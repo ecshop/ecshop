@@ -3,7 +3,7 @@
 /**
  * 程序说明
  */
- $_LANG['id'] = '编号';
+$_LANG['id'] = '编号';
 
 $_LANG['starttime'] = '发布时间';
 $_LANG['endtime'] = '取消时间';
@@ -23,5 +23,3 @@ $_LANG['batch_end_succeed'] = '批量取消成功';
 
 $_LANG['back_list'] = '返回文章自动发布';
 $_LANG['select_time'] = '请选定时间';
-
-?>

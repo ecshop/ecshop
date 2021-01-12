@@ -109,8 +109,8 @@ $_LANG['cardimg_cannt_write'] = '您将无法上传贺卡的图片文件。';
 $_LANG['feedbackimg_cannt_write'] = '用户将无法通过留言上传文件。';
 $_LANG['packimg_cannt_write'] = '您将无法上传包装的图片文件。';
 $_LANG['cert_cannt_write'] = '您将无法上传 ICP 备案证书文件。';
-$_LANG['images_cannt_write']= '您将无法上传任何商品图片。';
-$_LANG['imagesupload_cannt_write']= '您将无法通过编辑器上传任何图片。';
+$_LANG['images_cannt_write'] = '您将无法上传任何商品图片。';
+$_LANG['imagesupload_cannt_write'] = '您将无法通过编辑器上传任何图片。';
 $_LANG['tpl_cannt_write'] = '您的网站将无法浏览。';
 $_LANG['tpl_backup_cannt_write'] = '您就无法备份当前的模版文件。';
 $_LANG['order_print_canntwrite'] = 'data目录下的order_print.html文件属性为不可写，您将无法修改订单打印模板。';
@@ -197,4 +197,3 @@ $_LANG['js_languages']['good_price_not_number'] = '商品价格不是数值';
 
 /*后台语言项*/
 $_LANG['send_mail_off'] = '自动发送邮件关闭';
-?>

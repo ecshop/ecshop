@@ -8,7 +8,7 @@ $_LANG['shopinfo_list'] = '文章列表';
 
 $_LANG['back_list'] = '返回列表';
 $_LANG['continue_add'] = '继续添加';
-$_LANG['articleadd_succeed']= '添加成功';
+$_LANG['articleadd_succeed'] = '添加成功';
 
 /* 提示信息 */
 $_LANG['title_exist'] = '文章名 %s 已经存在';
@@ -21,5 +21,3 @@ $_LANG['title_empty'] = '文章标题不能为空！';
 /*JS 语言项*/
 $_LANG['js_languages']['no_title'] = '没有文章标题';
 $_LANG['js_languages']['remove_confirm'] = '你确定要删除这条记录吗？';
-
-?>

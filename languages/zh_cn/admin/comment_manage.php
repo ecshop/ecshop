@@ -24,7 +24,7 @@ $_LANG['no_reply'] = '未回复';
 $_LANG['yes_reply'] = '已回复';
 $_LANG['admin_user_name'] = '管理员';
 
-$_LANG['type'] = array('商品','文章');
+$_LANG['type'] = array('商品', '文章');
 
 $_LANG['ip_address'] = 'IP地址';
 $_LANG['comment_rank'] = '评论等级';
@@ -65,5 +65,3 @@ $_LANG['cfm_remove'] = '你确定要删除所选评论吗？';
 $_LANG['cfm_deny'] = '你确定要禁止显示所选评论吗？';
 
 $_LANG['mail_send_fail'] = '邮件发送失败，请检查邮件服务器设置后重新发送邮件。';
-
-?>

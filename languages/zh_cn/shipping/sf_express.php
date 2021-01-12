@@ -5,12 +5,12 @@
  */
 global $_LANG;
 
-$_LANG['sf_express']             = '顺丰速运';
-$_LANG['sf_express_desc']        = '江、浙、沪地区首重15元/KG，续重2元/KG，其余城市首重20元/KG';
-$_LANG['item_fee']              = '单件商品费用：';
-$_LANG['base_fee']              = '1000克以内费用';
-$_LANG['step_fee']               = '续重每1000克或其零数的费用';
-$_LANG['shipping_print']         = '<table style="width:18.8cm; height:3cm;" border="0" cellspacing="0" cellpadding="0">
+$_LANG['sf_express'] = '顺丰速运';
+$_LANG['sf_express_desc'] = '江、浙、沪地区首重15元/KG，续重2元/KG，其余城市首重20元/KG';
+$_LANG['item_fee'] = '单件商品费用：';
+$_LANG['base_fee'] = '1000克以内费用';
+$_LANG['step_fee'] = '续重每1000克或其零数的费用';
+$_LANG['shipping_print'] = '<table style="width:18.8cm; height:3cm;" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td>&nbsp;</td>
   </tr>
@@ -154,5 +154,3 @@ $_LANG['shipping_print']         = '<table style="width:18.8cm; height:3cm;" bor
 <td valign="top" style="width:11.4cm;">&nbsp;</td>
   </tr>
 </table>';
-
-?>

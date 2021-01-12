@@ -139,7 +139,6 @@ $_LANG['js_languages']['money_empty_error'] = '请输入您要充值的金额。
 $_LANG['js_languages']['money_format_error'] = '金额格式不对。';
 
 
-
 $_LANG['insert_sign'] = '请输入短信签名';
 $_LANG['insert_succ'] = '添加成功';
 $_LANG['error_smg'] = '信息错误';
@@ -153,10 +152,3 @@ $_LANG['add'] = '添加';
 $_LANG['edited'] = '修改为';
 $_LANG['edit'] = '修改';
 $_LANG['set_default_sign'] = '设置成默认签名';
-
-
-
-
-
-
-?>

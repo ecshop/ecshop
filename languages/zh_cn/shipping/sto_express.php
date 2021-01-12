@@ -4,12 +4,12 @@
  * 申通快递插件的语言文件
  */
 
-$_LANG['sto_express']            = '申通快递';
-$_LANG['sto_express_desc']       = '江、浙、沪地区首重为15元/KG，其他地区18元/KG， 续重均为5-6元/KG， 云南地区为8元';
-$_LANG['item_fee']              = '单件商品费用：';
-$_LANG['base_fee']              = '1000克以内费用';
-$_LANG['step_fee']               = '续重每1000克或其零数的费用';
-$_LANG['shipping_print']         = '<table border="0" cellspacing="0" cellpadding="0" style="width:18.9cm;">
+$_LANG['sto_express'] = '申通快递';
+$_LANG['sto_express_desc'] = '江、浙、沪地区首重为15元/KG，其他地区18元/KG， 续重均为5-6元/KG， 云南地区为8元';
+$_LANG['item_fee'] = '单件商品费用：';
+$_LANG['base_fee'] = '1000克以内费用';
+$_LANG['step_fee'] = '续重每1000克或其零数的费用';
+$_LANG['shipping_print'] = '<table border="0" cellspacing="0" cellpadding="0" style="width:18.9cm;">
   <tr>
     <td colspan="3" style="height:2cm;">&nbsp;</td>
   </tr>
@@ -61,5 +61,3 @@ $_LANG['shipping_print']         = '<table border="0" cellspacing="0" cellpaddin
     <td colspan="2" style="height:3.5cm;">&nbsp;</td>
   </tr>
 </table>';
-
-?>

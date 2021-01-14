@@ -32,7 +32,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('record_count', $tag_list['record_count']);
     $smarty->assign('page_count', $tag_list['page_count']);
 
-    $sort_flag  = sort_flag($tag_list['filter']);
+    $sort_flag = sort_flag($tag_list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     /* 椤甸潰鏄剧ず */
@@ -61,7 +61,7 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     } else {
         $tag_id = $_GET['id'];
         $tag = get_tag_info($tag_id);
-        $tag['tag_words']=htmlspecialchars($tag['tag_words']);
+        $tag['tag_words'] = htmlspecialchars($tag['tag_words']);
         $smarty->assign('ur_here', $_LANG['tag_edit']);
     }
     $smarty->assign('tag', $tag);
@@ -93,7 +93,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
     if ($is_insert) {
         $sql = 'INSERT INTO ' . $ecs->table('tag') . '(tag_id, goods_id, tag_words)' .
-               " VALUES('$id', '$goods_id', '$tag_words')";
+            " VALUES('$id', '$goods_id', '$tag_words')";
         $db->query($sql);
 
         admin_log($tag_words, 'add', 'tag');
@@ -131,7 +131,7 @@ elseif ($_REQUEST['act'] == 'query') {
     $smarty->assign('record_count', $tag_list['record_count']);
     $smarty->assign('page_count', $tag_list['page_count']);
 
-    $sort_flag  = sort_flag($tag_list['filter']);
+    $sort_flag = sort_flag($tag_list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
@@ -150,12 +150,12 @@ elseif ($_REQUEST['act'] == 'search_goods') {
 
     include_once(ROOT_PATH . 'includes/cls_json.php');
 
-    $json   = new JSON;
+    $json = new JSON;
     $filter = $json->decode($_GET['JSON']);
-    $arr    = get_goods_list($filter);
+    $arr = get_goods_list($filter);
     if (empty($arr)) {
         $arr[0] = array(
-            'goods_id'   => 0,
+            'goods_id' => 0,
             'goods_name' => ''
         );
     }
@@ -172,7 +172,7 @@ elseif ($_REQUEST['act'] == 'batch_drop') {
     if (isset($_POST['checkboxes'])) {
         $count = 0;
         foreach ($_POST['checkboxes'] as $key => $id) {
-            $sql = "DELETE FROM " .$ecs->table('tag'). " WHERE tag_id='$id'";
+            $sql = "DELETE FROM " . $ecs->table('tag') . " WHERE tag_id='$id'";
             $db->query($sql);
 
             $count++;
@@ -181,10 +181,10 @@ elseif ($_REQUEST['act'] == 'batch_drop') {
         admin_log($count, 'remove', 'tag_manage');
         clear_cache_files();
 
-        $link[] = array('text' => $_LANG['back_list'], 'href'=>'tag_manage.php?act=list');
+        $link[] = array('text' => $_LANG['back_list'], 'href' => 'tag_manage.php?act=list');
         sys_msg(sprintf($_LANG['drop_success'], $count), 0, $link);
     } else {
-        $link[] = array('text' => $_LANG['back_list'], 'href'=>'tag_manage.php?act=list');
+        $link[] = array('text' => $_LANG['back_list'], 'href' => 'tag_manage.php?act=list');
         sys_msg($_LANG['no_select_tag'], 0, $link);
     }
 }
@@ -202,9 +202,9 @@ elseif ($_REQUEST['act'] == 'remove') {
     $id = intval($_GET['id']);
 
     /* 鑾峰彇鍒犻櫎鐨勬爣绛剧殑鍚嶇О */
-    $tag_name = $db->getOne("SELECT tag_words FROM " .$ecs->table('tag'). " WHERE tag_id = '$id'");
+    $tag_name = $db->getOne("SELECT tag_words FROM " . $ecs->table('tag') . " WHERE tag_id = '$id'");
 
-    $sql = "DELETE FROM " .$ecs->table('tag'). " WHERE tag_id = '$id'";
+    $sql = "DELETE FROM " . $ecs->table('tag') . " WHERE tag_id = '$id'";
     $result = $GLOBALS['db']->query($sql);
     if ($result) {
         /* 绠＄悊鍛樻棩蹇 */
@@ -253,7 +253,7 @@ function tag_is_only($name, $tag_id, $goods_id = '')
     }
 
     $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('tag') . " WHERE tag_words = '$name'" .
-           " AND goods_id = '$goods_id' AND tag_id != '$tag_id'";
+        " AND goods_id = '$goods_id' AND tag_id != '$tag_id'";
 
     if ($GLOBALS['db']->getOne($sql) > 0) {
         return false;
@@ -289,21 +289,21 @@ function edit_tag($name, $id, $goods_id = '')
  */
 function get_tag_list()
 {
-    $filter['sort_by']    = empty($_REQUEST['sort_by']) ? 't.tag_id' : trim($_REQUEST['sort_by']);
+    $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 't.tag_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-    $sql = "SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('tag');
+    $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('tag');
     $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
     $filter = page_and_size($filter);
 
-    $sql = "SELECT t.tag_id, u.user_name, t.goods_id, g.goods_name, t.tag_words ".
-            "FROM " .$GLOBALS['ecs']->table('tag'). " AS t ".
-            "LEFT JOIN " .$GLOBALS['ecs']->table('users'). " AS u ON u.user_id=t.user_id ".
-            "LEFT JOIN " .$GLOBALS['ecs']->table('goods'). " AS g ON g.goods_id=t.goods_id ".
-            "ORDER by $filter[sort_by] $filter[sort_order] LIMIT ". $filter['start'] .", ". $filter['page_size'];
+    $sql = "SELECT t.tag_id, u.user_name, t.goods_id, g.goods_name, t.tag_words " .
+        "FROM " . $GLOBALS['ecs']->table('tag') . " AS t " .
+        "LEFT JOIN " . $GLOBALS['ecs']->table('users') . " AS u ON u.user_id=t.user_id " .
+        "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g ON g.goods_id=t.goods_id " .
+        "ORDER by $filter[sort_by] $filter[sort_order] LIMIT " . $filter['start'] . ", " . $filter['page_size'];
     $row = $GLOBALS['db']->getAll($sql);
-    foreach ($row as $k=>$v) {
+    foreach ($row as $k => $v) {
         $row[$k]['tag_words'] = htmlspecialchars($v['tag_words']);
     }
 
@@ -320,8 +320,8 @@ function get_tag_list()
 function get_tag_info($tag_id)
 {
     $sql = 'SELECT t.tag_id, t.tag_words, t.goods_id, g.goods_name FROM ' . $GLOBALS['ecs']->table('tag') . ' AS t' .
-           ' LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON t.goods_id=g.goods_id' .
-           " WHERE tag_id = '$tag_id'";
+        ' LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON t.goods_id=g.goods_id' .
+        " WHERE tag_id = '$tag_id'";
     $row = $GLOBALS['db']->getRow($sql);
 
     return $row;

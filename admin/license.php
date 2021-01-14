@@ -11,7 +11,7 @@ require(dirname(__FILE__) . '/includes/init.php');
 /*------------------------------------------------------ */
 //-- 证书编辑页
 /*------------------------------------------------------ */
-if ($_REQUEST['act']== 'list_edit') {
+if ($_REQUEST['act'] == 'list_edit') {
     /* 检查权限 */
     admin_priv('shop_authorized');
 
@@ -35,7 +35,7 @@ if ($_REQUEST['act']== 'list_edit') {
 //-- 证书下载
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act']== 'download') {
+elseif ($_REQUEST['act'] == 'download') {
     /* 检查权限 */
     admin_priv('shop_authorized');
 
@@ -59,7 +59,7 @@ elseif ($_REQUEST['act']== 'download') {
 //-- 证书上传
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act']== 'upload') {
+elseif ($_REQUEST['act'] == 'upload') {
     /* 检查权限 */
     admin_priv('shop_authorized');
 
@@ -115,7 +115,7 @@ elseif ($_REQUEST['act']== 'upload') {
 //-- 证书删除
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act']== 'del') {
+elseif ($_REQUEST['act'] == 'del') {
     /* 检查权限 */
     admin_priv('shop_authorized');
 

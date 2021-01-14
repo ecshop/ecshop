@@ -15,12 +15,12 @@ $data['api_ver'] = '1.0';
 $data['version'] = VERSION;
 $data['charset'] = strtoupper(EC_CHARSET);
 $ecs_charset = $data['charset'];
-$data['patch'] = file_get_contents(ROOT_PATH."admin/patch_num");
+$data['patch'] = file_get_contents(ROOT_PATH . "admin/patch_num");
 $data['ecs_lang'] = !empty($_SESSION['ecs_lang']) ? $_SESSION['ecs_lang'] : 'zh_cn';
 $data['release'] = RELEASE;
 $step = isset($_REQUEST['step']) ? trim($_REQUEST['step']) : '';
 
-$step_arr = array('welcome','check','setting_ui','done','active');
+$step_arr = array('welcome', 'check', 'setting_ui', 'done', 'active');
 
 if (!in_array($step, $step_arr)) {
     @header('Location: index.php');
@@ -44,7 +44,7 @@ if ($step == 'welcome') {
     $content = api_request($apiget);
     if ($content) {
         //$content=str_replace('<'.'?php','<'.'?',$content);
-        $content='?'.'>'.trim($content);
+        $content = '?' . '>' . trim($content);
         eval($content);
     } else {
         $smarty->display('welcome_content.php');
@@ -53,7 +53,7 @@ if ($step == 'welcome') {
     $content = api_request($apiget);
     if ($content) {
         //$content=str_replace('<'.'?php','<'.'?',$content);
-        $content='?'.'>'.trim($content);
+        $content = '?' . '>' . trim($content);
         eval($content);
     } else {
         $smarty->display('checking_content.php');
@@ -62,7 +62,7 @@ if ($step == 'welcome') {
     $content = api_request($apiget);
     if ($content) {
         //$content=str_replace('<'.'?php','<'.'?',$content);
-        $content='?'.'>'.trim($content);
+        $content = '?' . '>' . trim($content);
         eval($content);
     } else {
         $smarty->display('setting_content.php');
@@ -71,7 +71,7 @@ if ($step == 'welcome') {
     $content = api_request($apiget);
     if ($content) {
         //$content=str_replace('<'.'?php','<'.'?',$content);
-        $content='?'.'>'.trim($content);
+        $content = '?' . '>' . trim($content);
         eval($content);
     } else {
         $smarty->display('done_content.php');
@@ -80,7 +80,7 @@ if ($step == 'welcome') {
     $content = api_request($apiget);
     if ($content) {
         //$content=str_replace('<'.'?php','<'.'?',$content);
-        $content='?'.'>'.trim($content);
+        $content = '?' . '>' . trim($content);
         eval($content);
     } else {
         $smarty->display('active_content.php');
@@ -89,7 +89,7 @@ if ($step == 'welcome') {
 
 function api_request($apiget)
 {
-    global $t,$ecs_charset;
+    global $t, $ecs_charset;
     $api_comment = $t->request('http://cloud.ecshop.com/install_api.php', $apiget);
     $api_str = $api_comment["body"];
     include_once(ROOT_PATH . 'includes/cls_json.php');

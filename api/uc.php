@@ -157,7 +157,7 @@ class uc_note
         }
         $username = $get['username'];
         #$password = md5($get['password']);
-        $newpw = md5(time().rand(100000, 999999));
+        $newpw = md5(time() . rand(100000, 999999));
         $this->db->query("UPDATE " . $GLOBALS['ecs']->table('users') . " SET password='$newpw' WHERE user_name='$username'");
         return API_RETURN_SUCCEED;
     }
@@ -167,7 +167,7 @@ class uc_note
         if (!API_UPDATEBADWORDS) {
             return API_RETURN_FORBIDDEN;
         }
-        $cachefile = $this->appdir.'./uc_client/data/cache/badwords.php';
+        $cachefile = $this->appdir . './uc_client/data/cache/badwords.php';
         $fp = fopen($cachefile, 'w');
         $data = array();
         if (is_array($post)) {
@@ -177,7 +177,7 @@ class uc_note
             }
         }
         $s = "<?php\r\n";
-        $s .= '$_CACHE[\'badwords\'] = '.var_export($data, true).";\r\n";
+        $s .= '$_CACHE[\'badwords\'] = ' . var_export($data, true) . ";\r\n";
         fwrite($fp, $s);
         fclose($fp);
         return API_RETURN_SUCCEED;
@@ -191,7 +191,7 @@ class uc_note
         $cachefile = $this->appdir . './uc_client/data/cache/hosts.php';
         $fp = fopen($cachefile, 'w');
         $s = "<?php\r\n";
-        $s .= '$_CACHE[\'hosts\'] = '.var_export($post, true).";\r\n";
+        $s .= '$_CACHE[\'hosts\'] = ' . var_export($post, true) . ";\r\n";
         fwrite($fp, $s);
         fclose($fp);
         return API_RETURN_SUCCEED;
@@ -207,7 +207,7 @@ class uc_note
         $cachefile = $this->appdir . './uc_client/data/cache/apps.php';
         $fp = fopen($cachefile, 'w');
         $s = "<?php\r\n";
-        $s .= '$_CACHE[\'apps\'] = '.var_export($post, true).";\r\n";
+        $s .= '$_CACHE[\'apps\'] = ' . var_export($post, true) . ";\r\n";
         fwrite($fp, $s);
         fclose($fp);
         #clear_cache_files();
@@ -222,7 +222,7 @@ class uc_note
         $cachefile = $this->appdir . './uc_client/data/cache/settings.php';
         $fp = fopen($cachefile, 'w');
         $s = "<?php\r\n";
-        $s .= '$_CACHE[\'settings\'] = '.var_export($post, true).";\r\n";
+        $s .= '$_CACHE[\'settings\'] = ' . var_export($post, true) . ";\r\n";
         fwrite($fp, $s);
         fclose($fp);
         return API_RETURN_SUCCEED;
@@ -238,13 +238,13 @@ class uc_note
         $amount = intval($get['amount']);
         $uid = intval($get['uid']);
         $points = array(0 => 'rank_points', 1 => 'pay_points');
-        $sql = "UPDATE " . $GLOBALS['ecs']-> table('users') . " SET {$points[$credit]} = {$points[$credit]} + '$amount' WHERE user_id = $uid";
+        $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET {$points[$credit]} = {$points[$credit]} + '$amount' WHERE user_id = $uid";
         $this->db->query($sql);
         if ($this->db->affected_rows() <= 0) {
             return API_RETURN_FAILED;
         }
         $sql = "INSERT INTO " . $GLOBALS['ecs']->table('account_log') . "(user_id, {$points[$credit]}, change_time, change_desc, change_type)" .
-         " VALUES ('$uid', '$amount', '". gmtime() ."', '" . $cfg['uc_lang']['exchange'] . "', '99')";
+            " VALUES ('$uid', '$amount', '" . gmtime() . "', '" . $cfg['uc_lang']['exchange'] . "', '99')";
         $this->db->query($sql);
         return API_RETURN_SUCCEED;
     }
@@ -292,7 +292,7 @@ class uc_note
                 }
             }
         }
-        $this->db->query("UPDATE " . $GLOBALS['ecs']->table("shop_config") . " SET value='".serialize($outextcredits)."' WHERE code='points_rule'");
+        $this->db->query("UPDATE " . $GLOBALS['ecs']->table("shop_config") . " SET value='" . serialize($outextcredits) . "' WHERE code='points_rule'");
         return API_RETURN_SUCCEED;
     }
 }
@@ -301,7 +301,7 @@ class uc_note
  *  删除用户接口函数
  *
  * @access  public
- * @param   int $uids
+ * @param int $uids
  * @return  void
  */
 function delete_user($uids = '')
@@ -326,7 +326,7 @@ function delete_user($uids = '')
 function set_login($user_id = '', $user_name = '')
 {
     if (empty($user_id)) {
-        return ;
+        return;
     } else {
         $sql = "SELECT user_name, email FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id='$user_id' LIMIT 1";
         $row = $GLOBALS['db']->getRow($sql);
@@ -339,7 +339,7 @@ function set_login($user_id = '', $user_name = '')
             include_once(ROOT_PATH . 'uc_client/client.php');
             if ($data = uc_get_user($user_name)) {
                 list($uid, $uname, $email) = $data;
-                $sql = "REPLACE INTO " . $GLOBALS['ecs']->table('users') ."(user_id, user_name, email) VALUES('$uid', '$uname', '$email')";
+                $sql = "REPLACE INTO " . $GLOBALS['ecs']->table('users') . "(user_id, user_name, email) VALUES('$uid', '$uname', '$email')";
                 $GLOBALS['db']->query($sql);
                 set_login($uid);
             } else {
@@ -356,7 +356,7 @@ function set_login($user_id = '', $user_name = '')
  * @param
  * @return void
  */
-function set_cookie($user_id='', $user_name = '', $email = '')
+function set_cookie($user_id = '', $user_name = '', $email = '')
 {
     if (empty($user_id)) {
         /* 摧毁cookie */
@@ -385,9 +385,9 @@ function set_session($user_id = '', $user_name = '', $email = '')
     if (empty($user_id)) {
         $GLOBALS['sess']->destroy_session();
     } else {
-        $_SESSION['user_id']   = $user_id;
+        $_SESSION['user_id'] = $user_id;
         $_SESSION['user_name'] = $user_name;
-        $_SESSION['email']     = $email;
+        $_SESSION['email'] = $email;
     }
 }
 
@@ -395,24 +395,24 @@ function set_session($user_id = '', $user_name = '', $email = '')
  *  获取EC的TAG数据
  *
  * @access  public
- * @param  string $tagname
- * @param   int    $num 获取的数量 默认取最新的100条
+ * @param string $tagname
+ * @param int $num 获取的数量 默认取最新的100条
  * @return  array
  */
-function fetch_tag($tagname, $num=100)
+function fetch_tag($tagname, $num = 100)
 {
     $rewrite = intval($GLOBALS['_CFG']['rewrite']) > 0;
-    $sql = "SELECT t.*, u.user_name, g.goods_name, g.goods_img, g.shop_price FROM " . $GLOBALS['ecs']->table('tag') . " as t, " . $GLOBALS['ecs']->table('users') ." as u, " .
-    $GLOBALS['ecs']->table('goods') ." as g WHERE tag_words = '$tagname' AND t.user_id = u.user_id AND g.goods_id = t.goods_id ORDER BY t.tag_id DESC LIMIT " . $num;
+    $sql = "SELECT t.*, u.user_name, g.goods_name, g.goods_img, g.shop_price FROM " . $GLOBALS['ecs']->table('tag') . " as t, " . $GLOBALS['ecs']->table('users') . " as u, " .
+        $GLOBALS['ecs']->table('goods') . " as g WHERE tag_words = '$tagname' AND t.user_id = u.user_id AND g.goods_id = t.goods_id ORDER BY t.tag_id DESC LIMIT " . $num;
     $arr = $GLOBALS['db']->getAll($sql);
     $tag_list = array();
-    foreach ($arr as $k=>$v) {
-        $tag_list[$k]['goods_name']  = $v['goods_name'];
-        $tag_list[$k]['uid']         = $v['user_id'];
-        $tag_list[$k]['username']    = $v['user_name'];
-        $tag_list[$k]['dateline']    = time();
-        $tag_list[$k]['url']         = $GLOBALS['ecs_url'] . 'goods.php?id=' . $v['goods_id'];
-        $tag_list[$k]['image']       = $GLOBALS['ecs_url'] . $v['goods_img'];
+    foreach ($arr as $k => $v) {
+        $tag_list[$k]['goods_name'] = $v['goods_name'];
+        $tag_list[$k]['uid'] = $v['user_id'];
+        $tag_list[$k]['username'] = $v['user_name'];
+        $tag_list[$k]['dateline'] = time();
+        $tag_list[$k]['url'] = $GLOBALS['ecs_url'] . 'goods.php?id=' . $v['goods_id'];
+        $tag_list[$k]['image'] = $GLOBALS['ecs_url'] . $v['goods_img'];
         $tag_list[$k]['goods_price'] = $v['shop_price'];
     }
 
@@ -423,7 +423,7 @@ function fetch_tag($tagname, $num=100)
  *  uc自带函数1
  *
  * @access  public
- * @param   string  $string
+ * @param string $string
  *
  * @return  string  $string
  */
@@ -431,7 +431,7 @@ function _setcookie($var, $value, $life = 0, $prefix = 1)
 {
     global $cookiepre, $cookiedomain, $cookiepath, $timestamp, $_SERVER;
     setcookie(
-        ($prefix ? $cookiepre : '').$var,
+        ($prefix ? $cookiepre : '') . $var,
         $value,
         $life ? $timestamp + $life : 0,
         $cookiepath,
@@ -453,12 +453,12 @@ function _authcode($string, $operation = 'DECODE', $key = '', $expiry = 0)
     $key = md5($key ? $key : UC_KEY);
     $keya = md5(substr($key, 0, 16));
     $keyb = md5(substr($key, 16, 16));
-    $keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : '';
+    $keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length) : substr(md5(microtime()), -$ckey_length)) : '';
 
-    $cryptkey = $keya.md5($keya.$keyc);
+    $cryptkey = $keya . md5($keya . $keyc);
     $key_length = strlen($cryptkey);
 
-    $string = $operation == 'DECODE' ? base64_decode(substr($string, $ckey_length)) : sprintf('%010d', $expiry ? $expiry + time() : 0).substr(md5($string.$keyb), 0, 16).$string;
+    $string = $operation == 'DECODE' ? base64_decode(substr($string, $ckey_length)) : sprintf('%010d', $expiry ? $expiry + time() : 0) . substr(md5($string . $keyb), 0, 16) . $string;
     $string_length = strlen($string);
 
     $result = '';
@@ -486,13 +486,13 @@ function _authcode($string, $operation = 'DECODE', $key = '', $expiry = 0)
     }
 
     if ($operation == 'DECODE') {
-        if ((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26).$keyb), 0, 16)) {
+        if ((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26) . $keyb), 0, 16)) {
             return substr($result, 26);
         } else {
             return '';
         }
     } else {
-        return $keyc.str_replace('=', '', base64_encode($result));
+        return $keyc . str_replace('=', '', base64_encode($result));
     }
 }
 
@@ -500,7 +500,7 @@ function _authcode($string, $operation = 'DECODE', $key = '', $expiry = 0)
  *  uc自带函数3
  *
  * @access  public
- * @param   string  $string
+ * @param string $string
  *
  * @return  string  $string
  */

@@ -14,7 +14,7 @@ class sql_executor
      * 记录程序执行过程中最后产生的那条错误信息
      *
      * @access  public
-     * @var     string       $error
+     * @var     string $error
      */
     public $error = '';
 
@@ -23,7 +23,7 @@ class sql_executor
      * 但仍然会记录在错误日志文件当中。
      *
      * @access  private
-     * @var     array       $ignored_errors
+     * @var     array $ignored_errors
      */
     public $ignored_errors = array();
 
@@ -31,7 +31,7 @@ class sql_executor
      * MySQL对象
      *
      * @access  private
-     * @var     object      $db
+     * @var     object $db
      */
     public $db = '';
 
@@ -39,7 +39,7 @@ class sql_executor
      * 数据库字符编码
      *
      * @access   private
-     * @var      string     $charset
+     * @var      string $charset
      */
     public $db_charset = '';
 
@@ -47,7 +47,7 @@ class sql_executor
      * 替换前表前缀
      *
      * @access  private
-     * @var     string      $source_prefix
+     * @var     string $source_prefix
      */
     public $source_prefix = '';
 
@@ -55,7 +55,7 @@ class sql_executor
      * 替换后表前缀
      *
      * @access  private
-     * @var     string      $target_prefix
+     * @var     string $target_prefix
      */
     public $target_prefix = '';
 
@@ -63,7 +63,7 @@ class sql_executor
      * 当发生错误时，程序将把日志记录在该指定的文件中
      *
      * @access  private
-     * @var     string       $log_path
+     * @var     string $log_path
      */
     public $log_path = '';
 
@@ -73,7 +73,7 @@ class sql_executor
      * 表达式，开启该选项后将非常耗费服务器的资源。
      *
      * @access  private
-     * @var     boolean      $auto_match
+     * @var     boolean $auto_match
      */
     public $auto_match = false;
 
@@ -81,7 +81,7 @@ class sql_executor
      * 记录当前正在执行的SQL文件名
      *
      * @access  private
-     * @var     string       $current_file
+     * @var     string $current_file
      */
     public $current_file = 'Not a file, but a string.';
 
@@ -89,13 +89,13 @@ class sql_executor
      * 构造函数
      *
      * @access  public
-     * @param   mysql       $db             mysql类对象
-     * @param   string      $charset        字符集
-     * @param   string      $sprefix        替换前表前缀
-     * @param   string      $tprefix        替换后表前缀
-     * @param   string      $log_path       日志路径
-     * @param   boolean     $auto_match     是否进行智能化查询
-     * @param   array       $ignored_errors 忽略的错误号数组
+     * @param mysql $db mysql类对象
+     * @param string $charset 字符集
+     * @param string $sprefix 替换前表前缀
+     * @param string $tprefix 替换后表前缀
+     * @param string $log_path 日志路径
+     * @param boolean $auto_match 是否进行智能化查询
+     * @param array $ignored_errors 忽略的错误号数组
      * @return  void
      */
     public function __construct($db, $charset = 'gbk', $sprefix = 'ecs_', $tprefix = 'ecs_', $log_path = '', $auto_match = false, $ignored_errors = array())
@@ -107,13 +107,13 @@ class sql_executor
      * 构造函数
      *
      * @access  public
-     * @param   mysql       $db             mysql类对象
-     * @param   string      $charset        字符集
-     * @param   string      $sprefix        替换前表前缀
-     * @param   string      $tprefix        替换后表前缀
-     * @param   string      $log_path       日志路径
-     * @param   boolean     $auto_match     是否进行智能化查询
-     * @param   array       $ignored_errors 忽略的错误号数组
+     * @param mysql $db mysql类对象
+     * @param string $charset 字符集
+     * @param string $sprefix 替换前表前缀
+     * @param string $tprefix 替换后表前缀
+     * @param string $log_path 日志路径
+     * @param boolean $auto_match 是否进行智能化查询
+     * @param array $ignored_errors 忽略的错误号数组
      * @return  void
      */
     public function sql_executor($db, $charset = 'gbk', $sprefix = 'ecs_', $tprefix = 'ecs_', $log_path = '', $auto_match = false, $ignored_errors = array())
@@ -131,7 +131,7 @@ class sql_executor
      * 执行所有SQL文件中所有的SQL语句
      *
      * @access  public
-     * @param   array       $sql_files     文件绝对路径组成的一维数组
+     * @param array $sql_files 文件绝对路径组成的一维数组
      * @return  boolean     执行成功返回true，失败返回false。
      */
     public function run_all($sql_files)
@@ -168,7 +168,7 @@ class sql_executor
      * 获得分散的查询项
      *
      * @access  public
-     * @param   string      $file_path      文件的绝对路径
+     * @param string $file_path 文件的绝对路径
      * @return  mixed       解析成功返回分散的查询项数组，失败返回false。
      */
     public function parse_sql_file($file_path)
@@ -209,7 +209,7 @@ class sql_executor
      * 执行某一个查询项
      *
      * @access  public
-     * @param   string      $query_item      查询项
+     * @param string $query_item 查询项
      * @return  boolean     成功返回true，失败返回false。
      */
     public function query($query_item)
@@ -227,14 +227,12 @@ class sql_executor
             if (!$this->create_table($query_item)) {
                 return false;
             }
-        }
-        /* 处理ALTER TABLE语句，此时程序将对表的结构进行修改 */
+        } /* 处理ALTER TABLE语句，此时程序将对表的结构进行修改 */
         elseif ($this->auto_match && preg_match('/^\s*ALTER\s+TABLE\s*/i', $query_item)) {
             if (!$this->alter_table($query_item)) {
                 return false;
             }
-        }
-        /* 处理其它修改操作，如数据添加、更新、删除等 */
+        } /* 处理其它修改操作，如数据添加、更新、删除等 */
         else {
             if (!$this->do_other($query_item)) {
                 return false;
@@ -248,7 +246,7 @@ class sql_executor
      * 过滤SQL查询串中的注释。该方法只过滤SQL文件中独占一行或一块的那些注释。
      *
      * @access  public
-     * @param   string      $sql        SQL查询串
+     * @param string $sql SQL查询串
      * @return  string      返回已过滤掉注释的SQL查询串。
      */
     public function remove_comment($sql)
@@ -268,18 +266,18 @@ class sql_executor
      * DROP TABLE, ALTER TABLE, UPDATE, REPLACE INTO, INSERT INTO
      *
      * @access  public
-     * @param   string      $sql        SQL查询串
+     * @param string $sql SQL查询串
      * @return  string      返回已替换掉前缀的SQL查询串。
      */
     public function replace_prefix($sql)
     {
         $keywords = 'CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?|'
-                  . 'DROP\s+TABLE(?:\s+IF\s+EXISTS)?|'
-                  . 'ALTER\s+TABLE|'
-                  . 'UPDATE|'
-                  . 'REPLACE\s+INTO|'
-                  . 'DELETE\s+FROM|'
-                  . 'INSERT\s+INTO';
+            . 'DROP\s+TABLE(?:\s+IF\s+EXISTS)?|'
+            . 'ALTER\s+TABLE|'
+            . 'UPDATE|'
+            . 'REPLACE\s+INTO|'
+            . 'DELETE\s+FROM|'
+            . 'INSERT\s+INTO';
 
         $pattern = '/(' . $keywords . ')(\s*)`?' . $this->source_prefix . '(\w+)`?(\s*)/i';
         $replacement = '\1\2`' . $this->target_prefix . '\3`\4';
@@ -297,8 +295,8 @@ class sql_executor
      * DROP TABLE, ALTER TABLE, UPDATE, REPLACE INTO, INSERT INTO
      *
      * @access  public
-     * @param   string      $query_item     SQL查询项
-     * @param   string      $query_type     查询类型
+     * @param string $query_item SQL查询项
+     * @param string $query_type 查询类型
      * @return  mixed       成功返回表的名字，失败返回false。
      */
     public function get_table_name($query_item, $query_type = '')
@@ -315,26 +313,26 @@ class sql_executor
         /* 获取相应的正则表达式 */
         $query_type = strtoupper($query_type);
         switch ($query_type) {
-        case 'ALTER':
-            $pattern = '/^\s*ALTER\s+TABLE\s*`?(\w+)/i';
-            break;
-        case 'CREATE':
-            $pattern = '/^\s*CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?\s*`?(\w+)/i';
-            break;
-        case 'DROP':
-            $pattern = '/^\s*DROP\s+TABLE(?:\s+IF\s+EXISTS)?\s*`?(\w+)/i';
-            break;
-        case 'INSERT':
-            $pattern = '/^\s*INSERT\s+INTO\s*`?(\w+)/i';
-            break;
-        case 'REPLACE':
-            $pattern = '/^\s*REPLACE\s+INTO\s*`?(\w+)/i';
-            break;
-        case 'UPDATE':
-            $pattern = '/^\s*UPDATE\s*`?(\w+)/i';
-            break;
-        default:
-            return false;
+            case 'ALTER':
+                $pattern = '/^\s*ALTER\s+TABLE\s*`?(\w+)/i';
+                break;
+            case 'CREATE':
+                $pattern = '/^\s*CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?\s*`?(\w+)/i';
+                break;
+            case 'DROP':
+                $pattern = '/^\s*DROP\s+TABLE(?:\s+IF\s+EXISTS)?\s*`?(\w+)/i';
+                break;
+            case 'INSERT':
+                $pattern = '/^\s*INSERT\s+INTO\s*`?(\w+)/i';
+                break;
+            case 'REPLACE':
+                $pattern = '/^\s*REPLACE\s+INTO\s*`?(\w+)/i';
+                break;
+            case 'UPDATE':
+                $pattern = '/^\s*UPDATE\s*`?(\w+)/i';
+                break;
+            default:
+                return false;
         }
 
         if (!preg_match($pattern, $query_item, $matches)) {
@@ -349,8 +347,8 @@ class sql_executor
      *   获得SQL文件中指定的查询项
      *
      * @access  public
-     * @param   string    $file_path       SQL查询项
-     * @param   int       $pos             查询项的索引号
+     * @param string $file_path SQL查询项
+     * @param int $pos 查询项的索引号
      * @return  mixed     成功返回该查询项，失败返回false。
      */
     public function get_spec_query_item($file_path, $pos)
@@ -358,7 +356,7 @@ class sql_executor
         $query_items = $this->parse_sql_file($file_path);
 
         if (empty($query_items)
-                || empty($query_items[$pos])) {
+            || empty($query_items[$pos])) {
             return false;
         }
 
@@ -369,7 +367,7 @@ class sql_executor
      * 概据MYSQL版本，创建数据表
      *
      * @access  public
-     * @param   string      $query_item     SQL查询项
+     * @param string $query_item SQL查询项
      * @return  boolean     成功返回true，失败返回false。
      */
     public function create_table($query_item)
@@ -392,7 +390,7 @@ class sql_executor
 
         /* 重新设置表属性声明串 */
         $postfix = $this->db->version() > '4.1' ? " ENGINE=$type DEFAULT CHARACTER SET " . $this->db_charset
-                                                : " TYPE=$type";
+            : " TYPE=$type";
         $postfix .= ' ' . $auto_incr;
 
         /* 重新构造建表语句 */
@@ -417,7 +415,7 @@ class sql_executor
      * 6. 最后进行其它操作。
      *
      * @access  public
-     * @param   string      $query_item     SQL查询项
+     * @param string $query_item SQL查询项
      * @return  boolean     修改成功返回true，否则返回false
      */
     public function alter_table($query_item)
@@ -487,8 +485,8 @@ class sql_executor
      * 解析出CHANGE操作
      *
      * @access  public
-     * @param   string      $query_item     SQL查询项
-     * @param   string      $table_name     表名
+     * @param string $query_item SQL查询项
+     * @param string $table_name 表名
      * @return  array       返回一个以CHANGE操作串和其它操作串组成的数组
      */
     public function parse_change_query($query_item, $table_name = '')
@@ -510,12 +508,10 @@ class sql_executor
                 /* 如果表中存在原列名 */
                 if (in_array($matches[$i][1], $fields)) {
                     $sql .= $matches[$i][0];
-                }
-                /* 如果表中存在新列名 */
+                } /* 如果表中存在新列名 */
                 elseif (in_array($matches[$i][2], $fields)) {
                     $sql .= 'CHANGE ' . $matches[$i][2] . ' ' . $matches[$i][2] . ' ' . $matches[$i][3] . ',';
-                } else /* 如果两个列名都不存在 */
-                {
+                } else /* 如果两个列名都不存在 */ {
                     $sql .= 'ADD ' . $matches[$i][2] . ' ' . $matches[$i][3] . ',';
                     $sql = preg_replace('/(\s+AUTO_INCREMENT)/i', '\1 PRIMARY KEY', $sql);
                 }
@@ -524,7 +520,7 @@ class sql_executor
             $result[0] = preg_replace('/\s*,\s*$/', '', $sql);//存储CHANGE操作，已过滤末尾的逗号
             $result[0] = $this->insert_charset($result[0]);//加入字符集设置
             $result[1] = preg_replace($pattern, '', $query_item);//存储其它操作
-            $result[1] = $this->has_other_query($result[1]) ? $result[1]: '';
+            $result[1] = $this->has_other_query($result[1]) ? $result[1] : '';
         }
 
         return $result;
@@ -534,8 +530,8 @@ class sql_executor
      * 解析出DROP COLUMN操作
      *
      * @access  public
-     * @param   string      $query_item     SQL查询项
-     * @param   string      $table_name     表名
+     * @param string $query_item SQL查询项
+     * @param string $table_name 表名
      * @return  array       返回一个以DROP COLUMN操作和其它操作组成的数组
      */
     public function parse_drop_column_query($query_item, $table_name = '')
@@ -573,8 +569,8 @@ class sql_executor
      * 解析出ADD [COLUMN]操作
      *
      * @access  public
-     * @param   string      $query_item     SQL查询项
-     * @param   string      $table_name     表名
+     * @param string $query_item SQL查询项
+     * @param string $table_name 表名
      * @return  array       返回一个以ADD [COLUMN]操作和其它操作组成的数组
      */
     public function parse_add_column_query($query_item, $table_name = '')
@@ -618,8 +614,8 @@ class sql_executor
      * 解析出DROP INDEX操作
      *
      * @access  public
-     * @param   string      $query_item     SQL查询项
-     * @param   string      $table_name     表名
+     * @param string $query_item SQL查询项
+     * @param string $table_name 表名
      * @return  array       返回一个以DROP INDEX操作和其它操作组成的数组
      */
     public function parse_drop_index_query($query_item, $table_name = '')
@@ -640,8 +636,7 @@ class sql_executor
                 /* 如果子模式为空，删除主键 */
                 if (empty($matches[$i][1])) {
                     $sql .= 'DROP PRIMARY KEY,';
-                }
-                /* 否则删除索引 */
+                } /* 否则删除索引 */
                 elseif (in_array($matches[$i][1], $indexes)) {
                     $sql .= 'DROP INDEX ' . $matches[$i][1] . ',';
                 }
@@ -661,8 +656,8 @@ class sql_executor
      * 解析出ADD INDEX操作
      *
      * @access  public
-     * @param   string      $query_item     SQL查询项
-     * @param   string      $table_name     表名
+     * @param string $query_item SQL查询项
+     * @param string $table_name 表名
      * @return  array       返回一个以ADD INDEX操作和其它操作组成的数组
      */
     public function parse_add_index_query($query_item, $table_name = '')
@@ -701,7 +696,7 @@ class sql_executor
      * 获取所有的indexes
      *
      * @access  public
-     * @param   string      $table_name      数据表名
+     * @param string $table_name 数据表名
      * @return  array
      */
     public function get_indexes($table_name)
@@ -723,7 +718,7 @@ class sql_executor
      * 获取所有的fields
      *
      * @access  public
-     * @param   string      $table_name      数据表名
+     * @param string $table_name 数据表名
      * @return  array
      */
     public function get_fields($table_name)
@@ -745,7 +740,7 @@ class sql_executor
      * 判断是否还有其它的查询
      *
      * @access  private
-     * @param   string      $sql_string     SQL查询串
+     * @param string $sql_string SQL查询串
      * @return  boolean     有返回true，否则返回false
      */
     public function has_other_query($sql_string)
@@ -757,7 +752,7 @@ class sql_executor
      * 在查询串中加入字符集设置
      *
      * @access  private
-     * @param  string      $sql_string     SQL查询串
+     * @param string $sql_string SQL查询串
      * @return  string     含有字符集设置的SQL查询串
      */
     public function insert_charset($sql_string)
@@ -777,7 +772,7 @@ class sql_executor
      * 处理其它的数据库操作
      *
      * @access  private
-     * @param   string      $query_item     SQL查询项
+     * @param string $query_item SQL查询项
      * @return  boolean     成功返回true，失败返回false。
      */
     public function do_other($query_item)
@@ -794,20 +789,20 @@ class sql_executor
      * 处理错误信息
      *
      * @access  private
-     * @param   string      $query_item     SQL查询项
+     * @param string $query_item SQL查询项
      * @return  boolean     成功返回true，失败返回false。
      */
     public function handle_error($query_item)
     {
         $mysql_error = 'ERROR NO: ' . $this->db->errno()
-                    . "\r\nERROR MSG: " . $this->db->error();
+            . "\r\nERROR MSG: " . $this->db->error();
 
         $error_str = "SQL Error:\r\n " . $mysql_error
-                . "\r\n\r\n"
-                . "Query String:\r\n ". $query_item
-                . "\r\n\r\n"
-                . "File Path:\r\n ". $this->current_file
-                . "\r\n\r\n\r\n\r\n";
+            . "\r\n\r\n"
+            . "Query String:\r\n " . $query_item
+            . "\r\n\r\n"
+            . "File Path:\r\n " . $this->current_file
+            . "\r\n\r\n\r\n\r\n";
 
         /* 过滤一些错误 */
         if (!in_array($this->db->errno(), $this->ignored_errors)) {

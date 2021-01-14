@@ -11,18 +11,18 @@ if (!defined('IN_ECS')) {
 class template
 {
     /**
-    * 用来存储变量的空间
-    *
-    * @access  private
-    * @var     array      $vars
-    */
+     * 用来存储变量的空间
+     *
+     * @access  private
+     * @var     array $vars
+     */
     public $vars = array();
 
     /**
      * 模板存放的目录路径
      *
      * @access  private
-     * @var     string      $path
+     * @var     string $path
      */
     public $path = '';
 
@@ -30,7 +30,7 @@ class template
      * 构造函数
      *
      * @access  public
-     * @param   string       $path
+     * @param string $path
      * @return  void
      */
     public function __construct($path)
@@ -42,7 +42,7 @@ class template
      * 构造函数
      *
      * @access  public
-     * @param   string       $path
+     * @param string $path
      * @return  void
      */
     public function template($path)
@@ -54,8 +54,8 @@ class template
      * 模拟smarty的assign函数
      *
      * @access  public
-     * @param   string       $name    变量的名字
-     * @param   mix           $value   变量的值
+     * @param string $name 变量的名字
+     * @param mix $value 变量的值
      * @return  void
      */
     public function assign($name, $value)
@@ -67,7 +67,7 @@ class template
      * 模拟smarty的fetch函数
      *
      * @access  public
-     * @param   string       $file   文件相对路径
+     * @param string $file 文件相对路径
      * @return  string      模板的内容(文本格式)
      */
     public function fetch($file)
@@ -85,7 +85,7 @@ class template
      * 模拟smarty的display函数
      *
      * @access  public
-     * @param   string       $file   文件相对路径
+     * @param string $file 文件相对路径
      * @return  void
      */
     public function display($file)

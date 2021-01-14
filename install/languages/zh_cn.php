@@ -103,7 +103,7 @@ $_LANG['mobile2'] = '精品手机';
 $_LANG['install_at_once'] = '立即安装';
 $_LANG['default_friend_link'] = 'ECSHOP 网上商店管理系统';
 $_LANG['maifou_friend_link'] = '买否网';
-$_LANG['wdwd_friend_link']='免费开独立网店';
+$_LANG['wdwd_friend_link'] = '免费开独立网店';
 $_LANG['monitor_title'] = '安装程序监视器';
 $_LANG['admin_user'][] = '商品列表|goods.php?act=list';
 $_LANG['admin_user'][] = '订单列表|order.php?act=list';

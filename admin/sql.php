@@ -31,7 +31,7 @@ if ($_REQUEST['act'] == 'query') {
     admin_priv('sql_query');
     if (!empty($_POST['sql'])) {
         preg_match_all("/(SELECT)/i", $_POST['sql'], $matches);
-        if (isset($matches[1]) && count($matches[1])>1) {
+        if (isset($matches[1]) && count($matches[1]) > 1) {
             sys_msg("this sql more than one SELECT ");
         }
 
@@ -65,14 +65,14 @@ function assign_sql($sql)
     /* 解析查询项 */
     $sql = str_replace("\r", '', $sql);
     $query_items = explode(";\n", $sql);
-    foreach ($query_items as $key=>$value) {
+    foreach ($query_items as $key => $value) {
         if (empty($value)) {
             unset($query_items[$key]);
         }
     }
     /* 如果是多条语句，拆开来执行 */
     if (count($query_items) > 1) {
-        foreach ($query_items as $key=>$value) {
+        foreach ($query_items as $key => $value) {
             if ($db->query($value, 'SILENT')) {
                 $smarty->assign('type', 1);
             } else {
@@ -115,7 +115,7 @@ function assign_sql($sql)
                 }
                 $result .= "</table>\n";
             } else {
-                $result ="<center><h3>" . $_LANG['no_data'] . "</h3></center>";
+                $result = "<center><h3>" . $_LANG['no_data'] . "</h3></center>";
             }
 
             $smarty->assign('type', 2);

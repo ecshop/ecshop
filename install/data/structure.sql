@@ -709,7 +709,7 @@ CREATE TABLE `ecs_member_price` (
 
 DROP TABLE IF EXISTS `ecs_keywords`;
 CREATE TABLE `ecs_keywords` (
-  `date` date NOT NULL default '0000-00-00',
+  `date` date NOT NULL default '2000-01-01',
   `searchengine` varchar(20) NOT NULL default '',
   `keyword` varchar(90) NOT NULL default '',
   `count` mediumint(8) unsigned NOT NULL default '0',
@@ -961,7 +961,7 @@ CREATE TABLE `ecs_reg_fields` (
 
 DROP TABLE IF EXISTS `ecs_searchengine`;
 CREATE TABLE `ecs_searchengine` (
-  `date` date NOT NULL default '0000-00-00',
+  `date` date NOT NULL default '2000-01-01',
   `searchengine` varchar(20) NOT NULL default '',
   `count` mediumint(8) unsigned NOT NULL default '0',
   PRIMARY KEY  (`date`,`searchengine`)
@@ -1239,7 +1239,7 @@ CREATE TABLE `ecs_users` (
   `question` varchar(255) NOT NULL default '',
   `answer` varchar(255) NOT NULL default '',
   `sex` tinyint(1) unsigned NOT NULL default '0',
-  `birthday` date NOT NULL default '0000-00-00',
+  `birthday` date NOT NULL default '2000-01-01',
   `user_money` decimal(10,2) NOT NULL default '0.00',
   `frozen_money` decimal(10,2) NOT NULL default '0.00',
   `pay_points` int unsigned NOT NULL default '0',
@@ -1247,7 +1247,7 @@ CREATE TABLE `ecs_users` (
   `address_id` mediumint(8) unsigned NOT NULL default '0',
   `reg_time` int(10) unsigned NOT NULL default '0',
   `last_login` INT( 11 ) UNSIGNED NOT NULL default '0',
-  `last_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `last_time` datetime NOT NULL default '2000-01-01 00:00:00',
   `last_ip` varchar(15) NOT NULL default '',
   `visit_count` smallint(5) unsigned NOT NULL default '0',
   `user_rank` tinyint(3) unsigned NOT NULL default '0',

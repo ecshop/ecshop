@@ -140,7 +140,6 @@ body {
   </li>
 {/if}
 {/foreach}
-  <script language="JavaScript" src="http://api.ecshop.com/menu_ext.php?charset={$charset}&lang={$help_lang}"></script>
 </ul>
 </div>
 <div id="help-div" style="display:none">
@@ -406,17 +405,6 @@ Object.extend(ToggleHanlder ,{
 ToggleHanlder.CookieName += "_{$admin_id}";
 //初始化菜单状态
 ToggleHanlder.Load();
-Ajax.call('cloud.php?is_ajax=1&act=menu_api','', start_menu_api, 'GET', 'JSON');
-function start_menu_api(result)
-{
-      if(result.content==0)
-      {
-      }
-      else
-      {
-          document.getElementById("menu-ul").innerHTML = document.getElementById("menu-ul").innerHTML + result.content;
-      }   
-}
 //-->
 </script>
 

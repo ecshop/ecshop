@@ -4,14 +4,12 @@
  * EMS插件
  */
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
 $shipping_lang = ROOT_PATH.'languages/' .$GLOBALS['_CFG']['lang']. '/shipping/ems.php';
-if (file_exists($shipping_lang))
-{
+if (file_exists($shipping_lang)) {
     global $_LANG;
     include_once($shipping_lang);
 }
@@ -19,8 +17,7 @@ if (file_exists($shipping_lang))
 include_once(ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/admin/shipping.php');
 
 /* 模块的基本信息 */
-if (isset($set_modules) && $set_modules == TRUE)
-{
+if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 配送方式插件的代码必须和文件名保持一致 */
@@ -53,7 +50,7 @@ if (isset($set_modules) && $set_modules == TRUE)
     /* 打印单背景 */
     $modules[$i]['print_bg'] = '/images/receipt/dly_ems.jpg';
 
-   /* 打印快递单标签位置信息 */
+    /* 打印快递单标签位置信息 */
     $modules[$i]['config_lable'] = 't_shop_name,' . $_LANG['lable_box']['shop_name'] . ',236,32,182,161,b_shop_name||,||t_shop_tel,' . $_LANG['lable_box']['shop_tel'] . ',127,21,295,135,b_shop_tel||,||t_shop_address,' . $_LANG['lable_box']['shop_address'] . ',296,68,124,190,b_shop_address||,||t_pigeon,' . $_LANG['lable_box']['pigeon'] . ',21,21,192,278,b_pigeon||,||t_customer_name,' . $_LANG['lable_box']['customer_name'] . ',107,23,494,136,b_customer_name||,||t_customer_tel,' . $_LANG['lable_box']['customer_tel'] . ',155,21,639,124,b_customer_tel||,||t_customer_mobel,' . $_LANG['lable_box']['customer_mobel'] . ',159,21,639,147,b_customer_mobel||,||t_customer_post,' . $_LANG['lable_box']['customer_post'] . ',88,21,680,258,b_customer_post||,||t_year,' . $_LANG['lable_box']['year'] . ',37,21,534,379,b_year||,||t_months,' . $_LANG['lable_box']['months'] . ',29,21,592,379,b_months||,||t_day,' . $_LANG['lable_box']['day'] . ',27,21,642,380,b_day||,||t_order_best_time,' . $_LANG['lable_box']['order_best_time'] . ',104,39,688,359,b_order_best_time||,||t_order_postscript,' . $_LANG['lable_box']['order_postscript'] . ',305,34,485,402,b_order_postscript||,||t_customer_address,' . $_LANG['lable_box']['customer_address'] . ',289,48,503,190,b_customer_address||,||';
 
     return;
@@ -77,7 +74,7 @@ class ems
     /**
      * 配置信息
      */
-    var $configure;
+    public $configure;
 
     /*------------------------------------------------------ */
     //-- PUBLIC METHODs
@@ -90,10 +87,9 @@ class ems
      *
      * @return null
      */
-    function ems($cfg=array())
+    public function ems($cfg=array())
     {
-        foreach ($cfg AS $key=>$val)
-        {
+        foreach ($cfg as $key=>$val) {
             $this->configure[$val['name']] = $val['value'];
         }
     }
@@ -106,25 +102,18 @@ class ems
      * @param   float   $goods_number   商品件数
      * @return  decimal
      */
-    function calculate($goods_weight, $goods_amount, $goods_number)
+    public function calculate($goods_weight, $goods_amount, $goods_number)
     {
-        if ($this->configure['free_money'] > 0 && $goods_amount >= $this->configure['free_money'])
-        {
+        if ($this->configure['free_money'] > 0 && $goods_amount >= $this->configure['free_money']) {
             return 0;
-        }
-        else
-        {
+        } else {
             $fee = $this->configure['base_fee'];
             $this->configure['fee_compute_mode'] = !empty($this->configure['fee_compute_mode']) ? $this->configure['fee_compute_mode'] : 'by_weight';
 
-            if ($this->configure['fee_compute_mode'] == 'by_number')
-            {
+            if ($this->configure['fee_compute_mode'] == 'by_number') {
                 $fee = $goods_number * $this->configure['item_fee'];
-            }
-            else
-            {
-                if ($goods_weight > 0.5)
-                {
+            } else {
+                if ($goods_weight > 0.5) {
                     $fee += (ceil(($goods_weight - 0.5) / 0.5)) * $this->configure['step_fee'];
                 }
             }
@@ -139,7 +128,7 @@ class ems
      * @param   string  $invoice_sn     发货单号
      * @return  string
      */
-    function query($invoice_sn)
+    public function query($invoice_sn)
     {
         $str = '<form style="margin:0px" method="post" '.
             'action="http://www.ems.com.cn/qcgzOutQueryAction.do" name="queryForm_' .$invoice_sn. '" target="_blank">'.
@@ -152,5 +141,3 @@ class ems
         return $str;
     }
 }
-
-?>

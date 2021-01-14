@@ -4,8 +4,7 @@
  * 系统环境检测函数库
  */
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
@@ -25,22 +24,17 @@ function check_dirs_priv($checking_dirs)
     global $_LANG;
     $msgs = array('result' => 'OK', 'detail' => array());
 
-    foreach ($checking_dirs AS $dir)
-    {
-        if (!file_exists(ROOT_PATH . $dir))
-        {
+    foreach ($checking_dirs as $dir) {
+        if (!file_exists(ROOT_PATH . $dir)) {
             $msgs['result'] = 'ERROR';
             $msgs['detail'][] = array($dir, $_LANG['not_exists']);
             continue;
         }
 
-        if (file_mode_info(ROOT_PATH . $dir) < 2)
-        {
+        if (file_mode_info(ROOT_PATH . $dir) < 2) {
             $msgs['result'] = 'ERROR';
             $msgs['detail'][] = array($dir, $_LANG['cannt_write']);
-        }
-        else
-        {
+        } else {
             $msgs['detail'][] = array($dir, $_LANG['can_write']);
         }
     }
@@ -63,22 +57,18 @@ function check_templates_priv($templates_root)
     $filename = '';
     $filepath = '';
 
-    foreach ($templates_root as $tpl_type => $tpl_root)
-    {
-        if (!file_exists($tpl_root))
-        {
+    foreach ($templates_root as $tpl_type => $tpl_root) {
+        if (!file_exists($tpl_root)) {
             $msgs[] = str_replace(ROOT_PATH, '', $tpl_root . ' ' . $_LANG['not_exists']);
             continue;
         }
 
         $tpl_handle = @opendir($tpl_root);
-        while (($filename = @readdir($tpl_handle)) !== false)
-        {
+        while (($filename = @readdir($tpl_handle)) !== false) {
             $filepath = $tpl_root . $filename;
             if (is_file($filepath)
                     && strrpos($filename, '.' . $tpl_type) !== false
-                    && file_mode_info($filepath) < 7)
-            {
+                    && file_mode_info($filepath) < 7) {
                 $msgs[] = str_replace(ROOT_PATH, '', $filepath . ' ' . $_LANG['cannt_write']);
             }
         }
@@ -105,26 +95,20 @@ function check_rename_priv()
     $dir_list[] = 'temp/compiled/admin';
     /* 获取images目录下图片目录 */
     $folder = opendir(ROOT_PATH . 'images');
-    while ($dir = readdir($folder))
-    {
-        if (is_dir(ROOT_PATH . 'images/' . $dir) && preg_match('/^[0-9]{6}$/', $dir))
-        {
+    while ($dir = readdir($folder)) {
+        if (is_dir(ROOT_PATH . 'images/' . $dir) && preg_match('/^[0-9]{6}$/', $dir)) {
             $dir_list[] = 'images/' . $dir;
         }
     }
     closedir($folder);
     /* 检查目录是否有执行rename函数的权限 */
     $msgs = array();
-    foreach ($dir_list AS $dir)
-    {
+    foreach ($dir_list as $dir) {
         $mask = file_mode_info(ROOT_PATH .$dir);
-        if ((($mask & 2) > 0 ) && (($mask & 8) < 1))
-        {
+        if ((($mask & 2) > 0) && (($mask & 8) < 1)) {
             /* 只有可写时才检查rename权限 */
             $msgs[] = $dir . ' ' . $GLOBALS['_LANG']['cannt_modify'];
         }
     }
     return $msgs;
 }
-
-?>

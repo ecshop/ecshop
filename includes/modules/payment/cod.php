@@ -4,23 +4,20 @@
  * 货到付款插件
  */
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
 $payment_lang = ROOT_PATH . 'languages/' .$GLOBALS['_CFG']['lang']. '/payment/cod.php';
 
-if (file_exists($payment_lang))
-{
+if (file_exists($payment_lang)) {
     global $_LANG;
 
     include_once($payment_lang);
 }
 
 /* 模块的基本信息 */
-if (isset($set_modules) && $set_modules == TRUE)
-{
+if (isset($set_modules) && $set_modules == true) {
     $i = isset($modules) ? count($modules) : 0;
 
     /* 代码 */
@@ -66,11 +63,11 @@ class cod
      *
      * @return void
      */
-    function cod()
+    public function cod()
     {
     }
 
-    function __construct()
+    public function __construct()
     {
         $this->cod();
     }
@@ -78,7 +75,7 @@ class cod
     /**
      * 提交函数
      */
-    function get_code()
+    public function get_code()
     {
         return '';
     }
@@ -86,10 +83,8 @@ class cod
     /**
      * 处理函数
      */
-    function response()
+    public function response()
     {
         return;
     }
 }
-
-?>

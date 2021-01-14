@@ -13,11 +13,11 @@ if (!defined('IN_ECS')) {
 /*------------------------------------------------------ */
 class exchange
 {
-    var $table;
-    var $db;
-    var $id;
-    var $name;
-    var $error_msg;
+    public $table;
+    public $db;
+    public $id;
+    public $name;
+    public $error_msg;
 
     /**
      * 构造函数
@@ -30,7 +30,7 @@ class exchange
      *
      * @return void
      */
-    function exchange($table, &$db , $id, $name)
+    public function exchange($table, &$db, $id, $name)
     {
         $this->table     = $table;
         $this->db        = &$db;
@@ -49,7 +49,7 @@ class exchange
      *
      * @return void
      */
-    function is_only($col, $name, $id = 0, $where='')
+    public function is_only($col, $name, $id = 0, $where='')
     {
         $sql = 'SELECT COUNT(*) FROM ' .$this->table. " WHERE $col = '$name'";
         $sql .= empty($id) ? '' : ' AND ' . $this->id . " <> '$id'";
@@ -67,7 +67,7 @@ class exchange
      *
      * @return   int        记录个数
      */
-    function num($col, $name, $id = 0)
+    public function num($col, $name, $id = 0)
     {
         $sql = 'SELECT COUNT(*) FROM ' .$this->table. " WHERE $col = '$name'";
         $sql .= empty($id) ? '' : ' AND '. $this->id ." != '$id' ";
@@ -84,16 +84,13 @@ class exchange
      *
      * @return bool     成功或失败
      */
-    function edit($set, $id)
+    public function edit($set, $id)
     {
         $sql = 'UPDATE ' . $this->table . ' SET ' . $set . " WHERE $this->id = '$id'";
 
-        if ($this->db->query($sql))
-        {
+        if ($this->db->query($sql)) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -107,10 +104,9 @@ class exchange
      *
      * @return string   取出的数据
      */
-    function get_name($id, $name = '')
+    public function get_name($id, $name = '')
     {
-        if (empty($name))
-        {
+        if (empty($name)) {
             $name = $this->name;
         }
 
@@ -127,12 +123,10 @@ class exchange
      *
      * @return bool
      */
-    function drop($id)
+    public function drop($id)
     {
         $sql = 'DELETE FROM ' . $this->table . " WHERE $this->id = '$id'";
 
         return $this->db->query($sql);
     }
 }
-
-?>

@@ -84,7 +84,7 @@
 <h3><?php echo $lang['mix_options'];?></h3>
 <table width="450" class="list">
 <tr>
-    <?php if (EC_CHARSET == 'gbk'){ ?>
+    <?php if (EC_CHARSET == 'gbk') { ?>
     <td width="90" align="left"><?php echo $lang['select_lang_package'];?></td>
     <td align="left"><input type="radio" class="p" name="js-system-lang" id="js-system-lang-zh_cn" value="zh_cn" checked='true'/><label for="js-system-lang-zh_cn"><?php echo $lang['simplified_chinese'];?></label></td>
     <?php } elseif (EC_CHARSET == 'utf-8') { ?>
@@ -103,7 +103,7 @@
     <td width="90" align="left"><?php echo $lang['set_timezone'];?></td>
     <td align="left">
      <select name="js-timezones">
-<?php foreach($timezones as $key => $item): ?>
+<?php foreach ($timezones as $key => $item): ?>
             <option value="<?php echo $key;?>" <?php if ($key == $local_timezone):?>selected="true"<?php $found = true;endif;?>><?php echo $item;?></option>
 <?php endforeach; ?>
 <?php if (!$found) :?>
@@ -120,7 +120,7 @@
 <tr>
     <td width="90" align="left" valign="top"><?php echo $lang['pre_goods_types'];?></td>
     <td align="left" >
-<?php $i=0; foreach($goods_types as $key => $item): ?>
+<?php $i=0; foreach ($goods_types as $key => $item): ?>
     <input type="checkbox" class="p" name="js-goods-type[]" value="<?php echo $key;?>" checked="true" /> <?php echo $item;?>
     <?php if (++$i == 5):?><br /><?php endif;?>
 <?php endforeach; ?>
@@ -128,9 +128,8 @@
 </tr>
 
 <tr <?php
-if(!file_exists(ROOT_PATH .'demo'))
-{
-?>
+if (!file_exists(ROOT_PATH .'demo')) {
+    ?>
 style="display:none"
 <?php
 }

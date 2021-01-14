@@ -173,4 +173,3 @@ $_LANG['ucenter_data_error'] = '安装数据错误';
 $_LANG['ucenter_config_error'] = '配置文件写入错误';
 $_LANG['ucenter_datadir_access'] = '请检查data目录是否可写';
 $_LANG['ucenter_tmp_config_error'] = '临时配置文件写入错误';
-?>

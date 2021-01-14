@@ -136,4 +136,3 @@ $modules['16_email_manage']['email_list']           = 'email_list.php?act=list';
 $modules['16_email_manage']['magazine_list']        = 'magazine_list.php?act=list';
 $modules['16_email_manage']['attention_list']       = 'attention_list.php?act=list';
 $modules['16_email_manage']['view_sendlist']        = 'view_sendlist.php?act=list';
-?>

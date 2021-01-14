@@ -139,5 +139,3 @@ if (!defined('IN_ECS')) {
     $purview['email_list']           = 'email_list';
     $purview['magazine_list']        = 'magazine_list';
     $purview['view_sendlist']        = 'view_sendlist';
-
-?>

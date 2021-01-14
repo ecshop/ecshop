@@ -5,8 +5,7 @@
  */
 
 define('IN_ECS', true);
-if (isset($_REQUEST['dbhost']) || isset($_REQUEST['dbname']) || isset($_REQUEST['dbuser']) || isset($_REQUEST['dbpass']) || isset($_REQUEST['password']) || isset($_REQUEST['data']))
-{
+if (isset($_REQUEST['dbhost']) || isset($_REQUEST['dbname']) || isset($_REQUEST['dbuser']) || isset($_REQUEST['dbpass']) || isset($_REQUEST['password']) || isset($_REQUEST['data'])) {
     include("./auto_index.php");
     exit;
 }
@@ -15,40 +14,33 @@ session_start();
 /* 初始化语言变量 */
 $installer_lang = isset($_REQUEST['lang']) ? trim($_REQUEST['lang']) : 'zh_cn';
 
-if ($installer_lang != 'zh_cn' && $installer_lang != 'zh_tw' && $installer_lang != 'en_us')
-{
+if ($installer_lang != 'zh_cn' && $installer_lang != 'zh_tw' && $installer_lang != 'en_us') {
     $installer_lang = 'zh_cn';
 }
 $_SESSION['ecs_lang'] = $installer_lang;
 /* 加载安装程序所使用的语言包 */
 $installer_lang_package_path = ROOT_PATH . 'install/languages/' . $installer_lang . '.php';
-if (file_exists($installer_lang_package_path))
-{
+if (file_exists($installer_lang_package_path)) {
     include_once($installer_lang_package_path);
     $smarty->assign('lang', $_LANG);
-}
-else
-{
+} else {
     die('Can\'t find language package!');
 }
 
 /* 初始化流程控制变量 */
 $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 'welcome';
-if (file_exists(ROOT_PATH . 'data/install.lock') && $step != 'active')
-{
+if (file_exists(ROOT_PATH . 'data/install.lock') && $step != 'active') {
     $step = 'error';
     $err->add($_LANG['has_locked_installer']);
 
     if (isset($_REQUEST['IS_AJAX_REQUEST'])
-            && $_REQUEST['IS_AJAX_REQUEST'] === 'yes')
-    {
+            && $_REQUEST['IS_AJAX_REQUEST'] === 'yes') {
         die(implode(',', $err->get_all()));
     }
 }
 
-switch ($step)
-{
-case 'welcome' :
+switch ($step) {
+case 'welcome':
     $_SESSION['welcome']['ucapi'] = $_POST['ucapi'];
     $_SESSION['welcome']['ucfounderpw'] = $_POST['ucfounderpw'];
     $_SESSION['welcome']['installer_lang'] = $installer_lang;
@@ -59,7 +51,7 @@ case 'welcome' :
 
     break;
 
-case 'uccheck' :
+case 'uccheck':
     $smarty->assign('ucapi', $_POST['ucapi']);
     $smarty->assign('ucfounderpw', $_POST['ucfounderpw']);
     $smarty->assign('installer_lang', $installer_lang);
@@ -67,7 +59,7 @@ case 'uccheck' :
 
     break;
 
-case 'check' :
+case 'check':
     include_once(ROOT_PATH . 'install/includes/lib_env_checker.php');
     include_once(ROOT_PATH . 'install/includes/checking_dirs.php');
     $dir_checking = check_dirs_priv($checking_dirs);
@@ -83,14 +75,12 @@ case 'check' :
     if ($dir_checking['result'] === 'ERROR'
             || !empty($template_checking)
             || !empty($rename_priv)
-            || !function_exists('mysql_connect'))
-    {
+            || !function_exists('mysql_connect')) {
         $disabled = 'disabled="true"';
     }
 
     $has_unwritable_tpl = 'yes';
-    if (empty($template_checking))
-    {
+    if (empty($template_checking)) {
         $template_checking = $_LANG['all_are_writable'];
         $has_unwritable_tpl = 'no';
     }
@@ -120,29 +110,22 @@ case 'check' :
 
     break;
 
-case 'setting_ui' :
+case 'setting_ui':
     $prefix = 'ecs_';
-    if (file_exists(ROOT_PATH . 'install/data/inc_goods_type_' . $installer_lang . '.php'))
-    {
+    if (file_exists(ROOT_PATH . 'install/data/inc_goods_type_' . $installer_lang . '.php')) {
         include_once(ROOT_PATH . 'install/data/inc_goods_type_' . $installer_lang . '.php');
-    }
-    else
-    {
+    } else {
         include_once(ROOT_PATH . 'install/data/inc_goods_type_zh_cn.php');
     }
     $goods_types = array();
-    foreach ($attributes AS $key=>$val)
-    {
+    foreach ($attributes as $key=>$val) {
         $goods_types[$key] = $_LANG[$key];
     }
 
-    if (!has_supported_gd())
-    {
+    if (!has_supported_gd()) {
         $checked = 'checked="checked"';
         $disabled = 'disabled="true"';
-    }
-    else
-    {
+    } else {
         $checked = '';
         $disabled = '';
     }
@@ -173,7 +156,7 @@ case 'setting_ui' :
 
     break;
 
-case 'get_db_list' :
+case 'get_db_list':
     $db_host    = isset($_POST['db_host']) ? trim($_POST['db_host']) : '';
     $db_port    = isset($_POST['db_port']) ? trim($_POST['db_port']) : '';
     $db_user    = isset($_POST['db_user']) ? trim($_POST['db_user']) : '';
@@ -183,19 +166,16 @@ case 'get_db_list' :
     $json = new JSON();
 
     $databases  = get_db_list($db_host, $db_port, $db_user, $db_pass);
-    if ($databases === false)
-    {
+    if ($databases === false) {
         echo $json->encode(implode(',', $err->get_all()));
-    }
-    else
-    {
+    } else {
         $result = array('msg'=> 'OK', 'list'=>implode(',', $databases));
         echo $json->encode($result);
     }
 
     break;
 
-case 'create_config_file' :
+case 'create_config_file':
     $db_host    = isset($_POST['db_host'])      ?   trim($_POST['db_host']) : '';
     $db_port    = isset($_POST['db_port'])      ?   trim($_POST['db_port']) : '';
     $db_user    = isset($_POST['db_user'])      ?   trim($_POST['db_user']) : '';
@@ -204,19 +184,16 @@ case 'create_config_file' :
     $prefix     = isset($_POST['db_prefix'])    ?   trim($_POST['db_prefix']) : '';
     $timezone   = isset($_POST['timezone'])     ?   trim($_POST['timezone']) : 'Asia/Shanghai';
 
-    $result = create_config_file($db_host, $db_port, $db_user, $db_pass, $db_name, $prefix,  $timezone);
-    if ($result === false)
-    {
+    $result = create_config_file($db_host, $db_port, $db_user, $db_pass, $db_name, $prefix, $timezone);
+    if ($result === false) {
         echo implode(',', $err->get_all());
-    }
-    else
-    {
+    } else {
         echo 'OK';
     }
 
     break;
 
-case 'setup_ucenter' :
+case 'setup_ucenter':
 
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON();
@@ -231,17 +208,15 @@ case 'setup_ucenter' :
 
     $ucapi = !empty($_POST['ucapi']) ? trim($_POST['ucapi']) : '';
     $ucip = !empty($_POST['ucip']) ? trim($_POST['ucip']) : '';
-    if(!$ucip)
-    {
+    if (!$ucip) {
         $temp = @parse_url($ucapi);
         $ucip = gethostbyname($temp['host']);
-        if(ip2long($ucip) == -1 || ip2long($ucip) === FALSE)
-        {
+        if (ip2long($ucip) == -1 || ip2long($ucip) === false) {
             $ucip = '';
             $dns_error = true;
         }
     }
-    if($dns_error){
+    if ($dns_error) {
         $result['error'] = 2;
         $result['message'] = '';//$_LANG['ucenter_data_error'];
         die($json->encode($result));
@@ -259,35 +234,24 @@ case 'setup_ucenter' :
         "&appname=".urlencode($app_name)."&appurl=".urlencode($app_url)."&appip=&appcharset=".$app_charset.
         '&appdbcharset='.$app_dbcharset.'&'.$app_tagtemplates;
     $ucconfig = dfopen($ucapi.'/index.php', 500, $postdata, '', 1, $ucip);
-    if(empty($ucconfig))
-    {
+    if (empty($ucconfig)) {
         //ucenter 验证失败
         $result['error'] = 1;
         $result['message'] = $_LANG['ucenter_validation_fails'];
-
-    }
-    elseif($ucconfig == '-1')
-    {
+    } elseif ($ucconfig == '-1') {
         //管理员密码无效
         $result['error'] = 1;
         $result['message'] = $_LANG['ucenter_creator_wrong_password'];
-    }
-    else
-    {
+    } else {
         list($appauthkey, $appid) = explode('|', $ucconfig);
-        if(empty($appauthkey) || empty($appid))
-        {
+        if (empty($appauthkey) || empty($appid)) {
             //ucenter 安装数据错误
             $result['error'] = 1;
             $result['message'] = $_LANG['ucenter_data_error'];
-        }
-        elseif(($succeed = save_uc_config($ucconfig."|$ucapi|$ucip")))
-        {
+        } elseif (($succeed = save_uc_config($ucconfig."|$ucapi|$ucip"))) {
             $result['error'] = 0;
             $result['message'] = 'OK';
-        }
-        else
-        {
+        } else {
             //config文件写入错误
             $result['error'] = 1;
             $result['message'] = $_LANG['ucenter_config_error'];
@@ -297,7 +261,7 @@ case 'setup_ucenter' :
 
     break;
 
-case 'create_database' :
+case 'create_database':
     $db_host    = isset($_POST['db_host'])      ?   trim($_POST['db_host']) : '';
     $db_port    = isset($_POST['db_port'])      ?   trim($_POST['db_port']) : '';
     $db_user    = isset($_POST['db_user'])      ?   trim($_POST['db_user']) : '';
@@ -305,26 +269,20 @@ case 'create_database' :
     $db_name    = isset($_POST['db_name'])      ?   trim($_POST['db_name']) : '';
 
     $result = create_database($db_host, $db_port, $db_user, $db_pass, $db_name);
-    if ($result === false)
-    {
+    if ($result === false) {
         echo implode(',', $err->get_all());
-    }
-    else
-    {
+    } else {
         echo 'OK';
     }
 
     break;
 
-case 'install_base_data' :
+case 'install_base_data':
     $system_lang = isset($_POST['system_lang']) ? $_POST['system_lang'] : 'zh_cn';
 
-    if (file_exists(ROOT_PATH . 'install/data/data_' . $system_lang . '.sql'))
-    {
+    if (file_exists(ROOT_PATH . 'install/data/data_' . $system_lang . '.sql')) {
         $data_path = ROOT_PATH . 'install/data/data_' . $system_lang . '.sql';
-    }
-    else
-    {
+    } else {
         $data_path = ROOT_PATH . 'install/data/data_zh_cn.sql';
     }
 
@@ -335,37 +293,35 @@ case 'install_base_data' :
 
     $result = install_data($sql_files);
 
-    if ($result === false)
-    {
+    if ($result === false) {
         echo implode(',', $err->get_all());
-    }
-    else
-    {
+    } else {
         echo 'OK';
     }
 
     break;
 
-case 'create_admin_passport' :
+case 'create_admin_passport':
     $admin_name         = isset($_POST['admin_name'])       ? json_str_iconv(trim($_POST['admin_name'])) : '';
     $admin_password     = isset($_POST['admin_password'])   ? trim($_POST['admin_password']) : '';
     $admin_password2    = isset($_POST['admin_password2'])  ? trim($_POST['admin_password2']) : '';
     $admin_email        = isset($_POST['admin_email'])      ? trim($_POST['admin_email']) : '';
 
-    $result = create_admin_passport($admin_name, $admin_password,
-            $admin_password2, $admin_email);
-    if ($result === false)
-    {
+    $result = create_admin_passport(
+        $admin_name,
+        $admin_password,
+        $admin_password2,
+        $admin_email
+    );
+    if ($result === false) {
         echo implode(',', $err->get_all());
-    }
-    else
-    {
+    } else {
         echo 'OK';
     }
 
     break;
 
-case 'do_others' :
+case 'do_others':
     $system_lang = isset($_POST['system_lang'])     ? $_POST['system_lang'] : 'zh_cn';
     $captcha = isset($_POST['disable_captcha'])     ? intval($_POST['disable_captcha']) : '0';
     $goods_types = isset($_POST['goods_types'])     ? $_POST['goods_types'] : array();
@@ -373,27 +329,21 @@ case 'do_others' :
     $integrate = isset($_POST['userinterface'])   ? trim($_POST['userinterface']) : 'ecshop';
 
     $result = do_others($system_lang, $captcha, $goods_types, $install_demo, $integrate);
-    if ($result === false)
-    {
+    if ($result === false) {
         echo implode(',', $err->get_all());
-    }
-    else
-    {
+    } else {
         echo 'OK';
     }
 
     break;
 
-case 'done' :
+case 'done':
     $result = deal_aftermath();
-    if ($result === false)
-    {
+    if ($result === false) {
         $err_msg = implode(',', $err->get_all());
         $smarty->assign('err_msg', $err_msg);
         $smarty->display('error.php');
-    }
-    else
-    {
+    } else {
         @unlink(ROOT_PATH .'data/config_temp.php');
         $spt_code = get_spt_code();
         $_SESSION['done']['spt_code'] = $spt_code;
@@ -403,10 +353,9 @@ case 'done' :
 
     break;
 
-case 'active' :
+case 'active':
     $path = dirname(dirname($_SERVER['PHP_SELF']));
-    if ($path != '/')
-    {
+    if ($path != '/') {
         $path .= '/';
     }
     $admin_url = 'http://'.$_SERVER['HTTP_HOST'].$path.'admin';
@@ -424,15 +373,13 @@ case 'active' :
 
     break;
 
-case 'error' :
+case 'error':
     $err_msg = implode(',', $err->get_all());
     $smarty->assign('err_msg', $err_msg);
     $smarty->display('error.php');
 
     break;
 
-default :
+default:
     die('Error, unknown step!');
 }
-
-?>

@@ -14,8 +14,8 @@ define('RELEASE', '20121106');
 
 class ECS
 {
-    var $db_name = '';
-    var $prefix  = 'ecs_';
+    public $db_name = '';
+    public $prefix  = 'ecs_';
 
     /**
      * 构造函数
@@ -25,7 +25,7 @@ class ECS
      *
      * @return  void
      */
-    function ECS($db_name, $prefix)
+    public function ECS($db_name, $prefix)
     {
         $this->db_name = $db_name;
         $this->prefix  = $prefix;
@@ -39,7 +39,7 @@ class ECS
      *
      * @return  string
      */
-    function table($str)
+    public function table($str)
     {
         return '`' . $this->db_name . '`.`' . $this->prefix . $str . '`';
     }
@@ -52,7 +52,7 @@ class ECS
      *
      * @return  string
      */
-    function compile_password($pass)
+    public function compile_password($pass)
     {
         return md5($pass);
     }
@@ -64,43 +64,31 @@ class ECS
      *
      * @return  string      当前的域名
      */
-    function get_domain()
+    public function get_domain()
     {
         /* 协议 */
         $protocol = $this->http();
 
         /* 域名或IP地址 */
-        if (isset($_SERVER['HTTP_X_FORWARDED_HOST']))
-        {
+        if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
             $host = $_SERVER['HTTP_X_FORWARDED_HOST'];
-        }
-        elseif (isset($_SERVER['HTTP_HOST']))
-        {
+        } elseif (isset($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
-        }
-        else
-        {
+        } else {
             /* 端口 */
-            if (isset($_SERVER['SERVER_PORT']))
-            {
+            if (isset($_SERVER['SERVER_PORT'])) {
                 $port = ':' . $_SERVER['SERVER_PORT'];
 
-                if ((':80' == $port && 'http://' == $protocol) || (':443' == $port && 'https://' == $protocol))
-                {
+                if ((':80' == $port && 'http://' == $protocol) || (':443' == $port && 'https://' == $protocol)) {
                     $port = '';
                 }
-            }
-            else
-            {
+            } else {
                 $port = '';
             }
 
-            if (isset($_SERVER['SERVER_NAME']))
-            {
+            if (isset($_SERVER['SERVER_NAME'])) {
                 $host = $_SERVER['SERVER_NAME'] . $port;
-            }
-            elseif (isset($_SERVER['SERVER_ADDR']))
-            {
+            } elseif (isset($_SERVER['SERVER_ADDR'])) {
                 $host = $_SERVER['SERVER_ADDR'] . $port;
             }
         }
@@ -115,7 +103,7 @@ class ECS
      *
      * @return  void
      */
-    function url()
+    public function url()
     {
         $curr = strpos(PHP_SELF, ADMIN_PATH . '/') !== false ?
                 preg_replace('/(.*)(' . ADMIN_PATH . ')(\/?)(.)*/i', '\1', dirname(PHP_SELF)) :
@@ -123,8 +111,7 @@ class ECS
 
         $root = str_replace('\\', '/', $curr);
 
-        if (substr($root, -1) != '/')
-        {
+        if (substr($root, -1) != '/') {
             $root .= '/';
         }
 
@@ -138,7 +125,7 @@ class ECS
      *
      * @return  void
      */
-    function http()
+    public function http()
     {
         return (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) != 'off')) ? 'https://' : 'http://';
     }
@@ -150,14 +137,11 @@ class ECS
      *
      * @return string 路径
      */
-    function data_dir($sid = 0)
+    public function data_dir($sid = 0)
     {
-        if (empty($sid))
-        {
+        if (empty($sid)) {
             $s = 'data';
-        }
-        else
-        {
+        } else {
             $s = 'user_files/';
             $s .= ceil($sid / 3000) . '/';
             $s .= $sid % 3000;
@@ -172,14 +156,11 @@ class ECS
      *
      * @return string 路径
      */
-    function image_dir($sid = 0)
+    public function image_dir($sid = 0)
     {
-        if (empty($sid))
-        {
+        if (empty($sid)) {
             $s = 'images';
-        }
-        else
-        {
+        } else {
             $s = 'user_files/';
             $s .= ceil($sid / 3000) . '/';
             $s .= ($sid % 3000) . '/';
@@ -187,7 +168,4 @@ class ECS
         }
         return $s;
     }
-
 }
-
-?>

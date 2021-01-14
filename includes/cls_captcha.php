@@ -15,19 +15,19 @@ class captcha
      *
      * @var string  $folder
      */
-    var $folder     = 'data/captcha';
+    public $folder     = 'data/captcha';
 
     /**
      * 图片的文件类型
      *
      * @var string  $img_type
      */
-    var $img_type   = 'png';
+    public $img_type   = 'png';
 
     /*------------------------------------------------------ */
     //-- 存在session中的名称
     /*------------------------------------------------------ */
-    var $session_word = 'captcha_word';
+    public $session_word = 'captcha_word';
 
     /**
      * 背景图片以及背景颜色
@@ -36,7 +36,7 @@ class captcha
      * 1 => Red, 2 => Green, 3 => Blue
      * @var array   $themes
      */
-    var $themes_jpg = array(
+    public $themes_jpg = array(
         1 => array('captcha_bg1.jpg', 255, 255, 255),
         2 => array('captcha_bg2.jpg', 0, 0, 0),
         3 => array('captcha_bg3.jpg', 0, 0, 0),
@@ -44,7 +44,7 @@ class captcha
         5 => array('captcha_bg5.jpg', 255, 255, 255),
     );
 
-    var $themes_gif = array(
+    public $themes_gif = array(
         1 => array('captcha_bg1.gif', 255, 255, 255),
         2 => array('captcha_bg2.gif', 0, 0, 0),
         3 => array('captcha_bg3.gif', 0, 0, 0),
@@ -57,14 +57,14 @@ class captcha
      *
      * @var integer $width
      */
-    var $width      = 130;
+    public $width      = 130;
 
     /**
      * 图片的高度
      *
      * @var integer $height
      */
-    var $height     = 20;
+    public $height     = 20;
 
     /**
      * 构造函数
@@ -75,10 +75,9 @@ class captcha
      * @param   integer $height     图片高度
      * @return  bool
      */
-    function captcha($folder = '', $width = 145, $height = 20)
+    public function captcha($folder = '', $width = 145, $height = 20)
     {
-        if (!empty($folder))
-        {
+        if (!empty($folder)) {
             $this->folder = $folder;
         }
 
@@ -86,15 +85,10 @@ class captcha
         $this->height   = $height;
 
         /* 检查是否支持 GD */
-        if (PHP_VERSION >= '4.3')
-        {
-
+        if (PHP_VERSION >= '4.3') {
             return (function_exists('imagecreatetruecolor') || function_exists('imagecreate'));
-        }
-        else
-        {
-
-            return (((imagetypes() & IMG_GIF) > 0) || ((imagetypes() & IMG_JPG)) > 0 );
+        } else {
+            return (((imagetypes() & IMG_GIF) > 0) || ((imagetypes() & IMG_JPG)) > 0);
         }
     }
 
@@ -106,7 +100,7 @@ class captcha
      *
      * @return void
      */
-    function __construct($folder = '', $width = 145, $height = 20)
+    public function __construct($folder = '', $width = 145, $height = 20)
     {
         $this->captcha($folder, $width, $height);
     }
@@ -119,7 +113,7 @@ class captcha
      * @param   string  $word   验证码
      * @return  bool
      */
-    function check_word($word)
+    public function check_word($word)
     {
         $recorded = isset($_SESSION[$this->session_word]) ? base64_decode($_SESSION[$this->session_word]) : '';
         $given    = $this->encrypts_word(strtoupper($word));
@@ -134,10 +128,9 @@ class captcha
      * @param   string  $word   验证码
      * @return  mix
      */
-    function generate_image($word = false)
+    public function generate_image($word = false)
     {
-        if (!$word)
-        {
+        if (!$word) {
             $word = $this->generate_word();
         }
 
@@ -150,21 +143,15 @@ class captcha
         /* 选择一个随机的方案 */
         mt_srand((double) microtime() * 1000000);
 
-        if (function_exists('imagecreatefromjpeg') && ((imagetypes() & IMG_JPG) > 0))
-        {
+        if (function_exists('imagecreatefromjpeg') && ((imagetypes() & IMG_JPG) > 0)) {
             $theme  = $this->themes_jpg[mt_rand(1, count($this->themes_jpg))];
-        }
-        else
-        {
+        } else {
             $theme  = $this->themes_gif[mt_rand(1, count($this->themes_gif))];
         }
 
-        if (!file_exists($this->folder . $theme[0]))
-        {
+        if (!file_exists($this->folder . $theme[0])) {
             return false;
-        }
-        else
-        {
+        } else {
             $img_bg    = (function_exists('imagecreatefromjpeg') && ((imagetypes() & IMG_JPG) > 0)) ?
                             imagecreatefromjpeg($this->folder . $theme[0]) : imagecreatefromgif($this->folder . $theme[0]);
             $bg_width  = imagesx($img_bg);
@@ -174,12 +161,9 @@ class captcha
                           imagecreatetruecolor($this->width, $this->height) : imagecreate($this->width, $this->height);
 
             /* 将背景图象复制原始图象并调整大小 */
-            if (function_exists('imagecopyresampled') && PHP_VERSION >= '4.3') // GD 2.x
-            {
+            if (function_exists('imagecopyresampled') && PHP_VERSION >= '4.3') { // GD 2.x
                 imagecopyresampled($img_org, $img_bg, 0, 0, 0, 0, $this->width, $this->height, $bg_width, $bg_height);
-            }
-            else // GD 1.x
-            {
+            } else { // GD 1.x
                 imagecopyresized($img_org, $img_bg, 0, 0, 0, 0, $this->width, $this->height, $bg_width, $bg_height);
             }
             imagedestroy($img_bg);
@@ -202,14 +186,11 @@ class captcha
 
             // HTTP/1.0
             header('Pragma: no-cache');
-            if ($this->img_type == 'jpeg' && function_exists('imagecreatefromjpeg'))
-            {
+            if ($this->img_type == 'jpeg' && function_exists('imagecreatefromjpeg')) {
                 header('Content-type: image/jpeg');
                 imageinterlace($img_org, 1);
                 imagejpeg($img_org, false, 95);
-            }
-            else
-            {
+            } else {
                 header('Content-type: image/png');
                 imagepng($img_org);
             }
@@ -231,7 +212,7 @@ class captcha
      * @param   string  $word   原始字符串
      * @return  string
      */
-    function encrypts_word($word)
+    public function encrypts_word($word)
     {
         return substr(md5($word), 1, 10);
     }
@@ -243,7 +224,7 @@ class captcha
      * @param   string  $word   原始字符串
      * @return  void
      */
-    function record_word($word)
+    public function record_word($word)
     {
         $_SESSION[$this->session_word] = base64_encode($this->encrypts_word($word));
     }
@@ -255,12 +236,11 @@ class captcha
      * @param   integer $length     验证码长度
      * @return  string
      */
-    function generate_word($length = 4)
+    public function generate_word($length = 4)
     {
         $chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
 
-        for ($i = 0, $count = strlen($chars); $i < $count; $i++)
-        {
+        for ($i = 0, $count = strlen($chars); $i < $count; $i++) {
             $arr[$i] = $chars[$i];
         }
 
@@ -270,5 +250,3 @@ class captcha
         return substr(implode('', $arr), 5, $length);
     }
 }
-
-?>

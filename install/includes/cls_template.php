@@ -4,8 +4,7 @@
  * 模板类
  */
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
@@ -17,15 +16,15 @@ class template
     * @access  private
     * @var     array      $vars
     */
-    var $vars = array();
+    public $vars = array();
 
-   /**
-    * 模板存放的目录路径
-    *
-    * @access  private
-    * @var     string      $path
-    */
-    var $path = '';
+    /**
+     * 模板存放的目录路径
+     *
+     * @access  private
+     * @var     string      $path
+     */
+    public $path = '';
 
     /**
      * 构造函数
@@ -34,7 +33,7 @@ class template
      * @param   string       $path
      * @return  void
      */
-    function __construct($path)
+    public function __construct($path)
     {
         $this->template($path);
     }
@@ -46,7 +45,7 @@ class template
      * @param   string       $path
      * @return  void
      */
-    function template($path)
+    public function template($path)
     {
         $this->path = $path;
     }
@@ -59,7 +58,7 @@ class template
      * @param   mix           $value   变量的值
      * @return  void
      */
-    function assign($name, $value)
+    public function assign($name, $value)
     {
         $this->vars[$name] = $value;
     }
@@ -71,7 +70,7 @@ class template
      * @param   string       $file   文件相对路径
      * @return  string      模板的内容(文本格式)
      */
-    function fetch($file)
+    public function fetch($file)
     {
         extract($this->vars);
         ob_start();
@@ -89,10 +88,8 @@ class template
      * @param   string       $file   文件相对路径
      * @return  void
      */
-    function display($file)
+    public function display($file)
     {
         echo $this->fetch($file);
     }
 }
-
-?>

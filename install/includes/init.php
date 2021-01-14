@@ -10,18 +10,15 @@ clearstatcache();
 /* 定义站点根 */
 define('ROOT_PATH', str_replace('install/includes/init.php', '', str_replace('\\', '/', __FILE__)));
 
-if (isset($_SERVER['PHP_SELF']))
-{
+if (isset($_SERVER['PHP_SELF'])) {
     define('PHP_SELF', $_SERVER['PHP_SELF']);
-}
-else
-{
+} else {
     define('PHP_SELF', $_SERVER['SCRIPT_NAME']);
 }
 
 /* 定义版本的编码 */
-define('EC_CHARSET','utf-8');
-define('EC_DB_CHARSET','utf8');
+define('EC_CHARSET', 'utf-8');
+define('EC_DB_CHARSET', 'utf8');
 
 require(ROOT_PATH . 'includes/lib_base.php');
 require(ROOT_PATH . 'includes/lib_common.php');
@@ -41,5 +38,3 @@ require(ROOT_PATH . 'install/includes/lib_installer.php');
 header('Content-type: text/html; charset='.EC_CHARSET);
 
 @set_time_limit(360);
-
-?>

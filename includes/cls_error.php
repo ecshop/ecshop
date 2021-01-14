@@ -4,16 +4,15 @@
  * 用户级错误处理类
  */
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
 class ecs_error
 {
-    var $_message   = array();
-    var $_template  = '';
-    var $error_no   = 0;
+    public $_message   = array();
+    public $_template  = '';
+    public $error_no   = 0;
 
     /**
      * 构造函数
@@ -22,7 +21,7 @@ class ecs_error
      * @param   string  $tpl
      * @return  void
      */
-    function __construct($tpl)
+    public function __construct($tpl)
     {
         $this->ecs_error($tpl);
     }
@@ -34,7 +33,7 @@ class ecs_error
      * @param   string  $tpl
      * @return  void
      */
-    function ecs_error($tpl)
+    public function ecs_error($tpl)
     {
         $this->_template = $tpl;
     }
@@ -47,14 +46,11 @@ class ecs_error
      * @param   integer $errno
      * @return  void
      */
-    function add($msg, $errno=1)
+    public function add($msg, $errno=1)
     {
-        if (is_array($msg))
-        {
+        if (is_array($msg)) {
             $this->_message = array_merge($this->_message, $msg);
-        }
-        else
-        {
+        } else {
             $this->_message[] = $msg;
         }
 
@@ -67,7 +63,7 @@ class ecs_error
      * @access  public
      * @return  void
      */
-    function clean()
+    public function clean()
     {
         $this->_message = array();
         $this->error_no = 0;
@@ -79,7 +75,7 @@ class ecs_error
      * @access  public
      * @return  array
      */
-    function get_all()
+    public function get_all()
     {
         return $this->_message;
     }
@@ -90,7 +86,7 @@ class ecs_error
      * @access  public
      * @return  void
      */
-    function last_message()
+    public function last_message()
     {
         return array_slice($this->_message, -1);
     }
@@ -103,10 +99,9 @@ class ecs_error
      * @param   string  $href
      * @return  void
      */
-    function show($link = '', $href = '')
+    public function show($link = '', $href = '')
     {
-        if ($this->error_no > 0)
-        {
+        if ($this->error_no > 0) {
             $message = array();
 
             $link = (empty($link)) ? $GLOBALS['_LANG']['back_up_page'] : $link;
@@ -114,20 +109,16 @@ class ecs_error
             $message['url_info'][$link] = $href;
             $message['back_url'] = $href;
 
-            foreach ($this->_message AS $msg)
-            {
+            foreach ($this->_message as $msg) {
                 $message['content'] = '<div>' . htmlspecialchars($msg) . '</div>';
             }
 
-            if (isset($GLOBALS['smarty']))
-            {
+            if (isset($GLOBALS['smarty'])) {
                 assign_template();
                 $GLOBALS['smarty']->assign('auto_redirect', true);
                 $GLOBALS['smarty']->assign('message', $message);
                 $GLOBALS['smarty']->display($this->_template);
-            }
-            else
-            {
+            } else {
                 die($message['content']);
             }
 
@@ -135,5 +126,3 @@ class ecs_error
         }
     }
 }
-
-?>

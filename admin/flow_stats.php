@@ -50,7 +50,7 @@ if ($_REQUEST['act'] == 'view') {
     } else {
         $tmp_time = local_strtotime(local_date('Y-m-d'));
         $start_date_arr[] = local_strtotime(local_date('Y-m') . '-1');
-        $end_date_arr[] = local_strtotime(local_date('Y-m') . '-31');;
+        $end_date_arr[] = local_strtotime(local_date('Y-m') . '-31');
     }
 
     /* ------------------------------------- */

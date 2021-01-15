@@ -63,15 +63,9 @@ if ($_REQUEST['act'] == 'install') {
         include_once(ROOT_PATH . "includes/modules/integrates/" . $_GET['code'] . ".php");
         $set_modules = false;
 
-//        if ($_GET['code'] == 'ucenter' && !empty($_CFG['integrate_config']))
-//        {
-//            $cfg = unserialize($_CFG['integrate_config']);
-//        }
-//        else
-//        {
         $cfg = $modules[0]['default'];
         $cfg['integrate_url'] = "http://";
-//        }
+
 
         /* 判断 */
 

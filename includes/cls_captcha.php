@@ -69,13 +69,12 @@ class captcha
     /**
      * 构造函数
      *
-     * @access  public
      * @param string $folder 背景图片所在目录
      * @param integer $width 图片宽度
-     * @param integer $height 图片高度
-     * @return  bool
+     * @param integer $height 图片高度     *
+     * @return void
      */
-    public function captcha($folder = '', $width = 145, $height = 20)
+    public function __construct($folder = '', $width = 145, $height = 20)
     {
         if (!empty($folder)) {
             $this->folder = $folder;
@@ -85,26 +84,8 @@ class captcha
         $this->height = $height;
 
         /* 检查是否支持 GD */
-        if (PHP_VERSION >= '4.3') {
-            return (function_exists('imagecreatetruecolor') || function_exists('imagecreate'));
-        } else {
-            return (((imagetypes() & IMG_GIF) > 0) || ((imagetypes() & IMG_JPG)) > 0);
-        }
+        return (function_exists('imagecreatetruecolor') || function_exists('imagecreate'));
     }
-
-    /**
-     * 构造函数
-     *
-     * @access  public
-     * @param
-     *
-     * @return void
-     */
-    public function __construct($folder = '', $width = 145, $height = 20)
-    {
-        $this->captcha($folder, $width, $height);
-    }
-
 
     /**
      * 检查给出的验证码是否和session中的一致
@@ -157,15 +138,10 @@ class captcha
             $bg_width = imagesx($img_bg);
             $bg_height = imagesy($img_bg);
 
-            $img_org = ((function_exists('imagecreatetruecolor')) && PHP_VERSION >= '4.3') ?
-                imagecreatetruecolor($this->width, $this->height) : imagecreate($this->width, $this->height);
+            $img_org = imagecreatetruecolor($this->width, $this->height);
 
             /* 将背景图象复制原始图象并调整大小 */
-            if (function_exists('imagecopyresampled') && PHP_VERSION >= '4.3') { // GD 2.x
-                imagecopyresampled($img_org, $img_bg, 0, 0, 0, 0, $this->width, $this->height, $bg_width, $bg_height);
-            } else { // GD 1.x
-                imagecopyresized($img_org, $img_bg, 0, 0, 0, 0, $this->width, $this->height, $bg_width, $bg_height);
-            }
+            imagecopyresampled($img_org, $img_bg, 0, 0, 0, 0, $this->width, $this->height, $bg_width, $bg_height);
             imagedestroy($img_bg);
 
             $clr = imagecolorallocate($img_org, $theme[1], $theme[2], $theme[3]);

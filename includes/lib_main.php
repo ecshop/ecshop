@@ -127,7 +127,7 @@ function assign_ur_here($cat = 0, $str = '')
     }
 
     /* 初始化“页面标题”和“当前位置” */
-    $page_title = $GLOBALS['_CFG']['shop_title'] . ' - ' . 'Powered by ECShop';
+    $page_title = $GLOBALS['_CFG']['shop_title'];
     $ur_here = '<a href=".">' . $GLOBALS['_LANG']['home'] . '</a>';
 
     /* 根据文件名分别处理中间的部分 */
@@ -957,7 +957,7 @@ function visit_stats()
         'referer_domain, referer_path, access_url, access_time' .
         ') VALUES (' .
         "'$ip', '$visit_times', '$browser', '$os', '$lang', '$area', " .
-        "'" . htmlspecialchars(addslashes($domain)) . "', '" . htmlspecialchars(addslashes($path)) . "', '" . htmlspecialchars(addslashes(PHP_SELF)) . "', '" . $time . "')";
+        "'" . addslashes($domain) . "', '" . addslashes($path) . "', '" . htmlspecialchars(addslashes(PHP_SELF)) . "', '" . $time . "')";
     $GLOBALS['db']->query($sql);
 }
 
@@ -1091,7 +1091,8 @@ function get_tags($goods_id = 0, $user_id = 0)
  */
 function get_dyna_libs($theme, $tmp)
 {
-    $ext = end(explode('.', $tmp));
+    $tmp_arr = explode('.', $tmp);
+    $ext = end($tmp_arr);
     $tmp = basename($tmp, ".$ext");
     $sql = 'SELECT region, library, sort_order, id, number, type' .
         ' FROM ' . $GLOBALS['ecs']->table('template') .
@@ -1444,8 +1445,7 @@ function get_user_bonus($user_id = 0)
  * @param void
  *
  * @return void
- * @author xuanyan
- **/
+ */
 function set_affiliate()
 {
     $config = unserialize($GLOBALS['_CFG']['affiliate']);
@@ -1474,8 +1474,7 @@ function set_affiliate()
  * @param void
  *
  * @return int
- * @author xuanyan
- **/
+ */
 function get_affiliate()
 {
     if (!empty($_COOKIE['ecshop_affiliate_uid'])) {

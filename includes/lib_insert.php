@@ -19,13 +19,7 @@ function insert_query_info()
     if ($GLOBALS['db']->queryTime == '') {
         $query_time = 0;
     } else {
-        if (PHP_VERSION >= '5.0.0') {
-            $query_time = number_format(microtime(true) - $GLOBALS['db']->queryTime, 6);
-        } else {
-            list($now_usec, $now_sec) = explode(' ', microtime());
-            list($start_usec, $start_sec) = explode(' ', $GLOBALS['db']->queryTime);
-            $query_time = number_format(($now_sec - $start_sec) + ($now_usec - $start_usec), 6);
-        }
+        $query_time = number_format(microtime(true) - $GLOBALS['db']->queryTime, 6);
     }
 
     /* 内存占用情况 */
@@ -290,7 +284,7 @@ function insert_bought_notes($arr)
     $pager['page'] = $page = 1;
     $pager['size'] = $size = 5;
     $pager['record_count'] = $count;
-    $pager['page_count'] = $page_count = ($count > 0) ? intval(ceil($count / $size)) : 1;;
+    $pager['page_count'] = $page_count = ($count > 0) ? intval(ceil($count / $size)) : 1;
     $pager['page_first'] = "javascript:gotoBuyPage(1,$arr[id])";
     $pager['page_prev'] = $page > 1 ? "javascript:gotoBuyPage(" . ($page - 1) . ",$arr[id])" : 'javascript:;';
     $pager['page_next'] = $page < $page_count ? 'javascript:gotoBuyPage(' . ($page + 1) . ",$arr[id])" : 'javascript:;';

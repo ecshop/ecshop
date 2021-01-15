@@ -50,21 +50,7 @@ class ucenter extends integrate
      */
     public function __construct($cfg)
     {
-        /* 使用默认数据库连接 */
-        $this->ucenter($cfg);
-    }
-
-    /**
-     * 构造函数
-     *
-     * @access  public
-     * @param
-     *
-     * @return void
-     */
-    public function ucenter($cfg)
-    {
-        parent::integrate(array());
+        parent::__construct(array());
         $this->user_table = 'users';
         $this->field_id = 'user_id';
         $this->field_name = 'user_name';
@@ -110,7 +96,7 @@ class ucenter extends integrate
      *
      * @return void
      */
-    public function login($username, $password)
+    public function login($username, $password, $remember = null)
     {
         list($uid, $uname, $pwd, $email, $repeat) = uc_call("uc_user_login", array($username, $password));
         $uname = addslashes($uname);
@@ -174,8 +160,7 @@ class ucenter extends integrate
         return true;
     }
 
-    /*添加用户*/
-    public function add_user($username, $password, $email)
+    public function add_user($username, $password, $email, $gender = -1, $bday = 0, $reg_date = 0, $md5password = '')
     {
         /* 检测用户名 */
         if ($this->check_user($username)) {
@@ -378,7 +363,7 @@ class ucenter extends integrate
      *
      * @return void
      */
-    public function set_cookie($username = '')
+    public function set_cookie($username = '', $remember = null)
     {
         if (empty($username)) {
             /* 摧毁cookie */

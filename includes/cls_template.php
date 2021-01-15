@@ -31,11 +31,6 @@ class cls_template
 
     public function __construct()
     {
-        $this->cls_template();
-    }
-
-    public function cls_template()
-    {
         $this->_errorlevel = error_reporting();
         $this->_nowtime = time();
         if (defined('EC_CHARSET')) {
@@ -242,7 +237,10 @@ class cls_template
                 $source = str_replace('%%%SMARTYSP' . $curr_sp . '%%%', '<?php echo \'' . str_replace("'", "\'", $sp_match[1][$curr_sp]) . '\'; ?>' . "\n", $source);
             }
         }
-        return preg_replace("/{([^\}\{\n]*)}/e", "\$this->select('\\1');", $source);
+        $template = $this;
+        return preg_replace_callback("/{([^\}\{\n]*)}/", function ($r) use (&$template) {
+            return $template->select($r[1]);
+        }, $source);
     }
 
     /**
@@ -408,7 +406,9 @@ class cls_template
                 case 'insert':
                     $t = $this->get_para(substr($tag, 7), false);
 
-                    $out = "<?php \n" . '$k = ' . preg_replace("/(\'\\$[^,]+)/e", "stripslashes(trim('\\1','\''));", var_export($t, true)) . ";\n";
+                    $out = "<?php \n" . '$k = ' . preg_replace_callback("/(\'\\$[^,]+)/", function ($r) {
+                        return stripcslashes(trim($r[1], '\''));
+                    }, var_export($t, true)) . ";\n";
                     $out .= 'echo $this->_echash . $k[\'name\'] . \'|\' . serialize($k) . $this->_echash;' . "\n?>";
 
                     return $out;
@@ -466,7 +466,9 @@ class cls_template
     public function get_val($val)
     {
         if (strrpos($val, '[') !== false) {
-            $val = preg_replace("/\[([^\[\]]*)\]/eis", "'.'.str_replace('$','\$','\\1')", $val);
+            $val = preg_replace_callback("/\[([^\[\]]*)\]/is", function ($r) {
+                return '.' . $r[1];
+            }, $val);
         }
 
         if (strrpos($val, '|') !== false) {
@@ -908,9 +910,10 @@ class cls_template
          */
         if ($file_type == '.dwt') {
             /* 将模板中所有library替换为链接 */
-            $pattern = '/<!--\s#BeginLibraryItem\s\"\/(.*?)\"\s-->.*?<!--\s#EndLibraryItem\s-->/se';
-            $replacement = "'{include file='.strtolower('\\1'). '}'";
-            $source = preg_replace($pattern, $replacement, $source);
+            $pattern = '/<!--\s#BeginLibraryItem\s\"\/(.*?)\"\s-->.*?<!--\s#EndLibraryItem\s-->/s';
+            $source = preg_replace_callback($pattern, function ($r) {
+                return '{include file=' . strtolower($r[1]) . '}';
+            }, $source);
 
             /* 检查有无动态库文件，如果有为其赋值 */
             $dyna_libs = get_dyna_libs($GLOBALS['_CFG']['template'], $this->_current_file);

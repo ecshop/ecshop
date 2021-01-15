@@ -66,13 +66,8 @@ class alipay
      *
      * @return void
      */
-    public function alipay()
-    {
-    }
-
     public function __construct()
     {
-        $this->alipay();
     }
 
     /**
@@ -139,7 +134,6 @@ class alipay
 
         $param = substr($param, 0, -1);
         $sign = substr($sign, 0, -1) . $payment['alipay_key'];
-        //$sign  = substr($sign, 0, -1). ALIPAY_AUTH;
 
         $button = '<div style="text-align:center"><input type="button" onclick="window.open(\'https://mapi.alipay.com/gateway.do?' . $param . '&sign=' . md5($sign) . '&sign_type=MD5\')" value="' . $GLOBALS['_LANG']['pay_button'] . '" /></div>';
 
@@ -159,7 +153,7 @@ class alipay
         $payment = get_payment($_GET['code']);
         $seller_email = rawurldecode($_GET['seller_email']);
         $order_sn = str_replace($_GET['subject'], '', $_GET['out_trade_no']);
-        $order_sn = trim($order_sn);
+        $order_sn = trim(addslashes($order_sn));
 
         /* 检查数字签名是否正确 */
         ksort($_GET);
@@ -173,7 +167,6 @@ class alipay
         }
 
         $sign = substr($sign, 0, -1) . $payment['alipay_key'];
-        //$sign = substr($sign, 0, -1) . ALIPAY_AUTH;
         if (md5($sign) != $_GET['sign']) {
             return false;
         }

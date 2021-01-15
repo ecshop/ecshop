@@ -10,7 +10,6 @@ if (!defined('IN_ECS')) {
 define('SOURCE_TOKEN', 'b11983d30cb6821158744d5d065d0f70');
 define('SOURCE_ID', '620386');
 require_once(ROOT_PATH . 'includes/cls_transport.php');
-require_once(ROOT_PATH . 'includes/shopex_json.php');
 
 /* 短信模块主类 */
 
@@ -70,17 +69,6 @@ class sms
      * @return  void
      */
     public function __construct()
-    {
-        $this->sms();
-    }
-
-    /**
-     * 构造函数
-     *
-     * @access  public
-     * @return  void
-     */
-    public function sms()
     {
         /* 由于要包含init.php，所以这两个对象一定是存在的，因此直接赋值 */
         $this->db = $GLOBALS['db'];

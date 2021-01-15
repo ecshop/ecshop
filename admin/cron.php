@@ -313,7 +313,6 @@ function get_next_time($cron)
         $sh = $cron['hour'];
     }
     $next = local_strtotime("$sy-$smo-$sd $sh:$sm:0");
-    //$next = gmmktime($sh,$sm,0,$smo,$sd,$sy);
 
     return $next;
 }

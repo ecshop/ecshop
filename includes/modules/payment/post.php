@@ -60,13 +60,8 @@ class post
      *
      * @return void
      */
-    public function post()
-    {
-    }
-
     public function __construct()
     {
-        $this->post();
     }
 
     /**

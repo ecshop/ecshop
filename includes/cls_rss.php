@@ -30,26 +30,6 @@ if (!defined('IN_ECS')) {
 // @version 1.001
 /*-----------------------------------------------------------------------*/
 
-class RSSBase
-{
-    /*-----------------------*/
-    /* C O N S T R U C T O R */
-    /*-----------------------*/
-
-    //-------------------------------------------------
-    // Constructor
-    //-------------------------------------------------
-    // @desc Constructor
-    // @return (void)
-    // @access private
-    //-------------------------------------------------
-    public function RSSBase()
-    {
-    } // end constructor
-} // end class RSSBase
-
-//---------------------------------------------------------------------------
-
 /*-----------------------------------------------------------------------*/
 // Class for creating a RSS file
 //-------------------------------------------------
@@ -67,7 +47,7 @@ class RSSBase
 // @version 1.001
 /*-----------------------------------------------------------------------*/
 
-class RSSBuilder extends RSSBase
+class RSSBuilder
 {
     /*-----------------------------------------------------------------------*/
     /* V A R I A B L E S
@@ -284,7 +264,7 @@ class RSSBuilder extends RSSBase
     // @uses setEncoding(), setAbout(), setTitle(), setDescription(), setImageLink(), setCategory(), setCache()
     // @access private
     //-------------------------------------------------
-    public function RSSBuilder(
+    public function __construct(
         $encoding = '',
         $about = '',
         $title = '',
@@ -1434,7 +1414,7 @@ class RSSBuilder extends RSSBase
 // @version 1.001
 /*-----------------------------------------------------------------------*/
 
-class RSSItem extends RSSBase
+class RSSItem
 {
     /*-----------------------------------------------------------------------*/
     /* V A R I A B L E S */
@@ -1532,7 +1512,7 @@ class RSSItem extends RSSBase
     // @uses setAbout(), setTitle(), setLink(), setDescription(), setSubject(), setDate(), setAuthor(), setComments()
     // @access private
     //-------------------------------------------------
-    public function RSSItem(
+    public function __construct(
         $about = '',
         $title = '',
         $link = '',

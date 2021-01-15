@@ -18,7 +18,9 @@ if (!defined('IN_ECS')) {
  */
 function dump_escape_string($str)
 {
-    return cls_mysql::escape_string($str);
+    global $db;
+    /* 取得参数 */
+    return cls_mysql::escape_string($str, $db);
 }
 
 /**
@@ -58,26 +60,15 @@ class cls_sql_dump
      *
      * @return void
      */
-    public function cls_sql_dump(&$db, $max_size = 0)
+    public function __construct($db, $max_size = 0)
     {
-        $this->db = &$db;
+        $this->db = $db;
         if ($max_size > 0) {
             $this->max_size = $max_size;
         }
     }
 
     /**
-     *  类的构造函数
-     *
-     * @access  public
-     * @param
-     *
-     * @return void
-     */
-    public function __construct(&$db, $max_size = 0)
-    {
-        $this->cls_sql_dump($db, $max_size);
-    }
 
     /**
      *  获取指定表的定义

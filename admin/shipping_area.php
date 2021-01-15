@@ -161,15 +161,6 @@ elseif ($_REQUEST['act'] == 'edit') {
         if ($val['name'] == 'basic_fee') {
             $val['name'] = 'base_fee';
         }
-//       if ($val['name'] == 'step_fee1')
-//       {
-//            $val['name'] = 'step_fee';
-//       }
-//       if ($val['name'] == 'step_fee2')
-//       {
-//            $val['name'] = 'step_fee1';
-//       }
-
         if ($val['name'] == 'item_fee') {
             $item_fee = 1;
         }

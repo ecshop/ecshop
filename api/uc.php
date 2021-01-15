@@ -69,18 +69,18 @@ class uc_note
     public $tablepre = '';
     public $appdir = '';
 
+    public function __construct()
+    {
+        $this->appdir = ROOT_PATH;
+        $this->db = $GLOBALS['db'];
+    }
+
     public function _serialize($arr, $htmlon = 0)
     {
         if (!function_exists('xml_serialize')) {
             include(ROOT_PATH . 'uc_client/lib/xml.class.php');
         }
         return xml_serialize($arr, $htmlon);
-    }
-
-    public function uc_note()
-    {
-        $this->appdir = ROOT_PATH;
-        $this->db = $GLOBALS['db'];
     }
 
     public function test($get, $post)

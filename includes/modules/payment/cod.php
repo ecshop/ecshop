@@ -63,13 +63,8 @@ class cod
      *
      * @return void
      */
-    public function cod()
-    {
-    }
-
     public function __construct()
     {
-        $this->cod();
     }
 
     /**

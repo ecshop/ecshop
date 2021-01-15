@@ -60,13 +60,8 @@ class bank
      *
      * @return void
      */
-    public function bank()
-    {
-    }
-
     public function __construct()
     {
-        $this->bank();
     }
 
     /**

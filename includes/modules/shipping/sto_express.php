@@ -89,7 +89,7 @@ class sto_express
      *
      * @return null
      */
-    public function sto_express($cfg = array())
+    public function __construct($cfg = array())
     {
         foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];
@@ -110,6 +110,7 @@ class sto_express
             return 0;
         } else {
             @$fee = $this->configure['base_fee'];
+
             $this->configure['fee_compute_mode'] = !empty($this->configure['fee_compute_mode']) ? $this->configure['fee_compute_mode'] : 'by_weight';
 
             if ($this->configure['fee_compute_mode'] == 'by_number') {

@@ -93,7 +93,7 @@ if (!empty($_REQUEST['act']) && $_REQUEST['act'] == 'gotopage') {
         $pager['page'] = $page;
         $pager['size'] = $size = 5;
         $pager['record_count'] = $count;
-        $pager['page_count'] = $page_count = ($count > 0) ? intval(ceil($count / $size)) : 1;;
+        $pager['page_count'] = $page_count = ($count > 0) ? intval(ceil($count / $size)) : 1;
         $pager['page_first'] = "javascript:gotoBuyPage(1,$goods_id)";
         $pager['page_prev'] = $page > 1 ? "javascript:gotoBuyPage(" . ($page - 1) . ",$goods_id)" : 'javascript:;';
         $pager['page_next'] = $page < $page_count ? 'javascript:gotoBuyPage(' . ($page + 1) . ",$goods_id)" : 'javascript:;';

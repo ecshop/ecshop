@@ -134,7 +134,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
                 for ($i = 0; $i < 6; $i++) {
                     $name .= chr(mt_rand(97, 122));
                 }
-                $name .= '.' . end(explode('.', $_FILES['topic_img']['name']));
+                $topic_img_name_arr = explode('.', $_FILES['topic_img']['name']);
+                $name .= '.' . end($topic_img_name_arr);
                 $target = ROOT_PATH . DATA_DIR . '/afficheimg/' . $name;
 
                 if (move_upload_file($_FILES['topic_img']['tmp_name'], $target)) {
@@ -177,7 +178,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
         for ($i = 0; $i < 6; $i++) {
             $name .= chr(mt_rand(97, 122));
         }
-        $name .= '.' . end(explode('.', $_FILES['title_pic']['name']));
+        $title_pic_name_arr = explode('.', $_FILES['title_pic']['name']);
+        $name .= '.' . end($title_pic_name_arr);
         $target = ROOT_PATH . DATA_DIR . '/afficheimg/' . $name;
 
         if (move_upload_file($_FILES['title_pic']['tmp_name'], $target)) {
@@ -381,7 +383,8 @@ function get_toppic_width_height()
 
 function get_url_image($url)
 {
-    $ext = strtolower(end(explode('.', $url)));
+    $url_arr = explode('.', $url);
+    $ext = strtolower(end($url_arr));
     if ($ext != "gif" && $ext != "jpg" && $ext != "png" && $ext != "bmp" && $ext != "jpeg") {
         return $url;
     }

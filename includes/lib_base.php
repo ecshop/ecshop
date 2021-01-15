@@ -272,78 +272,6 @@ function gd_version()
     return cls_image::gd_version();
 }
 
-if (!function_exists('file_get_contents')) {
-    /**
-     * 如果系统不存在file_get_contents函数则声明该函数
-     *
-     * @access  public
-     * @param string $file
-     * @return  mix
-     */
-    function file_get_contents($file)
-    {
-        if (($fp = @fopen($file, 'rb')) === false) {
-            return false;
-        } else {
-            $fsize = @filesize($file);
-            if ($fsize) {
-                $contents = fread($fp, $fsize);
-            } else {
-                $contents = '';
-            }
-            fclose($fp);
-
-            return $contents;
-        }
-    }
-}
-
-if (!function_exists('file_put_contents')) {
-    define('FILE_APPEND', 'FILE_APPEND');
-
-    /**
-     * 如果系统不存在file_put_contents函数则声明该函数
-     *
-     * @access  public
-     * @param string $file
-     * @param mix $data
-     * @return  int
-     */
-    function file_put_contents($file, $data, $flags = '')
-    {
-        $contents = (is_array($data)) ? implode('', $data) : $data;
-
-        if ($flags == 'FILE_APPEND') {
-            $mode = 'ab+';
-        } else {
-            $mode = 'wb';
-        }
-
-        if (($fp = @fopen($file, $mode)) === false) {
-            return false;
-        } else {
-            $bytes = fwrite($fp, $contents);
-            fclose($fp);
-
-            return $bytes;
-        }
-    }
-}
-
-if (!function_exists('floatval')) {
-    /**
-     * 如果系统不存在 floatval 函数则声明该函数
-     *
-     * @access  public
-     * @param mix $n
-     * @return  float
-     */
-    function floatval($n)
-    {
-        return (float)$n;
-    }
-}
-
 /**
  * 文件或目录权限检查函数
  *
@@ -883,20 +811,20 @@ function trim_right($str)
 {
     $len = strlen($str);
     /* 为空或单个字符直接返回 */
-    if ($len == 0 || ord($str{$len - 1}) < 127) {
+    if ($len == 0 || ord($str[$len - 1]) < 127) {
         return $str;
     }
     /* 有前导字符的直接把前导字符去掉 */
-    if (ord($str{$len - 1}) >= 192) {
+    if (ord($str[$len - 1]) >= 192) {
         return substr($str, 0, $len - 1);
     }
     /* 有非独立的字符，先把非独立字符去掉，再验证非独立的字符是不是一个完整的字，不是连原来前导字符也截取掉 */
     $r_len = strlen(rtrim($str, "\x80..\xBF"));
-    if ($r_len == 0 || ord($str{$r_len - 1}) < 127) {
+    if ($r_len == 0 || ord($str[$r_len - 1]) < 127) {
         return sub_str($str, 0, $r_len);
     }
 
-    $as_num = ord(~$str{$r_len - 1});
+    $as_num = ord(~$str[$r_len - 1]);
     if ($as_num > (1 << (6 + $r_len - $len))) {
         return $str;
     } else {
@@ -993,7 +921,8 @@ function to_utf8_iconv($str)
  */
 function get_file_suffix($file_name, $allow_type = array())
 {
-    $file_suffix = strtolower(array_pop(explode('.', $file_name)));
+    $file_name_arr = explode('.', $file_name);
+    $file_suffix = strtolower(array_pop($file_name_arr));
     if (empty($allow_type)) {
         return $file_suffix;
     } else {

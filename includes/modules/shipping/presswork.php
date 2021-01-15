@@ -75,7 +75,7 @@ class presswork
      *
      * @return null
      */
-    public function presswork($cfg = array())
+    public function __construct($cfg = array())
     {
         foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];

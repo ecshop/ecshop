@@ -7,9 +7,8 @@ define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 require_once(ROOT_PATH . '/includes/lib_order.php');
-
 /*------------------------------------------------------ */
-//-- 妗嗘灦
+//-- 框架
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == '') {
     $smarty->assign('shop_url', urlencode($ecs->url()));
@@ -17,12 +16,12 @@ if ($_REQUEST['act'] == '') {
 }
 
 /*------------------------------------------------------ */
-//-- 椤堕儴妗嗘灦鐨勫唴瀹
+//-- 顶部框架的内容
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'top') {
-    // 鑾峰緱绠＄悊鍛樿?缃?殑鑿滃崟
+if ($_REQUEST['act'] == 'top') {
+    // 获得管理员设置的菜单
     $lst = array();
-    $nav = $db->GetOne('SELECT nav_list FROM ' . $ecs->table('admin_user') . " WHERE user_id = '" . $_SESSION['admin_id'] . "'");
+    $nav = $db->getOne('SELECT nav_list FROM ' . $ecs->table('admin_user') . " WHERE user_id = '" . $_SESSION['admin_id'] . "'");
 
     if (!empty($nav)) {
         $arr = explode(',', $nav);
@@ -33,9 +32,9 @@ elseif ($_REQUEST['act'] == 'top') {
         }
     }
 
-    // 鑾峰緱绠＄悊鍛樿?缃?殑鑿滃崟
+    // 获得管理员设置的菜单
 
-    // 鑾峰緱绠＄悊鍛業D
+    // 获得管理员ID
     $smarty->assign('send_mail_on', $_CFG['send_mail_on']);
     $smarty->assign('nav_list', $lst);
     $smarty->assign('admin_id', $_SESSION['admin_id']);
@@ -45,20 +44,20 @@ elseif ($_REQUEST['act'] == 'top') {
 }
 
 /*------------------------------------------------------ */
-//-- 璁＄畻鍣
+//-- 计算器
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'calculator') {
+if ($_REQUEST['act'] == 'calculator') {
     $smarty->display('calculator.htm');
 }
 
 /*------------------------------------------------------ */
-//-- 宸﹁竟鐨勬?鏋
+//-- 左边的框架
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'menu') {
+if ($_REQUEST['act'] == 'menu') {
     include_once('includes/inc_menu.php');
 
-    // 鏉冮檺瀵圭収琛
+    // 权限对照表
     include_once('includes/inc_priv.php');
 
     foreach ($modules as $key => $value) {
@@ -95,7 +94,7 @@ elseif ($_REQUEST['act'] == 'menu') {
             $menus[$key]['action'] = $val;
         }
 
-        // 濡傛灉children鐨勫瓙鍏冪礌闀垮害涓?鍒欏垹闄よ?缁
+        // 如果children的子元素长度为0则删除该组
         if (empty($menus[$key]['children'])) {
             unset($menus[$key]);
         }
@@ -111,10 +110,10 @@ elseif ($_REQUEST['act'] == 'menu') {
 
 
 /*------------------------------------------------------ */
-//-- 娓呴櫎缂撳瓨
+//-- 清除缓存
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'clear_cache') {
+if ($_REQUEST['act'] == 'clear_cache') {
     clear_all_files();
 
     sys_msg($_LANG['caches_cleared']);
@@ -122,12 +121,12 @@ elseif ($_REQUEST['act'] == 'clear_cache') {
 
 
 /*------------------------------------------------------ */
-//-- 涓荤獥鍙ｏ紝璧峰?椤
+//-- 主窗口，起始页
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'main') {
-    //寮€搴楀悜瀵肩?涓€姝
+if ($_REQUEST['act'] == 'main') {
+    //开店向导第一步
     if (isset($_SESSION['shop_guide']) && $_SESSION['shop_guide'] === true) {
-        unset($_SESSION['shop_guide']);//閿€姣乻ession
+        unset($_SESSION['shop_guide']);//销毁session
 
         ecs_header("Location: ./index.php?act=first\n");
 
@@ -136,7 +135,7 @@ elseif ($_REQUEST['act'] == 'main') {
 
     $gd = gd_version();
 
-    /* 妫€鏌ユ枃浠剁洰褰曞睘鎬 */
+    /* 检查文件目录属性 */
     $warning = array();
 
     if ($_CFG['shop_closed']) {
@@ -157,7 +156,7 @@ elseif ($_REQUEST['act'] == 'main') {
 
     $open_basedir = ini_get('open_basedir');
     if (!empty($open_basedir)) {
-        /* 濡傛灉 open_basedir 涓嶄负绌猴紝鍒欐?鏌ユ槸鍚﹀寘鍚?簡 upload_tmp_dir  */
+        /* 如果 open_basedir 不为空，则检查是否包含了 upload_tmp_dir  */
         $open_basedir = str_replace(array("\\", "\\\\"), array("/", "/"), $open_basedir);
         $upload_tmp_dir = ini_get('upload_tmp_dir');
 
@@ -313,7 +312,7 @@ elseif ($_REQUEST['act'] == 'main') {
         ' WHERE is_delete = 0 AND promote_price>0' .
         " AND promote_start_date <= '$time' AND promote_end_date >= '$time' AND is_real=0 AND extension_code='virtual_card'");
 
-    /* 缂鸿揣鍟嗗搧 */
+    /* 缺货商品 */
     if ($_CFG['use_storage']) {
         $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('goods') . ' WHERE is_delete = 0 AND goods_number <= warn_number AND is_real = 1';
         $goods['warn'] = $db->GetOne($sql);
@@ -326,7 +325,7 @@ elseif ($_REQUEST['act'] == 'main') {
     $smarty->assign('goods', $goods);
     $smarty->assign('virtual_card', $virtual_card);
 
-    /* 璁块棶缁熻?淇℃伅 */
+    /* 访问统计信息 */
     $today = local_getdate();
     $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('stats') .
         ' WHERE access_time > ' . (mktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']) - date('Z'));
@@ -337,20 +336,20 @@ elseif ($_REQUEST['act'] == 'main') {
     $online_users = $sess->get_users_count();
     $smarty->assign('online_users', $online_users);
 
-    /* 鏈€杩戝弽棣 */
+    /* 最近反馈 */
     $sql = "SELECT COUNT(f.msg_id) " .
         "FROM " . $ecs->table('feedback') . " AS f " .
         "LEFT JOIN " . $ecs->table('feedback') . " AS r ON r.parent_id=f.msg_id " .
         'WHERE f.parent_id=0 AND ISNULL(r.msg_id) ';
     $smarty->assign('feedback_number', $db->GetOne($sql));
 
-    /* 鏈??鏍歌瘎璁 */
+    /* 未审核评论 */
     $smarty->assign('comment_number', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('comment') .
         ' WHERE status = 0 AND parent_id = 0'));
 
-    $mysql_ver = $db->version();   // 鑾峰緱 MySQL 鐗堟湰
+    $mysql_ver = $db->version();   // 获得 MySQL 版本
 
-    /* 绯荤粺淇℃伅 */
+    /* 系统信息 */
     $sys_info['os'] = PHP_OS;
     $sys_info['ip'] = $_SERVER['SERVER_ADDR'];
     $sys_info['web_server'] = $_SERVER['SERVER_SOFTWARE'];
@@ -373,7 +372,7 @@ elseif ($_REQUEST['act'] == 'main') {
 
         $sys_info['gd'] .= ' (';
 
-        /* 妫€鏌ョ郴缁熸敮鎸佺殑鍥剧墖绫诲瀷 */
+        /* 检查系统支持的图片类型 */
         if ($gd && (imagetypes() & IMG_JPG) > 0) {
             $sys_info['gd'] .= ' JPEG';
         }
@@ -389,18 +388,18 @@ elseif ($_REQUEST['act'] == 'main') {
         $sys_info['gd'] .= ')';
     }
 
-    /* IP搴撶増鏈 */
+    /* IP库版本 */
     $sys_info['ip_version'] = ecs_geoip('255.255.255.0');
 
-    /* 鍏佽?涓婁紶鐨勬渶澶ф枃浠跺ぇ灏 */
+    /* 允许上传的最大文件大小 */
     $sys_info['max_filesize'] = ini_get('upload_max_filesize');
 
     $smarty->assign('sys_info', $sys_info);
 
-    /* 缂鸿揣鐧昏? */
+    /* 缺货登记 */
     $smarty->assign('booking_goods', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('booking_goods') . ' WHERE is_dispose = 0'));
 
-    /* 閫€娆剧敵璇 */
+    /* 退款申请 */
     $smarty->assign('new_repay', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('user_account') . ' WHERE process_type = ' . SURPLUS_RETURN . ' AND is_paid = 0 '));
 
 
@@ -459,7 +458,7 @@ elseif ($_REQUEST['act'] == 'main') {
 
 
 /*------------------------------------------------------ */
-//-- 寮€搴楀悜瀵肩?涓€姝
+//-- 开店向导第一步
 /*------------------------------------------------------ */
 
 elseif ($_REQUEST['act'] == 'first') {
@@ -477,8 +476,7 @@ elseif ($_REQUEST['act'] == 'first') {
 
     $smarty->assign('shop_title', $shop_title);
 
-    //鑾峰彇閰嶉€佹柟寮
-//    $modules = read_modules('../includes/modules/shipping');
+    //获取配送方式
     $directory = ROOT_PATH . 'includes/modules/shipping';
     $dir = @opendir($directory);
     $set_modules = true;
@@ -516,7 +514,7 @@ elseif ($_REQUEST['act'] == 'first') {
 
     unset($modules);
 
-    //鑾峰彇鏀?粯鏂瑰紡
+    //获取支付方式
     $modules = read_modules('../includes/modules/payment');
 
     for ($i = 0; $i < count($modules); $i++) {
@@ -527,7 +525,6 @@ elseif ($_REQUEST['act'] == 'first') {
         }
         $modules[$i]['desc'] = $_LANG[$modules[$i]['desc']];
     }
-    //        $modules[$i]['install'] = '0';
     $smarty->assign('modules_payment', $modules);
 
     assign_query_info();
@@ -537,7 +534,7 @@ elseif ($_REQUEST['act'] == 'first') {
 }
 
 /*------------------------------------------------------ */
-//-- 寮€搴楀悜瀵肩?浜屾?
+//-- 开店向导第二步
 /*------------------------------------------------------ */
 
 elseif ($_REQUEST['act'] == 'second') {
@@ -582,7 +579,7 @@ elseif ($_REQUEST['act'] == 'second') {
         $db->query($sql);
     }
 
-    //璁剧疆閰嶉€佹柟寮
+    //设置配送方式
     if (!empty($shipping)) {
         $shop_add = read_modules('../includes/modules/shipping');
 
@@ -611,7 +608,7 @@ elseif ($_REQUEST['act'] == 'second') {
             $shipping_id = $db->insert_Id();
         }
 
-        //璁剧疆閰嶉€佸尯鍩
+        //设置配送区域
         $area_name = empty($_POST['area_name']) ? '' : $_POST['area_name'];
         if (!empty($area_name)) {
             $sql = "SELECT shipping_area_id FROM " . $ecs->table("shipping_area") .
@@ -629,7 +626,7 @@ elseif ($_REQUEST['act'] == 'second') {
                 $config[$count]['name'] = 'free_money';
                 $config[$count]['value'] = 0;
 
-                /* 濡傛灉鏀?寔璐у埌浠樻?锛屽垯鍏佽?璁剧疆璐у埌浠樻?鏀?粯璐圭敤 */
+                /* 如果支持货到付款，则允许设置货到付款支付费用 */
                 if ($modules[0]['cod']) {
                     $count++;
                     $config[$count]['name'] = 'pay_fee';
@@ -648,7 +645,7 @@ elseif ($_REQUEST['act'] == 'second') {
             $region_id = empty($_POST['shipping_city']) ? $region_id : intval($_POST['shipping_city']);
             $region_id = empty($_POST['shipping_district']) ? $region_id : intval($_POST['shipping_district']);
 
-            /* 娣诲姞閫夊畾鐨勫煄甯傚拰鍦板尯 */
+            /* 添加选定的城市和地区 */
             $sql = "REPLACE INTO " . $ecs->table('area_region') . " (shipping_area_id, region_id) VALUES ('$area_id', '$region_id')";
             $db->query($sql);
         }
@@ -657,7 +654,7 @@ elseif ($_REQUEST['act'] == 'second') {
     unset($modules);
 
     if (!empty($payment)) {
-        /* 鍙栫浉搴旀彃浠朵俊鎭 */
+        /* 取相应插件信息 */
         $set_modules = true;
         include_once(ROOT_PATH . 'includes/modules/payment/' . $payment . '.php');
 
@@ -672,17 +669,15 @@ elseif ($_REQUEST['act'] == 'second') {
         }
 
         $pay_config = serialize($pay_config);
-        /* 瀹夎?锛屾?鏌ヨ?鏀?粯鏂瑰紡鏄?惁鏇剧粡瀹夎?杩 */
+        /* 安装，检查该支付方式是否曾经安装过 */
         $sql = "SELECT COUNT(*) FROM " . $ecs->table('payment') . " WHERE pay_code = '$payment'";
-        if ($db->GetOne($sql) > 0) {
+        if ($db->getOne($sql) > 0) {
             $sql = "UPDATE " . $ecs->table('payment') .
                 " SET pay_config = '$pay_config'," .
                 " enabled = '1' " .
                 "WHERE pay_code = '$payment' LIMIT 1";
             $db->query($sql);
         } else {
-//            $modules = read_modules('../includes/modules/payment');
-
             $payment_info = array();
             $payment_info['name'] = $_LANG[$modules[0]['code']];
             $payment_info['pay_fee'] = empty($modules[0]['pay_fee']) ? 0 : $modules[0]['pay_fee'];
@@ -703,7 +698,7 @@ elseif ($_REQUEST['act'] == 'second') {
 }
 
 /*------------------------------------------------------ */
-//-- 寮€搴楀悜瀵肩?涓夋?
+//-- 开店向导第三步
 /*------------------------------------------------------ */
 
 elseif ($_REQUEST['act'] == 'third') {
@@ -723,7 +718,7 @@ elseif ($_REQUEST['act'] == 'third') {
 
     if (!empty($good_category)) {
         if (cat_exists($good_category, 0)) {
-            /* 鍚岀骇鍒?笅涓嶈兘鏈夐噸澶嶇殑鍒嗙被鍚嶇О */
+            /* 同级别下不能有重复的分类名称 */
             $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
             sys_msg($_LANG['catname_exist'], 0, $link);
         }
@@ -731,7 +726,7 @@ elseif ($_REQUEST['act'] == 'third') {
 
     if (!empty($good_brand)) {
         if (brand_exists($good_brand)) {
-            /* 鍚岀骇鍒?笅涓嶈兘鏈夐噸澶嶇殑鍝佺墝鍚嶇О */
+            /* 同级别下不能有重复的品牌名称 */
             $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
             sys_msg($_LANG['brand_name_exist'], 0, $link);
         }
@@ -753,7 +748,7 @@ elseif ($_REQUEST['act'] == 'third') {
 
         $cat_id = $db->insert_Id();
 
-        //璐у彿
+        //货号
         require_once(ROOT_PATH . ADMIN_PATH . '/includes/lib_goods.php');
         $max_id = $db->getOne("SELECT MAX(goods_id) + 1 FROM " . $ecs->table('goods'));
         $goods_sn = generate_goods_sn($max_id);
@@ -762,13 +757,13 @@ elseif ($_REQUEST['act'] == 'third') {
         $image = new cls_image($_CFG['bgcolor']);
 
         if (!empty($good_name)) {
-            /* 妫€鏌ュ浘鐗囷細濡傛灉鏈夐敊璇?紝妫€鏌ュ昂瀵告槸鍚﹁秴杩囨渶澶у€硷紱鍚﹀垯锛屾?鏌ユ枃浠剁被鍨 */
-            if (isset($_FILES['goods_img']['error'])) { // php 4.2 鐗堟湰鎵嶆敮鎸 error
-                // 鏈€澶т笂浼犳枃浠跺ぇ灏
+            /* 检查图片：如果有错误，检查尺寸是否超过最大值；否则，检查文件类型 */
+            if (isset($_FILES['goods_img']['error'])) { // php 4.2 版本才支持 error
+                // 最大上传文件大小
                 $php_maxsize = ini_get('upload_max_filesize');
                 $htm_maxsize = '2M';
 
-                // 鍟嗗搧鍥剧墖
+                // 商品图片
                 if ($_FILES['goods_img']['error'] == 0) {
                     if (!$image->check_img_type($_FILES['goods_img']['type'])) {
                         sys_msg($_LANG['invalid_goods_img'], 1, array(), false);
@@ -778,29 +773,29 @@ elseif ($_REQUEST['act'] == 'third') {
                 } elseif ($_FILES['goods_img']['error'] == 2) {
                     sys_msg(sprintf($_LANG['goods_img_too_big'], $htm_maxsize), 1, array(), false);
                 }
-            } /* 4銆?鐗堟湰 */
+            } /* 4。1版本 */
             else {
-                // 鍟嗗搧鍥剧墖
+                // 商品图片
                 if ($_FILES['goods_img']['tmp_name'] != 'none') {
                     if (!$image->check_img_type($_FILES['goods_img']['type'])) {
                         sys_msg($_LANG['invalid_goods_img'], 1, array(), false);
                     }
                 }
             }
-            $goods_img = '';  // 鍒濆?鍖栧晢鍝佸浘鐗
-            $goods_thumb = '';  // 鍒濆?鍖栧晢鍝佺缉鐣ュ浘
-            $original_img = '';  // 鍒濆?鍖栧師濮嬪浘鐗
-            $old_original_img = '';  // 鍒濆?鍖栧師濮嬪浘鐗囨棫鍥
-            // 濡傛灉涓婁紶浜嗗晢鍝佸浘鐗囷紝鐩稿簲澶勭悊
+            $goods_img = '';  // 初始化商品图片
+            $goods_thumb = '';  // 初始化商品缩略图
+            $original_img = '';  // 初始化原始图片
+            $old_original_img = '';  // 初始化原始图片旧图
+            // 如果上传了商品图片，相应处理
             if ($_FILES['goods_img']['tmp_name'] != '' && $_FILES['goods_img']['tmp_name'] != 'none') {
-                $original_img = $image->upload_image($_FILES['goods_img']); // 鍘熷?鍥剧墖
+                $original_img = $image->upload_image($_FILES['goods_img']); // 原始图片
                 if ($original_img === false) {
                     sys_msg($image->error_msg(), 1, array(), false);
                 }
-                $goods_img = $original_img;   // 鍟嗗搧鍥剧墖
+                $goods_img = $original_img;   // 商品图片
 
-                /* 澶嶅埗涓€浠界浉鍐屽浘鐗 */
-                $img = $original_img;   // 鐩稿唽鍥剧墖
+                /* 复制一份相册图片 */
+                $img = $original_img;   // 相册图片
                 $pos = strpos(basename($img), '.');
                 $newname = dirname($img) . '/' . $image->random_filename() . substr(basename($img), $pos);
                 if (!copy('../' . $img, '../' . $newname)) {
@@ -811,9 +806,9 @@ elseif ($_REQUEST['act'] == 'third') {
                 $gallery_img = $img;
                 $gallery_thumb = $img;
 
-                // 濡傛灉绯荤粺鏀?寔GD锛岀缉鏀惧晢鍝佸浘鐗囷紝涓旂粰鍟嗗搧鍥剧墖鍜岀浉鍐屽浘鐗囧姞姘村嵃
+                // 如果系统支持GD，缩放商品图片，且给商品图片和相册图片加水印
                 if ($image->gd_version() > 0 && $image->check_img_function($_FILES['goods_img']['type'])) {
-                    // 濡傛灉璁剧疆澶у皬涓嶄负0锛岀缉鏀惧浘鐗
+                    // 如果设置大小不为0，缩放图片
                     if ($_CFG['image_width'] != 0 || $_CFG['image_height'] != 0) {
                         $goods_img = $image->make_thumb('../' . $goods_img, $GLOBALS['_CFG']['image_width'], $GLOBALS['_CFG']['image_height']);
                         if ($goods_img === false) {
@@ -827,7 +822,7 @@ elseif ($_REQUEST['act'] == 'third') {
                     }
                     $gallery_img = $newname;
 
-                    // 鍔犳按鍗
+                    // 加水印
                     if (intval($_CFG['watermark_place']) > 0 && !empty($GLOBALS['_CFG']['watermark'])) {
                         if ($image->add_watermark('../' . $goods_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
                             sys_msg($image->error_msg(), 1, array(), false);
@@ -838,7 +833,7 @@ elseif ($_REQUEST['act'] == 'third') {
                         }
                     }
 
-                    // 鐩稿唽缂╃暐鍥
+                    // 相册缩略图
                     if ($_CFG['thumb_width'] != 0 || $_CFG['thumb_height'] != 0) {
                         $gallery_thumb = $image->make_thumb('../' . $img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
                         if ($gallery_thumb === false) {
@@ -846,7 +841,7 @@ elseif ($_REQUEST['act'] == 'third') {
                         }
                     }
                 } else {
-                    /* 澶嶅埗涓€浠藉師鍥 */
+                    /* 复制一份原图 */
                     $pos = strpos(basename($img), '.');
                     $gallery_img = dirname($img) . '/' . $image->random_filename() . substr(basename($img), $pos);
                     if (!copy('../' . $img, '../' . $gallery_img)) {
@@ -855,9 +850,9 @@ elseif ($_REQUEST['act'] == 'third') {
                     $gallery_thumb = '';
                 }
             }
-            // 鏈?笂浼狅紝濡傛灉鑷?姩閫夋嫨鐢熸垚锛屼笖涓婁紶浜嗗晢鍝佸浘鐗囷紝鐢熸垚鎵€鐣ュ浘
+            // 未上传，如果自动选择生成，且上传了商品图片，生成所略图
             if (!empty($original_img)) {
-                // 濡傛灉璁剧疆缂╃暐鍥惧ぇ灏忎笉涓?锛岀敓鎴愮缉鐣ュ浘
+                // 如果设置缩略图大小不为0，生成缩略图
                 if ($_CFG['thumb_width'] != 0 || $_CFG['thumb_height'] != 0) {
                     $goods_thumb = $image->make_thumb('../' . $original_img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
                     if ($goods_thumb === false) {
@@ -876,7 +871,7 @@ elseif ($_REQUEST['act'] == 'third') {
 
             $db->query($sql);
             $good_id = $db->insert_id();
-            /* 濡傛灉鏈夊浘鐗囷紝鎶婂晢鍝佸浘鐗囧姞鍏ュ浘鐗囩浉鍐 */
+            /* 如果有图片，把商品图片加入图片相册 */
             if (isset($img)) {
                 $sql = "INSERT INTO " . $ecs->table('goods_gallery') . " (goods_id, img_url, img_desc, thumb_url, img_original) " .
                     "VALUES ('$good_id', '$gallery_img', '', '$gallery_thumb', '$img')";
@@ -886,43 +881,42 @@ elseif ($_REQUEST['act'] == 'third') {
     }
 
     assign_query_info();
-    //    $smarty->assign('ur_here', '寮€搴楀悜瀵硷紞娣诲姞鍟嗗搧');
     $smarty->display('setting_third.htm');
 }
 
 /*------------------------------------------------------ */
-//-- 鍏充簬 ECSHOP
+//-- 关于 ECSHOP
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'about_us') {
+if ($_REQUEST['act'] == 'about_us') {
     assign_query_info();
     $smarty->display('about_us.htm');
 }
 
 /*------------------------------------------------------ */
-//-- 鎷栧姩鐨勫抚
+//-- 拖动的帧
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'drag') {
-    $smarty->display('drag.htm');;
+if ($_REQUEST['act'] == 'drag') {
+    $smarty->display('drag.htm');
 }
 
 /*------------------------------------------------------ */
-//-- 妫€鏌ヨ?鍗
+//-- 检查订单
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'check_order') {
+if ($_REQUEST['act'] == 'check_order') {
     if (empty($_SESSION['last_check'])) {
         $_SESSION['last_check'] = gmtime();
 
         make_json_result('', '', array('new_orders' => 0, 'new_paid' => 0));
     }
 
-    /* 鏂拌?鍗 */
+    /* 新订单 */
     $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
         " WHERE add_time >= '$_SESSION[last_check]'";
     $arr['new_orders'] = $db->getOne($sql);
 
-    /* 鏂颁粯娆剧殑璁㈠崟 */
+    /* 新付款的订单 */
     $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
         ' WHERE pay_time >= ' . $_SESSION['last_check'];
     $arr['new_paid'] = $db->getOne($sql);
@@ -937,7 +931,7 @@ elseif ($_REQUEST['act'] == 'check_order') {
 }
 
 /*------------------------------------------------------ */
-//-- Totolist鎿嶄綔
+//-- Totolist操作
 /*------------------------------------------------------ */
 elseif ($_REQUEST['act'] == 'save_todolist') {
     $content = json_str_iconv($_POST["content"]);
@@ -947,8 +941,8 @@ elseif ($_REQUEST['act'] == 'save_todolist') {
     $sql = "SELECT todolist FROM " . $GLOBALS['ecs']->table('admin_user') . " WHERE user_id = " . $_SESSION['admin_id'];
     $content = $GLOBALS['db']->getOne($sql);
     echo $content;
-} // 閭?欢缇ゅ彂澶勭悊
-elseif ($_REQUEST['act'] == 'send_mail') {
+} // 邮件群发处理
+if ($_REQUEST['act'] == 'send_mail') {
     if ($_CFG['send_mail_on'] == 'off') {
         make_json_result('', $_LANG['send_mail_off'], 0);
         exit();
@@ -956,12 +950,12 @@ elseif ($_REQUEST['act'] == 'send_mail') {
     $sql = "SELECT * FROM " . $ecs->table('email_sendlist') . " ORDER BY pri DESC, last_send ASC LIMIT 1";
     $row = $db->getRow($sql);
 
-    //鍙戦€佸垪琛ㄤ负绌
+    //发送列表为空
     if (empty($row['id'])) {
         make_json_result('', $_LANG['mailsend_null'], 0);
     }
 
-    //鍙戦€佸垪琛ㄤ笉涓虹┖锛岄偖浠跺湴鍧€涓虹┖
+    //发送列表不为空，邮件地址为空
     if (!empty($row['id']) && empty($row['email'])) {
         $sql = "DELETE FROM " . $ecs->table('email_sendlist') . " WHERE id = '$row[id]'";
         $db->query($sql);
@@ -969,25 +963,25 @@ elseif ($_REQUEST['act'] == 'send_mail') {
         make_json_result('', $_LANG['mailsend_skip'], array('count' => $count, 'goon' => 1));
     }
 
-    //鏌ヨ?鐩稿叧妯℃澘
+    //查询相关模板
     $sql = "SELECT * FROM " . $ecs->table('mail_templates') . " WHERE template_id = '$row[template_id]'";
     $rt = $db->getRow($sql);
 
-    //濡傛灉鏄?ā鏉匡紝鍒欏皢宸插瓨鍏?mail_sendlist鐨勫唴瀹逛綔涓洪偖浠跺唴瀹
-    //鍚﹀垯鍗虫槸鏉傝川锛屽皢mail_templates璋冨嚭鐨勫唴瀹逛綔涓洪偖浠跺唴瀹
+    //如果是模板，则将已存入email_sendlist的内容作为邮件内容
+    //否则即是杂质，将mail_templates调出的内容作为邮件内容
     if ($rt['type'] == 'template') {
         $rt['template_content'] = $row['email_content'];
     }
 
     if ($rt['template_id'] && $rt['template_content']) {
         if (send_mail('', $row['email'], $rt['template_subject'], $rt['template_content'], $rt['is_html'])) {
-            //鍙戦€佹垚鍔
+            //发送成功
 
-            //浠庡垪琛ㄤ腑鍒犻櫎
+            //从列表中删除
             $sql = "DELETE FROM " . $ecs->table('email_sendlist') . " WHERE id = '$row[id]'";
             $db->query($sql);
 
-            //鍓╀綑鍒楄〃鏁
+            //剩余列表数
             $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('email_sendlist'));
 
             if ($count > 0) {
@@ -997,13 +991,13 @@ elseif ($_REQUEST['act'] == 'send_mail') {
             }
             make_json_result('', $msg, array('count' => $count));
         } else {
-            //鍙戦€佸嚭閿
+            //发送出错
 
             if ($row['error'] < 3) {
                 $time = time();
                 $sql = "UPDATE " . $ecs->table('email_sendlist') . " SET error = error + 1, pri = 0, last_send = '$time' WHERE id = '$row[id]'";
             } else {
-                //灏嗗嚭閿欒秴娆＄殑绾?綍鍒犻櫎
+                //将出错超次的纪录删除
                 $sql = "DELETE FROM " . $ecs->table('email_sendlist') . " WHERE id = '$row[id]'";
             }
             $db->query($sql);
@@ -1012,7 +1006,7 @@ elseif ($_REQUEST['act'] == 'send_mail') {
             make_json_result('', sprintf($_LANG['mailsend_fail'], $row['email']), array('count' => $count));
         }
     } else {
-        //鏃犳晥鐨勯偖浠堕槦鍒
+        //无效的邮件队列
         $sql = "DELETE FROM " . $ecs->table('email_sendlist') . " WHERE id = '$row[id]'";
         $db->query($sql);
         $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('email_sendlist'));
@@ -1021,13 +1015,13 @@ elseif ($_REQUEST['act'] == 'send_mail') {
 }
 
 /*------------------------------------------------------ */
-//-- license鎿嶄綔
+//-- license操作
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'license') {
+if ($_REQUEST['act'] == 'license') {
     $is_ajax = $_GET['is_ajax'];
 
     if (isset($is_ajax) && $is_ajax) {
-        // license 妫€鏌
+        // license 检查
         include_once(ROOT_PATH . 'includes/cls_transport.php');
         include_once(ROOT_PATH . 'includes/cls_json.php');
         include_once(ROOT_PATH . 'includes/lib_main.php');
@@ -1082,18 +1076,18 @@ elseif ($_REQUEST['act'] == 'license') {
  */
 function license_check()
 {
-    // return 杩斿洖鏁扮粍
+    // return 返回数组
     $return_array = array();
 
-    // 鍙栧嚭缃戝簵 license
+    // 取出网店 license
     $license = get_shop_license();
 
-    // 妫€娴嬬綉搴 license
+    // 检测网店 license
     if (!empty($license['certificate_id']) && !empty($license['token']) && !empty($license['certi'])) {
-        // license锛堢櫥褰曪級
+        // license（登录）
         $return_array = license_login();
     } else {
-        // license锛堟敞鍐岋級
+        // license（注册）
         $return_array = license_reg();
     }
 

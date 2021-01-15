@@ -231,11 +231,9 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['ac
         }
 
         if (!empty($goods['goods_brief'])) {
-            //$goods['goods_brief'] = trim_right($goods['goods_brief']);
             $goods['goods_brief'] = $goods['goods_brief'];
         }
         if (!empty($goods['keywords'])) {
-            //$goods['keywords']    = trim_right($goods['keywords']);
             $goods['keywords'] = $goods['keywords'];
         }
 
@@ -599,18 +597,6 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
                 }
             }
         }
-        /* 取消该原图复制流程 */
-        // else
-        // {
-        //     /* 复制一份原图 */
-        //     $pos        = strpos(basename($img), '.');
-        //     $gallery_img = dirname($img) . '/' . $image->random_filename() . // substr(basename($img), $pos);
-        //     if (!copy('../' . $img, '../' . $gallery_img))
-        //     {
-        //         sys_msg('fail to copy file: ' . realpath('../' . $img), 1, array(), false);
-        //     }
-        //     $gallery_thumb = '';
-        // }
     }
 
 
@@ -963,8 +949,6 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     }
     $link[3] = list_link($is_insert, $code);
 
-
-    //$key_array = array_keys($link);
     for ($i = 0; $i < count($link); $i++) {
         $key_array[] = $i;
     }

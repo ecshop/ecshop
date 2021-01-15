@@ -408,21 +408,6 @@ elseif ($_REQUEST['act'] == 'modif') {
     include_once('includes/inc_menu.php');
     include_once('includes/inc_priv.php');
 
-    /* 包含插件菜单语言项 */
-    $sql = "SELECT code FROM " . $ecs->table('plugins');
-    $rs = $db->query($sql);
-    while ($row = $db->FetchRow($rs)) {
-        /* 取得语言项 */
-        if (file_exists(ROOT_PATH . 'plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php')) {
-            include_once(ROOT_PATH . 'plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php');
-        }
-
-        /* 插件的菜单项 */
-        if (file_exists(ROOT_PATH . 'plugins/' . $row['code'] . '/languages/inc_menu.php')) {
-            include_once(ROOT_PATH . 'plugins/' . $row['code'] . '/languages/inc_menu.php');
-        }
-    }
-
     foreach ($modules as $key => $value) {
         ksort($modules[$key]);
     }

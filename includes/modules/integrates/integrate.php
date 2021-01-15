@@ -84,7 +84,7 @@ class integrate
      * @param string $db_pass 数据库密码
      * @return      void
      */
-    public function integrate($cfg)
+    public function __construct($cfg)
     {
         $this->charset = isset($cfg['db_charset']) ? $cfg['db_charset'] : 'UTF8';
         $this->prefix = isset($cfg['prefix']) ? $cfg['prefix'] : '';
@@ -99,7 +99,7 @@ class integrate
         if (empty($cfg['db_host'])) {
             $this->db_name = $GLOBALS['ecs']->db_name;
             $this->prefix = $GLOBALS['ecs']->prefix;
-            $this->db = &$GLOBALS['db'];
+            $this->db = $GLOBALS['db'];
         } else {
             if (empty($cfg['is_latin1'])) {
                 $this->db = new cls_mysql($cfg['db_host'], $cfg['db_user'], $cfg['db_pass'], $cfg['db_name'], $this->charset, null, $quiet);
@@ -582,7 +582,7 @@ class integrate
                     return $cfg['md5password'];
                 }
 
-            // no break
+                // no break
             case PWD_PRE_SALT:
                 if (empty($cfg['salt'])) {
                     $cfg['salt'] = '';

@@ -205,7 +205,8 @@ elseif ($_REQUEST['act'] == 'print_upload') {
         for ($i = 0; $i < 6; $i++) {
             $name .= chr(mt_rand(97, 122));
         }
-        $name .= '.' . end(explode('.', $_FILES['bg']['name']));
+        $bg_name_arr = explode('.', $_FILES['bg']['name']);
+        $name .= '.' . end($bg_name_arr);
         $target = ROOT_PATH . '/images/receipt/' . $name;
 
         if (move_upload_file($_FILES['bg']['tmp_name'], $target)) {

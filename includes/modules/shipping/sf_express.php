@@ -88,7 +88,7 @@ class sf_express
      *
      * @return null
      */
-    public function sf_express($cfg = array())
+    public function __construct($cfg = array())
     {
         foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];
@@ -131,7 +131,7 @@ class sf_express
      */
     public function query($invoice_sn)
     {
-        $form_str = '<a href="http://www.sf-express.com/tabid/68/Default.aspx" target="_blank">' . $invoice_sn . '</a>';
+        $form_str = '<a href="http://www.sf-express.com/cn/sc/dynamic_functions/waybill/#search/bill-number/' . $invoice_sn . ' " target="_blank">' . $invoice_sn . '</a>';
         return $form_str;
     }
 }

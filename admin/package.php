@@ -244,36 +244,10 @@ elseif ($_REQUEST['act'] == 'search_goods') {
 }
 
 /*------------------------------------------------------ */
-//-- 搜索商品，仅返回名称及ID
-/*------------------------------------------------------ */
-
-//elseif ($_REQUEST['act'] == 'get_goods_list')
-//{
-//    include_once(ROOT_PATH . 'includes/cls_json.php');
-//    $json = new JSON;
-//
-//    $filters = $json->decode($_GET['JSON']);
-//
-//    $arr = get_goods_list($filters);
-//
-//    $opt = array();
-//    foreach ($arr AS $key => $val)
-//    {
-//        $opt[$key] = array('value' => $val['goods_id'],
-//                        'text' => $val['goods_name'],
-//                        'data' => $val['shop_price']);
-//
-//        $opt[$key]['products'] = get_good_products($val['goods_id']);
-//    }
-//
-//    make_json_result($opt);
-//}
-
-/*------------------------------------------------------ */
 //-- 增加一个商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add_package_goods') {
+if ($_REQUEST['act'] == 'add_package_goods') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 

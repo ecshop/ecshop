@@ -496,27 +496,6 @@ if ($_REQUEST['act'] == 'remove') {
     ecs_header("Location: $url\n");
     exit;
 }
-
-/*------------------------------------------------------ */
-//-- PRIVATE FUNCTIONS
-/*------------------------------------------------------ */
-//
-///**
-// * 检查分类是否已经存在
-// *
-// * @param   string      $cat_name       分类名称
-// * @param   integer     $parent_cat     上级分类
-// * @param   integer     $exclude        排除的分类ID
-// *
-// * @return  boolean
-// */
-//function cat_exists($cat_name, $parent_cat, $exclude = 0)
-//{
-//    $sql = "SELECT COUNT(*) FROM " .$GLOBALS['ecs']->table('category').
-//           " WHERE parent_id = '$parent_cat' AND cat_name = '$cat_name' AND cat_id<>'$exclude'";
-//    return ($GLOBALS['db']->getOne($sql) > 0) ? true : false;
-//}
-
 /**
  * 获得商品分类的所有信息
  *

@@ -309,8 +309,8 @@ function get_comment_list()
     /* 获取评论数据 */
     $arr = array();
     $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('comment') . " WHERE parent_id = 0 $where " .
-        " ORDER BY $filter[sort_by] $filter[sort_order] " .
-        " LIMIT " . $filter['start'] . ", $filter[page_size]";
+        " ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'] .
+        " LIMIT " . $filter['start'] . "," . $filter['page_size'];
     $res = $GLOBALS['db']->query($sql);
 
     while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -318,11 +318,6 @@ function get_comment_list()
             "SELECT goods_name FROM " . $GLOBALS['ecs']->table('goods') . " WHERE goods_id='$row[id_value]'" :
             "SELECT title FROM " . $GLOBALS['ecs']->table('article') . " WHERE article_id='$row[id_value]'";
         $row['title'] = $GLOBALS['db']->getOne($sql);
-
-        /* 标记是否回复过 */
-//        $sql = "SELECT COUNT(*) FROM " .$GLOBALS['ecs']->table('comment'). " WHERE parent_id = '$row[comment_id]'";
-//        $row['is_reply'] =  ($GLOBALS['db']->getOne($sql) > 0) ?
-//            $GLOBALS['_LANG']['yes_reply'] : $GLOBALS['_LANG']['no_reply'];
 
         $row['add_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['add_time']);
 

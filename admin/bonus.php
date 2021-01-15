@@ -439,8 +439,6 @@ if ($_REQUEST['act'] == 'send_by_user') {
             $loop++;
         }
     }
-
-    //admin_log(addslashes($_LANG['send_bonus']), 'add', 'bonustype');
     if ($send_count > ($start + $limit)) {
         /*  */
         $href = "bonus.php?act=send_by_user&start=" . ($start + $limit) . "&limit=$limit&id=$_REQUEST[id]&";

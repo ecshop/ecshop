@@ -16,16 +16,6 @@ admin_priv('mail_template');
 if ($_REQUEST['act'] == 'list') {
     include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
 
-    /* 包含插件语言项 */
-    $sql = "SELECT code FROM " . $ecs->table('plugins');
-    $rs = $db->query($sql);
-    while ($row = $db->FetchRow($rs)) {
-        /* 取得语言项 */
-        if (file_exists('../plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php')) {
-            include_once(ROOT_PATH . 'plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php');
-        }
-    }
-
     /* 获得所有邮件模板 */
     $sql = "SELECT template_id, template_code FROM " . $ecs->table('mail_templates') . " WHERE  type = 'template'";
     $res = $db->query($sql);
@@ -72,16 +62,6 @@ elseif ($_REQUEST['act'] == 'loat_template') {
 
     $tpl = intval($_GET['tpl']);
     $mail_type = isset($_GET['mail_type']) ? $_GET['mail_type'] : -1;
-
-    /* 包含插件语言项 */
-    $sql = "SELECT code FROM " . $ecs->table('plugins');
-    $rs = $db->query($sql);
-    while ($row = $db->FetchRow($rs)) {
-        /* 取得语言项 */
-        if (file_exists('../plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php')) {
-            include_once(ROOT_PATH . 'plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php');
-        }
-    }
 
     /* 获得所有邮件模板 */
     $sql = "SELECT template_id, template_code FROM " . $ecs->table('mail_templates') . " WHERE  type = 'template'";

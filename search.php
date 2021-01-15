@@ -363,8 +363,8 @@ else {
         $arr[$row['goods_id']]['shop_price'] = price_format($row['shop_price']);
         $arr[$row['goods_id']]['promote_price'] = ($promote_price > 0) ? price_format($promote_price) : '';
         $arr[$row['goods_id']]['goods_brief'] = $row['goods_brief'];
-        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
-        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_thumb']);
+        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_img']);
         $arr[$row['goods_id']]['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
     }
 

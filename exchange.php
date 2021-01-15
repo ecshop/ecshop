@@ -379,8 +379,8 @@ function exchange_get_goods($children, $min, $max, $ext, $size, $page, $sort, $o
         $arr[$row['goods_id']]['goods_style_name'] = add_style($row['goods_name'], $row['goods_name_style']);
         $arr[$row['goods_id']]['exchange_integral'] = $row['exchange_integral'];
         $arr[$row['goods_id']]['type'] = $row['goods_type'];
-        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
-        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_thumb']);
+        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_img']);
         $arr[$row['goods_id']]['url'] = build_uri('exchange_goods', array('gid' => $row['goods_id']), $row['goods_name']);
     }
 
@@ -469,8 +469,8 @@ function get_exchange_recommend_goods($type = '', $cats = '', $min = 0, $max = 0
         $goods[$idx]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
             sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
         $goods[$idx]['exchange_integral'] = $row['exchange_integral'];
-        $goods[$idx]['thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
-        $goods[$idx]['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+        $goods[$idx]['thumb'] = get_image_path($row['goods_thumb']);
+        $goods[$idx]['goods_img'] = get_image_path($row['goods_img']);
         $goods[$idx]['url'] = build_uri('exchange_goods', array('gid' => $row['goods_id']), $row['goods_name']);
 
         $goods[$idx]['short_style_name'] = add_style($goods[$idx]['short_name'], $row['goods_name_style']);
@@ -525,8 +525,8 @@ function get_exchange_goods_info($goods_id)
         $row['add_time'] = local_date($GLOBALS['_CFG']['date_format'], $row['add_time']);
 
         /* 修正商品图片 */
-        $row['goods_img'] = get_image_path($goods_id, $row['goods_img']);
-        $row['goods_thumb'] = get_image_path($goods_id, $row['goods_thumb'], true);
+        $row['goods_img'] = get_image_path($row['goods_img']);
+        $row['goods_thumb'] = get_image_path($row['goods_thumb']);
 
         return $row;
     } else {

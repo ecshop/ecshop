@@ -225,8 +225,8 @@ function index_get_group_buy()
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             /* 如果缩略图为空，使用默认图片 */
-            $row['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
-            $row['thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
+            $row['goods_img'] = get_image_path($row['goods_img']);
+            $row['thumb'] = get_image_path($row['goods_thumb']);
 
             /* 根据价格阶梯，计算最低价 */
             $ext_info = unserialize($row['ext_info']);
@@ -278,7 +278,7 @@ function index_get_auction()
         $arr = array_merge($row, $ext_info);
         $arr['formated_start_price'] = price_format($arr['start_price']);
         $arr['formated_end_price'] = price_format($arr['end_price']);
-        $arr['thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
+        $arr['thumb'] = get_image_path($row['goods_thumb']);
         $arr['url'] = build_uri('auction', array('auid' => $arr['act_id']));
         $arr['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
             sub_str($arr['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $arr['goods_name'];

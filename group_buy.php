@@ -320,7 +320,7 @@ function group_buy_list($size, $page)
 
         /* 处理图片 */
         if (empty($group_buy['goods_thumb'])) {
-            $group_buy['goods_thumb'] = get_image_path($group_buy['goods_id'], $group_buy['goods_thumb'], true);
+            $group_buy['goods_thumb'] = get_image_path($group_buy['goods_thumb']);
         }
         /* 处理链接 */
         $group_buy['url'] = build_uri('group_buy', array('gbid' => $group_buy['group_buy_id']));

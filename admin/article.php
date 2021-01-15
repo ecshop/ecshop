@@ -46,7 +46,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 翻页，排序
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     check_authz_json('article_manage');
 
     $article_list = get_articleslist();
@@ -180,7 +180,7 @@ if ($_REQUEST['act'] == 'edit') {
 
     /* 取文章数据 */
     $sql = "SELECT * FROM " . $ecs->table('article') . " WHERE article_id='$_REQUEST[id]'";
-    $article = $db->GetRow($sql);
+    $article = $db->getRow($sql);
 
     /* 创建 html editor */
     create_html_editor('FCKeditor1', $article['content']);
@@ -270,7 +270,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 编辑文章主题
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_title') {
+if ($_REQUEST['act'] == 'edit_title') {
     check_authz_json('article_manage');
 
     $id = intval($_POST['id']);
@@ -293,7 +293,7 @@ elseif ($_REQUEST['act'] == 'edit_title') {
 /*------------------------------------------------------ */
 //-- 切换是否显示
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'toggle_show') {
+if ($_REQUEST['act'] == 'toggle_show') {
     check_authz_json('article_manage');
 
     $id = intval($_POST['id']);
@@ -308,7 +308,7 @@ elseif ($_REQUEST['act'] == 'toggle_show') {
 /*------------------------------------------------------ */
 //-- 切换文章重要性
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'toggle_type') {
+if ($_REQUEST['act'] == 'toggle_type') {
     check_authz_json('article_manage');
 
     $id = intval($_POST['id']);
@@ -321,11 +321,10 @@ elseif ($_REQUEST['act'] == 'toggle_type') {
 }
 
 
-
 /*------------------------------------------------------ */
 //-- 删除文章主题
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('article_manage');
 
     $id = intval($_GET['id']);
@@ -354,7 +353,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 将商品加入关联
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add_link_goods') {
+if ($_REQUEST['act'] == 'add_link_goods') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -390,7 +389,7 @@ elseif ($_REQUEST['act'] == 'add_link_goods') {
 /*------------------------------------------------------ */
 //-- 将商品删除关联
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'drop_link_goods') {
+if ($_REQUEST['act'] == 'drop_link_goods') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -445,7 +444,7 @@ if ($_REQUEST['act'] == 'get_goods_list') {
 //-- 批量操作
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'batch') {
+if ($_REQUEST['act'] == 'batch') {
     /* 批量删除 */
     if (isset($_POST['type'])) {
         if ($_POST['type'] == 'button_remove') {

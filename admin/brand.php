@@ -34,7 +34,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 添加品牌
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     /* 权限判断 */
     admin_priv('brand_manage');
 
@@ -45,7 +45,8 @@ elseif ($_REQUEST['act'] == 'add') {
     assign_query_info();
     $smarty->assign('brand', array('sort_order' => 50, 'is_show' => 1));
     $smarty->display('brand_info.htm');
-} elseif ($_REQUEST['act'] == 'insert') {
+}
+if ($_REQUEST['act'] == 'insert') {
     /*检查品牌名是否重复*/
     admin_priv('brand_manage');
 
@@ -91,12 +92,12 @@ elseif ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 编辑品牌
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     /* 权限判断 */
     admin_priv('brand_manage');
     $sql = "SELECT brand_id, brand_name, site_url, brand_logo, brand_desc, brand_logo, is_show, sort_order " .
         "FROM " . $ecs->table('brand') . " WHERE brand_id='$_REQUEST[id]'";
-    $brand = $db->GetRow($sql);
+    $brand = $db->getRow($sql);
 
     $smarty->assign('ur_here', $_LANG['brand_edit']);
     $smarty->assign('action_link', array('text' => $_LANG['06_goods_brand_list'], 'href' => 'brand.php?act=list&' . list_link_postfix()));
@@ -105,7 +106,8 @@ elseif ($_REQUEST['act'] == 'edit') {
 
     assign_query_info();
     $smarty->display('brand_info.htm');
-} elseif ($_REQUEST['act'] == 'updata') {
+}
+if ($_REQUEST['act'] == 'updata') {
     admin_priv('brand_manage');
     if ($_POST['brand_name'] != $_POST['old_brandname']) {
         /*检查品牌名是否相同*/
@@ -151,7 +153,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 编辑品牌名称
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_brand_name') {
+if ($_REQUEST['act'] == 'edit_brand_name') {
     check_authz_json('brand_manage');
 
     $id = intval($_POST['id']);
@@ -168,7 +170,8 @@ elseif ($_REQUEST['act'] == 'edit_brand_name') {
             make_json_result(sprintf($_LANG['brandedit_fail'], $name));
         }
     }
-} elseif ($_REQUEST['act'] == 'add_brand') {
+}
+if ($_REQUEST['act'] == 'add_brand') {
     $brand = empty($_REQUEST['brand']) ? '' : json_str_iconv(trim($_REQUEST['brand']));
 
     if (brand_exists($brand)) {
@@ -188,7 +191,7 @@ elseif ($_REQUEST['act'] == 'edit_brand_name') {
 /*------------------------------------------------------ */
 //-- 编辑排序序号
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_sort_order') {
+if ($_REQUEST['act'] == 'edit_sort_order') {
     check_authz_json('brand_manage');
 
     $id = intval($_POST['id']);
@@ -207,7 +210,7 @@ elseif ($_REQUEST['act'] == 'edit_sort_order') {
 /*------------------------------------------------------ */
 //-- 切换是否显示
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'toggle_show') {
+if ($_REQUEST['act'] == 'toggle_show') {
     check_authz_json('brand_manage');
 
     $id = intval($_POST['id']);
@@ -221,7 +224,7 @@ elseif ($_REQUEST['act'] == 'toggle_show') {
 /*------------------------------------------------------ */
 //-- 删除品牌
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('brand_manage');
 
     $id = intval($_GET['id']);
@@ -248,7 +251,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 删除品牌图片
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'drop_logo') {
+if ($_REQUEST['act'] == 'drop_logo') {
     /* 权限判断 */
     admin_priv('brand_manage');
     $brand_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -269,7 +272,7 @@ elseif ($_REQUEST['act'] == 'drop_logo') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $brand_list = get_brandlist();
     $smarty->assign('brand_list', $brand_list['brand']);
     $smarty->assign('filter', $brand_list['filter']);

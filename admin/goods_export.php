@@ -26,7 +26,8 @@ if ($_REQUEST['act'] == 'goods_export') {
     $smarty->assign('goods_fields', $goods_fields);
     assign_query_info();
     $smarty->display('goods_export.htm');
-} elseif ($_REQUEST['act'] == 'act_export_taobao') {
+}
+if ($_REQUEST['act'] == 'act_export_taobao') {
     /* 检查权限 */
     admin_priv('goods_export');
     include_once('includes/cls_phpzip.php');
@@ -97,7 +98,8 @@ if ($_REQUEST['act'] == 'goods_export') {
     header("Content-Disposition: attachment; filename=goods_list.zip");
     header("Content-Type: application/unknown");
     die($zip->file());
-} elseif ($_REQUEST['act'] == 'act_export_taobao V4.3') {
+}
+if ($_REQUEST['act'] == 'act_export_taobao V4.3') {
     /* 检查权限 */
     admin_priv('goods_export');
     include_once('includes/cls_phpzip.php');
@@ -168,9 +170,10 @@ if ($_REQUEST['act'] == 'goods_export') {
     header("Content-Type: application/unknown");
     die($zip->file());
 } /* 从淘宝导入数据 */
-elseif ($_REQUEST['act'] == 'import_taobao') {
+if ($_REQUEST['act'] == 'import_taobao') {
     $smarty->display('import_taobao.htm');
-} elseif ($_REQUEST['act'] == 'act_export_ecshop') {
+}
+if ($_REQUEST['act'] == 'act_export_ecshop') {
     /* 检查权限 */
     admin_priv('goods_export');
 
@@ -253,7 +256,8 @@ elseif ($_REQUEST['act'] == 'import_taobao') {
     header("Content-Disposition: attachment; filename=goods_list.zip");
     header("Content-Type: application/unknown");
     die($zip->file());
-} elseif ($_REQUEST['act'] == 'act_export_paipai') {
+}
+if ($_REQUEST['act'] == 'act_export_paipai') {
     /* 检查权限 */
     admin_priv('goods_export');
 
@@ -368,7 +372,8 @@ elseif ($_REQUEST['act'] == 'import_taobao') {
     header("Content-Disposition: attachment; filename=goods_list.zip");
     header("Content-Type: application/unknown");
     die($zip->file());
-} elseif ($_REQUEST['act'] == 'act_export_paipai4') {
+}
+if ($_REQUEST['act'] == 'act_export_paipai4') {
     /* 检查权限 */
     admin_priv('goods_export');
 
@@ -476,14 +481,15 @@ elseif ($_REQUEST['act'] == 'import_taobao') {
     header("Content-Type: application/unknown");
     die($zip->file());
 } /* 从拍拍网导入数据 */
-elseif ($_REQUEST['act'] == 'import_paipai') {
+if ($_REQUEST['act'] == 'import_paipai') {
     $smarty->display('import_paipai.htm');
 } /* 处理Ajax调用 */
-elseif ($_REQUEST['act'] == 'get_goods_fields') {
+if ($_REQUEST['act'] == 'get_goods_fields') {
     $cat_id = isset($_REQUEST['cat_id']) ? intval($_REQUEST['cat_id']) : 0;
     $goods_fields = my_array_merge($_LANG['custom'], get_attributes($cat_id));
     make_json_result($goods_fields);
-} elseif ($_REQUEST['act'] == 'act_export_custom') {
+}
+if ($_REQUEST['act'] == 'act_export_custom') {
     /* 检查输出列 */
     if (empty($_POST['custom_goods_export'])) {
         sys_msg($_LANG['custom_goods_field_not_null'], 1, array(), false);
@@ -562,7 +568,8 @@ elseif ($_REQUEST['act'] == 'get_goods_fields') {
     header("Content-Disposition: attachment; filename=goods_list.zip");
     header("Content-Type: application/unknown");
     die($zip->file());
-} elseif ($_REQUEST['act'] == 'get_goods_list') {
+}
+if ($_REQUEST['act'] == 'get_goods_list') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
     $filters = $json->decode($_REQUEST['JSON']);
@@ -575,7 +582,8 @@ elseif ($_REQUEST['act'] == 'get_goods_fields') {
         );
     }
     make_json_result($opt);
-} elseif ($_REQUEST['act'] == 'act_export_taobao V4.6') {
+}
+if ($_REQUEST['act'] == 'act_export_taobao V4.6') {
     /* 检查权限 */
     admin_priv('goods_export');
     include_once('includes/cls_phpzip.php');

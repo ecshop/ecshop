@@ -50,7 +50,7 @@ if ($_REQUEST['act'] == 'login') {
 /*------------------------------------------------------ */
 //-- 验证登陆信息
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'signin') {
+if ($_REQUEST['act'] == 'signin') {
     if (intval($_CFG['captcha']) & CAPTCHA_ADMIN) {
         include_once(ROOT_PATH . 'includes/cls_captcha.php');
 
@@ -68,16 +68,17 @@ elseif ($_REQUEST['act'] == 'signin') {
     $ec_salt = $db->getOne($sql);
     if (!empty($ec_salt)) {
         /* 检查密码是否正确 */
-        $sql = "SELECT user_id, user_name, password, last_login, action_list, last_login,suppliers_id,ec_salt" .
+        $sql = "SELECT user_id, user_name, password, add_time, action_list, last_login,suppliers_id,ec_salt" .
             " FROM " . $ecs->table('admin_user') .
             " WHERE user_name = '" . $_POST['username'] . "' AND password = '" . md5(md5($_POST['password']) . $ec_salt) . "'";
     } else {
         /* 检查密码是否正确 */
-        $sql = "SELECT user_id, user_name, password, last_login, action_list, last_login,suppliers_id,ec_salt" .
+        $sql = "SELECT user_id, user_name, password, add_time, action_list, last_login,suppliers_id,ec_salt" .
             " FROM " . $ecs->table('admin_user') .
             " WHERE user_name = '" . $_POST['username'] . "' AND password = '" . md5($_POST['password']) . "'";
     }
     $row = $db->getRow($sql);
+
     if ($row) {
         // 检查是否为供货商的管理员 所属供货商是否有效
         if (!empty($row['suppliers_id'])) {
@@ -127,7 +128,7 @@ elseif ($_REQUEST['act'] == 'signin') {
 /*------------------------------------------------------ */
 //-- 管理员列表页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'list') {
+if ($_REQUEST['act'] == 'list') {
     /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['admin_list']);
     $smarty->assign('action_link', array('href' => 'privilege.php?act=add', 'text' => $_LANG['admin_add']));
@@ -142,7 +143,7 @@ elseif ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $smarty->assign('admin_list', get_admin_userlist());
 
     make_json_result($smarty->fetch('privilege_list.htm'));
@@ -151,7 +152,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加管理员页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     /* 检查权限 */
     admin_priv('admin_manage');
 
@@ -170,17 +171,17 @@ elseif ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 添加管理员的处理
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'insert') {
+if ($_REQUEST['act'] == 'insert') {
     admin_priv('admin_manage');
     if ($_POST['token'] != $_CFG['token']) {
         sys_msg('add_error', 1);
     }
     /* 判断管理员是否已经存在 */
     if (!empty($_POST['user_name'])) {
-        $is_only = $exc->is_only('user_name', $_POST['user_name']);
+        $is_only = $exc->is_only('user_name', stripslashes($_POST['user_name']));
 
         if (!$is_only) {
-            sys_msg(sprintf($_LANG['user_name_exist'], $_POST['user_name']), 1);
+            sys_msg(sprintf($_LANG['user_name_exist'], stripslashes($_POST['user_name'])), 1);
         }
     }
 
@@ -233,7 +234,7 @@ elseif ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 编辑管理员信息
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     /* 不能编辑demo这个管理员 */
     if ($_SESSION['admin_name'] == 'demo') {
         $link[] = array('text' => $_LANG['back_list'], 'href' => 'privilege.php?act=list');
@@ -281,7 +282,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 更新管理员信息
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'update' || $_REQUEST['act'] == 'update_self') {
+if ($_REQUEST['act'] == 'update' || $_REQUEST['act'] == 'update_self') {
 
     /* 变量初始化 */
     $admin_id = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
@@ -398,7 +399,7 @@ elseif ($_REQUEST['act'] == 'update' || $_REQUEST['act'] == 'update_self') {
 /*------------------------------------------------------ */
 //-- 编辑个人资料
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'modif') {
+if ($_REQUEST['act'] == 'modif') {
     /* 不能编辑demo这个管理员 */
     if ($_SESSION['admin_name'] == 'demo') {
         $link[] = array('text' => $_LANG['back_admin_list'], 'href' => 'privilege.php?act=list');
@@ -463,7 +464,7 @@ elseif ($_REQUEST['act'] == 'modif') {
 /*------------------------------------------------------ */
 //-- 为管理员分配权限
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'allot') {
+if ($_REQUEST['act'] == 'allot') {
     include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/priv_action.php');
 
     admin_priv('allot_priv');
@@ -484,7 +485,7 @@ elseif ($_REQUEST['act'] == 'allot') {
     $sql_query = "SELECT action_id, parent_id, action_code,relevance FROM " . $ecs->table('admin_action') .
         " WHERE parent_id = 0";
     $res = $db->query($sql_query);
-    while ($rows = $db->FetchRow($res)) {
+    while ($rows = $db->fetchRow($res)) {
         $priv_arr[$rows['action_id']] = $rows;
     }
 
@@ -492,7 +493,7 @@ elseif ($_REQUEST['act'] == 'allot') {
     $sql = "SELECT action_id, parent_id, action_code,relevance FROM " . $ecs->table('admin_action') .
         " WHERE parent_id " . db_create_in(array_keys($priv_arr));
     $result = $db->query($sql);
-    while ($priv = $db->FetchRow($result)) {
+    while ($priv = $db->fetchRow($result)) {
         $priv_arr[$priv["parent_id"]]["priv"][$priv["action_code"]] = $priv;
     }
 
@@ -521,7 +522,7 @@ elseif ($_REQUEST['act'] == 'allot') {
 /*------------------------------------------------------ */
 //-- 更新管理员的权限
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'update_allot') {
+if ($_REQUEST['act'] == 'update_allot') {
     admin_priv('admin_manage');
     if ($_POST['token'] != $_CFG['token']) {
         sys_msg('update_allot_error', 1);
@@ -551,7 +552,7 @@ elseif ($_REQUEST['act'] == 'update_allot') {
 /*------------------------------------------------------ */
 //-- 删除一个管理员
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('admin_drop');
 
     $id = intval($_GET['id']);

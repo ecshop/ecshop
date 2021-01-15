@@ -128,7 +128,7 @@ if ($_REQUEST['act'] == 'setup') {
 
     $rc = $db->query($sql);
     $db_dyna_libs = array();
-    while ($row = $db->FetchRow($rc)) {
+    while ($row = $db->fetchRow($rc)) {
         if ($row['type'] > 0) {
             /* 动态内容 */
             $db_dyna_libs[$row['region']][$row['library']][] = array('id' => $row['id'], 'number' => $row['number'], 'type' => $row['type']);

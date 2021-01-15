@@ -19,7 +19,7 @@ if ($_REQUEST['act'] == 'list') {
     $rs = $db->query($sql);
 
     $ranks = array();
-    while ($row = $db->FetchRow($rs)) {
+    while ($row = $db->fetchRow($rs)) {
         $ranks[$row['rank_id']] = $row['rank_name'];
     }
 
@@ -43,7 +43,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- ajax返回用户列表
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $user_list = user_list();
 
     $smarty->assign('user_list', $user_list['user_list']);
@@ -60,7 +60,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加会员帐号
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     /* 检查权限 */
     admin_priv('users_manage');
 
@@ -87,7 +87,7 @@ elseif ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 添加会员帐号
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'insert') {
+if ($_REQUEST['act'] == 'insert') {
     /* 检查权限 */
     admin_priv('users_manage');
     $username = empty($_POST['username']) ? '' : trim($_POST['username']);
@@ -174,14 +174,14 @@ elseif ($_REQUEST['act'] == 'insert') {
 //-- 编辑用户帐号
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     /* 检查权限 */
     admin_priv('users_manage');
 
     $sql = "SELECT u.user_name, u.sex, u.birthday, u.pay_points, u.rank_points, u.user_rank , u.user_money, u.frozen_money, u.credit_line, u.parent_id, u2.user_name as parent_username, u.qq, u.msn, u.office_phone, u.home_phone, u.mobile_phone" .
         " FROM " . $ecs->table('users') . " u LEFT JOIN " . $ecs->table('users') . " u2 ON u.parent_id = u2.user_id WHERE u.user_id='$_GET[id]'";
 
-    $row = $db->GetRow($sql);
+    $row = $db->getRow($sql);
     $row['user_name'] = addslashes($row['user_name']);
     $users = init_users();
     $user = $users->get_user_info($row['user_name']);
@@ -190,7 +190,7 @@ elseif ($_REQUEST['act'] == 'edit') {
     u.office_phone, u.home_phone, u.mobile_phone" .
         " FROM " . $ecs->table('users') . " u LEFT JOIN " . $ecs->table('users') . " u2 ON u.parent_id = u2.user_id WHERE u.user_id='$_GET[id]'";
 
-    $row = $db->GetRow($sql);
+    $row = $db->getRow($sql);
 
     if ($row) {
         $user['user_id'] = $row['user_id'];
@@ -297,7 +297,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 //-- 更新用户帐号
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'update') {
     /* 检查权限 */
     admin_priv('users_manage');
     $username = empty($_POST['username']) ? '' : trim($_POST['username']);
@@ -374,7 +374,7 @@ elseif ($_REQUEST['act'] == 'update') {
 //-- 批量删除会员帐号
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'batch_remove') {
+if ($_REQUEST['act'] == 'batch_remove') {
     /* 检查权限 */
     admin_priv('users_drop');
 
@@ -396,7 +396,7 @@ elseif ($_REQUEST['act'] == 'batch_remove') {
         sys_msg($_LANG['no_select_user'], 0, $lnk);
     }
 } /* 编辑用户名 */
-elseif ($_REQUEST['act'] == 'edit_username') {
+if ($_REQUEST['act'] == 'edit_username') {
     /* 检查权限 */
     check_authz_json('users_manage');
 
@@ -432,7 +432,7 @@ elseif ($_REQUEST['act'] == 'edit_username') {
 /*------------------------------------------------------ */
 //-- 编辑email
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_email') {
+if ($_REQUEST['act'] == 'edit_email') {
     /* 检查权限 */
     check_authz_json('users_manage');
 
@@ -463,7 +463,7 @@ elseif ($_REQUEST['act'] == 'edit_email') {
 //-- 删除会员帐号
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     /* 检查权限 */
     admin_priv('users_drop');
 
@@ -484,7 +484,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //--  收货地址查看
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'address_list') {
+if ($_REQUEST['act'] == 'address_list') {
     $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $sql = "SELECT a.*, c.region_name AS country_name, p.region_name AS province, ct.region_name AS city_name, d.region_name AS district_name " .
         " FROM " . $ecs->table('user_address') . " as a " .
@@ -505,7 +505,7 @@ elseif ($_REQUEST['act'] == 'address_list') {
 //-- 脱离推荐关系
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'remove_parent') {
+if ($_REQUEST['act'] == 'remove_parent') {
     /* 检查权限 */
     admin_priv('users_manage');
 
@@ -526,7 +526,7 @@ elseif ($_REQUEST['act'] == 'remove_parent') {
 //-- 查看用户推荐会员列表
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'aff_list') {
+if ($_REQUEST['act'] == 'aff_list') {
     /* 检查权限 */
     admin_priv('users_manage');
     $smarty->assign('ur_here', $_LANG['03_users_list']);

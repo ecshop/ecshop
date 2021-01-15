@@ -24,10 +24,7 @@ if ($_REQUEST['act'] == 'list') {
     }
     $smarty->assign('user', $user);
 
-    if (empty($_REQUEST['account_type']) || !in_array(
-            $_REQUEST['account_type'],
-            array('user_money', 'frozen_money', 'rank_points', 'pay_points')
-        )) {
+    if (empty($_REQUEST['account_type']) || !in_array($_REQUEST['account_type'], array('user_money', 'frozen_money', 'rank_points', 'pay_points'))) {
         $account_type = '';
     } else {
         $account_type = $_REQUEST['account_type'];
@@ -51,7 +48,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     /* 检查参数 */
     $user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
     if ($user_id <= 0) {
@@ -63,10 +60,7 @@ elseif ($_REQUEST['act'] == 'query') {
     }
     $smarty->assign('user', $user);
 
-    if (empty($_REQUEST['account_type']) || !in_array(
-            $_REQUEST['account_type'],
-            array('user_money', 'frozen_money', 'rank_points', 'pay_points')
-        )) {
+    if (empty($_REQUEST['account_type']) || !in_array($_REQUEST['account_type'], array('user_money', 'frozen_money', 'rank_points', 'pay_points'))) {
         $account_type = '';
     } else {
         $account_type = $_REQUEST['account_type'];
@@ -89,7 +83,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 调节帐户
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     /* 检查权限 */
     admin_priv('account_manage');
     /* 检查参数 */
@@ -113,7 +107,7 @@ elseif ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 提交添加、编辑办事处
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     /* 检查权限 */
     admin_priv('account_manage');
     $token = trim($_POST['token']);

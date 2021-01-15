@@ -19,7 +19,8 @@ if ($_REQUEST['act'] == 'list') {
 
     assign_query_info();
     $smarty->display('view_sendlist.htm');
-} elseif ($_REQUEST['act'] == 'query') {
+}
+if ($_REQUEST['act'] == 'query') {
     $listdb = get_sendlist();
     $smarty->assign('listdb', $listdb['listdb']);
     $smarty->assign('filter', $listdb['filter']);
@@ -30,7 +31,8 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result($smarty->fetch('view_sendlist.htm'), '', array('filter' => $listdb['filter'], 'page_count' => $listdb['page_count']));
-} elseif ($_REQUEST['act'] == 'del') {
+}
+if ($_REQUEST['act'] == 'del') {
     $id = (int)$_REQUEST['id'];
     $sql = "DELETE FROM " . $GLOBALS['ecs']->table('email_sendlist') . " WHERE id = '$id' LIMIT 1";
     $db->query($sql);
@@ -42,7 +44,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 批量删除
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'batch_remove') {
+if ($_REQUEST['act'] == 'batch_remove') {
     /* 检查权限 */
     if (isset($_POST['checkboxes'])) {
         $sql = "DELETE FROM " . $ecs->table('email_sendlist') . " WHERE id " . db_create_in($_POST['checkboxes']);
@@ -60,7 +62,7 @@ elseif ($_REQUEST['act'] == 'batch_remove') {
 //-- 批量发送
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'batch_send') {
+if ($_REQUEST['act'] == 'batch_send') {
     /* 检查权限 */
     if (isset($_POST['checkboxes'])) {
         $sql = "SELECT * FROM " . $ecs->table('email_sendlist') . "WHERE id " . db_create_in($_POST['checkboxes']) . " ORDER BY pri DESC, last_send ASC LIMIT 1";
@@ -130,7 +132,7 @@ elseif ($_REQUEST['act'] == 'batch_send') {
 //-- 全部发送
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'all_send') {
+if ($_REQUEST['act'] == 'all_send') {
     $sql = "SELECT * FROM " . $ecs->table('email_sendlist') . " ORDER BY pri DESC, last_send ASC LIMIT 1";
     $row = $db->getRow($sql);
 

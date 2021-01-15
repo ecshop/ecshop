@@ -174,11 +174,6 @@ if ($_REQUEST['act'] == 'main') {
         }
     }
 
-    $result = file_mode_info('../cert');
-    if ($result < 2) {
-        $warning[] = sprintf($_LANG['not_writable'], 'cert', $_LANG['cert_cannt_write']);
-    }
-
     $result = file_mode_info('../' . DATA_DIR);
     if ($result < 2) {
         $warning[] = sprintf($_LANG['not_writable'], 'data', $_LANG['data_cannt_write']);
@@ -212,11 +207,6 @@ if ($_REQUEST['act'] == 'main') {
     $result = file_mode_info('../images');
     if ($result < 2) {
         $warning[] = sprintf($_LANG['not_writable'], 'images', $_LANG['images_cannt_write']);
-    } else {
-        $result = file_mode_info('../' . IMAGE_DIR . '/upload');
-        if ($result < 2) {
-            $warning[] = sprintf($_LANG['not_writable'], IMAGE_DIR . '/upload', $_LANG['imagesupload_cannt_write']);
-        }
     }
 
     $result = file_mode_info('../temp');
@@ -330,7 +320,7 @@ if ($_REQUEST['act'] == 'main') {
     $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('stats') .
         ' WHERE access_time > ' . (mktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']) - date('Z'));
 
-    $today_visit = $db->GetOne($sql);
+    $today_visit = $db->getOne($sql);
     $smarty->assign('today_visit', $today_visit);
 
     $online_users = $sess->get_users_count();
@@ -341,7 +331,7 @@ if ($_REQUEST['act'] == 'main') {
         "FROM " . $ecs->table('feedback') . " AS f " .
         "LEFT JOIN " . $ecs->table('feedback') . " AS r ON r.parent_id=f.msg_id " .
         'WHERE f.parent_id=0 AND ISNULL(r.msg_id) ';
-    $smarty->assign('feedback_number', $db->GetOne($sql));
+    $smarty->assign('feedback_number', $db->getOne($sql));
 
     /* 未审核评论 */
     $smarty->assign('comment_number', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('comment') .
@@ -410,7 +400,8 @@ if ($_REQUEST['act'] == 'main') {
     $smarty->assign('ecs_charset', strtoupper(EC_CHARSET));
     $smarty->assign('install_date', local_date($_CFG['date_format'], $_CFG['install_date']));
     $smarty->display('start.htm');
-} elseif ($_REQUEST['act'] == 'main_api') {
+}
+if ($_REQUEST['act'] == 'main_api') {
     require_once(ROOT_PATH . '/includes/lib_base.php');
     $data = read_static_cache('api_str');
 
@@ -461,7 +452,7 @@ if ($_REQUEST['act'] == 'main') {
 //-- 开店向导第一步
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'first') {
+if ($_REQUEST['act'] == 'first') {
     $smarty->assign('countries', get_regions());
     $smarty->assign('provinces', get_regions(1, 1));
     $smarty->assign('cities', get_regions(2, 2));
@@ -537,7 +528,7 @@ elseif ($_REQUEST['act'] == 'first') {
 //-- 开店向导第二步
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'second') {
+if ($_REQUEST['act'] == 'second') {
     admin_priv('shop_config');
 
     $shop_name = empty($_POST['shop_name']) ? '' : $_POST['shop_name'];
@@ -547,7 +538,7 @@ elseif ($_REQUEST['act'] == 'second') {
     $shop_city = empty($_POST['shop_city']) ? '' : intval($_POST['shop_city']);
     $shop_address = empty($_POST['shop_address']) ? '' : $_POST['shop_address'];
     $shipping = empty($_POST['shipping']) ? '' : $_POST['shipping'];
-    $payment = empty($_POST['payment']) ? '' : preg_replace('/[\'|\/|\\\]/', '', $_POST['payment']);
+    $payment = empty($_POST['payment']) ? '' : $_POST['payment'];
 
     if (!empty($shop_name)) {
         $sql = 'UPDATE ' . $ecs->table('shop_config') . " SET value = '$shop_name' WHERE code = 'shop_name'";
@@ -595,7 +586,7 @@ elseif ($_REQUEST['act'] == 'second') {
             include_once(ROOT_PATH . 'includes/modules/shipping/' . $shipping . '.php');
         }
         $sql = "SELECT shipping_id FROM " . $ecs->table('shipping') . " WHERE shipping_code = '$shipping'";
-        $shipping_id = $db->GetOne($sql);
+        $shipping_id = $db->getOne($sql);
 
         if ($shipping_id <= 0) {
             $insure = empty($modules[0]['insure']) ? 0 : $modules[0]['insure'];
@@ -701,7 +692,7 @@ elseif ($_REQUEST['act'] == 'second') {
 //-- 开店向导第三步
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'third') {
+if ($_REQUEST['act'] == 'third') {
     admin_priv('goods_manage');
 
     $good_name = empty($_POST['good_name']) ? '' : $_POST['good_name'];
@@ -933,11 +924,12 @@ if ($_REQUEST['act'] == 'check_order') {
 /*------------------------------------------------------ */
 //-- Totolist操作
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'save_todolist') {
+if ($_REQUEST['act'] == 'save_todolist') {
     $content = json_str_iconv($_POST["content"]);
     $sql = "UPDATE" . $GLOBALS['ecs']->table('admin_user') . " SET todolist='" . $content . "' WHERE user_id = " . $_SESSION['admin_id'];
     $GLOBALS['db']->query($sql);
-} elseif ($_REQUEST['act'] == 'get_todolist') {
+}
+if ($_REQUEST['act'] == 'get_todolist') {
     $sql = "SELECT todolist FROM " . $GLOBALS['ecs']->table('admin_user') . " WHERE user_id = " . $_SESSION['admin_id'];
     $content = $GLOBALS['db']->getOne($sql);
     echo $content;

@@ -39,7 +39,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     check_authz_json('suppliers_manage');
 
     $result = suppliers_list();
@@ -63,7 +63,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 列表页编辑名称
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_suppliers_name') {
+if ($_REQUEST['act'] == 'edit_suppliers_name') {
     check_authz_json('suppliers_manage');
 
     $id = intval($_POST['id']);
@@ -97,7 +97,7 @@ elseif ($_REQUEST['act'] == 'edit_suppliers_name') {
 /*------------------------------------------------------ */
 //-- 删除供货商
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('suppliers_manage');
 
     $id = intval($_REQUEST['id']);
@@ -158,7 +158,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 修改供货商状态
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'is_check') {
+if ($_REQUEST['act'] == 'is_check') {
     check_authz_json('suppliers_manage');
 
     $id = intval($_REQUEST['id']);
@@ -180,7 +180,7 @@ elseif ($_REQUEST['act'] == 'is_check') {
 /*------------------------------------------------------ */
 //-- 批量操作
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'batch') {
+if ($_REQUEST['act'] == 'batch') {
     /* 取得要操作的记录编号 */
     if (empty($_POST['checkboxes'])) {
         sys_msg($_LANG['no_record_selected']);
@@ -251,7 +251,7 @@ elseif ($_REQUEST['act'] == 'batch') {
 /*------------------------------------------------------ */
 //-- 添加、编辑供货商
 /*------------------------------------------------------ */
-elseif (in_array($_REQUEST['act'], array('add', 'edit'))) {
+if (in_array($_REQUEST['act'], array('add', 'edit'))) {
     /* 检查权限 */
     admin_priv('suppliers_manage');
 
@@ -278,7 +278,9 @@ elseif (in_array($_REQUEST['act'], array('add', 'edit'))) {
         assign_query_info();
 
         $smarty->display('suppliers_info.htm');
-    } elseif ($_REQUEST['act'] == 'edit') {
+    }
+
+    if ($_REQUEST['act'] == 'edit') {
         $suppliers = array();
 
         /* 取得供货商信息 */
@@ -316,7 +318,7 @@ elseif (in_array($_REQUEST['act'], array('add', 'edit'))) {
 /*------------------------------------------------------ */
 //-- 提交添加、编辑供货商
 /*------------------------------------------------------ */
-elseif (in_array($_REQUEST['act'], array('insert', 'update'))) {
+if (in_array($_REQUEST['act'], array('insert', 'update'))) {
     /* 检查权限 */
     admin_priv('suppliers_manage');
 

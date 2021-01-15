@@ -306,7 +306,7 @@ if ($_REQUEST['act'] == 'send') {
         $smarty->display('bonus_by_user.htm');
     } elseif ($_REQUEST['send_by'] == SEND_BY_GOODS) {
         /* 查询此红包类型信息 */
-        $bonus_type = $db->GetRow("SELECT type_id, type_name FROM " . $ecs->table('bonus_type') .
+        $bonus_type = $db->getRow("SELECT type_id, type_name FROM " . $ecs->table('bonus_type') .
             " WHERE type_id='$_REQUEST[id]'");
 
         /* 查询红包类型的商品列表 */
@@ -741,7 +741,7 @@ if ($_REQUEST['act'] == 'query_bonus') {
 /*------------------------------------------------------ */
 //-- 删除红包
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove_bonus') {
+if ($_REQUEST['act'] == 'remove_bonus') {
     check_authz_json('bonus_manage');
 
     $id = intval($_GET['id']);

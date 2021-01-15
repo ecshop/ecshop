@@ -21,7 +21,7 @@ if ($_REQUEST['act'] == 'list') {
     $res = $db->query($sql);
     $cur = null;
 
-    while ($row = $db->FetchRow($res)) {
+    while ($row = $db->fetchRow($res)) {
         if ($cur == null) {
             $cur = $row['template_id'];
         }
@@ -57,7 +57,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 载入指定模版
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'loat_template') {
+if ($_REQUEST['act'] == 'loat_template') {
     include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
 
     $tpl = intval($_GET['tpl']);
@@ -67,7 +67,7 @@ elseif ($_REQUEST['act'] == 'loat_template') {
     $sql = "SELECT template_id, template_code FROM " . $ecs->table('mail_templates') . " WHERE  type = 'template'";
     $res = $db->query($sql);
 
-    while ($row = $db->FetchRow($res)) {
+    while ($row = $db->fetchRow($res)) {
         $len = strlen($_LANG[$row['template_code']]);
         $templates[$row['template_id']] = $len < 18 ?
             $_LANG[$row['template_code']] . str_repeat('&nbsp;', (18 - $len) / 2) . " [$row[template_code]]" :
@@ -104,7 +104,7 @@ elseif ($_REQUEST['act'] == 'loat_template') {
 //-- 保存模板内容
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'save_template') {
+if ($_REQUEST['act'] == 'save_template') {
     if (empty($_POST['subject'])) {
         sys_msg($_LANG['subject_empty'], 1, array(), false);
     } else {
@@ -147,7 +147,7 @@ function load_template($temp_id)
 {
     $sql = "SELECT template_subject, template_content, is_html " .
         "FROM " . $GLOBALS['ecs']->table('mail_templates') . " WHERE template_id='$temp_id'";
-    $row = $GLOBALS['db']->GetRow($sql);
+    $row = $GLOBALS['db']->getRow($sql);
 
     return $row;
 }

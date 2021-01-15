@@ -23,7 +23,7 @@ if ($_REQUEST['act'] == 'replenish') {
         $link[] = array('text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list');
         sys_msg($_LANG['replenish_no_goods_id'], 1, $link);
     } else {
-        $goods_name = $db->GetOne("SELECT goods_name From " . $ecs->table('goods') . " WHERE goods_id='" . $_REQUEST['goods_id'] . "' AND is_real = 0 AND extension_code='virtual_card' ");
+        $goods_name = $db->getOne("SELECT goods_name From " . $ecs->table('goods') . " WHERE goods_id='" . $_REQUEST['goods_id'] . "' AND is_real = 0 AND extension_code='virtual_card' ");
         if (empty($goods_name)) {
             $link[] = array('text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list');
             sys_msg($_LANG['replenish_no_get_goods_name'], 1, $link);
@@ -41,14 +41,14 @@ if ($_REQUEST['act'] == 'replenish') {
 /*------------------------------------------------------ */
 //-- 编辑补货信息
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_replenish') {
+if ($_REQUEST['act'] == 'edit_replenish') {
     /* 检查权限 */
     admin_priv('virualcard');
     /* 获取卡片信息 */
     $sql = "SELECT T1.card_id, T1.goods_id, T2.goods_name,T1.card_sn, T1.card_password, T1.end_date, T1.crc32 FROM " .
         $ecs->table('virtual_card') . " AS T1, " . $ecs->table('goods') . " AS T2 " .
         "WHERE T1.goods_id = T2.goods_id AND T1.card_id = '$_REQUEST[card_id]'";
-    $card = $db->GetRow($sql);
+    $card = $db->getRow($sql);
     if ($card['crc32'] == 0 || $card['crc32'] == crc32(AUTH_KEY)) {
         $card['card_sn'] = decrypt($card['card_sn']);
         $card['card_password'] = decrypt($card['card_password']);
@@ -64,7 +64,8 @@ elseif ($_REQUEST['act'] == 'edit_replenish') {
     $smarty->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id=' . $card['goods_id']));
     $smarty->assign('card', $card);
     $smarty->display('replenish_info.htm');
-} elseif ($_REQUEST['act'] == 'action') {
+}
+if ($_REQUEST['act'] == 'action') {
     /* 检查权限 */
     admin_priv('virualcard');
 
@@ -79,7 +80,7 @@ elseif ($_REQUEST['act'] == 'edit_replenish') {
     if ($_POST['card_sn'] != $_POST['old_card_sn']) {
         $sql = "SELECT count(*) FROM " . $ecs->table('virtual_card') . " WHERE goods_id='" . $_POST['goods_id'] . "' AND card_sn='$coded_card_sn'";
 
-        if ($db->GetOne($sql) > 0) {
+        if ($db->getOne($sql) > 0) {
             $link[] = array('text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=replenish&goods_id=' . $_POST['goods_id']);
             sys_msg(sprintf($_LANG['card_sn_exist'], $_POST['card_sn']), 1, $link);
         }
@@ -118,7 +119,7 @@ elseif ($_REQUEST['act'] == 'edit_replenish') {
 /*------------------------------------------------------ */
 //-- 补货列表
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'card') {
+if ($_REQUEST['act'] == 'card') {
     /* 检查权限 */
     admin_priv('virualcard');
 
@@ -127,7 +128,7 @@ elseif ($_REQUEST['act'] == 'card') {
         $link[] = array('text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list');
         sys_msg($_LANG['replenish_no_goods_id'], 1, $link);
     } else {
-        $goods_name = $db->GetOne("SELECT goods_name From " . $ecs->table('goods') . " WHERE goods_id='" . $_REQUEST['goods_id'] . "' AND is_real = 0 AND extension_code='virtual_card' ");
+        $goods_name = $db->getOne("SELECT goods_name From " . $ecs->table('goods') . " WHERE goods_id='" . $_REQUEST['goods_id'] . "' AND is_real = 0 AND extension_code='virtual_card' ");
         if (empty($goods_name)) {
             $link[] = array('text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list');
             sys_msg($_LANG['replenish_no_get_goods_name'], 1, $link);
@@ -164,7 +165,7 @@ elseif ($_REQUEST['act'] == 'card') {
 //-- 虚拟卡列表，用于排序、翻页
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'query_card') {
+if ($_REQUEST['act'] == 'query_card') {
     $list = get_replenish_list();
 
     $smarty->assign('card_list', $list['item']);
@@ -181,7 +182,7 @@ elseif ($_REQUEST['act'] == 'query_card') {
         array('filter' => $list['filter'], 'page_count' => $list['page_count'])
     );
 } /* 批量删除card */
-elseif ($_REQUEST['act'] == 'batch_drop_card') {
+if ($_REQUEST['act'] == 'batch_drop_card') {
     /* 检查权限 */
     admin_priv('virualcard');
 
@@ -195,7 +196,7 @@ elseif ($_REQUEST['act'] == 'batch_drop_card') {
     }
 } /* 批量上传页面 */
 
-elseif ($_REQUEST['act'] == 'batch_card_add') {
+if ($_REQUEST['act'] == 'batch_card_add') {
     /* 检查权限 */
     admin_priv('virualcard');
 
@@ -203,7 +204,8 @@ elseif ($_REQUEST['act'] == 'batch_card_add') {
     $smarty->assign('action_link', array('text' => $_LANG['virtual_card_list'], 'href' => 'goods.php?act=list&extension_code=virtual_card'));
     $smarty->assign('goods_id', $_REQUEST['goods_id']);
     $smarty->display('batch_card_info.htm');
-} elseif ($_REQUEST['act'] == 'batch_confirm') {
+}
+if ($_REQUEST['act'] == 'batch_confirm') {
     /* 检查上传是否成功 */
     if ($_FILES['uploadfile']['tmp_name'] == '' || $_FILES['uploadfile']['tmp_name'] == 'none') {
         sys_msg($_LANG['uploadfile_fail'], 1);
@@ -218,10 +220,10 @@ elseif ($_REQUEST['act'] == 'batch_card_add') {
         switch (count($row)) {
             case '3':
                 $rec[$i]['end_date'] = $row[2];
-            // no break
+                // no break
             case '2':
                 $rec[$i]['card_password'] = $row[1];
-            // no break
+                // no break
             case '1':
                 $rec[$i]['card_sn'] = $row[0];
                 break;
@@ -239,7 +241,7 @@ elseif ($_REQUEST['act'] == 'batch_card_add') {
     $smarty->assign('list', $rec);
     $smarty->display('batch_card_confirm.htm');
 } /* 批量上传处理 */
-elseif ($_REQUEST['act'] == 'batch_insert') {
+if ($_REQUEST['act'] == 'batch_insert') {
     /* 检查权限 */
     admin_priv('virualcard');
 
@@ -252,7 +254,7 @@ elseif ($_REQUEST['act'] == 'batch_insert') {
         $rec['end_date'] = empty($_POST['end_date'][$key]) ? 0 : strtotime($_POST['end_date'][$key]);
         $rec['goods_id'] = $_POST['goods_id'];
         $rec['add_date'] = $add_time;
-        $db->AutoExecute($ecs->table('virtual_card'), $rec, 'INSERT');
+        $db->autoExecute($ecs->table('virtual_card'), $rec, 'INSERT');
         $i++;
     }
 
@@ -266,7 +268,7 @@ elseif ($_REQUEST['act'] == 'batch_insert') {
 //-- 更改加密串
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'change') {
+if ($_REQUEST['act'] == 'change') {
     /* 检查权限 */
     admin_priv('virualcard');
 
@@ -280,7 +282,7 @@ elseif ($_REQUEST['act'] == 'change') {
 //-- 提交更改
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'submit_change') {
+if ($_REQUEST['act'] == 'submit_change') {
     /* 检查权限 */
     admin_priv('virualcard');
 
@@ -325,7 +327,7 @@ elseif ($_REQUEST['act'] == 'submit_change') {
 //-- 切换是否已出售状态
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'toggle_sold') {
+if ($_REQUEST['act'] == 'toggle_sold') {
     check_authz_json('virualcard');
 
     $id = intval($_POST['id']);
@@ -348,12 +350,12 @@ elseif ($_REQUEST['act'] == 'toggle_sold') {
 /*------------------------------------------------------ */
 //-- 删除卡片
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove_card') {
+if ($_REQUEST['act'] == 'remove_card') {
     check_authz_json('virualcard');
 
     $id = intval($_GET['id']);
 
-    $row = $db->GetRow('SELECT card_sn, goods_id FROM ' . $ecs->table('virtual_card') . " WHERE card_id = '$id'");
+    $row = $db->getRow('SELECT card_sn, goods_id FROM ' . $ecs->table('virtual_card') . " WHERE card_id = '$id'");
 
     $sql = 'DELETE FROM ' . $ecs->table('virtual_card') . " WHERE card_id = '$id'";
     if ($db->query($sql, 'SILENT')) {
@@ -373,7 +375,7 @@ elseif ($_REQUEST['act'] == 'remove_card') {
 //-- 开始更改加密串：先检查原串和新串
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'start_change') {
+if ($_REQUEST['act'] == 'start_change') {
     $old_key = json_str_iconv(trim($_GET['old_key']));
     $new_key = json_str_iconv(trim($_GET['new_key']));
     // 检查原加密串和新加密串是否相同
@@ -412,7 +414,7 @@ elseif ($_REQUEST['act'] == 'start_change') {
 //-- 更新加密串
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'on_change') {
+if ($_REQUEST['act'] == 'on_change') {
     // 重新加密卡号和密码
     $each_num = 1;
     $old_crc32 = crc32(OLD_AUTH_KEY);

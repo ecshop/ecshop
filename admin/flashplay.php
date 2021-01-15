@@ -46,7 +46,8 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('current_flashtpl', $_CFG['flash_theme']);
     $smarty->assign('playerdb', $playerdb);
     $smarty->display('flashplay_list.htm');
-} elseif ($_REQUEST['act'] == 'del') {
+}
+if ($_REQUEST['act'] == 'del') {
     admin_priv('flash_manage');
 
     $id = (int)$_GET['id'];
@@ -72,7 +73,8 @@ if ($_REQUEST['act'] == 'list') {
     set_flash_data($_CFG['flash_theme'], $error_msg);
     ecs_header("Location: flashplay.php?act=list\n");
     exit;
-} elseif ($_REQUEST['act'] == 'add') {
+}
+if ($_REQUEST['act'] == 'add') {
     admin_priv('flash_manage');
 
     if (empty($_POST['step'])) {
@@ -147,7 +149,8 @@ if ($_REQUEST['act'] == 'list') {
         $links[] = array('text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list');
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
-} elseif ($_REQUEST['act'] == 'edit') {
+}
+if ($_REQUEST['act'] == 'edit') {
     admin_priv('flash_manage');
 
     $id = (int)$_REQUEST['id']; //取得id
@@ -229,7 +232,8 @@ if ($_REQUEST['act'] == 'list') {
         $links[] = array('text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list');
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
-} elseif ($_REQUEST['act'] == 'install') {
+}
+if ($_REQUEST['act'] == 'install') {
     check_authz_json('flash_manage');
     $flash_theme = trim($_GET['flashtpl']);
     if ($_CFG['flash_theme'] != $flash_theme) {
@@ -255,7 +259,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 用户自定义
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'custom_list') {
+if ($_REQUEST['act'] == 'custom_list') {
     /* 标签初始化 */
     $group_list = array(
         'sys' => array('text' => $_LANG['system_set'], 'url' => ($_CFG['index_ad'] == 'cus') ? 'javascript:system_set();void(0);' : 'flashplay.php?act=list'),
@@ -293,7 +297,7 @@ elseif ($_REQUEST['act'] == 'custom_list') {
 //-- 用户自定义添加
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'custom_add') {
+if ($_REQUEST['act'] == 'custom_add') {
     /* 标签初始化 */
     $group_list = array(
         'sys' => array('text' => $_LANG['system_set'], 'url' => ($_CFG['index_ad'] == 'cus') ? 'javascript:system_set();void(0);' : 'flashplay.php?act=list'),
@@ -328,12 +332,11 @@ elseif ($_REQUEST['act'] == 'custom_add') {
 }
 
 
-
 /*------------------------------------------------------ */
 //-- 用户自定义 添加广告入库
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'custom_insert') {
+if ($_REQUEST['act'] == 'custom_insert') {
     admin_priv('flash_manage');
 
     /* 定义当前时间 */
@@ -428,7 +431,7 @@ elseif ($_REQUEST['act'] == 'custom_insert') {
 //-- 用户自定义 删除广告
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'custom_del') {
+if ($_REQUEST['act'] == 'custom_del') {
     admin_priv('flash_manage');
 
     $id = empty($_GET['id']) ? 0 : intval(trim($_GET['id']));
@@ -457,7 +460,7 @@ elseif ($_REQUEST['act'] == 'custom_del') {
 //-- 用户自定义 启用与关闭广告
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'custom_status') {
+if ($_REQUEST['act'] == 'custom_status') {
     check_authz_json('flash_manage');
 
     $ad_status = empty($_GET['ad_status']) ? 1 : 0;
@@ -508,7 +511,7 @@ elseif ($_REQUEST['act'] == 'custom_status') {
 //-- 用户自定义 修改
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'custom_edit') {
+if ($_REQUEST['act'] == 'custom_edit') {
     $id = empty($_GET['id']) ? 0 : intval(trim($_GET['id']));
 
     /* 查询自定义广告信息 */
@@ -534,7 +537,7 @@ elseif ($_REQUEST['act'] == 'custom_edit') {
 //-- 用户自定义 更新数据库
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'custom_update') {
+if ($_REQUEST['act'] == 'custom_update') {
     admin_priv('flash_manage');
 
     if (empty($_POST['ad']) || empty($_POST['content']) || empty($_POST['ad']['ad_name']) || empty($_POST['ad']['id'])) {

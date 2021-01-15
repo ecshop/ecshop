@@ -38,7 +38,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $cat_list = cat_list(0, 0, false);
     $smarty->assign('cat_info', $cat_list);
 
@@ -187,7 +187,8 @@ if ($_REQUEST['act'] == 'edit') {
     /* 显示页面 */
     assign_query_info();
     $smarty->display('category_info.htm');
-} elseif ($_REQUEST['act'] == 'add_category') {
+}
+if ($_REQUEST['act'] == 'add_category') {
     $parent_id = empty($_REQUEST['parent_id']) ? 0 : intval($_REQUEST['parent_id']);
     $category = empty($_REQUEST['cat']) ? '' : json_str_iconv(trim($_REQUEST['cat']));
 

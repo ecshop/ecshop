@@ -23,7 +23,7 @@ admin_priv('lang_edit');
 if ($_REQUEST['act'] == 'list') {
     //从languages目录下获取语言项文件
     $lang_arr = array();
-    $lang_path = '../languages/' . $_CFG['lang'];
+    $lang_path = ROOT_PATH . 'languages/' . $_CFG['lang'];
     $lang_dir = @opendir($lang_path);
 
     while ($file = @readdir($lang_dir)) {
@@ -39,11 +39,11 @@ if ($_REQUEST['act'] == 'list') {
     /* 获得需要操作的语言包文件 */
     $lang_file = isset($_POST['lang_file']) ? trim($_POST['lang_file']) : '';
     if ($lang_file == 'common') {
-        $file_path = '../languages/' . $_CFG['lang'] . '/common.php';
+        $file_path = ROOT_PATH . 'languages/' . $_CFG['lang'] . '/common.php';
     } elseif ($lang_file == 'shopping_flow') {
-        $file_path = '../languages/' . $_CFG['lang'] . '/shopping_flow.php';
+        $file_path = ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php';
     } else {
-        $file_path = '../languages/' . $_CFG['lang'] . '/user.php';
+        $file_path = ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php';
     }
 
     $file_attr = '';
@@ -74,7 +74,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 编辑语言项
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     /* 语言项的路径 */
     $lang_file = isset($_POST['file_path']) ? trim($_POST['file_path']) : '';
 

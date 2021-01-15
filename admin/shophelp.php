@@ -43,7 +43,7 @@ if ($_REQUEST['act'] == 'list_article') {
 /*------------------------------------------------------ */
 //-- 查询分类下的文章
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query_art') {
+if ($_REQUEST['act'] == 'query_art') {
     $cat_id = intval($_GET['cat']);
 
     $smarty->assign('list', shophelp_article_list($cat_id));
@@ -53,7 +53,7 @@ elseif ($_REQUEST['act'] == 'query_art') {
 /*------------------------------------------------------ */
 //-- 查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $smarty->assign('list', get_shophelp_list());
 
     make_json_result($smarty->fetch('shophelp_cat_list.htm'));
@@ -65,6 +65,7 @@ elseif ($_REQUEST['act'] == 'query') {
 if ($_REQUEST['act'] == 'add') {
     /* 权限判断 */
     admin_priv('shophelp_manage');
+    $_POST['id'] = intval($_POST['id']);
 
     /* 创建 html editor */
     create_html_editor('FCKeditor1');
@@ -85,6 +86,7 @@ if ($_REQUEST['act'] == 'add') {
 if ($_REQUEST['act'] == 'insert') {
     /* 权限判断 */
     admin_priv('shophelp_manage');
+    $_POST['id'] = intval($_POST['id']);
 
     /* 判断是否重名 */
     $exc_article->is_only('title', $_POST['title'], $_LANG['title_exist']);
@@ -112,10 +114,11 @@ if ($_REQUEST['act'] == 'insert') {
 if ($_REQUEST['act'] == 'edit') {
     /* 权限判断 */
     admin_priv('shophelp_manage');
+    $_POST['id'] = intval($_POST['id']);
 
     /* 取文章数据 */
     $sql = "SELECT article_id,title, cat_id, article_type, is_open, author, author_email, keywords, content FROM " . $ecs->table('article') . " WHERE article_id='$_REQUEST[id]'";
-    $article = $db->GetRow($sql);
+    $article = $db->getRow($sql);
 
     /* 创建 html editor */
     create_html_editor('FCKeditor1', $article['content']);
@@ -132,6 +135,7 @@ if ($_REQUEST['act'] == 'edit') {
 if ($_REQUEST['act'] == 'update') {
     /* 权限判断 */
     admin_priv('shophelp_manage');
+    $_POST['id'] = intval($_POST['id']);
 
     /* 检查重名 */
     if ($_POST['title'] != $_POST['old_title']) {
@@ -153,7 +157,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 编辑分类的名称
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_catname') {
+if ($_REQUEST['act'] == 'edit_catname') {
     check_authz_json('shophelp_manage');
 
     $id = intval($_POST['id']);
@@ -176,7 +180,7 @@ elseif ($_REQUEST['act'] == 'edit_catname') {
 /*------------------------------------------------------ */
 //-- 编辑分类的排序
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_cat_order') {
+if ($_REQUEST['act'] == 'edit_cat_order') {
     check_authz_json('shophelp_manage');
 
     $id = intval($_POST['id']);
@@ -196,7 +200,7 @@ elseif ($_REQUEST['act'] == 'edit_cat_order') {
 /*------------------------------------------------------ */
 //-- 删除分类
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('shophelp_manage');
 
     $id = intval($_GET['id']);
@@ -219,7 +223,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 删除分类下的某文章
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove_art') {
+if ($_REQUEST['act'] == 'remove_art') {
     check_authz_json('shophelp_manage');
 
     $id = intval($_GET['id']);
@@ -243,7 +247,7 @@ elseif ($_REQUEST['act'] == 'remove_art') {
 /*------------------------------------------------------ */
 //-- 添加一个新分类
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add_catname') {
+if ($_REQUEST['act'] == 'add_catname') {
     check_authz_json('shophelp_manage');
 
     $cat_name = trim($_POST['cat_name']);
@@ -271,7 +275,7 @@ elseif ($_REQUEST['act'] == 'add_catname') {
 /*------------------------------------------------------ */
 //-- 编辑文章标题
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_title') {
+if ($_REQUEST['act'] == 'edit_title') {
     check_authz_json('shophelp_manage');
 
     $id = intval($_POST['id']);

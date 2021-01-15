@@ -13,7 +13,7 @@ require_once(ROOT_PATH . ADMIN_PATH . '/includes/cls_sql_dump.php');
 
 /* 备份页面 */
 if ($_REQUEST['act'] == 'backup') {
-    $tables = $db->GetCol("SHOW TABLES LIKE '" . mysql_like_quote($ecs->prefix) . "%'");
+    $tables = $db->getCol("SHOW TABLES LIKE '" . mysql_like_quote($ecs->prefix) . "%'");
     $allow_max_size = return_bytes(@ini_get('upload_max_filesize')); // 单位为字节
     $allow_max_size = $allow_max_size / 1024; // 转换单位为 KB
 
@@ -173,7 +173,7 @@ if ($_REQUEST['act'] == 'dumpsql') {
     switch ($type) {
         case 'full':
             $except = array($ecs->prefix . 'sessions', $ecs->prefix . 'sessions_data');
-            $temp = $db->GetCol("SHOW TABLES LIKE '" . mysql_like_quote($ecs->prefix) . "%'");
+            $temp = $db->getCol("SHOW TABLES LIKE '" . mysql_like_quote($ecs->prefix) . "%'");
             foreach ($temp as $table) {
                 if (in_array($table, $except)) {
                     continue;
@@ -468,7 +468,7 @@ if ($_REQUEST['act'] == 'optimize') {
             $res['Msg_text'] = 'Ignore';
             $row['Data_free'] = 'Ignore';
         } else {
-            $res = $db->GetRow('CHECK TABLE ' . $row['Name']);
+            $res = $db->getRow('CHECK TABLE ' . $row['Name']);
             $num += $row['Data_free'];
         }
         $type = $db_ver >= '4.1' ? $row['Engine'] : $row['Type'];

@@ -43,7 +43,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 翻页，排序
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     check_authz_json('exchange_goods');
 
     $goods_list = get_exchange_goodslist();
@@ -133,7 +133,7 @@ if ($_REQUEST['act'] == 'edit') {
         " FROM " . $ecs->table('exchange_goods') . " AS eg " .
         "  LEFT JOIN " . $ecs->table('goods') . " AS g ON g.goods_id = eg.goods_id " .
         " WHERE eg.goods_id='$_REQUEST[id]'";
-    $goods = $db->GetRow($sql);
+    $goods = $db->getRow($sql);
     $goods['option'] = '<option value="' . $goods['goods_id'] . '">' . $goods['goods_name'] . '</option>';
 
     $smarty->assign('goods', $goods);
@@ -172,7 +172,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 编辑使用积分值
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_exchange_integral') {
+if ($_REQUEST['act'] == 'edit_exchange_integral') {
     check_authz_json('exchange_goods');
 
     $id = intval($_POST['id']);
@@ -195,7 +195,7 @@ elseif ($_REQUEST['act'] == 'edit_exchange_integral') {
 /*------------------------------------------------------ */
 //-- 切换是否兑换
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'toggle_exchange') {
+if ($_REQUEST['act'] == 'toggle_exchange') {
     check_authz_json('exchange_goods');
 
     $id = intval($_POST['id']);
@@ -210,7 +210,7 @@ elseif ($_REQUEST['act'] == 'toggle_exchange') {
 /*------------------------------------------------------ */
 //-- 切换是否兑换
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'toggle_hot') {
+if ($_REQUEST['act'] == 'toggle_hot') {
     check_authz_json('exchange_goods');
 
     $id = intval($_POST['id']);
@@ -225,7 +225,7 @@ elseif ($_REQUEST['act'] == 'toggle_hot') {
 /*------------------------------------------------------ */
 //-- 批量删除商品
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'batch_remove') {
+if ($_REQUEST['act'] == 'batch_remove') {
     admin_priv('exchange_goods');
 
     if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
@@ -247,7 +247,7 @@ elseif ($_REQUEST['act'] == 'batch_remove') {
 /*------------------------------------------------------ */
 //-- 删除商品
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('exchange_goods');
 
     $id = intval($_GET['id']);
@@ -266,7 +266,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 //-- 搜索商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'search_goods') {
+if ($_REQUEST['act'] == 'search_goods') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 

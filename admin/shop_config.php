@@ -17,10 +17,10 @@ if ($_REQUEST['act'] == 'list_edit') {
     admin_priv('shop_config');
 
     /* 可选语言 */
-    $dir = opendir('../languages');
+    $dir = opendir(ROOT_PATH . 'languages');
     $lang_list = array();
     while (@$file = readdir($dir)) {
-        if ($file != '.' && $file != '..' && $file != '.svn' && $file != '_svn' && is_dir('../languages/' . $file)) {
+        if ($file != '.' && $file != '..' && $file != '.svn' && $file != '_svn' && is_dir(ROOT_PATH . 'languages/' . $file)) {
             $lang_list[] = $file;
         }
     }
@@ -53,7 +53,7 @@ if ($_REQUEST['act'] == 'list_edit') {
 /*------------------------------------------------------ */
 //-- 邮件服务器设置
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'mail_settings') {
+if ($_REQUEST['act'] == 'mail_settings') {
     /* 检查权限 */
     admin_priv('shop_config');
 
@@ -69,7 +69,7 @@ elseif ($_REQUEST['act'] == 'mail_settings') {
 /*------------------------------------------------------ */
 //-- 提交   ?act=post
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'post') {
+if ($_REQUEST['act'] == 'post') {
     $type = empty($_POST['type']) ? '' : $_POST['type'];
 
     /* 检查权限 */
@@ -210,7 +210,7 @@ if ($_REQUEST['act'] == 'send_test_email') {
 /*------------------------------------------------------ */
 //-- 删除上传文件
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'del') {
+if ($_REQUEST['act'] == 'del') {
     /* 检查权限 */
     check_authz_json('shop_config');
 

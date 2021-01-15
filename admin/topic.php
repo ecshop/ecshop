@@ -111,7 +111,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
         $smarty->assign('act', "insert");
     }
     $smarty->display('topic_edit.htm');
-} elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+}
+if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     admin_priv('topic_manage');
 
     $is_insert = $_REQUEST['act'] == 'insert';
@@ -225,7 +226,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 
     $links[] = array('href' => 'topic.php', 'text' => $_LANG['back_list']);
     sys_msg($_LANG['succed'], 0, $links);
-} elseif ($_REQUEST['act'] == 'get_goods_list') {
+}
+if ($_REQUEST['act'] == 'get_goods_list') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -240,7 +242,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     }
 
     make_json_result($opt);
-} elseif ($_REQUEST["act"] == "delete") {
+}
+if ($_REQUEST["act"] == "delete") {
     admin_priv('topic_manage');
 
     $sql = "DELETE FROM " . $ecs->table('topic') . " WHERE ";
@@ -266,7 +269,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 
     $links[] = array('href' => 'topic.php', 'text' => $_LANG['back_list']);
     sys_msg($_LANG['succed'], 0, $links);
-} elseif ($_REQUEST["act"] == "query") {
+}
+if ($_REQUEST["act"] == "query") {
     $topic_list = get_topic_list();
     $smarty->assign('topic_list', $topic_list['item']);
     $smarty->assign('filter', $topic_list['filter']);

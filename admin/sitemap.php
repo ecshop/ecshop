@@ -21,7 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $smarty->assign('ur_here', $_LANG['sitemap']);
     $smarty->assign('arr_changefreq', array(1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1));
     $smarty->display('sitemap.htm');
-} else {
+}
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     /*------------------------------------------------------ */
     //-- 生成站点地图
     /*------------------------------------------------------ */

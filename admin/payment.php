@@ -61,7 +61,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 安装支付方式 ?act=install&code=".$code."
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'install') {
+if ($_REQUEST['act'] == 'install') {
     admin_priv('payment');
 
     /* 取相应插件信息 */
@@ -100,7 +100,8 @@ elseif ($_REQUEST['act'] == 'install') {
     $smarty->assign('action_link', array('text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list'));
     $smarty->assign('pay', $pay);
     $smarty->display('payment_edit.htm');
-} elseif ($_REQUEST['act'] == 'get_config') {
+}
+if ($_REQUEST['act'] == 'get_config') {
     check_authz_json('payment');
 
     $code = $_REQUEST['code'];
@@ -145,7 +146,7 @@ elseif ($_REQUEST['act'] == 'install') {
 /*------------------------------------------------------ */
 //-- 编辑支付方式 ?act=edit&code={$code}
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     admin_priv('payment');
 
     /* 查询该支付方式内容 */
@@ -172,9 +173,12 @@ elseif ($_REQUEST['act'] == 'edit') {
         $store = unserialize($pay['pay_config']);
         /* 取出已经设置属性的code */
         $code_list = array();
-        foreach ($store as $key => $value) {
-            $code_list[$value['name']] = $value['value'];
+        if ($store) {
+            foreach ($store as $key => $value) {
+                $code_list[$value['name']] = $value['value'];
+            }
         }
+
         $pay['pay_config'] = array();
 
         /* 循环插件中所有属性 */
@@ -217,7 +221,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 提交支付方式 post
 /*------------------------------------------------------ */
-elseif (isset($_POST['Submit'])) {
+if (isset($_POST['Submit'])) {
     admin_priv('payment');
 
     /* 检查输入 */
@@ -227,7 +231,7 @@ elseif (isset($_POST['Submit'])) {
 
     $sql = "SELECT COUNT(*) FROM " . $ecs->table('payment') .
         " WHERE pay_name = '$_POST[pay_name]' AND pay_code <> '$_POST[pay_code]'";
-    if ($db->GetOne($sql) > 0) {
+    if ($db->getOne($sql) > 0) {
         sys_msg($_LANG['payment_name'] . $_LANG['repeat'], 1);
     }
 
@@ -264,7 +268,7 @@ elseif (isset($_POST['Submit'])) {
     } else {
         /* 安装，检查该支付方式是否曾经安装过 */
         $sql = "SELECT COUNT(*) FROM " . $ecs->table('payment') . " WHERE pay_code = '$_REQUEST[pay_code]'";
-        if ($db->GetOne($sql) > 0) {
+        if ($db->getOne($sql) > 0) {
             /* 该支付方式已经安装过, 将该支付方式的状态设置为 enable */
             $sql = "UPDATE " . $ecs->table('payment') .
                 "SET pay_name = '$_POST[pay_name]'," .
@@ -291,7 +295,7 @@ elseif (isset($_POST['Submit'])) {
 /*------------------------------------------------------ */
 //-- 卸载支付方式 ?act=uninstall&code={$code}
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'uninstall') {
+if ($_REQUEST['act'] == 'uninstall') {
     admin_priv('payment');
 
     /* 把 enabled 设为 0 */
@@ -311,7 +315,7 @@ elseif ($_REQUEST['act'] == 'uninstall') {
 //-- 修改支付方式名称
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_name') {
+if ($_REQUEST['act'] == 'edit_name') {
     /* 检查权限 */
     check_authz_json('payment');
 
@@ -338,7 +342,7 @@ elseif ($_REQUEST['act'] == 'edit_name') {
 //-- 修改支付方式描述
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_desc') {
+if ($_REQUEST['act'] == 'edit_desc') {
     /* 检查权限 */
     check_authz_json('payment');
 
@@ -355,7 +359,7 @@ elseif ($_REQUEST['act'] == 'edit_desc') {
 //-- 修改支付方式排序
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_order') {
+if ($_REQUEST['act'] == 'edit_order') {
     /* 检查权限 */
     check_authz_json('payment');
 
@@ -372,7 +376,7 @@ elseif ($_REQUEST['act'] == 'edit_order') {
 //-- 修改支付方式费用
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_pay_fee') {
+if ($_REQUEST['act'] == 'edit_pay_fee') {
     /* 检查权限 */
     check_authz_json('payment');
 

@@ -32,7 +32,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 自定义导航栏列表Ajax
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $navdb = get_nav();
     $smarty->assign('navdb', $navdb['navdb']);
     $smarty->assign('filter', $navdb['filter']);
@@ -47,7 +47,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 自定义导航栏增加
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     if (empty($_REQUEST['step'])) {
         $rt = array('act' => 'add');
 
@@ -94,7 +94,7 @@ elseif ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 自定义导航栏编辑
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     $id = $_REQUEST['id'];
     if (empty($_REQUEST['step'])) {
         $rt = array('act' => 'edit', 'id' => $id);
@@ -170,7 +170,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 自定义导航栏删除
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'del') {
+if ($_REQUEST['act'] == 'del') {
     $id = (int)$_GET['id'];
     $row = $db->getRow("SELECT ctype,cid,type FROM " . $GLOBALS['ecs']->table('nav') . " WHERE id = '$id' LIMIT 1");
 
@@ -188,7 +188,7 @@ elseif ($_REQUEST['act'] == 'del') {
 /*------------------------------------------------------ */
 //-- 编辑排序
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_sort_order') {
+if ($_REQUEST['act'] == 'edit_sort_order') {
     check_authz_json('nav');
 
     $id = intval($_POST['id']);

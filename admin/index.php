@@ -226,88 +226,86 @@ if ($_REQUEST['act'] == 'main') {
 
     $smarty->assign('warning_arr', $warning);
 
-
-    /* 绠＄悊鍛樼暀瑷€淇℃伅 */
-    $sql = 'SELECT message_id, sender_id, receiver_id, sent_time, readed, deleted, title, message, user_name ' .
-        'FROM ' . $ecs->table('admin_message') . ' AS a, ' . $ecs->table('admin_user') . ' AS b ' .
-        "WHERE a.sender_id = b.user_id AND a.receiver_id = '$_SESSION[admin_id]' AND " .
+    /* 管理员留言信息 */
+    $sql = "SELECT message_id, sender_id, receiver_id, sent_time, readed, deleted, title, message, user_name " .
+        "FROM " . $ecs->table('admin_message') . " AS a, " . $ecs->table('admin_user') . " AS b " .
+        "WHERE a.sender_id = b.user_id AND a.receiver_id = " . $_SESSION['admin_id'] . " AND " .
         "a.readed = 0 AND deleted = 0 ORDER BY a.sent_time DESC";
-    $admin_msg = $db->GetAll($sql);
+    $admin_msg = $db->getAll($sql);
 
     $smarty->assign('admin_msg', $admin_msg);
 
-    /* 鍙栧緱鏀?寔璐у埌浠樻?鍜屼笉鏀?寔璐у埌浠樻?鐨勬敮浠樻柟寮 */
+    /* 取得支持货到付款和不支持货到付款的支付方式 */
     $ids = get_pay_ids();
 
-    /* 宸插畬鎴愮殑璁㈠崟 */
-    $order['finished'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
+    /* 已完成的订单 */
+    $order['finished'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
         " WHERE 1 " . order_query_sql('finished'));
     $status['finished'] = CS_FINISHED;
 
-    /* 寰呭彂璐х殑璁㈠崟锛 */
-    $order['await_ship'] = $db->GetOne('SELECT COUNT(*)' .
+    /* 待发货的订单： */
+    $order['await_ship'] = $db->getOne('SELECT COUNT(*)' .
         ' FROM ' . $ecs->table('order_info') .
         " WHERE 1 " . order_query_sql('await_ship'));
     $status['await_ship'] = CS_AWAIT_SHIP;
 
-    /* 寰呬粯娆剧殑璁㈠崟锛 */
-    $order['await_pay'] = $db->GetOne('SELECT COUNT(*)' .
+    /* 待付款的订单： */
+    $order['await_pay'] = $db->getOne('SELECT COUNT(*)' .
         ' FROM ' . $ecs->table('order_info') .
         " WHERE 1 " . order_query_sql('await_pay'));
     $status['await_pay'] = CS_AWAIT_PAY;
 
-    /* 鈥滄湭纭??鈥濈殑璁㈠崟 */
-    $order['unconfirmed'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
+    /* “未确认”的订单 */
+    $order['unconfirmed'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
         " WHERE 1 " . order_query_sql('unconfirmed'));
     $status['unconfirmed'] = OS_UNCONFIRMED;
 
-    /* 鈥滈儴鍒嗗彂璐р€濈殑璁㈠崟 */
-    $order['shipped_part'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
+    /* “部分发货”的订单 */
+    $order['shipped_part'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
         " WHERE  shipping_status=" . SS_SHIPPED_PART);
     $status['shipped_part'] = OS_SHIPPED_PART;
 
-//    $today_start = mktime(0,0,0,date('m'),date('d'),date('Y'));
     $order['stats'] = $db->getRow('SELECT COUNT(*) AS oCount, IFNULL(SUM(order_amount), 0) AS oAmount' .
         ' FROM ' . $ecs->table('order_info'));
 
     $smarty->assign('order', $order);
     $smarty->assign('status', $status);
 
-    /* 鍟嗗搧淇℃伅 */
-    $goods['total'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+    /* 商品信息 */
+    $goods['total'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
         ' WHERE is_delete = 0 AND is_alone_sale = 1 AND is_real = 1');
-    $virtual_card['total'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+    $virtual_card['total'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
         ' WHERE is_delete = 0 AND is_alone_sale = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
 
-    $goods['new'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+    $goods['new'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
         ' WHERE is_delete = 0 AND is_new = 1 AND is_real = 1');
-    $virtual_card['new'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+    $virtual_card['new'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
         ' WHERE is_delete = 0 AND is_new = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
 
-    $goods['best'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+    $goods['best'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
         ' WHERE is_delete = 0 AND is_best = 1 AND is_real = 1');
-    $virtual_card['best'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+    $virtual_card['best'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
         ' WHERE is_delete = 0 AND is_best = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
 
-    $goods['hot'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+    $goods['hot'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
         ' WHERE is_delete = 0 AND is_hot = 1 AND is_real = 1');
-    $virtual_card['hot'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+    $virtual_card['hot'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
         ' WHERE is_delete = 0 AND is_hot = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
 
     $time = gmtime();
-    $goods['promote'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+    $goods['promote'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
         ' WHERE is_delete = 0 AND promote_price>0' .
         " AND promote_start_date <= '$time' AND promote_end_date >= '$time' AND is_real = 1");
-    $virtual_card['promote'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+    $virtual_card['promote'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
         ' WHERE is_delete = 0 AND promote_price>0' .
         " AND promote_start_date <= '$time' AND promote_end_date >= '$time' AND is_real=0 AND extension_code='virtual_card'");
 
     /* 缺货商品 */
     if ($_CFG['use_storage']) {
         $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('goods') . ' WHERE is_delete = 0 AND goods_number <= warn_number AND is_real = 1';
-        $goods['warn'] = $db->GetOne($sql);
+        $goods['warn'] = $db->getOne($sql);
         $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('goods') . ' WHERE is_delete = 0 AND goods_number <= warn_number AND is_real=0 AND extension_code=\'virtual_card\'';
-        $virtual_card['warn'] = $db->GetOne($sql);
+        $virtual_card['warn'] = $db->getOne($sql);
     } else {
         $goods['warn'] = 0;
         $virtual_card['warn'] = 0;

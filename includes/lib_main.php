@@ -919,7 +919,7 @@ function visit_stats()
     $time = gmtime();
     /* 检查客户端是否存在访问统计的cookie */
     $visit_times = (!empty($_COOKIE['ECS']['visit_times'])) ? intval($_COOKIE['ECS']['visit_times']) + 1 : 1;
-    setcookie('ECS[visit_times]', $visit_times, $time + 86400 * 365, '/');
+    setcookie('ECS[visit_times]', $visit_times, $time + 86400 * 365, '/', null, null, true);
 
     $browser = get_user_browser();
     $os = get_os();

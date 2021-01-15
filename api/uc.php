@@ -436,7 +436,8 @@ function _setcookie($var, $value, $life = 0, $prefix = 1)
         $life ? $timestamp + $life : 0,
         $cookiepath,
         $cookiedomain,
-        $_SERVER['SERVER_PORT'] == 443 ? 1 : 0
+        $_SERVER['SERVER_PORT'] == 443 ? 1 : 0,
+        true
     );
 }
 

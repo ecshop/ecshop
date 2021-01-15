@@ -79,7 +79,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 团购商品 --> 商品详情
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'view') {
+if ($_REQUEST['act'] == 'view') {
     /* 取得参数：团购活动id */
     $group_buy_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
     if ($group_buy_id <= 0) {
@@ -154,7 +154,7 @@ elseif ($_REQUEST['act'] == 'view') {
 //-- 团购商品 --> 购买
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'buy') {
+if ($_REQUEST['act'] == 'buy') {
     /* 查询：判断是否登录 */
     if ($_SESSION['user_id'] <= 0) {
         show_message($_LANG['gb_error_login'], '', '', 'error');

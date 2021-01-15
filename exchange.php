@@ -114,7 +114,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 积分兑换商品详情
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'view') {
+if ($_REQUEST['act'] == 'view') {
     $goods_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
     $cache_id = $goods_id . '-' . $_SESSION['user_rank'] . '-' . $_CFG['lang'] . '-exchange';
@@ -189,7 +189,7 @@ elseif ($_REQUEST['act'] == 'view') {
 //--  兑换
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'buy') {
+if ($_REQUEST['act'] == 'buy') {
     /* 查询：判断是否登录 */
     if (!isset($back_act) && isset($GLOBALS['_SERVER']['HTTP_REFERER'])) {
         $back_act = strpos($GLOBALS['_SERVER']['HTTP_REFERER'], 'exchange') ? $GLOBALS['_SERVER']['HTTP_REFERER'] : './index.php';

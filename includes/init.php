@@ -204,7 +204,7 @@ if (!defined('INIT_NO_USERS')) {
             ' FROM ' . $ecs->table('users') .
             " WHERE user_id = '" . intval($_COOKIE['ECS']['user_id']) . "' AND password = '" . $_COOKIE['ECS']['password'] . "'";
 
-        $row = $db->GetRow($sql);
+        $row = $db->getRow($sql);
 
         if (!$row) {
             // 没有找到这个记录

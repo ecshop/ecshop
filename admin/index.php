@@ -405,44 +405,24 @@ if ($_REQUEST['act'] == 'main_api') {
 
     if ($data === false || API_TIME < date('Y-m-d H:i:s', time() - 43200)) {
         include_once(ROOT_PATH . 'includes/cls_transport.php');
-        $ecs_version = VERSION;
-        $ecs_lang = $_CFG['lang'];
-        $ecs_release = RELEASE;
-        $php_ver = PHP_VERSION;
-        $mysql_ver = $db->version();
-        $order['stats'] = $db->getRow('SELECT COUNT(*) AS oCount, IFNULL(SUM(order_amount), 0) AS oAmount' .
-            ' FROM ' . $ecs->table('order_info'));
-        $ocount = $order['stats']['oCount'];
-        $oamount = $order['stats']['oAmount'];
-        $goods['total'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
-            ' WHERE is_delete = 0 AND is_alone_sale = 1 AND is_real = 1');
-        $gcount = $goods['total'];
-        $ecs_charset = strtoupper(EC_CHARSET);
-        $ecs_user = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('users'));
-        $ecs_template = $db->getOne('SELECT value FROM ' . $ecs->table('shop_config') . ' WHERE code = \'template\'');
-        $style = $db->getOne('SELECT value FROM ' . $ecs->table('shop_config') . ' WHERE code = \'stylename\'');
-        if ($style == '') {
-            $style = '0';
-        }
-        $ecs_style = $style;
-        $shop_url = urlencode($ecs->url());
-
-        $patch_file = file_get_contents(ROOT_PATH . ADMIN_PATH . "/patch_num");
-
-        $apiget = "ver= $ecs_version &lang= $ecs_lang &release= $ecs_release &php_ver= $php_ver &mysql_ver= $mysql_ver &ocount= $ocount &oamount= $oamount &gcount= $gcount &charset= $ecs_charset &usecount= $ecs_user &template= $ecs_template &style= $ecs_style &url= $shop_url &patch= $patch_file ";
-
         $t = new transport;
-        $api_comment = $t->request('http://api.ecshop.com/checkver.php', $apiget);
-        $api_str = $api_comment["body"];
-        echo $api_str;
+        $api_comment = $t->request('https://api.github.com/repos/ecshop/ecshop/releases/latest', '', 'GET');
+        if (isset($api_comment["body"])) {
+            $tag = json_decode($api_comment["body"], true);
+            if (isset($tag['tag_name']) && version_compare($tag['tag_name'], VERSION, '>')) {
+                $data = '<li style="border: 1px solid #CC0000; background: #FFFFCC; padding: 10px; margin-bottom: 5px;">';
+                $data .= '<div>Latest: ' . $tag['tag_name'] . ' released ' . $tag['published_at'] . '. <a target="_blank" href="' . $tag['zipball_url'] . '">Download</a></div>';
+                $data .= '</li>';
+
+                write_static_cache('api_str', $data);
+            }
+        }
 
         $f = ROOT_PATH . 'data/config.php';
         file_put_contents($f, str_replace("'API_TIME', '" . API_TIME . "'", "'API_TIME', '" . date('Y-m-d H:i:s', time()) . "'", file_get_contents($f)));
-
-        write_static_cache('api_str', $api_str);
-    } else {
-        echo $data;
     }
+
+    echo $data;
 }
 
 

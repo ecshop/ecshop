@@ -491,8 +491,6 @@ function addslashes_deep($value)
  * @access   public
  * @param mix $obj 对象或者数组
  * @return   mix                  对象或者数组
- * @author   Xuan Yan
- *
  */
 function addslashes_deep_obj($obj)
 {
@@ -731,11 +729,7 @@ function ecs_header($string, $replace = true, $http_response_code = 0)
         exit();
     }
 
-    if (empty($http_response_code) || PHP_VERSION < '4.3') {
-        @header($string, $replace);
-    } else {
-        @header($string, $replace, $http_response_code);
-    }
+    @header($string, $replace);
 }
 
 function ecs_iconv($source_lang, $target_lang, $source_string = '')

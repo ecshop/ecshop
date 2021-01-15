@@ -80,7 +80,7 @@ function insert_cart_info()
     $sql = 'SELECT SUM(goods_number) AS number, SUM(goods_price * goods_number) AS amount' .
         ' FROM ' . $GLOBALS['ecs']->table('cart') .
         " WHERE session_id = '" . SESS_ID . "' AND rec_type = '" . CART_GENERAL_GOODS . "'";
-    $row = $GLOBALS['db']->GetRow($sql);
+    $row = $GLOBALS['db']->getRow($sql);
 
     if ($row) {
         $number = intval($row['number']);
@@ -107,6 +107,8 @@ function insert_ads($arr)
 {
     static $static_res = null;
 
+    $arr['num'] = intval($arr['num']);
+    $arr['id'] = intval($arr['id']);
     $time = gmtime();
     if (!empty($arr['num']) && $arr['num'] != 1) {
         $sql = 'SELECT a.ad_id, a.position_id, a.media_type, a.ad_link, a.ad_code, a.ad_name, p.ad_width, ' .
@@ -116,7 +118,7 @@ function insert_ads($arr)
             "WHERE enabled = 1 AND start_time <= '" . $time . "' AND end_time >= '" . $time . "' " .
             "AND a.position_id = '" . $arr['id'] . "' " .
             'ORDER BY rnd LIMIT ' . $arr['num'];
-        $res = $GLOBALS['db']->GetAll($sql);
+        $res = $GLOBALS['db']->getAll($sql);
     } else {
         if ($static_res[$arr['id']] === null) {
             $sql = 'SELECT a.ad_id, a.position_id, a.media_type, a.ad_link, a.ad_code, a.ad_name, p.ad_width, ' .
@@ -126,7 +128,7 @@ function insert_ads($arr)
                 "WHERE enabled = 1 AND a.position_id = '" . $arr['id'] .
                 "' AND start_time <= '" . $time . "' AND end_time >= '" . $time . "' " .
                 'ORDER BY rnd LIMIT 1';
-            $static_res[$arr['id']] = $GLOBALS['db']->GetAll($sql);
+            $static_res[$arr['id']] = $GLOBALS['db']->getAll($sql);
         }
         $res = $static_res[$arr['id']];
     }
@@ -225,6 +227,8 @@ function insert_comments($arr)
 
     $GLOBALS['smarty']->caching = false;
     $GLOBALS['smarty']->force_compile = true;
+    $arr['id'] = intval($arr['id']);
+    $arr['type'] = addslashes($arr['type']);
 
     /* 验证码相关设置 */
     if ((intval($GLOBALS['_CFG']['captcha']) & CAPTCHA_COMMENT) && gd_version() > 0) {
@@ -262,6 +266,7 @@ function insert_bought_notes($arr)
 
     $GLOBALS['smarty']->caching = false;
     $GLOBALS['smarty']->force_compile = true;
+    $arr['id'] = intval($arr['id']);
 
     /* 商品购买记录 */
     $sql = 'SELECT u.user_name, og.goods_number, oi.add_time, IF(oi.order_status IN (2, 3, 4), 0, 1) AS order_status ' .

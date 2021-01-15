@@ -225,7 +225,7 @@ function get_parent_cats($cat)
         return array();
     }
 
-    $arr = $GLOBALS['db']->GetAll('SELECT cat_id, cat_name, parent_id FROM ' . $GLOBALS['ecs']->table('category'));
+    $arr = $GLOBALS['db']->getAll('SELECT cat_id, cat_name, parent_id FROM ' . $GLOBALS['ecs']->table('category'));
 
     if (empty($arr)) {
         return array();
@@ -1556,7 +1556,7 @@ function get_article_parent_cats($cat)
         return array();
     }
 
-    $arr = $GLOBALS['db']->GetAll('SELECT cat_id, cat_name, parent_id FROM ' . $GLOBALS['ecs']->table('article_cat'));
+    $arr = $GLOBALS['db']->getAll('SELECT cat_id, cat_name, parent_id FROM ' . $GLOBALS['ecs']->table('article_cat'));
 
     if (empty($arr)) {
         return array();

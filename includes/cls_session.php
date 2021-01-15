@@ -216,7 +216,7 @@ class cls_session
     {
         $GLOBALS['_SESSION'] = array();
 
-        setcookie($this->session_name, $this->session_id, 1, $this->session_cookie_path, $this->session_cookie_domain, $this->session_cookie_secure);
+        setcookie($this->session_name, $this->session_id, 1, $this->session_cookie_path, $this->session_cookie_domain, $this->session_cookie_secure, true);
 
         /* ECSHOP 鑷?畾涔夋墽琛岄儴鍒 */
         if (!empty($GLOBALS['ecs'])) {

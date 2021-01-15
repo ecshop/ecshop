@@ -72,29 +72,17 @@ function get_system_info()
     $system_info[] = array($_LANG['php_ver'], PHP_VERSION);
 
     /* 检查MYSQL支持情况 */
-    $mysql_enabled = function_exists('mysql_connect') ? $_LANG['support'] : $_LANG['not_support'];
+    $mysql_enabled = function_exists('mysqli_connect') ? $_LANG['support'] : $_LANG['not_support'];
     $system_info[] = array($_LANG['does_support_mysql'], $mysql_enabled);
 
     /* 检查图片处理函数库 */
     $gd_ver = get_gd_version();
     $gd_ver = empty($gd_ver) ? $_LANG['not_support'] : $gd_ver;
     if ($gd_ver > 0) {
-        if (PHP_VERSION >= '4.3' && function_exists('gd_info')) {
-            $gd_info = gd_info();
-            $jpeg_enabled = ($gd_info['JPG Support'] === true) ? $_LANG['support'] : $_LANG['not_support'];
-            $gif_enabled = ($gd_info['GIF Create Support'] === true) ? $_LANG['support'] : $_LANG['not_support'];
-            $png_enabled = ($gd_info['PNG Support'] === true) ? $_LANG['support'] : $_LANG['not_support'];
-        } else {
-            if (function_exists('imagetypes')) {
-                $jpeg_enabled = ((imagetypes() & IMG_JPG) > 0) ? $_LANG['support'] : $_LANG['not_support'];
-                $gif_enabled = ((imagetypes() & IMG_GIF) > 0) ? $_LANG['support'] : $_LANG['not_support'];
-                $png_enabled = ((imagetypes() & IMG_PNG) > 0) ? $_LANG['support'] : $_LANG['not_support'];
-            } else {
-                $jpeg_enabled = $_LANG['not_support'];
-                $gif_enabled = $_LANG['not_support'];
-                $png_enabled = $_LANG['not_support'];
-            }
-        }
+        $gd_info = gd_info();
+        $jpeg_enabled = ($gd_info['JPEG Support'] === true) ? $_LANG['support'] : $_LANG['not_support'];
+        $gif_enabled = ($gd_info['GIF Create Support'] === true) ? $_LANG['support'] : $_LANG['not_support'];
+        $png_enabled = ($gd_info['PNG Support'] === true) ? $_LANG['support'] : $_LANG['not_support'];
     } else {
         $jpeg_enabled = $_LANG['not_support'];
         $gif_enabled = $_LANG['not_support'];
@@ -138,7 +126,7 @@ function get_db_list($db_host, $db_port, $db_user, $db_pass)
     $databases = array();
     $filter_dbs = array('information_schema', 'mysql');
     $db_host = construct_db_host($db_host, $db_port);
-    $conn = @mysql_connect($db_host, $db_user, $db_pass);
+    $conn = @mysqli_connect($db_host, $db_user, $db_pass);
 
     if ($conn === false) {
         $err->add($_LANG['connect_failed']);
@@ -146,9 +134,9 @@ function get_db_list($db_host, $db_port, $db_user, $db_pass)
     }
     keep_right_conn($conn);
 
-    $result = mysql_query('SHOW DATABASES', $conn);
+    $result = mysqli_query($conn, 'SHOW DATABASES');
     if ($result !== false) {
-        while (($row = mysql_fetch_assoc($result)) !== false) {
+        while ($row = mysqli_fetch_assoc($result)) {
             if (in_array($row['Database'], $filter_dbs)) {
                 continue;
             }
@@ -158,7 +146,7 @@ function get_db_list($db_host, $db_port, $db_user, $db_pass)
         $err->add($_LANG['query_failed']);
         return false;
     }
-    @mysql_close($conn);
+    @mysqli_close($conn);
 
     return $databases;
 }
@@ -188,13 +176,7 @@ function get_timezone_list($lang)
  */
 function get_local_timezone()
 {
-    if (PHP_VERSION >= '5.1') {
-        $local_timezone = date_default_timezone_get();
-    } else {
-        $local_timezone = '';
-    }
-
-    return $local_timezone;
+    return date_default_timezone_get();
 }
 
 /**
@@ -212,7 +194,7 @@ function create_database($db_host, $db_port, $db_user, $db_pass, $db_name)
 {
     global $err, $_LANG;
     $db_host = construct_db_host($db_host, $db_port);
-    $conn = @mysql_connect($db_host, $db_user, $db_pass);
+    $conn = @mysqli_connect($db_host, $db_user, $db_pass);
 
     if ($conn === false) {
         $err->add($_LANG['connect_failed']);
@@ -220,16 +202,16 @@ function create_database($db_host, $db_port, $db_user, $db_pass, $db_name)
         return false;
     }
 
-    $mysql_version = mysql_get_server_info($conn);
+    $mysql_version = mysqli_get_server_info($conn);
     keep_right_conn($conn, $mysql_version);
-    if (mysql_select_db($db_name, $conn) === false) {
+    if (mysqli_select_db($conn, $db_name) === false) {
         $sql = $mysql_version >= '4.1' ? "CREATE DATABASE $db_name DEFAULT CHARACTER SET " . EC_DB_CHARSET : "CREATE DATABASE $db_name";
-        if (mysql_query($sql, $conn) === false) {
+        if (mysqli_query($conn, $sql) === false) {
             $err->add($_LANG['cannt_create_database']);
             return false;
         }
     }
-    @mysql_close($conn);
+    @mysqli_close($conn);
 
     return true;
 }
@@ -245,14 +227,14 @@ function create_database($db_host, $db_port, $db_user, $db_pass, $db_name)
 function keep_right_conn($conn, $mysql_version = '')
 {
     if ($mysql_version === '') {
-        $mysql_version = mysql_get_server_info($conn);
+        $mysql_version = mysqli_get_server_info($conn);
     }
 
     if ($mysql_version >= '4.1') {
-        mysql_query('SET character_set_connection=' . EC_DB_CHARSET . ', character_set_results=' . EC_DB_CHARSET . ', character_set_client=binary', $conn);
+        mysqli_query($conn, 'SET character_set_connection=' . EC_DB_CHARSET . ', character_set_results=' . EC_DB_CHARSET . ', character_set_client=binary');
 
         if ($mysql_version > '5.0.1') {
-            mysql_query("SET sql_mode=''", $conn);
+            mysqli_query($conn, "SET sql_mode=''");
         }
     }
 }
@@ -411,52 +393,6 @@ function create_admin_passport($admin_name, $admin_password, $admin_password2, $
 }
 
 /**
- * 安装预选商品类型
- *
- * @access  public
- * @param array $goods_types 预选商品类型
- * @param string $lang 语言
- * @return  boolean    成功返回true，失败返回false
- */
-function install_goods_types($goods_types, $lang)
-{
-    global $err;
-
-    if (!$goods_types) {
-        return true;
-    }
-
-    include(ROOT_PATH . 'data/config.php');
-    include_once(ROOT_PATH . 'includes/cls_mysql.php');
-    $db = new cls_mysql($db_host, $db_user, $db_pass, $db_name);
-
-    if (file_exists(ROOT_PATH . 'install/data/inc_goods_type_' . $lang . '.php')) {
-        include(ROOT_PATH . 'install/data/inc_goods_type_' . $lang . '.php');
-    } else {
-        include(ROOT_PATH . 'install/data/inc_goods_type_zh_cn.php');
-    }
-    foreach ($attributes as $key => $val) {
-        if (!in_array($key, $goods_types)) {
-            continue;
-        }
-
-        if (!$db->query($val['cat'], 'SILENT')) {
-            $err->add($db->errno() . ' ' . $db->error());
-            return false;
-        }
-        $cat_id = $db->Insert_ID();
-
-        $sql = str_replace("{cat_id}", $cat_id, $val['attr']);
-        if (!$db->query($sql, 'SILENT')) {
-            $err->add($db->errno() . ' ' . $db->error());
-            return false;
-        }
-    }
-
-    return true;
-}
-
-/**
  * 把一个文件从一个目录复制到另一个目录
  *
  * @access  public
@@ -506,12 +442,6 @@ function copy_files($source, $target)
 function do_others($system_lang, $captcha, $goods_types, $install_demo, $integrate_code)
 {
     global $err, $_LANG;
-
-    /* 安装预选商品类型 */
-    if (!install_goods_types($goods_types, $system_lang)) {
-        $err->add(implode('', $err->last_message()));
-        return false;
-    }
 
     /* 安装测试数据 */
     if (intval($install_demo)) {
@@ -612,29 +542,6 @@ function deal_aftermath()
 
     $db = new cls_mysql($db_host, $db_user, $db_pass, $db_name);
 
-    /* 初始化友情链接 */
-    $sql = "INSERT INTO $prefix" . "friend_link " .
-        "(link_name, link_url, link_logo, show_order)" .
-        "VALUES " .
-        "('" . $_LANG['default_friend_link'] . "', 'http://www.ecshop.com/', 'http://www.ecshop.com/images/logo/ecshop_logo.gif','50')";
-    if (!$db->query($sql, 'SILENT')) {
-        $err->add($db->errno() . ' ' . $db->error());
-    }
-
-    $sql = "INSERT INTO $prefix" . "friend_link " .
-        "(link_name, link_url, show_order)" .
-        "VALUES " .
-        "('" . $_LANG['maifou_friend_link'] . "', 'http://www.maifou.net/','51')";
-    if (!$db->query($sql, 'SILENT')) {
-        $err->add($db->errno() . ' ' . $db->error());
-    }
-    $sql = "INSERT INTO $prefix" . "friend_link " .
-        "(link_name, link_url, show_order)" .
-        "VALUES " .
-        "('" . $_LANG['wdwd_friend_link'] . "', 'http://www.wdwd.com/','52')";
-    if (!$db->query($sql, 'SILENT')) {
-        $err->add($db->errno() . ' ' . $db->error());
-    }
     /* 更新 ECSHOP 安装日期 */
     $sql = "UPDATE $prefix" . "shop_config SET value='" . time() . "' WHERE code='install_date'";
     if (!$db->query($sql, 'SILENT')) {
@@ -669,26 +576,6 @@ function deal_aftermath()
     @fclose($fp);
 
     return true;
-}
-
-/**
- * 获得spt代码
- *
- * @access  public
- * @return  string   spt代码
- */
-function get_spt_code()
-{
-    include(ROOT_PATH . 'data/config.php');
-    include_once(ROOT_PATH . 'includes/cls_ecshop.php');
-    include_once(ROOT_PATH . 'includes/cls_mysql.php');
-    $db = new cls_mysql($db_host, $db_user, $db_pass, $db_name);
-    $ecs = new ECS($db_name, $prefix);
-    $hash_code = $db->getOne("SELECT value FROM " . $ecs->table('shop_config') . " WHERE code='hash_code'");
-    $spt = '<script type="text/javascript" src="http://api.ecshop.com/record.php?';
-    $spt .= "url=" . urlencode($ecs->url()) . "&mod=install&version=" . VERSION . "&hash_code=" . $hash_code . "&charset=" . EC_CHARSET . "&language=" . $GLOBALS['installer_lang'] . "\"></script>";
-
-    return $spt;
 }
 
 /**
@@ -854,62 +741,4 @@ function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = false, $
         @fclose($fp);
         return $return;
     }
-}
-
-function save_uc_config($config)
-{
-    $success = false;
-
-    list($appauthkey, $appid, $ucdbhost, $ucdbname, $ucdbuser, $ucdbpw, $ucdbcharset, $uctablepre, $uccharset, $ucapi, $ucip) = explode('|', $config);
-
-    /*
-        $content = '<?' ."php\n";
-        $content .= "define('UC_CONNECT', 'mysql');\n\n";
-        $content .= "define('UC_DBHOST', '$ucdbhost');\n\n";
-        $content .= "define('UC_DBUSER', '$ucdbuser');\n\n";
-        $content .= "define('UC_DBPW', '$ucdbpw');\n\n";
-        $content .= "define('UC_DBNAME', '$ucdbname');\n\n";
-        $content .= "define('UC_DBCHARSET', '$ucdbcharset');\n\n";
-        $content .= "define('UC_DBTABLEPRE', '`$ucdbname`.$uctablepre');\n\n";
-        $content .= "define('UC_DBCONNECT', '0');\n\n";
-        $content .= "define('UC_KEY', '$appauthkey');\n\n";
-        $content .= "define('UC_API', '$ucapi');\n\n";
-        $content .= "define('UC_CHARSET', '$uccharset');\n\n";
-        $content .= "define('UC_IP', '$ucip');\n\n";
-        $content .= "define('UC_APPID', '$appid');\n\n";
-        $content .= "define('UC_PPP', '20');\n\n";
-        $content .= '?>';
-    */
-    $cfg = array(
-        'uc_id' => $appid,
-        'uc_key' => $appauthkey,
-        'uc_url' => $ucapi,
-        'uc_ip' => $ucip,
-        'uc_connect' => 'mysql',
-        'uc_charset' => $uccharset,
-        'db_host' => $ucdbhost,
-        'db_user' => $ucdbuser,
-        'db_name' => $ucdbname,
-        'db_pass' => $ucdbpw,
-        'db_pre' => $uctablepre,
-        'db_charset' => $ucdbcharset,
-    );
-    $content = "<?php\r\n";
-    $content .= "\$cfg = " . var_export($cfg, true) . ";\r\n";
-    $content .= "?>";
-
-    $fp = @fopen(ROOT_PATH . 'data/config_temp.php', 'wb+');
-    if (!$fp) {
-        $result['error'] = 1;
-        $result['message'] = $_LANG['ucenter_datadir_access'];
-        die($GLOBALS['json']->encode($result));
-    }
-    if (!@fwrite($fp, $content)) {
-        $result['error'] = 1;
-        $result['message'] = $_LANG['ucenter_tmp_config_error'];
-        die($GLOBALS['json']->encode($result));
-    }
-    @fclose($fp);
-
-    return true;
 }

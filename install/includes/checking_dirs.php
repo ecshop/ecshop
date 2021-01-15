@@ -5,15 +5,7 @@ if (!defined('IN_ECS')) {
 }
 
 $checking_dirs = array(
-    /* 取消检测uc_client */
-    //'uc_client/data',
-    'cert',
     'images',
-    'images/upload',
-    'images/upload/Image',
-    'images/upload/File',
-    'images/upload/Flash',
-    'images/upload/Media',
     'data',
     'data/afficheimg',
     'data/brandlogo',

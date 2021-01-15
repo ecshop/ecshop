@@ -8,4 +8,3 @@
         </ul>
     </div>
 </div>
-<?php echo $spt_code; ?>

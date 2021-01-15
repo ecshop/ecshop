@@ -197,6 +197,4 @@
         </tr>
     </table>
     <input name="userinterface" type="hidden" value="<?php echo $userinterface; ?>"/>
-    <input name="ucapi" type="hidden" value="<?php echo $ucapi; ?>"/>
-    <input name="ucfounderpw" type="hidden" value="<?php echo $ucfounderpw; ?>"/>
 </form>

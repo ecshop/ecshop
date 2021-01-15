@@ -405,32 +405,6 @@ function get_template_region($tmp_name, $tmp_file, $lib = true)
 }
 
 /**
- * 将插件library从默认模板中移动到指定模板中
- *
- * @access  public
- * @param string $tmp_name 模版名称
- * @param string $msg 如果出错，保存错误信息，否则为空
- * @return  Boolen
- */
-function move_plugin_library($tmp_name, &$msg)
-{
-    $sql = 'SELECT code, library FROM ' . $GLOBALS['ecs']->table('plugins') . " WHERE library > ''";
-    $rec = $GLOBALS['db']->query($sql);
-    $return_value = true;
-    $target_dir = ROOT_PATH . 'themes/' . $tmp_name;
-    $source_dir = ROOT_PATH . 'themes/' . $GLOBALS['_CFG']['template'];
-    while ($row = $GLOBALS['db']->fetchRow($rec)) {
-        //先移动，移动失败试则拷贝
-        if (!@rename($source_dir . $row['library'], $target_dir . $row['library'])) {
-            if (!@copy(ROOT_PATH . 'plugins/' . $row['code'] . '/temp' . $row['library'], $target_dir . $row['library'])) {
-                $return_value = false;
-                $msg .= "\n moving " . $row['library'] . ' failed';
-            }
-        }
-    }
-}
-
-/**
  * 获得指定库项目在模板中的设置内容
  *
  * @access  public

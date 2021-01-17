@@ -5,8 +5,8 @@ if (!defined('IN_ECS')) {
 }
 
 define('APPNAME', 'ECSHOP');
-define('VERSION', 'v2.7.4-dev');
-define('RELEASE', '20210115');
+define('VERSION', 'v2.7.4');
+define('RELEASE', '20210117');
 
 /* 图片处理相关常数 */
 define('ERR_INVALID_IMAGE', 1);

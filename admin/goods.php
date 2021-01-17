@@ -1069,7 +1069,7 @@ if ($_REQUEST['act'] == 'show_image') {
     if (isset($GLOBALS['shop_id']) && $GLOBALS['shop_id'] > 0) {
         $img_url = $_GET['img_url'];
     } else {
-        if (strpos($_GET['img_url'], 'http://') === 0) {
+        if (strstr($_GET['img_url'], 'http://') || strstr($_GET['img_url'], 'https://')) {        
             $img_url = $_GET['img_url'];
         } else {
             $img_url = '../' . $_GET['img_url'];

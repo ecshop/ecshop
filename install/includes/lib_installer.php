@@ -202,10 +202,9 @@ function create_database($db_host, $db_port, $db_user, $db_pass, $db_name)
         return false;
     }
 
-    $mysql_version = mysqli_get_server_info($conn);
-    keep_right_conn($conn, $mysql_version);
+    keep_right_conn($conn);
     if (mysqli_select_db($conn, $db_name) === false) {
-        $sql = $mysql_version >= '4.1' ? "CREATE DATABASE $db_name DEFAULT CHARACTER SET " . EC_DB_CHARSET : "CREATE DATABASE $db_name";
+        $sql = "CREATE DATABASE $db_name DEFAULT CHARACTER SET " . EC_DB_CHARSET;
         if (mysqli_query($conn, $sql) === false) {
             $err->add($_LANG['cannt_create_database']);
             return false;
@@ -221,22 +220,12 @@ function create_database($db_host, $db_port, $db_user, $db_pass, $db_name)
  *
  * @access  public
  * @param string $conn 数据库连接
- * @param string $mysql_version mysql版本号
  * @return  void
  */
-function keep_right_conn($conn, $mysql_version = '')
+function keep_right_conn($conn)
 {
-    if ($mysql_version === '') {
-        $mysql_version = mysqli_get_server_info($conn);
-    }
-
-    if ($mysql_version >= '4.1') {
-        mysqli_query($conn, 'SET character_set_connection=' . EC_DB_CHARSET . ', character_set_results=' . EC_DB_CHARSET . ', character_set_client=binary');
-
-        if ($mysql_version > '5.0.1') {
-            mysqli_query($conn, "SET sql_mode=''");
-        }
-    }
+    mysqli_query($conn, 'SET character_set_connection=' . EC_DB_CHARSET . ', character_set_results=' . EC_DB_CHARSET . ', character_set_client=binary');
+    mysqli_query($conn, "SET sql_mode=''");
 }
 
 /**

@@ -84,15 +84,8 @@ class cls_mysql
         $this->dbhash = md5($this->root_path . $dbhost . $dbuser . $dbpw . $dbname);
         $this->version = mysqli_get_server_info($this->link_id);
 
-        /* 如果mysql 版本是 4.1+ 以上，需要对字符集进行初始化 */
-        if ($this->version > '4.1') {
-            if ($charset != 'latin1') {
-                mysqli_query($this->link_id, "SET character_set_connection=$charset, character_set_results=$charset, character_set_client=binary");
-            }
-            if ($this->version > '5.0.1') {
-                mysqli_query($this->link_id, "SET sql_mode=''");
-            }
-        }
+        mysqli_query($this->link_id, "SET character_set_connection=$charset, character_set_results=$charset, character_set_client=binary");
+        mysqli_query($this->link_id, "SET sql_mode=''");
 
         $sqlcache_config_file = $this->root_path . $this->cache_data_dir . 'sqlcache_config_file_' . $this->dbhash . '.php';
 
@@ -115,7 +108,7 @@ class cls_mysql
 
             if ($this->platform == 'OTHER' &&
                 ($dbhost != '.' && strtolower($dbhost) != 'localhost:3306' && $dbhost != '127.0.0.1:3306') ||
-                (PHP_VERSION >= '5.1' && date_default_timezone_get() == 'UTC')) {
+                (date_default_timezone_get() == 'UTC')) {
                 $result = mysqli_query($this->link_id, "SELECT UNIX_TIMESTAMP() AS timeline, UNIX_TIMESTAMP('" . date('Y-m-d H:i:s', $this->starttime) . "') AS timezone");
                 $row = mysqli_fetch_assoc($result);
 
@@ -123,7 +116,7 @@ class cls_mysql
                     $this->timeline = $this->starttime - $row['timeline'];
                 }
 
-                if (PHP_VERSION >= '5.1' && date_default_timezone_get() == 'UTC') {
+                if (date_default_timezone_get() == 'UTC') {
                     $this->timezone = $this->starttime - $row['timezone'];
                 }
             }
@@ -160,15 +153,10 @@ class cls_mysql
 
     public function set_mysql_charset($charset)
     {
-        /* 如果mysql 版本是 4.1+ 以上，需要对字符集进行初始化 */
-        if ($this->version > '4.1') {
-            if (in_array(strtolower($charset), array('gbk', 'big5', 'utf-8', 'utf8'))) {
-                $charset = str_replace('-', '', $charset);
-            }
-            if ($charset != 'latin1') {
-                mysqli_query($this->link_id, "SET character_set_connection=$charset, character_set_results=$charset, character_set_client=binary");
-            }
+        if (in_array(strtolower($charset), array('gbk', 'big5', 'utf-8', 'utf8'))) {
+            $charset = str_replace('-', '', $charset);
         }
+        mysqli_query($this->link_id, "SET character_set_connection=$charset, character_set_results=$charset, character_set_client=binary");
     }
 
     public function fetch_array($query, $result_type = MYSQLI_ASSOC)

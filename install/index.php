@@ -104,7 +104,7 @@ switch ($step) {
             $disabled = '';
         }
 
-        $show_timezone = PHP_VERSION >= '5.1' ? 'yes' : 'no';
+        $show_timezone = 'yes';
         $timezones = get_timezone_list($installer_lang);
         $_SESSION['setting_ui']['installer_lang'] = $installer_lang;
         $_SESSION['setting_ui']['checked'] = $checked;

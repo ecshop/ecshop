@@ -457,8 +457,6 @@ if ($_REQUEST['act'] == 'upload_sql') {
 if ($_REQUEST['act'] == 'optimize') {
     /* 初始化数据 */
     admin_priv('db_backup');
-    $db_ver_arr = $db->version();
-    $db_ver = $db_ver_arr;
     $ret = $db->query("SHOW TABLE STATUS LIKE '" . mysql_like_quote($ecs->prefix) . "%'");
 
     $num = 0;
@@ -471,8 +469,8 @@ if ($_REQUEST['act'] == 'optimize') {
             $res = $db->getRow('CHECK TABLE ' . $row['Name']);
             $num += $row['Data_free'];
         }
-        $type = $db_ver >= '4.1' ? $row['Engine'] : $row['Type'];
-        $charset = $db_ver >= '4.1' ? $row['Collation'] : 'N/A';
+        $type = $row['Engine'];
+        $charset = $row['Collation'];
         $list[] = array('table' => $row['Name'], 'type' => $type, 'rec_num' => $row['Rows'], 'rec_size' => sprintf(" %.2f KB", $row['Data_length'] / 1024), 'rec_index' => $row['Index_length'], 'rec_chip' => $row['Data_free'], 'status' => $res['Msg_text'], 'charset' => $charset);
     }
     unset($ret);
@@ -509,8 +507,6 @@ if ($_REQUEST['act'] == 'run_optimize') {
  */
 function sql_import($sql_file)
 {
-    $db_ver = $GLOBALS['db']->version();
-
     $sql_str = array_filter(file($sql_file), 'remove_comment');
     $sql_str = str_replace("\r", '', implode('', $sql_str));
 
@@ -518,26 +514,14 @@ function sql_import($sql_file)
     $ret_count = count($ret);
 
     /* 执行sql语句 */
-    if ($db_ver > '4.1') {
-        for ($i = 0; $i < $ret_count; $i++) {
-            $ret[$i] = trim($ret[$i], " \r\n;"); //剔除多余信息
-            if (!empty($ret[$i])) {
-                if ((strpos($ret[$i], 'CREATE TABLE') !== false) && (strpos($ret[$i], 'DEFAULT CHARSET=' . str_replace('-', '', EC_CHARSET)) === false)) {
-                    /* 建表时缺 DEFAULT CHARSET=utf8 */
-                    $ret[$i] = $ret[$i] . 'DEFAULT CHARSET=' . str_replace('-', '', EC_CHARSET);
-                }
-                $GLOBALS['db']->query($ret[$i]);
+    for ($i = 0; $i < $ret_count; $i++) {
+        $ret[$i] = trim($ret[$i], " \r\n;"); //剔除多余信息
+        if (!empty($ret[$i])) {
+            if ((strpos($ret[$i], 'CREATE TABLE') !== false) && (strpos($ret[$i], 'DEFAULT CHARSET=' . str_replace('-', '', EC_CHARSET)) === false)) {
+                /* 建表时缺 DEFAULT CHARSET=utf8 */
+                $ret[$i] = $ret[$i] . 'DEFAULT CHARSET=' . str_replace('-', '', EC_CHARSET);
             }
-        }
-    } else {
-        for ($i = 0; $i < $ret_count; $i++) {
-            $ret[$i] = trim($ret[$i], " \r\n;"); //剔除多余信息
-            if ((strpos($ret[$i], 'CREATE TABLE') !== false) && (strpos($ret[$i], 'DEFAULT CHARSET=' . str_replace('-', '', EC_CHARSET)) !== false)) {
-                $ret[$i] = str_replace('DEFAULT CHARSET=' . str_replace('-', '', EC_CHARSET), '', $ret[$i]);
-            }
-            if (!empty($ret[$i])) {
-                $GLOBALS['db']->query($ret[$i]);
-            }
+            $GLOBALS['db']->query($ret[$i]);
         }
     }
 

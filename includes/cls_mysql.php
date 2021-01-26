@@ -62,7 +62,7 @@ class cls_mysql
     public function connect($dbhost, $dbuser, $dbpw, $dbname = '', $charset = 'utf8', $pconnect = 0, $quiet = 0)
     {
         if ($pconnect) {
-            if (!($this->link_id = @mysqli_pconnect($dbhost, $dbuser, $dbpw))) {
+            if (!($this->link_id = mysqli_pconnect($dbhost, $dbuser, $dbpw))) {
                 if (!$quiet) {
                     $this->ErrorMsg("Can't pConnect MySQL Server($dbhost)!");
                 }
@@ -71,7 +71,7 @@ class cls_mysql
             }
         } else {
             list($dbhost, $dbport) = array_pad(explode(":", $dbhost), 2, '3306');
-            $this->link_id = @mysqli_connect($dbhost, $dbuser, $dbpw, $dbname, $dbport);
+            $this->link_id = mysqli_connect($dbhost, $dbuser, $dbpw, $dbname, $dbport);
             if (!$this->link_id) {
                 if (!$quiet) {
                     $this->ErrorMsg("Can't Connect MySQL Server($dbhost)!");
@@ -89,7 +89,7 @@ class cls_mysql
 
         $sqlcache_config_file = $this->root_path . $this->cache_data_dir . 'sqlcache_config_file_' . $this->dbhash . '.php';
 
-        @include($sqlcache_config_file);
+        include($sqlcache_config_file);
 
         $this->starttime = time();
 
@@ -97,7 +97,7 @@ class cls_mysql
             if ($dbhost != '.') {
                 $result = mysqli_query($this->link_id, "SHOW VARIABLES LIKE 'basedir'");
                 $row = mysqli_fetch_assoc($result);
-                if (!empty($row['Value']{1}) && $row['Value']{1} == ':' && !empty($row['Value']{2}) && $row['Value']{2} == "\\") {
+                if (!empty($row['Value'][1]) && $row['Value'][1] == ':' && !empty($row['Value'][2]) && $row['Value'][2] == "\\") {
                     $this->platform = 'WINDOWS';
                 } else {
                     $this->platform = 'OTHER';
@@ -127,7 +127,7 @@ class cls_mysql
                 '$this->timezone = ' . $this->timezone . ";\r\n" .
                 '$this->platform = ' . "'" . $this->platform . "';\r\n?" . '>';
 
-            @file_put_contents($sqlcache_config_file, $content);
+            file_put_contents($sqlcache_config_file, $content);
         }
 
         /* 选择数据库 */
@@ -221,7 +221,7 @@ class cls_mysql
 
     public function result($query, $row)
     {
-        return @mysqli_result($query, $row);
+        return mysqli_result($query, $row);
     }
 
     public function num_rows($query)
@@ -581,7 +581,7 @@ class cls_mysql
         $result = array();
         $result['filename'] = $this->root_path . $this->cache_data_dir . 'sqlcache_' . abs(crc32($this->dbhash . $sql)) . '_' . md5($this->dbhash . $sql) . '.php';
 
-        $data = @file_get_contents($result['filename']);
+        $data = file_get_contents($result['filename']);
         if (isset($data{23})) {
             $filetime = substr($data, 13, 10);
             $data = substr($data, 23);
@@ -589,7 +589,7 @@ class cls_mysql
             if (($cached == 'FILEFIRST' && time() > $filetime + $this->max_cache_time) || ($cached == 'MYSQLFIRST' && $this->table_lastupdate($this->get_table_name($sql)) > $filetime)) {
                 $result['storecache'] = true;
             } else {
-                $result['data'] = @unserialize($data);
+                $result['data'] = unserialize($data);
                 if ($result['data'] === false) {
                     $result['storecache'] = true;
                 } else {
@@ -606,7 +606,7 @@ class cls_mysql
     public function setSqlCacheData($result, $data)
     {
         if ($result['storecache'] === true && $result['filename']) {
-            @file_put_contents($result['filename'], '<?php exit;?>' . time() . serialize($data));
+            file_put_contents($result['filename'], '<?php exit;?>' . time() . serialize($data));
             clearstatcache();
         }
     }

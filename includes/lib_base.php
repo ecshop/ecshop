@@ -742,9 +742,9 @@ function ecs_geoip($ip)
     $length = $offset['len'] - 1028;
     $start = unpack('Vlen', $index[$ipdot[0] * 4] . $index[$ipdot[0] * 4 + 1] . $index[$ipdot[0] * 4 + 2] . $index[$ipdot[0] * 4 + 3]);
     for ($start = $start['len'] * 8 + 1024; $start < $length; $start += 8) {
-        if ($index{$start} . $index{$start + 1} . $index{$start + 2} . $index{$start + 3} >= $ip) {
-            $index_offset = unpack('Vlen', $index{$start + 4} . $index{$start + 5} . $index{$start + 6} . "\x0");
-            $index_length = unpack('Clen', $index{$start + 7});
+        if ($index[$start] . $index[$start + 1] . $index[$start + 2] . $index[$start + 3] >= $ip) {
+            $index_offset = unpack('Vlen', $index[$start + 4] . $index[$start + 5] . $index[$start + 6] . "\x0");
+            $index_length = unpack('Clen', $index[$start + 7]);
             break;
         }
     }

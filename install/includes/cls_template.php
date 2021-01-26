@@ -35,18 +35,6 @@ class template
      */
     public function __construct($path)
     {
-        $this->template($path);
-    }
-
-    /**
-     * 构造函数
-     *
-     * @access  public
-     * @param string $path
-     * @return  void
-     */
-    public function template($path)
-    {
         $this->path = $path;
     }
 

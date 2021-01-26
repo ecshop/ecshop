@@ -1,21 +1,12 @@
 <?php
 
-/**
- * 安装程序语言文件
- */
-
 /* 通用语言项 */
 $_LANG['prev_step'] = '上一步：';
 $_LANG['next_step'] = '下一步：';
 $_LANG['copyright'] = '&copy; 2005-2021 <a href="http://www.ecshop.com" target="_blank">上海商派网络科技有限公司</a>。保留所有权利。';
 
-
 /* 欢迎页 */
 $_LANG['welcome_title'] = '欢迎您选用ECShop网上商店管理系统！';
-$_LANG['select_installer_lang'] = '界面语言：';
-$_LANG['simplified_chinese'] = '简体中文';
-$_LANG['traditional_chinese'] = '繁体中文';
-$_LANG['americanese'] = 'English';
 $_LANG['agree_license'] = '我已仔细阅读，并同意上述条款中的所有内容';
 $_LANG['check_system_environment'] = '检测系统环境';
 $_LANG['setup_environment'] = '配置安装环境';
@@ -85,8 +76,6 @@ $_LANG['demo_notice'] = '选择此项，将默认全选预选商品类型';
 
 $_LANG['install_at_once'] = '立即安装';
 $_LANG['default_friend_link'] = 'ECSHOP 网上商店管理系统';
-$_LANG['maifou_friend_link'] = '买否网';
-$_LANG['wdwd_friend_link'] = '免费开独立网店';
 $_LANG['monitor_title'] = '安装程序监视器';
 $_LANG['admin_user'][] = '商品列表|goods.php?act=list';
 $_LANG['admin_user'][] = '订单列表|order.php?act=list';

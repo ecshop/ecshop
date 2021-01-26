@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 安装程序 之 控制器
+ * 安装程序
  */
 
 define('IN_ECS', true);
@@ -9,17 +9,11 @@ define('IN_ECS', true);
 session_start();
 require(dirname(__FILE__) . '/includes/init.php');
 require(ROOT_PATH . 'includes/inc_constant.php');
-/* 初始化语言变量 */
-$installer_lang = isset($_REQUEST['lang']) ? trim($_REQUEST['lang']) : 'zh_cn';
 
-if ($installer_lang != 'zh_cn' && $installer_lang != 'zh_tw' && $installer_lang != 'en_us') {
-    $installer_lang = 'zh_cn';
-}
-$_SESSION['ecs_lang'] = $installer_lang;
 /* 加载安装程序所使用的语言包 */
-$installer_lang_package_path = ROOT_PATH . 'install/languages/' . $installer_lang . '.php';
-if (file_exists($installer_lang_package_path)) {
-    include_once($installer_lang_package_path);
+$installer_lang = ROOT_PATH . 'install/languages/zh_cn.php';
+if (file_exists($installer_lang)) {
+    include_once($installer_lang);
     $smarty->assign('lang', $_LANG);
 } else {
     die('Can\'t find language package!');
@@ -39,8 +33,6 @@ if (file_exists(ROOT_PATH . 'data/install.lock') && $step != 'done') {
 
 switch ($step) {
     case 'welcome':
-        $_SESSION['welcome']['installer_lang'] = $installer_lang;
-        $smarty->assign('installer_lang', $installer_lang);
         $smarty->display('welcome.php');
 
         break;
@@ -72,22 +64,18 @@ switch ($step) {
         }
 
         $ui = (!empty($_POST['user_interface'])) ? $_POST['user_interface'] : $_GET['ui'];
-        $_SESSION['check']['installer_lang'] = $installer_lang;
         $_SESSION['check']['system_info'] = get_system_info();
         $_SESSION['check']['dir_checking'] = $dir_checking['detail'];
         $_SESSION['check']['has_unwritable_tpl'] = $has_unwritable_tpl;
         $_SESSION['check']['template_checking'] = $template_checking;
         $_SESSION['check']['rename_priv'] = $rename_priv;
         $_SESSION['check']['disabled'] = $disabled;
-        $_SESSION['check']['userinterface'] = $ui;
-        $smarty->assign('installer_lang', $installer_lang);
         $smarty->assign('system_info', get_system_info());
         $smarty->assign('dir_checking', $dir_checking['detail']);
         $smarty->assign('has_unwritable_tpl', $has_unwritable_tpl);
         $smarty->assign('template_checking', $template_checking);
         $smarty->assign('rename_priv', $rename_priv);
         $smarty->assign('disabled', $disabled);
-        $smarty->assign('userinterface', $ui);
         $smarty->display('checking.php');
 
         break;
@@ -105,23 +93,19 @@ switch ($step) {
         }
 
         $show_timezone = 'yes';
-        $timezones = get_timezone_list($installer_lang);
-        $_SESSION['setting_ui']['installer_lang'] = $installer_lang;
+        $timezones = get_timezone_list();
         $_SESSION['setting_ui']['checked'] = $checked;
         $_SESSION['setting_ui']['disabled'] = $disabled;
         $_SESSION['setting_ui']['goods_types'] = $goods_types;
         $_SESSION['setting_ui']['show_timezone'] = $show_timezone;
         $_SESSION['setting_ui']['local_timezone'] = get_local_timezone();
         $_SESSION['setting_ui']['timezones'] = $timezones;
-        $_SESSION['setting_ui']['userinterface'] = empty($_GET['ui']) ? 'ecshop' : $_GET['ui'];
-        $smarty->assign('installer_lang', $installer_lang);
         $smarty->assign('checked', $checked);
         $smarty->assign('disabled', $disabled);
         $smarty->assign('goods_types', $goods_types);
         $smarty->assign('show_timezone', $show_timezone);
         $smarty->assign('local_timezone', get_local_timezone());
         $smarty->assign('timezones', $timezones);
-        $smarty->assign('userinterface', empty($_GET['ui']) ? 'ecshop' : $_GET['ui']);
         $smarty->display('setting.php');
 
         break;
@@ -180,17 +164,10 @@ switch ($step) {
         break;
 
     case 'install_base_data':
-        $system_lang = isset($_POST['system_lang']) ? $_POST['system_lang'] : 'zh_cn';
-
-        if (file_exists(ROOT_PATH . 'install/data/data_' . $system_lang . '.sql')) {
-            $data_path = ROOT_PATH . 'install/data/data_' . $system_lang . '.sql';
-        } else {
-            $data_path = ROOT_PATH . 'install/data/data_zh_cn.sql';
-        }
-
         $sql_files = array(
             ROOT_PATH . 'install/data/structure.sql',
-            $data_path
+            ROOT_PATH . 'install/data/data.sql',
+            ROOT_PATH . 'install/data/upgrade.sql',
         );
 
         $result = install_data($sql_files);
@@ -224,13 +201,10 @@ switch ($step) {
         break;
 
     case 'do_others':
-        $system_lang = isset($_POST['system_lang']) ? $_POST['system_lang'] : 'zh_cn';
+        $system_lang = 'zh_cn';
         $captcha = isset($_POST['disable_captcha']) ? intval($_POST['disable_captcha']) : '0';
-        $goods_types = isset($_POST['goods_types']) ? $_POST['goods_types'] : array();
-        $install_demo = isset($_POST['install_demo']) ? $_POST['install_demo'] : 0;
-        $integrate = isset($_POST['userinterface']) ? trim($_POST['userinterface']) : 'ecshop';
 
-        $result = do_others($system_lang, $captcha, $goods_types, $install_demo, $integrate);
+        $result = do_others($system_lang, $captcha);
         if ($result === false) {
             echo implode(',', $err->get_all());
         } else {

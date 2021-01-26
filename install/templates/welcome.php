@@ -26,7 +26,6 @@
     function welcome_api(result) {
         if (result) {
             setInnerHTML('content', result);
-            setInputCheckedStatus();
 
             var agree = $("js-agree");
             var submit = $("js-submit");
@@ -35,7 +34,7 @@
                 submit.disabled = !this.checked;
             };
             submit.onclick = function () {
-                this.form.action = "./index.php?lang=" + getAddressLang() + "&step=check";
+                this.form.action = "./index.php?step=check";
             };
         }
     }

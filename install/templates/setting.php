@@ -35,7 +35,6 @@
     function setting_ui_api(result) {
         if (result) {
             setInnerHTML('content', result);
-            setInputCheckedStatus();
             var f = $("js-setting");
 
             f.setAttribute("action", "javascript:install();void 0;");
@@ -171,19 +170,14 @@
                     this.innerHTML = $_LANG["hide_detail"];
                 }
             };
-//alert(1);
-            //iframe = frames['js-monitor-notice'];
+
             notice = $("js-notice");
             var d = new Draggable();
             d.bindDragNode("js-monitor", "js-monitor-title");
 
-            $("js-system-lang-" + getAddressLang()).setAttribute("checked", "checked");
-
             $("js-pre-step").onclick = function () {
-                location.href = "./index.php?lang=" + getAddressLang() + "&step=check";
+                location.href = "./index.php?step=check";
             };
-
-            f["js-install-demo"].onclick = switchInputsStatus;
         }
     }
 </script>

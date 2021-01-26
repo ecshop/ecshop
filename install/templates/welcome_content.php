@@ -4,11 +4,11 @@
         <tr>
             <td valign="top">
                 <div id="wrapper" style="padding:30px 0;">
-                    <iframe id="iframe" src="templates/license_<?php echo $installer_lang; ?>.htm" width="730"
+                    <iframe id="iframe" src="templates/license.htm" width="730"
                             height="350"></iframe>
                 </div>
             </td>
-            <td width="227" valign="top" background="images/install-step1-<?php echo $installer_lang; ?>.gif">&nbsp;
+            <td width="227" valign="top" background="images/install-step1.gif">&nbsp;
             </td>
         </tr>
         <tr>

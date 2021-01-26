@@ -98,33 +98,6 @@
 
                     <h3><?php echo $lang['mix_options']; ?></h3>
                     <table width="450" class="list">
-                        <tr>
-                            <?php if (EC_CHARSET == 'gbk') { ?>
-                                <td width="90" align="left"><?php echo $lang['select_lang_package']; ?></td>
-                                <td align="left"><input type="radio" class="p" name="js-system-lang"
-                                                        id="js-system-lang-zh_cn" value="zh_cn" checked='true'/><label
-                                            for="js-system-lang-zh_cn"><?php echo $lang['simplified_chinese']; ?></label>
-                                </td>
-                            <?php } elseif (EC_CHARSET == 'utf-8') { ?>
-                                <td width="90" align="left"><?php echo $lang['select_lang_package']; ?></td>
-                                <td align="left"><input type="radio" class="p" name="js-system-lang"
-                                                        id="js-system-lang-zh_cn" value="zh_cn"/><label
-                                            for="js-system-lang-zh_cn"><?php echo $lang['simplified_chinese']; ?></label>
-                                    <input type="radio" name="js-system-lang" id="js-system-lang-zh_tw"
-                                           value="zh_tw"/><label
-                                            for="js-system-lang-zh_tw"><?php echo $lang['traditional_chinese']; ?></label>
-                                    <input type="radio" name="js-system-lang" id="js-system-lang-en_us"
-                                           value="en_us"/><label
-                                            for="js-system-lang-en_us"><?php echo $lang['americanese']; ?></label>
-                                </td>
-                            <?php } elseif (EC_CHARSET == 'big5') { ?>
-                                <td width="90" align="left"><?php echo $lang['select_lang_package']; ?></td>
-                                <td align="left"><input type="radio" name="js-system-lang" id="js-system-lang-zh_tw"
-                                                        value="zh_tw" checked='true'/><label
-                                            for="js-system-lang-zh_tw"><?php echo $lang['traditional_chinese']; ?></label>
-                                </td>
-                            <?php } ?>
-                        </tr>
                         <?php if ($show_timezone == "yes"): ?>
                             <tr>
                                 <td width="90" align="left"><?php echo $lang['set_timezone']; ?></td>
@@ -149,41 +122,11 @@
                                                     name="js-disable-captcha" <?php echo $checked . $disabled; ?> />
                                 <span class="comment"> (<?php echo $lang['captcha_notice']; ?>)</span></td>
                         </tr>
-                        <tr>
-                            <td width="90" align="left" valign="top"><?php echo $lang['pre_goods_types']; ?></td>
-                            <td align="left">
-                                <?php $i = 0;
-                                foreach ($goods_types as $key => $item): ?>
-                                    <input type="checkbox" class="p" name="js-goods-type[]" value="<?php echo $key; ?>"
-                                           checked="true"/> <?php echo $item; ?>
-                                    <?php if (++$i == 5): ?><br/><?php endif; ?>
-                                <?php endforeach; ?>
-                            </td>
-                        </tr>
-
-                        <tr <?php
-                        if (!file_exists(ROOT_PATH . 'demo')) {
-                            ?>
-                            style="display:none"
-                            <?php
-                        }
-                        ?>
-                        >
-
-                            <td width="90" align="left"><?php echo $lang['install_demo']; ?></td>
-                            <td align="left"><input type="checkbox" class="p" name="js-install-demo"/> <span
-                                        class="comment">(<?php echo $lang['demo_notice']; ?>)</span></td>
-                        </tr>
-
-                        <tr>
-                            <td align="center" colspan="2">
-                            </td>
-                        </tr>
                     </table>
 
                 </div>
             </td>
-            <td width="227" valign="top" background="images/install-step3-<?php echo $installer_lang; ?>.gif">&nbsp;
+            <td width="227" valign="top" background="images/install-step3.gif">&nbsp;
             </td>
         </tr>
         <tr>
@@ -196,5 +139,4 @@
             <td></td>
         </tr>
     </table>
-    <input name="userinterface" type="hidden" value="<?php echo $userinterface; ?>"/>
 </form>

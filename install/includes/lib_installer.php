@@ -157,13 +157,9 @@ function get_db_list($db_host, $db_port, $db_user, $db_pass)
  * @access  public
  * @return  array
  */
-function get_timezone_list($lang)
+function get_timezone_list()
 {
-    if (file_exists(ROOT_PATH . 'install/data/inc_timezones_' . $lang . '.php')) {
-        include_once(ROOT_PATH . 'install/data/inc_timezones_' . $lang . '.php');
-    } else {
-        include_once(ROOT_PATH . 'install/data/inc_timezones_zh_cn.php');
-    }
+    include_once(ROOT_PATH . 'install/data/timezones.php');
 
     return array_unique($timezones);
 }
@@ -334,13 +330,7 @@ function install_data($sql_files)
  */
 function create_admin_passport($admin_name, $admin_password, $admin_password2, $admin_email)
 {
-    if (trim($_REQUEST['lang']) != 'zh_cn') {
-        global $err;
-        $system_lang = isset($_REQUEST['lang']) ? $_REQUEST['lang'] : 'zh_cn';
-        include(ROOT_PATH . 'install/languages/' . $system_lang . '.php');
-    } else {
-        global $err, $_LANG;
-    }
+    global $err, $_LANG;
 
     if ($admin_password === '') {
         $err->add($_LANG['password_empty_error']);
@@ -394,7 +384,6 @@ function copy_files($source, $target)
     global $err, $_LANG;
 
     if (!file_exists($target)) {
-        //if (!mkdir(rtrim($target, '/'), 0777))
         if (!mkdir($target, 0777)) {
             $err->add($_LANG['cannt_mk_dir']);
             return false;
@@ -424,54 +413,12 @@ function copy_files($source, $target)
  * @param string $system_lang 系统语言
  * @param string $disable_captcha 是否开启验证码
  * @param array $goods_types 预选商品类型
- * @param string $install_demo 是否安装测试数据
  * @param string $integrate_code 用户接口
  * @return  boolean     成功返回true，失败返回false
  */
-function do_others($system_lang, $captcha, $goods_types, $install_demo, $integrate_code)
+function do_others($system_lang, $captcha, $goods_types = array(), $integrate_code = 'ecshop')
 {
     global $err, $_LANG;
-
-    /* 安装测试数据 */
-    if (intval($install_demo)) {
-        if (file_exists(ROOT_PATH . 'demo/' . $system_lang . '.sql')) {
-            $sql_files = array(ROOT_PATH . 'demo/' . $system_lang . '.sql');
-        } else {
-            $sql_files = array(ROOT_PATH . 'demo/zh_cn.sql');
-        }
-        if (!install_data($sql_files)) {
-            $err->add(implode('', $err->last_message()));
-            return false;
-        }
-        if (!copy_files(ROOT_PATH . 'demo/brandlogo/', ROOT_PATH . 'data/brandlogo/')) {
-            $err->add(implode('', $err->last_message()));
-            return false;
-        }
-        if (!copy_files(ROOT_PATH . 'demo/200905/goods_img/', ROOT_PATH . 'images/200905/goods_img/')) {
-            $err->add(implode('', $err->last_message()));
-            return false;
-        }
-        if (!copy_files(ROOT_PATH . 'demo/200905/thumb_img/', ROOT_PATH . 'images/200905/thumb_img/')) {
-            $err->add(implode('', $err->last_message()));
-            return false;
-        }
-        if (!copy_files(ROOT_PATH . 'demo/200905/source_img/', ROOT_PATH . 'images/200905/source_img/')) {
-            $err->add(implode('', $err->last_message()));
-            return false;
-        }
-        if (!copy_files(ROOT_PATH . 'demo/afficheimg/', ROOT_PATH . 'data/afficheimg/')) {
-            $err->add(implode('', $err->last_message()));
-            return false;
-        }
-        if (!copy_files(ROOT_PATH . 'demo/packimg/', ROOT_PATH . 'data/packimg/')) {
-            $err->add(implode('', $err->last_message()));
-            return false;
-        }
-        if (!copy_files(ROOT_PATH . 'demo/cardimg/', ROOT_PATH . 'data/cardimg/')) {
-            $err->add(implode('', $err->last_message()));
-            return false;
-        }
-    }
 
     include(ROOT_PATH . 'data/config.php');
     include_once(ROOT_PATH . 'includes/cls_mysql.php');

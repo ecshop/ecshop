@@ -38,7 +38,7 @@
                 </div>
             </td>
             <td width="227" valign="top" style="background:url(images/install-bg.gif) repeat-y;"><img
-                        src="images/install-step2-<?php echo $installer_lang; ?>.gif" alt=""/></td>
+                        src="images/install-step2.gif" alt=""/></td>
         </tr>
         <tr>
             <td>

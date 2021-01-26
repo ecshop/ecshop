@@ -8,7 +8,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 clearstatcache();
 
 /* 定义站点根 */
-define('ROOT_PATH', str_replace('install/includes/init.php', '', str_replace('\\', '/', __FILE__)));
+define('ROOT_PATH', dirname(__DIR__, 2) . '/');
 
 if (isset($_SERVER['PHP_SELF'])) {
     define('PHP_SELF', $_SERVER['PHP_SELF']);

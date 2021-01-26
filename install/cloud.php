@@ -16,7 +16,6 @@ $data['api_ver'] = '1.0';
 $data['version'] = VERSION;
 $data['charset'] = strtoupper(EC_CHARSET);
 $ecs_charset = $data['charset'];
-$data['ecs_lang'] = !empty($_SESSION['ecs_lang']) ? $_SESSION['ecs_lang'] : 'zh_cn';
 $data['release'] = RELEASE;
 $step = isset($_REQUEST['step']) ? trim($_REQUEST['step']) : '';
 
@@ -26,16 +25,16 @@ if (!in_array($step, $step_arr)) {
     @header('Location: index.php');
 }
 
-$apiget = "step={$step}&ecs_lang={$data['ecs_lang']}&release={$data['release']}&version={$data['version']}&charset={$data['charset']}&api_ver={$data['api_ver']}";
-
-foreach ($_SESSION[$step] as $k => $v) {
-    $smarty->assign($k, $v);
-    $GLOBALS[$k] = $v;
+if (is_array($_SESSION[$step])) {
+    foreach ($_SESSION[$step] as $k => $v) {
+        $smarty->assign($k, $v);
+        $GLOBALS[$k] = $v;
+    }
 }
 
-$installer_lang_package_path = ROOT_PATH . 'install/languages/' . $data['ecs_lang'] . '.php';
-if (file_exists($installer_lang_package_path)) {
-    include_once($installer_lang_package_path);
+$installer_lang = ROOT_PATH . 'install/languages/zh_cn.php';
+if (file_exists($installer_lang)) {
+    include_once($installer_lang);
     $lang = $_LANG;
     $smarty->assign('lang', $_LANG);
 }

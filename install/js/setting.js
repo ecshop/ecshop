@@ -42,7 +42,6 @@ function getDbList() {
             + "db_port=" + f["js-db-port"].value + "&"
             + "db_user=" + encodeURIComponent(f["js-db-user"].value) + "&"
             + "db_pass=" + encodeURIComponent(f["js-db-pass"].value) + "&"
-            + "lang=" + getAddressLang() + "&"
             + "IS_AJAX_REQUEST=yes";
     try {
         var result = Ajax.call("./index.php?step=get_db_list", params, null, "POST", "JSON", false);
@@ -55,26 +54,6 @@ function getDbList() {
     } else {
         alert(result);
         return false;
-    }
-}
-
-/**
- * 切换复选框的状态
- */
-function switchInputsStatus() {
-    var goodsTypes = document.getElementsByName("js-goods-type[]"),
-        num = goodsTypes.length;
-
-    if (this.checked) {
-        for (var i = 0; i < num; i++) {
-            goodsTypes[i].checked = "checked";
-            goodsTypes[i].disabled = "true";
-        }
-    } else {
-        for (var i = 0; i < num; i++) {
-            goodsTypes[i].checked = "";
-            goodsTypes[i].disabled = "";
-        }
     }
 }
 
@@ -106,7 +85,6 @@ function createConfigFile() {
             + "db_name=" + encodeURIComponent(f["js-db-name"].value) + "&"
             + "db_prefix=" + f["js-db-prefix"].value + "&"
             + tz + "&"
-            + "lang=" + getAddressLang() + "&"
             + "IS_AJAX_REQUEST=yes";
 
     notice.innerHTML = $_LANG["create_config_file"];
@@ -130,8 +108,7 @@ function createDatabase() {
             + "db_port=" + f["js-db-port"].value + "&"
             + "db_user=" + encodeURIComponent(f["js-db-user"].value) + "&"
             + "db_pass=" + encodeURIComponent(f["js-db-pass"].value) + "&"
-            + "db_name=" + encodeURIComponent(f["js-db-name"].value) + "&"
-            + "lang=" + getAddressLang();
+            + "db_name=" + encodeURIComponent(f["js-db-name"].value);
 
     notice.innerHTML += $_LANG["create_database"];
 
@@ -149,13 +126,11 @@ function createDatabase() {
  * 安装数据
  */
 function installBaseData() {
-    var f = $("js-setting"),
-        params = "system_lang=" + getCheckedRadio("js-system-lang").value + "&"
-            + "lang=" + getAddressLang();
+    var f = $("js-setting");
 
     notice.innerHTML += $_LANG["install_data"];
 
-    Ajax.call("./index.php?step=install_base_data", params, function (result) {
+    Ajax.call("./index.php?step=install_base_data", {}, function (result) {
         if (result.replace(/\s+$/g, '') === "OK") {
             displayOKMsg();
             createAdminPassport();
@@ -173,8 +148,7 @@ function createAdminPassport() {
         params="admin_name=" + encodeURIComponent(f["js-admin-name"].value) + "&"
             + "admin_password=" + encodeURIComponent(f["js-admin-password"].value) + "&"
             + "admin_password2=" + encodeURIComponent(f["js-admin-password2"].value) + "&"
-            + "admin_email=" + f["js-admin-email"].value + "&"
-            + "lang=" + getCheckedRadio("js-system-lang").value;
+            + "admin_email=" + f["js-admin-email"].value;
 
     notice.innerHTML += $_LANG["create_admin_passport"];
 
@@ -194,13 +168,7 @@ function createAdminPassport() {
 function doOthers() {
     var f = $("js-setting"),
         disableCaptcha = f["js-disable-captcha"].checked ? 0 : 1,
-        installDemo = f["js-install-demo"].checked ? 1 : 0,
-        params = "disable_captcha=" + disableCaptcha + "&"
-            + "system_lang=" + getCheckedRadio("js-system-lang").value + "&"
-            + getCheckedGoodsTypesString() + "&"
-            + "install_demo=" + installDemo + "&"
-            + "userinterface=" + f["userinterface"].value + "&"
-            + "lang=" + getAddressLang();
+        params = "disable_captcha=" + disableCaptcha;
 
     notice.innerHTML += $_LANG["do_others"];
 
@@ -220,7 +188,7 @@ function doOthers() {
 function goToDone() {
     stopNotice();
     window.setTimeout(function () {
-        location.href = "./index.php?lang=" + getAddressLang() + "&step=done";
+        location.href = "./index.php?step=done";
     }, 1000);
 }
 
@@ -235,52 +203,6 @@ function stopNotice() {
     $("js-monitor-loading").src = "images/loading2.gif";
     $("js-monitor-wait-please").innerHTML = $_LANG["has_been_stopped"];
 };
-
-/**
- * 取得所有选中的复选框
- */
-function getCheckedBoxes(boxName) {
-    var boxes = document.getElementsByName(boxName),
-        num = boxes.length,
-        checkedBoxes = [];
-
-    for (var i = 0; i < num; i++) {
-        if (boxes[i].checked) {
-            checkedBoxes.push(boxes[i]);
-        }
-    }
-
-    return checkedBoxes;
-}
-
-/**
- * 取得选择的商品类型串
- */
-function getCheckedGoodsTypesString() {
-    var f = $("js-setting"),
-        checkedGoodsTypes = getCheckedBoxes("js-goods-type[]"),
-        num = checkedGoodsTypes.length,
-        gtString = '';
-
-    for (var i = 0; i < num; i++) {
-            gtString += "goods_types[]=" + checkedGoodsTypes[i].value + '&';
-    }
-    gtString = gtString.replace(/&$/, "");
-
-    return gtString;
-}
-
-/**
- * 获得选中的单选框
- */
-function getCheckedRadio(radioName) {
-    var radios = document.getElementsByName(radioName);
-    for (var i = 0; i < radios.length; i++) {
-        if (radios[i].checked) {
-            return radios[i];
-        }
-    }
-}
 
 /**
  * 锁定所有的输入组件

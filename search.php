@@ -423,13 +423,7 @@ else {
     $smarty->display('search.dwt');
 }
 
-/*------------------------------------------------------ */
-//-- PRIVATE FUNCTION
-/*------------------------------------------------------ */
 /**
- *
- *
- * @access public
  * @param
  *
  * @return void
@@ -446,7 +440,6 @@ function is_not_null($value)
 /**
  * 获得可以检索的属性
  *
- * @access  public
  * @params  integer $cat_id
  * @return  void
  */

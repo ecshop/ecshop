@@ -246,10 +246,6 @@ $db->query('UPDATE ' . $ecs->table('goods') . " SET click_count = click_count + 
 $smarty->assign('now_time', gmtime());           // 当前系统时间
 $smarty->display('goods.dwt', $cache_id);
 
-/*------------------------------------------------------ */
-//-- PRIVATE FUNCTION
-/*------------------------------------------------------ */
-
 /**
  * 获得指定商品的关联商品
  *

@@ -345,10 +345,6 @@ if (!$smarty->is_cached('category.dwt', $cache_id)) {
 
 $smarty->display('category.dwt', $cache_id);
 
-/*------------------------------------------------------ */
-//-- PRIVATE FUNCTION
-/*------------------------------------------------------ */
-
 /**
  * 获得分类的信息
  *

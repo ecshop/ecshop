@@ -64,20 +64,11 @@ class integrate
 
     public $error = 0;
 
-    /*------------------------------------------------------ */
-    //-- PRIVATE ATTRIBUTEs
-    /*------------------------------------------------------ */
-
-    public $db;
-
-    /*------------------------------------------------------ */
-    //-- PUBLIC METHODs
-    /*------------------------------------------------------ */
+    private $db;
 
     /**
      * 会员数据整合插件类的构造函数
      *
-     * @access      public
      * @param string $db_host 数据库主机
      * @param string $db_name 数据库名
      * @param string $db_user 数据库用户名
@@ -118,7 +109,6 @@ class integrate
     /**
      *  用户登录函数
      *
-     * @access  public
      * @param string $username
      * @param string $password
      *
@@ -140,9 +130,6 @@ class integrate
     }
 
     /**
-     *
-     *
-     * @access  public
      * @param
      *
      * @return void
@@ -156,7 +143,6 @@ class integrate
     /**
      *  添加一个新用户
      *
-     * @access  public
      * @param
      *
      * @return int
@@ -219,7 +205,6 @@ class integrate
     /**
      *  编辑用户信息($password, $email, $gender, $bday)
      *
-     * @access  public
      * @param
      *
      * @return void
@@ -293,7 +278,6 @@ class integrate
     /**
      * 删除用户
      *
-     * @access  public
      * @param
      *
      * @return void
@@ -361,7 +345,6 @@ class integrate
     /**
      *  获取指定用户的信息
      *
-     * @access  public
      * @param
      *
      * @return void
@@ -384,7 +367,6 @@ class integrate
     /**
      *  获取指定用户的信息
      *
-     * @access  public
      * @param
      *
      * @return void
@@ -405,7 +387,6 @@ class integrate
     /**
      *  根据登录状态设置cookie
      *
-     * @access  public
      * @param
      *
      * @return void
@@ -428,7 +409,6 @@ class integrate
     /**
      *  检查指定用户是否存在及密码是否正确
      *
-     * @access  public
      * @param string $username 用户名
      *
      * @return  int
@@ -456,7 +436,6 @@ class integrate
     /**
      *  检查指定邮箱是否存在
      *
-     * @access  public
      * @param string $email 用户邮箱
      *
      * @return  boolean

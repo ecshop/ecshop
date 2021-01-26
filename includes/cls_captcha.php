@@ -177,10 +177,6 @@ class captcha
         }
     }
 
-    /*------------------------------------------------------ */
-    //-- PRIVATE METHODs
-    /*------------------------------------------------------ */
-
     /**
      * 对需要记录的串进行加密
      *
@@ -188,7 +184,7 @@ class captcha
      * @param string $word 原始字符串
      * @return  string
      */
-    public function encrypts_word($word)
+    private function encrypts_word($word)
     {
         return substr(md5($word), 1, 10);
     }
@@ -200,7 +196,7 @@ class captcha
      * @param string $word 原始字符串
      * @return  void
      */
-    public function record_word($word)
+    private function record_word($word)
     {
         $_SESSION[$this->session_word] = base64_encode($this->encrypts_word($word));
     }
@@ -212,7 +208,7 @@ class captcha
      * @param integer $length 验证码长度
      * @return  string
      */
-    public function generate_word($length = 4)
+    private function generate_word($length = 4)
     {
         $chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
 

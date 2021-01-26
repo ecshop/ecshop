@@ -96,14 +96,9 @@ if (!$smarty->is_cached('index.dwt', $cache_id)) {
 
 $smarty->display('index.dwt', $cache_id);
 
-/*------------------------------------------------------ */
-//-- PRIVATE FUNCTIONS
-/*------------------------------------------------------ */
-
 /**
  * 调用发货单查询
  *
- * @access  private
  * @return  array
  */
 function index_get_invoice_query()
@@ -133,7 +128,6 @@ function index_get_invoice_query()
 /**
  * 获得最新的文章列表。
  *
- * @access  private
  * @return  array
  */
 function index_get_new_articles()
@@ -164,7 +158,6 @@ function index_get_new_articles()
 /**
  * 获得最新的团购活动
  *
- * @access  private
  * @return  array
  */
 function index_get_group_buy()
@@ -255,7 +248,6 @@ function index_get_auction()
 /**
  * 获得所有的友情链接
  *
- * @access  private
  * @return  array
  */
 function index_get_links()

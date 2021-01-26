@@ -10,12 +10,8 @@ if (!defined('IN_ECS')) {
 
 error_reporting(E_ALL);
 
-if (__FILE__ == '') {
-    die('Fatal error code: 0');
-}
-
 /* 取得当前ecshop所在的根目录 */
-define('ROOT_PATH', str_replace('api', '', str_replace('\\', '/', dirname(__FILE__))));
+define('ROOT_PATH', dirname(__DIR__) . '/');
 
 /* 初始化设置 */
 @ini_set('memory_limit', '1G');
@@ -25,16 +21,8 @@ define('ROOT_PATH', str_replace('api', '', str_replace('\\', '/', dirname(__FILE
 @ini_set('session.auto_start', 0);
 @ini_set('display_errors', 0);
 
-if (DIRECTORY_SEPARATOR == '\\') {
-    @ini_set('include_path', '.;' . ROOT_PATH);
-} else {
-    @ini_set('include_path', '.:' . ROOT_PATH);
-}
-
 if (file_exists(ROOT_PATH . 'data/config.php')) {
     include(ROOT_PATH . 'data/config.php');
-} else {
-    include(ROOT_PATH . 'includes/config.php');
 }
 
 if (defined('DEBUG_MODE') == false) {

@@ -369,30 +369,6 @@ function file_mode_info($file_path)
     return $mark;
 }
 
-function log_write($arg, $file = '', $line = '')
-{
-    if ((DEBUG_MODE & 4) != 4) {
-        return;
-    }
-
-    $str = "\r\n-- " . date('Y-m-d H:i:s') . " --------------------------------------------------------------\r\n";
-    $str .= "FILE: $file\r\nLINE: $line\r\n";
-
-    if (is_array($arg)) {
-        $str .= '$arg = array(';
-        foreach ($arg as $val) {
-            foreach ($val as $key => $list) {
-                $str .= "'$key' => '$list'\r\n";
-            }
-        }
-        $str .= ")\r\n";
-    } else {
-        $str .= $arg;
-    }
-
-    file_put_contents(ROOT_PATH . DATA_DIR . '/log.txt', $str);
-}
-
 /**
  * 检查目标文件夹是否存在，如果不存在则自动创建该目录
  *

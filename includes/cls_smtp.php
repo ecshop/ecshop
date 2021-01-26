@@ -94,7 +94,6 @@ class smtp
 
                 return $this->auth ? $this->ehlo() : $this->helo();
             } else {
-                log_write($errstr, __FILE__, __LINE__);
                 $this->errors[] = 'Failed to connect to server: ' . $errstr;
 
                 return false;

@@ -88,8 +88,9 @@ class cls_mysql
         mysqli_query($this->link_id, "SET sql_mode=''");
 
         $sqlcache_config_file = $this->root_path . $this->cache_data_dir . 'sqlcache_config_file_' . $this->dbhash . '.php';
-
-        include($sqlcache_config_file);
+        if (file_exists($sqlcache_config_file)) {
+            include($sqlcache_config_file);
+        }
 
         $this->starttime = time();
 

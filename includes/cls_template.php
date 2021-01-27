@@ -28,6 +28,7 @@ class cls_template
 
     public $_temp_key = array();  // 临时存放 foreach 里 key 的数组
     public $_temp_val = array();  // 临时存放 foreach 里 item 的数组
+    public $_vars = array();
 
     public function __construct()
     {
@@ -468,23 +469,25 @@ class cls_template
                 $s = explode(':', $mod);
                 switch ($s[0]) {
                     case 'escape':
-                        $s[1] = trim($s[1], '"');
-                        if ($s[1] == 'html') {
-                            $p = 'htmlspecialchars(' . $p . ')';
-                        } elseif ($s[1] == 'url') {
-                            $p = 'urlencode(' . $p . ')';
-                        } elseif ($s[1] == 'decode_url') {
-                            $p = 'urldecode(' . $p . ')';
-                        } elseif ($s[1] == 'quotes') {
-                            $p = 'addslashes(' . $p . ')';
-                        } elseif ($s[1] == 'u8_url') {
-                            if (EC_CHARSET != 'utf-8') {
-                                $p = 'urlencode(ecs_iconv("' . EC_CHARSET . '", "utf-8",' . $p . '))';
-                            } else {
+                        if (isset($s[1])) {
+                            $s[1] = trim($s[1], '"');
+                            if ($s[1] == 'html') {
+                                $p = 'htmlspecialchars(' . $p . ')';
+                            } elseif ($s[1] == 'url') {
                                 $p = 'urlencode(' . $p . ')';
+                            } elseif ($s[1] == 'decode_url') {
+                                $p = 'urldecode(' . $p . ')';
+                            } elseif ($s[1] == 'quotes') {
+                                $p = 'addslashes(' . $p . ')';
+                            } elseif ($s[1] == 'u8_url') {
+                                if (EC_CHARSET != 'utf-8') {
+                                    $p = 'urlencode(ecs_iconv("' . EC_CHARSET . '", "utf-8",' . $p . '))';
+                                } else {
+                                    $p = 'urlencode(' . $p . ')';
+                                }
+                            } else {
+                                $p = 'htmlspecialchars(' . $p . ')';
                             }
-                        } else {
-                            $p = 'htmlspecialchars(' . $p . ')';
                         }
                         break;
 
@@ -574,6 +577,10 @@ class cls_template
                     $para[$a] = $b;
                 }
             }
+        }
+
+        if (!isset($para['key'])) {
+            $para['key'] = 'key';
         }
 
         return $para;
@@ -669,10 +676,15 @@ class cls_template
             }
         }
 
+        $exp = implode(' ', $tokens);
+        if (count($tokens) === 1) {
+            $exp = 'isset(' . $exp . ')';
+        }
+
         if ($elseif) {
-            return '<?php elseif (' . implode(' ', $tokens) . '): ?>';
+            return '<?php elseif (' . $exp . '): ?>';
         } else {
-            return '<?php if (' . implode(' ', $tokens) . '): ?>';
+            return '<?php if (' . $exp . '): ?>';
         }
     }
 
@@ -712,7 +724,7 @@ class cls_template
         }
 
         $output = '<?php ';
-        $output .= "\$_from = $from; if (!is_array(\$_from) && !is_object(\$_from)) { settype(\$_from, 'array'); }; \$this->push_vars('$attrs[key]', '$attrs[item]');";
+        $output .= "\$_from = $from; if (!is_array(\$_from) && !is_object(\$_from)) { settype(\$_from, 'array'); }; \$this->push_vars('{$attrs['key']}', '{$attrs['item']}');";
 
         if (!empty($name)) {
             $foreach_props = "\$this->_foreach['$name']";

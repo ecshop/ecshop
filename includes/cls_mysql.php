@@ -582,7 +582,7 @@ class cls_mysql
         $result['filename'] = $this->root_path . $this->cache_data_dir . 'sqlcache_' . abs(crc32($this->dbhash . $sql)) . '_' . md5($this->dbhash . $sql) . '.php';
 
         $data = file_get_contents($result['filename']);
-        if (isset($data{23})) {
+        if (isset($data[23])) {
             $filetime = substr($data, 13, 10);
             $data = substr($data, 23);
 

@@ -182,13 +182,12 @@ class cls_template
         if ($this->_expires) {
             $expires = $this->_expires - $this->cache_lifetime;
         } else {
-            $filestat = @stat($name);
-            $expires = $filestat['mtime'];
+            $expires = (int)@filemtime($name);
         }
 
-        $filestat = @stat($filename);
+        $filemtime = (int)@filemtime($filename);
 
-        if ($filestat['mtime'] <= $expires && !$this->force_compile) {
+        if ($filemtime <= $expires && !$this->force_compile) {
             if (file_exists($name)) {
                 $source = $this->_require($name);
                 if ($source == '') {
@@ -200,7 +199,7 @@ class cls_template
             }
         }
 
-        if ($this->force_compile || $filestat['mtime'] > $expires) {
+        if ($this->force_compile || $filemtime > $expires) {
             $this->_current_file = $filename;
             $source = $this->fetch_str(file_get_contents($filename));
 
@@ -272,8 +271,8 @@ class cls_template
                 $this->template_out = substr($data, $pos);
 
                 foreach ($para['template'] as $val) {
-                    $stat = @stat($val);
-                    if ($para['maketime'] < $stat['mtime']) {
+                    $filemtime = (int)@filemtime($val);
+                    if ($para['maketime'] < $filemtime) {
                         $this->caching = false;
 
                         return false;
@@ -308,16 +307,11 @@ class cls_template
         } elseif ($tag[0] == '*' && substr($tag, -1) == '*') { // 注释部分
             return '';
         } elseif ($tag[0] == '$') { // 变量
-//            if(strpos($tag,"'") || strpos($tag,"]"))
-//            {
-//                 return '';
-//            }
             return '<?php echo ' . $this->get_val(substr($tag, 1)) . '; ?>';
         } elseif ($tag[0] == '/') { // 结束 tag
             switch (substr($tag, 1)) {
                 case 'if':
                     return '<?php endif; ?>';
-                    break;
 
                 case 'foreach':
                     if ($this->_foreachmark == 'foreachelse') {
@@ -329,47 +323,38 @@ class cls_template
                     $output .= "<?php \$this->pop_vars();; ?>";
 
                     return $output;
-                    break;
 
                 case 'literal':
                     return '';
-                    break;
 
                 default:
                     return '{' . $tag . '}';
-                    break;
             }
         } else {
-            $tag_sel = array_shift(explode(' ', $tag));
+            $tags = explode(' ', $tag);
+            $tag_sel = array_shift($tags);
             switch ($tag_sel) {
                 case 'if':
-
                     return $this->_compile_if_tag(substr($tag, 3));
-                    break;
 
                 case 'else':
-
                     return '<?php else: ?>';
-                    break;
 
                 case 'elseif':
-
                     return $this->_compile_if_tag(substr($tag, 7), true);
-                    break;
 
                 case 'foreachelse':
                     $this->_foreachmark = 'foreachelse';
 
                     return '<?php endforeach; else: ?>';
-                    break;
 
                 case 'foreach':
                     $this->_foreachmark = 'foreach';
                     if (!isset($this->_patchstack)) {
                         $this->_patchstack = array();
                     }
+
                     return $this->_compile_foreach_start(substr($tag, 8));
-                    break;
 
                 case 'assign':
                     $t = $this->get_para(substr($tag, 7), 0);
@@ -382,74 +367,62 @@ class cls_template
                     }
 
                     return '<?php ' . $tmp . ' ?>';
-                    break;
 
                 case 'include':
                     $t = $this->get_para(substr($tag, 8), 0);
 
                     return '<?php echo $this->fetch(' . "'$t[file]'" . '); ?>';
-                    break;
 
                 case 'insert_scripts':
                     $t = $this->get_para(substr($tag, 15), 0);
 
                     return '<?php echo $this->smarty_insert_scripts(' . $this->make_array($t) . '); ?>';
-                    break;
 
                 case 'create_pages':
                     $t = $this->get_para(substr($tag, 13), 0);
 
                     return '<?php echo $this->smarty_create_pages(' . $this->make_array($t) . '); ?>';
-                    break;
 
                 case 'insert':
                     $t = $this->get_para(substr($tag, 7), false);
 
                     $out = "<?php \n" . '$k = ' . preg_replace_callback("/(\'\\$[^,]+)/", function ($r) {
-                        return stripcslashes(trim($r[1], '\''));
-                    }, var_export($t, true)) . ";\n";
+                            return stripcslashes(trim($r[1], '\''));
+                        }, var_export($t, true)) . ";\n";
                     $out .= 'echo $this->_echash . $k[\'name\'] . \'|\' . serialize($k) . $this->_echash;' . "\n?>";
 
                     return $out;
-                    break;
 
                 case 'literal':
                     return '';
-                    break;
 
                 case 'cycle':
                     $t = $this->get_para(substr($tag, 6), 0);
 
                     return '<?php echo $this->cycle(' . $this->make_array($t) . '); ?>';
-                    break;
 
                 case 'html_options':
                     $t = $this->get_para(substr($tag, 13), 0);
 
                     return '<?php echo $this->html_options(' . $this->make_array($t) . '); ?>';
-                    break;
 
                 case 'html_select_date':
                     $t = $this->get_para(substr($tag, 17), 0);
 
                     return '<?php echo $this->html_select_date(' . $this->make_array($t) . '); ?>';
-                    break;
 
                 case 'html_radios':
                     $t = $this->get_para(substr($tag, 12), 0);
 
                     return '<?php echo $this->html_radios(' . $this->make_array($t) . '); ?>';
-                    break;
 
                 case 'html_select_time':
                     $t = $this->get_para(substr($tag, 12), 0);
 
                     return '<?php echo $this->html_select_time(' . $this->make_array($t) . '); ?>';
-                    break;
 
                 default:
                     return '{' . $tag . '}';
-                    break;
             }
         }
     }
@@ -641,11 +614,6 @@ class cls_template
         preg_match_all('/\-?\d+[\.\d]+|\'[^\'|\s]*\'|"[^"|\s]*"|[\$\w\.]+|!==|===|==|!=|<>|<<|>>|<=|>=|&&|\|\||\(|\)|,|\!|\^|=|&|<|>|~|\||\%|\+|\-|\/|\*|\@|\S/', $tag_args, $match);
 
         $tokens = $match[0];
-        // make sure we have balanced parenthesis
-        $token_count = array_count_values($tokens);
-        if (!empty($token_count['(']) && $token_count['('] != $token_count[')']) {
-            // $this->_syntax_error('unbalanced parenthesis in if statement', E_USER_ERROR, __FILE__, __LINE__);
-        }
 
         for ($i = 0, $count = count($tokens); $i < $count; $i++) {
             $token = &$tokens[$i];
@@ -719,7 +687,7 @@ class cls_template
     public function _compile_foreach_start($tag_args)
     {
         $attrs = $this->get_para($tag_args, 0);
-        $arg_list = array();
+
         $from = $attrs['from'];
         if (isset($this->_var[$attrs['item']]) && !isset($this->_patchstack[$attrs['item']])) {
             $this->_patchstack[$attrs['item']] = $attrs['item'] . '_' . str_replace(array(' ', '.'), '_', microtime());
@@ -870,7 +838,6 @@ class cls_template
                 break;
 
             default:
-                // $this->_syntax_error('$smarty.' . $_ref . ' is an unknown reference', E_USER_ERROR, __FILE__, __LINE__);
                 break;
         }
         array_shift($indexes);

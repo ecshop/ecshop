@@ -1,18 +1,26 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 转换程序
  */
+class ConvertController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+    }
 
-require(dirname(__FILE__) . '/includes/init.php');
+
+
 
 /*------------------------------------------------------ */
 //-- 转换程序主页面
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'main') {
+function mainAction() {
     admin_priv('convert');
 
     /* 取得插件文件中的转换程序 */
@@ -51,7 +59,7 @@ if ($_REQUEST['act'] == 'main') {
 //-- 转换前检查
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'check') {
+function checkAction() {
     /* 检查权限 */
     check_authz_json('convert');
 
@@ -139,7 +147,7 @@ if ($_REQUEST['act'] == 'check') {
 //-- 转换操作
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'process') {
+function processAction() {
     /* 设置执行时间 */
     set_time_limit(0);
 
@@ -264,4 +272,5 @@ function copy_dirs($from_dir, $to_dir, $file_prefix = '')
     }
     closedir($handle);
     return $result;
+}
 }

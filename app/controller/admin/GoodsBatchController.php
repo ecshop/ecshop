@@ -1,18 +1,24 @@
 <?php
+
+namespace app\controller\admin;
+
 /**
  * 商品批量上传、修改
  */
+class GoodsBatchController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        require('includes/lib_goods.php');
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-require('includes/lib_goods.php');
+    }
 
 /*------------------------------------------------------ */
 //-- 批量上传
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 检查权限 */
     admin_priv('goods_batch');
 
@@ -57,7 +63,7 @@ if ($_REQUEST['act'] == 'add') {
 //-- 批量上传：处理
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'upload') {
+function uploadAction() {
     /* 检查权限 */
     admin_priv('goods_batch');
 
@@ -313,7 +319,7 @@ if ($_REQUEST['act'] == 'upload') {
 //-- 批量上传：入库
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /* 检查权限 */
     admin_priv('goods_batch');
 
@@ -503,7 +509,7 @@ if ($_REQUEST['act'] == 'insert') {
 //-- 批量修改：选择商品
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'select') {
+function selectAction() {
     /* 检查权限 */
     admin_priv('goods_batch');
 
@@ -526,7 +532,7 @@ if ($_REQUEST['act'] == 'select') {
 //-- 批量修改：修改
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 检查权限 */
     admin_priv('goods_batch');
 
@@ -609,7 +615,7 @@ if ($_REQUEST['act'] == 'edit') {
 //-- 批量修改：提交
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 检查权限 */
     admin_priv('goods_batch');
 
@@ -737,7 +743,7 @@ if ($_REQUEST['act'] == 'update') {
 //-- 下载文件
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'download') {
+function downloadAction() {
     /* 检查权限 */
     admin_priv('goods_batch');
 
@@ -770,7 +776,7 @@ if ($_REQUEST['act'] == 'download') {
 //-- 取得商品
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'get_goods') {
+function get_goodsAction() {
     $filter = new stdclass;
 
     $filter->cat_id = intval($_GET['cat_id']);
@@ -779,4 +785,5 @@ if ($_REQUEST['act'] == 'get_goods') {
     $arr = get_goods_list($filter);
 
     make_json_result($arr);
+}
 }

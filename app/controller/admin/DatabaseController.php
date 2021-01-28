@@ -1,18 +1,26 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 数据库管理
  */
+class DatabaseController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . ADMIN_PATH . '/includes/cls_sql_dump.php');
 
-@ini_set('memory_limit', '1G');
+        require_once(ROOT_PATH . ADMIN_PATH . '/includes/cls_sql_dump.php');
+
+        @ini_set('memory_limit', '1G');
+    }
+
 
 /* 备份页面 */
-if ($_REQUEST['act'] == 'backup') {
+function backupAction() {
     $tables = $db->getCol("SHOW TABLES LIKE '" . mysql_like_quote($ecs->prefix) . "%'");
     $allow_max_size = return_bytes(@ini_get('upload_max_filesize')); // 单位为字节
     $allow_max_size = $allow_max_size / 1024; // 转换单位为 KB
@@ -50,7 +58,7 @@ if ($_REQUEST['act'] == 'backup') {
 }
 
 /* 备份恢复页面 */
-if ($_REQUEST['act'] == 'restore') {
+function restoreAction() {
     /* 权限判断 */
     admin_priv('db_renew');
 
@@ -101,7 +109,7 @@ if ($_REQUEST['act'] == 'restore') {
     $smarty->display('db_restore.htm');
 }
 
-if ($_REQUEST['act'] == 'dumpsql') {
+function dumpsqlAction() {
     /* 权限判断 */
     $token = trim($_REQUEST['token']);
     if ($token != $_CFG['token']) {
@@ -254,7 +262,7 @@ if ($_REQUEST['act'] == 'dumpsql') {
 }
 
 /* 删除备份 */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     /* 权限判断 */
     admin_priv('db_backup');
 
@@ -304,7 +312,7 @@ if ($_REQUEST['act'] == 'remove') {
 }
 
 /* 从服务器上导入数据 */
-if ($_REQUEST['act'] == 'import') {
+function importAction() {
     /* 权限判断 */
     admin_priv('db_renew');
 
@@ -377,7 +385,7 @@ if ($_REQUEST['act'] == 'import') {
 /*------------------------------------------------------ */
 //-- 上传sql 文件
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'upload_sql') {
+function upload_sqlAction() {
     /* 权限判断 */
     admin_priv('db_renew');
 
@@ -454,7 +462,7 @@ if ($_REQUEST['act'] == 'upload_sql') {
 /*------------------------------------------------------ */
 //-- 优化页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'optimize') {
+function optimizeAction() {
     /* 初始化数据 */
     admin_priv('db_backup');
     $ret = $db->query("SHOW TABLE STATUS LIKE '" . mysql_like_quote($ecs->prefix) . "%'");
@@ -482,7 +490,7 @@ if ($_REQUEST['act'] == 'optimize') {
     $smarty->display('optimize.htm');
 }
 
-if ($_REQUEST['act'] == 'run_optimize') {
+function run_optimizeAction() {
     admin_priv('db_backup');
     $tables = $db->getCol("SHOW TABLES LIKE '" . mysql_like_quote($ecs->prefix) . "%'");
     foreach ($tables as $table) {
@@ -558,4 +566,5 @@ function num_bitunit($num)
 function remove_comment($var)
 {
     return (substr($var, 0, 2) != '--');
+}
 }

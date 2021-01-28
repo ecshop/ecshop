@@ -1,5 +1,7 @@
 <?php
 
+namespace app\controller\api;
+
 /**
  * API 公用初始化文件
  */

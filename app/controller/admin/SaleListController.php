@@ -1,12 +1,21 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 销售明细列表程序
  */
+class SaleListController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+    }
+}
 
-require(dirname(__FILE__) . '/includes/init.php');
+
+
 require_once(ROOT_PATH . 'includes/lib_order.php');
 require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
 $smarty->assign('lang', $_LANG);
@@ -21,7 +30,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
     /*------------------------------------------------------ */
     //--Excel文件下载
     /*------------------------------------------------------ */
-    if ($_REQUEST['act'] == 'download') {
+    function downloadAction() {
         $file_name = $_REQUEST['start_date'] . '_' . $_REQUEST['end_date'] . '_sale';
         $goods_sales_list = get_sale_list(false);
         header("Content-type: application/vnd.ms-excel; charset=utf-8");
@@ -58,7 +67,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
 /*------------------------------------------------------ */
 //--商品明细列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 权限判断 */
     admin_priv('sale_order_stats');
     /* 时间参数 */

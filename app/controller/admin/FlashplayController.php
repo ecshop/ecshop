@@ -1,19 +1,21 @@
 <?php
 
-/**
- * 程序说明
- */
+namespace app\controller\admin;
 
-define('IN_ECS', true);
+class FlashplayController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-require(dirname(__FILE__) . '/includes/init.php');
-$uri = $ecs->url();
-$allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp');
+        $uri = $ecs->url();
+        $allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp');
+    }
 
 /*------------------------------------------------------ */
 //-- 系统
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 判断系统当前设置 如果为用户自定义 则跳转到自定义 */
     if ($_CFG['index_ad'] == 'cus') {
         ecs_header("Location: flashplay.php?act=custom_list\n");
@@ -47,7 +49,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('playerdb', $playerdb);
     $smarty->display('flashplay_list.htm');
 }
-if ($_REQUEST['act'] == 'del') {
+function delAction() {
     admin_priv('flash_manage');
 
     $id = (int)$_GET['id'];
@@ -74,7 +76,7 @@ if ($_REQUEST['act'] == 'del') {
     ecs_header("Location: flashplay.php?act=list\n");
     exit;
 }
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     admin_priv('flash_manage');
 
     if (empty($_POST['step'])) {
@@ -150,7 +152,7 @@ if ($_REQUEST['act'] == 'add') {
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
 }
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     admin_priv('flash_manage');
 
     $id = (int)$_REQUEST['id']; //取得id
@@ -233,7 +235,7 @@ if ($_REQUEST['act'] == 'edit') {
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
 }
-if ($_REQUEST['act'] == 'install') {
+function installAction() {
     check_authz_json('flash_manage');
     $flash_theme = trim($_GET['flashtpl']);
     if ($_CFG['flash_theme'] != $flash_theme) {
@@ -259,7 +261,7 @@ if ($_REQUEST['act'] == 'install') {
 //-- 用户自定义
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'custom_list') {
+function custom_listAction() {
     /* 标签初始化 */
     $group_list = array(
         'sys' => array('text' => $_LANG['system_set'], 'url' => ($_CFG['index_ad'] == 'cus') ? 'javascript:system_set();void(0);' : 'flashplay.php?act=list'),
@@ -297,7 +299,7 @@ if ($_REQUEST['act'] == 'custom_list') {
 //-- 用户自定义添加
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'custom_add') {
+function custom_addAction() {
     /* 标签初始化 */
     $group_list = array(
         'sys' => array('text' => $_LANG['system_set'], 'url' => ($_CFG['index_ad'] == 'cus') ? 'javascript:system_set();void(0);' : 'flashplay.php?act=list'),
@@ -336,7 +338,7 @@ if ($_REQUEST['act'] == 'custom_add') {
 //-- 用户自定义 添加广告入库
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'custom_insert') {
+function custom_insertAction() {
     admin_priv('flash_manage');
 
     /* 定义当前时间 */
@@ -431,7 +433,7 @@ if ($_REQUEST['act'] == 'custom_insert') {
 //-- 用户自定义 删除广告
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'custom_del') {
+function custom_delAction() {
     admin_priv('flash_manage');
 
     $id = empty($_GET['id']) ? 0 : intval(trim($_GET['id']));
@@ -460,7 +462,7 @@ if ($_REQUEST['act'] == 'custom_del') {
 //-- 用户自定义 启用与关闭广告
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'custom_status') {
+function custom_statusAction() {
     check_authz_json('flash_manage');
 
     $ad_status = empty($_GET['ad_status']) ? 1 : 0;
@@ -511,7 +513,7 @@ if ($_REQUEST['act'] == 'custom_status') {
 //-- 用户自定义 修改
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'custom_edit') {
+function custom_editAction() {
     $id = empty($_GET['id']) ? 0 : intval(trim($_GET['id']));
 
     /* 查询自定义广告信息 */
@@ -537,7 +539,7 @@ if ($_REQUEST['act'] == 'custom_edit') {
 //-- 用户自定义 更新数据库
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'custom_update') {
+function custom_updateAction() {
     admin_priv('flash_manage');
 
     if (empty($_POST['ad']) || empty($_POST['content']) || empty($_POST['ad']['ad_name']) || empty($_POST['ad']['id'])) {
@@ -934,4 +936,5 @@ function modfiy_ad_status($ad_id, $ad_status = 0)
     }
 
     return $return = true;
+}
 }

@@ -1,16 +1,23 @@
 <?php
+
+namespace app\controller\admin;
 /**
  * 控制台首页
  */
+class IndexController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        require_once(ROOT_PATH . '/includes/lib_order.php');
 
-define('IN_ECS', true);
+    }
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . '/includes/lib_order.php');
 /*------------------------------------------------------ */
 //-- 框架
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == '') {
+    public function index()
+    {
     $smarty->assign('shop_url', urlencode($ecs->url()));
     $smarty->display('index.htm');
 }
@@ -18,7 +25,7 @@ if ($_REQUEST['act'] == '') {
 /*------------------------------------------------------ */
 //-- 顶部框架的内容
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'top') {
+function topAction() {
     // 获得管理员设置的菜单
     $lst = array();
     $nav = $db->getOne('SELECT nav_list FROM ' . $ecs->table('admin_user') . " WHERE user_id = '" . $_SESSION['admin_id'] . "'");
@@ -47,14 +54,14 @@ if ($_REQUEST['act'] == 'top') {
 //-- 计算器
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'calculator') {
+function calculatorAction() {
     $smarty->display('calculator.htm');
 }
 
 /*------------------------------------------------------ */
 //-- 左边的框架
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'menu') {
+function menuAction() {
     include_once('includes/inc_menu.php');
 
     // 权限对照表
@@ -113,7 +120,7 @@ if ($_REQUEST['act'] == 'menu') {
 //-- 清除缓存
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'clear_cache') {
+function clear_cacheAction() {
     clear_all_files();
 
     sys_msg($_LANG['caches_cleared']);
@@ -123,7 +130,7 @@ if ($_REQUEST['act'] == 'clear_cache') {
 /*------------------------------------------------------ */
 //-- 主窗口，起始页
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'main') {
+function mainAction() {
     //开店向导第一步
     if (isset($_SESSION['shop_guide']) && $_SESSION['shop_guide'] === true) {
         unset($_SESSION['shop_guide']);//销毁session
@@ -399,7 +406,7 @@ if ($_REQUEST['act'] == 'main') {
     $smarty->assign('install_date', local_date($_CFG['date_format'], $_CFG['install_date']));
     $smarty->display('start.htm');
 }
-if ($_REQUEST['act'] == 'main_api') {
+function main_apiAction() {
     require_once(ROOT_PATH . '/includes/lib_base.php');
     $data = read_static_cache('api_str');
 
@@ -430,7 +437,7 @@ if ($_REQUEST['act'] == 'main_api') {
 //-- 开店向导第一步
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'first') {
+function firstAction() {
     $smarty->assign('countries', get_regions());
     $smarty->assign('provinces', get_regions(1, 1));
     $smarty->assign('cities', get_regions(2, 2));
@@ -506,7 +513,7 @@ if ($_REQUEST['act'] == 'first') {
 //-- 开店向导第二步
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'second') {
+function secondAction() {
     admin_priv('shop_config');
 
     $shop_name = empty($_POST['shop_name']) ? '' : $_POST['shop_name'];
@@ -670,7 +677,7 @@ if ($_REQUEST['act'] == 'second') {
 //-- 开店向导第三步
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'third') {
+function thirdAction() {
     admin_priv('goods_manage');
 
     $good_name = empty($_POST['good_name']) ? '' : $_POST['good_name'];
@@ -857,7 +864,7 @@ if ($_REQUEST['act'] == 'third') {
 //-- 关于 ECSHOP
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'about_us') {
+function about_usAction() {
     assign_query_info();
     $smarty->display('about_us.htm');
 }
@@ -866,14 +873,14 @@ if ($_REQUEST['act'] == 'about_us') {
 //-- 拖动的帧
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'drag') {
+function dragAction() {
     $smarty->display('drag.htm');
 }
 
 /*------------------------------------------------------ */
 //-- 检查订单
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'check_order') {
+function check_orderAction() {
     if (empty($_SESSION['last_check'])) {
         $_SESSION['last_check'] = gmtime();
 
@@ -902,17 +909,17 @@ if ($_REQUEST['act'] == 'check_order') {
 /*------------------------------------------------------ */
 //-- Totolist操作
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'save_todolist') {
+function save_todolistAction() {
     $content = json_str_iconv($_POST["content"]);
     $sql = "UPDATE" . $GLOBALS['ecs']->table('admin_user') . " SET todolist='" . $content . "' WHERE user_id = " . $_SESSION['admin_id'];
     $GLOBALS['db']->query($sql);
 }
-if ($_REQUEST['act'] == 'get_todolist') {
+function get_todolistAction() {
     $sql = "SELECT todolist FROM " . $GLOBALS['ecs']->table('admin_user') . " WHERE user_id = " . $_SESSION['admin_id'];
     $content = $GLOBALS['db']->getOne($sql);
     echo $content;
 } // 邮件群发处理
-if ($_REQUEST['act'] == 'send_mail') {
+function send_mailAction() {
     if ($_CFG['send_mail_on'] == 'off') {
         make_json_result('', $_LANG['send_mail_off'], 0);
         exit();
@@ -987,7 +994,7 @@ if ($_REQUEST['act'] == 'send_mail') {
 /*------------------------------------------------------ */
 //-- license操作
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'license') {
+function licenseAction() {
     $is_ajax = $_GET['is_ajax'];
 
     if (isset($is_ajax) && $is_ajax) {
@@ -1062,4 +1069,5 @@ function license_check()
     }
 
     return $return_array;
+}
 }

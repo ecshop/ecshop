@@ -1,17 +1,23 @@
 <?php
+
+namespace app\controller\admin;
+
 /**
  * 生成显示商品的js代码
  */
+class GenGoodsScriptController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
+    }
 
 /*------------------------------------------------------ */
 //-- 生成代码
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'setup') {
+function setupAction() {
     /* 检查权限 */
     admin_priv('gen_goods_script');
 
@@ -34,4 +40,5 @@ if ($_REQUEST['act'] == 'setup') {
     /* 显示模板 */
     assign_query_info();
     $smarty->display('gen_goods_script.htm');
+}
 }

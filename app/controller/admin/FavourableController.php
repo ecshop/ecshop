@@ -1,20 +1,28 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理中心优惠活动管理
  */
+class FavourableController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
-require(ROOT_PATH . 'includes/lib_goods.php');
 
-$exc = new exchange($ecs->table('favourable_activity'), $db, 'act_id', 'act_name');
+        require(ROOT_PATH . 'includes/lib_goods.php');
+
+        $exc = new exchange($ecs->table('favourable_activity'), $db, 'act_id', 'act_name');
+
+    }
 
 /*------------------------------------------------------ */
 //-- 活动列表页
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     admin_priv('favourable');
 
     /* 模板赋值 */
@@ -41,7 +49,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 分页、排序、查询
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $list = favourable_list();
 
     $smarty->assign('favourable_list', $list['item']);
@@ -62,7 +70,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 删除
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('favourable');
 
     $id = intval($_GET['id']);
@@ -88,7 +96,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 批量操作
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch') {
+function batchAction() {
     /* 取得要操作的记录编号 */
     if (empty($_POST['checkboxes'])) {
         sys_msg($_LANG['no_record_selected']);
@@ -119,7 +127,7 @@ if ($_REQUEST['act'] == 'batch') {
 /*------------------------------------------------------ */
 //-- 修改排序
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_sort_order') {
+function edit_sort_orderAction() {
     check_authz_json('favourable');
 
     $id = intval($_POST['id']);
@@ -136,8 +144,10 @@ if ($_REQUEST['act'] == 'edit_sort_order') {
 /*------------------------------------------------------ */
 //-- 添加、编辑
 /*------------------------------------------------------ */
-
-if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+    function addAction() {
+        editAction();
+    }
+function editAction() {
     /* 检查权限 */
     admin_priv('favourable');
 
@@ -226,8 +236,10 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 添加、编辑后提交
 /*------------------------------------------------------ */
-
-if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+    function insertAction() {
+        updateAction();
+    }
+function updateAction() {
     /* 检查权限 */
     admin_priv('favourable');
 
@@ -321,7 +333,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 //-- 搜索商品
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'search') {
+function searchAction() {
     /* 检查权限 */
     check_authz_json('favourable');
 
@@ -416,4 +428,5 @@ function favourable_list()
     }
 
     return array('item' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+}
 }

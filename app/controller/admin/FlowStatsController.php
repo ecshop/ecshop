@@ -1,23 +1,22 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 综合流量统计
  */
+class FlowStatsController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
-$smarty->assign('lang', $_LANG);
+        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
+        $smarty->assign('lang', $_LANG);
+    }
 
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'view';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
-
-if ($_REQUEST['act'] == 'view') {
+function viewAction() {
     if ($_CFG['visit_stats'] == 'off') {
         sys_msg($_LANG['stats_off']);
         exit();
@@ -286,8 +285,10 @@ if ($_REQUEST['act'] == 'view') {
     /* 显示页面 */
     assign_query_info();
     $smarty->display('flow_stats.htm');
-} /* 报表下载 */
-if ($_REQUEST['act'] = 'download') {
+}
+
+/* 报表下载 */
+function downloadAction() {
     $filename = !empty($_REQUEST['filename']) ? trim($_REQUEST['filename']) : '';
 
     header("Content-type: application/vnd.ms-excel; charset=utf-8");
@@ -345,4 +346,5 @@ if ($_REQUEST['act'] = 'download') {
     } else {
         echo $data . "\t";
     }
+}
 }

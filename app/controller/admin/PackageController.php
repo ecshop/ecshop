@@ -1,18 +1,24 @@
 <?php
 
+namespace app\controller\admin;
+
+
 /**
  * 超值礼包管理程序
  */
+class PackageController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        $exc = new exchange($ecs->table("goods_activity"), $db, 'act_id', 'act_name');
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-$exc = new exchange($ecs->table("goods_activity"), $db, 'act_id', 'act_name');
+    }
 
 /*------------------------------------------------------ */
 //-- 添加活动
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 权限判断 */
     admin_priv('package_manage');
 
@@ -38,7 +44,7 @@ if ($_REQUEST['act'] == 'add') {
     assign_query_info();
     $smarty->display('package_info.htm');
 }
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /* 权限判断 */
     admin_priv('package_manage');
 
@@ -82,7 +88,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 编辑活动
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 权限判断 */
     admin_priv('package_manage');
 
@@ -100,7 +106,7 @@ if ($_REQUEST['act'] == 'edit') {
     assign_query_info();
     $smarty->display('package_info.htm');
 }
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 权限判断 */
     admin_priv('package_manage');
 
@@ -138,7 +144,7 @@ if ($_REQUEST['act'] == 'update') {
 //-- 删除指定的活动
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('package_manage');
 
     $id = intval($_GET['id']);
@@ -158,7 +164,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 活动列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $smarty->assign('ur_here', $_LANG['14_package_list']);
     $smarty->assign('action_link', array('text' => $_LANG['package_add'], 'href' => 'package.php?act=add'));
 
@@ -181,7 +187,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 查询、翻页、排序
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $packages = get_packagelist();
 
     $smarty->assign('package_list', $packages['packages']);
@@ -203,7 +209,7 @@ if ($_REQUEST['act'] == 'query') {
 //-- 编辑活动名称
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_package_name') {
+function edit_package_nameAction() {
     check_authz_json('package_manage');
 
     $id = intval($_POST['id']);
@@ -225,7 +231,7 @@ if ($_REQUEST['act'] == 'edit_package_name') {
 //-- 搜索商品
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'search_goods') {
+function search_goodsAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -249,7 +255,7 @@ if ($_REQUEST['act'] == 'search_goods') {
 //-- 增加一个商品
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'add_package_goods') {
+function add_package_goodsAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -288,7 +294,7 @@ if ($_REQUEST['act'] == 'add_package_goods') {
 //-- 删除一个商品
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'drop_package_goods') {
+function drop_package_goodsAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -413,4 +419,5 @@ function handle_packagep_goods($package_id)
         " WHERE package_id = '0'" .
         " AND admin_id = '$_SESSION[admin_id]'";
     $GLOBALS['db']->query($sql);
+}
 }

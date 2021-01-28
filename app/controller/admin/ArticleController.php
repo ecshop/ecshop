@@ -1,26 +1,32 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理中心文章处理程序文件
  */
+class ArticleController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+        require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
+        require_once(ROOT_PATH . 'includes/cls_image.php');
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
-require_once(ROOT_PATH . 'includes/cls_image.php');
-
-/*初始化数据交换对象 */
-$exc = new exchange($ecs->table("article"), $db, 'article_id', 'title');
+        /*初始化数据交换对象 */
+        $exc = new exchange($ecs->table("article"), $db, 'article_id', 'title');
 //$image = new cls_image();
 
-/* 允许上传的文件类型 */
-$allow_file_types = '|GIF|JPG|PNG|BMP|SWF|DOC|XLS|PPT|MID|WAV|ZIP|RAR|PDF|CHM|RM|TXT|';
+        /* 允许上传的文件类型 */
+        $allow_file_types = '|GIF|JPG|PNG|BMP|SWF|DOC|XLS|PPT|MID|WAV|ZIP|RAR|PDF|CHM|RM|TXT|';
+
+    }
 
 /*------------------------------------------------------ */
 //-- 文章列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 取得过滤条件 */
     $filter = array();
     $smarty->assign('cat_select', article_cat_list(0));
@@ -46,7 +52,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 翻页，排序
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     check_authz_json('article_manage');
 
     $article_list = get_articleslist();
@@ -69,7 +75,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加文章
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 权限判断 */
     admin_priv('article_manage');
 
@@ -104,7 +110,7 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 添加文章
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /* 权限判断 */
     admin_priv('article_manage');
 
@@ -174,7 +180,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 编辑
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 权限判断 */
     admin_priv('article_manage');
 
@@ -203,7 +209,7 @@ if ($_REQUEST['act'] == 'edit') {
     $smarty->display('article_info.htm');
 }
 
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 权限判断 */
     admin_priv('article_manage');
 
@@ -270,7 +276,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 编辑文章主题
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_title') {
+function edit_titleAction() {
     check_authz_json('article_manage');
 
     $id = intval($_POST['id']);
@@ -293,7 +299,7 @@ if ($_REQUEST['act'] == 'edit_title') {
 /*------------------------------------------------------ */
 //-- 切换是否显示
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'toggle_show') {
+function toggle_showAction() {
     check_authz_json('article_manage');
 
     $id = intval($_POST['id']);
@@ -308,7 +314,7 @@ if ($_REQUEST['act'] == 'toggle_show') {
 /*------------------------------------------------------ */
 //-- 切换文章重要性
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'toggle_type') {
+function toggle_typeAction() {
     check_authz_json('article_manage');
 
     $id = intval($_POST['id']);
@@ -324,7 +330,7 @@ if ($_REQUEST['act'] == 'toggle_type') {
 /*------------------------------------------------------ */
 //-- 删除文章主题
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('article_manage');
 
     $id = intval($_GET['id']);
@@ -353,7 +359,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 将商品加入关联
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add_link_goods') {
+function add_link_goodsAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -389,7 +395,7 @@ if ($_REQUEST['act'] == 'add_link_goods') {
 /*------------------------------------------------------ */
 //-- 将商品删除关联
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'drop_link_goods') {
+function drop_link_goodsAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -423,7 +429,7 @@ if ($_REQUEST['act'] == 'drop_link_goods') {
 /*------------------------------------------------------ */
 //-- 搜索商品
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'get_goods_list') {
+function get_goods_listAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -444,7 +450,7 @@ if ($_REQUEST['act'] == 'get_goods_list') {
 //-- 批量操作
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'batch') {
+function batchAction() {
     /* 批量删除 */
     if (isset($_POST['type'])) {
         if ($_POST['type'] == 'button_remove') {
@@ -613,4 +619,5 @@ function upload_article_file($upload)
     } else {
         return false;
     }
+}
 }

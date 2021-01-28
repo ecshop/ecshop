@@ -1,16 +1,21 @@
 <?php
 
-define('IN_ECS', true);
+namespace app\controller\admin;
 
-require(dirname(__FILE__) . '/includes/init.php');
+class CaptchaManageController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-/* 检查权限 */
-admin_priv('shop_config');
+        /* 检查权限 */
+        admin_priv('shop_config');
+    }
 
 /*------------------------------------------------------ */
 //-- 验证码设置
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'main') {
+function mainAction() {
     if (gd_version() == 0) {
         sys_msg($_LANG['captcha_note'], 1);
     }
@@ -50,7 +55,7 @@ if ($_REQUEST['act'] == 'main') {
 /*------------------------------------------------------ */
 //-- 保存设置
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'save_config') {
+function save_configAction() {
     $captcha = 0;
     $captcha = empty($_POST['captcha_register']) ? $captcha : $captcha | CAPTCHA_REGISTER;
     $captcha = empty($_POST['captcha_login']) ? $captcha : $captcha | CAPTCHA_LOGIN;
@@ -73,4 +78,5 @@ if ($_REQUEST['act'] == 'save_config') {
     clear_cache_files();
 
     sys_msg($_LANG['save_ok'], 0, array(array('href' => 'captcha_manage.php?act=main', 'text' => $_LANG['captcha_manage'])));
+}
 }

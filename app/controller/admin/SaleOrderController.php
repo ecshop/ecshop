@@ -1,12 +1,21 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 商品销售排行
  */
+class SaleOrderController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+    }
+}
 
-require(dirname(__FILE__) . '/includes/init.php');
+
+
 require_once(ROOT_PATH . 'includes/lib_order.php');
 require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
 $smarty->assign('lang', $_LANG);
@@ -20,7 +29,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
     }
 
     /* 下载报表 */
-    if ($_REQUEST['act'] == 'download') {
+    function downloadAction() {
         $goods_order_data = get_sales_order(false);
         $goods_order_data = $goods_order_data['sales_order_data'];
 
@@ -55,7 +64,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
 
     make_json_result($smarty->fetch('sale_order.htm'), '', array('filter' => $goods_order_data['filter'], 'page_count' => $goods_order_data['page_count']));
 }
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 权限检查 */
     admin_priv('sale_order_stats');
 

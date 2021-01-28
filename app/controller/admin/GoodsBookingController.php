@@ -1,17 +1,22 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 缺货处理管理程序
  */
+class GoodsBookingController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        admin_priv('booking');
+    }
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-admin_priv('booking');
 /*------------------------------------------------------ */
 //-- 列出所有订购信息
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list_all') {
+function list_allAction() {
     $smarty->assign('ur_here', $_LANG['list_all']);
     $smarty->assign('full_page', 1);
 
@@ -32,7 +37,7 @@ if ($_REQUEST['act'] == 'list_all') {
 /*------------------------------------------------------ */
 //-- 翻页、排序
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $list = get_bookinglist();
 
     $smarty->assign('booking_list', $list['item']);
@@ -54,7 +59,7 @@ if ($_REQUEST['act'] == 'query') {
 //-- 删除缺货登记
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('booking');
 
     $id = intval($_GET['id']);
@@ -70,7 +75,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 显示详情
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'detail') {
+function detailAction() {
     $id = intval($_REQUEST['id']);
 
     $smarty->assign('send_fail', !empty($_REQUEST['send_ok']));
@@ -83,7 +88,7 @@ if ($_REQUEST['act'] == 'detail') {
 /*------------------------------------------------------ */
 //-- 处理提交数据
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 权限判断 */
     admin_priv('booking');
 
@@ -203,4 +208,5 @@ function get_booking_info($id)
     }
 
     return $res;
+}
 }

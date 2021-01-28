@@ -1,21 +1,25 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理中心积分兑换商品程序文件
  */
+class ExchangeGoodsController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-
-/*初始化数据交换对象 */
-$exc = new exchange($ecs->table("exchange_goods"), $db, 'goods_id', 'exchange_integral');
-//$image = new cls_image();
+        /*初始化数据交换对象 */
+        $exc = new exchange($ecs->table("exchange_goods"), $db, 'goods_id', 'exchange_integral');
+    }
 
 /*------------------------------------------------------ */
 //-- 商品列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 权限判断 */
     admin_priv('exchange_goods');
 
@@ -43,7 +47,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 翻页，排序
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     check_authz_json('exchange_goods');
 
     $goods_list = get_exchange_goodslist();
@@ -66,7 +70,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加商品
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 权限判断 */
     admin_priv('exchange_goods');
 
@@ -88,7 +92,7 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 添加商品
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /* 权限判断 */
     admin_priv('exchange_goods');
 
@@ -124,7 +128,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 编辑
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 权限判断 */
     admin_priv('exchange_goods');
 
@@ -148,7 +152,7 @@ if ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 编辑
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 权限判断 */
     admin_priv('exchange_goods');
 
@@ -172,7 +176,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 编辑使用积分值
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_exchange_integral') {
+function edit_exchange_integralAction() {
     check_authz_json('exchange_goods');
 
     $id = intval($_POST['id']);
@@ -195,7 +199,7 @@ if ($_REQUEST['act'] == 'edit_exchange_integral') {
 /*------------------------------------------------------ */
 //-- 切换是否兑换
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'toggle_exchange') {
+function toggle_exchangeAction() {
     check_authz_json('exchange_goods');
 
     $id = intval($_POST['id']);
@@ -210,7 +214,7 @@ if ($_REQUEST['act'] == 'toggle_exchange') {
 /*------------------------------------------------------ */
 //-- 切换是否兑换
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'toggle_hot') {
+function toggle_hotAction() {
     check_authz_json('exchange_goods');
 
     $id = intval($_POST['id']);
@@ -225,7 +229,7 @@ if ($_REQUEST['act'] == 'toggle_hot') {
 /*------------------------------------------------------ */
 //-- 批量删除商品
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch_remove') {
+function batch_removeAction() {
     admin_priv('exchange_goods');
 
     if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
@@ -247,7 +251,7 @@ if ($_REQUEST['act'] == 'batch_remove') {
 /*------------------------------------------------------ */
 //-- 删除商品
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('exchange_goods');
 
     $id = intval($_GET['id']);
@@ -266,7 +270,7 @@ if ($_REQUEST['act'] == 'remove') {
 //-- 搜索商品
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'search_goods') {
+function search_goodsAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -322,4 +326,5 @@ function get_exchange_goodslist()
         $arr[] = $rows;
     }
     return array('arr' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+}
 }

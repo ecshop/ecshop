@@ -1,17 +1,16 @@
 <?php
 
+namespace app\controller;
+
+use app\support\Controller;
+
 /**
  * 前台公用文件
  */
-
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
-error_reporting(E_ALL);
-
-/* 取得当前ecshop所在的根目录 */
-define('ROOT_PATH', str_replace('\\', '/', dirname(__DIR__) . '/'));
+class InitController extends Controller
+{
+    protected function initialize()
+    {
 
 if (!file_exists(ROOT_PATH . 'data/install.lock') && !file_exists(ROOT_PATH . 'includes/install.lock')
     && !defined('NO_CHECK_INSTALL')) {
@@ -20,27 +19,10 @@ if (!file_exists(ROOT_PATH . 'data/install.lock') && !file_exists(ROOT_PATH . 'i
     exit;
 }
 
-/* 初始化设置 */
-@ini_set('memory_limit', '1G');
-@ini_set('session.cache_expire', 180);
-@ini_set('session.use_trans_sid', 0);
-@ini_set('session.use_cookies', 1);
-@ini_set('session.auto_start', 0);
-@ini_set('display_errors', 1);
-
-if (DIRECTORY_SEPARATOR == '\\') {
-    @ini_set('include_path', '.;' . ROOT_PATH);
-} else {
-    @ini_set('include_path', '.:' . ROOT_PATH);
-}
-
-require(ROOT_PATH . 'data/config.php');
 
 if (defined('DEBUG_MODE') == false) {
     define('DEBUG_MODE', 0);
 }
-
-date_default_timezone_set($timezone);
 
 $php_self = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
 if ('/' == substr($php_self, -1)) {
@@ -234,4 +216,7 @@ if (!defined('INIT_NO_SMARTY') && gzip_enabled()) {
     ob_start('ob_gzhandler');
 } else {
     ob_start();
+}
+
+    }
 }

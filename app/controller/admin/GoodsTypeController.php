@@ -1,19 +1,22 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 商品类型管理程序
  */
+class GoodsTypeController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        $exc = new exchange($ecs->table("goods_type"), $db, 'cat_id', 'cat_name');
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-$exc = new exchange($ecs->table("goods_type"), $db, 'cat_id', 'cat_name');
-
+    }
 /*------------------------------------------------------ */
 //-- 管理界面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'manage') {
+function manageAction() {
     assign_query_info();
 
     $smarty->assign('ur_here', $_LANG['08_goods_type']);
@@ -42,7 +45,7 @@ if ($_REQUEST['act'] == 'manage') {
 //-- 获得列表
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $good_type_list = get_goodstype();
 
     $smarty->assign('goods_type_arr', $good_type_list['type']);
@@ -60,7 +63,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 修改商品类型名称
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_type_name') {
+function edit_type_nameAction() {
     check_authz_json('goods_type');
 
     $type_id = !empty($_POST['id']) ? intval($_POST['id']) : 0;
@@ -84,7 +87,7 @@ if ($_REQUEST['act'] == 'edit_type_name') {
 //-- 切换启用状态
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'toggle_enabled') {
+function toggle_enabledAction() {
     check_authz_json('goods_type');
 
     $id = intval($_POST['id']);
@@ -99,7 +102,7 @@ if ($_REQUEST['act'] == 'toggle_enabled') {
 //-- 添加商品类型
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     admin_priv('goods_type');
 
     $smarty->assign('ur_here', $_LANG['new_goods_type']);
@@ -111,7 +114,7 @@ if ($_REQUEST['act'] == 'add') {
     assign_query_info();
     $smarty->display('goods_type_info.htm');
 }
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     $goods_type['cat_name'] = sub_str($_POST['cat_name'], 60);
     $goods_type['attr_group'] = sub_str($_POST['attr_group'], 255);
     $goods_type['enabled'] = intval($_POST['enabled']);
@@ -128,7 +131,7 @@ if ($_REQUEST['act'] == 'insert') {
 //-- 编辑商品类型
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     $goods_type = get_goodstype_info(intval($_GET['cat_id']));
 
     if (empty($goods_type)) {
@@ -146,7 +149,7 @@ if ($_REQUEST['act'] == 'edit') {
     assign_query_info();
     $smarty->display('goods_type_info.htm');
 }
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     $goods_type['cat_name'] = sub_str($_POST['cat_name'], 60);
     $goods_type['attr_group'] = sub_str($_POST['attr_group'], 255);
     $goods_type['enabled'] = intval($_POST['enabled']);
@@ -182,7 +185,7 @@ if ($_REQUEST['act'] == 'update') {
 //-- 删除商品类型
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('goods_type');
 
     $id = intval($_GET['id']);
@@ -276,4 +279,5 @@ function update_attribute_group($cat_id, $old_group, $new_group)
     $sql = "UPDATE " . $GLOBALS['ecs']->table('attribute') .
         " SET attr_group='$new_group' WHERE cat_id='$cat_id' AND attr_group='$old_group'";
     $GLOBALS['db']->query($sql);
+}
 }

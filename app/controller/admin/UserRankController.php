@@ -1,21 +1,26 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 会员等级管理程序
  */
+class UserRankController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+        $exc = new exchange($ecs->table("user_rank"), $db, 'rank_id', 'rank_name');
+        $exc_user = new exchange($ecs->table("users"), $db, 'user_rank', 'user_rank');
 
-require(dirname(__FILE__) . '/includes/init.php');
-
-$exc = new exchange($ecs->table("user_rank"), $db, 'rank_id', 'rank_name');
-$exc_user = new exchange($ecs->table("users"), $db, 'user_rank', 'user_rank');
+    }
 
 /*------------------------------------------------------ */
 //-- 会员等级列表
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $ranks = array();
     $ranks = $db->getAll("SELECT * FROM " . $ecs->table('user_rank'));
 
@@ -32,7 +37,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 翻页，排序
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $ranks = array();
     $ranks = $db->getAll("SELECT * FROM " . $ecs->table('user_rank'));
 
@@ -44,7 +49,7 @@ if ($_REQUEST['act'] == 'query') {
 //-- 添加会员等级
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     admin_priv('user_rank');
 
     $rank['rank_id'] = 0;
@@ -70,7 +75,7 @@ if ($_REQUEST['act'] == 'add') {
 //-- 增加会员等级到数据库
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     admin_priv('user_rank');
 
     $special_rank = isset($_POST['special_rank']) ? intval($_POST['special_rank']) : 0;
@@ -122,7 +127,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 删除会员等级
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('user_rank');
 
     $rank_id = intval($_GET['id']);
@@ -143,7 +148,7 @@ if ($_REQUEST['act'] == 'remove') {
 } /*
  *  编辑会员等级名称
  */
-if ($_REQUEST['act'] == 'edit_name') {
+function edit_nameAction() {
     $id = intval($_REQUEST['id']);
     $val = empty($_REQUEST['val']) ? '' : json_str_iconv(trim($_REQUEST['val']));
     check_authz_json('user_rank');
@@ -162,7 +167,7 @@ if ($_REQUEST['act'] == 'edit_name') {
 } /*
  *  ajax编辑积分下限
  */
-if ($_REQUEST['act'] == 'edit_min_points') {
+function edit_min_pointsAction() {
     check_authz_json('user_rank');
 
     $rank_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
@@ -187,7 +192,7 @@ if ($_REQUEST['act'] == 'edit_min_points') {
 } /*
  *  ajax修改积分上限
  */
-if ($_REQUEST['act'] == 'edit_max_points') {
+function edit_max_pointsAction() {
     check_authz_json('user_rank');
 
     $rank_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
@@ -212,7 +217,7 @@ if ($_REQUEST['act'] == 'edit_max_points') {
 } /*
  *  修改折扣率
  */
-if ($_REQUEST['act'] == 'edit_discount') {
+function edit_discountAction() {
     check_authz_json('user_rank');
 
     $rank_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
@@ -235,7 +240,7 @@ if ($_REQUEST['act'] == 'edit_discount') {
 /*------------------------------------------------------ */
 //-- 切换是否是特殊会员组
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'toggle_special') {
+function toggle_specialAction() {
     check_authz_json('user_rank');
 
     $rank_id = intval($_POST['id']);
@@ -252,7 +257,7 @@ if ($_REQUEST['act'] == 'toggle_special') {
 /*------------------------------------------------------ */
 //-- 切换是否显示价格
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'toggle_showprice') {
+function toggle_showpriceAction() {
     check_authz_json('user_rank');
 
     $rank_id = intval($_POST['id']);
@@ -266,4 +271,5 @@ if ($_REQUEST['act'] == 'toggle_showprice') {
     } else {
         make_json_error($db->error());
     }
+}
 }

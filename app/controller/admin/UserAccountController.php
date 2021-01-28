@@ -1,24 +1,22 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 会员帐目管理(包括预付款，余额)
  */
+class UserAccountController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
+    }
 
 /*------------------------------------------------------ */
 //-- 会员余额记录列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 权限判断 */
     admin_priv('surplus_manage');
 
@@ -61,7 +59,10 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 添加/编辑会员余额页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+    function addAction() {
+        editAction();
+    }
+function editAction() {
     admin_priv('surplus_manage'); //权限判断
 
     $ur_here = ($_REQUEST['act'] == 'add') ? $_LANG['surplus_add'] : $_LANG['surplus_edit'];
@@ -79,7 +80,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
         $payment[$row['pay_name']] = $row['pay_name'];
     }
 
-    if ($_REQUEST['act'] == 'edit') {
+    if($act == 'edit') { // todo
         /* 取得余额信息 */
         $user_account = $db->getRow("SELECT * FROM " . $ecs->table('user_account') . " WHERE id = '$id'");
 
@@ -101,7 +102,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     $smarty->assign('action', $_REQUEST['act']);
     $smarty->assign('user_surplus', $user_account);
     $smarty->assign('user_name', $user_name);
-    if ($_REQUEST['act'] == 'add') {
+    if($act == 'add') {
         $href = 'user_account.php?act=list';
     } else {
         $href = 'user_account.php?act=list&' . list_link_postfix();
@@ -115,7 +116,11 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 添加/编辑会员余额的处理部分
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+
+function insertAction() {
+    updateAction();
+}
+function updateAction() {
     /* 权限判断 */
     admin_priv('surplus_manage');
 
@@ -148,7 +153,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         }
     }
 
-    if ($_REQUEST['act'] == 'insert') {
+    if( $act == 'insert') { // TODO
         /* 入库的操作 */
         if ($process_type == 1) {
             $amount = (-1) * $amount;
@@ -193,14 +198,14 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     }
 
     /* 记录管理员操作 */
-    if ($_REQUEST['act'] == 'update') {
+    if($act == 'update') { // TODO
         admin_log($user_name, 'edit', 'user_surplus');
     } else {
         admin_log($user_name, 'add', 'user_surplus');
     }
 
     /* 提示信息 */
-    if ($_REQUEST['act'] == 'insert') {
+    if($act == 'insert') { // TODO
         $href = 'user_account.php?act=list';
     } else {
         $href = 'user_account.php?act=list&' . list_link_postfix();
@@ -217,7 +222,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 审核会员余额页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'check') {
+function checkAction() {
     /* 检查权限 */
     admin_priv('surplus_manage');
 
@@ -267,7 +272,7 @@ if ($_REQUEST['act'] == 'check') {
 /*------------------------------------------------------ */
 //-- 更新会员余额的状态
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'action') {
+function actionAction() {
     /* 检查权限 */
     admin_priv('surplus_manage');
 
@@ -333,7 +338,7 @@ if ($_REQUEST['act'] == 'action') {
 /*------------------------------------------------------ */
 //-- ajax帐户信息列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $list = account_list();
     $smarty->assign('list', $list['list']);
     $smarty->assign('filter', $list['filter']);
@@ -348,7 +353,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- ajax删除一条信息
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     /* 检查权限 */
     check_authz_json('surplus_manage');
     $id = @intval($_REQUEST['id']);
@@ -488,4 +493,5 @@ function account_list()
     $arr = array('list' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
 
     return $arr;
+}
 }

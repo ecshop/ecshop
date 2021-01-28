@@ -1,12 +1,20 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 选购中心
  */
+class PickOutController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
+    }
+}
 
-require(dirname(__FILE__) . '/includes/init.php');
+
+
 
 $condition = array();
 $picks = array();

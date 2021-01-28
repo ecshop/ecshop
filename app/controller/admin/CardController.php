@@ -1,21 +1,28 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 贺卡管理程序
  */
+class CardController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+        include_once(ROOT_PATH . 'includes/cls_image.php');
+        $image = new cls_image($_CFG['bgcolor']);
 
-require(dirname(__FILE__) . '/includes/init.php');
-include_once(ROOT_PATH . 'includes/cls_image.php');
-$image = new cls_image($_CFG['bgcolor']);
+        $exc = new exchange($ecs->table("card"), $db, 'card_id', 'card_name');
 
-$exc = new exchange($ecs->table("card"), $db, 'card_id', 'card_name');
+    }
+
 
 /*------------------------------------------------------ */
 //-- 包装列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     assign_query_info();
     $smarty->assign('ur_here', $_LANG['07_card_list']);
     $smarty->assign('action_link', array('text' => $_LANG['card_add'], 'href' => 'card.php?act=add'));
@@ -34,7 +41,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- ajax列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $cards_list = cards_list();
     $smarty->assign('card_list', $cards_list['card_list']);
     $smarty->assign('filter', $cards_list['filter']);
@@ -49,7 +56,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 删除贺卡
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     /* 检查权限 */
     check_authz_json('card_manage');
 
@@ -76,7 +83,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 添加新包装
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 权限判断 */
     admin_priv('card_manage');
 
@@ -92,7 +99,7 @@ if ($_REQUEST['act'] == 'add') {
     assign_query_info();
     $smarty->display('card_info.htm');
 }
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /* 权限判断 */
     admin_priv('card_manage');
 
@@ -126,7 +133,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 编辑包装
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 权限判断 */
     admin_priv('card_manage');
 
@@ -141,7 +148,7 @@ if ($_REQUEST['act'] == 'edit') {
     assign_query_info();
     $smarty->display('card_info.htm');
 }
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 权限判断 */
     admin_priv('card_manage');
 
@@ -172,7 +179,7 @@ if ($_REQUEST['act'] == 'update') {
         die($db->error());
     }
 } /* 删除卡片图片 */
-if ($_REQUEST['act'] == 'drop_card_img') {
+function drop_card_imgAction() {
     /* 权限判断 */
     admin_priv('card_manage');
     $card_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -192,7 +199,7 @@ if ($_REQUEST['act'] == 'drop_card_img') {
 /*------------------------------------------------------ */
 //-- ajax编辑卡片名字
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_card_name') {
+function edit_card_nameAction() {
     check_authz_json('card_manage');
     $card_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
     $card_name = empty($_REQUEST['val']) ? '' : json_str_iconv(trim($_REQUEST['val']));
@@ -211,7 +218,7 @@ if ($_REQUEST['act'] == 'edit_card_name') {
 /*------------------------------------------------------ */
 //-- ajax编辑卡片费用
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_card_fee') {
+function edit_card_feeAction() {
     check_authz_json('card_manage');
     $card_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
     $card_fee = empty($_REQUEST['val']) ? 0.00 : floatval($_REQUEST['val']);
@@ -227,7 +234,7 @@ if ($_REQUEST['act'] == 'edit_card_fee') {
 /*------------------------------------------------------ */
 //-- ajax编辑免费额度
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_free_money') {
+function edit_free_moneyAction() {
     check_authz_json('card_manage');
     $card_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
     $free_money = empty($_REQUEST['val']) ? 0.00 : floatval($_REQUEST['val']);
@@ -271,4 +278,5 @@ function cards_list()
     $arr = array('card_list' => $card_list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
 
     return $arr;
+}
 }

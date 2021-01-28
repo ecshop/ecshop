@@ -1,28 +1,26 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 订单统计
  */
+class OrderStatsController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+        require_once(ROOT_PATH . 'includes/lib_order.php');
+        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'includes/lib_order.php');
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
-
-$smarty->assign('lang', $_LANG);
-
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
+        $smarty->assign('lang', $_LANG);
+    }
 
 /*------------------------------------------------------ */
 //--订单统计
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     admin_priv('sale_order_stats');
 
     /* 随机的颜色数组 */
@@ -273,7 +271,7 @@ if ($_REQUEST['act'] == 'list') {
     assign_query_info();
     $smarty->display('order_stats.htm');
 }
-if ($_REQUEST['act'] = 'download') {
+function download() {
     $filename = !empty($_REQUEST['filename']) ? trim($_REQUEST['filename']) : '';
 
     header("Content-type: application/vnd.ms-excel; charset=utf-8");
@@ -361,4 +359,5 @@ function get_orderinfo($start_date, $end_date)
         " AND add_time >= '$start_date' AND add_time < '" . ($end_date + 86400) . "'";
     $order_info['invalid_num'] = $GLOBALS['db']->getOne($sql);
     return $order_info;
+}
 }

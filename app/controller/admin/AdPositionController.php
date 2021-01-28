@@ -1,28 +1,26 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 广告位置管理程序
  */
+class AdPositionController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/ads.php');
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/ads.php');
-
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
-
-$smarty->assign('lang', $_LANG);
-$exc = new exchange($ecs->table("ad_position"), $db, 'position_id', 'position_name');
+        $smarty->assign('lang', $_LANG);
+        $exc = new exchange($ecs->table("ad_position"), $db, 'position_id', 'position_name');
+    }
 
 /*------------------------------------------------------ */
 //-- 广告位置列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $smarty->assign('ur_here', $_LANG['ad_position']);
     $smarty->assign('action_link', array('text' => $_LANG['position_add'], 'href' => 'ad_position.php?act=add'));
     $smarty->assign('full_page', 1);
@@ -41,7 +39,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 添加广告位页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     admin_priv('ad_manage');
 
     /* 模板赋值 */
@@ -54,7 +52,7 @@ if ($_REQUEST['act'] == 'add') {
     assign_query_info();
     $smarty->display('ad_position_info.htm');
 }
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     admin_priv('ad_manage');
 
     /* 对POST上来的值进行处理并去除空格 */
@@ -93,7 +91,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 广告位编辑页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     admin_priv('ad_manage');
 
     $id = !empty($_GET['id']) ? intval($_GET['id']) : 0;
@@ -110,7 +108,7 @@ if ($_REQUEST['act'] == 'edit') {
     assign_query_info();
     $smarty->display('ad_position_info.htm');
 }
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     admin_priv('ad_manage');
 
     /* 对POST上来的值进行处理并去除空格 */
@@ -150,7 +148,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $position_list = ad_position_list();
 
     $smarty->assign('position_list', $position_list['position']);
@@ -168,7 +166,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 编辑广告位置名称
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_position_name') {
+function edit_position_nameAction() {
     check_authz_json('ad_manage');
 
     $id = intval($_POST['id']);
@@ -190,7 +188,7 @@ if ($_REQUEST['act'] == 'edit_position_name') {
 /*------------------------------------------------------ */
 //-- 编辑广告位宽高
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_ad_width') {
+function edit_ad_widthAction() {
     check_authz_json('ad_manage');
 
     $id = intval($_POST['id']);
@@ -218,7 +216,7 @@ if ($_REQUEST['act'] == 'edit_ad_width') {
 /*------------------------------------------------------ */
 //-- 编辑广告位宽高
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_ad_height') {
+function edit_ad_heightAction() {
     check_authz_json('ad_manage');
 
     $id = intval($_POST['id']);
@@ -246,7 +244,7 @@ if ($_REQUEST['act'] == 'edit_ad_height') {
 /*------------------------------------------------------ */
 //-- 删除广告位置
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('ad_manage');
 
     $id = intval($_GET['id']);
@@ -290,4 +288,5 @@ function ad_position_list()
     }
 
     return array('position' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+}
 }

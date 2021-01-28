@@ -1,24 +1,22 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 找回管理员密码
  */
+class GetPasswordController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-/* 操作项的初始化 */
-if (empty($_SERVER['REQUEST_METHOD'])) {
-    $_SERVER['REQUEST_METHOD'] = 'GET';
-} else {
-    $_SERVER['REQUEST_METHOD'] = trim($_SERVER['REQUEST_METHOD']);
-}
+    }
 
 /*------------------------------------------------------ */
 //-- 填写管理员帐号和email页面
 /*------------------------------------------------------ */
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+function indexAction() {
     //验证从邮件地址过来的链接
     if (!empty($_GET['act']) && $_GET['act'] == 'reset_pwd') {
         $code = !empty($_GET['code']) ? trim($_GET['code']) : '';
@@ -57,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 /*------------------------------------------------------ */
 //-- 验证管理员帐号和email, 发送邮件
 /*------------------------------------------------------ */
-else {
+function doAction() {
     /* 发送找回密码确认邮件 */
     if (!empty($_POST['action']) && $_POST['action'] == 'get_pwd') {
         $admin_username = !empty($_POST['user_name']) ? trim($_POST['user_name']) : '';
@@ -147,4 +145,5 @@ else {
             sys_msg($_LANG['update_pwd_failed'], 1);
         }
     }
+}
 }

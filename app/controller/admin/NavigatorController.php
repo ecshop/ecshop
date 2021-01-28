@@ -1,20 +1,23 @@
 <?php
 
-/**
- * 程序说明
- */
+namespace app\controller\admin;
 
-define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
+class NavigatorController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-admin_priv('navigator');
+        admin_priv('navigator');
 
-$exc = new exchange($ecs->table("nav"), $db, 'id', 'name');
+        $exc = new exchange($ecs->table("nav"), $db, 'id', 'name');
+    }
+
 
 /*------------------------------------------------------ */
 //-- 自定义导航栏列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $smarty->assign('ur_here', $_LANG['navigator']);
     $smarty->assign('action_link', array('text' => $_LANG['add_new'], 'href' => 'navigator.php?act=add'));
     $smarty->assign('full_page', 1);
@@ -32,7 +35,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 自定义导航栏列表Ajax
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $navdb = get_nav();
     $smarty->assign('navdb', $navdb['navdb']);
     $smarty->assign('filter', $navdb['filter']);
@@ -47,7 +50,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 自定义导航栏增加
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     if (empty($_REQUEST['step'])) {
         $rt = array('act' => 'add');
 
@@ -94,7 +97,7 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 自定义导航栏编辑
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     $id = $_REQUEST['id'];
     if (empty($_REQUEST['step'])) {
         $rt = array('act' => 'edit', 'id' => $id);
@@ -170,7 +173,7 @@ if ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 自定义导航栏删除
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'del') {
+function delAction() {
     $id = (int)$_GET['id'];
     $row = $db->getRow("SELECT ctype,cid,type FROM " . $GLOBALS['ecs']->table('nav') . " WHERE id = '$id' LIMIT 1");
 
@@ -188,7 +191,7 @@ if ($_REQUEST['act'] == 'del') {
 /*------------------------------------------------------ */
 //-- 编辑排序
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_sort_order') {
+function edit_sort_orderAction() {
     check_authz_json('nav');
 
     $id = intval($_POST['id']);
@@ -211,7 +214,7 @@ if ($_REQUEST['act'] == 'edit_sort_order') {
 //-- 切换是否显示
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'toggle_ifshow') {
+function toggle_ifshowAction() {
     $id = intval($_POST['id']);
     $val = intval($_POST['val']);
 
@@ -233,7 +236,7 @@ if ($_REQUEST['act'] == 'toggle_ifshow') {
 //-- 切换是否新窗口
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'toggle_opennew') {
+function toggle_opennewAction() {
     $id = intval($_POST['id']);
     $val = intval($_POST['val']);
 
@@ -420,4 +423,5 @@ function set_show_in_nav($type, $id, $val)
     }
     $GLOBALS['db']->query("UPDATE $tablename SET show_in_nav = '$val' WHERE cat_id = '$id'");
     clear_cache_files();
+}
 }

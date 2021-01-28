@@ -1,18 +1,22 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 会员管理程序
  */
+class UsersController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
+    }
 /*------------------------------------------------------ */
 //-- 用户帐号列表
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 检查权限 */
     admin_priv('users_manage');
     $sql = "SELECT rank_id, rank_name, min_points FROM " . $ecs->table('user_rank') . " ORDER BY min_points ASC ";
@@ -43,7 +47,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- ajax返回用户列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $user_list = user_list();
 
     $smarty->assign('user_list', $user_list['user_list']);
@@ -60,7 +64,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加会员帐号
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 检查权限 */
     admin_priv('users_manage');
 
@@ -87,7 +91,7 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 添加会员帐号
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /* 检查权限 */
     admin_priv('users_manage');
     $username = empty($_POST['username']) ? '' : trim($_POST['username']);
@@ -174,7 +178,7 @@ if ($_REQUEST['act'] == 'insert') {
 //-- 编辑用户帐号
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 检查权限 */
     admin_priv('users_manage');
 
@@ -297,7 +301,7 @@ if ($_REQUEST['act'] == 'edit') {
 //-- 更新用户帐号
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 检查权限 */
     admin_priv('users_manage');
     $username = empty($_POST['username']) ? '' : trim($_POST['username']);
@@ -374,7 +378,7 @@ if ($_REQUEST['act'] == 'update') {
 //-- 批量删除会员帐号
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'batch_remove') {
+function batch_removeAction() {
     /* 检查权限 */
     admin_priv('users_drop');
 
@@ -396,7 +400,7 @@ if ($_REQUEST['act'] == 'batch_remove') {
         sys_msg($_LANG['no_select_user'], 0, $lnk);
     }
 } /* 编辑用户名 */
-if ($_REQUEST['act'] == 'edit_username') {
+function edit_usernameAction() {
     /* 检查权限 */
     check_authz_json('users_manage');
 
@@ -432,7 +436,7 @@ if ($_REQUEST['act'] == 'edit_username') {
 /*------------------------------------------------------ */
 //-- 编辑email
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_email') {
+function edit_emailAction() {
     /* 检查权限 */
     check_authz_json('users_manage');
 
@@ -463,7 +467,7 @@ if ($_REQUEST['act'] == 'edit_email') {
 //-- 删除会员帐号
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     /* 检查权限 */
     admin_priv('users_drop');
 
@@ -484,7 +488,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //--  收货地址查看
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'address_list') {
+function address_listAction() {
     $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $sql = "SELECT a.*, c.region_name AS country_name, p.region_name AS province, ct.region_name AS city_name, d.region_name AS district_name " .
         " FROM " . $ecs->table('user_address') . " as a " .
@@ -505,7 +509,7 @@ if ($_REQUEST['act'] == 'address_list') {
 //-- 脱离推荐关系
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'remove_parent') {
+function remove_parentAction() {
     /* 检查权限 */
     admin_priv('users_manage');
 
@@ -526,7 +530,7 @@ if ($_REQUEST['act'] == 'remove_parent') {
 //-- 查看用户推荐会员列表
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'aff_list') {
+function aff_listAction() {
     /* 检查权限 */
     admin_priv('users_manage');
     $smarty->assign('ur_here', $_LANG['03_users_list']);
@@ -652,4 +656,5 @@ function user_list()
         'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
 
     return $arr;
+}
 }

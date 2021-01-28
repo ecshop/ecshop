@@ -1,22 +1,29 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 帮助信息管理程序
  */
+class ShophelpController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
+        require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
 
-/*初始化数据交换对象 */
-$exc_article = new exchange($ecs->table("article"), $db, 'article_id', 'title');
-$exc_cat = new exchange($ecs->table("article_cat"), $db, 'cat_id', 'cat_name');
+        /*初始化数据交换对象 */
+        $exc_article = new exchange($ecs->table("article"), $db, 'article_id', 'title');
+        $exc_cat = new exchange($ecs->table("article_cat"), $db, 'cat_id', 'cat_name');
+
+    }
 
 /*------------------------------------------------------ */
 //-- 列出所有文章分类
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list_cat') {
+function list_catAction() {
     $smarty->assign('action_link', array('text' => $_LANG['article_add'], 'href' => 'shophelp.php?act=add'));
     $smarty->assign('ur_here', $_LANG['cat_list']);
     $smarty->assign('full_page', 1);
@@ -29,7 +36,7 @@ if ($_REQUEST['act'] == 'list_cat') {
 /*------------------------------------------------------ */
 //-- 分类下的文章
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list_article') {
+function list_articleAction() {
     $smarty->assign('ur_here', $_LANG['article_list']);
     $smarty->assign('action_link', array('text' => $_LANG['article_add'], 'href' => 'shophelp.php?act=add&cat_id=' . $_REQUEST['cat_id']));
     $smarty->assign('full_page', 1);
@@ -43,7 +50,7 @@ if ($_REQUEST['act'] == 'list_article') {
 /*------------------------------------------------------ */
 //-- 查询分类下的文章
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query_art') {
+function query_artAction() {
     $cat_id = intval($_GET['cat']);
 
     $smarty->assign('list', shophelp_article_list($cat_id));
@@ -53,7 +60,7 @@ if ($_REQUEST['act'] == 'query_art') {
 /*------------------------------------------------------ */
 //-- 查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $smarty->assign('list', get_shophelp_list());
 
     make_json_result($smarty->fetch('shophelp_cat_list.htm'));
@@ -62,7 +69,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加文章
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 权限判断 */
     admin_priv('shophelp_manage');
     $_POST['id'] = intval($_POST['id']);
@@ -83,7 +90,7 @@ if ($_REQUEST['act'] == 'add') {
     $smarty->assign('form_action', 'insert');
     $smarty->display('shophelp_info.htm');
 }
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /* 权限判断 */
     admin_priv('shophelp_manage');
     $_POST['id'] = intval($_POST['id']);
@@ -111,7 +118,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 编辑文章
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 权限判断 */
     admin_priv('shophelp_manage');
     $_POST['id'] = intval($_POST['id']);
@@ -132,7 +139,7 @@ if ($_REQUEST['act'] == 'edit') {
     assign_query_info();
     $smarty->display('shophelp_info.htm');
 }
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 权限判断 */
     admin_priv('shophelp_manage');
     $_POST['id'] = intval($_POST['id']);
@@ -157,7 +164,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 编辑分类的名称
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_catname') {
+function edit_catnameAction() {
     check_authz_json('shophelp_manage');
 
     $id = intval($_POST['id']);
@@ -180,7 +187,7 @@ if ($_REQUEST['act'] == 'edit_catname') {
 /*------------------------------------------------------ */
 //-- 编辑分类的排序
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_cat_order') {
+function edit_cat_orderAction() {
     check_authz_json('shophelp_manage');
 
     $id = intval($_POST['id']);
@@ -200,7 +207,7 @@ if ($_REQUEST['act'] == 'edit_cat_order') {
 /*------------------------------------------------------ */
 //-- 删除分类
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('shophelp_manage');
 
     $id = intval($_GET['id']);
@@ -223,7 +230,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 删除分类下的某文章
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove_art') {
+function remove_artAction() {
     check_authz_json('shophelp_manage');
 
     $id = intval($_GET['id']);
@@ -247,7 +254,7 @@ if ($_REQUEST['act'] == 'remove_art') {
 /*------------------------------------------------------ */
 //-- 添加一个新分类
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add_catname') {
+function add_catnameAction() {
     check_authz_json('shophelp_manage');
 
     $cat_name = trim($_POST['cat_name']);
@@ -275,7 +282,7 @@ if ($_REQUEST['act'] == 'add_catname') {
 /*------------------------------------------------------ */
 //-- 编辑文章标题
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_title') {
+function edit_titleAction() {
     check_authz_json('shophelp_manage');
 
     $id = intval($_POST['id']);
@@ -326,4 +333,5 @@ function shophelp_article_list($cat_id)
     }
 
     return $list;
+}
 }

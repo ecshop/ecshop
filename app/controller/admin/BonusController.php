@@ -1,27 +1,24 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 红包类型的处理
  */
+class BonusController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
-
-/* 初始化$exc对象 */
-$exc = new exchange($ecs->table('bonus_type'), $db, 'type_id', 'type_name');
+        /* 初始化$exc对象 */
+        $exc = new exchange($ecs->table('bonus_type'), $db, 'type_id', 'type_name');
+    }
 
 /*------------------------------------------------------ */
 //-- 红包类型列表页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $smarty->assign('ur_here', $_LANG['04_bonustype_list']);
     $smarty->assign('action_link', array('text' => $_LANG['bonustype_add'], 'href' => 'bonus.php?act=add'));
     $smarty->assign('full_page', 1);
@@ -44,7 +41,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 翻页、排序
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $list = get_type_list();
 
     $smarty->assign('type_list', $list['item']);
@@ -66,7 +63,7 @@ if ($_REQUEST['act'] == 'query') {
 //-- 编辑红包类型名称
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_type_name') {
+function edit_type_nameAction() {
     check_authz_json('bonus_manage');
 
     $id = intval($_POST['id']);
@@ -86,7 +83,7 @@ if ($_REQUEST['act'] == 'edit_type_name') {
 //-- 编辑红包金额
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_type_money') {
+function edit_type_moneyAction() {
     check_authz_json('bonus_manage');
 
     $id = intval($_POST['id']);
@@ -106,7 +103,7 @@ if ($_REQUEST['act'] == 'edit_type_money') {
 //-- 编辑订单下限
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_min_amount') {
+function edit_min_amountAction() {
     check_authz_json('bonus_manage');
 
     $id = intval($_POST['id']);
@@ -124,7 +121,7 @@ if ($_REQUEST['act'] == 'edit_min_amount') {
 /*------------------------------------------------------ */
 //-- 删除红包类型
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('bonus_manage');
 
     $id = intval($_GET['id']);
@@ -146,7 +143,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 红包类型添加页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     admin_priv('bonus_manage');
 
     $smarty->assign('lang', $_LANG);
@@ -172,7 +169,7 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 红包类型添加的处理
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /* 去掉红包类型名称前后的空格 */
     $type_name = !empty($_POST['type_name']) ? trim($_POST['type_name']) : '';
 
@@ -224,7 +221,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 红包类型编辑页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     admin_priv('bonus_manage');
 
     /* 获取红包类型数据 */
@@ -249,7 +246,7 @@ if ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 红包类型编辑的处理
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 获得日期信息 */
     $send_startdate = local_strtotime($_POST['send_start_date']);
     $send_enddate = local_strtotime($_POST['send_end_date']);
@@ -288,7 +285,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 红包发送页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'send') {
+function sendAction() {
     admin_priv('bonus_manage');
 
     /* 取得参数 */
@@ -336,7 +333,7 @@ if ($_REQUEST['act'] == 'send') {
 /*------------------------------------------------------ */
 //-- 处理红包的发送页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'send_by_user') {
+function send_by_userAction() {
     $user_list = array();
     $start = empty($_REQUEST['start']) ? 0 : intval($_REQUEST['start']);
     $limit = empty($_REQUEST['limit']) ? 10 : intval($_REQUEST['limit']);
@@ -463,7 +460,7 @@ if ($_REQUEST['act'] == 'send_by_user') {
 //-- 发送邮件
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'send_mail') {
+function send_mailAction() {
     /* 取得参数：红包id */
     $bonus_id = intval($_REQUEST['bonus_id']);
     if ($bonus_id <= 0) {
@@ -490,7 +487,7 @@ if ($_REQUEST['act'] == 'send_mail') {
 //-- 按印刷品发放红包
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'send_by_print') {
+function send_by_printAction() {
     @set_time_limit(0);
 
     /* 红下红包的类型ID和生成的数量的处理 */
@@ -524,7 +521,7 @@ if ($_REQUEST['act'] == 'send_by_print') {
 /*------------------------------------------------------ */
 //-- 导出线下发放的信息
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'gen_excel') {
+function gen_excelAction() {
     @set_time_limit(0);
 
     /* 获得此线下红包类型的ID */
@@ -583,7 +580,7 @@ if ($_REQUEST['act'] == 'gen_excel') {
 /*------------------------------------------------------ */
 //-- 搜索商品
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'get_goods_list') {
+function get_goods_listAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -604,7 +601,7 @@ if ($_REQUEST['act'] == 'get_goods_list') {
 /*------------------------------------------------------ */
 //-- 添加发放红包的商品
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add_bonus_goods') {
+function add_bonus_goodsAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -635,7 +632,7 @@ if ($_REQUEST['act'] == 'add_bonus_goods') {
 /*------------------------------------------------------ */
 //-- 删除发放红包的商品
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'drop_bonus_goods') {
+function drop_bonus_goodsAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -665,7 +662,7 @@ if ($_REQUEST['act'] == 'drop_bonus_goods') {
 /*------------------------------------------------------ */
 //-- 搜索用户
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'search_users') {
+function search_usersAction() {
     $keywords = json_str_iconv(trim($_GET['keywords']));
 
     $sql = "SELECT user_id, user_name FROM " . $ecs->table('users') .
@@ -679,7 +676,7 @@ if ($_REQUEST['act'] == 'search_users') {
 //-- 红包列表
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'bonus_list') {
+function bonus_listAction() {
     $smarty->assign('full_page', 1);
     $smarty->assign('ur_here', $_LANG['bonus_list']);
     $smarty->assign('action_link', array('href' => 'bonus.php?act=list', 'text' => $_LANG['04_bonustype_list']));
@@ -711,7 +708,7 @@ if ($_REQUEST['act'] == 'bonus_list') {
 //-- 红包列表翻页、排序
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'query_bonus') {
+function query_bonusAction() {
     $list = get_bonus_list();
 
     /* 赋值是否显示红包序列号 */
@@ -741,7 +738,7 @@ if ($_REQUEST['act'] == 'query_bonus') {
 /*------------------------------------------------------ */
 //-- 删除红包
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove_bonus') {
+function remove_bonusAction() {
     check_authz_json('bonus_manage');
 
     $id = intval($_GET['id']);
@@ -757,7 +754,7 @@ if ($_REQUEST['act'] == 'remove_bonus') {
 /*------------------------------------------------------ */
 //-- 批量操作
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch') {
+function batchAction() {
     /* 检查权限 */
     admin_priv('bonus_manage');
 
@@ -994,4 +991,5 @@ function add_to_maillist($username, $email, $subject, $content, $is_html)
     $sql = "INSERT INTO " . $GLOBALS['ecs']->table('email_sendlist') . " ( email, template_id, email_content, pri, last_send) VALUES ('$email', $template_id, '$content', 1, '$time')";
     $GLOBALS['db']->query($sql);
     return true;
+}
 }

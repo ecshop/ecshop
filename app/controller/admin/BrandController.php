@@ -1,21 +1,29 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理中心品牌管理
  */
 
-define('IN_ECS', true);
+class BrandController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-require(dirname(__FILE__) . '/includes/init.php');
-include_once(ROOT_PATH . 'includes/cls_image.php');
-$image = new cls_image($_CFG['bgcolor']);
+        include_once(ROOT_PATH . 'includes/cls_image.php');
+        $image = new cls_image($_CFG['bgcolor']);
 
-$exc = new exchange($ecs->table("brand"), $db, 'brand_id', 'brand_name');
+        $exc = new exchange($ecs->table("brand"), $db, 'brand_id', 'brand_name');
+
+    }
+
 
 /*------------------------------------------------------ */
 //-- 品牌列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $smarty->assign('ur_here', $_LANG['06_goods_brand_list']);
     $smarty->assign('action_link', array('text' => $_LANG['07_brand_add'], 'href' => 'brand.php?act=add'));
     $smarty->assign('full_page', 1);
@@ -34,7 +42,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 添加品牌
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 权限判断 */
     admin_priv('brand_manage');
 
@@ -46,7 +54,7 @@ if ($_REQUEST['act'] == 'add') {
     $smarty->assign('brand', array('sort_order' => 50, 'is_show' => 1));
     $smarty->display('brand_info.htm');
 }
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /*检查品牌名是否重复*/
     admin_priv('brand_manage');
 
@@ -92,7 +100,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 编辑品牌
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 权限判断 */
     admin_priv('brand_manage');
     $sql = "SELECT brand_id, brand_name, site_url, brand_logo, brand_desc, brand_logo, is_show, sort_order " .
@@ -107,7 +115,7 @@ if ($_REQUEST['act'] == 'edit') {
     assign_query_info();
     $smarty->display('brand_info.htm');
 }
-if ($_REQUEST['act'] == 'updata') {
+function updataAction() {
     admin_priv('brand_manage');
     if ($_POST['brand_name'] != $_POST['old_brandname']) {
         /*检查品牌名是否相同*/
@@ -153,7 +161,7 @@ if ($_REQUEST['act'] == 'updata') {
 /*------------------------------------------------------ */
 //-- 编辑品牌名称
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_brand_name') {
+function edit_brand_nameAction() {
     check_authz_json('brand_manage');
 
     $id = intval($_POST['id']);
@@ -171,7 +179,7 @@ if ($_REQUEST['act'] == 'edit_brand_name') {
         }
     }
 }
-if ($_REQUEST['act'] == 'add_brand') {
+function add_brandAction() {
     $brand = empty($_REQUEST['brand']) ? '' : json_str_iconv(trim($_REQUEST['brand']));
 
     if (brand_exists($brand)) {
@@ -191,7 +199,7 @@ if ($_REQUEST['act'] == 'add_brand') {
 /*------------------------------------------------------ */
 //-- 编辑排序序号
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_sort_order') {
+function edit_sort_orderAction() {
     check_authz_json('brand_manage');
 
     $id = intval($_POST['id']);
@@ -210,7 +218,7 @@ if ($_REQUEST['act'] == 'edit_sort_order') {
 /*------------------------------------------------------ */
 //-- 切换是否显示
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'toggle_show') {
+function toggle_showAction() {
     check_authz_json('brand_manage');
 
     $id = intval($_POST['id']);
@@ -224,7 +232,7 @@ if ($_REQUEST['act'] == 'toggle_show') {
 /*------------------------------------------------------ */
 //-- 删除品牌
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('brand_manage');
 
     $id = intval($_GET['id']);
@@ -251,7 +259,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 删除品牌图片
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'drop_logo') {
+function drop_logoAction() {
     /* 权限判断 */
     admin_priv('brand_manage');
     $brand_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -272,7 +280,7 @@ if ($_REQUEST['act'] == 'drop_logo') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $brand_list = get_brandlist();
     $smarty->assign('brand_list', $brand_list['brand']);
     $smarty->assign('filter', $brand_list['filter']);
@@ -342,4 +350,5 @@ function get_brandlist()
     }
 
     return array('brand' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+}
 }

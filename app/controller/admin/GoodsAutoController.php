@@ -1,14 +1,17 @@
 <?php
 
-/**
- * 程序说明
- */
+namespace app\controller\admin;
 
-define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
-admin_priv('goods_auto');
-$smarty->assign('thisfile', 'goods_auto.php');
-if ($_REQUEST['act'] == 'list') {
+class GoodsAutoController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        admin_priv('goods_auto');
+        $smarty->assign('thisfile', 'goods_auto.php');
+    }
+
+function listAction() {
     $goodsdb = get_auto_goods();
     $crons_enable = $db->getOne("SELECT enable FROM " . $GLOBALS['ecs']->table('crons') . " WHERE cron_code='auto_manage'");
     $smarty->assign('crons_enable', $crons_enable);
@@ -22,7 +25,7 @@ if ($_REQUEST['act'] == 'list') {
     assign_query_info();
     $smarty->display('goods_auto.htm');
 }
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $goodsdb = get_auto_goods();
     $smarty->assign('goodsdb', $goodsdb['goodsdb']);
     $smarty->assign('filter', $goodsdb['filter']);
@@ -35,14 +38,14 @@ if ($_REQUEST['act'] == 'query') {
 
     make_json_result($smarty->fetch('goods_auto.htm'), '', array('filter' => $goodsdb['filter'], 'page_count' => $goodsdb['page_count']));
 }
-if ($_REQUEST['act'] == 'del') {
+function delAction() {
     $goods_id = (int)$_REQUEST['goods_id'];
     $sql = "DELETE FROM " . $ecs->table('auto_manage') . " WHERE item_id = '$goods_id' AND type = 'goods'";
     $db->query($sql);
     $links[] = array('text' => $_LANG['goods_auto'], 'href' => 'goods_auto.php?act=list');
     sys_msg($_LANG['edit_ok'], 0, $links);
 }
-if ($_REQUEST['act'] == 'edit_starttime') {
+function edit_starttimeAction() {
     check_authz_json('goods_auto');
 
     if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
@@ -61,7 +64,7 @@ if ($_REQUEST['act'] == 'edit_starttime') {
     clear_cache_files();
     make_json_result(stripslashes($_POST['val']), '', array('act' => 'goods_auto', 'id' => $id));
 }
-if ($_REQUEST['act'] == 'edit_endtime') {
+function edit_endtimeAction() {
     check_authz_json('goods_auto');
 
     if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
@@ -80,7 +83,7 @@ if ($_REQUEST['act'] == 'edit_endtime') {
     clear_cache_files();
     make_json_result(stripslashes($_POST['val']), '', array('act' => 'goods_auto', 'id' => $id));
 } //批量上架
-if ($_REQUEST['act'] == 'batch_start') {
+function batch_startAction() {
     admin_priv('goods_auto');
 
     if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
@@ -101,7 +104,7 @@ if ($_REQUEST['act'] == 'batch_start') {
     $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'goods_auto.php?act=list');
     sys_msg($_LANG['batch_start_succeed'], 0, $lnk);
 } //批量下架
-if ($_REQUEST['act'] == 'batch_end') {
+function batch_endAction() {
     admin_priv('goods_auto');
 
     if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
@@ -172,4 +175,5 @@ function get_auto_goods()
     $arr = array('goodsdb' => $goodsdb, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
 
     return $arr;
+}
 }

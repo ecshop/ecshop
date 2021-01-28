@@ -1,17 +1,19 @@
 <?php
 
-/**
- * 程序说明
- */
+namespace app\controller\admin;
 
-define('IN_ECS', true);
+class LicenseController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-require(dirname(__FILE__) . '/includes/init.php');
+    }
 
 /*------------------------------------------------------ */
 //-- 证书编辑页
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list_edit') {
+function list_editAction() {
     /* 检查权限 */
     admin_priv('shop_authorized');
 
@@ -35,7 +37,7 @@ if ($_REQUEST['act'] == 'list_edit') {
 //-- 证书下载
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'download') {
+function downloadAction() {
     /* 检查权限 */
     admin_priv('shop_authorized');
 
@@ -59,7 +61,7 @@ if ($_REQUEST['act'] == 'download') {
 //-- 证书上传
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'upload') {
+function uploadAction() {
     /* 检查权限 */
     admin_priv('shop_authorized');
 
@@ -115,7 +117,7 @@ if ($_REQUEST['act'] == 'upload') {
 //-- 证书删除
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'del') {
+function delAction() {
     /* 检查权限 */
     admin_priv('shop_authorized');
 
@@ -126,4 +128,5 @@ if ($_REQUEST['act'] == 'del') {
 
     $links[] = array('text' => $_LANG['back'], 'href' => 'license.php?act=list_edit');
     sys_msg($_LANG['delete_license'], 0, $links);
+}
 }

@@ -1,12 +1,12 @@
 <?php
 
+namespace app\controller\api;
+
 /**
  * 程序说明
  */
 
-define('IN_ECS', true);
 
-require('./init.php');
 //require('../includes/lib_time.php');
 
 $timestamp = gmtime();

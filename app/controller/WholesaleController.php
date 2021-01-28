@@ -1,29 +1,29 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 批发前台文件
  */
+class WholesaleController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+        /* 如果没登录，提示登录 */
+        if ($_SESSION['user_rank'] <= 0) {
+            show_message($_LANG['ws_user_rank'], $_LANG['ws_return_home'], 'index.php');
+        }
+    }
 
-/* 如果没登录，提示登录 */
-if ($_SESSION['user_rank'] <= 0) {
-    show_message($_LANG['ws_user_rank'], $_LANG['ws_return_home'], 'index.php');
-}
 
-/*------------------------------------------------------ */
-//-- act 操作项的初始化
-/*------------------------------------------------------ */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-}
+
 
 /*------------------------------------------------------ */
 //-- 批发活动列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $search_category = empty($_REQUEST['search_category']) ? 0 : intval($_REQUEST['search_category']);
     $search_keywords = isset($_REQUEST['search_keywords']) ? trim($_REQUEST['search_keywords']) : '';
     $param = array(); // 翻页链接所带参数列表
@@ -99,7 +99,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 下载价格单
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'price_list') {
+function price_listAction() {
     $data = $_LANG['goods_name'] . "\t" . $_LANG['goods_attr'] . "\t" . $_LANG['number'] . "\t" . $_LANG['ws_price'] . "\t\n";
     $sql = "SELECT * FROM " . $ecs->table('wholesale') .
         "WHERE enabled = 1 AND CONCAT(',', rank_ids, ',') LIKE '" . '%,' . $_SESSION['user_rank'] . ',%' . "'";
@@ -132,7 +132,7 @@ if ($_REQUEST['act'] == 'price_list') {
 /*------------------------------------------------------ */
 //-- 加入购物车
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add_to_cart') {
+function add_to_cartAction() {
     /* 取得参数 */
     $act_id = intval($_POST['act_id']);
     $goods_number = $_POST['goods_number'][$act_id];
@@ -254,7 +254,7 @@ if ($_REQUEST['act'] == 'add_to_cart') {
 /*------------------------------------------------------ */
 //-- 从购物车删除
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'drop_goods') {
+function drop_goodsAction() {
     $key = intval($_REQUEST['key']);
     if (isset($_SESSION['wholesale_goods'][$key])) {
         unset($_SESSION['wholesale_goods'][$key]);
@@ -268,7 +268,7 @@ if ($_REQUEST['act'] == 'drop_goods') {
 /*------------------------------------------------------ */
 //-- 提交订单
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'submit_order') {
+function submit_orderAction() {
     include_once(ROOT_PATH . 'includes/lib_order.php');
 
     /* 检查购物车中是否有商品 */
@@ -506,3 +506,4 @@ function is_attr_matching(&$goods_list, $reference)
 //
 //    return true;
 //}
+}

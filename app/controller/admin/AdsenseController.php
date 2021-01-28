@@ -1,26 +1,28 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 站外JS投放的统计程序
  */
+class AdsenseController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+        require_once(ROOT_PATH . 'includes/lib_order.php');
+        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/ads.php');
+    }
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'includes/lib_order.php');
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/ads.php');
-
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
+function listAction() {
+    $this->downloadAction();
 }
 
 /*------------------------------------------------------ */
 //-- 站外投放广告的统计
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'download') {
+function downloadAction() {
     admin_priv('ad_manage');
 
     /* 获取广告数据 */
@@ -64,7 +66,7 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'download') {
         $rows2['ad_name'] = $_LANG['adsense_js_goods'];
         $goods_stats[] = $rows2;
     }
-    if ($_REQUEST['act'] == 'download') {
+    function downloadAction() {
         header("Content-type: application/vnd.ms-excel; charset=utf-8");
         header("Content-Disposition: attachment; filename=ad_statistics.xls");
         $data = "$_LANG[adsense_name]\t$_LANG[cleck_referer]\t$_LANG[click_count]\t$_LANG[confirm_order]\t$_LANG[gen_order_amount]\n";
@@ -86,4 +88,5 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'download') {
     /* 显示页面 */
     assign_query_info();
     $smarty->display('adsense.htm');
+}
 }

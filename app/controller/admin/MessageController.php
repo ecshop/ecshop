@@ -1,23 +1,22 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  *  管理中心管理员留言程序
  */
+class MessageController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-/* act操作项的初始化 */
-$_REQUEST['act'] = trim($_REQUEST['act']);
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-}
+    }
 
 /*------------------------------------------------------ */
 //-- 留言列表页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $smarty->assign('full_page', 1);
     $smarty->assign('ur_here', $_LANG['msg_list']);
     $smarty->assign('action_link', array('text' => $_LANG['send_msg'], 'href' => 'message.php?act=send'));
@@ -39,7 +38,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 翻页、排序
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $list = get_message_list();
 
     $smarty->assign('message_list', $list['item']);
@@ -60,7 +59,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 留言发送页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'send') {
+function sendAction() {
     /* 获取管理员列表 */
     $admin_list = $db->getAll('SELECT user_id, user_name FROM ' . $ecs->table('admin_user'));
 
@@ -77,7 +76,7 @@ if ($_REQUEST['act'] == 'send') {
 /*------------------------------------------------------ */
 //-- 处理留言的发送
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     $rec_arr = $_POST['receiver_id'];
 
     /* 向所有管理员发送留言 */
@@ -125,7 +124,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 留言编辑页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     $id = intval($_REQUEST['id']);
 
     /* 获取管理员列表 */
@@ -145,7 +144,7 @@ if ($_REQUEST['act'] == 'edit') {
     assign_query_info();
     $smarty->display('message_info.htm');
 }
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 获得留言数据*/
     $msg_arr = array();
     $msg_arr = $db->getRow('SELECT * FROM ' . $ecs->table('admin_message') . " WHERE message_id='$_POST[id]'");
@@ -168,7 +167,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 留言查看页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'view') {
+function viewAction() {
     $msg_id = intval($_REQUEST['id']);
 
     /* 获得管理员留言数据 */
@@ -206,7 +205,7 @@ if ($_REQUEST['act'] == 'view') {
 /*------------------------------------------------------ */
 //--留言回复页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'reply') {
+function replyAction() {
     $msg_id = intval($_REQUEST['id']);
 
     /* 获得留言数据 */
@@ -231,7 +230,7 @@ if ($_REQUEST['act'] == 'reply') {
 /*------------------------------------------------------ */
 //--留言回复的处理
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 're_msg') {
+function re_msgAction() {
     $sql = "INSERT INTO " . $ecs->table('admin_message') . " (sender_id, receiver_id, sent_time, " .
         "read_time, readed, deleted, title, message) " .
         "VALUES ('" . $_SESSION['admin_id'] . "', '$_POST[receiver_id]', '" . gmtime() . "', " .
@@ -250,7 +249,7 @@ if ($_REQUEST['act'] == 're_msg') {
 /*------------------------------------------------------ */
 //-- 批量删除留言记录
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'drop_msg') {
+function drop_msgAction() {
     if (isset($_POST['checkboxes'])) {
         $count = 0;
         foreach ($_POST['checkboxes'] as $key => $id) {
@@ -273,7 +272,7 @@ if ($_REQUEST['act'] == 'drop_msg') {
 /*------------------------------------------------------ */
 //-- 删除留言
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     $id = intval($_GET['id']);
 
     $sql = "UPDATE " . $ecs->table('admin_message') . " SET deleted=1 " .
@@ -337,4 +336,5 @@ function get_message_list()
     $arr = array('item' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
 
     return $arr;
+}
 }

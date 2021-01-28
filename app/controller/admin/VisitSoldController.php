@@ -1,29 +1,34 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 访问购买比例
  */
+ class VisitSoldController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
 require_once(ROOT_PATH . 'includes/lib_order.php');
 require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
 $smarty->assign('lang', $_LANG);
 
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
+admin_priv('client_flow_stats');
+    }
+
+
+
+function listAction() {
+$this->downloadAction();
 }
 
-admin_priv('client_flow_stats');
 
 /*------------------------------------------------------ */
 //--访问购买比例
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'download') {
+function downloadAction() {
     /* 变量的初始化 */
     $cat_id = (!empty($_REQUEST['cat_id'])) ? intval($_REQUEST['cat_id']) : 0;
     $brand_id = (!empty($_REQUEST['brand_id'])) ? intval($_REQUEST['brand_id']) : 0;
@@ -108,4 +113,5 @@ function click_sold_info($cat_id, $brand_id, $show_num)
     }
 
     return $click_sold_info;
+}
 }

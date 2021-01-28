@@ -1,12 +1,20 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 留言板
  */
+class MessageController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
+    }
+}
 
-require(dirname(__FILE__) . '/includes/init.php');
+
+
 
 if (empty($_CFG['message_board'])) {
     show_message($_LANG['message_board_close']);

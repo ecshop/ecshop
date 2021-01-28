@@ -1,13 +1,16 @@
 <?php
 
-/**
- * 程序说明
- */
+namespace app\controller\admin;
 
-define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
-admin_priv('attention_list');
-if ($_REQUEST['act'] == 'list') {
+class AttentionListController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        admin_priv('attention_list');
+    }
+
+function listAction() {
     $goodsdb = get_attention();
     $smarty->assign('full_page', 1);
     $smarty->assign('ur_here', $_LANG['attention_list']);
@@ -19,7 +22,7 @@ if ($_REQUEST['act'] == 'list') {
     assign_query_info();
     $smarty->display('attention_list.htm');
 }
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $goodsdb = get_attention();
     $smarty->assign('goodsdb', $goodsdb['goodsdb']);
     $smarty->assign('filter', $goodsdb['filter']);
@@ -31,7 +34,7 @@ if ($_REQUEST['act'] == 'query') {
         array('filter' => $goodsdb['filter'], 'page_count' => $goodsdb['page_count'])
     );
 }
-if ($_REQUEST['act'] == 'addtolist') {
+function addtolistAction() {
     $id = intval($_REQUEST['id']);
     $pri = (intval($_REQUEST['pri']) == 1) ? 1 : 0;
     $start = empty($_GET['start']) ? 0 : (int)$_GET['start'];
@@ -77,7 +80,7 @@ if ($_REQUEST['act'] == 'addtolist') {
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
 }
-if ($_REQUEST['act'] == 'batch_addtolist') {
+function batch_addtolistAction() {
     $olddate = $_REQUEST['date'];
     $date = local_strtotime(trim($_REQUEST['date']));
     $pri = (intval($_REQUEST['pri']) == 1) ? 1 : 0;
@@ -170,4 +173,5 @@ function get_attention()
 
     $arr = array('goodsdb' => $goodsdb, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
     return $arr;
+}
 }

@@ -1,18 +1,24 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理中心商店设置
  */
+class ShopConfigController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+    }
 
 /* 代码 */
-require(dirname(__FILE__) . '/includes/init.php');
 
 /*------------------------------------------------------ */
 //-- 列表编辑 ?act=list_edit
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list_edit') {
+function list_editAction() {
     /* 检查权限 */
     admin_priv('shop_config');
 
@@ -53,7 +59,7 @@ if ($_REQUEST['act'] == 'list_edit') {
 /*------------------------------------------------------ */
 //-- 邮件服务器设置
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'mail_settings') {
+function mail_settingsAction() {
     /* 检查权限 */
     admin_priv('shop_config');
 
@@ -69,7 +75,7 @@ if ($_REQUEST['act'] == 'mail_settings') {
 /*------------------------------------------------------ */
 //-- 提交   ?act=post
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'post') {
+function postAction() {
     $type = empty($_POST['type']) ? '' : $_POST['type'];
 
     /* 检查权限 */
@@ -184,7 +190,7 @@ if ($_REQUEST['act'] == 'post') {
 /*------------------------------------------------------ */
 //-- 发送测试邮件
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'send_test_email') {
+function send_test_emailAction() {
     /* 检查权限 */
     check_authz_json('shop_config');
 
@@ -210,7 +216,7 @@ if ($_REQUEST['act'] == 'send_test_email') {
 /*------------------------------------------------------ */
 //-- 删除上传文件
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'del') {
+function delAction() {
     /* 检查权限 */
     check_authz_json('shop_config');
 
@@ -317,4 +323,5 @@ function get_settings($groups = null, $excludes = null)
     }
 
     return $group_list;
+}
 }

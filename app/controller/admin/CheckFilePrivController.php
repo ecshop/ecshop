@@ -1,14 +1,19 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 系统文件检测
  */
+class CheckFilePrivController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+    }
 
-require(dirname(__FILE__) . '/includes/init.php');
-
-if ($_REQUEST['act'] == 'check') {
+function checkAction() {
     /* 检查权限 */
     admin_priv('file_priv');
 
@@ -157,4 +162,5 @@ function check_file_in_array($arr, &$err_msg)
     }
 
     return $mark;
+}
 }

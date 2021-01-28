@@ -1,23 +1,22 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 后台标签管理
  */
+class TagManageController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-/* act操作项的初始化 */
-$_REQUEST['act'] = trim($_REQUEST['act']);
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-}
+    }
 
 /*------------------------------------------------------ */
 //-- 获取标签数据列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 权限判断 */
     admin_priv('tag_manage');
 
@@ -43,8 +42,10 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 添加 ,编辑
 /*------------------------------------------------------ */
-
-if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+    function addAction() {
+        editAction();
+    }
+function editAction() {
     admin_priv('tag_manage');
 
     $is_add = $_REQUEST['act'] == 'add';
@@ -74,8 +75,10 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 更新
 /*------------------------------------------------------ */
-
-if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+    function insertAction() {
+        updateAction();
+    }
+function updateAction() {
     admin_priv('tag_manage');
 
     $is_insert = $_REQUEST['act'] == 'insert';
@@ -122,7 +125,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 //-- 翻页，排序
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     check_authz_json('tag_manage');
 
     $tag_list = get_tag_list();
@@ -145,7 +148,7 @@ if ($_REQUEST['act'] == 'query') {
 //-- 搜索
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'search_goods') {
+function search_goodsAction() {
     check_authz_json('tag_manage');
 
     include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -166,7 +169,7 @@ if ($_REQUEST['act'] == 'search_goods') {
 /*------------------------------------------------------ */
 //-- 批量删除标签
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch_drop') {
+function batch_dropAction() {
     admin_priv('tag_manage');
 
     if (isset($_POST['checkboxes'])) {
@@ -193,7 +196,7 @@ if ($_REQUEST['act'] == 'batch_drop') {
 //-- 删除标签
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('tag_manage');
 
     include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -222,7 +225,7 @@ if ($_REQUEST['act'] == 'remove') {
 //-- 编辑标签名称
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == "edit_tag_name") {
+function edit_tag_name() {
     check_authz_json('tag_manage');
 
     $name = json_str_iconv(trim($_POST['val']));
@@ -325,4 +328,5 @@ function get_tag_info($tag_id)
     $row = $GLOBALS['db']->getRow($sql);
 
     return $row;
+}
 }

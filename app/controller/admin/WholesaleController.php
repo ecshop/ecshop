@@ -1,18 +1,24 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理中心批发管理
  */
+class WholesaleController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        include_once('../includes/lib_goods.php');
+    }
 
-define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
-include_once('../includes/lib_goods.php');
 
 /*------------------------------------------------------ */
 //-- 活动列表页
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     admin_priv('whole_sale');
 
     /* 模板赋值 */
@@ -40,7 +46,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 分页、排序、查询
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $list = wholesale_list();
 
     $smarty->assign('wholesale_list', $list['item']);
@@ -61,7 +67,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 删除
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('whole_sale');
 
     $id = intval($_GET['id']);
@@ -91,7 +97,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 批量操作
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch') {
+function batchAction() {
     /* 取得要操作的记录编号 */
     if (empty($_POST['checkboxes'])) {
         sys_msg($_LANG['no_record_selected']);
@@ -122,7 +128,7 @@ if ($_REQUEST['act'] == 'batch') {
 /*------------------------------------------------------ */
 //-- 修改排序
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'toggle_enabled') {
+function toggle_enabledAction() {
     check_authz_json('whole_sale');
 
     $id = intval($_POST['id']);
@@ -140,7 +146,7 @@ if ($_REQUEST['act'] == 'toggle_enabled') {
 //-- 批量添加
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'batch_add') {
+function batch_addAction() {
     /* 检查权限 */
     admin_priv('whole_sale');
     $smarty->assign('form_action', 'batch_add_insert');
@@ -194,7 +200,7 @@ if ($_REQUEST['act'] == 'batch_add') {
 //-- 批量添加入库
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'batch_add_insert') {
+function batch_add_insertAction() {
     /* 检查权限 */
     admin_priv('whole_sale');
 
@@ -292,8 +298,11 @@ if ($_REQUEST['act'] == 'batch_add_insert') {
 /*------------------------------------------------------ */
 //-- 添加、编辑
 /*------------------------------------------------------ */
+function addAction() {
+$this->editAction();
+}
 
-if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 检查权限 */
     admin_priv('whole_sale');
 
@@ -369,8 +378,11 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 添加、编辑后提交
 /*------------------------------------------------------ */
+function insertAction() {
+$this->updateAction();
+}
 
-if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 检查权限 */
     admin_priv('whole_sale');
 
@@ -522,7 +534,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 //-- 搜索商品
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'search_goods') {
+function search_goodsAction() {
     check_authz_json('whole_sale');
 
     include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -544,7 +556,7 @@ if ($_REQUEST['act'] == 'search_goods') {
 //-- 取得商品信息
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'get_goods_info') {
+function get_goods_infoAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON();
 
@@ -635,4 +647,5 @@ function wholesale_list()
     }
 
     return array('item' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+}
 }

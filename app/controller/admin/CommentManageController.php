@@ -1,24 +1,23 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 用户评论管理程序
  */
+class CommentManageController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+    }
 
-require(dirname(__FILE__) . '/includes/init.php');
-
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
 
 /*------------------------------------------------------ */
 //-- 获取没有回复的评论列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 检查权限 */
     admin_priv('comment_priv');
 
@@ -42,7 +41,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 翻页、搜索、排序
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $list = get_comment_list();
 
     $smarty->assign('comment_list', $list['item']);
@@ -63,7 +62,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 回复用户评论(同时查看评论详情)
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'reply') {
+function replyAction() {
     /* 检查权限 */
     admin_priv('comment_priv');
 
@@ -123,7 +122,7 @@ if ($_REQUEST['act'] == 'reply') {
 /*------------------------------------------------------ */
 //-- 处理 回复用户评论
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'action') {
+function actionAction() {
     admin_priv('comment_priv');
 
     /* 获取IP地址 */
@@ -196,7 +195,7 @@ if ($_REQUEST['act'] == 'action') {
 /*------------------------------------------------------ */
 //-- 更新评论的状态为显示或者禁止
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'check') {
+function checkAction() {
     if ($_REQUEST['check'] == 'allow') {
         /* 允许评论显示 */
         $sql = "UPDATE " . $ecs->table('comment') . " SET status = 1 WHERE comment_id = '$_REQUEST[id]'";
@@ -225,7 +224,7 @@ if ($_REQUEST['act'] == 'check') {
 /*------------------------------------------------------ */
 //-- 删除某一条评论
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('comment_priv');
 
     $id = intval($_GET['id']);
@@ -247,7 +246,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 批量删除用户评论
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch') {
+function batchAction() {
     admin_priv('comment_priv');
     $action = isset($_POST['sel_action']) ? trim($_POST['sel_action']) : 'deny';
 
@@ -329,4 +328,5 @@ function get_comment_list()
     $arr = array('item' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
 
     return $arr;
+}
 }

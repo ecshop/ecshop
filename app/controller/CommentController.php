@@ -1,12 +1,20 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 提交用户评论
  */
+class CommentController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
+    }
+}
 
-require(dirname(__FILE__) . '/includes/init.php');
+
+
 require(ROOT_PATH . 'includes/cls_json.php');
 if (!isset($_REQUEST['cmt']) && !isset($_REQUEST['act'])) {
     /* 只有在没有提交评论内容以及没有act的情况下才跳转 */

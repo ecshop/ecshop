@@ -1,12 +1,20 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 商品相册
  */
+class GalleryController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
+    }
+}
 
-require(dirname(__FILE__) . '/includes/init.php');
+
+
 
 /* 参数 */
 $_REQUEST['id'] = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0; // 商品编号

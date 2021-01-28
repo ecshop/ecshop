@@ -1,18 +1,23 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 夺宝奇兵管理程序
  */
+class SnatchController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        $exc = new exchange($ecs->table("goods_activity"), $db, 'act_id', 'act_name');
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-$exc = new exchange($ecs->table("goods_activity"), $db, 'act_id', 'act_name');
+    }
 
 /*------------------------------------------------------ */
 //-- 添加活动
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 权限判断 */
     admin_priv('snatch_manage');
 
@@ -31,7 +36,7 @@ if ($_REQUEST['act'] == 'add') {
     assign_query_info();
     $smarty->display('snatch_info.htm');
 }
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /* 权限判断 */
     admin_priv('snatch_manage');
 
@@ -91,7 +96,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 活动列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $smarty->assign('ur_here', $_LANG['02_snatch_list']);
     $smarty->assign('action_link', array('text' => $_LANG['snatch_add'], 'href' => 'snatch.php?act=add'));
 
@@ -114,7 +119,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 查询、翻页、排序
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $snatchs = get_snatchlist();
 
     $smarty->assign('snatch_list', $snatchs['snatchs']);
@@ -136,7 +141,7 @@ if ($_REQUEST['act'] == 'query') {
 //-- 编辑活动名称
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_snatch_name') {
+function edit_snatch_nameAction() {
     check_authz_json('snatch_manage');
 
     $id = intval($_POST['id']);
@@ -158,7 +163,7 @@ if ($_REQUEST['act'] == 'edit_snatch_name') {
 //-- 删除指定的活动
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('attr_manage');
 
     $id = intval($_GET['id']);
@@ -174,7 +179,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 编辑活动
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 权限判断 */
     admin_priv('snatch_manage');
 
@@ -192,7 +197,7 @@ if ($_REQUEST['act'] == 'edit') {
     assign_query_info();
     $smarty->display('snatch_info.htm');
 }
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 权限判断 */
     admin_priv('snatch_manage');
 
@@ -251,7 +256,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 查看活动详情
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'view') {
+function viewAction() {
     /* 权限判断 */
     admin_priv('snatch_manage');
 
@@ -279,7 +284,7 @@ if ($_REQUEST['act'] == 'view') {
 //-- 排序、翻页活动详情
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'query_bid') {
+function query_bidAction() {
     $bid_list = get_snatch_detail();
 
     $smarty->assign('bid_list', $bid_list['bid']);
@@ -301,7 +306,7 @@ if ($_REQUEST['act'] == 'query_bid') {
 //-- 搜索商品
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'search_goods') {
+function search_goodsAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -320,7 +325,7 @@ if ($_REQUEST['act'] == 'search_goods') {
 //-- 搜索货品
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'search_products') {
+function search_productsAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -460,4 +465,5 @@ function get_snatch_detail()
     $arr = array('bid' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
 
     return $arr;
+}
 }

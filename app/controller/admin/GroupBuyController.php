@@ -1,29 +1,28 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理中心团购商品管理
  */
+class GroupBuyController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'includes/lib_goods.php');
-require_once(ROOT_PATH . 'includes/lib_order.php');
+        require_once(ROOT_PATH . 'includes/lib_goods.php');
+        require_once(ROOT_PATH . 'includes/lib_order.php');
 
-/* 检查权限 */
-admin_priv('group_by');
-
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
+        /* 检查权限 */
+        admin_priv('group_by');
+    }
 
 /*------------------------------------------------------ */
 //-- 团购活动列表
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 模板赋值 */
     $smarty->assign('full_page', 1);
     $smarty->assign('ur_here', $_LANG['group_buy_list']);
@@ -43,7 +42,7 @@ if ($_REQUEST['act'] == 'list') {
     assign_query_info();
     $smarty->display('group_buy_list.htm');
 }
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $list = group_buy_list();
 
     $smarty->assign('group_buy_list', $list['item']);
@@ -65,9 +64,12 @@ if ($_REQUEST['act'] == 'query') {
 //-- 添加/编辑团购活动
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+    function addAction() {
+        editAction();
+    }
+function editAction() {
     /* 初始化/取得团购活动信息 */
-    if ($_REQUEST['act'] == 'add') {
+    if($act == 'add') { // TODO
         $group_buy = array(
             'act_id' => 0,
             'start_time' => date('Y-m-d', time() + 86400),
@@ -98,7 +100,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 //-- 添加/编辑团购活动的提交
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'insert_update') {
+function insert_updateAction() {
     /* 取得团购活动id */
     $group_buy_id = intval($_POST['act_id']);
     if (isset($_POST['finish']) || isset($_POST['succeed']) || isset($_POST['fail']) || isset($_POST['mail'])) {
@@ -482,7 +484,7 @@ if ($_REQUEST['act'] == 'insert_update') {
 /*------------------------------------------------------ */
 //-- 批量删除团购活动
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch_drop') {
+function batch_dropAction() {
     if (isset($_POST['checkboxes'])) {
         $del_count = 0; //初始化删除数量
         foreach ($_POST['checkboxes'] as $key => $id) {
@@ -518,7 +520,7 @@ if ($_REQUEST['act'] == 'batch_drop') {
 //-- 搜索商品
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'search_goods') {
+function search_goodsAction() {
     check_authz_json('group_by');
 
     include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -534,7 +536,7 @@ if ($_REQUEST['act'] == 'search_goods') {
 //-- 编辑保证金
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_deposit') {
+function edit_depositAction() {
     check_authz_json('group_by');
 
     $id = intval($_POST['id']);
@@ -559,7 +561,7 @@ if ($_REQUEST['act'] == 'edit_deposit') {
 //-- 编辑保证金
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_restrict_amount') {
+function edit_restrict_amountAction() {
     check_authz_json('group_by');
 
     $id = intval($_POST['id']);
@@ -584,7 +586,7 @@ if ($_REQUEST['act'] == 'edit_restrict_amount') {
 //-- 删除团购活动
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('group_by');
 
     $id = intval($_GET['id']);
@@ -722,4 +724,5 @@ function list_link($is_add = true)
     }
 
     return array('href' => $href, 'text' => $GLOBALS['_LANG']['group_buy_list']);
+}
 }

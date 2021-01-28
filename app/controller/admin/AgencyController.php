@@ -1,19 +1,23 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理中心办事处管理
  */
+class AgencyController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-$exc = new exchange($ecs->table('agency'), $db, 'agency_id', 'agency_name');
+        $exc = new exchange($ecs->table('agency'), $db, 'agency_id', 'agency_name');
+    }
 
 /*------------------------------------------------------ */
 //-- 办事处列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $smarty->assign('ur_here', $_LANG['agency_list']);
     $smarty->assign('action_link', array('text' => $_LANG['add_agency'], 'href' => 'agency.php?act=add'));
     $smarty->assign('full_page', 1);
@@ -35,7 +39,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $agency_list = get_agencylist();
     $smarty->assign('agency_list', $agency_list['agency']);
     $smarty->assign('filter', $agency_list['filter']);
@@ -56,7 +60,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 列表页编辑名称
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_agency_name') {
+function edit_agency_nameAction() {
     check_authz_json('agency_manage');
 
     $id = intval($_POST['id']);
@@ -79,7 +83,7 @@ if ($_REQUEST['act'] == 'edit_agency_name') {
 /*------------------------------------------------------ */
 //-- 删除办事处
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('agency_manage');
 
     $id = intval($_GET['id']);
@@ -108,7 +112,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 批量操作
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch') {
+function batchAction() {
     /* 取得要操作的记录编号 */
     if (empty($_POST['checkboxes'])) {
         sys_msg($_LANG['no_record_selected']);
@@ -145,7 +149,11 @@ if ($_REQUEST['act'] == 'batch') {
 /*------------------------------------------------------ */
 //-- 添加、编辑办事处
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+    function addAction() {
+        editAction();
+    }
+
+function editAction() {
     /* 检查权限 */
     admin_priv('agency_manage');
 
@@ -213,7 +221,11 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 提交添加、编辑办事处
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+function insertAction() {
+    updateAction();
+}
+
+function updateAction() {
     /* 检查权限 */
     admin_priv('agency_manage');
 
@@ -323,4 +335,5 @@ function get_agencylist()
     }
 
     return array('agency' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+}
 }

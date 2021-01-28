@@ -1,20 +1,28 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 网店信息管理页面
  */
+class ShopinfoController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
+        require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
 
-$exc = new exchange($ecs->table("article"), $db, 'article_id', 'title');
+        $exc = new exchange($ecs->table("article"), $db, 'article_id', 'title');
+
+    }
+
 
 /*------------------------------------------------------ */
 //-- 文章列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $smarty->assign('ur_here', $_LANG['shop_info']);
     $smarty->assign('action_link', array('text' => $_LANG['shopinfo_add'], 'href' => 'shopinfo.php?act=add'));
     $smarty->assign('full_page', 1);
@@ -27,7 +35,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $smarty->assign('list', shopinfo_article_list());
 
     make_json_result($smarty->fetch('shopinfo_list.htm'));
@@ -36,7 +44,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加新文章
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 权限判断 */
     admin_priv('shopinfo_manage');
     $_REQUEST['id'] = intval($_REQUEST['id']);
@@ -54,7 +62,7 @@ if ($_REQUEST['act'] == 'add') {
     assign_query_info();
     $smarty->display('shopinfo_info.htm');
 }
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /* 权限判断 */
     admin_priv('shopinfo_manage');
     $_REQUEST['id'] = intval($_REQUEST['id']);
@@ -87,7 +95,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 文章编辑
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 权限判断 */
     admin_priv('shopinfo_manage');
     $_REQUEST['id'] = intval($_REQUEST['id']);
@@ -105,7 +113,7 @@ if ($_REQUEST['act'] == 'edit') {
     $smarty->assign('form_action', 'update');
     $smarty->display('shopinfo_info.htm');
 }
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 权限判断 */
     admin_priv('shopinfo_manage');
     $_REQUEST['id'] = intval($_REQUEST['id']);
@@ -136,7 +144,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 编辑文章主题
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_title') {
+function edit_titleAction() {
     check_authz_json('shopinfo_manage');
 
     $id = intval($_POST['id']);
@@ -157,7 +165,7 @@ if ($_REQUEST['act'] == 'edit_title') {
 /*------------------------------------------------------ */
 //-- 删除文章
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('shopinfo_manage');
 
     $id = intval($_GET['id']);
@@ -190,4 +198,5 @@ function shopinfo_article_list()
     }
 
     return $list;
+}
 }

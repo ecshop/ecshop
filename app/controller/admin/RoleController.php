@@ -1,27 +1,27 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 角色管理信息以及权限管理程序
  */
+class RoleController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+        /* 初始化 $exc 对象 */
+        $exc = new exchange($ecs->table("role"), $db, 'role_id', 'role_name');
 
-require(dirname(__FILE__) . '/includes/init.php');
+    }
 
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'login';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
 
-/* 初始化 $exc 对象 */
-$exc = new exchange($ecs->table("role"), $db, 'role_id', 'role_name');
 
 /*------------------------------------------------------ */
 //-- 退出登录
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'logout') {
+function logoutAction() {
     /* 清除cookie */
     setcookie('ECSCP[admin_id]', '', 1, null, null, null, true);
     setcookie('ECSCP[admin_pass]', '', 1, null, null, null, true);
@@ -34,7 +34,7 @@ if ($_REQUEST['act'] == 'logout') {
 /*------------------------------------------------------ */
 //-- 登陆界面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'login') {
+function loginAction() {
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
     header("Cache-Control: no-cache, must-revalidate");
     header("Pragma: no-cache");
@@ -51,7 +51,7 @@ if ($_REQUEST['act'] == 'login') {
 /*------------------------------------------------------ */
 //-- 角色列表页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['admin_role']);
     $smarty->assign('action_link', array('href' => 'role.php?act=add', 'text' => $_LANG['admin_add_role']));
@@ -66,7 +66,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $smarty->assign('admin_list', get_role_list());
 
     make_json_result($smarty->fetch('role_list.htm'));
@@ -75,7 +75,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加角色页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 检查权限 */
     admin_priv('admin_manage');
     include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/priv_action.php');
@@ -124,7 +124,7 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 添加角色的处理
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     admin_priv('admin_manage');
     $act_list = @join(",", $_POST['action_code']);
     $sql = "INSERT INTO " . $ecs->table('role') . " (role_name, action_list, role_describe) " .
@@ -148,7 +148,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 编辑角色信息
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/priv_action.php');
     $_REQUEST['id'] = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
     /* 获得该管理员的权限 */
@@ -208,7 +208,7 @@ if ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 更新角色信息
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 更新管理员的权限 */
     $act_list = @join(",", $_POST['action_code']);
     $sql = "UPDATE " . $ecs->table('role') . " SET action_list = '$act_list', role_name = '" . $_POST['user_name'] . "', role_describe = '" . $_POST['role_describe'] . " ' " .
@@ -225,7 +225,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 删除一个角色
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('admin_drop');
 
     $id = intval($_GET['id']);
@@ -251,4 +251,5 @@ function get_role_list()
     $list = $GLOBALS['db']->getAll($sql);
 
     return $list;
+}
 }

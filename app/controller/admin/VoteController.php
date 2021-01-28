@@ -1,27 +1,26 @@
 <?php
 
+namespace app\controller\admin;
 /**
  *  调查管理程序
  */
+class VoteController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+        $exc = new exchange($ecs->table("vote"), $db, 'vote_id', 'vote_name');
+        $exc_opn = new exchange($ecs->table("vote_option"), $db, 'option_id', 'option_name');
+    }
 
-require(dirname(__FILE__) . '/includes/init.php');
 
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
 
-$exc = new exchange($ecs->table("vote"), $db, 'vote_id', 'vote_name');
-$exc_opn = new exchange($ecs->table("vote_option"), $db, 'option_id', 'option_name');
 
 /*------------------------------------------------------ */
 //-- 投票列表页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['list_vote']);
     $smarty->assign('action_link', array('text' => $_LANG['add_vote'], 'href' => 'vote.php?act=add'));
@@ -42,7 +41,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $vote_list = get_votelist();
 
     $smarty->assign('list', $vote_list['list']);
@@ -60,7 +59,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加新的投票页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 权限检查 */
     admin_priv('vote_priv');
 
@@ -80,7 +79,7 @@ if ($_REQUEST['act'] == 'add') {
     assign_query_info();
     $smarty->display('vote_info.htm');
 }
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     admin_priv('vote_priv');
 
     /* 获得广告的开始时期与结束日期 */
@@ -122,7 +121,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 在线调查编辑页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     admin_priv('vote_priv');
 
     /* 获取数据 */
@@ -139,7 +138,7 @@ if ($_REQUEST['act'] == 'edit') {
     assign_query_info();
     $smarty->display('vote_info.htm');
 }
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 获得广告的开始时期与结束日期 */
     $start_time = local_strtotime($_POST['start_time']);
     $end_time = local_strtotime($_POST['end_time']);
@@ -166,7 +165,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 调查选项列表页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'option') {
+function optionAction() {
     $id = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
     /* 模板赋值 */
@@ -185,7 +184,7 @@ if ($_REQUEST['act'] == 'option') {
 /*------------------------------------------------------ */
 //-- 调查选项查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query_option') {
+function query_optionAction() {
     $id = intval($_GET['vid']);
 
     $smarty->assign('id', $id);
@@ -197,7 +196,7 @@ if ($_REQUEST['act'] == 'query_option') {
 /*------------------------------------------------------ */
 //-- 添加新调查选项
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'new_option') {
+function new_optionAction() {
     check_authz_json('vote_priv');
 
     $option_name = json_str_iconv(trim($_POST['option_name']));
@@ -230,7 +229,7 @@ if ($_REQUEST['act'] == 'new_option') {
 /*------------------------------------------------------ */
 //-- 编辑调查主题
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_vote_name') {
+function edit_vote_nameAction() {
     check_authz_json('vote_priv');
 
     $id = intval($_POST['id']);
@@ -250,7 +249,7 @@ if ($_REQUEST['act'] == 'edit_vote_name') {
 /*------------------------------------------------------ */
 //-- 编辑调查选项
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_option_name') {
+function edit_option_nameAction() {
     check_authz_json('vote_priv');
 
     $id = intval($_POST['id']);
@@ -275,7 +274,7 @@ if ($_REQUEST['act'] == 'edit_option_name') {
 /*------------------------------------------------------ */
 //-- 编辑调查选项排序值
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_option_order') {
+function edit_option_orderAction() {
     check_authz_json('vote_priv');
 
     $id = intval($_POST['id']);
@@ -291,7 +290,7 @@ if ($_REQUEST['act'] == 'edit_option_order') {
 /*------------------------------------------------------ */
 //-- 删除在线调查主题
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('vote_priv');
 
     $id = intval($_GET['id']);
@@ -312,7 +311,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 删除在线调查选项
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove_option') {
+function remove_optionAction() {
     check_authz_json('vote_priv');
 
     $id = intval($_GET['id']);
@@ -367,4 +366,5 @@ function get_optionlist($id)
     }
 
     return $list;
+}
 }

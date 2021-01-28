@@ -1,48 +1,48 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 会员资金管理程序
  */
+class UserAccountManageController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+        require_once(ROOT_PATH . 'includes/lib_order.php');
+        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
+        $smarty->assign('lang', $_LANG);
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'includes/lib_order.php');
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
-$smarty->assign('lang', $_LANG);
+        /* 权限判断 */
+        admin_priv('user_account_manage');
 
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
+        $start_date = $end_date = '';
+        if (isset($_POST) && !empty($_POST)) {
+            $start_date = local_strtotime($_POST['start_date']);
+            $end_date = local_strtotime($_POST['end_date']);
+        } elseif (isset($_GET['start_date']) && !empty($_GET['end_date'])) {
+            $start_date = local_strtotime($_GET['start_date']);
+            $end_date = local_strtotime($_GET['end_date']);
+        } else {
+            $today = local_strtotime(local_date('Y-m-d'));
+            $start_date = $today - 86400 * 7;
+            $end_date = $today;
+        }
 
-/* 权限判断 */
-admin_priv('user_account_manage');
+    }
 
 /*------------------------------------------------------ */
 //--数据查询
 /*------------------------------------------------------ */
 /* 时间参数 */
 
-$start_date = $end_date = '';
-if (isset($_POST) && !empty($_POST)) {
-    $start_date = local_strtotime($_POST['start_date']);
-    $end_date = local_strtotime($_POST['end_date']);
-} elseif (isset($_GET['start_date']) && !empty($_GET['end_date'])) {
-    $start_date = local_strtotime($_GET['start_date']);
-    $end_date = local_strtotime($_GET['end_date']);
-} else {
-    $today = local_strtotime(local_date('Y-m-d'));
-    $start_date = $today - 86400 * 7;
-    $end_date = $today;
-}
 
 /*------------------------------------------------------ */
 //--商品明细列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $account = $money_list = array();
     $account['voucher_amount'] = get_total_amount($start_date, $end_date);//充值总额
     $account['to_cash_amount'] = get_total_amount($start_date, $end_date, 1);//提现总额
@@ -70,7 +70,7 @@ if ($_REQUEST['act'] == 'list') {
     assign_query_info();
     $smarty->display('user_account_manage.htm');
 }
-if ($_REQUEST['act'] == 'surplus') {
+function surplusAction() {
     $order_list = order_list();
 
     /* 赋值到模板 */
@@ -90,7 +90,7 @@ if ($_REQUEST['act'] == 'surplus') {
 /*------------------------------------------------------ */
 //-- ajax返回用户列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $order_list = order_list();
 
     $smarty->assign('order_list', $order_list['order_list']);
@@ -179,4 +179,5 @@ function order_list()
         'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
 
     return $arr;
+}
 }

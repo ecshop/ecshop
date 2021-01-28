@@ -1,20 +1,24 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 会员等级管理程序
  */
+class RegFieldsController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        $exc = new exchange($ecs->table("reg_fields"), $db, 'id', 'reg_field_name');
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-$exc = new exchange($ecs->table("reg_fields"), $db, 'id', 'reg_field_name');
+    }
 
 /*------------------------------------------------------ */
 //-- 会员注册项列表
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $fields = array();
     $fields = $db->getAll("SELECT * FROM " . $ecs->table('reg_fields') . " ORDER BY dis_order, id");
 
@@ -32,7 +36,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 翻页，排序
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $fields = array();
     $fields = $db->getAll("SELECT * FROM " . $ecs->table('reg_fields') . "ORDER BY id");
 
@@ -44,7 +48,7 @@ if ($_REQUEST['act'] == 'query') {
 //-- 添加会员注册项
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     admin_priv('reg_fields');
 
     $form_action = 'insert';
@@ -66,7 +70,7 @@ if ($_REQUEST['act'] == 'add') {
 //-- 增加会员注册项到数据库
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     admin_priv('reg_fields');
 
     /* 检查是否存在重名的会员注册项 */
@@ -93,7 +97,7 @@ if ($_REQUEST['act'] == 'insert') {
 //-- 编辑会员注册项
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     admin_priv('reg_fields');
 
     $form_action = 'update';
@@ -115,7 +119,7 @@ if ($_REQUEST['act'] == 'edit') {
 //-- 更新会员注册项
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     admin_priv('reg_fields');
 
     /* 检查是否存在重名的会员注册项 */
@@ -137,7 +141,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 删除会员注册项
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('reg_fields');
 
     $field_id = intval($_GET['id']);
@@ -159,7 +163,7 @@ if ($_REQUEST['act'] == 'remove') {
 } /*
  *  编辑会员注册项名称
  */
-if ($_REQUEST['act'] == 'edit_name') {
+function edit_nameAction() {
     $id = intval($_REQUEST['id']);
     $val = empty($_REQUEST['val']) ? '' : json_str_iconv(trim($_REQUEST['val']));
     check_authz_json('reg_fields');
@@ -178,7 +182,7 @@ if ($_REQUEST['act'] == 'edit_name') {
 } /*
  *  编辑会员注册项排序权值
  */
-if ($_REQUEST['act'] == 'edit_order') {
+function edit_orderAction() {
     $id = intval($_REQUEST['id']);
     $val = isset($_REQUEST['val']) ? json_str_iconv(trim($_REQUEST['val'])) : '';
     check_authz_json('reg_fields');
@@ -199,7 +203,7 @@ if ($_REQUEST['act'] == 'edit_order') {
 /*------------------------------------------------------ */
 //-- 修改会员注册项显示状态
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'toggle_dis') {
+function toggle_disAction() {
     check_authz_json('reg_fields');
 
     $id = intval($_POST['id']);
@@ -214,7 +218,7 @@ if ($_REQUEST['act'] == 'toggle_dis') {
 /*------------------------------------------------------ */
 //-- 修改会员注册项必填状态
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'toggle_need') {
+function toggle_needAction() {
     check_authz_json('reg_fields');
 
     $id = intval($_POST['id']);
@@ -224,4 +228,5 @@ if ($_REQUEST['act'] == 'toggle_need') {
         clear_cache_files();
         make_json_result($is_need);
     }
+}
 }

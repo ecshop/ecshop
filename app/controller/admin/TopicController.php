@@ -1,36 +1,34 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 专题管理
  */
+class TopicController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+        /* 配置风格颜色选项 */
+        $topic_style_color = array(
+            '0' => '008080',
+            '1' => '008000',
+            '2' => 'ffa500',
+            '3' => 'ff0000',
+            '4' => 'ffff00',
+            '5' => '9acd32',
+            '6' => 'ffd700'
+        );
+        $allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp', 'swf');
 
-require(dirname(__FILE__) . '/includes/init.php');
-
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
-
-/* 配置风格颜色选项 */
-$topic_style_color = array(
-    '0' => '008080',
-    '1' => '008000',
-    '2' => 'ffa500',
-    '3' => 'ff0000',
-    '4' => 'ffff00',
-    '5' => '9acd32',
-    '6' => 'ffd700'
-);
-$allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp', 'swf');
+    }
 
 /*------------------------------------------------------ */
 //-- 专题列表页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     admin_priv('topic_manage');
 
     $smarty->assign('ur_here', $_LANG['09_topic']);
@@ -51,7 +49,10 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('topic_list.htm');
 }
 /* 添加,编辑 */
-if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+    function addAction() {
+        editAction();
+    }
+function editAction() {
     admin_priv('topic_manage');
 
     $isadd = $_REQUEST['act'] == 'add';
@@ -112,7 +113,10 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     }
     $smarty->display('topic_edit.htm');
 }
-if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+function insertAction() {
+    updateAction();
+}
+function updateAction() {
     admin_priv('topic_manage');
 
     $is_insert = $_REQUEST['act'] == 'insert';
@@ -227,7 +231,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     $links[] = array('href' => 'topic.php', 'text' => $_LANG['back_list']);
     sys_msg($_LANG['succed'], 0, $links);
 }
-if ($_REQUEST['act'] == 'get_goods_list') {
+function get_goods_listAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -243,7 +247,7 @@ if ($_REQUEST['act'] == 'get_goods_list') {
 
     make_json_result($opt);
 }
-if ($_REQUEST["act"] == "delete") {
+function deleteAction(){
     admin_priv('topic_manage');
 
     $sql = "DELETE FROM " . $ecs->table('topic') . " WHERE ";
@@ -270,7 +274,7 @@ if ($_REQUEST["act"] == "delete") {
     $links[] = array('href' => 'topic.php', 'text' => $_LANG['back_list']);
     sys_msg($_LANG['succed'], 0, $links);
 }
-if ($_REQUEST["act"] == "query") {
+function queryAction(){
     $topic_list = get_topic_list();
     $smarty->assign('topic_list', $topic_list['item']);
     $smarty->assign('filter', $topic_list['filter']);
@@ -410,4 +414,5 @@ function get_url_image($url)
     fclose($fp);
 
     return $tmp_file;
+}
 }

@@ -1,18 +1,23 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理中心模版管理程序
  */
+class TemplateController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        require_once('includes/lib_template.php');
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-require_once('includes/lib_template.php');
+    }
 
 /*------------------------------------------------------ */
 //-- 模版列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     admin_priv('template_select');
 
     /* 获得当前的模版的信息 */
@@ -70,7 +75,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 设置模板的内容
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'setup') {
+function setupAction() {
     admin_priv('template_setup');
 
     $template_theme = $_CFG['template'];
@@ -194,7 +199,7 @@ if ($_REQUEST['act'] == 'setup') {
 //-- 提交模板内容设置
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'setting') {
+function settingAction() {
     admin_priv('template_setup');
 
     $curr_template = $_CFG['template'];
@@ -390,7 +395,7 @@ if ($_REQUEST['act'] == 'setting') {
 //-- 管理库项目
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'library') {
+function libraryAction() {
     admin_priv('library_manage');
 
     $curr_template = $_CFG['template'];
@@ -428,7 +433,7 @@ if ($_REQUEST['act'] == 'library') {
 //-- 安装模版
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'install') {
+function installAction() {
     check_authz_json('backup_setting');
 
     $tpl_name = trim($_GET['tpl_name']);
@@ -453,7 +458,7 @@ if ($_REQUEST['act'] == 'install') {
 //-- 备份模版
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'backup') {
+function backupAction() {
     check_authz_json('backup_setting');
     include_once('includes/cls_phpzip.php');
     $tpl = $_CFG['template'];
@@ -475,7 +480,7 @@ if ($_REQUEST['act'] == 'backup') {
 //-- 载入指定库项目的内容
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'load_library') {
+function load_libraryAction() {
     $library = load_library($_CFG['template'], trim($_GET['lib']));
     $message = ($library['mark'] & 7) ? '' : $_LANG['library_not_written'];
 
@@ -486,7 +491,7 @@ if ($_REQUEST['act'] == 'load_library') {
 //-- 更新库项目内容
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'update_library') {
+function update_libraryAction() {
     check_authz_json('library_manage');
 
     $html = stripslashes(json_str_iconv($_POST['html']));
@@ -507,7 +512,7 @@ if ($_REQUEST['act'] == 'update_library') {
 /*------------------------------------------------------ */
 //-- 还原库项目
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'restore_library') {
+function restore_libraryAction() {
     admin_priv('backup_setting');
     $lib_name = trim($_GET['lib']);
     $lib_file = '../themes/' . $_CFG['template'] . '/library/' . $lib_name . '.lbi';
@@ -526,7 +531,7 @@ if ($_REQUEST['act'] == 'restore_library') {
 /*------------------------------------------------------ */
 //-- 布局备份
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'backup_setting') {
+function backup_settingAction() {
     admin_priv('backup_setting');
 
     $sql = "SELECT DISTINCT(remarks) FROM " . $ecs->table('template') . " WHERE theme = '" . $_CFG['template'] . "' AND remarks > ''";
@@ -550,7 +555,7 @@ if ($_REQUEST['act'] == 'backup_setting') {
     $smarty->display('templates_backup.htm');
 }
 
-if ($_REQUEST['act'] == 'act_backup_setting') {
+function act_backup_settingAction() {
     $remarks = empty($_POST['remarks']) ? local_date($_CFG['time_format']) : trim($_POST['remarks']);
 
     if (empty($_POST['files'])) {
@@ -575,7 +580,7 @@ if ($_REQUEST['act'] == 'act_backup_setting') {
     sys_msg($_LANG['backup_template_ok'], 0, array(array('text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting')));
 }
 
-if ($_REQUEST['act'] == 'del_backup') {
+function del_backupAction() {
     $remarks = empty($_GET['remarks']) ? '' : trim($_GET['remarks']);
     if ($remarks) {
         $sql = "DELETE FROM " . $ecs->table('template') . " WHERE remarks='$remarks' AND theme = '" . $_CFG['template'] . "'";
@@ -584,7 +589,7 @@ if ($_REQUEST['act'] == 'del_backup') {
     sys_msg($_LANG['del_backup_ok'], 0, array(array('text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting')));
 }
 
-if ($_REQUEST['act'] == 'restore_backup') {
+function restore_backupAction() {
     $remarks = empty($_GET['remarks']) ? '' : trim($_GET['remarks']);
     if ($remarks) {
         $sql = "SELECT filename, region, library, sort_order " .
@@ -758,4 +763,5 @@ function read_style_and_tpl($tpl_name, $tpl_style)
     $style_info['tpl_style'] = $tpl_style_list;
 
     return $style_info;
+}
 }

@@ -1,25 +1,23 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 商品分类管理程序
  */
+class CategoryController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-$exc = new exchange($ecs->table("category"), $db, 'cat_id', 'cat_name');
-
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
+        $exc = new exchange($ecs->table("category"), $db, 'cat_id', 'cat_name');
+    }
 
 /*------------------------------------------------------ */
 //-- 商品分类列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 获取分类列表 */
     $cat_list = cat_list(0, 0, false);
 
@@ -38,7 +36,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $cat_list = cat_list(0, 0, false);
     $smarty->assign('cat_info', $cat_list);
 
@@ -47,7 +45,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加商品分类
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 权限检查 */
     admin_priv('cat_manage');
 
@@ -72,7 +70,7 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 商品分类添加时的处理
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /* 权限检查 */
     admin_priv('cat_manage');
 
@@ -135,7 +133,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 编辑商品分类信息
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     admin_priv('cat_manage');   // 权限检查
     $cat_id = intval($_REQUEST['cat_id']);
     $cat_info = get_cat_info($cat_id);  // 查询分类信息数据
@@ -188,7 +186,7 @@ if ($_REQUEST['act'] == 'edit') {
     assign_query_info();
     $smarty->display('category_info.htm');
 }
-if ($_REQUEST['act'] == 'add_category') {
+function add_categoryAction() {
     $parent_id = empty($_REQUEST['parent_id']) ? 0 : intval($_REQUEST['parent_id']);
     $category = empty($_REQUEST['cat']) ? '' : json_str_iconv(trim($_REQUEST['cat']));
 
@@ -212,7 +210,7 @@ if ($_REQUEST['act'] == 'add_category') {
 /*------------------------------------------------------ */
 //-- 编辑商品分类信息
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 权限检查 */
     admin_priv('cat_manage');
 
@@ -300,7 +298,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 批量转移商品分类页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'move') {
+function moveAction() {
     /* 权限检查 */
     admin_priv('cat_drop');
 
@@ -321,7 +319,7 @@ if ($_REQUEST['act'] == 'move') {
 /*------------------------------------------------------ */
 //-- 处理批量转移商品分类的处理程序
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'move_cat') {
+function move_catAction() {
     /* 权限检查 */
     admin_priv('cat_drop');
 
@@ -351,7 +349,7 @@ if ($_REQUEST['act'] == 'move_cat') {
 //-- 编辑排序序号
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_sort_order') {
+function edit_sort_orderAction() {
     check_authz_json('cat_manage');
 
     $id = intval($_POST['id']);
@@ -369,7 +367,7 @@ if ($_REQUEST['act'] == 'edit_sort_order') {
 //-- 编辑数量单位
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_measure_unit') {
+function edit_measure_unitAction() {
     check_authz_json('cat_manage');
 
     $id = intval($_POST['id']);
@@ -387,7 +385,7 @@ if ($_REQUEST['act'] == 'edit_measure_unit') {
 //-- 编辑排序序号
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_grade') {
+function edit_gradeAction() {
     check_authz_json('cat_manage');
 
     $id = intval($_POST['id']);
@@ -410,7 +408,7 @@ if ($_REQUEST['act'] == 'edit_grade') {
 //-- 切换是否显示在导航栏
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'toggle_show_in_nav') {
+function toggle_show_in_navAction() {
     check_authz_json('cat_manage');
 
     $id = intval($_POST['id']);
@@ -449,7 +447,7 @@ if ($_REQUEST['act'] == 'toggle_show_in_nav') {
 //-- 切换是否显示
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'toggle_is_show') {
+function toggle_is_showAction() {
     check_authz_json('cat_manage');
 
     $id = intval($_POST['id']);
@@ -466,7 +464,7 @@ if ($_REQUEST['act'] == 'toggle_is_show') {
 /*------------------------------------------------------ */
 //-- 删除商品分类
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('cat_manage');
 
     /* 初始化分类ID并取得分类名称 */
@@ -595,4 +593,5 @@ function insert_cat_recommend($recommend_type, $cat_id)
     } else {
         $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table("cat_recommend") . " WHERE cat_id=" . $cat_id);
     }
+}
 }

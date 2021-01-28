@@ -1,23 +1,25 @@
 <?php
 
-/**
- * 程序说明
- */
+namespace app\controller\admin;
 
-define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
+class AffiliateCkController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-admin_priv('affiliate_ck');
-$timestamp = time();
+        admin_priv('affiliate_ck');
+        $timestamp = time();
 
-$affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
-empty($affiliate) && $affiliate = array();
-$separate_on = $affiliate['on'];
+        $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
+        empty($affiliate) && $affiliate = array();
+        $separate_on = $affiliate['on'];
+    }
 
 /*------------------------------------------------------ */
 //-- 分成页
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     isset($_GET['auid']) && $_GET['auid'] = intval($_GET['auid']);
     $logdb = get_affiliate_ck();
     $smarty->assign('full_page', 1);
@@ -37,7 +39,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 分页
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     isset($_GET['auid']) && $_GET['auid'] = intval($_GET['auid']);
     $logdb = get_affiliate_ck();
     $smarty->assign('logdb', $logdb['logdb']);
@@ -53,7 +55,7 @@ if ($_REQUEST['act'] == 'query') {
 } /*
     取消分成，不再能对该订单进行分成
 */
-if ($_REQUEST['act'] == 'del') {
+function delAction() {
     $oid = (int)$_REQUEST['oid'];
     $stat = $db->getOne("SELECT is_separate FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_id = '$oid'");
     if (empty($stat)) {
@@ -67,7 +69,7 @@ if ($_REQUEST['act'] == 'del') {
 } /*
     撤销某次分成，将已分成的收回来
 */
-if ($_REQUEST['act'] == 'rollback') {
+function rollbackAction() {
     $logid = (int)$_REQUEST['logid'];
     $stat = $db->getRow("SELECT * FROM " . $GLOBALS['ecs']->table('affiliate_log') . " WHERE log_id = '$logid'");
     if (!empty($stat)) {
@@ -89,7 +91,7 @@ if ($_REQUEST['act'] == 'rollback') {
 } /*
     分成
 */
-if ($_REQUEST['act'] == 'separate') {
+function separateAction() {
     include_once(ROOT_PATH . 'includes/lib_order.php');
     $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
     empty($affiliate) && $affiliate = array();
@@ -301,4 +303,5 @@ function write_affiliate_log($oid, $uid, $username, $money, $point, $separate_by
     if ($oid) {
         $GLOBALS['db']->query($sql);
     }
+}
 }

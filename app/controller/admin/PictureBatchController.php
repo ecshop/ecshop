@@ -1,12 +1,24 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 图片批量处理程序
  */
+class PictureBatchController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+    }
 
-require(dirname(__FILE__) . '/includes/init.php');
+    public function index()
+    {
+
+
+
+
 include_once(ROOT_PATH . 'includes/cls_image.php');
 include_once(ROOT_PATH . '/' . ADMIN_PATH . '/includes/lib_goods.php');
 $image = new cls_image($_CFG['bgcolor']);
@@ -206,6 +218,7 @@ if (empty($_GET['is_ajax'])) {
         die($json->encode($result));
     }
 }
+    }
 
 /**
  * 图片处理函数
@@ -483,4 +496,6 @@ function replace_image($new_image, $old_image, $goods_id, $silent)
         }
         return;
     }
+}
+
 }

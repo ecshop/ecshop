@@ -1,20 +1,24 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 支付方式管理程序
  */
+class PaymentController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        $exc = new exchange($ecs->table('payment'), $db, 'pay_code', 'pay_name');
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-$exc = new exchange($ecs->table('payment'), $db, 'pay_code', 'pay_name');
+    }
 
 /*------------------------------------------------------ */
 //-- 支付方式列表 ?act=list
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 查询数据库中启用的支付方式 */
     $pay_list = array();
     $sql = "SELECT * FROM " . $ecs->table('payment') . " WHERE enabled = '1' ORDER BY pay_order";
@@ -61,7 +65,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 安装支付方式 ?act=install&code=".$code."
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'install') {
+function installAction() {
     admin_priv('payment');
 
     /* 取相应插件信息 */
@@ -101,7 +105,7 @@ if ($_REQUEST['act'] == 'install') {
     $smarty->assign('pay', $pay);
     $smarty->display('payment_edit.htm');
 }
-if ($_REQUEST['act'] == 'get_config') {
+function get_configAction() {
     check_authz_json('payment');
 
     $code = $_REQUEST['code'];
@@ -146,7 +150,7 @@ if ($_REQUEST['act'] == 'get_config') {
 /*------------------------------------------------------ */
 //-- 编辑支付方式 ?act=edit&code={$code}
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     admin_priv('payment');
 
     /* 查询该支付方式内容 */
@@ -221,7 +225,7 @@ if ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 提交支付方式 post
 /*------------------------------------------------------ */
-if (isset($_POST['Submit'])) {
+function submit() {
     admin_priv('payment');
 
     /* 检查输入 */
@@ -295,7 +299,7 @@ if (isset($_POST['Submit'])) {
 /*------------------------------------------------------ */
 //-- 卸载支付方式 ?act=uninstall&code={$code}
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'uninstall') {
+function uninstallAction() {
     admin_priv('payment');
 
     /* 把 enabled 设为 0 */
@@ -315,7 +319,7 @@ if ($_REQUEST['act'] == 'uninstall') {
 //-- 修改支付方式名称
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_name') {
+function edit_nameAction() {
     /* 检查权限 */
     check_authz_json('payment');
 
@@ -342,7 +346,7 @@ if ($_REQUEST['act'] == 'edit_name') {
 //-- 修改支付方式描述
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_desc') {
+function edit_descAction() {
     /* 检查权限 */
     check_authz_json('payment');
 
@@ -359,7 +363,7 @@ if ($_REQUEST['act'] == 'edit_desc') {
 //-- 修改支付方式排序
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_order') {
+function edit_orderAction() {
     /* 检查权限 */
     check_authz_json('payment');
 
@@ -376,7 +380,7 @@ if ($_REQUEST['act'] == 'edit_order') {
 //-- 修改支付方式费用
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_pay_fee') {
+function edit_pay_feeAction() {
     /* 检查权限 */
     check_authz_json('payment');
 
@@ -397,4 +401,5 @@ if ($_REQUEST['act'] == 'edit_pay_fee') {
     /* 更新支付费用 */
     $exc->edit("pay_fee = '$pay_fee'", $code);
     make_json_result(stripcslashes($pay_fee));
+}
 }

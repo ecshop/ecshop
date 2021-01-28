@@ -1,19 +1,24 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 配送方式管理程序
  */
+class ShippingController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        $exc = new exchange($ecs->table('shipping'), $db, 'shipping_code', 'shipping_name');
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-$exc = new exchange($ecs->table('shipping'), $db, 'shipping_code', 'shipping_name');
+    }
 
 /*------------------------------------------------------ */
 //-- 配送方式列表
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $modules = read_modules(ROOT_PATH . 'includes/modules/shipping');
 
     for ($i = 0; $i < count($modules); $i++) {
@@ -61,7 +66,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 安装配送方式
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'install') {
+function installAction() {
     admin_priv('ship_manage');
 
     $set_modules = true;
@@ -99,7 +104,7 @@ if ($_REQUEST['act'] == 'install') {
 //-- 卸载配送方式
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'uninstall') {
+function uninstallAction() {
     global $ecs, $_LANG;
 
     admin_priv('ship_manage');
@@ -135,7 +140,7 @@ if ($_REQUEST['act'] == 'uninstall') {
 //-- 模板Flash编辑器
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'print_index') {
+function print_indexAction() {
     //检查登录权限
     admin_priv('ship_manage');
 
@@ -159,7 +164,7 @@ if ($_REQUEST['act'] == 'print_index') {
 //-- 模板Flash编辑器
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'recovery_default_template') {
+function recovery_default_templateAction() {
     /* 检查登录权限 */
     admin_priv('ship_manage');
 
@@ -183,7 +188,7 @@ if ($_REQUEST['act'] == 'recovery_default_template') {
 //-- 模板Flash编辑器 上传图片
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'print_upload') {
+function print_uploadAction() {
     //检查登录权限
     admin_priv('ship_manage');
 
@@ -228,7 +233,7 @@ if ($_REQUEST['act'] == 'print_upload') {
 //-- 模板Flash编辑器 删除图片
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'print_del') {
+function print_delAction() {
     /* 检查权限 */
     check_authz_json('ship_manage');
 
@@ -256,7 +261,7 @@ if ($_REQUEST['act'] == 'print_del') {
 //-- 编辑打印模板
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_print_template') {
+function edit_print_templateAction() {
     admin_priv('ship_manage');
 
     $shipping_id = !empty($_GET['shipping']) ? intval($_GET['shipping']) : 0;
@@ -288,7 +293,7 @@ if ($_REQUEST['act'] == 'edit_print_template') {
 //-- 编辑打印模板
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'do_edit_print_template') {
+function do_edit_print_templateAction() {
     /* 检查权限 */
     admin_priv('ship_manage');
 
@@ -318,7 +323,7 @@ if ($_REQUEST['act'] == 'do_edit_print_template') {
 //-- 编辑配送方式名称
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_name') {
+function edit_nameAction() {
     /* 检查权限 */
     check_authz_json('ship_manage');
 
@@ -345,7 +350,7 @@ if ($_REQUEST['act'] == 'edit_name') {
 //-- 编辑配送方式描述
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_desc') {
+function edit_descAction() {
     /* 检查权限 */
     check_authz_json('ship_manage');
 
@@ -362,7 +367,7 @@ if ($_REQUEST['act'] == 'edit_desc') {
 //-- 修改配送方式保价费
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_insure') {
+function edit_insureAction() {
     /* 检查权限 */
     check_authz_json('ship_manage');
 
@@ -391,7 +396,7 @@ if ($_REQUEST['act'] == 'edit_insure') {
     $exc->edit("insure = '$val'", $id);
     make_json_result(stripcslashes($val));
 }
-if ($_REQUEST['act'] == 'shipping_priv') {
+function shipping_privAction() {
     check_authz_json('ship_manage');
 
     make_json_result('');
@@ -400,7 +405,7 @@ if ($_REQUEST['act'] == 'shipping_priv') {
 //-- 修改配送方式排序
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_order') {
+function edit_orderAction() {
     /* 检查权限 */
     check_authz_json('ship_manage');
 
@@ -453,4 +458,5 @@ function is_print_bg_default($print_bg)
     }
 
     return false;
+}
 }

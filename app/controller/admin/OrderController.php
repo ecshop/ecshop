@@ -1,20 +1,26 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 订单管理
  */
 
-define('IN_ECS', true);
+class OrderController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'includes/lib_order.php');
-require_once(ROOT_PATH . 'includes/lib_goods.php');
+        require_once(ROOT_PATH . 'includes/lib_order.php');
+        require_once(ROOT_PATH . 'includes/lib_goods.php');
+    }
 
 /*------------------------------------------------------ */
 //-- 订单查询
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'order_query') {
+function order_queryAction() {
     /* 检查权限 */
     admin_priv('order_view');
 
@@ -45,7 +51,7 @@ if ($_REQUEST['act'] == 'order_query') {
 //-- 订单列表
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 检查权限 */
     admin_priv('order_view');
 
@@ -75,7 +81,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     /* 检查权限 */
     admin_priv('order_view');
 
@@ -94,7 +100,7 @@ if ($_REQUEST['act'] == 'query') {
 //-- 订单详情页面
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'info') {
+function infoAction() {
     /* 根据订单id或订单号查询订单信息 */
     if (isset($_REQUEST['order_id'])) {
         $order_id = intval($_REQUEST['order_id']);
@@ -453,7 +459,7 @@ if ($_REQUEST['act'] == 'info') {
 /*------------------------------------------------------ */
 //-- 发货单列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'delivery_list') {
+function delivery_listAction() {
     /* 检查权限 */
     admin_priv('delivery_view');
 
@@ -482,7 +488,7 @@ if ($_REQUEST['act'] == 'delivery_list') {
 /*------------------------------------------------------ */
 //-- 搜索、排序、分页
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'delivery_query') {
+function delivery_queryAction() {
     /* 检查权限 */
     admin_priv('delivery_view');
 
@@ -501,7 +507,7 @@ if ($_REQUEST['act'] == 'delivery_query') {
 /*------------------------------------------------------ */
 //-- 发货单详细
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'delivery_info') {
+function delivery_infoAction() {
     /* 检查权限 */
     admin_priv('delivery_view');
 
@@ -597,7 +603,7 @@ if ($_REQUEST['act'] == 'delivery_info') {
 /*------------------------------------------------------ */
 //-- 发货单发货确认
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'delivery_ship') {
+function delivery_shipAction() {
     /* 检查权限 */
     admin_priv('delivery_view');
 
@@ -791,7 +797,7 @@ if ($_REQUEST['act'] == 'delivery_ship') {
 /*------------------------------------------------------ */
 //-- 发货单取消发货
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'delivery_cancel_ship') {
+function delivery_cancel_shipAction() {
     /* 检查权限 */
     admin_priv('delivery_view');
 
@@ -907,7 +913,7 @@ if ($_REQUEST['act'] == 'delivery_cancel_ship') {
 /*------------------------------------------------------ */
 //-- 退货单列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'back_list') {
+function back_listAction() {
     /* 检查权限 */
     admin_priv('back_view');
 
@@ -936,7 +942,7 @@ if ($_REQUEST['act'] == 'back_list') {
 /*------------------------------------------------------ */
 //-- 搜索、排序、分页
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'back_query') {
+function back_queryAction() {
     /* 检查权限 */
     admin_priv('back_view');
 
@@ -955,7 +961,7 @@ if ($_REQUEST['act'] == 'back_query') {
 /*------------------------------------------------------ */
 //-- 退货单详细
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'back_info') {
+function back_infoAction() {
     /* 检查权限 */
     admin_priv('back_view');
 
@@ -1038,7 +1044,7 @@ if ($_REQUEST['act'] == 'back_info') {
 //-- 修改订单（处理提交）
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'step_post') {
+function step_postAction() {
     /* 检查权限 */
     admin_priv('order_edit');
 
@@ -1744,7 +1750,11 @@ if ($_REQUEST['act'] == 'step_post') {
 //-- 修改订单（载入页面）
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+    function addAction() {
+        editAction();
+    }
+
+function editAction() {
     /* 检查权限 */
     admin_priv('order_edit');
 
@@ -1980,7 +1990,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 //-- 处理
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'process') {
+function processAction() {
     /* 取得参数 func */
     $func = isset($_GET['func']) ? $_GET['func'] : '';
 
@@ -2074,7 +2084,7 @@ if ($_REQUEST['act'] == 'process') {
 //-- 合并订单
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'merge') {
+function mergeAction() {
     /* 检查权限 */
     admin_priv('order_os_edit');
 
@@ -2099,7 +2109,7 @@ if ($_REQUEST['act'] == 'merge') {
 //-- 订单打印模板（载入页面）
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'templates') {
+function templatesAction() {
     /* 检查权限 */
     admin_priv('order_os_edit');
 
@@ -2134,7 +2144,7 @@ if ($_REQUEST['act'] == 'templates') {
 //-- 订单打印模板（提交修改）
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_templates') {
+function edit_templatesAction() {
     /* 更新模板文件的内容 */
     $file_name = @fopen('../' . DATA_DIR . '/order_print.html', 'w+');
     @fwrite($file_name, stripslashes($_POST['FCKeditor1']));
@@ -2149,7 +2159,7 @@ if ($_REQUEST['act'] == 'edit_templates') {
 //-- 操作订单状态（载入页面）
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'operate') {
+function operateAction() {
     $order_id = '';
     /* 检查权限 */
     admin_priv('order_os_edit');
@@ -2628,7 +2638,7 @@ if ($_REQUEST['act'] == 'operate') {
 //-- 操作订单状态（处理批量提交）
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'batch_operate_post') {
+function batch_operate_postAction() {
     /* 检查权限 */
     admin_priv('order_os_edit');
 
@@ -2858,7 +2868,7 @@ if ($_REQUEST['act'] == 'batch_operate_post') {
 //-- 操作订单状态（处理提交）
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'operate_post') {
+function operate_postAction() {
     /* 检查权限 */
     admin_priv('order_os_edit');
 
@@ -3527,7 +3537,7 @@ if ($_REQUEST['act'] == 'operate_post') {
     $links[] = array('text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id=' . $order_id);
     sys_msg($_LANG['act_ok'] . $msg, 0, $links);
 }
-if ($_REQUEST['act'] == 'json') {
+function jsonAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON();
 
@@ -3576,7 +3586,7 @@ if ($_REQUEST['act'] == 'json') {
 /*------------------------------------------------------ */
 //-- 合并订单
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'ajax_merge_order') {
+function ajax_merge_orderAction() {
     /* 检查权限 */
     admin_priv('order_os_edit');
 
@@ -3600,7 +3610,7 @@ if ($_REQUEST['act'] == 'ajax_merge_order') {
 /*------------------------------------------------------ */
 //-- 删除订单
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove_order') {
+function remove_orderAction() {
     /* 检查权限 */
     admin_priv('order_edit');
 
@@ -3636,7 +3646,7 @@ if ($_REQUEST['act'] == 'remove_order') {
 /*------------------------------------------------------ */
 //-- 根据关键字和id搜索用户
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'search_users') {
+function search_usersAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON();
 
@@ -3665,7 +3675,7 @@ if ($_REQUEST['act'] == 'search_users') {
 /*------------------------------------------------------ */
 //-- 根据关键字搜索商品
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'search_goods') {
+function search_goodsAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON();
 
@@ -3698,7 +3708,7 @@ if ($_REQUEST['act'] == 'search_goods') {
 /*------------------------------------------------------ */
 //-- 编辑收货单号
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_invoice_no') {
+function edit_invoice_noAction() {
     /* 检查权限 */
     check_authz_json('order_edit');
 
@@ -3726,7 +3736,7 @@ if ($_REQUEST['act'] == 'edit_invoice_no') {
 /*------------------------------------------------------ */
 //-- 编辑付款备注
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_pay_note') {
+function edit_pay_noteAction() {
     /* 检查权限 */
     check_authz_json('order_edit');
 
@@ -3754,7 +3764,7 @@ if ($_REQUEST['act'] == 'edit_pay_note') {
 /*------------------------------------------------------ */
 //-- 获取订单商品信息
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'get_goods_info') {
+function get_goods_infoAction() {
     /* 取得订单商品 */
     $order_id = isset($_REQUEST['order_id']) ? intval($_REQUEST['order_id']) : 0;
     if (empty($order_id)) {
@@ -5388,4 +5398,5 @@ function del_order_invoice_no($order_id, $delivery_invoice_no)
 function get_site_root_url()
 {
     return 'http://' . $_SERVER['HTTP_HOST'] . str_replace('/' . ADMIN_PATH . '/order.php', '', PHP_SELF);
+}
 }

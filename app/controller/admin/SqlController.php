@@ -1,24 +1,23 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 会员管理程序
  */
+class SqlController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-$_POST['sql'] = !empty($_POST['sql']) ? trim($_POST['sql']) : '';
-
-if (!$_POST['sql']) {
-    $_REQUEST['act'] = 'main';
-}
+    }
 
 /*------------------------------------------------------ */
 //-- 用户帐号列表
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'main') {
+function mainAction() {
     admin_priv('sql_query');
     assign_query_info();
     $smarty->assign('type', -1);
@@ -27,7 +26,7 @@ if ($_REQUEST['act'] == 'main') {
     $smarty->display('sql.htm');
 }
 
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     admin_priv('sql_query');
     if (!empty($_POST['sql'])) {
         preg_match_all("/(SELECT)/i", $_POST['sql'], $matches);
@@ -122,4 +121,5 @@ function assign_sql($sql)
             $smarty->assign('result', $result);
         }
     }
+}
 }

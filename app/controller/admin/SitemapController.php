@@ -1,17 +1,20 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 站点地图生成程序
  */
+class SitemapController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        /* 检查权限 */
+        admin_priv('sitemap');
+    }
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-/* 检查权限 */
-admin_priv('sitemap');
-
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    function indexAction() {
     /*------------------------------------------------------ */
     //-- 设置更新频率
     /*------------------------------------------------------ */
@@ -22,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $smarty->assign('arr_changefreq', array(1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1));
     $smarty->display('sitemap.htm');
 }
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+function doAction() {
     /*------------------------------------------------------ */
     //-- 生成站点地图
     /*------------------------------------------------------ */
@@ -118,4 +121,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             sys_msg(sprintf($_LANG['generate_failed']));
         }
     }
+}
 }

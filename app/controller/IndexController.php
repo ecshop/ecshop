@@ -1,12 +1,20 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 首页文件
  */
+class IndexController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
+    }
+}
 
-require(dirname(__FILE__) . '/includes/init.php');
+
+
 
 if ((DEBUG_MODE & 2) != 2) {
     $smarty->caching = true;

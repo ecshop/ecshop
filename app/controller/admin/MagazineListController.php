@@ -1,13 +1,17 @@
 <?php
 
-/**
- * 程序说明
- */
+namespace app\controller\admin;
 
-define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
-admin_priv('magazine_list');
-if ($_REQUEST['act'] == 'list') {
+class MagazineListController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        admin_priv('magazine_list');
+
+    }
+
+function listAction() {
     $smarty->assign('ur_here', $_LANG['magazine_list']);
     $smarty->assign('action_link', array('text' => $_LANG['add_new'], 'href' => 'magazine_list.php?act=add'));
     $smarty->assign('full_page', 1);
@@ -30,7 +34,7 @@ if ($_REQUEST['act'] == 'list') {
     assign_query_info();
     $smarty->display('magazine_list.htm');
 }
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $magazinedb = get_magazine();
     $smarty->assign('magazinedb', $magazinedb['magazinedb']);
     $smarty->assign('filter', $magazinedb['filter']);
@@ -42,7 +46,7 @@ if ($_REQUEST['act'] == 'query') {
 
     make_json_result($smarty->fetch('magazine_list.htm'), '', array('filter' => $magazinedb['filter'], 'page_count' => $magazinedb['page_count']));
 }
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     if (empty($_POST['step'])) {
         include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
         $smarty->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'magazine_list.php?act=list'));
@@ -62,7 +66,7 @@ if ($_REQUEST['act'] == 'add') {
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
 }
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
     $id = intval($_REQUEST['id']);
     if (empty($_POST['step'])) {
@@ -83,13 +87,13 @@ if ($_REQUEST['act'] == 'edit') {
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
 }
-if ($_REQUEST['act'] == 'del') {
+function delAction() {
     $id = intval($_REQUEST['id']);
     $db->query("DELETE  FROM " . $ecs->table('mail_templates') . " WHERE type = 'magazine' AND template_id = '$id' LIMIT 1");
     $links[] = array('text' => $_LANG['magazine_list'], 'href' => 'magazine_list.php?act=list');
     sys_msg($_LANG['edit_ok'], 0, $links);
 }
-if ($_REQUEST['act'] == 'addtolist') {
+function addtolistAction() {
     $id = intval($_REQUEST['id']);
     $pri = !empty($_REQUEST['pri']) ? 1 : 0;
     $start = empty($_GET['start']) ? 0 : (int)$_GET['start'];
@@ -218,4 +222,5 @@ function get_magazine()
     $arr = array('magazinedb' => $magazinedb, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
 
     return $arr;
+}
 }

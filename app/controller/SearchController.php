@@ -1,10 +1,19 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 搜索程序
  */
+class SearchController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
+    }
+}
+
+
 
 if (empty($_GET['encode'])) {
     $string = array_merge($_GET, $_POST);
@@ -41,7 +50,6 @@ if (empty($_GET['encode'])) {
     }
 }
 
-require(dirname(__FILE__) . '/includes/init.php');
 
 $_REQUEST = array_merge($_REQUEST, addslashes_deep($string));
 
@@ -50,7 +58,7 @@ $_REQUEST['act'] = !empty($_REQUEST['act']) ? trim($_REQUEST['act']) : '';
 /*------------------------------------------------------ */
 //-- 高级搜索
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'advanced_search') {
+function advanced_searchAction() {
     $goods_type = !empty($_REQUEST['goods_type']) ? intval($_REQUEST['goods_type']) : 0;
     $attributes = get_seachable_attributes($goods_type);
     $smarty->assign('goods_type_selected', $goods_type);

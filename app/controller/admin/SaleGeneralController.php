@@ -1,12 +1,19 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 销售概况
  */
+class SaleGeneralController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+    }
+}
 
-require(dirname(__FILE__) . '/includes/init.php');
 require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
 $smarty->assign('lang', $_LANG);
 
@@ -61,7 +68,7 @@ $data_list = $db->getAll($sql);
 /*------------------------------------------------------ */
 //-- 显示统计信息
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 赋值查询时间段 */
     $smarty->assign('start_time', local_date('Y-m-d', $start_time));
     $smarty->assign('end_time', local_date('Y-m-d', $end_time));
@@ -106,7 +113,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 下载EXCEL报表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'download') {
+function downloadAction() {
     /* 文件名 */
     $filename = !empty($_REQUEST['filename']) ? trim($_REQUEST['filename']) : '';
 

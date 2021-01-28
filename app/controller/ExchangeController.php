@@ -1,22 +1,23 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 积分商城
  */
+class ExchangeController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
+    }
+}
 
-require(dirname(__FILE__) . '/includes/init.php');
+
+
 
 if ((DEBUG_MODE & 2) != 2) {
     $smarty->caching = true;
-}
-
-/*------------------------------------------------------ */
-//-- act 操作项的初始化
-/*------------------------------------------------------ */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
 }
 
 /*------------------------------------------------------ */
@@ -26,7 +27,7 @@ if (empty($_REQUEST['act'])) {
 /*------------------------------------------------------ */
 //-- 积分兑换商品列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 初始化分页信息 */
     $page = isset($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
     $size = isset($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
@@ -114,7 +115,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 积分兑换商品详情
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'view') {
+function viewAction() {
     $goods_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
     $cache_id = $goods_id . '-' . $_SESSION['user_rank'] . '-' . $_CFG['lang'] . '-exchange';
@@ -189,7 +190,7 @@ if ($_REQUEST['act'] == 'view') {
 //--  兑换
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'buy') {
+function buyAction() {
     /* 查询：判断是否登录 */
     if (!isset($back_act) && isset($GLOBALS['_SERVER']['HTTP_REFERER'])) {
         $back_act = strpos($GLOBALS['_SERVER']['HTTP_REFERER'], 'exchange') ? $GLOBALS['_SERVER']['HTTP_REFERER'] : './index.php';

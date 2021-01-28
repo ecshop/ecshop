@@ -1,12 +1,21 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 短信模块 之 控制器
  */
+class SmsController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+    }
+}
 
-require(dirname(__FILE__) . '/includes/init.php');
+
+
 require_once(ROOT_PATH . 'includes/cls_sms.php');
 
 $action = isset($_REQUEST['act']) ? $_REQUEST['act'] : 'display_my_info';

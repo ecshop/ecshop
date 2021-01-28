@@ -1,26 +1,23 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理中心语言项编辑(前台语言项)
  */
+class EditLanguagesController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        admin_priv('lang_edit');
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
-
-admin_priv('lang_edit');
+    }
 
 /*------------------------------------------------------ */
 //-- 列表编辑 ?act=list
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     //从languages目录下获取语言项文件
     $lang_arr = array();
     $lang_path = ROOT_PATH . 'languages/' . $_CFG['lang'];
@@ -74,7 +71,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 编辑语言项
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 语言项的路径 */
     $lang_file = isset($_POST['file_path']) ? trim($_POST['file_path']) : '';
 
@@ -204,4 +201,5 @@ function set_language_items($file_path, $src_items, $dst_items)
     } else {
         return true;
     }
+}
 }

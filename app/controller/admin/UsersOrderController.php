@@ -1,17 +1,27 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 会员排行统计程序
  */
+class UsersOrderController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+        require_once(ROOT_PATH . 'includes/lib_order.php');
+        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
+        $smarty->assign('lang', $_LANG);
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'includes/lib_order.php');
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
-$smarty->assign('lang', $_LANG);
+    }
 
-if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] == 'download')) {
+function query(){
+    download();
+}
+
+function download(){
     /* 检查权限 */
     check_authz_json('client_flow_stats');
     if (strstr($_REQUEST['start_date'], '-') === false) {
@@ -19,7 +29,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
         $_REQUEST['end_date'] = local_date('Y-m-d', $_REQUEST['end_date']);
     }
 
-    if ($_REQUEST['act'] == 'download') {
+    if($act == 'download') { // TODO
         $user_orderinfo = get_user_orderinfo(false);
         $filename = $_REQUEST['start_date'] . '_' . $_REQUEST['end_date'] . 'users_order';
 
@@ -48,7 +58,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
     make_json_result($smarty->fetch('users_order.htm'), '', array('filter' => $user_orderinfo['filter'], 'page_count' => $user_orderinfo['page_count']));
 }
 
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 权限判断 */
     admin_priv('client_flow_stats');
     /* 时间参数 */
@@ -128,4 +138,5 @@ function get_user_orderinfo($is_pagination = true)
     }
     $arr = array('user_orderinfo' => $user_orderinfo, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
     return $arr;
+}
 }

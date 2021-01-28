@@ -1,22 +1,24 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 搜索引擎关键字统计
  */
+class SearchengineStatsController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
 
-define('IN_ECS', true);
+    }
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
 
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'view';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
 
-if ($_REQUEST['act'] == 'view') {
+
+
+function indexAction() {
     admin_priv('client_flow_stats');
 
     /* 时间参数 */
@@ -107,7 +109,7 @@ if ($_REQUEST['act'] == 'view') {
     assign_query_info();
     $smarty->display('searchengine_stats.htm');
 }
-if ($_REQUEST['act'] == 'download') {
+function downloadAction() {
     $start_date = empty($_REQUEST['start_date']) ? strtotime('-20 day') : intval($_REQUEST['start_date']);
     $end_date = empty($_REQUEST['end_date']) ? time() : intval($_REQUEST['end_date']);
 
@@ -141,4 +143,5 @@ if ($_REQUEST['act'] == 'download') {
         }
     }
     echo ecs_iconv(EC_CHARSET, 'GB2312', $data) . "\t";
+}
 }

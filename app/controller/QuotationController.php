@@ -1,11 +1,19 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 报价单
  */
-define('IN_ECS', true);
+class QuotationController extends InitController
+{
+    public function initialize()
+    {
 
-require(dirname(__FILE__) . '/includes/init.php');
+    }
+}
+
+
 
 $action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
 if ($action == 'print_quotation') {

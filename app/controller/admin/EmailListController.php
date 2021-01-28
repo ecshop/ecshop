@@ -1,13 +1,20 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 邮件列表管理
  */
-define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
-admin_priv('email_list');
+class EmailListController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        admin_priv('email_list');
 
-if ($_REQUEST['act'] == 'list') {
+    }
+
+function listAction() {
     $emaildb = get_email_list();
     $smarty->assign('full_page', 1);
     $smarty->assign('ur_here', $_LANG['email_list']);
@@ -18,7 +25,7 @@ if ($_REQUEST['act'] == 'list') {
     assign_query_info();
     $smarty->display('email_list.htm');
 }
-if ($_REQUEST['act'] == 'export') {
+function exportAction() {
     $sql = "SELECT email FROM " . $ecs->table('email_list') . "WHERE stat = 1";
     $emails = $db->getAll($sql);
     $out = '';
@@ -36,7 +43,7 @@ if ($_REQUEST['act'] == 'export') {
     echo $out;
     exit;
 }
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $emaildb = get_email_list();
     $smarty->assign('emaildb', $emaildb['emaildb']);
     $smarty->assign('filter', $emaildb['filter']);
@@ -56,7 +63,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 批量删除
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch_remove') {
+function batch_removeAction() {
     if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
         sys_msg($_LANG['no_select_email'], 1);
     }
@@ -72,7 +79,7 @@ if ($_REQUEST['act'] == 'batch_remove') {
 /*------------------------------------------------------ */
 //-- 批量恢复
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch_unremove') {
+function batch_unremoveAction() {
     if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
         sys_msg($_LANG['no_select_email'], 1);
     }
@@ -88,7 +95,7 @@ if ($_REQUEST['act'] == 'batch_unremove') {
 /*------------------------------------------------------ */
 //-- 批量退订
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch_exit') {
+function batch_exitAction() {
     if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
         sys_msg($_LANG['no_select_email'], 1);
     }
@@ -131,4 +138,5 @@ function get_email_list()
     $arr = array('emaildb' => $emaildb, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
 
     return $arr;
+}
 }

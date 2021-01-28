@@ -1,18 +1,23 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理中心供货商管理
  */
+class SuppliersController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        define('SUPPLIERS_ACTION_LIST', 'delivery_view,back_view');
 
-define('IN_ECS', true);
+    }
 
-require(dirname(__FILE__) . '/includes/init.php');
-
-define('SUPPLIERS_ACTION_LIST', 'delivery_view,back_view');
 /*------------------------------------------------------ */
 //-- 供货商列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 检查权限 */
     admin_priv('suppliers_manage');
 
@@ -39,7 +44,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     check_authz_json('suppliers_manage');
 
     $result = suppliers_list();
@@ -63,7 +68,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 列表页编辑名称
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_suppliers_name') {
+function edit_suppliers_nameAction() {
     check_authz_json('suppliers_manage');
 
     $id = intval($_POST['id']);
@@ -97,7 +102,7 @@ if ($_REQUEST['act'] == 'edit_suppliers_name') {
 /*------------------------------------------------------ */
 //-- 删除供货商
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('suppliers_manage');
 
     $id = intval($_REQUEST['id']);
@@ -158,7 +163,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 修改供货商状态
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'is_check') {
+function is_checkAction() {
     check_authz_json('suppliers_manage');
 
     $id = intval($_REQUEST['id']);
@@ -180,7 +185,7 @@ if ($_REQUEST['act'] == 'is_check') {
 /*------------------------------------------------------ */
 //-- 批量操作
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch') {
+function batchAction() {
     /* 取得要操作的记录编号 */
     if (empty($_POST['checkboxes'])) {
         sys_msg($_LANG['no_record_selected']);
@@ -251,11 +256,8 @@ if ($_REQUEST['act'] == 'batch') {
 /*------------------------------------------------------ */
 //-- 添加、编辑供货商
 /*------------------------------------------------------ */
-if (in_array($_REQUEST['act'], array('add', 'edit'))) {
-    /* 检查权限 */
-    admin_priv('suppliers_manage');
 
-    if ($_REQUEST['act'] == 'add') {
+    function addAction() {
         $suppliers = array();
 
         /* 取得所有管理员，*/
@@ -280,7 +282,7 @@ if (in_array($_REQUEST['act'], array('add', 'edit'))) {
         $smarty->display('suppliers_info.htm');
     }
 
-    if ($_REQUEST['act'] == 'edit') {
+    function editAction() {
         $suppliers = array();
 
         /* 取得供货商信息 */
@@ -313,16 +315,13 @@ if (in_array($_REQUEST['act'], array('add', 'edit'))) {
 
         $smarty->display('suppliers_info.htm');
     }
-}
 
 /*------------------------------------------------------ */
 //-- 提交添加、编辑供货商
 /*------------------------------------------------------ */
-if (in_array($_REQUEST['act'], array('insert', 'update'))) {
-    /* 检查权限 */
-    admin_priv('suppliers_manage');
 
-    if ($_REQUEST['act'] == 'insert') {
+
+    function insertAction() {
         /* 提交值 */
         $suppliers = array('suppliers_name' => trim($_POST['suppliers_name']),
             'suppliers_desc' => trim($_POST['suppliers_desc']),
@@ -358,7 +357,7 @@ if (in_array($_REQUEST['act'], array('insert', 'update'))) {
         sys_msg($_LANG['add_suppliers_ok'], 0, $links);
     }
 
-    if ($_REQUEST['act'] == 'update') {
+    function updateAction() {
         /* 提交值 */
         $suppliers = array('id' => trim($_POST['id']));
 
@@ -405,7 +404,6 @@ if (in_array($_REQUEST['act'], array('insert', 'update'))) {
         $links[] = array('href' => 'suppliers.php?act=list', 'text' => $_LANG['back_suppliers_list']);
         sys_msg($_LANG['edit_suppliers_ok'], 0, $links);
     }
-}
 
 /**
  *  获取供应商列表信息
@@ -461,4 +459,5 @@ function suppliers_list()
     $arr = array('result' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
 
     return $arr;
+}
 }

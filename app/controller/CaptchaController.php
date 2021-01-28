@@ -1,13 +1,21 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 生成验证码
  */
+class CaptchaController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
+    }
+}
+
+
 define('INIT_NO_SMARTY', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
 require(ROOT_PATH . 'includes/cls_captcha.php');
 
 $img = new captcha(ROOT_PATH . 'data/captcha/', $_CFG['captcha_width'], $_CFG['captcha_height']);

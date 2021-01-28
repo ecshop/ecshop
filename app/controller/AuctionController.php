@@ -1,24 +1,21 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 拍卖前台文件
  */
+class AuctionController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-/*------------------------------------------------------ */
-//-- act 操作项的初始化
-/*------------------------------------------------------ */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
+    }
 }
-
 /*------------------------------------------------------ */
 //-- 拍卖活动列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 取得拍卖活动总数 */
     $count = auction_count();
     if ($count > 0) {
@@ -75,7 +72,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 拍卖商品 --> 商品详情
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'view') {
+function viewAction() {
     /* 取得参数：拍卖活动id */
     $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
     if ($id <= 0) {
@@ -165,7 +162,7 @@ if ($_REQUEST['act'] == 'view') {
 /*------------------------------------------------------ */
 //-- 拍卖商品 --> 出价
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'bid') {
+function bidAction() {
     include_once(ROOT_PATH . 'includes/lib_order.php');
 
     /* 取得参数：拍卖活动id */
@@ -286,7 +283,7 @@ if ($_REQUEST['act'] == 'bid') {
 /*------------------------------------------------------ */
 //-- 拍卖商品 --> 购买
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'buy') {
+function buyAction() {
     /* 查询：取得参数：拍卖活动id */
     $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
     if ($id <= 0) {

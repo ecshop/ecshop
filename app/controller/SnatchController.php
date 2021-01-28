@@ -1,20 +1,19 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 夺宝奇兵前台页面
  */
+class SnatchController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-/*------------------------------------------------------ */
-//-- 如果用没有指定活动id，将页面重定向到即将结束的活动
-/*------------------------------------------------------ */
-if (empty($_REQUEST['act'])) {
-    //默认显示页面
-    $_REQUEST['act'] = 'main';
+    }
 }
+
+
 
 /* 设置活动的SESSION */
 if (empty($_REQUEST['id'])) {
@@ -32,7 +31,7 @@ if (empty($_REQUEST['id'])) {
 }
 
 /* 显示页面部分 */
-if ($_REQUEST['act'] == 'main') {
+function listAction() {
     $goods = get_snatch($id);
     if ($goods) {
         $position = assign_ur_here(0, $goods['snatch_name']);
@@ -84,7 +83,7 @@ if ($_REQUEST['act'] == 'main') {
 }
 
 /* 最新出价列表 */
-if ($_REQUEST['act'] == 'new_price_list') {
+function new_price_listAction() {
     $smarty->assign('price_list', get_price_list($id));
     $smarty->display('library/snatch_price.lbi');
 
@@ -92,7 +91,7 @@ if ($_REQUEST['act'] == 'new_price_list') {
 }
 
 /* 用户出价处理 */
-if ($_REQUEST['act'] == 'bid') {
+function bidAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON();
     $result = array('error' => 0, 'content' => '');
@@ -170,7 +169,7 @@ if ($_REQUEST['act'] == 'bid') {
 /*------------------------------------------------------ */
 //-- 购买商品
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'buy') {
+function buyAction() {
     if (empty($id)) {
         ecs_header("Location: ./\n");
         exit;

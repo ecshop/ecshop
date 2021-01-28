@@ -1,20 +1,28 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理中心拍卖活动管理
  */
 
-define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
-require(ROOT_PATH . 'includes/lib_goods.php');
+class AuctionController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-$exc = new exchange($ecs->table('goods_activity'), $db, 'act_id', 'act_name');
+        require(ROOT_PATH . 'includes/lib_goods.php');
+
+        $exc = new exchange($ecs->table('goods_activity'), $db, 'act_id', 'act_name');
+
+    }
 
 /*------------------------------------------------------ */
 //-- 活动列表页
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 检查权限 */
     admin_priv('auction');
 
@@ -42,7 +50,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 分页、排序、查询
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $list = auction_list();
 
     $smarty->assign('auction_list', $list['item']);
@@ -63,7 +71,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 删除
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('auction');
 
     $id = intval($_GET['id']);
@@ -92,7 +100,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 批量操作
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch') {
+function batchAction() {
     /* 取得要操作的记录编号 */
     if (empty($_POST['checkboxes'])) {
         sys_msg($_LANG['no_record_selected']);
@@ -130,7 +138,7 @@ if ($_REQUEST['act'] == 'batch') {
 //-- 查看出价记录
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'view_log') {
+function view_logAction() {
     /* 检查权限 */
     admin_priv('auction');
 
@@ -158,8 +166,10 @@ if ($_REQUEST['act'] == 'view_log') {
 /*------------------------------------------------------ */
 //-- 添加、编辑
 /*------------------------------------------------------ */
-
-if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+    function addAction() {
+        editAction();
+    }
+function editAction() {
     /* 检查权限 */
     admin_priv('auction');
 
@@ -217,8 +227,10 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 添加、编辑后提交
 /*------------------------------------------------------ */
-
-if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+    function insertAction() {
+        updateAction();
+    }
+function updateAction() {
     /* 检查权限 */
     admin_priv('auction');
 
@@ -295,7 +307,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 //-- 处理冻结资金
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'settle_money') {
+function settle_moneyAction() {
     /* 检查权限 */
     admin_priv('auction');
 
@@ -353,7 +365,7 @@ if ($_REQUEST['act'] == 'settle_money') {
 //-- 搜索商品
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'search_goods') {
+function search_goodsAction() {
     check_authz_json('auction');
 
     include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -373,7 +385,7 @@ if ($_REQUEST['act'] == 'search_goods') {
 //-- 搜索货品
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'search_products') {
+function search_productsAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -466,4 +478,5 @@ function list_link($is_add = true, $text = '')
     }
 
     return array('href' => $href, 'text' => $text);
+}
 }

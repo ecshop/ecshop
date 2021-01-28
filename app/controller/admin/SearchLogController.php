@@ -1,16 +1,19 @@
 <?php
 
-/**
- * 程序说明
- */
+namespace app\controller\admin;
 
-define('IN_ECS', true);
+class SearchLogController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-require(dirname(__FILE__) . '/includes/init.php');
-$_REQUEST['act'] = trim($_REQUEST['act']);
+        $_REQUEST['act'] = trim($_REQUEST['act']);
 
-admin_priv('search_log');
-if ($_REQUEST['act'] == 'list') {
+        admin_priv('search_log');
+    }
+
+function listAction() {
     $logdb = get_search_log();
     $smarty->assign('ur_here', $_LANG['search_log']);
     $smarty->assign('full_page', 1);
@@ -23,7 +26,7 @@ if ($_REQUEST['act'] == 'list') {
     assign_query_info();
     $smarty->display('search_log_list.htm');
 }
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $logdb = get_search_log();
     $smarty->assign('full_page', 0);
     $smarty->assign('logdb', $logdb['logdb']);
@@ -70,4 +73,5 @@ function get_search_log()
     $arr = array('logdb' => $logdb, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
 
     return $arr;
+}
 }

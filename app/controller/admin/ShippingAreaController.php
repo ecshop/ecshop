@@ -1,18 +1,23 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 配送区域管理程序
  */
+class ShippingAreaController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        $exc = new exchange($ecs->table('shipping_area'), $db, 'shipping_area_id', 'shipping_area_name');
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-$exc = new exchange($ecs->table('shipping_area'), $db, 'shipping_area_id', 'shipping_area_name');
+    }
 
 /*------------------------------------------------------ */
 //-- 配送区域列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $shipping_id = intval($_REQUEST['shipping']);
 
     $list = get_shipping_area_list($shipping_id);
@@ -32,7 +37,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 新建配送区域
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'add' && !empty($_REQUEST['shipping'])) {
+function addAction() {
     admin_priv('shiparea_manage');
 
     $shipping = $db->getRow("SELECT shipping_name, shipping_code FROM " . $ecs->table('shipping') . " WHERE shipping_id='$_REQUEST[shipping]'");
@@ -71,7 +76,7 @@ if ($_REQUEST['act'] == 'add' && !empty($_REQUEST['shipping'])) {
     assign_query_info();
     $smarty->display('shipping_area_info.htm');
 }
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     admin_priv('shiparea_manage');
 
     /* 检查同类型的配送方式下有没有重名的配送区域 */
@@ -139,7 +144,7 @@ if ($_REQUEST['act'] == 'insert') {
 //-- 编辑配送区域
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     admin_priv('shiparea_manage');
 
     $sql = "SELECT a.shipping_name, a.shipping_code, a.support_cod, b.* " .
@@ -200,7 +205,7 @@ if ($_REQUEST['act'] == 'edit') {
     $smarty->assign('default_country', 1);
     $smarty->display('shipping_area_info.htm');
 }
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     admin_priv('shiparea_manage');
 
     /* 检查同类型的配送方式下有没有重名的配送区域 */
@@ -293,7 +298,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 批量删除配送区域
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'multi_remove') {
+function multi_removeAction() {
     admin_priv('shiparea_manage');
 
     if (isset($_POST['areas']) && count($_POST['areas']) > 0) {
@@ -315,7 +320,7 @@ if ($_REQUEST['act'] == 'multi_remove') {
 //-- 编辑配送区域名称
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_area') {
+function edit_areaAction() {
     /* 检查权限 */
     check_authz_json('shiparea_manage');
 
@@ -345,7 +350,7 @@ if ($_REQUEST['act'] == 'edit_area') {
 //-- 删除配送区域
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'remove_area') {
+function remove_areaAction() {
     check_authz_json('shiparea_manage');
 
     $id = intval($_GET['id']);
@@ -389,4 +394,5 @@ function get_shipping_area_list($shipping_id)
     }
 
     return $list;
+}
 }

@@ -1,25 +1,25 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 属性规格管理
  */
+class AttributeController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        $exc = new exchange($ecs->table("attribute"), $db, 'attr_id', 'attr_name');
 
-define('IN_ECS', true);
+    }
 
-require(dirname(__FILE__) . '/includes/init.php');
 
-/* act操作项的初始化 */
-$_REQUEST['act'] = trim($_REQUEST['act']);
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-}
-
-$exc = new exchange($ecs->table("attribute"), $db, 'attr_id', 'attr_name');
 
 /*------------------------------------------------------ */
 //-- 属性列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $goods_type = isset($_GET['goods_type']) ? intval($_GET['goods_type']) : 0;
 
     $smarty->assign('ur_here', $_LANG['09_attribute_list']);
@@ -46,7 +46,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 排序、翻页
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $list = get_attrlist();
 
     $smarty->assign('attr_list', $list['item']);
@@ -67,7 +67,10 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加/编辑属性
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+    function addAction() {
+        editAction();
+    }
+function editAction() {
     /* 检查权限 */
     admin_priv('attr_manage');
 
@@ -111,8 +114,10 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 插入/更新属性
 /*------------------------------------------------------ */
-
-if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+    function insertAction() {
+        updateAction();
+    }
+function updateAction() {
     /* 检查权限 */
     admin_priv('attr_manage');
 
@@ -161,7 +166,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 删除属性(一个或多个)
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch') {
+function batchAction() {
     /* 检查权限 */
     admin_priv('attr_manage');
 
@@ -192,7 +197,7 @@ if ($_REQUEST['act'] == 'batch') {
 //-- 编辑属性名称
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_attr_name') {
+function edit_attr_nameAction() {
     check_authz_json('attr_manage');
 
     $id = intval($_POST['id']);
@@ -217,7 +222,7 @@ if ($_REQUEST['act'] == 'edit_attr_name') {
 //-- 编辑排序序号
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_sort_order') {
+function edit_sort_orderAction() {
     check_authz_json('attr_manage');
 
     $id = intval($_POST['id']);
@@ -233,7 +238,7 @@ if ($_REQUEST['act'] == 'edit_sort_order') {
 /*------------------------------------------------------ */
 //-- 删除商品属性
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('attr_manage');
 
     $id = intval($_GET['id']);
@@ -250,7 +255,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 获取某属性商品数量
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'get_attr_num') {
+function get_attr_numAction() {
     check_authz_json('attr_manage');
 
     $id = intval($_GET['attr_id']);
@@ -275,7 +280,7 @@ if ($_REQUEST['act'] == 'get_attr_num') {
 //-- 获得指定商品类型下的所有属性分组
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'get_attr_groups') {
+function get_attr_groupsAction() {
     check_authz_json('attr_manage');
 
     $cat_id = intval($_GET['cat_id']);
@@ -321,4 +326,5 @@ function get_attrlist()
     $arr = array('item' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
 
     return $arr;
+}
 }

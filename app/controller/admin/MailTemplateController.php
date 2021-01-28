@@ -1,19 +1,23 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理中心模版管理程序
  */
+class MailTemplateController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        admin_priv('mail_template');
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-
-admin_priv('mail_template');
+    }
 
 /*------------------------------------------------------ */
 //-- 模版列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
 
     /* 获得所有邮件模板 */
@@ -57,7 +61,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 载入指定模版
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'loat_template') {
+function loat_templateAction() {
     include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
 
     $tpl = intval($_GET['tpl']);
@@ -104,7 +108,7 @@ if ($_REQUEST['act'] == 'loat_template') {
 //-- 保存模板内容
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'save_template') {
+function save_templateAction() {
     if (empty($_POST['subject'])) {
         sys_msg($_LANG['subject_empty'], 1, array(), false);
     } else {
@@ -150,4 +154,5 @@ function load_template($temp_id)
     $row = $GLOBALS['db']->getRow($sql);
 
     return $row;
+}
 }

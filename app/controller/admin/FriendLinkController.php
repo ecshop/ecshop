@@ -1,28 +1,29 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 友情链接管理
  */
+class FriendLinkController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-include_once(ROOT_PATH . 'includes/cls_image.php');
-$image = new cls_image($_CFG['bgcolor']);
+        include_once(ROOT_PATH . 'includes/cls_image.php');
+        $image = new cls_image($_CFG['bgcolor']);
 
-$exc = new exchange($ecs->table('friend_link'), $db, 'link_id', 'link_name');
+        $exc = new exchange($ecs->table('friend_link'), $db, 'link_id', 'link_name');
 
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
+    }
+
 
 /*------------------------------------------------------ */
 //-- 友情链接列表页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['list_link']);
     $smarty->assign('action_link', array('text' => $_LANG['add_link'], 'href' => 'friend_link.php?act=add'));
@@ -46,7 +47,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     /* 获取友情链接数据 */
     $links_list = get_links_list();
 
@@ -68,7 +69,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加新链接页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     admin_priv('friendlink');
 
     $smarty->assign('ur_here', $_LANG['add_link']);
@@ -83,7 +84,7 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 处理添加的链接
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /* 变量初始化 */
     $link_logo = '';
     $show_order = (!empty($_POST['show_order'])) ? intval($_POST['show_order']) : 0;
@@ -146,7 +147,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 友情链接编辑页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     admin_priv('friendlink');
 
     /* 取得友情链接数据 */
@@ -182,7 +183,7 @@ if ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 编辑链接的处理页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 变量初始化 */
     $id = (!empty($_REQUEST['id'])) ? intval($_REQUEST['id']) : 0;
     $show_order = (!empty($_POST['show_order'])) ? intval($_POST['show_order']) : 0;
@@ -241,7 +242,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 编辑链接名称
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_link_name') {
+function edit_link_nameAction() {
     check_authz_json('friendlink');
 
     $id = intval($_POST['id']);
@@ -264,7 +265,7 @@ if ($_REQUEST['act'] == 'edit_link_name') {
 /*------------------------------------------------------ */
 //-- 删除友情链接
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('friendlink');
 
     $id = intval($_GET['id']);
@@ -290,7 +291,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 编辑排序
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_show_order') {
+function edit_show_orderAction() {
     check_authz_json('friendlink');
 
     $id = intval($_POST['id']);
@@ -350,4 +351,5 @@ function get_links_list()
     }
 
     return array('list' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+}
 }

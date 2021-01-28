@@ -1,27 +1,26 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理员信息以及权限管理程序
  */
+class PrivilegeController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+        /* 初始化 $exc 对象 */
+        $exc = new exchange($ecs->table("admin_user"), $db, 'user_id', 'user_name');
 
-require(dirname(__FILE__) . '/includes/init.php');
+    }
 
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'login';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
-
-/* 初始化 $exc 对象 */
-$exc = new exchange($ecs->table("admin_user"), $db, 'user_id', 'user_name');
 
 /*------------------------------------------------------ */
 //-- 退出登录
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'logout') {
+function logoutAction() {
     /* 清除cookie */
     setcookie('ECSCP[admin_id]', '', 1, null, null, null, true);
     setcookie('ECSCP[admin_pass]', '', 1, null, null, null, true);
@@ -34,7 +33,7 @@ if ($_REQUEST['act'] == 'logout') {
 /*------------------------------------------------------ */
 //-- 登陆界面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'login') {
+function loginAction() {
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
     header("Cache-Control: no-cache, must-revalidate");
     header("Pragma: no-cache");
@@ -50,7 +49,7 @@ if ($_REQUEST['act'] == 'login') {
 /*------------------------------------------------------ */
 //-- 验证登陆信息
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'signin') {
+function signinAction() {
     if (intval($_CFG['captcha']) & CAPTCHA_ADMIN) {
         include_once(ROOT_PATH . 'includes/cls_captcha.php');
 
@@ -128,7 +127,7 @@ if ($_REQUEST['act'] == 'signin') {
 /*------------------------------------------------------ */
 //-- 管理员列表页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['admin_list']);
     $smarty->assign('action_link', array('href' => 'privilege.php?act=add', 'text' => $_LANG['admin_add']));
@@ -143,7 +142,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $smarty->assign('admin_list', get_admin_userlist());
 
     make_json_result($smarty->fetch('privilege_list.htm'));
@@ -152,7 +151,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加管理员页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 检查权限 */
     admin_priv('admin_manage');
 
@@ -171,7 +170,7 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 添加管理员的处理
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     admin_priv('admin_manage');
     if ($_POST['token'] != $_CFG['token']) {
         sys_msg('add_error', 1);
@@ -234,7 +233,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 编辑管理员信息
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 不能编辑demo这个管理员 */
     if ($_SESSION['admin_name'] == 'demo') {
         $link[] = array('text' => $_LANG['back_list'], 'href' => 'privilege.php?act=list');
@@ -282,7 +281,11 @@ if ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 更新管理员信息
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'update' || $_REQUEST['act'] == 'update_self') {
+
+    function updateAction() {
+        update_selfAction();
+    }
+function update_selfAction() {
 
     /* 变量初始化 */
     $admin_id = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
@@ -293,7 +296,7 @@ if ($_REQUEST['act'] == 'update' || $_REQUEST['act'] == 'update_self') {
     if ($_POST['token'] != $_CFG['token']) {
         sys_msg('update_error', 1);
     }
-    if ($_REQUEST['act'] == 'update') {
+    if($act == 'update') {
         /* 查看是否有权限编辑其他管理员的信息 */
         if ($_SESSION['admin_id'] != $_REQUEST['id']) {
             admin_priv('admin_manage');
@@ -399,7 +402,7 @@ if ($_REQUEST['act'] == 'update' || $_REQUEST['act'] == 'update_self') {
 /*------------------------------------------------------ */
 //-- 编辑个人资料
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'modif') {
+function modifAction() {
     /* 不能编辑demo这个管理员 */
     if ($_SESSION['admin_name'] == 'demo') {
         $link[] = array('text' => $_LANG['back_admin_list'], 'href' => 'privilege.php?act=list');
@@ -464,7 +467,7 @@ if ($_REQUEST['act'] == 'modif') {
 /*------------------------------------------------------ */
 //-- 为管理员分配权限
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'allot') {
+function allotAction() {
     include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/priv_action.php');
 
     admin_priv('allot_priv');
@@ -522,7 +525,7 @@ if ($_REQUEST['act'] == 'allot') {
 /*------------------------------------------------------ */
 //-- 更新管理员的权限
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'update_allot') {
+function update_allotAction() {
     admin_priv('admin_manage');
     if ($_POST['token'] != $_CFG['token']) {
         sys_msg('update_allot_error', 1);
@@ -552,7 +555,7 @@ if ($_REQUEST['act'] == 'update_allot') {
 /*------------------------------------------------------ */
 //-- 删除一个管理员
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('admin_drop');
 
     $id = intval($_GET['id']);
@@ -628,4 +631,5 @@ function get_role_list()
         'FROM ' . $GLOBALS['ecs']->table('role');
     $list = $GLOBALS['db']->getAll($sql);
     return $list;
+}
 }

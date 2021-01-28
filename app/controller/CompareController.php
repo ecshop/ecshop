@@ -1,12 +1,20 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 商品比较程序
  */
+class CompareController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
+    }
+}
 
-require(dirname(__FILE__) . '/includes/init.php');
+
+
 
 if (!empty($_REQUEST['goods']) && is_array($_REQUEST['goods']) && count($_REQUEST['goods']) > 1) {
     foreach ($_REQUEST['goods'] as $key => $val) {

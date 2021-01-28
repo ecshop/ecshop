@@ -1,23 +1,22 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 记录管理员操作日志
  */
+class AdminLogsController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
-
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
+    }
 
 /*------------------------------------------------------ */
 //-- 获取所有日志列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 权限的判断 */
     admin_priv('logs_manage');
 
@@ -53,7 +52,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $log_list = get_admin_logs();
 
     $smarty->assign('log_list', $log_list['list']);
@@ -74,7 +73,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 批量删除日志记录
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch_drop') {
+function batch_dropAction() {
     admin_priv('logs_drop');
 
     $drop_type_date = isset($_POST['drop_type_date']) ? $_POST['drop_type_date'] : '';
@@ -173,4 +172,5 @@ function get_admin_logs()
     }
 
     return array('list' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+}
 }

@@ -1,12 +1,20 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 处理收回确认的页面
  */
+class ReceiveController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
+    }
+}
 
-require(dirname(__FILE__) . '/includes/init.php');
+
+
 
 /* 取得参数 */
 $order_id = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;  // 订单号

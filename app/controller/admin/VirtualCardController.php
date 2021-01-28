@@ -1,19 +1,27 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 虚拟卡商品管理程序
  */
+class VirtualCardController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+require_once(ROOT_PATH . 'includes/lib_code.php');
+    }
 
-define('IN_ECS', true);
+
+
 
 /* 包含文件 */
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'includes/lib_code.php');
 
 /*------------------------------------------------------ */
 //-- 补货处理
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'replenish') {
+function replenishAction() {
     assign_query_info();
 
     /* 检查权限 */
@@ -41,7 +49,7 @@ if ($_REQUEST['act'] == 'replenish') {
 /*------------------------------------------------------ */
 //-- 编辑补货信息
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_replenish') {
+function edit_replenishAction() {
     /* 检查权限 */
     admin_priv('virualcard');
     /* 获取卡片信息 */
@@ -65,7 +73,7 @@ if ($_REQUEST['act'] == 'edit_replenish') {
     $smarty->assign('card', $card);
     $smarty->display('replenish_info.htm');
 }
-if ($_REQUEST['act'] == 'action') {
+function actionAction() {
     /* 检查权限 */
     admin_priv('virualcard');
 
@@ -119,7 +127,7 @@ if ($_REQUEST['act'] == 'action') {
 /*------------------------------------------------------ */
 //-- 补货列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'card') {
+function cardAction() {
     /* 检查权限 */
     admin_priv('virualcard');
 
@@ -165,7 +173,7 @@ if ($_REQUEST['act'] == 'card') {
 //-- 虚拟卡列表，用于排序、翻页
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'query_card') {
+function query_cardAction() {
     $list = get_replenish_list();
 
     $smarty->assign('card_list', $list['item']);
@@ -182,7 +190,7 @@ if ($_REQUEST['act'] == 'query_card') {
         array('filter' => $list['filter'], 'page_count' => $list['page_count'])
     );
 } /* 批量删除card */
-if ($_REQUEST['act'] == 'batch_drop_card') {
+function batch_drop_cardAction() {
     /* 检查权限 */
     admin_priv('virualcard');
 
@@ -196,7 +204,7 @@ if ($_REQUEST['act'] == 'batch_drop_card') {
     }
 } /* 批量上传页面 */
 
-if ($_REQUEST['act'] == 'batch_card_add') {
+function batch_card_addAction() {
     /* 检查权限 */
     admin_priv('virualcard');
 
@@ -205,7 +213,7 @@ if ($_REQUEST['act'] == 'batch_card_add') {
     $smarty->assign('goods_id', $_REQUEST['goods_id']);
     $smarty->display('batch_card_info.htm');
 }
-if ($_REQUEST['act'] == 'batch_confirm') {
+function batch_confirmAction() {
     /* 检查上传是否成功 */
     if ($_FILES['uploadfile']['tmp_name'] == '' || $_FILES['uploadfile']['tmp_name'] == 'none') {
         sys_msg($_LANG['uploadfile_fail'], 1);
@@ -241,7 +249,7 @@ if ($_REQUEST['act'] == 'batch_confirm') {
     $smarty->assign('list', $rec);
     $smarty->display('batch_card_confirm.htm');
 } /* 批量上传处理 */
-if ($_REQUEST['act'] == 'batch_insert') {
+function batch_insertAction() {
     /* 检查权限 */
     admin_priv('virualcard');
 
@@ -268,7 +276,7 @@ if ($_REQUEST['act'] == 'batch_insert') {
 //-- 更改加密串
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'change') {
+function changeAction() {
     /* 检查权限 */
     admin_priv('virualcard');
 
@@ -282,7 +290,7 @@ if ($_REQUEST['act'] == 'change') {
 //-- 提交更改
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'submit_change') {
+function submit_changeAction() {
     /* 检查权限 */
     admin_priv('virualcard');
 
@@ -327,7 +335,7 @@ if ($_REQUEST['act'] == 'submit_change') {
 //-- 切换是否已出售状态
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'toggle_sold') {
+function toggle_soldAction() {
     check_authz_json('virualcard');
 
     $id = intval($_POST['id']);
@@ -350,7 +358,7 @@ if ($_REQUEST['act'] == 'toggle_sold') {
 /*------------------------------------------------------ */
 //-- 删除卡片
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove_card') {
+function remove_cardAction() {
     check_authz_json('virualcard');
 
     $id = intval($_GET['id']);
@@ -375,7 +383,7 @@ if ($_REQUEST['act'] == 'remove_card') {
 //-- 开始更改加密串：先检查原串和新串
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'start_change') {
+function start_changeAction() {
     $old_key = json_str_iconv(trim($_GET['old_key']));
     $new_key = json_str_iconv(trim($_GET['new_key']));
     // 检查原加密串和新加密串是否相同
@@ -414,7 +422,7 @@ if ($_REQUEST['act'] == 'start_change') {
 //-- 更新加密串
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'on_change') {
+function on_changeAction() {
     // 重新加密卡号和密码
     $each_num = 1;
     $old_crc32 = crc32(OLD_AUTH_KEY);
@@ -542,4 +550,5 @@ function update_goods_number($goods_id)
     $sql = "UPDATE " . $GLOBALS['ecs']->table('goods') . " SET goods_number = '$goods_number' WHERE goods_id = '$goods_id' AND extension_code='virtual_card'";
 
     return $GLOBALS['db']->query($sql);
+}
 }

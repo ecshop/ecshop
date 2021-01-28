@@ -1,27 +1,27 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 广告管理程序
  */
+class AdsController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-include_once(ROOT_PATH . 'includes/cls_image.php');
-$image = new cls_image($_CFG['bgcolor']);
-$exc = new exchange($ecs->table("ad"), $db, 'ad_id', 'ad_name');
-$allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp', 'swf');
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
+        include_once(ROOT_PATH . 'includes/cls_image.php');
+        $image = new cls_image($_CFG['bgcolor']);
+        $exc = new exchange($ecs->table("ad"), $db, 'ad_id', 'ad_name');
+        $allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp', 'swf');
+    }
 
 /*------------------------------------------------------ */
 //-- 广告列表页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     admin_priv('ad_manage');
     $pid = !empty($_REQUEST['pid']) ? intval($_REQUEST['pid']) : 0;
 
@@ -47,7 +47,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $ads_list = get_adslist();
 
     $smarty->assign('ads_list', $ads_list['ads']);
@@ -68,7 +68,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加新广告页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     admin_priv('ad_manage');
 
     $ad_link = empty($_GET['ad_link']) ? '' : trim($_GET['ad_link']);
@@ -98,7 +98,7 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 新广告的处理
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     admin_priv('ad_manage');
 
     /* 初始化变量 */
@@ -227,7 +227,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 广告编辑页面
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     admin_priv('ad_manage');
 
     /* 获取广告数据 */
@@ -282,7 +282,7 @@ if ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 广告编辑的处理
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     admin_priv('ad_manage');
 
     /* 初始化变量 */
@@ -382,7 +382,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //--生成广告的JS代码
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add_js') {
+function add_jsAction() {
     admin_priv('ad_manage');
 
     /* 编码 */
@@ -410,7 +410,7 @@ if ($_REQUEST['act'] == 'add_js') {
 /*------------------------------------------------------ */
 //-- 编辑广告名称
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_ad_name') {
+function edit_ad_nameAction() {
     check_authz_json('ad_manage');
 
     $id = intval($_POST['id']);
@@ -432,7 +432,7 @@ if ($_REQUEST['act'] == 'edit_ad_name') {
 /*------------------------------------------------------ */
 //-- 删除广告位置
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('ad_manage');
 
     $id = intval($_GET['id']);
@@ -500,4 +500,5 @@ function get_adslist()
     }
 
     return array('ads' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+}
 }

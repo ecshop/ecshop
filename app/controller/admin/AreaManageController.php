@@ -1,25 +1,23 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 地区列表管理文件
  */
+class AreaManageController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-$exc = new exchange($ecs->table('region'), $db, 'region_id', 'region_name');
-
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
+        $exc = new exchange($ecs->table('region'), $db, 'region_id', 'region_name');
+    }
 
 /*------------------------------------------------------ */
 //-- 列出某地区下的所有地区列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     admin_priv('area_manage');
 
     /* 取得参数：上级地区id */
@@ -71,7 +69,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 添加新的地区
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'add_area') {
+function add_areaAction() {
     check_authz_json('area_manage');
 
     $parent_id = intval($_POST['parent_id']);
@@ -108,7 +106,7 @@ if ($_REQUEST['act'] == 'add_area') {
 //-- 编辑区域名称
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_area_name') {
+function edit_area_nameAction() {
     check_authz_json('area_manage');
 
     $id = intval($_POST['id']);
@@ -137,7 +135,7 @@ if ($_REQUEST['act'] == 'edit_area_name') {
 /*------------------------------------------------------ */
 //-- 删除区域
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'drop_area') {
+function drop_areaAction() {
     check_authz_json('area_manage');
 
     $id = intval($_REQUEST['id']);
@@ -192,4 +190,5 @@ function new_region_id($region_id)
         $regions_id[] = $val['region_id'];
     }
     return $regions_id;
+}
 }

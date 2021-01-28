@@ -1,18 +1,21 @@
 <?php
 
-/**
- * 程序说明
- */
+namespace app\controller\admin;
 
-define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
-admin_priv('affiliate');
-$config = get_affiliate();
+class AffiliateController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+
+        admin_priv('affiliate');
+        $config = get_affiliate();
+    }
 
 /*------------------------------------------------------ */
 //-- 分成管理页
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     assign_query_info();
     if (empty($_REQUEST['is_ajax'])) {
         $smarty->assign('full_page', 1);
@@ -22,7 +25,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('config', $config);
     $smarty->display('affiliate.htm');
 }
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $smarty->assign('ur_here', $_LANG['affiliate']);
     $smarty->assign('config', $config);
     make_json_result($smarty->fetch('affiliate.htm'), '', null);
@@ -30,7 +33,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 增加下线分配方案
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     if (count($config['item']) < 5) {
         //下线不能超过5层
         $_POST['level_point'] = (float)$_POST['level_point'];
@@ -65,7 +68,7 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 修改配置
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'updata') {
+function updataAction() {
     $separate_by = (intval($_POST['separate_by']) == 1) ? 1 : 0;
 
     $_POST['expire'] = (float)$_POST['expire'];
@@ -100,7 +103,7 @@ if ($_REQUEST['act'] == 'updata') {
 /*------------------------------------------------------ */
 //-- 推荐开关
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'on') {
+function onAction() {
     $on = (intval($_POST['on']) == 1) ? 1 : 0;
 
     $config['on'] = $on;
@@ -111,7 +114,7 @@ if ($_REQUEST['act'] == 'on') {
 /*------------------------------------------------------ */
 //-- Ajax修改设置
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_point') {
+function edit_pointAction() {
 
     /* 取得参数 */
     $key = trim($_POST['id']) - 1;
@@ -134,7 +137,7 @@ if ($_REQUEST['act'] == 'edit_point') {
 /*------------------------------------------------------ */
 //-- Ajax修改设置
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_money') {
+function edit_moneyAction() {
     $key = trim($_POST['id']) - 1;
     $val = (float)trim($_POST['val']);
     $maxmoney = 100;
@@ -155,7 +158,7 @@ if ($_REQUEST['act'] == 'edit_money') {
 /*------------------------------------------------------ */
 //-- 删除下线分成
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'del') {
+function delAction() {
     $key = trim($_GET['id']) - 1;
     unset($config['item'][$key]);
     $temp = array();
@@ -186,4 +189,5 @@ function put_affiliate($config)
         "WHERE code = 'affiliate'";
     $GLOBALS['db']->query($sql);
     clear_all_files();
+}
 }

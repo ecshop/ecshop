@@ -1,17 +1,22 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 计划任务
  */
+class CronController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+        $_REQUEST['act'] = trim($_REQUEST['act']);
+        admin_priv('cron');
+        $exc = new exchange($ecs->table('crons'), $db, 'cron_code', 'cron_name');
+    }
 
-require(dirname(__FILE__) . '/includes/init.php');
-
-$_REQUEST['act'] = trim($_REQUEST['act']);
-admin_priv('cron');
-$exc = new exchange($ecs->table('crons'), $db, 'cron_code', 'cron_name');
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $cron_list = array();
     $sql = "SELECT * FROM " . $ecs->table('crons');
     $res = $db->query($sql);
@@ -44,7 +49,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('modules', $modules);
     $smarty->display('cron_list.htm');
 }
-if ($_REQUEST['act'] == 'install') {
+function installAction() {
     if (empty($_POST['step'])) {
         /* 取相应插件信息 */
         $set_modules = true;
@@ -140,7 +145,7 @@ if ($_REQUEST['act'] == 'install') {
         sys_msg($_LANG['install_ok'], 0, $links);
     }
 }
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     if (empty($_POST['step'])) {
         if (isset($_REQUEST['code'])) {
             $_REQUEST['code'] = trim($_REQUEST['code']);
@@ -251,14 +256,14 @@ if ($_REQUEST['act'] == 'edit') {
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
 }
-if ($_REQUEST['act'] == 'uninstall') {
+function uninstallAction() {
     $sql = "DELETE FROM " . $ecs->table('crons') .
         "WHERE cron_code = '$_REQUEST[code]' LIMIT 1";
     $db->query($sql);
     $links[] = array('text' => $_LANG['back_list'], 'href' => 'cron.php?act=list');
     sys_msg($_LANG['uninstall_ok'], 0, $links);
 }
-if ($_REQUEST['act'] == 'toggle_show') {
+function toggle_showAction() {
     $id = trim($_POST['id']);
     $val = intval($_POST['val']);
 
@@ -268,7 +273,7 @@ if ($_REQUEST['act'] == 'toggle_show') {
     $db->query($sql);
     make_json_result($val);
 }
-if ($_REQUEST['act'] == 'do') {
+function doAction() {
     if (isset($set_modules)) {
         $set_modules = false;
         unset($set_modules);
@@ -351,4 +356,5 @@ function get_dwh()
     }
 
     return array($days, $week, $hours);
+}
 }

@@ -1,21 +1,26 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 客户留言
  */
+class UserMsgController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
+        /* 权限判断 */
+        admin_priv('feedback_priv');
+        /*初始化数据交换对象 */
+        $exc = new exchange($ecs->table("feedback"), $db, 'msg_id', 'msg_title');
 
-require(dirname(__FILE__) . '/includes/init.php');
-/* 权限判断 */
-admin_priv('feedback_priv');
-/*初始化数据交换对象 */
-$exc = new exchange($ecs->table("feedback"), $db, 'msg_id', 'msg_title');
-
+    }
 /*------------------------------------------------------ */
 //-- 发送留言
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     $user_id = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
     $order_id = empty($_GET['order_id']) ? 0 : intval($_GET['order_id']);
     $order_sn = $db->getOne("SELECT order_sn FROM " . $ecs->table('order_info') . " WHERE order_id = '$order_id'");
@@ -39,7 +44,7 @@ if ($_REQUEST['act'] == 'add') {
     $smarty->display('msg_add.htm');
 }
 
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     $sql = "INSERT INTO " . $ecs->table('feedback') . "(parent_id, user_id, user_name, user_email, msg_title, msg_type, msg_content, msg_time, message_img, order_id)" .
         " VALUES (0, '$_POST[user_id]', '$_SESSION[admin_name]', ' ', " .
         " '$_POST[msg_title]', 5, '$_POST[msg_content]', '" . gmtime() . "', '', '$_POST[order_id]')";
@@ -50,7 +55,7 @@ if ($_REQUEST['act'] == 'insert') {
     exit;
 }
 
-if ($_REQUEST['act'] == 'remove_msg') {
+function remove_msgAction() {
     $msg_id = empty($_GET['msg_id']) ? 0 : intval($_GET['msg_id']);
     $order_id = empty($_GET['order_id']) ? 0 : intval($_GET['order_id']);
     $user_id = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
@@ -72,7 +77,7 @@ if ($_REQUEST['act'] == 'remove_msg') {
 /*------------------------------------------------------ */
 //-- 更新留言的状态为显示或者禁止
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'check') {
+function checkAction() {
     if ($_REQUEST['check'] == 'allow') {
         /* 允许留言显示 */
         $sql = "UPDATE " . $ecs->table('feedback') . " SET msg_status = 1 WHERE msg_id = '$_REQUEST[id]'";
@@ -98,7 +103,7 @@ if ($_REQUEST['act'] == 'check') {
 /*------------------------------------------------------ */
 //-- 列出所有留言
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list_all') {
+function list_allAction() {
     assign_query_info();
     $msg_list = msg_list();
 
@@ -117,7 +122,7 @@ if ($_REQUEST['act'] == 'list_all') {
 /*------------------------------------------------------ */
 //-- ajax显示留言列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $msg_list = msg_list();
 
     $smarty->assign('msg_list', $msg_list['msg_list']);
@@ -133,7 +138,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- ajax 删除留言
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     $msg_id = intval($_REQUEST['id']);
 
     /* 检查权限 */
@@ -161,7 +166,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 批量操作删除、允许显示、禁止显示用户评论
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'batch') {
+function batchAction() {
     admin_priv('feedback_priv');
     $action = isset($_POST['sel_action']) ? trim($_POST['sel_action']) : 'def';
 
@@ -201,7 +206,7 @@ if ($_REQUEST['act'] == 'batch') {
 /*------------------------------------------------------ */
 //-- 回复留言
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'view') {
+function viewAction() {
     $smarty->assign('send_fail', !empty($_REQUEST['send_ok']));
     $smarty->assign('msg', get_feedback_detail(intval($_REQUEST['id'])));
     $smarty->assign('ur_here', $_LANG['reply']);
@@ -210,7 +215,7 @@ if ($_REQUEST['act'] == 'view') {
     assign_query_info();
     $smarty->display('msg_info.htm');
 }
-if ($_REQUEST['act'] == 'action') {
+function actionAction() {
     if (empty($_REQUEST['parent_id'])) {
         $sql = "INSERT INTO " . $ecs->table('feedback') . " (msg_title, msg_time, user_id, user_name , " .
             "user_email, parent_id, msg_content) " .
@@ -258,7 +263,7 @@ if ($_REQUEST['act'] == 'action') {
 /*------------------------------------------------------ */
 //-- 删除会员上传的文件
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'drop_file') {
+function drop_fileAction() {
     /* 删除上传的文件 */
     $file = $_GET['file'];
     $file = str_replace('/', '', $file);
@@ -352,4 +357,5 @@ function get_feedback_detail($id)
     }
 
     return $msg;
+}
 }

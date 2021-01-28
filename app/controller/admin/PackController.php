@@ -1,21 +1,29 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 包装管理程序
  */
+class PackController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-include_once(ROOT_PATH . 'includes/cls_image.php');
-$image = new cls_image($_CFG['bgcolor']);
+        include_once(ROOT_PATH . 'includes/cls_image.php');
+        $image = new cls_image($_CFG['bgcolor']);
 
-$exc = new exchange($ecs->table("pack"), $db, 'pack_id', 'pack_name');
+        $exc = new exchange($ecs->table("pack"), $db, 'pack_id', 'pack_name');
+
+    }
+
 
 /*------------------------------------------------------ */
 //-- 包装列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $smarty->assign('ur_here', $_LANG['06_pack_list']);
     $smarty->assign('action_link', array('text' => $_LANG['pack_add'], 'href' => 'pack.php?act=add'));
     $smarty->assign('full_page', 1);
@@ -33,7 +41,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- ajax 列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $packs_list = packs_list();
     $smarty->assign('packs_list', $packs_list['packs_list']);
     $smarty->assign('filter', $packs_list['filter']);
@@ -48,7 +56,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加新包装
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 权限判断 */
     admin_priv('pack');
 
@@ -63,7 +71,7 @@ if ($_REQUEST['act'] == 'add') {
     assign_query_info();
     $smarty->display('pack_info.htm');
 }
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /* 权限判断 */
     admin_priv('pack');
 
@@ -102,7 +110,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 编辑包装
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 权限判断 */
     admin_priv('pack');
 
@@ -114,7 +122,7 @@ if ($_REQUEST['act'] == 'edit') {
     $smarty->assign('form_action', 'update');
     $smarty->display('pack_info.htm');
 }
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 权限判断 */
     admin_priv('pack');
     if ($_POST['pack_name'] != $_POST['old_packname']) {
@@ -154,7 +162,7 @@ if ($_REQUEST['act'] == 'update') {
 }
 
 /* 删除卡片图片 */
-if ($_REQUEST['act'] == 'drop_pack_img') {
+function drop_pack_imgAction() {
     /* 权限判断 */
     admin_priv('pack');
     $pack_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -176,7 +184,7 @@ if ($_REQUEST['act'] == 'drop_pack_img') {
 //-- 编辑包装名称
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_name') {
+function edit_nameAction() {
     check_authz_json('pack');
 
     $id = intval($_POST['id']);
@@ -199,7 +207,7 @@ if ($_REQUEST['act'] == 'edit_name') {
 //-- 编辑包装费用
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_pack_fee') {
+function edit_pack_feeAction() {
     check_authz_json('pack');
 
     $id = intval($_POST['id']);
@@ -217,7 +225,7 @@ if ($_REQUEST['act'] == 'edit_pack_fee') {
 //-- 编辑免费额度
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'edit_free_money') {
+function edit_free_moneyAction() {
     check_authz_json('pack');
 
     $id = intval($_POST['id']);
@@ -235,7 +243,7 @@ if ($_REQUEST['act'] == 'edit_free_money') {
 //-- 删除包装
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('pack');
 
     $id = intval($_GET['id']);
@@ -289,4 +297,5 @@ function packs_list()
     $arr = array('packs_list' => $packs_list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
 
     return $arr;
+}
 }

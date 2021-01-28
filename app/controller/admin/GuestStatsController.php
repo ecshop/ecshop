@@ -1,26 +1,24 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 客户统计
  */
+class GuestStatsController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'includes/lib_order.php');
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
-
-/* act操作项的初始化 */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-} else {
-    $_REQUEST['act'] = trim($_REQUEST['act']);
-}
+        require_once(ROOT_PATH . 'includes/lib_order.php');
+        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
+    }
 
 /*------------------------------------------------------ */
 //-- 客户统计列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 权限判断 */
     admin_priv('client_flow_stats');
 
@@ -125,4 +123,5 @@ if ($_REQUEST['act'] == 'list') {
 
     assign_query_info();
     $smarty->display('guest_stats.htm');
+}
 }

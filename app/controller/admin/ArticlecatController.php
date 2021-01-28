@@ -1,23 +1,23 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 文章分类管理程序
  */
+class ArticlecatController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        $exc = new exchange($ecs->table("article_cat"), $db, 'cat_id', 'cat_name');
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-$exc = new exchange($ecs->table("article_cat"), $db, 'cat_id', 'cat_name');
-/* act操作项的初始化 */
-$_REQUEST['act'] = trim($_REQUEST['act']);
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-}
+    }
 
 /*------------------------------------------------------ */
 //-- 分类列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     $articlecat = article_cat_list(0, 0, false);
     foreach ($articlecat as $key => $cat) {
         $articlecat[$key]['type_name'] = $_LANG['type_name'][$cat['cat_type']];
@@ -34,7 +34,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     $articlecat = article_cat_list(0, 0, false);
     foreach ($articlecat as $key => $cat) {
         $articlecat[$key]['type_name'] = $_LANG['type_name'][$cat['cat_type']];
@@ -47,7 +47,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加分类
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 权限判断 */
     admin_priv('article_cat');
 
@@ -59,7 +59,7 @@ if ($_REQUEST['act'] == 'add') {
     assign_query_info();
     $smarty->display('articlecat_info.htm');
 }
-if ($_REQUEST['act'] == 'insert') {
+function insertAction() {
     /* 权限判断 */
     admin_priv('article_cat');
 
@@ -108,7 +108,7 @@ if ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 编辑文章分类
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit') {
+function editAction() {
     /* 权限判断 */
     admin_priv('article_cat');
 
@@ -145,7 +145,7 @@ if ($_REQUEST['act'] == 'edit') {
     assign_query_info();
     $smarty->display('articlecat_info.htm');
 }
-if ($_REQUEST['act'] == 'update') {
+function updateAction() {
     /* 权限判断 */
     admin_priv('article_cat');
 
@@ -236,7 +236,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 编辑文章分类的排序
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'edit_sort_order') {
+function edit_sort_orderAction() {
     check_authz_json('article_cat');
 
     $id = intval($_POST['id']);
@@ -258,7 +258,7 @@ if ($_REQUEST['act'] == 'edit_sort_order') {
 /*------------------------------------------------------ */
 //-- 删除文章分类
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'remove') {
+function removeAction() {
     check_authz_json('article_cat');
 
     $id = intval($_GET['id']);
@@ -296,7 +296,7 @@ if ($_REQUEST['act'] == 'remove') {
 //-- 切换是否显示在导航栏
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'toggle_show_in_nav') {
+function toggle_show_in_navAction() {
     check_authz_json('cat_manage');
 
     $id = intval($_POST['id']);
@@ -345,4 +345,5 @@ function cat_update($cat_id, $args)
     }
 
     return $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('article_cat'), $args, 'update', "cat_id='$cat_id'");
+}
 }

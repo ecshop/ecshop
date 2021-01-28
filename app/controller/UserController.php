@@ -1,80 +1,84 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 会员中心
  */
+class UserController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
+        /* 载入语言文件 */
+        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');
 
-require(dirname(__FILE__) . '/includes/init.php');
+        $user_id = $_SESSION['user_id'];
+        $action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
 
-/* 载入语言文件 */
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');
-
-$user_id = $_SESSION['user_id'];
-$action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
-
-$affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
-$smarty->assign('affiliate', $affiliate);
-$back_act = '';
+        $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
+        $smarty->assign('affiliate', $affiliate);
+        $back_act = '';
 
 
 // 不需要登录的操作或自己验证是否登录（如ajax处理）的act
-$not_login_arr =
-    array('login', 'act_login', 'register', 'act_register', 'act_edit_password', 'get_password', 'send_pwd_email', 'password', 'signin', 'add_tag', 'collect', 'return_to_cart', 'logout', 'email_list', 'validate_email', 'send_hash_mail', 'order_query', 'is_registered', 'check_email', 'clear_history', 'qpassword_name', 'get_passwd_question', 'check_answer');
+        $not_login_arr =
+            array('login', 'act_login', 'register', 'act_register', 'act_edit_password', 'get_password', 'send_pwd_email', 'password', 'signin', 'add_tag', 'collect', 'return_to_cart', 'logout', 'email_list', 'validate_email', 'send_hash_mail', 'order_query', 'is_registered', 'check_email', 'clear_history', 'qpassword_name', 'get_passwd_question', 'check_answer');
 
-/* 显示页面的action列表 */
-$ui_arr = array('register', 'login', 'profile', 'order_list', 'order_detail', 'address_list', 'collection_list',
-    'message_list', 'tag_list', 'get_password', 'reset_password', 'booking_list', 'add_booking', 'account_raply',
-    'account_deposit', 'account_log', 'account_detail', 'act_account', 'pay', 'default', 'bonus', 'group_buy', 'group_buy_detail', 'affiliate', 'comment_list', 'validate_email', 'track_packages', 'transform_points', 'qpassword_name', 'get_passwd_question', 'check_answer');
+        /* 显示页面的action列表 */
+        $ui_arr = array('register', 'login', 'profile', 'order_list', 'order_detail', 'address_list', 'collection_list',
+            'message_list', 'tag_list', 'get_password', 'reset_password', 'booking_list', 'add_booking', 'account_raply',
+            'account_deposit', 'account_log', 'account_detail', 'act_account', 'pay', 'default', 'bonus', 'group_buy', 'group_buy_detail', 'affiliate', 'comment_list', 'validate_email', 'track_packages', 'transform_points', 'qpassword_name', 'get_passwd_question', 'check_answer');
 
-/* 未登录处理 */
-if (empty($_SESSION['user_id'])) {
-    if (!in_array($action, $not_login_arr)) {
-        if (in_array($action, $ui_arr)) {
-            /* 如果需要登录,并是显示页面的操作，记录当前操作，用于登录后跳转到相应操作
-            if ($action == 'login')
-            {
-                if (isset($_REQUEST['back_act']))
-                {
-                    $back_act = trim($_REQUEST['back_act']);
+        /* 未登录处理 */
+        if (empty($_SESSION['user_id'])) {
+            if (!in_array($action, $not_login_arr)) {
+                if (in_array($action, $ui_arr)) {
+                    /* 如果需要登录,并是显示页面的操作，记录当前操作，用于登录后跳转到相应操作
+                    if ($action == 'login')
+                    {
+                        if (isset($_REQUEST['back_act']))
+                        {
+                            $back_act = trim($_REQUEST['back_act']);
+                        }
+                    }
+                    else
+                    {}*/
+                    if (!empty($_SERVER['QUERY_STRING'])) {
+                        $back_act = 'user.php?' . strip_tags($_SERVER['QUERY_STRING']);
+                    }
+                    $action = 'login';
+                } else {
+                    //未登录提交数据。非正常途径提交数据！
+                    die($_LANG['require_login']);
                 }
             }
-            else
-            {}*/
-            if (!empty($_SERVER['QUERY_STRING'])) {
-                $back_act = 'user.php?' . strip_tags($_SERVER['QUERY_STRING']);
-            }
-            $action = 'login';
-        } else {
-            //未登录提交数据。非正常途径提交数据！
-            die($_LANG['require_login']);
         }
-    }
-}
 
-/* 如果是显示页面，对页面进行相应赋值 */
-if (in_array($action, $ui_arr)) {
-    assign_template();
-    $position = assign_ur_here(0, $_LANG['user_center']);
-    $smarty->assign('page_title', $position['title']); // 页面标题
-    $smarty->assign('ur_here', $position['ur_here']);
-    $sql = "SELECT value FROM " . $ecs->table('shop_config') . " WHERE id = 419";
-    $row = $db->getRow($sql);
-    $car_off = $row['value'];
-    $smarty->assign('car_off', $car_off);
-    /* 是否显示积分兑换 */
-    if (!empty($_CFG['points_rule']) && unserialize($_CFG['points_rule'])) {
-        $smarty->assign('show_transform_points', 1);
+        /* 如果是显示页面，对页面进行相应赋值 */
+        if (in_array($action, $ui_arr)) {
+            assign_template();
+            $position = assign_ur_here(0, $_LANG['user_center']);
+            $smarty->assign('page_title', $position['title']); // 页面标题
+            $smarty->assign('ur_here', $position['ur_here']);
+            $sql = "SELECT value FROM " . $ecs->table('shop_config') . " WHERE id = 419";
+            $row = $db->getRow($sql);
+            $car_off = $row['value'];
+            $smarty->assign('car_off', $car_off);
+            /* 是否显示积分兑换 */
+            if (!empty($_CFG['points_rule']) && unserialize($_CFG['points_rule'])) {
+                $smarty->assign('show_transform_points', 1);
+            }
+            $smarty->assign('helps', get_shop_help());        // 网店帮助
+            $smarty->assign('data_dir', DATA_DIR);   // 数据目录
+            $smarty->assign('action', $action);
+            $smarty->assign('lang', $_LANG);
+        }
+
     }
-    $smarty->assign('helps', get_shop_help());        // 网店帮助
-    $smarty->assign('data_dir', DATA_DIR);   // 数据目录
-    $smarty->assign('action', $action);
-    $smarty->assign('lang', $_LANG);
-}
 
 //用户中心欢迎页
-if ($action == 'default') {
+function defaultAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
     if ($rank = get_rank_info()) {
         $smarty->assign('rank_name', sprintf($_LANG['your_level'], $rank['rank_name']));
@@ -89,7 +93,7 @@ if ($action == 'default') {
 }
 
 /* 显示会员注册界面 */
-if ($action == 'register') {
+function registerAction() {
     if ((!isset($back_act) || empty($back_act)) && isset($GLOBALS['_SERVER']['HTTP_REFERER'])) {
         $back_act = strpos($GLOBALS['_SERVER']['HTTP_REFERER'], 'user.php') ? './index.php' : $GLOBALS['_SERVER']['HTTP_REFERER'];
     }
@@ -113,7 +117,7 @@ if ($action == 'register') {
 //    $smarty->assign('back_act', $back_act);
     $smarty->display('user_passport.dwt');
 } /* 注册会员的处理 */
-elseif ($action == 'act_register') {
+function act_registerAction() {
     /* 增加是否关闭注册 */
     if ($_CFG['shop_reg_closed']) {
         $smarty->assign('action', 'register');
@@ -202,7 +206,7 @@ elseif ($action == 'act_register') {
         }
     }
 } /* 验证用户注册邮件 */
-elseif ($action == 'validate_email') {
+function validate_emailAction() {
     $hash = empty($_GET['hash']) ? '' : trim($_GET['hash']);
     if ($hash) {
         include_once(ROOT_PATH . 'includes/lib_passport.php');
@@ -217,7 +221,7 @@ elseif ($action == 'validate_email') {
     }
     show_message($_LANG['validate_fail']);
 } /* 验证用户注册用户名是否可以注册 */
-elseif ($action == 'is_registered') {
+function is_registeredAction() {
     include_once(ROOT_PATH . 'includes/lib_passport.php');
 
     $username = trim($_GET['username']);
@@ -229,7 +233,7 @@ elseif ($action == 'is_registered') {
         echo 'true';
     }
 } /* 验证用户邮箱地址是否被注册 */
-elseif ($action == 'check_email') {
+function check_emailAction() {
     $email = trim($_GET['email']);
     if ($user->check_email($email)) {
         echo 'false';
@@ -237,7 +241,7 @@ elseif ($action == 'check_email') {
         echo 'ok';
     }
 } /* 用户登录界面 */
-elseif ($action == 'login') {
+function loginAction() {
     if (empty($back_act)) {
         if (empty($back_act) && isset($GLOBALS['_SERVER']['HTTP_REFERER'])) {
             $back_act = strpos($GLOBALS['_SERVER']['HTTP_REFERER'], 'user.php') ? './index.php' : $GLOBALS['_SERVER']['HTTP_REFERER'];
@@ -256,7 +260,7 @@ elseif ($action == 'login') {
     $smarty->assign('back_act', $back_act);
     $smarty->display('user_passport.dwt');
 } /* 处理会员的登录 */
-elseif ($action == 'act_login') {
+function act_loginAction() {
     $username = isset($_POST['username']) ? trim($_POST['username']) : '';
     $password = isset($_POST['password']) ? trim($_POST['password']) : '';
     $back_act = isset($_POST['back_act']) ? trim($_POST['back_act']) : '';
@@ -289,7 +293,7 @@ elseif ($action == 'act_login') {
         show_message($_LANG['login_failure'], $_LANG['relogin_lnk'], 'user.php', 'error');
     }
 } /* 处理 ajax 的登录请求 */
-elseif ($action == 'signin') {
+function signinAction() {
     include_once('includes/cls_json.php');
     $json = new JSON;
 
@@ -336,7 +340,7 @@ elseif ($action == 'signin') {
     }
     die($json->encode($result));
 } /* 退出会员中心 */
-elseif ($action == 'logout') {
+function logoutAction() {
     if ((!isset($back_act) || empty($back_act)) && isset($GLOBALS['_SERVER']['HTTP_REFERER'])) {
         $back_act = strpos($GLOBALS['_SERVER']['HTTP_REFERER'], 'user.php') ? './index.php' : $GLOBALS['_SERVER']['HTTP_REFERER'];
     }
@@ -345,7 +349,7 @@ elseif ($action == 'logout') {
     $ucdata = empty($user->ucdata) ? "" : $user->ucdata;
     show_message($_LANG['logout'] . $ucdata, array($_LANG['back_up_page'], $_LANG['back_home_lnk']), array($back_act, 'index.php'), 'info');
 } /* 个人资料页面 */
-elseif ($action == 'profile') {
+function profileAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
     $user_info = get_profile($user_id);
@@ -394,7 +398,7 @@ elseif ($action == 'profile') {
     $smarty->assign('profile', $user_info);
     $smarty->display('user_transaction.dwt');
 } /* 修改个人资料的处理 */
-elseif ($action == 'act_edit_profile') {
+function act_edit_profileAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
     $birthday = trim($_POST['birthdayYear']) . '-' . trim($_POST['birthdayMonth']) . '-' .
@@ -472,7 +476,7 @@ elseif ($action == 'act_edit_profile') {
         show_message($msg, '', '', 'info');
     }
 } /* 密码找回-->修改密码界面 */
-elseif ($action == 'get_password') {
+function get_passwordAction() {
     include_once(ROOT_PATH . 'includes/lib_passport.php');
 
     if (isset($_GET['code']) && isset($_GET['uid'])) { //从邮件处获得的act
@@ -494,11 +498,11 @@ elseif ($action == 'get_password') {
         $smarty->display('user_passport.dwt');
     }
 } /* 密码找回-->输入用户名界面 */
-elseif ($action == 'qpassword_name') {
+function qpassword_nameAction() {
     //显示输入要找回密码的账号表单
     $smarty->display('user_passport.dwt');
 } /* 密码找回-->根据注册用户名取得密码提示问题界面 */
-elseif ($action == 'get_passwd_question') {
+function get_passwd_questionAction() {
     if (empty($_POST['user_name'])) {
         show_message($_LANG['no_passwd_question'], $_LANG['back_home_lnk'], './', 'info');
     } else {
@@ -527,7 +531,7 @@ elseif ($action == 'get_passwd_question') {
     $smarty->assign('passwd_question', $_LANG['passwd_questions'][$user_question_arr['passwd_question']]);
     $smarty->display('user_passport.dwt');
 } /* 密码找回-->根据提交的密码答案进行相应处理 */
-elseif ($action == 'check_answer') {
+function check_answerAction() {
     $captcha = intval($_CFG['captcha']);
     if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
         if (empty($_POST['captcha'])) {
@@ -556,7 +560,7 @@ elseif ($action == 'check_answer') {
         $smarty->display('user_passport.dwt');
     }
 } /* 发送密码修改确认邮件 */
-elseif ($action == 'send_pwd_email') {
+function send_pwd_emailAction() {
     include_once(ROOT_PATH . 'includes/lib_passport.php');
 
     /* 初始化会员用户名和邮件地址 */
@@ -583,11 +587,11 @@ elseif ($action == 'send_pwd_email') {
         show_message($_LANG['username_no_email'], $_LANG['back_page_up'], '', 'info');
     }
 } /* 重置新密码 */
-elseif ($action == 'reset_password') {
+function reset_passwordAction() {
     //显示重置密码的表单
     $smarty->display('user_passport.dwt');
 } /* 修改会员密码 */
-elseif ($action == 'act_edit_password') {
+function act_edit_passwordAction() {
     include_once(ROOT_PATH . 'includes/lib_passport.php');
 
     $old_password = isset($_POST['old_password']) ? trim($_POST['old_password']) : null;
@@ -614,7 +618,7 @@ elseif ($action == 'act_edit_password') {
         show_message($_LANG['edit_password_failure'], $_LANG['back_page_up'], '', 'info');
     }
 } /* 添加一个红包 */
-elseif ($action == 'act_add_bonus') {
+function act_add_bonusAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
     $bouns_sn = isset($_POST['bonus_sn']) ? intval($_POST['bonus_sn']) : '';
@@ -625,7 +629,7 @@ elseif ($action == 'act_add_bonus') {
         $err->show($_LANG['back_up_page'], 'user.php?act=bonus');
     }
 } /* 查看订单列表 */
-elseif ($action == 'order_list') {
+function order_listAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
@@ -642,7 +646,7 @@ elseif ($action == 'order_list') {
     $smarty->assign('orders', $orders);
     $smarty->display('user_transaction.dwt');
 } /* 查看订单详情 */
-elseif ($action == 'order_detail') {
+function order_detailAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
     include_once(ROOT_PATH . 'includes/lib_payment.php');
     include_once(ROOT_PATH . 'includes/lib_order.php');
@@ -707,7 +711,7 @@ elseif ($action == 'order_detail') {
     $smarty->assign('goods_list', $goods_list);
     $smarty->display('user_transaction.dwt');
 } /* 取消订单 */
-elseif ($action == 'cancel_order') {
+function cancel_orderAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
     include_once(ROOT_PATH . 'includes/lib_order.php');
 
@@ -720,7 +724,7 @@ elseif ($action == 'cancel_order') {
         $err->show($_LANG['order_list_lnk'], 'user.php?act=order_list');
     }
 } /* 收货地址列表界面*/
-elseif ($action == 'address_list') {
+function address_listAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
     include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
     $smarty->assign('lang', $_LANG);
@@ -767,7 +771,7 @@ elseif ($action == 'address_list') {
 
     $smarty->display('user_transaction.dwt');
 } /* 添加/编辑收货地址的处理 */
-elseif ($action == 'act_edit_address') {
+function act_edit_addressAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
     include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
     $smarty->assign('lang', $_LANG);
@@ -793,7 +797,7 @@ elseif ($action == 'act_edit_address') {
         show_message($_LANG['edit_address_success'], $_LANG['address_list_lnk'], 'user.php?act=address_list');
     }
 } /* 删除收货地址 */
-elseif ($action == 'drop_consignee') {
+function drop_consigneeAction() {
     include_once('includes/lib_transaction.php');
 
     $consignee_id = intval($_GET['id']);
@@ -805,7 +809,7 @@ elseif ($action == 'drop_consignee') {
         show_message($_LANG['del_address_false']);
     }
 } /* 显示收藏商品列表 */
-elseif ($action == 'collection_list') {
+function collection_listAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
@@ -826,7 +830,7 @@ elseif ($action == 'collection_list') {
     $smarty->assign('user_id', $user_id);
     $smarty->display('user_clips.dwt');
 } /* 删除收藏的商品 */
-elseif ($action == 'delete_collection') {
+function delete_collectionAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $collection_id = isset($_GET['collection_id']) ? intval($_GET['collection_id']) : 0;
@@ -838,7 +842,7 @@ elseif ($action == 'delete_collection') {
     ecs_header("Location: user.php?act=collection_list\n");
     exit;
 } /* 添加关注商品 */
-elseif ($action == 'add_to_attention') {
+function add_to_attentionAction() {
     $rec_id = (int)$_GET['rec_id'];
     if ($rec_id) {
         $db->query('UPDATE ' . $ecs->table('collect_goods') . "SET is_attention = 1 WHERE rec_id='$rec_id' AND user_id ='$user_id'");
@@ -846,7 +850,7 @@ elseif ($action == 'add_to_attention') {
     ecs_header("Location: user.php?act=collection_list\n");
     exit;
 } /* 取消关注商品 */
-elseif ($action == 'del_attention') {
+function del_attentionAction() {
     $rec_id = (int)$_GET['rec_id'];
     if ($rec_id) {
         $db->query('UPDATE ' . $ecs->table('collect_goods') . "SET is_attention = 0 WHERE rec_id='$rec_id' AND user_id ='$user_id'");
@@ -854,7 +858,7 @@ elseif ($action == 'del_attention') {
     ecs_header("Location: user.php?act=collection_list\n");
     exit;
 } /* 显示留言列表 */
-elseif ($action == 'message_list') {
+function message_listAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
@@ -887,7 +891,7 @@ elseif ($action == 'message_list') {
     $smarty->assign('order_info', $order_info);
     $smarty->display('user_clips.dwt');
 } /* 显示评论列表 */
-elseif ($action == 'comment_list') {
+function comment_listAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
@@ -902,7 +906,7 @@ elseif ($action == 'comment_list') {
     $smarty->assign('pager', $pager);
     $smarty->display('user_clips.dwt');
 } /* 添加我的留言 */
-elseif ($action == 'act_add_message') {
+function act_add_messageAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $message = array(
@@ -923,7 +927,7 @@ elseif ($action == 'act_add_message') {
         $err->show($_LANG['message_list_lnk'], 'user.php?act=message_list');
     }
 } /* 标签云列表 */
-elseif ($action == 'tag_list') {
+function tag_listAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $good_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -932,7 +936,7 @@ elseif ($action == 'tag_list') {
     $smarty->assign('tags_from', 'user');
     $smarty->display('user_clips.dwt');
 } /* 删除标签云的处理 */
-elseif ($action == 'act_del_tag') {
+function act_del_tagAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $tag_words = isset($_GET['tag_words']) ? trim($_GET['tag_words']) : '';
@@ -941,7 +945,7 @@ elseif ($action == 'act_del_tag') {
     ecs_header("Location: user.php?act=tag_list\n");
     exit;
 } /* 显示缺货登记列表 */
-elseif ($action == 'booking_list') {
+function booking_listAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
@@ -958,7 +962,7 @@ elseif ($action == 'booking_list') {
     $smarty->assign('pager', $pager);
     $smarty->display('user_clips.dwt');
 } /* 添加缺货登记页面 */
-elseif ($action == 'add_booking') {
+function add_bookingAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $goods_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -988,7 +992,7 @@ elseif ($action == 'add_booking') {
     $smarty->assign('info', get_goodsinfo($goods_id));
     $smarty->display('user_clips.dwt');
 } /* 添加缺货登记的处理 */
-elseif ($action == 'act_add_booking') {
+function act_add_bookingAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $booking = array(
@@ -1018,7 +1022,7 @@ elseif ($action == 'act_add_booking') {
         $err->show($_LANG['booking_list_lnk'], 'user.php?act=booking_list');
     }
 } /* 删除缺货登记 */
-elseif ($action == 'act_del_booking') {
+function act_del_bookingAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -1033,7 +1037,7 @@ elseif ($action == 'act_del_booking') {
         exit;
     }
 } /* 确认收货 */
-elseif ($action == 'affirm_received') {
+function affirm_receivedAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
     $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
@@ -1045,10 +1049,10 @@ elseif ($action == 'affirm_received') {
         $err->show($_LANG['order_list_lnk'], 'user.php?act=order_list');
     }
 } /* 会员退款申请界面 */
-elseif ($action == 'account_raply') {
+function account_raplyAction() {
     $smarty->display('user_transaction.dwt');
 } /* 会员预付款界面 */
-elseif ($action == 'account_deposit') {
+function account_depositAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $surplus_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -1058,7 +1062,7 @@ elseif ($action == 'account_deposit') {
     $smarty->assign('order', $account);
     $smarty->display('user_transaction.dwt');
 } /* 会员账目明细界面 */
-elseif ($action == 'account_detail') {
+function account_detailAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
@@ -1105,7 +1109,7 @@ elseif ($action == 'account_detail') {
     $smarty->assign('pager', $pager);
     $smarty->display('user_transaction.dwt');
 } /* 会员充值和提现申请记录 */
-elseif ($action == 'account_log') {
+function account_logAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
@@ -1134,7 +1138,7 @@ elseif ($action == 'account_log') {
     $smarty->assign('pager', $pager);
     $smarty->display('user_transaction.dwt');
 } /* 对会员余额申请的处理 */
-elseif ($action == 'act_account') {
+function act_accountAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
     include_once(ROOT_PATH . 'includes/lib_order.php');
     $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : 0;
@@ -1228,7 +1232,7 @@ elseif ($action == 'act_account') {
         $smarty->display('user_transaction.dwt');
     }
 } /* 删除会员余额 */
-elseif ($action == 'cancel') {
+function cancelAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -1243,7 +1247,7 @@ elseif ($action == 'cancel') {
         exit;
     }
 } /* 会员通过帐目明细列表进行再付款的操作 */
-elseif ($action == 'pay') {
+function payAction() {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
     include_once(ROOT_PATH . 'includes/lib_payment.php');
     include_once(ROOT_PATH . 'includes/lib_order.php');
@@ -1322,7 +1326,7 @@ elseif ($action == 'pay') {
         $smarty->display('user_transaction.dwt');
     }
 } /* 添加标签(ajax) */
-elseif ($action == 'add_tag') {
+function add_tagAction() {
     include_once('includes/cls_json.php');
     include_once('includes/lib_clips.php');
 
@@ -1351,7 +1355,7 @@ elseif ($action == 'add_tag') {
     echo $json->encode($result);
     exit;
 } /* 添加收藏商品(ajax) */
-elseif ($action == 'collect') {
+function collectAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON();
     $result = array('error' => 0, 'message' => '');
@@ -1386,7 +1390,7 @@ elseif ($action == 'collect') {
         }
     }
 } /* 删除留言 */
-elseif ($action == 'del_msg') {
+function del_msgAction() {
     $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $order_id = empty($_GET['order_id']) ? 0 : intval($_GET['order_id']);
 
@@ -1405,7 +1409,7 @@ elseif ($action == 'del_msg') {
     ecs_header("Location: user.php?act=message_list&order_id=$order_id\n");
     exit;
 } /* 删除评论 */
-elseif ($action == 'del_cmt') {
+function del_cmtAction() {
     $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     if ($id > 0) {
         $sql = "DELETE FROM " . $ecs->table('comment') . " WHERE comment_id = '$id' AND user_id = '$user_id'";
@@ -1414,7 +1418,7 @@ elseif ($action == 'del_cmt') {
     ecs_header("Location: user.php?act=comment_list\n");
     exit;
 } /* 合并订单 */
-elseif ($action == 'merge_order') {
+function merge_orderAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
     include_once(ROOT_PATH . 'includes/lib_order.php');
     $from_order = isset($_POST['from_order']) ? trim($_POST['from_order']) : '';
@@ -1425,7 +1429,7 @@ elseif ($action == 'merge_order') {
         $err->show($_LANG['order_list_lnk']);
     }
 } /* 将指定订单中商品添加到购物车 */
-elseif ($action == 'return_to_cart') {
+function return_to_cartAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
     $json = new JSON();
@@ -1471,7 +1475,7 @@ elseif ($action == 'return_to_cart') {
         die($json->encode($result));
     }
 } /* 编辑使用余额支付的处理 */
-elseif ($action == 'act_edit_surplus') {
+function act_edit_surplusAction() {
     /* 检查是否登录 */
     if ($_SESSION['user_id'] <= 0) {
         ecs_header("Location: ./\n");
@@ -1572,7 +1576,7 @@ elseif ($action == 'act_edit_surplus') {
     ecs_header('Location: user.php?act=order_detail&order_id=' . $order_id . "\n");
     exit;
 } /* 编辑使用余额支付的处理 */
-elseif ($action == 'act_edit_payment') {
+function act_edit_paymentAction() {
     /* 检查是否登录 */
     if ($_SESSION['user_id'] <= 0) {
         ecs_header("Location: ./\n");
@@ -1632,7 +1636,7 @@ elseif ($action == 'act_edit_payment') {
     ecs_header("Location: user.php?act=order_detail&order_id=$order_id\n");
     exit;
 } /* 保存订单详情收货地址 */
-elseif ($action == 'save_order_address') {
+function save_order_addressAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
     $address = array(
@@ -1653,7 +1657,7 @@ elseif ($action == 'save_order_address') {
         $err->show($_LANG['order_list_lnk'], 'user.php?act=order_list');
     }
 } /* 我的红包列表 */
-elseif ($action == 'bonus') {
+function bonusAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
@@ -1666,19 +1670,19 @@ elseif ($action == 'bonus') {
     $smarty->assign('bonus', $bonus);
     $smarty->display('user_transaction.dwt');
 } /* 我的团购列表 */
-elseif ($action == 'group_buy') {
+function group_buyAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
     //待议
     $smarty->display('user_transaction.dwt');
 } /* 团购订单详情 */
-elseif ($action == 'group_buy_detail') {
+function group_buy_detailAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
     //待议
     $smarty->display('user_transaction.dwt');
 } // 用户推荐页面
-elseif ($action == 'affiliate') {
+function affiliateAction() {
     $goodsid = intval(isset($_REQUEST['goodsid']) ? $_REQUEST['goodsid'] : 0);
     if (empty($goodsid)) {
         //我的推荐页面
@@ -1842,7 +1846,7 @@ elseif ($action == 'affiliate') {
 
     $smarty->display('user_clips.dwt');
 } //首页邮件订阅ajax操做和验证操作
-elseif ($action == 'email_list') {
+function email_listAction() {
     $job = $_GET['job'];
 
     if ($job == 'add' || $job == 'del') {
@@ -1927,7 +1931,7 @@ elseif ($action == 'email_list') {
         show_message($info, $_LANG['back_home_lnk'], 'index.php');
     }
 } /* ajax 发送验证邮件 */
-elseif ($action == 'send_hash_mail') {
+function send_hash_mailAction() {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     include_once(ROOT_PATH . 'includes/lib_passport.php');
     $json = new JSON();
@@ -1950,7 +1954,7 @@ elseif ($action == 'send_hash_mail') {
     }
 
     die($json->encode($result));
-} elseif ($action == 'track_packages') {
+} function track_packagesAction() {
     include_once(ROOT_PATH . 'includes/lib_transaction.php');
     include_once(ROOT_PATH . 'includes/lib_order.php');
 
@@ -1981,7 +1985,7 @@ elseif ($action == 'send_hash_mail') {
     $smarty->assign('pager', $pager);
     $smarty->assign('orders', $orders);
     $smarty->display('user_transaction.dwt');
-} elseif ($action == 'order_query') {
+} function order_queryAction() {
     $_GET['order_sn'] = trim(substr($_GET['order_sn'], 1));
     $order_sn = empty($_GET['order_sn']) ? '' : addslashes($_GET['order_sn']);
     include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -2042,7 +2046,7 @@ elseif ($action == 'send_hash_mail') {
     $smarty->assign('order_query', $order_query);
     $result['content'] = $smarty->fetch('library/order_query.lbi');
     die($json->encode($result));
-} elseif ($action == 'transform_points') {
+} function transform_pointsAction() {
     $rule = array();
     if (!empty($_CFG['points_rule'])) {
         $rule = unserialize($_CFG['points_rule']);
@@ -2119,7 +2123,7 @@ elseif ($action == 'send_hash_mail') {
     $smarty->assign('action', $action);
     $smarty->assign('lang', $_LANG);
     $smarty->display('user_transaction.dwt');
-} elseif ($action == 'act_transform_points') {
+} function act_transform_pointsAction() {
     $rule_index = empty($_POST['rule_index']) ? '' : trim($_POST['rule_index']);
     $num = empty($_POST['num']) ? 0 : intval($_POST['num']);
 
@@ -2195,7 +2199,7 @@ elseif ($action == 'send_hash_mail') {
             $user->set_points($row['user_name'], array($bbs_key => $result_points)); //调整论坛积分
             show_message(sprintf($_LANG['from_rank_points'], $num, $result_points, $points_name[$bbs_key]['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
     }
-} elseif ($action == 'act_transform_ucenter_points') {
+} function act_transform_ucenter_pointsAction() {
     $rule = array();
     if ($_CFG['points_rule']) {
         $rule = unserialize($_CFG['points_rule']);
@@ -2242,6 +2246,7 @@ elseif ($action == 'send_hash_mail') {
         show_message($_LANG['exchange_error_1'], $_LANG['transform_points'], 'user.php?act=transform_points');
     }
 } /* 清除商品浏览历史 */
-elseif ($action == 'clear_history') {
+function clear_historyAction() {
     setcookie('ECS[history]', '', 1, null, null, null, true);
+}
 }

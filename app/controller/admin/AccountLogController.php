@@ -1,18 +1,23 @@
 <?php
 
+namespace app\controller\admin;
+
 /**
  * 管理中心帐户变动记录
  */
+class AccountLogController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+        include_once(ROOT_PATH . 'includes/lib_order.php');
 
-define('IN_ECS', true);
-
-require(dirname(__FILE__) . '/includes/init.php');
-include_once(ROOT_PATH . 'includes/lib_order.php');
+    }
 
 /*------------------------------------------------------ */
 //-- 办事处列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 检查参数 */
     $user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
     if ($user_id <= 0) {
@@ -48,7 +53,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'query') {
+function queryAction() {
     /* 检查参数 */
     $user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
     if ($user_id <= 0) {
@@ -83,7 +88,7 @@ if ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 调节帐户
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'add') {
+function addAction() {
     /* 检查权限 */
     admin_priv('account_manage');
     /* 检查参数 */
@@ -107,7 +112,10 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 提交添加、编辑办事处
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+    function insertAction() {
+        $this->updateAction();
+    }
+function updateAction() {
     /* 检查权限 */
     admin_priv('account_manage');
     $token = trim($_POST['token']);
@@ -185,4 +193,5 @@ function get_accountlist($user_id, $account_type = '')
     }
 
     return array('account' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+}
 }

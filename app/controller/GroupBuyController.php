@@ -1,28 +1,29 @@
 <?php
 
+namespace app\controller;
+
 /**
  * 团购商品前台文件
  */
+class GroupBuyController extends InitController
+{
+    public function initialize()
+    {
 
-define('IN_ECS', true);
+    }
+}
 
-require(dirname(__FILE__) . '/includes/init.php');
+
+
 
 if ((DEBUG_MODE & 2) != 2) {
     $smarty->caching = true;
 }
 
 /*------------------------------------------------------ */
-//-- act 操作项的初始化
-/*------------------------------------------------------ */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
-}
-
-/*------------------------------------------------------ */
 //-- 团购商品 --> 团购活动商品列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list') {
+function listAction() {
     /* 取得团购活动总数 */
     $count = group_buy_count();
     if ($count > 0) {
@@ -79,7 +80,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 团购商品 --> 商品详情
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'view') {
+function viewAction() {
     /* 取得参数：团购活动id */
     $group_buy_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
     if ($group_buy_id <= 0) {
@@ -154,7 +155,7 @@ if ($_REQUEST['act'] == 'view') {
 //-- 团购商品 --> 购买
 /*------------------------------------------------------ */
 
-if ($_REQUEST['act'] == 'buy') {
+function buyAction() {
     /* 查询：判断是否登录 */
     if ($_SESSION['user_id'] <= 0) {
         show_message($_LANG['gb_error_login'], '', '', 'error');

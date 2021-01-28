@@ -1,3 +1,3 @@
 <?php
 
-new think\App();
+return new think\App();

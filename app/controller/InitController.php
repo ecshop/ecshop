@@ -18,11 +18,6 @@ class InitController extends Controller
             exit;
         }
 
-
-        if (defined('DEBUG_MODE') == false) {
-            define('DEBUG_MODE', 0);
-        }
-
         $php_self = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
         if ('/' == substr($php_self, -1)) {
             $php_self .= 'index.php';
@@ -118,14 +113,8 @@ class InitController extends Controller
             $smarty->template_dir = ROOT_PATH . 'themes/' . $_CFG['template'];
             $smarty->cache_dir = ROOT_PATH . 'temp/caches';
             $smarty->compile_dir = ROOT_PATH . 'temp/compiled';
-
-            if ((DEBUG_MODE & 2) == 2) {
-                $smarty->direct_output = true;
-                $smarty->force_compile = true;
-            } else {
-                $smarty->direct_output = false;
-                $smarty->force_compile = false;
-            }
+            $smarty->direct_output = true;
+            $smarty->force_compile = true;
 
             $smarty->assign('lang', $_LANG);
             $smarty->assign('ecs_charset', EC_CHARSET);
@@ -202,12 +191,6 @@ class InitController extends Controller
             if (isset($smarty)) {
                 $smarty->assign('ecs_session', $_SESSION);
             }
-        }
-
-        if ((DEBUG_MODE & 1) == 1) {
-            error_reporting(E_ALL);
-        } else {
-            error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
         }
 
         /* 判断是否支持 Gzip 模式 */

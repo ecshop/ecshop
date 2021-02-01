@@ -9,13 +9,6 @@ class CategoryController extends InitController
 {
     public function indexAction()
     {
-        if ((DEBUG_MODE & 2) != 2) {
-            $smarty->caching = true;
-        }
-
-        /*------------------------------------------------------ */
-        //-- INPUT
-        /*------------------------------------------------------ */
 
         /* 获得请求的分类 ID */
         if (isset($_REQUEST['id'])) {

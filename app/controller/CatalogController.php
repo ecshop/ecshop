@@ -9,10 +9,6 @@ class CatalogController extends InitController
 {
     public function indexAction()
     {
-        if ((DEBUG_MODE & 2) != 2) {
-            $smarty->caching = true;
-        }
-
         if (!$smarty->is_cached('catalog.dwt')) {
             /* 取出所有分类 */
             $cat_list = cat_list(0, 0, false);

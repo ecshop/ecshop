@@ -15,10 +15,6 @@ class InitController extends Controller
     {
         define('ECS_ADMIN', true);
 
-        if (defined('DEBUG_MODE') == false) {
-            define('DEBUG_MODE', 0);
-        }
-
         if (isset($_SERVER['PHP_SELF'])) {
             define('PHP_SELF', $_SERVER['PHP_SELF']);
         } else {
@@ -127,9 +123,7 @@ class InitController extends Controller
 
         $smarty->template_dir = ROOT_PATH . ADMIN_PATH . '/templates';
         $smarty->compile_dir = ROOT_PATH . 'temp/compiled/admin';
-        if ((DEBUG_MODE & 2) == 2) {
             $smarty->force_compile = true;
-        }
 
         $smarty->assign('lang', $_LANG);
         $smarty->assign('help_open', $_CFG['help_open']);
@@ -221,12 +215,6 @@ class InitController extends Controller
         header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
         header('Cache-Control: no-cache, must-revalidate');
         header('Pragma: no-cache');
-
-        if ((DEBUG_MODE & 1) == 1) {
-            error_reporting(E_ALL);
-        } else {
-            error_reporting(E_ALL ^ E_NOTICE);
-        }
 
         /* 判断是否支持gzip模式 */
         if (gzip_enabled()) {

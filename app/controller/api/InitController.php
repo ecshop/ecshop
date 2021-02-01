@@ -56,12 +56,6 @@ class InitController extends Controller
         /* 初始化用户插件 */
         $user = init_users();
 
-        if ((DEBUG_MODE & 1) == 1) {
-            error_reporting(E_ALL);
-        } else {
-            error_reporting(E_ALL ^ E_NOTICE);
-        }
-
         /* 判断是否支持 Gzip 模式 */
         if (gzip_enabled()) {
             ob_start('ob_gzhandler');

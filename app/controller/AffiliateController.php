@@ -9,11 +9,6 @@ class AffiliateController extends InitController
 {
     public function initialize()
     {
-        if ((DEBUG_MODE & 2) != 2) {
-            $smarty->caching = true;
-        }
-
-        //$charset = empty($_GET['charset']) ? 'UTF8' : $_GET['charset'];
         $display_mode = empty($_GET['display_mode']) ? 'javascript' : $_GET['display_mode'];
 
         if ($display_mode == 'javascript') {

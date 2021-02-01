@@ -9,14 +9,6 @@ class ArticleController extends InitController
 {
     public function initialize()
     {
-        if ((DEBUG_MODE & 2) != 2) {
-            $smarty->caching = true;
-        }
-
-        /*------------------------------------------------------ */
-        //-- INPUT
-        /*------------------------------------------------------ */
-
         $_REQUEST['id'] = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
         $article_id = $_REQUEST['id'];
         if (isset($_REQUEST['cat_id']) && $_REQUEST['cat_id'] < 0) {

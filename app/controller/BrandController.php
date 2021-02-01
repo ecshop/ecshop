@@ -9,14 +9,6 @@ class BrandController extends InitController
 {
     public function indexAction()
     {
-        if ((DEBUG_MODE & 2) != 2) {
-            $smarty->caching = true;
-        }
-
-        /*------------------------------------------------------ */
-        //-- INPUT
-        /*------------------------------------------------------ */
-
         /* 获得请求的分类 ID */
         if (!empty($_REQUEST['id'])) {
             $brand_id = intval($_REQUEST['id']);

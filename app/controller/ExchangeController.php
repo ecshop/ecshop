@@ -9,9 +9,6 @@ class ExchangeController extends InitController
 {
     public function initialize()
     {
-        if ((DEBUG_MODE & 2) != 2) {
-            $smarty->caching = true;
-        }
     }
 
     /*------------------------------------------------------ */

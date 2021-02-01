@@ -9,17 +9,6 @@ class ArticleCatController extends InitController
 {
     public function indexAction()
     {
-        if ((DEBUG_MODE & 2) != 2) {
-            $smarty->caching = true;
-        }
-
-        /* 清除缓存 */
-        clear_cache_files();
-
-        /*------------------------------------------------------ */
-        //-- INPUT
-        /*------------------------------------------------------ */
-
         /* 获得指定的分类ID */
         if (!empty($_GET['id'])) {
             $cat_id = intval($_GET['id']);

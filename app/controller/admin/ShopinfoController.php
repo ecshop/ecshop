@@ -14,7 +14,7 @@ class ShopinfoController extends InitController
 
         require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
 
-        $exc = new exchange($ecs->table("article"), $db, 'article_id', 'title');
+        $exc = new exchange(table("article"), $db, 'article_id', 'title');
     }
 
 
@@ -80,7 +80,7 @@ class ShopinfoController extends InitController
 
         /* 插入数据 */
         $add_time = gmtime();
-        $sql = "INSERT INTO " . $ecs->table('article') . "(title, cat_id, content, add_time) VALUES('$_POST[title]', '0', '$_POST[FCKeditor1]','$add_time' )";
+        $sql = "INSERT INTO " . table('article') . "(title, cat_id, content, add_time) VALUES('$_POST[title]', '0', '$_POST[FCKeditor1]','$add_time' )";
         $db->query($sql);
 
         $link[0]['text'] = $_LANG['continue_add'];
@@ -106,7 +106,7 @@ class ShopinfoController extends InitController
         $_REQUEST['id'] = intval($_REQUEST['id']);
 
         /* 取得文章数据 */
-        $sql = "SELECT article_id, title, content FROM " . $ecs->table('article') . "WHERE article_id =" . $_REQUEST['id'];
+        $sql = "SELECT article_id, title, content FROM " . table('article') . "WHERE article_id =" . $_REQUEST['id'];
         $article = $db->getRow($sql);
 
         /* 创建 html editor */
@@ -196,7 +196,7 @@ class ShopinfoController extends InitController
     {
         $list = array();
         $sql = 'SELECT article_id, title ,add_time' .
-            ' FROM ' . $GLOBALS['ecs']->table('article') .
+            ' FROM ' . table('article') .
             ' WHERE cat_id = 0 ORDER BY article_id';
         $res = $GLOBALS['db']->query($sql);
         while ($rows = $GLOBALS['db']->fetchRow($res)) {

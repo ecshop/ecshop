@@ -95,11 +95,11 @@ class LicenseController extends InitController
                 sys_msg($_LANG['fail_license_login'], 1, $links);
             }
 
-            $sql = "UPDATE " . $ecs->table('shop_config') . "
+            $sql = "UPDATE " . table('shop_config') . "
                 SET value = '" . $license_arr[0] . "'
                 WHERE code = 'certificate_id'";
             $db->query($sql);
-            $sql = "UPDATE " . $ecs->table('shop_config') . "
+            $sql = "UPDATE " . table('shop_config') . "
                 SET value = '" . $license_arr[1] . "'
                 WHERE code = 'token'";
             $db->query($sql);
@@ -118,7 +118,7 @@ class LicenseController extends InitController
         /* 检查权限 */
         admin_priv('shop_authorized');
 
-        $sql = "UPDATE " . $ecs->table('shop_config') . "
+        $sql = "UPDATE " . table('shop_config') . "
             SET value = ''
             WHERE code IN('certificate_id', 'token')";
         $db->query($sql);

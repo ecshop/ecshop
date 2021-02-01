@@ -11,8 +11,8 @@ class VoteController extends InitController
     {
         parent::initialize();
 
-        $exc = new exchange($ecs->table("vote"), $db, 'vote_id', 'vote_name');
-        $exc_opn = new exchange($ecs->table("vote_option"), $db, 'option_id', 'option_name');
+        $exc = new exchange(table("vote"), $db, 'vote_id', 'vote_name');
+        $exc_opn = new exchange(table("vote_option"), $db, 'option_id', 'option_name');
     }
 
 
@@ -93,10 +93,10 @@ class VoteController extends InitController
         $end_time = local_strtotime($_POST['end_time']);
 
         /* 查看广告名称是否有重复 */
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('vote') . " WHERE vote_name='$_POST[vote_name]'";
+        $sql = "SELECT COUNT(*) FROM " . table('vote') . " WHERE vote_name='$_POST[vote_name]'";
         if ($db->getOne($sql) == 0) {
             /* 插入数据 */
-            $sql = "INSERT INTO " . $ecs->table('vote') . " (vote_name, start_time, end_time, can_multi, vote_count)
+            $sql = "INSERT INTO " . table('vote') . " (vote_name, start_time, end_time, can_multi, vote_count)
         VALUES ('$_POST[vote_name]', '$start_time', '$end_time', '$_POST[can_multi]', '0')";
             $db->query($sql);
 
@@ -132,7 +132,7 @@ class VoteController extends InitController
         admin_priv('vote_priv');
 
         /* 获取数据 */
-        $vote_arr = $db->getRow("SELECT * FROM " . $ecs->table('vote') . " WHERE vote_id='$_REQUEST[id]'");
+        $vote_arr = $db->getRow("SELECT * FROM " . table('vote') . " WHERE vote_id='$_REQUEST[id]'");
         $vote_arr['start_time'] = local_date('Y-m-d', $vote_arr['start_time']);
         $vote_arr['end_time'] = local_date('Y-m-d', $vote_arr['end_time']);
 
@@ -153,7 +153,7 @@ class VoteController extends InitController
         $end_time = local_strtotime($_POST['end_time']);
 
         /* 更新信息 */
-        $sql = "UPDATE " . $ecs->table('vote') . " SET " .
+        $sql = "UPDATE " . table('vote') . " SET " .
             "vote_name     = '$_POST[vote_name]', " .
             "start_time    = '$start_time', " .
             "end_time      = '$end_time', " .
@@ -216,12 +216,12 @@ class VoteController extends InitController
 
         if (!empty($option_name)) {
             /* 查看调查标题是否有重复 */
-            $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('vote_option') .
+            $sql = 'SELECT COUNT(*) FROM ' . table('vote_option') .
                 " WHERE option_name = '$option_name' AND vote_id = '$vote_id'";
             if ($db->getOne($sql) != 0) {
                 return make_json_error($_LANG['vote_option_exist']);
             } else {
-                $sql = 'INSERT INTO ' . $ecs->table('vote_option') . ' (vote_id, option_name, option_count) ' .
+                $sql = 'INSERT INTO ' . table('vote_option') . ' (vote_id, option_name, option_count) ' .
                     "VALUES ('$vote_id', '$option_name', 0)";
                 $db->query($sql);
 
@@ -269,9 +269,9 @@ class VoteController extends InitController
         $option_name = json_str_iconv(trim($_POST['val']));
 
         /* 检查名称是否重复 */
-        $vote_id = $db->getOne('SELECT vote_id FROM ' . $ecs->table('vote_option') . " WHERE option_id='$id'");
+        $vote_id = $db->getOne('SELECT vote_id FROM ' . table('vote_option') . " WHERE option_id='$id'");
 
-        $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('vote_option') .
+        $sql = 'SELECT COUNT(*) FROM ' . table('vote_option') .
             " WHERE option_name = '$option_name' AND vote_id = '$vote_id' AND option_id <> $id";
         if ($db->getOne($sql) != 0) {
             return make_json_error(sprintf($_LANG['vote_option_exist'], $option_name));
@@ -312,7 +312,7 @@ class VoteController extends InitController
 
         if ($exc->drop($id)) {
             /* 同时删除调查选项 */
-            $db->query("DELETE FROM " . $ecs->table('vote_option') . " WHERE vote_id = '$id'");
+            $db->query("DELETE FROM " . table('vote_option') . " WHERE vote_id = '$id'");
             clear_cache_files();
             admin_log('', 'remove', 'ads_position');
         }
@@ -330,7 +330,7 @@ class VoteController extends InitController
         check_authz_json('vote_priv');
 
         $id = intval($_GET['id']);
-        $vote_id = $db->getOne('SELECT vote_id FROM ' . $ecs->table('vote_option') . " WHERE option_id='$id'");
+        $vote_id = $db->getOne('SELECT vote_id FROM ' . table('vote_option') . " WHERE option_id='$id'");
 
         if ($exc_opn->drop($id)) {
             clear_cache_files();
@@ -348,13 +348,13 @@ class VoteController extends InitController
         $filter = array();
 
         /* 记录总数以及页数 */
-        $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('vote');
+        $sql = 'SELECT COUNT(*) FROM ' . table('vote');
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         $filter = page_and_size($filter);
 
         /* 查询数据 */
-        $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('vote') . ' ORDER BY vote_id DESC';
+        $sql = 'SELECT * FROM ' . table('vote') . ' ORDER BY vote_id DESC';
         $res = $GLOBALS['db']->selectLimit($sql, $filter['page_size'], $filter['start']);
 
         $list = array();
@@ -372,7 +372,7 @@ class VoteController extends InitController
     {
         $list = array();
         $sql = 'SELECT option_id, vote_id, option_name, option_count, option_order' .
-            ' FROM ' . $GLOBALS['ecs']->table('vote_option') .
+            ' FROM ' . table('vote_option') .
             " WHERE vote_id = '$id' ORDER BY option_order ASC, option_id DESC";
         $res = $GLOBALS['db']->query($sql);
         while ($rows = $GLOBALS['db']->fetchRow($res)) {

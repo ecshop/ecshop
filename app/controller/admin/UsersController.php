@@ -19,7 +19,7 @@ class UsersController extends InitController
     {
         /* 检查权限 */
         admin_priv('users_manage');
-        $sql = "SELECT rank_id, rank_name, min_points FROM " . $ecs->table('user_rank') . " ORDER BY min_points ASC ";
+        $sql = "SELECT rank_id, rank_name, min_points FROM " . table('user_rank') . " ORDER BY min_points ASC ";
         $rs = $db->query($sql);
 
         $ranks = array();
@@ -76,7 +76,7 @@ class UsersController extends InitController
             'credit_line' => 0
         );
         /* 取出注册扩展字段 */
-        $sql = 'SELECT * FROM ' . $ecs->table('reg_fields') . ' WHERE type < 2 AND display = 1 AND id != 6 ORDER BY dis_order, id';
+        $sql = 'SELECT * FROM ' . table('reg_fields') . ' WHERE type < 2 AND display = 1 AND id != 6 ORDER BY dis_order, id';
         $extend_info_list = $db->getAll($sql);
         $this->assign('extend_info_list', $extend_info_list);
 
@@ -134,7 +134,7 @@ class UsersController extends InitController
         }
 
         /*把新注册用户的扩展信息插入数据库*/
-        $sql = 'SELECT id FROM ' . $ecs->table('reg_fields') . ' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有扩展字段的id
+        $sql = 'SELECT id FROM ' . table('reg_fields') . ' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有扩展字段的id
         $fields_arr = $db->getAll($sql);
 
         $extend_field_str = '';    //生成扩展字段的内容字符串
@@ -149,7 +149,7 @@ class UsersController extends InitController
         $extend_field_str = substr($extend_field_str, 0, -1);
 
         if ($extend_field_str) {      //插入注册扩展数据
-            $sql = 'INSERT INTO ' . $ecs->table('reg_extend_info') . ' (`user_id`, `reg_field_id`, `content`) VALUES' . $extend_field_str;
+            $sql = 'INSERT INTO ' . table('reg_extend_info') . ' (`user_id`, `reg_field_id`, `content`) VALUES' . $extend_field_str;
             $db->query($sql);
         }
 
@@ -167,7 +167,7 @@ class UsersController extends InitController
         $other['home_phone'] = isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
         $other['mobile_phone'] = isset($_POST['extend_field5']) ? htmlspecialchars(trim($_POST['extend_field5'])) : '';
 
-        $db->autoExecute($ecs->table('users'), $other, 'UPDATE', "user_name = '$username'");
+        $db->autoExecute(table('users'), $other, 'UPDATE', "user_name = '$username'");
 
         /* 记录管理员操作 */
         admin_log($_POST['username'], 'add', 'users');
@@ -187,7 +187,7 @@ class UsersController extends InitController
         admin_priv('users_manage');
 
         $sql = "SELECT u.user_name, u.sex, u.birthday, u.pay_points, u.rank_points, u.user_rank , u.user_money, u.frozen_money, u.credit_line, u.parent_id, u2.user_name as parent_username, u.qq, u.msn, u.office_phone, u.home_phone, u.mobile_phone" .
-            " FROM " . $ecs->table('users') . " u LEFT JOIN " . $ecs->table('users') . " u2 ON u.parent_id = u2.user_id WHERE u.user_id='$_GET[id]'";
+            " FROM " . table('users') . " u LEFT JOIN " . table('users') . " u2 ON u.parent_id = u2.user_id WHERE u.user_id='$_GET[id]'";
 
         $row = $db->getRow($sql);
         $row['user_name'] = addslashes($row['user_name']);
@@ -196,7 +196,7 @@ class UsersController extends InitController
 
         $sql = "SELECT u.user_id, u.sex, u.birthday, u.pay_points, u.rank_points, u.user_rank , u.user_money, u.frozen_money, u.credit_line, u.parent_id, u2.user_name as parent_username, u.qq, u.msn,
     u.office_phone, u.home_phone, u.mobile_phone" .
-            " FROM " . $ecs->table('users') . " u LEFT JOIN " . $ecs->table('users') . " u2 ON u.parent_id = u2.user_id WHERE u.user_id='$_GET[id]'";
+            " FROM " . table('users') . " u LEFT JOIN " . table('users') . " u2 ON u.parent_id = u2.user_id WHERE u.user_id='$_GET[id]'";
 
         $row = $db->getRow($sql);
 
@@ -225,11 +225,11 @@ class UsersController extends InitController
         }
 
         /* 取出注册扩展字段 */
-        $sql = 'SELECT * FROM ' . $ecs->table('reg_fields') . ' WHERE type < 2 AND display = 1 AND id != 6 ORDER BY dis_order, id';
+        $sql = 'SELECT * FROM ' . table('reg_fields') . ' WHERE type < 2 AND display = 1 AND id != 6 ORDER BY dis_order, id';
         $extend_info_list = $db->getAll($sql);
 
         $sql = 'SELECT reg_field_id, content ' .
-            'FROM ' . $ecs->table('reg_extend_info') .
+            'FROM ' . table('reg_extend_info') .
             " WHERE user_id = $user[user_id]";
         $extend_info_arr = $db->getAll($sql);
 
@@ -276,7 +276,7 @@ class UsersController extends InitController
             for ($i = 1; $i <= $num; $i++) {
                 $count = 0;
                 if ($up_uid) {
-                    $sql = "SELECT user_id FROM " . $ecs->table('users') . " WHERE parent_id IN($up_uid)";
+                    $sql = "SELECT user_id FROM " . table('users') . " WHERE parent_id IN($up_uid)";
                     $query = $db->query($sql);
                     $up_uid = '';
                     while ($rt = $db->fetch_array($query)) {
@@ -329,11 +329,11 @@ class UsersController extends InitController
             sys_msg($msg, 1);
         }
         if (!empty($password)) {
-            $sql = "UPDATE " . $ecs->table('users') . "SET `ec_salt`='0' WHERE user_name= '" . $username . "'";
+            $sql = "UPDATE " . table('users') . "SET `ec_salt`='0' WHERE user_name= '" . $username . "'";
             $db->query($sql);
         }
         /* 更新用户扩展字段的数据 */
-        $sql = 'SELECT id FROM ' . $ecs->table('reg_fields') . ' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有扩展字段的id
+        $sql = 'SELECT id FROM ' . table('reg_fields') . ' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有扩展字段的id
         $fields_arr = $db->getAll($sql);
         $user_id_arr = $users->get_profile_by_name($username);
         $user_id = $user_id_arr['user_id'];
@@ -343,11 +343,11 @@ class UsersController extends InitController
             if (isset($_POST[$extend_field_index])) {
                 $temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr($_POST[$extend_field_index], 0, 99) : $_POST[$extend_field_index];
 
-                $sql = 'SELECT * FROM ' . $ecs->table('reg_extend_info') . "  WHERE reg_field_id = '$val[id]' AND user_id = '$user_id'";
+                $sql = 'SELECT * FROM ' . table('reg_extend_info') . "  WHERE reg_field_id = '$val[id]' AND user_id = '$user_id'";
                 if ($db->getOne($sql)) {      //如果之前没有记录，则插入
-                    $sql = 'UPDATE ' . $ecs->table('reg_extend_info') . " SET content = '$temp_field_content' WHERE reg_field_id = '$val[id]' AND user_id = '$user_id'";
+                    $sql = 'UPDATE ' . table('reg_extend_info') . " SET content = '$temp_field_content' WHERE reg_field_id = '$val[id]' AND user_id = '$user_id'";
                 } else {
-                    $sql = 'INSERT INTO ' . $ecs->table('reg_extend_info') . " (`user_id`, `reg_field_id`, `content`) VALUES ('$user_id', '$val[id]', '$temp_field_content')";
+                    $sql = 'INSERT INTO ' . table('reg_extend_info') . " (`user_id`, `reg_field_id`, `content`) VALUES ('$user_id', '$val[id]', '$temp_field_content')";
                 }
                 $db->query($sql);
             }
@@ -365,7 +365,7 @@ class UsersController extends InitController
         $other['home_phone'] = isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
         $other['mobile_phone'] = isset($_POST['extend_field5']) ? htmlspecialchars(trim($_POST['extend_field5'])) : '';
 
-        $db->autoExecute($ecs->table('users'), $other, 'UPDATE', "user_name = '$username'");
+        $db->autoExecute(table('users'), $other, 'UPDATE', "user_name = '$username'");
 
         /* 记录管理员操作 */
         admin_log($username, 'edit', 'users');
@@ -389,7 +389,7 @@ class UsersController extends InitController
         admin_priv('users_drop');
 
         if (isset($_POST['checkboxes'])) {
-            $sql = "SELECT user_name FROM " . $ecs->table('users') . " WHERE user_id " . db_create_in($_POST['checkboxes']);
+            $sql = "SELECT user_name FROM " . table('users') . " WHERE user_id " . db_create_in($_POST['checkboxes']);
             $col = $db->getCol($sql);
             $usernames = implode(',', addslashes_deep($col));
             $count = count($col);
@@ -429,7 +429,7 @@ class UsersController extends InitController
         if ($users->edit_user($id, $username)) {
             if ($_CFG['integrate_code'] != 'ecshop') {
                 /* 更新商城会员表 */
-                $db->query('UPDATE ' . $ecs->table('users') . " SET user_name = '$username' WHERE user_id = '$id'");
+                $db->query('UPDATE ' . table('users') . " SET user_name = '$username' WHERE user_id = '$id'");
             }
 
             admin_log(addslashes($username), 'edit', 'users');
@@ -453,7 +453,7 @@ class UsersController extends InitController
 
         $users = init_users();
 
-        $sql = "SELECT user_name FROM " . $ecs->table('users') . " WHERE user_id = '$id'";
+        $sql = "SELECT user_name FROM " . table('users') . " WHERE user_id = '$id'";
         $username = $db->getOne($sql);
 
 
@@ -480,7 +480,7 @@ class UsersController extends InitController
         /* 检查权限 */
         admin_priv('users_drop');
 
-        $sql = "SELECT user_name FROM " . $ecs->table('users') . " WHERE user_id = '" . $_GET['id'] . "'";
+        $sql = "SELECT user_name FROM " . table('users') . " WHERE user_id = '" . $_GET['id'] . "'";
         $username = $db->getOne($sql);
         /* 通过插件来删除用户 */
         $users = init_users();
@@ -501,11 +501,11 @@ class UsersController extends InitController
     {
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $sql = "SELECT a.*, c.region_name AS country_name, p.region_name AS province, ct.region_name AS city_name, d.region_name AS district_name " .
-            " FROM " . $ecs->table('user_address') . " as a " .
-            " LEFT JOIN " . $ecs->table('region') . " AS c ON c.region_id = a.country " .
-            " LEFT JOIN " . $ecs->table('region') . " AS p ON p.region_id = a.province " .
-            " LEFT JOIN " . $ecs->table('region') . " AS ct ON ct.region_id = a.city " .
-            " LEFT JOIN " . $ecs->table('region') . " AS d ON d.region_id = a.district " .
+            " FROM " . table('user_address') . " as a " .
+            " LEFT JOIN " . table('region') . " AS c ON c.region_id = a.country " .
+            " LEFT JOIN " . table('region') . " AS p ON p.region_id = a.province " .
+            " LEFT JOIN " . table('region') . " AS ct ON ct.region_id = a.city " .
+            " LEFT JOIN " . table('region') . " AS d ON d.region_id = a.district " .
             " WHERE user_id='$id'";
         $address = $db->getAll($sql);
         $this->assign('address', $address);
@@ -524,11 +524,11 @@ class UsersController extends InitController
         /* 检查权限 */
         admin_priv('users_manage');
 
-        $sql = "UPDATE " . $ecs->table('users') . " SET parent_id = 0 WHERE user_id = '" . $_GET['id'] . "'";
+        $sql = "UPDATE " . table('users') . " SET parent_id = 0 WHERE user_id = '" . $_GET['id'] . "'";
         $db->query($sql);
 
         /* 记录管理员操作 */
-        $sql = "SELECT user_name FROM " . $ecs->table('users') . " WHERE user_id = '" . $_GET['id'] . "'";
+        $sql = "SELECT user_name FROM " . table('users') . " WHERE user_id = '" . $_GET['id'] . "'";
         $username = $db->getOne($sql);
         admin_log(addslashes($username), 'edit', 'users');
 
@@ -561,7 +561,7 @@ class UsersController extends InitController
         for ($i = 1; $i <= $num; $i++) {
             $count = 0;
             if ($up_uid) {
-                $sql = "SELECT user_id FROM " . $ecs->table('users') . " WHERE parent_id IN($up_uid)";
+                $sql = "SELECT user_id FROM " . table('users') . " WHERE parent_id IN($up_uid)";
                 $query = $db->query($sql);
                 $up_uid = '';
                 while ($rt = $db->fetch_array($query)) {
@@ -573,7 +573,7 @@ class UsersController extends InitController
 
             if ($count) {
                 $sql = "SELECT user_id, user_name, '$i' AS level, email, is_validated, user_money, frozen_money, rank_points, pay_points, reg_time " .
-                    " FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id IN($up_uid)" .
+                    " FROM " . table('users') . " WHERE user_id IN($up_uid)" .
                     " ORDER by level, user_id";
                 $user_list['user_list'] = array_merge($user_list['user_list'], $db->getAll($sql));
             }
@@ -624,7 +624,7 @@ class UsersController extends InitController
                 $ex_where .= " AND user_name LIKE '%" . mysql_like_quote($filter['keywords']) . "%'";
             }
             if ($filter['rank']) {
-                $sql = "SELECT min_points, max_points, special_rank FROM " . $GLOBALS['ecs']->table('user_rank') . " WHERE rank_id = '$filter[rank]'";
+                $sql = "SELECT min_points, max_points, special_rank FROM " . table('user_rank') . " WHERE rank_id = '$filter[rank]'";
                 $row = $GLOBALS['db']->getRow($sql);
                 if ($row['special_rank'] > 0) {
                     /* 特殊等级 */
@@ -640,12 +640,12 @@ class UsersController extends InitController
                 $ex_where .= " AND pay_points < '$filter[pay_points_lt]' ";
             }
 
-            $filter['record_count'] = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('users') . $ex_where);
+            $filter['record_count'] = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . table('users') . $ex_where);
 
             /* 分页大小 */
             $filter = page_and_size($filter);
             $sql = "SELECT user_id, user_name, email, is_validated, user_money, frozen_money, rank_points, pay_points, reg_time " .
-                " FROM " . $GLOBALS['ecs']->table('users') . $ex_where .
+                " FROM " . table('users') . $ex_where .
                 " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
                 " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
 

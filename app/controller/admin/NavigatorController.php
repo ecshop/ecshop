@@ -10,7 +10,7 @@ class NavigatorController extends InitController
 
         admin_priv('navigator');
 
-        $exc = new exchange($ecs->table("nav"), $db, 'id', 'name');
+        $exc = new exchange(table("nav"), $db, 'id', 'name');
     }
 
 
@@ -72,7 +72,7 @@ class NavigatorController extends InitController
             $item_opennew = $_REQUEST['item_opennew'];
             $item_type = $_REQUEST['item_type'];
 
-            $vieworder = $db->getOne("SELECT max(vieworder) FROM " . $ecs->table('nav') . " WHERE type = '" . $item_type . "'");
+            $vieworder = $db->getOne("SELECT max(vieworder) FROM " . table('nav') . " WHERE type = '" . $item_type . "'");
 
             $item_vieworder = empty($_REQUEST['item_vieworder']) ? $vieworder + 1 : $_REQUEST['item_vieworder'];
 
@@ -83,12 +83,12 @@ class NavigatorController extends InitController
                 if ($arr) {
                     //如果为分类
                     set_show_in_nav($arr['type'], $arr['id'], 1);   //设置显示
-                    $sql = "INSERT INTO " . $GLOBALS['ecs']->table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('$item_name','" . $arr['type'] . "','" . $arr['id'] . "','$item_ifshow','$item_vieworder','$item_opennew','$item_url','$item_type')";
+                    $sql = "INSERT INTO " . table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('$item_name','" . $arr['type'] . "','" . $arr['id'] . "','$item_ifshow','$item_vieworder','$item_opennew','$item_url','$item_type')";
                 }
             }
 
             if (empty($sql)) {
-                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('nav') . " (name,ifshow,vieworder,opennew,url,type) VALUES('$item_name','$item_ifshow','$item_vieworder','$item_opennew','$item_url','$item_type')";
+                $sql = "INSERT INTO " . table('nav') . " (name,ifshow,vieworder,opennew,url,type) VALUES('$item_name','$item_ifshow','$item_vieworder','$item_opennew','$item_url','$item_type')";
             }
             $db->query($sql);
             clear_cache_files();
@@ -105,7 +105,7 @@ class NavigatorController extends InitController
         $id = $_REQUEST['id'];
         if (empty($_REQUEST['step'])) {
             $rt = array('act' => 'edit', 'id' => $id);
-            $row = $db->getRow("SELECT * FROM " . $GLOBALS['ecs']->table('nav') . " WHERE id='$id'");
+            $row = $db->getRow("SELECT * FROM " . table('nav') . " WHERE id='$id'");
             $rt['item_name'] = $row['name'];
             $rt['item_url'] = $row['url'];
             $rt['item_vieworder'] = $row['vieworder'];
@@ -129,7 +129,7 @@ class NavigatorController extends InitController
             $item_type = $_REQUEST['item_type'];
             $item_vieworder = (int)$_REQUEST['item_vieworder'];
 
-            $row = $db->getRow("SELECT ctype,cid,ifshow,type FROM " . $GLOBALS['ecs']->table('nav') . " WHERE id = '$id'");
+            $row = $db->getRow("SELECT ctype,cid,ifshow,type FROM " . table('nav') . " WHERE id = '$id'");
             $arr = analyse_uri($item_url);
 
             if ($arr) {
@@ -154,7 +154,7 @@ class NavigatorController extends InitController
                 if ($item_ifshow != is_show_in_nav($arr['type'], $arr['id']) && $item_type == 'middle') {
                     set_show_in_nav($arr['type'], $arr['id'], $item_ifshow);
                 }
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('nav') .
+                $sql = "UPDATE " . table('nav') .
                     " SET name='$item_name',ctype='" . $arr['type'] . "',cid='" . $arr['id'] . "',ifshow='$item_ifshow',vieworder='$item_vieworder',opennew='$item_opennew',url='$item_url',type='$item_type' WHERE id='$id'";
             } else {
                 //目标不是分类
@@ -163,7 +163,7 @@ class NavigatorController extends InitController
                     set_show_in_nav($row['ctype'], $row['cid'], 0);
                 }
 
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('nav') .
+                $sql = "UPDATE " . table('nav') .
                     " SET name='$item_name',ctype='',cid='',ifshow='$item_ifshow',vieworder='$item_vieworder',opennew='$item_opennew',url='$item_url',type='$item_type' WHERE id='$id'";
             }
 
@@ -180,13 +180,13 @@ class NavigatorController extends InitController
     public function delAction()
     {
         $id = (int)$_GET['id'];
-        $row = $db->getRow("SELECT ctype,cid,type FROM " . $GLOBALS['ecs']->table('nav') . " WHERE id = '$id' LIMIT 1");
+        $row = $db->getRow("SELECT ctype,cid,type FROM " . table('nav') . " WHERE id = '$id' LIMIT 1");
 
         if ($row['type'] == 'middle' && $row['ctype'] && $row['cid']) {
             set_show_in_nav($row['ctype'], $row['cid'], 0);
         }
 
-        $sql = " DELETE FROM " . $GLOBALS['ecs']->table('nav') . " WHERE id='$id' LIMIT 1";
+        $sql = " DELETE FROM " . table('nav') . " WHERE id='$id' LIMIT 1";
         $db->query($sql);
         clear_cache_files();
         return redirect("navigator.php?act=list");
@@ -224,7 +224,7 @@ class NavigatorController extends InitController
         $id = intval($_POST['id']);
         $val = intval($_POST['val']);
 
-        $row = $db->getRow("SELECT type,ctype,cid FROM " . $GLOBALS['ecs']->table('nav') . " WHERE id = '$id' LIMIT 1");
+        $row = $db->getRow("SELECT type,ctype,cid FROM " . table('nav') . " WHERE id = '$id' LIMIT 1");
 
         if ($row['type'] == 'middle' && $row['ctype'] && $row['cid']) {
             set_show_in_nav($row['ctype'], $row['cid'], $val);
@@ -263,7 +263,7 @@ class NavigatorController extends InitController
             $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'type DESC, vieworder' : 'type DESC, ' . trim($_REQUEST['sort_by']);
             $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'ASC' : trim($_REQUEST['sort_order']);
 
-            $sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('nav');
+            $sql = "SELECT count(*) FROM " . table('nav');
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
             /* 分页大小 */
@@ -271,7 +271,7 @@ class NavigatorController extends InitController
 
             /* 查询 */
             $sql = "SELECT id, name, ifshow, vieworder, opennew, url, type" .
-                " FROM " . $GLOBALS['ecs']->table('nav') .
+                " FROM " . table('nav') .
                 " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
                 " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
 
@@ -349,7 +349,7 @@ class NavigatorController extends InitController
             return false;
         }
 
-        return $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('nav'), $args, 'update', "id='$id'");
+        return $GLOBALS['db']->autoExecute(table('nav'), $args, 'update', "id='$id'");
     }
 
     /*------------------------------------------------------ */
@@ -410,9 +410,9 @@ class NavigatorController extends InitController
     public function is_show_in_nav($type, $id)
     {
         if ($type == 'c') {
-            $tablename = $GLOBALS['ecs']->table('category');
+            $tablename = table('category');
         } else {
-            $tablename = $GLOBALS['ecs']->table('article_cat');
+            $tablename = table('article_cat');
         }
         return $GLOBALS['db']->getOne("SELECT show_in_nav FROM $tablename WHERE cat_id = '$id'");
     }
@@ -423,9 +423,9 @@ class NavigatorController extends InitController
     public function set_show_in_nav($type, $id, $val)
     {
         if ($type == 'c') {
-            $tablename = $GLOBALS['ecs']->table('category');
+            $tablename = table('category');
         } else {
-            $tablename = $GLOBALS['ecs']->table('article_cat');
+            $tablename = table('article_cat');
         }
         $GLOBALS['db']->query("UPDATE $tablename SET show_in_nav = '$val' WHERE cat_id = '$id'");
         clear_cache_files();

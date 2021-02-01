@@ -120,8 +120,8 @@ function get_sales_order($is_pagination = true)
     }
 
     $sql = "SELECT COUNT(distinct(og.goods_id)) FROM " .
-        $GLOBALS['ecs']->table('order_info') . ' AS oi,' .
-        $GLOBALS['ecs']->table('order_goods') . ' AS og ' .
+        table('order_info') . ' AS oi,' .
+        table('order_goods') . ' AS og ' .
         $where;
     $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -130,8 +130,8 @@ function get_sales_order($is_pagination = true)
 
     $sql = "SELECT og.goods_id, og.goods_sn, og.goods_name, oi.order_status, " .
         "SUM(og.goods_number) AS goods_num, SUM(og.goods_number * og.goods_price) AS turnover " .
-        "FROM " . $GLOBALS['ecs']->table('order_goods') . " AS og, " .
-        $GLOBALS['ecs']->table('order_info') . " AS oi  " . $where .
+        "FROM " . table('order_goods') . " AS og, " .
+        table('order_info') . " AS oi  " . $where .
         " GROUP BY og.goods_id " .
         ' ORDER BY ' . $filter['sort_by'] . ' ' . $filter['sort_order'];
     if ($is_pagination) {

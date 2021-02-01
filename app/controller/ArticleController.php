@@ -12,7 +12,7 @@ class ArticleController extends InitController
         $_REQUEST['id'] = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
         $article_id = $_REQUEST['id'];
         if (isset($_REQUEST['cat_id']) && $_REQUEST['cat_id'] < 0) {
-            $article_id = $db->getOne("SELECT article_id FROM " . $ecs->table('article') . " WHERE cat_id = '" . intval($_REQUEST['cat_id']) . "' ");
+            $article_id = $db->getOne("SELECT article_id FROM " . table('article') . " WHERE cat_id = '" . intval($_REQUEST['cat_id']) . "' ");
         }
 
         /* 文章详情 */
@@ -65,21 +65,21 @@ class ArticleController extends InitController
 
         /* 相关商品 */
         $sql = "SELECT a.goods_id, g.goods_name " .
-            "FROM " . $ecs->table('goods_article') . " AS a, " . $ecs->table('goods') . " AS g " .
+            "FROM " . table('goods_article') . " AS a, " . table('goods') . " AS g " .
             "WHERE a.goods_id = g.goods_id " .
             "AND a.article_id = '$_REQUEST[id]' ";
         $this->assign('goods_list', $db->getAll($sql));
 
         /* 上一篇下一篇文章 */
-        $next_article = $db->getRow("SELECT article_id, title FROM " . $ecs->table('article') . " WHERE article_id > $article_id AND cat_id=$article[cat_id] AND is_open=1 LIMIT 1");
+        $next_article = $db->getRow("SELECT article_id, title FROM " . table('article') . " WHERE article_id > $article_id AND cat_id=$article[cat_id] AND is_open=1 LIMIT 1");
         if (!empty($next_article)) {
             $next_article['url'] = build_uri('article', array('aid' => $next_article['article_id']), $next_article['title']);
             $this->assign('next_article', $next_article);
         }
 
-        $prev_aid = $db->getOne("SELECT max(article_id) FROM " . $ecs->table('article') . " WHERE article_id < $article_id AND cat_id=$article[cat_id] AND is_open=1");
+        $prev_aid = $db->getOne("SELECT max(article_id) FROM " . table('article') . " WHERE article_id < $article_id AND cat_id=$article[cat_id] AND is_open=1");
         if (!empty($prev_aid)) {
-            $prev_article = $db->getRow("SELECT article_id, title FROM " . $ecs->table('article') . " WHERE article_id = $prev_aid");
+            $prev_article = $db->getRow("SELECT article_id, title FROM " . table('article') . " WHERE article_id = $prev_aid");
             $prev_article['url'] = build_uri('article', array('aid' => $prev_article['article_id']), $prev_article['title']);
             $this->assign('prev_article', $prev_article);
         }
@@ -105,8 +105,8 @@ class ArticleController extends InitController
     {
         /* 获得文章的信息 */
         $sql = "SELECT a.*, IFNULL(AVG(r.comment_rank), 0) AS comment_rank " .
-            "FROM " . $GLOBALS['ecs']->table('article') . " AS a " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('comment') . " AS r ON r.id_value = a.article_id AND comment_type = 1 " .
+            "FROM " . table('article') . " AS a " .
+            "LEFT JOIN " . table('comment') . " AS r ON r.id_value = a.article_id AND comment_type = 1 " .
             "WHERE a.is_open = 1 AND a.article_id = '$article_id' GROUP BY a.article_id";
         $row = $GLOBALS['db']->getRow($sql);
 
@@ -135,9 +135,9 @@ class ArticleController extends InitController
         $sql = 'SELECT g.goods_id, g.goods_name, g.goods_thumb, g.goods_img, g.shop_price AS org_price, ' .
             "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " .
             'g.market_price, g.promote_price, g.promote_start_date, g.promote_end_date ' .
-            'FROM ' . $GLOBALS['ecs']->table('goods_article') . ' ga ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = ga.goods_id ' .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp " .
+            'FROM ' . table('goods_article') . ' ga ' .
+            'LEFT JOIN ' . table('goods') . ' AS g ON g.goods_id = ga.goods_id ' .
+            "LEFT JOIN " . table('member_price') . " AS mp " .
             "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
             "WHERE ga.article_id = '$id' AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0";
         $res = $GLOBALS['db']->query($sql);

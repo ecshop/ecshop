@@ -15,8 +15,8 @@ class ShophelpController extends InitController
         require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
 
         /*初始化数据交换对象 */
-        $exc_article = new exchange($ecs->table("article"), $db, 'article_id', 'title');
-        $exc_cat = new exchange($ecs->table("article_cat"), $db, 'cat_id', 'cat_name');
+        $exc_article = new exchange(table("article"), $db, 'article_id', 'title');
+        $exc_cat = new exchange(table("article_cat"), $db, 'cat_id', 'cat_name');
     }
 
     /*------------------------------------------------------ */
@@ -106,7 +106,7 @@ class ShophelpController extends InitController
 
         /* 插入数据 */
         $add_time = gmtime();
-        $sql = "INSERT INTO " . $ecs->table('article') . "(title, cat_id, article_type, content, add_time, author) VALUES('$_POST[title]', '$_POST[cat_id]', '$_POST[article_type]','$_POST[FCKeditor1]','$add_time', '_SHOPHELP' )";
+        $sql = "INSERT INTO " . table('article') . "(title, cat_id, article_type, content, add_time, author) VALUES('$_POST[title]', '$_POST[cat_id]', '$_POST[article_type]','$_POST[FCKeditor1]','$add_time', '_SHOPHELP' )";
         $db->query($sql);
 
         $link[0]['text'] = $_LANG['back_list'];
@@ -131,7 +131,7 @@ class ShophelpController extends InitController
         $_POST['id'] = intval($_POST['id']);
 
         /* 取文章数据 */
-        $sql = "SELECT article_id,title, cat_id, article_type, is_open, author, author_email, keywords, content FROM " . $ecs->table('article') . " WHERE article_id='$_REQUEST[id]'";
+        $sql = "SELECT article_id,title, cat_id, article_type, is_open, author, author_email, keywords, content FROM " . table('article') . " WHERE article_id='$_REQUEST[id]'";
         $article = $db->getRow($sql);
 
         /* 创建 html editor */
@@ -246,7 +246,7 @@ class ShophelpController extends InitController
         check_authz_json('shophelp_manage');
 
         $id = intval($_GET['id']);
-        $cat_id = $db->getOne('SELECT cat_id FROM ' . $ecs->table('article') . " WHERE article_id='$id'");
+        $cat_id = $db->getOne('SELECT cat_id FROM ' . table('article') . " WHERE article_id='$id'");
 
         if ($exc_article->drop($id)) {
             /* 清除缓存 */
@@ -274,7 +274,7 @@ class ShophelpController extends InitController
             if ($exc_cat->num("cat_name", $cat_name) != 0) {
                 return make_json_error($_LANG['catname_exist']);
             } else {
-                $sql = "INSERT INTO " . $ecs->table('article_cat') . " (cat_name, cat_type) VALUES ('$cat_name', 0)";
+                $sql = "INSERT INTO " . table('article_cat') . " (cat_name, cat_type) VALUES ('$cat_name', 0)";
                 $db->query($sql);
 
                 admin_log($cat_name, 'add', 'shophelpcat');
@@ -315,11 +315,11 @@ class ShophelpController extends InitController
     {
         $list = array();
         $sql = 'SELECT cat_id, cat_name, sort_order' .
-            ' FROM ' . $GLOBALS['ecs']->table('article_cat') .
+            ' FROM ' . table('article_cat') .
             ' WHERE cat_type = 0 ORDER BY sort_order';
         $res = $GLOBALS['db']->query($sql);
         while ($rows = $GLOBALS['db']->fetchRow($res)) {
-            $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('article') . " WHERE cat_id = '$rows[cat_id]'";
+            $sql = 'SELECT COUNT(*) FROM ' . table('article') . " WHERE cat_id = '$rows[cat_id]'";
             $rows['num'] = $GLOBALS['db']->getOne($sql);
 
             $list[] = $rows;
@@ -333,7 +333,7 @@ class ShophelpController extends InitController
     {
         $list = array();
         $sql = 'SELECT article_id, title, article_type , add_time' .
-            ' FROM ' . $GLOBALS['ecs']->table('article') .
+            ' FROM ' . table('article') .
             " WHERE cat_id = '$cat_id' ORDER BY article_type DESC";
         $res = $GLOBALS['db']->query($sql);
         while ($rows = $GLOBALS['db']->fetchRow($res)) {

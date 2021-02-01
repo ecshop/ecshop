@@ -24,7 +24,7 @@ class GuestStatsController extends InitController
 
         /* 取得会员总数 */
         $users = init_users();
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table("users");
+        $sql = "SELECT COUNT(*) FROM " . table("users");
         $res = $db->getCol($sql);
         $user_num = $res[0];
 
@@ -33,14 +33,14 @@ class GuestStatsController extends InitController
         $total_fee = " SUM(" . order_amount_field() . ") AS turnover ";
 
         /* 有过订单的会员数 */
-        $sql = 'SELECT COUNT(DISTINCT user_id) FROM ' . $ecs->table('order_info') .
+        $sql = 'SELECT COUNT(DISTINCT user_id) FROM ' . table('order_info') .
             " WHERE user_id > 0 " . order_query_sql('finished');
         $have_order_usernum = $db->getOne($sql);
 
         /* 会员订单总数和订单总购物额 */
         $user_all_order = array();
         $sql = "SELECT COUNT(*) AS order_num, " . $total_fee .
-            "FROM " . $ecs->table('order_info') .
+            "FROM " . table('order_info') .
             " WHERE user_id > 0 " . order_query_sql('finished');
         $user_all_order = $db->getRow($sql);
         $user_all_order['turnover'] = floatval($user_all_order['turnover']);
@@ -48,7 +48,7 @@ class GuestStatsController extends InitController
         /* 匿名会员订单总数和总购物额 */
         $guest_all_order = array();
         $sql = "SELECT COUNT(*) AS order_num, " . $total_fee .
-            "FROM " . $ecs->table('order_info') .
+            "FROM " . table('order_info') .
             " WHERE user_id = 0 " . order_query_sql('finished');
         $guest_all_order = $db->getRow($sql);
 

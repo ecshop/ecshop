@@ -67,7 +67,7 @@ class GoodsBookingController extends InitController
 
         $id = intval($_GET['id']);
 
-        $db->query("DELETE FROM " . $ecs->table('booking_goods') . " WHERE rec_id='$id'");
+        $db->query("DELETE FROM " . table('booking_goods') . " WHERE rec_id='$id'");
 
         $url = 'goods_booking.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
@@ -98,7 +98,7 @@ class GoodsBookingController extends InitController
 
         $dispose_note = !empty($_POST['dispose_note']) ? trim($_POST['dispose_note']) : '';
 
-        $sql = "UPDATE  " . $ecs->table('booking_goods') .
+        $sql = "UPDATE  " . table('booking_goods') .
             " SET is_dispose='1', dispose_note='$dispose_note', " .
             "dispose_time='" . gmtime() . "', dispose_user='" . $_SESSION['admin_name'] . "'" .
             " WHERE rec_id='$_REQUEST[rec_id]'";
@@ -108,7 +108,7 @@ class GoodsBookingController extends InitController
         if (!empty($_POST['send_email_notice']) or isset($_POST['remail'])) {
             //获取邮件中的必要内容
             $sql = 'SELECT bg.email, bg.link_man, bg.goods_id, g.goods_name ' .
-                'FROM ' . $ecs->table('booking_goods') . ' AS bg, ' . $ecs->table('goods') . ' AS g ' .
+                'FROM ' . table('booking_goods') . ' AS bg, ' . table('goods') . ' AS g ' .
                 "WHERE bg.goods_id = g.goods_id AND bg.rec_id='$_REQUEST[rec_id]'";
             $booking_info = $db->getRow($sql);
 
@@ -157,8 +157,8 @@ class GoodsBookingController extends InitController
         $where = (!empty($_REQUEST['keywords'])) ? " AND g.goods_name LIKE '%" . mysql_like_quote($filter['keywords']) . "%' " : '';
         $where .= (!empty($_REQUEST['dispose'])) ? " AND bg.is_dispose = '$filter[dispose]' " : '';
 
-        $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('booking_goods') . ' AS bg, ' .
-            $GLOBALS['ecs']->table('goods') . ' AS g ' .
+        $sql = 'SELECT COUNT(*) FROM ' . table('booking_goods') . ' AS bg, ' .
+            table('goods') . ' AS g ' .
             "WHERE bg.goods_id = g.goods_id $where";
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -167,7 +167,7 @@ class GoodsBookingController extends InitController
 
         /* 获取活动数据 */
         $sql = 'SELECT bg.rec_id, bg.link_man, g.goods_id, g.goods_name, bg.goods_number, bg.booking_time, bg.is_dispose ' .
-            'FROM ' . $GLOBALS['ecs']->table('booking_goods') . ' AS bg, ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
+            'FROM ' . table('booking_goods') . ' AS bg, ' . table('goods') . ' AS g ' .
             "WHERE bg.goods_id = g.goods_id $where " .
             "ORDER BY $filter[sort_by] $filter[sort_order] " .
             "LIMIT " . $filter['start'] . ", $filter[page_size]";
@@ -196,9 +196,9 @@ class GoodsBookingController extends InitController
             "bg.link_man, g.goods_name, bg.goods_id, bg.goods_number, " .
             "bg.booking_time, bg.goods_desc,bg.dispose_user, bg.dispose_time, bg.email, " .
             "bg.tel, bg.dispose_note ,bg.dispose_user, bg.dispose_time,bg.is_dispose  " .
-            "FROM " . $ecs->table('booking_goods') . " AS bg " .
-            "LEFT JOIN " . $ecs->table('goods') . " AS g ON g.goods_id=bg.goods_id " .
-            "LEFT JOIN " . $ecs->table('users') . " AS u ON u.user_id=bg.user_id " .
+            "FROM " . table('booking_goods') . " AS bg " .
+            "LEFT JOIN " . table('goods') . " AS g ON g.goods_id=bg.goods_id " .
+            "LEFT JOIN " . table('users') . " AS u ON u.user_id=bg.user_id " .
             "WHERE bg.rec_id ='$id'";
 
         $res = $db->getRow($sql);

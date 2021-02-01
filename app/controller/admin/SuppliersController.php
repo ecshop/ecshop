@@ -78,14 +78,14 @@ class SuppliersController extends InitController
 
         /* 判断名称是否重复 */
         $sql = "SELECT suppliers_id
-            FROM " . $ecs->table('suppliers') . "
+            FROM " . table('suppliers') . "
             WHERE suppliers_name = '$name'
             AND suppliers_id <> '$id' ";
         if ($db->getOne($sql)) {
             return make_json_error(sprintf($_LANG['suppliers_name_exist'], $name));
         } else {
             /* 保存供货商信息 */
-            $sql = "UPDATE " . $ecs->table('suppliers') . "
+            $sql = "UPDATE " . table('suppliers') . "
                 SET suppliers_name = '$name'
                 WHERE suppliers_id = '$id'";
             if ($result = $db->query($sql)) {
@@ -110,14 +110,14 @@ class SuppliersController extends InitController
 
         $id = intval($_REQUEST['id']);
         $sql = "SELECT *
-            FROM " . $ecs->table('suppliers') . "
+            FROM " . table('suppliers') . "
             WHERE suppliers_id = '$id'";
         $suppliers = $db->getRow($sql, true);
 
         if ($suppliers['suppliers_id']) {
             /* 判断供货商是否存在订单 */
             $sql = "SELECT COUNT(*)
-                FROM " . $ecs->table('order_info') . "AS O, " . $ecs->table('order_goods') . " AS OG, " . $ecs->table('goods') . " AS G
+                FROM " . table('order_info') . "AS O, " . table('order_goods') . " AS OG, " . table('goods') . " AS G
                 WHERE O.order_id = OG.order_id
                 AND OG.goods_id = G.goods_id
                 AND G.suppliers_id = '$id'";
@@ -129,7 +129,7 @@ class SuppliersController extends InitController
 
             /* 判断供货商是否存在商品 */
             $sql = "SELECT COUNT(*)
-                FROM " . $ecs->table('goods') . "AS G
+                FROM " . table('goods') . "AS G
                 WHERE G.suppliers_id = '$id'";
             $goods_exists = $db->getOne($sql, true);
             if ($goods_exists > 0) {
@@ -138,14 +138,14 @@ class SuppliersController extends InitController
                 exit;
             }
 
-            $sql = "DELETE FROM " . $ecs->table('suppliers') . "
+            $sql = "DELETE FROM " . table('suppliers') . "
             WHERE suppliers_id = '$id'";
             $db->query($sql);
 
             /* 删除管理员、发货单关联、退货单关联和订单关联的供货商 */
             $table_array = array('admin_user', 'delivery_order', 'back_order');
             foreach ($table_array as $value) {
-                $sql = "DELETE FROM " . $ecs->table($value) . " WHERE suppliers_id = '$id'";
+                $sql = "DELETE FROM " . table($value) . " WHERE suppliers_id = '$id'";
                 $db->query($sql, 'SILENT');
             }
 
@@ -171,13 +171,13 @@ class SuppliersController extends InitController
 
         $id = intval($_REQUEST['id']);
         $sql = "SELECT suppliers_id, is_check
-            FROM " . $ecs->table('suppliers') . "
+            FROM " . table('suppliers') . "
             WHERE suppliers_id = '$id'";
         $suppliers = $db->getRow($sql, true);
 
         if ($suppliers['suppliers_id']) {
             $_suppliers['is_check'] = empty($suppliers['is_check']) ? 1 : 0;
-            $db->autoExecute($ecs->table('suppliers'), $_suppliers, '', "suppliers_id = '$id'");
+            $db->autoExecute(table('suppliers'), $_suppliers, '', "suppliers_id = '$id'");
             clear_cache_files();
             return make_json_result($_suppliers['is_check']);
         }
@@ -201,14 +201,14 @@ class SuppliersController extends InitController
 
             if (isset($_POST['remove'])) {
                 $sql = "SELECT *
-                    FROM " . $ecs->table('suppliers') . "
+                    FROM " . table('suppliers') . "
                     WHERE suppliers_id " . db_create_in($ids);
                 $suppliers = $db->getAll($sql);
 
                 foreach ($suppliers as $key => $value) {
                     /* 判断供货商是否存在订单 */
                     $sql = "SELECT COUNT(*)
-                        FROM " . $ecs->table('order_info') . "AS O, " . $ecs->table('order_goods') . " AS OG, " . $ecs->table('goods') . " AS G
+                        FROM " . table('order_info') . "AS O, " . table('order_goods') . " AS OG, " . table('goods') . " AS G
                         WHERE O.order_id = OG.order_id
                         AND OG.goods_id = G.goods_id
                         AND G.suppliers_id = '" . $value['suppliers_id'] . "'";
@@ -219,7 +219,7 @@ class SuppliersController extends InitController
 
                     /* 判断供货商是否存在商品 */
                     $sql = "SELECT COUNT(*)
-                        FROM " . $ecs->table('goods') . "AS G
+                        FROM " . table('goods') . "AS G
                         WHERE G.suppliers_id = '" . $value['suppliers_id'] . "'";
                     $goods_exists = $db->getOne($sql, true);
                     if ($goods_exists > 0) {
@@ -231,14 +231,14 @@ class SuppliersController extends InitController
                 }
 
 
-                $sql = "DELETE FROM " . $ecs->table('suppliers') . "
+                $sql = "DELETE FROM " . table('suppliers') . "
                 WHERE suppliers_id " . db_create_in($ids);
                 $db->query($sql);
 
                 /* 更新管理员、发货单关联、退货单关联和订单关联的供货商 */
                 $table_array = array('admin_user', 'delivery_order', 'back_order');
                 foreach ($table_array as $value) {
-                    $sql = "DELETE FROM " . $ecs->table($value) . " WHERE suppliers_id " . db_create_in($ids) . " ";
+                    $sql = "DELETE FROM " . table($value) . " WHERE suppliers_id " . db_create_in($ids) . " ";
                     $db->query($sql, 'SILENT');
                 }
 
@@ -271,7 +271,7 @@ class SuppliersController extends InitController
         $sql = "SELECT user_id, user_name, CASE
                 WHEN suppliers_id = 0 THEN 'free'
                 ELSE 'other' END AS type
-                FROM " . $ecs->table('admin_user') . "
+                FROM " . table('admin_user') . "
                 WHERE agency_id = 0
                 AND action_list <> 'all'";
         $suppliers['admin_list'] = $db->getAll($sql);
@@ -293,7 +293,7 @@ class SuppliersController extends InitController
 
         /* 取得供货商信息 */
         $id = $_REQUEST['id'];
-        $sql = "SELECT * FROM " . $ecs->table('suppliers') . " WHERE suppliers_id = '$id'";
+        $sql = "SELECT * FROM " . table('suppliers') . " WHERE suppliers_id = '$id'";
         $suppliers = $db->getRow($sql);
         if (count($suppliers) <= 0) {
             sys_msg('suppliers does not exist');
@@ -306,7 +306,7 @@ class SuppliersController extends InitController
                 WHEN suppliers_id = '$id' THEN 'this'
                 WHEN suppliers_id = 0 THEN 'free'
                 ELSE 'other' END AS type
-                FROM " . $ecs->table('admin_user') . "
+                FROM " . table('admin_user') . "
                 WHERE agency_id = 0
                 AND action_list <> 'all'";
         $suppliers['admin_list'] = $db->getAll($sql);
@@ -337,17 +337,17 @@ class SuppliersController extends InitController
 
         /* 判断名称是否重复 */
         $sql = "SELECT suppliers_id
-                FROM " . $ecs->table('suppliers') . "
+                FROM " . table('suppliers') . "
                 WHERE suppliers_name = '" . $suppliers['suppliers_name'] . "' ";
         if ($db->getOne($sql)) {
             sys_msg($_LANG['suppliers_name_exist']);
         }
 
-        $db->autoExecute($ecs->table('suppliers'), $suppliers, 'INSERT');
+        $db->autoExecute(table('suppliers'), $suppliers, 'INSERT');
         $suppliers['suppliers_id'] = $db->insert_id();
 
         if (isset($_POST['admins'])) {
-            $sql = "UPDATE " . $ecs->table('admin_user') . " SET suppliers_id = '" . $suppliers['suppliers_id'] . "', action_list = '" . SUPPLIERS_ACTION_LIST . "' WHERE user_id " . db_create_in($_POST['admins']);
+            $sql = "UPDATE " . table('admin_user') . " SET suppliers_id = '" . $suppliers['suppliers_id'] . "', action_list = '" . SUPPLIERS_ACTION_LIST . "' WHERE user_id " . db_create_in($_POST['admins']);
             $db->query($sql);
         }
 
@@ -374,7 +374,7 @@ class SuppliersController extends InitController
         );
 
         /* 取得供货商信息 */
-        $sql = "SELECT * FROM " . $ecs->table('suppliers') . " WHERE suppliers_id = '" . $suppliers['id'] . "'";
+        $sql = "SELECT * FROM " . table('suppliers') . " WHERE suppliers_id = '" . $suppliers['id'] . "'";
         $suppliers['old'] = $db->getRow($sql);
         if (empty($suppliers['old']['suppliers_id'])) {
             sys_msg('suppliers does not exist');
@@ -382,7 +382,7 @@ class SuppliersController extends InitController
 
         /* 判断名称是否重复 */
         $sql = "SELECT suppliers_id
-                FROM " . $ecs->table('suppliers') . "
+                FROM " . table('suppliers') . "
                 WHERE suppliers_name = '" . $suppliers['new']['suppliers_name'] . "'
                 AND suppliers_id <> '" . $suppliers['id'] . "'";
         if ($db->getOne($sql)) {
@@ -390,15 +390,15 @@ class SuppliersController extends InitController
         }
 
         /* 保存供货商信息 */
-        $db->autoExecute($ecs->table('suppliers'), $suppliers['new'], 'UPDATE', "suppliers_id = '" . $suppliers['id'] . "'");
+        $db->autoExecute(table('suppliers'), $suppliers['new'], 'UPDATE', "suppliers_id = '" . $suppliers['id'] . "'");
 
         /* 清空供货商的管理员 */
-        $sql = "UPDATE " . $ecs->table('admin_user') . " SET suppliers_id = 0, action_list = '" . SUPPLIERS_ACTION_LIST . "' WHERE suppliers_id = '" . $suppliers['id'] . "'";
+        $sql = "UPDATE " . table('admin_user') . " SET suppliers_id = 0, action_list = '" . SUPPLIERS_ACTION_LIST . "' WHERE suppliers_id = '" . $suppliers['id'] . "'";
         $db->query($sql);
 
         /* 添加供货商的管理员 */
         if (isset($_POST['admins'])) {
-            $sql = "UPDATE " . $ecs->table('admin_user') . " SET suppliers_id = '" . $suppliers['old']['suppliers_id'] . "' WHERE user_id " . db_create_in($_POST['admins']);
+            $sql = "UPDATE " . table('admin_user') . " SET suppliers_id = '" . $suppliers['old']['suppliers_id'] . "' WHERE user_id " . db_create_in($_POST['admins']);
             $db->query($sql);
         }
 
@@ -445,13 +445,13 @@ class SuppliersController extends InitController
             }
 
             /* 记录总数 */
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('suppliers') . $where;
+            $sql = "SELECT COUNT(*) FROM " . table('suppliers') . $where;
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
             $filter['page_count'] = $filter['record_count'] > 0 ? ceil($filter['record_count'] / $filter['page_size']) : 1;
 
             /* 查询 */
             $sql = "SELECT suppliers_id, suppliers_name, suppliers_desc, is_check
-                FROM " . $GLOBALS['ecs']->table("suppliers") . "
+                FROM " . table("suppliers") . "
                 $where
                 ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'] . "
                 LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ", " . $filter['page_size'] . " ";

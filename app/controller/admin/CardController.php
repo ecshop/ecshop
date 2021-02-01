@@ -13,7 +13,7 @@ class CardController extends InitController
 
         $image = new cls_image($_CFG['bgcolor']);
 
-        $exc = new exchange($ecs->table("card"), $db, 'card_id', 'card_name');
+        $exc = new exchange(table("card"), $db, 'card_id', 'card_name');
     }
 
 
@@ -117,7 +117,7 @@ class CardController extends InitController
         $img_name = basename($image->upload_image($_FILES['card_img'], "cardimg"));
 
         /*插入数据*/
-        $sql = "INSERT INTO " . $ecs->table('card') . "(card_name, card_fee, free_money, card_desc, card_img)
+        $sql = "INSERT INTO " . table('card') . "(card_name, card_fee, free_money, card_desc, card_img)
             VALUES ('$_POST[card_name]', '$_POST[card_fee]', '$_POST[free_money]', '$_POST[card_desc]', '$img_name')";
         $db->query($sql);
 
@@ -141,7 +141,7 @@ class CardController extends InitController
         /* 权限判断 */
         admin_priv('card_manage');
 
-        $sql = "SELECT card_id, card_name, card_fee, free_money, card_desc, card_img FROM " . $ecs->table('card') . " WHERE card_id='$_REQUEST[id]'";
+        $sql = "SELECT card_id, card_name, card_fee, free_money, card_desc, card_img FROM " . table('card') . " WHERE card_id='$_REQUEST[id]'";
         $card = $db->getRow($sql);
 
         $this->assign('ur_here', $_LANG['card_edit']);
@@ -192,12 +192,12 @@ class CardController extends InitController
         $card_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
         /* 取得logo名称 */
-        $sql = "SELECT card_img FROM " . $ecs->table('card') . " WHERE card_id = '$card_id'";
+        $sql = "SELECT card_img FROM " . table('card') . " WHERE card_id = '$card_id'";
         $img_name = $db->getOne($sql);
 
         if (!empty($img_name)) {
             @unlink(ROOT_PATH . DATA_DIR . '/cardimg/' . $img_name);
-            $sql = "UPDATE " . $ecs->table('card') . " SET card_img = '' WHERE card_id = '$card_id'";
+            $sql = "UPDATE " . table('card') . " SET card_img = '' WHERE card_id = '$card_id'";
             $db->query($sql);
         }
         $link = array(array('text' => $_LANG['card_edit_lnk'], 'href' => 'card.php?act=edit&id=' . $card_id), array('text' => $_LANG['card_list_lnk'], 'href' => 'brand.php?act=list'));
@@ -266,14 +266,14 @@ class CardController extends InitController
             $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
             /* 分页大小 */
-            $sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('card');
+            $sql = "SELECT count(*) FROM " . table('card');
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
             $filter = page_and_size($filter);
 
             /* 查询 */
             $sql = "SELECT card_id, card_name, card_img, card_fee, free_money, card_desc" .
-                " FROM " . $GLOBALS['ecs']->table('card') .
+                " FROM " . table('card') .
                 " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
                 " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
 

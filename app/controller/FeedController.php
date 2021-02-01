@@ -32,7 +32,7 @@ class FeedController extends InitController
             if ($_REQUEST['type'] == 'group_buy') {
                 $now = gmtime();
                 $sql = 'SELECT act_id, act_name, act_desc, start_time ' .
-                    "FROM " . $GLOBALS['ecs']->table('goods_activity') .
+                    "FROM " . table('goods_activity') .
                     "WHERE act_type = '" . GAT_GROUP_BUY . "' " .
                     "AND start_time <= '$now' AND is_finished < 3 ORDER BY start_time DESC";
                 $res = $db->query($sql);
@@ -56,7 +56,7 @@ class FeedController extends InitController
             } elseif ($_REQUEST['type'] == 'snatch') {
                 $now = gmtime();
                 $sql = 'SELECT act_id, act_name, act_desc, start_time ' .
-                    "FROM " . $GLOBALS['ecs']->table('goods_activity') .
+                    "FROM " . table('goods_activity') .
                     "WHERE act_type = '" . GAT_SNATCH . "' " .
                     "AND start_time <= '$now' AND is_finished < 3 ORDER BY start_time DESC";
                 $res = $db->query($sql);
@@ -80,7 +80,7 @@ class FeedController extends InitController
             } elseif ($_REQUEST['type'] == 'auction') {
                 $now = gmtime();
                 $sql = 'SELECT act_id, act_name, act_desc, start_time ' .
-                    "FROM " . $GLOBALS['ecs']->table('goods_activity') .
+                    "FROM " . table('goods_activity') .
                     "WHERE act_type = '" . GAT_AUCTION . "' " .
                     "AND start_time <= '$now' AND is_finished < 3 ORDER BY start_time DESC";
                 $res = $db->query($sql);
@@ -103,8 +103,8 @@ class FeedController extends InitController
                 }
             } elseif ($_REQUEST['type'] == 'exchange') {
                 $sql = 'SELECT g.goods_id, g.goods_name, g.goods_brief, g.last_update ' .
-                    "FROM " . $GLOBALS['ecs']->table('exchange_goods') . " AS eg, " .
-                    $GLOBALS['ecs']->table('goods') . " AS g " .
+                    "FROM " . table('exchange_goods') . " AS eg, " .
+                    table('goods') . " AS g " .
                     "WHERE eg.goods_id = g.goods_id";
                 $res = $db->query($sql);
 
@@ -127,7 +127,7 @@ class FeedController extends InitController
             } elseif ($_REQUEST['type'] == 'activity') {
                 $now = gmtime();
                 $sql = 'SELECT act_id, act_name, start_time ' .
-                    "FROM " . $GLOBALS['ecs']->table('favourable_activity') .
+                    "FROM " . table('favourable_activity') .
                     " WHERE start_time <= '$now' AND end_time >= '$now'";
                 $res = $db->query($sql);
 
@@ -150,7 +150,7 @@ class FeedController extends InitController
             } elseif ($_REQUEST['type'] == 'package') {
                 $now = gmtime();
                 $sql = 'SELECT act_id, act_name, act_desc, start_time ' .
-                    "FROM " . $GLOBALS['ecs']->table('goods_activity') .
+                    "FROM " . table('goods_activity') .
                     "WHERE act_type = '" . GAT_PACKAGE . "' " .
                     "AND start_time <= '$now' AND is_finished < 3 ORDER BY start_time DESC";
                 $res = $db->query($sql);
@@ -173,7 +173,7 @@ class FeedController extends InitController
                 }
             } elseif (substr($_REQUEST['type'], 0, 11) == 'article_cat') {
                 $sql = 'SELECT article_id, title, author, add_time' .
-                    ' FROM ' . $GLOBALS['ecs']->table('article') .
+                    ' FROM ' . table('article') .
                     ' WHERE is_open = 1 AND ' . get_article_children(substr($_REQUEST['type'], 11)) .
                     ' ORDER BY add_time DESC LIMIT ' . $_CFG['article_page_size'];
                 $res = $db->query($sql);
@@ -199,7 +199,7 @@ class FeedController extends InitController
             $in_cat = $cat > 0 ? ' AND ' . get_children($cat) : '';
 
             $sql = 'SELECT c.cat_name, g.goods_id, g.goods_name, g.goods_brief, g.last_update ' .
-                'FROM ' . $ecs->table('category') . ' AS c, ' . $ecs->table('goods') . ' AS g ' .
+                'FROM ' . table('category') . ' AS c, ' . table('goods') . ' AS g ' .
                 'WHERE c.cat_id = g.cat_id AND g.is_delete = 0 AND g.is_alone_sale = 1 ' . $brd . $cat .
                 'ORDER BY g.last_update DESC';
             $res = $db->query($sql);

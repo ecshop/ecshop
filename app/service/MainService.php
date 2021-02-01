@@ -25,10 +25,10 @@ class MainService
         $time = date('Y-m-d');
         $sql = 'SELECT u.user_money,u.email, u.pay_points, u.user_rank, u.rank_points, ' .
             ' IFNULL(b.type_money, 0) AS user_bonus, u.last_login, u.last_ip' .
-            ' FROM ' . $GLOBALS['ecs']->table('users') . ' AS u ' .
-            ' LEFT JOIN ' . $GLOBALS['ecs']->table('user_bonus') . ' AS ub' .
+            ' FROM ' . table('users') . ' AS u ' .
+            ' LEFT JOIN ' . table('user_bonus') . ' AS ub' .
             ' ON ub.user_id = u.user_id AND ub.used_time = 0 ' .
-            ' LEFT JOIN ' . $GLOBALS['ecs']->table('bonus_type') . ' AS b' .
+            ' LEFT JOIN ' . table('bonus_type') . ' AS b' .
             " ON b.type_id = ub.bonus_type_id AND b.use_start_date <= '$time' AND b.use_end_date >= '$time' " .
             " WHERE u.user_id = '$_SESSION[user_id]'";
         if ($row = $GLOBALS['db']->getRow($sql)) {
@@ -40,9 +40,9 @@ class MainService
 
             /*判断是否是特殊等级，可能后台把特殊会员组更改普通会员组*/
             if ($row['user_rank'] > 0) {
-                $sql = "SELECT special_rank from " . $GLOBALS['ecs']->table('user_rank') . "where rank_id='$row[user_rank]'";
+                $sql = "SELECT special_rank from " . table('user_rank') . "where rank_id='$row[user_rank]'";
                 if ($GLOBALS['db']->getOne($sql) === '0' || $GLOBALS['db']->getOne($sql) === null) {
-                    $sql = "update " . $GLOBALS['ecs']->table('users') . "set user_rank='0' where user_id='$_SESSION[user_id]'";
+                    $sql = "update " . table('users') . "set user_rank='0' where user_id='$_SESSION[user_id]'";
                     $GLOBALS['db']->query($sql);
                     $row['user_rank'] = 0;
                 }
@@ -51,7 +51,7 @@ class MainService
             /* 取得用户等级和折扣 */
             if ($row['user_rank'] == 0) {
                 // 非特殊等级，根据等级积分计算用户等级（注意：不包括特殊等级）
-                $sql = 'SELECT rank_id, discount FROM ' . $GLOBALS['ecs']->table('user_rank') . " WHERE special_rank = '0' AND min_points <= " . intval($row['rank_points']) . ' AND max_points > ' . intval($row['rank_points']);
+                $sql = 'SELECT rank_id, discount FROM ' . table('user_rank') . " WHERE special_rank = '0' AND min_points <= " . intval($row['rank_points']) . ' AND max_points > ' . intval($row['rank_points']);
                 if ($row = $GLOBALS['db']->getRow($sql)) {
                     $_SESSION['user_rank'] = $row['rank_id'];
                     $_SESSION['discount'] = $row['discount'] / 100.00;
@@ -61,7 +61,7 @@ class MainService
                 }
             } else {
                 // 特殊等级
-                $sql = 'SELECT rank_id, discount FROM ' . $GLOBALS['ecs']->table('user_rank') . " WHERE rank_id = '$row[user_rank]'";
+                $sql = 'SELECT rank_id, discount FROM ' . table('user_rank') . " WHERE rank_id = '$row[user_rank]'";
                 if ($row = $GLOBALS['db']->getRow($sql)) {
                     $_SESSION['user_rank'] = $row['rank_id'];
                     $_SESSION['discount'] = $row['discount'] / 100.00;
@@ -73,7 +73,7 @@ class MainService
         }
 
         /* 更新登录时间，登录次数及登录ip */
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET" .
+        $sql = "UPDATE " . table('users') . " SET" .
             " visit_count = visit_count + 1, " .
             " last_ip = '" . real_ip() . "'," .
             " last_login = '" . gmtime() . "'" .
@@ -96,7 +96,7 @@ class MainService
         }
         $time = date('Y-m-d');
         $sql = 'SELECT u.user_id, u.email, u.user_name, u.user_money, u.pay_points' .
-            ' FROM ' . $GLOBALS['ecs']->table('users') . ' AS u ' .
+            ' FROM ' . table('users') . ' AS u ' .
             " WHERE u.user_id = '$id'";
         $user = $GLOBALS['db']->getRow($sql);
         $bonus = get_user_bonus($id);
@@ -122,7 +122,7 @@ class MainService
             return array();
         }
 
-        $arr = $GLOBALS['db']->getAll('SELECT cat_id, cat_name, parent_id FROM ' . $GLOBALS['ecs']->table('category'));
+        $arr = $GLOBALS['db']->getAll('SELECT cat_id, cat_name, parent_id FROM ' . table('category'));
 
         if (empty($arr)) {
             return array();
@@ -211,7 +211,7 @@ class MainService
      */
     public function assign_articles($id, $num)
     {
-        $sql = 'SELECT cat_name FROM ' . $GLOBALS['ecs']->table('article_cat') . " WHERE cat_id = '" . $id . "'";
+        $sql = 'SELECT cat_name FROM ' . table('article_cat') . " WHERE cat_id = '" . $id . "'";
 
         $cat['id'] = $id;
         $cat['name'] = $GLOBALS['db']->getOne($sql);
@@ -232,8 +232,8 @@ class MainService
     public function get_shop_help()
     {
         $sql = 'SELECT c.cat_id, c.cat_name, c.sort_order, a.article_id, a.title, a.file_url, a.open_type ' .
-            'FROM ' . $GLOBALS['ecs']->table('article') . ' AS a ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('article_cat') . ' AS c ' .
+            'FROM ' . table('article') . ' AS a ' .
+            'LEFT JOIN ' . table('article_cat') . ' AS c ' .
             'ON a.cat_id = c.cat_id WHERE c.cat_type = 5 AND a.is_open = 1 ' .
             'ORDER BY c.sort_order ASC, a.article_id';
         $res = $GLOBALS['db']->getAll($sql);
@@ -516,12 +516,12 @@ class MainService
         if (empty($id)) {
             $time = gmtime();
             $sql = 'SELECT vote_id, vote_name, can_multi, vote_count, RAND() AS rnd' .
-                ' FROM ' . $GLOBALS['ecs']->table('vote') .
+                ' FROM ' . table('vote') .
                 " WHERE start_time <= '$time' AND end_time >= '$time' " .
                 ' ORDER BY rnd LIMIT 1';
         } else {
             $sql = 'SELECT vote_id, vote_name, can_multi, vote_count' .
-                ' FROM ' . $GLOBALS['ecs']->table('vote') .
+                ' FROM ' . table('vote') .
                 " WHERE vote_id = '$id'";
         }
 
@@ -530,13 +530,13 @@ class MainService
         if ($vote_arr !== false && !empty($vote_arr)) {
             /* 通过调查的ID,查询调查选项 */
             $sql_option = 'SELECT v.*, o.option_id, o.vote_id, o.option_name, o.option_count ' .
-                'FROM ' . $GLOBALS['ecs']->table('vote') . ' AS v, ' .
-                $GLOBALS['ecs']->table('vote_option') . ' AS o ' .
+                'FROM ' . table('vote') . ' AS v, ' .
+                table('vote_option') . ' AS o ' .
                 "WHERE o.vote_id = v.vote_id AND o.vote_id = '$vote_arr[vote_id]' ORDER BY o.option_order ASC, o.option_id DESC";
             $res = $GLOBALS['db']->getAll($sql_option);
 
             /* 总票数 */
-            $sql = 'SELECT SUM(option_count) AS all_option FROM ' . $GLOBALS['ecs']->table('vote_option') .
+            $sql = 'SELECT SUM(option_count) AS all_option FROM ' . table('vote_option') .
                 " WHERE vote_id = '" . $vote_arr['vote_id'] . "' GROUP BY vote_id";
             $option_num = $GLOBALS['db']->getOne($sql);
 
@@ -675,7 +675,7 @@ class MainService
                 $spider = $searchengine_name[$key];
 
                 if ($record === true) {
-                    $GLOBALS['db']->autoReplace($GLOBALS['ecs']->table('searchengine'), array('date' => local_date('Y-m-d'), 'searchengine' => $spider, 'count' => 1), array('count' => 1));
+                    $GLOBALS['db']->autoReplace(table('searchengine'), array('date' => local_date('Y-m-d'), 'searchengine' => $spider, 'count' => 1), array('count' => 1));
                 }
 
                 return $spider;
@@ -812,7 +812,7 @@ class MainService
             $domain = $path = '';
         }
 
-        $sql = 'INSERT INTO ' . $GLOBALS['ecs']->table('stats') . ' ( ' .
+        $sql = 'INSERT INTO ' . table('stats') . ' ( ' .
             'ip_address, visit_times, browser, system, language, area, ' .
             'referer_domain, referer_path, access_url, access_time' .
             ') VALUES (' .
@@ -902,7 +902,7 @@ class MainService
                 $keywords = ecs_iconv('UTF8', 'GBK', $keywords);
             }
 
-            $GLOBALS['db']->autoReplace($GLOBALS['ecs']->table('keywords'), array('date' => local_date('Y-m-d'), 'searchengine' => $searchengine, 'keyword' => htmlspecialchars(addslashes($keywords)), 'count' => 1), array('count' => 1));
+            $GLOBALS['db']->autoReplace(table('keywords'), array('date' => local_date('Y-m-d'), 'searchengine' => $searchengine, 'keyword' => htmlspecialchars(addslashes($keywords)), 'count' => 1), array('count' => 1));
         }
     }
 
@@ -933,7 +933,7 @@ class MainService
         }
 
         $sql = 'SELECT tag_id, user_id, tag_words, COUNT(tag_id) AS tag_count' .
-            ' FROM ' . $GLOBALS['ecs']->table('tag') .
+            ' FROM ' . table('tag') .
             "$where GROUP BY tag_words";
         $arr = $GLOBALS['db']->getAll($sql);
 
@@ -955,7 +955,7 @@ class MainService
         $ext = end($tmp_arr);
         $tmp = basename($tmp, ".$ext");
         $sql = 'SELECT region, library, sort_order, id, number, type' .
-            ' FROM ' . $GLOBALS['ecs']->table('template') .
+            ' FROM ' . table('template') .
             " WHERE theme = '$theme' AND filename = '" . $tmp . "' AND type > 0 AND remarks=''" .
             ' ORDER BY region, library, sort_order';
         $res = $GLOBALS['db']->getAll($sql);
@@ -1093,9 +1093,9 @@ class MainService
         /* 取得有可能改变价格的商品：除配件和赠品之外的商品 */
         $sql = 'SELECT c.rec_id, c.goods_id, c.goods_attr_id, g.promote_price, g.promote_start_date, c.goods_number,' .
             "g.promote_end_date, IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS member_price " .
-            'FROM ' . $GLOBALS['ecs']->table('cart') . ' AS c ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = c.goods_id ' .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp " .
+            'FROM ' . table('cart') . ' AS c ' .
+            'LEFT JOIN ' . table('goods') . ' AS g ON g.goods_id = c.goods_id ' .
+            "LEFT JOIN " . table('member_price') . " AS mp " .
             "ON mp.goods_id = g.goods_id AND mp.user_rank = '" . $_SESSION['user_rank'] . "' " .
             "WHERE session_id = '" . SESS_ID . "' AND c.parent_id = 0 AND c.is_gift = 0 AND c.goods_id > 0 " .
             "AND c.rec_type = '" . CART_GENERAL_GOODS . "' AND c.extension_code <> 'package_buy'";
@@ -1109,14 +1109,14 @@ class MainService
             $goods_price = get_final_price($row['goods_id'], $row['goods_number'], true, $attr_id);
 
 
-            $goods_sql = "UPDATE " . $GLOBALS['ecs']->table('cart') . " SET goods_price = '$goods_price' " .
+            $goods_sql = "UPDATE " . table('cart') . " SET goods_price = '$goods_price' " .
                 "WHERE goods_id = '" . $row['goods_id'] . "' AND session_id = '" . SESS_ID . "' AND rec_id = '" . $row['rec_id'] . "'";
 
             $GLOBALS['db']->query($goods_sql);
         }
 
         /* 删除赠品，重新选择 */
-        $GLOBALS['db']->query('DELETE FROM ' . $GLOBALS['ecs']->table('cart') .
+        $GLOBALS['db']->query('DELETE FROM ' . table('cart') .
             " WHERE session_id = '" . SESS_ID . "' AND is_gift > 0");
     }
 
@@ -1132,13 +1132,13 @@ class MainService
     public function assign_comment($id, $type, $page = 1)
     {
         /* 取得评论列表 */
-        $count = $GLOBALS['db']->getOne('SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('comment') .
+        $count = $GLOBALS['db']->getOne('SELECT COUNT(*) FROM ' . table('comment') .
             " WHERE id_value = '$id' AND comment_type = '$type' AND status = 1 AND parent_id = 0");
         $size = !empty($GLOBALS['_CFG']['comments_number']) ? $GLOBALS['_CFG']['comments_number'] : 5;
 
         $page_count = ($count > 0) ? intval(ceil($count / $size)) : 1;
 
-        $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('comment') .
+        $sql = 'SELECT * FROM ' . table('comment') .
             " WHERE id_value = '$id' AND comment_type = '$type' AND status = 1 AND parent_id = 0" .
             ' ORDER BY comment_id DESC';
         $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);
@@ -1157,7 +1157,7 @@ class MainService
         }
         /* 取得已有回复的评论 */
         if ($ids) {
-            $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('comment') .
+            $sql = 'SELECT * FROM ' . table('comment') .
                 " WHERE parent_id IN( $ids )";
             $res = $GLOBALS['db']->query($sql);
             while ($row = $GLOBALS['db']->fetch_array($res)) {
@@ -1210,8 +1210,8 @@ class MainService
         }
 
         $sql = "SELECT SUM(bt.type_money) AS bonus_value, COUNT(*) AS bonus_count " .
-            "FROM " . $GLOBALS['ecs']->table('user_bonus') . " AS ub, " .
-            $GLOBALS['ecs']->table('bonus_type') . " AS bt " .
+            "FROM " . table('user_bonus') . " AS ub, " .
+            table('bonus_type') . " AS bt " .
             "WHERE ub.user_id = '$user_id' AND ub.bonus_type_id = bt.type_id AND ub.order_id = 0";
         $row = $GLOBALS['db']->getRow($sql);
 
@@ -1259,7 +1259,7 @@ class MainService
     {
         if (!empty($_COOKIE['ecshop_affiliate_uid'])) {
             $uid = intval($_COOKIE['ecshop_affiliate_uid']);
-            if ($GLOBALS['db']->getOne('SELECT user_id FROM ' . $GLOBALS['ecs']->table('users') . "WHERE user_id = '$uid'")) {
+            if ($GLOBALS['db']->getOne('SELECT user_id FROM ' . table('users') . "WHERE user_id = '$uid'")) {
                 return $uid;
             } else {
                 setcookie('ecshop_affiliate_uid', '', 1, null, null, null, true);
@@ -1279,7 +1279,7 @@ class MainService
     public function article_categories_tree($cat_id = 0)
     {
         if ($cat_id > 0) {
-            $sql = 'SELECT parent_id FROM ' . $GLOBALS['ecs']->table('article_cat') . " WHERE cat_id = '$cat_id'";
+            $sql = 'SELECT parent_id FROM ' . table('article_cat') . " WHERE cat_id = '$cat_id'";
             $parent_id = $GLOBALS['db']->getOne($sql);
         } else {
             $parent_id = 0;
@@ -1290,19 +1290,19 @@ class MainService
          如果是取出底级分类上级分类，
          如果不是取当前分类及其下的子分类
         */
-        $sql = 'SELECT count(*) FROM ' . $GLOBALS['ecs']->table('article_cat') . " WHERE parent_id = '$parent_id'";
+        $sql = 'SELECT count(*) FROM ' . table('article_cat') . " WHERE parent_id = '$parent_id'";
         if ($GLOBALS['db']->getOne($sql)) {
             /* 获取当前分类及其子分类 */
             $sql = 'SELECT a.cat_id, a.cat_name, a.sort_order AS parent_order, a.cat_id, ' .
                 'b.cat_id AS child_id, b.cat_name AS child_name, b.sort_order AS child_order ' .
-                'FROM ' . $GLOBALS['ecs']->table('article_cat') . ' AS a ' .
-                'LEFT JOIN ' . $GLOBALS['ecs']->table('article_cat') . ' AS b ON b.parent_id = a.cat_id ' .
+                'FROM ' . table('article_cat') . ' AS a ' .
+                'LEFT JOIN ' . table('article_cat') . ' AS b ON b.parent_id = a.cat_id ' .
                 "WHERE a.parent_id = '$parent_id' AND a.cat_type=1 ORDER BY parent_order ASC, a.cat_id ASC, child_order ASC";
         } else {
             /* 获取当前分类及其父分类 */
             $sql = 'SELECT a.cat_id, a.cat_name, b.cat_id AS child_id, b.cat_name AS child_name, b.sort_order ' .
-                'FROM ' . $GLOBALS['ecs']->table('article_cat') . ' AS a ' .
-                'LEFT JOIN ' . $GLOBALS['ecs']->table('article_cat') . ' AS b ON b.parent_id = a.cat_id ' .
+                'FROM ' . table('article_cat') . ' AS a ' .
+                'LEFT JOIN ' . table('article_cat') . ' AS b ON b.parent_id = a.cat_id ' .
                 "WHERE b.parent_id = '$parent_id' AND b.cat_type = 1 ORDER BY sort_order ASC";
         }
         $res = $GLOBALS['db']->getAll($sql);
@@ -1336,7 +1336,7 @@ class MainService
             return array();
         }
 
-        $arr = $GLOBALS['db']->getAll('SELECT cat_id, cat_name, parent_id FROM ' . $GLOBALS['ecs']->table('article_cat'));
+        $arr = $GLOBALS['db']->getAll('SELECT cat_id, cat_name, parent_id FROM ' . table('article_cat'));
 
         if (empty($arr)) {
             return array();
@@ -1387,7 +1387,7 @@ class MainService
         /* 如果没有该模板的信息，取得该模板的信息 */
         if (!isset($lib_list[$template])) {
             $lib_list[$template] = array();
-            $sql = "SELECT library, number FROM " . $GLOBALS['ecs']->table('template') .
+            $sql = "SELECT library, number FROM " . table('template') .
                 " WHERE theme = '" . $GLOBALS['_CFG']['template'] . "'" .
                 " AND filename = '$template' AND remarks='' ";
             $res = $GLOBALS['db']->query($sql);
@@ -1421,7 +1421,7 @@ class MainService
      */
     public function get_navigator($ctype = '', $catlist = array())
     {
-        $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('nav') . '
+        $sql = 'SELECT * FROM ' . table('nav') . '
             WHERE ifshow = \'1\' ORDER BY type, vieworder';
         $res = $GLOBALS['db']->query($sql);
 
@@ -1531,7 +1531,7 @@ class MainService
 
         //获取离线购物车
         $sql = "SELECT * " .
-            " FROM " . $GLOBALS['ecs']->table('cart') .
+            " FROM " . table('cart') .
             " WHERE session_id = '" . SESS_ID . "' AND user_id=0";
         $offline_carts = $GLOBALS['db']->getAll($sql);
 
@@ -1541,12 +1541,12 @@ class MainService
 
         //获取会员购物车数据
         $sql = "SELECT * " .
-            " FROM " . $GLOBALS['ecs']->table('cart') .
+            " FROM " . table('cart') .
             " WHERE user_id = '" . $user_id . "'";
         $online_carts = $GLOBALS['db']->getAll($sql);
 
         if (!$online_carts) { //离线转在线
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('cart') . " SET user_id = '$user_id' WHERE session_id = '" . SESS_ID . "'";
+            $sql = "UPDATE " . table('cart') . " SET user_id = '$user_id' WHERE session_id = '" . SESS_ID . "'";
             $GLOBALS['db']->query($sql);
         }
 
@@ -1566,9 +1566,9 @@ class MainService
             }
             $key = $onval['goods_id'] . '_' . $onval['product_id'];
             if ($offcart[$key]) {
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('cart') . " SET goods_number=goods_number+" . $offcart[$key]['goods_number'] . " WHERE rec_id='" . $onval['rec_id'] . "'";
+                $sql = "UPDATE " . table('cart') . " SET goods_number=goods_number+" . $offcart[$key]['goods_number'] . " WHERE rec_id='" . $onval['rec_id'] . "'";
                 $GLOBALS['db']->query($sql);
-                $sql = "DELETE FROM " . $GLOBALS['ecs']->table('cart') . " WHERE rec_id = '" . $offcart[$key]['rec_id'] . "'";
+                $sql = "DELETE FROM " . table('cart') . " WHERE rec_id = '" . $offcart[$key]['rec_id'] . "'";
                 $GLOBALS['db']->query($sql);
                 unset($offcart[$key]);
             }
@@ -1579,7 +1579,7 @@ class MainService
             $rec_id = array();
             for ($i = count($offcart); $i >= 0; $rec_id[] = $offcart[$i]['rec_id'], $i--) ;
             $rec_id = array_unique(array_filter($rec_id));
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('cart') . " SET user_id = '$user_id' WHERE rec_id IN (" . implode(',', $rec_id) . ")";
+            $sql = "UPDATE " . table('cart') . " SET user_id = '$user_id' WHERE rec_id IN (" . implode(',', $rec_id) . ")";
             $GLOBALS['db']->query($sql);
         }
 

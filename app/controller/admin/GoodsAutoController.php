@@ -14,7 +14,7 @@ class GoodsAutoController extends InitController
     public function listAction()
     {
         $goodsdb = get_auto_goods();
-        $crons_enable = $db->getOne("SELECT enable FROM " . $GLOBALS['ecs']->table('crons') . " WHERE cron_code='auto_manage'");
+        $crons_enable = $db->getOne("SELECT enable FROM " . table('crons') . " WHERE cron_code='auto_manage'");
         $this->assign('crons_enable', $crons_enable);
         $this->assign('full_page', 1);
         $this->assign('ur_here', $_LANG['goods_auto']);
@@ -45,7 +45,7 @@ class GoodsAutoController extends InitController
     public function delAction()
     {
         $goods_id = (int)$_REQUEST['goods_id'];
-        $sql = "DELETE FROM " . $ecs->table('auto_manage') . " WHERE item_id = '$goods_id' AND type = 'goods'";
+        $sql = "DELETE FROM " . table('auto_manage') . " WHERE item_id = '$goods_id' AND type = 'goods'";
         $db->query($sql);
         $links[] = array('text' => $_LANG['goods_auto'], 'href' => 'goods_auto.php?act=list');
         sys_msg($_LANG['edit_ok'], 0, $links);
@@ -65,7 +65,7 @@ class GoodsAutoController extends InitController
             return make_json_error('');
         }
 
-        $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'goods',
+        $db->autoReplace(table('auto_manage'), array('item_id' => $id, 'type' => 'goods',
             'starttime' => $time), array('starttime' => (string)$time));
 
         clear_cache_files();
@@ -86,7 +86,7 @@ class GoodsAutoController extends InitController
             return make_json_error('');
         }
 
-        $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'goods',
+        $db->autoReplace(table('auto_manage'), array('item_id' => $id, 'type' => 'goods',
             'endtime' => $time), array('endtime' => (string)$time));
 
         clear_cache_files();
@@ -108,7 +108,7 @@ class GoodsAutoController extends InitController
         }
 
         foreach ($_POST['checkboxes'] as $id) {
-            $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'goods',
+            $db->autoReplace(table('auto_manage'), array('item_id' => $id, 'type' => 'goods',
                 'starttime' => $_POST['date']), array('starttime' => (string)$_POST['date']));
         }
 
@@ -131,7 +131,7 @@ class GoodsAutoController extends InitController
         }
 
         foreach ($_POST['checkboxes'] as $id) {
-            $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'goods',
+            $db->autoReplace(table('auto_manage'), array('item_id' => $id, 'type' => 'goods',
                 'endtime' => $_POST['date']), array('endtime' => (string)$_POST['date']));
         }
 
@@ -154,14 +154,14 @@ class GoodsAutoController extends InitController
             $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'last_update' : trim($_REQUEST['sort_by']);
             $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods') . " g" . $where;
+            $sql = "SELECT COUNT(*) FROM " . table('goods') . " g" . $where;
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
             /* 分页大小 */
             $filter = page_and_size($filter);
 
             /* 查询 */
-            $sql = "SELECT g.*,a.starttime,a.endtime FROM " . $GLOBALS['ecs']->table('goods') . " g LEFT JOIN " . $GLOBALS['ecs']->table('auto_manage') . " a ON g.goods_id = a.item_id AND a.type='goods'" . $where .
+            $sql = "SELECT g.*,a.starttime,a.endtime FROM " . table('goods') . " g LEFT JOIN " . table('auto_manage') . " a ON g.goods_id = a.item_id AND a.type='goods'" . $where .
                 " ORDER by goods_id, " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
                 " LIMIT " . $filter['start'] . ",$filter[page_size]";
 

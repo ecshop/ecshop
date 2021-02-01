@@ -56,7 +56,7 @@ class CommentController extends InitController
 
                                 case COMMENT_CUSTOM:
                                     if ($_SESSION['user_id'] > 0) {
-                                        $sql = "SELECT o.order_id FROM " . $ecs->table('order_info') . " AS o " .
+                                        $sql = "SELECT o.order_id FROM " . table('order_info') . " AS o " .
                                             " WHERE user_id = '" . $_SESSION['user_id'] . "'" .
                                             " AND (o.order_status = '" . OS_CONFIRMED . "' or o.order_status = '" . OS_SPLITED . "') " .
                                             " AND (o.pay_status = '" . PS_PAYED . "' OR o.pay_status = '" . PS_PAYING . "') " .
@@ -77,8 +77,8 @@ class CommentController extends InitController
                                 case COMMENT_BOUGHT:
                                     if ($_SESSION['user_id'] > 0) {
                                         $sql = "SELECT o.order_id" .
-                                            " FROM " . $ecs->table('order_info') . " AS o, " .
-                                            $ecs->table('order_goods') . " AS og " .
+                                            " FROM " . table('order_info') . " AS o, " .
+                                            table('order_goods') . " AS og " .
                                             " WHERE o.order_id = og.order_id" .
                                             " AND o.user_id = '" . $_SESSION['user_id'] . "'" .
                                             " AND og.goods_id = '" . $cmt->id . "'" .
@@ -127,7 +127,7 @@ class CommentController extends InitController
 
                                 case COMMENT_CUSTOM:
                                     if ($_SESSION['user_id'] > 0) {
-                                        $sql = "SELECT o.order_id FROM " . $ecs->table('order_info') . " AS o " .
+                                        $sql = "SELECT o.order_id FROM " . table('order_info') . " AS o " .
                                             " WHERE user_id = '" . $_SESSION['user_id'] . "'" .
                                             " AND (o.order_status = '" . OS_CONFIRMED . "' or o.order_status = '" . OS_SPLITED . "') " .
                                             " AND (o.pay_status = '" . PS_PAYED . "' OR o.pay_status = '" . PS_PAYING . "') " .
@@ -149,8 +149,8 @@ class CommentController extends InitController
                                 case COMMENT_BOUGHT:
                                     if ($_SESSION['user_id'] > 0) {
                                         $sql = "SELECT o.order_id" .
-                                            " FROM " . $ecs->table('order_info') . " AS o, " .
-                                            $ecs->table('order_goods') . " AS og " .
+                                            " FROM " . table('order_info') . " AS o, " .
+                                            table('order_goods') . " AS og " .
                                             " WHERE o.order_id = og.order_id" .
                                             " AND o.user_id = '" . $_SESSION['user_id'] . "'" .
                                             " AND og.goods_id = '" . $cmt->id . "'" .
@@ -232,7 +232,7 @@ class CommentController extends InitController
         $user_name = htmlspecialchars($user_name);
 
         /* 保存评论内容 */
-        $sql = "INSERT INTO " . $GLOBALS['ecs']->table('comment') .
+        $sql = "INSERT INTO " . table('comment') .
             "(comment_type, id_value, email, user_name, content, comment_rank, add_time, ip_address, status, parent_id, user_id) VALUES " .
             "('" . $cmt->type . "', '" . $cmt->id . "', '$email', '$user_name', '" . $cmt->content . "', '" . $cmt->rank . "', " . gmtime() . ", '" . real_ip() . "', '$status', '0', '$user_id')";
 

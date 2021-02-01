@@ -29,7 +29,7 @@ class RespondController extends InitController
             }
 
             /* 判断是否启用 */
-            $sql = "SELECT COUNT(*) FROM " . $ecs->table('payment') . " WHERE pay_code = '$pay_code' AND enabled = 1";
+            $sql = "SELECT COUNT(*) FROM " . table('payment') . " WHERE pay_code = '$pay_code' AND enabled = 1";
             if ($db->getOne($sql) == 0) {
                 $msg = $_LANG['pay_disabled'];
             } else {

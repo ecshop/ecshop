@@ -103,16 +103,16 @@ class ucenter extends integrate
 
         if ($uid > 0) {
             //检查用户是否存在,不存在直接放入用户表
-            $result = $this->db->getRow("SELECT user_id,ec_salt FROM " . $GLOBALS['ecs']->table("users") . " WHERE user_name='$username'");
+            $result = $this->db->getRow("SELECT user_id,ec_salt FROM " . table("users") . " WHERE user_name='$username'");
             $name_exist = $result['user_id'];
             if (empty($result['ec_salt'])) {
-                $user_exist = $this->db->getOne("SELECT user_id FROM " . $GLOBALS['ecs']->table("users") . " WHERE user_name='$username' AND password = '" . MD5($password) . "'");
+                $user_exist = $this->db->getOne("SELECT user_id FROM " . table("users") . " WHERE user_name='$username' AND password = '" . MD5($password) . "'");
                 if (!empty($user_exist)) {
                     $ec_salt = rand(1, 9999);
-                    $this->db->query('UPDATE ' . $GLOBALS['ecs']->table("users") . "SET `password`='" . MD5(MD5($password) . $ec_salt) . "',`ec_salt`='" . $ec_salt . "' WHERE user_id = '" . $uid . "'");
+                    $this->db->query('UPDATE ' . table("users") . "SET `password`='" . MD5(MD5($password) . $ec_salt) . "',`ec_salt`='" . $ec_salt . "' WHERE user_id = '" . $uid . "'");
                 }
             } else {
-                $user_exist = $this->db->getOne("SELECT user_id FROM " . $GLOBALS['ecs']->table("users") . " WHERE user_name='$username' AND password = '" . MD5(MD5($password) . $result['ec_salt']) . "'");
+                $user_exist = $this->db->getOne("SELECT user_id FROM " . table("users") . " WHERE user_name='$username' AND password = '" . MD5(MD5($password) . $result['ec_salt']) . "'");
             }
 
 
@@ -121,12 +121,12 @@ class ucenter extends integrate
                     $reg_date = time();
                     $ip = real_ip();
                     $password = $this->compile_password(array('password' => $password));
-                    $this->db->query('INSERT INTO ' . $GLOBALS['ecs']->table("users") . "(`user_id`, `email`, `user_name`, `password`, `reg_time`, `last_login`, `last_ip`) VALUES ('$uid', '$email', '$uname', '$password', '$reg_date', '$reg_date', '$ip')");
+                    $this->db->query('INSERT INTO ' . table("users") . "(`user_id`, `email`, `user_name`, `password`, `reg_time`, `last_login`, `last_ip`) VALUES ('$uid', '$email', '$uname', '$password', '$reg_date', '$reg_date', '$ip')");
                 } else {
                     if (empty($result['ec_salt'])) {
                         $result['ec_salt'] = 0;
                     }
-                    $this->db->query('UPDATE ' . $GLOBALS['ecs']->table("users") . "SET `password`='" . MD5(MD5($password) . $result['ec_salt']) . "',`ec_salt`='" . $result['ec_salt'] . "' WHERE user_id = '" . $uid . "'");
+                    $this->db->query('UPDATE ' . table("users") . "SET `password`='" . MD5(MD5($password) . $result['ec_salt']) . "',`ec_salt`='" . $result['ec_salt'] . "' WHERE user_id = '" . $uid . "'");
                 }
             }
             $this->set_session($uname);
@@ -196,7 +196,7 @@ class ucenter extends integrate
             $reg_date = time();
             $ip = real_ip();
             $password = $this->compile_password(array('password' => $password));
-            $this->db->query('INSERT INTO ' . $GLOBALS['ecs']->table("users") . "(`user_id`, `email`, `user_name`, `password`, `reg_time`, `last_login`, `last_ip`) VALUES ('$uid', '$email', '$username', '$password', '$reg_date', '$reg_date', '$ip')");
+            $this->db->query('INSERT INTO ' . table("users") . "(`user_id`, `email`, `user_name`, `password`, `reg_time`, `last_login`, `last_ip`) VALUES ('$uid', '$email', '$username', '$password', '$reg_date', '$reg_date', '$ip')");
             return true;
         }
     }
@@ -256,7 +256,7 @@ class ucenter extends integrate
         }
         $set_str = substr($set_str, 0, -1);
         if (!empty($set_str)) {
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET $set_str  WHERE user_name = '$cfg[username]'";
+            $sql = "UPDATE " . table('users') . " SET $set_str  WHERE user_name = '$cfg[username]'";
             $GLOBALS['db']->query($sql);
             $flag = true;
         }
@@ -314,7 +314,7 @@ class ucenter extends integrate
     {
         //$username = addslashes($username);
 
-        $sql = "SELECT user_id, user_name, email, sex, reg_time FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_name='$username'";
+        $sql = "SELECT user_id, user_name, email, sex, reg_time FROM " . table('users') . " WHERE user_name='$username'";
         $row = $this->db->getRow($sql);
         return $row;
     }
@@ -375,7 +375,7 @@ class ucenter extends integrate
             $time = time() + 3600 * 24 * 30;
 
             setcookie("ECS[username]", stripslashes($username), $time, $this->cookie_path, $this->cookie_domain, null, true);
-            $sql = "SELECT user_id, password FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_name='$username' LIMIT 1";
+            $sql = "SELECT user_id, password FROM " . table('users') . " WHERE user_name='$username' LIMIT 1";
             $row = $GLOBALS['db']->getRow($sql);
             if ($row) {
                 setcookie("ECS[user_id]", $row['user_id'], $time, $this->cookie_path, $this->cookie_domain, null, true);
@@ -397,7 +397,7 @@ class ucenter extends integrate
         if (empty($username)) {
             $GLOBALS['sess']->destroy_session();
         } else {
-            $sql = "SELECT user_id, password, email FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_name='$username' LIMIT 1";
+            $sql = "SELECT user_id, password, email FROM " . table('users') . " WHERE user_name='$username' LIMIT 1";
             $row = $GLOBALS['db']->getRow($sql);
 
             if ($row) {
@@ -418,7 +418,7 @@ class ucenter extends integrate
      */
     public function get_profile_by_id($id)
     {
-        $sql = "SELECT user_id, user_name, email, sex, birthday, reg_time FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id='$id'";
+        $sql = "SELECT user_id, user_name, email, sex, birthday, reg_time FROM " . table('users') . " WHERE user_id='$id'";
         $row = $this->db->getRow($sql);
 
         return $row;
@@ -449,41 +449,41 @@ class ucenter extends integrate
         }
 
         /* 如果需要同步或是ecshop插件执行这部分代码 */
-        $sql = "SELECT user_id FROM " . $GLOBALS['ecs']->table('users') . " WHERE ";
+        $sql = "SELECT user_id FROM " . table('users') . " WHERE ";
         $sql .= (is_array($post_id)) ? db_create_in($post_id, 'user_name') : "user_name='" . $post_id . "' LIMIT 1";
         $col = $GLOBALS['db']->getCol($sql);
 
         if ($col) {
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET parent_id = 0 WHERE " . db_create_in($col, 'parent_id'); //将删除用户的下级的parent_id 改为0
+            $sql = "UPDATE " . table('users') . " SET parent_id = 0 WHERE " . db_create_in($col, 'parent_id'); //将删除用户的下级的parent_id 改为0
             $GLOBALS['db']->query($sql);
-            $sql = "DELETE FROM " . $GLOBALS['ecs']->table('users') . " WHERE " . db_create_in($col, 'user_id'); //删除用户
+            $sql = "DELETE FROM " . table('users') . " WHERE " . db_create_in($col, 'user_id'); //删除用户
             $GLOBALS['db']->query($sql);
             /* 删除用户订单 */
-            $sql = "SELECT order_id FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE " . db_create_in($col, 'user_id');
+            $sql = "SELECT order_id FROM " . table('order_info') . " WHERE " . db_create_in($col, 'user_id');
             $GLOBALS['db']->query($sql);
             $col_order_id = $GLOBALS['db']->getCol($sql);
             if ($col_order_id) {
-                $sql = "DELETE FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE " . db_create_in($col_order_id, 'order_id');
+                $sql = "DELETE FROM " . table('order_info') . " WHERE " . db_create_in($col_order_id, 'order_id');
                 $GLOBALS['db']->query($sql);
-                $sql = "DELETE FROM " . $GLOBALS['ecs']->table('order_goods') . " WHERE " . db_create_in($col_order_id, 'order_id');
+                $sql = "DELETE FROM " . table('order_goods') . " WHERE " . db_create_in($col_order_id, 'order_id');
                 $GLOBALS['db']->query($sql);
             }
 
-            $sql = "DELETE FROM " . $GLOBALS['ecs']->table('booking_goods') . " WHERE " . db_create_in($col, 'user_id'); //删除用户
+            $sql = "DELETE FROM " . table('booking_goods') . " WHERE " . db_create_in($col, 'user_id'); //删除用户
             $GLOBALS['db']->query($sql);
-            $sql = "DELETE FROM " . $GLOBALS['ecs']->table('collect_goods') . " WHERE " . db_create_in($col, 'user_id'); //删除会员收藏商品
+            $sql = "DELETE FROM " . table('collect_goods') . " WHERE " . db_create_in($col, 'user_id'); //删除会员收藏商品
             $GLOBALS['db']->query($sql);
-            $sql = "DELETE FROM " . $GLOBALS['ecs']->table('feedback') . " WHERE " . db_create_in($col, 'user_id'); //删除用户留言
+            $sql = "DELETE FROM " . table('feedback') . " WHERE " . db_create_in($col, 'user_id'); //删除用户留言
             $GLOBALS['db']->query($sql);
-            $sql = "DELETE FROM " . $GLOBALS['ecs']->table('user_address') . " WHERE " . db_create_in($col, 'user_id'); //删除用户地址
+            $sql = "DELETE FROM " . table('user_address') . " WHERE " . db_create_in($col, 'user_id'); //删除用户地址
             $GLOBALS['db']->query($sql);
-            $sql = "DELETE FROM " . $GLOBALS['ecs']->table('user_bonus') . " WHERE " . db_create_in($col, 'user_id'); //删除用户红包
+            $sql = "DELETE FROM " . table('user_bonus') . " WHERE " . db_create_in($col, 'user_id'); //删除用户红包
             $GLOBALS['db']->query($sql);
-            $sql = "DELETE FROM " . $GLOBALS['ecs']->table('user_account') . " WHERE " . db_create_in($col, 'user_id'); //删除用户帐号金额
+            $sql = "DELETE FROM " . table('user_account') . " WHERE " . db_create_in($col, 'user_id'); //删除用户帐号金额
             $GLOBALS['db']->query($sql);
-            $sql = "DELETE FROM " . $GLOBALS['ecs']->table('tag') . " WHERE " . db_create_in($col, 'user_id'); //删除用户标记
+            $sql = "DELETE FROM " . table('tag') . " WHERE " . db_create_in($col, 'user_id'); //删除用户标记
             $GLOBALS['db']->query($sql);
-            $sql = "DELETE FROM " . $GLOBALS['ecs']->table('account_log') . " WHERE " . db_create_in($col, 'user_id'); //删除用户日志
+            $sql = "DELETE FROM " . table('account_log') . " WHERE " . db_create_in($col, 'user_id'); //删除用户日志
             $GLOBALS['db']->query($sql);
         }
 
@@ -492,7 +492,7 @@ class ucenter extends integrate
             return;
         }
 
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('users') . " WHERE ";
+        $sql = "DELETE FROM " . table('users') . " WHERE ";
         if (is_array($post_id)) {
             $sql .= db_create_in($post_id, 'user_name');
         } else {

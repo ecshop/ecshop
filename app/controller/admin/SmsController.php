@@ -49,7 +49,7 @@ if ($action == 'sms_sign') {
     admin_priv('sms_send');
 
     if ($sms->has_registered()) {
-        $sql = "SELECT * FROM " . $ecs->table('shop_config') . "WHERE  code='sms_sign'";
+        $sql = "SELECT * FROM " . table('shop_config') . "WHERE  code='sms_sign'";
         $row = $db->getRow($sql);
         if (!empty($row['id'])) {
             $sms_sign = unserialize($row['value']);
@@ -65,7 +65,7 @@ if ($action == 'sms_sign') {
             shop_config_update('sms_sign', '');
             shop_config_update('default_sms_sign', '');
         }
-        $sql = "SELECT * FROM " . $ecs->table('shop_config') . "WHERE  code='default_sms_sign'";
+        $sql = "SELECT * FROM " . table('shop_config') . "WHERE  code='default_sms_sign'";
         $default_sms_sign = $db->getRow($sql);
         $this->assign('default_sign', $default_sms_sign['value']);
 
@@ -86,7 +86,7 @@ if ($action == 'sms_sign_add') {
             sys_msg($_LANG['insert_sign'], 1, array(), false);
         }
 
-        $sql = "SELECT * FROM " . $ecs->table('shop_config') . "WHERE  code='sms_sign'";
+        $sql = "SELECT * FROM " . table('shop_config') . "WHERE  code='sms_sign'";
         $row = $db->getRow($sql);
 
         if (!empty($row['id'])) {
@@ -148,7 +148,7 @@ if ($action == 'sms_sign_add') {
 if ($action == 'sms_sign_update') {
     admin_priv('sms_send');
     if ($sms->has_registered()) {
-        $sql = "SELECT * FROM " . $ecs->table('shop_config') . "WHERE  code='sms_sign'";
+        $sql = "SELECT * FROM " . table('shop_config') . "WHERE  code='sms_sign'";
         $row = $db->getRow($sql);
         if (!empty($row['id'])) {
             $sms_sign = unserialize($row['value']);
@@ -217,7 +217,7 @@ if ($action == 'sms_sign_update') {
 if ($action == 'sms_sign_default') {
     admin_priv('sms_send');
     if ($sms->has_registered()) {
-        $sql = "SELECT * FROM " . $ecs->table('shop_config') . "WHERE  code='sms_sign'";
+        $sql = "SELECT * FROM " . table('shop_config') . "WHERE  code='sms_sign'";
         $row = $db->getRow($sql);
         if (!empty($row['id'])) {
             $sms_sign = unserialize($row['value']);
@@ -269,19 +269,19 @@ if ($action == 'send_sms') {
         $rank_array = explode('_', $send_rank);
 
         if ($rank_array['0'] == 1) {
-            $sql = 'SELECT mobile_phone FROM ' . $ecs->table('users') . "WHERE mobile_phone <>'' ";
+            $sql = 'SELECT mobile_phone FROM ' . table('users') . "WHERE mobile_phone <>'' ";
             $row = $db->query($sql);
             while ($rank_rs = $db->fetch_array($row)) {
                 $value[] = $rank_rs['mobile_phone'];
             }
         } else {
-            $rank_sql = "SELECT * FROM " . $ecs->table('user_rank') . " WHERE rank_id = '" . $rank_array['1'] . "'";
+            $rank_sql = "SELECT * FROM " . table('user_rank') . " WHERE rank_id = '" . $rank_array['1'] . "'";
             $rank_row = $db->getRow($rank_sql);
 
             if ($rank_row['special_rank'] == 1) {
-                $sql = 'SELECT mobile_phone FROM ' . $ecs->table('users') . " WHERE mobile_phone <>'' AND user_rank = '" . $rank_array['1'] . "'";
+                $sql = 'SELECT mobile_phone FROM ' . table('users') . " WHERE mobile_phone <>'' AND user_rank = '" . $rank_array['1'] . "'";
             } else {
-                $sql = 'SELECT mobile_phone FROM ' . $ecs->table('users') . "WHERE mobile_phone <>'' AND rank_points > " . $rank_row['min_points'] . " AND rank_points < " . $rank_row['max_points'] . " ";
+                $sql = 'SELECT mobile_phone FROM ' . table('users') . "WHERE mobile_phone <>'' AND rank_points > " . $rank_row['min_points'] . " AND rank_points < " . $rank_row['max_points'] . " ";
             }
 
             $row = $db->query($sql);
@@ -317,20 +317,20 @@ if ($action == 'send_sms') {
 
 function shop_config_update($config_code, $config_value)
 {
-    $sql = "SELECT `id` FROM " . $GLOBALS['ecs']->table('shop_config') . " WHERE `code`='$config_code'";
+    $sql = "SELECT `id` FROM " . table('shop_config') . " WHERE `code`='$config_code'";
     $c_node_id = $GLOBALS['db']->getOne($sql);
     if (empty($c_node_id)) {
         for ($i = 247; $i <= 270; $i++) {
-            $sql = "SELECT `id` FROM " . $GLOBALS['ecs']->table('shop_config') . " WHERE `id`='$i'";
+            $sql = "SELECT `id` FROM " . table('shop_config') . " WHERE `id`='$i'";
             $c_id = $GLOBALS['db']->getOne($sql);
             if (empty($c_id)) {
-                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('shop_config') . "(`id`,`parent_id`,`code`,`type`,`value`,`sort_order`) VALUES ('$i','2','$config_code','hidden','$config_value','1')";
+                $sql = "INSERT INTO " . table('shop_config') . "(`id`,`parent_id`,`code`,`type`,`value`,`sort_order`) VALUES ('$i','2','$config_code','hidden','$config_value','1')";
                 $GLOBALS['db']->query($sql);
                 break;
             }
         }
     } else {
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') . " SET `value`='$config_value'  WHERE `code`='$config_code'";
+        $sql = "UPDATE " . table('shop_config') . " SET `value`='$config_value'  WHERE `code`='$config_code'";
         $GLOBALS['db']->query($sql);
     }
 }

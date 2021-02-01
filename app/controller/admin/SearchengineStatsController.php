@@ -33,7 +33,7 @@ class SearchengineStatsController extends InitController
         $max = 0;
         $general_xml = "<chart caption='$_LANG[tab_keywords]' shownames='1' showvalues='0' decimals='0' numberPrefix='' outCnvBaseFontSize='12' baseFontSize='12'>";
         $sql = "SELECT keyword, count, searchengine " .
-            " FROM " . $ecs->table('keywords') .
+            " FROM " . table('keywords') .
             " WHERE date >= '$start_date' AND date <= '" . $end_date . "'";
         if (isset($_POST['filter'])) {
             $sql .= ' AND ' . db_create_in($_POST['filter'], 'searchengine');
@@ -114,7 +114,7 @@ class SearchengineStatsController extends InitController
 
         $filename = $start_date . '_' . $end_date;
         $sql = "SELECT keyword, count,searchengine " .
-            " FROM " . $ecs->table('keywords') .
+            " FROM " . table('keywords') .
             " WHERE date >= '$start_date' AND date <= '$end_date'";
         $res = $db->query($sql);
 

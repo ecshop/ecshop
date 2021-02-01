@@ -13,13 +13,13 @@ class CronController extends InitController
 
         $_REQUEST['act'] = trim($_REQUEST['act']);
         admin_priv('cron');
-        $exc = new exchange($ecs->table('crons'), $db, 'cron_code', 'cron_name');
+        $exc = new exchange(table('crons'), $db, 'cron_code', 'cron_name');
     }
 
     public function listAction()
     {
         $cron_list = array();
-        $sql = "SELECT * FROM " . $ecs->table('crons');
+        $sql = "SELECT * FROM " . table('crons');
         $res = $db->query($sql);
         while ($row = $db->fetchRow($res)) {
             $cron_list[$row['cron_code']] = $row;
@@ -104,7 +104,7 @@ class CronController extends InitController
             if (empty($_POST['cron_name'])) {
                 sys_msg($_LANG['cron_name'] . $_LANG['empty']);
             }
-            $sql = "SELECT COUNT(*) FROM " . $ecs->table('crons') .
+            $sql = "SELECT COUNT(*) FROM " . table('crons') .
                 " WHERE  cron_code = '$_POST[cron_code]'";
             if ($db->getOne($sql) > 0) {
                 sys_msg($_LANG['cron_code'] . $_LANG['repeat'], 1);
@@ -142,7 +142,7 @@ class CronController extends InitController
             $cron_hour = $_POST['cron_hour'];
             $cron = array('day' => $cron_day, 'week' => $cron_week, 'm' => $cron_minute, 'hour' => $cron_hour);
             $next = get_next_time($cron);
-            $sql = "INSERT INTO " . $ecs->table('crons') . " (cron_code, cron_name, cron_desc, cron_config, nextime, day, week, hour, minute, run_once, allow_ip, alow_files)" .
+            $sql = "INSERT INTO " . table('crons') . " (cron_code, cron_name, cron_desc, cron_config, nextime, day, week, hour, minute, run_once, allow_ip, alow_files)" .
                 "VALUES ('$_POST[cron_code]', '$_POST[cron_name]', '$_POST[cron_desc]', '$cron_config', '$next', '$cron_day', '$cron_week', '$cron_hour', '$cron_minute', '$_POST[cron_run_once]', '$_POST[allow_ip]', '$_POST[alow_files]')";
             $db->query($sql);
             sys_msg($_LANG['install_ok'], 0, $links);
@@ -158,7 +158,7 @@ class CronController extends InitController
                 die('invalid cron');
             }
 
-            $sql = "SELECT * FROM " . $ecs->table('crons') . " WHERE cron_code = '$_REQUEST[code]'";
+            $sql = "SELECT * FROM " . table('crons') . " WHERE cron_code = '$_REQUEST[code]'";
             $cron = $db->getRow($sql);
             if (empty($cron)) {
                 $links[] = array('text' => $_LANG['back_list'], 'href' => 'cron.php?act=list');
@@ -254,7 +254,7 @@ class CronController extends InitController
             $cron_hour = $_POST['cron_hour'];
             $cron = array('day' => $cron_day, 'week' => $cron_week, 'm' => $cron_minute, 'hour' => $cron_hour);
             $next = get_next_time($cron);
-            $sql = "UPDATE " . $ecs->table('crons') .
+            $sql = "UPDATE " . table('crons') .
                 "SET cron_name = '$_POST[cron_name]', cron_desc = '$_POST[cron_desc]', cron_config = '$cron_config', nextime='$next', day = '$cron_day', week = '$cron_week', hour = '$cron_hour', minute = '$cron_minute', run_once = '$_POST[cron_run_once]', allow_ip = '$_POST[allow_ip]', alow_files = '$_POST[alow_files]'" .
                 "WHERE cron_id = '$_POST[cron_id]' LIMIT 1";
             $db->query($sql);
@@ -264,7 +264,7 @@ class CronController extends InitController
 
     public function uninstallAction()
     {
-        $sql = "DELETE FROM " . $ecs->table('crons') .
+        $sql = "DELETE FROM " . table('crons') .
             "WHERE cron_code = '$_REQUEST[code]' LIMIT 1";
         $db->query($sql);
         $links[] = array('text' => $_LANG['back_list'], 'href' => 'cron.php?act=list');
@@ -276,7 +276,7 @@ class CronController extends InitController
         $id = trim($_POST['id']);
         $val = intval($_POST['val']);
 
-        $sql = "UPDATE " . $ecs->table('crons') .
+        $sql = "UPDATE " . table('crons') .
             "SET enable = '$val' " .
             "WHERE cron_code = '$id' LIMIT 1";
         $db->query($sql);
@@ -291,7 +291,7 @@ class CronController extends InitController
         }
         if (file_exists(ROOT_PATH . 'includes/modules/cron/' . $_REQUEST['code'] . '.php')) {
             $cron = array();
-            $sql = "SELECT cron_config FROM " . $ecs->table('crons') . " WHERE cron_code = '$_REQUEST[code]'";
+            $sql = "SELECT cron_config FROM " . table('crons') . " WHERE cron_code = '$_REQUEST[code]'";
             $temp = $db->getRow($sql);
             $temp = unserialize($temp['cron_config']);
             if (!empty($temp)) {
@@ -301,7 +301,7 @@ class CronController extends InitController
             }
             include_once(ROOT_PATH . 'includes/modules/cron/' . $_REQUEST['code'] . '.php');
             $timestamp = gmtime();
-            $sql = "UPDATE " . $ecs->table('crons') .
+            $sql = "UPDATE " . table('crons') .
                 "SET thistime = '$timestamp' " .
                 "WHERE cron_code = '$_REQUEST[code]' LIMIT 1";
             $db->query($sql);

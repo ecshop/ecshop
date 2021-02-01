@@ -10,7 +10,7 @@ class AttributeController extends InitController
     public function initialize()
     {
         parent::initialize();
-        $exc = new exchange($ecs->table("attribute"), $db, 'attr_id', 'attr_name');
+        $exc = new exchange(table("attribute"), $db, 'attr_id', 'attr_name');
     }
 
 
@@ -96,7 +96,7 @@ class AttributeController extends InitController
                 'is_linked' => 0,
             );
         } else {
-            $sql = "SELECT * FROM " . $ecs->table('attribute') . " WHERE attr_id = '$_REQUEST[attr_id]'";
+            $sql = "SELECT * FROM " . table('attribute') . " WHERE attr_id = '$_REQUEST[attr_id]'";
             $attr = $db->getRow($sql);
         }
 
@@ -153,7 +153,7 @@ class AttributeController extends InitController
 
         /* 入库、记录日志、提示信息 */
         if ($is_insert) {
-            $db->autoExecute($ecs->table('attribute'), $attr, 'INSERT');
+            $db->autoExecute(table('attribute'), $attr, 'INSERT');
             admin_log($_POST['attr_name'], 'add', 'attribute');
             $links = array(
                 array('text' => $_LANG['add_next'], 'href' => '?act=add&goods_type=' . $_POST['cat_id']),
@@ -161,7 +161,7 @@ class AttributeController extends InitController
             );
             sys_msg(sprintf($_LANG['add_ok'], $attr['attr_name']), 0, $links);
         } else {
-            $db->autoExecute($ecs->table('attribute'), $attr, 'UPDATE', "attr_id = '$_POST[attr_id]'");
+            $db->autoExecute(table('attribute'), $attr, 'UPDATE', "attr_id = '$_POST[attr_id]'");
             admin_log($_POST['attr_name'], 'edit', 'attribute');
             $links = array(
                 array('text' => $_LANG['back_list'], 'href' => '?act=list&amp;goods_type=' . $_POST['cat_id'] . ''),
@@ -183,10 +183,10 @@ class AttributeController extends InitController
             $count = count($_POST['checkboxes']);
             $ids = isset($_POST['checkboxes']) ? join(',', $_POST['checkboxes']) : 0;
 
-            $sql = "DELETE FROM " . $ecs->table('attribute') . " WHERE attr_id " . db_create_in($ids);
+            $sql = "DELETE FROM " . table('attribute') . " WHERE attr_id " . db_create_in($ids);
             $db->query($sql);
 
-            $sql = "DELETE FROM " . $ecs->table('goods_attr') . " WHERE attr_id " . db_create_in($ids);
+            $sql = "DELETE FROM " . table('goods_attr') . " WHERE attr_id " . db_create_in($ids);
             $db->query($sql);
 
             /* 记录日志 */
@@ -254,8 +254,8 @@ class AttributeController extends InitController
 
         $id = intval($_GET['id']);
 
-        $db->query("DELETE FROM " . $ecs->table('attribute') . " WHERE attr_id='$id'");
-        $db->query("DELETE FROM " . $ecs->table('goods_attr') . " WHERE attr_id='$id'");
+        $db->query("DELETE FROM " . table('attribute') . " WHERE attr_id='$id'");
+        $db->query("DELETE FROM " . table('goods_attr') . " WHERE attr_id='$id'");
 
         $url = 'attribute.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
@@ -272,8 +272,8 @@ class AttributeController extends InitController
         $id = intval($_GET['attr_id']);
 
         $sql = "SELECT COUNT(*) " .
-            " FROM " . $ecs->table('goods_attr') . " AS a, " .
-            $ecs->table('goods') . " AS g " .
+            " FROM " . table('goods_attr') . " AS a, " .
+            table('goods') . " AS g " .
             " WHERE g.goods_id = a.goods_id AND g.is_delete = 0 AND attr_id = '$id' ";
 
         $goods_num = $db->getOne($sql);
@@ -316,7 +316,7 @@ class AttributeController extends InitController
 
         $where = (!empty($filter['goods_type'])) ? " WHERE a.cat_id = '$filter[goods_type]' " : '';
 
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('attribute') . " AS a $where";
+        $sql = "SELECT COUNT(*) FROM " . table('attribute') . " AS a $where";
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         /* 分页大小 */
@@ -324,8 +324,8 @@ class AttributeController extends InitController
 
         /* 查询 */
         $sql = "SELECT a.*, t.cat_name " .
-            " FROM " . $GLOBALS['ecs']->table('attribute') . " AS a " .
-            " LEFT JOIN " . $GLOBALS['ecs']->table('goods_type') . " AS t ON a.cat_id = t.cat_id " . $where .
+            " FROM " . table('attribute') . " AS a " .
+            " LEFT JOIN " . table('goods_type') . " AS t ON a.cat_id = t.cat_id " . $where .
             " ORDER BY $filter[sort_by] $filter[sort_order] " .
             " LIMIT " . $filter['start'] . ", $filter[page_size]";
         $row = $GLOBALS['db']->getAll($sql);

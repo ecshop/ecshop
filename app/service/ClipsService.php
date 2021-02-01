@@ -24,10 +24,10 @@ class ClipsService
         $sql = 'SELECT g.goods_id, g.goods_name, g.market_price, g.shop_price AS org_price, ' .
             "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " .
             'g.promote_price, g.promote_start_date,g.promote_end_date, c.rec_id, c.is_attention' .
-            ' FROM ' . $GLOBALS['ecs']->table('collect_goods') . ' AS c' .
-            " LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g " .
+            ' FROM ' . table('collect_goods') . ' AS c' .
+            " LEFT JOIN " . table('goods') . " AS g " .
             "ON g.goods_id = c.goods_id " .
-            " LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp " .
+            " LEFT JOIN " . table('member_price') . " AS mp " .
             "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
             " WHERE c.user_id = '$user_id' ORDER BY c.rec_id DESC";
         $res = $GLOBALS['db']->selectLimit($sql, $num, $start);
@@ -65,7 +65,7 @@ class ClipsService
     public function get_booking_rec($user_id, $goods_id)
     {
         $sql = 'SELECT COUNT(*) ' .
-            'FROM ' . $GLOBALS['ecs']->table('booking_goods') .
+            'FROM ' . table('booking_goods') .
             "WHERE user_id = '$user_id' AND goods_id = '$goods_id' AND is_dispose = 0";
 
         return $GLOBALS['db']->getOne($sql);
@@ -86,7 +86,7 @@ class ClipsService
     {
         /* 获取留言数据 */
         $msg = array();
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('feedback');
+        $sql = "SELECT * FROM " . table('feedback');
         if ($order_id) {
             $sql .= " WHERE parent_id = 0 AND order_id = '$order_id' AND user_id = '$user_id' ORDER BY msg_time DESC";
         } else {
@@ -101,7 +101,7 @@ class ClipsService
             //{
             $reply = array();
             $sql = "SELECT user_name, user_email, msg_time, msg_content" .
-                " FROM " . $GLOBALS['ecs']->table('feedback') .
+                " FROM " . table('feedback') .
                 " WHERE parent_id = '" . $rows['msg_id'] . "'";
             $reply = $GLOBALS['db']->getRow($sql);
 
@@ -169,7 +169,7 @@ class ClipsService
         }
 
         $message['msg_area'] = isset($message['msg_area']) ? intval($message['msg_area']) : 0;
-        $sql = "INSERT INTO " . $GLOBALS['ecs']->table('feedback') .
+        $sql = "INSERT INTO " . table('feedback') .
             " (msg_id, parent_id, user_id, user_name, user_email, msg_title, msg_type, msg_status,  msg_content, msg_time, message_img, order_id, msg_area)" .
             " VALUES (NULL, 0, '$message[user_id]', '$message[user_name]', '$message[user_email]', " .
             " '$message[msg_title]', '$message[msg_type]', '$status', '$message[msg_content]', '" . gmtime() . "', '$img_name', '$message[order_id]', '$message[msg_area]')";
@@ -214,7 +214,7 @@ class ClipsService
      */
     public function delete_tag($tag_words, $user_id)
     {
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('tag') .
+        $sql = "DELETE FROM " . table('tag') .
             " WHERE tag_words = '$tag_words' AND user_id = '$user_id'";
 
         return $GLOBALS['db']->query($sql);
@@ -234,7 +234,7 @@ class ClipsService
     {
         $booking = array();
         $sql = "SELECT bg.rec_id, bg.goods_id, bg.goods_number, bg.booking_time, bg.dispose_note, g.goods_name " .
-            "FROM " . $GLOBALS['ecs']->table('booking_goods') . " AS bg , " . $GLOBALS['ecs']->table('goods') . " AS g" . " WHERE bg.goods_id = g.goods_id AND bg.user_id = '$user_id' ORDER BY bg.booking_time DESC";
+            "FROM " . table('booking_goods') . " AS bg , " . table('goods') . " AS g" . " WHERE bg.goods_id = g.goods_id AND bg.user_id = '$user_id' ORDER BY bg.booking_time DESC";
         $res = $GLOBALS['db']->selectLimit($sql, $num, $start);
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -263,7 +263,7 @@ class ClipsService
     public function get_goodsinfo($goods_id)
     {
         $info = array();
-        $sql = "SELECT goods_name FROM " . $GLOBALS['ecs']->table('goods') . " WHERE goods_id = '$goods_id'";
+        $sql = "SELECT goods_name FROM " . table('goods') . " WHERE goods_id = '$goods_id'";
 
         $info['goods_name'] = $GLOBALS['db']->getOne($sql);
         $info['goods_number'] = 1;
@@ -272,7 +272,7 @@ class ClipsService
         if (!empty($_SESSION['user_id'])) {
             $row = array();
             $sql = "SELECT ua.consignee, ua.email, ua.tel, ua.mobile " .
-                "FROM " . $GLOBALS['ecs']->table('user_address') . " AS ua, " . $GLOBALS['ecs']->table('users') . " AS u" .
+                "FROM " . table('user_address') . " AS ua, " . table('users') . " AS u" .
                 " WHERE u.address_id = ua.address_id AND u.user_id = '$_SESSION[user_id]'";
             $row = $GLOBALS['db']->getRow($sql);
             $info['consignee'] = empty($row['consignee']) ? '' : $row['consignee'];
@@ -293,7 +293,7 @@ class ClipsService
      */
     public function delete_booking($booking_id, $user_id)
     {
-        $sql = 'DELETE FROM ' . $GLOBALS['ecs']->table('booking_goods') .
+        $sql = 'DELETE FROM ' . table('booking_goods') .
             " WHERE rec_id = '$booking_id' AND user_id = '$user_id'";
 
         return $GLOBALS['db']->query($sql);
@@ -308,7 +308,7 @@ class ClipsService
      */
     public function add_booking($booking)
     {
-        $sql = "INSERT INTO " . $GLOBALS['ecs']->table('booking_goods') .
+        $sql = "INSERT INTO " . table('booking_goods') .
             " VALUES ('', '$_SESSION[user_id]', '$booking[email]', '$booking[linkman]', " .
             "'$booking[tel]', '$booking[goods_id]', '$booking[desc]', " .
             "'$booking[goods_amount]', '" . gmtime() . "', 0, '', 0, '')";
@@ -328,7 +328,7 @@ class ClipsService
      */
     public function insert_user_account($surplus, $amount)
     {
-        $sql = 'INSERT INTO ' . $GLOBALS['ecs']->table('user_account') .
+        $sql = 'INSERT INTO ' . table('user_account') .
             ' (user_id, admin_user, amount, add_time, paid_time, admin_note, user_note, process_type, payment, is_paid)' .
             " VALUES ('$surplus[user_id]', '', '$amount', '" . gmtime() . "', 0, '', '$surplus[user_note]', '$surplus[process_type]', '$surplus[payment]', 0)";
         $GLOBALS['db']->query($sql);
@@ -346,7 +346,7 @@ class ClipsService
      */
     public function update_user_account($surplus)
     {
-        $sql = 'UPDATE ' . $GLOBALS['ecs']->table('user_account') . ' SET ' .
+        $sql = 'UPDATE ' . table('user_account') . ' SET ' .
             "amount     = '$surplus[amount]', " .
             "user_note  = '$surplus[user_note]', " .
             "payment    = '$surplus[payment]' " .
@@ -369,7 +369,7 @@ class ClipsService
      */
     public function insert_pay_log($id, $amount, $type = PAY_SURPLUS, $is_paid = 0)
     {
-        $sql = 'INSERT INTO ' . $GLOBALS['ecs']->table('pay_log') . " (order_id, order_amount, order_type, is_paid)" .
+        $sql = 'INSERT INTO ' . table('pay_log') . " (order_id, order_amount, order_type, is_paid)" .
             " VALUES  ('$id', '$amount', '$type', '$is_paid')";
         $GLOBALS['db']->query($sql);
 
@@ -387,7 +387,7 @@ class ClipsService
      */
     public function get_paylog_id($surplus_id, $pay_type = PAY_SURPLUS)
     {
-        $sql = 'SELECT log_id FROM' . $GLOBALS['ecs']->table('pay_log') .
+        $sql = 'SELECT log_id FROM' . table('pay_log') .
             " WHERE order_id = '$surplus_id' AND order_type = '$pay_type' AND is_paid = 0";
 
         return $GLOBALS['db']->getOne($sql);
@@ -403,7 +403,7 @@ class ClipsService
      */
     public function get_surplus_info($surplus_id)
     {
-        $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('user_account') .
+        $sql = 'SELECT * FROM ' . table('user_account') .
             " WHERE id = '$surplus_id'";
 
         return $GLOBALS['db']->getRow($sql);
@@ -417,7 +417,7 @@ class ClipsService
     public function get_online_payment_list($include_balance = true)
     {
         $sql = 'SELECT pay_id, pay_code, pay_name, pay_fee, pay_desc ' .
-            'FROM ' . $GLOBALS['ecs']->table('payment') .
+            'FROM ' . table('payment') .
             " WHERE enabled = 1 AND is_cod <> 1";
         if (!$include_balance) {
             $sql .= " AND pay_code <> 'balance' ";
@@ -438,7 +438,7 @@ class ClipsService
     public function get_account_log($user_id, $num, $start)
     {
         $account_log = array();
-        $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('user_account') .
+        $sql = 'SELECT * FROM ' . table('user_account') .
             " WHERE user_id = '$user_id'" .
             " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN)) .
             " ORDER BY add_time DESC";
@@ -462,7 +462,7 @@ class ClipsService
                 }
 
                 /* 支付方式的ID */
-                $sql = 'SELECT pay_id FROM ' . $GLOBALS['ecs']->table('payment') .
+                $sql = 'SELECT pay_id FROM ' . table('payment') .
                     " WHERE pay_name = '$rows[payment]' AND enabled = 1";
                 $pid = $GLOBALS['db']->getOne($sql);
 
@@ -490,7 +490,7 @@ class ClipsService
      */
     public function del_user_account($rec_id, $user_id)
     {
-        $sql = 'DELETE FROM ' . $GLOBALS['ecs']->table('user_account') .
+        $sql = 'DELETE FROM ' . table('user_account') .
             " WHERE is_paid = 0 AND id = '$rec_id' AND user_id = '$user_id'";
 
         return $GLOBALS['db']->query($sql);
@@ -504,7 +504,7 @@ class ClipsService
      */
     public function get_user_surplus($user_id)
     {
-        $sql = "SELECT SUM(user_money) FROM " . $GLOBALS['ecs']->table('account_log') .
+        $sql = "SELECT SUM(user_money) FROM " . table('account_log') .
             " WHERE user_id = '$user_id'";
 
         return $GLOBALS['db']->getOne($sql);
@@ -522,7 +522,7 @@ class ClipsService
     {
         $user_bonus = get_user_bonus();
 
-        $sql = "SELECT pay_points, user_money, credit_line, last_login, is_validated FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id = '$user_id'";
+        $sql = "SELECT pay_points, user_money, credit_line, last_login, is_validated FROM " . table('users') . " WHERE user_id = '$user_id'";
         $row = $GLOBALS['db']->getRow($sql);
         $info = array();
         $info['username'] = stripslashes($_SESSION['user_name']);
@@ -544,12 +544,12 @@ class ClipsService
         $info['surplus'] = price_format($row['user_money'], false);
         $info['bonus'] = sprintf($GLOBALS['_LANG']['user_bonus_info'], $user_bonus['bonus_count'], price_format($user_bonus['bonus_value'], false));
 
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('order_info') .
+        $sql = "SELECT COUNT(*) FROM " . table('order_info') .
             " WHERE user_id = '" . $user_id . "' AND add_time > '" . local_strtotime('-1 months') . "'";
         $info['order_count'] = $GLOBALS['db']->getOne($sql);
 
         $sql = "SELECT order_id, order_sn " .
-            " FROM " . $GLOBALS['ecs']->table('order_info') .
+            " FROM " . table('order_info') .
             " WHERE user_id = '" . $user_id . "' AND shipping_time > '" . $last_time . "'" . order_query_sql('shipped');
         $info['shipped_order'] = $GLOBALS['db']->getAll($sql);
 
@@ -574,11 +574,11 @@ class ClipsService
 
         foreach ($arr as $val) {
             /* 检查是否重复 */
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table("tag") .
+            $sql = "SELECT COUNT(*) FROM " . table("tag") .
                 " WHERE user_id = '" . $_SESSION['user_id'] . "' AND goods_id = '$id' AND tag_words = '$val'";
 
             if ($GLOBALS['db']->getOne($sql) == 0) {
-                $sql = "INSERT INTO " . $GLOBALS['ecs']->table("tag") . " (user_id, goods_id, tag_words) " .
+                $sql = "INSERT INTO " . table("tag") . " (user_id, goods_id, tag_words) " .
                     "VALUES ('" . $_SESSION['user_id'] . "', '$id', '$val')";
                 $GLOBALS['db']->query($sql);
             }
@@ -655,7 +655,7 @@ class ClipsService
     {
 
         if (!empty($_SESSION['user_rank'])) {
-            $sql = "SELECT rank_name, special_rank FROM " . $ecs->table('user_rank') . " WHERE rank_id = '$_SESSION[user_rank]'";
+            $sql = "SELECT rank_name, special_rank FROM " . table('user_rank') . " WHERE rank_id = '$_SESSION[user_rank]'";
             $row = $db->getRow($sql);
             if (empty($row)) {
                 return array();
@@ -664,8 +664,8 @@ class ClipsService
             if ($row['special_rank']) {
                 return array('rank_name' => $rank_name);
             } else {
-                $user_rank = $db->getOne("SELECT rank_points FROM " . $ecs->table('users') . " WHERE user_id = '$_SESSION[user_id]'");
-                $sql = "SELECT rank_name,min_points FROM " . $ecs->table('user_rank') . " WHERE min_points > '$user_rank' ORDER BY min_points ASC LIMIT 1";
+                $user_rank = $db->getOne("SELECT rank_points FROM " . table('users') . " WHERE user_id = '$_SESSION[user_id]'");
+                $sql = "SELECT rank_name,min_points FROM " . table('user_rank') . " WHERE min_points > '$user_rank' ORDER BY min_points ASC LIMIT 1";
                 $rt = $db->getRow($sql);
                 $next_rank_name = $rt['rank_name'];
                 $next_rank = $rt['min_points'] - $user_rank;
@@ -690,7 +690,7 @@ class ClipsService
         $now = gmtime();
         /* 夺宝奇兵 */
         $sql = "SELECT act_id, goods_name, end_time " .
-            "FROM " . $GLOBALS['ecs']->table('goods_activity') .
+            "FROM " . table('goods_activity') .
             " WHERE act_type = '" . GAT_SNATCH . "'" .
             " AND (is_finished = 1 OR (is_finished = 0 AND end_time <= '$now'))";
         $res = $GLOBALS['db']->query($sql);
@@ -715,7 +715,7 @@ class ClipsService
         /* 竞拍 */
 
         $sql = "SELECT act_id, goods_name, end_time " .
-            "FROM " . $GLOBALS['ecs']->table('goods_activity') .
+            "FROM " . table('goods_activity') .
             " WHERE act_type = '" . GAT_AUCTION . "'" .
             " AND (is_finished = 1 OR (is_finished = 0 AND end_time <= '$now'))";
         $res = $GLOBALS['db']->query($sql);
@@ -760,10 +760,10 @@ class ClipsService
     public function get_comment_list($user_id, $page_size, $start)
     {
         $sql = "SELECT c.*, g.goods_name AS cmt_name, r.content AS reply_content, r.add_time AS reply_time " .
-            " FROM " . $GLOBALS['ecs']->table('comment') . " AS c " .
-            " LEFT JOIN " . $GLOBALS['ecs']->table('comment') . " AS r " .
+            " FROM " . table('comment') . " AS c " .
+            " LEFT JOIN " . table('comment') . " AS r " .
             " ON r.parent_id = c.comment_id AND r.parent_id > 0 " .
-            " LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g " .
+            " LEFT JOIN " . table('goods') . " AS g " .
             " ON c.comment_type=0 AND c.id_value = g.goods_id " .
             " WHERE c.user_id='$user_id'";
         $res = $GLOBALS['db']->selectLimit($sql, $page_size, $start);
@@ -782,7 +782,7 @@ class ClipsService
         }
 
         if ($to_article) {
-            $sql = "SELECT article_id , title FROM " . $GLOBALS['ecs']->table('article') . " WHERE " . db_create_in($to_article, 'article_id');
+            $sql = "SELECT article_id , title FROM " . table('article') . " WHERE " . db_create_in($to_article, 'article_id');
             $arr = $GLOBALS['db']->getAll($sql);
             $to_cmt_name = array();
             foreach ($arr as $row) {

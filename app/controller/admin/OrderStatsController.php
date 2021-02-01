@@ -31,13 +31,13 @@ class OrderStatsController extends InitController
 
         /* 取得订单转化率数据 */
         $sql = "SELECT COUNT(*) AS total_order_num, " . $total_fee .
-            " FROM " . $ecs->table('order_info') .
+            " FROM " . table('order_info') .
             " WHERE 1 " . order_query_sql('finished');
         $order_general = $db->getRow($sql);
         $order_general['total_turnover'] = floatval($order_general['total_turnover']);
 
         /* 取得商品总点击数量 */
-        $sql = 'SELECT SUM(click_count) FROM ' . $ecs->table('goods') . ' WHERE is_delete = 0';
+        $sql = 'SELECT SUM(click_count) FROM ' . table('goods') . ' WHERE is_delete = 0';
         $click_count = floatval($db->getOne($sql));
 
         /* 每千个点击的订单数 */
@@ -111,7 +111,7 @@ class OrderStatsController extends InitController
 
             foreach ($start_date_arr as $k => $val) {
                 $sql = 'SELECT i.pay_id, p.pay_name, i.pay_time, COUNT(i.order_id) AS order_num ' .
-                    'FROM ' . $ecs->table('payment') . ' AS p, ' . $ecs->table('order_info') . ' AS i ' .
+                    'FROM ' . table('payment') . ' AS p, ' . table('order_info') . ' AS i ' .
                     "WHERE p.pay_id = i.pay_id AND i.order_status = '" . OS_CONFIRMED . "' " .
                     "AND i.pay_status > '" . PS_UNPAYED . "' AND i.shipping_status > '" . SS_UNSHIPPED . "' " .
                     "AND i.add_time >= '$start_date_arr[$k]' AND i.add_time <= '$end_date_arr[$k]'" .
@@ -155,7 +155,7 @@ class OrderStatsController extends InitController
 
             foreach ($start_date_arr as $k => $val) {
                 $sql = 'SELECT sp.shipping_id, sp.shipping_name AS ship_name, i.shipping_time, COUNT(i.order_id) AS order_num ' .
-                    'FROM ' . $ecs->table('shipping') . ' AS sp, ' . $ecs->table('order_info') . ' AS i ' .
+                    'FROM ' . table('shipping') . ' AS sp, ' . table('order_info') . ' AS i ' .
                     'WHERE sp.shipping_id = i.shipping_id ' . order_query_sql('finished') .
                     "AND i.add_time >= '$start_date_arr[$k]' AND i.add_time <= '$end_date_arr[$k]' " .
                     "GROUP BY i.shipping_id ORDER BY order_num DESC";
@@ -210,7 +210,7 @@ class OrderStatsController extends InitController
             $pay_xml = "<graph caption='" . $_LANG['pay_method'] . "' decimalPrecision='2' showPercentageValues='0' showNames='1' numberPrefix='' showValues='1' showPercentageInLabel='0' pieYScale='45' pieBorderAlpha='40' pieFillAlpha='70' pieSliceDepth='15' pieRadius='100' outCnvBaseFontSize='13' baseFontSize='12'>";
 
             $sql = 'SELECT i.pay_id, p.pay_name, COUNT(i.order_id) AS order_num ' .
-                'FROM ' . $ecs->table('payment') . ' AS p, ' . $ecs->table('order_info') . ' AS i ' .
+                'FROM ' . table('payment') . ' AS p, ' . table('order_info') . ' AS i ' .
                 "WHERE p.pay_id = i.pay_id " . order_query_sql('finished') .
                 "AND i.add_time >= '$start_date' AND i.add_time <= '$end_date' " .
                 "GROUP BY i.pay_id ORDER BY order_num DESC";
@@ -225,7 +225,7 @@ class OrderStatsController extends InitController
             $ship_xml = "<graph caption='" . $_LANG['shipping_method'] . "' decimalPrecision='2' showPercentageValues='0' showNames='1' numberPrefix='' showValues='1' showPercentageInLabel='0' pieYScale='45' pieBorderAlpha='40' pieFillAlpha='70' pieSliceDepth='15' pieRadius='100' outCnvBaseFontSize='13' baseFontSize='12'>";
 
             $sql = 'SELECT sp.shipping_id, sp.shipping_name AS ship_name, COUNT(i.order_id) AS order_num ' .
-                'FROM ' . $ecs->table('shipping') . ' AS sp, ' . $ecs->table('order_info') . ' AS i ' .
+                'FROM ' . table('shipping') . ' AS sp, ' . table('order_info') . ' AS i ' .
                 'WHERE sp.shipping_id = i.shipping_id ' . order_query_sql('finished') .
                 "AND i.add_time >= '$start_date' AND i.add_time <= '$end_date' " .
                 "GROUP BY i.shipping_id ORDER BY order_num DESC";
@@ -289,7 +289,7 @@ class OrderStatsController extends InitController
 
         /* 支付方式 */
         $sql = 'SELECT i.pay_id, p.pay_name, COUNT(i.order_id) AS order_num ' .
-            'FROM ' . $ecs->table('payment') . ' AS p, ' . $ecs->table('order_info') . ' AS i ' .
+            'FROM ' . table('payment') . ' AS p, ' . table('order_info') . ' AS i ' .
             "WHERE p.pay_id = i.pay_id " . order_query_sql('finished') .
             "AND i.add_time >= '$start_date' AND i.add_time <= '$end_date' " .
             "GROUP BY i.pay_id ORDER BY order_num DESC";
@@ -304,7 +304,7 @@ class OrderStatsController extends InitController
 
         /* 配送方式 */
         $sql = 'SELECT sp.shipping_id, sp.shipping_name AS ship_name, COUNT(i.order_id) AS order_num ' .
-            'FROM ' . $ecs->table('shipping') . ' AS sp, ' . $ecs->table('order_info') . ' AS i ' .
+            'FROM ' . table('shipping') . ' AS sp, ' . table('order_info') . ' AS i ' .
             'WHERE sp.shipping_id = i.shipping_id ' . order_query_sql('finished') .
             "AND i.add_time >= '$start_date' AND i.add_time <= '$end_date' " .
             "GROUP BY i.shipping_id ORDER BY order_num DESC";
@@ -337,26 +337,26 @@ class OrderStatsController extends InitController
         $order_info = array();
 
         /* 未确认订单数 */
-        $sql = 'SELECT COUNT(*) AS unconfirmed_num FROM ' . $GLOBALS['ecs']->table('order_info') .
+        $sql = 'SELECT COUNT(*) AS unconfirmed_num FROM ' . table('order_info') .
             " WHERE order_status = '" . OS_UNCONFIRMED . "' AND add_time >= '$start_date'" .
             " AND add_time < '" . ($end_date + 86400) . "'";
 
         $order_info['unconfirmed_num'] = $GLOBALS['db']->getOne($sql);
 
         /* 已确认订单数 */
-        $sql = 'SELECT COUNT(*) AS confirmed_num FROM ' . $GLOBALS['ecs']->table('order_info') .
+        $sql = 'SELECT COUNT(*) AS confirmed_num FROM ' . table('order_info') .
             " WHERE order_status = '" . OS_CONFIRMED . "' AND shipping_status NOT " . db_create_in(array(SS_SHIPPED, SS_RECEIVED)) . " AND pay_status NOT" . db_create_in(array(PS_PAYED, PS_PAYING)) . " AND add_time >= '$start_date'" .
             " AND add_time < '" . ($end_date + 86400) . "'";
         $order_info['confirmed_num'] = $GLOBALS['db']->getOne($sql);
 
         /* 已成交订单数 */
-        $sql = 'SELECT COUNT(*) AS succeed_num FROM ' . $GLOBALS['ecs']->table('order_info') .
+        $sql = 'SELECT COUNT(*) AS succeed_num FROM ' . table('order_info') .
             " WHERE 1 " . order_query_sql('finished') .
             " AND add_time >= '$start_date' AND add_time < '" . ($end_date + 86400) . "'";
         $order_info['succeed_num'] = $GLOBALS['db']->getOne($sql);
 
         /* 无效或已取消订单数 */
-        $sql = "SELECT COUNT(*) AS invalid_num FROM " . $GLOBALS['ecs']->table('order_info') .
+        $sql = "SELECT COUNT(*) AS invalid_num FROM " . table('order_info') .
             " WHERE order_status > '" . OS_CONFIRMED . "'" .
             " AND add_time >= '$start_date' AND add_time < '" . ($end_date + 86400) . "'";
         $order_info['invalid_num'] = $GLOBALS['db']->getOne($sql);

@@ -31,7 +31,7 @@ class VirtualCardController extends InitController
             $link[] = array('text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list');
             sys_msg($_LANG['replenish_no_goods_id'], 1, $link);
         } else {
-            $goods_name = $db->getOne("SELECT goods_name From " . $ecs->table('goods') . " WHERE goods_id='" . $_REQUEST['goods_id'] . "' AND is_real = 0 AND extension_code='virtual_card' ");
+            $goods_name = $db->getOne("SELECT goods_name From " . table('goods') . " WHERE goods_id='" . $_REQUEST['goods_id'] . "' AND is_real = 0 AND extension_code='virtual_card' ");
             if (empty($goods_name)) {
                 $link[] = array('text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list');
                 sys_msg($_LANG['replenish_no_get_goods_name'], 1, $link);
@@ -55,7 +55,7 @@ class VirtualCardController extends InitController
         admin_priv('virualcard');
         /* 获取卡片信息 */
         $sql = "SELECT T1.card_id, T1.goods_id, T2.goods_name,T1.card_sn, T1.card_password, T1.end_date, T1.crc32 FROM " .
-            $ecs->table('virtual_card') . " AS T1, " . $ecs->table('goods') . " AS T2 " .
+            table('virtual_card') . " AS T1, " . table('goods') . " AS T2 " .
             "WHERE T1.goods_id = T2.goods_id AND T1.card_id = '$_REQUEST[card_id]'";
         $card = $db->getRow($sql);
         if ($card['crc32'] == 0 || $card['crc32'] == crc32(AUTH_KEY)) {
@@ -89,7 +89,7 @@ class VirtualCardController extends InitController
 
         /* 在前后两次card_sn不一致时，检查是否有重复记录,一致时直接更新数据 */
         if ($_POST['card_sn'] != $_POST['old_card_sn']) {
-            $sql = "SELECT count(*) FROM " . $ecs->table('virtual_card') . " WHERE goods_id='" . $_POST['goods_id'] . "' AND card_sn='$coded_card_sn'";
+            $sql = "SELECT count(*) FROM " . table('virtual_card') . " WHERE goods_id='" . $_POST['goods_id'] . "' AND card_sn='$coded_card_sn'";
 
             if ($db->getOne($sql) > 0) {
                 $link[] = array('text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=replenish&goods_id=' . $_POST['goods_id']);
@@ -102,13 +102,13 @@ class VirtualCardController extends InitController
             /* 插入一条新记录 */
             $end_date = strtotime($_POST['end_dateYear'] . "-" . $_POST['end_dateMonth'] . "-" . $_POST['end_dateDay']);
             $add_date = gmtime();
-            $sql = "INSERT INTO " . $ecs->table('virtual_card') . " (goods_id, card_sn, card_password, end_date, add_date, crc32) " .
+            $sql = "INSERT INTO " . table('virtual_card') . " (goods_id, card_sn, card_password, end_date, add_date, crc32) " .
                 "VALUES ('$_POST[goods_id]', '$coded_card_sn', '$coded_card_password', '$end_date', '$add_date', '" . crc32(AUTH_KEY) . "')";
             $db->query($sql);
 
             /* 如果添加成功且原卡号为空时商品库存加1 */
             if (empty($_POST['old_card_sn'])) {
-                $sql = "UPDATE " . $ecs->table('goods') . " SET goods_number= goods_number+1 WHERE goods_id='$_POST[goods_id]'";
+                $sql = "UPDATE " . table('goods') . " SET goods_number= goods_number+1 WHERE goods_id='$_POST[goods_id]'";
                 $db->query($sql);
             }
 
@@ -118,7 +118,7 @@ class VirtualCardController extends InitController
         } else {
             /* 更新数据 */
             $end_date = strtotime($_POST['end_dateYear'] . "-" . $_POST['end_dateMonth'] . "-" . $_POST['end_dateDay']);
-            $sql = "UPDATE " . $ecs->table('virtual_card') . " SET card_sn='$coded_card_sn', card_password='$coded_card_password', end_date='$end_date' " .
+            $sql = "UPDATE " . table('virtual_card') . " SET card_sn='$coded_card_sn', card_password='$coded_card_password', end_date='$end_date' " .
                 "WHERE card_id='$_POST[card_id]'";
             $db->query($sql);
 
@@ -140,7 +140,7 @@ class VirtualCardController extends InitController
             $link[] = array('text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list');
             sys_msg($_LANG['replenish_no_goods_id'], 1, $link);
         } else {
-            $goods_name = $db->getOne("SELECT goods_name From " . $ecs->table('goods') . " WHERE goods_id='" . $_REQUEST['goods_id'] . "' AND is_real = 0 AND extension_code='virtual_card' ");
+            $goods_name = $db->getOne("SELECT goods_name From " . table('goods') . " WHERE goods_id='" . $_REQUEST['goods_id'] . "' AND is_real = 0 AND extension_code='virtual_card' ");
             if (empty($goods_name)) {
                 $link[] = array('text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list');
                 sys_msg($_LANG['replenish_no_get_goods_name'], 1, $link);
@@ -201,7 +201,7 @@ class VirtualCardController extends InitController
         admin_priv('virualcard');
 
         $num = count($_POST['checkboxes']);
-        $sql = "DELETE FROM " . $ecs->table('virtual_card') . " WHERE card_id " . db_create_in(implode(',', $_POST['checkboxes']));
+        $sql = "DELETE FROM " . table('virtual_card') . " WHERE card_id " . db_create_in(implode(',', $_POST['checkboxes']));
         if ($db->query($sql)) {
             /* 商品数量减$num */
             update_goods_number(intval($_REQUEST['goods_id']));
@@ -272,7 +272,7 @@ class VirtualCardController extends InitController
             $rec['end_date'] = empty($_POST['end_date'][$key]) ? 0 : strtotime($_POST['end_date'][$key]);
             $rec['goods_id'] = $_POST['goods_id'];
             $rec['add_date'] = $add_time;
-            $db->autoExecute($ecs->table('virtual_card'), $rec, 'INSERT');
+            $db->autoExecute(table('virtual_card'), $rec, 'INSERT');
             $i++;
         }
 
@@ -326,13 +326,13 @@ class VirtualCardController extends InitController
             // 重新加密卡号和密码
             $old_crc32 = crc32($_POST['old_string']);
             $new_crc32 = crc32($_POST['new_string']);
-            $sql = "SELECT card_id, card_sn, card_password FROM " . $ecs->table('virtual_card') . " WHERE crc32 = '$old_crc32'";
+            $sql = "SELECT card_id, card_sn, card_password FROM " . table('virtual_card') . " WHERE crc32 = '$old_crc32'";
             $res = $db->query($sql);
             while ($row = $db->fetchRow($res)) {
                 $row['card_sn'] = encrypt(decrypt($row['card_sn'], $_POST['old_string']), $_POST['new_string']);
                 $row['card_password'] = encrypt(decrypt($row['card_password'], $_POST['old_string']), $_POST['new_string']);
                 $row['crc32'] = $new_crc32;
-                $db->autoExecute($ecs->table('virtual_card'), $row, 'UPDATE', 'card_id = ' . $row['card_id']);
+                $db->autoExecute(table('virtual_card'), $row, 'UPDATE', 'card_id = ' . $row['card_id']);
             }
 
             // 记录日志
@@ -354,11 +354,11 @@ class VirtualCardController extends InitController
         $id = intval($_POST['id']);
         $val = intval($_POST['val']);
 
-        $sql = "UPDATE " . $ecs->table('virtual_card') . " SET is_saled= '$val' WHERE card_id='$id'";
+        $sql = "UPDATE " . table('virtual_card') . " SET is_saled= '$val' WHERE card_id='$id'";
 
         if ($db->query($sql, 'SILENT')) {
             /* 修改商品库存 */
-            $sql = "SELECT goods_id FROM " . $ecs->table('virtual_card') . " WHERE card_id = '$id' LIMIT 1";
+            $sql = "SELECT goods_id FROM " . table('virtual_card') . " WHERE card_id = '$id' LIMIT 1";
             $goods_id = $db->getOne($sql);
 
             update_goods_number($goods_id);
@@ -377,9 +377,9 @@ class VirtualCardController extends InitController
 
         $id = intval($_GET['id']);
 
-        $row = $db->getRow('SELECT card_sn, goods_id FROM ' . $ecs->table('virtual_card') . " WHERE card_id = '$id'");
+        $row = $db->getRow('SELECT card_sn, goods_id FROM ' . table('virtual_card') . " WHERE card_id = '$id'");
 
-        $sql = 'DELETE FROM ' . $ecs->table('virtual_card') . " WHERE card_id = '$id'";
+        $sql = 'DELETE FROM ' . table('virtual_card') . " WHERE card_id = '$id'";
         if ($db->query($sql, 'SILENT')) {
             /* 修改商品数量 */
             update_goods_number($row['goods_id']);
@@ -416,7 +416,7 @@ class VirtualCardController extends InitController
 
         // 查询统计信息：总记录，使用原串的记录，使用新串的记录，使用未知串的记录
         $stat = array('all' => 0, 'new' => 0, 'old' => 0, 'unknown' => 0);
-        $sql = "SELECT crc32, count(*) AS cnt FROM " . $ecs->table('virtual_card') . " GROUP BY crc32";
+        $sql = "SELECT crc32, count(*) AS cnt FROM " . table('virtual_card') . " GROUP BY crc32";
         $res = $GLOBALS['db']->query($sql);
         while ($row = $db->fetchRow($res)) {
             $stat['all'] += $row['cnt'];
@@ -445,7 +445,7 @@ class VirtualCardController extends InitController
         $updated = intval($_GET['updated']);
 
         $sql = "SELECT card_id, card_sn, card_password " .
-            " FROM " . $ecs->table('virtual_card') .
+            " FROM " . table('virtual_card') .
             " WHERE crc32 = '$old_crc32' LIMIT $each_num";
         $res = $db->query($sql);
 
@@ -454,7 +454,7 @@ class VirtualCardController extends InitController
             $row['card_password'] = encrypt(decrypt($row['card_password'], OLD_AUTH_KEY));
             $row['crc32'] = $new_crc32;
 
-            if (!$db->autoExecute($ecs->table('virtual_card'), $row, 'UPDATE', 'card_id = ' . $row['card_id'])) {
+            if (!$db->autoExecute(table('virtual_card'), $row, 'UPDATE', 'card_id = ' . $row['card_id'])) {
                 return make_json_error($updated, 0, $_LANG['update_error'] . "\n" . $db->error());
             }
 
@@ -462,7 +462,7 @@ class VirtualCardController extends InitController
         }
 
         // 查询是否还有未更新的
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('virtual_card') . " WHERE crc32 = '$old_crc32' ";
+        $sql = "SELECT COUNT(*) FROM " . table('virtual_card') . " WHERE crc32 = '$old_crc32' ";
         $left_num = $db->getOne($sql);
 
         if ($left_num > 0) {
@@ -470,7 +470,7 @@ class VirtualCardController extends InitController
         } else {
             // 查询统计信息
             $stat = array('new' => 0, 'unknown' => 0);
-            $sql = "SELECT crc32, count(*) AS cnt FROM " . $GLOBALS['ecs']->table('virtual_card') . " GROUP BY crc32";
+            $sql = "SELECT crc32, count(*) AS cnt FROM " . table('virtual_card') . " GROUP BY crc32";
             $res = $GLOBALS['db']->query($sql);
             while ($row = $db->fetchRow($res)) {
                 if ($new_crc32 == $row['crc32']) {
@@ -513,7 +513,7 @@ class VirtualCardController extends InitController
             }
         }
 
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('virtual_card') . " WHERE 1 $where";
+        $sql = "SELECT COUNT(*) FROM " . table('virtual_card') . " WHERE 1 $where";
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         /* 分页大小 */
@@ -522,7 +522,7 @@ class VirtualCardController extends InitController
 
         /* 查询 */
         $sql = "SELECT card_id, goods_id, card_sn, card_password, end_date, is_saled, order_sn, crc32 " .
-            " FROM " . $GLOBALS['ecs']->table('virtual_card') .
+            " FROM " . table('virtual_card') .
             " WHERE 1 " . $where .
             " ORDER BY $filter[sort_by] $filter[sort_order] " .
             " LIMIT $start, $filter[page_size]";
@@ -559,10 +559,10 @@ class VirtualCardController extends InitController
      */
     public function update_goods_number($goods_id)
     {
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('virtual_card') . " WHERE goods_id = '$goods_id' AND is_saled = 0";
+        $sql = "SELECT COUNT(*) FROM " . table('virtual_card') . " WHERE goods_id = '$goods_id' AND is_saled = 0";
         $goods_number = $GLOBALS['db']->getOne($sql);
 
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('goods') . " SET goods_number = '$goods_number' WHERE goods_id = '$goods_id' AND extension_code='virtual_card'";
+        $sql = "UPDATE " . table('goods') . " SET goods_number = '$goods_number' WHERE goods_id = '$goods_id' AND extension_code='virtual_card'";
 
         return $GLOBALS['db']->query($sql);
     }

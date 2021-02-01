@@ -29,7 +29,7 @@ class PackageController extends InitController
 
         $now = gmtime();
 
-        $sql = "SELECT * FROM " . $ecs->table('goods_activity') . " WHERE `start_time` <= '$now' AND `end_time` >= '$now' AND `act_type` = '4' ORDER BY `end_time`";
+        $sql = "SELECT * FROM " . table('goods_activity') . " WHERE `start_time` <= '$now' AND `end_time` >= '$now' AND `act_type` = '4' ORDER BY `end_time`";
         $res = $db->query($sql);
 
         $list = array();
@@ -47,10 +47,10 @@ class PackageController extends InitController
             $sql = "SELECT pg.package_id, pg.goods_id, pg.goods_number, pg.admin_id, " .
                 " g.goods_sn, g.goods_name, g.market_price, g.goods_thumb, " .
                 " IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS rank_price " .
-                " FROM " . $GLOBALS['ecs']->table('package_goods') . " AS pg " .
-                "   LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g " .
+                " FROM " . table('package_goods') . " AS pg " .
+                "   LEFT JOIN " . table('goods') . " AS g " .
                 "   ON g.goods_id = pg.goods_id " .
-                " LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp " .
+                " LEFT JOIN " . table('member_price') . " AS mp " .
                 "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
                 " WHERE pg.package_id = " . $row['act_id'] . " " .
                 " ORDER BY pg.goods_id";

@@ -10,7 +10,7 @@ class ShippingAreaController extends InitController
     public function initialize()
     {
         parent::initialize();
-        $exc = new exchange($ecs->table('shipping_area'), $db, 'shipping_area_id', 'shipping_area_name');
+        $exc = new exchange(table('shipping_area'), $db, 'shipping_area_id', 'shipping_area_name');
     }
 
     /*------------------------------------------------------ */
@@ -41,7 +41,7 @@ class ShippingAreaController extends InitController
     {
         admin_priv('shiparea_manage');
 
-        $shipping = $db->getRow("SELECT shipping_name, shipping_code FROM " . $ecs->table('shipping') . " WHERE shipping_id='$_REQUEST[shipping]'");
+        $shipping = $db->getRow("SELECT shipping_name, shipping_code FROM " . table('shipping') . " WHERE shipping_id='$_REQUEST[shipping]'");
 
         $set_modules = 1;
         include_once(ROOT_PATH . 'includes/modules/shipping/' . $shipping['shipping_code'] . '.php');
@@ -83,12 +83,12 @@ class ShippingAreaController extends InitController
         admin_priv('shiparea_manage');
 
         /* 检查同类型的配送方式下有没有重名的配送区域 */
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table("shipping_area") .
+        $sql = "SELECT COUNT(*) FROM " . table("shipping_area") .
             " WHERE shipping_id='$_POST[shipping]' AND shipping_area_name='$_POST[shipping_area_name]'";
         if ($db->getOne($sql) > 0) {
             sys_msg($_LANG['repeat_area_name'], 1);
         } else {
-            $shipping_code = $db->getOne("SELECT shipping_code FROM " . $ecs->table('shipping') .
+            $shipping_code = $db->getOne("SELECT shipping_code FROM " . table('shipping') .
                 " WHERE shipping_id='$_POST[shipping]'");
             $plugin = '../includes/modules/shipping/' . $shipping_code . ".php";
 
@@ -118,7 +118,7 @@ class ShippingAreaController extends InitController
                 $config[$count]['value'] = make_semiangle(empty($_POST['pay_fee']) ? '' : $_POST['pay_fee']);
             }
 
-            $sql = "INSERT INTO " . $ecs->table('shipping_area') .
+            $sql = "INSERT INTO " . table('shipping_area') .
                 " (shipping_area_name, shipping_id, configure) " .
                 "VALUES" .
                 " ('$_POST[shipping_area_name]', '$_POST[shipping]', '" . serialize($config) . "')";
@@ -130,7 +130,7 @@ class ShippingAreaController extends InitController
             /* 添加选定的城市和地区 */
             if (isset($_POST['regions']) && is_array($_POST['regions'])) {
                 foreach ($_POST['regions'] as $key => $val) {
-                    $sql = "INSERT INTO " . $ecs->table('area_region') . " (shipping_area_id, region_id) VALUES ('$new_id', '$val')";
+                    $sql = "INSERT INTO " . table('area_region') . " (shipping_area_id, region_id) VALUES ('$new_id', '$val')";
                     $db->query($sql);
                 }
             }
@@ -152,7 +152,7 @@ class ShippingAreaController extends InitController
         admin_priv('shiparea_manage');
 
         $sql = "SELECT a.shipping_name, a.shipping_code, a.support_cod, b.* " .
-            "FROM " . $ecs->table('shipping') . " AS a, " . $ecs->table('shipping_area') . " AS b " .
+            "FROM " . table('shipping') . " AS a, " . table('shipping_area') . " AS b " .
             "WHERE b.shipping_id=a.shipping_id AND b.shipping_area_id='$_REQUEST[id]'";
         $row = $db->getRow($sql);
 
@@ -191,7 +191,7 @@ class ShippingAreaController extends InitController
         $regions = array();
 
         $sql = "SELECT a.region_id, r.region_name " .
-            "FROM " . $ecs->table('area_region') . " AS a, " . $ecs->table('region') . " AS r " .
+            "FROM " . table('area_region') . " AS a, " . table('region') . " AS r " .
             "WHERE r.region_id=a.region_id AND a.shipping_area_id='$_REQUEST[id]'";
         $res = $db->query($sql);
         while ($arr = $db->fetchRow($res)) {
@@ -215,14 +215,14 @@ class ShippingAreaController extends InitController
         admin_priv('shiparea_manage');
 
         /* 检查同类型的配送方式下有没有重名的配送区域 */
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table("shipping_area") .
+        $sql = "SELECT COUNT(*) FROM " . table("shipping_area") .
             " WHERE shipping_id='$_POST[shipping]' AND " .
             "shipping_area_name='$_POST[shipping_area_name]' AND " .
             "shipping_area_id<>'$_POST[id]'";
         if ($db->getOne($sql) > 0) {
             sys_msg($_LANG['repeat_area_name'], 1);
         } else {
-            $shipping_code = $db->getOne("SELECT shipping_code FROM " . $ecs->table('shipping') . " WHERE shipping_id='$_POST[shipping]'");
+            $shipping_code = $db->getOne("SELECT shipping_code FROM " . table('shipping') . " WHERE shipping_id='$_POST[shipping]'");
             $plugin = '../includes/modules/shipping/' . $shipping_code . ".php";
 
             if (!file_exists($plugin)) {
@@ -250,7 +250,7 @@ class ShippingAreaController extends InitController
                 $config[$count]['value'] = make_semiangle(empty($_POST['pay_fee']) ? '' : $_POST['pay_fee']);
             }
 
-            $sql = "UPDATE " . $ecs->table('shipping_area') .
+            $sql = "UPDATE " . table('shipping_area') .
                 " SET shipping_area_name='$_POST[shipping_area_name]', " .
                 "configure='" . serialize($config) . "' " .
                 "WHERE shipping_area_id='$_POST[id]'";
@@ -268,7 +268,7 @@ class ShippingAreaController extends InitController
             }
 
             // 查询所有区域 region_id => parent_id
-            $sql = "SELECT region_id, parent_id FROM " . $ecs->table('region');
+            $sql = "SELECT region_id, parent_id FROM " . table('region');
             $res = $db->query($sql);
             while ($row = $db->fetchRow($res)) {
                 $region_list[$row['region_id']] = $row['parent_id'];
@@ -287,11 +287,11 @@ class ShippingAreaController extends InitController
             }
 
             /* 清除原有的城市和地区 */
-            $db->query("DELETE FROM " . $ecs->table("area_region") . " WHERE shipping_area_id='$_POST[id]'");
+            $db->query("DELETE FROM " . table("area_region") . " WHERE shipping_area_id='$_POST[id]'");
 
             /* 添加选定的城市和地区 */
             foreach ($selected_regions as $key => $val) {
-                $sql = "INSERT INTO " . $ecs->table('area_region') . " (shipping_area_id, region_id) VALUES ('$_POST[id]', '$val')";
+                $sql = "INSERT INTO " . table('area_region') . " (shipping_area_id, region_id) VALUES ('$_POST[id]', '$val')";
                 $db->query($sql);
             }
 
@@ -311,7 +311,7 @@ class ShippingAreaController extends InitController
         if (isset($_POST['areas']) && count($_POST['areas']) > 0) {
             $i = 0;
             foreach ($_POST['areas'] as $v) {
-                $db->query("DELETE FROM " . $ecs->table('shipping_area') . " WHERE shipping_area_id='$v'");
+                $db->query("DELETE FROM " . table('shipping_area') . " WHERE shipping_area_id='$v'");
                 $i++;
             }
 
@@ -367,7 +367,7 @@ class ShippingAreaController extends InitController
         $shipping_id = $exc->get_name($id, 'shipping_id');
 
         $exc->drop($id);
-        $db->query('DELETE FROM ' . $ecs->table('area_region') . ' WHERE shipping_area_id=' . $id);
+        $db->query('DELETE FROM ' . table('area_region') . ' WHERE shipping_area_id=' . $id);
 
         admin_log($name, 'remove', 'shipping_area');
 
@@ -382,7 +382,7 @@ class ShippingAreaController extends InitController
      */
     public function get_shipping_area_list($shipping_id)
     {
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('shipping_area');
+        $sql = "SELECT * FROM " . table('shipping_area');
         if ($shipping_id > 0) {
             $sql .= " WHERE shipping_id = '$shipping_id'";
         }
@@ -390,8 +390,8 @@ class ShippingAreaController extends InitController
         $list = array();
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             $sql = "SELECT r.region_name " .
-                "FROM " . $GLOBALS['ecs']->table('area_region') . " AS a, " .
-                $GLOBALS['ecs']->table('region') . " AS r " .
+                "FROM " . table('area_region') . " AS a, " .
+                table('region') . " AS r " .
                 "WHERE a.region_id = r.region_id " .
                 "AND a.shipping_area_id = '$row[shipping_area_id]'";
             $regions = join(', ', $GLOBALS['db']->getCol($sql));

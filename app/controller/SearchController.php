@@ -160,13 +160,13 @@ class SearchController extends InitController
                 $sc_dsad = $_REQUEST['sc_ds'] ? " OR goods_desc LIKE '%$val%'" : '';
                 $keywords .= "(goods_name LIKE '%$val%' OR goods_sn LIKE '%$val%' OR keywords LIKE '%$val%' $sc_dsad)";
 
-                $sql = 'SELECT DISTINCT goods_id FROM ' . $ecs->table('tag') . " WHERE tag_words LIKE '%$val%' ";
+                $sql = 'SELECT DISTINCT goods_id FROM ' . table('tag') . " WHERE tag_words LIKE '%$val%' ";
                 $res = $db->query($sql);
                 while ($row = $db->fetchRow($res)) {
                     $goods_ids[] = $row['goods_id'];
                 }
 
-                $db->autoReplace($ecs->table('keywords'), array('date' => local_date('Y-m-d'),
+                $db->autoReplace(table('keywords'), array('date' => local_date('Y-m-d'),
                     'searchengine' => 'ecshop', 'keyword' => addslashes(str_replace('%', '', $val)), 'count' => 1), array('count' => 1));
             }
             $keywords .= ')';
@@ -245,7 +245,7 @@ class SearchController extends InitController
         $attr_arg = array();
 
         if (!empty($_REQUEST['attr'])) {
-            $sql = "SELECT goods_id, COUNT(*) AS num FROM " . $ecs->table("goods_attr") . " WHERE 0 ";
+            $sql = "SELECT goods_id, COUNT(*) AS num FROM " . table("goods_attr") . " WHERE 0 ";
             foreach ($_REQUEST['attr'] as $key => $val) {
                 if (is_not_null($val) && is_numeric($key)) {
                     $attr_num++;
@@ -289,7 +289,7 @@ class SearchController extends InitController
             }
         } elseif (isset($_REQUEST['pickout'])) {
             /* 从选购中心进入的链接 */
-            $sql = "SELECT DISTINCT(goods_id) FROM " . $ecs->table('goods_attr');
+            $sql = "SELECT DISTINCT(goods_id) FROM " . table('goods_attr');
             $col = $db->getCol($sql);
             //如果商店没有设置商品属性,那么此检索条件是无效的
             if (!empty($col)) {
@@ -298,7 +298,7 @@ class SearchController extends InitController
         }
 
         /* 获得符合条件的商品总数 */
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('goods') . " AS g " .
+        $sql = "SELECT COUNT(*) FROM " . table('goods') . " AS g " .
             "WHERE g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 $attr_in " .
             "AND (( 1 " . $categories . $keywords . $brand . $min_price . $max_price . $intro . $outstock . " ) " . $tag_where . " )";
         $count = $db->getOne($sql);
@@ -312,8 +312,8 @@ class SearchController extends InitController
         $sql = "SELECT g.goods_id, g.goods_name, g.market_price, g.is_new, g.is_best, g.is_hot, g.shop_price AS org_price, " .
             "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " .
             "g.promote_price, g.promote_start_date, g.promote_end_date, g.goods_thumb, g.goods_img, g.goods_brief, g.goods_type " .
-            "FROM " . $ecs->table('goods') . " AS g " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp " .
+            "FROM " . table('goods') . " AS g " .
+            "LEFT JOIN " . table('member_price') . " AS mp " .
             "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
             "WHERE g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 $attr_in " .
             "AND (( 1 " . $categories . $keywords . $brand . $min_price . $max_price . $intro . $outstock . " ) " . $tag_where . " ) " .
@@ -452,8 +452,8 @@ class SearchController extends InitController
         );
 
         /* 获得可用的商品类型 */
-        $sql = "SELECT t.cat_id, cat_name FROM " . $GLOBALS['ecs']->table('goods_type') . " AS t, " .
-            $GLOBALS['ecs']->table('attribute') . " AS a" .
+        $sql = "SELECT t.cat_id, cat_name FROM " . table('goods_type') . " AS t, " .
+            table('attribute') . " AS a" .
             " WHERE t.cat_id = a.cat_id AND t.enabled = 1 AND a.attr_index > 0 ";
         $cat = $GLOBALS['db']->getAll($sql);
 
@@ -465,7 +465,7 @@ class SearchController extends InitController
             $where = $cat_id > 0 ? ' AND a.cat_id = ' . $cat_id : " AND a.cat_id = " . $cat[0]['cat_id'];
 
             $sql = 'SELECT attr_id, attr_name, attr_input_type, attr_type, attr_values, attr_index, sort_order ' .
-                ' FROM ' . $GLOBALS['ecs']->table('attribute') . ' AS a ' .
+                ' FROM ' . table('attribute') . ' AS a ' .
                 ' WHERE a.attr_index > 0 ' . $where .
                 ' ORDER BY cat_id, sort_order ASC';
             $res = $GLOBALS['db']->query($sql);

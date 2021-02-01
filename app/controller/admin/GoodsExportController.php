@@ -40,7 +40,7 @@ class GoodsExportController extends InitController
         $where = get_export_where_sql($_POST);
 
         $sql = "SELECT g.*, b.brand_name as brandname " .
-            " FROM " . $ecs->table('goods') . " AS g LEFT JOIN " . $ecs->table('brand') . " AS b " .
+            " FROM " . table('goods') . " AS g LEFT JOIN " . table('brand') . " AS b " .
             "ON g.brand_id = b.brand_id" . $where;
 
         $res = $db->query($sql);
@@ -138,7 +138,7 @@ class GoodsExportController extends InitController
         $where = get_export_where_sql($_POST);
 
         $sql = "SELECT g.*, b.brand_name as brandname " .
-            " FROM " . $ecs->table('goods') . " AS g LEFT JOIN " . $ecs->table('brand') . " AS b " .
+            " FROM " . table('goods') . " AS g LEFT JOIN " . table('brand') . " AS b " .
             "ON g.brand_id = b.brand_id" . $where;
 
         $res = $db->query($sql);
@@ -181,7 +181,7 @@ class GoodsExportController extends InitController
             isset($goods_value['is_alone_sale']) && ($goods_value['is_alone_sale'] = $row['is_alone_sale']);
             isset($goods_value['is_real']) && ($goods_value['is_real'] = $row['is_real']);
 
-            $sql = "SELECT `attr_id`, `attr_value` FROM " . $ecs->table('goods_attr') . " WHERE `goods_id` = '" . $row['goods_id'] . "'";
+            $sql = "SELECT `attr_id`, `attr_value` FROM " . table('goods_attr') . " WHERE `goods_id` = '" . $row['goods_id'] . "'";
             $query = $db->query($sql);
             while ($attr = $db->fetchRow($query)) {
                 if (in_array($attr['attr_id'], $goods_fields)) {
@@ -313,7 +313,7 @@ class GoodsExportController extends InitController
      */
     public function get_attributes($cat_id = 0)
     {
-        $sql = "SELECT `attr_id`, `cat_id`, `attr_name` FROM " . $GLOBALS['ecs']->table('attribute') . " ";
+        $sql = "SELECT `attr_id`, `cat_id`, `attr_name` FROM " . table('attribute') . " ";
         if (!empty($cat_id)) {
             $cat_id = intval($cat_id);
             $sql .= " WHERE `cat_id` = '{$cat_id}' ";
@@ -342,7 +342,7 @@ class GoodsExportController extends InitController
             if (isset($lang[$value])) {
                 $tmp_fields[$key] = $lang[$value];
             } else {
-                $tmp_fields[$key] = $GLOBALS['db']->getOne("SELECT `attr_name` FROM " . $GLOBALS['ecs']->table('attribute') . " WHERE `attr_id` = '" . intval($value) . "'");
+                $tmp_fields[$key] = $GLOBALS['db']->getOne("SELECT `attr_name` FROM " . table('attribute') . " WHERE `attr_id` = '" . intval($value) . "'");
             }
         }
         return $tmp_fields;

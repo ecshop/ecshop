@@ -52,7 +52,7 @@ class InitController extends Controller
         $err = new ecs_error('message.htm');
 
         /* 初始化session */
-        $sess = new cls_session($db, $ecs->table('sessions'), $ecs->table('sessions_data'), 'ECSCP_ID');
+        $sess = new cls_session($db, table('sessions'), table('sessions_data'), 'ECSCP_ID');
 
         /* 初始化 action */
         if (!isset($_REQUEST['act'])) {
@@ -130,7 +130,7 @@ class InitController extends Controller
             if (!empty($_COOKIE['ECSCP']['admin_id']) && !empty($_COOKIE['ECSCP']['admin_pass'])) {
                 // 找到了cookie, 验证cookie信息
                 $sql = 'SELECT user_id, user_name, password, add_time, action_list, last_login ' .
-                    ' FROM ' . $ecs->table('admin_user') .
+                    ' FROM ' . table('admin_user') .
                     " WHERE user_id = '" . intval($_COOKIE['ECSCP']['admin_id']) . "'";
                 $row = $db->getRow($sql);
 
@@ -153,7 +153,7 @@ class InitController extends Controller
                         set_admin_session($row['user_id'], $row['user_name'], $row['action_list'], $row['last_time']);
 
                         // 更新最后登录时间和IP
-                        $db->query('UPDATE ' . $ecs->table('admin_user') .
+                        $db->query('UPDATE ' . table('admin_user') .
                             " SET last_login = '" . gmtime() . "', last_ip = '" . real_ip() . "'" .
                             " WHERE user_id = '" . $_SESSION['admin_id'] . "'");
                     } else {

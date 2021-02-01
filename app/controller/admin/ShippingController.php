@@ -10,7 +10,7 @@ class ShippingController extends InitController
     public function initialize()
     {
         parent::initialize();
-        $exc = new exchange($ecs->table('shipping'), $db, 'shipping_code', 'shipping_name');
+        $exc = new exchange(table('shipping'), $db, 'shipping_code', 'shipping_name');
     }
 
     /*------------------------------------------------------ */
@@ -29,7 +29,7 @@ class ShippingController extends InitController
             }
 
             /* 检查该插件是否已经安装 */
-            $sql = "SELECT shipping_id, shipping_name, shipping_desc, insure, support_cod,shipping_order FROM " . $ecs->table('shipping') . " WHERE shipping_code='" . $modules[$i]['code'] . "' ORDER BY shipping_order";
+            $sql = "SELECT shipping_id, shipping_name, shipping_desc, insure, support_cod,shipping_order FROM " . table('shipping') . " WHERE shipping_code='" . $modules[$i]['code'] . "' ORDER BY shipping_order";
             $row = $db->getRow($sql);
 
             if ($row) {
@@ -74,16 +74,16 @@ class ShippingController extends InitController
         include_once(ROOT_PATH . 'includes/modules/shipping/' . $_GET['code'] . '.php');
 
         /* 检查该配送方式是否已经安装 */
-        $sql = "SELECT shipping_id FROM " . $ecs->table('shipping') . " WHERE shipping_code = '$_GET[code]'";
+        $sql = "SELECT shipping_id FROM " . table('shipping') . " WHERE shipping_code = '$_GET[code]'";
         $id = $db->getOne($sql);
 
         if ($id > 0) {
             /* 该配送方式已经安装过, 将该配送方式的状态设置为 enable */
-            $db->query("UPDATE " . $ecs->table('shipping') . " SET enabled = 1 WHERE shipping_code = '$_GET[code]' LIMIT 1");
+            $db->query("UPDATE " . table('shipping') . " SET enabled = 1 WHERE shipping_code = '$_GET[code]' LIMIT 1");
         } else {
             /* 该配送方式没有安装过, 将该配送方式的信息添加到数据库 */
             $insure = empty($modules[0]['insure']) ? 0 : $modules[0]['insure'];
-            $sql = "INSERT INTO " . $ecs->table('shipping') . " (" .
+            $sql = "INSERT INTO " . table('shipping') . " (" .
                 "shipping_code, shipping_name, shipping_desc, insure, support_cod, enabled, print_bg, config_lable, print_model" .
                 ") VALUES (" .
                 "'" . addslashes($modules[0]['code']) . "', '" . addslashes($_LANG[$modules[0]['code']]) . "', '" .
@@ -111,18 +111,18 @@ class ShippingController extends InitController
         admin_priv('ship_manage');
 
         /* 获得该配送方式的ID */
-        $row = $db->getRow("SELECT shipping_id, shipping_name, print_bg FROM " . $ecs->table('shipping') . " WHERE shipping_code='$_GET[code]'");
+        $row = $db->getRow("SELECT shipping_id, shipping_name, print_bg FROM " . table('shipping') . " WHERE shipping_code='$_GET[code]'");
         $shipping_id = $row['shipping_id'];
         $shipping_name = $row['shipping_name'];
 
         /* 删除 shipping_fee 以及 shipping 表中的数据 */
         if ($row) {
-            $all = $db->getCol("SELECT shipping_area_id FROM " . $ecs->table('shipping_area') . " WHERE shipping_id='$shipping_id'");
+            $all = $db->getCol("SELECT shipping_area_id FROM " . table('shipping_area') . " WHERE shipping_id='$shipping_id'");
             $in = db_create_in(join(',', $all));
 
-            $db->query("DELETE FROM " . $ecs->table('area_region') . " WHERE shipping_area_id $in");
-            $db->query("DELETE FROM " . $ecs->table('shipping_area') . " WHERE shipping_id='$shipping_id'");
-            $db->query("DELETE FROM " . $ecs->table('shipping') . " WHERE shipping_id='$shipping_id'");
+            $db->query("DELETE FROM " . table('area_region') . " WHERE shipping_area_id $in");
+            $db->query("DELETE FROM " . table('shipping_area') . " WHERE shipping_id='$shipping_id'");
+            $db->query("DELETE FROM " . table('shipping') . " WHERE shipping_id='$shipping_id'");
 
             //删除上传的非默认快递单
             if (($row['print_bg'] != '') && (!is_print_bg_default($row['print_bg']))) {
@@ -149,7 +149,7 @@ class ShippingController extends InitController
         $shipping_id = !empty($_GET['shipping']) ? intval($_GET['shipping']) : 0;
 
         /* 检查该插件是否已经安装 取值 */
-        $sql = "SELECT * FROM " . $ecs->table('shipping') . " WHERE shipping_id = '$shipping_id' LIMIT 0,1";
+        $sql = "SELECT * FROM " . table('shipping') . " WHERE shipping_id = '$shipping_id' LIMIT 0,1";
         $row = $db->getRow($sql);
         if ($row) {
             include_once(ROOT_PATH . 'includes/modules/shipping/' . $row['shipping_code'] . '.php');
@@ -174,14 +174,14 @@ class ShippingController extends InitController
         $shipping_id = !empty($_POST['shipping']) ? intval($_POST['shipping']) : 0;
 
         /* 取配送代码 */
-        $sql = "SELECT shipping_code FROM " . $ecs->table('shipping') . " WHERE shipping_id = '$shipping_id'";
+        $sql = "SELECT shipping_code FROM " . table('shipping') . " WHERE shipping_id = '$shipping_id'";
         $code = $db->getOne($sql);
 
         $set_modules = true;
         include_once(ROOT_PATH . 'includes/modules/shipping/' . $code . '.php');
 
         /* 恢复默认 */
-        $db->query("UPDATE " . $ecs->table('shipping') . " SET print_bg = '" . addslashes($modules[0]['print_bg']) . "',  config_lable = '" . addslashes($modules[0]['config_lable']) . "' WHERE shipping_code = '$code' LIMIT 1");
+        $db->query("UPDATE " . table('shipping') . " SET print_bg = '" . addslashes($modules[0]['print_bg']) . "',  config_lable = '" . addslashes($modules[0]['config_lable']) . "' WHERE shipping_code = '$code' LIMIT 1");
 
         $url = "shipping.php?act=edit_print_template&shipping=$shipping_id";
         return redirect($url);
@@ -224,7 +224,7 @@ class ShippingController extends InitController
         }
 
         //保存
-        $sql = "UPDATE " . $ecs->table('shipping') . " SET print_bg = '$src' WHERE shipping_id = '$shipping_id'";
+        $sql = "UPDATE " . table('shipping') . " SET print_bg = '$src' WHERE shipping_id = '$shipping_id'";
         $res = $db->query($sql);
         if ($res) {
             echo '<script language="javascript">';
@@ -246,14 +246,14 @@ class ShippingController extends InitController
         $shipping_id = json_str_iconv($shipping_id);
 
         /* 检查该插件是否已经安装 取值 */
-        $sql = "SELECT print_bg FROM " . $ecs->table('shipping') . " WHERE shipping_id = '$shipping_id' LIMIT 0,1";
+        $sql = "SELECT print_bg FROM " . table('shipping') . " WHERE shipping_id = '$shipping_id' LIMIT 0,1";
         $row = $db->getRow($sql);
         if ($row) {
             if (($row['print_bg'] != '') && (!is_print_bg_default($row['print_bg']))) {
                 @unlink(ROOT_PATH . $row['print_bg']);
             }
 
-            $sql = "UPDATE " . $ecs->table('shipping') . " SET print_bg = '' WHERE shipping_id = '$shipping_id'";
+            $sql = "UPDATE " . table('shipping') . " SET print_bg = '' WHERE shipping_id = '$shipping_id'";
             $res = $db->query($sql);
         } else {
             return make_json_error($_LANG['js_languages']['upload_del_falid']);
@@ -273,7 +273,7 @@ class ShippingController extends InitController
         $shipping_id = !empty($_GET['shipping']) ? intval($_GET['shipping']) : 0;
 
         /* 检查该插件是否已经安装 */
-        $sql = "SELECT * FROM " . $ecs->table('shipping') . " WHERE shipping_id=$shipping_id";
+        $sql = "SELECT * FROM " . table('shipping') . " WHERE shipping_id=$shipping_id";
         $row = $db->getRow($sql);
         if ($row) {
             include_once(ROOT_PATH . 'includes/modules/shipping/' . $row['shipping_code'] . '.php');
@@ -311,12 +311,12 @@ class ShippingController extends InitController
         /* 处理不同模式编辑的表单 */
         if ($print_model == 2) {
             //所见即所得模式
-            $db->query("UPDATE " . $ecs->table('shipping') . " SET config_lable = '" . $_POST['config_lable'] . "', print_model = '$print_model'  WHERE shipping_id = '$shipping_id'");
+            $db->query("UPDATE " . table('shipping') . " SET config_lable = '" . $_POST['config_lable'] . "', print_model = '$print_model'  WHERE shipping_id = '$shipping_id'");
         } elseif ($print_model == 1) {
             //代码模式
             $template = !empty($_POST['shipping_print']) ? $_POST['shipping_print'] : '';
 
-            $db->query("UPDATE " . $ecs->table('shipping') . " SET shipping_print = '" . $template . "', print_model = '$print_model' WHERE shipping_id = '$shipping_id'");
+            $db->query("UPDATE " . table('shipping') . " SET shipping_print = '" . $template . "', print_model = '$print_model' WHERE shipping_id = '$shipping_id'");
         }
 
         /* 记录管理员操作 */

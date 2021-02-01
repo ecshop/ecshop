@@ -44,21 +44,21 @@ class AttentionListController extends InitController
         $pri = (intval($_REQUEST['pri']) == 1) ? 1 : 0;
         $start = empty($_GET['start']) ? 0 : (int)$_GET['start'];
 
-        $sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('goods') . " g"
-            . " LEFT JOIN " . $GLOBALS['ecs']->table('collect_goods') . " c"
+        $sql = "SELECT count(*) FROM " . table('goods') . " g"
+            . " LEFT JOIN " . table('collect_goods') . " c"
             . " ON g.goods_id = c.goods_id"
-            . " LEFT JOIN " . $GLOBALS['ecs']->table('users') . " u"
+            . " LEFT JOIN " . table('users') . " u"
             . " ON c.user_id = u.user_id" .
             " WHERE c.is_attention = 1 AND g.is_delete = 0 AND c.goods_id = '$id'";
 
         $count = $db->getOne($sql);
 
         if ($count > $start) {
-            $sql = "SELECT u.user_name, u.email, g.goods_name, g.goods_id FROM " . $GLOBALS['ecs']->table('goods') . " g LEFT JOIN " . $GLOBALS['ecs']->table('collect_goods') . " c ON g.goods_id = c.goods_id LEFT JOIN " . $GLOBALS['ecs']->table('users') . " u ON c.user_id = u.user_id" .
+            $sql = "SELECT u.user_name, u.email, g.goods_name, g.goods_id FROM " . table('goods') . " g LEFT JOIN " . table('collect_goods') . " c ON g.goods_id = c.goods_id LEFT JOIN " . table('users') . " u ON c.user_id = u.user_id" .
                 " WHERE c.is_attention = 1 AND g.is_delete = 0 AND c.goods_id = '$id' LIMIT $start,100";
             $query = $db->query($sql);
             $add = '';
-            $template = $db->getRow("SELECT * FROM " . $ecs->table('mail_templates') . " WHERE  template_code = 'attention_list' AND type = 'template'");
+            $template = $db->getRow("SELECT * FROM " . table('mail_templates') . " WHERE  template_code = 'attention_list' AND type = 'template'");
 
             $i = 0;
             while ($rt = $db->fetch_array($query)) {
@@ -70,7 +70,7 @@ class AttentionListController extends InitController
                 $i++;
             }
             if ($add) {
-                $sql = "INSERT INTO " . $ecs->table('email_sendlist') . " (email,template_id,email_content,pri,last_send) VALUES " . $add;
+                $sql = "INSERT INTO " . table('email_sendlist') . " (email,template_id,email_content,pri,last_send) VALUES " . $add;
                 $db->query($sql);
             }
             if ($i == 100) {
@@ -93,22 +93,22 @@ class AttentionListController extends InitController
         $pri = (intval($_REQUEST['pri']) == 1) ? 1 : 0;
         $start = empty($_GET['start']) ? 0 : (int)$_GET['start'];
 
-        $sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('goods') . " g"
-            . " LEFT JOIN " . $GLOBALS['ecs']->table('collect_goods') . " c"
+        $sql = "SELECT count(*) FROM " . table('goods') . " g"
+            . " LEFT JOIN " . table('collect_goods') . " c"
             . " ON g.goods_id = c.goods_id"
-            . " LEFT JOIN " . $GLOBALS['ecs']->table('users') . " u"
+            . " LEFT JOIN " . table('users') . " u"
             . " ON c.user_id = u.user_id" .
             " WHERE c.is_attention = 1 AND g.is_delete = 0 AND g.last_update >= '$date'";
 
         $count = $db->getOne($sql);
 
         if ($count > $start) {
-            $sql = "SELECT u.user_name, u.email, g.goods_name, g.goods_id FROM " . $GLOBALS['ecs']->table('goods') . " g LEFT JOIN " . $GLOBALS['ecs']->table('collect_goods') . " c ON g.goods_id = c.goods_id LEFT JOIN " . $GLOBALS['ecs']->table('users') . " u ON c.user_id = u.user_id" .
+            $sql = "SELECT u.user_name, u.email, g.goods_name, g.goods_id FROM " . table('goods') . " g LEFT JOIN " . table('collect_goods') . " c ON g.goods_id = c.goods_id LEFT JOIN " . table('users') . " u ON c.user_id = u.user_id" .
                 " WHERE c.is_attention = 1 AND g.is_delete = 0 AND g.last_update >= '$date' LIMIT $start,100";
             $query = $db->query($sql);
             $add = '';
 
-            $template = $db->getRow("SELECT * FROM " . $ecs->table('mail_templates') . " WHERE  template_code = 'attention_list' AND type = 'template'");
+            $template = $db->getRow("SELECT * FROM " . table('mail_templates') . " WHERE  template_code = 'attention_list' AND type = 'template'");
 
             $i = 0;
             while ($rt = $db->fetch_array($query)) {
@@ -122,7 +122,7 @@ class AttentionListController extends InitController
                 $i++;
             }
             if ($add) {
-                $sql = "INSERT INTO " . $ecs->table('email_sendlist') . " (email,template_id,email_content,pri,last_send) VALUES " . $add;
+                $sql = "INSERT INTO " . table('email_sendlist') . " (email,template_id,email_content,pri,last_send) VALUES " . $add;
                 $db->query($sql);
             }
             if ($i == 100) {
@@ -153,8 +153,8 @@ class AttentionListController extends InitController
             $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'last_update' : trim($_REQUEST['sort_by']);
             $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-            $sql = "SELECT COUNT(DISTINCT c.goods_id) FROM " . $GLOBALS['ecs']->table('collect_goods') . " c " .
-                "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " g ON c.goods_id = g.goods_id " .
+            $sql = "SELECT COUNT(DISTINCT c.goods_id) FROM " . table('collect_goods') . " c " .
+                "LEFT JOIN " . table('goods') . " g ON c.goods_id = g.goods_id " .
                 $where;
 
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
@@ -163,8 +163,8 @@ class AttentionListController extends InitController
             $filter = page_and_size($filter);
 
             /* 查询 */
-            $sql = "SELECT DISTINCT c.goods_id, g.goods_name, g.last_update FROM " . $GLOBALS['ecs']->table('collect_goods') . " c " .
-                "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " g ON c.goods_id = g.goods_id " .
+            $sql = "SELECT DISTINCT c.goods_id, g.goods_name, g.last_update FROM " . table('collect_goods') . " c " .
+                "LEFT JOIN " . table('goods') . " g ON c.goods_id = g.goods_id " .
                 $where .
                 " ORDER BY " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
                 " LIMIT " . $filter['start'] . ",$filter[page_size]";

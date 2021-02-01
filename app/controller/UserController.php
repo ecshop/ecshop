@@ -61,7 +61,7 @@ class UserController extends InitController
             $position = $this->assign_ur_here(0, $_LANG['user_center']);
             $this->assign('page_title', $position['title']); // 页面标题
             $this->assign('ur_here', $position['ur_here']);
-            $sql = "SELECT value FROM " . $ecs->table('shop_config') . " WHERE id = 419";
+            $sql = "SELECT value FROM " . table('shop_config') . " WHERE id = 419";
             $row = $db->getRow($sql);
             $car_off = $row['value'];
             $this->assign('car_off', $car_off);
@@ -99,7 +99,7 @@ class UserController extends InitController
         }
 
         /* 取出注册扩展字段 */
-        $sql = 'SELECT * FROM ' . $ecs->table('reg_fields') . ' WHERE type < 2 AND display = 1 ORDER BY dis_order, id';
+        $sql = 'SELECT * FROM ' . table('reg_fields') . ' WHERE type < 2 AND display = 1 ORDER BY dis_order, id';
         $extend_info_list = $db->getAll($sql);
         $this->assign('extend_info_list', $extend_info_list);
 
@@ -171,7 +171,7 @@ class UserController extends InitController
 
             if (register($username, $password, $email, $other) !== false) {
                 /*把新注册用户的扩展信息插入数据库*/
-                $sql = 'SELECT id FROM ' . $ecs->table('reg_fields') . ' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有自定义扩展字段的id
+                $sql = 'SELECT id FROM ' . table('reg_fields') . ' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有自定义扩展字段的id
                 $fields_arr = $db->getAll($sql);
 
                 $extend_field_str = '';    //生成扩展字段的内容字符串
@@ -185,13 +185,13 @@ class UserController extends InitController
                 $extend_field_str = substr($extend_field_str, 0, -1);
 
                 if ($extend_field_str) {      //插入注册扩展数据
-                    $sql = 'INSERT INTO ' . $ecs->table('reg_extend_info') . ' (`user_id`, `reg_field_id`, `content`) VALUES' . $extend_field_str;
+                    $sql = 'INSERT INTO ' . table('reg_extend_info') . ' (`user_id`, `reg_field_id`, `content`) VALUES' . $extend_field_str;
                     $db->query($sql);
                 }
 
                 /* 写入密码提示问题和答案 */
                 if (!empty($passwd_answer) && !empty($sel_question)) {
-                    $sql = 'UPDATE ' . $ecs->table('users') . " SET `passwd_question`='$sel_question', `passwd_answer`='$passwd_answer'  WHERE `user_id`='" . $_SESSION['user_id'] . "'";
+                    $sql = 'UPDATE ' . table('users') . " SET `passwd_question`='$sel_question', `passwd_answer`='$passwd_answer'  WHERE `user_id`='" . $_SESSION['user_id'] . "'";
                     $db->query($sql);
                 }
                 /* 判断是否需要自动发送注册邮件 */
@@ -212,9 +212,9 @@ class UserController extends InitController
         if ($hash) {
             $id = register_hash('decode', $hash);
             if ($id > 0) {
-                $sql = "UPDATE " . $ecs->table('users') . " SET is_validated = 1 WHERE user_id='$id'";
+                $sql = "UPDATE " . table('users') . " SET is_validated = 1 WHERE user_id='$id'";
                 $db->query($sql);
-                $sql = 'SELECT user_name, email FROM ' . $ecs->table('users') . " WHERE user_id = '$id'";
+                $sql = 'SELECT user_name, email FROM ' . table('users') . " WHERE user_id = '$id'";
                 $row = $db->getRow($sql);
                 return $this->show_message(sprintf($_LANG['validate_ok'], $row['user_name'], $row['email']), $_LANG['profile_lnk'], 'user.php');
             }
@@ -357,11 +357,11 @@ class UserController extends InitController
         $user_info = get_profile($user_id);
 
         /* 取出注册扩展字段 */
-        $sql = 'SELECT * FROM ' . $ecs->table('reg_fields') . ' WHERE type < 2 AND display = 1 ORDER BY dis_order, id';
+        $sql = 'SELECT * FROM ' . table('reg_fields') . ' WHERE type < 2 AND display = 1 ORDER BY dis_order, id';
         $extend_info_list = $db->getAll($sql);
 
         $sql = 'SELECT reg_field_id, content ' .
-            'FROM ' . $ecs->table('reg_extend_info') .
+            'FROM ' . table('reg_extend_info') .
             " WHERE user_id = $user_id";
         $extend_info_arr = $db->getAll($sql);
 
@@ -415,18 +415,18 @@ class UserController extends InitController
         $passwd_answer = isset($_POST['passwd_answer']) ? compile_str(trim($_POST['passwd_answer'])) : '';
 
         /* 更新用户扩展字段的数据 */
-        $sql = 'SELECT id FROM ' . $ecs->table('reg_fields') . ' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有扩展字段的id
+        $sql = 'SELECT id FROM ' . table('reg_fields') . ' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有扩展字段的id
         $fields_arr = $db->getAll($sql);
 
         foreach ($fields_arr as $val) {       //循环更新扩展用户信息
             $extend_field_index = 'extend_field' . $val['id'];
             if (isset($_POST[$extend_field_index])) {
                 $temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr(htmlspecialchars($_POST[$extend_field_index]), 0, 99) : htmlspecialchars($_POST[$extend_field_index]);
-                $sql = 'SELECT * FROM ' . $ecs->table('reg_extend_info') . "  WHERE reg_field_id = '$val[id]' AND user_id = '$user_id'";
+                $sql = 'SELECT * FROM ' . table('reg_extend_info') . "  WHERE reg_field_id = '$val[id]' AND user_id = '$user_id'";
                 if ($db->getOne($sql)) {      //如果之前没有记录，则插入
-                    $sql = 'UPDATE ' . $ecs->table('reg_extend_info') . " SET content = '$temp_field_content' WHERE reg_field_id = '$val[id]' AND user_id = '$user_id'";
+                    $sql = 'UPDATE ' . table('reg_extend_info') . " SET content = '$temp_field_content' WHERE reg_field_id = '$val[id]' AND user_id = '$user_id'";
                 } else {
-                    $sql = 'INSERT INTO ' . $ecs->table('reg_extend_info') . " (`user_id`, `reg_field_id`, `content`) VALUES ('$user_id', '$val[id]', '$temp_field_content')";
+                    $sql = 'INSERT INTO ' . table('reg_extend_info') . " (`user_id`, `reg_field_id`, `content`) VALUES ('$user_id', '$val[id]', '$temp_field_content')";
                 }
                 $db->query($sql);
             }
@@ -434,7 +434,7 @@ class UserController extends InitController
 
         /* 写入密码提示问题和答案 */
         if (!empty($passwd_answer) && !empty($sel_question)) {
-            $sql = 'UPDATE ' . $ecs->table('users') . " SET `passwd_question`='$sel_question', `passwd_answer`='$passwd_answer'  WHERE `user_id`='" . $_SESSION['user_id'] . "'";
+            $sql = 'UPDATE ' . table('users') . " SET `passwd_question`='$sel_question', `passwd_answer`='$passwd_answer'  WHERE `user_id`='" . $_SESSION['user_id'] . "'";
             $db->query($sql);
         }
 
@@ -514,7 +514,7 @@ class UserController extends InitController
         }
 
         //取出会员密码问题和答案
-        $sql = 'SELECT user_id, user_name, passwd_question, passwd_answer FROM ' . $ecs->table('users') . " WHERE user_name = '" . $user_name . "'";
+        $sql = 'SELECT user_id, user_name, passwd_question, passwd_answer FROM ' . table('users') . " WHERE user_name = '" . $user_name . "'";
         $user_question_arr = $db->getRow($sql);
 
         //如果没有设置密码问题，给出错误提示
@@ -612,7 +612,7 @@ class UserController extends InitController
 
         if (($user_info && (!empty($code) && md5($user_info['user_id'] . $_CFG['hash_code'] . $user_info['reg_time']) == $code)) || ($_SESSION['user_id'] > 0 && $_SESSION['user_id'] == $user_id && $user->check_user($_SESSION['user_name'], $old_password))) {
             if ($user->edit_user(array('username' => (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']), 'old_password' => $old_password, 'password' => $new_password), empty($code) ? 0 : 1)) {
-                $sql = "UPDATE " . $ecs->table('users') . "SET `ec_salt`='0' WHERE user_id= '" . $user_id . "'";
+                $sql = "UPDATE " . table('users') . "SET `ec_salt`='0' WHERE user_id= '" . $user_id . "'";
                 $db->query($sql);
                 $user->logout();
                 return $this->show_message($_LANG['edit_password_success'], $_LANG['relogin_lnk'], 'user.php?act=login', 'info');
@@ -640,7 +640,7 @@ class UserController extends InitController
 
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 
-        $record_count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('order_info') . " WHERE user_id = '$user_id'");
+        $record_count = $db->getOne("SELECT COUNT(*) FROM " . table('order_info') . " WHERE user_id = '$user_id'");
 
         $pager = get_pager('user.php', array('act' => $action), $record_count, $page);
 
@@ -756,7 +756,7 @@ class UserController extends InitController
         }
 
         /* 获取默认收货ID */
-        $address_id = $db->getOne("SELECT address_id FROM " . $ecs->table('users') . " WHERE user_id='$user_id'");
+        $address_id = $db->getOne("SELECT address_id FROM " . table('users') . " WHERE user_id='$user_id'");
 
         //赋值于模板
         $this->assign('real_goods_count', 1);
@@ -814,7 +814,7 @@ class UserController extends InitController
 
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 
-        $record_count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('collect_goods') .
+        $record_count = $db->getOne("SELECT COUNT(*) FROM " . table('collect_goods') .
             " WHERE user_id='$user_id' ORDER BY add_time DESC");
 
         $pager = get_pager('user.php', array('act' => $action), $record_count, $page);
@@ -836,7 +836,7 @@ class UserController extends InitController
         $collection_id = isset($_GET['collection_id']) ? intval($_GET['collection_id']) : 0;
 
         if ($collection_id > 0) {
-            $db->query('DELETE FROM ' . $ecs->table('collect_goods') . " WHERE rec_id='$collection_id' AND user_id ='$user_id'");
+            $db->query('DELETE FROM ' . table('collect_goods') . " WHERE rec_id='$collection_id' AND user_id ='$user_id'");
         }
 
         return redirect("user.php?act=collection_list");
@@ -845,7 +845,7 @@ class UserController extends InitController
     {
         $rec_id = (int)$_GET['rec_id'];
         if ($rec_id) {
-            $db->query('UPDATE ' . $ecs->table('collect_goods') . "SET is_attention = 1 WHERE rec_id='$rec_id' AND user_id ='$user_id'");
+            $db->query('UPDATE ' . table('collect_goods') . "SET is_attention = 1 WHERE rec_id='$rec_id' AND user_id ='$user_id'");
         }
         return redirect("user.php?act=collection_list");
     } /* 取消关注商品 */
@@ -853,7 +853,7 @@ class UserController extends InitController
     {
         $rec_id = (int)$_GET['rec_id'];
         if ($rec_id) {
-            $db->query('UPDATE ' . $ecs->table('collect_goods') . "SET is_attention = 0 WHERE rec_id='$rec_id' AND user_id ='$user_id'");
+            $db->query('UPDATE ' . table('collect_goods') . "SET is_attention = 0 WHERE rec_id='$rec_id' AND user_id ='$user_id'");
         }
         return redirect("user.php?act=collection_list");
     } /* 显示留言列表 */
@@ -867,12 +867,12 @@ class UserController extends InitController
 
         /* 获取用户留言的数量 */
         if ($order_id) {
-            $sql = "SELECT COUNT(*) FROM " . $ecs->table('feedback') .
+            $sql = "SELECT COUNT(*) FROM " . table('feedback') .
                 " WHERE parent_id = 0 AND order_id = '$order_id' AND user_id = '$user_id'";
-            $order_info = $db->getRow("SELECT * FROM " . $ecs->table('order_info') . " WHERE order_id = '$order_id' AND user_id = '$user_id'");
+            $order_info = $db->getRow("SELECT * FROM " . table('order_info') . " WHERE order_id = '$order_id' AND user_id = '$user_id'");
             $order_info['url'] = 'user.php?act=order_detail&order_id=' . $order_id;
         } else {
-            $sql = "SELECT COUNT(*) FROM " . $ecs->table('feedback') .
+            $sql = "SELECT COUNT(*) FROM " . table('feedback') .
                 " WHERE parent_id = 0 AND user_id = '$user_id' AND user_name = '" . $_SESSION['user_name'] . "' AND order_id=0";
         }
 
@@ -896,7 +896,7 @@ class UserController extends InitController
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 
         /* 获取用户留言的数量 */
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('comment') .
+        $sql = "SELECT COUNT(*) FROM " . table('comment') .
             " WHERE parent_id = 0 AND user_id = '$user_id'";
         $record_count = $db->getOne($sql);
         $pager = get_pager('user.php', array('act' => $action), $record_count, $page, 5);
@@ -951,8 +951,8 @@ class UserController extends InitController
 
         /* 获取缺货登记的数量 */
         $sql = "SELECT COUNT(*) " .
-            "FROM " . $ecs->table('booking_goods') . " AS bg, " .
-            $ecs->table('goods') . " AS g " .
+            "FROM " . table('booking_goods') . " AS bg, " .
+            table('goods') . " AS g " .
             "WHERE bg.goods_id = g.goods_id AND user_id = '$user_id'";
         $record_count = $db->getOne($sql);
         $pager = get_pager('user.php', array('act' => $action), $record_count, $page);
@@ -976,8 +976,8 @@ class UserController extends InitController
 
             $attr_list = array();
             $sql = "SELECT a.attr_name, g.attr_value " .
-                "FROM " . $ecs->table('goods_attr') . " AS g, " .
-                $ecs->table('attribute') . " AS a " .
+                "FROM " . table('goods_attr') . " AS g, " .
+                table('attribute') . " AS a " .
                 "WHERE g.attr_id = a.attr_id " .
                 "AND g.goods_attr_id " . db_create_in($goods_attr_id);
             $res = $db->query($sql);
@@ -1069,7 +1069,7 @@ class UserController extends InitController
         $account_type = 'user_money';
 
         /* 获取记录条数 */
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('account_log') .
+        $sql = "SELECT COUNT(*) FROM " . table('account_log') .
             " WHERE user_id = '$user_id'" .
             " AND $account_type <> 0 ";
         $record_count = $db->getOne($sql);
@@ -1085,7 +1085,7 @@ class UserController extends InitController
 
         //获取余额记录
         $account_log = array();
-        $sql = "SELECT * FROM " . $ecs->table('account_log') .
+        $sql = "SELECT * FROM " . table('account_log') .
             " WHERE user_id = '$user_id'" .
             " AND $account_type <> 0 " .
             " ORDER BY log_id DESC";
@@ -1114,7 +1114,7 @@ class UserController extends InitController
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 
         /* 获取记录条数 */
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('user_account') .
+        $sql = "SELECT COUNT(*) FROM " . table('user_account') .
             " WHERE user_id = '$user_id'" .
             " AND process_type " . db_create_in(array(SURPLUS_SAVE, SURPLUS_RETURN));
         $record_count = $db->getOne($sql);
@@ -1287,9 +1287,9 @@ class UserController extends InitController
             $order['order_amount'] = $order['surplus_amount'] + $payment_info['pay_fee'];
 
             //如果支付费用改变了，也要相应的更改pay_log表的order_amount
-            $order_amount = $db->getOne("SELECT order_amount FROM " . $ecs->table('pay_log') . " WHERE log_id = '$order[log_id]'");
+            $order_amount = $db->getOne("SELECT order_amount FROM " . table('pay_log') . " WHERE log_id = '$order[log_id]'");
             if ($order_amount <> $order['order_amount']) {
-                $db->query("UPDATE " . $ecs->table('pay_log') .
+                $db->query("UPDATE " . table('pay_log') .
                     " SET order_amount = '$order[order_amount]' WHERE log_id = '$order[log_id]'");
             }
 
@@ -1356,7 +1356,7 @@ class UserController extends InitController
             die($json->encode($result));
         } else {
             /* 检查是否已经存在于用户的收藏夹 */
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('collect_goods') .
+            $sql = "SELECT COUNT(*) FROM " . table('collect_goods') .
                 " WHERE user_id='$_SESSION[user_id]' AND goods_id = '$goods_id'";
             if ($GLOBALS['db']->getOne($sql) > 0) {
                 $result['error'] = 1;
@@ -1364,7 +1364,7 @@ class UserController extends InitController
                 die($json->encode($result));
             } else {
                 $time = gmtime();
-                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('collect_goods') . " (user_id, goods_id, add_time)" .
+                $sql = "INSERT INTO " . table('collect_goods') . " (user_id, goods_id, add_time)" .
                     "VALUES ('$_SESSION[user_id]', '$goods_id', '$time')";
 
                 if ($GLOBALS['db']->query($sql) === false) {
@@ -1385,14 +1385,14 @@ class UserController extends InitController
         $order_id = empty($_GET['order_id']) ? 0 : intval($_GET['order_id']);
 
         if ($id > 0) {
-            $sql = 'SELECT user_id, message_img FROM ' . $ecs->table('feedback') . " WHERE msg_id = '$id' LIMIT 1";
+            $sql = 'SELECT user_id, message_img FROM ' . table('feedback') . " WHERE msg_id = '$id' LIMIT 1";
             $row = $db->getRow($sql);
             if ($row && $row['user_id'] == $user_id) {
                 /* 验证通过，删除留言，回复，及相应文件 */
                 if ($row['message_img']) {
                     @unlink(ROOT_PATH . DATA_DIR . '/feedbackimg/' . $row['message_img']);
                 }
-                $sql = "DELETE FROM " . $ecs->table('feedback') . " WHERE msg_id = '$id' OR parent_id = '$id'";
+                $sql = "DELETE FROM " . table('feedback') . " WHERE msg_id = '$id' OR parent_id = '$id'";
                 $db->query($sql);
             }
         }
@@ -1402,7 +1402,7 @@ class UserController extends InitController
     {
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         if ($id > 0) {
-            $sql = "DELETE FROM " . $ecs->table('comment') . " WHERE comment_id = '$id' AND user_id = '$user_id'";
+            $sql = "DELETE FROM " . table('comment') . " WHERE comment_id = '$id' AND user_id = '$user_id'";
             $db->query($sql);
         }
         return redirect("user.php?act=comment_list");
@@ -1438,7 +1438,7 @@ class UserController extends InitController
         }
 
         /* 检查订单是否属于该用户 */
-        $order_user = $db->getOne("SELECT user_id FROM " . $ecs->table('order_info') . " WHERE order_id = '$order_id'");
+        $order_user = $db->getOne("SELECT user_id FROM " . table('order_info') . " WHERE order_id = '$order_id'");
         if (empty($order_user)) {
             $result['error'] = 1;
             $result['message'] = $_LANG['order_exist'];
@@ -1606,7 +1606,7 @@ class UserController extends InitController
         $pay_fee = pay_fee($pay_id, $order_amount);
         $order_amount += $pay_fee;
 
-        $sql = "UPDATE " . $ecs->table('order_info') .
+        $sql = "UPDATE " . table('order_info') .
             " SET pay_id='$pay_id', pay_name='$payment_info[pay_name]', pay_fee='$pay_fee', order_amount='$order_amount'" .
             " WHERE order_id = '$order_id'";
         $db->query($sql);
@@ -1639,7 +1639,7 @@ class UserController extends InitController
     {
 
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
-        $record_count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('user_bonus') . " WHERE user_id = '$user_id'");
+        $record_count = $db->getOne("SELECT COUNT(*) FROM " . table('user_bonus') . " WHERE user_id = '$user_id'");
 
         $pager = get_pager('user.php', array('act' => $action), $record_count, $page);
         $bonus = get_user_bouns_list($user_id, $pager['size'], $pager['start']);
@@ -1681,7 +1681,7 @@ class UserController extends InitController
                 for ($i = 1; $i <= $num; $i++) {
                     $count = 0;
                     if ($up_uid) {
-                        $sql = "SELECT user_id FROM " . $ecs->table('users') . " WHERE parent_id IN($up_uid)";
+                        $sql = "SELECT user_id FROM " . table('users') . " WHERE parent_id IN($up_uid)";
                         $query = $db->query($sql);
                         $up_uid = '';
                         while ($rt = $db->fetch_array($query)) {
@@ -1698,14 +1698,14 @@ class UserController extends InitController
                 }
                 $this->assign('affdb', $affdb);
 
-                $sqlcount = "SELECT count(*) FROM " . $ecs->table('order_info') . " o" .
-                    " LEFT JOIN" . $ecs->table('users') . " u ON o.user_id = u.user_id" .
-                    " LEFT JOIN " . $ecs->table('affiliate_log') . " a ON o.order_id = a.order_id" .
+                $sqlcount = "SELECT count(*) FROM " . table('order_info') . " o" .
+                    " LEFT JOIN" . table('users') . " u ON o.user_id = u.user_id" .
+                    " LEFT JOIN " . table('affiliate_log') . " a ON o.order_id = a.order_id" .
                     " WHERE o.user_id > 0 AND (u.parent_id IN ($all_uid) AND o.is_separate = 0 OR a.user_id = '$user_id' AND o.is_separate > 0)";
 
-                $sql = "SELECT o.*, a.log_id, a.user_id as suid,  a.user_name as auser, a.money, a.point, a.separate_type FROM " . $ecs->table('order_info') . " o" .
-                    " LEFT JOIN" . $ecs->table('users') . " u ON o.user_id = u.user_id" .
-                    " LEFT JOIN " . $ecs->table('affiliate_log') . " a ON o.order_id = a.order_id" .
+                $sql = "SELECT o.*, a.log_id, a.user_id as suid,  a.user_name as auser, a.money, a.point, a.separate_type FROM " . table('order_info') . " o" .
+                    " LEFT JOIN" . table('users') . " u ON o.user_id = u.user_id" .
+                    " LEFT JOIN " . table('affiliate_log') . " a ON o.order_id = a.order_id" .
                     " WHERE o.user_id > 0 AND (u.parent_id IN ($all_uid) AND o.is_separate = 0 OR a.user_id = '$user_id' AND o.is_separate > 0)" .
                     " ORDER BY order_id DESC";
 
@@ -1726,15 +1726,15 @@ class UserController extends InitController
                 $affiliate_intro = nl2br(sprintf($_LANG['affiliate_intro'][$affiliate['config']['separate_by']], $affiliate['config']['expire'], $_LANG['expire_unit'][$affiliate['config']['expire_unit']], $affiliate['config']['level_register_all'], $affiliate['config']['level_register_up'], $affiliate['config']['level_money_all'], $affiliate['config']['level_point_all']));
             } else {
                 //推荐订单分成
-                $sqlcount = "SELECT count(*) FROM " . $ecs->table('order_info') . " o" .
-                    " LEFT JOIN" . $ecs->table('users') . " u ON o.user_id = u.user_id" .
-                    " LEFT JOIN " . $ecs->table('affiliate_log') . " a ON o.order_id = a.order_id" .
+                $sqlcount = "SELECT count(*) FROM " . table('order_info') . " o" .
+                    " LEFT JOIN" . table('users') . " u ON o.user_id = u.user_id" .
+                    " LEFT JOIN " . table('affiliate_log') . " a ON o.order_id = a.order_id" .
                     " WHERE o.user_id > 0 AND (o.parent_id = '$user_id' AND o.is_separate = 0 OR a.user_id = '$user_id' AND o.is_separate > 0)";
 
 
-                $sql = "SELECT o.*, a.log_id,a.user_id as suid, a.user_name as auser, a.money, a.point, a.separate_type,u.parent_id as up FROM " . $ecs->table('order_info') . " o" .
-                    " LEFT JOIN" . $ecs->table('users') . " u ON o.user_id = u.user_id" .
-                    " LEFT JOIN " . $ecs->table('affiliate_log') . " a ON o.order_id = a.order_id" .
+                $sql = "SELECT o.*, a.log_id,a.user_id as suid, a.user_name as auser, a.money, a.point, a.separate_type,u.parent_id as up FROM " . table('order_info') . " o" .
+                    " LEFT JOIN" . table('users') . " u ON o.user_id = u.user_id" .
+                    " LEFT JOIN " . table('affiliate_log') . " a ON o.order_id = a.order_id" .
                     " WHERE o.user_id > 0 AND (o.parent_id = '$user_id' AND o.is_separate = 0 OR a.user_id = '$user_id' AND o.is_separate > 0)" .
                     " ORDER BY order_id DESC";
 
@@ -1847,11 +1847,11 @@ class UserController extends InitController
             $info = sprintf($_LANG['email_invalid'], $email);
             die($info);
         }
-        $ck = $db->getRow("SELECT * FROM " . $ecs->table('email_list') . " WHERE email = '$email'");
+        $ck = $db->getRow("SELECT * FROM " . table('email_list') . " WHERE email = '$email'");
         if ($job == 'add') {
             if (empty($ck)) {
                 $hash = substr(md5(time()), 1, 10);
-                $sql = "INSERT INTO " . $ecs->table('email_list') . " (email, stat, hash) VALUES ('$email', 0, '$hash')";
+                $sql = "INSERT INTO " . table('email_list') . " (email, stat, hash) VALUES ('$email', 0, '$hash')";
                 $db->query($sql);
                 $info = $_LANG['email_check'];
                 $url = $ecs->url() . "user.php?act=email_list&job=add_check&hash=$hash&email=$email";
@@ -1860,7 +1860,7 @@ class UserController extends InitController
                 $info = sprintf($_LANG['email_alreadyin_list'], $email);
             } else {
                 $hash = substr(md5(time()), 1, 10);
-                $sql = "UPDATE " . $ecs->table('email_list') . "SET hash = '$hash' WHERE email = '$email'";
+                $sql = "UPDATE " . table('email_list') . "SET hash = '$hash' WHERE email = '$email'";
                 $db->query($sql);
                 $info = $_LANG['email_re_check'];
                 $url = $ecs->url() . "user.php?act=email_list&job=add_check&hash=$hash&email=$email";
@@ -1872,7 +1872,7 @@ class UserController extends InitController
                 $info = sprintf($_LANG['email_notin_list'], $email);
             } elseif ($ck['stat'] == 1) {
                 $hash = substr(md5(time()), 1, 10);
-                $sql = "UPDATE " . $ecs->table('email_list') . "SET hash = '$hash' WHERE email = '$email'";
+                $sql = "UPDATE " . table('email_list') . "SET hash = '$hash' WHERE email = '$email'";
                 $db->query($sql);
                 $info = $_LANG['email_check'];
                 $url = $ecs->url() . "user.php?act=email_list&job=del_check&hash=$hash&email=$email";
@@ -1888,7 +1888,7 @@ class UserController extends InitController
                 $info = $_LANG['email_checked'];
             } else {
                 if ($_GET['hash'] == $ck['hash']) {
-                    $sql = "UPDATE " . $ecs->table('email_list') . "SET stat = 1 WHERE email = '$email'";
+                    $sql = "UPDATE " . table('email_list') . "SET stat = 1 WHERE email = '$email'";
                     $db->query($sql);
                     $info = $_LANG['email_checked'];
                 } else {
@@ -1901,7 +1901,7 @@ class UserController extends InitController
                 $info = sprintf($_LANG['email_invalid'], $email);
             } elseif ($ck['stat'] == 1) {
                 if ($_GET['hash'] == $ck['hash']) {
-                    $sql = "DELETE FROM " . $ecs->table('email_list') . "WHERE email = '$email'";
+                    $sql = "DELETE FROM " . table('email_list') . "WHERE email = '$email'";
                     $db->query($sql);
                     $info = $_LANG['email_canceled'];
                 } else {
@@ -1944,7 +1944,7 @@ class UserController extends InitController
 
         $orders = array();
 
-        $sql = "SELECT order_id,order_sn,invoice_no,shipping_id FROM " . $ecs->table('order_info') .
+        $sql = "SELECT order_id,order_sn,invoice_no,shipping_id FROM " . table('order_info') .
             " WHERE user_id = '$user_id' AND shipping_status = '" . SS_SHIPPED . "'";
         $res = $db->query($sql);
         $record_count = 0;
@@ -1994,7 +1994,7 @@ class UserController extends InitController
 
         $sql = "SELECT order_id, order_status, shipping_status, pay_status, " .
             " shipping_time, shipping_id, invoice_no, user_id " .
-            " FROM " . $ecs->table('order_info') .
+            " FROM " . table('order_info') .
             " WHERE order_sn = '$order_sn' LIMIT 1";
 
         $row = $db->getRow($sql);
@@ -2010,7 +2010,7 @@ class UserController extends InitController
         $order_query['order_status'] = $_LANG['os'][$row['order_status']] . ',' . $_LANG['ps'][$row['pay_status']] . ',' . $_LANG['ss'][$row['shipping_status']];
 
         if ($row['invoice_no'] && $row['shipping_id'] > 0) {
-            $sql = "SELECT shipping_code FROM " . $ecs->table('shipping') . " WHERE shipping_id = '$row[shipping_id]'";
+            $sql = "SELECT shipping_code FROM " . table('shipping') . " WHERE shipping_id = '$row[shipping_id]'";
             $shipping_code = $db->getOne($sql);
             $plugin = ROOT_PATH . 'includes/modules/shipping/' . $shipping_code . '.php';
             if (file_exists($plugin)) {
@@ -2044,7 +2044,7 @@ class UserController extends InitController
             $_LANG['exchange_points'][0] = empty($cfg['uc_lang']['credits'][0][0]) ? $_LANG['exchange_points'][0] : $cfg['uc_lang']['credits'][0][0];
             $_LANG['exchange_points'][1] = empty($cfg['uc_lang']['credits'][1][0]) ? $_LANG['exchange_points'][1] : $cfg['uc_lang']['credits'][1][0];
         }
-        $sql = "SELECT user_id, user_name, pay_points, rank_points FROM " . $ecs->table('users') . " WHERE user_id='$user_id'";
+        $sql = "SELECT user_id, user_name, pay_points, rank_points FROM " . table('users') . " WHERE user_id='$user_id'";
         $row = $db->getRow($sql);
         if ($_CFG['integrate_code'] == 'ucenter') {
             $exchange_type = 'ucenter';
@@ -2130,7 +2130,7 @@ class UserController extends InitController
         $max_num = 0;
 
         /* 取出用户数据 */
-        $sql = "SELECT user_name, user_id, pay_points, rank_points FROM " . $ecs->table('users') . " WHERE user_id='$user_id'";
+        $sql = "SELECT user_name, user_id, pay_points, rank_points FROM " . table('users') . " WHERE user_id='$user_id'";
         $row = $db->getRow($sql);
         $bbs_points = $user->get_points($row['user_name']);
         $points_name = $user->get_points_name();
@@ -2195,7 +2195,7 @@ class UserController extends InitController
             $rule = unserialize($_CFG['points_rule']);
         }
         $shop_points = array(0 => 'rank_points', 1 => 'pay_points');
-        $sql = "SELECT user_id, user_name, pay_points, rank_points FROM " . $ecs->table('users') . " WHERE user_id='$user_id'";
+        $sql = "SELECT user_id, user_name, pay_points, rank_points FROM " . table('users') . " WHERE user_id='$user_id'";
         $row = $db->getRow($sql);
         $exchange_amount = intval($_POST['amount']);
         $fromcredits = intval($_POST['fromcredits']);
@@ -2226,9 +2226,9 @@ class UserController extends InitController
         $netamount = floor($exchange_amount / $ratio);
         $result = exchange_points($row['user_id'], $fromcredits, $creditdesc, $appiddesc, $netamount);
         if ($result === true) {
-            $sql = "UPDATE " . $ecs->table('users') . " SET {$shop_points[$fromcredits]}={$shop_points[$fromcredits]}-'$exchange_amount' WHERE user_id='{$row['user_id']}'";
+            $sql = "UPDATE " . table('users') . " SET {$shop_points[$fromcredits]}={$shop_points[$fromcredits]}-'$exchange_amount' WHERE user_id='{$row['user_id']}'";
             $db->query($sql);
-            $sql = "INSERT INTO " . $ecs->table('account_log') . "(user_id, {$shop_points[$fromcredits]}, change_time, change_desc, change_type)" . " VALUES ('{$row['user_id']}', '-$exchange_amount', '" . gmtime() . "', '" . $cfg['uc_lang']['exchange'] . "', '98')";
+            $sql = "INSERT INTO " . table('account_log') . "(user_id, {$shop_points[$fromcredits]}, change_time, change_desc, change_type)" . " VALUES ('{$row['user_id']}', '-$exchange_amount', '" . gmtime() . "', '" . $cfg['uc_lang']['exchange'] . "', '98')";
             $db->query($sql);
             return $this->show_message(sprintf($_LANG['exchange_success'], $exchange_amount, $_LANG['exchange_points'][$fromcredits], $netamount, $credit['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
         } else {

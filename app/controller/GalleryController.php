@@ -16,7 +16,7 @@ class GalleryController extends InitController
         $_REQUEST['img'] = isset($_REQUEST['img']) ? intval($_REQUEST['img']) : 0; // 图片编号
 
         /* 获得商品名称 */
-        $sql = 'SELECT goods_name FROM ' . $ecs->table('goods') . "WHERE goods_id = '$_REQUEST[id]'";
+        $sql = 'SELECT goods_name FROM ' . table('goods') . "WHERE goods_id = '$_REQUEST[id]'";
         $goods_name = $db->getOne($sql);
 
         /* 如果该商品不存在，返回首页 */
@@ -26,7 +26,7 @@ class GalleryController extends InitController
 
         /* 获得所有的图片 */
         $sql = 'SELECT img_id, img_desc, thumb_url, img_url' .
-            ' FROM ' . $ecs->table('goods_gallery') .
+            ' FROM ' . table('goods_gallery') .
             " WHERE goods_id = '$_REQUEST[id]' ORDER BY img_id";
         $img_list = $db->getAll($sql);
 

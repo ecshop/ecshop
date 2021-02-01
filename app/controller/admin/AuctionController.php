@@ -12,7 +12,7 @@ class AuctionController extends InitController
         parent::initialize();
 
 
-        $exc = new exchange($ecs->table('goods_activity'), $db, 'act_id', 'act_name');
+        $exc = new exchange(table('goods_activity'), $db, 'act_id', 'act_name');
     }
 
     /*------------------------------------------------------ */
@@ -112,12 +112,12 @@ class AuctionController extends InitController
 
             if (isset($_POST['drop'])) {
                 /* 查询哪些拍卖活动已经有人出价 */
-                $sql = "SELECT DISTINCT act_id FROM " . $ecs->table('auction_log') .
+                $sql = "SELECT DISTINCT act_id FROM " . table('auction_log') .
                     " WHERE act_id " . db_create_in($ids);
                 $ids = array_diff($ids, $db->getCol($sql));
                 if (!empty($ids)) {
                     /* 删除记录 */
-                    $sql = "DELETE FROM " . $ecs->table('goods_activity') .
+                    $sql = "DELETE FROM " . table('goods_activity') .
                         " WHERE act_id " . db_create_in($ids) .
                         " AND act_type = '" . GAT_AUCTION . "'";
                     $db->query($sql);
@@ -249,7 +249,7 @@ class AuctionController extends InitController
         if ($goods_id <= 0) {
             sys_msg($_LANG['pls_select_goods']);
         }
-        $sql = "SELECT goods_name FROM " . $ecs->table('goods') . " WHERE goods_id = '$goods_id'";
+        $sql = "SELECT goods_name FROM " . table('goods') . " WHERE goods_id = '$goods_id'";
         $row = $db->getRow($sql);
         if (empty($row)) {
             sys_msg($_LANG['goods_not_exist']);
@@ -279,10 +279,10 @@ class AuctionController extends InitController
         /* 保存数据 */
         if ($is_add) {
             $auction['is_finished'] = 0;
-            $db->autoExecute($ecs->table('goods_activity'), $auction, 'INSERT');
+            $db->autoExecute(table('goods_activity'), $auction, 'INSERT');
             $auction['act_id'] = $db->insert_id();
         } else {
-            $db->autoExecute($ecs->table('goods_activity'), $auction, 'UPDATE', "act_id = '$auction[act_id]'");
+            $db->autoExecute(table('goods_activity'), $auction, 'UPDATE', "act_id = '$auction[act_id]'");
         }
 
         /* 记日志 */
@@ -432,7 +432,7 @@ class AuctionController extends InitController
                 $where .= " AND is_finished = 0 AND start_time <= '$now' AND end_time >= '$now' ";
             }
 
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_activity') .
+            $sql = "SELECT COUNT(*) FROM " . table('goods_activity') .
                 " WHERE act_type = '" . GAT_AUCTION . "' $where";
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -441,7 +441,7 @@ class AuctionController extends InitController
 
             /* 查询 */
             $sql = "SELECT * " .
-                "FROM " . $GLOBALS['ecs']->table('goods_activity') .
+                "FROM " . table('goods_activity') .
                 " WHERE act_type = '" . GAT_AUCTION . "' $where " .
                 " ORDER BY $filter[sort_by] $filter[sort_order] " .
                 " LIMIT " . $filter['start'] . ", $filter[page_size]";

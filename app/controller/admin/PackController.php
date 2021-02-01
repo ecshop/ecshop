@@ -14,7 +14,7 @@ class PackController extends InitController
 
         $image = new cls_image($_CFG['bgcolor']);
 
-        $exc = new exchange($ecs->table("pack"), $db, 'pack_id', 'pack_name');
+        $exc = new exchange(table("pack"), $db, 'pack_id', 'pack_name');
     }
 
 
@@ -97,7 +97,7 @@ class PackController extends InitController
         }
 
         /*插入数据*/
-        $sql = "INSERT INTO " . $ecs->table('pack') . "(pack_name, pack_fee, free_money, pack_desc, pack_img)
+        $sql = "INSERT INTO " . table('pack') . "(pack_name, pack_fee, free_money, pack_desc, pack_img)
             VALUES ('$_POST[pack_name]', '$_POST[pack_fee]', '$_POST[free_money]', '$_POST[pack_desc]', '$img_name')";
         $db->query($sql);
 
@@ -118,7 +118,7 @@ class PackController extends InitController
         /* 权限判断 */
         admin_priv('pack');
 
-        $sql = "SELECT pack_id, pack_name, pack_fee, free_money, pack_desc, pack_img FROM " . $ecs->table('pack') . " WHERE pack_id='$_REQUEST[id]'";
+        $sql = "SELECT pack_id, pack_name, pack_fee, free_money, pack_desc, pack_img FROM " . table('pack') . " WHERE pack_id='$_REQUEST[id]'";
         $pack = $db->getRow($sql);
         $this->assign('ur_here', $_LANG['pack_edit']);
         $this->assign('action_link', array('text' => $_LANG['06_pack_list'], 'href' => 'pack.php?act=list&' . list_link_postfix()));
@@ -175,12 +175,12 @@ class PackController extends InitController
         $pack_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
         /* 取得logo名称 */
-        $sql = "SELECT pack_img FROM " . $ecs->table('pack') . " WHERE pack_id = '$pack_id'";
+        $sql = "SELECT pack_img FROM " . table('pack') . " WHERE pack_id = '$pack_id'";
         $img_name = $db->getOne($sql);
 
         if (!empty($img_name)) {
             @unlink(ROOT_PATH . DATA_DIR . '/packimg/' . $img_name);
-            $sql = "UPDATE " . $ecs->table('pack') . " SET pack_img = '' WHERE pack_id = '$pack_id'";
+            $sql = "UPDATE " . table('pack') . " SET pack_img = '' WHERE pack_id = '$pack_id'";
             $db->query($sql);
         }
         $link = array(array('text' => $_LANG['pack_edit_lnk'], 'href' => 'pack.php?act=edit&id=' . $pack_id), array('text' => $_LANG['pack_list_lnk'], 'href' => 'pack.php?act=list'));
@@ -284,7 +284,7 @@ class PackController extends InitController
             $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'pack_id' : trim($_REQUEST['sort_by']);
             $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-            $sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('pack');
+            $sql = "SELECT count(*) FROM " . table('pack');
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
             /* 分页大小 */
@@ -292,7 +292,7 @@ class PackController extends InitController
 
             /* 查询 */
             $sql = "SELECT pack_id, pack_name, pack_img, pack_fee, free_money, pack_desc" .
-                " FROM " . $GLOBALS['ecs']->table('pack') .
+                " FROM " . table('pack') .
                 " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
                 " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
 

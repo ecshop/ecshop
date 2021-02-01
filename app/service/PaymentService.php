@@ -24,7 +24,7 @@ class PaymentService
      */
     public function get_payment($code)
     {
-        $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('payment') .
+        $sql = 'SELECT * FROM ' . table('payment') .
             " WHERE pay_code = '$code' AND enabled = '1'";
         $payment = $GLOBALS['db']->getRow($sql);
 
@@ -48,17 +48,17 @@ class PaymentService
     {
         if ($voucher == 'true') {
             if (is_numeric($order_sn)) {
-                return $GLOBALS['db']->getOne("SELECT log_id FROM " . $GLOBALS['ecs']->table('pay_log') . " WHERE order_id=" . $order_sn . ' AND order_type=1');
+                return $GLOBALS['db']->getOne("SELECT log_id FROM " . table('pay_log') . " WHERE order_id=" . $order_sn . ' AND order_type=1');
             } else {
                 return "";
             }
         } else {
             if (is_numeric($order_sn)) {
-                $sql = 'SELECT order_id FROM ' . $GLOBALS['ecs']->table('order_info') . " WHERE order_sn = '$order_sn'";
+                $sql = 'SELECT order_id FROM ' . table('order_info') . " WHERE order_sn = '$order_sn'";
                 $order_id = $GLOBALS['db']->getOne($sql);
             }
             if (!empty($order_id)) {
-                $pay_log_id = $GLOBALS['db']->getOne("SELECT log_id FROM " . $GLOBALS['ecs']->table('pay_log') . " WHERE order_id='" . $order_id . "'");
+                $pay_log_id = $GLOBALS['db']->getOne("SELECT log_id FROM " . table('pay_log') . " WHERE order_id='" . $order_id . "'");
                 return $pay_log_id;
             } else {
                 return "";
@@ -72,7 +72,7 @@ class PaymentService
      */
     public function get_goods_name_by_id($order_id)
     {
-        $sql = 'SELECT goods_name FROM ' . $GLOBALS['ecs']->table('order_goods') . " WHERE order_id = '$order_id'";
+        $sql = 'SELECT goods_name FROM ' . table('order_goods') . " WHERE order_id = '$order_id'";
         $goods_name = $GLOBALS['db']->getCol($sql);
         return implode(',', $goods_name);
     }
@@ -88,7 +88,7 @@ class PaymentService
     public function check_money($log_id, $money)
     {
         if (is_numeric($log_id)) {
-            $sql = 'SELECT order_amount FROM ' . $GLOBALS['ecs']->table('pay_log') .
+            $sql = 'SELECT order_amount FROM ' . table('pay_log') .
                 " WHERE log_id = '$log_id'";
             $amount = $GLOBALS['db']->getOne($sql);
         } else {
@@ -116,12 +116,12 @@ class PaymentService
         $log_id = intval($log_id);
         if ($log_id > 0) {
             /* 取得要修改的支付记录信息 */
-            $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('pay_log') .
+            $sql = "SELECT * FROM " . table('pay_log') .
                 " WHERE log_id = '$log_id'";
             $pay_log = $GLOBALS['db']->getRow($sql);
             if ($pay_log && $pay_log['is_paid'] == 0) {
                 /* 修改此次支付操作的状态为已付款 */
-                $sql = 'UPDATE ' . $GLOBALS['ecs']->table('pay_log') .
+                $sql = 'UPDATE ' . table('pay_log') .
                     " SET is_paid = '1' WHERE log_id = '$log_id'";
                 $GLOBALS['db']->query($sql);
 
@@ -129,14 +129,14 @@ class PaymentService
                 if ($pay_log['order_type'] == PAY_ORDER) {
                     /* 取得订单信息 */
                     $sql = 'SELECT order_id, user_id, order_sn, consignee, address, tel, shipping_id, extension_code, extension_id, goods_amount ' .
-                        'FROM ' . $GLOBALS['ecs']->table('order_info') .
+                        'FROM ' . table('order_info') .
                         " WHERE order_id = '$pay_log[order_id]'";
                     $order = $GLOBALS['db']->getRow($sql);
                     $order_id = $order['order_id'];
                     $order_sn = $order['order_sn'];
 
                     /* 修改订单状态为已付款 */
-                    $sql = 'UPDATE ' . $GLOBALS['ecs']->table('order_info') .
+                    $sql = 'UPDATE ' . table('order_info') .
                         " SET order_status = '" . OS_CONFIRMED . "', " .
                         " confirm_time = '" . gmtime() . "', " .
                         " pay_status = '$pay_status', " .
@@ -172,7 +172,7 @@ class PaymentService
                         /* 如果订单没有配送方式，自动完成发货操作 */
                         if ($order['shipping_id'] == -1) {
                             /* 将订单标识为已发货状态，并记录发货记录 */
-                            $sql = 'UPDATE ' . $GLOBALS['ecs']->table('order_info') .
+                            $sql = 'UPDATE ' . table('order_info') .
                                 " SET shipping_status = '" . SS_SHIPPED . "', shipping_time = '" . gmtime() . "'" .
                                 " WHERE order_id = '$order_id'";
                             $GLOBALS['db']->query($sql);
@@ -184,17 +184,17 @@ class PaymentService
                         }
                     }
                 } elseif ($pay_log['order_type'] == PAY_SURPLUS) {
-                    $sql = 'SELECT `id` FROM ' . $GLOBALS['ecs']->table('user_account') . " WHERE `id` = '$pay_log[order_id]' AND `is_paid` = 1  LIMIT 1";
+                    $sql = 'SELECT `id` FROM ' . table('user_account') . " WHERE `id` = '$pay_log[order_id]' AND `is_paid` = 1  LIMIT 1";
                     $res_id = $GLOBALS['db']->getOne($sql);
                     if (empty($res_id)) {
                         /* 更新会员预付款的到款状态 */
-                        $sql = 'UPDATE ' . $GLOBALS['ecs']->table('user_account') .
+                        $sql = 'UPDATE ' . table('user_account') .
                             " SET paid_time = '" . gmtime() . "', is_paid = 1" .
                             " WHERE id = '$pay_log[order_id]' LIMIT 1";
                         $GLOBALS['db']->query($sql);
 
                         /* 取得添加预付款的用户以及金额 */
-                        $sql = "SELECT user_id, amount FROM " . $GLOBALS['ecs']->table('user_account') .
+                        $sql = "SELECT user_id, amount FROM " . table('user_account') .
                             " WHERE id = '$pay_log[order_id]'";
                         $arr = $GLOBALS['db']->getRow($sql);
 
@@ -212,7 +212,7 @@ class PaymentService
                 if (!empty($post_virtual_goods)) {
                     $msg = '';
                     /* 检查两次刷新时间有无超过12小时 */
-                    $sql = 'SELECT pay_time, order_sn FROM ' . $GLOBALS['ecs']->table('order_info') . " WHERE order_id = '$pay_log[order_id]'";
+                    $sql = 'SELECT pay_time, order_sn FROM ' . table('order_info') . " WHERE order_id = '$pay_log[order_id]'";
                     $row = $GLOBALS['db']->getRow($sql);
                     $intval_time = gmtime() - $row['pay_time'];
                     if ($intval_time >= 0 && $intval_time < 3600 * 12) {

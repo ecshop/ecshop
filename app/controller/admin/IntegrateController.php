@@ -50,9 +50,9 @@ class IntegrateController extends InitController
             }
         }
         if ($_GET['code'] == 'ecshop') {
-            $sql = "UPDATE " . $ecs->table('shop_config') . " SET value = 'ecshop' WHERE code = 'integrate_code'";
+            $sql = "UPDATE " . table('shop_config') . " SET value = 'ecshop' WHERE code = 'integrate_code'";
             $db->query($sql);
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') . " SET value = '' WHERE code = 'points_rule'";
+            $sql = "UPDATE " . table('shop_config') . " SET value = '' WHERE code = 'points_rule'";
             $GLOBALS['db']->query($sql);
 
             /* 清除shopconfig表的sql的缓存 */
@@ -62,7 +62,7 @@ class IntegrateController extends InitController
             $links[0]['href'] = 'integrate.php?act=list';
             sys_msg($_LANG['update_success'], 0, $links);
         } else {
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('users') .
+            $sql = "UPDATE " . table('users') .
                 " SET flag = 0, alias=''" .
                 " WHERE flag > 0";
             $db->query($sql); //如果有标记，清空标记
@@ -203,7 +203,7 @@ class IntegrateController extends InitController
             }
         }
 
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('users');
+        $sql = "SELECT COUNT(*) FROM " . table('users');
         $total = $db->getOne($sql);
 
         if ($total == 0) {
@@ -353,12 +353,12 @@ class IntegrateController extends InitController
         }
         $_SESSION['domain'] = $domain;
 
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('users');
+        $sql = "SELECT COUNT(*) FROM " . table('users');
         $total = $db->getOne($sql);
 
         $result = array('error' => 0, 'message' => '', 'start' => 0, 'size' => $size, 'content' => '', 'method' => $method, 'domain' => $domain, 'is_end' => 0);
 
-        $sql = "SELECT user_name FROM " . $ecs->table('users') . " LIMIT $start, $size";
+        $sql = "SELECT user_name FROM " . table('users') . " LIMIT $start, $size";
         $user_list = $db->getCol($sql);
 
         $post_user_list = $cls_user->test_conflict($user_list);
@@ -366,9 +366,9 @@ class IntegrateController extends InitController
         if ($post_user_list) {
             /* 标记重名用户 */
             if ($method == 2) {
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET flag = '$method', alias = CONCAT(user_name, '$domain') WHERE " . db_create_in($post_user_list, 'user_name');
+                $sql = "UPDATE " . table('users') . " SET flag = '$method', alias = CONCAT(user_name, '$domain') WHERE " . db_create_in($post_user_list, 'user_name');
             } else {
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET flag = '$method' WHERE " . db_create_in($post_user_list, 'user_name');
+                $sql = "UPDATE " . table('users') . " SET flag = '$method' WHERE " . db_create_in($post_user_list, 'user_name');
             }
 
             $GLOBALS['db']->ping();
@@ -390,11 +390,11 @@ class IntegrateController extends InitController
                         $error_user_list[$i] = substr($error_user_list[$i], 0, $domain_len);
                     }
                     /* 将用户标记为改名失败 */
-                    $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET flag = '1' WHERE " . db_create_in($error_user_list, 'user_name');
+                    $sql = "UPDATE " . table('users') . " SET flag = '1' WHERE " . db_create_in($error_user_list, 'user_name');
                 }
 
                 /* 检查改名后用户是否与商城用户重名 */
-                $sql = "SELECT user_name FROM " . $GLOBALS['ecs']->table('users') . " WHERE " . db_create_in($test_user_list, 'user_name');
+                $sql = "SELECT user_name FROM " . table('users') . " WHERE " . db_create_in($test_user_list, 'user_name');
                 $error_user_list = $GLOBALS['db']->getCol($sql);
                 if ($error_user_list) {
                     $domain_len = 0 - str_len($domain);
@@ -403,7 +403,7 @@ class IntegrateController extends InitController
                         $error_user_list[$i] = substr($error_user_list[$i], 0, $domain_len);
                     }
                     /* 将用户标记为改名失败 */
-                    $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET flag = '1' WHERE " . db_create_in($error_user_list, 'user_name');
+                    $sql = "UPDATE " . table('users') . " SET flag = '1' WHERE " . db_create_in($error_user_list, 'user_name');
                 }
             }
         }
@@ -417,7 +417,7 @@ class IntegrateController extends InitController
             $result['is_end'] = 1;
 
             /* 查找有无重名用户,无重名用户则直接同步，有则查看重名用户 */
-            $sql = "SELECT COUNT(*) FROM " . $ecs->table('users') . " WHERE flag > 0 ";
+            $sql = "SELECT COUNT(*) FROM " . table('users') . " WHERE flag > 0 ";
             if ($db->getOne($sql) > 0) {
                 $result['href'] = "integrate.php?act=modify";
             } else {
@@ -445,7 +445,7 @@ class IntegrateController extends InitController
         $uc_uid = array();
         $repeat_user = array();
 
-        $query = $db->query("SELECT * FROM " . $ecs->table('users') . " ORDER BY `user_id` ASC");
+        $query = $db->query("SELECT * FROM " . table('users') . " ORDER BY `user_id` ASC");
         while ($data = $db->fetch_array($query)) {
             $salt = rand(100000, 999999);
             $password = md5($data['password'] . $salt);
@@ -481,13 +481,13 @@ class IntegrateController extends InitController
         }
         // 更新ECSHOP表
         foreach ($up_user_table as $table) {
-            $db->query("UPDATE " . $ecs->table($table) . " SET `user_id`=`user_id`+ $maxuid ORDER BY `user_id` DESC");
+            $db->query("UPDATE " . table($table) . " SET `user_id`=`user_id`+ $maxuid ORDER BY `user_id` DESC");
             foreach ($uc_uid as $uid) {
-                $db->query("UPDATE " . $ecs->table($table) . " SET `user_id`='" . $uid['uid'] . "' WHERE `user_id`='" . ($uid['user_id'] + $maxuid) . "'");
+                $db->query("UPDATE " . table($table) . " SET `user_id`='" . $uid['uid'] . "' WHERE `user_id`='" . ($uid['user_id'] + $maxuid) . "'");
             }
         }
         foreach ($truncate_user_table as $table) {
-            $db->query("TRUNCATE TABLE " . $ecs->table($table));
+            $db->query("TRUNCATE TABLE " . table($table));
         }
         // 保存重复的用户信息
         if (!empty($repeat_user)) {
@@ -504,7 +504,7 @@ class IntegrateController extends InitController
     public function modifyAction()
     {
         /* 检查是否有改名失败的用户 */
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('users') . " WHERE flag = 1";
+        $sql = "SELECT COUNT(*) FROM " . table('users') . " WHERE flag = 1";
         if ($db->getOne($sql) > 0) {
             $_REQUEST['flag'] = 1;
             $this->assign('default_flag', 1);
@@ -558,7 +558,7 @@ class IntegrateController extends InitController
         }
         if ($alias) {
             /* 检查改名后用户名是否会重名 */
-            $sql = 'SELECT user_name FROM ' . $GLOBALS['ecs']->table('users') . ' WHERE ' . db_create_in($alias, 'user_name');
+            $sql = 'SELECT user_name FROM ' . table('users') . ' WHERE ' . db_create_in($alias, 'user_name');
             $ecs_error_list = $db->getCol($sql);
 
             /* 检查和商城是否有重名 */
@@ -576,10 +576,10 @@ class IntegrateController extends InitController
                     if ($val = 2) {
                         if (in_array($_POST['alias'][$user_id], $error_list)) {
                             /* 重名用户，需要标记 */
-                            $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET flag = 1,  alias='' WHERE user_id = '$user_id'";
+                            $sql = "UPDATE " . table('users') . " SET flag = 1,  alias='' WHERE user_id = '$user_id'";
                         } else {
                             /* 用户名无重复，可以正常改名 */
-                            $sql = "UPDATE " . $GLOBALS['ecs']->table('users') .
+                            $sql = "UPDATE " . table('users') .
                                 " SET flag = 2, alias = '" . $_POST['alias'][$user_id] . "'" .
                                 " WHERE user_id = '$user_id'";
                         }
@@ -589,7 +589,7 @@ class IntegrateController extends InitController
             } else {
                 /* 处理没有重名的情况 */
                 foreach ($_POST['opt'] as $user_id => $val) {
-                    $sql = "UPDATE " . $GLOBALS['ecs']->table('users') .
+                    $sql = "UPDATE " . table('users') .
                         " SET flag = 2, alias = '" . $_POST['alias'][$user_id] . "'" .
                         " WHERE user_id = '$user_id'";
                     $db->query($sql);
@@ -600,7 +600,7 @@ class IntegrateController extends InitController
         /* 处理删除和保留情况 */
         foreach ($_POST['opt'] as $user_id => $val) {
             if ($val == 3 || $val == 4) {
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET flag='$val' WHERE user_id='$user_id'";
+                $sql = "UPDATE " . table('users') . " SET flag='$val' WHERE user_id='$user_id'";
                 $db->query($sql);
             }
         }
@@ -615,10 +615,10 @@ class IntegrateController extends InitController
     public function syncAction()
     {
         $size = 100;
-        $total = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table("users"));
-        $task_del = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table("users") . " WHERE flag = 3");
-        $task_rename = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table("users") . " WHERE flag = 2");
-        $task_ignore = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table("users") . " WHERE flag = 4");
+        $total = $db->getOne("SELECT COUNT(*) FROM " . table("users"));
+        $task_del = $db->getOne("SELECT COUNT(*) FROM " . table("users") . " WHERE flag = 3");
+        $task_rename = $db->getOne("SELECT COUNT(*) FROM " . table("users") . " WHERE flag = 2");
+        $task_ignore = $db->getOne("SELECT COUNT(*) FROM " . table("users") . " WHERE flag = 4");
         $task_sync = $total - $task_del - $task_ignore;
 
         $_SESSION['task'] = array('del' => array('total' => $task_del, 'start' => 0), 'rename' => array('total' => $task_rename, 'start' => 0), 'sync' => array('total' => $task_sync, 'start' => 0));
@@ -630,18 +630,18 @@ class IntegrateController extends InitController
         $tasks = array();
         if ($task_del > 0) {
             $tasks[] = array('task_name' => sprintf($_LANG['task_del'], $task_del), 'task_status' => '<span id="task_del">' . $_LANG['task_uncomplete'] . '<span>');
-            $sql = "SELECT user_name FROM " . $ecs->table('users') . " WHERE flag = 2";
+            $sql = "SELECT user_name FROM " . table('users') . " WHERE flag = 2";
             $del_list = $db->getCol($sql);
         }
 
         if ($task_rename > 0) {
             $tasks[] = array('task_name' => sprintf($_LANG['task_rename'], $task_rename), 'task_status' => '<span id="task_rename">' . $_LANG['task_uncomplete'] . '</span>');
-            $sql = "SELECT user_name, alias FROM " . $ecs->table('users') . " WHERE flag = 3";
+            $sql = "SELECT user_name, alias FROM " . table('users') . " WHERE flag = 3";
             $rename_list = $db->getAll($sql);
         }
 
         if ($task_ignore > 0) {
-            $sql = "SELECT user_name FROM " . $ecs->table('users') . " WHERE flag = 4";
+            $sql = "SELECT user_name FROM " . table('users') . " WHERE flag = 4";
             $ignore_list = $db->getCol($sql);
         }
 
@@ -689,8 +689,8 @@ class IntegrateController extends InitController
         if ($_SESSION['task']['del']['start'] < $_SESSION['task']['del']['total']) {
             /* 执行操作 */
             /* 查找要删除用户 */
-            $arr = $db->getCol("SELECT user_name FROM " . $ecs->table('users') . " WHERE flag = 3 LIMIT " . $_SESSION['task']['del']['start'] . ',' . $result['size']);
-            $db->query("DELETE FROM " . $ecs->table('users') . " WHERE " . db_create_in($arr, 'user_name'));
+            $arr = $db->getCol("SELECT user_name FROM " . table('users') . " WHERE flag = 3 LIMIT " . $_SESSION['task']['del']['start'] . ',' . $result['size']);
+            $db->query("DELETE FROM " . table('users') . " WHERE " . db_create_in($arr, 'user_name'));
 
             /* 保存设置 */
             $result['id'] = 'task_del';
@@ -705,8 +705,8 @@ class IntegrateController extends InitController
             die($json->encode($result));
         } elseif ($_SESSION['task']['rename']['start'] < $_SESSION['task']['rename']['total']) {
             /* 查找要改名用户 */
-            $arr = $db->getCol("SELECT user_name FROM " . $ecs->table('users') . " WHERE flag = 2 LIMIT " . $_SESSION['task']['del']['start'] . ',' . $result['size']);
-            $db->query("UPDATE " . $ecs->table('users') . " SET user_name=alias, alias='' WHERE " . db_create_in($arr, 'user_name'));
+            $arr = $db->getCol("SELECT user_name FROM " . table('users') . " WHERE flag = 2 LIMIT " . $_SESSION['task']['del']['start'] . ',' . $result['size']);
+            $db->query("UPDATE " . table('users') . " SET user_name=alias, alias='' WHERE " . db_create_in($arr, 'user_name'));
 
             /* 保存设置 */
             $result['id'] = 'task_rename';
@@ -725,7 +725,7 @@ class IntegrateController extends InitController
             $cls_user->need_sync = false;
 
             $sql = "SELECT user_name, password, email, sex, birthday, reg_time " .
-                "FROM " . $ecs->table('users') . " LIMIT " . $_SESSION['task']['del']['start'] . ',' . $result['size'];
+                "FROM " . table('users') . " LIMIT " . $_SESSION['task']['del']['start'] . ',' . $result['size'];
             $arr = $db->getAll($sql);
             foreach ($arr as $user) {
                 @$cls_user->add_user($user['user_name'], '', $user['email'], $user['sex'], $user['birthday'], $user['reg_time'], $user['password']);
@@ -745,13 +745,13 @@ class IntegrateController extends InitController
             /* 记录合并用户 */
 
             /* 插入code到shop_config表 */
-            $sql = "SELECT COUNT(*) FROM " . $ecs->table('shop_config') . " WHERE code = 'integrate_code'";
+            $sql = "SELECT COUNT(*) FROM " . table('shop_config') . " WHERE code = 'integrate_code'";
 
             if ($db->getOne($sql) == 0) {
-                $sql = "INSERT INTO " . $ecs->table('shop_config') . " (code, value) " .
+                $sql = "INSERT INTO " . table('shop_config') . " (code, value) " .
                     "VALUES ('integrate_code', '$_SESSION[code]')";
             } else {
-                $sql = "UPDATE " . $ecs->table('shop_config') . " SET value = '$_SESSION[code]' WHERE code = 'integrate_code'";
+                $sql = "UPDATE " . table('shop_config') . " SET value = '$_SESSION[code]' WHERE code = 'integrate_code'";
             }
             $db->query($sql);
 
@@ -767,7 +767,7 @@ class IntegrateController extends InitController
             unset($_SESSION['code']);
             unset($_SESSION['task']);
             unset($_SESSION['domain']);
-            $sql = "UPDATE " . $ecs->table('users') . " set flag = 0, alias = '' WHERE flag > 0";
+            $sql = "UPDATE " . table('users') . " set flag = 0, alias = '' WHERE flag > 0";
             $db->query($sql);
             die($json->encode($result));
         }
@@ -782,7 +782,7 @@ class IntegrateController extends InitController
         $result = array('error' => 0, 'message' => '');
 
         $app_type = 'ECSHOP';
-        $app_name = $db->getOne('SELECT value FROM ' . $ecs->table('shop_config') . " WHERE code = 'shop_name'");
+        $app_name = $db->getOne('SELECT value FROM ' . table('shop_config') . " WHERE code = 'shop_name'");
         $app_url = $GLOBALS['ecs']->url();
         $app_charset = EC_CHARSET;
         $app_dbcharset = strtolower((str_replace('-', '', EC_CHARSET)));
@@ -960,7 +960,7 @@ class IntegrateController extends InitController
             unset($rule[$rule_index]);
         }
 
-        $sql = "UPDATE " . $ecs->table('shop_config') . " SET value ='" . serialize($rule) . "' WHERE code='points_rule'";
+        $sql = "UPDATE " . table('shop_config') . " SET value ='" . serialize($rule) . "' WHERE code='points_rule'";
 
         $db->query($sql);
 
@@ -982,11 +982,11 @@ class IntegrateController extends InitController
             }
         }
 
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('shop_config') . " WHERE code='points_set'";
+        $sql = "SELECT COUNT(*) FROM " . table('shop_config') . " WHERE code='points_set'";
         if ($db->getOne($sql) == 0) {
-            $sql = "INSERT INTO " . $ecs->table('shop_config') . " (parent_id, type, code, value) VALUES (6, 'hidden', 'points_set', '" . serialize($cfg) . "')";
+            $sql = "INSERT INTO " . table('shop_config') . " (parent_id, type, code, value) VALUES (6, 'hidden', 'points_set', '" . serialize($cfg) . "')";
         } else {
-            $sql = "UPDATE " . $ecs->table('shop_config') . " SET value ='" . serialize($cfg) . "' WHERE code='points_set'";
+            $sql = "UPDATE " . table('shop_config') . " SET value ='" . serialize($cfg) . "' WHERE code='points_set'";
         }
         $db->query($sql);
         clear_cache_files();
@@ -1011,14 +1011,14 @@ class IntegrateController extends InitController
             $where .= ">" . 0;
         }
 
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('users') . $where;
+        $sql = "SELECT COUNT(*) FROM " . table('users') . $where;
 
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         /* 分页大小 */
         $filter = page_and_size($filter);
         $sql = "SELECT user_id, user_name, email, reg_time, flag, alias " .
-            " FROM " . $GLOBALS['ecs']->table('users') . $where .
+            " FROM " . table('users') . $where .
             " ORDER BY user_id ASC" .
             " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
         $list = $GLOBALS['db']->getAll($sql);
@@ -1043,19 +1043,19 @@ class IntegrateController extends InitController
      */
     public function save_integrate_config($code, $cfg)
     {
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('shop_config') . " WHERE code = 'integrate_code'";
+        $sql = "SELECT COUNT(*) FROM " . table('shop_config') . " WHERE code = 'integrate_code'";
 
         if ($GLOBALS['db']->getOne($sql) == 0) {
-            $sql = "INSERT INTO " . $ecs->table('shop_config') . " (code, value) " .
+            $sql = "INSERT INTO " . table('shop_config') . " (code, value) " .
                 "VALUES ('integrate_code', '$code')";
         } else {
-            $sql = "SELECT value FROM " . $GLOBALS['ecs']->table('shop_config') . " WHERE code = 'integrate_code'";
+            $sql = "SELECT value FROM " . table('shop_config') . " WHERE code = 'integrate_code'";
             if ($code != $GLOBALS['db']->getOne($sql)) {
                 /* 有缺换整合插件，需要把积分设置也清除 */
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') . " SET value = '' WHERE code = 'points_rule'";
+                $sql = "UPDATE " . table('shop_config') . " SET value = '' WHERE code = 'points_rule'";
                 $GLOBALS['db']->query($sql);
             }
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') . " SET value = '$code' WHERE code = 'integrate_code'";
+            $sql = "UPDATE " . table('shop_config') . " SET value = '$code' WHERE code = 'integrate_code'";
         }
 
         $GLOBALS['db']->query($sql);
@@ -1118,12 +1118,12 @@ class IntegrateController extends InitController
             $cfg['cookie_path'] = '/';
         }
 
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('shop_config') . " WHERE code = 'integrate_config'";
+        $sql = "SELECT COUNT(*) FROM " . table('shop_config') . " WHERE code = 'integrate_config'";
         if ($GLOBALS['db']->getOne($sql) == 0) {
-            $sql = "INSERT INTO " . $GLOBALS['ecs']->table('shop_config') . " (code, value) " .
+            $sql = "INSERT INTO " . table('shop_config') . " (code, value) " .
                 "VALUES ('integrate_config', '" . serialize($cfg) . "')";
         } else {
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') . " SET value='" . serialize($cfg) . "' " .
+            $sql = "UPDATE " . table('shop_config') . " SET value='" . serialize($cfg) . "' " .
                 "WHERE code='integrate_config'";
         }
 

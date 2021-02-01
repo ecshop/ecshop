@@ -11,8 +11,8 @@ class UserRankController extends InitController
     {
         parent::initialize();
 
-        $exc = new exchange($ecs->table("user_rank"), $db, 'rank_id', 'rank_name');
-        $exc_user = new exchange($ecs->table("users"), $db, 'user_rank', 'user_rank');
+        $exc = new exchange(table("user_rank"), $db, 'rank_id', 'rank_name');
+        $exc_user = new exchange(table("users"), $db, 'user_rank', 'user_rank');
     }
 
     /*------------------------------------------------------ */
@@ -22,7 +22,7 @@ class UserRankController extends InitController
     public function listAction()
     {
         $ranks = array();
-        $ranks = $db->getAll("SELECT * FROM " . $ecs->table('user_rank'));
+        $ranks = $db->getAll("SELECT * FROM " . table('user_rank'));
 
         $this->assign('ur_here', $_LANG['05_user_rank_list']);
         $this->assign('action_link', array('text' => $_LANG['add_user_rank'], 'href' => 'user_rank.php?act=add'));
@@ -40,7 +40,7 @@ class UserRankController extends InitController
     public function queryAction()
     {
         $ranks = array();
-        $ranks = $db->getAll("SELECT * FROM " . $ecs->table('user_rank'));
+        $ranks = $db->getAll("SELECT * FROM " . table('user_rank'));
 
         $this->assign('user_ranks', $ranks);
         return make_json_result($smarty->fetch('user_rank.htm'));
@@ -111,7 +111,7 @@ class UserRankController extends InitController
             }
         }
 
-        $sql = "INSERT INTO " . $ecs->table('user_rank') . "( " .
+        $sql = "INSERT INTO " . table('user_rank') . "( " .
             "rank_name, min_points, max_points, discount, special_rank, show_price" .
             ") VALUES (" .
             "'$_POST[rank_name]', '" . intval($_POST['min_points']) . "', '" . intval($_POST['max_points']) . "', " .
@@ -178,7 +178,7 @@ class UserRankController extends InitController
         $rank_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
         $val = empty($_REQUEST['val']) ? 0 : intval($_REQUEST['val']);
 
-        $rank = $db->getRow("SELECT max_points, special_rank FROM " . $ecs->table('user_rank') . " WHERE rank_id = '$rank_id'");
+        $rank = $db->getRow("SELECT max_points, special_rank FROM " . table('user_rank') . " WHERE rank_id = '$rank_id'");
         if ($val >= $rank['max_points'] && $rank['special_rank'] == 0) {
             return make_json_error($_LANG['js_languages']['integral_max_small']);
         }
@@ -204,7 +204,7 @@ class UserRankController extends InitController
         $rank_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
         $val = empty($_REQUEST['val']) ? 0 : intval($_REQUEST['val']);
 
-        $rank = $db->getRow("SELECT min_points, special_rank FROM " . $ecs->table('user_rank') . " WHERE rank_id = '$rank_id'");
+        $rank = $db->getRow("SELECT min_points, special_rank FROM " . table('user_rank') . " WHERE rank_id = '$rank_id'");
 
         if ($val <= $rank['min_points'] && $rank['special_rank'] == 0) {
             return make_json_error($_LANG['js_languages']['integral_max_small']);

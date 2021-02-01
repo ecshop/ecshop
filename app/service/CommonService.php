@@ -133,7 +133,7 @@ class CommonService
      */
     public function get_regions($type = 0, $parent = 0)
     {
-        $sql = 'SELECT region_id, region_name FROM ' . $GLOBALS['ecs']->table('region') .
+        $sql = 'SELECT region_id, region_name FROM ' . table('region') .
             " WHERE region_type = '$type' AND parent_id = '$parent'";
 
         return $GLOBALS['db']->getAll($sql);
@@ -150,7 +150,7 @@ class CommonService
     public function get_shipping_config($area_id)
     {
         /* 获得配置信息 */
-        $sql = 'SELECT configure FROM ' . $GLOBALS['ecs']->table('shipping_area') . " WHERE shipping_area_id = '$area_id'";
+        $sql = 'SELECT configure FROM ' . table('shipping_area') . " WHERE shipping_area_id = '$area_id'";
         $cfg = $GLOBALS['db']->getOne($sql);
 
         if ($cfg) {
@@ -202,20 +202,20 @@ class CommonService
             $data = read_static_cache('cat_pid_releate');
             if ($data === false) {
                 $sql = "SELECT c.cat_id, c.cat_name, c.measure_unit, c.parent_id, c.is_show, c.show_in_nav, c.grade, c.sort_order, COUNT(s.cat_id) AS has_children " .
-                    'FROM ' . $GLOBALS['ecs']->table('category') . " AS c " .
-                    "LEFT JOIN " . $GLOBALS['ecs']->table('category') . " AS s ON s.parent_id=c.cat_id " .
+                    'FROM ' . table('category') . " AS c " .
+                    "LEFT JOIN " . table('category') . " AS s ON s.parent_id=c.cat_id " .
                     "GROUP BY c.cat_id " .
                     'ORDER BY c.parent_id, c.sort_order ASC';
                 $res = $GLOBALS['db']->getAll($sql);
 
                 $sql = "SELECT cat_id, COUNT(*) AS goods_num " .
-                    " FROM " . $GLOBALS['ecs']->table('goods') .
+                    " FROM " . table('goods') .
                     " WHERE is_delete = 0 AND is_on_sale = 1 " .
                     " GROUP BY cat_id";
                 $res2 = $GLOBALS['db']->getAll($sql);
 
                 $sql = "SELECT gc.cat_id, COUNT(*) AS goods_num " .
-                    " FROM " . $GLOBALS['ecs']->table('goods_cat') . " AS gc , " . $GLOBALS['ecs']->table('goods') . " AS g " .
+                    " FROM " . table('goods_cat') . " AS gc , " . table('goods') . " AS g " .
                     " WHERE g.goods_id = gc.goods_id AND g.is_delete = 0 AND g.is_on_sale = 1 " .
                     " GROUP BY gc.cat_id";
                 $res3 = $GLOBALS['db']->getAll($sql);
@@ -446,7 +446,7 @@ class CommonService
 
         $data = read_static_cache('shop_config');
         if ($data === false) {
-            $sql = 'SELECT code, value FROM ' . $GLOBALS['ecs']->table('shop_config') . ' WHERE parent_id > 0';
+            $sql = 'SELECT code, value FROM ' . table('shop_config') . ' WHERE parent_id > 0';
             $res = $GLOBALS['db']->getAll($sql);
 
             foreach ($res as $row) {
@@ -514,7 +514,7 @@ class CommonService
      */
     public function get_brand_list()
     {
-        $sql = 'SELECT brand_id, brand_name FROM ' . $GLOBALS['ecs']->table('brand') . ' ORDER BY sort_order';
+        $sql = 'SELECT brand_id, brand_name FROM ' . table('brand') . ' ORDER BY sort_order';
         $res = $GLOBALS['db']->getAll($sql);
 
         $brand_list = array();
@@ -544,8 +544,8 @@ class CommonService
         $children = ($cat > 0) ? ' AND ' . get_children($cat) : '';
 
         $sql = "SELECT b.brand_id, b.brand_name, b.brand_logo, b.brand_desc, COUNT(*) AS goods_num, IF(b.brand_logo > '', '1', '0') AS tag " .
-            "FROM " . $GLOBALS['ecs']->table('brand') . "AS b, " .
-            $GLOBALS['ecs']->table('goods') . " AS g " .
+            "FROM " . table('brand') . "AS b, " .
+            table('goods') . " AS g " .
             "WHERE g.brand_id = b.brand_id $children AND is_show = 1 " .
             " AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 " .
             "GROUP BY b.brand_id HAVING goods_num > 0 ORDER BY tag DESC, b.sort_order ASC";
@@ -578,7 +578,7 @@ class CommonService
         $favourable = array();
 
         $gmtime = gmtime();
-        $sql = 'SELECT act_id, act_name, act_type, start_time, end_time FROM ' . $GLOBALS['ecs']->table('goods_activity') . " WHERE is_finished=0 AND start_time <= '$gmtime' AND end_time >= '$gmtime'";
+        $sql = 'SELECT act_id, act_name, act_type, start_time, end_time FROM ' . table('goods_activity') . " WHERE is_finished=0 AND start_time <= '$gmtime' AND end_time >= '$gmtime'";
         if (!empty($goods_id)) {
             $sql .= " AND goods_id = '$goods_id'";
         }
@@ -621,7 +621,7 @@ class CommonService
 
         $user_rank = ',' . $_SESSION['user_rank'] . ',';
         $favourable = array();
-        $sql = 'SELECT act_id, act_range, act_range_ext, act_name, start_time, end_time FROM ' . $GLOBALS['ecs']->table('favourable_activity') . " WHERE start_time <= '$gmtime' AND end_time >= '$gmtime'";
+        $sql = 'SELECT act_id, act_range, act_range_ext, act_name, start_time, end_time FROM ' . table('favourable_activity') . " WHERE start_time <= '$gmtime' AND end_time >= '$gmtime'";
         if (!empty($goods_id)) {
             $sql .= " AND CONCAT(',', user_rank, ',') LIKE '%" . $user_rank . "%'";
         }
@@ -636,7 +636,7 @@ class CommonService
                 $favourable[$rows['act_id']]['type'] = 'favourable';
             }
         } else {
-            $sql = "SELECT cat_id, brand_id FROM " . $GLOBALS['ecs']->table('goods') .
+            $sql = "SELECT cat_id, brand_id FROM " . table('goods') .
                 "WHERE goods_id = '$goods_id'";
             $row = $GLOBALS['db']->getRow($sql);
             $category_id = $row['cat_id'];
@@ -735,7 +735,7 @@ class CommonService
      */
     public function get_mail_template($tpl_name)
     {
-        $sql = 'SELECT template_subject, is_html, template_content FROM ' . $GLOBALS['ecs']->table('mail_templates') . " WHERE template_code = '$tpl_name'";
+        $sql = 'SELECT template_subject, is_html, template_content FROM ' . table('mail_templates') . " WHERE template_code = '$tpl_name'";
 
         return $GLOBALS['db']->getRow($sql);
     }
@@ -758,11 +758,11 @@ class CommonService
             $username = $_SESSION['admin_name'];
         }
 
-        $sql = 'INSERT INTO ' . $GLOBALS['ecs']->table('order_action') .
+        $sql = 'INSERT INTO ' . table('order_action') .
             ' (order_id, action_user, order_status, shipping_status, pay_status, action_place, action_note, log_time) ' .
             'SELECT ' .
             "order_id, '$username', '$order_status', '$shipping_status', '$pay_status', '$place', '$note', '" . gmtime() . "' " .
-            'FROM ' . $GLOBALS['ecs']->table('order_info') . " WHERE order_sn = '$order_sn'";
+            'FROM ' . table('order_info') . " WHERE order_sn = '$order_sn'";
         $GLOBALS['db']->query($sql);
     }
 
@@ -823,11 +823,11 @@ class CommonService
     {
         if ($shipping) {
             $sql = 'SELECT goods_id, goods_name, send_number AS num, extension_code FROM ' .
-                $GLOBALS['ecs']->table('order_goods') .
+                table('order_goods') .
                 " WHERE order_id = '$order_id' AND extension_code > ''";
         } else {
             $sql = 'SELECT goods_id, goods_name, (goods_number - send_number) AS num, extension_code FROM ' .
-                $GLOBALS['ecs']->table('order_goods') .
+                table('order_goods') .
                 " WHERE order_id = '$order_id' AND is_real = 0 AND (goods_number - send_number) > 0 AND extension_code > '' ";
         }
         $res = $GLOBALS['db']->getAll($sql);
@@ -889,7 +889,7 @@ class CommonService
         /* 包含加密解密函数所在文件 */
 
         /* 检查有没有缺货 */
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('virtual_card') . " WHERE goods_id = '$goods[goods_id]' AND is_saled = 0 ";
+        $sql = "SELECT COUNT(*) FROM " . table('virtual_card') . " WHERE goods_id = '$goods[goods_id]' AND is_saled = 0 ";
         $num = $GLOBALS['db']->getOne($sql);
 
         if ($num < $goods['num']) {
@@ -899,7 +899,7 @@ class CommonService
         }
 
         /* 取出卡片信息 */
-        $sql = "SELECT card_id, card_sn, card_password, end_date, crc32 FROM " . $GLOBALS['ecs']->table('virtual_card') . " WHERE goods_id = '$goods[goods_id]' AND is_saled = 0  LIMIT " . $goods['num'];
+        $sql = "SELECT card_id, card_sn, card_password, end_date, crc32 FROM " . table('virtual_card') . " WHERE goods_id = '$goods[goods_id]' AND is_saled = 0  LIMIT " . $goods['num'];
         $arr = $GLOBALS['db']->getAll($sql);
 
         $card_ids = array();
@@ -926,7 +926,7 @@ class CommonService
         }
 
         /* 标记已经取出的卡片 */
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('virtual_card') . " SET " .
+        $sql = "UPDATE " . table('virtual_card') . " SET " .
             "is_saled = 1 ," .
             "order_sn = '$order_sn' " .
             "WHERE " . db_create_in($card_ids, 'card_id');
@@ -937,22 +937,22 @@ class CommonService
         }
 
         /* 更新库存 */
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('goods') . " SET goods_number = goods_number - '$goods[num]' WHERE goods_id = '$goods[goods_id]'";
+        $sql = "UPDATE " . table('goods') . " SET goods_number = goods_number - '$goods[num]' WHERE goods_id = '$goods[goods_id]'";
         $GLOBALS['db']->query($sql);
 
         if (true) {
             /* 获取订单信息 */
-            $sql = "SELECT order_id, order_sn, consignee, email FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_sn = '$order_sn'";
+            $sql = "SELECT order_id, order_sn, consignee, email FROM " . table('order_info') . " WHERE order_sn = '$order_sn'";
             $order = $GLOBALS['db']->getRow($sql);
 
             /* 更新订单信息 */
             if ($process == 'split') {
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('order_goods') . "
+                $sql = "UPDATE " . table('order_goods') . "
                     SET send_number = send_number + '" . $goods['num'] . "'
                     WHERE order_id = '" . $order['order_id'] . "'
                     AND goods_id = '" . $goods['goods_id'] . "' ";
             } else {
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('order_goods') . "
+                $sql = "UPDATE " . table('order_goods') . "
                     SET send_number = '" . $goods['num'] . "'
                     WHERE order_id = '" . $order['order_id'] . "'
                     AND goods_id = '" . $goods['goods_id'] . "' ";
@@ -995,7 +995,7 @@ class CommonService
         /* 包含加密解密函数所在文件 */
 
         /* 获取已经发送的卡片数据 */
-        $sql = "SELECT card_sn, card_password, end_date, crc32 FROM " . $GLOBALS['ecs']->table('virtual_card') . " WHERE goods_id= '$goods[goods_id]' AND order_sn = '$order_sn' ";
+        $sql = "SELECT card_sn, card_password, end_date, crc32 FROM " . table('virtual_card') . " WHERE goods_id= '$goods[goods_id]' AND order_sn = '$order_sn' ";
         $res = $GLOBALS['db']->query($sql);
 
         $cards = array();
@@ -1031,8 +1031,8 @@ class CommonService
     public function get_snatch_result($id)
     {
         $sql = 'SELECT u.user_id, u.user_name, u.email, lg.bid_price, lg.bid_time, count(*) as num' .
-            ' FROM ' . $GLOBALS['ecs']->table('snatch_log') . ' AS lg ' .
-            ' LEFT JOIN ' . $GLOBALS['ecs']->table('users') . ' AS u ON lg.user_id = u.user_id' .
+            ' FROM ' . table('snatch_log') . ' AS lg ' .
+            ' LEFT JOIN ' . table('users') . ' AS u ON lg.user_id = u.user_id' .
             " WHERE lg.snatch_id = '$id'" .
             ' GROUP BY lg.bid_price' .
             ' ORDER BY num ASC, lg.bid_price ASC, lg.bid_time ASC LIMIT 1';
@@ -1044,7 +1044,7 @@ class CommonService
 
             /* 活动信息 */
             $sql = 'SELECT ext_info " .
-               " FROM ' . $GLOBALS['ecs']->table('goods_activity') .
+               " FROM ' . table('goods_activity') .
                 " WHERE act_id= '$id' AND act_type=" . GAT_SNATCH .
                 " LIMIT 1";
             $row = $GLOBALS['db']->getOne($sql);
@@ -1059,7 +1059,7 @@ class CommonService
 
             /* 检查订单 */
             $sql = "SELECT COUNT(*)" .
-                " FROM " . $GLOBALS['ecs']->table('order_info') .
+                " FROM " . table('order_info') .
                 " WHERE extension_code = 'snatch'" .
                 " AND extension_id = '$id'" .
                 " AND order_status " . db_create_in(array(OS_CONFIRMED, OS_UNCONFIRMED));
@@ -1557,10 +1557,10 @@ class CommonService
             'change_desc' => $change_desc,
             'change_type' => $change_type
         );
-        $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('account_log'), $account_log, 'INSERT');
+        $GLOBALS['db']->autoExecute(table('account_log'), $account_log, 'INSERT');
 
         /* 更新用户信息 */
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('users') .
+        $sql = "UPDATE " . table('users') .
             " SET user_money = user_money + ('$user_money')," .
             " frozen_money = frozen_money + ('$frozen_money')," .
             " rank_points = rank_points + ('$rank_points')," .
@@ -1588,9 +1588,9 @@ class CommonService
             $data = read_static_cache('art_cat_pid_releate');
             if ($data === false) {
                 $sql = "SELECT c.*, COUNT(s.cat_id) AS has_children, COUNT(a.article_id) AS aricle_num " .
-                    ' FROM ' . $GLOBALS['ecs']->table('article_cat') . " AS c" .
-                    " LEFT JOIN " . $GLOBALS['ecs']->table('article_cat') . " AS s ON s.parent_id=c.cat_id" .
-                    " LEFT JOIN " . $GLOBALS['ecs']->table('article') . " AS a ON a.cat_id=c.cat_id" .
+                    ' FROM ' . table('article_cat') . " AS c" .
+                    " LEFT JOIN " . table('article_cat') . " AS s ON s.parent_id=c.cat_id" .
+                    " LEFT JOIN " . table('article') . " AS a ON a.cat_id=c.cat_id" .
                     " GROUP BY c.cat_id " .
                     " ORDER BY parent_id, sort_order ASC";
                 $res = $GLOBALS['db']->getAll($sql);
@@ -1858,7 +1858,7 @@ class CommonService
         $temp_index = '0';
 
         $sql = "SELECT `volume_number` , `volume_price`" .
-            " FROM " . $GLOBALS['ecs']->table('volume_price') .
+            " FROM " . table('volume_price') .
             " WHERE `goods_id` = '" . $goods_id . "' AND `price_type` = '" . $price_type . "'" .
             " ORDER BY `volume_number`";
 
@@ -1906,8 +1906,8 @@ class CommonService
         /* 取得商品信息 */
         $sql = "SELECT g.promote_price, g.promote_start_date, g.promote_end_date, " .
             "IFNULL(mp.user_price, g.shop_price * '" . $_SESSION['discount'] . "') AS shop_price " .
-            " FROM " . $GLOBALS['ecs']->table('goods') . " AS g " .
-            " LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp " .
+            " FROM " . table('goods') . " AS g " .
+            " LEFT JOIN " . table('member_price') . " AS mp " .
             "ON mp.goods_id = g.goods_id AND mp.user_rank = '" . $_SESSION['user_rank'] . "' " .
             " WHERE g.goods_id = '" . $goods_id . "'" .
             " AND g.is_delete = 0";
@@ -1971,8 +1971,8 @@ class CommonService
 
         //重新排序
         $sql = "SELECT a.attr_type, v.attr_value, v.goods_attr_id
-            FROM " . $GLOBALS['ecs']->table('attribute') . " AS a
-            LEFT JOIN " . $GLOBALS['ecs']->table('goods_attr') . " AS v
+            FROM " . table('attribute') . " AS a
+            LEFT JOIN " . table('goods_attr') . " AS v
                 ON v.attr_id = a.attr_id
                 AND a.attr_type = 1
             WHERE v.goods_attr_id " . db_create_in($goods_attr_id_array) . "
@@ -2006,8 +2006,8 @@ class CommonService
 
         //重新排序
         $sql = "SELECT a.attr_type, v.attr_value, v.goods_attr_id
-            FROM " . $GLOBALS['ecs']->table('attribute') . " AS a
-            LEFT JOIN " . $GLOBALS['ecs']->table('goods_attr') . " AS v
+            FROM " . table('attribute') . " AS a
+            LEFT JOIN " . table('goods_attr') . " AS v
                 ON v.attr_id = a.attr_id
                 AND a.attr_type = 1
             WHERE v.goods_attr_id " . db_create_in($goods_attr_id_array) . "
@@ -2042,7 +2042,7 @@ class CommonService
         $now = gmtime();
 
         $sql = "SELECT act_id AS id,  act_name AS package_name, goods_id , goods_name, start_time, end_time, act_desc, ext_info" .
-            " FROM " . $GLOBALS['ecs']->table('goods_activity') .
+            " FROM " . table('goods_activity') .
             " WHERE act_id='$id' AND act_type = " . GAT_PACKAGE;
 
         $package = $db->getRow($sql);
@@ -2066,10 +2066,10 @@ class CommonService
         $sql = "SELECT pg.package_id, pg.goods_id, pg.goods_number, pg.admin_id, " .
             " g.goods_sn, g.goods_name, g.market_price, g.goods_thumb, g.is_real, " .
             " IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS rank_price " .
-            " FROM " . $GLOBALS['ecs']->table('package_goods') . " AS pg " .
-            "   LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g " .
+            " FROM " . table('package_goods') . " AS pg " .
+            "   LEFT JOIN " . table('goods') . " AS g " .
             "   ON g.goods_id = pg.goods_id " .
-            " LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp " .
+            " LEFT JOIN " . table('member_price') . " AS mp " .
             "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
             " WHERE pg.package_id = " . $id . " " .
             " ORDER BY pg.package_id, pg.goods_id";
@@ -2117,9 +2117,9 @@ class CommonService
     public function get_package_goods($package_id)
     {
         $sql = "SELECT pg.goods_id, g.goods_name, pg.goods_number, p.goods_attr, p.product_number, p.product_id
-            FROM " . $GLOBALS['ecs']->table('package_goods') . " AS pg
-                LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g ON pg.goods_id = g.goods_id
-                LEFT JOIN " . $GLOBALS['ecs']->table('products') . " AS p ON pg.product_id = p.product_id
+            FROM " . table('package_goods') . " AS pg
+                LEFT JOIN " . table('goods') . " AS g ON pg.goods_id = g.goods_id
+                LEFT JOIN " . table('products') . " AS p ON pg.product_id = p.product_id
             WHERE pg.package_id = '$package_id'";
         if ($package_id == 0) {
             $sql .= " AND pg.admin_id = '$_SESSION[admin_id]'";
@@ -2155,7 +2155,7 @@ class CommonService
 
         /* 取商品属性 */
         if ($good_product_str != '') {
-            $sql = "SELECT goods_attr_id, attr_value FROM " . $GLOBALS['ecs']->table('goods_attr') . " WHERE goods_id IN ($good_product_str)";
+            $sql = "SELECT goods_attr_id, attr_value FROM " . table('goods_attr') . " WHERE goods_id IN ($good_product_str)";
             $result_goods_attr = $GLOBALS['db']->getAll($sql);
 
             $_goods_attr = array();
@@ -2215,11 +2215,11 @@ class CommonService
         }
 
         /* 取货品 */
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('products') . " WHERE $_goods_id $conditions";
+        $sql = "SELECT * FROM " . table('products') . " WHERE $_goods_id $conditions";
         $result_products = $GLOBALS['db']->getAll($sql);
 
         /* 取商品属性 */
-        $sql = "SELECT goods_attr_id, attr_value FROM " . $GLOBALS['ecs']->table('goods_attr') . " WHERE $_goods_id";
+        $sql = "SELECT goods_attr_id, attr_value FROM " . table('goods_attr') . " WHERE $_goods_id";
         $result_goods_attr = $GLOBALS['db']->getAll($sql);
 
         $_goods_attr = array();
@@ -2280,7 +2280,7 @@ class CommonService
     {
         /* 取商品属性 */
         $sql = "SELECT ga.goods_attr_id, ga.attr_id, ga.attr_value, a.attr_name
-            FROM " . $GLOBALS['ecs']->table('goods_attr') . " AS ga, " . $GLOBALS['ecs']->table('attribute') . " AS a
+            FROM " . table('goods_attr') . " AS ga, " . table('attribute') . " AS a
             WHERE ga.attr_id = a.attr_id
             AND ga.goods_id = '$goods_id'
             $conditions";

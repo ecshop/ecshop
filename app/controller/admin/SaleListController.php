@@ -117,8 +117,8 @@ function get_sale_list($is_pagination = true)
         " AND oi.add_time >= '" . $filter['start_date'] . "' AND oi.add_time < '" . ($filter['end_date'] + 86400) . "'";
 
     $sql = "SELECT COUNT(og.goods_id) FROM " .
-        $GLOBALS['ecs']->table('order_info') . ' AS oi,' .
-        $GLOBALS['ecs']->table('order_goods') . ' AS og ' .
+        table('order_info') . ' AS oi,' .
+        table('order_goods') . ' AS og ' .
         $where;
     $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -127,7 +127,7 @@ function get_sale_list($is_pagination = true)
 
     $sql = 'SELECT og.goods_id, og.goods_sn, og.goods_name, og.goods_number AS goods_num, og.goods_price ' .
         'AS sales_price, oi.add_time AS sales_time, oi.order_id, oi.order_sn ' .
-        "FROM " . $GLOBALS['ecs']->table('order_goods') . " AS og, " . $GLOBALS['ecs']->table('order_info') . " AS oi " .
+        "FROM " . table('order_goods') . " AS og, " . table('order_info') . " AS oi " .
         $where . " ORDER BY sales_time DESC, goods_num DESC";
     if ($is_pagination) {
         $sql .= " LIMIT " . $filter['start'] . ', ' . $filter['page_size'];

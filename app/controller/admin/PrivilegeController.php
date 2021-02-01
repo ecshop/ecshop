@@ -12,7 +12,7 @@ class PrivilegeController extends InitController
         parent::initialize();
 
         /* 初始化 $exc 对象 */
-        $exc = new exchange($ecs->table("admin_user"), $db, 'user_id', 'user_name');
+        $exc = new exchange(table("admin_user"), $db, 'user_id', 'user_name');
     }
 
 
@@ -64,17 +64,17 @@ class PrivilegeController extends InitController
         $_POST['username'] = isset($_POST['username']) ? trim($_POST['username']) : '';
         $_POST['password'] = isset($_POST['password']) ? trim($_POST['password']) : '';
 
-        $sql = "SELECT `ec_salt` FROM " . $ecs->table('admin_user') . "WHERE user_name = '" . $_POST['username'] . "'";
+        $sql = "SELECT `ec_salt` FROM " . table('admin_user') . "WHERE user_name = '" . $_POST['username'] . "'";
         $ec_salt = $db->getOne($sql);
         if (!empty($ec_salt)) {
             /* 检查密码是否正确 */
             $sql = "SELECT user_id, user_name, password, add_time, action_list, last_login,suppliers_id,ec_salt" .
-                " FROM " . $ecs->table('admin_user') .
+                " FROM " . table('admin_user') .
                 " WHERE user_name = '" . $_POST['username'] . "' AND password = '" . md5(md5($_POST['password']) . $ec_salt) . "'";
         } else {
             /* 检查密码是否正确 */
             $sql = "SELECT user_id, user_name, password, add_time, action_list, last_login,suppliers_id,ec_salt" .
-                " FROM " . $ecs->table('admin_user') .
+                " FROM " . table('admin_user') .
                 " WHERE user_name = '" . $_POST['username'] . "' AND password = '" . md5($_POST['password']) . "'";
         }
         $row = $db->getRow($sql);
@@ -94,7 +94,7 @@ class PrivilegeController extends InitController
             if (empty($row['ec_salt'])) {
                 $ec_salt = rand(1, 9999);
                 $new_possword = md5(md5($_POST['password']) . $ec_salt);
-                $db->query("UPDATE " . $ecs->table('admin_user') .
+                $db->query("UPDATE " . table('admin_user') .
                     " SET ec_salt='" . $ec_salt . "', password='" . $new_possword . "'" .
                     " WHERE user_id='$_SESSION[admin_id]'");
             }
@@ -104,7 +104,7 @@ class PrivilegeController extends InitController
             }
 
             // 更新最后登录时间和IP
-            $db->query("UPDATE " . $ecs->table('admin_user') .
+            $db->query("UPDATE " . table('admin_user') .
                 " SET last_login='" . gmtime() . "', last_ip='" . real_ip() . "'" .
                 " WHERE user_id='$_SESSION[admin_id]'");
 
@@ -203,17 +203,17 @@ class PrivilegeController extends InitController
         $role_id = '';
         $action_list = '';
         if (!empty($_POST['select_role'])) {
-            $sql = "SELECT action_list FROM " . $ecs->table('role') . " WHERE role_id = '" . $_POST['select_role'] . "'";
+            $sql = "SELECT action_list FROM " . table('role') . " WHERE role_id = '" . $_POST['select_role'] . "'";
             $row = $db->getRow($sql);
             $action_list = $row['action_list'];
             $role_id = $_POST['select_role'];
         }
 
-        $sql = "SELECT nav_list FROM " . $ecs->table('admin_user') . " WHERE action_list = 'all'";
+        $sql = "SELECT nav_list FROM " . table('admin_user') . " WHERE action_list = 'all'";
         $row = $db->getRow($sql);
 
 
-        $sql = "INSERT INTO " . $ecs->table('admin_user') . " (user_name, email, password, add_time, nav_list, action_list, role_id) " .
+        $sql = "INSERT INTO " . table('admin_user') . " (user_name, email, password, add_time, nav_list, action_list, role_id) " .
             "VALUES ('" . trim($_POST['user_name']) . "', '" . trim($_POST['email']) . "', '$password', '$add_time', '$row[nav_list]', '$action_list', '$role_id')";
 
         $db->query($sql);
@@ -252,14 +252,14 @@ class PrivilegeController extends InitController
         }
 
         /* 获取管理员信息 */
-        $sql = "SELECT user_id, user_name, email, password, agency_id, role_id FROM " . $ecs->table('admin_user') .
+        $sql = "SELECT user_id, user_name, email, password, agency_id, role_id FROM " . table('admin_user') .
             " WHERE user_id = '" . $_REQUEST['id'] . "'";
         $user_info = $db->getRow($sql);
 
 
         /* 取得该管理员负责的办事处名称 */
         if ($user_info['agency_id'] > 0) {
-            $sql = "SELECT agency_name FROM " . $ecs->table('agency') . " WHERE agency_id = '$user_info[agency_id]'";
+            $sql = "SELECT agency_name FROM " . table('agency') . " WHERE agency_id = '$user_info[agency_id]'";
             $user_info['agency_name'] = $db->getOne($sql);
         }
 
@@ -269,7 +269,7 @@ class PrivilegeController extends InitController
         $this->assign('user', $user_info);
 
         /* 获得该管理员的权限 */
-        $priv_str = $db->getOne("SELECT action_list FROM " . $ecs->table('admin_user') . " WHERE user_id = '$_GET[id]'");
+        $priv_str = $db->getOne("SELECT action_list FROM " . table('admin_user') . " WHERE user_id = '$_GET[id]'");
 
         /* 如果被编辑的管理员拥有了all这个权限，将不能编辑 */
         if ($priv_str != 'all') {
@@ -337,9 +337,9 @@ class PrivilegeController extends InitController
 
         if (!empty($_POST['new_password'])) {
             /* 查询旧密码并与输入的旧密码比较是否相同 */
-            $sql = "SELECT password FROM " . $ecs->table('admin_user') . " WHERE user_id = '$admin_id'";
+            $sql = "SELECT password FROM " . table('admin_user') . " WHERE user_id = '$admin_id'";
             $old_password = $db->getOne($sql);
-            $sql = "SELECT ec_salt FROM " . $ecs->table('admin_user') . " WHERE user_id = '$admin_id'";
+            $sql = "SELECT ec_salt FROM " . table('admin_user') . " WHERE user_id = '$admin_id'";
             $old_ec_salt = $db->getOne($sql);
             if (empty($old_ec_salt)) {
                 $old_ec_password = md5($_POST['old_password']);
@@ -363,14 +363,14 @@ class PrivilegeController extends InitController
         $role_id = '';
         $action_list = '';
         if (!empty($_POST['select_role'])) {
-            $sql = "SELECT action_list FROM " . $ecs->table('role') . " WHERE role_id = '" . $_POST['select_role'] . "'";
+            $sql = "SELECT action_list FROM " . table('role') . " WHERE role_id = '" . $_POST['select_role'] . "'";
             $row = $db->getRow($sql);
             $action_list = ', action_list = \'' . $row['action_list'] . '\'';
             $role_id = ', role_id = ' . $_POST['select_role'] . ' ';
         }
         //更新管理员信息
         if ($pwd_modified) {
-            $sql = "UPDATE " . $ecs->table('admin_user') . " SET " .
+            $sql = "UPDATE " . table('admin_user') . " SET " .
                 "user_name = '$admin_name', " .
                 "email = '$admin_email', " .
                 "ec_salt = '$ec_salt' " .
@@ -380,7 +380,7 @@ class PrivilegeController extends InitController
                 $nav_list .
                 "WHERE user_id = '$admin_id'";
         } else {
-            $sql = "UPDATE " . $ecs->table('admin_user') . " SET " .
+            $sql = "UPDATE " . table('admin_user') . " SET " .
                 "user_name = '$admin_name', " .
                 "email = '$admin_email' " .
                 $action_list .
@@ -445,7 +445,7 @@ class PrivilegeController extends InitController
 
         /* 获得当前管理员数据信息 */
         $sql = "SELECT user_id, user_name, email, nav_list " .
-            "FROM " . $ecs->table('admin_user') . " WHERE user_id = '" . $_SESSION['admin_id'] . "'";
+            "FROM " . table('admin_user') . " WHERE user_id = '" . $_SESSION['admin_id'] . "'";
         $user_info = $db->getRow($sql);
 
         /* 获取导航条 */
@@ -485,7 +485,7 @@ class PrivilegeController extends InitController
         }
 
         /* 获得该管理员的权限 */
-        $priv_str = $db->getOne("SELECT action_list FROM " . $ecs->table('admin_user') . " WHERE user_id = '$_GET[id]'");
+        $priv_str = $db->getOne("SELECT action_list FROM " . table('admin_user') . " WHERE user_id = '$_GET[id]'");
 
         /* 如果被编辑的管理员拥有了all这个权限，将不能编辑 */
         if ($priv_str == 'all') {
@@ -494,7 +494,7 @@ class PrivilegeController extends InitController
         }
 
         /* 获取权限的分组数据 */
-        $sql_query = "SELECT action_id, parent_id, action_code,relevance FROM " . $ecs->table('admin_action') .
+        $sql_query = "SELECT action_id, parent_id, action_code,relevance FROM " . table('admin_action') .
             " WHERE parent_id = 0";
         $res = $db->query($sql_query);
         while ($rows = $db->fetchRow($res)) {
@@ -502,7 +502,7 @@ class PrivilegeController extends InitController
         }
 
         /* 按权限组查询底级的权限名称 */
-        $sql = "SELECT action_id, parent_id, action_code,relevance FROM " . $ecs->table('admin_action') .
+        $sql = "SELECT action_id, parent_id, action_code,relevance FROM " . table('admin_action') .
             " WHERE parent_id " . db_create_in(array_keys($priv_arr));
         $result = $db->query($sql);
         while ($priv = $db->fetchRow($result)) {
@@ -541,11 +541,11 @@ class PrivilegeController extends InitController
             sys_msg('update_allot_error', 1);
         }
         /* 取得当前管理员用户名 */
-        $admin_name = $db->getOne("SELECT user_name FROM " . $ecs->table('admin_user') . " WHERE user_id = '$_POST[id]'");
+        $admin_name = $db->getOne("SELECT user_name FROM " . table('admin_user') . " WHERE user_id = '$_POST[id]'");
 
         /* 更新管理员的权限 */
         $act_list = @join(",", $_POST['action_code']);
-        $sql = "UPDATE " . $ecs->table('admin_user') . " SET action_list = '$act_list', role_id = '' " .
+        $sql = "UPDATE " . table('admin_user') . " SET action_list = '$act_list', role_id = '' " .
             "WHERE user_id = '$_POST[id]'";
 
         $db->query($sql);
@@ -572,7 +572,7 @@ class PrivilegeController extends InitController
         $id = intval($_GET['id']);
 
         /* 获得管理员用户名 */
-        $admin_name = $db->getOne('SELECT user_name FROM ' . $ecs->table('admin_user') . " WHERE user_id='$id'");
+        $admin_name = $db->getOne('SELECT user_name FROM ' . table('admin_user') . " WHERE user_id='$id'");
 
         /* demo这个管理员不允许删除 */
         if ($admin_name == 'demo') {
@@ -606,7 +606,7 @@ class PrivilegeController extends InitController
     {
         $list = array();
         $sql = 'SELECT user_id, user_name, email, add_time, last_login ' .
-            'FROM ' . $GLOBALS['ecs']->table('admin_user') . ' ORDER BY user_id DESC';
+            'FROM ' . table('admin_user') . ' ORDER BY user_id DESC';
         $list = $GLOBALS['db']->getAll($sql);
 
         foreach ($list as $key => $val) {
@@ -622,13 +622,13 @@ class PrivilegeController extends InitController
     {
         /* 取得有效的session */
         $sql = "SELECT DISTINCT session_id " .
-            "FROM " . $GLOBALS['ecs']->table('cart') . " AS c, " .
-            $GLOBALS['ecs']->table('sessions') . " AS s " .
+            "FROM " . table('cart') . " AS c, " .
+            table('sessions') . " AS s " .
             "WHERE c.session_id = s.sesskey ";
         $valid_sess = $GLOBALS['db']->getCol($sql);
 
         // 删除cart中无效的数据
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('cart') .
+        $sql = "DELETE FROM " . table('cart') .
             " WHERE session_id NOT " . db_create_in($valid_sess);
         $GLOBALS['db']->query($sql);
     }
@@ -638,7 +638,7 @@ class PrivilegeController extends InitController
     {
         $list = array();
         $sql = 'SELECT role_id, role_name, action_list ' .
-            'FROM ' . $GLOBALS['ecs']->table('role');
+            'FROM ' . table('role');
         $list = $GLOBALS['db']->getAll($sql);
         return $list;
     }

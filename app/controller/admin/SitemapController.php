@@ -50,10 +50,10 @@ class SitemapController extends InitController
         );
         $config = serialize($config);
 
-        $db->query("UPDATE " . $ecs->table('shop_config') . " SET VALUE='$config' WHERE code='sitemap'");
+        $db->query("UPDATE " . table('shop_config') . " SET VALUE='$config' WHERE code='sitemap'");
 
         /* 商品分类 */
-        $sql = "SELECT cat_id,cat_name FROM " . $ecs->table('category') . " ORDER BY parent_id";
+        $sql = "SELECT cat_id,cat_name FROM " . table('category') . " ORDER BY parent_id";
         $res = $db->query($sql);
 
         while ($row = $db->fetchRow($res)) {
@@ -67,7 +67,7 @@ class SitemapController extends InitController
         }
 
         /* 文章分类 */
-        $sql = "SELECT cat_id,cat_name FROM " . $ecs->table('article_cat') . " WHERE cat_type=1";
+        $sql = "SELECT cat_id,cat_name FROM " . table('article_cat') . " WHERE cat_type=1";
         $res = $db->query($sql);
 
         while ($row = $db->fetchRow($res)) {
@@ -81,7 +81,7 @@ class SitemapController extends InitController
         }
 
         /* 商品 */
-        $sql = "SELECT goods_id, goods_name FROM " . $ecs->table('goods') . " WHERE is_delete = 0";
+        $sql = "SELECT goods_id, goods_name FROM " . table('goods') . " WHERE is_delete = 0";
         $res = $db->query($sql);
 
         while ($row = $db->fetchRow($res)) {
@@ -95,7 +95,7 @@ class SitemapController extends InitController
         }
 
         /* 文章 */
-        $sql = "SELECT article_id,title,file_url,open_type FROM " . $ecs->table('article') . " WHERE is_open=1";
+        $sql = "SELECT article_id,title,file_url,open_type FROM " . table('article') . " WHERE is_open=1";
         $res = $db->query($sql);
 
         while ($row = $db->fetchRow($res)) {

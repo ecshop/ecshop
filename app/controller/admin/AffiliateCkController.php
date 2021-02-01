@@ -60,9 +60,9 @@ class AffiliateCkController extends InitController
     public function delAction()
     {
         $oid = (int)$_REQUEST['oid'];
-        $stat = $db->getOne("SELECT is_separate FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_id = '$oid'");
+        $stat = $db->getOne("SELECT is_separate FROM " . table('order_info') . " WHERE order_id = '$oid'");
         if (empty($stat)) {
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('order_info') .
+            $sql = "UPDATE " . table('order_info') .
                 " SET is_separate = 2" .
                 " WHERE order_id = '$oid'";
             $db->query($sql);
@@ -75,7 +75,7 @@ class AffiliateCkController extends InitController
     public function rollbackAction()
     {
         $logid = (int)$_REQUEST['logid'];
-        $stat = $db->getRow("SELECT * FROM " . $GLOBALS['ecs']->table('affiliate_log') . " WHERE log_id = '$logid'");
+        $stat = $db->getRow("SELECT * FROM " . table('affiliate_log') . " WHERE log_id = '$logid'");
         if (!empty($stat)) {
             if ($stat['separate_type'] == 1) {
                 //推荐订单分成
@@ -85,7 +85,7 @@ class AffiliateCkController extends InitController
                 $flag = -1;
             }
             log_account_change($stat['user_id'], -$stat['money'], 0, -$stat['point'], 0, $_LANG['loginfo']['cancel']);
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('affiliate_log') .
+            $sql = "UPDATE " . table('affiliate_log') .
                 " SET separate_type = '$flag'" .
                 " WHERE log_id = '$logid'";
             $db->query($sql);
@@ -104,8 +104,8 @@ class AffiliateCkController extends InitController
 
         $oid = (int)$_REQUEST['oid'];
 
-        $row = $db->getRow("SELECT o.order_sn, o.is_separate, (o.goods_amount - o.discount) AS goods_amount, o.user_id FROM " . $GLOBALS['ecs']->table('order_info') . " o" .
-            " LEFT JOIN " . $GLOBALS['ecs']->table('users') . " u ON o.user_id = u.user_id" .
+        $row = $db->getRow("SELECT o.order_sn, o.is_separate, (o.goods_amount - o.discount) AS goods_amount, o.user_id FROM " . table('order_info') . " o" .
+            " LEFT JOIN " . table('users') . " u ON o.user_id = u.user_id" .
             " WHERE order_id = '$oid'");
 
         $order_sn = $row['order_sn'];
@@ -138,8 +138,8 @@ class AffiliateCkController extends InitController
                     $setmoney = round($money * $affiliate['item'][$i]['level_money'], 2);
                     $setpoint = round($point * $affiliate['item'][$i]['level_point'], 0);
                     $row = $db->getRow(
-                        "SELECT o.parent_id as user_id,u.user_name FROM " . $GLOBALS['ecs']->table('users') . " o" .
-                        " LEFT JOIN" . $GLOBALS['ecs']->table('users') . " u ON o.parent_id = u.user_id" .
+                        "SELECT o.parent_id as user_id,u.user_name FROM " . table('users') . " o" .
+                        " LEFT JOIN" . table('users') . " u ON o.parent_id = u.user_id" .
                         " WHERE o.user_id = '$row[user_id]'"
                     );
                     $up_uid = $row['user_id'];
@@ -154,8 +154,8 @@ class AffiliateCkController extends InitController
             } else {
                 //推荐订单分成
                 $row = $db->getRow(
-                    "SELECT o.parent_id, u.user_name FROM " . $GLOBALS['ecs']->table('order_info') . " o" .
-                    " LEFT JOIN" . $GLOBALS['ecs']->table('users') . " u ON o.parent_id = u.user_id" .
+                    "SELECT o.parent_id, u.user_name FROM " . table('order_info') . " o" .
+                    " LEFT JOIN" . table('users') . " u ON o.parent_id = u.user_id" .
                     " WHERE o.order_id = '$oid'"
                 );
                 $up_uid = $row['parent_id'];
@@ -168,7 +168,7 @@ class AffiliateCkController extends InitController
                     sys_msg($_LANG['edit_fail'], 1, $links);
                 }
             }
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('order_info') .
+            $sql = "UPDATE " . table('order_info') .
                 " SET is_separate = 1" .
                 " WHERE order_id = '$oid'";
             $db->query($sql);
@@ -200,21 +200,21 @@ class AffiliateCkController extends InitController
         if (!empty($affiliate['on'])) {
             if (empty($separate_by)) {
                 //推荐注册分成
-                $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('order_info') . " o" .
-                    " LEFT JOIN" . $GLOBALS['ecs']->table('users') . " u ON o.user_id = u.user_id" .
-                    " LEFT JOIN " . $GLOBALS['ecs']->table('affiliate_log') . " a ON o.order_id = a.order_id" .
+                $sql = "SELECT COUNT(*) FROM " . table('order_info') . " o" .
+                    " LEFT JOIN" . table('users') . " u ON o.user_id = u.user_id" .
+                    " LEFT JOIN " . table('affiliate_log') . " a ON o.order_id = a.order_id" .
                     " WHERE o.user_id > 0 AND (u.parent_id > 0 AND o.is_separate = 0 OR o.is_separate > 0) $sqladd";
             } else {
                 //推荐订单分成
-                $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('order_info') . " o" .
-                    " LEFT JOIN" . $GLOBALS['ecs']->table('users') . " u ON o.user_id = u.user_id" .
-                    " LEFT JOIN " . $GLOBALS['ecs']->table('affiliate_log') . " a ON o.order_id = a.order_id" .
+                $sql = "SELECT COUNT(*) FROM " . table('order_info') . " o" .
+                    " LEFT JOIN" . table('users') . " u ON o.user_id = u.user_id" .
+                    " LEFT JOIN " . table('affiliate_log') . " a ON o.order_id = a.order_id" .
                     " WHERE o.user_id > 0 AND (o.parent_id > 0 AND o.is_separate = 0 OR o.is_separate > 0) $sqladd";
             }
         } else {
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('order_info') . " o" .
-                " LEFT JOIN" . $GLOBALS['ecs']->table('users') . " u ON o.user_id = u.user_id" .
-                " LEFT JOIN " . $GLOBALS['ecs']->table('affiliate_log') . " a ON o.order_id = a.order_id" .
+            $sql = "SELECT COUNT(*) FROM " . table('order_info') . " o" .
+                " LEFT JOIN" . table('users') . " u ON o.user_id = u.user_id" .
+                " LEFT JOIN " . table('affiliate_log') . " a ON o.order_id = a.order_id" .
                 " WHERE o.user_id > 0 AND o.is_separate > 0 $sqladd";
         }
 
@@ -227,9 +227,9 @@ class AffiliateCkController extends InitController
         if (!empty($affiliate['on'])) {
             if (empty($separate_by)) {
                 //推荐注册分成
-                $sql = "SELECT o.*, a.log_id, a.user_id as suid,  a.user_name as auser, a.money, a.point, a.separate_type,u.parent_id as up FROM " . $GLOBALS['ecs']->table('order_info') . " o" .
-                    " LEFT JOIN" . $GLOBALS['ecs']->table('users') . " u ON o.user_id = u.user_id" .
-                    " LEFT JOIN " . $GLOBALS['ecs']->table('affiliate_log') . " a ON o.order_id = a.order_id" .
+                $sql = "SELECT o.*, a.log_id, a.user_id as suid,  a.user_name as auser, a.money, a.point, a.separate_type,u.parent_id as up FROM " . table('order_info') . " o" .
+                    " LEFT JOIN" . table('users') . " u ON o.user_id = u.user_id" .
+                    " LEFT JOIN " . table('affiliate_log') . " a ON o.order_id = a.order_id" .
                     " WHERE o.user_id > 0 AND (u.parent_id > 0 AND o.is_separate = 0 OR o.is_separate > 0) $sqladd" .
                     " ORDER BY order_id DESC" .
                     " LIMIT " . $filter['start'] . ",$filter[page_size]";
@@ -246,9 +246,9 @@ class AffiliateCkController extends InitController
                 */
             } else {
                 //推荐订单分成
-                $sql = "SELECT o.*, a.log_id,a.user_id as suid, a.user_name as auser, a.money, a.point, a.separate_type,u.parent_id as up FROM " . $GLOBALS['ecs']->table('order_info') . " o" .
-                    " LEFT JOIN" . $GLOBALS['ecs']->table('users') . " u ON o.user_id = u.user_id" .
-                    " LEFT JOIN " . $GLOBALS['ecs']->table('affiliate_log') . " a ON o.order_id = a.order_id" .
+                $sql = "SELECT o.*, a.log_id,a.user_id as suid, a.user_name as auser, a.money, a.point, a.separate_type,u.parent_id as up FROM " . table('order_info') . " o" .
+                    " LEFT JOIN" . table('users') . " u ON o.user_id = u.user_id" .
+                    " LEFT JOIN " . table('affiliate_log') . " a ON o.order_id = a.order_id" .
                     " WHERE o.user_id > 0 AND (o.parent_id > 0 AND o.is_separate = 0 OR o.is_separate > 0) $sqladd" .
                     " ORDER BY order_id DESC" .
                     " LIMIT " . $filter['start'] . ",$filter[page_size]";
@@ -266,9 +266,9 @@ class AffiliateCkController extends InitController
             }
         } else {
             //关闭
-            $sql = "SELECT o.*, a.log_id,a.user_id as suid, a.user_name as auser, a.money, a.point, a.separate_type,u.parent_id as up FROM " . $GLOBALS['ecs']->table('order_info') . " o" .
-                " LEFT JOIN" . $GLOBALS['ecs']->table('users') . " u ON o.user_id = u.user_id" .
-                " LEFT JOIN " . $GLOBALS['ecs']->table('affiliate_log') . " a ON o.order_id = a.order_id" .
+            $sql = "SELECT o.*, a.log_id,a.user_id as suid, a.user_name as auser, a.money, a.point, a.separate_type,u.parent_id as up FROM " . table('order_info') . " o" .
+                " LEFT JOIN" . table('users') . " u ON o.user_id = u.user_id" .
+                " LEFT JOIN " . table('affiliate_log') . " a ON o.order_id = a.order_id" .
                 " WHERE o.user_id > 0 AND o.is_separate > 0 $sqladd" .
                 " ORDER BY order_id DESC" .
                 " LIMIT " . $filter['start'] . ",$filter[page_size]";
@@ -303,7 +303,7 @@ class AffiliateCkController extends InitController
     public function write_affiliate_log($oid, $uid, $username, $money, $point, $separate_by)
     {
         $time = gmtime();
-        $sql = "INSERT INTO " . $GLOBALS['ecs']->table('affiliate_log') . "( order_id, user_id, user_name, time, money, point, separate_type)" .
+        $sql = "INSERT INTO " . table('affiliate_log') . "( order_id, user_id, user_name, time, money, point, separate_type)" .
             " VALUES ( '$oid', '$uid', '$username', '$time', '$money', '$point', $separate_by)";
         if ($oid) {
             $GLOBALS['db']->query($sql);

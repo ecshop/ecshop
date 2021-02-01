@@ -129,14 +129,14 @@ class ExchangeController extends InitController
             $this->assign_template();
 
             /* 上一个商品下一个商品 */
-            $sql = "SELECT eg.goods_id FROM " . $ecs->table('exchange_goods') . " AS eg," . $GLOBALS['ecs']->table('goods') . " AS g WHERE eg.goods_id = g.goods_id AND eg.goods_id > " . $goods['goods_id'] . " AND eg.is_exchange = 1 AND g.is_delete = 0 LIMIT 1";
+            $sql = "SELECT eg.goods_id FROM " . table('exchange_goods') . " AS eg," . table('goods') . " AS g WHERE eg.goods_id = g.goods_id AND eg.goods_id > " . $goods['goods_id'] . " AND eg.is_exchange = 1 AND g.is_delete = 0 LIMIT 1";
             $prev_gid = $db->getOne($sql);
             if (!empty($prev_gid)) {
                 $prev_good['url'] = build_uri('exchange_goods', array('gid' => $prev_gid), $goods['goods_name']);
                 $this->assign('prev_good', $prev_good);//上一个商品
             }
 
-            $sql = "SELECT max(eg.goods_id) FROM " . $ecs->table('exchange_goods') . " AS eg," . $GLOBALS['ecs']->table('goods') . " AS g WHERE eg.goods_id = g.goods_id AND eg.goods_id < " . $goods['goods_id'] . " AND eg.is_exchange = 1 AND g.is_delete = 0";
+            $sql = "SELECT max(eg.goods_id) FROM " . table('exchange_goods') . " AS eg," . table('goods') . " AS g WHERE eg.goods_id = g.goods_id AND eg.goods_id < " . $goods['goods_id'] . " AND eg.is_exchange = 1 AND g.is_delete = 0";
             $next_gid = $db->getOne($sql);
             if (!empty($next_gid)) {
                 $next_good['url'] = build_uri('exchange_goods', array('gid' => $next_gid), $goods['goods_name']);
@@ -229,8 +229,8 @@ class ExchangeController extends InitController
         /* 查询：查询规格名称和值，不考虑价格 */
         $attr_list = array();
         $sql = "SELECT a.attr_name, g.attr_value " .
-            "FROM " . $ecs->table('goods_attr') . " AS g, " .
-            $ecs->table('attribute') . " AS a " .
+            "FROM " . table('goods_attr') . " AS g, " .
+            table('attribute') . " AS a " .
             "WHERE g.attr_id = a.attr_id " .
             "AND g.goods_attr_id " . db_create_in($specs);
         $res = $db->query($sql);
@@ -262,7 +262,7 @@ class ExchangeController extends InitController
             'rec_type' => CART_EXCHANGE_GOODS,
             'is_gift' => 0
         );
-        $db->autoExecute($ecs->table('cart'), $cart, 'INSERT');
+        $db->autoExecute(table('cart'), $cart, 'INSERT');
 
         /* 记录购物流程类型：团购 */
         $_SESSION['flow_type'] = CART_EXCHANGE_GOODS;
@@ -282,7 +282,7 @@ class ExchangeController extends InitController
      */
     public function get_cat_info($cat_id)
     {
-        return $GLOBALS['db']->getRow('SELECT keywords, cat_desc, style, grade, filter_attr, parent_id FROM ' . $GLOBALS['ecs']->table('category') .
+        return $GLOBALS['db']->getRow('SELECT keywords, cat_desc, style, grade, filter_attr, parent_id FROM ' . table('category') .
             " WHERE cat_id = '$cat_id'");
     }
 
@@ -310,7 +310,7 @@ class ExchangeController extends InitController
         /* 获得商品列表 */
         $sql = 'SELECT g.goods_id, g.goods_name, g.goods_name_style, eg.exchange_integral, ' .
             'g.goods_type, g.goods_brief, g.goods_thumb , g.goods_img, eg.is_hot ' .
-            'FROM ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg, ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
+            'FROM ' . table('exchange_goods') . ' AS eg, ' . table('goods') . ' AS g ' .
             "WHERE eg.goods_id = g.goods_id AND $where $ext ORDER BY $sort $order";
         $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);
 
@@ -375,8 +375,8 @@ class ExchangeController extends InitController
             $where .= " AND eg.exchange_integral <= $max ";
         }
 
-        $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg, ' .
-            $GLOBALS['ecs']->table('goods') . " AS g WHERE eg.goods_id = g.goods_id AND $where $ext";
+        $sql = 'SELECT COUNT(*) FROM ' . table('exchange_goods') . ' AS eg, ' .
+            table('goods') . " AS g WHERE eg.goods_id = g.goods_id AND $where $ext";
 
         /* 返回商品总数 */
         return $GLOBALS['db']->getOne($sql);
@@ -400,9 +400,9 @@ class ExchangeController extends InitController
 
         $sql = 'SELECT g.goods_id, g.goods_name, g.goods_name_style, eg.exchange_integral, ' .
             'g.goods_brief, g.goods_thumb, goods_img, b.brand_name ' .
-            'FROM ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = eg.goods_id ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('brand') . ' AS b ON b.brand_id = g.brand_id ' .
+            'FROM ' . table('exchange_goods') . ' AS eg ' .
+            'LEFT JOIN ' . table('goods') . ' AS g ON g.goods_id = eg.goods_id ' .
+            'LEFT JOIN ' . table('brand') . ' AS b ON b.brand_id = g.brand_id ' .
             'WHERE eg.is_exchange = 1 AND g.is_delete = 0 ' . $price_where . $ext;
         $num = 0;
         $type2lib = array('best' => 'exchange_best', 'new' => 'exchange_new', 'hot' => 'exchange_hot');
@@ -459,10 +459,10 @@ class ExchangeController extends InitController
     {
         $time = gmtime();
         $sql = 'SELECT g.*, c.measure_unit, b.brand_id, b.brand_name AS goods_brand, eg.exchange_integral, eg.is_exchange ' .
-            'FROM ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg ON g.goods_id = eg.goods_id ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('category') . ' AS c ON g.cat_id = c.cat_id ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('brand') . ' AS b ON g.brand_id = b.brand_id ' .
+            'FROM ' . table('goods') . ' AS g ' .
+            'LEFT JOIN ' . table('exchange_goods') . ' AS eg ON g.goods_id = eg.goods_id ' .
+            'LEFT JOIN ' . table('category') . ' AS c ON g.cat_id = c.cat_id ' .
+            'LEFT JOIN ' . table('brand') . ' AS b ON g.brand_id = b.brand_id ' .
             "WHERE g.goods_id = '$goods_id' AND g.is_delete = 0 " .
             'GROUP BY g.goods_id';
 

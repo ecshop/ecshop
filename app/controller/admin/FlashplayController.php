@@ -246,7 +246,7 @@ class FlashplayController extends InitController
         check_authz_json('flash_manage');
         $flash_theme = trim($_GET['flashtpl']);
         if ($_CFG['flash_theme'] != $flash_theme) {
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') . " SET value = '$flash_theme' WHERE code = 'flash_theme'";
+            $sql = "UPDATE " . table('shop_config') . " SET value = '$flash_theme' WHERE code = 'flash_theme'";
             if ($db->query($sql, 'SILENT')) {
                 clear_all_files(); //清除模板编译文件
 
@@ -424,7 +424,7 @@ class FlashplayController extends InitController
             'url' => $filter['ad']['url'],
             'ad_status' => $filter['ad']['ad_status']
         );
-        $db->autoExecute($ecs->table('ad_custom'), $ad, 'INSERT', '', 'SILENT');
+        $db->autoExecute(table('ad_custom'), $ad, 'INSERT', '', 'SILENT');
         $ad_id = $db->insert_id();
 
         /* 修改状态 */
@@ -459,7 +459,7 @@ class FlashplayController extends InitController
         /* 清除模板编译文件 */
         clear_all_files();
 
-        $query = $db->query("DELETE FROM " . $ecs->table('ad_custom') . " WHERE ad_id = $id");
+        $query = $db->query("DELETE FROM " . table('ad_custom') . " WHERE ad_id = $id");
 
         $links[] = array('text' => $_LANG['back_custom_set'], 'href' => 'flashplay.php?act=custom_list');
         if ($query) {
@@ -491,7 +491,7 @@ class FlashplayController extends InitController
             clear_all_files();
 
             /* 标签初始化 */
-            $sql = "SELECT  value FROM " . $ecs->table("shop_config") . " WHERE id =337";
+            $sql = "SELECT  value FROM " . table("shop_config") . " WHERE id =337";
             $shop_config = $db->getRow($sql);
             $group_list = array(
                 'sys' => array('text' => $_LANG['system_set'], 'url' => ($shop_config['value'] == 'cus') ? 'javascript:system_set();void(0);' : 'flashplay.php?act=list'),
@@ -530,7 +530,7 @@ class FlashplayController extends InitController
         $id = empty($_GET['id']) ? 0 : intval(trim($_GET['id']));
 
         /* 查询自定义广告信息 */
-        $sql = "SELECT ad_id, ad_type, content, url, ad_status, ad_name FROM " . $GLOBALS['ecs']->table("ad_custom") . " WHERE ad_id = $id LIMIT 0, 1";
+        $sql = "SELECT ad_id, ad_type, content, url, ad_status, ad_name FROM " . table("ad_custom") . " WHERE ad_id = $id LIMIT 0, 1";
         $ad = $GLOBALS['db']->getRow($sql);
 
         assign_query_info();
@@ -567,7 +567,7 @@ class FlashplayController extends InitController
         $ad_img = $_FILES;
 
         /* 查询自定义广告信息 */
-        $sql = "SELECT ad_id, ad_type, content, url, ad_status, ad_name FROM " . $GLOBALS['ecs']->table("ad_custom") . " WHERE ad_id = " . $filter['ad']['id'] . " LIMIT 0, 1";
+        $sql = "SELECT ad_id, ad_type, content, url, ad_status, ad_name FROM " . table("ad_custom") . " WHERE ad_id = " . $filter['ad']['id'] . " LIMIT 0, 1";
         $ad_info = $GLOBALS['db']->getRow($sql);
 
         /* 配置接收文件类型 */
@@ -629,7 +629,7 @@ class FlashplayController extends InitController
             'url' => $filter['ad']['url'],
             'ad_status' => $filter['ad']['ad_status']
         );
-        $db->autoExecute($ecs->table('ad_custom'), $ad, 'UPDATE', 'ad_id = ' . $ad_info['ad_id'], 'SILENT');
+        $db->autoExecute(table('ad_custom'), $ad, 'UPDATE', 'ad_id = ' . $ad_info['ad_id'], 'SILENT');
 
         /* 修改状态 */
         modfiy_ad_status($ad_info['ad_id'], $filter['ad']['ad_status']);
@@ -869,7 +869,7 @@ class FlashplayController extends InitController
                                    WHEN ad_type = 2 THEN '代码'
                                    WHEN ad_type = 3 THEN '文字'
                                    ELSE '' END AS type_name, ad_name, add_time, CASE WHEN ad_status = 1 THEN '启用' ELSE '关闭' END AS status_name, ad_type, ad_status
-                FROM " . $GLOBALS['ecs']->table("ad_custom") . "
+                FROM " . table("ad_custom") . "
                 $where
                 ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'] . " ";
 
@@ -908,43 +908,43 @@ class FlashplayController extends InitController
         }
 
         /* 查询自定义广告信息 */
-        $sql = "SELECT ad_type, content, url, ad_status FROM " . $GLOBALS['ecs']->table("ad_custom") . " WHERE ad_id = $ad_id LIMIT 0, 1";
+        $sql = "SELECT ad_type, content, url, ad_status FROM " . table("ad_custom") . " WHERE ad_id = $ad_id LIMIT 0, 1";
         $ad = $GLOBALS['db']->getRow($sql);
 
         if ($ad_status == 1) {
             /* 如果当前自定义广告是关闭状态 则修改其状态为启用 */
             if ($ad['ad_status'] == 0) {
-                $sql = "UPDATE " . $GLOBALS['ecs']->table("ad_custom") . " SET ad_status = 1 WHERE ad_id = $ad_id";
+                $sql = "UPDATE " . table("ad_custom") . " SET ad_status = 1 WHERE ad_id = $ad_id";
                 $GLOBALS['db']->query($sql);
             }
 
             /* 关闭 其它自定义广告 */
-            $sql = "UPDATE " . $GLOBALS['ecs']->table("ad_custom") . " SET ad_status = 0 WHERE ad_id <> $ad_id";
+            $sql = "UPDATE " . table("ad_custom") . " SET ad_status = 0 WHERE ad_id <> $ad_id";
             $GLOBALS['db']->query($sql);
 
             /* 用户自定义广告开启 */
-            $sql = "UPDATE " . $GLOBALS['ecs']->table("shop_config") . " SET value = 'cus' WHERE id =337";
+            $sql = "UPDATE " . table("shop_config") . " SET value = 'cus' WHERE id =337";
             $GLOBALS['db']->query($sql);
         } else {
             /* 如果当前自定义广告是关闭状态 则检查是否存在启用的自定义广告 */
             /* 如果无 则启用系统默认广告播放器 */
             if ($ad['ad_status'] == 0) {
-                $sql = "SELECT COUNT(ad_id) FROM " . $GLOBALS['ecs']->table("ad_custom") . " WHERE ad_status = 1";
+                $sql = "SELECT COUNT(ad_id) FROM " . table("ad_custom") . " WHERE ad_status = 1";
                 $ad_status_1 = $GLOBALS['db']->getOne($sql);
                 if (empty($ad_status_1)) {
-                    $sql = "UPDATE " . $GLOBALS['ecs']->table("shop_config") . " SET value = 'sys' WHERE id =337";
+                    $sql = "UPDATE " . table("shop_config") . " SET value = 'sys' WHERE id =337";
                     $GLOBALS['db']->query($sql);
                 } else {
-                    $sql = "UPDATE " . $GLOBALS['ecs']->table("shop_config") . " SET value = 'cus' WHERE id =337";
+                    $sql = "UPDATE " . table("shop_config") . " SET value = 'cus' WHERE id =337";
                     $GLOBALS['db']->query($sql);
                 }
             } else {
                 /* 当前自定义广告是开启状态 关闭之 */
                 /* 如果无 则启用系统默认广告播放器 */
-                $sql = "UPDATE " . $GLOBALS['ecs']->table("ad_custom") . " SET ad_status = 0 WHERE ad_id = $ad_id";
+                $sql = "UPDATE " . table("ad_custom") . " SET ad_status = 0 WHERE ad_id = $ad_id";
                 $GLOBALS['db']->query($sql);
 
-                $sql = "UPDATE " . $GLOBALS['ecs']->table("shop_config") . " SET value = 'sys' WHERE id =337";
+                $sql = "UPDATE " . table("shop_config") . " SET value = 'sys' WHERE id =337";
                 $GLOBALS['db']->query($sql);
             }
         }

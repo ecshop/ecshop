@@ -101,7 +101,7 @@ class TagManageController extends InitController
         }
 
         if ($is_insert) {
-            $sql = 'INSERT INTO ' . $ecs->table('tag') . '(tag_id, goods_id, tag_words)' .
+            $sql = 'INSERT INTO ' . table('tag') . '(tag_id, goods_id, tag_words)' .
                 " VALUES('$id', '$goods_id', '$tag_words')";
             $db->query($sql);
 
@@ -183,7 +183,7 @@ class TagManageController extends InitController
         if (isset($_POST['checkboxes'])) {
             $count = 0;
             foreach ($_POST['checkboxes'] as $key => $id) {
-                $sql = "DELETE FROM " . $ecs->table('tag') . " WHERE tag_id='$id'";
+                $sql = "DELETE FROM " . table('tag') . " WHERE tag_id='$id'";
                 $db->query($sql);
 
                 $count++;
@@ -213,9 +213,9 @@ class TagManageController extends InitController
         $id = intval($_GET['id']);
 
         /* 获取删除的标签的名称 */
-        $tag_name = $db->getOne("SELECT tag_words FROM " . $ecs->table('tag') . " WHERE tag_id = '$id'");
+        $tag_name = $db->getOne("SELECT tag_words FROM " . table('tag') . " WHERE tag_id = '$id'");
 
-        $sql = "DELETE FROM " . $ecs->table('tag') . " WHERE tag_id = '$id'";
+        $sql = "DELETE FROM " . table('tag') . " WHERE tag_id = '$id'";
         $result = $GLOBALS['db']->query($sql);
         if ($result) {
             /* 管理员日志 */
@@ -258,12 +258,12 @@ class TagManageController extends InitController
     {
         if (empty($goods_id)) {
             $db = $GLOBALS['db'];
-            $sql = 'SELECT goods_id FROM ' . $GLOBALS['ecs']->table('tag') . " WHERE tag_id = '$tag_id'";
+            $sql = 'SELECT goods_id FROM ' . table('tag') . " WHERE tag_id = '$tag_id'";
             $row = $GLOBALS['db']->getRow($sql);
             $goods_id = $row['goods_id'];
         }
 
-        $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('tag') . " WHERE tag_words = '$name'" .
+        $sql = 'SELECT COUNT(*) FROM ' . table('tag') . " WHERE tag_words = '$name'" .
             " AND goods_id = '$goods_id' AND tag_id != '$tag_id'";
 
         if ($GLOBALS['db']->getOne($sql) > 0) {
@@ -283,7 +283,7 @@ class TagManageController extends InitController
     public function edit_tag($name, $id, $goods_id = '')
     {
         $db = $GLOBALS['db'];
-        $sql = 'UPDATE ' . $GLOBALS['ecs']->table('tag') . " SET tag_words = '$name'";
+        $sql = 'UPDATE ' . table('tag') . " SET tag_words = '$name'";
         if (!empty($goods_id)) {
             $sql .= ", goods_id = '$goods_id'";
         }
@@ -303,15 +303,15 @@ class TagManageController extends InitController
         $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 't.tag_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('tag');
+        $sql = "SELECT COUNT(*) FROM " . table('tag');
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         $filter = page_and_size($filter);
 
         $sql = "SELECT t.tag_id, u.user_name, t.goods_id, g.goods_name, t.tag_words " .
-            "FROM " . $GLOBALS['ecs']->table('tag') . " AS t " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('users') . " AS u ON u.user_id=t.user_id " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g ON g.goods_id=t.goods_id " .
+            "FROM " . table('tag') . " AS t " .
+            "LEFT JOIN " . table('users') . " AS u ON u.user_id=t.user_id " .
+            "LEFT JOIN " . table('goods') . " AS g ON g.goods_id=t.goods_id " .
             "ORDER by $filter[sort_by] $filter[sort_order] LIMIT " . $filter['start'] . ", " . $filter['page_size'];
         $row = $GLOBALS['db']->getAll($sql);
         foreach ($row as $k => $v) {
@@ -330,8 +330,8 @@ class TagManageController extends InitController
 
     public function get_tag_info($tag_id)
     {
-        $sql = 'SELECT t.tag_id, t.tag_words, t.goods_id, g.goods_name FROM ' . $GLOBALS['ecs']->table('tag') . ' AS t' .
-            ' LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON t.goods_id=g.goods_id' .
+        $sql = 'SELECT t.tag_id, t.tag_words, t.goods_id, g.goods_name FROM ' . table('tag') . ' AS t' .
+            ' LEFT JOIN ' . table('goods') . ' AS g ON t.goods_id=g.goods_id' .
             " WHERE tag_id = '$tag_id'";
         $row = $GLOBALS['db']->getRow($sql);
 

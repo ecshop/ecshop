@@ -28,7 +28,7 @@ class IndexController extends InitController
     {
         // 获得管理员设置的菜单
         $lst = array();
-        $nav = $db->getOne('SELECT nav_list FROM ' . $ecs->table('admin_user') . " WHERE user_id = '" . $_SESSION['admin_id'] . "'");
+        $nav = $db->getOne('SELECT nav_list FROM ' . table('admin_user') . " WHERE user_id = '" . $_SESSION['admin_id'] . "'");
 
         if (!empty($nav)) {
             $arr = explode(',', $nav);
@@ -237,7 +237,7 @@ class IndexController extends InitController
 
         /* 管理员留言信息 */
         $sql = "SELECT message_id, sender_id, receiver_id, sent_time, readed, deleted, title, message, user_name " .
-            "FROM " . $ecs->table('admin_message') . " AS a, " . $ecs->table('admin_user') . " AS b " .
+            "FROM " . table('admin_message') . " AS a, " . table('admin_user') . " AS b " .
             "WHERE a.sender_id = b.user_id AND a.receiver_id = " . $_SESSION['admin_id'] . " AND " .
             "a.readed = 0 AND deleted = 0 ORDER BY a.sent_time DESC";
         $admin_msg = $db->getAll($sql);
@@ -248,72 +248,72 @@ class IndexController extends InitController
         $ids = get_pay_ids();
 
         /* 已完成的订单 */
-        $order['finished'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
+        $order['finished'] = $db->getOne('SELECT COUNT(*) FROM ' . table('order_info') .
             " WHERE 1 " . order_query_sql('finished'));
         $status['finished'] = CS_FINISHED;
 
         /* 待发货的订单： */
         $order['await_ship'] = $db->getOne('SELECT COUNT(*)' .
-            ' FROM ' . $ecs->table('order_info') .
+            ' FROM ' . table('order_info') .
             " WHERE 1 " . order_query_sql('await_ship'));
         $status['await_ship'] = CS_AWAIT_SHIP;
 
         /* 待付款的订单： */
         $order['await_pay'] = $db->getOne('SELECT COUNT(*)' .
-            ' FROM ' . $ecs->table('order_info') .
+            ' FROM ' . table('order_info') .
             " WHERE 1 " . order_query_sql('await_pay'));
         $status['await_pay'] = CS_AWAIT_PAY;
 
         /* “未确认”的订单 */
-        $order['unconfirmed'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
+        $order['unconfirmed'] = $db->getOne('SELECT COUNT(*) FROM ' . table('order_info') .
             " WHERE 1 " . order_query_sql('unconfirmed'));
         $status['unconfirmed'] = OS_UNCONFIRMED;
 
         /* “部分发货”的订单 */
-        $order['shipped_part'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
+        $order['shipped_part'] = $db->getOne('SELECT COUNT(*) FROM ' . table('order_info') .
             " WHERE  shipping_status=" . SS_SHIPPED_PART);
         $status['shipped_part'] = OS_SHIPPED_PART;
 
         $order['stats'] = $db->getRow('SELECT COUNT(*) AS oCount, IFNULL(SUM(order_amount), 0) AS oAmount' .
-            ' FROM ' . $ecs->table('order_info'));
+            ' FROM ' . table('order_info'));
 
         $this->assign('order', $order);
         $this->assign('status', $status);
 
         /* 商品信息 */
-        $goods['total'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        $goods['total'] = $db->getOne('SELECT COUNT(*) FROM ' . table('goods') .
             ' WHERE is_delete = 0 AND is_alone_sale = 1 AND is_real = 1');
-        $virtual_card['total'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        $virtual_card['total'] = $db->getOne('SELECT COUNT(*) FROM ' . table('goods') .
             ' WHERE is_delete = 0 AND is_alone_sale = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
 
-        $goods['new'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        $goods['new'] = $db->getOne('SELECT COUNT(*) FROM ' . table('goods') .
             ' WHERE is_delete = 0 AND is_new = 1 AND is_real = 1');
-        $virtual_card['new'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        $virtual_card['new'] = $db->getOne('SELECT COUNT(*) FROM ' . table('goods') .
             ' WHERE is_delete = 0 AND is_new = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
 
-        $goods['best'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        $goods['best'] = $db->getOne('SELECT COUNT(*) FROM ' . table('goods') .
             ' WHERE is_delete = 0 AND is_best = 1 AND is_real = 1');
-        $virtual_card['best'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        $virtual_card['best'] = $db->getOne('SELECT COUNT(*) FROM ' . table('goods') .
             ' WHERE is_delete = 0 AND is_best = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
 
-        $goods['hot'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        $goods['hot'] = $db->getOne('SELECT COUNT(*) FROM ' . table('goods') .
             ' WHERE is_delete = 0 AND is_hot = 1 AND is_real = 1');
-        $virtual_card['hot'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        $virtual_card['hot'] = $db->getOne('SELECT COUNT(*) FROM ' . table('goods') .
             ' WHERE is_delete = 0 AND is_hot = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
 
         $time = gmtime();
-        $goods['promote'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        $goods['promote'] = $db->getOne('SELECT COUNT(*) FROM ' . table('goods') .
             ' WHERE is_delete = 0 AND promote_price>0' .
             " AND promote_start_date <= '$time' AND promote_end_date >= '$time' AND is_real = 1");
-        $virtual_card['promote'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        $virtual_card['promote'] = $db->getOne('SELECT COUNT(*) FROM ' . table('goods') .
             ' WHERE is_delete = 0 AND promote_price>0' .
             " AND promote_start_date <= '$time' AND promote_end_date >= '$time' AND is_real=0 AND extension_code='virtual_card'");
 
         /* 缺货商品 */
         if ($_CFG['use_storage']) {
-            $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('goods') . ' WHERE is_delete = 0 AND goods_number <= warn_number AND is_real = 1';
+            $sql = 'SELECT COUNT(*) FROM ' . table('goods') . ' WHERE is_delete = 0 AND goods_number <= warn_number AND is_real = 1';
             $goods['warn'] = $db->getOne($sql);
-            $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('goods') . ' WHERE is_delete = 0 AND goods_number <= warn_number AND is_real=0 AND extension_code=\'virtual_card\'';
+            $sql = 'SELECT COUNT(*) FROM ' . table('goods') . ' WHERE is_delete = 0 AND goods_number <= warn_number AND is_real=0 AND extension_code=\'virtual_card\'';
             $virtual_card['warn'] = $db->getOne($sql);
         } else {
             $goods['warn'] = 0;
@@ -324,7 +324,7 @@ class IndexController extends InitController
 
         /* 访问统计信息 */
         $today = local_getdate();
-        $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('stats') .
+        $sql = 'SELECT COUNT(*) FROM ' . table('stats') .
             ' WHERE access_time > ' . (mktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']) - date('Z'));
 
         $today_visit = $db->getOne($sql);
@@ -335,13 +335,13 @@ class IndexController extends InitController
 
         /* 最近反馈 */
         $sql = "SELECT COUNT(f.msg_id) " .
-            "FROM " . $ecs->table('feedback') . " AS f " .
-            "LEFT JOIN " . $ecs->table('feedback') . " AS r ON r.parent_id=f.msg_id " .
+            "FROM " . table('feedback') . " AS f " .
+            "LEFT JOIN " . table('feedback') . " AS r ON r.parent_id=f.msg_id " .
             'WHERE f.parent_id=0 AND ISNULL(r.msg_id) ';
         $this->assign('feedback_number', $db->getOne($sql));
 
         /* 未审核评论 */
-        $this->assign('comment_number', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('comment') .
+        $this->assign('comment_number', $db->getOne('SELECT COUNT(*) FROM ' . table('comment') .
             ' WHERE status = 0 AND parent_id = 0'));
 
         $mysql_ver = $db->version();   // 获得 MySQL 版本
@@ -394,10 +394,10 @@ class IndexController extends InitController
         $this->assign('sys_info', $sys_info);
 
         /* 缺货登记 */
-        $this->assign('booking_goods', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('booking_goods') . ' WHERE is_dispose = 0'));
+        $this->assign('booking_goods', $db->getOne('SELECT COUNT(*) FROM ' . table('booking_goods') . ' WHERE is_dispose = 0'));
 
         /* 退款申请 */
-        $this->assign('new_repay', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('user_account') . ' WHERE process_type = ' . SURPLUS_RETURN . ' AND is_paid = 0 '));
+        $this->assign('new_repay', $db->getOne('SELECT COUNT(*) FROM ' . table('user_account') . ' WHERE process_type = ' . SURPLUS_RETURN . ' AND is_paid = 0 '));
 
 
         assign_query_info();
@@ -445,12 +445,12 @@ class IndexController extends InitController
         $this->assign('provinces', get_regions(1, 1));
         $this->assign('cities', get_regions(2, 2));
 
-        $sql = 'SELECT value from ' . $ecs->table('shop_config') . " WHERE code='shop_name'";
+        $sql = 'SELECT value from ' . table('shop_config') . " WHERE code='shop_name'";
         $shop_name = $db->getOne($sql);
 
         $this->assign('shop_name', $shop_name);
 
-        $sql = 'SELECT value from ' . $ecs->table('shop_config') . " WHERE code='shop_title'";
+        $sql = 'SELECT value from ' . table('shop_config') . " WHERE code='shop_title'";
         $shop_title = $db->getOne($sql);
 
         $this->assign('shop_title', $shop_title);
@@ -530,32 +530,32 @@ class IndexController extends InitController
         $payment = empty($_POST['payment']) ? '' : $_POST['payment'];
 
         if (!empty($shop_name)) {
-            $sql = 'UPDATE ' . $ecs->table('shop_config') . " SET value = '$shop_name' WHERE code = 'shop_name'";
+            $sql = 'UPDATE ' . table('shop_config') . " SET value = '$shop_name' WHERE code = 'shop_name'";
             $db->query($sql);
         }
 
         if (!empty($shop_title)) {
-            $sql = 'UPDATE ' . $ecs->table('shop_config') . " SET value = '$shop_title' WHERE code = 'shop_title'";
+            $sql = 'UPDATE ' . table('shop_config') . " SET value = '$shop_title' WHERE code = 'shop_title'";
             $db->query($sql);
         }
 
         if (!empty($shop_address)) {
-            $sql = 'UPDATE ' . $ecs->table('shop_config') . " SET value = '$shop_address' WHERE code = 'shop_address'";
+            $sql = 'UPDATE ' . table('shop_config') . " SET value = '$shop_address' WHERE code = 'shop_address'";
             $db->query($sql);
         }
 
         if (!empty($shop_country)) {
-            $sql = 'UPDATE ' . $ecs->table('shop_config') . "SET value = '$shop_country' WHERE code='shop_country'";
+            $sql = 'UPDATE ' . table('shop_config') . "SET value = '$shop_country' WHERE code='shop_country'";
             $db->query($sql);
         }
 
         if (!empty($shop_province)) {
-            $sql = 'UPDATE ' . $ecs->table('shop_config') . "SET value = '$shop_province' WHERE code='shop_province'";
+            $sql = 'UPDATE ' . table('shop_config') . "SET value = '$shop_province' WHERE code='shop_province'";
             $db->query($sql);
         }
 
         if (!empty($shop_city)) {
-            $sql = 'UPDATE ' . $ecs->table('shop_config') . "SET value = '$shop_city' WHERE code='shop_city'";
+            $sql = 'UPDATE ' . table('shop_config') . "SET value = '$shop_city' WHERE code='shop_city'";
             $db->query($sql);
         }
 
@@ -574,12 +574,12 @@ class IndexController extends InitController
             } else {
                 include_once(ROOT_PATH . 'includes/modules/shipping/' . $shipping . '.php');
             }
-            $sql = "SELECT shipping_id FROM " . $ecs->table('shipping') . " WHERE shipping_code = '$shipping'";
+            $sql = "SELECT shipping_id FROM " . table('shipping') . " WHERE shipping_code = '$shipping'";
             $shipping_id = $db->getOne($sql);
 
             if ($shipping_id <= 0) {
                 $insure = empty($modules[0]['insure']) ? 0 : $modules[0]['insure'];
-                $sql = "INSERT INTO " . $ecs->table('shipping') . " (" .
+                $sql = "INSERT INTO " . table('shipping') . " (" .
                     "shipping_code, shipping_name, shipping_desc, insure, support_cod, enabled" .
                     ") VALUES (" .
                     "'" . addslashes($modules[0]['code']) . "', '" . addslashes($_LANG[$modules[0]['code']]) . "', '" .
@@ -591,7 +591,7 @@ class IndexController extends InitController
             //设置配送区域
             $area_name = empty($_POST['area_name']) ? '' : $_POST['area_name'];
             if (!empty($area_name)) {
-                $sql = "SELECT shipping_area_id FROM " . $ecs->table("shipping_area") .
+                $sql = "SELECT shipping_area_id FROM " . table("shipping_area") .
                     " WHERE shipping_id='$shipping_id' AND shipping_area_name='$area_name'";
                 $area_id = $db->getOne($sql);
 
@@ -613,7 +613,7 @@ class IndexController extends InitController
                         $config[$count]['value'] = make_semiangle(0);
                     }
 
-                    $sql = "INSERT INTO " . $ecs->table('shipping_area') .
+                    $sql = "INSERT INTO " . table('shipping_area') .
                         " (shipping_area_name, shipping_id, configure) " .
                         "VALUES" . " ('$area_name', '$shipping_id', '" . serialize($config) . "')";
                     $db->query($sql);
@@ -626,7 +626,7 @@ class IndexController extends InitController
                 $region_id = empty($_POST['shipping_district']) ? $region_id : intval($_POST['shipping_district']);
 
                 /* 添加选定的城市和地区 */
-                $sql = "REPLACE INTO " . $ecs->table('area_region') . " (shipping_area_id, region_id) VALUES ('$area_id', '$region_id')";
+                $sql = "REPLACE INTO " . table('area_region') . " (shipping_area_id, region_id) VALUES ('$area_id', '$region_id')";
                 $db->query($sql);
             }
         }
@@ -650,9 +650,9 @@ class IndexController extends InitController
 
             $pay_config = serialize($pay_config);
             /* 安装，检查该支付方式是否曾经安装过 */
-            $sql = "SELECT COUNT(*) FROM " . $ecs->table('payment') . " WHERE pay_code = '$payment'";
+            $sql = "SELECT COUNT(*) FROM " . table('payment') . " WHERE pay_code = '$payment'";
             if ($db->getOne($sql) > 0) {
-                $sql = "UPDATE " . $ecs->table('payment') .
+                $sql = "UPDATE " . table('payment') .
                     " SET pay_config = '$pay_config'," .
                     " enabled = '1' " .
                     "WHERE pay_code = '$payment' LIMIT 1";
@@ -663,7 +663,7 @@ class IndexController extends InitController
                 $payment_info['pay_fee'] = empty($modules[0]['pay_fee']) ? 0 : $modules[0]['pay_fee'];
                 $payment_info['desc'] = $_LANG[$modules[0]['desc']];
 
-                $sql = "INSERT INTO " . $ecs->table('payment') . " (pay_code, pay_name, pay_desc, pay_config, is_cod, pay_fee, enabled, is_online)" .
+                $sql = "INSERT INTO " . table('payment') . " (pay_code, pay_name, pay_desc, pay_config, is_cod, pay_fee, enabled, is_online)" .
                     "VALUES ('$payment', '$payment_info[name]', '$payment_info[desc]', '$pay_config', '0', '$payment_info[pay_fee]', '1', '1')";
                 $db->query($sql);
             }
@@ -715,7 +715,7 @@ class IndexController extends InitController
 
         $brand_id = 0;
         if (!empty($good_brand)) {
-            $sql = 'INSERT INTO ' . $ecs->table('brand') . " (brand_name, is_show)" .
+            $sql = 'INSERT INTO ' . table('brand') . " (brand_name, is_show)" .
                 " values('" . $good_brand . "', '1')";
             $db->query($sql);
 
@@ -723,14 +723,14 @@ class IndexController extends InitController
         }
 
         if (!empty($good_category)) {
-            $sql = 'INSERT INTO ' . $ecs->table('category') . " (cat_name, parent_id, is_show)" .
+            $sql = 'INSERT INTO ' . table('category') . " (cat_name, parent_id, is_show)" .
                 " values('" . $good_category . "', '0', '1')";
             $db->query($sql);
 
             $cat_id = $db->insert_Id();
 
             //货号
-            $max_id = $db->getOne("SELECT MAX(goods_id) + 1 FROM " . $ecs->table('goods'));
+            $max_id = $db->getOne("SELECT MAX(goods_id) + 1 FROM " . table('goods'));
             $goods_sn = generate_goods_sn($max_id);
 
             $image = new cls_image($_CFG['bgcolor']);
@@ -843,7 +843,7 @@ class IndexController extends InitController
                 }
 
 
-                $sql = 'INSERT INTO ' . $ecs->table('goods') . "(goods_name, goods_sn, goods_number, cat_id, brand_id, goods_brief, shop_price, market_price, goods_img, goods_thumb, original_img,add_time, last_update,
+                $sql = 'INSERT INTO ' . table('goods') . "(goods_name, goods_sn, goods_number, cat_id, brand_id, goods_brief, shop_price, market_price, goods_img, goods_thumb, original_img,add_time, last_update,
                    is_best, is_new, is_hot)" .
                     "VALUES('$good_name', '$goods_sn', '$good_number', '$cat_id', '$brand_id', '$good_brief', '$good_price'," .
                     " '$market_price', '$goods_img', '$goods_thumb', '$original_img','" . gmtime() . "', '" . gmtime() . "', '$is_best', '$is_new', '$is_hot')";
@@ -852,7 +852,7 @@ class IndexController extends InitController
                 $good_id = $db->insert_id();
                 /* 如果有图片，把商品图片加入图片相册 */
                 if (isset($img)) {
-                    $sql = "INSERT INTO " . $ecs->table('goods_gallery') . " (goods_id, img_url, img_desc, thumb_url, img_original) " .
+                    $sql = "INSERT INTO " . table('goods_gallery') . " (goods_id, img_url, img_desc, thumb_url, img_original) " .
                         "VALUES ('$good_id', '$gallery_img', '', '$gallery_thumb', '$img')";
                     $db->query($sql);
                 }
@@ -894,12 +894,12 @@ class IndexController extends InitController
         }
 
         /* 新订单 */
-        $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
+        $sql = 'SELECT COUNT(*) FROM ' . table('order_info') .
             " WHERE add_time >= '$_SESSION[last_check]'";
         $arr['new_orders'] = $db->getOne($sql);
 
         /* 新付款的订单 */
-        $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
+        $sql = 'SELECT COUNT(*) FROM ' . table('order_info') .
             ' WHERE pay_time >= ' . $_SESSION['last_check'];
         $arr['new_paid'] = $db->getOne($sql);
 
@@ -918,13 +918,13 @@ class IndexController extends InitController
     public function save_todolistAction()
     {
         $content = json_str_iconv($_POST["content"]);
-        $sql = "UPDATE" . $GLOBALS['ecs']->table('admin_user') . " SET todolist='" . $content . "' WHERE user_id = " . $_SESSION['admin_id'];
+        $sql = "UPDATE" . table('admin_user') . " SET todolist='" . $content . "' WHERE user_id = " . $_SESSION['admin_id'];
         $GLOBALS['db']->query($sql);
     }
 
     public function get_todolistAction()
     {
-        $sql = "SELECT todolist FROM " . $GLOBALS['ecs']->table('admin_user') . " WHERE user_id = " . $_SESSION['admin_id'];
+        $sql = "SELECT todolist FROM " . table('admin_user') . " WHERE user_id = " . $_SESSION['admin_id'];
         $content = $GLOBALS['db']->getOne($sql);
         echo $content;
     } // 邮件群发处理
@@ -935,7 +935,7 @@ class IndexController extends InitController
             return make_json_result('', $_LANG['send_mail_off'], 0);
             exit();
         }
-        $sql = "SELECT * FROM " . $ecs->table('email_sendlist') . " ORDER BY pri DESC, last_send ASC LIMIT 1";
+        $sql = "SELECT * FROM " . table('email_sendlist') . " ORDER BY pri DESC, last_send ASC LIMIT 1";
         $row = $db->getRow($sql);
 
         //发送列表为空
@@ -945,14 +945,14 @@ class IndexController extends InitController
 
         //发送列表不为空，邮件地址为空
         if (!empty($row['id']) && empty($row['email'])) {
-            $sql = "DELETE FROM " . $ecs->table('email_sendlist') . " WHERE id = '$row[id]'";
+            $sql = "DELETE FROM " . table('email_sendlist') . " WHERE id = '$row[id]'";
             $db->query($sql);
-            $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('email_sendlist'));
+            $count = $db->getOne("SELECT COUNT(*) FROM " . table('email_sendlist'));
             return make_json_result('', $_LANG['mailsend_skip'], array('count' => $count, 'goon' => 1));
         }
 
         //查询相关模板
-        $sql = "SELECT * FROM " . $ecs->table('mail_templates') . " WHERE template_id = '$row[template_id]'";
+        $sql = "SELECT * FROM " . table('mail_templates') . " WHERE template_id = '$row[template_id]'";
         $rt = $db->getRow($sql);
 
         //如果是模板，则将已存入email_sendlist的内容作为邮件内容
@@ -966,11 +966,11 @@ class IndexController extends InitController
                 //发送成功
 
                 //从列表中删除
-                $sql = "DELETE FROM " . $ecs->table('email_sendlist') . " WHERE id = '$row[id]'";
+                $sql = "DELETE FROM " . table('email_sendlist') . " WHERE id = '$row[id]'";
                 $db->query($sql);
 
                 //剩余列表数
-                $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('email_sendlist'));
+                $count = $db->getOne("SELECT COUNT(*) FROM " . table('email_sendlist'));
 
                 if ($count > 0) {
                     $msg = sprintf($_LANG['mailsend_ok'], $row['email'], $count);
@@ -983,21 +983,21 @@ class IndexController extends InitController
 
                 if ($row['error'] < 3) {
                     $time = time();
-                    $sql = "UPDATE " . $ecs->table('email_sendlist') . " SET error = error + 1, pri = 0, last_send = '$time' WHERE id = '$row[id]'";
+                    $sql = "UPDATE " . table('email_sendlist') . " SET error = error + 1, pri = 0, last_send = '$time' WHERE id = '$row[id]'";
                 } else {
                     //将出错超次的纪录删除
-                    $sql = "DELETE FROM " . $ecs->table('email_sendlist') . " WHERE id = '$row[id]'";
+                    $sql = "DELETE FROM " . table('email_sendlist') . " WHERE id = '$row[id]'";
                 }
                 $db->query($sql);
 
-                $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('email_sendlist'));
+                $count = $db->getOne("SELECT COUNT(*) FROM " . table('email_sendlist'));
                 return make_json_result('', sprintf($_LANG['mailsend_fail'], $row['email']), array('count' => $count));
             }
         } else {
             //无效的邮件队列
-            $sql = "DELETE FROM " . $ecs->table('email_sendlist') . " WHERE id = '$row[id]'";
+            $sql = "DELETE FROM " . table('email_sendlist') . " WHERE id = '$row[id]'";
             $db->query($sql);
-            $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('email_sendlist'));
+            $count = $db->getOne("SELECT COUNT(*) FROM " . table('email_sendlist'));
             return make_json_result('', sprintf($_LANG['mailsend_fail'], $row['email']), array('count' => $count));
         }
     }

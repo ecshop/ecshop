@@ -12,7 +12,7 @@ class RoleController extends InitController
         parent::initialize();
 
         /* 初始化 $exc 对象 */
-        $exc = new exchange($ecs->table("role"), $db, 'role_id', 'role_name');
+        $exc = new exchange(table("role"), $db, 'role_id', 'role_name');
     }
 
 
@@ -87,7 +87,7 @@ class RoleController extends InitController
         $priv_str = '';
 
         /* 获取权限的分组数据 */
-        $sql_query = "SELECT action_id, parent_id, action_code, relevance FROM " . $ecs->table('admin_action') .
+        $sql_query = "SELECT action_id, parent_id, action_code, relevance FROM " . table('admin_action') .
             " WHERE parent_id = 0";
         $res = $db->query($sql_query);
         while ($rows = $db->fetchRow($res)) {
@@ -96,7 +96,7 @@ class RoleController extends InitController
 
 
         /* 按权限组查询底级的权限名称 */
-        $sql = "SELECT action_id, parent_id, action_code, relevance FROM " . $ecs->table('admin_action') .
+        $sql = "SELECT action_id, parent_id, action_code, relevance FROM " . table('admin_action') .
             " WHERE parent_id " . db_create_in(array_keys($priv_arr));
         $result = $db->query($sql);
         while ($priv = $db->fetchRow($result)) {
@@ -132,7 +132,7 @@ class RoleController extends InitController
     {
         admin_priv('admin_manage');
         $act_list = @join(",", $_POST['action_code']);
-        $sql = "INSERT INTO " . $ecs->table('role') . " (role_name, action_list, role_describe) " .
+        $sql = "INSERT INTO " . table('role') . " (role_name, action_list, role_describe) " .
             "VALUES ('" . trim($_POST['user_name']) . "','$act_list','" . trim($_POST['role_describe']) . "')";
 
         $db->query($sql);
@@ -158,7 +158,7 @@ class RoleController extends InitController
         include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/priv_action.php');
         $_REQUEST['id'] = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
         /* 获得该管理员的权限 */
-        $priv_str = $db->getOne("SELECT action_list FROM " . $ecs->table('role') . " WHERE role_id = '$_GET[id]'");
+        $priv_str = $db->getOne("SELECT action_list FROM " . table('role') . " WHERE role_id = '$_GET[id]'");
 
         /* 查看是否有权限编辑其他管理员的信息 */
         if ($_SESSION['admin_id'] != $_REQUEST['id']) {
@@ -166,12 +166,12 @@ class RoleController extends InitController
         }
 
         /* 获取角色信息 */
-        $sql = "SELECT role_id, role_name, role_describe FROM " . $ecs->table('role') .
+        $sql = "SELECT role_id, role_name, role_describe FROM " . table('role') .
             " WHERE role_id = '" . $_REQUEST['id'] . "'";
         $user_info = $db->getRow($sql);
 
         /* 获取权限的分组数据 */
-        $sql_query = "SELECT action_id, parent_id, action_code,relevance FROM " . $ecs->table('admin_action') .
+        $sql_query = "SELECT action_id, parent_id, action_code,relevance FROM " . table('admin_action') .
             " WHERE parent_id = 0";
         $res = $db->query($sql_query);
         while ($rows = $db->fetchRow($res)) {
@@ -179,7 +179,7 @@ class RoleController extends InitController
         }
 
         /* 按权限组查询底级的权限名称 */
-        $sql = "SELECT action_id, parent_id, action_code,relevance FROM " . $ecs->table('admin_action') .
+        $sql = "SELECT action_id, parent_id, action_code,relevance FROM " . table('admin_action') .
             " WHERE parent_id " . db_create_in(array_keys($priv_arr));
         $result = $db->query($sql);
         while ($priv = $db->fetchRow($result)) {
@@ -218,10 +218,10 @@ class RoleController extends InitController
     {
         /* 更新管理员的权限 */
         $act_list = @join(",", $_POST['action_code']);
-        $sql = "UPDATE " . $ecs->table('role') . " SET action_list = '$act_list', role_name = '" . $_POST['user_name'] . "', role_describe = '" . $_POST['role_describe'] . " ' " .
+        $sql = "UPDATE " . table('role') . " SET action_list = '$act_list', role_name = '" . $_POST['user_name'] . "', role_describe = '" . $_POST['role_describe'] . " ' " .
             "WHERE role_id = '$_POST[id]'";
         $db->query($sql);
-        $user_sql = "UPDATE " . $ecs->table('admin_user') . " SET action_list = '$act_list' " .
+        $user_sql = "UPDATE " . table('admin_user') . " SET action_list = '$act_list' " .
             "WHERE role_id = '$_POST[id]'";
         $db->query($user_sql);
         /* 提示信息 */
@@ -237,7 +237,7 @@ class RoleController extends InitController
         check_authz_json('admin_drop');
 
         $id = intval($_GET['id']);
-        $num_sql = "SELECT count(*) FROM " . $ecs->table('admin_user') . " WHERE role_id = '$_GET[id]'";
+        $num_sql = "SELECT count(*) FROM " . table('admin_user') . " WHERE role_id = '$_GET[id]'";
         $remove_num = $db->getOne($num_sql);
         if ($remove_num > 0) {
             return make_json_error($_LANG['remove_cannot_user']);
@@ -254,7 +254,7 @@ class RoleController extends InitController
     {
         $list = array();
         $sql = 'SELECT role_id, role_name, action_list, role_describe ' .
-            'FROM ' . $GLOBALS['ecs']->table('role') . ' ORDER BY role_id DESC';
+            'FROM ' . table('role') . ' ORDER BY role_id DESC';
         $list = $GLOBALS['db']->getAll($sql);
 
         return $list;

@@ -33,7 +33,7 @@ class InsertService
         /* 是否启用了 gzip */
         $gzip_enabled = gzip_enabled() ? $GLOBALS['_LANG']['gzip_enabled'] : $GLOBALS['_LANG']['gzip_disabled'];
 
-        $online_count = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('sessions'));
+        $online_count = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . table('sessions'));
 
         /* 加入触发cron代码 */
         $cron_method = empty($GLOBALS['_CFG']['cron_method']) ? '<img src="api/cron.php?t=' . gmtime() . '" alt="" style="width:0px;height:0px;" />' : '';
@@ -52,7 +52,7 @@ class InsertService
         $str = '';
         if (!empty($_COOKIE['ECS']['history'])) {
             $where = db_create_in($_COOKIE['ECS']['history'], 'goods_id');
-            $sql = 'SELECT goods_id, goods_name, goods_thumb, shop_price FROM ' . $GLOBALS['ecs']->table('goods') .
+            $sql = 'SELECT goods_id, goods_name, goods_thumb, shop_price FROM ' . table('goods') .
                 " WHERE $where AND is_on_sale = 1 AND is_alone_sale = 1 AND is_delete = 0";
             $query = $GLOBALS['db']->query($sql);
             $res = array();
@@ -79,7 +79,7 @@ class InsertService
     public function insert_cart_info()
     {
         $sql = 'SELECT SUM(goods_number) AS number, SUM(goods_price * goods_number) AS amount' .
-            ' FROM ' . $GLOBALS['ecs']->table('cart') .
+            ' FROM ' . table('cart') .
             " WHERE session_id = '" . SESS_ID . "' AND rec_type = '" . CART_GENERAL_GOODS . "'";
         $row = $GLOBALS['db']->getRow($sql);
 
@@ -114,8 +114,8 @@ class InsertService
         if (!empty($arr['num']) && $arr['num'] != 1) {
             $sql = 'SELECT a.ad_id, a.position_id, a.media_type, a.ad_link, a.ad_code, a.ad_name, p.ad_width, ' .
                 'p.ad_height, p.position_style, RAND() AS rnd ' .
-                'FROM ' . $GLOBALS['ecs']->table('ad') . ' AS a ' .
-                'LEFT JOIN ' . $GLOBALS['ecs']->table('ad_position') . ' AS p ON a.position_id = p.position_id ' .
+                'FROM ' . table('ad') . ' AS a ' .
+                'LEFT JOIN ' . table('ad_position') . ' AS p ON a.position_id = p.position_id ' .
                 "WHERE enabled = 1 AND start_time <= '" . $time . "' AND end_time >= '" . $time . "' " .
                 "AND a.position_id = '" . $arr['id'] . "' " .
                 'ORDER BY rnd LIMIT ' . $arr['num'];
@@ -124,8 +124,8 @@ class InsertService
             if ($static_res[$arr['id']] === null) {
                 $sql = 'SELECT a.ad_id, a.position_id, a.media_type, a.ad_link, a.ad_code, a.ad_name, p.ad_width, ' .
                     'p.ad_height, p.position_style, RAND() AS rnd ' .
-                    'FROM ' . $GLOBALS['ecs']->table('ad') . ' AS a ' .
-                    'LEFT JOIN ' . $GLOBALS['ecs']->table('ad_position') . ' AS p ON a.position_id = p.position_id ' .
+                    'FROM ' . table('ad') . ' AS a ' .
+                    'LEFT JOIN ' . table('ad_position') . ' AS p ON a.position_id = p.position_id ' .
                     "WHERE enabled = 1 AND a.position_id = '" . $arr['id'] .
                     "' AND start_time <= '" . $time . "' AND end_time >= '" . $time . "' " .
                     'ORDER BY rnd LIMIT 1';
@@ -271,7 +271,7 @@ class InsertService
 
         /* 商品购买记录 */
         $sql = 'SELECT u.user_name, og.goods_number, oi.add_time, IF(oi.order_status IN (2, 3, 4), 0, 1) AS order_status ' .
-            'FROM ' . $GLOBALS['ecs']->table('order_info') . ' AS oi LEFT JOIN ' . $GLOBALS['ecs']->table('users') . ' AS u ON oi.user_id = u.user_id, ' . $GLOBALS['ecs']->table('order_goods') . ' AS og ' .
+            'FROM ' . table('order_info') . ' AS oi LEFT JOIN ' . table('users') . ' AS u ON oi.user_id = u.user_id, ' . table('order_goods') . ' AS og ' .
             'WHERE oi.order_id = og.order_id AND ' . time() . ' - oi.add_time < 2592000 AND og.goods_id = ' . $arr['id'] . ' ORDER BY oi.add_time DESC LIMIT 5';
         $bought_notes = $GLOBALS['db']->getAll($sql);
 
@@ -280,7 +280,7 @@ class InsertService
         }
 
         $sql = 'SELECT count(*) ' .
-            'FROM ' . $GLOBALS['ecs']->table('order_info') . ' AS oi LEFT JOIN ' . $GLOBALS['ecs']->table('users') . ' AS u ON oi.user_id = u.user_id, ' . $GLOBALS['ecs']->table('order_goods') . ' AS og ' .
+            'FROM ' . table('order_info') . ' AS oi LEFT JOIN ' . table('users') . ' AS u ON oi.user_id = u.user_id, ' . table('order_goods') . ' AS og ' .
             'WHERE oi.order_id = og.order_id AND ' . time() . ' - oi.add_time < 2592000 AND og.goods_id = ' . $arr['id'];
         $count = $GLOBALS['db']->getOne($sql);
 

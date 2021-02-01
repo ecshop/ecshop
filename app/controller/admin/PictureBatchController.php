@@ -38,7 +38,7 @@ class PictureBatchController extends InitController
                 $goods_where .= " AND g.`brand_id` = '$brand_id'";
             }
 
-            $sql = 'SELECT `goods_id`, `goods_name` FROM ' . $ecs->table('goods') . ' AS g WHERE 1 ' . $goods_where . ' LIMIT 50';
+            $sql = 'SELECT `goods_id`, `goods_name` FROM ' . table('goods') . ' AS g WHERE 1 ' . $goods_where . ' LIMIT 50';
 
             die($json->encode($db->getAll($sql)));
         } else {
@@ -68,7 +68,7 @@ class PictureBatchController extends InitController
             }
 
             if (!empty($goods_where)) {
-                $album_where = ', ' . $ecs->table('goods') . " AS g WHERE album.img_original > '' AND album.goods_id = g.goods_id " . $goods_where;
+                $album_where = ', ' . table('goods') . " AS g WHERE album.img_original > '' AND album.goods_id = g.goods_id " . $goods_where;
             } else {
                 $album_where = " WHERE album.img_original > ''";
             }
@@ -96,12 +96,12 @@ class PictureBatchController extends InitController
                 $title = '';
 
                 if (isset($_GET['total_icon'])) {
-                    $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('goods') . " AS g WHERE g.original_img <> ''" . $goods_where);
+                    $count = $db->getOne("SELECT COUNT(*) FROM " . table('goods') . " AS g WHERE g.original_img <> ''" . $goods_where);
                     $title = sprintf($_LANG['goods_format'], $count, $page_size);
                 }
 
                 if (isset($_GET['total_album'])) {
-                    $count = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_gallery') . ' AS album ' . $album_where);
+                    $count = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . table('goods_gallery') . ' AS album ' . $album_where);
                     $title = sprintf('&nbsp;' . $_LANG['gallery_format'], $count, $page_size);
                     $module_no = 1;
                 }
@@ -133,7 +133,7 @@ class PictureBatchController extends InitController
                 //-- 商品图片
                 /*------------------------------------------------------ */
                 if ($result['module_no'] == 0) {
-                    $count = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $ecs->table('goods') . " AS g WHERE g.original_img > ''" . $goods_where);
+                    $count = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . table('goods') . " AS g WHERE g.original_img > ''" . $goods_where);
                     /* 页数在许可范围内 */
                     if ($result['page'] <= ceil($count / $result['page_size'])) {
                         $start_time = gmtime(); //开始执行时间
@@ -165,7 +165,7 @@ class PictureBatchController extends InitController
                     }
                 } elseif ($result['module_no'] == 1 && $result['do_album'] == 1) {
                     //商品相册
-                    $count = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_gallery') . ' AS album ' . $album_where);
+                    $count = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . table('goods_gallery') . ' AS album ' . $album_where);
 
                     if ($result['page'] <= ceil($count / $result['page_size'])) {
                         $start_time = gmtime(); // 开始执行时间
@@ -228,7 +228,7 @@ class PictureBatchController extends InitController
     public function process_image($page = 1, $page_size = 100, $type = 0, $thumb = true, $watermark = true, $change = false, $silent = true)
     {
         if ($type == 0) {
-            $sql = "SELECT g.goods_id, g.original_img, g.goods_img, g.goods_thumb FROM " . $GLOBALS['ecs']->table('goods') . " AS g WHERE g.original_img > ''" . $GLOBALS['goods_where'];
+            $sql = "SELECT g.goods_id, g.original_img, g.goods_img, g.goods_thumb FROM " . table('goods') . " AS g WHERE g.original_img > ''" . $GLOBALS['goods_where'];
             $res = $GLOBALS['db']->selectLimit($sql, $page_size, ($page - 1) * $page_size);
             while ($row = $GLOBALS['db']->fetchRow($res)) {
                 $goods_thumb = '';
@@ -274,7 +274,7 @@ class PictureBatchController extends InitController
                     if ($change || empty($row['goods_img'])) {
                         /* 要生成新链接的处理过程 */
                         if ($image != $row['goods_img']) {
-                            $sql = "UPDATE " . $GLOBALS['ecs']->table('goods') . " SET goods_img = '$image' WHERE goods_id = '" . $row['goods_id'] . "'";
+                            $sql = "UPDATE " . table('goods') . " SET goods_img = '$image' WHERE goods_id = '" . $row['goods_id'] . "'";
                             $GLOBALS['db']->query($sql);
                             /* 防止原图被删除 */
                             if ($row['goods_img'] != $row['original_img']) {
@@ -310,7 +310,7 @@ class PictureBatchController extends InitController
                     $goods_thumb = reformat_image_name('goods_thumb', $row['goods_id'], $goods_thumb, 'thumb');
                     if ($change || empty($row['goods_thumb'])) {
                         if ($row['goods_thumb'] != $goods_thumb) {
-                            $sql = "UPDATE " . $GLOBALS['ecs']->table('goods') . " SET goods_thumb = '$goods_thumb' WHERE goods_id = '" . $row['goods_id'] . "'";
+                            $sql = "UPDATE " . table('goods') . " SET goods_thumb = '$goods_thumb' WHERE goods_id = '" . $row['goods_id'] . "'";
                             $GLOBALS['db']->query($sql);
                             /* 防止原图被删除 */
                             if ($row['goods_thumb'] != $row['original_img']) {
@@ -324,7 +324,7 @@ class PictureBatchController extends InitController
             }
         } else {
             /* 遍历商品相册 */
-            $sql = "SELECT album.goods_id, album.img_id, album.img_url, album.thumb_url, album.img_original FROM " . $GLOBALS['ecs']->table('goods_gallery') . " AS album " . $GLOBALS['album_where'];
+            $sql = "SELECT album.goods_id, album.img_id, album.img_url, album.thumb_url, album.img_original FROM " . table('goods_gallery') . " AS album " . $GLOBALS['album_where'];
             $res = $GLOBALS['db']->selectLimit($sql, $page_size, ($page - 1) * $page_size);
 
             while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -358,7 +358,7 @@ class PictureBatchController extends InitController
                     $image = reformat_image_name('gallery', $row['goods_id'], $image, 'goods');
                     if ($change || empty($row['img_url']) || $row['img_original'] == $row['img_url']) {
                         if ($image != $row['img_url']) {
-                            $sql = "UPDATE " . $GLOBALS['ecs']->table('goods_gallery') . " SET img_url='$image' WHERE img_id='$row[img_id]'";
+                            $sql = "UPDATE " . table('goods_gallery') . " SET img_url='$image' WHERE img_id='$row[img_id]'";
                             $GLOBALS['db']->query($sql);
                             if ($row['img_original'] != $row['img_url']) {
                                 @unlink(ROOT_PATH . $row['img_url']);
@@ -392,7 +392,7 @@ class PictureBatchController extends InitController
                     $thumb_url = reformat_image_name('gallery_thumb', $row['goods_id'], $thumb_url, 'thumb');
                     if ($change || empty($row['thumb_url'])) {
                         if ($thumb_url != $row['thumb_url']) {
-                            $sql = "UPDATE " . $GLOBALS['ecs']->table('goods_gallery') . " SET thumb_url='$thumb_url' WHERE img_id='$row[img_id]'";
+                            $sql = "UPDATE " . table('goods_gallery') . " SET thumb_url='$thumb_url' WHERE img_id='$row[img_id]'";
                             $GLOBALS['db']->query($sql);
                             @unlink(ROOT_PATH . $row['thumb_url']);
                         }
@@ -421,7 +421,7 @@ class PictureBatchController extends InitController
     public function process_image_ex($page = 1, $page_size = 100, $type = 0, $thumb = true, $watermark = true, $change = false, $silent = true)
     {
         if ($type == 0) {
-            $sql = "SELECT g.goods_id, g.original_img, g.goods_img, g.goods_thumb FROM " . $GLOBALS['ecs']->table('goods') . " AS g WHERE g.original_img > ''" . $goods_where;
+            $sql = "SELECT g.goods_id, g.original_img, g.goods_img, g.goods_thumb FROM " . table('goods') . " AS g WHERE g.original_img > ''" . $goods_where;
             $res = $GLOBALS['db']->selectLimit($sql, $page_size, ($page - 1) * $page_size);
 
             while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -433,7 +433,7 @@ class PictureBatchController extends InitController
                 }
             }
         } else {
-            $sql = "SELECT album.goods_id, album.img_id, album.img_url, album.thumb_url, album.img_original FROM " . $GLOBALS['ecs']->table('goods_gallery') . " AS album " . $GLOBALS['album_where'];
+            $sql = "SELECT album.goods_id, album.img_id, album.img_url, album.thumb_url, album.img_original FROM " . table('goods_gallery') . " AS album " . $GLOBALS['album_where'];
             $res = $GLOBALS['db']->selectLimit($sql, $page_size, ($page - 1) * $page_size);
 
             while ($row = $GLOBALS['db']->fetchRow($res)) {

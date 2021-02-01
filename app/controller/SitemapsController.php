@@ -25,7 +25,7 @@ class SitemapsController extends InitController
             );
             $sitemap->item($item);
             /* 商品分类 */
-            $sql = "SELECT cat_id,cat_name FROM " . $ecs->table('category') . " ORDER BY parent_id";
+            $sql = "SELECT cat_id,cat_name FROM " . table('category') . " ORDER BY parent_id";
             $res = $db->query($sql);
 
             while ($row = $db->fetchRow($res)) {
@@ -38,7 +38,7 @@ class SitemapsController extends InitController
                 $sitemap->item($item);
             }
             /* 文章分类 */
-            $sql = "SELECT cat_id,cat_name FROM " . $ecs->table('article_cat') . " WHERE cat_type=1";
+            $sql = "SELECT cat_id,cat_name FROM " . table('article_cat') . " WHERE cat_type=1";
             $res = $db->query($sql);
 
             while ($row = $db->fetchRow($res)) {
@@ -51,7 +51,7 @@ class SitemapsController extends InitController
                 $sitemap->item($item);
             }
             /* 商品 */
-            $sql = "SELECT goods_id, goods_name, last_update FROM " . $ecs->table('goods') . " WHERE is_delete = 0 LIMIT 300";
+            $sql = "SELECT goods_id, goods_name, last_update FROM " . table('goods') . " WHERE is_delete = 0 LIMIT 300";
             $res = $db->query($sql);
 
             while ($row = $db->fetchRow($res)) {
@@ -64,7 +64,7 @@ class SitemapsController extends InitController
                 $sitemap->item($item);
             }
             /* 文章 */
-            $sql = "SELECT article_id,title,file_url,open_type, add_time FROM " . $ecs->table('article') . " WHERE is_open=1";
+            $sql = "SELECT article_id,title,file_url,open_type, add_time FROM " . table('article') . " WHERE is_open=1";
             $res = $db->query($sql);
 
             while ($row = $db->fetchRow($res)) {

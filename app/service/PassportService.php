@@ -96,7 +96,7 @@ class PassportService
                 if ($up_uid) {
                     if (!empty($affiliate['config']['level_register_all'])) {
                         if (!empty($affiliate['config']['level_register_up'])) {
-                            $rank_points = $GLOBALS['db']->getOne("SELECT rank_points FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id = '$up_uid'");
+                            $rank_points = $GLOBALS['db']->getOne("SELECT rank_points FROM " . table('users') . " WHERE user_id = '$up_uid'");
                             if ($rank_points + $affiliate['config']['level_register_all'] <= $affiliate['config']['level_register_up']) {
                                 log_account_change($up_uid, 0, 0, $affiliate['config']['level_register_all'], 0, sprintf($GLOBALS['_LANG']['register_affiliate'], $_SESSION['user_id'], $username));
                             }
@@ -106,7 +106,7 @@ class PassportService
                     }
 
                     //设置推荐人
-                    $sql = 'UPDATE ' . $GLOBALS['ecs']->table('users') . ' SET parent_id = ' . $up_uid . ' WHERE user_id = ' . $_SESSION['user_id'];
+                    $sql = 'UPDATE ' . table('users') . ' SET parent_id = ' . $up_uid . ' WHERE user_id = ' . $_SESSION['user_id'];
 
                     $GLOBALS['db']->query($sql);
                 }
@@ -126,7 +126,7 @@ class PassportService
                 }
                 $update_data = array_merge($update_data, $other);
             }
-            $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('users'), $update_data, 'UPDATE', 'user_id = ' . $_SESSION['user_id']);
+            $GLOBALS['db']->autoExecute(table('users'), $update_data, 'UPDATE', 'user_id = ' . $_SESSION['user_id']);
 
             update_user_info();      // 更新用户信息
             recalculate_price();     // 重新计算购物车中的商品价格
@@ -250,7 +250,7 @@ class PassportService
         $hash = register_hash('encode', $user_id);
         $validate_email = $GLOBALS['ecs']->url() . 'user.php?act=validate_email&hash=' . $hash;
 
-        $sql = "SELECT user_name, email FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id = '$user_id'";
+        $sql = "SELECT user_name, email FROM " . table('users') . " WHERE user_id = '$user_id'";
         $row = $GLOBALS['db']->getRow($sql);
 
         View::assign('user_name', $row['user_name']);
@@ -281,7 +281,7 @@ class PassportService
         if ($operation == 'encode') {
             $user_id = intval($key);
             $sql = "SELECT reg_time " .
-                " FROM " . $GLOBALS['ecs']->table('users') .
+                " FROM " . table('users') .
                 " WHERE user_id = '$user_id' LIMIT 1";
             $reg_time = $GLOBALS['db']->getOne($sql);
 
@@ -302,7 +302,7 @@ class PassportService
             }
 
             $sql = "SELECT reg_time " .
-                " FROM " . $GLOBALS['ecs']->table('users') .
+                " FROM " . table('users') .
                 " WHERE user_id = '$user_id' LIMIT 1";
             $reg_time = $GLOBALS['db']->getOne($sql);
 
@@ -323,7 +323,7 @@ class PassportService
      */
     public function admin_registered($adminname)
     {
-        $res = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('admin_user') .
+        $res = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . table('admin_user') .
             " WHERE user_name = '$adminname'");
         return $res;
     }

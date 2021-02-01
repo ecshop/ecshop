@@ -85,7 +85,7 @@ class MainManageService
     {
         $log_info = $GLOBALS['_LANG']['log_action'][$action] . $GLOBALS['_LANG']['log_action'][$content] . ': ' . addslashes($sn);
 
-        $sql = 'INSERT INTO ' . $GLOBALS['ecs']->table('admin_log') . ' (log_time, user_id, log_info, ip_address) ' .
+        $sql = 'INSERT INTO ' . table('admin_log') . ' (log_time, user_id, log_info, ip_address) ' .
             " VALUES ('" . gmtime() . "', $_SESSION[admin_id], '" . stripslashes($log_info) . "', '" . real_ip() . "')";
         $GLOBALS['db']->query($sql);
     }
@@ -138,10 +138,10 @@ class MainManageService
     public function insert_config($parent, $code, $value)
     {
 
-        $sql = 'SELECT id FROM ' . $ecs->table('shop_config') . " WHERE code = '$parent' AND type = 1";
+        $sql = 'SELECT id FROM ' . table('shop_config') . " WHERE code = '$parent' AND type = 1";
         $parent_id = $db->getOne($sql);
 
-        $sql = 'INSERT INTO ' . $ecs->table('shop_config') . ' (parent_id, code, value) ' .
+        $sql = 'INSERT INTO ' . table('shop_config') . ' (parent_id, code, value) ' .
             "VALUES('$parent_id', '$code', '$value')";
         $db->query($sql);
     }
@@ -206,7 +206,7 @@ class MainManageService
     public function get_bonus_type()
     {
         $bonus = array();
-        $sql = 'SELECT type_id, type_name, type_money FROM ' . $GLOBALS['ecs']->table('bonus_type') .
+        $sql = 'SELECT type_id, type_name, type_money FROM ' . table('bonus_type') .
             ' WHERE send_type = 3';
         $res = $GLOBALS['db']->query($sql);
 
@@ -225,7 +225,7 @@ class MainManageService
     public function get_rank_list($is_special = false)
     {
         $rank_list = array();
-        $sql = 'SELECT rank_id, rank_name, min_points FROM ' . $GLOBALS['ecs']->table('user_rank');
+        $sql = 'SELECT rank_id, rank_name, min_points FROM ' . table('user_rank');
         if ($is_special) {
             $sql .= ' WHERE special_rank = 1';
         }
@@ -248,7 +248,7 @@ class MainManageService
     public function get_user_rank($rankid, $where)
     {
         $user_list = array();
-        $sql = 'SELECT user_id, user_name FROM ' . $GLOBALS['ecs']->table('users') . $where .
+        $sql = 'SELECT user_id, user_name FROM ' . table('users') . $where .
             ' ORDER BY user_id DESC';
         $res = $GLOBALS['db']->query($sql);
 
@@ -268,7 +268,7 @@ class MainManageService
     {
         $position_list = array();
         $sql = 'SELECT position_id, position_name, ad_width, ad_height ' .
-            'FROM ' . $GLOBALS['ecs']->table('ad_position');
+            'FROM ' . table('ad_position');
         $res = $GLOBALS['db']->query($sql);
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -307,7 +307,7 @@ class MainManageService
 
         /* 取得数据 */
         $sql = 'SELECT goods_id, goods_name, shop_price ' .
-            'FROM ' . $GLOBALS['ecs']->table('goods') . ' AS g ' . $where .
+            'FROM ' . table('goods') . ' AS g ' . $where .
             'LIMIT 50';
         $row = $GLOBALS['db']->getAll($sql);
 
@@ -329,7 +329,7 @@ class MainManageService
 
         /* 取得数据 */
         $sql = 'SELECT a.article_id, a.title ' .
-            'FROM ' . $GLOBALS['ecs']->table('article') . ' AS a, ' . $GLOBALS['ecs']->table('article_cat') . ' AS c ' . $where;
+            'FROM ' . table('article') . ' AS a, ' . table('article_cat') . ' AS c ' . $where;
         $res = $GLOBALS['db']->query($sql);
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -389,7 +389,7 @@ class MainManageService
     {
         $area_arr = array();
 
-        $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('region') .
+        $sql = 'SELECT * FROM ' . table('region') .
             " WHERE parent_id = '$region_id' ORDER BY region_id";
         $res = $GLOBALS['db']->query($sql);
         while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -432,7 +432,7 @@ class MainManageService
      */
     public function goods_type_list($selected)
     {
-        $sql = 'SELECT cat_id, cat_name FROM ' . $GLOBALS['ecs']->table('goods_type') . ' WHERE enabled = 1';
+        $sql = 'SELECT cat_id, cat_name FROM ' . table('goods_type') . ' WHERE enabled = 1';
         $res = $GLOBALS['db']->query($sql);
 
         $lst = '';
@@ -452,7 +452,7 @@ class MainManageService
     public function get_pay_ids()
     {
         $ids = array('is_cod' => '0', 'is_not_cod' => '0');
-        $sql = 'SELECT pay_id, is_cod FROM ' . $GLOBALS['ecs']->table('payment') . ' WHERE enabled = 1';
+        $sql = 'SELECT pay_id, is_cod FROM ' . table('payment') . ' WHERE enabled = 1';
         $res = $GLOBALS['db']->query($sql);
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -472,7 +472,7 @@ class MainManageService
      */
     public function truncate_table($table_name)
     {
-        $sql = 'TRUNCATE TABLE ' . $GLOBALS['ecs']->table($table_name);
+        $sql = 'TRUNCATE TABLE ' . table($table_name);
 
         return $GLOBALS['db']->query($sql);
     }
@@ -629,7 +629,7 @@ class MainManageService
      */
     public function get_attr_groups($cat_id)
     {
-        $sql = "SELECT attr_group FROM " . $GLOBALS['ecs']->table('goods_type') . " WHERE cat_id='$cat_id'";
+        $sql = "SELECT attr_group FROM " . table('goods_type') . " WHERE cat_id='$cat_id'";
         $grp = str_replace("\r", '', $GLOBALS['db']->getOne($sql));
 
         if ($grp) {
@@ -710,14 +710,14 @@ class MainManageService
      */
     public function cat_exists($cat_name, $parent_cat, $exclude = 0)
     {
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') .
+        $sql = "SELECT COUNT(*) FROM " . table('category') .
             " WHERE parent_id = '$parent_cat' AND cat_name = '$cat_name' AND cat_id<>'$exclude'";
         return ($GLOBALS['db']->getOne($sql) > 0) ? true : false;
     }
 
     public function brand_exists($brand_name)
     {
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('brand') .
+        $sql = "SELECT COUNT(*) FROM " . table('brand') .
             " WHERE brand_name = '" . $brand_name . "'";
         return ($GLOBALS['db']->getOne($sql) > 0) ? true : false;
     }
@@ -732,7 +732,7 @@ class MainManageService
      */
     public function admin_info()
     {
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('admin_user') . "
+        $sql = "SELECT * FROM " . table('admin_user') . "
             WHERE user_id = '$_SESSION[admin_id]'
             LIMIT 0, 1";
         $admin_info = $GLOBALS['db']->getRow($sql);
@@ -760,7 +760,7 @@ class MainManageService
 
         /* 查询 */
         $sql = "SELECT suppliers_id, suppliers_name, suppliers_desc
-            FROM " . $GLOBALS['ecs']->table("suppliers") . "
+            FROM " . table("suppliers") . "
             $where";
 
         return $GLOBALS['db']->getAll($sql);

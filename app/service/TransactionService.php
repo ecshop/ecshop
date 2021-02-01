@@ -26,7 +26,7 @@ class TransactionService
         }
 
         $cfg = array();
-        $cfg['username'] = $GLOBALS['db']->getOne("SELECT user_name FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id='" . $profile['user_id'] . "'");
+        $cfg['username'] = $GLOBALS['db']->getOne("SELECT user_name FROM " . table('users') . " WHERE user_id='" . $profile['user_id'] . "'");
         if (isset($profile['sex'])) {
             $cfg['gender'] = intval($profile['sex']);
         }
@@ -65,7 +65,7 @@ class TransactionService
         }
         /* 修改在其他资料 */
         if (!empty($profile['other'])) {
-            $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('users'), $profile['other'], 'UPDATE', "user_id = '$profile[user_id]'");
+            $GLOBALS['db']->autoExecute(table('users'), $profile['other'], 'UPDATE', "user_id = '$profile[user_id]'");
         }
 
         return true;
@@ -88,7 +88,7 @@ class TransactionService
         $infos = array();
         $sql = "SELECT user_name, birthday, sex, question, answer, rank_points, pay_points,user_money, user_rank," .
             " msn, qq, office_phone, home_phone, mobile_phone, passwd_question, passwd_answer " .
-            "FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id = '$user_id'";
+            "FROM " . table('users') . " WHERE user_id = '$user_id'";
         $infos = $GLOBALS['db']->getRow($sql);
         $infos['user_name'] = addslashes($infos['user_name']);
 
@@ -97,11 +97,11 @@ class TransactionService
 
         /* 会员等级 */
         if ($infos['user_rank'] > 0) {
-            $sql = "SELECT rank_id, rank_name, discount FROM " . $GLOBALS['ecs']->table('user_rank') .
+            $sql = "SELECT rank_id, rank_name, discount FROM " . table('user_rank') .
                 " WHERE rank_id = '$infos[user_rank]'";
         } else {
             $sql = "SELECT rank_id, rank_name, discount, min_points" .
-                " FROM " . $GLOBALS['ecs']->table('user_rank') .
+                " FROM " . table('user_rank') .
                 " WHERE min_points<= " . intval($infos['rank_points']) . " ORDER BY min_points DESC";
         }
 
@@ -116,7 +116,7 @@ class TransactionService
         /* 会员红包 */
         $bonus = array();
         $sql = "SELECT type_name, type_money " .
-            "FROM " . $GLOBALS['ecs']->table('bonus_type') . " AS t1, " . $GLOBALS['ecs']->table('user_bonus') . " AS t2 " .
+            "FROM " . table('bonus_type') . " AS t1, " . table('user_bonus') . " AS t2 " .
             "WHERE t1.type_id = t2.bonus_type_id AND t2.user_id = '$user_id' AND t1.use_start_date <= '$cur_date' " .
             "AND t1.use_end_date > '$cur_date' AND t2.order_id = 0";
         $bonus = $GLOBALS['db']->getAll($sql);
@@ -157,7 +157,7 @@ class TransactionService
      */
     public function get_consignee_list($user_id)
     {
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('user_address') .
+        $sql = "SELECT * FROM " . table('user_address') .
             " WHERE user_id = '$user_id' LIMIT 5";
 
         return $GLOBALS['db']->getAll($sql);
@@ -181,14 +181,14 @@ class TransactionService
         }
 
         /* 查询红包序列号是否已经存在 */
-        $sql = "SELECT bonus_id, bonus_sn, user_id, bonus_type_id FROM " . $GLOBALS['ecs']->table('user_bonus') .
+        $sql = "SELECT bonus_id, bonus_sn, user_id, bonus_type_id FROM " . table('user_bonus') .
             " WHERE bonus_sn = '$bouns_sn'";
         $row = $GLOBALS['db']->getRow($sql);
         if ($row) {
             if ($row['user_id'] == 0) {
                 //红包没有被使用
                 $sql = "SELECT send_end_date, use_end_date " .
-                    " FROM " . $GLOBALS['ecs']->table('bonus_type') .
+                    " FROM " . table('bonus_type') .
                     " WHERE type_id = '" . $row['bonus_type_id'] . "'";
 
                 $bonus_time = $GLOBALS['db']->getRow($sql);
@@ -199,7 +199,7 @@ class TransactionService
                     return false;
                 }
 
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('user_bonus') . " SET user_id = '$user_id' " .
+                $sql = "UPDATE " . table('user_bonus') . " SET user_id = '$user_id' " .
                     "WHERE bonus_id = '$row[bonus_id]'";
                 $result = $GLOBALS['db']->query($sql);
                 if ($result) {
@@ -241,7 +241,7 @@ class TransactionService
 
         $sql = "SELECT order_id, order_sn, order_status, shipping_status, pay_status, add_time, " .
             "(goods_amount + shipping_fee + insure_fee + pay_fee + pack_fee + card_fee + tax - discount) AS total_fee " .
-            " FROM " . $GLOBALS['ecs']->table('order_info') .
+            " FROM " . table('order_info') .
             " WHERE user_id = '$user_id' ORDER BY add_time DESC";
         $res = $GLOBALS['db']->selectLimit($sql, $num, $start);
 
@@ -291,7 +291,7 @@ class TransactionService
     public function cancel_order($order_id, $user_id = 0)
     {
         /* 查询订单信息，检查状态 */
-        $sql = "SELECT user_id, order_id, order_sn , surplus , integral , bonus_id, order_status, shipping_status, pay_status FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_id = '$order_id'";
+        $sql = "SELECT user_id, order_id, order_sn , surplus , integral , bonus_id, order_status, shipping_status, pay_status FROM " . table('order_info') . " WHERE order_id = '$order_id'";
         $order = $GLOBALS['db']->getRow($sql);
 
         if (empty($order)) {
@@ -335,7 +335,7 @@ class TransactionService
         }
 
         //将用户订单设置为取消
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('order_info') . " SET order_status = '" . OS_CANCELED . "' WHERE order_id = '$order_id'";
+        $sql = "UPDATE " . table('order_info') . " SET order_status = '" . OS_CANCELED . "' WHERE order_id = '$order_id'";
         if ($GLOBALS['db']->query($sql)) {
             /* 记录log */
             order_action($order['order_sn'], OS_CANCELED, $order['shipping_status'], PS_UNPAYED, $GLOBALS['_LANG']['buyer_cancel'], 'buyer');
@@ -385,7 +385,7 @@ class TransactionService
     public function affirm_received($order_id, $user_id = 0)
     {
         /* 查询订单信息，检查状态 */
-        $sql = "SELECT user_id, order_sn , order_status, shipping_status, pay_status FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_id = '$order_id'";
+        $sql = "SELECT user_id, order_sn , order_status, shipping_status, pay_status FROM " . table('order_info') . " WHERE order_id = '$order_id'";
 
         $order = $GLOBALS['db']->getRow($sql);
 
@@ -405,7 +405,7 @@ class TransactionService
             return false;
         } /* 修改订单发货状态为“确认收货” */
         else {
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('order_info') . " SET shipping_status = '" . SS_RECEIVED . "' WHERE order_id = '$order_id'";
+            $sql = "UPDATE " . table('order_info') . " SET shipping_status = '" . SS_RECEIVED . "' WHERE order_id = '$order_id'";
             if ($GLOBALS['db']->query($sql)) {
                 /* 记录日志 */
                 order_action($order['order_sn'], $order['order_status'], SS_RECEIVED, $order['pay_status'], '', $GLOBALS['_LANG']['buyer']);
@@ -430,16 +430,16 @@ class TransactionService
     {
         if ($consignee['address_id'] > 0) {
             /* 修改地址 */
-            $res = $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('user_address'), $consignee, 'UPDATE', 'address_id = ' . $consignee['address_id'] . " AND `user_id`= '" . $_SESSION['user_id'] . "'");
+            $res = $GLOBALS['db']->autoExecute(table('user_address'), $consignee, 'UPDATE', 'address_id = ' . $consignee['address_id'] . " AND `user_id`= '" . $_SESSION['user_id'] . "'");
         } else {
             /* 添加地址 */
-            $res = $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('user_address'), $consignee, 'INSERT');
+            $res = $GLOBALS['db']->autoExecute(table('user_address'), $consignee, 'INSERT');
             $consignee['address_id'] = $GLOBALS['db']->insert_id();
         }
 
         if ($default) {
             /* 保存为用户的默认收货地址 */
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('users') .
+            $sql = "UPDATE " . table('users') .
                 " SET address_id = '$consignee[address_id]' WHERE user_id = '$_SESSION[user_id]'";
 
             $res = $GLOBALS['db']->query($sql);
@@ -457,13 +457,13 @@ class TransactionService
      */
     public function drop_consignee($id)
     {
-        $sql = "SELECT user_id FROM " . $GLOBALS['ecs']->table('user_address') . " WHERE address_id = '$id'";
+        $sql = "SELECT user_id FROM " . table('user_address') . " WHERE address_id = '$id'";
         $uid = $GLOBALS['db']->getOne($sql);
 
         if ($uid != $_SESSION['user_id']) {
             return false;
         } else {
-            $sql = "DELETE FROM " . $GLOBALS['ecs']->table('user_address') . " WHERE address_id = '$id'";
+            $sql = "DELETE FROM " . table('user_address') . " WHERE address_id = '$id'";
             $res = $GLOBALS['db']->query($sql);
 
             return $res;
@@ -484,15 +484,15 @@ class TransactionService
 
         if ($address_id > 0) {
             /* 更新指定记录 */
-            $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('user_address'), $address, 'UPDATE', 'address_id = ' . $address_id . ' AND user_id = ' . $address['user_id']);
+            $GLOBALS['db']->autoExecute(table('user_address'), $address, 'UPDATE', 'address_id = ' . $address_id . ' AND user_id = ' . $address['user_id']);
         } else {
             /* 插入一条新记录 */
-            $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('user_address'), $address, 'INSERT');
+            $GLOBALS['db']->autoExecute(table('user_address'), $address, 'INSERT');
             $address_id = $GLOBALS['db']->insert_id();
         }
 
         if (isset($address['defalut']) && $address['default'] > 0 && isset($address['user_id'])) {
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('users') .
+            $sql = "UPDATE " . table('users') .
                 " SET address_id = '" . $address_id . "' " .
                 " WHERE user_id = '" . $address['user_id'] . "'";
             $GLOBALS['db']->query($sql);
@@ -530,7 +530,7 @@ class TransactionService
 
         /* 对发货号处理 */
         if (!empty($order['invoice_no'])) {
-            $shipping_code = $GLOBALS['db']->getOne("SELECT shipping_code FROM " . $GLOBALS['ecs']->table('shipping') . " WHERE shipping_id = '$order[shipping_id]'");
+            $shipping_code = $GLOBALS['db']->getOne("SELECT shipping_code FROM " . table('shipping') . " WHERE shipping_id = '$order[shipping_id]'");
             $plugin = ROOT_PATH . 'includes/modules/shipping/' . $shipping_code . '.php';
             if (file_exists($plugin)) {
                 include_once($plugin);
@@ -607,7 +607,7 @@ class TransactionService
                 /* 处理超值礼包里面的虚拟卡 */
                 if ($code == 'package_buy') {
                     foreach ($goods_list as $goods) {
-                        $sql = 'SELECT g.goods_id FROM ' . $GLOBALS['ecs']->table('package_goods') . ' AS pg, ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
+                        $sql = 'SELECT g.goods_id FROM ' . table('package_goods') . ' AS pg, ' . table('goods') . ' AS g ' .
                             "WHERE pg.goods_id = g.goods_id AND pg.package_id = '" . $goods['goods_id'] . "' AND extension_code = 'virtual_card'";
                         $vcard_arr = $GLOBALS['db']->getAll($sql);
 
@@ -653,7 +653,7 @@ class TransactionService
      */
     public function get_user_merge($user_id)
     {
-        $sql = "SELECT order_sn FROM " . $GLOBALS['ecs']->table('order_info') .
+        $sql = "SELECT order_sn FROM " . table('order_info') .
             " WHERE user_id  = '$user_id' " . order_query_sql('unprocessed') .
             "AND extension_code = '' " .
             " ORDER BY add_time DESC";
@@ -681,7 +681,7 @@ class TransactionService
         if ($user_id > 0) {
             /* 检查订单是否属于指定用户 */
             if (strlen($to_order) > 0) {
-                $sql = "SELECT user_id FROM " . $GLOBALS['ecs']->table('order_info') .
+                $sql = "SELECT user_id FROM " . table('order_info') .
                     " WHERE order_sn = '$to_order'";
                 $order_user = $GLOBALS['db']->getOne($sql);
                 if ($order_user != $user_id) {
@@ -717,7 +717,7 @@ class TransactionService
 
         /* 查订单商品：不考虑赠品 */
         $sql = "SELECT goods_id, product_id,goods_number, goods_attr, parent_id, goods_attr_id" .
-            " FROM " . $GLOBALS['ecs']->table('order_goods') .
+            " FROM " . table('order_goods') .
             " WHERE order_id = '$order_id' AND is_gift = 0 AND extension_code <> 'package_buy'" .
             " ORDER BY parent_id ASC";
         $res = $GLOBALS['db']->query($sql);
@@ -729,7 +729,7 @@ class TransactionService
             $sql = "SELECT goods_sn, goods_name, goods_number, market_price, " .
                 "IF(is_promote = 1 AND '$time' BETWEEN promote_start_date AND promote_end_date, promote_price, shop_price) AS goods_price," .
                 "is_real, extension_code, is_alone_sale, goods_type " .
-                "FROM " . $GLOBALS['ecs']->table('goods') .
+                "FROM " . table('goods') .
                 " WHERE goods_id = '$row[goods_id]' " .
                 " AND is_delete = 0 LIMIT 1";
             $goods = $GLOBALS['db']->getRow($sql);
@@ -740,7 +740,7 @@ class TransactionService
             }
             if ($row['product_id']) {
                 $order_goods_product_id = $row['product_id'];
-                $sql = "SELECT product_number from " . $GLOBALS['ecs']->table('products') . "where product_id='$order_goods_product_id'";
+                $sql = "SELECT product_number from " . table('products') . "where product_id='$order_goods_product_id'";
                 $product_number = $GLOBALS['db']->getOne($sql);
             }
             // 如果使用库存，且库存不足，修改数量
@@ -759,7 +759,7 @@ class TransactionService
             }
 
             //检查商品价格是否有会员价格
-            $sql = "SELECT goods_number FROM" . $GLOBALS['ecs']->table('cart') . " " .
+            $sql = "SELECT goods_number FROM" . table('cart') . " " .
                 "WHERE session_id = '" . SESS_ID . "' " .
                 "AND goods_id = '" . $row['goods_id'] . "' " .
                 "AND rec_type = '" . CART_GENERAL_GOODS . "' LIMIT 1";
@@ -790,14 +790,14 @@ class TransactionService
             if ($row['parent_id'] > 0) {
                 // 查询基本件信息：是否删除、是否上架、能否作为普通商品销售
                 $sql = "SELECT goods_id " .
-                    "FROM " . $GLOBALS['ecs']->table('goods') .
+                    "FROM " . table('goods') .
                     " WHERE goods_id = '$row[parent_id]' " .
                     " AND is_delete = 0 AND is_on_sale = 1 AND is_alone_sale = 1 LIMIT 1";
                 $parent = $GLOBALS['db']->getRow($sql);
                 if ($parent) {
                     // 如果基本件存在，查询组合关系是否存在
                     $sql = "SELECT goods_price " .
-                        "FROM " . $GLOBALS['ecs']->table('group_goods') .
+                        "FROM " . table('group_goods') .
                         " WHERE parent_id = '$row[parent_id]' " .
                         " AND goods_id = '$row[goods_id]' LIMIT 1";
                     $fitting_price = $GLOBALS['db']->getOne($sql);
@@ -815,7 +815,7 @@ class TransactionService
 
             // 返回购物车：看有没有相同商品
             $sql = "SELECT goods_id " .
-                "FROM " . $GLOBALS['ecs']->table('cart') .
+                "FROM " . table('cart') .
                 " WHERE session_id = '" . SESS_ID . "' " .
                 " AND goods_id = '$return_goods[goods_id]' " .
                 " AND goods_attr = '$return_goods[goods_attr]' " .
@@ -827,10 +827,10 @@ class TransactionService
                 // 没有相同商品，插入
                 $return_goods['session_id'] = SESS_ID;
                 $return_goods['user_id'] = $_SESSION['user_id'];
-                $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('cart'), $return_goods, 'INSERT');
+                $GLOBALS['db']->autoExecute(table('cart'), $return_goods, 'INSERT');
             } else {
                 // 有相同商品，修改数量
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('cart') . " SET " .
+                $sql = "UPDATE " . table('cart') . " SET " .
                     "goods_number = '" . $return_goods['goods_number'] . "' " .
                     ",goods_price = '" . $return_goods['goods_price'] . "' " .
                     "WHERE session_id = '" . SESS_ID . "' " .
@@ -841,7 +841,7 @@ class TransactionService
         }
 
         // 清空购物车的赠品
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('cart') .
+        $sql = "DELETE FROM " . table('cart') .
             " WHERE session_id = '" . SESS_ID . "' AND is_gift = 1";
         $GLOBALS['db']->query($sql);
 
@@ -876,7 +876,7 @@ class TransactionService
         }
 
         /* 检查订单状态 */
-        $sql = "SELECT user_id, order_status FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_id = '" . $address['order_id'] . "'";
+        $sql = "SELECT user_id, order_status FROM " . table('order_info') . " WHERE order_id = '" . $address['order_id'] . "'";
         $row = $GLOBALS['db']->getRow($sql);
         if ($row) {
             if ($user_id > 0 && $user_id != $row['user_id']) {
@@ -887,7 +887,7 @@ class TransactionService
                 $GLOBALS['err']->add($GLOBALS['_LANG']['require_unconfirmed']);
                 return false;
             }
-            $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('order_info'), $address, 'UPDATE', "order_id = '$address[order_id]'");
+            $GLOBALS['db']->autoExecute(table('order_info'), $address, 'UPDATE', "order_id = '$address[order_id]'");
             return true;
         } else {
             /* 订单不存在 */
@@ -908,8 +908,8 @@ class TransactionService
     public function get_user_bouns_list($user_id, $num = 10, $start = 0)
     {
         $sql = "SELECT u.bonus_sn, u.order_id, b.type_name, b.type_money, b.min_goods_amount, b.use_start_date, b.use_end_date " .
-            " FROM " . $GLOBALS['ecs']->table('user_bonus') . " AS u ," .
-            $GLOBALS['ecs']->table('bonus_type') . " AS b" .
+            " FROM " . table('user_bonus') . " AS u ," .
+            table('bonus_type') . " AS b" .
             " WHERE u.bonus_type_id = b.type_id AND u.user_id = '" . $user_id . "'";
         $res = $GLOBALS['db']->selectLimit($sql, $num, $start);
         $arr = array();

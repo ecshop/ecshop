@@ -46,7 +46,7 @@ class IndexController extends InitController
         /* 首页主广告设置 */
         $this->assign('index_ad', $_CFG['index_ad']);
         if ($_CFG['index_ad'] == 'cus') {
-            $sql = 'SELECT ad_type, content, url FROM ' . $ecs->table("ad_custom") . ' WHERE ad_status = 1';
+            $sql = 'SELECT ad_type, content, url FROM ' . table("ad_custom") . ' WHERE ad_status = 1';
             $ad = $db->getRow($sql, true);
             $this->assign('ad', $ad);
         }
@@ -58,7 +58,7 @@ class IndexController extends InitController
         $this->assign('data_dir', DATA_DIR);       // 数据目录
 
         /* 首页推荐分类 */
-        $cat_recommend_res = $db->getAll("SELECT c.cat_id, c.cat_name, cr.recommend_type FROM " . $ecs->table("cat_recommend") . " AS cr INNER JOIN " . $ecs->table("category") . " AS c ON cr.cat_id=c.cat_id");
+        $cat_recommend_res = $db->getAll("SELECT c.cat_id, c.cat_name, cr.recommend_type FROM " . table("cat_recommend") . " AS cr INNER JOIN " . table("category") . " AS c ON cr.cat_id=c.cat_id");
         if (!empty($cat_recommend_res)) {
             $cat_rec_array = array();
             foreach ($cat_recommend_res as $cat_recommend_data) {
@@ -98,8 +98,8 @@ class IndexController extends InitController
      */
     public function index_get_invoice_query()
     {
-        $sql = 'SELECT o.order_sn, o.invoice_no, s.shipping_code FROM ' . $GLOBALS['ecs']->table('order_info') . ' AS o' .
-            ' LEFT JOIN ' . $GLOBALS['ecs']->table('shipping') . ' AS s ON s.shipping_id = o.shipping_id' .
+        $sql = 'SELECT o.order_sn, o.invoice_no, s.shipping_code FROM ' . table('order_info') . ' AS o' .
+            ' LEFT JOIN ' . table('shipping') . ' AS s ON s.shipping_id = o.shipping_id' .
             " WHERE invoice_no > '' AND shipping_status = " . SS_SHIPPED .
             ' ORDER BY shipping_time DESC LIMIT 10';
         $all = $GLOBALS['db']->getAll($sql);
@@ -128,8 +128,8 @@ class IndexController extends InitController
     public function index_get_new_articles()
     {
         $sql = 'SELECT a.article_id, a.title, ac.cat_name, a.add_time, a.file_url, a.open_type, ac.cat_id, ac.cat_name ' .
-            ' FROM ' . $GLOBALS['ecs']->table('article') . ' AS a, ' .
-            $GLOBALS['ecs']->table('article_cat') . ' AS ac' .
+            ' FROM ' . table('article') . ' AS a, ' .
+            table('article_cat') . ' AS ac' .
             ' WHERE a.is_open = 1 AND a.cat_id = ac.cat_id AND ac.cat_type = 1' .
             ' ORDER BY a.article_type DESC, a.add_time DESC LIMIT ' . $GLOBALS['_CFG']['article_number'];
         $res = $GLOBALS['db']->getAll($sql);
@@ -163,8 +163,8 @@ class IndexController extends InitController
         $group_buy_list = array();
         if ($limit > 0) {
             $sql = 'SELECT gb.act_id AS group_buy_id, gb.goods_id, gb.ext_info, gb.goods_name, g.goods_thumb, g.goods_img ' .
-                'FROM ' . $GLOBALS['ecs']->table('goods_activity') . ' AS gb, ' .
-                $GLOBALS['ecs']->table('goods') . ' AS g ' .
+                'FROM ' . table('goods_activity') . ' AS gb, ' .
+                table('goods') . ' AS g ' .
                 "WHERE gb.act_type = '" . GAT_GROUP_BUY . "' " .
                 "AND g.goods_id = gb.goods_id " .
                 "AND gb.start_time <= '" . $time . "' " .
@@ -211,8 +211,8 @@ class IndexController extends InitController
         $now = gmtime();
         $limit = get_library_number('auction', 'index');
         $sql = "SELECT a.act_id, a.goods_id, a.goods_name, a.ext_info, g.goods_thumb " .
-            "FROM " . $GLOBALS['ecs']->table('goods_activity') . " AS a," .
-            $GLOBALS['ecs']->table('goods') . " AS g" .
+            "FROM " . table('goods_activity') . " AS a," .
+            table('goods') . " AS g" .
             " WHERE a.goods_id = g.goods_id" .
             " AND a.act_type = '" . GAT_AUCTION . "'" .
             " AND a.is_finished = 0" .
@@ -247,7 +247,7 @@ class IndexController extends InitController
      */
     public function index_get_links()
     {
-        $sql = 'SELECT link_logo, link_name, link_url FROM ' . $GLOBALS['ecs']->table('friend_link') . ' ORDER BY show_order';
+        $sql = 'SELECT link_logo, link_name, link_url FROM ' . table('friend_link') . ' ORDER BY show_order';
         $res = $GLOBALS['db']->getAll($sql);
 
         $links['img'] = $links['txt'] = array();

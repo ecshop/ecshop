@@ -14,7 +14,7 @@ class UserMsgController extends InitController
         /* 权限判断 */
         admin_priv('feedback_priv');
         /*初始化数据交换对象 */
-        $exc = new exchange($ecs->table("feedback"), $db, 'msg_id', 'msg_title');
+        $exc = new exchange(table("feedback"), $db, 'msg_id', 'msg_title');
     }
     /*------------------------------------------------------ */
     //-- 发送留言
@@ -23,11 +23,11 @@ class UserMsgController extends InitController
     {
         $user_id = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
         $order_id = empty($_GET['order_id']) ? 0 : intval($_GET['order_id']);
-        $order_sn = $db->getOne("SELECT order_sn FROM " . $ecs->table('order_info') . " WHERE order_id = '$order_id'");
+        $order_sn = $db->getOne("SELECT order_sn FROM " . table('order_info') . " WHERE order_id = '$order_id'");
 
         /* 获取关于订单所有信息 */
         $sql = "SELECT msg_id, user_name, msg_title, msg_type, msg_time, msg_content" .
-            " FROM " . $ecs->table('feedback') .
+            " FROM " . table('feedback') .
             " WHERE user_id ='$user_id' AND order_id = '$order_id'";
 
         $msg_list = $db->getAll($sql);
@@ -46,7 +46,7 @@ class UserMsgController extends InitController
 
     public function insertAction()
     {
-        $sql = "INSERT INTO " . $ecs->table('feedback') . "(parent_id, user_id, user_name, user_email, msg_title, msg_type, msg_content, msg_time, message_img, order_id)" .
+        $sql = "INSERT INTO " . table('feedback') . "(parent_id, user_id, user_name, user_email, msg_title, msg_type, msg_content, msg_time, message_img, order_id)" .
             " VALUES (0, '$_POST[user_id]', '$_SESSION[admin_name]', ' ', " .
             " '$_POST[msg_title]', 5, '$_POST[msg_content]', '" . gmtime() . "', '', '$_POST[order_id]')";
 
@@ -60,14 +60,14 @@ class UserMsgController extends InitController
         $msg_id = empty($_GET['msg_id']) ? 0 : intval($_GET['msg_id']);
         $order_id = empty($_GET['order_id']) ? 0 : intval($_GET['order_id']);
         $user_id = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
-        $sql = "SELECT user_id, order_id, message_img FROM " . $ecs->table('feedback') . " WHERE msg_id='$msg_id'";
+        $sql = "SELECT user_id, order_id, message_img FROM " . table('feedback') . " WHERE msg_id='$msg_id'";
         $row = $db->getRow($sql);
         if ($row) {
             if ($row['user_id'] == $user_id && $row['order_id'] == $order_id) {
                 if ($row['message_img']) {
                     @unlink(ROOT_PATH . DATA_DIR . '/feedbackimg/' . $row['message_img']);
                 }
-                $sql = "DELETE FROM " . $ecs->table('feedback') . " WHERE msg_id=$msg_id LIMIT 1";
+                $sql = "DELETE FROM " . table('feedback') . " WHERE msg_id=$msg_id LIMIT 1";
                 $db->query($sql);
             }
         }
@@ -81,7 +81,7 @@ class UserMsgController extends InitController
     {
         if ($_REQUEST['check'] == 'allow') {
             /* 允许留言显示 */
-            $sql = "UPDATE " . $ecs->table('feedback') . " SET msg_status = 1 WHERE msg_id = '$_REQUEST[id]'";
+            $sql = "UPDATE " . table('feedback') . " SET msg_status = 1 WHERE msg_id = '$_REQUEST[id]'";
             $db->query($sql);
 
             /* 清除缓存 */
@@ -90,7 +90,7 @@ class UserMsgController extends InitController
             return redirect("user_msg.php?act=view&id=$_REQUEST[id]");
         } else {
             /* 禁止留言显示 */
-            $sql = "UPDATE " . $ecs->table('feedback') . " SET msg_status = 0 WHERE msg_id = '$_REQUEST[id]'";
+            $sql = "UPDATE " . table('feedback') . " SET msg_status = 0 WHERE msg_id = '$_REQUEST[id]'";
             $db->query($sql);
 
             /* 清除缓存 */
@@ -153,7 +153,7 @@ class UserMsgController extends InitController
             if (!empty($img)) {
                 @unlink(ROOT_PATH . DATA_DIR . '/feedbackimg/' . $img);
             }
-            $sql = "DELETE FROM " . $ecs->table('feedback') . " WHERE parent_id = '$msg_id' LIMIT 1";
+            $sql = "DELETE FROM " . table('feedback') . " WHERE parent_id = '$msg_id' LIMIT 1";
             $db->query($sql, 'SILENT');
 
             admin_log(addslashes($msg_title), 'remove', 'message');
@@ -175,16 +175,16 @@ class UserMsgController extends InitController
         if (isset($_POST['checkboxes'])) {
             switch ($action) {
                 case 'remove':
-                    $db->query("DELETE FROM " . $ecs->table('feedback') . " WHERE " . db_create_in($_POST['checkboxes'], 'msg_id'));
-                    $db->query("DELETE FROM " . $ecs->table('feedback') . " WHERE " . db_create_in($_POST['checkboxes'], 'parent_id'));
+                    $db->query("DELETE FROM " . table('feedback') . " WHERE " . db_create_in($_POST['checkboxes'], 'msg_id'));
+                    $db->query("DELETE FROM " . table('feedback') . " WHERE " . db_create_in($_POST['checkboxes'], 'parent_id'));
                     break;
 
                 case 'allow':
-                    $db->query("UPDATE " . $ecs->table('feedback') . " SET msg_status = 1  WHERE " . db_create_in($_POST['checkboxes'], 'msg_id'));
+                    $db->query("UPDATE " . table('feedback') . " SET msg_status = 1  WHERE " . db_create_in($_POST['checkboxes'], 'msg_id'));
                     break;
 
                 case 'deny':
-                    $db->query("UPDATE " . $ecs->table('feedback') . " SET msg_status = 0,msg_area =1  WHERE " . db_create_in($_POST['checkboxes'], 'msg_id'));
+                    $db->query("UPDATE " . table('feedback') . " SET msg_status = 0,msg_area =1  WHERE " . db_create_in($_POST['checkboxes'], 'msg_id'));
                     break;
 
                 default:
@@ -222,14 +222,14 @@ class UserMsgController extends InitController
     public function actionAction()
     {
         if (empty($_REQUEST['parent_id'])) {
-            $sql = "INSERT INTO " . $ecs->table('feedback') . " (msg_title, msg_time, user_id, user_name , " .
+            $sql = "INSERT INTO " . table('feedback') . " (msg_title, msg_time, user_id, user_name , " .
                 "user_email, parent_id, msg_content) " .
                 "VALUES ('reply', '" . gmtime() . "', '" . $_SESSION['admin_id'] . "', " .
                 "'" . $_SESSION['admin_name'] . "', '" . $_POST['user_email'] . "', " .
                 "'" . $_REQUEST['msg_id'] . "', '" . $_POST['msg_content'] . "') ";
             $db->query($sql);
         } else {
-            $sql = "UPDATE " . $ecs->table('feedback') . " SET user_email = '" . $_POST['user_email'] . "', msg_content='" . $_POST['msg_content'] . "', msg_time = '" . gmtime() . "' WHERE msg_id = '" . $_REQUEST['parent_id'] . "'";
+            $sql = "UPDATE " . table('feedback') . " SET user_email = '" . $_POST['user_email'] . "', msg_content='" . $_POST['msg_content'] . "', msg_time = '" . gmtime() . "' WHERE msg_id = '" . $_REQUEST['parent_id'] . "'";
             $db->query($sql);
         }
 
@@ -237,7 +237,7 @@ class UserMsgController extends InitController
         if (!empty($_POST['send_email_notice']) or isset($_POST['remail'])) {
             //获取邮件中的必要内容
             $sql = 'SELECT user_name, user_email, msg_title, msg_content ' .
-                'FROM ' . $ecs->table('feedback') .
+                'FROM ' . table('feedback') .
                 " WHERE msg_id ='$_REQUEST[msg_id]'";
             $message_info = $db->getRow($sql);
 
@@ -275,7 +275,7 @@ class UserMsgController extends InitController
         @unlink('../' . DATA_DIR . '/feedbackimg/' . $file);
 
         /* 更新数据库 */
-        $db->query("UPDATE " . $ecs->table('feedback') . " SET message_img = '' WHERE msg_id = '$_GET[id]'");
+        $db->query("UPDATE " . table('feedback') . " SET message_img = '' WHERE msg_id = '$_GET[id]'");
 
         return redirect("user_msg.php?act=view&amp;id=" . $_GET['id']);
     }
@@ -307,7 +307,7 @@ class UserMsgController extends InitController
             $where .= " AND f.msg_type = '$filter[msg_type]' ";
         }
 
-        $sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('feedback') . " AS f" .
+        $sql = "SELECT count(*) FROM " . table('feedback') . " AS f" .
             " WHERE parent_id = '0' " . $where;
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -315,8 +315,8 @@ class UserMsgController extends InitController
         $filter = page_and_size($filter);
 
         $sql = "SELECT f.msg_id, f.user_name, f.msg_title, f.msg_type, f.order_id, f.msg_status, f.msg_time, f.msg_area, COUNT(r.msg_id) AS reply " .
-            "FROM " . $GLOBALS['ecs']->table('feedback') . " AS f " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('feedback') . " AS r ON r.parent_id=f.msg_id " .
+            "FROM " . table('feedback') . " AS f " .
+            "LEFT JOIN " . table('feedback') . " AS r ON r.parent_id=f.msg_id " .
             "WHERE f.parent_id = 0 $where " .
             "GROUP BY f.msg_id " .
             "ORDER by $filter[sort_by] $filter[sort_order] " .
@@ -325,7 +325,7 @@ class UserMsgController extends InitController
         $msg_list = $GLOBALS['db']->getAll($sql);
         foreach ($msg_list as $key => $value) {
             if ($value['order_id'] > 0) {
-                $msg_list[$key]['order_sn'] = $GLOBALS['db']->getOne("SELECT order_sn FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_id= " . $value['order_id']);
+                $msg_list[$key]['order_sn'] = $GLOBALS['db']->getOne("SELECT order_sn FROM " . table('order_info') . " WHERE order_id= " . $value['order_id']);
             }
             $msg_list[$key]['msg_time'] = local_date($GLOBALS['_CFG']['time_format'], $value['msg_time']);
             $msg_list[$key]['msg_type'] = $GLOBALS['_LANG']['type'][$value['msg_type']];
@@ -348,9 +348,9 @@ class UserMsgController extends InitController
 
         $sql = "SELECT T1.*, T2.msg_id AS reply_id, T2.user_name  AS reply_name, u.email AS reply_email, " .
             "T2.msg_content AS reply_content , T2.msg_time AS reply_time, T2.user_name AS reply_name " .
-            "FROM " . $ecs->table('feedback') . " AS T1 " .
-            "LEFT JOIN " . $ecs->table('admin_user') . " AS u ON u.user_id='" . $_SESSION['admin_id'] . "' " .
-            "LEFT JOIN " . $ecs->table('feedback') . " AS T2 ON T2.parent_id=T1.msg_id " .
+            "FROM " . table('feedback') . " AS T1 " .
+            "LEFT JOIN " . table('admin_user') . " AS u ON u.user_id='" . $_SESSION['admin_id'] . "' " .
+            "LEFT JOIN " . table('feedback') . " AS T2 ON T2.parent_id=T1.msg_id " .
             "WHERE T1.msg_id = '$id'";
         $msg = $db->getRow($sql);
 

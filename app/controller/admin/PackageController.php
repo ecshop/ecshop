@@ -10,7 +10,7 @@ class PackageController extends InitController
     public function initialize()
     {
         parent::initialize();
-        $exc = new exchange($ecs->table("goods_activity"), $db, 'act_id', 'act_name');
+        $exc = new exchange(table("goods_activity"), $db, 'act_id', 'act_name');
     }
 
     /*------------------------------------------------------ */
@@ -23,7 +23,7 @@ class PackageController extends InitController
 
         /* 组合商品 */
         $group_goods_list = array();
-        $sql = "DELETE FROM " . $ecs->table('package_goods') .
+        $sql = "DELETE FROM " . table('package_goods') .
             " WHERE package_id = 0 AND admin_id = '$_SESSION[admin_id]'";
 
         $db->query($sql);
@@ -50,7 +50,7 @@ class PackageController extends InitController
         admin_priv('package_manage');
 
         $sql = "SELECT COUNT(*) " .
-            " FROM " . $ecs->table('goods_activity') .
+            " FROM " . table('goods_activity') .
             " WHERE act_type='" . GAT_PACKAGE . "' AND act_name='" . $_POST['package_name'] . "'";
         if ($db->getOne($sql)) {
             sys_msg(sprintf($_LANG['package_exist'], $_POST['package_name']), 1);
@@ -73,7 +73,7 @@ class PackageController extends InitController
             'act_type' => GAT_PACKAGE, 'start_time' => $_POST['start_time'],
             'end_time' => $_POST['end_time'], 'is_finished' => 0, 'ext_info' => serialize($info));
 
-        $db->autoExecute($ecs->table('goods_activity'), $record, 'INSERT');
+        $db->autoExecute(table('goods_activity'), $record, 'INSERT');
 
         /* 礼包编号 */
         $package_id = $db->insert_id();
@@ -125,7 +125,7 @@ class PackageController extends InitController
 
         /* 检查活动重名 */
         $sql = "SELECT COUNT(*) " .
-            " FROM " . $ecs->table('goods_activity') .
+            " FROM " . table('goods_activity') .
             " WHERE act_type='" . GAT_PACKAGE . "' AND act_name='" . $_POST['package_name'] . "' AND act_id <> '" . $_POST['id'] . "'";
         if ($db->getOne($sql)) {
             sys_msg(sprintf($_LANG['package_exist'], $_POST['package_name']), 1);
@@ -137,7 +137,7 @@ class PackageController extends InitController
         /* 更新数据 */
         $record = array('act_name' => $_POST['package_name'], 'start_time' => $_POST['start_time'], 'end_time' => $_POST['end_time'],
             'act_desc' => $_POST['desc'], 'ext_info' => serialize($info));
-        $db->autoExecute($ecs->table('goods_activity'), $record, 'UPDATE', "act_id = '" . $_POST['id'] . "' AND act_type = " . GAT_PACKAGE);
+        $db->autoExecute(table('goods_activity'), $record, 'UPDATE', "act_id = '" . $_POST['id'] . "' AND act_type = " . GAT_PACKAGE);
 
         admin_log($_POST['package_name'], 'edit', 'package');
         $link[] = array('text' => $_LANG['back_list'], 'href' => 'package.php?act=list&' . list_link_postfix());
@@ -156,7 +156,7 @@ class PackageController extends InitController
 
         $exc->drop($id);
 
-        $sql = "DELETE FROM " . $ecs->table('package_goods') .
+        $sql = "DELETE FROM " . table('package_goods') .
             " WHERE package_id='$id'";
         $db->query($sql);
 
@@ -224,7 +224,7 @@ class PackageController extends InitController
 
         /* 检查活动重名 */
         $sql = "SELECT COUNT(*) " .
-            " FROM " . $ecs->table('goods_activity') .
+            " FROM " . table('goods_activity') .
             " WHERE act_type='" . GAT_PACKAGE . "' AND act_name='$val' AND act_id <> '$id'";
         if ($db->getOne($sql)) {
             return make_json_error(sprintf($_LANG['package_exist'], $val));
@@ -279,7 +279,7 @@ class PackageController extends InitController
                 $val_array[1] = 0;
             }
 
-            $sql = "INSERT INTO " . $ecs->table('package_goods') . " (package_id, goods_id, product_id, goods_number, admin_id) " .
+            $sql = "INSERT INTO " . table('package_goods') . " (package_id, goods_id, product_id, goods_number, admin_id) " .
                 "VALUES ('$package_id', '" . $val_array[0] . "', '" . $val_array[1] . "', '$number', '$_SESSION[admin_id]')";
             $db->query($sql, 'SILENT');
         }
@@ -324,7 +324,7 @@ class PackageController extends InitController
         }
 
         if (!empty($goods)) {
-            $sql = "DELETE FROM " . $ecs->table('package_goods') .
+            $sql = "DELETE FROM " . table('package_goods') .
                 " WHERE package_id='$package_id' AND " . db_create_in($goods, 'goods_id');
             if ($package_id == 0) {
                 $sql .= " AND admin_id = '$_SESSION[admin_id]'";
@@ -333,7 +333,7 @@ class PackageController extends InitController
         }
 
         if (!empty($g_p)) {
-            $sql = "DELETE FROM " . $ecs->table('package_goods') .
+            $sql = "DELETE FROM " . table('package_goods') .
                 " WHERE package_id='$package_id' AND " . db_create_in($g_p['goods_id'], 'goods_id') . " AND " . db_create_in($g_p['product_id'], 'product_id');
             if ($package_id == 0) {
                 $sql .= " AND admin_id = '$_SESSION[admin_id]'";
@@ -376,7 +376,7 @@ class PackageController extends InitController
 
             $where = (!empty($filter['keywords'])) ? " AND act_name like '%" . mysql_like_quote($filter['keywords']) . "%'" : '';
 
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_activity') .
+            $sql = "SELECT COUNT(*) FROM " . table('goods_activity') .
                 " WHERE act_type =" . GAT_PACKAGE . $where;
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -384,7 +384,7 @@ class PackageController extends InitController
 
             /* 获活动数据 */
             $sql = "SELECT act_id, act_name AS package_name, start_time, end_time, is_finished, ext_info " .
-                " FROM " . $GLOBALS['ecs']->table('goods_activity') .
+                " FROM " . table('goods_activity') .
                 " WHERE act_type = " . GAT_PACKAGE . $where .
                 " ORDER by $filter[sort_by] $filter[sort_order] LIMIT " . $filter['start'] . ", " . $filter['page_size'];
 
@@ -421,7 +421,7 @@ class PackageController extends InitController
      */
     public function handle_packagep_goods($package_id)
     {
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('package_goods') . " SET " .
+        $sql = "UPDATE " . table('package_goods') . " SET " .
             " package_id = '$package_id' " .
             " WHERE package_id = '0'" .
             " AND admin_id = '$_SESSION[admin_id]'";

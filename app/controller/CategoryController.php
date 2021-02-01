@@ -60,7 +60,7 @@ class CategoryController extends InitController
 
         /* 赋值固定内容 */
         if ($brand > 0) {
-            $sql = "SELECT brand_name FROM " . $GLOBALS['ecs']->table('brand') . " WHERE brand_id = '$brand'";
+            $sql = "SELECT brand_name FROM " . table('brand') . " WHERE brand_id = '$brand'";
             $brand_name = $db->getOne($sql);
         } else {
             $brand_name = '';
@@ -102,7 +102,7 @@ class CategoryController extends InitController
             */
 
             $sql = "SELECT min(g.shop_price) AS min, max(g.shop_price) as max " .
-                " FROM " . $ecs->table('goods') . " AS g " .
+                " FROM " . table('goods') . " AS g " .
                 " WHERE ($children OR " . get_extension_goods($children) . ') AND g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1  ';
             //获得当前分类下商品价格的最大值、最小值
 
@@ -129,7 +129,7 @@ class CategoryController extends InitController
             $row['max'] = $dx * ($i) + $price_grade * ($j - 1);
 
             $sql = "SELECT (FLOOR((g.shop_price - $row[min]) / $dx)) AS sn, COUNT(*) AS goods_num  " .
-                " FROM " . $ecs->table('goods') . " AS g " .
+                " FROM " . table('goods') . " AS g " .
                 " WHERE ($children OR " . get_extension_goods($children) . ') AND g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 ' .
                 " GROUP BY sn ";
 
@@ -166,8 +166,8 @@ class CategoryController extends InitController
         /* 品牌筛选 */
 
         $sql = "SELECT b.brand_id, b.brand_name, COUNT(*) AS goods_num " .
-            "FROM " . $GLOBALS['ecs']->table('brand') . "AS b, " .
-            $GLOBALS['ecs']->table('goods') . " AS g LEFT JOIN " . $GLOBALS['ecs']->table('goods_cat') . " AS gc ON g.goods_id = gc.goods_id " .
+            "FROM " . table('brand') . "AS b, " .
+            table('goods') . " AS g LEFT JOIN " . table('goods_cat') . " AS gc ON g.goods_id = gc.goods_id " .
             "WHERE g.brand_id = b.brand_id AND ($children OR " . 'gc.cat_id ' . db_create_in(array_unique(array_merge(array($cat_id), array_keys(cat_list($cat_id, 0, false))))) . ") AND b.is_show = 1 " .
             " AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 " .
             "GROUP BY b.brand_id HAVING goods_num > 0 ORDER BY b.sort_order, b.brand_id ASC";
@@ -201,11 +201,11 @@ class CategoryController extends InitController
             $all_attr_list = array();
 
             foreach ($cat_filter_attr as $key => $value) {
-                $sql = "SELECT a.attr_name FROM " . $ecs->table('attribute') . " AS a, " . $ecs->table('goods_attr') . " AS ga, " . $ecs->table('goods') . " AS g WHERE ($children OR " . get_extension_goods($children) . ") AND a.attr_id = ga.attr_id AND g.goods_id = ga.goods_id AND g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND a.attr_id='$value'";
+                $sql = "SELECT a.attr_name FROM " . table('attribute') . " AS a, " . table('goods_attr') . " AS ga, " . table('goods') . " AS g WHERE ($children OR " . get_extension_goods($children) . ") AND a.attr_id = ga.attr_id AND g.goods_id = ga.goods_id AND g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND a.attr_id='$value'";
                 if ($temp_name = $db->getOne($sql)) {
                     $all_attr_list[$key]['filter_attr_name'] = $temp_name;
 
-                    $sql = "SELECT a.attr_id, MIN(a.goods_attr_id ) AS goods_id, a.attr_value AS attr_value FROM " . $ecs->table('goods_attr') . " AS a, " . $ecs->table('goods') .
+                    $sql = "SELECT a.attr_id, MIN(a.goods_attr_id ) AS goods_id, a.attr_value AS attr_value FROM " . table('goods_attr') . " AS a, " . table('goods') .
                         " AS g" .
                         " WHERE ($children OR " . get_extension_goods($children) . ') AND g.goods_id = a.goods_id AND g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 ' .
                         " AND a.attr_id='$value' " .
@@ -245,7 +245,7 @@ class CategoryController extends InitController
             $this->assign('filter_attr_list', $all_attr_list);
             /* 扩展商品查询条件 */
             if (!empty($filter_attr)) {
-                $ext_sql = "SELECT DISTINCT(b.goods_id) FROM " . $ecs->table('goods_attr') . " AS a, " . $ecs->table('goods_attr') . " AS b " . "WHERE ";
+                $ext_sql = "SELECT DISTINCT(b.goods_id) FROM " . table('goods_attr') . " AS a, " . table('goods_attr') . " AS b " . "WHERE ";
                 $ext_group_goods = array();
 
                 foreach ($filter_attr as $k => $v) {                      // 查出符合所有筛选属性条件的商品id */
@@ -335,7 +335,7 @@ class CategoryController extends InitController
      */
     public function get_cat_info($cat_id)
     {
-        return $GLOBALS['db']->getRow('SELECT cat_name, keywords, cat_desc, style, grade, filter_attr, parent_id FROM ' . $GLOBALS['ecs']->table('category') .
+        return $GLOBALS['db']->getRow('SELECT cat_name, keywords, cat_desc, style, grade, filter_attr, parent_id FROM ' . table('category') .
             " WHERE cat_id = '$cat_id'");
     }
 
@@ -368,8 +368,8 @@ class CategoryController extends InitController
         $sql = 'SELECT g.goods_id, g.goods_name, g.goods_name_style, g.market_price, g.is_new, g.is_best, g.is_hot, g.shop_price AS org_price, ' .
             "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, g.promote_price, g.goods_type, " .
             'g.promote_start_date, g.promote_end_date, g.goods_brief, g.goods_thumb , g.goods_img ' .
-            'FROM ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('member_price') . ' AS mp ' .
+            'FROM ' . table('goods') . ' AS g ' .
+            'LEFT JOIN ' . table('member_price') . ' AS mp ' .
             "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
             "WHERE $where $ext ORDER BY $sort $order";
         $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);
@@ -444,7 +444,7 @@ class CategoryController extends InitController
         }
 
         /* 返回商品总数 */
-        return $GLOBALS['db']->getOne('SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('goods') . " AS g WHERE $where $ext");
+        return $GLOBALS['db']->getOne('SELECT COUNT(*) FROM ' . table('goods') . " AS g WHERE $where $ext");
     }
 
     /**
@@ -463,7 +463,7 @@ class CategoryController extends InitController
             $data = read_static_cache('cat_parent_grade');
             if ($data === false) {
                 $sql = "SELECT parent_id, cat_id, grade " .
-                    " FROM " . $GLOBALS['ecs']->table('category');
+                    " FROM " . table('category');
                 $res = $GLOBALS['db']->getAll($sql);
                 write_static_cache('cat_parent_grade', $res);
             } else {

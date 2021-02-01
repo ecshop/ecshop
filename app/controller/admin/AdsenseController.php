@@ -29,17 +29,17 @@ class AdsenseController extends InitController
         /* 获取广告数据 */
         $ads_stats = array();
         $sql = "SELECT a.ad_id, a.ad_name, b.* " .
-            "FROM " . $ecs->table('ad') . " AS a, " . $ecs->table('adsense') . " AS b " .
+            "FROM " . table('ad') . " AS a, " . table('adsense') . " AS b " .
             "WHERE b.from_ad = a.ad_id ORDER by a.ad_name DESC";
         $res = $db->query($sql);
         while ($rows = $db->fetchRow($res)) {
             /* 获取当前广告所产生的订单总数 */
             $rows['referer'] = addslashes($rows['referer']);
-            $sql2 = 'SELECT COUNT(order_id) FROM ' . $ecs->table('order_info') . " WHERE from_ad='$rows[ad_id]' AND referer='$rows[referer]'";
+            $sql2 = 'SELECT COUNT(order_id) FROM ' . table('order_info') . " WHERE from_ad='$rows[ad_id]' AND referer='$rows[referer]'";
             $rows['order_num'] = $db->getOne($sql2);
 
             /* 当前广告所产生的已完成的有效订单 */
-            $sql3 = "SELECT COUNT(order_id) FROM " . $ecs->table('order_info') .
+            $sql3 = "SELECT COUNT(order_id) FROM " . table('order_info') .
                 " WHERE from_ad    = '$rows[ad_id]'" .
                 " AND referer = '$rows[referer]' " . order_query_sql('finished');
             $rows['order_confirm'] = $db->getOne($sql3);
@@ -50,17 +50,17 @@ class AdsenseController extends InitController
 
         /* 站外JS投放商品的统计数据 */
         $goods_stats = array();
-        $goods_sql = "SELECT from_ad, referer, clicks FROM " . $ecs->table('adsense') .
+        $goods_sql = "SELECT from_ad, referer, clicks FROM " . table('adsense') .
             " WHERE from_ad = '-1' ORDER by referer DESC";
         $goods_res = $db->query($goods_sql);
         while ($rows2 = $db->fetchRow($goods_res)) {
             /* 获取当前广告所产生的订单总数 */
             $rows2['referer'] = addslashes($rows2['referer']);
-            $rows2['order_num'] = $db->getOne("SELECT COUNT(order_id) FROM " . $ecs->table('order_info') . " WHERE referer='$rows2[referer]'");
+            $rows2['order_num'] = $db->getOne("SELECT COUNT(order_id) FROM " . table('order_info') . " WHERE referer='$rows2[referer]'");
 
             /* 当前广告所产生的已完成的有效订单 */
 
-            $sql = "SELECT COUNT(order_id) FROM " . $ecs->table('order_info') .
+            $sql = "SELECT COUNT(order_id) FROM " . table('order_info') .
                 " WHERE referer='$rows2[referer]'" . order_query_sql('finished');
             $rows2['order_confirm'] = $db->getOne($sql);
 

@@ -80,7 +80,7 @@ class WholesaleController extends InitController
         $name = $wholesale['goods_name'];
 
         /* 删除记录 */
-        $sql = "DELETE FROM " . $ecs->table('wholesale') .
+        $sql = "DELETE FROM " . table('wholesale') .
             " WHERE act_id = '$id' LIMIT 1";
         $db->query($sql);
 
@@ -111,7 +111,7 @@ class WholesaleController extends InitController
 
             if (isset($_POST['drop'])) {
                 /* 删除记录 */
-                $sql = "DELETE FROM " . $ecs->table('wholesale') .
+                $sql = "DELETE FROM " . table('wholesale') .
                     " WHERE act_id " . db_create_in($ids);
                 $db->query($sql);
 
@@ -137,7 +137,7 @@ class WholesaleController extends InitController
         $id = intval($_POST['id']);
         $val = intval($_POST['val']);
 
-        $sql = "UPDATE " . $ecs->table('wholesale') .
+        $sql = "UPDATE " . table('wholesale') .
             " SET enabled = '$val'" .
             " WHERE act_id = '$id' LIMIT 1";
         $db->query($sql);
@@ -176,7 +176,7 @@ class WholesaleController extends InitController
 
         /* 取得用户等级 */
         $user_rank_list = array();
-        $sql = "SELECT rank_id, rank_name FROM " . $ecs->table('user_rank') .
+        $sql = "SELECT rank_id, rank_name FROM " . table('user_rank') .
             " ORDER BY special_rank, min_points";
         $res = $db->query($sql);
         while ($rank = $db->fetchRow($res)) {
@@ -229,7 +229,7 @@ class WholesaleController extends InitController
         $dst_goods = implode(',', $_POST['dst_goods_lists']);
 
 
-        $sql = "SELECT goods_name, goods_id FROM " . $ecs->table('goods') .
+        $sql = "SELECT goods_name, goods_id FROM " . table('goods') .
             " WHERE goods_id IN ($dst_goods)";
         $goods_name = $db->getAll($sql);
         if (!empty($goods_name)) {
@@ -252,7 +252,7 @@ class WholesaleController extends InitController
         if (isset($_POST['rank_id'])) {
             $dst_res = array();
             foreach ($_POST['rank_id'] as $rank_id) {
-                $sql = "SELECT COUNT(act_id) AS num, goods_id FROM " . $ecs->table('wholesale') .
+                $sql = "SELECT COUNT(act_id) AS num, goods_id FROM " . table('wholesale') .
                     " WHERE goods_id IN ($dst_goods) " .
                     " AND CONCAT(',', rank_ids, ',') LIKE CONCAT('%,', '$rank_id', ',%')
                       GROUP BY goods_id";
@@ -283,7 +283,7 @@ class WholesaleController extends InitController
             $_wholesale['goods_name'] = $goods_rebulid[$goods_value];
 
             /* 保存数据 */
-            $db->autoExecute($ecs->table('wholesale'), $_wholesale, 'INSERT');
+            $db->autoExecute(table('wholesale'), $_wholesale, 'INSERT');
 
             /* 记日志 */
             admin_log($goods_rebulid[$goods_value], 'add', 'wholesale');
@@ -353,7 +353,7 @@ class WholesaleController extends InitController
 
         /* 取得用户等级 */
         $user_rank_list = array();
-        $sql = "SELECT rank_id, rank_name FROM " . $ecs->table('user_rank') .
+        $sql = "SELECT rank_id, rank_name FROM " . table('user_rank') .
             " ORDER BY special_rank, min_points";
         $res = $db->query($sql);
         while ($rank = $db->fetchRow($res)) {
@@ -403,7 +403,7 @@ class WholesaleController extends InitController
         if ($goods_id <= 0) {
             sys_msg($_LANG['pls_search_goods']);
         }
-        $sql = "SELECT goods_name FROM " . $ecs->table('goods') .
+        $sql = "SELECT goods_name FROM " . table('goods') .
             " WHERE goods_id = '$goods_id'";
         $goods_name = $db->getOne($sql);
         $goods_name = addslashes($goods_name);
@@ -419,7 +419,7 @@ class WholesaleController extends InitController
         /* 同一个商品，会员等级不能重叠 */
         if (isset($_POST['rank_id'])) {
             foreach ($_POST['rank_id'] as $rank_id) {
-                $sql = "SELECT COUNT(*) FROM " . $ecs->table('wholesale') .
+                $sql = "SELECT COUNT(*) FROM " . table('wholesale') .
                     " WHERE goods_id = '$goods_id' " .
                     " AND CONCAT(',', rank_ids, ',') LIKE CONCAT('%,', '$rank_id', ',%')";
                 if (!$is_add) {
@@ -433,7 +433,7 @@ class WholesaleController extends InitController
 
         /* 取得goods_attr */
         $sql = "SELECT a.attr_id " .
-            "FROM " . $ecs->table('goods') . " AS g, " . $ecs->table('attribute') . " AS a " .
+            "FROM " . table('goods') . " AS g, " . table('attribute') . " AS a " .
             "WHERE g.goods_id = '$goods_id' " .
             "AND g.goods_type = a.cat_id " .
             "AND a.attr_type = 1";
@@ -458,7 +458,7 @@ class WholesaleController extends InitController
                 ksort($_attr);
                 $goods_attr = implode('|', $_attr);
 
-                $sql = "SELECT product_id FROM " . $ecs->table('products') . " WHERE goods_attr = '$goods_attr' AND goods_id = '$goods_id'";
+                $sql = "SELECT product_id FROM " . table('products') . " WHERE goods_attr = '$goods_attr' AND goods_id = '$goods_id'";
                 if (!$db->getOne($sql)) {
                     $attr_error = true;
                     continue;
@@ -501,10 +501,10 @@ class WholesaleController extends InitController
 
         /* 保存数据 */
         if ($is_add) {
-            $db->autoExecute($ecs->table('wholesale'), $wholesale, 'INSERT');
+            $db->autoExecute(table('wholesale'), $wholesale, 'INSERT');
             $wholesale['act_id'] = $db->insert_id();
         } else {
-            $db->autoExecute($ecs->table('wholesale'), $wholesale, 'UPDATE', "act_id = '$wholesale[act_id]'");
+            $db->autoExecute(table('wholesale'), $wholesale, 'UPDATE', "act_id = '$wholesale[act_id]'");
         }
 
         /* 记日志 */
@@ -595,7 +595,7 @@ class WholesaleController extends InitController
     {
         /* 查询会员等级 */
         $rank_list = array();
-        $sql = "SELECT rank_id, rank_name FROM " . $GLOBALS['ecs']->table('user_rank');
+        $sql = "SELECT rank_id, rank_name FROM " . table('user_rank');
         $res = $GLOBALS['db']->query($sql);
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             $rank_list[$row['rank_id']] = $row['rank_name'];
@@ -616,7 +616,7 @@ class WholesaleController extends InitController
                 $where .= " AND goods_name LIKE '%" . mysql_like_quote($filter['keyword']) . "%'";
             }
 
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('wholesale') .
+            $sql = "SELECT COUNT(*) FROM " . table('wholesale') .
                 " WHERE 1 $where";
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -625,7 +625,7 @@ class WholesaleController extends InitController
 
             /* 查询 */
             $sql = "SELECT * " .
-                "FROM " . $GLOBALS['ecs']->table('wholesale') .
+                "FROM " . table('wholesale') .
                 " WHERE 1 $where " .
                 " ORDER BY $filter[sort_by] $filter[sort_order] " .
                 " LIMIT " . $filter['start'] . ", $filter[page_size]";

@@ -43,6 +43,6 @@ if (isset($set_modules) && $set_modules == true) {
 empty($cron['ipdel_day']) && $cron['ipdel_day'] = 7;
 
 $deltime = gmtime() - $cron['ipdel_day'] * 3600 * 24;
-$sql = "DELETE FROM " . $ecs->table('stats') .
+$sql = "DELETE FROM " . table('stats') .
     "WHERE  access_time < '$deltime'";
 $db->query($sql);

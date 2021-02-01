@@ -181,12 +181,12 @@ class AccountLogController extends InitController
         );
 
         /* 查询记录总数，计算分页数 */
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('account_log') . $where;
+        $sql = "SELECT COUNT(*) FROM " . table('account_log') . $where;
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
         $filter = page_and_size($filter);
 
         /* 查询记录 */
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('account_log') . $where .
+        $sql = "SELECT * FROM " . table('account_log') . $where .
             " ORDER BY log_id DESC";
         $res = $GLOBALS['db']->selectLimit($sql, $filter['page_size'], $filter['start']);
 

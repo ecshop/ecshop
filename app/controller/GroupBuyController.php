@@ -107,7 +107,7 @@ class GroupBuyController extends InitController
         $this->assign_dynamic('group_buy_goods');
 
         //更新商品点击次数
-        $sql = 'UPDATE ' . $ecs->table('goods') . ' SET click_count = click_count + 1 ' .
+        $sql = 'UPDATE ' . table('goods') . ' SET click_count = click_count + 1 ' .
             "WHERE goods_id = '" . $group_buy['goods_id'] . "'";
         $db->query($sql);
 
@@ -183,8 +183,8 @@ class GroupBuyController extends InitController
         /* 查询：查询规格名称和值，不考虑价格 */
         $attr_list = array();
         $sql = "SELECT a.attr_name, g.attr_value " .
-            "FROM " . $ecs->table('goods_attr') . " AS g, " .
-            $ecs->table('attribute') . " AS a " .
+            "FROM " . table('goods_attr') . " AS g, " .
+            table('attribute') . " AS a " .
             "WHERE g.attr_id = a.attr_id " .
             "AND g.goods_attr_id " . db_create_in($specs);
         $res = $db->query($sql);
@@ -216,7 +216,7 @@ class GroupBuyController extends InitController
             'rec_type' => CART_GROUP_BUY_GOODS,
             'is_gift' => 0
         );
-        $db->autoExecute($ecs->table('cart'), $cart, 'INSERT');
+        $db->autoExecute(table('cart'), $cart, 'INSERT');
 
         /* 更新：记录购物流程类型：团购 */
         $_SESSION['flow_type'] = CART_GROUP_BUY_GOODS;
@@ -232,7 +232,7 @@ class GroupBuyController extends InitController
     {
         $now = gmtime();
         $sql = "SELECT COUNT(*) " .
-            "FROM " . $GLOBALS['ecs']->table('goods_activity') .
+            "FROM " . table('goods_activity') .
             "WHERE act_type = '" . GAT_GROUP_BUY . "' " .
             "AND start_time <= '$now' AND is_finished < 3";
 
@@ -252,8 +252,8 @@ class GroupBuyController extends InitController
         $now = gmtime();
         $sql = "SELECT b.*, IFNULL(g.goods_thumb, '') AS goods_thumb, b.act_id AS group_buy_id, " .
             "b.start_time AS start_date, b.end_time AS end_date " .
-            "FROM " . $GLOBALS['ecs']->table('goods_activity') . " AS b " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g ON b.goods_id = g.goods_id " .
+            "FROM " . table('goods_activity') . " AS b " .
+            "LEFT JOIN " . table('goods') . " AS g ON b.goods_id = g.goods_id " .
             "WHERE b.act_type = '" . GAT_GROUP_BUY . "' " .
             "AND b.start_time <= '$now' AND b.is_finished < 3 ORDER BY b.act_id DESC";
         $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);

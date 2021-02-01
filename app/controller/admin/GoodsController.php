@@ -12,7 +12,7 @@ class GoodsController extends InitController
         parent::initialize();
 
         $image = new cls_image($_CFG['bgcolor']);
-        $exc = new exchange($ecs->table('goods'), $db, 'goods_id', 'goods_name');
+        $exc = new exchange(table('goods'), $db, 'goods_id', 'goods_name');
     }
 
     /*------------------------------------------------------ */
@@ -179,32 +179,32 @@ class GoodsController extends InitController
 
             /* 关联商品 */
             $link_goods_list = array();
-            $sql = "DELETE FROM " . $ecs->table('link_goods') .
+            $sql = "DELETE FROM " . table('link_goods') .
                 " WHERE (goods_id = 0 OR link_goods_id = 0)" .
                 " AND admin_id = '$_SESSION[admin_id]'";
             $db->query($sql);
 
             /* 组合商品 */
             $group_goods_list = array();
-            $sql = "DELETE FROM " . $ecs->table('group_goods') .
+            $sql = "DELETE FROM " . table('group_goods') .
                 " WHERE parent_id = 0 AND admin_id = '$_SESSION[admin_id]'";
             $db->query($sql);
 
             /* 关联文章 */
             $goods_article_list = array();
-            $sql = "DELETE FROM " . $ecs->table('goods_article') .
+            $sql = "DELETE FROM " . table('goods_article') .
                 " WHERE goods_id = 0 AND admin_id = '$_SESSION[admin_id]'";
             $db->query($sql);
 
             /* 属性 */
-            $sql = "DELETE FROM " . $ecs->table('goods_attr') . " WHERE goods_id = 0";
+            $sql = "DELETE FROM " . table('goods_attr') . " WHERE goods_id = 0";
             $db->query($sql);
 
             /* 图片列表 */
             $img_list = array();
         } else {
             /* 商品信息 */
-            $sql = "SELECT * FROM " . $ecs->table('goods') . " WHERE goods_id = '$_REQUEST[goods_id]'";
+            $sql = "SELECT * FROM " . table('goods') . " WHERE goods_id = '$_REQUEST[goods_id]'";
             $goods = $db->getRow($sql);
 
             /* 虚拟卡商品复制时, 将其库存置为0*/
@@ -277,71 +277,71 @@ class GoodsController extends InitController
                 // 扩展分类不变
 
                 // 关联商品
-                $sql = "DELETE FROM " . $ecs->table('link_goods') .
+                $sql = "DELETE FROM " . table('link_goods') .
                     " WHERE (goods_id = 0 OR link_goods_id = 0)" .
                     " AND admin_id = '$_SESSION[admin_id]'";
                 $db->query($sql);
 
                 $sql = "SELECT '0' AS goods_id, link_goods_id, is_double, '$_SESSION[admin_id]' AS admin_id" .
-                    " FROM " . $ecs->table('link_goods') .
+                    " FROM " . table('link_goods') .
                     " WHERE goods_id = '$_REQUEST[goods_id]' ";
                 $res = $db->query($sql);
                 while ($row = $db->fetchRow($res)) {
-                    $db->autoExecute($ecs->table('link_goods'), $row, 'INSERT');
+                    $db->autoExecute(table('link_goods'), $row, 'INSERT');
                 }
 
                 $sql = "SELECT goods_id, '0' AS link_goods_id, is_double, '$_SESSION[admin_id]' AS admin_id" .
-                    " FROM " . $ecs->table('link_goods') .
+                    " FROM " . table('link_goods') .
                     " WHERE link_goods_id = '$_REQUEST[goods_id]' ";
                 $res = $db->query($sql);
                 while ($row = $db->fetchRow($res)) {
-                    $db->autoExecute($ecs->table('link_goods'), $row, 'INSERT');
+                    $db->autoExecute(table('link_goods'), $row, 'INSERT');
                 }
 
                 // 配件
-                $sql = "DELETE FROM " . $ecs->table('group_goods') .
+                $sql = "DELETE FROM " . table('group_goods') .
                     " WHERE parent_id = 0 AND admin_id = '$_SESSION[admin_id]'";
                 $db->query($sql);
 
                 $sql = "SELECT 0 AS parent_id, goods_id, goods_price, '$_SESSION[admin_id]' AS admin_id " .
-                    "FROM " . $ecs->table('group_goods') .
+                    "FROM " . table('group_goods') .
                     " WHERE parent_id = '$_REQUEST[goods_id]' ";
                 $res = $db->query($sql);
                 while ($row = $db->fetchRow($res)) {
-                    $db->autoExecute($ecs->table('group_goods'), $row, 'INSERT');
+                    $db->autoExecute(table('group_goods'), $row, 'INSERT');
                 }
 
                 // 关联文章
-                $sql = "DELETE FROM " . $ecs->table('goods_article') .
+                $sql = "DELETE FROM " . table('goods_article') .
                     " WHERE goods_id = 0 AND admin_id = '$_SESSION[admin_id]'";
                 $db->query($sql);
 
                 $sql = "SELECT 0 AS goods_id, article_id, '$_SESSION[admin_id]' AS admin_id " .
-                    "FROM " . $ecs->table('goods_article') .
+                    "FROM " . table('goods_article') .
                     " WHERE goods_id = '$_REQUEST[goods_id]' ";
                 $res = $db->query($sql);
                 while ($row = $db->fetchRow($res)) {
-                    $db->autoExecute($ecs->table('goods_article'), $row, 'INSERT');
+                    $db->autoExecute(table('goods_article'), $row, 'INSERT');
                 }
 
                 // 图片不变
 
                 // 商品属性
-                $sql = "DELETE FROM " . $ecs->table('goods_attr') . " WHERE goods_id = 0";
+                $sql = "DELETE FROM " . table('goods_attr') . " WHERE goods_id = 0";
                 $db->query($sql);
 
                 $sql = "SELECT 0 AS goods_id, attr_id, attr_value, attr_price " .
-                    "FROM " . $ecs->table('goods_attr') .
+                    "FROM " . table('goods_attr') .
                     " WHERE goods_id = '$_REQUEST[goods_id]' ";
                 $res = $db->query($sql);
                 while ($row = $db->fetchRow($res)) {
-                    $db->autoExecute($ecs->table('goods_attr'), addslashes_deep($row), 'INSERT');
+                    $db->autoExecute(table('goods_attr'), addslashes_deep($row), 'INSERT');
                 }
             }
 
             // 扩展分类
             $other_cat_list = array();
-            $sql = "SELECT cat_id FROM " . $ecs->table('goods_cat') . " WHERE goods_id = '$_REQUEST[goods_id]'";
+            $sql = "SELECT cat_id FROM " . table('goods_cat') . " WHERE goods_id = '$_REQUEST[goods_id]'";
             $goods['other_cat'] = $db->getCol($sql);
             foreach ($goods['other_cat'] as $cat_id) {
                 $other_cat_list[$cat_id] = cat_list(0, $cat_id);
@@ -359,7 +359,7 @@ class GoodsController extends InitController
             }
 
             /* 图片列表 */
-            $sql = "SELECT * FROM " . $ecs->table('goods_gallery') . " WHERE goods_id = '$goods[goods_id]'";
+            $sql = "SELECT * FROM " . table('goods_gallery') . " WHERE goods_id = '$goods[goods_id]'";
             $img_list = $db->getAll($sql);
 
             /* 格式化相册图片路径 */
@@ -445,7 +445,7 @@ class GoodsController extends InitController
 
         /* 检查货号是否重复 */
         if ($_POST['goods_sn']) {
-            $sql = "SELECT COUNT(*) FROM " . $ecs->table('goods') .
+            $sql = "SELECT COUNT(*) FROM " . table('goods') .
                 " WHERE goods_sn = '$_POST[goods_sn]' AND is_delete = 0 AND goods_id <> '$_POST[goods_id]'";
             if ($db->getOne($sql) > 0) {
                 sys_msg($_LANG['goods_sn_exists'], 1, array(), false);
@@ -536,7 +536,7 @@ class GoodsController extends InitController
             if ($_REQUEST['goods_id'] > 0) {
                 /* 删除原来的图片文件 */
                 $sql = "SELECT goods_thumb, goods_img, original_img " .
-                    " FROM " . $ecs->table('goods') .
+                    " FROM " . table('goods') .
                     " WHERE goods_id = '$_REQUEST[goods_id]'";
                 $row = $db->getRow($sql);
                 if ($row['goods_thumb'] != '' && is_file('../' . $row['goods_thumb'])) {
@@ -657,7 +657,7 @@ class GoodsController extends InitController
 
         /* 如果没有输入商品货号则自动生成一个商品货号 */
         if (empty($_POST['goods_sn'])) {
-            $max_id = $is_insert ? $db->getOne("SELECT MAX(goods_id) + 1 FROM " . $ecs->table('goods')) : $_REQUEST['goods_id'];
+            $max_id = $is_insert ? $db->getOne("SELECT MAX(goods_id) + 1 FROM " . table('goods')) : $_REQUEST['goods_id'];
             $goods_sn = generate_goods_sn($max_id);
         } else {
             $goods_sn = $_POST['goods_sn'];
@@ -695,7 +695,7 @@ class GoodsController extends InitController
         /* 入库 */
         if ($is_insert) {
             if ($code == '') {
-                $sql = "INSERT INTO " . $ecs->table('goods') . " (goods_name, goods_name_style, goods_sn, " .
+                $sql = "INSERT INTO " . table('goods') . " (goods_name, goods_name_style, goods_sn, " .
                     "cat_id, brand_id, shop_price, market_price, is_promote, promote_price, " .
                     "promote_start_date, promote_end_date, goods_img, goods_thumb, original_img, keywords, goods_brief, " .
                     "seller_note, goods_weight, goods_number, warn_number, integral, give_integral, is_best, is_new, is_hot, " .
@@ -707,7 +707,7 @@ class GoodsController extends InitController
                     " '$warn_number', '$_POST[integral]', '$give_integral', '$is_best', '$is_new', '$is_hot', '$is_on_sale', '$is_alone_sale', $is_shipping, " .
                     " '$_POST[goods_desc]', '" . gmtime() . "', '" . gmtime() . "', '$goods_type', '$rank_integral', '$suppliers_id')";
             } else {
-                $sql = "INSERT INTO " . $ecs->table('goods') . " (goods_name, goods_name_style, goods_sn, " .
+                $sql = "INSERT INTO " . table('goods') . " (goods_name, goods_name_style, goods_sn, " .
                     "cat_id, brand_id, shop_price, market_price, is_promote, promote_price, " .
                     "promote_start_date, promote_end_date, goods_img, goods_thumb, original_img, keywords, goods_brief, " .
                     "seller_note, goods_weight, goods_number, warn_number, integral, give_integral, is_best, is_new, is_hot, is_real, " .
@@ -722,7 +722,7 @@ class GoodsController extends InitController
         } else {
             /* 如果有上传图片，删除原来的商品图 */
             $sql = "SELECT goods_thumb, goods_img, original_img " .
-                " FROM " . $ecs->table('goods') .
+                " FROM " . table('goods') .
                 " WHERE goods_id = '$_REQUEST[goods_id]'";
             $row = $db->getRow($sql);
             if ($proc_thumb && $goods_img && $row['goods_img'] && !goods_parse_url($row['goods_img'])) {
@@ -734,7 +734,7 @@ class GoodsController extends InitController
                 @unlink(ROOT_PATH . $row['goods_thumb']);
             }
 
-            $sql = "UPDATE " . $ecs->table('goods') . " SET " .
+            $sql = "UPDATE " . table('goods') . " SET " .
                 "goods_name = '$_POST[goods_name]', " .
                 "goods_name_style = '$goods_name_style', " .
                 "goods_sn = '$goods_sn', " .
@@ -802,7 +802,7 @@ class GoodsController extends InitController
                 unset($keywords_arr['']);
             }
 
-            $sql = "SELECT attr_id, attr_index FROM " . $ecs->table('attribute') . " WHERE cat_id = '$goods_type'";
+            $sql = "SELECT attr_id, attr_index FROM " . table('attribute') . " WHERE cat_id = '$goods_type'";
 
             $attr_res = $db->query($sql);
 
@@ -813,8 +813,8 @@ class GoodsController extends InitController
             }
 
             $sql = "SELECT g.*, a.attr_type
-                FROM " . $ecs->table('goods_attr') . " AS g
-                    LEFT JOIN " . $ecs->table('attribute') . " AS a
+                FROM " . table('goods_attr') . " AS g
+                    LEFT JOIN " . table('attribute') . " AS a
                         ON a.attr_id = g.attr_id
                 WHERE g.goods_id = '$goods_id'";
 
@@ -849,7 +849,7 @@ class GoodsController extends InitController
             }
             $keywords = join(' ', array_flip($keywords_arr));
 
-            $sql = "UPDATE " . $ecs->table('goods') . " SET keywords = '$keywords' WHERE goods_id = '$goods_id' LIMIT 1";
+            $sql = "UPDATE " . table('goods') . " SET keywords = '$keywords' WHERE goods_id = '$goods_id' LIMIT 1";
 
             $db->query($sql);
 
@@ -857,12 +857,12 @@ class GoodsController extends InitController
             foreach ($goods_attr_list as $attr_id => $attr_value_list) {
                 foreach ($attr_value_list as $attr_value => $info) {
                     if ($info['sign'] == 'insert') {
-                        $sql = "INSERT INTO " . $ecs->table('goods_attr') . " (attr_id, goods_id, attr_value, attr_price)" .
+                        $sql = "INSERT INTO " . table('goods_attr') . " (attr_id, goods_id, attr_value, attr_price)" .
                             "VALUES ('$attr_id', '$goods_id', '$attr_value', '$info[attr_price]')";
                     } elseif ($info['sign'] == 'update') {
-                        $sql = "UPDATE " . $ecs->table('goods_attr') . " SET attr_price = '$info[attr_price]' WHERE goods_attr_id = '$info[goods_attr_id]' LIMIT 1";
+                        $sql = "UPDATE " . table('goods_attr') . " SET attr_price = '$info[attr_price]' WHERE goods_attr_id = '$info[goods_attr_id]' LIMIT 1";
                     } else {
-                        $sql = "DELETE FROM " . $ecs->table('goods_attr') . " WHERE goods_attr_id = '$info[goods_attr_id]' LIMIT 1";
+                        $sql = "DELETE FROM " . table('goods_attr') . " WHERE goods_attr_id = '$info[goods_attr_id]' LIMIT 1";
                     }
                     $db->query($sql);
                 }
@@ -907,15 +907,15 @@ class GoodsController extends InitController
         $goods_img = reformat_image_name('goods', $goods_id, $goods_img, 'goods');
         $goods_thumb = reformat_image_name('goods_thumb', $goods_id, $goods_thumb, 'thumb');
         if ($goods_img !== false) {
-            $db->query("UPDATE " . $ecs->table('goods') . " SET goods_img = '$goods_img' WHERE goods_id='$goods_id'");
+            $db->query("UPDATE " . table('goods') . " SET goods_img = '$goods_img' WHERE goods_id='$goods_id'");
         }
 
         if ($original_img !== false) {
-            $db->query("UPDATE " . $ecs->table('goods') . " SET original_img = '$original_img' WHERE goods_id='$goods_id'");
+            $db->query("UPDATE " . table('goods') . " SET original_img = '$original_img' WHERE goods_id='$goods_id'");
         }
 
         if ($goods_thumb !== false) {
-            $db->query("UPDATE " . $ecs->table('goods') . " SET goods_thumb = '$goods_thumb' WHERE goods_id='$goods_id'");
+            $db->query("UPDATE " . table('goods') . " SET goods_thumb = '$goods_thumb' WHERE goods_id='$goods_id'");
         }
 
         /* 如果有图片，把商品图片加入图片相册 */
@@ -930,7 +930,7 @@ class GoodsController extends InitController
             }
 
             $gallery_thumb = reformat_image_name('gallery_thumb', $goods_id, $gallery_thumb, 'thumb');
-            $sql = "INSERT INTO " . $ecs->table('goods_gallery') . " (goods_id, img_url, img_desc, thumb_url, img_original) " .
+            $sql = "INSERT INTO " . table('goods_gallery') . " (goods_id, img_url, img_desc, thumb_url, img_original) " .
                 "VALUES ('$goods_id', '$gallery_img', '', '$gallery_thumb', '$img')";
             $db->query($sql);
         }
@@ -941,15 +941,15 @@ class GoodsController extends InitController
         /* 编辑时处理相册图片描述 */
         if (!$is_insert && isset($_POST['old_img_desc'])) {
             foreach ($_POST['old_img_desc'] as $img_id => $img_desc) {
-                $sql = "UPDATE " . $ecs->table('goods_gallery') . " SET img_desc = '$img_desc' WHERE img_id = '$img_id' LIMIT 1";
+                $sql = "UPDATE " . table('goods_gallery') . " SET img_desc = '$img_desc' WHERE img_id = '$img_id' LIMIT 1";
                 $db->query($sql);
             }
         }
 
         /* 不保留商品原图的时候删除原图 */
         if ($proc_thumb && !$_CFG['retain_original_img'] && !empty($original_img)) {
-            $db->query("UPDATE " . $ecs->table('goods') . " SET original_img='' WHERE `goods_id`='{$goods_id}'");
-            $db->query("UPDATE " . $ecs->table('goods_gallery') . " SET img_original='' WHERE `goods_id`='{$goods_id}'");
+            $db->query("UPDATE " . table('goods') . " SET original_img='' WHERE `goods_id`='{$goods_id}'");
+            $db->query("UPDATE " . table('goods_gallery') . " SET img_original='' WHERE `goods_id`='{$goods_id}'");
             @unlink('../' . $original_img);
             @unlink('../' . $img);
         }
@@ -1134,7 +1134,7 @@ class GoodsController extends InitController
         if (!$exc->is_only('goods_sn', $goods_sn, $goods_id)) {
             return make_json_error($_LANG['goods_sn_exists']);
         }
-        $sql = "SELECT goods_id FROM " . $ecs->table('products') . "WHERE product_sn='$goods_sn'";
+        $sql = "SELECT goods_id FROM " . table('products') . "WHERE product_sn='$goods_sn'";
         if ($db->getOne($sql)) {
             return make_json_error($_LANG['goods_sn_exists']);
         }
@@ -1156,7 +1156,7 @@ class GoodsController extends InitController
             return make_json_error($_LANG['goods_sn_exists']);
         }
         if (!empty($goods_sn)) {
-            $sql = "SELECT goods_id FROM " . $ecs->table('products') . "WHERE product_sn='$goods_sn'";
+            $sql = "SELECT goods_id FROM " . table('products') . "WHERE product_sn='$goods_sn'";
             if ($db->getOne($sql)) {
                 return make_json_error($_LANG['goods_sn_exists']);
             }
@@ -1187,7 +1187,7 @@ class GoodsController extends InitController
                 if (!$exc->is_only('goods_sn', $val, '0')) {
                     return make_json_error($val . $_LANG['goods_sn_exists']);
                 }
-                $sql = "SELECT goods_id FROM " . $ecs->table('products') . "WHERE product_sn='$val'";
+                $sql = "SELECT goods_id FROM " . table('products') . "WHERE product_sn='$val'";
                 if ($db->getOne($sql)) {
                     return make_json_error($val . $_LANG['goods_sn_exists']);
                 }
@@ -1425,7 +1425,7 @@ class GoodsController extends InitController
         /* 取得商品信息 */
         $sql = "SELECT goods_id, goods_name, is_delete, is_real, goods_thumb, " .
             "goods_img, original_img " .
-            "FROM " . $ecs->table('goods') .
+            "FROM " . table('goods') .
             " WHERE goods_id = '$goods_id'";
         $goods = $db->getRow($sql);
         if (empty($goods)) {
@@ -1450,7 +1450,7 @@ class GoodsController extends InitController
         $exc->drop($goods_id);
 
         /* 删除商品的货品记录 */
-        $sql = "DELETE FROM " . $ecs->table('products') .
+        $sql = "DELETE FROM " . table('products') .
             " WHERE goods_id = '$goods_id'";
         $db->query($sql);
 
@@ -1459,7 +1459,7 @@ class GoodsController extends InitController
 
         /* 删除商品相册 */
         $sql = "SELECT img_url, thumb_url, img_original " .
-            "FROM " . $ecs->table('goods_gallery') .
+            "FROM " . table('goods_gallery') .
             " WHERE goods_id = '$goods_id'";
         $res = $db->query($sql);
         while ($row = $db->fetchRow($res)) {
@@ -1474,42 +1474,42 @@ class GoodsController extends InitController
             }
         }
 
-        $sql = "DELETE FROM " . $ecs->table('goods_gallery') . " WHERE goods_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('goods_gallery') . " WHERE goods_id = '$goods_id'";
         $db->query($sql);
 
         /* 删除相关表记录 */
-        $sql = "DELETE FROM " . $ecs->table('collect_goods') . " WHERE goods_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('collect_goods') . " WHERE goods_id = '$goods_id'";
         $db->query($sql);
-        $sql = "DELETE FROM " . $ecs->table('goods_article') . " WHERE goods_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('goods_article') . " WHERE goods_id = '$goods_id'";
         $db->query($sql);
-        $sql = "DELETE FROM " . $ecs->table('goods_attr') . " WHERE goods_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('goods_attr') . " WHERE goods_id = '$goods_id'";
         $db->query($sql);
-        $sql = "DELETE FROM " . $ecs->table('goods_cat') . " WHERE goods_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('goods_cat') . " WHERE goods_id = '$goods_id'";
         $db->query($sql);
-        $sql = "DELETE FROM " . $ecs->table('member_price') . " WHERE goods_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('member_price') . " WHERE goods_id = '$goods_id'";
         $db->query($sql);
-        $sql = "DELETE FROM " . $ecs->table('group_goods') . " WHERE parent_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('group_goods') . " WHERE parent_id = '$goods_id'";
         $db->query($sql);
-        $sql = "DELETE FROM " . $ecs->table('group_goods') . " WHERE goods_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('group_goods') . " WHERE goods_id = '$goods_id'";
         $db->query($sql);
-        $sql = "DELETE FROM " . $ecs->table('link_goods') . " WHERE goods_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('link_goods') . " WHERE goods_id = '$goods_id'";
         $db->query($sql);
-        $sql = "DELETE FROM " . $ecs->table('link_goods') . " WHERE link_goods_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('link_goods') . " WHERE link_goods_id = '$goods_id'";
         $db->query($sql);
-        $sql = "DELETE FROM " . $ecs->table('tag') . " WHERE goods_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('tag') . " WHERE goods_id = '$goods_id'";
         $db->query($sql);
-        $sql = "DELETE FROM " . $ecs->table('comment') . " WHERE comment_type = 0 AND id_value = '$goods_id'";
+        $sql = "DELETE FROM " . table('comment') . " WHERE comment_type = 0 AND id_value = '$goods_id'";
         $db->query($sql);
-        $sql = "DELETE FROM " . $ecs->table('collect_goods') . " WHERE goods_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('collect_goods') . " WHERE goods_id = '$goods_id'";
         $db->query($sql);
-        $sql = "DELETE FROM " . $ecs->table('booking_goods') . " WHERE goods_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('booking_goods') . " WHERE goods_id = '$goods_id'";
         $db->query($sql);
-        $sql = "DELETE FROM " . $ecs->table('goods_activity') . " WHERE goods_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('goods_activity') . " WHERE goods_id = '$goods_id'";
         $db->query($sql);
 
         /* 如果不是实体商品，删除相应虚拟商品记录 */
         if ($goods['is_real'] != 1) {
-            $sql = "DELETE FROM " . $ecs->table('virtual_card') . " WHERE goods_id = '$goods_id'";
+            $sql = "DELETE FROM " . table('virtual_card') . " WHERE goods_id = '$goods_id'";
             if (!$db->query($sql, 'SILENT') && $db->errno() != 1146) {
                 die($db->error());
             }
@@ -1547,7 +1547,7 @@ class GoodsController extends InitController
 
         /* 删除图片文件 */
         $sql = "SELECT img_url, thumb_url, img_original " .
-            " FROM " . $GLOBALS['ecs']->table('goods_gallery') .
+            " FROM " . table('goods_gallery') .
             " WHERE img_id = '$img_id'";
         $row = $GLOBALS['db']->getRow($sql);
 
@@ -1562,7 +1562,7 @@ class GoodsController extends InitController
         }
 
         /* 删除数据 */
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods_gallery') . " WHERE img_id = '$img_id' LIMIT 1";
+        $sql = "DELETE FROM " . table('goods_gallery') . " WHERE img_id = '$img_id' LIMIT 1";
         $GLOBALS['db']->query($sql);
 
         clear_cache_files();
@@ -1607,12 +1607,12 @@ class GoodsController extends InitController
         foreach ($linked_array as $val) {
             if ($is_double) {
                 /* 双向关联 */
-                $sql = "INSERT INTO " . $ecs->table('link_goods') . " (goods_id, link_goods_id, is_double, admin_id) " .
+                $sql = "INSERT INTO " . table('link_goods') . " (goods_id, link_goods_id, is_double, admin_id) " .
                     "VALUES ('$val', '$goods_id', '$is_double', '$_SESSION[admin_id]')";
                 $db->query($sql, 'SILENT');
             }
 
-            $sql = "INSERT INTO " . $ecs->table('link_goods') . " (goods_id, link_goods_id, is_double, admin_id) " .
+            $sql = "INSERT INTO " . table('link_goods') . " (goods_id, link_goods_id, is_double, admin_id) " .
                 "VALUES ('$goods_id', '$val', '$is_double', '$_SESSION[admin_id]')";
             $db->query($sql, 'SILENT');
         }
@@ -1646,10 +1646,10 @@ class GoodsController extends InitController
         $is_signle = $linked_goods[1];
 
         if (!$is_signle) {
-            $sql = "DELETE FROM " . $ecs->table('link_goods') .
+            $sql = "DELETE FROM " . table('link_goods') .
                 " WHERE link_goods_id = '$goods_id' AND goods_id " . $drop_goods_ids;
         } else {
-            $sql = "UPDATE " . $ecs->table('link_goods') . " SET is_double = 0 " .
+            $sql = "UPDATE " . table('link_goods') . " SET is_double = 0 " .
                 " WHERE link_goods_id = '$goods_id' AND goods_id " . $drop_goods_ids;
         }
         if ($goods_id == 0) {
@@ -1657,7 +1657,7 @@ class GoodsController extends InitController
         }
         $db->query($sql);
 
-        $sql = "DELETE FROM " . $ecs->table('link_goods') .
+        $sql = "DELETE FROM " . table('link_goods') .
             " WHERE goods_id = '$goods_id' AND link_goods_id " . $drop_goods_ids;
         if ($goods_id == 0) {
             $sql .= " AND admin_id = '$_SESSION[admin_id]'";
@@ -1694,7 +1694,7 @@ class GoodsController extends InitController
         $price = $arguments[1];
 
         foreach ($fittings as $val) {
-            $sql = "INSERT INTO " . $ecs->table('group_goods') . " (parent_id, goods_id, goods_price, admin_id) " .
+            $sql = "INSERT INTO " . table('group_goods') . " (parent_id, goods_id, goods_price, admin_id) " .
                 "VALUES ('$goods_id', '$val', '$price', '$_SESSION[admin_id]')";
             $db->query($sql, 'SILENT');
         }
@@ -1727,7 +1727,7 @@ class GoodsController extends InitController
         $goods_id = $arguments[0];
         $price = $arguments[1];
 
-        $sql = "DELETE FROM " . $ecs->table('group_goods') .
+        $sql = "DELETE FROM " . table('group_goods') .
             " WHERE parent_id='$goods_id' AND " . db_create_in($fittings, 'goods_id');
         if ($goods_id == 0) {
             $sql .= " AND admin_id = '$_SESSION[admin_id]'";
@@ -1763,7 +1763,7 @@ class GoodsController extends InitController
             $where .= " AND title LIKE '%" . mysql_like_quote($keyword) . "%' ";
         }
 
-        $sql = 'SELECT article_id, title FROM ' . $ecs->table('article') . $where .
+        $sql = 'SELECT article_id, title FROM ' . table('article') . $where .
             'ORDER BY article_id DESC LIMIT 50';
         $res = $db->query($sql);
         $arr = array();
@@ -1790,7 +1790,7 @@ class GoodsController extends InitController
         $goods_id = $arguments[0];
 
         foreach ($articles as $val) {
-            $sql = "INSERT INTO " . $ecs->table('goods_article') . " (goods_id, article_id, admin_id) " .
+            $sql = "INSERT INTO " . table('goods_article') . " (goods_id, article_id, admin_id) " .
                 "VALUES ('$goods_id', '$val', '$_SESSION[admin_id]')";
             $db->query($sql);
         }
@@ -1821,7 +1821,7 @@ class GoodsController extends InitController
         $arguments = $json->decode($_GET['JSON']);
         $goods_id = $arguments[0];
 
-        $sql = "DELETE FROM " . $ecs->table('goods_article') . " WHERE " . db_create_in($articles, "article_id") . " AND goods_id = '$goods_id'";
+        $sql = "DELETE FROM " . table('goods_article') . " WHERE " . db_create_in($articles, "article_id") . " AND goods_id = '$goods_id'";
         $db->query($sql);
 
         $arr = get_goods_articles($goods_id);
@@ -1853,7 +1853,7 @@ class GoodsController extends InitController
         }
 
         /* 取出商品信息 */
-        $sql = "SELECT goods_sn, goods_name, goods_type, shop_price FROM " . $ecs->table('goods') . " WHERE goods_id = '$goods_id'";
+        $sql = "SELECT goods_sn, goods_name, goods_type, shop_price FROM " . table('goods') . " WHERE goods_id = '$goods_id'";
         $goods = $db->getRow($sql);
         if (empty($goods)) {
             $link[] = array('href' => 'goods.php?act=list', 'text' => $_LANG['01_goods_list']);
@@ -1937,7 +1937,7 @@ class GoodsController extends InitController
         }
 
         /* 取出商品信息 */
-        $sql = "SELECT goods_sn, goods_name, goods_type, shop_price FROM " . $ecs->table('goods') . " WHERE goods_id = '$goods_id'";
+        $sql = "SELECT goods_sn, goods_name, goods_type, shop_price FROM " . table('goods') . " WHERE goods_id = '$goods_id'";
         $goods = $db->getRow($sql);
         if (empty($goods)) {
             return make_json_error($_LANG['sys']['wrong'] . $_LANG['cannot_found_goods']);
@@ -2007,7 +2007,7 @@ class GoodsController extends InitController
         $product = get_product_info($product_id, 'product_number, goods_id');
 
         /* 删除货品 */
-        $sql = "DELETE FROM " . $ecs->table('products') . " WHERE product_id = '$product_id'";
+        $sql = "DELETE FROM " . table('products') . " WHERE product_id = '$product_id'";
         $result = $db->query($sql);
         if ($result) {
             /* 修改商品库存 */
@@ -2041,7 +2041,7 @@ class GoodsController extends InitController
         }
 
         /* 修改 */
-        $sql = "UPDATE " . $ecs->table('products') . " SET product_sn = '$product_sn' WHERE product_id = '$product_id'";
+        $sql = "UPDATE " . table('products') . " SET product_sn = '$product_sn' WHERE product_id = '$product_id'";
         $result = $db->query($sql);
         if ($result) {
             clear_cache_files();
@@ -2063,7 +2063,7 @@ class GoodsController extends InitController
         $product = get_product_info($product_id, 'product_number, goods_id');
 
         /* 修改货品库存 */
-        $sql = "UPDATE " . $ecs->table('products') . " SET product_number = '$product_number' WHERE product_id = '$product_id'";
+        $sql = "UPDATE " . table('products') . " SET product_number = '$product_number' WHERE product_id = '$product_id'";
         $result = $db->query($sql);
         if ($result) {
             /* 修改商品库存 */
@@ -2098,7 +2098,7 @@ class GoodsController extends InitController
         }
 
         /* 取出商品信息 */
-        $sql = "SELECT goods_sn, goods_name, goods_type, shop_price FROM " . $ecs->table('goods') . " WHERE goods_id = '" . $product['goods_id'] . "'";
+        $sql = "SELECT goods_sn, goods_name, goods_type, shop_price FROM " . table('goods') . " WHERE goods_id = '" . $product['goods_id'] . "'";
         $goods = $db->getRow($sql);
         if (empty($goods)) {
             sys_msg($_LANG['sys']['wrong'] . $_LANG['cannot_found_goods'], 1, array(), false);
@@ -2145,7 +2145,7 @@ class GoodsController extends InitController
             }
 
             /* 插入货品表 */
-            $sql = "INSERT INTO " . $GLOBALS['ecs']->table('products') . " (goods_id, goods_attr, product_sn, product_number)  VALUES ('" . $product['goods_id'] . "', '$goods_attr', '$value', '" . $product['product_number'][$key] . "')";
+            $sql = "INSERT INTO " . table('products') . " (goods_id, goods_attr, product_sn, product_number)  VALUES ('" . $product['goods_id'] . "', '$goods_attr', '$value', '" . $product['product_number'][$key] . "')";
             if (!$GLOBALS['db']->query($sql)) {
                 continue;
                 //sys_msg($_LANG['sys']['wrong'] . $_LANG['cannot_add_products'], 1, array(), false);
@@ -2153,7 +2153,7 @@ class GoodsController extends InitController
 
             //货品号为空 自动补货品号
             if (empty($value)) {
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('products') . "
+                $sql = "UPDATE " . table('products') . "
                     SET product_sn = '" . $goods['goods_sn'] . "g_p" . $GLOBALS['db']->insert_id() . "'
                     WHERE product_id = '" . $GLOBALS['db']->insert_id() . "'";
                 $GLOBALS['db']->query($sql);
@@ -2202,7 +2202,7 @@ class GoodsController extends InitController
             //取出货品库存总数
             $sum = 0;
             $goods_id = 0;
-            $sql = "SELECT product_id, goods_id, product_number FROM  " . $GLOBALS['ecs']->table('products') . " WHERE product_id $product_bound";
+            $sql = "SELECT product_id, goods_id, product_number FROM  " . table('products') . " WHERE product_id $product_bound";
             $product_array = $GLOBALS['db']->getAll($sql);
             if (!empty($product_array)) {
                 foreach ($product_array as $value) {
@@ -2211,7 +2211,7 @@ class GoodsController extends InitController
                 $goods_id = $product_array[0]['goods_id'];
 
                 /* 删除货品 */
-                $sql = "DELETE FROM " . $ecs->table('products') . " WHERE product_id $product_bound";
+                $sql = "DELETE FROM " . table('products') . " WHERE product_id $product_bound";
                 if ($db->query($sql)) {
                     //记录日志
                     admin_log('', 'delete', 'products');
@@ -2303,7 +2303,7 @@ class GoodsController extends InitController
      */
     public function handle_volume_price($goods_id, $number_list, $price_list)
     {
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('volume_price') .
+        $sql = "DELETE FROM " . table('volume_price') .
             " WHERE price_type = '1' AND goods_id = '$goods_id'";
         $GLOBALS['db']->query($sql);
 
@@ -2314,7 +2314,7 @@ class GoodsController extends InitController
             $volume_number = $number_list[$key];
 
             if (!empty($price)) {
-                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('volume_price') .
+                $sql = "INSERT INTO " . table('volume_price') .
                     " (price_type, goods_id, volume_number, volume_price) " .
                     "VALUES ('1', '$goods_id', '$volume_number', '$price')";
                 $GLOBALS['db']->query($sql);
@@ -2332,7 +2332,7 @@ class GoodsController extends InitController
     {
         if ($goods_id) {
             /* $res = $goods_number - $old_product_number + $product_number; */
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('goods') . "
+            $sql = "UPDATE " . table('goods') . "
                 SET goods_number = goods_number + $value,
                     last_update = '" . gmtime() . "'
                 WHERE goods_id = '$goods_id'";

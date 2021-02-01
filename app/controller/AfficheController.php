@@ -34,8 +34,8 @@ class AfficheController extends InitController
 
             /* 取得广告的信息 */
             $sql = 'SELECT ad.ad_id, ad.ad_name, ad.ad_link, ad.ad_code ' .
-                'FROM ' . $ecs->table('ad') . ' AS ad ' .
-                'LEFT JOIN ' . $ecs->table('ad_position') . ' AS p ON ad.position_id = p.position_id ' .
+                'FROM ' . table('ad') . ' AS ad ' .
+                'LEFT JOIN ' . table('ad_position') . ' AS p ON ad.position_id = p.position_id ' .
                 "WHERE ad.ad_id = '$ad_id' and " . gmtime() . " >= ad.start_time and " . gmtime() . "<= ad.end_time";
 
             $ad_info = $db->getRow($sql);
@@ -92,15 +92,15 @@ class AfficheController extends InitController
 
             /* 如果是商品的站外JS */
             if ($ad_id == '-1') {
-                $sql = "SELECT count(*) FROM " . $ecs->table('adsense') . " WHERE from_ad = '-1' AND referer = '" . $site_name . "'";
+                $sql = "SELECT count(*) FROM " . table('adsense') . " WHERE from_ad = '-1' AND referer = '" . $site_name . "'";
                 if ($db->getOne($sql) > 0) {
-                    $sql = "UPDATE " . $ecs->table('adsense') . " SET clicks = clicks + 1 WHERE from_ad = '-1' AND referer = '" . $site_name . "'";
+                    $sql = "UPDATE " . table('adsense') . " SET clicks = clicks + 1 WHERE from_ad = '-1' AND referer = '" . $site_name . "'";
                 } else {
-                    $sql = "INSERT INTO " . $ecs->table('adsense') . "(from_ad, referer, clicks) VALUES ('-1', '" . $site_name . "', '1')";
+                    $sql = "INSERT INTO " . table('adsense') . "(from_ad, referer, clicks) VALUES ('-1', '" . $site_name . "', '1')";
                 }
                 $db->query($sql);
-                //$db->autoReplace($ecs->table('adsense'), array('from_ad' => -1, 'referer' => $site_name, 'clicks' => 1), array('clicks' => 1));
-                $sql = "SELECT goods_name FROM " . $ecs->table('goods') . " WHERE goods_id = $goods_id";
+                //$db->autoReplace(table('adsense'), array('from_ad' => -1, 'referer' => $site_name, 'clicks' => 1), array('clicks' => 1));
+                $sql = "SELECT goods_name FROM " . table('goods') . " WHERE goods_id = $goods_id";
                 $res = $db->query($sql);
 
                 $row = $db->fetchRow($res);
@@ -110,17 +110,17 @@ class AfficheController extends InitController
                 return redirect($uri);
             } else {
                 /* 更新站内广告的点击次数 */
-                $db->query('UPDATE ' . $ecs->table('ad') . " SET click_count = click_count + 1 WHERE ad_id = '$ad_id'");
+                $db->query('UPDATE ' . table('ad') . " SET click_count = click_count + 1 WHERE ad_id = '$ad_id'");
 
-                $sql = "SELECT count(*) FROM " . $ecs->table('adsense') . " WHERE from_ad = '" . $ad_id . "' AND referer = '" . $site_name . "'";
+                $sql = "SELECT count(*) FROM " . table('adsense') . " WHERE from_ad = '" . $ad_id . "' AND referer = '" . $site_name . "'";
                 if ($db->getOne($sql) > 0) {
-                    $sql = "UPDATE " . $ecs->table('adsense') . " SET clicks = clicks + 1 WHERE from_ad = '" . $ad_id . "' AND referer = '" . $site_name . "'";
+                    $sql = "UPDATE " . table('adsense') . " SET clicks = clicks + 1 WHERE from_ad = '" . $ad_id . "' AND referer = '" . $site_name . "'";
                 } else {
-                    $sql = "INSERT INTO " . $ecs->table('adsense') . "(from_ad, referer, clicks) VALUES ('" . $ad_id . "', '" . $site_name . "', '1')";
+                    $sql = "INSERT INTO " . table('adsense') . "(from_ad, referer, clicks) VALUES ('" . $ad_id . "', '" . $site_name . "', '1')";
                 }
                 $db->query($sql);
 
-                $sql = "SELECT * FROM " . $ecs->table('ad') . " WHERE ad_id = '$ad_id'";
+                $sql = "SELECT * FROM " . table('ad') . " WHERE ad_id = '$ad_id'";
                 $ad_info = $db->getRow($sql);
                 /* 跳转到广告的链接页面 */
                 if (!empty($ad_info['ad_link'])) {

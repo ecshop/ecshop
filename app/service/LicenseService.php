@@ -21,7 +21,7 @@ class LicenseService
     {
         // 取出网店 license
         $sql = "SELECT code, value
-            FROM " . $GLOBALS['ecs']->table('shop_config') . "
+            FROM " . table('shop_config') . "
             WHERE code IN ('certificate_id', 'token', 'certi')
             LIMIT 0,3";
         $license_info = $GLOBALS['db']->getAll($sql);
@@ -216,10 +216,10 @@ class LicenseService
         $request_arr = exchange_shop_license($certi, $license);
         if (is_array($request_arr) && $request_arr['res'] == $certi_back['succ']) {
             // 注册信息入库
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') . "
+            $sql = "UPDATE " . table('shop_config') . "
                 SET value = '" . $request_arr['info']['certificate_id'] . "' WHERE code = 'certificate_id'";
             $GLOBALS['db']->query($sql);
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') . "
+            $sql = "UPDATE " . table('shop_config') . "
                 SET value = '" . $request_arr['info']['token'] . "' WHERE code = 'token'";
             $GLOBALS['db']->query($sql);
 

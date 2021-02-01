@@ -191,7 +191,7 @@ class AffiliateController extends InitController
     public function put_affiliate($config)
     {
         $temp = serialize($config);
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') .
+        $sql = "UPDATE " . table('shop_config') .
             "SET  value = '$temp'" .
             "WHERE code = 'affiliate'";
         $GLOBALS['db']->query($sql);

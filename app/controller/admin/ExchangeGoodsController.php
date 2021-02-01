@@ -13,7 +13,7 @@ class ExchangeGoodsController extends InitController
 
 
         /*初始化数据交换对象 */
-        $exc = new exchange($ecs->table("exchange_goods"), $db, 'goods_id', 'exchange_integral');
+        $exc = new exchange(table("exchange_goods"), $db, 'goods_id', 'exchange_integral');
     }
 
     /*------------------------------------------------------ */
@@ -112,7 +112,7 @@ class ExchangeGoodsController extends InitController
         if (empty($_POST['goods_id'])) {
             $_POST['goods_id'] = 0;
         }
-        $sql = "INSERT INTO " . $ecs->table('exchange_goods') . "(goods_id, exchange_integral, is_exchange, is_hot) " .
+        $sql = "INSERT INTO " . table('exchange_goods') . "(goods_id, exchange_integral, is_exchange, is_hot) " .
             "VALUES ('$_POST[goods_id]', '$_POST[exchange_integral]', '$_POST[is_exchange]', '$_POST[is_hot]')";
         $db->query($sql);
 
@@ -139,8 +139,8 @@ class ExchangeGoodsController extends InitController
 
         /* 取商品数据 */
         $sql = "SELECT eg.goods_id, eg.exchange_integral,eg.is_exchange, eg.is_hot, g.goods_name " .
-            " FROM " . $ecs->table('exchange_goods') . " AS eg " .
-            "  LEFT JOIN " . $ecs->table('goods') . " AS g ON g.goods_id = eg.goods_id " .
+            " FROM " . table('exchange_goods') . " AS eg " .
+            "  LEFT JOIN " . table('goods') . " AS g ON g.goods_id = eg.goods_id " .
             " WHERE eg.goods_id='$_REQUEST[id]'";
         $goods = $db->getRow($sql);
         $goods['option'] = '<option value="' . $goods['goods_id'] . '">' . $goods['goods_name'] . '</option>';
@@ -310,8 +310,8 @@ class ExchangeGoodsController extends InitController
             }
 
             /* 文章总数 */
-            $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg ' .
-                'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = eg.goods_id ' .
+            $sql = 'SELECT COUNT(*) FROM ' . table('exchange_goods') . ' AS eg ' .
+                'LEFT JOIN ' . table('goods') . ' AS g ON g.goods_id = eg.goods_id ' .
                 'WHERE 1 ' . $where;
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -319,8 +319,8 @@ class ExchangeGoodsController extends InitController
 
             /* 获取文章数据 */
             $sql = 'SELECT eg.* , g.goods_name ' .
-                'FROM ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg ' .
-                'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = eg.goods_id ' .
+                'FROM ' . table('exchange_goods') . ' AS eg ' .
+                'LEFT JOIN ' . table('goods') . ' AS g ON g.goods_id = eg.goods_id ' .
                 'WHERE 1 ' . $where . ' ORDER by ' . $filter['sort_by'] . ' ' . $filter['sort_order'];
 
             $filter['keyword'] = stripslashes($filter['keyword']);

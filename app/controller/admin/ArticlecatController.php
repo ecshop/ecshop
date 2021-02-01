@@ -10,7 +10,7 @@ class ArticlecatController extends InitController
     public function initialize()
     {
         parent::initialize();
-        $exc = new exchange($ecs->table("article_cat"), $db, 'cat_id', 'cat_name');
+        $exc = new exchange(table("article_cat"), $db, 'cat_id', 'cat_name');
     }
 
     /*------------------------------------------------------ */
@@ -76,7 +76,7 @@ class ArticlecatController extends InitController
 
         $cat_type = 1;
         if ($_POST['parent_id'] > 0) {
-            $sql = "SELECT cat_type FROM " . $ecs->table('article_cat') . " WHERE cat_id = '$_POST[parent_id]'";
+            $sql = "SELECT cat_type FROM " . table('article_cat') . " WHERE cat_id = '$_POST[parent_id]'";
             $p_cat_type = $db->getOne($sql);
             if ($p_cat_type == 2 || $p_cat_type == 3 || $p_cat_type == 5) {
                 sys_msg($_LANG['not_allow_add'], 0);
@@ -86,15 +86,15 @@ class ArticlecatController extends InitController
         }
 
 
-        $sql = "INSERT INTO " . $ecs->table('article_cat') . "(cat_name, cat_type, cat_desc,keywords, parent_id, sort_order, show_in_nav)
+        $sql = "INSERT INTO " . table('article_cat') . "(cat_name, cat_type, cat_desc,keywords, parent_id, sort_order, show_in_nav)
            VALUES ('$_POST[cat_name]', '$cat_type',  '$_POST[cat_desc]','$_POST[keywords]', '$_POST[parent_id]', '$_POST[sort_order]', '$_POST[show_in_nav]')";
         $db->query($sql);
 
         if ($_POST['show_in_nav'] == 1) {
-            $vieworder = $db->getOne("SELECT max(vieworder) FROM " . $ecs->table('nav') . " WHERE type = 'middle'");
+            $vieworder = $db->getOne("SELECT max(vieworder) FROM " . table('nav') . " WHERE type = 'middle'");
             $vieworder += 2;
             //显示在自定义导航栏中
-            $sql = "INSERT INTO " . $ecs->table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('" . $_POST['cat_name'] . "', 'a', '" . $db->insert_id() . "','1','$vieworder','0', '" . build_uri('article_cat', array('acid' => $db->insert_id()), $_POST['cat_name']) . "','middle')";
+            $sql = "INSERT INTO " . table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('" . $_POST['cat_name'] . "', 'a', '" . $db->insert_id() . "','1','$vieworder','0', '" . build_uri('article_cat', array('acid' => $db->insert_id()), $_POST['cat_name']) . "','middle')";
             $db->query($sql);
         }
 
@@ -118,7 +118,7 @@ class ArticlecatController extends InitController
         admin_priv('article_cat');
 
         $sql = "SELECT cat_id, cat_name, cat_type, cat_desc, show_in_nav, keywords, parent_id,sort_order FROM " .
-            $ecs->table('article_cat') . " WHERE cat_id='$_REQUEST[id]'";
+            table('article_cat') . " WHERE cat_id='$_REQUEST[id]'";
         $cat = $db->getRow($sql);
 
         if ($cat['cat_type'] == 2 || $cat['cat_type'] == 3 || $cat['cat_type'] == 4) {
@@ -169,7 +169,7 @@ class ArticlecatController extends InitController
             $_POST['parent_id'] = 0;
         }
 
-        $row = $db->getRow("SELECT cat_type, parent_id FROM " . $ecs->table('article_cat') . " WHERE cat_id='$_POST[id]'");
+        $row = $db->getRow("SELECT cat_type, parent_id FROM " . table('article_cat') . " WHERE cat_id='$_POST[id]'");
         $cat_type = $row['cat_type'];
         if ($cat_type == 3 || $cat_type == 4) {
             $_POST['parent_id'] = $row['parent_id'];
@@ -188,7 +188,7 @@ class ArticlecatController extends InitController
 
         if ($cat_type == 1 || $cat_type == 5) {
             if ($_POST['parent_id'] > 0) {
-                $sql = "SELECT cat_type FROM " . $ecs->table('article_cat') . " WHERE cat_id = '$_POST[parent_id]'";
+                $sql = "SELECT cat_type FROM " . table('article_cat') . " WHERE cat_id = '$_POST[parent_id]'";
                 $p_cat_type = $db->getOne($sql);
                 if ($p_cat_type == 4) {
                     $cat_type = 5;
@@ -200,32 +200,32 @@ class ArticlecatController extends InitController
             }
         }
 
-        $dat = $db->getOne("SELECT cat_name, show_in_nav FROM " . $ecs->table('article_cat') . " WHERE cat_id = '" . $_POST['id'] . "'");
+        $dat = $db->getOne("SELECT cat_name, show_in_nav FROM " . table('article_cat') . " WHERE cat_id = '" . $_POST['id'] . "'");
         if ($exc->edit("cat_name = '$_POST[cat_name]', cat_desc ='$_POST[cat_desc]', keywords='$_POST[keywords]',parent_id = '$_POST[parent_id]', cat_type='$cat_type', sort_order='$_POST[sort_order]', show_in_nav = '$_POST[show_in_nav]'", $_POST['id'])) {
             if ($_POST['cat_name'] != $dat['cat_name']) {
                 //如果分类名称发生了改变
-                $sql = "UPDATE " . $ecs->table('nav') . " SET name = '" . $_POST['cat_name'] . "' WHERE ctype = 'a' AND cid = '" . $_POST['id'] . "' AND type = 'middle'";
+                $sql = "UPDATE " . table('nav') . " SET name = '" . $_POST['cat_name'] . "' WHERE ctype = 'a' AND cid = '" . $_POST['id'] . "' AND type = 'middle'";
                 $db->query($sql);
             }
             if ($_POST['show_in_nav'] != $dat['show_in_nav']) {
                 if ($_POST['show_in_nav'] == 1) {
                     //显示
-                    $nid = $db->getOne("SELECT id FROM " . $ecs->table('nav') . " WHERE ctype = 'a' AND cid = '" . $_POST['id'] . "' AND type = 'middle'");
+                    $nid = $db->getOne("SELECT id FROM " . table('nav') . " WHERE ctype = 'a' AND cid = '" . $_POST['id'] . "' AND type = 'middle'");
                     if (empty($nid)) {
-                        $vieworder = $db->getOne("SELECT max(vieworder) FROM " . $ecs->table('nav') . " WHERE type = 'middle'");
+                        $vieworder = $db->getOne("SELECT max(vieworder) FROM " . table('nav') . " WHERE type = 'middle'");
                         $vieworder += 2;
                         $uri = build_uri('article_cat', array('acid' => $_POST['id']), $_POST['cat_name']);
                         //不存在
-                        $sql = "INSERT INTO " . $ecs->table('nav') .
+                        $sql = "INSERT INTO " . table('nav') .
                             " (name,ctype,cid,ifshow,vieworder,opennew,url,type) " .
                             "VALUES('" . $_POST['cat_name'] . "', 'a', '" . $_POST['id'] . "','1','$vieworder','0', '" . $uri . "','middle')";
                     } else {
-                        $sql = "UPDATE " . $ecs->table('nav') . " SET ifshow = 1 WHERE ctype = 'a' AND cid = '" . $_POST['id'] . "' AND type = 'middle'";
+                        $sql = "UPDATE " . table('nav') . " SET ifshow = 1 WHERE ctype = 'a' AND cid = '" . $_POST['id'] . "' AND type = 'middle'";
                     }
                     $db->query($sql);
                 } else {
                     //去除
-                    $db->query("UPDATE " . $ecs->table('nav') . " SET ifshow = 0 WHERE ctype = 'a' AND cid = '" . $_POST['id'] . "' AND type = 'middle'");
+                    $db->query("UPDATE " . table('nav') . " SET ifshow = 0 WHERE ctype = 'a' AND cid = '" . $_POST['id'] . "' AND type = 'middle'");
                 }
             }
             $link[0]['text'] = $_LANG['back_list'];
@@ -272,26 +272,26 @@ class ArticlecatController extends InitController
 
         $id = intval($_GET['id']);
 
-        $sql = "SELECT cat_type FROM " . $ecs->table('article_cat') . " WHERE cat_id = '$id'";
+        $sql = "SELECT cat_type FROM " . table('article_cat') . " WHERE cat_id = '$id'";
         $cat_type = $db->getOne($sql);
         if ($cat_type == 2 || $cat_type == 3 || $cat_type == 4) {
             /* 系统保留分类，不能删除 */
             return make_json_error($_LANG['not_allow_remove']);
         }
 
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('article_cat') . " WHERE parent_id = '$id'";
+        $sql = "SELECT COUNT(*) FROM " . table('article_cat') . " WHERE parent_id = '$id'";
         if ($db->getOne($sql) > 0) {
             /* 还有子分类，不能删除 */
             return make_json_error($_LANG['is_fullcat']);
         }
 
         /* 非空的分类不允许删除 */
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('article') . " WHERE cat_id = '$id'";
+        $sql = "SELECT COUNT(*) FROM " . table('article') . " WHERE cat_id = '$id'";
         if ($db->getOne($sql) > 0) {
             return make_json_error(sprintf($_LANG['not_emptycat']));
         } else {
             $exc->drop($id);
-            $db->query("DELETE FROM " . $ecs->table('nav') . "WHERE  ctype = 'a' AND cid = '$id' AND type = 'middle'");
+            $db->query("DELETE FROM " . table('nav') . "WHERE  ctype = 'a' AND cid = '$id' AND type = 'middle'");
             clear_cache_files();
             admin_log($cat_name, 'remove', 'category');
         }
@@ -314,23 +314,23 @@ class ArticlecatController extends InitController
         if (cat_update($id, array('show_in_nav' => $val)) != false) {
             if ($val == 1) {
                 //显示
-                $nid = $db->getOne("SELECT id FROM " . $ecs->table('nav') . " WHERE ctype='a' AND cid='$id' AND type = 'middle'");
+                $nid = $db->getOne("SELECT id FROM " . table('nav') . " WHERE ctype='a' AND cid='$id' AND type = 'middle'");
                 if (empty($nid)) {
                     //不存在
-                    $vieworder = $db->getOne("SELECT max(vieworder) FROM " . $ecs->table('nav') . " WHERE type = 'middle'");
+                    $vieworder = $db->getOne("SELECT max(vieworder) FROM " . table('nav') . " WHERE type = 'middle'");
                     $vieworder += 2;
-                    $catname = $db->getOne("SELECT cat_name FROM " . $ecs->table('article_cat') . " WHERE cat_id = '$id'");
+                    $catname = $db->getOne("SELECT cat_name FROM " . table('article_cat') . " WHERE cat_id = '$id'");
                     $uri = build_uri('article_cat', array('acid' => $id), $_POST['cat_name']);
 
-                    $sql = "INSERT INTO " . $ecs->table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) " .
+                    $sql = "INSERT INTO " . table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) " .
                         "VALUES('" . $catname . "', 'a', '$id','1','$vieworder','0', '" . $uri . "','middle')";
                 } else {
-                    $sql = "UPDATE " . $ecs->table('nav') . " SET ifshow = 1 WHERE ctype='a' AND cid='$id' AND type = 'middle'";
+                    $sql = "UPDATE " . table('nav') . " SET ifshow = 1 WHERE ctype='a' AND cid='$id' AND type = 'middle'";
                 }
                 $db->query($sql);
             } else {
                 //去除
-                $db->query("UPDATE " . $ecs->table('nav') . " SET ifshow = 0 WHERE ctype='a' AND cid='$id' AND type = 'middle'");
+                $db->query("UPDATE " . table('nav') . " SET ifshow = 0 WHERE ctype='a' AND cid='$id' AND type = 'middle'");
             }
             clear_cache_files();
             return make_json_result($val);
@@ -353,6 +353,6 @@ class ArticlecatController extends InitController
             return false;
         }
 
-        return $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('article_cat'), $args, 'update', "cat_id='$cat_id'");
+        return $GLOBALS['db']->autoExecute(table('article_cat'), $args, 'update', "cat_id='$cat_id'");
     }
 }

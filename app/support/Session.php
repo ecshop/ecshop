@@ -209,7 +209,7 @@ class Session
 
         /* ECSHOP 自定义执行部分 */
         if (!empty($GLOBALS['ecs'])) {
-            $this->db->query('DELETE FROM ' . $GLOBALS['ecs']->table('cart') . " WHERE session_id = '$this->session_id'");
+            $this->db->query('DELETE FROM ' . table('cart') . " WHERE session_id = '$this->session_id'");
         }
         /* ECSHOP 自定义执行部分 */
 

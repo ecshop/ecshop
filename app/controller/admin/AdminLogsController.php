@@ -26,7 +26,7 @@ class AdminLogsController extends InitController
 
         /* 查询IP地址列表 */
         $ip_list = array();
-        $res = $db->query("SELECT DISTINCT ip_address FROM " . $ecs->table('admin_log'));
+        $res = $db->query("SELECT DISTINCT ip_address FROM " . table('admin_log'));
         while ($row = $db->fetchRow($res)) {
             $ip_list[$row['ip_address']] = $row['ip_address'];
         }
@@ -108,7 +108,7 @@ class AdminLogsController extends InitController
                         $where .= " AND log_time <= '" . $a_year . "'";
                         break;
                 }
-                $sql = "DELETE FROM " . $ecs->table('admin_log') . $where;
+                $sql = "DELETE FROM " . table('admin_log') . $where;
                 $res = $db->query($sql);
                 if ($res) {
                     admin_log('', 'remove', 'adminlog');
@@ -121,7 +121,7 @@ class AdminLogsController extends InitController
         else {
             $count = 0;
             foreach ($_POST['checkboxes'] as $key => $id) {
-                $sql = "DELETE FROM " . $ecs->table('admin_log') . " WHERE log_id = '$id'";
+                $sql = "DELETE FROM " . table('admin_log') . " WHERE log_id = '$id'";
                 $result = $db->query($sql);
 
                 $count++;
@@ -154,15 +154,15 @@ class AdminLogsController extends InitController
         }
 
         /* 获得总记录数据 */
-        $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('admin_log') . ' AS al ' . $where;
+        $sql = 'SELECT COUNT(*) FROM ' . table('admin_log') . ' AS al ' . $where;
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         $filter = page_and_size($filter);
 
         /* 获取管理员日志记录 */
         $list = array();
-        $sql = 'SELECT al.*, u.user_name FROM ' . $GLOBALS['ecs']->table('admin_log') . ' AS al ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('admin_user') . ' AS u ON u.user_id = al.user_id ' .
+        $sql = 'SELECT al.*, u.user_name FROM ' . table('admin_log') . ' AS al ' .
+            'LEFT JOIN ' . table('admin_user') . ' AS u ON u.user_id = al.user_id ' .
             $where . ' ORDER by ' . $filter['sort_by'] . ' ' . $filter['sort_order'];
         $res = $GLOBALS['db']->selectLimit($sql, $filter['page_size'], $filter['start']);
 

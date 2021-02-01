@@ -26,13 +26,13 @@ class ActivityController extends InitController
         /* 取得用户等级 */
         $user_rank_list = array();
         $user_rank_list[0] = $_LANG['not_user'];
-        $sql = "SELECT rank_id, rank_name FROM " . $ecs->table('user_rank');
+        $sql = "SELECT rank_id, rank_name FROM " . table('user_rank');
         $res = $db->query($sql);
         while ($row = $db->fetchRow($res)) {
             $user_rank_list[$row['rank_id']] = $row['rank_name'];
         }
 
-        $sql = "SELECT * FROM " . $ecs->table('favourable_activity') . " ORDER BY `sort_order` ASC,`end_time` DESC";
+        $sql = "SELECT * FROM " . table('favourable_activity') . " ORDER BY `sort_order` ASC,`end_time` DESC";
         $res = $db->query($sql);
 
         $list = array();
@@ -54,17 +54,17 @@ class ActivityController extends InitController
                 if ($row['act_range'] == FAR_CATEGORY) {
                     $row['act_range'] = $_LANG['far_category'];
                     $row['program'] = 'category.php?id=';
-                    $sql = "SELECT cat_id AS id, cat_name AS name FROM " . $ecs->table('category') .
+                    $sql = "SELECT cat_id AS id, cat_name AS name FROM " . table('category') .
                         " WHERE cat_id " . db_create_in($row['act_range_ext']);
                 } elseif ($row['act_range'] == FAR_BRAND) {
                     $row['act_range'] = $_LANG['far_brand'];
                     $row['program'] = 'brand.php?id=';
-                    $sql = "SELECT brand_id AS id, brand_name AS name FROM " . $ecs->table('brand') .
+                    $sql = "SELECT brand_id AS id, brand_name AS name FROM " . table('brand') .
                         " WHERE brand_id " . db_create_in($row['act_range_ext']);
                 } else {
                     $row['act_range'] = $_LANG['far_goods'];
                     $row['program'] = 'goods.php?id=';
-                    $sql = "SELECT goods_id AS id, goods_name AS name FROM " . $ecs->table('goods') .
+                    $sql = "SELECT goods_id AS id, goods_name AS name FROM " . table('goods') .
                         " WHERE goods_id " . db_create_in($row['act_range_ext']);
                 }
                 $act_range_ext = $db->getAll($sql);
@@ -81,7 +81,7 @@ class ActivityController extends InitController
                     $row['gift'] = unserialize($row['gift']);
                     if (is_array($row['gift'])) {
                         foreach ($row['gift'] as $k => $v) {
-                            $row['gift'][$k]['thumb'] = get_image_path($db->getOne("SELECT goods_thumb FROM " . $ecs->table('goods') . " WHERE goods_id = '" . $v['id'] . "'"));
+                            $row['gift'][$k]['thumb'] = get_image_path($db->getOne("SELECT goods_thumb FROM " . table('goods') . " WHERE goods_id = '" . $v['id'] . "'"));
                         }
                     }
                     break;

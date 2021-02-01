@@ -50,7 +50,7 @@ class CronController extends InitController
 
             $close = $cron_val['run_once'] ? 0 : 1;
             $next_time = get_next_time($cron_val['cron']);
-            $sql = "UPDATE " . $ecs->table('crons') .
+            $sql = "UPDATE " . table('crons') .
                 "SET thistime = '$timestamp', nextime = '$next_time', enable = $close " .
                 "WHERE cron_id = '$cron_val[cron_id]' LIMIT 1";
 
@@ -101,7 +101,7 @@ class CronController extends InitController
     {
         $crondb = array();
 
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('crons') . " WHERE enable = 1 AND nextime < $GLOBALS[timestamp]";
+        $sql = "SELECT * FROM " . table('crons') . " WHERE enable = 1 AND nextime < $GLOBALS[timestamp]";
         $query = $GLOBALS['db']->query($sql);
 
         while ($rt = $GLOBALS['db']->fetch_array($query)) {
@@ -130,7 +130,7 @@ class CronController extends InitController
                 $query .= $query ? ",('$val[info]', '$val[file]', '$val[time]')" : "('$val[info]', '$val[file]', '$val[time]')";
             }
             if ($query) {
-                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('error_log') . "(info, file, time) VALUES " . $query;
+                $sql = "INSERT INTO " . table('error_log') . "(info, file, time) VALUES " . $query;
                 $GLOBALS['db']->query($sql);
             }
         }

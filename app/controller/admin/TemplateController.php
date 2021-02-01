@@ -43,7 +43,7 @@ class TemplateController extends InitController
 
         /* 清除不需要的模板设置 */
         $available_code = array();
-        $sql = "DELETE FROM " . $ecs->table('template') . " WHERE 1 ";
+        $sql = "DELETE FROM " . table('template') . " WHERE 1 ";
         foreach ($available_templates as $tmp) {
             $sql .= " AND theme <> '" . $tmp['code'] . "' ";
             $available_code[] = $tmp['code'];
@@ -127,7 +127,7 @@ class TemplateController extends InitController
         $cat_articles = array();
         $ad_positions = array();
 
-        $sql = "SELECT region, library, sort_order, id, number, type FROM " . $ecs->table('template') . " " .
+        $sql = "SELECT region, library, sort_order, id, number, type FROM " . table('template') . " " .
             "WHERE theme='$template_theme' AND filename='$curr_template' AND remarks='' " .
             "ORDER BY region, sort_order ASC ";
 
@@ -204,13 +204,13 @@ class TemplateController extends InitController
         admin_priv('template_setup');
 
         $curr_template = $_CFG['template'];
-        $db->query("DELETE FROM " . $ecs->table('template') . " WHERE remarks = '' AND filename = '$_POST[template_file]' AND theme = '$curr_template'");
+        $db->query("DELETE FROM " . table('template') . " WHERE remarks = '' AND filename = '$_POST[template_file]' AND theme = '$curr_template'");
 
         /* 先处理固定内容 */
         foreach ($_POST['regions'] as $key => $val) {
             $number = isset($_POST['number'][$key]) ? intval($_POST['number'][$key]) : 0;
             if (!in_array($key, $GLOBALS['dyna_libs']) and (isset($_POST['display'][$key]) and $_POST['display'][$key] == 1 or $number > 0)) {
-                $sql = "INSERT INTO " . $ecs->table('template') .
+                $sql = "INSERT INTO " . table('template') .
                     "(theme, filename, region, library, sort_order, number)" .
                     " VALUES " .
                     "('$curr_template', '$_POST[template_file]', '$val', '" . $_POST['map'][$key] . "', '" . @$_POST['sort_order'][$key] . "', '$number')";
@@ -222,7 +222,7 @@ class TemplateController extends InitController
         if (isset($_POST['regions']['cat_goods'])) {
             foreach ($_POST['regions']['cat_goods'] as $key => $val) {
                 if ($_POST['categories']['cat_goods'][$key] != '' && intval($_POST['categories']['cat_goods'][$key]) > 0) {
-                    $sql = "INSERT INTO " . $ecs->table('template') . " (" .
+                    $sql = "INSERT INTO " . table('template') . " (" .
                         "theme, filename, region, library, sort_order, type, id, number" .
                         ") VALUES (" .
                         "'$curr_template', " .
@@ -239,7 +239,7 @@ class TemplateController extends InitController
         if (isset($_POST['regions']['brand_goods'])) {
             foreach ($_POST['regions']['brand_goods'] as $key => $val) {
                 if ($_POST['brands']['brand_goods'][$key] != '' && intval($_POST['brands']['brand_goods'][$key]) > 0) {
-                    $sql = "INSERT INTO " . $ecs->table('template') . " (" .
+                    $sql = "INSERT INTO " . table('template') . " (" .
                         "theme, filename, region, library, sort_order, type, id, number" .
                         ") VALUES (" .
                         "'$curr_template', " .
@@ -256,7 +256,7 @@ class TemplateController extends InitController
         if (isset($_POST['regions']['cat_articles'])) {
             foreach ($_POST['regions']['cat_articles'] as $key => $val) {
                 if ($_POST['article_cat']['cat_articles'][$key] != '' && intval($_POST['article_cat']['cat_articles'][$key]) > 0) {
-                    $sql = "INSERT INTO " . $ecs->table('template') . " (" .
+                    $sql = "INSERT INTO " . table('template') . " (" .
                         "theme, filename, region, library, sort_order, type, id, number" .
                         ") VALUES (" .
                         "'$curr_template', " .
@@ -273,7 +273,7 @@ class TemplateController extends InitController
         if (isset($_POST['regions']['ad_position'])) {
             foreach ($_POST['regions']['ad_position'] as $key => $val) {
                 if ($_POST['ad_position'][$key] != '' && intval($_POST['ad_position'][$key]) > 0) {
-                    $sql = "INSERT INTO " . $ecs->table('template') . " (" .
+                    $sql = "INSERT INTO " . table('template') . " (" .
                         "theme, filename, region, library, sort_order, type, id, number" .
                         ") VALUES (" .
                         "'$curr_template', " .
@@ -443,9 +443,9 @@ class TemplateController extends InitController
         $tpl_fg = 0;
         $tpl_fg = trim($_GET['tpl_fg']);
 
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') . " SET value = '$tpl_name' WHERE code = 'template'";
+        $sql = "UPDATE " . table('shop_config') . " SET value = '$tpl_name' WHERE code = 'template'";
         $step_one = $db->query($sql, 'SILENT');
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') . " SET value = '$tpl_fg' WHERE code = 'stylename'";
+        $sql = "UPDATE " . table('shop_config') . " SET value = '$tpl_fg' WHERE code = 'stylename'";
         $step_two = $db->query($sql, 'SILENT');
 
         if ($step_one && $step_two) {
@@ -541,14 +541,14 @@ class TemplateController extends InitController
     {
         admin_priv('backup_setting');
 
-        $sql = "SELECT DISTINCT(remarks) FROM " . $ecs->table('template') . " WHERE theme = '" . $_CFG['template'] . "' AND remarks > ''";
+        $sql = "SELECT DISTINCT(remarks) FROM " . table('template') . " WHERE theme = '" . $_CFG['template'] . "' AND remarks > ''";
         $col = $db->getCol($sql);
         $remarks = array();
         foreach ($col as $val) {
             $remarks[] = array('content' => $val, 'url' => urlencode($val));
         }
 
-        $sql = "SELECT DISTINCT(filename) FROM " . $ecs->table('template') . " WHERE theme = '" . $_CFG['template'] . "' AND remarks = ''";
+        $sql = "SELECT DISTINCT(filename) FROM " . table('template') . " WHERE theme = '" . $_CFG['template'] . "' AND remarks = ''";
         $col = $db->getCol($sql);
         $files = array();
         foreach ($col as $val) {
@@ -572,15 +572,15 @@ class TemplateController extends InitController
             $files = $_POST['files'];
         }
 
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('template') . " WHERE remarks='$remarks' AND theme = '" . $_CFG['template'] . "'";
+        $sql = "SELECT COUNT(*) FROM " . table('template') . " WHERE remarks='$remarks' AND theme = '" . $_CFG['template'] . "'";
         if ($db->getOne($sql) > 0) {
             sys_msg(sprintf($_LANG['remarks_exist'], $remarks), 1);
         }
 
-        $sql = "INSERT INTO " . $ecs->table('template') .
+        $sql = "INSERT INTO " . table('template') .
             " (filename, region, library, sort_order, id, number, type, theme, remarks)" .
             " SELECT filename, region, library, sort_order, id, number, type, theme, '$remarks'" .
-            " FROM " . $ecs->table('template') .
+            " FROM " . table('template') .
             " WHERE remarks = '' AND theme = '" . $_CFG['template'] . "'" .
             " AND " . db_create_in($files, 'filename');
 
@@ -592,7 +592,7 @@ class TemplateController extends InitController
     {
         $remarks = empty($_GET['remarks']) ? '' : trim($_GET['remarks']);
         if ($remarks) {
-            $sql = "DELETE FROM " . $ecs->table('template') . " WHERE remarks='$remarks' AND theme = '" . $_CFG['template'] . "'";
+            $sql = "DELETE FROM " . table('template') . " WHERE remarks='$remarks' AND theme = '" . $_CFG['template'] . "'";
             $db->query($sql);
         }
         sys_msg($_LANG['del_backup_ok'], 0, array(array('text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting')));
@@ -603,7 +603,7 @@ class TemplateController extends InitController
         $remarks = empty($_GET['remarks']) ? '' : trim($_GET['remarks']);
         if ($remarks) {
             $sql = "SELECT filename, region, library, sort_order " .
-                " FROM " . $ecs->table('template') .
+                " FROM " . table('template') .
                 " WHERE remarks='$remarks' AND theme = '" . $_CFG['template'] . "'" .
                 " ORDER BY filename, region, sort_order";
             $arr = $db->getAll($sql);
@@ -636,14 +636,14 @@ class TemplateController extends InitController
                 }
 
                 /* 文件修改成功后，恢复数据库 */
-                $sql = "DELETE FROM " . $ecs->table('template') .
+                $sql = "DELETE FROM " . table('template') .
                     " WHERE remarks = '' AND  theme = '" . $_CFG['template'] . "'" .
                     " AND " . db_create_in(array_keys($data), 'filename');
                 $db->query($sql);
-                $sql = "INSERT INTO " . $ecs->table('template') .
+                $sql = "INSERT INTO " . table('template') .
                     " (filename, region, library, sort_order, id, number, type, theme, remarks)" .
                     " SELECT filename, region, library, sort_order, id, number, type, theme, ''" .
-                    " FROM " . $ecs->table('template') .
+                    " FROM " . table('template') .
                     " WHERE remarks = '$remarks' AND theme = '" . $_CFG['template'] . "'";
                 $db->query($sql);
             }

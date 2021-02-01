@@ -61,7 +61,7 @@ class FlowStatsController extends InitController
             $general_xml = "<graph caption='$_LANG[general_stats]' shownames='1' showvalues='1' decimalPrecision='0' yaxisminvalue='0' yaxismaxvalue='%d' animation='1' outCnvBaseFontSize='12' baseFontSize='12' xaxisname='$_LANG[date]' yaxisname='$_LANG[access_count]' >";
 
             $sql = "SELECT FLOOR((access_time - $start_date) / (24 * 3600)) AS sn, access_time, COUNT(*) AS access_count" .
-                " FROM " . $ecs->table('stats') .
+                " FROM " . table('stats') .
                 " WHERE access_time >= '$start_date' AND access_time <= " . ($end_date + 86400) .
                 " GROUP BY sn";
             $res = $db->query($sql);
@@ -85,7 +85,7 @@ class FlowStatsController extends InitController
                 $seriesName = local_date('Y-m', $start_date_arr[$k]);
                 $general_xml .= "<dataset seriesName='$seriesName' color='" . chart_color($k) . "' anchorBorderColor='" . chart_color($k) . "' anchorBgColor='" . chart_color($k) . "'>";
                 $sql = "SELECT FLOOR((access_time - $start_date_arr[$k]) / (24 * 3600)) AS sn, access_time, COUNT(*) AS access_count" .
-                    " FROM " . $ecs->table('stats') .
+                    " FROM " . table('stats') .
                     " WHERE access_time >= '$start_date_arr[$k]' AND access_time <= " . ($end_date_arr[$k] + 86400) .
                     " GROUP BY sn";
                 $res = $db->query($sql);
@@ -125,7 +125,7 @@ class FlowStatsController extends InitController
         if (!$is_multi) {
             $area_xml .= "<graph caption='" . $_LANG['area_stats'] . "' shownames='1' showvalues='1' decimalPrecision='2' outCnvBaseFontSize='13' baseFontSize='13' pieYScale='45'  pieBorderAlpha='40' pieFillAlpha='70' pieSliceDepth='15' pieRadius='100' bgAngle='460'>";
 
-            $sql = "SELECT COUNT(*) AS access_count, area FROM " . $ecs->table('stats') .
+            $sql = "SELECT COUNT(*) AS access_count, area FROM " . table('stats') .
                 " WHERE access_time >= '$start_date' AND access_time < " . ($end_date + 86400) .
                 " GROUP BY area ORDER BY access_count DESC LIMIT 20";
             $res = $db->query($sql);
@@ -146,7 +146,7 @@ class FlowStatsController extends InitController
                 }
                 $where .= "(access_time >= '$start_date_arr[$k]' AND access_time <= " . ($end_date_arr[$k] + 86400) . ")";
             }
-            $sql = "SELECT access_time, area FROM " . $ecs->table('stats') .
+            $sql = "SELECT access_time, area FROM " . table('stats') .
                 " WHERE $where";
             $res = $db->query($sql);
             $area_arr = array();
@@ -189,7 +189,7 @@ class FlowStatsController extends InitController
         if (!$is_multi) {
             $from_xml = "<graph caption='$_LANG[from_stats]' shownames='1' showvalues='1' decimalPrecision='2' outCnvBaseFontSize='12' baseFontSize='12' pieYScale='45' pieBorderAlpha='40' pieFillAlpha='70' pieSliceDepth='15' pieRadius='100' bgAngle='460'>";
 
-            $sql = "SELECT COUNT(*) AS access_count, referer_domain FROM " . $ecs->table('stats') .
+            $sql = "SELECT COUNT(*) AS access_count, referer_domain FROM " . table('stats') .
                 " WHERE access_time >= '$start_date' AND access_time <= " . ($end_date + 86400) .
                 " GROUP BY referer_domain ORDER BY access_count DESC LIMIT 20";
             $res = $db->query($sql);
@@ -214,7 +214,7 @@ class FlowStatsController extends InitController
                 $where .= "(access_time >= '$start_date_arr[$k]' AND access_time <= " . ($end_date_arr[$k] + 86400) . ")";
             }
 
-            $sql = "SELECT access_time, referer_domain FROM " . $ecs->table('stats') .
+            $sql = "SELECT access_time, referer_domain FROM " . table('stats') .
                 " WHERE $where";
 
             $res = $db->query($sql);
@@ -297,7 +297,7 @@ class FlowStatsController extends InitController
         $start_date = empty($_GET['start_date']) ? strtotime('-20 day') : intval($_GET['start_date']);
         $end_date = empty($_GET['end_date']) ? time() : intval($_GET['end_date']);
         $sql = "SELECT FLOOR((access_time - $start_date) / (24 * 3600)) AS sn, access_time, COUNT(*) AS access_count" .
-            " FROM " . $GLOBALS['ecs']->table('stats') .
+            " FROM " . table('stats') .
             " WHERE access_time >= '$start_date' AND access_time <= " . ($end_date + 86400) .
             " GROUP BY sn";
         $res = $GLOBALS['db']->query($sql);
@@ -312,7 +312,7 @@ class FlowStatsController extends InitController
             $data .= $val['access_count'] . "\t\n";
         }
 
-        $sql = "SELECT COUNT(*) AS access_count, area FROM " . $GLOBALS['ecs']->table('stats') .
+        $sql = "SELECT COUNT(*) AS access_count, area FROM " . table('stats') .
             " WHERE access_time >= '$start_date' AND access_time <= " . ($end_date + 86400) .
             " GROUP BY area ORDER BY access_count DESC LIMIT 20";
 
@@ -327,7 +327,7 @@ class FlowStatsController extends InitController
             $data .= $val['access_count'] . "\t\n";
         }
 
-        $sql = "SELECT COUNT(*) AS access_count, referer_domain FROM " . $GLOBALS['ecs']->table('stats') .
+        $sql = "SELECT COUNT(*) AS access_count, referer_domain FROM " . table('stats') .
             " WHERE access_time >= '$start_date' AND access_time <= " . ($end_date + 86400) .
             " GROUP BY referer_domain ORDER BY access_count DESC LIMIT 20";
 

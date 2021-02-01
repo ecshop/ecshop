@@ -45,7 +45,7 @@ class WholesaleController extends InitController
         }
 
         /* 取得批发商品总数 */
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('wholesale') . " AS w, " . $ecs->table('goods') . " AS g " . $where;
+        $sql = "SELECT COUNT(*) FROM " . table('wholesale') . " AS w, " . table('goods') . " AS g " . $where;
         $count = $db->getOne($sql);
 
         if ($count > 0) {
@@ -98,14 +98,14 @@ class WholesaleController extends InitController
     public function price_listAction()
     {
         $data = $_LANG['goods_name'] . "\t" . $_LANG['goods_attr'] . "\t" . $_LANG['number'] . "\t" . $_LANG['ws_price'] . "\t\n";
-        $sql = "SELECT * FROM " . $ecs->table('wholesale') .
+        $sql = "SELECT * FROM " . table('wholesale') .
             "WHERE enabled = 1 AND CONCAT(',', rank_ids, ',') LIKE '" . '%,' . $_SESSION['user_rank'] . ',%' . "'";
         $res = $db->query($sql);
         while ($row = $db->fetchRow($res)) {
             $price_list = unserialize($row['prices']);
             foreach ($price_list as $attr_price) {
                 if ($attr_price['attr']) {
-                    $sql = "SELECT attr_value FROM " . $ecs->table('goods_attr') .
+                    $sql = "SELECT attr_value FROM " . table('goods_attr') .
                         " WHERE goods_attr_id " . db_create_in($attr_price['attr']);
                     $goods_attr = join(',', $db->getCol($sql));
                 } else {
@@ -299,7 +299,7 @@ class WholesaleController extends InitController
         $error_no = 0;
         do {
             $order['order_sn'] = get_order_sn(); //获取新订单号
-            $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('order_info'), $order, 'INSERT');
+            $GLOBALS['db']->autoExecute(table('order_info'), $order, 'INSERT');
 
             $error_no = $GLOBALS['db']->errno();
 
@@ -324,16 +324,16 @@ class WholesaleController extends InitController
                 ksort($goods_attr_id);
                 $goods_attr = implode('|', $goods_attr_id);
 
-                $sql = "SELECT product_id FROM " . $ecs->table('products') . " WHERE goods_attr = '$goods_attr' AND goods_id = '" . $goods['goods_id'] . "'";
+                $sql = "SELECT product_id FROM " . table('products') . " WHERE goods_attr = '$goods_attr' AND goods_id = '" . $goods['goods_id'] . "'";
                 $product_id = $db->getOne($sql);
             }
 
-            $sql = "INSERT INTO " . $ecs->table('order_goods') . "( " .
+            $sql = "INSERT INTO " . table('order_goods') . "( " .
                 "order_id, goods_id, goods_name, goods_sn, product_id, goods_number, market_price, " .
                 "goods_price, goods_attr, is_real, extension_code, parent_id, is_gift) " .
                 " SELECT '$new_order_id', goods_id, goods_name, goods_sn, '$product_id','$goods[goods_number]', market_price, " .
                 "'$goods[goods_price]', '$goods[goods_attr]', is_real, extension_code, 0, 0 " .
-                " FROM " . $ecs->table('goods') .
+                " FROM " . table('goods') .
                 " WHERE goods_id = '$goods[goods_id]'";
             $db->query($sql);
         }
@@ -373,8 +373,8 @@ class WholesaleController extends InitController
     {
         $list = array();
         $sql = "SELECT w.*, g.goods_thumb, g.goods_name as goods_name " .
-            "FROM " . $GLOBALS['ecs']->table('wholesale') . " AS w, " .
-            $GLOBALS['ecs']->table('goods') . " AS g " . $where .
+            "FROM " . table('wholesale') . " AS w, " .
+            table('goods') . " AS g " . $where .
             " AND w.goods_id = g.goods_id ";
         $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);
         while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -404,7 +404,7 @@ class WholesaleController extends InitController
     {
         /* 显示商品规格 */
         $goods_attr_list = array_values(get_goods_attr($goods_id));
-        $sql = "SELECT prices FROM " . $GLOBALS['ecs']->table('wholesale') .
+        $sql = "SELECT prices FROM " . table('wholesale') .
             "WHERE goods_id = " . $goods_id;
         $row = $GLOBALS['db']->getRow($sql);
 

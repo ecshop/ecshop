@@ -12,7 +12,7 @@ class FavourableController extends InitController
         parent::initialize();
 
 
-        $exc = new exchange($ecs->table('favourable_activity'), $db, 'act_id', 'act_name');
+        $exc = new exchange(table('favourable_activity'), $db, 'act_id', 'act_name');
     }
 
     /*------------------------------------------------------ */
@@ -108,7 +108,7 @@ class FavourableController extends InitController
 
             if (isset($_POST['drop'])) {
                 /* 删除记录 */
-                $sql = "DELETE FROM " . $ecs->table('favourable_activity') .
+                $sql = "DELETE FROM " . table('favourable_activity') .
                     " WHERE act_id " . db_create_in($ids);
                 $db->query($sql);
 
@@ -134,7 +134,7 @@ class FavourableController extends InitController
         $id = intval($_POST['id']);
         $val = intval($_POST['val']);
 
-        $sql = "UPDATE " . $ecs->table('favourable_activity') .
+        $sql = "UPDATE " . table('favourable_activity') .
             " SET sort_order = '$val'" .
             " WHERE act_id = '$id' LIMIT 1";
         $db->query($sql);
@@ -194,7 +194,7 @@ class FavourableController extends InitController
             'rank_name' => $_LANG['not_user'],
             'checked' => strpos(',' . $favourable['user_rank'] . ',', ',0,') !== false
         );
-        $sql = "SELECT rank_id, rank_name FROM " . $ecs->table('user_rank');
+        $sql = "SELECT rank_id, rank_name FROM " . table('user_rank');
         $res = $db->query($sql);
         while ($row = $db->fetchRow($res)) {
             $row['checked'] = strpos(',' . $favourable['user_rank'] . ',', ',' . $row['rank_id'] . ',') !== false;
@@ -206,13 +206,13 @@ class FavourableController extends InitController
         $act_range_ext = array();
         if ($favourable['act_range'] != FAR_ALL && !empty($favourable['act_range_ext'])) {
             if ($favourable['act_range'] == FAR_CATEGORY) {
-                $sql = "SELECT cat_id AS id, cat_name AS name FROM " . $ecs->table('category') .
+                $sql = "SELECT cat_id AS id, cat_name AS name FROM " . table('category') .
                     " WHERE cat_id " . db_create_in($favourable['act_range_ext']);
             } elseif ($favourable['act_range'] == FAR_BRAND) {
-                $sql = "SELECT brand_id AS id, brand_name AS name FROM " . $ecs->table('brand') .
+                $sql = "SELECT brand_id AS id, brand_name AS name FROM " . table('brand') .
                     " WHERE brand_id " . db_create_in($favourable['act_range_ext']);
             } else {
-                $sql = "SELECT goods_id AS id, goods_name AS name FROM " . $ecs->table('goods') .
+                $sql = "SELECT goods_id AS id, goods_name AS name FROM " . table('goods') .
                     " WHERE goods_id " . db_create_in($favourable['act_range_ext']);
             }
             $act_range_ext = $db->getAll($sql);
@@ -305,10 +305,10 @@ class FavourableController extends InitController
 
         /* 保存数据 */
         if ($is_add) {
-            $db->autoExecute($ecs->table('favourable_activity'), $favourable, 'INSERT');
+            $db->autoExecute(table('favourable_activity'), $favourable, 'INSERT');
             $favourable['act_id'] = $db->insert_id();
         } else {
-            $db->autoExecute($ecs->table('favourable_activity'), $favourable, 'UPDATE', "act_id = '$favourable[act_id]'");
+            $db->autoExecute(table('favourable_activity'), $favourable, 'UPDATE', "act_id = '$favourable[act_id]'");
         }
 
         /* 记日志 */
@@ -355,15 +355,15 @@ class FavourableController extends InitController
                 'name' => $_LANG['js_languages']['all_need_not_search']
             );
         } elseif ($filter->act_range == FAR_CATEGORY) {
-            $sql = "SELECT cat_id AS id, cat_name AS name FROM " . $ecs->table('category') .
+            $sql = "SELECT cat_id AS id, cat_name AS name FROM " . table('category') .
                 " WHERE cat_name LIKE '%" . mysql_like_quote($filter->keyword) . "%' LIMIT 50";
             $arr = $db->getAll($sql);
         } elseif ($filter->act_range == FAR_BRAND) {
-            $sql = "SELECT brand_id AS id, brand_name AS name FROM " . $ecs->table('brand') .
+            $sql = "SELECT brand_id AS id, brand_name AS name FROM " . table('brand') .
                 " WHERE brand_name LIKE '%" . mysql_like_quote($filter->keyword) . "%' LIMIT 50";
             $arr = $db->getAll($sql);
         } else {
-            $sql = "SELECT goods_id AS id, goods_name AS name FROM " . $ecs->table('goods') .
+            $sql = "SELECT goods_id AS id, goods_name AS name FROM " . table('goods') .
                 " WHERE goods_name LIKE '%" . mysql_like_quote($filter->keyword) . "%'" .
                 " OR goods_sn LIKE '%" . mysql_like_quote($filter->keyword) . "%' LIMIT 50";
             $arr = $db->getAll($sql);
@@ -404,7 +404,7 @@ class FavourableController extends InitController
                 $where .= " AND start_time <= '$now' AND end_time >= '$now' ";
             }
 
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('favourable_activity') .
+            $sql = "SELECT COUNT(*) FROM " . table('favourable_activity') .
                 " WHERE 1 $where";
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -413,7 +413,7 @@ class FavourableController extends InitController
 
             /* 查询 */
             $sql = "SELECT * " .
-                "FROM " . $GLOBALS['ecs']->table('favourable_activity') .
+                "FROM " . table('favourable_activity') .
                 " WHERE 1 $where " .
                 " ORDER BY $filter[sort_by] $filter[sort_order] " .
                 " LIMIT " . $filter['start'] . ", $filter[page_size]";

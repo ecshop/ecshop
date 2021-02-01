@@ -11,7 +11,7 @@ class AgencyController extends InitController
     {
         parent::initialize();
 
-        $exc = new exchange($ecs->table('agency'), $db, 'agency_id', 'agency_name');
+        $exc = new exchange(table('agency'), $db, 'agency_id', 'agency_name');
     }
 
     /*------------------------------------------------------ */
@@ -97,7 +97,7 @@ class AgencyController extends InitController
         /* 更新管理员、配送地区、发货单、退货单和订单关联的办事处 */
         $table_array = array('admin_user', 'region', 'order_info', 'delivery_order', 'back_order');
         foreach ($table_array as $value) {
-            $sql = "UPDATE " . $ecs->table($value) . " SET agency_id = 0 WHERE agency_id = '$id'";
+            $sql = "UPDATE " . table($value) . " SET agency_id = 0 WHERE agency_id = '$id'";
             $db->query($sql);
         }
 
@@ -128,14 +128,14 @@ class AgencyController extends InitController
 
             if (isset($_POST['remove'])) {
                 /* 删除记录 */
-                $sql = "DELETE FROM " . $ecs->table('agency') .
+                $sql = "DELETE FROM " . table('agency') .
                     " WHERE agency_id " . db_create_in($ids);
                 $db->query($sql);
 
                 /* 更新管理员、配送地区、发货单、退货单和订单关联的办事处 */
                 $table_array = array('admin_user', 'region', 'order_info', 'delivery_order', 'back_order');
                 foreach ($table_array as $value) {
-                    $sql = "UPDATE " . $ecs->table($value) . " SET agency_id = 0 WHERE agency_id " . db_create_in($ids) . " ";
+                    $sql = "UPDATE " . table($value) . " SET agency_id = 0 WHERE agency_id " . db_create_in($ids) . " ";
                     $db->query($sql);
                 }
 
@@ -181,14 +181,14 @@ class AgencyController extends InitController
             }
 
             $id = $_GET['id'];
-            $sql = "SELECT * FROM " . $ecs->table('agency') . " WHERE agency_id = '$id'";
+            $sql = "SELECT * FROM " . table('agency') . " WHERE agency_id = '$id'";
             $agency = $db->getRow($sql);
             if (empty($agency)) {
                 sys_msg('agency does not exist');
             }
 
             /* 关联的地区 */
-            $sql = "SELECT region_id, region_name FROM " . $ecs->table('region') .
+            $sql = "SELECT region_id, region_name FROM " . table('region') .
                 " WHERE agency_id = '$id'";
             $agency['region_list'] = $db->getAll($sql);
         }
@@ -199,7 +199,7 @@ class AgencyController extends InitController
             "WHEN agency_id = '$agency[agency_id]' THEN 'this' " .
             "ELSE 'other' END " .
             "AS type " .
-            "FROM " . $ecs->table('admin_user');
+            "FROM " . table('admin_user');
         $agency['admin_list'] = $db->getAll($sql);
 
         $this->assign('agency', $agency);
@@ -259,28 +259,28 @@ class AgencyController extends InitController
 
         /* 保存办事处信息 */
         if ($is_add) {
-            $db->autoExecute($ecs->table('agency'), $agency, 'INSERT');
+            $db->autoExecute(table('agency'), $agency, 'INSERT');
             $agency['agency_id'] = $db->insert_id();
         } else {
-            $db->autoExecute($ecs->table('agency'), $agency, 'UPDATE', "agency_id = '$agency[agency_id]'");
+            $db->autoExecute(table('agency'), $agency, 'UPDATE', "agency_id = '$agency[agency_id]'");
         }
 
         /* 更新管理员表和地区表 */
         if (!$is_add) {
-            $sql = "UPDATE " . $ecs->table('admin_user') . " SET agency_id = 0 WHERE agency_id = '$agency[agency_id]'";
+            $sql = "UPDATE " . table('admin_user') . " SET agency_id = 0 WHERE agency_id = '$agency[agency_id]'";
             $db->query($sql);
 
-            $sql = "UPDATE " . $ecs->table('region') . " SET agency_id = 0 WHERE agency_id = '$agency[agency_id]'";
+            $sql = "UPDATE " . table('region') . " SET agency_id = 0 WHERE agency_id = '$agency[agency_id]'";
             $db->query($sql);
         }
 
         if (isset($_POST['admins'])) {
-            $sql = "UPDATE " . $ecs->table('admin_user') . " SET agency_id = '$agency[agency_id]' WHERE user_id " . db_create_in($_POST['admins']);
+            $sql = "UPDATE " . table('admin_user') . " SET agency_id = '$agency[agency_id]' WHERE user_id " . db_create_in($_POST['admins']);
             $db->query($sql);
         }
 
         if (isset($_POST['regions'])) {
-            $sql = "UPDATE " . $ecs->table('region') . " SET agency_id = '$agency[agency_id]' WHERE region_id " . db_create_in($_POST['regions']);
+            $sql = "UPDATE " . table('region') . " SET agency_id = '$agency[agency_id]' WHERE region_id " . db_create_in($_POST['regions']);
             $db->query($sql);
         }
 
@@ -323,12 +323,12 @@ class AgencyController extends InitController
             $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
             /* 查询记录总数，计算分页数 */
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('agency');
+            $sql = "SELECT COUNT(*) FROM " . table('agency');
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
             $filter = page_and_size($filter);
 
             /* 查询记录 */
-            $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('agency') . " ORDER BY $filter[sort_by] $filter[sort_order]";
+            $sql = "SELECT * FROM " . table('agency') . " ORDER BY $filter[sort_by] $filter[sort_order]";
 
             set_filter($filter, $sql);
         } else {

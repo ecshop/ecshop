@@ -90,21 +90,21 @@ class ShopConfigController extends InitController
         $count = count($_POST['value']);
 
         $arr = array();
-        $sql = 'SELECT id, value FROM ' . $ecs->table('shop_config');
+        $sql = 'SELECT id, value FROM ' . table('shop_config');
         $res = $db->query($sql);
         while ($row = $db->fetchRow($res)) {
             $arr[$row['id']] = $row['value'];
         }
         foreach ($_POST['value'] as $key => $val) {
             if ($arr[$key] != $val) {
-                $sql = "UPDATE " . $ecs->table('shop_config') . " SET value = '" . trim($val) . "' WHERE id = '" . $key . "'";
+                $sql = "UPDATE " . table('shop_config') . " SET value = '" . trim($val) . "' WHERE id = '" . $key . "'";
                 $db->query($sql);
             }
         }
 
         /* 处理上传文件 */
         $file_var_list = array();
-        $sql = "SELECT * FROM " . $ecs->table('shop_config') . " WHERE parent_id > 0 AND type = 'file'";
+        $sql = "SELECT * FROM " . table('shop_config') . " WHERE parent_id > 0 AND type = 'file'";
         $res = $db->query($sql);
         while ($row = $db->fetchRow($res)) {
             $file_var_list[$row['code']] = $row;
@@ -141,7 +141,7 @@ class ShopConfigController extends InitController
 
                     /* 判断是否上传成功 */
                     if (move_upload_file($file['tmp_name'], $file_name)) {
-                        $sql = "UPDATE " . $ecs->table('shop_config') . " SET value = '$file_name' WHERE code = '$code'";
+                        $sql = "UPDATE " . table('shop_config') . " SET value = '$file_name' WHERE code = '$code'";
                         $db->query($sql);
                     } else {
                         sys_msg(sprintf($_LANG['msg_upload_failed'], $file['name'], $file_var_list[$code]['store_dir']));
@@ -163,7 +163,7 @@ class ShopConfigController extends InitController
                 'type' => $_POST['invoice_type'],
                 'rate' => $_POST['invoice_rate']
             );
-            $sql = "UPDATE " . $ecs->table('shop_config') . " SET value = '" . serialize($invoice) . "' WHERE code = 'invoice_type'";
+            $sql = "UPDATE " . table('shop_config') . " SET value = '" . serialize($invoice) . "' WHERE code = 'invoice_type'";
             $db->query($sql);
         }
 
@@ -175,9 +175,9 @@ class ShopConfigController extends InitController
 
         $_CFG = load_config();
 
-        $shop_country = $db->getOne("SELECT region_name FROM " . $ecs->table('region') . " WHERE region_id='$_CFG[shop_country]'");
-        $shop_province = $db->getOne("SELECT region_name FROM " . $ecs->table('region') . " WHERE region_id='$_CFG[shop_province]'");
-        $shop_city = $db->getOne("SELECT region_name FROM " . $ecs->table('region') . " WHERE region_id='$_CFG[shop_city]'");
+        $shop_country = $db->getOne("SELECT region_name FROM " . table('region') . " WHERE region_id='$_CFG[shop_country]'");
+        $shop_province = $db->getOne("SELECT region_name FROM " . table('region') . " WHERE region_id='$_CFG[shop_province]'");
+        $shop_city = $db->getOne("SELECT region_name FROM " . table('region') . " WHERE region_id='$_CFG[shop_city]'");
 
         if ($type == 'mail_setting') {
             $links[] = array('text' => $_LANG['back_mail_settings'], 'href' => 'shop_config.php?act=mail_settings');
@@ -254,7 +254,7 @@ class ShopConfigController extends InitController
     public function update_configure($key, $val = '')
     {
         if (!empty($key)) {
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') . " SET value='$val' WHERE code='$key'";
+            $sql = "UPDATE " . table('shop_config') . " SET value='$val' WHERE code='$key'";
 
             return $GLOBALS['db']->query($sql);
         }
@@ -289,7 +289,7 @@ class ShopConfigController extends InitController
         }
 
         /* 取出全部数据：分组和变量 */
-        $sql = "SELECT * FROM " . $ecs->table('shop_config') .
+        $sql = "SELECT * FROM " . table('shop_config') .
             " WHERE type<>'hidden' $config_groups $excludes_groups ORDER BY parent_id, sort_order, id";
         $item_list = $db->getAll($sql);
 

@@ -28,7 +28,7 @@ class EmailListController extends InitController
 
     public function exportAction()
     {
-        $sql = "SELECT email FROM " . $ecs->table('email_list') . "WHERE stat = 1";
+        $sql = "SELECT email FROM " . table('email_list') . "WHERE stat = 1";
         $emails = $db->getAll($sql);
         $out = '';
         foreach ($emails as $key => $val) {
@@ -73,7 +73,7 @@ class EmailListController extends InitController
             sys_msg($_LANG['no_select_email'], 1);
         }
 
-        $sql = "DELETE FROM " . $ecs->table('email_list') .
+        $sql = "DELETE FROM " . table('email_list') .
             " WHERE id " . db_create_in(join(',', $_POST['checkboxes']));
         $db->query($sql);
 
@@ -90,7 +90,7 @@ class EmailListController extends InitController
             sys_msg($_LANG['no_select_email'], 1);
         }
 
-        $sql = "UPDATE " . $ecs->table('email_list') .
+        $sql = "UPDATE " . table('email_list') .
             " SET stat = 1 WHERE stat <> 1 AND id " . db_create_in(join(',', $_POST['checkboxes']));
         $db->query($sql);
 
@@ -107,7 +107,7 @@ class EmailListController extends InitController
             sys_msg($_LANG['no_select_email'], 1);
         }
 
-        $sql = "UPDATE " . $ecs->table('email_list') .
+        $sql = "UPDATE " . table('email_list') .
             " SET stat = 2 WHERE stat <> 2 AND id " . db_create_in(join(',', $_POST['checkboxes']));
         $db->query($sql);
 
@@ -122,7 +122,7 @@ class EmailListController extends InitController
             $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'stat' : trim($_REQUEST['sort_by']);
             $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'ASC' : trim($_REQUEST['sort_order']);
 
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('email_list');
+            $sql = "SELECT COUNT(*) FROM " . table('email_list');
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
             /* 分页大小 */
@@ -130,7 +130,7 @@ class EmailListController extends InitController
 
             /* 查询 */
 
-            $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('email_list') .
+            $sql = "SELECT * FROM " . table('email_list') .
                 " ORDER BY " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
                 " LIMIT " . $filter['start'] . ",$filter[page_size]";
 

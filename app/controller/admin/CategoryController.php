@@ -11,7 +11,7 @@ class CategoryController extends InitController
     {
         parent::initialize();
 
-        $exc = new exchange($ecs->table("category"), $db, 'cat_id', 'cat_name');
+        $exc = new exchange(table("category"), $db, 'cat_id', 'cat_name');
     }
 
     /*------------------------------------------------------ */
@@ -107,13 +107,13 @@ class CategoryController extends InitController
         }
 
         /* 入库的操作 */
-        if ($db->autoExecute($ecs->table('category'), $cat) !== false) {
+        if ($db->autoExecute(table('category'), $cat) !== false) {
             $cat_id = $db->insert_id();
             if ($cat['show_in_nav'] == 1) {
-                $vieworder = $db->getOne("SELECT max(vieworder) FROM " . $ecs->table('nav') . " WHERE type = 'middle'");
+                $vieworder = $db->getOne("SELECT max(vieworder) FROM " . table('nav') . " WHERE type = 'middle'");
                 $vieworder += 2;
                 //显示在自定义导航栏中
-                $sql = "INSERT INTO " . $ecs->table('nav') .
+                $sql = "INSERT INTO " . table('nav') .
                     " (name,ctype,cid,ifshow,vieworder,opennew,url,type)" .
                     " VALUES('" . $cat['cat_name'] . "', 'c', '" . $db->insert_id() . "','1','$vieworder','0', '" . build_uri('category', array('cid' => $cat_id), $cat['cat_name']) . "','middle')";
                 $db->query($sql);
@@ -149,7 +149,7 @@ class CategoryController extends InitController
             $filter_attr = explode(",", $cat_info['filter_attr']);  //把多个筛选属性放到数组中
 
             foreach ($filter_attr as $k => $v) {
-                $attr_cat_id = $db->getOne("SELECT cat_id FROM " . $ecs->table('attribute') . " WHERE attr_id = '" . intval($v) . "'");
+                $attr_cat_id = $db->getOne("SELECT cat_id FROM " . table('attribute') . " WHERE attr_id = '" . intval($v) . "'");
                 $filter_attr_list[$k]['goods_type_list'] = goods_type_list($attr_cat_id);  //取得每个属性的商品类型
                 $filter_attr_list[$k]['filter_attr'] = $v;
                 $attr_option = array();
@@ -173,7 +173,7 @@ class CategoryController extends InitController
         $this->assign('action_link', array('text' => $_LANG['03_category_list'], 'href' => 'category.php?act=list'));
 
         //分类是否存在首页推荐
-        $res = $db->getAll("SELECT recommend_type FROM " . $ecs->table("cat_recommend") . " WHERE cat_id=" . $cat_id);
+        $res = $db->getAll("SELECT recommend_type FROM " . table("cat_recommend") . " WHERE cat_id=" . $cat_id);
         if (!empty($res)) {
             $cat_recommend = array();
             foreach ($res as $data) {
@@ -200,7 +200,7 @@ class CategoryController extends InitController
         if (cat_exists($category, $parent_id)) {
             return make_json_error($_LANG['catname_exist']);
         } else {
-            $sql = "INSERT INTO " . $ecs->table('category') . "(cat_name, parent_id, is_show)" .
+            $sql = "INSERT INTO " . table('category') . "(cat_name, parent_id, is_show)" .
                 "VALUES ( '$category', '$parent_id', 1)";
 
             $db->query($sql);
@@ -261,33 +261,33 @@ class CategoryController extends InitController
             sys_msg($_LANG['grade_error'], 0, $link);
         }
 
-        $dat = $db->getRow("SELECT cat_name, show_in_nav FROM " . $ecs->table('category') . " WHERE cat_id = '$cat_id'");
+        $dat = $db->getRow("SELECT cat_name, show_in_nav FROM " . table('category') . " WHERE cat_id = '$cat_id'");
 
-        if ($db->autoExecute($ecs->table('category'), $cat, 'UPDATE', "cat_id='$cat_id'")) {
+        if ($db->autoExecute(table('category'), $cat, 'UPDATE', "cat_id='$cat_id'")) {
             if ($cat['cat_name'] != $dat['cat_name']) {
                 //如果分类名称发生了改变
-                $sql = "UPDATE " . $ecs->table('nav') . " SET name = '" . $cat['cat_name'] . "' WHERE ctype = 'c' AND cid = '" . $cat_id . "' AND type = 'middle'";
+                $sql = "UPDATE " . table('nav') . " SET name = '" . $cat['cat_name'] . "' WHERE ctype = 'c' AND cid = '" . $cat_id . "' AND type = 'middle'";
                 $db->query($sql);
             }
             if ($cat['show_in_nav'] != $dat['show_in_nav']) {
                 //是否显示于导航栏发生了变化
                 if ($cat['show_in_nav'] == 1) {
                     //显示
-                    $nid = $db->getOne("SELECT id FROM " . $ecs->table('nav') . " WHERE ctype = 'c' AND cid = '" . $cat_id . "' AND type = 'middle'");
+                    $nid = $db->getOne("SELECT id FROM " . table('nav') . " WHERE ctype = 'c' AND cid = '" . $cat_id . "' AND type = 'middle'");
                     if (empty($nid)) {
                         //不存在
-                        $vieworder = $db->getOne("SELECT max(vieworder) FROM " . $ecs->table('nav') . " WHERE type = 'middle'");
+                        $vieworder = $db->getOne("SELECT max(vieworder) FROM " . table('nav') . " WHERE type = 'middle'");
                         $vieworder += 2;
                         $uri = build_uri('category', array('cid' => $cat_id), $cat['cat_name']);
 
-                        $sql = "INSERT INTO " . $ecs->table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('" . $cat['cat_name'] . "', 'c', '$cat_id','1','$vieworder','0', '" . $uri . "','middle')";
+                        $sql = "INSERT INTO " . table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('" . $cat['cat_name'] . "', 'c', '$cat_id','1','$vieworder','0', '" . $uri . "','middle')";
                     } else {
-                        $sql = "UPDATE " . $ecs->table('nav') . " SET ifshow = 1 WHERE ctype = 'c' AND cid = '" . $cat_id . "' AND type = 'middle'";
+                        $sql = "UPDATE " . table('nav') . " SET ifshow = 1 WHERE ctype = 'c' AND cid = '" . $cat_id . "' AND type = 'middle'";
                     }
                     $db->query($sql);
                 } else {
                     //去除
-                    $db->query("UPDATE " . $ecs->table('nav') . " SET ifshow = 0 WHERE ctype = 'c' AND cid = '" . $cat_id . "' AND type = 'middle'");
+                    $db->query("UPDATE " . table('nav') . " SET ifshow = 0 WHERE ctype = 'c' AND cid = '" . $cat_id . "' AND type = 'middle'");
                 }
             }
 
@@ -343,7 +343,7 @@ class CategoryController extends InitController
         }
 
         /* 更新商品分类 */
-        $sql = "UPDATE " . $ecs->table('goods') . " SET cat_id = '$target_cat_id' " .
+        $sql = "UPDATE " . table('goods') . " SET cat_id = '$target_cat_id' " .
             "WHERE cat_id = '$cat_id'";
         if ($db->query($sql)) {
             /* 清除缓存 */
@@ -431,24 +431,24 @@ class CategoryController extends InitController
         if (cat_update($id, array('show_in_nav' => $val)) != false) {
             if ($val == 1) {
                 //显示
-                $vieworder = $db->getOne("SELECT max(vieworder) FROM " . $ecs->table('nav') . " WHERE type = 'middle'");
+                $vieworder = $db->getOne("SELECT max(vieworder) FROM " . table('nav') . " WHERE type = 'middle'");
                 $vieworder += 2;
-                $catname = $db->getOne("SELECT cat_name FROM " . $ecs->table('category') . " WHERE cat_id = '$id'");
+                $catname = $db->getOne("SELECT cat_name FROM " . table('category') . " WHERE cat_id = '$id'");
                 //显示在自定义导航栏中
                 $_CFG['rewrite'] = 0;
                 $uri = build_uri('category', array('cid' => $id), $catname);
 
-                $nid = $db->getOne("SELECT id FROM " . $ecs->table('nav') . " WHERE ctype = 'c' AND cid = '" . $id . "' AND type = 'middle'");
+                $nid = $db->getOne("SELECT id FROM " . table('nav') . " WHERE ctype = 'c' AND cid = '" . $id . "' AND type = 'middle'");
                 if (empty($nid)) {
                     //不存在
-                    $sql = "INSERT INTO " . $ecs->table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('" . $catname . "', 'c', '$id','1','$vieworder','0', '" . $uri . "','middle')";
+                    $sql = "INSERT INTO " . table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('" . $catname . "', 'c', '$id','1','$vieworder','0', '" . $uri . "','middle')";
                 } else {
-                    $sql = "UPDATE " . $ecs->table('nav') . " SET ifshow = 1 WHERE ctype = 'c' AND cid = '" . $id . "' AND type = 'middle'";
+                    $sql = "UPDATE " . table('nav') . " SET ifshow = 1 WHERE ctype = 'c' AND cid = '" . $id . "' AND type = 'middle'";
                 }
                 $db->query($sql);
             } else {
                 //去除
-                $db->query("UPDATE " . $ecs->table('nav') . "SET ifshow = 0 WHERE ctype = 'c' AND cid = '" . $id . "' AND type = 'middle'");
+                $db->query("UPDATE " . table('nav') . "SET ifshow = 0 WHERE ctype = 'c' AND cid = '" . $id . "' AND type = 'middle'");
             }
             clear_cache_files();
             return make_json_result($val);
@@ -485,20 +485,20 @@ class CategoryController extends InitController
 
         /* 初始化分类ID并取得分类名称 */
         $cat_id = intval($_GET['id']);
-        $cat_name = $db->getOne('SELECT cat_name FROM ' . $ecs->table('category') . " WHERE cat_id='$cat_id'");
+        $cat_name = $db->getOne('SELECT cat_name FROM ' . table('category') . " WHERE cat_id='$cat_id'");
 
         /* 当前分类下是否有子分类 */
-        $cat_count = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('category') . " WHERE parent_id='$cat_id'");
+        $cat_count = $db->getOne('SELECT COUNT(*) FROM ' . table('category') . " WHERE parent_id='$cat_id'");
 
         /* 当前分类下是否存在商品 */
-        $goods_count = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') . " WHERE cat_id='$cat_id'");
+        $goods_count = $db->getOne('SELECT COUNT(*) FROM ' . table('goods') . " WHERE cat_id='$cat_id'");
 
         /* 如果不存在下级子分类和商品，则删除之 */
         if ($cat_count == 0 && $goods_count == 0) {
             /* 删除分类 */
-            $sql = 'DELETE FROM ' . $ecs->table('category') . " WHERE cat_id = '$cat_id'";
+            $sql = 'DELETE FROM ' . table('category') . " WHERE cat_id = '$cat_id'";
             if ($db->query($sql)) {
-                $db->query("DELETE FROM " . $ecs->table('nav') . "WHERE ctype = 'c' AND cid = '" . $cat_id . "' AND type = 'middle'");
+                $db->query("DELETE FROM " . table('nav') . "WHERE ctype = 'c' AND cid = '" . $cat_id . "' AND type = 'middle'");
                 clear_cache_files();
                 admin_log($cat_name, 'remove', 'category');
             }
@@ -520,7 +520,7 @@ class CategoryController extends InitController
      */
     public function get_cat_info($cat_id)
     {
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('category') . " WHERE cat_id='$cat_id' LIMIT 1";
+        $sql = "SELECT * FROM " . table('category') . " WHERE cat_id='$cat_id' LIMIT 1";
         return $GLOBALS['db']->getRow($sql);
     }
 
@@ -538,7 +538,7 @@ class CategoryController extends InitController
             return false;
         }
 
-        return $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('category'), $args, 'update', "cat_id='$cat_id'");
+        return $GLOBALS['db']->autoExecute(table('category'), $args, 'update', "cat_id='$cat_id'");
     }
 
 
@@ -553,8 +553,8 @@ class CategoryController extends InitController
     public function get_attr_list()
     {
         $sql = "SELECT a.attr_id, a.cat_id, a.attr_name " .
-            " FROM " . $GLOBALS['ecs']->table('attribute') . " AS a,  " .
-            $GLOBALS['ecs']->table('goods_type') . " AS c " .
+            " FROM " . table('attribute') . " AS a,  " .
+            table('goods_type') . " AS c " .
             " WHERE  a.cat_id = c.cat_id AND c.enabled = 1 " .
             " ORDER BY a.cat_id , a.sort_order";
 
@@ -583,11 +583,11 @@ class CategoryController extends InitController
         //检查分类是否为首页推荐
         if (!empty($recommend_type)) {
             //取得之前的分类
-            $recommend_res = $GLOBALS['db']->getAll("SELECT recommend_type FROM " . $GLOBALS['ecs']->table("cat_recommend") . " WHERE cat_id=" . $cat_id);
+            $recommend_res = $GLOBALS['db']->getAll("SELECT recommend_type FROM " . table("cat_recommend") . " WHERE cat_id=" . $cat_id);
             if (empty($recommend_res)) {
                 foreach ($recommend_type as $data) {
                     $data = intval($data);
-                    $GLOBALS['db']->query("INSERT INTO " . $GLOBALS['ecs']->table("cat_recommend") . "(cat_id, recommend_type) VALUES ('$cat_id', '$data')");
+                    $GLOBALS['db']->query("INSERT INTO " . table("cat_recommend") . "(cat_id, recommend_type) VALUES ('$cat_id', '$data')");
                 }
             } else {
                 $old_data = array();
@@ -596,18 +596,18 @@ class CategoryController extends InitController
                 }
                 $delete_array = array_diff($old_data, $recommend_type);
                 if (!empty($delete_array)) {
-                    $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table("cat_recommend") . " WHERE cat_id=$cat_id AND recommend_type " . db_create_in($delete_array));
+                    $GLOBALS['db']->query("DELETE FROM " . table("cat_recommend") . " WHERE cat_id=$cat_id AND recommend_type " . db_create_in($delete_array));
                 }
                 $insert_array = array_diff($recommend_type, $old_data);
                 if (!empty($insert_array)) {
                     foreach ($insert_array as $data) {
                         $data = intval($data);
-                        $GLOBALS['db']->query("INSERT INTO " . $GLOBALS['ecs']->table("cat_recommend") . "(cat_id, recommend_type) VALUES ('$cat_id', '$data')");
+                        $GLOBALS['db']->query("INSERT INTO " . table("cat_recommend") . "(cat_id, recommend_type) VALUES ('$cat_id', '$data')");
                     }
                 }
             }
         } else {
-            $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table("cat_recommend") . " WHERE cat_id=" . $cat_id);
+            $GLOBALS['db']->query("DELETE FROM " . table("cat_recommend") . " WHERE cat_id=" . $cat_id);
         }
     }
 }

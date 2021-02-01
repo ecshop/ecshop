@@ -42,7 +42,7 @@ class InitController extends Controller
 
         /* 初始化session */
         $sess_name = defined("SESS_NAME") ? SESS_NAME : 'ECS_ID';
-        $sess = new cls_session($db, $ecs->table('sessions'), $ecs->table('sessions_data'), $sess_name);
+        $sess = new cls_session($db, table('sessions'), table('sessions_data'), $sess_name);
 
         /* 载入系统参数 */
         $_CFG = load_config();

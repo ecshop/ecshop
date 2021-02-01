@@ -13,7 +13,7 @@ class BrandController extends InitController
 
         $image = new cls_image($_CFG['bgcolor']);
 
-        $exc = new exchange($ecs->table("brand"), $db, 'brand_id', 'brand_name');
+        $exc = new exchange(table("brand"), $db, 'brand_id', 'brand_name');
     }
 
 
@@ -80,7 +80,7 @@ class BrandController extends InitController
 
         /*插入数据*/
 
-        $sql = "INSERT INTO " . $ecs->table('brand') . "(brand_name, site_url, brand_desc, brand_logo, is_show, sort_order) " .
+        $sql = "INSERT INTO " . table('brand') . "(brand_name, site_url, brand_desc, brand_logo, is_show, sort_order) " .
             "VALUES ('$_POST[brand_name]', '$site_url', '$_POST[brand_desc]', '$img_name', '$is_show', '$_POST[sort_order]')";
         $db->query($sql);
 
@@ -106,7 +106,7 @@ class BrandController extends InitController
         /* 权限判断 */
         admin_priv('brand_manage');
         $sql = "SELECT brand_id, brand_name, site_url, brand_logo, brand_desc, brand_logo, is_show, sort_order " .
-            "FROM " . $ecs->table('brand') . " WHERE brand_id='$_REQUEST[id]'";
+            "FROM " . table('brand') . " WHERE brand_id='$_REQUEST[id]'";
         $brand = $db->getRow($sql);
 
         $this->assign('ur_here', $_LANG['brand_edit']);
@@ -192,7 +192,7 @@ class BrandController extends InitController
         if (brand_exists($brand)) {
             return make_json_error($_LANG['brand_name_exist']);
         } else {
-            $sql = "INSERT INTO " . $ecs->table('brand') . "(brand_name)" .
+            $sql = "INSERT INTO " . table('brand') . "(brand_name)" .
                 "VALUES ( '$brand')";
 
             $db->query($sql);
@@ -248,7 +248,7 @@ class BrandController extends InitController
         $id = intval($_GET['id']);
 
         /* 删除该品牌的图标 */
-        $sql = "SELECT brand_logo FROM " . $ecs->table('brand') . " WHERE brand_id = '$id'";
+        $sql = "SELECT brand_logo FROM " . table('brand') . " WHERE brand_id = '$id'";
         $logo_name = $db->getOne($sql);
         if (!empty($logo_name)) {
             @unlink(ROOT_PATH . DATA_DIR . '/brandlogo/' . $logo_name);
@@ -257,7 +257,7 @@ class BrandController extends InitController
         $exc->drop($id);
 
         /* 更新商品的品牌编号 */
-        $sql = "UPDATE " . $ecs->table('goods') . " SET brand_id=0 WHERE brand_id='$id'";
+        $sql = "UPDATE " . table('goods') . " SET brand_id=0 WHERE brand_id='$id'";
         $db->query($sql);
 
         $url = 'brand.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
@@ -275,12 +275,12 @@ class BrandController extends InitController
         $brand_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
         /* 取得logo名称 */
-        $sql = "SELECT brand_logo FROM " . $ecs->table('brand') . " WHERE brand_id = '$brand_id'";
+        $sql = "SELECT brand_logo FROM " . table('brand') . " WHERE brand_id = '$brand_id'";
         $logo_name = $db->getOne($sql);
 
         if (!empty($logo_name)) {
             @unlink(ROOT_PATH . DATA_DIR . '/brandlogo/' . $logo_name);
-            $sql = "UPDATE " . $ecs->table('brand') . " SET brand_logo = '' WHERE brand_id = '$brand_id'";
+            $sql = "UPDATE " . table('brand') . " SET brand_logo = '' WHERE brand_id = '$brand_id'";
             $db->query($sql);
         }
         $link = array(array('text' => $_LANG['brand_edit_lnk'], 'href' => 'brand.php?act=edit&id=' . $brand_id), array('text' => $_LANG['brand_list_lnk'], 'href' => 'brand.php?act=list'));
@@ -320,9 +320,9 @@ class BrandController extends InitController
 
             /* 记录总数以及页数 */
             if (isset($_POST['brand_name'])) {
-                $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('brand') . ' WHERE brand_name = \'' . $_POST['brand_name'] . '\'';
+                $sql = "SELECT COUNT(*) FROM " . table('brand') . ' WHERE brand_name = \'' . $_POST['brand_name'] . '\'';
             } else {
-                $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('brand');
+                $sql = "SELECT COUNT(*) FROM " . table('brand');
             }
 
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
@@ -336,9 +336,9 @@ class BrandController extends InitController
                 } else {
                     $keyword = $_POST['brand_name'];
                 }
-                $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('brand') . " WHERE brand_name like '%{$keyword}%' ORDER BY sort_order ASC";
+                $sql = "SELECT * FROM " . table('brand') . " WHERE brand_name like '%{$keyword}%' ORDER BY sort_order ASC";
             } else {
-                $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('brand') . " ORDER BY sort_order ASC";
+                $sql = "SELECT * FROM " . table('brand') . " ORDER BY sort_order ASC";
             }
 
             set_filter($filter, $sql);

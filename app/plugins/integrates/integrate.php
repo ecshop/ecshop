@@ -242,7 +242,7 @@ class integrate
                 " WHERE " . $this->field_email . " = '$cfg[email]' ";
             if ($this->db->getOne($sql, true) == 0) {
                 // 新的E-mail
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET is_validated = 0 WHERE user_name = '$cfg[post_username]'";
+                $sql = "UPDATE " . table('users') . " SET is_validated = 0 WHERE user_name = '$cfg[post_username]'";
                 $this->db->query($sql);
             }
             $values[] = $this->field_email . "='" . $cfg['email'] . "'";
@@ -288,41 +288,41 @@ class integrate
 
         if ($this->need_sync || (isset($this->is_ecshop) && $this->is_ecshop)) {
             /* 如果需要同步或是ecshop插件执行这部分代码 */
-            $sql = "SELECT user_id FROM " . $GLOBALS['ecs']->table('users') . " WHERE ";
+            $sql = "SELECT user_id FROM " . table('users') . " WHERE ";
             $sql .= (is_array($post_id)) ? db_create_in($post_id, 'user_name') : "user_name='" . $post_id . "' LIMIT 1";
             $col = $GLOBALS['db']->getCol($sql);
 
             if ($col) {
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET parent_id = 0 WHERE " . db_create_in($col, 'parent_id'); //将删除用户的下级的parent_id 改为0
+                $sql = "UPDATE " . table('users') . " SET parent_id = 0 WHERE " . db_create_in($col, 'parent_id'); //将删除用户的下级的parent_id 改为0
                 $GLOBALS['db']->query($sql);
-                $sql = "DELETE FROM " . $GLOBALS['ecs']->table('users') . " WHERE " . db_create_in($col, 'user_id'); //删除用户
+                $sql = "DELETE FROM " . table('users') . " WHERE " . db_create_in($col, 'user_id'); //删除用户
                 $GLOBALS['db']->query($sql);
                 /* 删除用户订单 */
-                $sql = "SELECT order_id FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE " . db_create_in($col, 'user_id');
+                $sql = "SELECT order_id FROM " . table('order_info') . " WHERE " . db_create_in($col, 'user_id');
                 $GLOBALS['db']->query($sql);
                 $col_order_id = $GLOBALS['db']->getCol($sql);
                 if ($col_order_id) {
-                    $sql = "DELETE FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE " . db_create_in($col_order_id, 'order_id');
+                    $sql = "DELETE FROM " . table('order_info') . " WHERE " . db_create_in($col_order_id, 'order_id');
                     $GLOBALS['db']->query($sql);
-                    $sql = "DELETE FROM " . $GLOBALS['ecs']->table('order_goods') . " WHERE " . db_create_in($col_order_id, 'order_id');
+                    $sql = "DELETE FROM " . table('order_goods') . " WHERE " . db_create_in($col_order_id, 'order_id');
                     $GLOBALS['db']->query($sql);
                 }
 
-                $sql = "DELETE FROM " . $GLOBALS['ecs']->table('booking_goods') . " WHERE " . db_create_in($col, 'user_id'); //删除用户
+                $sql = "DELETE FROM " . table('booking_goods') . " WHERE " . db_create_in($col, 'user_id'); //删除用户
                 $GLOBALS['db']->query($sql);
-                $sql = "DELETE FROM " . $GLOBALS['ecs']->table('collect_goods') . " WHERE " . db_create_in($col, 'user_id'); //删除会员收藏商品
+                $sql = "DELETE FROM " . table('collect_goods') . " WHERE " . db_create_in($col, 'user_id'); //删除会员收藏商品
                 $GLOBALS['db']->query($sql);
-                $sql = "DELETE FROM " . $GLOBALS['ecs']->table('feedback') . " WHERE " . db_create_in($col, 'user_id'); //删除用户留言
+                $sql = "DELETE FROM " . table('feedback') . " WHERE " . db_create_in($col, 'user_id'); //删除用户留言
                 $GLOBALS['db']->query($sql);
-                $sql = "DELETE FROM " . $GLOBALS['ecs']->table('user_address') . " WHERE " . db_create_in($col, 'user_id'); //删除用户地址
+                $sql = "DELETE FROM " . table('user_address') . " WHERE " . db_create_in($col, 'user_id'); //删除用户地址
                 $GLOBALS['db']->query($sql);
-                $sql = "DELETE FROM " . $GLOBALS['ecs']->table('user_bonus') . " WHERE " . db_create_in($col, 'user_id'); //删除用户红包
+                $sql = "DELETE FROM " . table('user_bonus') . " WHERE " . db_create_in($col, 'user_id'); //删除用户红包
                 $GLOBALS['db']->query($sql);
-                $sql = "DELETE FROM " . $GLOBALS['ecs']->table('user_account') . " WHERE " . db_create_in($col, 'user_id'); //删除用户帐号金额
+                $sql = "DELETE FROM " . table('user_account') . " WHERE " . db_create_in($col, 'user_id'); //删除用户帐号金额
                 $GLOBALS['db']->query($sql);
-                $sql = "DELETE FROM " . $GLOBALS['ecs']->table('tag') . " WHERE " . db_create_in($col, 'user_id'); //删除用户标记
+                $sql = "DELETE FROM " . table('tag') . " WHERE " . db_create_in($col, 'user_id'); //删除用户标记
                 $GLOBALS['db']->query($sql);
-                $sql = "DELETE FROM " . $GLOBALS['ecs']->table('account_log') . " WHERE " . db_create_in($col, 'user_id'); //删除用户日志
+                $sql = "DELETE FROM " . table('account_log') . " WHERE " . db_create_in($col, 'user_id'); //删除用户日志
                 $GLOBALS['db']->query($sql);
             }
         }
@@ -489,7 +489,7 @@ class integrate
             $time = time() + 3600 * 24 * 15;
 
             setcookie("ECS[username]", $username, $time, $this->cookie_path, $this->cookie_domain, null, true);
-            $sql = "SELECT user_id, password FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_name='$username' LIMIT 1";
+            $sql = "SELECT user_id, password FROM " . table('users') . " WHERE user_name='$username' LIMIT 1";
             $row = $GLOBALS['db']->getRow($sql);
             if ($row) {
                 setcookie("ECS[user_id]", $row['user_id'], $time, $this->cookie_path, $this->cookie_domain, null, true);
@@ -511,7 +511,7 @@ class integrate
         if (empty($username)) {
             $GLOBALS['sess']->destroy_session();
         } else {
-            $sql = "SELECT user_id, password, email FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_name='$username' LIMIT 1";
+            $sql = "SELECT user_id, password, email FROM " . table('users') . " WHERE user_name='$username' LIMIT 1";
             $row = $GLOBALS['db']->getRow($sql);
 
             if ($row) {
@@ -561,7 +561,7 @@ class integrate
                     return $cfg['md5password'];
                 }
 
-                // no break
+            // no break
             case PWD_PRE_SALT:
                 if (empty($cfg['salt'])) {
                     $cfg['salt'] = '';
@@ -602,19 +602,19 @@ class integrate
         }
 
         $sql = "SELECT user_name, email, password, sex, birthday" .
-            " FROM " . $GLOBALS['ecs']->table('users') .
+            " FROM " . table('users') .
             " WHERE user_name = '$username'";
 
         $profile = $GLOBALS['db']->getRow($sql);
         if (empty($profile)) {
             /* 向商城表插入一条新记录 */
             if (empty($md5password)) {
-                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('users') .
+                $sql = "INSERT INTO " . table('users') .
                     "(user_name, email, sex, birthday, reg_time)" .
                     " VALUES('$username', '" . $main_profile['email'] . "','" .
                     $main_profile['sex'] . "','" . $main_profile['birthday'] . "','" . $main_profile['reg_time'] . "')";
             } else {
-                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('users') .
+                $sql = "INSERT INTO " . table('users') .
                     "(user_name, email, sex, birthday, reg_time, password)" .
                     " VALUES('$username', '" . $main_profile['email'] . "','" .
                     $main_profile['sex'] . "','" . $main_profile['birthday'] . "','" .
@@ -642,7 +642,7 @@ class integrate
             if (empty($values)) {
                 return true;
             } else {
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('users') .
+                $sql = "UPDATE " . table('users') .
                     " SET " . implode(", ", $values) .
                     " WHERE user_name='$username'";
 

@@ -112,7 +112,7 @@ class BrandController extends InitController
      */
     public function get_brand_info($id)
     {
-        $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('brand') . " WHERE brand_id = '$id'";
+        $sql = 'SELECT * FROM ' . table('brand') . " WHERE brand_id = '$id'";
 
         return $GLOBALS['db']->getRow($sql);
     }
@@ -142,9 +142,9 @@ class BrandController extends InitController
                 "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " .
                 'promote_start_date, promote_end_date, g.goods_brief, g.goods_thumb, goods_img, ' .
                 'b.brand_name, g.is_best, g.is_new, g.is_hot, g.is_promote ' .
-                'FROM ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
-                'LEFT JOIN ' . $GLOBALS['ecs']->table('brand') . ' AS b ON b.brand_id = g.brand_id ' .
-                'LEFT JOIN ' . $GLOBALS['ecs']->table('member_price') . ' AS mp ' .
+                'FROM ' . table('goods') . ' AS g ' .
+                'LEFT JOIN ' . table('brand') . ' AS b ON b.brand_id = g.brand_id ' .
+                'LEFT JOIN ' . table('member_price') . ' AS mp ' .
                 "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
                 "WHERE g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 AND g.brand_id = '$brand' AND " .
                 "(g.is_best = 1 OR (g.is_promote = 1 AND promote_start_date <= '$time' AND " .
@@ -204,7 +204,7 @@ class BrandController extends InitController
      */
     public function goods_count_by_brand($brand_id, $cate = 0)
     {
-        $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
+        $sql = 'SELECT COUNT(*) FROM ' . table('goods') . ' AS g ' .
             "WHERE brand_id = '$brand_id' AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0";
 
         if ($cate > 0) {
@@ -229,8 +229,8 @@ class BrandController extends InitController
         $sql = 'SELECT g.goods_id, g.goods_name, g.market_price, g.shop_price AS org_price, ' .
             "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, g.promote_price, " .
             'g.promote_start_date, g.promote_end_date, g.goods_brief, g.goods_thumb , g.goods_img ' .
-            'FROM ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('member_price') . ' AS mp ' .
+            'FROM ' . table('goods') . ' AS g ' .
+            'LEFT JOIN ' . table('member_price') . ' AS mp ' .
             "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
             "WHERE g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 AND g.brand_id = '$brand_id' $cate_where" .
             "ORDER BY $sort $order";
@@ -277,8 +277,8 @@ class BrandController extends InitController
             'url' => build_uri('brand', array('bid' => $brand), $GLOBALS['_LANG']['all_category']));
 
         $sql = "SELECT c.cat_id, c.cat_name, COUNT(g.goods_id) AS goods_count FROM " .
-            $GLOBALS['ecs']->table('category') . " AS c, " .
-            $GLOBALS['ecs']->table('goods') . " AS g " .
+            table('category') . " AS c, " .
+            table('goods') . " AS g " .
             "WHERE g.brand_id = '$brand' AND c.cat_id = g.cat_id " .
             "GROUP BY g.cat_id";
         $res = $GLOBALS['db']->query($sql);

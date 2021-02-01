@@ -56,7 +56,7 @@ if (empty($_POST['query_by_year']) && empty($_POST['query_by_month'])) {
 $format = ($query_type == 'year') ? '%Y' : '%Y-%m';
 $sql = "SELECT DATE_FORMAT(FROM_UNIXTIME(shipping_time), '$format') AS period, COUNT(*) AS order_count, " .
     "SUM(goods_amount + shipping_fee + insure_fee + pay_fee + pack_fee + card_fee - discount) AS order_amount " .
-    "FROM " . $ecs->table('order_info') .
+    "FROM " . table('order_info') .
     " WHERE (order_status = '" . OS_CONFIRMED . "' OR order_status >= '" . OS_SPLITED . "')" .
     " AND (pay_status = '" . PS_PAYED . "' OR pay_status = '" . PS_PAYING . "') " .
     " AND (shipping_status = '" . SS_SHIPPED . "' OR shipping_status = '" . SS_RECEIVED . "') " .

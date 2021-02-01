@@ -14,7 +14,7 @@ class FriendLinkController extends InitController
 
         $image = new cls_image($_CFG['bgcolor']);
 
-        $exc = new exchange($ecs->table('friend_link'), $db, 'link_id', 'link_name');
+        $exc = new exchange(table('friend_link'), $db, 'link_id', 'link_name');
     }
 
 
@@ -122,7 +122,7 @@ class FriendLinkController extends InitController
             }
 
             /* 插入数据 */
-            $sql = "INSERT INTO " . $ecs->table('friend_link') . " (link_name, link_url, link_logo, show_order) " .
+            $sql = "INSERT INTO " . table('friend_link') . " (link_name, link_url, link_logo, show_order) " .
                 "VALUES ('$link_name', '$link_url', '$link_logo', '$show_order')";
             $db->query($sql);
 
@@ -155,7 +155,7 @@ class FriendLinkController extends InitController
 
         /* 取得友情链接数据 */
         $sql = "SELECT link_id, link_name, link_url, link_logo, show_order " .
-            "FROM " . $ecs->table('friend_link') . " WHERE link_id = '" . intval($_REQUEST['id']) . "'";
+            "FROM " . table('friend_link') . " WHERE link_id = '" . intval($_REQUEST['id']) . "'";
         $link_arr = $db->getRow($sql);
 
         /* 标记为图片链接还是文字链接 */
@@ -207,7 +207,7 @@ class FriendLinkController extends InitController
         //如果要修改链接图片, 删除原来的图片
         if (!empty($img_up_info)) {
             //获取链子LOGO,并删除
-            $old_logo = $db->getOne("SELECT link_logo FROM " . $ecs->table('friend_link') . " WHERE link_id = '$id'");
+            $old_logo = $db->getOne("SELECT link_logo FROM " . table('friend_link') . " WHERE link_id = '$id'");
             if ((strpos($old_logo, 'http://') === false) && (strpos($old_logo, 'https://') === false)) {
                 $img_name = basename($old_logo);
                 @unlink(ROOT_PATH . DATA_DIR . '/afficheimg/' . $img_name);
@@ -222,7 +222,7 @@ class FriendLinkController extends InitController
         }
 
         /* 更新信息 */
-        $sql = "UPDATE " . $ecs->table('friend_link') . " SET " .
+        $sql = "UPDATE " . table('friend_link') . " SET " .
             "link_name = '$link_name', " .
             "link_url = '$link_url' " .
             $link_logo . ',' .
@@ -324,14 +324,14 @@ class FriendLinkController extends InitController
             $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
             /* 获得总记录数据 */
-            $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('friend_link');
+            $sql = 'SELECT COUNT(*) FROM ' . table('friend_link');
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
             $filter = page_and_size($filter);
 
             /* 获取数据 */
             $sql = 'SELECT link_id, link_name, link_url, link_logo, show_order' .
-                ' FROM ' . $GLOBALS['ecs']->table('friend_link') .
+                ' FROM ' . table('friend_link') .
                 " ORDER by $filter[sort_by] $filter[sort_order]";
 
             set_filter($filter, $sql);

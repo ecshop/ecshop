@@ -50,7 +50,7 @@ class GoodsController extends InitController
             /* 购买该商品可以得到多少钱的红包 */
             if ($goods['bonus_type_id'] > 0) {
                 $time = gmtime();
-                $sql = "SELECT type_money FROM " . $ecs->table('bonus_type') .
+                $sql = "SELECT type_money FROM " . table('bonus_type') .
                     " WHERE type_id = '$goods[bonus_type_id]' " .
                     " AND send_type = '" . SEND_BY_GOODS . "' " .
                     " AND send_start_date <= '$time'" .
@@ -79,13 +79,13 @@ class GoodsController extends InitController
             $this->assign_template('c', $catlist);
 
             /* 上一个商品下一个商品 */
-            $prev_gid = $db->getOne("SELECT goods_id FROM " . $ecs->table('goods') . " WHERE cat_id=" . $goods['cat_id'] . " AND goods_id > " . $goods['goods_id'] . " AND is_on_sale = 1 AND is_alone_sale = 1 AND is_delete = 0 LIMIT 1");
+            $prev_gid = $db->getOne("SELECT goods_id FROM " . table('goods') . " WHERE cat_id=" . $goods['cat_id'] . " AND goods_id > " . $goods['goods_id'] . " AND is_on_sale = 1 AND is_alone_sale = 1 AND is_delete = 0 LIMIT 1");
             if (!empty($prev_gid)) {
                 $prev_good['url'] = build_uri('goods', array('gid' => $prev_gid), $goods['goods_name']);
                 $this->assign('prev_good', $prev_good);//上一个商品
             }
 
-            $next_gid = $db->getOne("SELECT max(goods_id) FROM " . $ecs->table('goods') . " WHERE cat_id=" . $goods['cat_id'] . " AND goods_id < " . $goods['goods_id'] . " AND is_on_sale = 1 AND is_alone_sale = 1 AND is_delete = 0");
+            $next_gid = $db->getOne("SELECT max(goods_id) FROM " . table('goods') . " WHERE cat_id=" . $goods['cat_id'] . " AND goods_id < " . $goods['goods_id'] . " AND is_on_sale = 1 AND is_alone_sale = 1 AND is_delete = 0");
             if (!empty($next_gid)) {
                 $next_good['url'] = build_uri('goods', array('gid' => $next_gid), $goods['goods_name']);
                 $this->assign('next_good', $next_good);//下一个商品
@@ -141,7 +141,7 @@ class GoodsController extends InitController
 
 
         /* 更新点击次数 */
-        $db->query('UPDATE ' . $ecs->table('goods') . " SET click_count = click_count + 1 WHERE goods_id = '$_REQUEST[id]'");
+        $db->query('UPDATE ' . table('goods') . " SET click_count = click_count + 1 WHERE goods_id = '$_REQUEST[id]'");
 
         $this->assign('now_time', gmtime());           // 当前系统时间
         return $this->display('goods.dwt');
@@ -203,7 +203,7 @@ class GoodsController extends InitController
 
             /* 商品购买记录 */
             $sql = 'SELECT u.user_name, og.goods_number, oi.add_time, IF(oi.order_status IN (2, 3, 4), 0, 1) AS order_status ' .
-                'FROM ' . $ecs->table('order_info') . ' AS oi LEFT JOIN ' . $ecs->table('users') . ' AS u ON oi.user_id = u.user_id, ' . $ecs->table('order_goods') . ' AS og ' .
+                'FROM ' . table('order_info') . ' AS oi LEFT JOIN ' . table('users') . ' AS u ON oi.user_id = u.user_id, ' . table('order_goods') . ' AS og ' .
                 'WHERE oi.order_id = og.order_id AND ' . time() . ' - oi.add_time < 2592000 AND og.goods_id = ' . $goods_id . ' ORDER BY oi.add_time DESC LIMIT ' . (($page > 1) ? ($page - 1) : 0) * 5 . ',5';
             $bought_notes = $db->getAll($sql);
 
@@ -212,7 +212,7 @@ class GoodsController extends InitController
             }
 
             $sql = 'SELECT count(*) ' .
-                'FROM ' . $ecs->table('order_info') . ' AS oi LEFT JOIN ' . $ecs->table('users') . ' AS u ON oi.user_id = u.user_id, ' . $ecs->table('order_goods') . ' AS og ' .
+                'FROM ' . table('order_info') . ' AS oi LEFT JOIN ' . table('users') . ' AS u ON oi.user_id = u.user_id, ' . table('order_goods') . ' AS og ' .
                 'WHERE oi.order_id = og.order_id AND ' . time() . ' - oi.add_time < 2592000 AND og.goods_id = ' . $goods_id;
             $count = $db->getOne($sql);
 
@@ -254,9 +254,9 @@ class GoodsController extends InitController
         $sql = 'SELECT g.goods_id, g.goods_name, g.goods_thumb, g.goods_img, g.shop_price AS org_price, ' .
             "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " .
             'g.market_price, g.promote_price, g.promote_start_date, g.promote_end_date ' .
-            'FROM ' . $GLOBALS['ecs']->table('link_goods') . ' lg ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = lg.link_goods_id ' .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp " .
+            'FROM ' . table('link_goods') . ' lg ' .
+            'LEFT JOIN ' . table('goods') . ' AS g ON g.goods_id = lg.link_goods_id ' .
+            "LEFT JOIN " . table('member_price') . " AS mp " .
             "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
             "WHERE lg.goods_id = '$goods_id' AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 " .
             "LIMIT " . $GLOBALS['_CFG']['related_goods_number'];
@@ -295,8 +295,8 @@ class GoodsController extends InitController
     public function get_linked_articles($goods_id)
     {
         $sql = 'SELECT a.article_id, a.title, a.file_url, a.open_type, a.add_time ' .
-            'FROM ' . $GLOBALS['ecs']->table('goods_article') . ' AS g, ' .
-            $GLOBALS['ecs']->table('article') . ' AS a ' .
+            'FROM ' . table('goods_article') . ' AS g, ' .
+            table('article') . ' AS a ' .
             "WHERE g.article_id = a.article_id AND g.goods_id = '$goods_id' AND a.is_open = 1 " .
             'ORDER BY a.add_time DESC';
         $res = $GLOBALS['db']->query($sql);
@@ -325,8 +325,8 @@ class GoodsController extends InitController
     public function get_user_rank_prices($goods_id, $shop_price)
     {
         $sql = "SELECT rank_id, IFNULL(mp.user_price, r.discount * $shop_price / 100) AS price, r.rank_name, r.discount " .
-            'FROM ' . $GLOBALS['ecs']->table('user_rank') . ' AS r ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('member_price') . " AS mp " .
+            'FROM ' . table('user_rank') . ' AS r ' .
+            'LEFT JOIN ' . table('member_price') . " AS mp " .
             "ON mp.goods_id = '$goods_id' AND mp.user_rank = r.rank_id " .
             "WHERE r.show_price = 1 OR r.rank_id = '$_SESSION[user_rank]'";
         $res = $GLOBALS['db']->query($sql);
@@ -351,9 +351,9 @@ class GoodsController extends InitController
     public function get_also_bought($goods_id)
     {
         $sql = 'SELECT COUNT(b.goods_id ) AS num, g.goods_id, g.goods_name, g.goods_thumb, g.goods_img, g.shop_price, g.promote_price, g.promote_start_date, g.promote_end_date ' .
-            'FROM ' . $GLOBALS['ecs']->table('order_goods') . ' AS a ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('order_goods') . ' AS b ON b.order_id = a.order_id ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = b.goods_id ' .
+            'FROM ' . table('order_goods') . ' AS a ' .
+            'LEFT JOIN ' . table('order_goods') . ' AS b ON b.order_id = a.order_id ' .
+            'LEFT JOIN ' . table('goods') . ' AS g ON g.goods_id = b.goods_id ' .
             "WHERE a.goods_id = '$goods_id' AND b.goods_id <> '$goods_id' AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 " .
             'GROUP BY b.goods_id ' .
             'ORDER BY num DESC ' .
@@ -410,8 +410,8 @@ class GoodsController extends InitController
 
         /* 查询该商品销量 */
         $sql = 'SELECT IFNULL(SUM(g.goods_number), 0) ' .
-            'FROM ' . $GLOBALS['ecs']->table('order_info') . ' AS o, ' .
-            $GLOBALS['ecs']->table('order_goods') . ' AS g ' .
+            'FROM ' . table('order_info') . ' AS o, ' .
+            table('order_goods') . ' AS g ' .
             "WHERE o.order_id = g.order_id " .
             "AND o.order_status = '" . OS_CONFIRMED . "' " .
             "AND o.shipping_status " . db_create_in(array(SS_SHIPPED, SS_RECEIVED)) .
@@ -422,8 +422,8 @@ class GoodsController extends InitController
         if ($sales_count > 0) {
             /* 只有在商品销售量大于0时才去计算该商品的排行 */
             $sql = 'SELECT DISTINCT SUM(goods_number) AS num ' .
-                'FROM ' . $GLOBALS['ecs']->table('order_info') . ' AS o, ' .
-                $GLOBALS['ecs']->table('order_goods') . ' AS g ' .
+                'FROM ' . table('order_info') . ' AS o, ' .
+                table('order_goods') . ' AS g ' .
                 "WHERE o.order_id = g.order_id " .
                 "AND o.order_status = '" . OS_CONFIRMED . "' " .
                 "AND o.shipping_status " . db_create_in(array(SS_SHIPPED, SS_RECEIVED)) .
@@ -453,7 +453,7 @@ class GoodsController extends InitController
      */
     public function get_attr_amount($goods_id, $attr)
     {
-        $sql = "SELECT SUM(attr_price) FROM " . $GLOBALS['ecs']->table('goods_attr') .
+        $sql = "SELECT SUM(attr_price) FROM " . table('goods_attr') .
             " WHERE goods_id='$goods_id' AND " . db_create_in($attr, 'goods_attr_id');
 
         return $GLOBALS['db']->getOne($sql);
@@ -471,7 +471,7 @@ class GoodsController extends InitController
         $now = gmtime();
         $sql = "SELECT pg.goods_id, ga.act_id, ga.act_name, ga.act_desc, ga.goods_name, ga.start_time,
                    ga.end_time, ga.is_finished, ga.ext_info
-            FROM " . $GLOBALS['ecs']->table('goods_activity') . " AS ga, " . $GLOBALS['ecs']->table('package_goods') . " AS pg
+            FROM " . table('goods_activity') . " AS ga, " . table('package_goods') . " AS pg
             WHERE pg.package_id = ga.act_id
             AND ga.start_time <= '" . $now . "'
             AND ga.end_time >= '" . $now . "'
@@ -491,12 +491,12 @@ class GoodsController extends InitController
             }
 
             $sql = "SELECT pg.package_id, pg.goods_id, pg.goods_number, pg.admin_id, p.goods_attr, g.goods_sn, g.goods_name, g.market_price, g.goods_thumb, IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS rank_price
-                FROM " . $GLOBALS['ecs']->table('package_goods') . " AS pg
-                    LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g
+                FROM " . table('package_goods') . " AS pg
+                    LEFT JOIN " . table('goods') . " AS g
                         ON g.goods_id = pg.goods_id
-                    LEFT JOIN " . $GLOBALS['ecs']->table('products') . " AS p
+                    LEFT JOIN " . table('products') . " AS p
                         ON p.product_id = pg.product_id
-                    LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp
+                    LEFT JOIN " . table('member_price') . " AS mp
                         ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]'
                 WHERE pg.package_id = " . $value['act_id'] . "
                 ORDER BY pg.package_id, pg.goods_id";
@@ -513,7 +513,7 @@ class GoodsController extends InitController
 
             /* 取商品属性 */
             $sql = "SELECT ga.goods_attr_id, ga.attr_value
-                FROM " . $GLOBALS['ecs']->table('goods_attr') . " AS ga, " . $GLOBALS['ecs']->table('attribute') . " AS a
+                FROM " . table('goods_attr') . " AS ga, " . table('attribute') . " AS a
                 WHERE a.attr_id = ga.attr_id
                 AND a.attr_type = 1
                 AND " . db_create_in($goods_id_array, 'goods_id');

@@ -10,7 +10,7 @@ class RegFieldsController extends InitController
     public function initialize()
     {
         parent::initialize();
-        $exc = new exchange($ecs->table("reg_fields"), $db, 'id', 'reg_field_name');
+        $exc = new exchange(table("reg_fields"), $db, 'id', 'reg_field_name');
     }
 
     /*------------------------------------------------------ */
@@ -20,7 +20,7 @@ class RegFieldsController extends InitController
     public function listAction()
     {
         $fields = array();
-        $fields = $db->getAll("SELECT * FROM " . $ecs->table('reg_fields') . " ORDER BY dis_order, id");
+        $fields = $db->getAll("SELECT * FROM " . table('reg_fields') . " ORDER BY dis_order, id");
 
         $this->assign('ur_here', $_LANG['021_reg_fields']);
         $this->assign('action_link', array('text' => $_LANG['add_reg_field'], 'href' => 'reg_fields.php?act=add'));
@@ -39,7 +39,7 @@ class RegFieldsController extends InitController
     public function queryAction()
     {
         $fields = array();
-        $fields = $db->getAll("SELECT * FROM " . $ecs->table('reg_fields') . "ORDER BY id");
+        $fields = $db->getAll("SELECT * FROM " . table('reg_fields') . "ORDER BY id");
 
         $this->assign('reg_fields', $fields);
         return make_json_result($smarty->fetch('reg_fields.htm'));
@@ -81,7 +81,7 @@ class RegFieldsController extends InitController
             sys_msg(sprintf($_LANG['field_name_exist'], trim($_POST['reg_field_name'])), 1);
         }
 
-        $sql = "INSERT INTO " . $ecs->table('reg_fields') . "( " .
+        $sql = "INSERT INTO " . table('reg_fields') . "( " .
             "reg_field_name, dis_order, display, is_need" .
             ") VALUES (" .
             "'$_POST[reg_field_name]', '$_POST[reg_field_order]', '$_POST[reg_field_display]', '$_POST[reg_field_need]')";
@@ -107,7 +107,7 @@ class RegFieldsController extends InitController
         $form_action = 'update';
 
         $sql = "SELECT id AS reg_field_id, reg_field_name, dis_order AS reg_field_order, display AS reg_field_display, is_need AS reg_field_need FROM " .
-            $ecs->table('reg_fields') . " WHERE id='$_REQUEST[id]'";
+            table('reg_fields') . " WHERE id='$_REQUEST[id]'";
         $reg_field = $db->getRow($sql);
 
         $this->assign('reg_field', $reg_field);
@@ -132,7 +132,7 @@ class RegFieldsController extends InitController
             sys_msg(sprintf($_LANG['field_name_exist'], trim($_POST['reg_field_name'])), 1);
         }
 
-        $sql = "UPDATE " . $ecs->table('reg_fields') . " SET `reg_field_name` = '$_POST[reg_field_name]', `dis_order` = '$_POST[reg_field_order]', `display` = '$_POST[reg_field_display]', `is_need` = '$_POST[reg_field_need]' WHERE `id` = '$_POST[id]'";
+        $sql = "UPDATE " . table('reg_fields') . " SET `reg_field_name` = '$_POST[reg_field_name]', `dis_order` = '$_POST[reg_field_order]', `display` = '$_POST[reg_field_display]', `is_need` = '$_POST[reg_field_need]' WHERE `id` = '$_POST[id]'";
         $db->query($sql);
 
         /* 管理员日志 */
@@ -155,7 +155,7 @@ class RegFieldsController extends InitController
 
         if ($exc->drop($field_id)) {
             /* 删除会员扩展信息表的相应信息 */
-            $sql = "DELETE FROM " . $GLOBALS['ecs']->table('reg_extend_info') . " WHERE reg_field_id = '" . $field_id . "'";
+            $sql = "DELETE FROM " . table('reg_extend_info') . " WHERE reg_field_id = '" . $field_id . "'";
             @$GLOBALS['db']->query($sql);
 
             admin_log(addslashes($field_name), 'remove', 'reg_fields');

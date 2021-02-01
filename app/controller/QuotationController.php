@@ -16,7 +16,7 @@ class QuotationController extends InitController
             $this->assign('cfg', $_CFG);
             $where = get_quotation_where($_POST);
             $sql = "SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, c.cat_name AS goods_category,p.product_id,p.product_number,p.goods_attr" .
-                " FROM " . $ecs->table('goods') . " AS g LEFT JOIN " . $ecs->table('category') . " AS c ON g.cat_id = c.cat_id LEFT JOIN " . $ecs->table('products') . "as p  On g.goods_id=p.goods_id" . $where . " AND is_on_sale = 1 AND is_alone_sale = 1 ";
+                " FROM " . table('goods') . " AS g LEFT JOIN " . table('category') . " AS c ON g.cat_id = c.cat_id LEFT JOIN " . table('products') . "as p  On g.goods_id=p.goods_id" . $where . " AND is_on_sale = 1 AND is_alone_sale = 1 ";
             $goods_list = $db->getAll($sql);
 
             foreach ($goods_list as $key => $val) {
@@ -34,10 +34,10 @@ class QuotationController extends InitController
                 }
                 $goods_list[$key]['goods_key'] = $key;
             }
-            $user_rank = $db->getAll("SELECT * FROM " . $ecs->table('user_rank') . "WHERE show_price = 1 OR rank_id = '$_SESSION[user_rank]'");
+            $user_rank = $db->getAll("SELECT * FROM " . table('user_rank') . "WHERE show_price = 1 OR rank_id = '$_SESSION[user_rank]'");
             $rank_point = 0;
             if (!empty($_SESSION['user_id'])) {
-                $rank_point = $db->getOne("SELECT rank_points FROM " . $ecs->table('users') . " WHERE user_id = '$_SESSION[user_id]'");
+                $rank_point = $db->getOne("SELECT rank_points FROM " . table('users') . " WHERE user_id = '$_SESSION[user_id]'");
             }
             $user_rank = calc_user_rank($user_rank, $rank_point);
             $user_men = serve_user($goods_list);
@@ -100,8 +100,8 @@ class QuotationController extends InitController
             $goods_key = $all_list['goods_key'];
             $price = $all_list['members_price'];
             $sql = "SELECT rank_id, IFNULL(mp.user_price, r.discount * $price / 100) AS price, r.rank_name, r.discount " .
-                'FROM ' . $GLOBALS['ecs']->table('user_rank') . ' AS r ' .
-                'LEFT JOIN ' . $GLOBALS['ecs']->table('member_price') . " AS mp " .
+                'FROM ' . table('user_rank') . ' AS r ' .
+                'LEFT JOIN ' . table('member_price') . " AS mp " .
                 "ON mp.goods_id = '$goods_id' AND mp.user_rank = r.rank_id " .
                 "WHERE r.show_price = 1 OR r.rank_id = '$_SESSION[user_rank]'";
             $res = $GLOBALS['db']->getAll($sql);
@@ -119,7 +119,7 @@ class QuotationController extends InitController
     public function product_info($goods_attr, $goods_id)
     {
         $goods_attr = str_replace('|', ' OR goods_attr_id=', $goods_attr);
-        $sql = "SELECT attr_value,attr_price FROM " . $GLOBALS['ecs']->table('goods_attr') . " WHERE goods_id='$goods_id' AND (goods_attr_id = $goods_attr)";
+        $sql = "SELECT attr_value,attr_price FROM " . table('goods_attr') . " WHERE goods_id='$goods_id' AND (goods_attr_id = $goods_attr)";
         $result = $GLOBALS['db']->getAll($sql);
         $i = 1;
         $count = count($result);

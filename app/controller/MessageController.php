@@ -88,9 +88,9 @@ class MessageController extends InitController
 
         $this->assign('enabled_mes_captcha', (intval($_CFG['captcha']) & CAPTCHA_MESSAGE));
 
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('comment') . " WHERE STATUS =1 AND comment_type =0 ";
+        $sql = "SELECT COUNT(*) FROM " . table('comment') . " WHERE STATUS =1 AND comment_type =0 ";
         $record_count = $db->getOne($sql);
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('feedback') . " WHERE `msg_area`='1' AND `msg_status` = '1' ";
+        $sql = "SELECT COUNT(*) FROM " . table('feedback') . " WHERE `msg_area`='1' AND `msg_status` = '1' ";
         $record_count += $db->getOne($sql);
 
         /* 获取留言的数量 */
@@ -119,11 +119,11 @@ class MessageController extends InitController
         $msg = array();
 
         $sql = "(SELECT 'comment' AS tablename,   comment_id AS ID, content AS msg_content, null AS msg_title, add_time AS msg_time, id_value AS id_value, comment_rank AS comment_rank, null AS message_img, user_name AS user_name, '6' AS msg_type ";
-        $sql .= " FROM " . $GLOBALS['ecs']->table('comment');
+        $sql .= " FROM " . table('comment');
         $sql .= "WHERE STATUS =1 AND comment_type =0) ";
         $sql .= " UNION ";
         $sql .= "(SELECT 'feedback' AS tablename, msg_id AS ID, msg_content AS msg_content, msg_title AS msg_title, msg_time AS msg_time, null AS id_value, null AS comment_rank, message_img AS message_img, user_name AS user_name, msg_type AS msg_type ";
-        $sql .= " FROM " . $GLOBALS['ecs']->table('feedback');
+        $sql .= " FROM " . table('feedback');
         $sql .= " WHERE `msg_area`='1' AND `msg_status` = '1') ";
         $sql .= " ORDER BY msg_time DESC ";
 
@@ -148,7 +148,7 @@ class MessageController extends InitController
 
                 /*如果id_value为true为商品评论,根据商品id取出商品名称*/
                 if ($rows['id_value']) {
-                    $sql_goods = "SELECT goods_name FROM " . $GLOBALS['ecs']->table('goods');
+                    $sql_goods = "SELECT goods_name FROM " . table('goods');
                     $sql_goods .= "WHERE goods_id= " . $rows['id_value'];
                     $goods_res = $GLOBALS['db']->getRow($sql_goods);
                     $msg[$rows['msg_time']]['goods_name'] = $goods_res['goods_name'];
@@ -164,11 +164,11 @@ class MessageController extends InitController
 
                 if ($table_name == 'feedback') {
                     $sql = "SELECT user_name AS re_name, user_email AS re_email, msg_time AS re_time, msg_content AS re_content ,parent_id" .
-                        " FROM " . $GLOBALS['ecs']->table('feedback') .
+                        " FROM " . table('feedback') .
                         " WHERE parent_id = '" . $id . "'";
                 } else {
                     $sql = 'SELECT user_name AS re_name, email AS re_email, add_time AS re_time, content AS re_content ,parent_id
-                FROM ' . $GLOBALS['ecs']->table('comment') .
+                FROM ' . table('comment') .
                         " WHERE parent_id = $id ";
                 }
                 $reply = $GLOBALS['db']->getRow($sql);

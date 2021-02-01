@@ -104,7 +104,7 @@ class SnatchController extends InitController
         }
 
         /* 获取活动基本信息用于校验 */
-        $sql = 'SELECT act_name AS snatch_name, end_time, ext_info FROM ' . $GLOBALS['ecs']->table('goods_activity') . " WHERE act_id ='$id'";
+        $sql = 'SELECT act_name AS snatch_name, end_time, ext_info FROM ' . table('goods_activity') . " WHERE act_id ='$id'";
         $row = $db->getRow($sql, 'SILENT');
 
         if ($row) {
@@ -136,7 +136,7 @@ class SnatchController extends InitController
         }
 
         /* 检查用户是否已经出同一价格 */
-        $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('snatch_log') . " WHERE snatch_id = '$id' AND user_id = '$_SESSION[user_id]' AND bid_price = '$price'";
+        $sql = 'SELECT COUNT(*) FROM ' . table('snatch_log') . " WHERE snatch_id = '$id' AND user_id = '$_SESSION[user_id]' AND bid_price = '$price'";
         if ($GLOBALS['db']->getOne($sql) > 0) {
             $result['error'] = 1;
             $result['content'] = sprintf($GLOBALS['_LANG']['also_bid'], price_format($price, false));
@@ -144,7 +144,7 @@ class SnatchController extends InitController
         }
 
         /* 检查用户积分是否足够 */
-        $sql = 'SELECT pay_points FROM ' . $ecs->table('users') . " WHERE user_id = '" . $_SESSION['user_id'] . "'";
+        $sql = 'SELECT pay_points FROM ' . table('users') . " WHERE user_id = '" . $_SESSION['user_id'] . "'";
         $pay_points = $db->getOne($sql);
         if ($row['cost_points'] > $pay_points) {
             $result['error'] = 1;
@@ -153,7 +153,7 @@ class SnatchController extends InitController
         }
 
         log_account_change($_SESSION['user_id'], 0, 0, 0, 0 - $row['cost_points'], sprintf($_LANG['snatch_log'], $row['snatch_name'])); //扣除用户积分
-        $sql = 'INSERT INTO ' . $ecs->table('snatch_log') . '(snatch_id, user_id, bid_price, bid_time) VALUES' .
+        $sql = 'INSERT INTO ' . table('snatch_log') . '(snatch_id, user_id, bid_price, bid_time) VALUES' .
             "('$id', '" . $_SESSION['user_id'] . "', '" . $price . "', " . gmtime() . ")";
         $db->query($sql);
 
@@ -209,8 +209,8 @@ class SnatchController extends InitController
 
             $attr_list = array();
             $sql = "SELECT a.attr_name, g.attr_value " .
-                "FROM " . $ecs->table('goods_attr') . " AS g, " .
-                $ecs->table('attribute') . " AS a " .
+                "FROM " . table('goods_attr') . " AS g, " .
+                table('attribute') . " AS a " .
                 "WHERE g.attr_id = a.attr_id " .
                 "AND g.goods_attr_id " . db_create_in($goods_attr_id);
             $res = $db->query($sql);
@@ -245,7 +245,7 @@ class SnatchController extends InitController
             'is_gift' => 0
         );
 
-        $db->autoExecute($ecs->table('cart'), $cart, 'INSERT');
+        $db->autoExecute(table('cart'), $cart, 'INSERT');
 
         /* 记录购物流程类型：夺宝奇兵 */
         $_SESSION['flow_type'] = CART_SNATCH_GOODS;
@@ -272,12 +272,12 @@ class SnatchController extends InitController
         $bid_price = array();
         if (!empty($_SESSION['user_id'])) {
             /* 取得用户所有价格 */
-            $sql = 'SELECT bid_price FROM ' . $GLOBALS['ecs']->table('snatch_log') . " WHERE snatch_id = '$id' AND user_id = '$_SESSION[user_id]' ORDER BY bid_time DESC";
+            $sql = 'SELECT bid_price FROM ' . table('snatch_log') . " WHERE snatch_id = '$id' AND user_id = '$_SESSION[user_id]' ORDER BY bid_time DESC";
             $my_price = $GLOBALS['db']->getCol($sql);
 
             if ($my_price) {
                 /* 取得用户唯一价格 */
-                $sql = 'SELECT bid_price , count(*) AS num FROM ' . $GLOBALS['ecs']->table('snatch_log') . "  WHERE snatch_id ='$id' AND bid_price " . db_create_in(join(',', $my_price)) . ' GROUP BY bid_price HAVING num = 1';
+                $sql = 'SELECT bid_price , count(*) AS num FROM ' . table('snatch_log') . "  WHERE snatch_id ='$id' AND bid_price " . db_create_in(join(',', $my_price)) . ' GROUP BY bid_price HAVING num = 1';
                 $my_only_price = $GLOBALS['db']->getCol($sql);
             }
 
@@ -287,13 +287,13 @@ class SnatchController extends InitController
                 );
             }
 
-            $sql = 'SELECT pay_points FROM ' . $GLOBALS['ecs']->table('users') . " WHERE user_id = '$_SESSION[user_id]'";
+            $sql = 'SELECT pay_points FROM ' . table('users') . " WHERE user_id = '$_SESSION[user_id]'";
             $pay_points = $GLOBALS['db']->getOne($sql);
             $pay_points = $pay_points . $GLOBALS['_CFG']['integral_name'];
         }
 
         /* 活动结束时间 */
-        $sql = 'SELECT end_time FROM ' . $GLOBALS['ecs']->table('goods_activity') .
+        $sql = 'SELECT end_time FROM ' . table('goods_activity') .
             " WHERE act_id = '$id' AND act_type=" . GAT_SNATCH;
         $end_time = $GLOBALS['db']->getOne($sql);
         $my_price = array(
@@ -315,7 +315,7 @@ class SnatchController extends InitController
      */
     public function get_price_list($id, $num = 5)
     {
-        $sql = 'SELECT t1.log_id, t1.bid_price, t2.user_name FROM ' . $GLOBALS['ecs']->table('snatch_log') . ' AS t1, ' . $GLOBALS['ecs']->table('users') . " AS t2 WHERE snatch_id = '$id' AND t1.user_id = t2.user_id ORDER BY t1.log_id DESC LIMIT $num";
+        $sql = 'SELECT t1.log_id, t1.bid_price, t2.user_name FROM ' . table('snatch_log') . ' AS t1, ' . table('users') . " AS t2 WHERE snatch_id = '$id' AND t1.user_id = t2.user_id ORDER BY t1.log_id DESC LIMIT $num";
         $res = $GLOBALS['db']->query($sql);
         $price_list = array();
         while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -336,7 +336,7 @@ class SnatchController extends InitController
     {
         $now = gmtime();
         $sql = 'SELECT act_id AS snatch_id, act_name AS snatch_name, end_time ' .
-            ' FROM ' . $GLOBALS['ecs']->table('goods_activity') .
+            ' FROM ' . table('goods_activity') .
             " WHERE start_time <= '$now' AND act_type=" . GAT_SNATCH .
             " ORDER BY end_time DESC LIMIT $num";
         $snatch_list = array();
@@ -367,10 +367,10 @@ class SnatchController extends InitController
             "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " .
             "g.promote_price, g.promote_start_date, g.promote_end_date, g.goods_brief, g.goods_thumb, " .
             "ga.act_name AS snatch_name, ga.start_time, ga.end_time, ga.ext_info, ga.act_desc AS `desc` " .
-            "FROM " . $GLOBALS['ecs']->table('goods_activity') . " AS ga " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g " .
+            "FROM " . table('goods_activity') . " AS ga " .
+            "LEFT JOIN " . table('goods') . " AS g " .
             "ON g.goods_id = ga.goods_id " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp " .
+            "LEFT JOIN " . table('member_price') . " AS mp " .
             "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
             "WHERE ga.act_id = '$id' AND g.is_delete = 0";
 
@@ -417,7 +417,7 @@ class SnatchController extends InitController
     public function get_last_snatch()
     {
         $now = gmtime();
-        $sql = 'SELECT act_id FROM ' . $GLOBALS['ecs']->table('goods_activity') .
+        $sql = 'SELECT act_id FROM ' . table('goods_activity') .
             " WHERE  start_time < '$now' AND end_time > '$now' AND act_type = " . GAT_SNATCH .
             " ORDER BY end_time ASC LIMIT 1";
         return $GLOBALS['db']->getOne($sql);

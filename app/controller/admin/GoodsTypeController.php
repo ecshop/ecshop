@@ -10,7 +10,7 @@ class GoodsTypeController extends InitController
     public function initialize()
     {
         parent::initialize();
-        $exc = new exchange($ecs->table("goods_type"), $db, 'cat_id', 'cat_name');
+        $exc = new exchange(table("goods_type"), $db, 'cat_id', 'cat_name');
     }
     /*------------------------------------------------------ */
     //-- 管理界面
@@ -30,7 +30,7 @@ class GoodsTypeController extends InitController
         $this->assign('record_count', $good_type_list['record_count']);
         $this->assign('page_count', $good_type_list['page_count']);
 
-        $query = $db->query("SELECT a.cat_id FROM " . $ecs->table('attribute') . " AS a RIGHT JOIN " . $ecs->table('goods_attr') . " AS g ON g.attr_id = a.attr_id GROUP BY a.cat_id");
+        $query = $db->query("SELECT a.cat_id FROM " . table('attribute') . " AS a RIGHT JOIN " . table('goods_attr') . " AS g ON g.attr_id = a.attr_id GROUP BY a.cat_id");
         while ($row = $db->fetchRow($query)) {
             $good_in_type[$row['cat_id']] = 1;
         }
@@ -125,7 +125,7 @@ class GoodsTypeController extends InitController
         $goods_type['attr_group'] = sub_str($_POST['attr_group'], 255);
         $goods_type['enabled'] = intval($_POST['enabled']);
 
-        if ($db->autoExecute($ecs->table('goods_type'), $goods_type) !== false) {
+        if ($db->autoExecute(table('goods_type'), $goods_type) !== false) {
             $links = array(array('href' => 'goods_type.php?act=manage', 'text' => $_LANG['back_list']));
             sys_msg($_LANG['add_goodstype_success'], 0, $links);
         } else {
@@ -165,7 +165,7 @@ class GoodsTypeController extends InitController
         $cat_id = intval($_POST['cat_id']);
         $old_groups = get_attr_groups($cat_id);
 
-        if ($db->autoExecute($ecs->table('goods_type'), $goods_type, 'UPDATE', "cat_id='$cat_id'") !== false) {
+        if ($db->autoExecute(table('goods_type'), $goods_type, 'UPDATE', "cat_id='$cat_id'") !== false) {
             /* 对比原来的分组 */
             $new_groups = explode("\n", str_replace("\r", '', $goods_type['attr_group']));  // 新的分组
 
@@ -206,11 +206,11 @@ class GoodsTypeController extends InitController
             admin_log(addslashes($name), 'remove', 'goods_type');
 
             /* 清除该类型下的所有属性 */
-            $sql = "SELECT attr_id FROM " . $ecs->table('attribute') . " WHERE cat_id = '$id'";
+            $sql = "SELECT attr_id FROM " . table('attribute') . " WHERE cat_id = '$id'";
             $arr = $db->getCol($sql);
 
-            $GLOBALS['db']->query("DELETE FROM " . $ecs->table('attribute') . " WHERE attr_id " . db_create_in($arr));
-            $GLOBALS['db']->query("DELETE FROM " . $ecs->table('goods_attr') . " WHERE attr_id " . db_create_in($arr));
+            $GLOBALS['db']->query("DELETE FROM " . table('attribute') . " WHERE attr_id " . db_create_in($arr));
+            $GLOBALS['db']->query("DELETE FROM " . table('goods_attr') . " WHERE attr_id " . db_create_in($arr));
 
             $url = 'goods_type.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
@@ -234,15 +234,15 @@ class GoodsTypeController extends InitController
             $filter = array();
 
             /* 记录总数以及页数 */
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_type');
+            $sql = "SELECT COUNT(*) FROM " . table('goods_type');
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
             $filter = page_and_size($filter);
 
             /* 查询记录 */
             $sql = "SELECT t.*, COUNT(a.cat_id) AS attr_count " .
-                "FROM " . $GLOBALS['ecs']->table('goods_type') . " AS t " .
-                "LEFT JOIN " . $GLOBALS['ecs']->table('attribute') . " AS a ON a.cat_id=t.cat_id " .
+                "FROM " . table('goods_type') . " AS t " .
+                "LEFT JOIN " . table('attribute') . " AS a ON a.cat_id=t.cat_id " .
                 "GROUP BY t.cat_id " .
                 'LIMIT ' . $filter['start'] . ',' . $filter['page_size'];
             set_filter($filter, $sql);
@@ -269,7 +269,7 @@ class GoodsTypeController extends InitController
      */
     public function get_goodstype_info($cat_id)
     {
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('goods_type') . " WHERE cat_id='$cat_id'";
+        $sql = "SELECT * FROM " . table('goods_type') . " WHERE cat_id='$cat_id'";
 
         return $GLOBALS['db']->getRow($sql);
     }
@@ -285,7 +285,7 @@ class GoodsTypeController extends InitController
      */
     public function update_attribute_group($cat_id, $old_group, $new_group)
     {
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('attribute') .
+        $sql = "UPDATE " . table('attribute') .
             " SET attr_group='$new_group' WHERE cat_id='$cat_id' AND attr_group='$old_group'";
         $GLOBALS['db']->query($sql);
     }

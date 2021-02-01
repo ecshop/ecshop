@@ -11,7 +11,7 @@ class AreaManageController extends InitController
     {
         parent::initialize();
 
-        $exc = new exchange($ecs->table('region'), $db, 'region_id', 'region_name');
+        $exc = new exchange(table('region'), $db, 'region_id', 'region_name');
     }
 
     /*------------------------------------------------------ */
@@ -87,7 +87,7 @@ class AreaManageController extends InitController
             return make_json_error($_LANG['region_name_exist']);
         }
 
-        $sql = "INSERT INTO " . $ecs->table('region') . " (parent_id, region_name, region_type) " .
+        $sql = "INSERT INTO " . table('region') . " (parent_id, region_name, region_type) " .
             "VALUES ('$parent_id', '$region_name', '$region_type')";
         if ($GLOBALS['db']->query($sql, 'SILENT')) {
             admin_log($region_name, 'add', 'area');
@@ -144,11 +144,11 @@ class AreaManageController extends InitController
 
         $id = intval($_REQUEST['id']);
 
-        $sql = "SELECT * FROM " . $ecs->table('region') . " WHERE region_id = '$id'";
+        $sql = "SELECT * FROM " . table('region') . " WHERE region_id = '$id'";
         $region = $db->getRow($sql);
 
 //    /* 如果底下有下级区域,不能删除 */
-//    $sql = "SELECT COUNT(*) FROM " . $ecs->table('region') . " WHERE parent_id = '$id'";
+//    $sql = "SELECT COUNT(*) FROM " . table('region') . " WHERE parent_id = '$id'";
 //    if ($db->getOne($sql) > 0)
 //    {
 //        return make_json_error($_LANG['parent_id_exist']);
@@ -166,7 +166,7 @@ class AreaManageController extends InitController
                 }
             }
         }
-        $sql = "DELETE FROM " . $ecs->table("region") . "WHERE region_id" . db_create_in($delete_region);
+        $sql = "DELETE FROM " . table("region") . "WHERE region_id" . db_create_in($delete_region);
         $db->query($sql);
         if ($exc->drop($id)) {
             admin_log(addslashes($region['region_name']), 'remove', 'area');
@@ -188,7 +188,7 @@ class AreaManageController extends InitController
         if (empty($region_id)) {
             return $regions_id;
         }
-        $sql = "SELECT region_id FROM " . $GLOBALS['ecs']->table("region") . "WHERE parent_id " . db_create_in($region_id);
+        $sql = "SELECT region_id FROM " . table("region") . "WHERE parent_id " . db_create_in($region_id);
         $result = $GLOBALS['db']->getAll($sql);
         foreach ($result as $val) {
             $regions_id[] = $val['region_id'];

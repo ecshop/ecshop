@@ -10,7 +10,7 @@ class PaymentController extends InitController
     public function initialize()
     {
         parent::initialize();
-        $exc = new exchange($ecs->table('payment'), $db, 'pay_code', 'pay_name');
+        $exc = new exchange(table('payment'), $db, 'pay_code', 'pay_name');
     }
 
     /*------------------------------------------------------ */
@@ -21,7 +21,7 @@ class PaymentController extends InitController
     {
         /* 查询数据库中启用的支付方式 */
         $pay_list = array();
-        $sql = "SELECT * FROM " . $ecs->table('payment') . " WHERE enabled = '1' ORDER BY pay_order";
+        $sql = "SELECT * FROM " . table('payment') . " WHERE enabled = '1' ORDER BY pay_order";
         $res = $db->query($sql);
         while ($row = $db->fetchRow($res)) {
             $pay_list[$row['pay_code']] = $row;
@@ -164,7 +164,7 @@ class PaymentController extends InitController
             die('invalid parameter');
         }
 
-        $sql = "SELECT * FROM " . $ecs->table('payment') . " WHERE pay_code = '$_REQUEST[code]' AND enabled = '1'";
+        $sql = "SELECT * FROM " . table('payment') . " WHERE pay_code = '$_REQUEST[code]' AND enabled = '1'";
         $pay = $db->getRow($sql);
         if (empty($pay)) {
             $links[] = array('text' => $_LANG['back_list'], 'href' => 'payment.php?act=list');
@@ -238,7 +238,7 @@ class PaymentController extends InitController
             sys_msg($_LANG['payment_name'] . $_LANG['empty']);
         }
 
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('payment') .
+        $sql = "SELECT COUNT(*) FROM " . table('payment') .
             " WHERE pay_name = '$_POST[pay_name]' AND pay_code <> '$_POST[pay_code]'";
         if ($db->getOne($sql) > 0) {
             sys_msg($_LANG['payment_name'] . $_LANG['repeat'], 1);
@@ -262,7 +262,7 @@ class PaymentController extends InitController
         $link[] = array('text' => $_LANG['back_list'], 'href' => 'payment.php?act=list');
         if ($_POST['pay_id']) {
             /* 编辑 */
-            $sql = "UPDATE " . $ecs->table('payment') .
+            $sql = "UPDATE " . table('payment') .
                 "SET pay_name = '$_POST[pay_name]'," .
                 "    pay_desc = '$_POST[pay_desc]'," .
                 "    pay_config = '$pay_config', " .
@@ -276,10 +276,10 @@ class PaymentController extends InitController
             sys_msg($_LANG['edit_ok'], 0, $link);
         } else {
             /* 安装，检查该支付方式是否曾经安装过 */
-            $sql = "SELECT COUNT(*) FROM " . $ecs->table('payment') . " WHERE pay_code = '$_REQUEST[pay_code]'";
+            $sql = "SELECT COUNT(*) FROM " . table('payment') . " WHERE pay_code = '$_REQUEST[pay_code]'";
             if ($db->getOne($sql) > 0) {
                 /* 该支付方式已经安装过, 将该支付方式的状态设置为 enable */
-                $sql = "UPDATE " . $ecs->table('payment') .
+                $sql = "UPDATE " . table('payment') .
                     "SET pay_name = '$_POST[pay_name]'," .
                     "    pay_desc = '$_POST[pay_desc]'," .
                     "    pay_config = '$pay_config'," .
@@ -289,7 +289,7 @@ class PaymentController extends InitController
                 $db->query($sql);
             } else {
                 /* 该支付方式没有安装过, 将该支付方式的信息添加到数据库 */
-                $sql = "INSERT INTO " . $ecs->table('payment') . " (pay_code, pay_name, pay_desc, pay_config, is_cod, pay_fee, enabled, is_online)" .
+                $sql = "INSERT INTO " . table('payment') . " (pay_code, pay_name, pay_desc, pay_config, is_cod, pay_fee, enabled, is_online)" .
                     "VALUES ('$_POST[pay_code]', '$_POST[pay_name]', '$_POST[pay_desc]', '$pay_config', '$_POST[is_cod]', '$pay_fee', 1, '$_POST[is_online]')";
                 $db->query($sql);
             }
@@ -309,7 +309,7 @@ class PaymentController extends InitController
         admin_priv('payment');
 
         /* 把 enabled 设为 0 */
-        $sql = "UPDATE " . $ecs->table('payment') .
+        $sql = "UPDATE " . table('payment') .
             "SET enabled = '0' " .
             "WHERE pay_code = '$_REQUEST[code]' LIMIT 1";
         $db->query($sql);

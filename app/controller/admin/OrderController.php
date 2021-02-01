@@ -127,7 +127,7 @@ class OrderController extends InitController
         }
 
         /* 如果管理员属于某个办事处，检查该订单是否也属于这个办事处 */
-        $sql = "SELECT agency_id FROM " . $ecs->table('admin_user') . " WHERE user_id = '$_SESSION[admin_id]'";
+        $sql = "SELECT agency_id FROM " . table('admin_user') . " WHERE user_id = '$_SESSION[admin_id]'";
         $agency_id = $db->getOne($sql);
         if ($agency_id > 0) {
             if ($order['agency_id'] != $agency_id) {
@@ -161,7 +161,7 @@ class OrderController extends InitController
                 }
             }
         }
-        $sql = "SELECT MAX(order_id) FROM " . $ecs->table('order_info') . " as o WHERE order_id < '$order[order_id]'";
+        $sql = "SELECT MAX(order_id) FROM " . table('order_info') . " as o WHERE order_id < '$order[order_id]'";
         if ($agency_id > 0) {
             $sql .= " AND agency_id = '$agency_id'";
         }
@@ -169,7 +169,7 @@ class OrderController extends InitController
             $sql .= $where;
         }
         $this->assign('prev_id', $db->getOne($sql));
-        $sql = "SELECT MIN(order_id) FROM " . $ecs->table('order_info') . " as o WHERE order_id > '$order[order_id]'";
+        $sql = "SELECT MIN(order_id) FROM " . table('order_info') . " as o WHERE order_id > '$order[order_id]'";
         if ($agency_id > 0) {
             $sql .= " AND agency_id = '$agency_id'";
         }
@@ -187,17 +187,17 @@ class OrderController extends InitController
         }
 
         /* 取得所有办事处 */
-        $sql = "SELECT agency_id, agency_name FROM " . $ecs->table('agency');
+        $sql = "SELECT agency_id, agency_name FROM " . table('agency');
         $this->assign('agency_list', $db->getAll($sql));
 
         /* 取得区域名 */
         $sql = "SELECT concat(IFNULL(c.region_name, ''), '  ', IFNULL(p.region_name, ''), " .
             "'  ', IFNULL(t.region_name, ''), '  ', IFNULL(d.region_name, '')) AS region " .
-            "FROM " . $ecs->table('order_info') . " AS o " .
-            "LEFT JOIN " . $ecs->table('region') . " AS c ON o.country = c.region_id " .
-            "LEFT JOIN " . $ecs->table('region') . " AS p ON o.province = p.region_id " .
-            "LEFT JOIN " . $ecs->table('region') . " AS t ON o.city = t.region_id " .
-            "LEFT JOIN " . $ecs->table('region') . " AS d ON o.district = d.region_id " .
+            "FROM " . table('order_info') . " AS o " .
+            "LEFT JOIN " . table('region') . " AS c ON o.country = c.region_id " .
+            "LEFT JOIN " . table('region') . " AS p ON o.province = p.region_id " .
+            "LEFT JOIN " . table('region') . " AS t ON o.city = t.region_id " .
+            "LEFT JOIN " . table('region') . " AS d ON o.district = d.region_id " .
             "WHERE o.order_id = '$order[order_id]'";
         $order['region'] = $db->getOne($sql);
 
@@ -223,12 +223,12 @@ class OrderController extends InitController
             $order['referer'] = $_LANG['from_goods_js'] . ' (' . $_LANG['from'] . $order['referer'] . ')';
         } else {
             /* 查询广告的名称 */
-            $ad_name = $db->getOne("SELECT ad_name FROM " . $ecs->table('ad') . " WHERE ad_id='$order[from_ad]'");
+            $ad_name = $db->getOne("SELECT ad_name FROM " . table('ad') . " WHERE ad_id='$order[from_ad]'");
             $order['referer'] = $_LANG['from_ad_js'] . $ad_name . ' (' . $_LANG['from'] . $order['referer'] . ')';
         }
 
         /* 此订单的发货备注(此订单的最后一条操作记录) */
-        $sql = "SELECT action_note FROM " . $ecs->table('order_action') .
+        $sql = "SELECT action_note FROM " . table('order_action') .
             " WHERE order_id = '$order[order_id]' AND shipping_status = 1 ORDER BY log_time DESC";
         $order['invoice_note'] = $db->getOne($sql);
 
@@ -250,14 +250,14 @@ class OrderController extends InitController
             } else {
                 $where = " WHERE min_points <= " . intval($user['rank_points']) . " ORDER BY min_points DESC ";
             }
-            $sql = "SELECT rank_name FROM " . $ecs->table('user_rank') . $where;
+            $sql = "SELECT rank_name FROM " . table('user_rank') . $where;
             $user['rank_name'] = $db->getOne($sql);
 
             // 用户红包数量
             $day = getdate();
             $today = local_mktime(23, 59, 59, $day['mon'], $day['mday'], $day['year']);
             $sql = "SELECT COUNT(*) " .
-                "FROM " . $ecs->table('bonus_type') . " AS bt, " . $ecs->table('user_bonus') . " AS ub " .
+                "FROM " . table('bonus_type') . " AS bt, " . table('user_bonus') . " AS ub " .
                 "WHERE bt.type_id = ub.bonus_type_id " .
                 "AND ub.user_id = '$order[user_id]' " .
                 "AND ub.order_id = 0 " .
@@ -267,7 +267,7 @@ class OrderController extends InitController
             $this->assign('user', $user);
 
             // 地址信息
-            $sql = "SELECT * FROM " . $ecs->table('user_address') . " WHERE user_id = '$order[user_id]'";
+            $sql = "SELECT * FROM " . table('user_address') . " WHERE user_id = '$order[user_id]'";
             $this->assign('address_list', $db->getAll($sql));
         }
 
@@ -275,12 +275,12 @@ class OrderController extends InitController
         $goods_list = array();
         $goods_attr = array();
         $sql = "SELECT o.*, IF(o.product_id > 0, p.product_number, g.goods_number) AS storage, o.goods_attr, g.suppliers_id, IFNULL(b.brand_name, '') AS brand_name, p.product_sn
-            FROM " . $ecs->table('order_goods') . " AS o
-                LEFT JOIN " . $ecs->table('products') . " AS p
+            FROM " . table('order_goods') . " AS o
+                LEFT JOIN " . table('products') . " AS p
                     ON p.product_id = o.product_id
-                LEFT JOIN " . $ecs->table('goods') . " AS g
+                LEFT JOIN " . table('goods') . " AS g
                     ON o.goods_id = g.goods_id
-                LEFT JOIN " . $ecs->table('brand') . " AS b
+                LEFT JOIN " . table('brand') . " AS b
                     ON g.brand_id = b.brand_id
             WHERE o.order_id = '$order[order_id]'";
         $res = $db->query($sql);
@@ -317,7 +317,7 @@ class OrderController extends InitController
 
         /* 取得订单操作记录 */
         $act_list = array();
-        $sql = "SELECT * FROM " . $ecs->table('order_action') . " WHERE order_id = '$order[order_id]' ORDER BY log_time DESC,action_id DESC";
+        $sql = "SELECT * FROM " . table('order_action') . " WHERE order_id = '$order[order_id]' ORDER BY log_time DESC,action_id DESC";
         $res = $db->query($sql);
         while ($row = $db->fetchRow($res)) {
             $row['order_status'] = $_LANG['os'][$row['order_status']];
@@ -351,7 +351,7 @@ class OrderController extends InitController
             $region_id .= !empty($_CFG['shop_province']) ? $_CFG['shop_province'] . ',' : '';
             $region_id .= !empty($_CFG['shop_city']) ? $_CFG['shop_city'] . ',' : '';
             $region_id = substr($region_id, 0, -1);
-            $region = $db->getAll("SELECT region_id, region_name FROM " . $ecs->table("region") . " WHERE region_id IN ($region_id)");
+            $region = $db->getAll("SELECT region_id, region_name FROM " . table("region") . " WHERE region_id IN ($region_id)");
             if (!empty($region)) {
                 foreach ($region as $region_data) {
                     $region_array[$region_data['region_id']] = $region_data['region_name'];
@@ -363,7 +363,7 @@ class OrderController extends InitController
             $this->assign('city', $region_array[$_CFG['shop_city']]);
             $this->assign('shop_address', $_CFG['shop_address']);
             $this->assign('service_phone', $_CFG['service_phone']);
-            $shipping = $db->getRow("SELECT * FROM " . $ecs->table("shipping") . " WHERE shipping_id = " . $order['shipping_id']);
+            $shipping = $db->getRow("SELECT * FROM " . table("shipping") . " WHERE shipping_id = " . $order['shipping_id']);
 
             //打印单模式
             if ($shipping['print_model'] == 2) {
@@ -435,7 +435,7 @@ class OrderController extends InitController
                 /* 代码 */
                 echo $smarty->fetch("str:" . $shipping['shipping_print']);
             } else {
-                $shipping_code = $db->getOne("SELECT shipping_code FROM " . $ecs->table('shipping') . " WHERE shipping_id=" . $order['shipping_id']);
+                $shipping_code = $db->getOne("SELECT shipping_code FROM " . table('shipping') . " WHERE shipping_id=" . $order['shipping_id']);
                 if ($shipping_code) {
                     include_once(ROOT_PATH . 'includes/modules/shipping/' . $shipping_code . '.php');
                 }
@@ -525,7 +525,7 @@ class OrderController extends InitController
         }
 
         /* 如果管理员属于某个办事处，检查该订单是否也属于这个办事处 */
-        $sql = "SELECT agency_id FROM " . $ecs->table('admin_user') . " WHERE user_id = '" . $_SESSION['admin_id'] . "'";
+        $sql = "SELECT agency_id FROM " . table('admin_user') . " WHERE user_id = '" . $_SESSION['admin_id'] . "'";
         $agency_id = $db->getOne($sql);
         if ($agency_id > 0) {
             if ($delivery_order['agency_id'] != $agency_id) {
@@ -533,7 +533,7 @@ class OrderController extends InitController
             }
 
             /* 取当前办事处信息 */
-            $sql = "SELECT agency_name FROM " . $ecs->table('agency') . " WHERE agency_id = '$agency_id' LIMIT 0, 1";
+            $sql = "SELECT agency_name FROM " . table('agency') . " WHERE agency_id = '$agency_id' LIMIT 0, 1";
             $agency_name = $db->getOne($sql);
             $delivery_order['agency_name'] = $agency_name;
         }
@@ -549,11 +549,11 @@ class OrderController extends InitController
         /* 取得区域名 */
         $sql = "SELECT concat(IFNULL(c.region_name, ''), '  ', IFNULL(p.region_name, ''), " .
             "'  ', IFNULL(t.region_name, ''), '  ', IFNULL(d.region_name, '')) AS region " .
-            "FROM " . $ecs->table('order_info') . " AS o " .
-            "LEFT JOIN " . $ecs->table('region') . " AS c ON o.country = c.region_id " .
-            "LEFT JOIN " . $ecs->table('region') . " AS p ON o.province = p.region_id " .
-            "LEFT JOIN " . $ecs->table('region') . " AS t ON o.city = t.region_id " .
-            "LEFT JOIN " . $ecs->table('region') . " AS d ON o.district = d.region_id " .
+            "FROM " . table('order_info') . " AS o " .
+            "LEFT JOIN " . table('region') . " AS c ON o.country = c.region_id " .
+            "LEFT JOIN " . table('region') . " AS p ON o.province = p.region_id " .
+            "LEFT JOIN " . table('region') . " AS t ON o.city = t.region_id " .
+            "LEFT JOIN " . table('region') . " AS d ON o.district = d.region_id " .
             "WHERE o.order_id = '" . $delivery_order['order_id'] . "'";
         $delivery_order['region'] = $db->getOne($sql);
 
@@ -562,7 +562,7 @@ class OrderController extends InitController
 
         /* 取得发货单商品 */
         $goods_sql = "SELECT *
-                  FROM " . $ecs->table('delivery_goods') . "
+                  FROM " . table('delivery_goods') . "
                   WHERE delivery_id = " . $delivery_order['delivery_id'];
         $goods_list = $GLOBALS['db']->getAll($goods_sql);
 
@@ -578,7 +578,7 @@ class OrderController extends InitController
 
         /* 取得订单操作记录 */
         $act_list = array();
-        $sql = "SELECT * FROM " . $ecs->table('order_action') . " WHERE order_id = '" . $delivery_order['order_id'] . "' AND action_place = 1 ORDER BY log_time DESC,action_id DESC";
+        $sql = "SELECT * FROM " . table('order_action') . " WHERE order_id = '" . $delivery_order['order_id'] . "' AND action_place = 1 ORDER BY log_time DESC,action_id DESC";
         $res = $db->query($sql);
         while ($row = $db->fetchRow($res)) {
             $row['order_status'] = $_LANG['os'][$row['order_status']];
@@ -635,7 +635,7 @@ class OrderController extends InitController
         /* 检查此单发货商品库存缺货情况 */
         $virtual_goods = array();
         $delivery_stock_sql = "SELECT DG.goods_id, DG.is_real, DG.product_id, SUM(DG.send_number) AS sums, IF(DG.product_id > 0, P.product_number, G.goods_number) AS storage, G.goods_name, DG.send_number
-        FROM " . $GLOBALS['ecs']->table('delivery_goods') . " AS DG, " . $GLOBALS['ecs']->table('goods') . " AS G, " . $GLOBALS['ecs']->table('products') . " AS P
+        FROM " . table('delivery_goods') . " AS DG, " . table('goods') . " AS G, " . table('products') . " AS P
         WHERE DG.goods_id = G.goods_id
         AND DG.delivery_id = '$delivery_id'
         AND DG.product_id = P.product_id
@@ -664,7 +664,7 @@ class OrderController extends InitController
             }
         } else {
             $delivery_stock_sql = "SELECT DG.goods_id, DG.is_real, SUM(DG.send_number) AS sums, G.goods_number, G.goods_name, DG.send_number
-        FROM " . $GLOBALS['ecs']->table('delivery_goods') . " AS DG, " . $GLOBALS['ecs']->table('goods') . " AS G
+        FROM " . table('delivery_goods') . " AS DG, " . table('goods') . " AS G
         WHERE DG.goods_id = G.goods_id
         AND DG.delivery_id = '$delivery_id'
         GROUP BY DG.goods_id ";
@@ -704,13 +704,13 @@ class OrderController extends InitController
                 if ($value['is_real'] != 0) {
                     //（货品）
                     if (!empty($value['product_id'])) {
-                        $minus_stock_sql = "UPDATE " . $GLOBALS['ecs']->table('products') . "
+                        $minus_stock_sql = "UPDATE " . table('products') . "
                                         SET product_number = product_number - " . $value['sums'] . "
                                         WHERE product_id = " . $value['product_id'];
                         $GLOBALS['db']->query($minus_stock_sql, 'SILENT');
                     }
 
-                    $minus_stock_sql = "UPDATE " . $GLOBALS['ecs']->table('goods') . "
+                    $minus_stock_sql = "UPDATE " . table('goods') . "
                                     SET goods_number = goods_number - " . $value['sums'] . "
                                     WHERE goods_id = " . $value['goods_id'];
 
@@ -724,7 +724,7 @@ class OrderController extends InitController
         $invoice_no = trim($invoice_no, '<br>');
         $_delivery['invoice_no'] = $invoice_no;
         $_delivery['status'] = 0; // 0，为已发货
-        $query = $db->autoExecute($ecs->table('delivery_order'), $_delivery, 'UPDATE', "delivery_id = $delivery_id", 'SILENT');
+        $query = $db->autoExecute(table('delivery_order'), $_delivery, 'UPDATE', "delivery_id = $delivery_id", 'SILENT');
         if (!$query) {
             /* 操作失败 */
             $links[] = array('text' => $_LANG['delivery_sn'] . $_LANG['detail'], 'href' => 'order.php?act=delivery_info&delivery_id=' . $delivery_id);
@@ -826,7 +826,7 @@ class OrderController extends InitController
         /* 取消当前发货单物流单号 */
         $_delivery['invoice_no'] = '';
         $_delivery['status'] = 2;
-        $query = $db->autoExecute($ecs->table('delivery_order'), $_delivery, 'UPDATE', "delivery_id = $delivery_id", 'SILENT');
+        $query = $db->autoExecute(table('delivery_order'), $_delivery, 'UPDATE', "delivery_id = $delivery_id", 'SILENT');
         if (!$query) {
             /* 操作失败 */
             $links[] = array('text' => $_LANG['delivery_sn'] . $_LANG['detail'], 'href' => 'order.php?act=delivery_info&delivery_id=' . $delivery_id);
@@ -866,7 +866,7 @@ class OrderController extends InitController
             // 检查此单发货商品数量
             $virtual_goods = array();
             $delivery_stock_sql = "SELECT DG.goods_id, DG.product_id, DG.is_real, SUM(DG.send_number) AS sums
-            FROM " . $GLOBALS['ecs']->table('delivery_goods') . " AS DG
+            FROM " . table('delivery_goods') . " AS DG
             WHERE DG.delivery_id = '$delivery_id'
             GROUP BY DG.goods_id ";
             $delivery_stock_result = $GLOBALS['db']->getAll($delivery_stock_sql);
@@ -878,13 +878,13 @@ class OrderController extends InitController
 
                 //（货品）
                 if (!empty($value['product_id'])) {
-                    $minus_stock_sql = "UPDATE " . $GLOBALS['ecs']->table('products') . "
+                    $minus_stock_sql = "UPDATE " . table('products') . "
                                     SET product_number = product_number + " . $value['sums'] . "
                                     WHERE product_id = " . $value['product_id'];
                     $GLOBALS['db']->query($minus_stock_sql, 'SILENT');
                 }
 
-                $minus_stock_sql = "UPDATE " . $GLOBALS['ecs']->table('goods') . "
+                $minus_stock_sql = "UPDATE " . table('goods') . "
                                 SET goods_number = goods_number + " . $value['sums'] . "
                                 WHERE goods_id = " . $value['goods_id'];
                 $GLOBALS['db']->query($minus_stock_sql, 'SILENT');
@@ -983,7 +983,7 @@ class OrderController extends InitController
         }
 
         /* 如果管理员属于某个办事处，检查该订单是否也属于这个办事处 */
-        $sql = "SELECT agency_id FROM " . $ecs->table('admin_user') . " WHERE user_id = '$_SESSION[admin_id]'";
+        $sql = "SELECT agency_id FROM " . table('admin_user') . " WHERE user_id = '$_SESSION[admin_id]'";
         $agency_id = $db->getOne($sql);
         if ($agency_id > 0) {
             if ($back_order['agency_id'] != $agency_id) {
@@ -991,7 +991,7 @@ class OrderController extends InitController
             }
 
             /* 取当前办事处信息*/
-            $sql = "SELECT agency_name FROM " . $ecs->table('agency') . " WHERE agency_id = '$agency_id' LIMIT 0, 1";
+            $sql = "SELECT agency_name FROM " . table('agency') . " WHERE agency_id = '$agency_id' LIMIT 0, 1";
             $agency_name = $db->getOne($sql);
             $back_order['agency_name'] = $agency_name;
         }
@@ -1007,11 +1007,11 @@ class OrderController extends InitController
         /* 取得区域名 */
         $sql = "SELECT concat(IFNULL(c.region_name, ''), '  ', IFNULL(p.region_name, ''), " .
             "'  ', IFNULL(t.region_name, ''), '  ', IFNULL(d.region_name, '')) AS region " .
-            "FROM " . $ecs->table('order_info') . " AS o " .
-            "LEFT JOIN " . $ecs->table('region') . " AS c ON o.country = c.region_id " .
-            "LEFT JOIN " . $ecs->table('region') . " AS p ON o.province = p.region_id " .
-            "LEFT JOIN " . $ecs->table('region') . " AS t ON o.city = t.region_id " .
-            "LEFT JOIN " . $ecs->table('region') . " AS d ON o.district = d.region_id " .
+            "FROM " . table('order_info') . " AS o " .
+            "LEFT JOIN " . table('region') . " AS c ON o.country = c.region_id " .
+            "LEFT JOIN " . table('region') . " AS p ON o.province = p.region_id " .
+            "LEFT JOIN " . table('region') . " AS t ON o.city = t.region_id " .
+            "LEFT JOIN " . table('region') . " AS d ON o.district = d.region_id " .
             "WHERE o.order_id = '" . $back_order['order_id'] . "'";
         $back_order['region'] = $db->getOne($sql);
 
@@ -1020,7 +1020,7 @@ class OrderController extends InitController
 
         /* 取得发货单商品 */
         $goods_sql = "SELECT *
-                  FROM " . $ecs->table('back_goods') . "
+                  FROM " . table('back_goods') . "
                   WHERE back_id = " . $back_order['back_id'];
         $goods_list = $GLOBALS['db']->getAll($goods_sql);
 
@@ -1088,7 +1088,7 @@ class OrderController extends InitController
 
             do {
                 $order['order_sn'] = get_order_sn();
-                if ($db->autoExecute($ecs->table('order_info'), $order, 'INSERT', '', 'SILENT')) {
+                if ($db->autoExecute(table('order_info'), $order, 'INSERT', '', 'SILENT')) {
                     break;
                 } else {
                     if ($db->errno() != 1062) {
@@ -1103,7 +1103,7 @@ class OrderController extends InitController
             admin_log($order['order_sn'], 'add', 'order');
 
             /* 插入 pay_log */
-            $sql = 'INSERT INTO ' . $ecs->table('pay_log') . " (order_id, order_amount, order_type, is_paid)" .
+            $sql = 'INSERT INTO ' . table('pay_log') . " (order_id, order_amount, order_type, is_paid)" .
                 " VALUES ('$order_id', 0, '" . PAY_ORDER . "', 0)";
             $db->query($sql);
 
@@ -1114,7 +1114,7 @@ class OrderController extends InitController
             if (isset($_POST['rec_id'])) {
                 foreach ($_POST['rec_id'] as $key => $rec_id) {
                     $sql = "SELECT goods_number " .
-                        'FROM ' . $GLOBALS['ecs']->table('goods') .
+                        'FROM ' . table('goods') .
                         "WHERE goods_id =" . $_POST['goods_id'][$key];
                     /* 取得参数 */
                     $goods_price = floatval($_POST['goods_price'][$key]);
@@ -1123,13 +1123,13 @@ class OrderController extends InitController
                     $product_id = intval($_POST['product_id'][$key]);
                     if ($product_id) {
                         $sql = "SELECT product_number " .
-                            'FROM ' . $GLOBALS['ecs']->table('products') .
+                            'FROM ' . table('products') .
                             " WHERE product_id =" . $_POST['product_id'][$key];
                     }
                     $goods_number_all = $db->getOne($sql);
                     if ($goods_number_all >= $goods_number) {
                         /* 修改 */
-                        $sql = "UPDATE " . $ecs->table('order_goods') .
+                        $sql = "UPDATE " . table('order_goods') .
                             " SET goods_price = '$goods_price', " .
                             "goods_number = '$goods_number', " .
                             "goods_attr = '$goods_attr' " .
@@ -1189,7 +1189,7 @@ class OrderController extends InitController
 
 
             $sql = "SELECT attr_value " .
-                'FROM ' . $GLOBALS['ecs']->table('goods_attr') .
+                'FROM ' . table('goods_attr') .
                 "WHERE goods_attr_id in($attr_list)";
             $res = $db->query($sql);
             while ($row = $db->fetchRow($res)) {
@@ -1198,7 +1198,7 @@ class OrderController extends InitController
 
             $attr_value = implode(",", $attr_value);
 
-            $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('products') . " WHERE goods_id = '$goods_id' LIMIT 0, 1";
+            $sql = "SELECT * FROM " . table('products') . " WHERE goods_id = '$goods_id' LIMIT 0, 1";
             $prod = $GLOBALS['db']->getRow($sql);
 
 
@@ -1223,23 +1223,23 @@ class OrderController extends InitController
 
             if (is_spec($goods_attr) && !empty($prod)) {
                 /* 插入订单商品 */
-                $sql = "INSERT INTO " . $ecs->table('order_goods') .
+                $sql = "INSERT INTO " . table('order_goods') .
                     "(order_id, goods_id, goods_name, goods_sn, product_id, goods_number, market_price, " .
                     "goods_price, goods_attr, is_real, extension_code, parent_id, is_gift, goods_attr_id) " .
                     "SELECT '$order_id', goods_id, goods_name, goods_sn, " . $product_info['product_id'] . ", " .
                     "'$goods_number', market_price, '$goods_price', '" . $attr_value . "', " .
                     "is_real, extension_code, 0, 0 , '" . implode(',', $goods_attr) . "' " .
-                    "FROM " . $ecs->table('goods') .
+                    "FROM " . table('goods') .
                     " WHERE goods_id = '$goods_id' LIMIT 1";
             } else {
-                $sql = "INSERT INTO " . $ecs->table('order_goods') .
+                $sql = "INSERT INTO " . table('order_goods') .
                     " (order_id, goods_id, goods_name, goods_sn, " .
                     "goods_number, market_price, goods_price, goods_attr, " .
                     "is_real, extension_code, parent_id, is_gift)" .
                     "SELECT '$order_id', goods_id, goods_name, goods_sn, " .
                     "'$goods_number', market_price, '$goods_price', '" . $attr_value . "', " .
                     "is_real, extension_code, 0, 0 " .
-                    "FROM " . $ecs->table('goods') .
+                    "FROM " . table('goods') .
                     " WHERE goods_id = '$goods_id' LIMIT 1";
             }
             $db->query($sql);
@@ -1249,7 +1249,7 @@ class OrderController extends InitController
 
                 //（货品）
                 if (!empty($product_info['product_id'])) {
-                    $sql = "UPDATE " . $ecs->table('products') . "
+                    $sql = "UPDATE " . table('products') . "
                                     SET product_number = product_number - " . $goods_number . "
                                     WHERE product_id = " . $product_info['product_id'];
 
@@ -1257,7 +1257,7 @@ class OrderController extends InitController
                 }
 
 
-                $sql = "UPDATE " . $ecs->table('goods') .
+                $sql = "UPDATE " . table('goods') .
                     " SET `goods_number` = goods_number - '" . $goods_number . "' " .
                     " WHERE `goods_id` = '" . $goods_id . "' LIMIT 1";
                 $db->query($sql);
@@ -1667,14 +1667,14 @@ class OrderController extends InitController
 
                 if ($old_order['bonus_id'] != $order['bonus_id']) {
                     if ($old_order['bonus_id'] > 0) {
-                        $sql = "UPDATE " . $ecs->table('user_bonus') .
+                        $sql = "UPDATE " . table('user_bonus') .
                             " SET used_time = 0, order_id = 0 " .
                             "WHERE bonus_id = '$old_order[bonus_id]' LIMIT 1";
                         $db->query($sql);
                     }
 
                     if ($order['bonus_id'] > 0) {
-                        $sql = "UPDATE " . $ecs->table('user_bonus') .
+                        $sql = "UPDATE " . table('user_bonus') .
                             " SET used_time = '" . gmtime() . "', order_id = '$order_id' " .
                             "WHERE bonus_id = '$order[bonus_id]' LIMIT 1";
                         $db->query($sql);
@@ -2002,15 +2002,15 @@ class OrderController extends InitController
 
             /* 如果使用库存，且下订单时减库存，则修改库存 */
             if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE) {
-                $goods = $db->getRow("SELECT goods_id, goods_number FROM " . $ecs->table('order_goods') . " WHERE rec_id = " . $rec_id);
-                $sql = "UPDATE " . $ecs->table('goods') .
+                $goods = $db->getRow("SELECT goods_id, goods_number FROM " . table('order_goods') . " WHERE rec_id = " . $rec_id);
+                $sql = "UPDATE " . table('goods') .
                     " SET `goods_number` = goods_number + '" . $goods['goods_number'] . "' " .
                     " WHERE `goods_id` = '" . $goods['goods_id'] . "' LIMIT 1";
                 $db->query($sql);
             }
 
             /* 删除 */
-            $sql = "DELETE FROM " . $ecs->table('order_goods') .
+            $sql = "DELETE FROM " . table('order_goods') .
                 " WHERE rec_id = '$rec_id' LIMIT 1";
             $db->query($sql);
 
@@ -2027,7 +2027,7 @@ class OrderController extends InitController
             if ($step_act == 'add') {
                 /* 如果是添加，删除订单，返回订单列表 */
                 if ($order_id > 0) {
-                    $sql = "DELETE FROM " . $ecs->table('order_info') .
+                    $sql = "DELETE FROM " . table('order_info') .
                         " WHERE order_id = '$order_id' LIMIT 1";
                     $db->query($sql);
                 }
@@ -2083,8 +2083,8 @@ class OrderController extends InitController
 
         /* 取得满足条件的订单 */
         $sql = "SELECT o.order_sn, u.user_name " .
-            "FROM " . $ecs->table('order_info') . " AS o " .
-            "LEFT JOIN " . $ecs->table('users') . " AS u ON o.user_id = u.user_id " .
+            "FROM " . table('order_info') . " AS o " .
+            "LEFT JOIN " . table('users') . " AS u ON o.user_id = u.user_id " .
             "WHERE o.user_id > 0 " .
             "AND o.extension_code = '' " . order_query_sql('unprocessed');
         $this->assign('order_list', $db->getAll($sql));
@@ -2220,7 +2220,7 @@ class OrderController extends InitController
             }
 
             /* 查询：如果管理员属于某个办事处，检查该订单是否也属于这个办事处 */
-            $sql = "SELECT agency_id FROM " . $ecs->table('admin_user') . " WHERE user_id = '$_SESSION[admin_id]'";
+            $sql = "SELECT agency_id FROM " . table('admin_user') . " WHERE user_id = '$_SESSION[admin_id]'";
             $agency_id = $db->getOne($sql);
             if ($agency_id > 0) {
                 if ($order['agency_id'] != $agency_id) {
@@ -2239,11 +2239,11 @@ class OrderController extends InitController
             /* 查询：取得区域名 */
             $sql = "SELECT concat(IFNULL(c.region_name, ''), '  ', IFNULL(p.region_name, ''), " .
                 "'  ', IFNULL(t.region_name, ''), '  ', IFNULL(d.region_name, '')) AS region " .
-                "FROM " . $ecs->table('order_info') . " AS o " .
-                "LEFT JOIN " . $ecs->table('region') . " AS c ON o.country = c.region_id " .
-                "LEFT JOIN " . $ecs->table('region') . " AS p ON o.province = p.region_id " .
-                "LEFT JOIN " . $ecs->table('region') . " AS t ON o.city = t.region_id " .
-                "LEFT JOIN " . $ecs->table('region') . " AS d ON o.district = d.region_id " .
+                "FROM " . table('order_info') . " AS o " .
+                "LEFT JOIN " . table('region') . " AS c ON o.country = c.region_id " .
+                "LEFT JOIN " . table('region') . " AS p ON o.province = p.region_id " .
+                "LEFT JOIN " . table('region') . " AS t ON o.city = t.region_id " .
+                "LEFT JOIN " . table('region') . " AS d ON o.district = d.region_id " .
                 "WHERE o.order_id = '$order[order_id]'";
             $order['region'] = $db->getOne($sql);
 
@@ -2379,7 +2379,7 @@ class OrderController extends InitController
             $order = order_info($order_id);
 
             /* 如果管理员属于某个办事处，检查该订单是否也属于这个办事处 */
-            $sql = "SELECT agency_id FROM " . $ecs->table('admin_user') . " WHERE user_id = '$_SESSION[admin_id]'";
+            $sql = "SELECT agency_id FROM " . table('admin_user') . " WHERE user_id = '$_SESSION[admin_id]'";
             $admin_agency_id = $db->getOne($sql);
             if ($admin_agency_id > 0) {
                 if ($order['agency_id'] != $admin_agency_id) {
@@ -2394,7 +2394,7 @@ class OrderController extends InitController
                     'back_order'// 更改订单的退货单供货商ID
                 );
                 foreach ($query_array as $value) {
-                    $db->query("UPDATE " . $ecs->table($value) . " SET agency_id = '$new_agency_id' " .
+                    $db->query("UPDATE " . table($value) . " SET agency_id = '$new_agency_id' " .
                         "WHERE order_id = '$order_id'");
                 }
             }
@@ -2415,9 +2415,9 @@ class OrderController extends InitController
                 }
 
                 /* 删除订单 */
-                $db->query("DELETE FROM " . $ecs->table('order_info') . " WHERE order_id = '$order_id'");
-                $db->query("DELETE FROM " . $ecs->table('order_goods') . " WHERE order_id = '$order_id'");
-                $db->query("DELETE FROM " . $ecs->table('order_action') . " WHERE order_id = '$order_id'");
+                $db->query("DELETE FROM " . table('order_info') . " WHERE order_id = '$order_id'");
+                $db->query("DELETE FROM " . table('order_goods') . " WHERE order_id = '$order_id'");
+                $db->query("DELETE FROM " . table('order_action') . " WHERE order_id = '$order_id'");
                 $action_array = array('delivery', 'back');
                 del_delivery($order_id, $action_array);
 
@@ -2452,7 +2452,7 @@ class OrderController extends InitController
                 }
 
                 // 更新：删除发货单
-                $sql = "DELETE FROM " . $ecs->table('delivery_order') . " WHERE delivery_id = '$value_is'";
+                $sql = "DELETE FROM " . table('delivery_order') . " WHERE delivery_id = '$value_is'";
                 $db->query($sql);
             }
 
@@ -2464,11 +2464,11 @@ class OrderController extends InitController
             /* 删除退货单 */
             if (is_array($back_id)) {
                 foreach ($back_id as $value_is) {
-                    $sql = "DELETE FROM " . $ecs->table('back_order') . " WHERE back_id = '$value_is'";
+                    $sql = "DELETE FROM " . table('back_order') . " WHERE back_id = '$value_is'";
                     $db->query($sql);
                 }
             } else {
-                $sql = "DELETE FROM " . $ecs->table('back_order') . " WHERE back_id = '$back_id'";
+                $sql = "DELETE FROM " . table('back_order') . " WHERE back_id = '$back_id'";
                 $db->query($sql);
             }
             /* 返回 */
@@ -2508,7 +2508,7 @@ class OrderController extends InitController
                 }
 
                 /* 如果管理员属于某个办事处，检查该订单是否也属于这个办事处 */
-                $sql = "SELECT agency_id FROM " . $ecs->table('admin_user') . " WHERE user_id = '$_SESSION[admin_id]'";
+                $sql = "SELECT agency_id FROM " . table('admin_user') . " WHERE user_id = '$_SESSION[admin_id]'";
                 $agency_id = $db->getOne($sql);
                 if ($agency_id > 0) {
                     if ($order['agency_id'] != $agency_id) {
@@ -2527,11 +2527,11 @@ class OrderController extends InitController
                 /* 取得区域名 */
                 $sql = "SELECT concat(IFNULL(c.region_name, ''), '  ', IFNULL(p.region_name, ''), " .
                     "'  ', IFNULL(t.region_name, ''), '  ', IFNULL(d.region_name, '')) AS region " .
-                    "FROM " . $ecs->table('order_info') . " AS o " .
-                    "LEFT JOIN " . $ecs->table('region') . " AS c ON o.country = c.region_id " .
-                    "LEFT JOIN " . $ecs->table('region') . " AS p ON o.province = p.region_id " .
-                    "LEFT JOIN " . $ecs->table('region') . " AS t ON o.city = t.region_id " .
-                    "LEFT JOIN " . $ecs->table('region') . " AS d ON o.district = d.region_id " .
+                    "FROM " . table('order_info') . " AS o " .
+                    "LEFT JOIN " . table('region') . " AS c ON o.country = c.region_id " .
+                    "LEFT JOIN " . table('region') . " AS p ON o.province = p.region_id " .
+                    "LEFT JOIN " . table('region') . " AS t ON o.city = t.region_id " .
+                    "LEFT JOIN " . table('region') . " AS d ON o.district = d.region_id " .
                     "WHERE o.order_id = '$order[order_id]'";
                 $order['region'] = $db->getOne($sql);
 
@@ -2545,7 +2545,7 @@ class OrderController extends InitController
                 $order['invoice_no'] = $order['shipping_status'] == SS_UNSHIPPED || $order['shipping_status'] == SS_PREPARING ? $_LANG['ss'][SS_UNSHIPPED] : $order['invoice_no'];
 
                 /* 此订单的发货备注(此订单的最后一条操作记录) */
-                $sql = "SELECT action_note FROM " . $ecs->table('order_action') .
+                $sql = "SELECT action_note FROM " . table('order_action') .
                     " WHERE order_id = '$order[order_id]' AND shipping_status = 1 ORDER BY log_time DESC";
                 $order['invoice_note'] = $db->getOne($sql);
 
@@ -2556,9 +2556,9 @@ class OrderController extends InitController
                 $goods_list = array();
                 $goods_attr = array();
                 $sql = "SELECT o.*, g.goods_number AS storage, o.goods_attr, IFNULL(b.brand_name, '') AS brand_name " .
-                    "FROM " . $ecs->table('order_goods') . " AS o " .
-                    "LEFT JOIN " . $ecs->table('goods') . " AS g ON o.goods_id = g.goods_id " .
-                    "LEFT JOIN " . $ecs->table('brand') . " AS b ON g.brand_id = b.brand_id " .
+                    "FROM " . table('order_goods') . " AS o " .
+                    "LEFT JOIN " . table('goods') . " AS g ON o.goods_id = g.goods_id " .
+                    "LEFT JOIN " . table('brand') . " AS b ON g.brand_id = b.brand_id " .
                     "WHERE o.order_id = '$order[order_id]' ";
                 $res = $db->query($sql);
                 while ($row = $db->fetchRow($res)) {
@@ -2649,7 +2649,7 @@ class OrderController extends InitController
         /* 确认 */
         if ('confirm' == $operation) {
             foreach ($order_id_list as $id_order) {
-                $sql = "SELECT * FROM " . $ecs->table('order_info') .
+                $sql = "SELECT * FROM " . table('order_info') .
                     " WHERE order_sn = '$id_order'" .
                     " AND order_status = '" . OS_UNCONFIRMED . "'";
                 $order = $db->getRow($sql);
@@ -2693,7 +2693,7 @@ class OrderController extends InitController
         } /* 无效 */
         elseif ('invalid' == $operation) {
             foreach ($order_id_list as $id_order) {
-                $sql = "SELECT * FROM " . $ecs->table('order_info') .
+                $sql = "SELECT * FROM " . table('order_info') .
                     " WHERE order_sn = $id_order" . order_query_sql('unpay_unship');
 
                 $order = $db->getRow($sql);
@@ -2742,7 +2742,7 @@ class OrderController extends InitController
             $sn_str = $_LANG['invalid_order'];
         } elseif ('cancel' == $operation) {
             foreach ($order_id_list as $id_order) {
-                $sql = "SELECT * FROM " . $ecs->table('order_info') .
+                $sql = "SELECT * FROM " . table('order_info') .
                     " WHERE order_sn = $id_order" . order_query_sql('unpay_unship');
 
                 $order = $db->getRow($sql);
@@ -2800,9 +2800,9 @@ class OrderController extends InitController
                 }
 
                 /* 删除订单 */
-                $db->query("DELETE FROM " . $ecs->table('order_info') . " WHERE order_id = '$order[order_id]'");
-                $db->query("DELETE FROM " . $ecs->table('order_goods') . " WHERE order_id = '$order[order_id]'");
-                $db->query("DELETE FROM " . $ecs->table('order_action') . " WHERE order_id = '$order[order_id]'");
+                $db->query("DELETE FROM " . table('order_info') . " WHERE order_id = '$order[order_id]'");
+                $db->query("DELETE FROM " . table('order_goods') . " WHERE order_id = '$order[order_id]'");
+                $db->query("DELETE FROM " . table('order_action') . " WHERE order_id = '$order[order_id]'");
                 $action_array = array('delivery', 'back');
                 del_delivery($order['order_id'], $action_array);
 
@@ -2827,7 +2827,7 @@ class OrderController extends InitController
             sys_msg($msg, 0, $links);
         } else {
             $order_list_no_fail = array();
-            $sql = "SELECT * FROM " . $ecs->table('order_info') .
+            $sql = "SELECT * FROM " . table('order_info') .
                 " WHERE order_sn " . db_create_in($sn_not_list);
             $res = $db->query($sql);
             while ($row = $db->fetchRow($res)) {
@@ -3115,7 +3115,7 @@ class OrderController extends InitController
                     }
                 } // 商品（虚货）
                 elseif ($value['extension_code'] == 'virtual_card' || $value['is_real'] == 0) {
-                    $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('virtual_card') . " WHERE goods_id = '" . $value['goods_id'] . "' AND is_saled = 0 ";
+                    $sql = "SELECT COUNT(*) FROM " . table('virtual_card') . " WHERE goods_id = '" . $value['goods_id'] . "' AND is_saled = 0 ";
                     $num = $GLOBALS['db']->getOne($sql);
                     if (($num < $goods_no_package[$value['goods_id']]) && !($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE)) {
                         /* 操作失败 */
@@ -3134,11 +3134,11 @@ class OrderController extends InitController
 
                     /* （实货） */
                     if (empty($value['product_id'])) {
-                        $sql = "SELECT goods_number FROM " . $GLOBALS['ecs']->table('goods') . " WHERE goods_id = '" . $value['goods_id'] . "' LIMIT 0,1";
+                        $sql = "SELECT goods_number FROM " . table('goods') . " WHERE goods_id = '" . $value['goods_id'] . "' LIMIT 0,1";
                     } /* （货品） */
                     else {
                         $sql = "SELECT product_number
-                            FROM " . $GLOBALS['ecs']->table('products') . "
+                            FROM " . table('products') . "
                             WHERE goods_id = '" . $value['goods_id'] . "'
                             AND product_id =  '" . $value['product_id'] . "'
                             LIMIT 0,1";
@@ -3162,7 +3162,7 @@ class OrderController extends InitController
             /* 获取发货单生成时间 */
             $delivery['update_time'] = GMTIME_UTC;
             $delivery_time = $delivery['update_time'];
-            $sql = "select add_time from " . $GLOBALS['ecs']->table('order_info') . " WHERE order_sn = '" . $delivery['order_sn'] . "'";
+            $sql = "select add_time from " . table('order_info') . " WHERE order_sn = '" . $delivery['order_sn'] . "'";
             $delivery['add_time'] = $GLOBALS['db']->getOne($sql);
             /* 获取发货单所属供应商 */
             $delivery['suppliers_id'] = $suppliers_id;
@@ -3182,7 +3182,7 @@ class OrderController extends InitController
                 $_delivery[$value] = $delivery[$value];
             }
             /* 发货单入库 */
-            $query = $db->autoExecute($ecs->table('delivery_order'), $_delivery, 'INSERT', '', 'SILENT');
+            $query = $db->autoExecute(table('delivery_order'), $_delivery, 'INSERT', '', 'SILENT');
             $delivery_id = $db->insert_id();
             if ($delivery_id) {
                 $delivery_goods = array();
@@ -3211,7 +3211,7 @@ class OrderController extends InitController
                                 $delivery_goods['product_id'] = $value['product_id'];
                             }
 
-                            $query = $db->autoExecute($ecs->table('delivery_goods'), $delivery_goods, 'INSERT', '', 'SILENT');
+                            $query = $db->autoExecute(table('delivery_goods'), $delivery_goods, 'INSERT', '', 'SILENT');
                         } // 商品（超值礼包）
                         elseif ($value['extension_code'] == 'package_buy') {
                             foreach ($value['package_goods_list'] as $pg_key => $pg_value) {
@@ -3227,7 +3227,7 @@ class OrderController extends InitController
                                     'extension_code' => $value['extension_code'], // 礼包
                                     'is_real' => $pg_value['is_real']
                                 );
-                                $query = $db->autoExecute($ecs->table('delivery_goods'), $delivery_pg_goods, 'INSERT', '', 'SILENT');
+                                $query = $db->autoExecute(table('delivery_goods'), $delivery_pg_goods, 'INSERT', '', 'SILENT');
                             }
                         }
                     }
@@ -3314,7 +3314,7 @@ class OrderController extends InitController
             del_order_delivery($order_id);
 
             /* 将订单的商品发货数量更新为 0 */
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('order_goods') . "
+            $sql = "UPDATE " . table('order_goods') . "
                 SET send_number = 0
                 WHERE order_id = '$order_id'";
             $GLOBALS['db']->query($sql, 'SILENT');
@@ -3441,7 +3441,7 @@ class OrderController extends InitController
                 /* 取得用户信息 */
                 $user = user_info($order['user_id']);
 
-                $sql = "SELECT  goods_number, send_number FROM" . $GLOBALS['ecs']->table('order_goods') . "
+                $sql = "SELECT  goods_number, send_number FROM" . table('order_goods') . "
                 WHERE order_id = '" . $order['order_id'] . "'";
 
                 $goods_num = $db->query($sql);
@@ -3473,13 +3473,13 @@ class OrderController extends InitController
             /* 添加退货记录 */
             $delivery_list = array();
             $sql_delivery = "SELECT *
-                         FROM " . $ecs->table('delivery_order') . "
+                         FROM " . table('delivery_order') . "
                          WHERE status IN (0, 2)
                          AND order_id = " . $order['order_id'];
             $delivery_list = $GLOBALS['db']->getAll($sql_delivery);
             if ($delivery_list) {
                 foreach ($delivery_list as $list) {
-                    $sql_back = "INSERT INTO " . $ecs->table('back_order') . " (delivery_sn, order_sn, order_id, add_time, shipping_id, user_id, action_user, consignee, address, Country, province, City, district, sign_building, Email,Zipcode, Tel, Mobile, best_time, postscript, how_oos, insure_fee, shipping_fee, update_time, suppliers_id, return_time, agency_id, invoice_no) VALUES ";
+                    $sql_back = "INSERT INTO " . table('back_order') . " (delivery_sn, order_sn, order_id, add_time, shipping_id, user_id, action_user, consignee, address, Country, province, City, district, sign_building, Email,Zipcode, Tel, Mobile, best_time, postscript, how_oos, insure_fee, shipping_fee, update_time, suppliers_id, return_time, agency_id, invoice_no) VALUES ";
 
                     $sql_back .= " ( '" . $list['delivery_sn'] . "', '" . $list['order_sn'] . "',
                               '" . $list['order_id'] . "', '" . $list['add_time'] . "',
@@ -3497,23 +3497,23 @@ class OrderController extends InitController
                     $GLOBALS['db']->query($sql_back, 'SILENT');
                     $back_id = $GLOBALS['db']->insert_id();
 
-                    $sql_back_goods = "INSERT INTO " . $ecs->table('back_goods') . " (back_id, goods_id, product_id, product_sn, goods_name,goods_sn, is_real, send_number, goods_attr)
+                    $sql_back_goods = "INSERT INTO " . table('back_goods') . " (back_id, goods_id, product_id, product_sn, goods_name,goods_sn, is_real, send_number, goods_attr)
                                    SELECT '$back_id', goods_id, product_id, product_sn, goods_name, goods_sn, is_real, send_number, goods_attr
-                                   FROM " . $ecs->table('delivery_goods') . "
+                                   FROM " . table('delivery_goods') . "
                                    WHERE delivery_id = " . $list['delivery_id'];
                     $GLOBALS['db']->query($sql_back_goods, 'SILENT');
                 }
             }
 
             /* 修改订单的发货单状态为退货 */
-            $sql_delivery = "UPDATE " . $ecs->table('delivery_order') . "
+            $sql_delivery = "UPDATE " . table('delivery_order') . "
                          SET status = 1
                          WHERE status IN (0, 2)
                          AND order_id = " . $order['order_id'];
             $GLOBALS['db']->query($sql_delivery, 'SILENT');
 
             /* 将订单的商品发货数量更新为 0 */
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('order_goods') . "
+            $sql = "UPDATE " . table('order_goods') . "
                 SET send_number = 0
                 WHERE order_id = '$order_id'";
             $GLOBALS['db']->query($sql, 'SILENT');
@@ -3543,9 +3543,9 @@ class OrderController extends InitController
             $sql = "SELECT goods_id, c.cat_name, goods_sn, goods_name, b.brand_name, " .
                 "goods_number, market_price, shop_price, promote_price, " .
                 "promote_start_date, promote_end_date, goods_brief, goods_type, is_promote " .
-                "FROM " . $ecs->table('goods') . " AS g " .
-                "LEFT JOIN " . $ecs->table('brand') . " AS b ON g.brand_id = b.brand_id " .
-                "LEFT JOIN " . $ecs->table('category') . " AS c ON g.cat_id = c.cat_id " .
+                "FROM " . table('goods') . " AS g " .
+                "LEFT JOIN " . table('brand') . " AS b ON g.brand_id = b.brand_id " .
+                "LEFT JOIN " . table('category') . " AS c ON g.cat_id = c.cat_id " .
                 " WHERE goods_id = '$goods_id'";
             $goods = $db->getRow($sql);
             $today = gmtime();
@@ -3555,16 +3555,16 @@ class OrderController extends InitController
 
             /* 取得会员价格 */
             $sql = "SELECT p.user_price, r.rank_name " .
-                "FROM " . $ecs->table('member_price') . " AS p, " .
-                $ecs->table('user_rank') . " AS r " .
+                "FROM " . table('member_price') . " AS p, " .
+                table('user_rank') . " AS r " .
                 "WHERE p.user_rank = r.rank_id " .
                 "AND p.goods_id = '$goods_id' ";
             $goods['user_price'] = $db->getAll($sql);
 
             /* 取得商品属性 */
             $sql = "SELECT a.attr_id, a.attr_name, g.goods_attr_id, g.attr_value, g.attr_price, a.attr_input_type, a.attr_type " .
-                "FROM " . $ecs->table('goods_attr') . " AS g, " .
-                $ecs->table('attribute') . " AS a " .
+                "FROM " . table('goods_attr') . " AS g, " .
+                table('attribute') . " AS a " .
                 "WHERE g.attr_id = a.attr_id " .
                 "AND g.goods_id = '$goods_id' ";
             $goods['attr_list'] = array();
@@ -3623,9 +3623,9 @@ class OrderController extends InitController
             exit;
         }
 
-        $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_id = '$order_id'");
-        $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('order_goods') . " WHERE order_id = '$order_id'");
-        $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('order_action') . " WHERE order_id = '$order_id'");
+        $GLOBALS['db']->query("DELETE FROM " . table('order_info') . " WHERE order_id = '$order_id'");
+        $GLOBALS['db']->query("DELETE FROM " . table('order_goods') . " WHERE order_id = '$order_id'");
+        $GLOBALS['db']->query("DELETE FROM " . table('order_action') . " WHERE order_id = '$order_id'");
         $action_array = array('delivery', 'back');
         del_delivery($order_id, $action_array);
 
@@ -3650,7 +3650,7 @@ class OrderController extends InitController
 
         $result = array('error' => 0, 'message' => '', 'content' => '');
         if ($id_name != '') {
-            $sql = "SELECT user_id, user_name FROM " . $GLOBALS['ecs']->table('users') .
+            $sql = "SELECT user_id, user_name FROM " . table('users') .
                 " WHERE user_id LIKE '%" . mysql_like_quote($id_name) . "%'" .
                 " OR user_name LIKE '%" . mysql_like_quote($id_name) . "%'" .
                 " LIMIT 20";
@@ -3680,7 +3680,7 @@ class OrderController extends InitController
         $result = array('error' => 0, 'message' => '', 'content' => '');
 
         if ($keyword != '') {
-            $sql = "SELECT goods_id, goods_name, goods_sn FROM " . $GLOBALS['ecs']->table('goods') .
+            $sql = "SELECT goods_id, goods_name, goods_sn FROM " . table('goods') .
                 " WHERE is_delete = 0" .
                 " AND is_on_sale = 1" .
                 " AND is_alone_sale = 1" .
@@ -3718,7 +3718,7 @@ class OrderController extends InitController
             exit;
         }
 
-        $sql = 'UPDATE ' . $GLOBALS['ecs']->table('order_info') . " SET invoice_no='$no' WHERE order_id = '$order_id'";
+        $sql = 'UPDATE ' . table('order_info') . " SET invoice_no='$no' WHERE order_id = '$order_id'";
         if ($GLOBALS['db']->query($sql)) {
             if (empty($no)) {
                 return make_json_result('N/A');
@@ -3747,7 +3747,7 @@ class OrderController extends InitController
             exit;
         }
 
-        $sql = 'UPDATE ' . $GLOBALS['ecs']->table('order_info') . " SET pay_note='$no' WHERE order_id = '$order_id'";
+        $sql = 'UPDATE ' . table('order_info') . " SET pay_note='$no' WHERE order_id = '$order_id'";
         if ($GLOBALS['db']->query($sql)) {
             if (empty($no)) {
                 return make_json_result('N/A');
@@ -3772,9 +3772,9 @@ class OrderController extends InitController
         $goods_list = array();
         $goods_attr = array();
         $sql = "SELECT o.*, g.goods_thumb, g.goods_number AS storage, o.goods_attr, IFNULL(b.brand_name, '') AS brand_name " .
-            "FROM " . $ecs->table('order_goods') . " AS o " .
-            "LEFT JOIN " . $ecs->table('goods') . " AS g ON o.goods_id = g.goods_id " .
-            "LEFT JOIN " . $ecs->table('brand') . " AS b ON g.brand_id = b.brand_id " .
+            "FROM " . table('order_goods') . " AS o " .
+            "LEFT JOIN " . table('goods') . " AS g ON o.goods_id = g.goods_id " .
+            "LEFT JOIN " . table('brand') . " AS b ON g.brand_id = b.brand_id " .
             "WHERE o.order_id = '{$order_id}' ";
         $res = $db->query($sql);
         while ($row = $db->fetchRow($res)) {
@@ -3844,7 +3844,7 @@ class OrderController extends InitController
         if ($order['user_id'] > 0 && $order['surplus'] > 0) {
             $surplus = $order['money_paid'] < 0 ? $order['surplus'] + $order['money_paid'] : $order['surplus'];
             log_account_change($order['user_id'], $surplus, 0, 0, 0, sprintf($GLOBALS['_LANG']['return_order_surplus'], $order['order_sn']));
-            $GLOBALS['db']->query("UPDATE " . $GLOBALS['ecs']->table('order_info') . " SET `order_amount` = '0' WHERE `order_id` =" . $order['order_id']);
+            $GLOBALS['db']->query("UPDATE " . table('order_info') . " SET `order_amount` = '0' WHERE `order_id` =" . $order['order_id']);
         }
 
         if ($order['user_id'] > 0 && $order['integral'] > 0) {
@@ -3874,7 +3874,7 @@ class OrderController extends InitController
     public function update_order_amount($order_id)
     {
         //更新订单总金额
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('order_info') .
+        $sql = "UPDATE " . table('order_info') .
             " SET order_amount = " . order_due_field() .
             " WHERE order_id = '$order_id' LIMIT 1";
 
@@ -4235,7 +4235,7 @@ class OrderController extends InitController
             }
 
             /* 如果管理员属于某个办事处，只列出这个办事处管辖的订单 */
-            $sql = "SELECT agency_id FROM " . $GLOBALS['ecs']->table('admin_user') . " WHERE user_id = '$_SESSION[admin_id]'";
+            $sql = "SELECT agency_id FROM " . table('admin_user') . " WHERE user_id = '$_SESSION[admin_id]'";
             $agency_id = $GLOBALS['db']->getOne($sql);
             if ($agency_id > 0) {
                 $where .= " AND o.agency_id = '$agency_id' ";
@@ -4254,10 +4254,10 @@ class OrderController extends InitController
 
             /* 记录总数 */
             if ($filter['user_name']) {
-                $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('order_info') . " AS o ," .
-                    $GLOBALS['ecs']->table('users') . " AS u " . $where;
+                $sql = "SELECT COUNT(*) FROM " . table('order_info') . " AS o ," .
+                    table('users') . " AS u " . $where;
             } else {
-                $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('order_info') . " AS o " . $where;
+                $sql = "SELECT COUNT(*) FROM " . table('order_info') . " AS o " . $where;
             }
 
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
@@ -4268,8 +4268,8 @@ class OrderController extends InitController
                 "o.pay_status, o.consignee, o.address, o.email, o.tel, o.extension_code, o.extension_id, " .
                 "(" . order_amount_field('o.') . ") AS total_fee, " .
                 "IFNULL(u.user_name, '" . $GLOBALS['_LANG']['anonymous'] . "') AS buyer " .
-                " FROM " . $GLOBALS['ecs']->table('order_info') . " AS o " .
-                " LEFT JOIN " . $GLOBALS['ecs']->table('users') . " AS u ON u.user_id=o.user_id " . $where .
+                " FROM " . table('order_info') . " AS o " .
+                " LEFT JOIN " . table('users') . " AS u ON u.user_id=o.user_id " . $where .
                 " ORDER BY $filter[sort_by] $filter[sort_order] " .
                 " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
 
@@ -4311,23 +4311,23 @@ class OrderController extends InitController
     {
         $order_id = intval($order_id);
         if ($order_id > 0) {
-            $sql = "SELECT order_amount FROM " . $GLOBALS['ecs']->table('order_info') .
+            $sql = "SELECT order_amount FROM " . table('order_info') .
                 " WHERE order_id = '$order_id'";
             $order_amount = $GLOBALS['db']->getOne($sql);
             if (!is_null($order_amount)) {
-                $sql = "SELECT log_id FROM " . $GLOBALS['ecs']->table('pay_log') .
+                $sql = "SELECT log_id FROM " . table('pay_log') .
                     " WHERE order_id = '$order_id'" .
                     " AND order_type = '" . PAY_ORDER . "'" .
                     " AND is_paid = 0";
                 $log_id = intval($GLOBALS['db']->getOne($sql));
                 if ($log_id > 0) {
                     /* 未付款，更新支付金额 */
-                    $sql = "UPDATE " . $GLOBALS['ecs']->table('pay_log') .
+                    $sql = "UPDATE " . table('pay_log') .
                         " SET order_amount = '$order_amount' " .
                         "WHERE log_id = '$log_id' LIMIT 1";
                 } else {
                     /* 已付款，生成新的pay_log */
-                    $sql = "INSERT INTO " . $GLOBALS['ecs']->table('pay_log') .
+                    $sql = "INSERT INTO " . table('pay_log') .
                         " (order_id, order_amount, order_type, is_paid)" .
                         "VALUES('$order_id', '$order_amount', '" . PAY_ORDER . "', 0)";
                 }
@@ -4343,7 +4343,7 @@ class OrderController extends InitController
     public function get_suppliers_list()
     {
         $sql = 'SELECT *
-            FROM ' . $GLOBALS['ecs']->table('suppliers') . '
+            FROM ' . table('suppliers') . '
             WHERE is_check = 1
             ORDER BY suppliers_name ASC';
         $res = $GLOBALS['db']->getAll($sql);
@@ -4365,10 +4365,10 @@ class OrderController extends InitController
         $goods_list = array();
         $goods_attr = array();
         $sql = "SELECT o.*, g.suppliers_id AS suppliers_id,IF(o.product_id > 0, p.product_number, g.goods_number) AS storage, o.goods_attr, IFNULL(b.brand_name, '') AS brand_name, p.product_sn " .
-            "FROM " . $GLOBALS['ecs']->table('order_goods') . " AS o " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('products') . " AS p ON o.product_id = p.product_id " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g ON o.goods_id = g.goods_id " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('brand') . " AS b ON g.brand_id = b.brand_id " .
+            "FROM " . table('order_goods') . " AS o " .
+            "LEFT JOIN " . table('products') . " AS p ON o.product_id = p.product_id " .
+            "LEFT JOIN " . table('goods') . " AS g ON o.goods_id = g.goods_id " .
+            "LEFT JOIN " . table('brand') . " AS b ON g.brand_id = b.brand_id " .
             "WHERE o.order_id = '$order[order_id]' ";
         $res = $GLOBALS['db']->query($sql);
         while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -4410,9 +4410,9 @@ class OrderController extends InitController
     {
         $sql = "SELECT pg.goods_id, g.goods_name, (CASE WHEN pg.product_id > 0 THEN p.product_number ELSE g.goods_number END) AS goods_number, p.goods_attr, p.product_id, pg.goods_number AS
             order_goods_number, g.goods_sn, g.is_real, p.product_sn
-            FROM " . $GLOBALS['ecs']->table('package_goods') . " AS pg
-                LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g ON pg.goods_id = g.goods_id
-                LEFT JOIN " . $GLOBALS['ecs']->table('products') . " AS p ON pg.product_id = p.product_id
+            FROM " . table('package_goods') . " AS pg
+                LEFT JOIN " . table('goods') . " AS g ON pg.goods_id = g.goods_id
+                LEFT JOIN " . table('products') . " AS p ON pg.product_id = p.product_id
             WHERE pg.package_id = '$package_id'";
         $resource = $GLOBALS['db']->query($sql);
         if (!$resource) {
@@ -4446,7 +4446,7 @@ class OrderController extends InitController
         /* 取商品属性 */
         if ($good_product_str != '') {
             $sql = "SELECT ga.goods_attr_id, ga.attr_value, ga.attr_price, a.attr_name
-                FROM " . $GLOBALS['ecs']->table('goods_attr') . " AS ga, " . $GLOBALS['ecs']->table('attribute') . " AS a
+                FROM " . table('goods_attr') . " AS ga, " . table('attribute') . " AS a
                 WHERE a.attr_id = ga.attr_id
                 AND a.attr_type = 1
                 AND goods_id IN ($good_product_str)";
@@ -4481,8 +4481,8 @@ class OrderController extends InitController
 
 //    $sql = "SELECT pg.goods_id, CONCAT(g.goods_name, ' -- [', pg.goods_number, ']') AS goods_name,
 //            g.goods_number, pg.goods_number AS order_goods_number, g.goods_sn, g.is_real " .
-//            "FROM " . $GLOBALS['ecs']->table('package_goods') . " AS pg, " .
-//                $GLOBALS['ecs']->table('goods') . " AS g " .
+//            "FROM " . table('package_goods') . " AS pg, " .
+//                table('goods') . " AS g " .
 //            "WHERE pg.package_id = '$package_id' " .
 //            "AND pg.goods_id = g.goods_id ";
 //    $row = $GLOBALS['db']->getAll($sql);
@@ -4502,7 +4502,7 @@ class OrderController extends InitController
     public function order_delivery_num($order_id, $goods_id, $product_id = 0)
     {
         $sql = 'SELECT SUM(G.send_number) AS sums
-            FROM ' . $GLOBALS['ecs']->table('delivery_goods') . ' AS G, ' . $GLOBALS['ecs']->table('delivery_order') . ' AS O
+            FROM ' . table('delivery_goods') . ' AS G, ' . table('delivery_order') . ' AS O
             WHERE O.delivery_id = G.delivery_id
             AND O.status = 0
             AND O.order_id = ' . $order_id . '
@@ -4534,7 +4534,7 @@ class OrderController extends InitController
         }
 
         $sql = 'SELECT COUNT(delivery_id)
-            FROM ' . $GLOBALS['ecs']->table('delivery_order') . '
+            FROM ' . table('delivery_order') . '
             WHERE order_id = \'' . $order_id . '\'
             AND status = 0';
         $sum = $GLOBALS['db']->getOne($sql);
@@ -4584,7 +4584,7 @@ class OrderController extends InitController
 
                     // 超值礼包商品全部发货后更新订单商品库存
                     if ($pg_is_end) {
-                        $sql = "UPDATE " . $GLOBALS['ecs']->table('order_goods') . "
+                        $sql = "UPDATE " . table('order_goods') . "
                             SET send_number = goods_number
                             WHERE order_id = '$order_id'
                             AND goods_id = '" . $goods['goods_id'] . "' ";
@@ -4597,7 +4597,7 @@ class OrderController extends InitController
                 /* 检查是否为商品（实货）（货品） */
                 foreach ($goods_list as $goods) {
                     if ($goods['rec_id'] == $key && $goods['is_real'] == 1) {
-                        $sql = "UPDATE " . $GLOBALS['ecs']->table('order_goods') . "
+                        $sql = "UPDATE " . table('order_goods') . "
                             SET send_number = send_number + $value
                             WHERE order_id = '$order_id'
                             AND rec_id = '$key' ";
@@ -4630,7 +4630,7 @@ class OrderController extends InitController
         }
 
         foreach ($virtual_goods as $goods) {
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('order_goods') . "
+            $sql = "UPDATE " . table('order_goods') . "
                 SET send_number = send_number + '" . $goods['num'] . "'
                 WHERE order_id = '" . $order_id . "'
                 AND goods_id = '" . $goods['goods_id'] . "' ";
@@ -4656,7 +4656,7 @@ class OrderController extends InitController
         }
 
         $sql = 'SELECT COUNT(rec_id)
-            FROM ' . $GLOBALS['ecs']->table('order_goods') . '
+            FROM ' . table('order_goods') . '
             WHERE order_id = \'' . $order_id . '\'
             AND goods_number > send_number';
 
@@ -4688,7 +4688,7 @@ class OrderController extends InitController
         else {
             // 是否全部发货
             $sql = "SELECT COUNT(delivery_id)
-                FROM " . $GLOBALS['ecs']->table('delivery_order') . "
+                FROM " . table('delivery_order') . "
                 WHERE order_id = '$order_id'
                 AND status = 2 ";
             $sum = $GLOBALS['db']->getOne($sql);
@@ -4699,7 +4699,7 @@ class OrderController extends InitController
             else {
                 /* 订单全部发货中时：当前发货单总数 */
                 $sql = "SELECT COUNT(delivery_id)
-            FROM " . $GLOBALS['ecs']->table('delivery_order') . "
+            FROM " . table('delivery_order') . "
             WHERE order_id = '$order_id'
             AND status <> 1 ";
                 $_sum = $GLOBALS['db']->getOne($sql);
@@ -4746,7 +4746,7 @@ class OrderController extends InitController
         }
 
         $sql = 'DELETE O, G
-            FROM ' . $GLOBALS['ecs']->table('delivery_order') . ' AS O, ' . $GLOBALS['ecs']->table('delivery_goods') . ' AS G
+            FROM ' . table('delivery_order') . ' AS O, ' . table('delivery_goods') . ' AS G
             WHERE O.order_id = \'' . $order_id . '\'
             AND O.status = 0
             AND O.delivery_id = G.delivery_id';
@@ -4777,14 +4777,14 @@ class OrderController extends InitController
         $query_back = 1;
         if (in_array('delivery', $action_array)) {
             $sql = 'DELETE O, G
-                FROM ' . $GLOBALS['ecs']->table('delivery_order') . ' AS O, ' . $GLOBALS['ecs']->table('delivery_goods') . ' AS G
+                FROM ' . table('delivery_order') . ' AS O, ' . table('delivery_goods') . ' AS G
                 WHERE O.order_id = \'' . $order_id . '\'
                 AND O.delivery_id = G.delivery_id';
             $query_delivery = $GLOBALS['db']->query($sql, 'SILENT');
         }
         if (in_array('back', $action_array)) {
             $sql = 'DELETE O, G
-                FROM ' . $GLOBALS['ecs']->table('back_order') . ' AS O, ' . $GLOBALS['ecs']->table('back_goods') . ' AS G
+                FROM ' . table('back_order') . ' AS O, ' . table('back_goods') . ' AS G
                 WHERE O.order_id = \'' . $order_id . '\'
                 AND O.back_id = G.back_id';
             $query_back = $GLOBALS['db']->query($sql, 'SILENT');
@@ -4863,14 +4863,14 @@ class OrderController extends InitController
             }
 
             /* 记录总数 */
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('delivery_order') . $where;
+            $sql = "SELECT COUNT(*) FROM " . table('delivery_order') . $where;
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
             $filter['page_count'] = $filter['record_count'] > 0 ? ceil($filter['record_count'] / $filter['page_size']) : 1;
 
             /* 查询 */
             $sql = "SELECT delivery_id, delivery_sn, order_sn, order_id, add_time, action_user, consignee, country,
                        province, city, district, tel, status, update_time, email, suppliers_id
-                FROM " . $GLOBALS['ecs']->table("delivery_order") . "
+                FROM " . table("delivery_order") . "
                 $where
                 ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'] . "
                 LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ", " . $filter['page_size'] . " ";
@@ -4970,14 +4970,14 @@ class OrderController extends InitController
             }
 
             /* 记录总数 */
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('back_order') . $where;
+            $sql = "SELECT COUNT(*) FROM " . table('back_order') . $where;
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
             $filter['page_count'] = $filter['record_count'] > 0 ? ceil($filter['record_count'] / $filter['page_size']) : 1;
 
             /* 查询 */
             $sql = "SELECT back_id, delivery_sn, order_sn, order_id, add_time, action_user, consignee, country,
                        province, city, district, tel, status, update_time, email, return_time
-                FROM " . $GLOBALS['ecs']->table("back_order") . "
+                FROM " . table("back_order") . "
                 $where
                 ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'] . "
                 LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ", " . $filter['page_size'] . " ";
@@ -5033,7 +5033,7 @@ class OrderController extends InitController
             $where .= " AND suppliers_id = '" . $admin_info['suppliers_id'] . "' ";
         }
 
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('delivery_order');
+        $sql = "SELECT * FROM " . table('delivery_order');
         if ($delivery_id > 0) {
             $sql .= " WHERE delivery_id = '$delivery_id'";
         } else {
@@ -5084,7 +5084,7 @@ class OrderController extends InitController
             $where .= " AND suppliers_id = '" . $admin_info['suppliers_id'] . "' ";
         }
 
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('back_order') . "
+        $sql = "SELECT * FROM " . table('back_order') . "
             WHERE back_id = '$back_id'
             $where
             LIMIT 0, 1";
@@ -5163,7 +5163,7 @@ class OrderController extends InitController
         }
 
         $sql = "SELECT SUM(DG.send_number)
-            FROM " . $GLOBALS['ecs']->table('delivery_goods') . " AS DG, " . $GLOBALS['ecs']->table('delivery_order') . " AS o
+            FROM " . table('delivery_goods') . " AS DG, " . table('delivery_order') . " AS o
             WHERE o.delivery_id = DG.delivery_id
             AND o.status IN (0, 2)
             AND o.order_id = '$order_id'
@@ -5209,7 +5209,7 @@ class OrderController extends InitController
                         }
 
                         // 减库存：商品（超值礼包）（实货）、商品（超值礼包）（虚货）
-                        $sql = "UPDATE " . $GLOBALS['ecs']->table('goods') . "
+                        $sql = "UPDATE " . table('goods') . "
                             SET goods_number = goods_number - '" . $value[$package_goods['goods_id']] . "'
                             WHERE goods_id = '" . $package_goods['goods_id'] . "' ";
                         $GLOBALS['db']->query($sql);
@@ -5220,7 +5220,7 @@ class OrderController extends InitController
                 /* 检查是否为商品（实货） */
                 foreach ($goods_list as $goods) {
                     if ($goods['rec_id'] == $key && $goods['is_real'] == 1) {
-                        $sql = "UPDATE " . $GLOBALS['ecs']->table('goods') . "
+                        $sql = "UPDATE " . table('goods') . "
                             SET goods_number = goods_number - '" . $value . "'
                             WHERE goods_id = '" . $goods['goods_id'] . "' ";
                         $GLOBALS['db']->query($sql, 'SILENT');
@@ -5254,7 +5254,7 @@ class OrderController extends InitController
         foreach ($goods as $virtual_goods_key => $virtual_goods_value) {
             /* 取出卡片信息 */
             $sql = "SELECT card_id, card_sn, card_password, end_date, crc32
-                FROM " . $GLOBALS['ecs']->table('virtual_card') . "
+                FROM " . table('virtual_card') . "
                 WHERE goods_id = '" . $virtual_goods_value['goods_id'] . "'
                 AND is_saled = 0
                 LIMIT " . $virtual_goods_value['num'];
@@ -5286,7 +5286,7 @@ class OrderController extends InitController
             }
 
             /* 标记已经取出的卡片 */
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('virtual_card') . " SET " .
+            $sql = "UPDATE " . table('virtual_card') . " SET " .
                 "is_saled = 1 ," .
                 "order_sn = '$order_sn' " .
                 "WHERE " . db_create_in($card_ids, 'card_id');
@@ -5295,7 +5295,7 @@ class OrderController extends InitController
             }
 
             /* 获取订单信息 */
-            $sql = "SELECT order_id, order_sn, consignee, email FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_sn = '$order_sn'";
+            $sql = "SELECT order_id, order_sn, consignee, email FROM " . table('order_info') . " WHERE order_sn = '$order_sn'";
             $order = $GLOBALS['db']->getRow($sql);
 
             $cfg = $GLOBALS['_CFG']['send_ship_email'];
@@ -5332,17 +5332,17 @@ class OrderController extends InitController
     {
         /* 查询：取得发货单商品 */
         $goods_sql = "SELECT *
-                 FROM " . $GLOBALS['ecs']->table('delivery_goods') . "
+                 FROM " . table('delivery_goods') . "
                  WHERE delivery_id = " . $delivery_order['delivery_id'];
         $goods_list = $GLOBALS['db']->getAll($goods_sql);
         /* 更新： */
         foreach ($goods_list as $key => $val) {
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('order_goods') .
+            $sql = "UPDATE " . table('order_goods') .
                 " SET send_number = send_number-'" . $goods_list[$key]['send_number'] . "'" .
                 " WHERE order_id = '" . $delivery_order['order_id'] . "' AND goods_id = '" . $goods_list[$key]['goods_id'] . "' LIMIT 1";
             $GLOBALS['db']->query($sql);
         }
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('order_info') .
+        $sql = "UPDATE " . table('order_info') .
             " SET shipping_status = '0' , order_status = 1" .
             " WHERE order_id = '" . $delivery_order['order_id'] . "' LIMIT 1";
         $GLOBALS['db']->query($sql);
@@ -5361,7 +5361,7 @@ class OrderController extends InitController
     {
         /* 查询：取得订单中的发货单号 */
         $sql = "SELECT invoice_no
-            FROM " . $GLOBALS['ecs']->table('order_info') . "
+            FROM " . table('order_info') . "
             WHERE order_id = '$order_id'";
         $order_invoice_no = $GLOBALS['db']->getOne($sql);
 

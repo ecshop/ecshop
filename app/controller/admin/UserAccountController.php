@@ -25,7 +25,7 @@ class UserAccountController extends InitController
 
         /* 获得支付方式列表 */
         $payment = array();
-        $sql = "SELECT pay_id, pay_name FROM " . $ecs->table('payment') .
+        $sql = "SELECT pay_id, pay_name FROM " . table('payment') .
             " WHERE enabled = 1 AND pay_code != 'cod' ORDER BY pay_id";
         $res = $db->query($sql);
 
@@ -75,7 +75,7 @@ class UserAccountController extends InitController
         /* 获得支付方式列表, 不包括“货到付款” */
         $user_account = array();
         $payment = array();
-        $sql = "SELECT pay_id, pay_name FROM " . $ecs->table('payment') .
+        $sql = "SELECT pay_id, pay_name FROM " . table('payment') .
             " WHERE enabled = 1 AND pay_code != 'cod' ORDER BY pay_id";
         $res = $db->query($sql);
 
@@ -85,13 +85,13 @@ class UserAccountController extends InitController
 
         if ($act == 'edit') { // todo
             /* 取得余额信息 */
-            $user_account = $db->getRow("SELECT * FROM " . $ecs->table('user_account') . " WHERE id = '$id'");
+            $user_account = $db->getRow("SELECT * FROM " . table('user_account') . " WHERE id = '$id'");
 
             // 如果是负数，去掉前面的符号
             $user_account['amount'] = str_replace('-', '', $user_account['amount']);
 
             /* 取得会员名称 */
-            $sql = "SELECT user_name FROM " . $ecs->table('users') . " WHERE user_id = '$user_account[user_id]'";
+            $sql = "SELECT user_name FROM " . table('users') . " WHERE user_id = '$user_account[user_id]'";
             $user_name = $db->getOne($sql);
         } else {
             $surplus_type = '';
@@ -140,7 +140,7 @@ class UserAccountController extends InitController
         $user_note = !empty($_POST['user_note']) ? trim($_POST['user_note']) : '';
         $payment = !empty($_POST['payment']) ? trim($_POST['payment']) : '';
 
-        $user_id = $db->getOne("SELECT user_id FROM " . $ecs->table('users') . " WHERE user_name = '$user_name'");
+        $user_id = $db->getOne("SELECT user_id FROM " . table('users') . " WHERE user_name = '$user_name'");
 
         /* 此会员是否存在 */
         if ($user_id == 0) {
@@ -164,13 +164,13 @@ class UserAccountController extends InitController
             if ($process_type == 1) {
                 $amount = (-1) * $amount;
             }
-            $sql = "INSERT INTO " . $ecs->table('user_account') .
+            $sql = "INSERT INTO " . table('user_account') .
                 " VALUES ('', '$user_id', '$_SESSION[admin_name]', '$amount', '" . gmtime() . "', '" . gmtime() . "', '$admin_note', '$user_note', '$process_type', '$payment', '$is_paid')";
             $db->query($sql);
             $id = $db->insert_id();
         } else {
             /* 更新数据表 */
-            $sql = "UPDATE " . $ecs->table('user_account') . " SET " .
+            $sql = "UPDATE " . table('user_account') . " SET " .
                 "admin_note   = '$admin_note', " .
                 "user_note    = '$user_note', " .
                 "payment      = '$payment' " .
@@ -190,14 +190,14 @@ class UserAccountController extends InitController
 
             /* 取支付方式信息 */
             $payment_info = array();
-            $payment_info = $db->getRow('SELECT * FROM ' . $ecs->table('payment') .
+            $payment_info = $db->getRow('SELECT * FROM ' . table('payment') .
                 " WHERE pay_name = '$payment' AND enabled = '1'");
             //计算支付手续费用
             $pay_fee = pay_fee($payment_info['pay_id'], $amount, 0);
             $total_fee = $pay_fee + $amount;
 
             /* 插入 pay_log */
-            $sql = 'INSERT INTO ' . $ecs->table('pay_log') . " (order_id, order_amount, order_type, is_paid)" .
+            $sql = 'INSERT INTO ' . table('pay_log') . " (order_id, order_amount, order_type, is_paid)" .
                 " VALUES ('$id', '$total_fee', '" . PAY_SURPLUS . "', 0)";
             $db->query($sql);
         }
@@ -242,7 +242,7 @@ class UserAccountController extends InitController
 
         /* 查询当前的预付款信息 */
         $account = array();
-        $account = $db->getRow("SELECT * FROM " . $ecs->table('user_account') . " WHERE id = '$id'");
+        $account = $db->getRow("SELECT * FROM " . table('user_account') . " WHERE id = '$id'");
         $account['add_time'] = local_date($_CFG['time_format'], $account['add_time']);
 
         //余额类型:预付款，退款申请，购买商品，取消订单
@@ -256,7 +256,7 @@ class UserAccountController extends InitController
             $process_type = $_LANG['surplus_type_3'];
         }
 
-        $sql = "SELECT user_name FROM " . $ecs->table('users') . " WHERE user_id = '$account[user_id]'";
+        $sql = "SELECT user_name FROM " . table('users') . " WHERE user_id = '$account[user_id]'";
         $user_name = $db->getOne($sql);
 
         /* 模板赋值 */
@@ -294,7 +294,7 @@ class UserAccountController extends InitController
 
         /* 查询当前的预付款信息 */
         $account = array();
-        $account = $db->getRow("SELECT * FROM " . $ecs->table('user_account') . " WHERE id = '$id'");
+        $account = $db->getRow("SELECT * FROM " . table('user_account') . " WHERE id = '$id'");
         $amount = $account['amount'];
 
         //如果状态为未确认
@@ -322,7 +322,7 @@ class UserAccountController extends InitController
                 log_account_change($account['user_id'], $amount, 0, 0, 0, $_LANG['surplus_type_0'], ACT_SAVING);
             } elseif ($is_paid == '0') {
                 /* 否则更新信息 */
-                $sql = "UPDATE " . $ecs->table('user_account') . " SET " .
+                $sql = "UPDATE " . table('user_account') . " SET " .
                     "admin_user    = '$_SESSION[admin_name]', " .
                     "admin_note    = '$admin_note', " .
                     "is_paid       = 0 WHERE id = '$id'";
@@ -364,11 +364,11 @@ class UserAccountController extends InitController
         /* 检查权限 */
         check_authz_json('surplus_manage');
         $id = @intval($_REQUEST['id']);
-        $sql = "SELECT u.user_name FROM " . $ecs->table('users') . " AS u, " .
-            $ecs->table('user_account') . " AS ua " .
+        $sql = "SELECT u.user_name FROM " . table('users') . " AS u, " .
+            table('user_account') . " AS ua " .
             " WHERE u.user_id = ua.user_id AND ua.id = '$id' ";
         $user_name = $db->getOne($sql);
-        $sql = "DELETE FROM " . $ecs->table('user_account') . " WHERE id = '$id'";
+        $sql = "DELETE FROM " . table('user_account') . " WHERE id = '$id'";
         if ($db->query($sql, 'SILENT')) {
             admin_log(addslashes($user_name), 'remove', 'user_surplus');
             $url = 'user_account.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
@@ -389,7 +389,7 @@ class UserAccountController extends InitController
      */
     public function get_user_surplus($user_id)
     {
-        $sql = "SELECT SUM(user_money) FROM " . $GLOBALS['ecs']->table('account_log') .
+        $sql = "SELECT SUM(user_money) FROM " . table('account_log') .
             " WHERE user_id = '$user_id'";
 
         return $GLOBALS['db']->getOne($sql);
@@ -408,7 +408,7 @@ class UserAccountController extends InitController
      */
     public function update_user_account($id, $amount, $admin_note, $is_paid)
     {
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('user_account') . " SET " .
+        $sql = "UPDATE " . table('user_account') . " SET " .
             "admin_user  = '$_SESSION[admin_name]', " .
             "amount      = '$amount', " .
             "paid_time   = '" . gmtime() . "', " .
@@ -462,16 +462,16 @@ class UserAccountController extends InitController
 
             if ($filter['keywords']) {
                 $where .= " AND u.user_name LIKE '%" . mysql_like_quote($filter['keywords']) . "%'";
-                $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('user_account') . " AS ua, " .
-                    $GLOBALS['ecs']->table('users') . " AS u " . $where;
+                $sql = "SELECT COUNT(*) FROM " . table('user_account') . " AS ua, " .
+                    table('users') . " AS u " . $where;
             }
             /*　时间过滤　*/
             if (!empty($filter['start_date']) && !empty($filter['end_date'])) {
                 $where .= "AND paid_time >= " . $filter['start_date'] . " AND paid_time < '" . $filter['end_date'] . "'";
             }
 
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('user_account') . " AS ua, " .
-                $GLOBALS['ecs']->table('users') . " AS u " . $where;
+            $sql = "SELECT COUNT(*) FROM " . table('user_account') . " AS ua, " .
+                table('users') . " AS u " . $where;
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
             /* 分页大小 */
@@ -479,8 +479,8 @@ class UserAccountController extends InitController
 
             /* 查询数据 */
             $sql = 'SELECT ua.*, u.user_name FROM ' .
-                $GLOBALS['ecs']->table('user_account') . ' AS ua LEFT JOIN ' .
-                $GLOBALS['ecs']->table('users') . ' AS u ON ua.user_id = u.user_id' .
+                table('user_account') . ' AS ua LEFT JOIN ' .
+                table('users') . ' AS u ON ua.user_id = u.user_id' .
                 $where . "ORDER by " . $filter['sort_by'] . " " . $filter['sort_order'] . " LIMIT " . $filter['start'] . ", " . $filter['page_size'];
 
             $filter['keywords'] = stripslashes($filter['keywords']);

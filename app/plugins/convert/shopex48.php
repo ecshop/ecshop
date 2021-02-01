@@ -173,7 +173,7 @@ class shopex48
             $cat['sort_order'] = $row['p_order'];
 
             /* 插入分类 */
-            if (!$db->autoExecute($ecs->table('category'), $cat, 'INSERT', '', 'SILENT')) {
+            if (!$db->autoExecute(table('category'), $cat, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
         }
@@ -186,7 +186,7 @@ class shopex48
             $type['cat_id'] = $row['prop_cat_id'];
             $type['cat_name'] = $row['name'];
             $type['enabled'] = '1';
-            if (!$db->autoExecute($ecs->table('goods_type'), $type, 'INSERT', '', 'SILENT')) {
+            if (!$db->autoExecute(table('goods_type'), $type, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
         }
@@ -227,7 +227,7 @@ class shopex48
                 'site_url' => ecs_iconv($this->scharset, $this->tcharset, addslashes($row['brand_url'])),
                 'brand_logo' => $brand_url
             );
-            if (!$db->autoExecute($ecs->table('brand'), $brand, 'INSERT', '', 'SILENT')) {
+            if (!$db->autoExecute(table('brand'), $brand, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
         }
@@ -254,7 +254,7 @@ class shopex48
 
         /* 查询品牌列表 name => id */
         $brand_list = array();
-        $sql = "SELECT brand_id, brand_name FROM " . $ecs->table('brand');
+        $sql = "SELECT brand_id, brand_name FROM " . table('brand');
         $res = $db->query($sql);
         while ($row = $db->fetchRow($res)) {
             $brand_list[$row['brand_name']] = $row['brand_id'];
@@ -310,7 +310,7 @@ class shopex48
             $goods['last_update'] = gmtime();
 
             /* 插入 */
-            if (!$db->autoExecute($ecs->table('goods'), $goods, 'INSERT', '', 'SILENT')) {
+            if (!$db->autoExecute(table('goods'), $goods, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
 
@@ -329,7 +329,7 @@ class shopex48
                 $goods_gallery['img_url'] = $goods_gallery['thumb_url'];
                 //$goods['original_img']  = $big_pic;
 
-                if (!$db->autoExecute($ecs->table('goods_gallery'), $goods_gallery, 'INSERT', '', 'SILENT')) {
+                if (!$db->autoExecute(table('goods_gallery'), $goods_gallery, 'INSERT', '', 'SILENT')) {
                     //return $db->error();
                 }
             }
@@ -367,7 +367,7 @@ class shopex48
             $user_rank['show_price'] = '1';
             $user_rank['special_rank'] = '0';
 
-            if (!$db->autoExecute($ecs->table('user_rank'), $user_rank, 'INSERT', '', 'SILENT')) {
+            if (!$db->autoExecute(table('user_rank'), $user_rank, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
 
@@ -401,7 +401,7 @@ class shopex48
             $user['visit_count'] = '1';
             $user['user_rank'] = '0';
 
-            if (!$db->autoExecute($ecs->table('users'), $user, 'INSERT', '', 'SILENT')) {
+            if (!$db->autoExecute(table('users'), $user, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
             //uc_call('uc_user_register', array($user['user_name'], $user['password'], $user['email']));
@@ -425,7 +425,7 @@ class shopex48
             $address['province'] = $row['province'];
             $address['city'] = $row['city'];
 
-            if (!$db->autoExecute($ecs->table('user_address'), $address, 'INSERT', '', 'SILENT')) {
+            if (!$db->autoExecute(table('user_address'), $address, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
         }
@@ -443,7 +443,7 @@ class shopex48
                 $member_price['user_rank'] = $row['level_id'];
                 $member_price['user_price'] = $row['price'];
 
-                if (!$db->autoExecute($ecs->table('member_price'), $member_price, 'INSERT', '', 'SILENT')) {
+                if (!$db->autoExecute(table('member_price'), $member_price, 'INSERT', '', 'SILENT')) {
                     //return $db->error();
                 }
             }
@@ -465,7 +465,7 @@ class shopex48
             $user_account['process_type'] = $row['money'] >= 0 ? SURPLUS_SAVE : SURPLUS_RETURN;
             $user_account['is_paid'] = '1';
 
-            if (!$db->autoExecute($ecs->table('user_account'), $user_account, 'INSERT', '', 'SILENT')) {
+            if (!$db->autoExecute(table('user_account'), $user_account, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
         }
@@ -498,7 +498,7 @@ class shopex48
             $article['is_open'] = $row['ifpub'];
             $article['add_time'] = $row['uptime'];
 
-            if (!$db->autoExecute($ecs->table('article'), $article, 'INSERT', '', 'SILENT')) {
+            if (!$db->autoExecute(table('article'), $article, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
         }
@@ -516,7 +516,7 @@ class shopex48
             $logoarr = explode('|', $link_logo);
             $logourl = explode('/', $logoarr[0], 3);
             $link['link_logo'] = 'data/afficheimg/' . $logourl[2];
-            if (!$db->autoExecute($ecs->table('friend_link'), $link, 'INSERT', '', 'SILENT')) {
+            if (!$db->autoExecute(table('friend_link'), $link, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
         }
@@ -593,7 +593,7 @@ class shopex48
                 }
             }
 
-            if (!$db->autoExecute($ecs->table('order_info'), $order, 'INSERT', '', 'SILENT')) {
+            if (!$db->autoExecute(table('order_info'), $order, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
 
@@ -640,7 +640,7 @@ class shopex48
 
         /* 更新 */
         foreach ($config as $code => $value) {
-            $sql = "UPDATE " . $ecs->table('shop_config') . " SET " .
+            $sql = "UPDATE " . table('shop_config') . " SET " .
                 "value = '$value' " .
                 "WHERE code = '$code' LIMIT 1";
             if (!$db->query($sql, 'SILENT')) {

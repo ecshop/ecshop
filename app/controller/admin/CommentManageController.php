@@ -73,14 +73,14 @@ class CommentManageController extends InitController
         $id_value = array();
 
         /* 获取评论详细信息并进行字符处理 */
-        $sql = "SELECT * FROM " . $ecs->table('comment') . " WHERE comment_id = '$_REQUEST[id]'";
+        $sql = "SELECT * FROM " . table('comment') . " WHERE comment_id = '$_REQUEST[id]'";
         $comment_info = $db->getRow($sql);
         $comment_info['content'] = str_replace('\r\n', '<br />', htmlspecialchars($comment_info['content']));
         $comment_info['content'] = nl2br(str_replace('\n', '<br />', $comment_info['content']));
         $comment_info['add_time'] = local_date($_CFG['time_format'], $comment_info['add_time']);
 
         /* 获得评论回复内容 */
-        $sql = "SELECT * FROM " . $ecs->table('comment') . " WHERE parent_id = '$_REQUEST[id]'";
+        $sql = "SELECT * FROM " . table('comment') . " WHERE parent_id = '$_REQUEST[id]'";
         $reply_info = $db->getRow($sql);
 
         if (empty($reply_info)) {
@@ -91,17 +91,17 @@ class CommentManageController extends InitController
             $reply_info['add_time'] = local_date($_CFG['time_format'], $reply_info['add_time']);
         }
         /* 获取管理员的用户名和Email地址 */
-        $sql = "SELECT user_name, email FROM " . $ecs->table('admin_user') .
+        $sql = "SELECT user_name, email FROM " . table('admin_user') .
             " WHERE user_id = '$_SESSION[admin_id]'";
         $admin_info = $db->getRow($sql);
 
         /* 取得评论的对象(文章或者商品) */
         if ($comment_info['comment_type'] == 0) {
-            $sql = "SELECT goods_name FROM " . $ecs->table('goods') .
+            $sql = "SELECT goods_name FROM " . table('goods') .
                 " WHERE goods_id = '$comment_info[id_value]'";
             $id_value = $db->getOne($sql);
         } else {
-            $sql = "SELECT title FROM " . $ecs->table('article') .
+            $sql = "SELECT title FROM " . table('article') .
                 " WHERE article_id='$comment_info[id_value]'";
             $id_value = $db->getOne($sql);
         }
@@ -132,13 +132,13 @@ class CommentManageController extends InitController
         $ip = real_ip();
 
         /* 获得评论是否有回复 */
-        $sql = "SELECT comment_id, content, parent_id FROM " . $ecs->table('comment') .
+        $sql = "SELECT comment_id, content, parent_id FROM " . table('comment') .
             " WHERE parent_id = '$_REQUEST[comment_id]'";
         $reply_info = $db->getRow($sql);
 
         if (!empty($reply_info['content'])) {
             /* 更新回复的内容 */
-            $sql = "UPDATE " . $ecs->table('comment') . " SET " .
+            $sql = "UPDATE " . table('comment') . " SET " .
                 "email     = '$_POST[email]', " .
                 "user_name = '$_POST[user_name]', " .
                 "content   = '$_POST[content]', " .
@@ -148,7 +148,7 @@ class CommentManageController extends InitController
                 " WHERE comment_id = '" . $reply_info['comment_id'] . "'";
         } else {
             /* 插入回复的评论内容 */
-            $sql = "INSERT INTO " . $ecs->table('comment') . " (comment_type, id_value, email, user_name , " .
+            $sql = "INSERT INTO " . table('comment') . " (comment_type, id_value, email, user_name , " .
                 "content, add_time, ip_address, status, parent_id) " .
                 "VALUES('$_POST[comment_type]', '$_POST[id_value]','$_POST[email]', " .
                 "'$_SESSION[admin_name]','$_POST[content]','" . gmtime() . "', '$ip', '0', '$_POST[comment_id]')";
@@ -156,14 +156,14 @@ class CommentManageController extends InitController
         $db->query($sql);
 
         /* 更新当前的评论状态为已回复并且可以显示此条评论 */
-        $sql = "UPDATE " . $ecs->table('comment') . " SET status = 1 WHERE comment_id = '$_POST[comment_id]'";
+        $sql = "UPDATE " . table('comment') . " SET status = 1 WHERE comment_id = '$_POST[comment_id]'";
         $db->query($sql);
 
         /* 邮件通知处理流程 */
         if (!empty($_POST['send_email_notice']) or isset($_POST['remail'])) {
             //获取邮件中的必要内容
             $sql = 'SELECT user_name, email, content ' .
-                'FROM ' . $ecs->table('comment') .
+                'FROM ' . table('comment') .
                 " WHERE comment_id ='$_REQUEST[comment_id]'";
             $comment_info = $db->getRow($sql);
 
@@ -201,7 +201,7 @@ class CommentManageController extends InitController
     {
         if ($_REQUEST['check'] == 'allow') {
             /* 允许评论显示 */
-            $sql = "UPDATE " . $ecs->table('comment') . " SET status = 1 WHERE comment_id = '$_REQUEST[id]'";
+            $sql = "UPDATE " . table('comment') . " SET status = 1 WHERE comment_id = '$_REQUEST[id]'";
             $db->query($sql);
 
             //add_feed($_REQUEST['id'], COMMENT_GOODS);
@@ -213,7 +213,7 @@ class CommentManageController extends InitController
             exit;
         } else {
             /* 禁止评论显示 */
-            $sql = "UPDATE " . $ecs->table('comment') . " SET status = 0 WHERE comment_id = '$_REQUEST[id]'";
+            $sql = "UPDATE " . table('comment') . " SET status = 0 WHERE comment_id = '$_REQUEST[id]'";
             $db->query($sql);
 
             /* 清除缓存 */
@@ -232,10 +232,10 @@ class CommentManageController extends InitController
 
         $id = intval($_GET['id']);
 
-        $sql = "DELETE FROM " . $ecs->table('comment') . " WHERE comment_id = '$id'";
+        $sql = "DELETE FROM " . table('comment') . " WHERE comment_id = '$id'";
         $res = $db->query($sql);
         if ($res) {
-            $db->query("DELETE FROM " . $ecs->table('comment') . " WHERE parent_id = '$id'");
+            $db->query("DELETE FROM " . table('comment') . " WHERE parent_id = '$id'");
         }
 
         admin_log('', 'remove', 'ads');
@@ -257,16 +257,16 @@ class CommentManageController extends InitController
         if (isset($_POST['checkboxes'])) {
             switch ($action) {
                 case 'remove':
-                    $db->query("DELETE FROM " . $ecs->table('comment') . " WHERE " . db_create_in($_POST['checkboxes'], 'comment_id'));
-                    $db->query("DELETE FROM " . $ecs->table('comment') . " WHERE " . db_create_in($_POST['checkboxes'], 'parent_id'));
+                    $db->query("DELETE FROM " . table('comment') . " WHERE " . db_create_in($_POST['checkboxes'], 'comment_id'));
+                    $db->query("DELETE FROM " . table('comment') . " WHERE " . db_create_in($_POST['checkboxes'], 'parent_id'));
                     break;
 
                 case 'allow':
-                    $db->query("UPDATE " . $ecs->table('comment') . " SET status = 1  WHERE " . db_create_in($_POST['checkboxes'], 'comment_id'));
+                    $db->query("UPDATE " . table('comment') . " SET status = 1  WHERE " . db_create_in($_POST['checkboxes'], 'comment_id'));
                     break;
 
                 case 'deny':
-                    $db->query("UPDATE " . $ecs->table('comment') . " SET status = 0  WHERE " . db_create_in($_POST['checkboxes'], 'comment_id'));
+                    $db->query("UPDATE " . table('comment') . " SET status = 0  WHERE " . db_create_in($_POST['checkboxes'], 'comment_id'));
                     break;
 
                 default:
@@ -305,7 +305,7 @@ class CommentManageController extends InitController
 
         $where = (!empty($filter['keywords'])) ? " AND content LIKE '%" . mysql_like_quote($filter['keywords']) . "%' " : '';
 
-        $sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('comment') . " WHERE parent_id = 0 $where";
+        $sql = "SELECT count(*) FROM " . table('comment') . " WHERE parent_id = 0 $where";
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         /* 分页大小 */
@@ -313,15 +313,15 @@ class CommentManageController extends InitController
 
         /* 获取评论数据 */
         $arr = array();
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('comment') . " WHERE parent_id = 0 $where " .
+        $sql = "SELECT * FROM " . table('comment') . " WHERE parent_id = 0 $where " .
             " ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'] .
             " LIMIT " . $filter['start'] . "," . $filter['page_size'];
         $res = $GLOBALS['db']->query($sql);
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             $sql = ($row['comment_type'] == 0) ?
-                "SELECT goods_name FROM " . $GLOBALS['ecs']->table('goods') . " WHERE goods_id='$row[id_value]'" :
-                "SELECT title FROM " . $GLOBALS['ecs']->table('article') . " WHERE article_id='$row[id_value]'";
+                "SELECT goods_name FROM " . table('goods') . " WHERE goods_id='$row[id_value]'" :
+                "SELECT title FROM " . table('article') . " WHERE article_id='$row[id_value]'";
             $row['title'] = $GLOBALS['db']->getOne($sql);
 
             $row['add_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['add_time']);

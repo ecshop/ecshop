@@ -11,7 +11,7 @@ class TopicController extends InitController
     {
         $topic_id = empty($_REQUEST['topic_id']) ? 0 : intval($_REQUEST['topic_id']);
 
-        $sql = "SELECT template FROM " . $ecs->table('topic') .
+        $sql = "SELECT template FROM " . table('topic') .
             "WHERE topic_id = '$topic_id' and  " . gmtime() . " >= start_time and " . gmtime() . "<= end_time";
 
         $topic = $db->getRow($sql);
@@ -23,7 +23,7 @@ class TopicController extends InitController
 
         $templates = empty($topic['template']) ? 'topic.dwt' : $topic['template'];
 
-        $sql = "SELECT * FROM " . $ecs->table('topic') . " WHERE topic_id = '$topic_id'";
+        $sql = "SELECT * FROM " . table('topic') . " WHERE topic_id = '$topic_id'";
 
         $topic = $db->getRow($sql);
         $topic['data'] = addcslashes($topic['data'], "'");
@@ -43,8 +43,8 @@ class TopicController extends InitController
         $sql = 'SELECT g.goods_id, g.goods_name, g.goods_name_style, g.market_price, g.is_new, g.is_best, g.is_hot, g.shop_price AS org_price, ' .
             "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, g.promote_price, " .
             'g.promote_start_date, g.promote_end_date, g.goods_brief, g.goods_thumb , g.goods_img ' .
-            'FROM ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('member_price') . ' AS mp ' .
+            'FROM ' . table('goods') . ' AS g ' .
+            'LEFT JOIN ' . table('member_price') . ' AS mp ' .
             "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
             "WHERE " . db_create_in($goods_id, 'g.goods_id');
 

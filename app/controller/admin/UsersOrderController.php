@@ -115,7 +115,7 @@ class UsersOrderController extends InitController
             $where .= " AND o.add_time <= '" . $filter['end_date'] . "'";
         }
 
-        $sql = "SELECT count(distinct(u.user_id)) FROM " . $ecs->table('users') . " AS u, " . $ecs->table('order_info') . " AS o " . $where;
+        $sql = "SELECT count(distinct(u.user_id)) FROM " . table('users') . " AS u, " . table('order_info') . " AS o " . $where;
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
         /* 分页大小 */
         $filter = page_and_size($filter);
@@ -124,7 +124,7 @@ class UsersOrderController extends InitController
         $total_fee = " SUM(" . order_amount_field() . ") AS turnover ";
 
         $sql = "SELECT u.user_id, u.user_name, COUNT(*) AS order_num, " . $total_fee .
-            "FROM " . $ecs->table('users') . " AS u, " . $ecs->table('order_info') . " AS o " . $where .
+            "FROM " . table('users') . " AS u, " . table('order_info') . " AS o " . $where .
             " GROUP BY u.user_id" . " ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'];
         if ($is_pagination) {
             $sql .= " LIMIT " . $filter['start'] . ', ' . $filter['page_size'];

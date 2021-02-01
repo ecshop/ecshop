@@ -16,7 +16,7 @@ class CompareController extends InitController
 
             $where = db_create_in($_REQUEST['goods'], 'id_value');
             $sql = "SELECT id_value , AVG(comment_rank) AS cmt_rank, COUNT(*) AS cmt_count" .
-                " FROM " . $ecs->table('comment') .
+                " FROM " . table('comment') .
                 " WHERE $where AND comment_type = 0" .
                 ' GROUP BY id_value ';
             $query = $db->query($sql);
@@ -29,11 +29,11 @@ class CompareController extends InitController
             $sql = "SELECT g.goods_id, g.goods_type, g.goods_name, g.shop_price, g.goods_weight, g.goods_thumb, g.goods_brief, " .
                 "a.attr_name, v.attr_value, a.attr_id, b.brand_name, " .
                 "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS rank_price " .
-                "FROM " . $ecs->table('goods') . " AS g " .
-                "LEFT JOIN " . $ecs->table('goods_attr') . " AS v ON v.goods_id = g.goods_id " .
-                "LEFT JOIN " . $ecs->table('attribute') . " AS a ON a.attr_id = v.attr_id " .
-                "LEFT JOIN " . $ecs->table('brand') . " AS b ON g.brand_id = b.brand_id " .
-                "LEFT JOIN " . $ecs->table('member_price') . " AS mp " .
+                "FROM " . table('goods') . " AS g " .
+                "LEFT JOIN " . table('goods_attr') . " AS v ON v.goods_id = g.goods_id " .
+                "LEFT JOIN " . table('attribute') . " AS a ON a.attr_id = v.attr_id " .
+                "LEFT JOIN " . table('brand') . " AS b ON g.brand_id = b.brand_id " .
+                "LEFT JOIN " . table('member_price') . " AS mp " .
                 "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
                 "WHERE g.is_delete = 0 AND $where " .
                 "ORDER BY a.attr_id";
@@ -79,7 +79,7 @@ class CompareController extends InitController
                 $arr[$goods_id]['ids'] = !empty($tmp) ? "goods[]=" . implode('&amp;goods[]=', $tmp) : '';
             }
 
-            $sql = "SELECT attr_id,attr_name FROM " . $ecs->table('attribute') . " WHERE cat_id='$type_id' ORDER BY attr_id";
+            $sql = "SELECT attr_id,attr_name FROM " . table('attribute') . " WHERE cat_id='$type_id' ORDER BY attr_id";
 
             $attribute = array();
 

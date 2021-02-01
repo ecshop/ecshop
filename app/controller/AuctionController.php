@@ -126,7 +126,7 @@ class AuctionController extends InitController
         $this->assign_dynamic('auction');
 
         //更新商品点击次数
-        $sql = 'UPDATE ' . $ecs->table('goods') . ' SET click_count = click_count + 1 ' .
+        $sql = 'UPDATE ' . table('goods') . ' SET click_count = click_count + 1 ' .
             "WHERE goods_id = '" . $auction['goods_id'] . "'";
         $db->query($sql);
 
@@ -239,12 +239,12 @@ class AuctionController extends InitController
             'bid_price' => $bid_price,
             'bid_time' => gmtime()
         );
-        $db->autoExecute($ecs->table('auction_log'), $auction_log, 'INSERT');
+        $db->autoExecute(table('auction_log'), $auction_log, 'INSERT');
 
         /* 出价是否等于一口价 */
         if ($bid_price == $auction['end_price']) {
             /* 结束拍卖活动 */
-            $sql = "UPDATE " . $ecs->table('goods_activity') . " SET is_finished = 1 WHERE act_id = '$id' LIMIT 1";
+            $sql = "UPDATE " . table('goods_activity') . " SET is_finished = 1 WHERE act_id = '$id' LIMIT 1";
             $db->query($sql);
         }
 
@@ -308,8 +308,8 @@ class AuctionController extends InitController
 
             $attr_list = array();
             $sql = "SELECT a.attr_name, g.attr_value " .
-                "FROM " . $ecs->table('goods_attr') . " AS g, " .
-                $ecs->table('attribute') . " AS a " .
+                "FROM " . table('goods_attr') . " AS g, " .
+                table('attribute') . " AS a " .
                 "WHERE g.attr_id = a.attr_id " .
                 "AND g.goods_attr_id " . db_create_in($goods_attr_id);
             $res = $db->query($sql);
@@ -342,7 +342,7 @@ class AuctionController extends InitController
             'rec_type' => CART_AUCTION_GOODS,
             'is_gift' => 0
         );
-        $db->autoExecute($ecs->table('cart'), $cart, 'INSERT');
+        $db->autoExecute(table('cart'), $cart, 'INSERT');
 
         /* 记录购物流程类型：团购 */
         $_SESSION['flow_type'] = CART_AUCTION_GOODS;
@@ -361,7 +361,7 @@ class AuctionController extends InitController
     {
         $now = gmtime();
         $sql = "SELECT COUNT(*) " .
-            "FROM " . $GLOBALS['ecs']->table('goods_activity') .
+            "FROM " . table('goods_activity') .
             "WHERE act_type = '" . GAT_AUCTION . "' " .
             "AND start_time <= '$now' AND end_time >= '$now' AND is_finished < 2";
 
@@ -381,8 +381,8 @@ class AuctionController extends InitController
 
         $now = gmtime();
         $sql = "SELECT a.*, IFNULL(g.goods_thumb, '') AS goods_thumb " .
-            "FROM " . $GLOBALS['ecs']->table('goods_activity') . " AS a " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g ON a.goods_id = g.goods_id " .
+            "FROM " . table('goods_activity') . " AS a " .
+            "LEFT JOIN " . table('goods') . " AS g ON a.goods_id = g.goods_id " .
             "WHERE a.act_type = '" . GAT_AUCTION . "' " .
             "AND a.start_time <= '$now' AND a.end_time >= '$now' AND a.is_finished < 2 ORDER BY a.act_id DESC";
         $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);

@@ -13,7 +13,7 @@ class AdsController extends InitController
 
 
         $image = new cls_image($_CFG['bgcolor']);
-        $exc = new exchange($ecs->table("ad"), $db, 'ad_id', 'ad_name');
+        $exc = new exchange(table("ad"), $db, 'ad_id', 'ad_name');
         $allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp', 'swf');
     }
 
@@ -120,7 +120,7 @@ class AdsController extends InitController
         $end_time = local_strtotime($_POST['end_time']);
 
         /* 查看广告名称是否有重复 */
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('ad') . " WHERE ad_name = '$ad_name'";
+        $sql = "SELECT COUNT(*) FROM " . table('ad') . " WHERE ad_name = '$ad_name'";
         if ($db->getOne($sql) > 0) {
             $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
             sys_msg($_LANG['ad_name_exist'], 0, $link);
@@ -194,7 +194,7 @@ class AdsController extends InitController
         }
 
         /* 插入数据 */
-        $sql = "INSERT INTO " . $ecs->table('ad') . " (position_id,media_type,ad_name,ad_link,ad_code,start_time,end_time,link_man,link_email,link_phone,click_count,enabled)
+        $sql = "INSERT INTO " . table('ad') . " (position_id,media_type,ad_name,ad_link,ad_code,start_time,end_time,link_man,link_email,link_phone,click_count,enabled)
     VALUES ('$_POST[position_id]',
             '$_POST[media_type]',
             '$ad_name',
@@ -235,7 +235,7 @@ class AdsController extends InitController
         admin_priv('ad_manage');
 
         /* 获取广告数据 */
-        $sql = "SELECT * FROM " . $ecs->table('ad') . " WHERE ad_id='" . intval($_REQUEST['id']) . "'";
+        $sql = "SELECT * FROM " . table('ad') . " WHERE ad_id='" . intval($_REQUEST['id']) . "'";
         $ads_arr = $db->getRow($sql);
 
         $ads_arr['ad_name'] = htmlspecialchars($ads_arr['ad_name']);
@@ -360,7 +360,7 @@ class AdsController extends InitController
 
         $ad_code = str_replace('../' . DATA_DIR . '/afficheimg/', '', $ad_code);
         /* 更新信息 */
-        $sql = "UPDATE " . $ecs->table('ad') . " SET " .
+        $sql = "UPDATE " . table('ad') . " SET " .
             "position_id = '$_POST[position_id]', " .
             "ad_name     = '$_POST[ad_name]', " .
             "ad_link     = '$ad_link', " .
@@ -476,7 +476,7 @@ class AdsController extends InitController
         }
 
         /* 获得总记录数据 */
-        $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('ad') . ' AS ad ' . $where;
+        $sql = 'SELECT COUNT(*) FROM ' . table('ad') . ' AS ad ' . $where;
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         $filter = page_and_size($filter);
@@ -484,9 +484,9 @@ class AdsController extends InitController
         /* 获得广告数据 */
         $arr = array();
         $sql = 'SELECT ad.*, COUNT(o.order_id) AS ad_stats, p.position_name ' .
-            'FROM ' . $GLOBALS['ecs']->table('ad') . 'AS ad ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('ad_position') . ' AS p ON p.position_id = ad.position_id ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('order_info') . " AS o ON o.from_ad = ad.ad_id $where " .
+            'FROM ' . table('ad') . 'AS ad ' .
+            'LEFT JOIN ' . table('ad_position') . ' AS p ON p.position_id = ad.position_id ' .
+            'LEFT JOIN ' . table('order_info') . " AS o ON o.from_ad = ad.ad_id $where " .
             'GROUP BY ad.ad_id ' .
             'ORDER by ' . $filter['sort_by'] . ' ' . $filter['sort_order'];
 

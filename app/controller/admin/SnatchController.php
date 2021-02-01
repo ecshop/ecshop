@@ -10,7 +10,7 @@ class SnatchController extends InitController
     public function initialize()
     {
         parent::initialize();
-        $exc = new exchange($ecs->table("goods_activity"), $db, 'act_id', 'act_name');
+        $exc = new exchange(table("goods_activity"), $db, 'act_id', 'act_name');
     }
 
     /*------------------------------------------------------ */
@@ -43,7 +43,7 @@ class SnatchController extends InitController
         admin_priv('snatch_manage');
 
         /* 检查商品是否存在 */
-        $sql = "SELECT goods_name FROM " . $ecs->table('goods') . " WHERE goods_id = '$_POST[goods_id]'";
+        $sql = "SELECT goods_name FROM " . table('goods') . " WHERE goods_id = '$_POST[goods_id]'";
         $_POST['goods_name'] = $db->getOne($sql);
         if (empty($_POST['goods_name'])) {
             sys_msg($_LANG['no_goods'], 1);
@@ -51,7 +51,7 @@ class SnatchController extends InitController
         }
 
         $sql = "SELECT COUNT(*) " .
-            " FROM " . $ecs->table('goods_activity') .
+            " FROM " . table('goods_activity') .
             " WHERE act_type='" . GAT_SNATCH . "' AND act_name='" . $_POST['snatch_name'] . "'";
         if ($db->getOne($sql)) {
             sys_msg(sprintf($_LANG['snatch_name_exist'], $_POST['snatch_name']), 1);
@@ -87,7 +87,7 @@ class SnatchController extends InitController
             'product_id' => $_POST['product_id'],
             'is_finished' => 0, 'ext_info' => serialize($info));
 
-        $db->autoExecute($ecs->table('goods_activity'), $record, 'INSERT');
+        $db->autoExecute(table('goods_activity'), $record, 'INSERT');
 
         admin_log($_POST['snatch_name'], 'add', 'snatch');
         $link[] = array('text' => $_LANG['back_list'], 'href' => 'snatch.php?act=list');
@@ -154,7 +154,7 @@ class SnatchController extends InitController
 
         /* 检查活动重名 */
         $sql = "SELECT COUNT(*) " .
-            " FROM " . $ecs->table('goods_activity') .
+            " FROM " . table('goods_activity') .
             " WHERE act_type='" . GAT_SNATCH . "' AND act_name='$val' AND act_id <> '$id'";
         if ($db->getOne($sql)) {
             return make_json_error(sprintf($_LANG['snatch_name_exist'], $val));
@@ -220,7 +220,7 @@ class SnatchController extends InitController
         if (empty($_POST['goods_id'])) {
             $_POST['goods_id'] = 0;
         } else {
-            $_POST['goods_name'] = $db->getOne("SELECT goods_name FROM " . $ecs->table('goods') . "WHERE goods_id= '$_POST[goods_id]'");
+            $_POST['goods_name'] = $db->getOne("SELECT goods_name FROM " . table('goods') . "WHERE goods_id= '$_POST[goods_id]'");
         }
         if (empty($_POST['start_price'])) {
             $_POST['start_price'] = 0;
@@ -240,7 +240,7 @@ class SnatchController extends InitController
 
         /* 检查活动重名 */
         $sql = "SELECT COUNT(*) " .
-            " FROM " . $ecs->table('goods_activity') .
+            " FROM " . table('goods_activity') .
             " WHERE act_type='" . GAT_SNATCH . "' AND act_name='" . $_POST['snatch_name'] . "' AND act_id <> '" . $_POST['id'] . "'";
         if ($db->getOne($sql)) {
             sys_msg(sprintf($_LANG['snatch_name_exist'], $_POST['snatch_name']), 1);
@@ -254,7 +254,7 @@ class SnatchController extends InitController
             'end_time' => $_POST['end_time'], 'act_desc' => $_POST['desc'],
             'product_id' => $_POST['product_id'],
             'ext_info' => serialize($info));
-        $db->autoExecute($ecs->table('goods_activity'), $record, 'UPDATE', "act_id = '" . $_POST['id'] . "' AND act_type = " . GAT_SNATCH);
+        $db->autoExecute(table('goods_activity'), $record, 'UPDATE', "act_id = '" . $_POST['id'] . "' AND act_type = " . GAT_SNATCH);
 
         admin_log($_POST['snatch_name'], 'edit', 'snatch');
         $link[] = array('text' => $_LANG['back_list'], 'href' => 'snatch.php?act=list&' . list_link_postfix());
@@ -369,7 +369,7 @@ class SnatchController extends InitController
 
             $where = (!empty($filter['keywords'])) ? " AND act_name like '%" . mysql_like_quote($filter['keywords']) . "%'" : '';
 
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_activity') .
+            $sql = "SELECT COUNT(*) FROM " . table('goods_activity') .
                 " WHERE act_type =" . GAT_SNATCH . $where;
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -377,7 +377,7 @@ class SnatchController extends InitController
 
             /* 获活动数据 */
             $sql = "SELECT act_id, act_name AS snatch_name, goods_name, start_time, end_time, is_finished, ext_info, product_id " .
-                " FROM " . $GLOBALS['ecs']->table('goods_activity') .
+                " FROM " . table('goods_activity') .
                 " WHERE act_type = " . GAT_SNATCH . $where .
                 " ORDER by $filter[sort_by] $filter[sort_order] LIMIT " . $filter['start'] . ", " . $filter['page_size'];
 
@@ -419,7 +419,7 @@ class SnatchController extends InitController
     {
 
         $sql = "SELECT act_id, act_name AS snatch_name, goods_id, product_id, goods_name, start_time, end_time, act_desc, ext_info" .
-            " FROM " . $GLOBALS['ecs']->table('goods_activity') .
+            " FROM " . table('goods_activity') .
             " WHERE act_id='$id' AND act_type = " . GAT_SNATCH;
 
         $snatch = $db->getRow($sql);
@@ -454,15 +454,15 @@ class SnatchController extends InitController
         $where = empty($filter['snatch_id']) ? '' : " WHERE snatch_id='$filter[snatch_id]'";
 
         /* 获得记录总数以及总页数 */
-        $sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('snatch_log') . $where;
+        $sql = "SELECT count(*) FROM " . table('snatch_log') . $where;
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         $filter = page_and_size($filter);
 
         /* 获得活动数据 */
         $sql = "SELECT s.log_id, u.user_name, s.bid_price, s.bid_time " .
-            " FROM " . $GLOBALS['ecs']->table('snatch_log') . " AS s " .
-            " LEFT JOIN " . $GLOBALS['ecs']->table('users') . " AS u ON s.user_id = u.user_id  " . $where .
+            " FROM " . table('snatch_log') . " AS s " .
+            " LEFT JOIN " . table('users') . " AS u ON s.user_id = u.user_id  " . $where .
             " ORDER by " . $filter['sort_by'] . " " . $filter['sort_order'] .
             " LIMIT " . $filter['start'] . ", " . $filter['page_size'];
         $row = $GLOBALS['db']->getAll($sql);

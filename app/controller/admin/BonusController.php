@@ -12,7 +12,7 @@ class BonusController extends InitController
         parent::initialize();
 
         /* 初始化$exc对象 */
-        $exc = new exchange($ecs->table('bonus_type'), $db, 'type_id', 'type_name');
+        $exc = new exchange(table('bonus_type'), $db, 'type_id', 'type_name');
     }
 
     /*------------------------------------------------------ */
@@ -135,10 +135,10 @@ class BonusController extends InitController
         $exc->drop($id);
 
         /* 更新商品信息 */
-        $db->query("UPDATE " . $ecs->table('goods') . " SET bonus_type_id = 0 WHERE bonus_type_id = '$id'");
+        $db->query("UPDATE " . table('goods') . " SET bonus_type_id = 0 WHERE bonus_type_id = '$id'");
 
         /* 删除用户的红包 */
-        $db->query("DELETE FROM " . $ecs->table('user_bonus') . " WHERE bonus_type_id = '$id'");
+        $db->query("DELETE FROM " . table('user_bonus') . " WHERE bonus_type_id = '$id'");
 
         $url = 'bonus.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
@@ -185,7 +185,7 @@ class BonusController extends InitController
         $min_amount = !empty($_POST['min_amount']) ? intval($_POST['min_amount']) : 0;
 
         /* 检查类型是否有重复 */
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('bonus_type') . " WHERE type_name='$type_name'";
+        $sql = "SELECT COUNT(*) FROM " . table('bonus_type') . " WHERE type_name='$type_name'";
         if ($db->getOne($sql) > 0) {
             $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
             sys_msg($_LANG['type_name_exist'], 0, $link);
@@ -198,7 +198,7 @@ class BonusController extends InitController
         $use_enddate = local_strtotime($_POST['use_end_date']);
 
         /* 插入数据库。 */
-        $sql = "INSERT INTO " . $ecs->table('bonus_type') . " (type_name, type_money,send_start_date,send_end_date,use_start_date,use_end_date,send_type,min_amount,min_goods_amount)
+        $sql = "INSERT INTO " . table('bonus_type') . " (type_name, type_money,send_start_date,send_end_date,use_start_date,use_end_date,send_type,min_amount,min_goods_amount)
     VALUES ('$type_name',
             '$_POST[type_money]',
             '$send_startdate',
@@ -234,7 +234,7 @@ class BonusController extends InitController
 
         /* 获取红包类型数据 */
         $type_id = !empty($_GET['type_id']) ? intval($_GET['type_id']) : 0;
-        $bonus_arr = $db->getRow("SELECT * FROM " . $ecs->table('bonus_type') . " WHERE type_id = '$type_id'");
+        $bonus_arr = $db->getRow("SELECT * FROM " . table('bonus_type') . " WHERE type_id = '$type_id'");
 
         $bonus_arr['send_start_date'] = local_date('Y-m-d', $bonus_arr['send_start_date']);
         $bonus_arr['send_end_date'] = local_date('Y-m-d', $bonus_arr['send_end_date']);
@@ -267,7 +267,7 @@ class BonusController extends InitController
         $type_id = !empty($_POST['type_id']) ? intval($_POST['type_id']) : 0;
         $min_amount = !empty($_POST['min_amount']) ? intval($_POST['min_amount']) : 0;
 
-        $sql = "UPDATE " . $ecs->table('bonus_type') . " SET " .
+        $sql = "UPDATE " . table('bonus_type') . " SET " .
             "type_name       = '$type_name', " .
             "type_money      = '$_POST[type_money]', " .
             "send_start_date = '$send_startdate', " .
@@ -313,14 +313,14 @@ class BonusController extends InitController
             return $this->display('bonus_by_user.htm');
         } elseif ($_REQUEST['send_by'] == SEND_BY_GOODS) {
             /* 查询此红包类型信息 */
-            $bonus_type = $db->getRow("SELECT type_id, type_name FROM " . $ecs->table('bonus_type') .
+            $bonus_type = $db->getRow("SELECT type_id, type_name FROM " . table('bonus_type') .
                 " WHERE type_id='$_REQUEST[id]'");
 
             /* 查询红包类型的商品列表 */
             $goods_list = get_bonus_goods($_REQUEST['id']);
 
             /* 查询其他红包类型的商品 */
-            $sql = "SELECT goods_id FROM " . $ecs->table('goods') .
+            $sql = "SELECT goods_id FROM " . table('goods') .
                 " WHERE bonus_type_id > 0 AND bonus_type_id <> '$_REQUEST[id]'";
             $other_goods_list = $db->getCol($sql);
             $this->assign('other_goods', join(',', $other_goods_list));
@@ -356,32 +356,32 @@ class BonusController extends InitController
             $rank_id = intval($_REQUEST['rank_id']);
 
             if ($rank_id > 0) {
-                $sql = "SELECT min_points, max_points, special_rank FROM " . $ecs->table('user_rank') . " WHERE rank_id = '$rank_id'";
+                $sql = "SELECT min_points, max_points, special_rank FROM " . table('user_rank') . " WHERE rank_id = '$rank_id'";
                 $row = $db->getRow($sql);
                 if ($row['special_rank']) {
                     /* 特殊会员组处理 */
-                    $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('users') . " WHERE user_rank = '$rank_id'";
+                    $sql = 'SELECT COUNT(*) FROM ' . table('users') . " WHERE user_rank = '$rank_id'";
                     $send_count = $db->getOne($sql);
                     if ($validated_email) {
-                        $sql = 'SELECT user_id, email, user_name FROM ' . $ecs->table('users') .
+                        $sql = 'SELECT user_id, email, user_name FROM ' . table('users') .
                             " WHERE user_rank = '$rank_id' AND is_validated = 1" .
                             " LIMIT $start, $limit";
                     } else {
-                        $sql = 'SELECT user_id, email, user_name FROM ' . $ecs->table('users') .
+                        $sql = 'SELECT user_id, email, user_name FROM ' . table('users') .
                             " WHERE user_rank = '$rank_id'" .
                             " LIMIT $start, $limit";
                     }
                 } else {
-                    $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('users') .
+                    $sql = 'SELECT COUNT(*) FROM ' . table('users') .
                         " WHERE rank_points >= " . intval($row['min_points']) . " AND rank_points < " . intval($row['max_points']);
                     $send_count = $db->getOne($sql);
 
                     if ($validated_email) {
-                        $sql = 'SELECT user_id, email, user_name FROM ' . $ecs->table('users') .
+                        $sql = 'SELECT user_id, email, user_name FROM ' . table('users') .
                             " WHERE rank_points >= " . intval($row['min_points']) . " AND rank_points < " . intval($row['max_points']) .
                             " AND is_validated = 1 LIMIT $start, $limit";
                     } else {
-                        $sql = 'SELECT user_id, email, user_name FROM ' . $ecs->table('users') .
+                        $sql = 'SELECT user_id, email, user_name FROM ' . table('users') .
                             " WHERE rank_points >= " . intval($row['min_points']) . " AND rank_points < " . intval($row['max_points']) .
                             " LIMIT $start, $limit";
                     }
@@ -403,7 +403,7 @@ class BonusController extends InitController
             $id_array = array_slice($user_array, $start, $limit);
 
             /* 根据会员ID取得用户名和邮件地址 */
-            $sql = "SELECT user_id, email, user_name FROM " . $ecs->table('users') .
+            $sql = "SELECT user_id, email, user_name FROM " . table('users') .
                 " WHERE user_id " . db_create_in($id_array);
             $user_list = $db->getAll($sql);
             $count = count($user_list);
@@ -429,13 +429,13 @@ class BonusController extends InitController
 
             if (add_to_maillist($val['user_name'], $val['email'], $tpl['template_subject'], $content, $tpl['is_html'])) {
                 /* 向会员红包表录入数据 */
-                $sql = "INSERT INTO " . $ecs->table('user_bonus') .
+                $sql = "INSERT INTO " . table('user_bonus') .
                     "(bonus_type_id, bonus_sn, user_id, used_time, order_id, emailed) " .
                     "VALUES ('$_REQUEST[id]', 0, '$val[user_id]', 0, 0, " . BONUS_MAIL_SUCCEED . ")";
                 $db->query($sql);
             } else {
                 /* 邮件发送失败，更新数据库 */
-                $sql = "INSERT INTO " . $ecs->table('user_bonus') .
+                $sql = "INSERT INTO " . table('user_bonus') .
                     "(bonus_type_id, bonus_sn, user_id, used_time, order_id, emailed) " .
                     "VALUES ('$_REQUEST[id]', 0, '$val[user_id]', 0, 0, " . BONUS_MAIL_FAIL . ")";
                 $db->query($sql);
@@ -507,12 +507,12 @@ class BonusController extends InitController
         $bonus_sum = !empty($_POST['bonus_sum']) ? $_POST['bonus_sum'] : 1;
 
         /* 生成红包序列号 */
-        $num = $db->getOne("SELECT MAX(bonus_sn) FROM " . $ecs->table('user_bonus'));
+        $num = $db->getOne("SELECT MAX(bonus_sn) FROM " . table('user_bonus'));
         $num = $num ? floor($num / 10000) : 100000;
 
         for ($i = 0, $j = 0; $i < $bonus_sum; $i++) {
             $bonus_sn = ($num + $i) . str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
-            $db->query("INSERT INTO " . $ecs->table('user_bonus') . " (bonus_type_id, bonus_sn) VALUES('$bonus_typeid', '$bonus_sn')");
+            $db->query("INSERT INTO " . table('user_bonus') . " (bonus_type_id, bonus_sn) VALUES('$bonus_typeid', '$bonus_sn')");
 
             $j++;
         }
@@ -539,7 +539,7 @@ class BonusController extends InitController
 
         /* 获得此线下红包类型的ID */
         $tid = !empty($_GET['tid']) ? intval($_GET['tid']) : 0;
-        $type_name = $db->getOne("SELECT type_name FROM " . $ecs->table('bonus_type') . " WHERE type_id = '$tid'");
+        $type_name = $db->getOne("SELECT type_name FROM " . table('bonus_type') . " WHERE type_id = '$tid'");
 
         /* 文件名称 */
         $bonus_filename = $type_name . '_bonus_list';
@@ -569,7 +569,7 @@ class BonusController extends InitController
 
         $val = array();
         $sql = "SELECT ub.bonus_id, ub.bonus_type_id, ub.bonus_sn, bt.type_name, bt.type_money, bt.use_end_date " .
-            "FROM " . $ecs->table('user_bonus') . " AS ub, " . $ecs->table('bonus_type') . " AS bt " .
+            "FROM " . table('user_bonus') . " AS ub, " . table('bonus_type') . " AS bt " .
             "WHERE bt.type_id = ub.bonus_type_id AND ub.bonus_type_id = '$tid' ORDER BY ub.bonus_id DESC";
         $res = $db->query($sql);
 
@@ -625,7 +625,7 @@ class BonusController extends InitController
         $type_id = $args[0];
 
         foreach ($add_ids as $key => $val) {
-            $sql = "UPDATE " . $ecs->table('goods') . " SET bonus_type_id='$type_id' WHERE goods_id='$val'";
+            $sql = "UPDATE " . table('goods') . " SET bonus_type_id='$type_id' WHERE goods_id='$val'";
             $db->query($sql, 'SILENT') or make_json_error($db->error());
         }
 
@@ -656,7 +656,7 @@ class BonusController extends InitController
         $arguments = $json->decode($_GET['JSON']);
         $type_id = $arguments[0];
 
-        $db->query("UPDATE " . $ecs->table('goods') . " SET bonus_type_id = 0 " .
+        $db->query("UPDATE " . table('goods') . " SET bonus_type_id = 0 " .
             "WHERE bonus_type_id = '$type_id' AND goods_id " . $drop_goods_ids);
 
         /* 重新载入 */
@@ -679,7 +679,7 @@ class BonusController extends InitController
     {
         $keywords = json_str_iconv(trim($_GET['keywords']));
 
-        $sql = "SELECT user_id, user_name FROM " . $ecs->table('users') .
+        $sql = "SELECT user_id, user_name FROM " . table('users') .
             " WHERE user_name LIKE '%" . mysql_like_quote($keywords) . "%' OR user_id LIKE '%" . mysql_like_quote($keywords) . "%'";
         $row = $db->getAll($sql);
 
@@ -760,7 +760,7 @@ class BonusController extends InitController
 
         $id = intval($_GET['id']);
 
-        $db->query("DELETE FROM " . $ecs->table('user_bonus') . " WHERE bonus_id='$id'");
+        $db->query("DELETE FROM " . table('user_bonus') . " WHERE bonus_id='$id'");
 
         $url = 'bonus.php?act=query_bonus&' . str_replace('act=remove_bonus', '', $_SERVER['QUERY_STRING']);
 
@@ -784,7 +784,7 @@ class BonusController extends InitController
 
             /* 删除红包 */
             if (isset($_POST['drop'])) {
-                $sql = "DELETE FROM " . $ecs->table('user_bonus') . " WHERE bonus_id " . db_create_in($bonus_id_list);
+                $sql = "DELETE FROM " . table('user_bonus') . " WHERE bonus_id " . db_create_in($bonus_id_list);
                 $db->query($sql);
 
                 admin_log(count($bonus_id_list), 'remove', 'userbonus');
@@ -815,7 +815,7 @@ class BonusController extends InitController
     {
         /* 获得所有红包类型的发放数量 */
         $sql = "SELECT bonus_type_id, COUNT(*) AS sent_count" .
-            " FROM " . $GLOBALS['ecs']->table('user_bonus') .
+            " FROM " . table('user_bonus') .
             " GROUP BY bonus_type_id";
         $res = $GLOBALS['db']->query($sql);
 
@@ -826,7 +826,7 @@ class BonusController extends InitController
 
         /* 获得所有红包类型的发放数量 */
         $sql = "SELECT bonus_type_id, COUNT(*) AS used_count" .
-            " FROM " . $GLOBALS['ecs']->table('user_bonus') .
+            " FROM " . table('user_bonus') .
             " WHERE used_time > 0" .
             " GROUP BY bonus_type_id";
         $res = $GLOBALS['db']->query($sql);
@@ -842,13 +842,13 @@ class BonusController extends InitController
             $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'type_id' : trim($_REQUEST['sort_by']);
             $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('bonus_type');
+            $sql = "SELECT COUNT(*) FROM " . table('bonus_type');
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
             /* 分页大小 */
             $filter = page_and_size($filter);
 
-            $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('bonus_type') . " ORDER BY $filter[sort_by] $filter[sort_order]";
+            $sql = "SELECT * FROM " . table('bonus_type') . " ORDER BY $filter[sort_by] $filter[sort_order]";
 
             set_filter($filter, $sql);
         } else {
@@ -880,7 +880,7 @@ class BonusController extends InitController
      */
     public function get_bonus_goods($type_id)
     {
-        $sql = "SELECT goods_id, goods_name FROM " . $GLOBALS['ecs']->table('goods') .
+        $sql = "SELECT goods_id, goods_name FROM " . table('goods') .
             " WHERE bonus_type_id = '$type_id'";
         $row = $GLOBALS['db']->getAll($sql);
 
@@ -902,17 +902,17 @@ class BonusController extends InitController
 
         $where = empty($filter['bonus_type']) ? '' : " WHERE bonus_type_id='$filter[bonus_type]'";
 
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('user_bonus') . $where;
+        $sql = "SELECT COUNT(*) FROM " . table('user_bonus') . $where;
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         /* 分页大小 */
         $filter = page_and_size($filter);
 
         $sql = "SELECT ub.*, u.user_name, u.email, o.order_sn, bt.type_name " .
-            " FROM " . $GLOBALS['ecs']->table('user_bonus') . " AS ub " .
-            " LEFT JOIN " . $GLOBALS['ecs']->table('bonus_type') . " AS bt ON bt.type_id=ub.bonus_type_id " .
-            " LEFT JOIN " . $GLOBALS['ecs']->table('users') . " AS u ON u.user_id=ub.user_id " .
-            " LEFT JOIN " . $GLOBALS['ecs']->table('order_info') . " AS o ON o.order_id=ub.order_id $where " .
+            " FROM " . table('user_bonus') . " AS ub " .
+            " LEFT JOIN " . table('bonus_type') . " AS bt ON bt.type_id=ub.bonus_type_id " .
+            " LEFT JOIN " . table('users') . " AS u ON u.user_id=ub.user_id " .
+            " LEFT JOIN " . table('order_info') . " AS o ON o.order_id=ub.order_id $where " .
             " ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'] .
             " LIMIT " . $filter['start'] . ", $filter[page_size]";
         $row = $GLOBALS['db']->getAll($sql);
@@ -935,7 +935,7 @@ class BonusController extends InitController
      */
     public function bonus_type_info($bonus_type_id)
     {
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('bonus_type') .
+        $sql = "SELECT * FROM " . table('bonus_type') .
             " WHERE type_id = '$bonus_type_id'";
 
         return $GLOBALS['db']->getRow($sql);
@@ -957,8 +957,8 @@ class BonusController extends InitController
 
         /* 取得属于该类型的红包信息 */
         $sql = "SELECT b.bonus_id, u.user_name, u.email " .
-            "FROM " . $GLOBALS['ecs']->table('user_bonus') . " AS b, " .
-            $GLOBALS['ecs']->table('users') . " AS u " .
+            "FROM " . table('user_bonus') . " AS b, " .
+            table('users') . " AS u " .
             " WHERE b.user_id = u.user_id " .
             " AND b.bonus_id " . db_create_in($bonus_id_list) .
             " AND b.order_id = 0 " .
@@ -984,13 +984,13 @@ class BonusController extends InitController
 
             $content = $GLOBALS['smarty']->fetch('str:' . $tpl['template_content']);
             if (add_to_maillist($bonus['user_name'], $bonus['email'], $tpl['template_subject'], $content, $tpl['is_html'], false)) {
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('user_bonus') .
+                $sql = "UPDATE " . table('user_bonus') .
                     " SET emailed = '" . BONUS_MAIL_SUCCEED . "'" .
                     " WHERE bonus_id = '$bonus[bonus_id]'";
                 $GLOBALS['db']->query($sql);
                 $send_count++;
             } else {
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('user_bonus') .
+                $sql = "UPDATE " . table('user_bonus') .
                     " SET emailed = '" . BONUS_MAIL_FAIL . "'" .
                     " WHERE bonus_id = '$bonus[bonus_id]'";
                 $GLOBALS['db']->query($sql);
@@ -1004,8 +1004,8 @@ class BonusController extends InitController
     {
         $time = time();
         $content = addslashes($content);
-        $template_id = $GLOBALS['db']->getOne("SELECT template_id FROM " . $GLOBALS['ecs']->table('mail_templates') . " WHERE template_code = 'send_bonus'");
-        $sql = "INSERT INTO " . $GLOBALS['ecs']->table('email_sendlist') . " ( email, template_id, email_content, pri, last_send) VALUES ('$email', $template_id, '$content', 1, '$time')";
+        $template_id = $GLOBALS['db']->getOne("SELECT template_id FROM " . table('mail_templates') . " WHERE template_code = 'send_bonus'");
+        $sql = "INSERT INTO " . table('email_sendlist') . " ( email, template_id, email_content, pri, last_send) VALUES ('$email', $template_id, '$content', 1, '$time')";
         $GLOBALS['db']->query($sql);
         return true;
     }

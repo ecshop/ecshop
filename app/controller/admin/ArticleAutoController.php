@@ -14,7 +14,7 @@ class ArticleAutoController extends InitController
     public function listAction()
     {
         $goodsdb = get_auto_goods();
-        $crons_enable = $db->getOne("SELECT enable FROM " . $GLOBALS['ecs']->table('crons') . " WHERE cron_code='ipdel'");
+        $crons_enable = $db->getOne("SELECT enable FROM " . table('crons') . " WHERE cron_code='ipdel'");
         $this->assign('crons_enable', $crons_enable);
         $this->assign('full_page', 1);
         $this->assign('ur_here', $_LANG['article_auto']);
@@ -43,7 +43,7 @@ class ArticleAutoController extends InitController
     public function delAction()
     {
         $goods_id = (int)$_REQUEST['goods_id'];
-        $sql = "DELETE FROM " . $ecs->table('auto_manage') . " WHERE item_id = '$goods_id' AND type = 'article'";
+        $sql = "DELETE FROM " . table('auto_manage') . " WHERE item_id = '$goods_id' AND type = 'article'";
         $db->query($sql);
         $links[] = array('text' => $_LANG['article_auto'], 'href' => 'article_auto.php?act=list');
         sys_msg($_LANG['edit_ok'], 0, $links);
@@ -63,7 +63,7 @@ class ArticleAutoController extends InitController
             return make_json_error('');
         }
 
-        $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'article',
+        $db->autoReplace(table('auto_manage'), array('item_id' => $id, 'type' => 'article',
             'starttime' => $time), array('starttime' => (string)$time));
 
         clear_cache_files();
@@ -84,7 +84,7 @@ class ArticleAutoController extends InitController
             return make_json_error('');
         }
 
-        $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'article',
+        $db->autoReplace(table('auto_manage'), array('item_id' => $id, 'type' => 'article',
             'endtime' => $time), array('endtime' => (string)$time));
 
         clear_cache_files();
@@ -106,7 +106,7 @@ class ArticleAutoController extends InitController
         }
 
         foreach ($_POST['checkboxes'] as $id) {
-            $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'article',
+            $db->autoReplace(table('auto_manage'), array('item_id' => $id, 'type' => 'article',
                 'starttime' => $_POST['date']), array('starttime' => (string)$_POST['date']));
         }
 
@@ -129,7 +129,7 @@ class ArticleAutoController extends InitController
         }
 
         foreach ($_POST['checkboxes'] as $id) {
-            $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'article',
+            $db->autoReplace(table('auto_manage'), array('item_id' => $id, 'type' => 'article',
                 'endtime' => $_POST['date']), array('endtime' => (string)$_POST['date']));
         }
 
@@ -145,11 +145,11 @@ class ArticleAutoController extends InitController
             $where = " WHERE g.title LIKE '%$goods_name%'";
             $filter['goods_name'] = $goods_name;
         }
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('article') . " g" . $where;
+        $sql = "SELECT COUNT(*) FROM " . table('article') . " g" . $where;
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
         $goodsdb = array();
         $filter = page_and_size($filter);
-        $sql = "SELECT g.*,a.starttime,a.endtime FROM " . $GLOBALS['ecs']->table('article') . " g LEFT JOIN " . $GLOBALS['ecs']->table('auto_manage') . " a ON g.article_id = a.item_id AND a.type='article'" . $where .
+        $sql = "SELECT g.*,a.starttime,a.endtime FROM " . table('article') . " g LEFT JOIN " . table('auto_manage') . " a ON g.article_id = a.item_id AND a.type='article'" . $where .
             " ORDER BY g. add_time DESC" .
             " LIMIT " . $filter['start'] . ",$filter[page_size]";
         $query = $GLOBALS['db']->query($sql);

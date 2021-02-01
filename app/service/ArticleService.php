@@ -30,12 +30,12 @@ class ArticleService
         //增加搜索条件，如果有搜索内容就进行搜索
         if ($requirement != '') {
             $sql = 'SELECT article_id, title, author, add_time, file_url, open_type' .
-                ' FROM ' . $GLOBALS['ecs']->table('article') .
+                ' FROM ' . table('article') .
                 ' WHERE is_open = 1 AND title like \'%' . $requirement . '%\' ' .
                 ' ORDER BY article_type DESC, article_id DESC';
         } else {
             $sql = 'SELECT article_id, title, author, add_time, file_url, open_type' .
-                ' FROM ' . $GLOBALS['ecs']->table('article') .
+                ' FROM ' . table('article') .
                 ' WHERE is_open = 1 AND ' . $cat_str .
                 ' ORDER BY article_type DESC, article_id DESC';
         }
@@ -69,9 +69,9 @@ class ArticleService
     public function get_article_count($cat_id, $requirement = '')
     {
         if ($requirement != '') {
-            $count = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('article') . ' WHERE ' . get_article_children($cat_id) . ' AND  title like \'%' . $requirement . '%\'  AND is_open = 1');
+            $count = $db->getOne('SELECT COUNT(*) FROM ' . table('article') . ' WHERE ' . get_article_children($cat_id) . ' AND  title like \'%' . $requirement . '%\'  AND is_open = 1');
         } else {
-            $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('article') . " WHERE " . get_article_children($cat_id) . " AND is_open = 1");
+            $count = $db->getOne("SELECT COUNT(*) FROM " . table('article') . " WHERE " . get_article_children($cat_id) . " AND is_open = 1");
         }
         return $count;
     }

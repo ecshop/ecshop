@@ -82,7 +82,7 @@ class TopicController extends InitController
         }
 
         if (!$isadd) {
-            $sql = "SELECT * FROM " . $ecs->table('topic') . " WHERE topic_id = '$topic_id'";
+            $sql = "SELECT * FROM " . table('topic') . " WHERE topic_id = '$topic_id'";
             $topic = $db->getRow($sql);
             $topic['start_time'] = local_date('Y-m-d', $topic['start_time']);
             $topic['end_time'] = local_date('Y-m-d', $topic['end_time']);
@@ -222,10 +222,10 @@ class TopicController extends InitController
         $description = $_POST['description'];
 
         if ($is_insert) {
-            $sql = "INSERT INTO " . $ecs->table('topic') . " (title,start_time,end_time,data,intro,template,css,topic_img,title_pic,base_style, htmls,keywords,description)" .
+            $sql = "INSERT INTO " . table('topic') . " (title,start_time,end_time,data,intro,template,css,topic_img,title_pic,base_style, htmls,keywords,description)" .
                 "VALUES ('$_POST[topic_name]','$start_time','$end_time','$data','$_POST[topic_intro]','$_POST[topic_template_file]','$_POST[topic_css]', '$topic_img', '$title_pic', '$base_style', '$htmls','$keywords','$description')";
         } else {
-            $sql = "UPDATE " . $ecs->table('topic') .
+            $sql = "UPDATE " . table('topic') .
                 "SET title='$_POST[topic_name]',start_time='$start_time',end_time='$end_time',data='$data',intro='$_POST[topic_intro]',template='$_POST[topic_template_file]',css='$_POST[topic_css]', topic_img='$topic_img', title_pic='$title_pic', base_style='$base_style', htmls='$htmls', keywords='$keywords', description='$description'" .
                 " WHERE topic_id='$topic_id' LIMIT 1";
         }
@@ -259,7 +259,7 @@ class TopicController extends InitController
     {
         admin_priv('topic_manage');
 
-        $sql = "DELETE FROM " . $ecs->table('topic') . " WHERE ";
+        $sql = "DELETE FROM " . table('topic') . " WHERE ";
 
         if (!empty($_POST['checkboxs'])) {
             $sql .= db_create_in($_POST['checkboxs'], 'topic_id');
@@ -313,13 +313,13 @@ class TopicController extends InitController
             $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'topic_id' : trim($_REQUEST['sort_by']);
             $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('topic');
+            $sql = "SELECT COUNT(*) FROM " . table('topic');
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
             /* 分页大小 */
             $filter = page_and_size($filter);
 
-            $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('topic') . " ORDER BY $filter[sort_by] $filter[sort_order]";
+            $sql = "SELECT * FROM " . table('topic') . " ORDER BY $filter[sort_by] $filter[sort_order]";
 
             set_filter($filter, $sql);
         } else {

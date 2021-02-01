@@ -58,7 +58,7 @@ class VoteController extends InitController
      */
     public function vote_already_submited($vote_id, $ip_address)
     {
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('vote_log') . " " .
+        $sql = "SELECT COUNT(*) FROM " . table('vote_log') . " " .
             "WHERE ip_address = '$ip_address' AND vote_id = '$vote_id' ";
 
         return ($GLOBALS['db']->getOne($sql) > 0);
@@ -74,18 +74,18 @@ class VoteController extends InitController
      */
     public function save_vote($vote_id, $ip_address, $option_id)
     {
-        $sql = "INSERT INTO " . $GLOBALS['ecs']->table('vote_log') . " (vote_id, ip_address, vote_time) " .
+        $sql = "INSERT INTO " . table('vote_log') . " (vote_id, ip_address, vote_time) " .
             "VALUES ('$vote_id', '$ip_address', " . gmtime() . ")";
         $res = $GLOBALS['db']->query($sql);
 
         /* 更新投票主题的数量 */
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('vote') . " SET " .
+        $sql = "UPDATE " . table('vote') . " SET " .
             "vote_count = vote_count + 1 " .
             "WHERE vote_id = '$vote_id'";
         $GLOBALS['db']->query($sql);
 
         /* 更新投票选项的数量 */
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('vote_option') . " SET " .
+        $sql = "UPDATE " . table('vote_option') . " SET " .
             "option_count = option_count + 1 " .
             "WHERE " . db_create_in($option_id, 'option_id');
         $GLOBALS['db']->query($sql);

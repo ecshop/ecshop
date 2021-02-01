@@ -42,7 +42,7 @@ class GoodsManageService
      */
     public function get_user_rank_list()
     {
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('user_rank') .
+        $sql = "SELECT * FROM " . table('user_rank') .
             " ORDER BY min_points";
 
         return $GLOBALS['db']->getAll($sql);
@@ -58,7 +58,7 @@ class GoodsManageService
         /* 取得会员价格 */
         $price_list = array();
         $sql = "SELECT user_rank, user_price FROM " .
-            $GLOBALS['ecs']->table('member_price') .
+            table('member_price') .
             " WHERE goods_id = '$goods_id'";
         $res = $GLOBALS['db']->query($sql);
         while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -103,10 +103,10 @@ class GoodsManageService
             }
 
             // 插入或更新记录
-            $sql = "SELECT goods_attr_id FROM " . $GLOBALS['ecs']->table('goods_attr') . " WHERE goods_id = '$goods_id' AND attr_id = '$id' AND attr_value = '$value' LIMIT 0, 1";
+            $sql = "SELECT goods_attr_id FROM " . table('goods_attr') . " WHERE goods_id = '$goods_id' AND attr_id = '$id' AND attr_value = '$value' LIMIT 0, 1";
             $result_id = $GLOBALS['db']->getOne($sql);
             if (!empty($result_id)) {
-                $sql = "UPDATE " . $GLOBALS['ecs']->table('goods_attr') . "
+                $sql = "UPDATE " . table('goods_attr') . "
                     SET attr_value = '$value'
                     WHERE goods_id = '$goods_id'
                     AND attr_id = '$id'
@@ -114,7 +114,7 @@ class GoodsManageService
 
                 $goods_attr_id[$id] = $result_id;
             } else {
-                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('goods_attr') . " (goods_id, attr_id, attr_value, attr_price) " .
+                $sql = "INSERT INTO " . table('goods_attr') . " (goods_id, attr_id, attr_value, attr_price) " .
                     "VALUES ('$goods_id', '$id', '$value', '$price')";
             }
 
@@ -143,15 +143,15 @@ class GoodsManageService
             $price = $price_list[$key];
 
             // 插入或更新记录
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('member_price') .
+            $sql = "SELECT COUNT(*) FROM " . table('member_price') .
                 " WHERE goods_id = '$goods_id' AND user_rank = '$rank'";
             if ($GLOBALS['db']->getOne($sql) > 0) {
                 /* 如果会员价格是小于0则删除原来价格，不是则更新为新的价格 */
                 if ($price < 0) {
-                    $sql = "DELETE FROM " . $GLOBALS['ecs']->table('member_price') .
+                    $sql = "DELETE FROM " . table('member_price') .
                         " WHERE goods_id = '$goods_id' AND user_rank = '$rank' LIMIT 1";
                 } else {
-                    $sql = "UPDATE " . $GLOBALS['ecs']->table('member_price') .
+                    $sql = "UPDATE " . table('member_price') .
                         " SET user_price = '$price' " .
                         "WHERE goods_id = '$goods_id' " .
                         "AND user_rank = '$rank' LIMIT 1";
@@ -160,7 +160,7 @@ class GoodsManageService
                 if ($price == -1) {
                     $sql = '';
                 } else {
-                    $sql = "INSERT INTO " . $GLOBALS['ecs']->table('member_price') . " (goods_id, user_rank, user_price) " .
+                    $sql = "INSERT INTO " . table('member_price') . " (goods_id, user_rank, user_price) " .
                         "VALUES ('$goods_id', '$rank', '$price')";
                 }
             }
@@ -180,14 +180,14 @@ class GoodsManageService
     public function handle_other_cat($goods_id, $cat_list)
     {
         /* 查询现有的扩展分类 */
-        $sql = "SELECT cat_id FROM " . $GLOBALS['ecs']->table('goods_cat') .
+        $sql = "SELECT cat_id FROM " . table('goods_cat') .
             " WHERE goods_id = '$goods_id'";
         $exist_list = $GLOBALS['db']->getCol($sql);
 
         /* 删除不再有的分类 */
         $delete_list = array_diff($exist_list, $cat_list);
         if ($delete_list) {
-            $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods_cat') .
+            $sql = "DELETE FROM " . table('goods_cat') .
                 " WHERE goods_id = '$goods_id' " .
                 "AND cat_id " . db_create_in($delete_list);
             $GLOBALS['db']->query($sql);
@@ -197,7 +197,7 @@ class GoodsManageService
         $add_list = array_diff($cat_list, $exist_list, array(0));
         foreach ($add_list as $cat_id) {
             // 插入记录
-            $sql = "INSERT INTO " . $GLOBALS['ecs']->table('goods_cat') .
+            $sql = "INSERT INTO " . table('goods_cat') .
                 " (goods_id, cat_id) " .
                 "VALUES ('$goods_id', '$cat_id')";
             $GLOBALS['db']->query($sql);
@@ -211,13 +211,13 @@ class GoodsManageService
      */
     public function handle_link_goods($goods_id)
     {
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('link_goods') . " SET " .
+        $sql = "UPDATE " . table('link_goods') . " SET " .
             " goods_id = '$goods_id' " .
             " WHERE goods_id = '0'" .
             " AND admin_id = '$_SESSION[admin_id]'";
         $GLOBALS['db']->query($sql);
 
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('link_goods') . " SET " .
+        $sql = "UPDATE " . table('link_goods') . " SET " .
             " link_goods_id = '$goods_id' " .
             " WHERE link_goods_id = '0'" .
             " AND admin_id = '$_SESSION[admin_id]'";
@@ -231,7 +231,7 @@ class GoodsManageService
      */
     public function handle_group_goods($goods_id)
     {
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('group_goods') . " SET " .
+        $sql = "UPDATE " . table('group_goods') . " SET " .
             " parent_id = '$goods_id' " .
             " WHERE parent_id = '0'" .
             " AND admin_id = '$_SESSION[admin_id]'";
@@ -245,7 +245,7 @@ class GoodsManageService
      */
     public function handle_goods_article($goods_id)
     {
-        $sql = "UPDATE " . $GLOBALS['ecs']->table('goods_article') . " SET " .
+        $sql = "UPDATE " . table('goods_article') . " SET " .
             " goods_id = '$goods_id' " .
             " WHERE goods_id = '0'" .
             " AND admin_id = '$_SESSION[admin_id]'";
@@ -315,12 +315,12 @@ class GoodsManageService
                 $img_original = reformat_image_name('gallery', $goods_id, $img_original, 'source');
                 $img_url = reformat_image_name('gallery', $goods_id, $img_url, 'goods');
                 $thumb_url = reformat_image_name('gallery_thumb', $goods_id, $thumb_url, 'thumb');
-                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('goods_gallery') . " (goods_id, img_url, img_desc, thumb_url, img_original) " .
+                $sql = "INSERT INTO " . table('goods_gallery') . " (goods_id, img_url, img_desc, thumb_url, img_original) " .
                     "VALUES ('$goods_id', '$img_url', '$img_desc', '$thumb_url', '$img_original')";
                 $GLOBALS['db']->query($sql);
                 /* 不保留商品原图的时候删除原图 */
                 if ($proc_thumb && !$GLOBALS['_CFG']['retain_original_img'] && !empty($img_original)) {
-                    $GLOBALS['db']->query("UPDATE " . $GLOBALS['ecs']->table('goods_gallery') . " SET img_original='' WHERE `goods_id`='{$goods_id}'");
+                    $GLOBALS['db']->query("UPDATE " . table('goods_gallery') . " SET img_original='' WHERE `goods_id`='{$goods_id}'");
                     @unlink('../' . $img_original);
                 }
             } elseif (!empty($image_urls[$key]) && ($image_urls[$key] != $GLOBALS['_LANG']['img_file']) && ($image_urls[$key] != 'http://') && copy(trim($image_urls[$key]), ROOT_PATH . 'temp/' . basename($image_urls[$key]))) {
@@ -342,7 +342,7 @@ class GoodsManageService
 
                 /* 重新格式化图片名称 */
                 $img_url = $img_original = htmlspecialchars($image_url);
-                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('goods_gallery') . " (goods_id, img_url, img_desc, thumb_url, img_original) " .
+                $sql = "INSERT INTO " . table('goods_gallery') . " (goods_id, img_url, img_desc, thumb_url, img_original) " .
                     "VALUES ('$goods_id', '$img_url', '$img_desc', '$thumb_url', '$img_original')";
                 $GLOBALS['db']->query($sql);
 
@@ -364,7 +364,7 @@ class GoodsManageService
             /* 清除缓存 */
             clear_cache_files();
 
-            $sql = "UPDATE " . $GLOBALS['ecs']->table('goods') .
+            $sql = "UPDATE " . table('goods') .
                 " SET $field = '$value' , last_update = '" . gmtime() . "' " .
                 "WHERE goods_id " . db_create_in($goods_id);
             return $GLOBALS['db']->query($sql);
@@ -385,7 +385,7 @@ class GoodsManageService
         }
 
         /* 取得有效商品id */
-        $sql = "SELECT DISTINCT goods_id FROM " . $GLOBALS['ecs']->table('goods') .
+        $sql = "SELECT DISTINCT goods_id FROM " . table('goods') .
             " WHERE goods_id " . db_create_in($goods_id) . " AND is_delete = 1";
         $goods_id = $GLOBALS['db']->getCol($sql);
         if (empty($goods_id)) {
@@ -394,7 +394,7 @@ class GoodsManageService
 
         /* 删除商品图片和轮播图片文件 */
         $sql = "SELECT goods_thumb, goods_img, original_img " .
-            "FROM " . $GLOBALS['ecs']->table('goods') .
+            "FROM " . table('goods') .
             " WHERE goods_id " . db_create_in($goods_id);
         $res = $GLOBALS['db']->query($sql);
         while ($goods = $GLOBALS['db']->fetchRow($res)) {
@@ -410,18 +410,18 @@ class GoodsManageService
         }
 
         /* 删除商品 */
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods') .
+        $sql = "DELETE FROM " . table('goods') .
             " WHERE goods_id " . db_create_in($goods_id);
         $GLOBALS['db']->query($sql);
 
         /* 删除商品的货品记录 */
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('products') .
+        $sql = "DELETE FROM " . table('products') .
             " WHERE goods_id " . db_create_in($goods_id);
         $GLOBALS['db']->query($sql);
 
         /* 删除商品相册的图片文件 */
         $sql = "SELECT img_url, thumb_url, img_original " .
-            "FROM " . $GLOBALS['ecs']->table('goods_gallery') .
+            "FROM " . table('goods_gallery') .
             " WHERE goods_id " . db_create_in($goods_id);
         $res = $GLOBALS['db']->query($sql);
         while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -437,35 +437,35 @@ class GoodsManageService
         }
 
         /* 删除商品相册 */
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods_gallery') . " WHERE goods_id " . db_create_in($goods_id);
+        $sql = "DELETE FROM " . table('goods_gallery') . " WHERE goods_id " . db_create_in($goods_id);
         $GLOBALS['db']->query($sql);
 
         /* 删除相关表记录 */
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('collect_goods') . " WHERE goods_id " . db_create_in($goods_id);
+        $sql = "DELETE FROM " . table('collect_goods') . " WHERE goods_id " . db_create_in($goods_id);
         $GLOBALS['db']->query($sql);
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods_article') . " WHERE goods_id " . db_create_in($goods_id);
+        $sql = "DELETE FROM " . table('goods_article') . " WHERE goods_id " . db_create_in($goods_id);
         $GLOBALS['db']->query($sql);
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods_attr') . " WHERE goods_id " . db_create_in($goods_id);
+        $sql = "DELETE FROM " . table('goods_attr') . " WHERE goods_id " . db_create_in($goods_id);
         $GLOBALS['db']->query($sql);
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods_cat') . " WHERE goods_id " . db_create_in($goods_id);
+        $sql = "DELETE FROM " . table('goods_cat') . " WHERE goods_id " . db_create_in($goods_id);
         $GLOBALS['db']->query($sql);
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('member_price') . " WHERE goods_id " . db_create_in($goods_id);
+        $sql = "DELETE FROM " . table('member_price') . " WHERE goods_id " . db_create_in($goods_id);
         $GLOBALS['db']->query($sql);
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('group_goods') . " WHERE parent_id " . db_create_in($goods_id);
+        $sql = "DELETE FROM " . table('group_goods') . " WHERE parent_id " . db_create_in($goods_id);
         $GLOBALS['db']->query($sql);
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('group_goods') . " WHERE goods_id " . db_create_in($goods_id);
+        $sql = "DELETE FROM " . table('group_goods') . " WHERE goods_id " . db_create_in($goods_id);
         $GLOBALS['db']->query($sql);
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('link_goods') . " WHERE goods_id " . db_create_in($goods_id);
+        $sql = "DELETE FROM " . table('link_goods') . " WHERE goods_id " . db_create_in($goods_id);
         $GLOBALS['db']->query($sql);
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('link_goods') . " WHERE link_goods_id " . db_create_in($goods_id);
+        $sql = "DELETE FROM " . table('link_goods') . " WHERE link_goods_id " . db_create_in($goods_id);
         $GLOBALS['db']->query($sql);
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('tag') . " WHERE goods_id " . db_create_in($goods_id);
+        $sql = "DELETE FROM " . table('tag') . " WHERE goods_id " . db_create_in($goods_id);
         $GLOBALS['db']->query($sql);
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('comment') . " WHERE comment_type = 0 AND id_value " . db_create_in($goods_id);
+        $sql = "DELETE FROM " . table('comment') . " WHERE comment_type = 0 AND id_value " . db_create_in($goods_id);
         $GLOBALS['db']->query($sql);
 
         /* 删除相应虚拟商品记录 */
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('virtual_card') . " WHERE goods_id " . db_create_in($goods_id);
+        $sql = "DELETE FROM " . table('virtual_card') . " WHERE goods_id " . db_create_in($goods_id);
         if (!$GLOBALS['db']->query($sql, 'SILENT') && $GLOBALS['db']->errno() != 1146) {
             die($GLOBALS['db']->error());
         }
@@ -483,7 +483,7 @@ class GoodsManageService
     {
         $goods_sn = $GLOBALS['_CFG']['sn_prefix'] . str_repeat('0', 6 - strlen($goods_id)) . $goods_id;
 
-        $sql = "SELECT goods_sn FROM " . $GLOBALS['ecs']->table('goods') .
+        $sql = "SELECT goods_sn FROM " . table('goods') .
             " WHERE goods_sn LIKE '" . mysql_like_quote($goods_sn) . "%' AND goods_id <> '$goods_id' " .
             " ORDER BY LENGTH(goods_sn) DESC";
         $sn_list = $GLOBALS['db']->getCol($sql);
@@ -515,10 +515,10 @@ class GoodsManageService
         }
 
         if (empty($goods_id)) {
-            $sql = "SELECT goods_id FROM " . $GLOBALS['ecs']->table('goods') . "
+            $sql = "SELECT goods_id FROM " . table('goods') . "
                 WHERE goods_sn = '$goods_sn'";
         } else {
-            $sql = "SELECT goods_id FROM " . $GLOBALS['ecs']->table('goods') . "
+            $sql = "SELECT goods_id FROM " . table('goods') . "
                 WHERE goods_sn = '$goods_sn'
                 AND goods_id <> '$goods_id'";
         }
@@ -546,8 +546,8 @@ class GoodsManageService
 
         // 查询属性值及商品的属性值
         $sql = "SELECT a.attr_id, a.attr_name, a.attr_input_type, a.attr_type, a.attr_values, v.attr_value, v.attr_price " .
-            "FROM " . $GLOBALS['ecs']->table('attribute') . " AS a " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('goods_attr') . " AS v " .
+            "FROM " . table('attribute') . " AS a " .
+            "LEFT JOIN " . table('goods_attr') . " AS v " .
             "ON v.attr_id = a.attr_id AND v.goods_id = '$goods_id' " .
             "WHERE a.cat_id = " . intval($cat_id) . " OR a.cat_id = 0 " .
             "ORDER BY a.sort_order, a.attr_type, a.attr_id, v.attr_price, v.goods_attr_id";
@@ -567,7 +567,7 @@ class GoodsManageService
     {
         // 查询
         $sql = "SELECT DISTINCT cat_id
-            FROM " . $GLOBALS['ecs']->table('attribute') . "
+            FROM " . table('attribute') . "
             WHERE attr_type = 1";
         $row = $GLOBALS['db']->getAll($sql);
 
@@ -647,8 +647,8 @@ class GoodsManageService
     public function get_linked_goods($goods_id)
     {
         $sql = "SELECT lg.link_goods_id AS goods_id, g.goods_name, lg.is_double " .
-            "FROM " . $GLOBALS['ecs']->table('link_goods') . " AS lg, " .
-            $GLOBALS['ecs']->table('goods') . " AS g " .
+            "FROM " . table('link_goods') . " AS lg, " .
+            table('goods') . " AS g " .
             "WHERE lg.goods_id = '$goods_id' " .
             "AND lg.link_goods_id = g.goods_id ";
         if ($goods_id == 0) {
@@ -677,8 +677,8 @@ class GoodsManageService
     public function get_group_goods($goods_id)
     {
         $sql = "SELECT gg.goods_id, CONCAT(g.goods_name, ' -- [', gg.goods_price, ']') AS goods_name " .
-            "FROM " . $GLOBALS['ecs']->table('group_goods') . " AS gg, " .
-            $GLOBALS['ecs']->table('goods') . " AS g " .
+            "FROM " . table('group_goods') . " AS gg, " .
+            table('goods') . " AS g " .
             "WHERE gg.parent_id = '$goods_id' " .
             "AND gg.goods_id = g.goods_id ";
         if ($goods_id == 0) {
@@ -699,8 +699,8 @@ class GoodsManageService
     public function get_goods_articles($goods_id)
     {
         $sql = "SELECT g.article_id, a.title " .
-            "FROM " . $GLOBALS['ecs']->table('goods_article') . " AS g, " .
-            $GLOBALS['ecs']->table('article') . " AS a " .
+            "FROM " . table('goods_article') . " AS g, " .
+            table('article') . " AS a " .
             "WHERE g.goods_id = '$goods_id' " .
             "AND g.article_id = a.article_id ";
         if ($goods_id == 0) {
@@ -803,7 +803,7 @@ class GoodsManageService
             $where .= $conditions;
 
             /* 记录总数 */
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods') . " AS g WHERE is_delete='$is_delete' $where";
+            $sql = "SELECT COUNT(*) FROM " . table('goods') . " AS g WHERE is_delete='$is_delete' $where";
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
             /* 分页大小 */
@@ -811,7 +811,7 @@ class GoodsManageService
 
             $sql = "SELECT goods_id, goods_name, goods_type, goods_sn, shop_price, is_on_sale, is_best, is_new, is_hot, sort_order, goods_number, integral, " .
                 " (promote_price > 0 AND promote_start_date <= '$today' AND promote_end_date >= '$today') AS is_promote " .
-                " FROM " . $GLOBALS['ecs']->table('goods') . " AS g WHERE is_delete='$is_delete' $where" .
+                " FROM " . table('goods') . " AS g WHERE is_delete='$is_delete' $where" .
                 " ORDER BY $filter[sort_by] $filter[sort_order] " .
                 " LIMIT " . $filter['start'] . ",$filter[page_size]";
 
@@ -841,7 +841,7 @@ class GoodsManageService
         }
 
         $sql = "SELECT goods_id
-            FROM " . $GLOBALS['ecs']->table('products') . "
+            FROM " . table('products') . "
             WHERE goods_id = '$goods_id'
             " . $conditions . "
             LIMIT 0, 1";
@@ -869,7 +869,7 @@ class GoodsManageService
         }
 
         $sql = "SELECT SUM(product_number)
-            FROM " . $GLOBALS['ecs']->table('products') . "
+            FROM " . table('products') . "
             WHERE goods_id = '$goods_id'
             " . $conditions;
         $nums = $GLOBALS['db']->getOne($sql);
@@ -891,7 +891,7 @@ class GoodsManageService
             return array();  //$goods_id不能为空
         }
 
-        $sql = "SELECT goods_attr_id, attr_value FROM " . $GLOBALS['ecs']->table('goods_attr') . " WHERE goods_id = '$goods_id'";
+        $sql = "SELECT goods_attr_id, attr_value FROM " . table('goods_attr') . " WHERE goods_id = '$goods_id'";
         $results = $GLOBALS['db']->getAll($sql);
 
         $return_arr = array();
@@ -916,8 +916,8 @@ class GoodsManageService
         }
 
         $sql = "SELECT g.goods_attr_id, g.attr_value, g.attr_id, a.attr_name
-            FROM " . $GLOBALS['ecs']->table('goods_attr') . " AS g
-                LEFT JOIN " . $GLOBALS['ecs']->table('attribute') . " AS a
+            FROM " . table('goods_attr') . " AS g
+                LEFT JOIN " . table('attribute') . " AS a
                     ON a.attr_id = g.attr_id
             WHERE goods_id = '$goods_id'
             AND a.attr_type = 1
@@ -971,11 +971,11 @@ class GoodsManageService
             $where .= $conditions;
 
             /* 记录总数 */
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('products') . " AS p WHERE goods_id = $goods_id $where";
+            $sql = "SELECT COUNT(*) FROM " . table('products') . " AS p WHERE goods_id = $goods_id $where";
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
             $sql = "SELECT product_id, goods_id, goods_attr, product_sn, product_number
-                FROM " . $GLOBALS['ecs']->table('products') . " AS g
+                FROM " . table('products') . " AS g
                 WHERE goods_id = $goods_id $where
                 ORDER BY $filter[sort_by] $filter[sort_order]";
 
@@ -1024,7 +1024,7 @@ class GoodsManageService
             $filed = '*';
         }
 
-        $sql = "SELECT $filed FROM  " . $GLOBALS['ecs']->table('products') . " WHERE product_id = '$product_id'";
+        $sql = "SELECT $filed FROM  " . table('products') . " WHERE product_id = '$product_id'";
         $return_array = $GLOBALS['db']->getRow($sql);
 
         return $return_array;
@@ -1041,7 +1041,7 @@ class GoodsManageService
         $goods_id = intval($goods_id);
 
         $sql = "SELECT COUNT(a.attr_id)
-            FROM " . $GLOBALS['ecs']->table('attribute') . " AS a, " . $GLOBALS['ecs']->table('goods') . " AS g
+            FROM " . table('attribute') . " AS a, " . table('goods') . " AS g
             WHERE a.cat_id = g.goods_type
             AND g.goods_id = '$goods_id'";
 
@@ -1070,11 +1070,11 @@ class GoodsManageService
         }
 
         if (empty($product_id)) {
-            $sql = "SELECT product_id FROM " . $GLOBALS['ecs']->table('products') . "
+            $sql = "SELECT product_id FROM " . table('products') . "
                 WHERE goods_attr = '$goods_attr'
                 AND goods_id = '$goods_id'";
         } else {
-            $sql = "SELECT product_id FROM " . $GLOBALS['ecs']->table('products') . "
+            $sql = "SELECT product_id FROM " . table('products') . "
                 WHERE goods_attr = '$goods_attr'
                 AND goods_id = '$goods_id'
                 AND product_id <> '$product_id'";
@@ -1103,17 +1103,17 @@ class GoodsManageService
         if (strlen($product_sn) == 0) {
             return true;    //重复
         }
-        $sql = "SELECT goods_id FROM " . $GLOBALS['ecs']->table('goods') . "WHERE goods_sn='$product_sn'";
+        $sql = "SELECT goods_id FROM " . table('goods') . "WHERE goods_sn='$product_sn'";
         if ($GLOBALS['db']->getOne($sql)) {
             return true;    //重复
         }
 
 
         if (empty($product_id)) {
-            $sql = "SELECT product_id FROM " . $GLOBALS['ecs']->table('products') . "
+            $sql = "SELECT product_id FROM " . table('products') . "
                 WHERE product_sn = '$product_sn'";
         } else {
-            $sql = "SELECT product_id FROM " . $GLOBALS['ecs']->table('products') . "
+            $sql = "SELECT product_id FROM " . table('products') . "
                 WHERE product_sn = '$product_sn'
                 AND product_id <> '$product_id'";
         }

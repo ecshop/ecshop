@@ -21,7 +21,7 @@ class MailTemplateController extends InitController
         include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
 
         /* 获得所有邮件模板 */
-        $sql = "SELECT template_id, template_code FROM " . $ecs->table('mail_templates') . " WHERE  type = 'template'";
+        $sql = "SELECT template_id, template_code FROM " . table('mail_templates') . " WHERE  type = 'template'";
         $res = $db->query($sql);
         $cur = null;
 
@@ -69,7 +69,7 @@ class MailTemplateController extends InitController
         $mail_type = isset($_GET['mail_type']) ? $_GET['mail_type'] : -1;
 
         /* 获得所有邮件模板 */
-        $sql = "SELECT template_id, template_code FROM " . $ecs->table('mail_templates') . " WHERE  type = 'template'";
+        $sql = "SELECT template_id, template_code FROM " . table('mail_templates') . " WHERE  type = 'template'";
         $res = $db->query($sql);
 
         while ($row = $db->fetchRow($res)) {
@@ -127,7 +127,7 @@ class MailTemplateController extends InitController
         $tpl_id = intval($_POST['tpl']);
 
 
-        $sql = "UPDATE " . $ecs->table('mail_templates') . " SET " .
+        $sql = "UPDATE " . table('mail_templates') . " SET " .
             "template_subject = '" . str_replace('\\\'\\\'', '\\\'', $subject) . "', " .
             "template_content = '" . str_replace('\\\'\\\'', '\\\'', $content) . "', " .
             "is_html = '$type', " .
@@ -152,7 +152,7 @@ class MailTemplateController extends InitController
     public function load_template($temp_id)
     {
         $sql = "SELECT template_subject, template_content, is_html " .
-            "FROM " . $GLOBALS['ecs']->table('mail_templates') . " WHERE template_id='$temp_id'";
+            "FROM " . table('mail_templates') . " WHERE template_id='$temp_id'";
         $row = $GLOBALS['db']->getRow($sql);
 
         return $row;

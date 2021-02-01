@@ -96,7 +96,7 @@ class VisitSoldController extends InitController
 
         $click_sold_info = array();
         $sql = "SELECT og.goods_id, g.goods_sn, g.goods_name, g.click_count,  COUNT(og.goods_id) AS sold_times " .
-            " FROM " . $ecs->table('goods') . " AS g, " . $ecs->table('order_goods') . " AS og, " . $ecs->table('order_info') . " AS o " . $where .
+            " FROM " . table('goods') . " AS g, " . table('order_goods') . " AS og, " . table('order_info') . " AS o " . $where .
             " GROUP BY og.goods_id ORDER BY g.click_count DESC " . $limit;
         $res = $db->query($sql);
 

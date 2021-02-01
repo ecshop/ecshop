@@ -26,7 +26,7 @@ class PickOutController extends InitController
         if (empty($cat_id)) {
             /* 获取所有符合条件的商品类型 */
             $sql = "SELECT DISTINCT t.cat_id, t.cat_name " .
-                "FROM " . $ecs->table('goods_type') . " AS t, " . $ecs->table('attribute') . " AS a, " . $ecs->table('goods_attr') . " AS g " .
+                "FROM " . table('goods_type') . " AS t, " . table('attribute') . " AS a, " . table('goods_attr') . " AS g " .
                 "WHERE t.cat_id = a.cat_id AND a.attr_id = g.attr_id AND t.enabled = 1";
             $rs = $db->query($sql);
 
@@ -43,7 +43,7 @@ class PickOutController extends InitController
 
             /* 获取符合条件的属性 */
             $sql = "SELECT DISTINCT a.attr_id " .
-                "FROM " . $ecs->table('goods_attr') . " AS g, " . $ecs->table('attribute') . " AS a " .
+                "FROM " . table('goods_attr') . " AS g, " . table('attribute') . " AS a " .
                 "WHERE a.attr_id = g.attr_id " . $in_cat;
 
             $in_attr = $db->getCol($sql); //符合条件attr_id;
@@ -51,8 +51,8 @@ class PickOutController extends InitController
 
             /* 获取所有属性值 */
             $sql = "SELECT DISTINCT g.attr_id, a.attr_name, a.cat_id, g.attr_value" .
-                " FROM " . $ecs->table('goods_attr') . " AS g, " .
-                $ecs->table('attribute') . " AS a" .
+                " FROM " . table('goods_attr') . " AS g, " .
+                table('attribute') . " AS a" .
                 " WHERE a.attr_id = g.attr_id " . $in_attr . " ORDER BY cat_id";
             $rs = $db->query($sql);
 
@@ -65,16 +65,16 @@ class PickOutController extends InitController
             }
 
             /* 获取商品总数 */
-            $goods_count = $db->getOne("SELECT COUNT(DISTINCT(goods_id)) FROM " . $ecs->table('goods_attr'));
+            $goods_count = $db->getOne("SELECT COUNT(DISTINCT(goods_id)) FROM " . table('goods_attr'));
             /* 获取符合条件的商品id */
-            //$sql = "SELECT DISTINCT goods_id FROM " .$ecs->table('goods_attr'). " LIMIT 100";
-            $sql = "SELECT DISTINCT goods_id FROM " . $ecs->table('goods_attr');
+            //$sql = "SELECT DISTINCT goods_id FROM " .table('goods_attr'). " LIMIT 100";
+            $sql = "SELECT DISTINCT goods_id FROM " . table('goods_attr');
             $in_goods = $db->getCol($sql);
             $in_goods = 'AND g.goods_id ' . db_create_in(implode(',', $in_goods));
             $url = "search.php?pickout=1";
         } else {
             /* 取得商品类型名称 */
-            $sql = "SELECT cat_name FROM " . $ecs->table('goods_type') . " WHERE cat_id = '$cat_id'";
+            $sql = "SELECT cat_name FROM " . table('goods_type') . " WHERE cat_id = '$cat_id'";
             $cat_name = $db->getOne($sql);
             $condition[0]['name'] = $cat_name;
 
@@ -97,15 +97,15 @@ class PickOutController extends InitController
                         if (empty($goods_result)) {
                             break;
                         }
-                        $goods_result = $db->getCol("SELECT goods_id FROM " . $ecs->table("goods_attr") . " WHERE goods_id IN (" . implode(',', $goods_result) . ") AND attr_id='$key' AND attr_value='$value'");
+                        $goods_result = $db->getCol("SELECT goods_id FROM " . table("goods_attr") . " WHERE goods_id IN (" . implode(',', $goods_result) . ") AND attr_id='$key' AND attr_value='$value'");
                     } else {
-                        $goods_result = $db->getCol("SELECT goods_id FROM " . $ecs->table("goods_attr") . " WHERE attr_id='$key' AND attr_value='$value'");
+                        $goods_result = $db->getCol("SELECT goods_id FROM " . table("goods_attr") . " WHERE attr_id='$key' AND attr_value='$value'");
                     }
                     $i++;
                 }
 
                 /* 获取指定attr_id的名字 */
-                $sql = "SELECT attr_id, attr_name FROM " . $ecs->table('attribute') . " WHERE attr_id " . db_create_in(implode(',', $attr_picks));
+                $sql = "SELECT attr_id, attr_name FROM " . table('attribute') . " WHERE attr_id " . db_create_in(implode(',', $attr_picks));
                 $rs = $db->query($sql);
                 while ($row = $db->fetchRow($rs)) {
                     $picks[] = array('name' => '<strong>' . $row['attr_name'] . ':</strong><br />' . htmlspecialchars(urldecode($_GET['attr'][$row['attr_id']])), 'url' => 'pick_out.php?cat_id=' . $cat_id . search_url($attr_picks, $row['attr_id']));
@@ -119,17 +119,17 @@ class PickOutController extends InitController
                 /* 仅选择了商品类型的情况 */
 
                 /* 查出数量 */
-                $goods_count = $db->getOne("SELECT COUNT(distinct(g.goods_id)) FROM " . $ecs->table('goods_attr') . " AS g, " . $ecs->table('attribute') . " AS a WHERE g.attr_id = a.attr_id AND a.cat_id = '$cat_id' ");
+                $goods_count = $db->getOne("SELECT COUNT(distinct(g.goods_id)) FROM " . table('goods_attr') . " AS g, " . table('attribute') . " AS a WHERE g.attr_id = a.attr_id AND a.cat_id = '$cat_id' ");
 
                 /* 防止结果过大，最多只查出前100个goods_id */
 
-                $sql = "SELECT DISTINCT g.goods_id FROM " . $ecs->table('goods_attr') . " AS g, " . $ecs->table('attribute') . " AS a WHERE g.attr_id = a.attr_id AND a.cat_id = '$cat_id' LIMIT 100";
+                $sql = "SELECT DISTINCT g.goods_id FROM " . table('goods_attr') . " AS g, " . table('attribute') . " AS a WHERE g.attr_id = a.attr_id AND a.cat_id = '$cat_id' LIMIT 100";
                 $in_goods = $db->getCol($sql);
                 $in_goods = 'AND g.goods_id ' . db_create_in(implode(',', $in_goods));
             }
 
             /* 获取符合条件的属性 */
-            $sql = "SELECT DISTINCT a.attr_id FROM " . $ecs->table('goods_attr') . " AS g, " . $ecs->table('attribute') . " AS a " .
+            $sql = "SELECT DISTINCT a.attr_id FROM " . table('goods_attr') . " AS g, " . table('attribute') . " AS a " .
                 "WHERE a.attr_id = g.attr_id " . $in_goods;
 
             $in_attr = $db->getCol($sql); // 符合条件attr_id;
@@ -137,7 +137,7 @@ class PickOutController extends InitController
             $in_attr = 'AND g.attr_id ' . db_create_in(implode(',', $in_attr));
 
             /* 获取所有属性值 */
-            $sql = "SELECT DISTINCT g.attr_id, a.attr_name, g.attr_value FROM " . $ecs->table('goods_attr') . " AS g, " . $ecs->table('attribute') . " AS a WHERE a.attr_id = g.attr_id " . $in_attr . $in_goods;
+            $sql = "SELECT DISTINCT g.attr_id, a.attr_name, g.attr_value FROM " . table('goods_attr') . " AS g, " . table('attribute') . " AS a WHERE a.attr_id = g.attr_id " . $in_attr . $in_goods;
             $rs = $db->query($sql);
 
             while ($row = $db->fetchRow($rs)) {
@@ -156,8 +156,8 @@ class PickOutController extends InitController
         $sql = "SELECT g.goods_id, g.goods_name, g.market_price, g.shop_price AS org_price, " .
             "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " .
             "g.promote_price, promote_start_date, promote_end_date, g.goods_brief, g.goods_thumb " .
-            "FROM " . $ecs->table('goods') . " AS g " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp " .
+            "FROM " . table('goods') . " AS g " .
+            "LEFT JOIN " . table('member_price') . " AS mp " .
             "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
             "WHERE g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 " . $in_goods .
             "ORDER BY g.sort_order, g.last_update DESC";
@@ -165,8 +165,8 @@ class PickOutController extends InitController
 
         /* 获取品牌 */
         $sql = "SELECT b.brand_id, b.brand_name, b.brand_logo, COUNT(g.goods_id) AS goods_num " .
-            " FROM " . $ecs->table('goods') . " AS g " .
-            " LEFT JOIN " . $ecs->table('brand') . " AS b ON g.brand_id=b.brand_id " .
+            " FROM " . table('goods') . " AS g " .
+            " LEFT JOIN " . table('brand') . " AS b ON g.brand_id=b.brand_id " .
             " WHERE g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 AND b.brand_id > 0 " . $in_goods .
             " GROUP BY g.brand_id ";
 
@@ -177,8 +177,8 @@ class PickOutController extends InitController
 
         /* 获取分类 */
         $sql = "SELECT c.cat_id, c.cat_name, COUNT(g.goods_id) AS goods_num " .
-            " FROM " . $ecs->table('goods') . " AS g " .
-            " LEFT JOIN " . $ecs->table('category') . " AS c ON c.cat_id = g.cat_id " .
+            " FROM " . table('goods') . " AS g " .
+            " LEFT JOIN " . table('category') . " AS c ON c.cat_id = g.cat_id " .
             " WHERE g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0  " . $in_goods .
             " GROUP BY g.cat_id ";
 

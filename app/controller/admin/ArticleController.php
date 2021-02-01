@@ -14,7 +14,7 @@ class ArticleController extends InitController
         require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
 
         /*初始化数据交换对象 */
-        $exc = new exchange($ecs->table("article"), $db, 'article_id', 'title');
+        $exc = new exchange(table("article"), $db, 'article_id', 'title');
         //$image = new cls_image();
 
         /* 允许上传的文件类型 */
@@ -92,7 +92,7 @@ class ArticleController extends InitController
         $this->assign('brand_list', get_brand_list());
 
         /* 清理关联商品 */
-        $sql = "DELETE FROM " . $ecs->table('goods_article') . " WHERE article_id = 0";
+        $sql = "DELETE FROM " . table('goods_article') . " WHERE article_id = 0";
         $db->query($sql);
 
         if (isset($_GET['id'])) {
@@ -154,7 +154,7 @@ class ArticleController extends InitController
         if (empty($_POST['cat_id'])) {
             $_POST['cat_id'] = 0;
         }
-        $sql = "INSERT INTO " . $ecs->table('article') . "(title, cat_id, article_type, is_open, author, " .
+        $sql = "INSERT INTO " . table('article') . "(title, cat_id, article_type, is_open, author, " .
             "author_email, keywords, content, add_time, file_url, open_type, link, description) " .
             "VALUES ('$_POST[title]', '$_POST[article_cat]', '$_POST[article_type]', '$_POST[is_open]', " .
             "'$_POST[author]', '$_POST[author_email]', '$_POST[keywords]', '$_POST[FCKeditor1]', " .
@@ -163,7 +163,7 @@ class ArticleController extends InitController
 
         /* 处理关联商品 */
         $article_id = $db->insert_id();
-        $sql = "UPDATE " . $ecs->table('goods_article') . " SET article_id = '$article_id' WHERE article_id = 0";
+        $sql = "UPDATE " . table('goods_article') . " SET article_id = '$article_id' WHERE article_id = 0";
         $db->query($sql);
 
         $link[0]['text'] = $_LANG['continue_add'];
@@ -188,7 +188,7 @@ class ArticleController extends InitController
         admin_priv('article_manage');
 
         /* 取文章数据 */
-        $sql = "SELECT * FROM " . $ecs->table('article') . " WHERE article_id='$_REQUEST[id]'";
+        $sql = "SELECT * FROM " . table('article') . " WHERE article_id='$_REQUEST[id]'";
         $article = $db->getRow($sql);
 
         /* 创建 html editor */
@@ -256,7 +256,7 @@ class ArticleController extends InitController
         }
 
         /* 如果 file_url 跟以前不一样，且原来的文件是本地文件，删除原来的文件 */
-        $sql = "SELECT file_url FROM " . $ecs->table('article') . " WHERE article_id = '$_POST[id]'";
+        $sql = "SELECT file_url FROM " . table('article') . " WHERE article_id = '$_POST[id]'";
         $old_url = $db->getOne($sql);
         if ($old_url != '' && $old_url != $file_url && strpos($old_url, 'http://') === false && strpos($old_url, 'https://') === false) {
             @unlink(ROOT_PATH . $old_url);
@@ -344,7 +344,7 @@ class ArticleController extends InitController
         $id = intval($_GET['id']);
 
         /* 删除原来的文件 */
-        $sql = "SELECT file_url FROM " . $ecs->table('article') . " WHERE article_id = '$id'";
+        $sql = "SELECT file_url FROM " . table('article') . " WHERE article_id = '$id'";
         $old_url = $db->getOne($sql);
         if ($old_url != '' && strpos($old_url, 'http://') === false && strpos($old_url, 'https://') === false) {
             @unlink(ROOT_PATH . $old_url);
@@ -352,7 +352,7 @@ class ArticleController extends InitController
 
         $name = $exc->get_name($id);
         if ($exc->drop($id)) {
-            $db->query("DELETE FROM " . $ecs->table('comment') . " WHERE " . "comment_type = 1 AND id_value = $id");
+            $db->query("DELETE FROM " . table('comment') . " WHERE " . "comment_type = 1 AND id_value = $id");
 
             admin_log(addslashes($name), 'remove', 'article');
             clear_cache_files();
@@ -377,11 +377,11 @@ class ArticleController extends InitController
         $article_id = $args[0];
 
         if ($article_id == 0) {
-            $article_id = $db->getOne('SELECT MAX(article_id)+1 AS article_id FROM ' . $ecs->table('article'));
+            $article_id = $db->getOne('SELECT MAX(article_id)+1 AS article_id FROM ' . table('article'));
         }
 
         foreach ($add_ids as $key => $val) {
-            $sql = 'INSERT INTO ' . $ecs->table('goods_article') . ' (goods_id, article_id) ' .
+            $sql = 'INSERT INTO ' . table('goods_article') . ' (goods_id, article_id) ' .
                 "VALUES ('$val', '$article_id')";
             $db->query($sql, 'SILENT') or make_json_error($db->error());
         }
@@ -413,10 +413,10 @@ class ArticleController extends InitController
         $article_id = $arguments[0];
 
         if ($article_id == 0) {
-            $article_id = $db->getOne('SELECT MAX(article_id)+1 AS article_id FROM ' . $ecs->table('article'));
+            $article_id = $db->getOne('SELECT MAX(article_id)+1 AS article_id FROM ' . table('article'));
         }
 
-        $sql = "DELETE FROM " . $ecs->table('goods_article') .
+        $sql = "DELETE FROM " . table('goods_article') .
             " WHERE article_id = '$article_id' AND goods_id " . db_create_in($drop_goods);
         $db->query($sql, 'SILENT') or make_json_error($db->error());
 
@@ -469,7 +469,7 @@ class ArticleController extends InitController
                 }
 
                 /* 删除原来的文件 */
-                $sql = "SELECT file_url FROM " . $ecs->table('article') .
+                $sql = "SELECT file_url FROM " . table('article') .
                     " WHERE article_id " . db_create_in(join(',', $_POST['checkboxes'])) .
                     " AND file_url <> ''";
 
@@ -539,7 +539,7 @@ class ArticleController extends InitController
     /* 把商品删除关联 */
     public function drop_link_goods($goods_id, $article_id)
     {
-        $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods_article') .
+        $sql = "DELETE FROM " . table('goods_article') .
             " WHERE goods_id = '$goods_id' AND article_id = '$article_id' LIMIT 1";
         $GLOBALS['db']->query($sql);
         create_result(true, '', $goods_id);
@@ -550,8 +550,8 @@ class ArticleController extends InitController
     {
         $list = array();
         $sql = 'SELECT g.goods_id, g.goods_name' .
-            ' FROM ' . $GLOBALS['ecs']->table('goods_article') . ' AS ga' .
-            ' LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = ga.goods_id' .
+            ' FROM ' . table('goods_article') . ' AS ga' .
+            ' LEFT JOIN ' . table('goods') . ' AS g ON g.goods_id = ga.goods_id' .
             " WHERE ga.article_id = '$article_id'";
         $list = $GLOBALS['db']->getAll($sql);
 
@@ -581,8 +581,8 @@ class ArticleController extends InitController
             }
 
             /* 文章总数 */
-            $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('article') . ' AS a ' .
-                'LEFT JOIN ' . $GLOBALS['ecs']->table('article_cat') . ' AS ac ON ac.cat_id = a.cat_id ' .
+            $sql = 'SELECT COUNT(*) FROM ' . table('article') . ' AS a ' .
+                'LEFT JOIN ' . table('article_cat') . ' AS ac ON ac.cat_id = a.cat_id ' .
                 'WHERE 1 ' . $where;
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -590,8 +590,8 @@ class ArticleController extends InitController
 
             /* 获取文章数据 */
             $sql = 'SELECT a.* , ac.cat_name ' .
-                'FROM ' . $GLOBALS['ecs']->table('article') . ' AS a ' .
-                'LEFT JOIN ' . $GLOBALS['ecs']->table('article_cat') . ' AS ac ON ac.cat_id = a.cat_id ' .
+                'FROM ' . table('article') . ' AS a ' .
+                'LEFT JOIN ' . table('article_cat') . ' AS ac ON ac.cat_id = a.cat_id ' .
                 'WHERE 1 ' . $where . ' ORDER by ' . $filter['sort_by'] . ' ' . $filter['sort_order'];
 
             $filter['keyword'] = stripslashes($filter['keyword']);

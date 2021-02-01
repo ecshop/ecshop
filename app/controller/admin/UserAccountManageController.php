@@ -47,13 +47,13 @@ class UserAccountManageController extends InitController
         $account['to_cash_amount'] = get_total_amount($start_date, $end_date, 1);//提现总额
 
         $sql = " SELECT IFNULL(SUM(user_money), 0) AS user_money, IFNULL(SUM(frozen_money), 0) AS frozen_money FROM " .
-            $ecs->table('account_log') . " WHERE `change_time` >= " . $start_date . " AND `change_time` < " . ($end_date + 86400);
+            table('account_log') . " WHERE `change_time` >= " . $start_date . " AND `change_time` < " . ($end_date + 86400);
         $money_list = $db->getRow($sql);
         $account['user_money'] = price_format($money_list['user_money']);   //用户可用余额
         $account['frozen_money'] = price_format($money_list['frozen_money']);   //用户冻结金额
 
         $sql = "SELECT IFNULL(SUM(surplus), 0) AS surplus, IFNULL(SUM(integral_money), 0) AS integral_money FROM " .
-            $ecs->table('order_info') . " WHERE 1 AND `add_time` >= " . $start_date . " AND `add_time` < " . ($end_date + 86400);
+            table('order_info') . " WHERE 1 AND `add_time` >= " . $start_date . " AND `add_time` < " . ($end_date + 86400);
         $money_list = $db->getRow($sql);
 
         $account['surplus'] = price_format($money_list['surplus']);   //交易使用余额
@@ -113,7 +113,7 @@ class UserAccountManageController extends InitController
      */
     public function get_total_amount($start_date, $end_date, $type = 0)
     {
-        $sql = " SELECT IFNULL(SUM(amount), 0) AS total_amount FROM " . $GLOBALS['ecs']->table('user_account') . " AS a, " . $GLOBALS['ecs']->table('users') . " AS u " .
+        $sql = " SELECT IFNULL(SUM(amount), 0) AS total_amount FROM " . table('user_account') . " AS a, " . table('users') . " AS u " .
             " WHERE process_type = $type AND is_paid = 1 AND a.user_id = u.user_id AND paid_time >= '$start_date' AND paid_time < '" . ($end_date + 86400) . "'";
 
         $amount = $GLOBALS['db']->getone($sql);
@@ -152,13 +152,13 @@ class UserAccountManageController extends InitController
                 $ex_where .= " AND user_name LIKE '%" . mysql_like_quote($filter['keywords']) . "%'";
             }
             $ex_where .= " AND o.user_id = u.user_id AND (o.surplus != 0 OR integral_money != 0) AND `add_time` >= " . $start_date . " AND `add_time` < " . ($end_date + 86400);
-            $filter['record_count'] = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('order_info') . " AS o, " . $GLOBALS['ecs']->table('users') . " AS u " . $ex_where);
+            $filter['record_count'] = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . table('order_info') . " AS o, " . table('users') . " AS u " . $ex_where);
 
             /* 分页大小 */
             $filter = page_and_size($filter);
 
             $sql = "SELECT o.order_id, o.order_sn, u.user_name, o.surplus, o.integral_money, o.add_time FROM " .
-                $GLOBALS['ecs']->table('order_info') . " AS o," . $GLOBALS['ecs']->table('users') . " AS u " . $ex_where .
+                table('order_info') . " AS o," . table('users') . " AS u " . $ex_where .
                 " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
                 " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
 

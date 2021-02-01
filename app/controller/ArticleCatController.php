@@ -40,7 +40,7 @@ class ArticleCatController extends InitController
         $this->assign('promotion_info', get_promotion_info());
 
         /* Meta */
-        $meta = $db->getRow("SELECT keywords, cat_desc FROM " . $ecs->table('article_cat') . " WHERE cat_id = '$cat_id'");
+        $meta = $db->getRow("SELECT keywords, cat_desc FROM " . table('article_cat') . " WHERE cat_id = '$cat_id'");
 
         if ($meta === false || empty($meta)) {
             /* 如果没有找到任何记录则返回首页 */

@@ -70,11 +70,11 @@ class CaptchaManageController extends InitController
         $captcha_width = empty($_POST['captcha_width']) ? 145 : intval($_POST['captcha_width']);
         $captcha_height = empty($_POST['captcha_height']) ? 20 : intval($_POST['captcha_height']);
 
-        $sql = "UPDATE " . $ecs->table('shop_config') . " SET value='$captcha' WHERE code='captcha'";
+        $sql = "UPDATE " . table('shop_config') . " SET value='$captcha' WHERE code='captcha'";
         $db->query($sql);
-        $sql = "UPDATE " . $ecs->table('shop_config') . " SET value='$captcha_width' WHERE code='captcha_width'";
+        $sql = "UPDATE " . table('shop_config') . " SET value='$captcha_width' WHERE code='captcha_width'";
         $db->query($sql);
-        $sql = "UPDATE " . $ecs->table('shop_config') . " SET value='$captcha_height' WHERE code='captcha_height'";
+        $sql = "UPDATE " . table('shop_config') . " SET value='$captcha_height' WHERE code='captcha_height'";
         $db->query($sql);
 
         clear_cache_files();

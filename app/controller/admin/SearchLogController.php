@@ -61,11 +61,11 @@ class SearchLogController extends InitController
             $filter['end_dateDay'] = $_REQUEST['end_dateDay'];
         }
 
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('keywords') . " WHERE  searchengine='ecshop' $where";
+        $sql = "SELECT COUNT(*) FROM " . table('keywords') . " WHERE  searchengine='ecshop' $where";
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
         $logdb = array();
         $filter = page_and_size($filter);
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('keywords') .
+        $sql = "SELECT * FROM " . table('keywords') .
             " WHERE  searchengine='ecshop' $where" .
             " ORDER BY date DESC, count DESC" .
             "  LIMIT $filter[start],$filter[page_size]";

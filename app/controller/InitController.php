@@ -44,7 +44,7 @@ class InitController extends Controller
 
         /* 初始化数据库类 */
         $db = new cls_mysql($db_host, $db_user, $db_pass, $db_name);
-        $db->set_disable_cache_tables(array($ecs->table('sessions'), $ecs->table('sessions_data'), $ecs->table('cart')));
+        $db->set_disable_cache_tables(array(table('sessions'), table('sessions_data'), table('cart')));
         $db_host = $db_user = $db_pass = $db_name = null;
 
         /* 创建错误处理对象 */
@@ -83,7 +83,7 @@ class InitController extends Controller
         if (!defined('INIT_NO_USERS')) {
             /* 初始化session */
 
-            $sess = new cls_session($db, $ecs->table('sessions'), $ecs->table('sessions_data'));
+            $sess = new cls_session($db, table('sessions'), table('sessions_data'));
 
             define('SESS_ID', $sess->get_session_id());
         }
@@ -159,7 +159,7 @@ class InitController extends Controller
             if (!empty($_COOKIE['ECS']['user_id']) && !empty($_COOKIE['ECS']['password'])) {
                 // 找到了cookie, 验证cookie信息
                 $sql = 'SELECT user_id, user_name, password ' .
-                    ' FROM ' . $ecs->table('users') .
+                    ' FROM ' . table('users') .
                     " WHERE user_id = '" . intval($_COOKIE['ECS']['user_id']) . "' AND password = '" . $_COOKIE['ECS']['password'] . "'";
 
                 $row = $db->getRow($sql);
@@ -335,7 +335,7 @@ class InitController extends Controller
      */
     public function assign_dynamic($tmp)
     {
-        $sql = 'SELECT id, number, type FROM ' . $GLOBALS['ecs']->table('template') .
+        $sql = 'SELECT id, number, type FROM ' . table('template') .
             " WHERE filename = '$tmp' AND type > 0 AND remarks ='' AND theme='" . $GLOBALS['_CFG']['template'] . "'";
         $res = $GLOBALS['db']->getAll($sql);
 

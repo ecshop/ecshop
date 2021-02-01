@@ -125,7 +125,7 @@ class GroupBuyController extends InitController
             }
 
             /* 结束团购活动，修改结束时间为当前时间 */
-            $sql = "UPDATE " . $ecs->table('goods_activity') .
+            $sql = "UPDATE " . table('goods_activity') .
                 " SET end_time = '" . gmtime() . "' " .
                 "WHERE act_id = '$group_buy_id' LIMIT 1";
             $db->query($sql);
@@ -150,7 +150,7 @@ class GroupBuyController extends InitController
             if ($group_buy['total_order'] > 0) {
                 /* 查找该团购活动的已确认或未确认订单（已取消的就不管了） */
                 $sql = "SELECT order_id " .
-                    "FROM " . $ecs->table('order_info') .
+                    "FROM " . table('order_info') .
                     " WHERE extension_code = 'group_buy' " .
                     "AND extension_id = '$group_buy_id' " .
                     "AND (order_status = '" . OS_CONFIRMED . "' or order_status = '" . OS_UNCONFIRMED . "')";
@@ -158,14 +158,14 @@ class GroupBuyController extends InitController
 
                 /* 更新订单商品价 */
                 $final_price = $group_buy['trans_price'];
-                $sql = "UPDATE " . $ecs->table('order_goods') .
+                $sql = "UPDATE " . table('order_goods') .
                     " SET goods_price = '$final_price' " .
                     "WHERE order_id " . db_create_in($order_id_list);
                 $db->query($sql);
 
                 /* 查询订单商品总额 */
                 $sql = "SELECT order_id, SUM(goods_number * goods_price) AS goods_amount " .
-                    "FROM " . $ecs->table('order_goods') .
+                    "FROM " . table('order_goods') .
                     " WHERE order_id " . db_create_in($order_id_list) .
                     " GROUP BY order_id";
                 $res = $db->query($sql);
@@ -251,7 +251,7 @@ class GroupBuyController extends InitController
             }
 
             /* 修改团购活动状态为成功 */
-            $sql = "UPDATE " . $ecs->table('goods_activity') .
+            $sql = "UPDATE " . table('goods_activity') .
                 " SET is_finished = '" . GBS_SUCCEED . "' " .
                 "WHERE act_id = '$group_buy_id' LIMIT 1";
             $db->query($sql);
@@ -276,7 +276,7 @@ class GroupBuyController extends InitController
             if ($group_buy['valid_order'] > 0) {
                 /* 查找未确认或已确认的订单 */
                 $sql = "SELECT * " .
-                    "FROM " . $ecs->table('order_info') .
+                    "FROM " . table('order_info') .
                     " WHERE extension_code = 'group_buy' " .
                     "AND extension_id = '$group_buy_id' " .
                     "AND (order_status = '" . OS_CONFIRMED . "' OR order_status = '" . OS_UNCONFIRMED . "') ";
@@ -306,7 +306,7 @@ class GroupBuyController extends InitController
             }
 
             /* 修改团购活动状态为失败，记录失败原因（活动说明） */
-            $sql = "UPDATE " . $ecs->table('goods_activity') .
+            $sql = "UPDATE " . table('goods_activity') .
                 " SET is_finished = '" . GBS_FAIL . "', " .
                 "act_desc = '$_POST[act_desc]' " .
                 "WHERE act_id = '$group_buy_id' LIMIT 1";
@@ -338,8 +338,8 @@ class GroupBuyController extends InitController
             /* 取得有效订单 */
             $sql = "SELECT o.consignee, o.add_time, g.goods_number, o.order_sn, " .
                 "o.order_amount, o.order_id, o.email " .
-                "FROM " . $ecs->table('order_info') . " AS o, " .
-                $ecs->table('order_goods') . " AS g " .
+                "FROM " . table('order_info') . " AS o, " .
+                table('order_goods') . " AS g " .
                 "WHERE o.order_id = g.order_id " .
                 "AND o.extension_code = 'group_buy' " .
                 "AND o.extension_id = '$group_buy_id' " .
@@ -378,7 +378,7 @@ class GroupBuyController extends InitController
                 sys_msg($_LANG['error_goods_exist']);
             }
 
-            $goods_name = $db->getOne("SELECT goods_name FROM " . $ecs->table('goods') . " WHERE goods_id = '$goods_id'");
+            $goods_name = $db->getOne("SELECT goods_name FROM " . table('goods') . " WHERE goods_id = '$goods_id'");
 
             $act_name = empty($_POST['act_name']) ? $goods_name : sub_str($_POST['act_name'], 0, 255, false);
 
@@ -457,7 +457,7 @@ class GroupBuyController extends InitController
             /* 保存数据 */
             if ($group_buy_id > 0) {
                 /* update */
-                $db->autoExecute($ecs->table('goods_activity'), $group_buy, 'UPDATE', "act_id = '$group_buy_id'");
+                $db->autoExecute(table('goods_activity'), $group_buy, 'UPDATE', "act_id = '$group_buy_id'");
 
                 /* log */
                 admin_log(addslashes($goods_name) . '[' . $group_buy_id . ']', 'edit', 'group_buy');
@@ -471,7 +471,7 @@ class GroupBuyController extends InitController
                 sys_msg($_LANG['edit_success'], 0, $links);
             } else {
                 /* insert */
-                $db->autoExecute($ecs->table('goods_activity'), $group_buy, 'INSERT');
+                $db->autoExecute(table('goods_activity'), $group_buy, 'INSERT');
 
                 /* log */
                 admin_log(addslashes($goods_name), 'add', 'group_buy');
@@ -500,7 +500,7 @@ class GroupBuyController extends InitController
                 /* 如果团购活动已经有订单，不能删除 */
                 if ($group_buy['valid_order'] <= 0) {
                     /* 删除团购活动 */
-                    $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods_activity') .
+                    $sql = "DELETE FROM " . table('goods_activity') .
                         " WHERE act_id = '$id' LIMIT 1";
                     $GLOBALS['db']->query($sql, 'SILENT');
 
@@ -549,12 +549,12 @@ class GroupBuyController extends InitController
         $id = intval($_POST['id']);
         $val = floatval($_POST['val']);
 
-        $sql = "SELECT ext_info FROM " . $ecs->table('goods_activity') .
+        $sql = "SELECT ext_info FROM " . table('goods_activity') .
             " WHERE act_id = '$id' AND act_type = '" . GAT_GROUP_BUY . "'";
         $ext_info = unserialize($db->getOne($sql));
         $ext_info['deposit'] = $val;
 
-        $sql = "UPDATE " . $ecs->table('goods_activity') .
+        $sql = "UPDATE " . table('goods_activity') .
             " SET ext_info = '" . serialize($ext_info) . "'" .
             " WHERE act_id = '$id'";
         $db->query($sql);
@@ -575,12 +575,12 @@ class GroupBuyController extends InitController
         $id = intval($_POST['id']);
         $val = intval($_POST['val']);
 
-        $sql = "SELECT ext_info FROM " . $ecs->table('goods_activity') .
+        $sql = "SELECT ext_info FROM " . table('goods_activity') .
             " WHERE act_id = '$id' AND act_type = '" . GAT_GROUP_BUY . "'";
         $ext_info = unserialize($db->getOne($sql));
         $ext_info['restrict_amount'] = $val;
 
-        $sql = "UPDATE " . $ecs->table('goods_activity') .
+        $sql = "UPDATE " . table('goods_activity') .
             " SET ext_info = '" . serialize($ext_info) . "'" .
             " WHERE act_id = '$id'";
         $db->query($sql);
@@ -609,7 +609,7 @@ class GroupBuyController extends InitController
         }
 
         /* 删除团购活动 */
-        $sql = "DELETE FROM " . $ecs->table('goods_activity') . " WHERE act_id = '$id' LIMIT 1";
+        $sql = "DELETE FROM " . table('goods_activity') . " WHERE act_id = '$id' LIMIT 1";
         $db->query($sql);
 
         admin_log(addslashes($group_buy['goods_name']) . '[' . $id . ']', 'remove', 'group_buy');
@@ -639,7 +639,7 @@ class GroupBuyController extends InitController
 
             $where = (!empty($filter['keyword'])) ? " AND goods_name LIKE '%" . mysql_like_quote($filter['keyword']) . "%'" : '';
 
-            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_activity') .
+            $sql = "SELECT COUNT(*) FROM " . table('goods_activity') .
                 " WHERE act_type = '" . GAT_GROUP_BUY . "' $where";
             $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -648,7 +648,7 @@ class GroupBuyController extends InitController
 
             /* 查询 */
             $sql = "SELECT * " .
-                "FROM " . $GLOBALS['ecs']->table('goods_activity') .
+                "FROM " . table('goods_activity') .
                 " WHERE act_type = '" . GAT_GROUP_BUY . "' $where " .
                 " ORDER BY $filter[sort_by] $filter[sort_order] " .
                 " LIMIT " . $filter['start'] . ", $filter[page_size]";
@@ -710,7 +710,7 @@ class GroupBuyController extends InitController
      */
     public function goods_group_buy($goods_id)
     {
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('goods_activity') .
+        $sql = "SELECT * FROM " . table('goods_activity') .
             " WHERE goods_id = '$goods_id' " .
             " AND act_type = '" . GAT_GROUP_BUY . "'" .
             " AND start_time <= " . gmtime() .

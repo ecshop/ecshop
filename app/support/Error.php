@@ -98,16 +98,9 @@ class Error
                 $message['content'] = '<div>' . htmlspecialchars($msg) . '</div>';
             }
 
-            if (isset($GLOBALS['smarty'])) {
-                assign_template();
-                $GLOBALS['smarty']->assign('auto_redirect', true);
-                $GLOBALS['smarty']->assign('message', $message);
-                $GLOBALS['smarty']->display($this->_template);
-            } else {
-                die($message['content']);
-            }
-
-            exit;
+            $GLOBALS['smarty']->assign('auto_redirect', true);
+            $GLOBALS['smarty']->assign('message', $message);
+            return $GLOBALS['smarty']->display($this->_template);
         }
     }
 }

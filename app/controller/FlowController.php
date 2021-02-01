@@ -236,7 +236,8 @@ class FlowController extends InitController
                     ecs_header("Location: flow.php?step=consignee\n");
                     exit;
                 } else {
-                    $err->show();
+                    $this->assign_template();
+                    return $err->show();
                 }
             } else {
                 // TODO: 非法访问的处理

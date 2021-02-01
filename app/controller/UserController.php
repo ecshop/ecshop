@@ -204,7 +204,8 @@ class UserController extends InitController
                 $ucdata = empty($user->ucdata) ? "" : $user->ucdata;
                 return $this->show_message(sprintf($_LANG['register_success'], $username . $ucdata), array($_LANG['back_up_page'], $_LANG['profile_lnk']), array($back_act, 'user.php'), 'info');
             } else {
-                $err->show($_LANG['sign_up'], 'user.php?act=register');
+                $this->assign_template();
+                return $err->show($_LANG['sign_up'], 'user.php?act=register');
             }
         }
     } /* 验证用户注册邮件 */
@@ -645,7 +646,8 @@ class UserController extends InitController
         if (add_bonus($user_id, $bouns_sn)) {
             return $this->show_message($_LANG['add_bonus_sucess'], $_LANG['back_up_page'], 'user.php?act=bonus', 'info');
         } else {
-            $err->show($_LANG['back_up_page'], 'user.php?act=bonus');
+            $this->assign_template();
+            return $err->show($_LANG['back_up_page'], 'user.php?act=bonus');
         }
     } /* 查看订单列表 */
     public function order_listAction()
@@ -679,9 +681,8 @@ class UserController extends InitController
         $order = get_order_detail($order_id, $user_id);
 
         if ($order === false) {
-            $err->show($_LANG['back_home_lnk'], './');
-
-            exit;
+            $this->assign_template();
+            return $err->show($_LANG['back_home_lnk'], './');
         }
 
         /* 是否显示添加到购物车 */
@@ -743,7 +744,8 @@ class UserController extends InitController
             ecs_header("Location: user.php?act=order_list\n");
             exit;
         } else {
-            $err->show($_LANG['order_list_lnk'], 'user.php?act=order_list');
+            $this->assign_template();
+            return $err->show($_LANG['order_list_lnk'], 'user.php?act=order_list');
         }
     } /* 收货地址列表界面*/
     public function address_listAction()
@@ -956,7 +958,8 @@ class UserController extends InitController
         if (add_message($message)) {
             return $this->show_message($_LANG['add_message_success'], $_LANG['message_list_lnk'], 'user.php?act=message_list&order_id=' . $message['order_id'], 'info');
         } else {
-            $err->show($_LANG['message_list_lnk'], 'user.php?act=message_list');
+            $this->assign_template();
+            return $err->show($_LANG['message_list_lnk'], 'user.php?act=message_list');
         }
     } /* 标签云列表 */
     public function tag_listAction()
@@ -1056,7 +1059,8 @@ class UserController extends InitController
                 'info'
             );
         } else {
-            $err->show($_LANG['booking_list_lnk'], 'user.php?act=booking_list');
+            $this->assign_template();
+            return $err->show($_LANG['booking_list_lnk'], 'user.php?act=booking_list');
         }
     } /* 删除缺货登记 */
     public function act_del_bookingAction()
@@ -1085,7 +1089,8 @@ class UserController extends InitController
             ecs_header("Location: user.php?act=order_list\n");
             exit;
         } else {
-            $err->show($_LANG['order_list_lnk'], 'user.php?act=order_list');
+            $this->assign_template();
+            return $err->show($_LANG['order_list_lnk'], 'user.php?act=order_list');
         }
     } /* 会员退款申请界面 */
     public function account_raplyAction()
@@ -1477,7 +1482,8 @@ class UserController extends InitController
         if (merge_user_order($from_order, $to_order, $user_id)) {
             return $this->show_message($_LANG['merge_order_success'], $_LANG['order_list_lnk'], 'user.php?act=order_list', 'info');
         } else {
-            $err->show($_LANG['order_list_lnk']);
+            $this->assign_template();
+            return $err->show($_LANG['order_list_lnk']);
         }
     } /* 将指定订单中商品添加到购物车 */
     public function return_to_cartAction()
@@ -1546,7 +1552,8 @@ class UserController extends InitController
         $surplus = floatval($_POST['surplus']);
         if ($surplus <= 0) {
             $err->add($_LANG['error_surplus_invalid']);
-            $err->show($_LANG['order_detail'], 'user.php?act=order_detail&order_id=' . $order_id);
+            $this->assign_template();
+            return $err->show($_LANG['order_detail'], 'user.php?act=order_detail&order_id=' . $order_id);
         }
 
         include_once(ROOT_PATH . 'includes/lib_order.php');
@@ -1567,7 +1574,8 @@ class UserController extends InitController
         /* 检查订单是否未付款，检查应付款金额是否大于0 */
         if ($order['pay_status'] != PS_UNPAYED || $order['order_amount'] <= 0) {
             $err->add($_LANG['error_order_is_paid']);
-            $err->show($_LANG['order_detail'], 'user.php?act=order_detail&order_id=' . $order_id);
+            $this->assign_template();
+            return $err->show($_LANG['order_detail'], 'user.php?act=order_detail&order_id=' . $order_id);
         }
 
         /* 计算应付款金额（减去支付费用） */
@@ -1584,7 +1592,8 @@ class UserController extends InitController
         /* 用户帐户余额是否足够 */
         if ($surplus > $user['user_money'] + $user['credit_line']) {
             $err->add($_LANG['error_surplus_not_enough']);
-            $err->show($_LANG['order_detail'], 'user.php?act=order_detail&order_id=' . $order_id);
+            $this->assign_template();
+            return $err->show($_LANG['order_detail'], 'user.php?act=order_detail&order_id=' . $order_id);
         }
 
         /* 修改订单，重新计算支付费用 */
@@ -1709,7 +1718,8 @@ class UserController extends InitController
             ecs_header('Location: user.php?act=order_detail&order_id=' . $address['order_id'] . "\n");
             exit;
         } else {
-            $err->show($_LANG['order_list_lnk'], 'user.php?act=order_list');
+            $this->assign_template();
+            return $err->show($_LANG['order_list_lnk'], 'user.php?act=order_list');
         }
     } /* 我的红包列表 */
     public function bonusAction()

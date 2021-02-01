@@ -87,7 +87,7 @@ class UsersOrderController extends InitController
         $this->assign('sort_order_num', '<img src="images/sort_desc.gif">');
         /* 页面显示 */
         assign_query_info();
-        $smarty->display('users_order.htm');
+        return $this->display('users_order.htm');
     }
 
 

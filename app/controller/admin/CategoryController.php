@@ -31,7 +31,7 @@ class CategoryController extends InitController
 
         /* 列表页面 */
         assign_query_info();
-        $smarty->display('category_list.htm');
+        return $this->display('category_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -67,7 +67,7 @@ class CategoryController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('category_info.htm');
+        return $this->display('category_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -189,7 +189,7 @@ class CategoryController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('category_info.htm');
+        return $this->display('category_info.htm');
     }
 
     public function add_categoryAction()
@@ -322,7 +322,7 @@ class CategoryController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('category_move.htm');
+        return $this->display('category_move.htm');
     }
 
     /*------------------------------------------------------ */

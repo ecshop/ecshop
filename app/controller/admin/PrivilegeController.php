@@ -44,7 +44,7 @@ class PrivilegeController extends InitController
             $this->assign('random', mt_rand());
         }
 
-        $smarty->display('login.htm');
+        return $this->display('login.htm');
     }
 
     /*------------------------------------------------------ */
@@ -137,7 +137,7 @@ class PrivilegeController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('privilege_list.htm');
+        return $this->display('privilege_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -167,7 +167,7 @@ class PrivilegeController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('privilege_info.htm');
+        return $this->display('privilege_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -280,7 +280,7 @@ class PrivilegeController extends InitController
         $this->assign('action', 'edit');
 
         assign_query_info();
-        $smarty->display('privilege_info.htm');
+        return $this->display('privilege_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -470,7 +470,7 @@ class PrivilegeController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('privilege_info.htm');
+        return $this->display('privilege_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -529,7 +529,7 @@ class PrivilegeController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('privilege_allot.htm');
+        return $this->display('privilege_allot.htm');
     }
 
     /*------------------------------------------------------ */

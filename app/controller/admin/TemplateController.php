@@ -68,7 +68,7 @@ class TemplateController extends InitController
         $this->assign('template_style', $templates_style);
         $this->assign('curr_template', get_template_info($curr_template, $curr_style));
         $this->assign('available_templates', $available_templates);
-        $smarty->display('templates_list.htm');
+        return $this->display('templates_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -193,7 +193,7 @@ class TemplateController extends InitController
         $this->assign('arr_brands', get_brand_list());
         $this->assign('arr_article_cats', article_cat_list(0, 0, true));
         $this->assign('arr_ad_positions', get_position_list());
-        $smarty->display('template_setup.htm');
+        return $this->display('template_setup.htm');
     }
 
     /*------------------------------------------------------ */
@@ -429,7 +429,7 @@ class TemplateController extends InitController
         $this->assign('curr_library', $curr_library);
         $this->assign('libraries', $arr_library);
         $this->assign('library_html', $lib['html']);
-        $smarty->display('template_library.htm');
+        return $this->display('template_library.htm');
     }
 
     /*------------------------------------------------------ */
@@ -561,7 +561,7 @@ class TemplateController extends InitController
         $this->assign('ur_here', $_LANG['backup_setting']);
         $this->assign('list', $remarks);
         $this->assign('files', $files);
-        $smarty->display('templates_backup.htm');
+        return $this->display('templates_backup.htm');
     }
 
     public function act_backup_settingAction()

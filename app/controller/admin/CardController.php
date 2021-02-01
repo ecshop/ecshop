@@ -35,7 +35,7 @@ class CardController extends InitController
         $this->assign('record_count', $cards_list['record_count']);
         $this->assign('page_count', $cards_list['page_count']);
 
-        $smarty->display('card_list.htm');
+        return $this->display('card_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -99,7 +99,7 @@ class CardController extends InitController
         $this->assign('form_action', 'insert');
 
         assign_query_info();
-        $smarty->display('card_info.htm');
+        return $this->display('card_info.htm');
     }
 
     public function insertAction()
@@ -151,7 +151,7 @@ class CardController extends InitController
         $this->assign('form_action', 'update');
 
         assign_query_info();
-        $smarty->display('card_info.htm');
+        return $this->display('card_info.htm');
     }
 
     public function updateAction()

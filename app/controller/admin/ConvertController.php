@@ -52,7 +52,7 @@ class ConvertController extends InitController
         /* 显示模板 */
         $this->assign('ur_here', $_LANG['convert']);
         assign_query_info();
-        $smarty->display('convert_main.htm');
+        return $this->display('convert_main.htm');
     }
 
     /*------------------------------------------------------ */

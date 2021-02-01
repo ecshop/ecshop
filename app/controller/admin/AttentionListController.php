@@ -21,7 +21,7 @@ class AttentionListController extends InitController
         $this->assign('record_count', $goodsdb['record_count']);
         $this->assign('page_count', $goodsdb['page_count']);
         assign_query_info();
-        $smarty->display('attention_list.htm');
+        return $this->display('attention_list.htm');
     }
 
     public function queryAction()

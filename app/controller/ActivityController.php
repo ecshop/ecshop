@@ -113,6 +113,6 @@ class ActivityController extends InitController
         $this->assign('lang', $_LANG);
 
         $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typeactivity.xml" : 'feed.php?type=activity'); // RSS URL
-        $smarty->display('activity.dwt');
+        return $this->display('activity.dwt');
     }
 }

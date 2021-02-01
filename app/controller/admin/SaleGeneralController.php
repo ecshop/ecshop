@@ -107,7 +107,7 @@ function listAction()
     /* 显示模板 */
     $this->assign('ur_here', $_LANG['report_sell']);
     assign_query_info();
-    $smarty->display('sale_general.htm');
+    return $this->display('sale_general.htm');
 }
 
 /*------------------------------------------------------ */

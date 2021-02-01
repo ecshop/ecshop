@@ -41,7 +41,7 @@ class UserMsgController extends InitController
         $this->assign('msg_list', $msg_list);
         $this->assign('order_id', $_GET['order_id']);
         $this->assign('user_id', $_GET['user_id']);
-        $smarty->display('msg_add.htm');
+        return $this->display('msg_add.htm');
     }
 
     public function insertAction()
@@ -116,7 +116,7 @@ class UserMsgController extends InitController
 
         $this->assign('ur_here', $_LANG['08_unreply_msg']);
         $this->assign('full_page', 1);
-        $smarty->display('msg_list.htm');
+        return $this->display('msg_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -216,7 +216,7 @@ class UserMsgController extends InitController
         $this->assign('action_link', array('text' => $_LANG['08_unreply_msg'], 'href' => 'user_msg.php?act=list_all'));
 
         assign_query_info();
-        $smarty->display('msg_info.htm');
+        return $this->display('msg_info.htm');
     }
 
     public function actionAction()

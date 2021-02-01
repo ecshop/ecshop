@@ -123,6 +123,6 @@ class GuestStatsController extends InitController
             'href' => 'guest_stats.php?flag=download'));
 
         assign_query_info();
-        $smarty->display('guest_stats.htm');
+        return $this->display('guest_stats.htm');
     }
 }

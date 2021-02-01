@@ -60,6 +60,6 @@ class RespondController extends InitController
         $this->assign('message', $msg);
         $this->assign('shop_url', $ecs->url());
 
-        $smarty->display('respond.dwt');
+        return $this->display('respond.dwt');
     }
 }

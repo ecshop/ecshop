@@ -47,7 +47,7 @@ class FlashplayController extends InitController
         $this->assign('flashtpls', get_flash_templates($flash_dir));
         $this->assign('current_flashtpl', $_CFG['flash_theme']);
         $this->assign('playerdb', $playerdb);
-        $smarty->display('flashplay_list.htm');
+        return $this->display('flashplay_list.htm');
     }
 
     public function delAction()
@@ -96,7 +96,7 @@ class FlashplayController extends InitController
             $this->assign('action_link', array('text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list'));
             $this->assign('rt', $rt);
             $this->assign('ur_here', $_LANG['add_picad']);
-            $smarty->display('flashplay_add.htm');
+            return $this->display('flashplay_add.htm');
         } elseif ($_POST['step'] == 2) {
             if (!empty($_FILES['img_file_src']['name'])) {
                 if (!get_file_suffix($_FILES['img_file_src']['name'], $allow_suffix)) {
@@ -179,7 +179,7 @@ class FlashplayController extends InitController
             $this->assign('action_link', array('text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list'));
             $this->assign('rt', $rt);
             $this->assign('ur_here', $_LANG['edit_picad']);
-            $smarty->display('flashplay_add.htm');
+            return $this->display('flashplay_add.htm');
         } elseif ($_POST['step'] == 2) {
             if (empty($_POST['img_url'])) {
                 //若链接地址为空
@@ -300,7 +300,7 @@ class FlashplayController extends InitController
         $this->assign('ad', $ad);
         $this->assign('form_act', 'custom_insert');
 
-        $smarty->display('flashplay_custom.htm');
+        return $this->display('flashplay_custom.htm');
     }
 
     /*------------------------------------------------------ */
@@ -339,7 +339,7 @@ class FlashplayController extends InitController
         $this->assign('ad', $ad);
         $this->assign('form_act', 'custom_insert');
 
-        $smarty->display('flashplay_custom_add.htm');
+        return $this->display('flashplay_custom_add.htm');
     }
 
 
@@ -545,7 +545,7 @@ class FlashplayController extends InitController
 
         /* 添加 */
         $this->assign('ad', $ad);
-        $smarty->display('flashplay_ccustom_edit.htm');
+        return $this->display('flashplay_ccustom_edit.htm');
     }
 
     /*------------------------------------------------------ */

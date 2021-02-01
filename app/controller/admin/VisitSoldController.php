@@ -68,7 +68,7 @@ class VisitSoldController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('visit_sold.htm');
+        return $this->display('visit_sold.htm');
     }
 
     /*------------------------------------------------------ */

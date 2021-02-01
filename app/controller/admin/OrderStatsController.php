@@ -270,7 +270,7 @@ class OrderStatsController extends InitController
         }
 
         assign_query_info();
-        $smarty->display('order_stats.htm');
+        return $this->display('order_stats.htm');
     }
 
     public function download()

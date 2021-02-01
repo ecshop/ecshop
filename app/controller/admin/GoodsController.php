@@ -93,7 +93,7 @@ class GoodsController extends InitController
         assign_query_info();
         $htm_file = ($_REQUEST['act'] == 'list') ?
             'goods_list.htm' : (($_REQUEST['act'] == 'trash') ? 'goods_trash.htm' : 'group_list.htm');
-        $smarty->display($htm_file);
+        return $this->display($htm_file);
     }
 
     /*------------------------------------------------------ */
@@ -422,7 +422,7 @@ class GoodsController extends InitController
         $this->assign('volume_price_list', $volume_price_list);
         /* 显示商品信息页面 */
         assign_query_info();
-        $smarty->display('goods_info.htm');
+        return $this->display('goods_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -1103,7 +1103,7 @@ class GoodsController extends InitController
             }
         }
         $this->assign('img_url', $img_url);
-        $smarty->display('goods_show_image.htm');
+        return $this->display('goods_show_image.htm');
     }
 
     /*------------------------------------------------------ */
@@ -1931,7 +1931,7 @@ class GoodsController extends InitController
         /* 显示商品列表页面 */
         assign_query_info();
 
-        $smarty->display('product_info.htm');
+        return $this->display('product_info.htm');
     }
 
     /*------------------------------------------------------ */

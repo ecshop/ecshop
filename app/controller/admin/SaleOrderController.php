@@ -93,7 +93,7 @@ function listAction()
 
     /* 显示页面 */
     assign_query_info();
-    $smarty->display('sale_order.htm');
+    return $this->display('sale_order.htm');
 }
 
 /*------------------------------------------------------ */

@@ -54,7 +54,7 @@ class DatabaseController extends InitController
         $this->assign('vol_size', $allow_max_size);
         $this->assign('sql_name', cls_sql_dump::get_random_name() . '.sql');
         $this->assign('ur_here', $_LANG['02_db_manage']);
-        $smarty->display('db_backup.htm');
+        return $this->display('db_backup.htm');
     }
 
     /* 备份恢复页面 */
@@ -107,7 +107,7 @@ class DatabaseController extends InitController
         $this->assign('action_link', array('text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup'));
         $this->assign('ur_here', $_LANG['restore']);
         $this->assign('list', $list);
-        $smarty->display('db_restore.htm');
+        return $this->display('db_restore.htm');
     }
 
     public function dumpsqlAction()
@@ -238,7 +238,7 @@ class DatabaseController extends InitController
 
                 $this->assign('list', $list);
                 $this->assign('title', $_LANG['backup_success']);
-                $smarty->display('sql_dump_msg.htm');
+                return $this->display('sql_dump_msg.htm');
             } else {
                 /* 只有一个文件 */
                 if (!@file_put_contents(ROOT_PATH . DATA_DIR . '/sqldata/' . $sql_file_name . '.sql', $dump->dump_sql)) {
@@ -247,7 +247,7 @@ class DatabaseController extends InitController
 
                 $this->assign('list', array(array('name' => $sql_file_name . '.sql', 'href' => '../' . DATA_DIR . '/sqldata/' . $sql_file_name . '.sql')));
                 $this->assign('title', $_LANG['backup_success']);
-                $smarty->display('sql_dump_msg.htm');
+                return $this->display('sql_dump_msg.htm');
             }
         } else {
             /* 下一个页面处理 */
@@ -259,7 +259,7 @@ class DatabaseController extends InitController
             $this->assign('title', sprintf($_LANG['backup_title'], '#' . $vol));
             $this->assign('auto_redirect', 1);
             $this->assign('auto_link', $lnk);
-            $smarty->display('sql_dump_msg.htm');
+            return $this->display('sql_dump_msg.htm');
         }
     }
 
@@ -493,7 +493,7 @@ class DatabaseController extends InitController
         $this->assign('list', $list);
         $this->assign('num', $num);
         $this->assign('ur_here', $_LANG['03_db_optimize']);
-        $smarty->display('optimize.htm');
+        return $this->display('optimize.htm');
     }
 
     public function run_optimizeAction()

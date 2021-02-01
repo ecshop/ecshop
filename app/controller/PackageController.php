@@ -82,6 +82,6 @@ class PackageController extends InitController
         $this->assign('lang', $_LANG);
 
         $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typepackage.xml" : 'feed.php?type=package'); // RSS URL
-        $smarty->display('package.dwt');
+        return $this->display('package.dwt');
     }
 }

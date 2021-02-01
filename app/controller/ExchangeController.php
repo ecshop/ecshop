@@ -88,7 +88,7 @@ class ExchangeController extends InitController
         assign_dynamic('exchange_list'); // 动态内容
 
         $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typeexchange.xml" : 'feed.php?type=exchange'); // RSS URL
-        $smarty->display('exchange_list.dwt');
+        return $this->display('exchange_list.dwt');
     }
 
     /*------------------------------------------------------ */
@@ -157,7 +157,7 @@ class ExchangeController extends InitController
             assign_dynamic('exchange_goods');
         }
 
-        $smarty->display('exchange_goods.dwt');
+        return $this->display('exchange_goods.dwt');
     }
 
     /*------------------------------------------------------ */

@@ -36,7 +36,7 @@ class TagManageController extends InitController
 
         /* 页面显示 */
         assign_query_info();
-        $smarty->display('tag_manage.htm');
+        return $this->display('tag_manage.htm');
     }
 
     /*------------------------------------------------------ */
@@ -72,7 +72,7 @@ class TagManageController extends InitController
         $this->assign('action_link', array('href' => 'tag_manage.php?act=list', 'text' => $_LANG['tag_list']));
 
         assign_query_info();
-        $smarty->display('tag_edit.htm');
+        return $this->display('tag_edit.htm');
     }
 
     /*------------------------------------------------------ */

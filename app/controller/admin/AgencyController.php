@@ -34,7 +34,7 @@ class AgencyController extends InitController
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
-        $smarty->display('agency_list.htm');
+        return $this->display('agency_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -221,7 +221,7 @@ class AgencyController extends InitController
         }
         $this->assign('action_link', array('href' => $href, 'text' => $_LANG['agency_list']));
         assign_query_info();
-        $smarty->display('agency_info.htm');
+        return $this->display('agency_info.htm');
     }
 
     /*------------------------------------------------------ */

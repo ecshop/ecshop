@@ -41,7 +41,7 @@ class FriendLinkController extends InitController
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
-        $smarty->display('link_list.htm');
+        return $this->display('link_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -80,7 +80,7 @@ class FriendLinkController extends InitController
         $this->assign('form_act', 'insert');
 
         assign_query_info();
-        $smarty->display('link_info.htm');
+        return $this->display('link_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -181,7 +181,7 @@ class FriendLinkController extends InitController
         $this->assign('link_arr', $link_arr);
 
         assign_query_info();
-        $smarty->display('link_info.htm');
+        return $this->display('link_info.htm');
     }
 
     /*------------------------------------------------------ */

@@ -30,7 +30,7 @@ class LicenseController extends InitController
         $this->assign('certificate_id', $license['certificate_id']);
         $this->assign('token', $license['token']);
 
-        $smarty->display('license.htm');
+        return $this->display('license.htm');
     }
 
     /*------------------------------------------------------ */

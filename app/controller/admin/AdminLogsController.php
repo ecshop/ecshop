@@ -46,7 +46,7 @@ class AdminLogsController extends InitController
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
-        $smarty->display('admin_logs.htm');
+        return $this->display('admin_logs.htm');
     }
 
     /*------------------------------------------------------ */

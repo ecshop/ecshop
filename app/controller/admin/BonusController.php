@@ -35,7 +35,7 @@ class BonusController extends InitController
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
-        $smarty->display('bonus_type.htm');
+        return $this->display('bonus_type.htm');
     }
 
     /*------------------------------------------------------ */
@@ -169,7 +169,7 @@ class BonusController extends InitController
         $this->assign('bonus_arr', $bonus_arr);
 
         assign_query_info();
-        $smarty->display('bonus_type_info.htm');
+        return $this->display('bonus_type_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -248,7 +248,7 @@ class BonusController extends InitController
         $this->assign('bonus_arr', $bonus_arr);
 
         assign_query_info();
-        $smarty->display('bonus_type_info.htm');
+        return $this->display('bonus_type_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -310,7 +310,7 @@ class BonusController extends InitController
             $this->assign('id', $id);
             $this->assign('ranklist', get_rank_list());
 
-            $smarty->display('bonus_by_user.htm');
+            return $this->display('bonus_by_user.htm');
         } elseif ($_REQUEST['send_by'] == SEND_BY_GOODS) {
             /* 查询此红包类型信息 */
             $bonus_type = $db->getRow("SELECT type_id, type_name FROM " . $ecs->table('bonus_type') .
@@ -332,11 +332,11 @@ class BonusController extends InitController
             $this->assign('bonus_type', $bonus_type);
             $this->assign('goods_list', $goods_list);
 
-            $smarty->display('bonus_by_goods.htm');
+            return $this->display('bonus_by_goods.htm');
         } elseif ($_REQUEST['send_by'] == SEND_BY_PRINT) {
             $this->assign('type_list', get_bonus_type());
 
-            $smarty->display('bonus_by_print.htm');
+            return $this->display('bonus_by_print.htm');
         }
     }
 
@@ -720,7 +720,7 @@ class BonusController extends InitController
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
-        $smarty->display('bonus_list.htm');
+        return $this->display('bonus_list.htm');
     }
 
     /*------------------------------------------------------ */

@@ -30,7 +30,7 @@ class ShippingAreaController extends InitController
         $this->assign('full_page', 1);
 
         assign_query_info();
-        $smarty->display('shipping_area_list.htm');
+        return $this->display('shipping_area_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -75,7 +75,7 @@ class ShippingAreaController extends InitController
         $this->assign('countries', get_regions());
         $this->assign('default_country', $_CFG['shop_country']);
         assign_query_info();
-        $smarty->display('shipping_area_info.htm');
+        return $this->display('shipping_area_info.htm');
     }
 
     public function insertAction()
@@ -207,7 +207,7 @@ class ShippingAreaController extends InitController
         $this->assign('form_action', 'update');
         $this->assign('countries', get_regions());
         $this->assign('default_country', 1);
-        $smarty->display('shipping_area_info.htm');
+        return $this->display('shipping_area_info.htm');
     }
 
     public function updateAction()

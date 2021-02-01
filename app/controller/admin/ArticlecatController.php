@@ -28,7 +28,7 @@ class ArticlecatController extends InitController
         $this->assign('articlecat', $articlecat);
 
         assign_query_info();
-        $smarty->display('articlecat_list.htm');
+        return $this->display('articlecat_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -59,7 +59,7 @@ class ArticlecatController extends InitController
         $this->assign('form_action', 'insert');
 
         assign_query_info();
-        $smarty->display('articlecat_info.htm');
+        return $this->display('articlecat_info.htm');
     }
 
     public function insertAction()
@@ -148,7 +148,7 @@ class ArticlecatController extends InitController
         $this->assign('form_action', 'update');
 
         assign_query_info();
-        $smarty->display('articlecat_info.htm');
+        return $this->display('articlecat_info.htm');
     }
 
     public function updateAction()

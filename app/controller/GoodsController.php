@@ -144,7 +144,7 @@ class GoodsController extends InitController
         $db->query('UPDATE ' . $ecs->table('goods') . " SET click_count = click_count + 1 WHERE goods_id = '$_REQUEST[id]'");
 
         $this->assign('now_time', gmtime());           // 当前系统时间
-        $smarty->display('goods.dwt');
+        return $this->display('goods.dwt');
     }
 
 

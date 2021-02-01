@@ -104,7 +104,7 @@ class MessageController extends InitController
         $this->assign('rand', mt_rand());
         $this->assign('msg_lists', $msg_lists);
         $this->assign('pager', $pager);
-        $smarty->display('message_board.dwt');
+        return $this->display('message_board.dwt');
     }
 
     /**

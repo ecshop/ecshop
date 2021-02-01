@@ -44,7 +44,7 @@ class OrderController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('order_query.htm');
+        return $this->display('order_query.htm');
     }
 
     /*------------------------------------------------------ */
@@ -76,7 +76,7 @@ class OrderController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('order_list.htm');
+        return $this->display('order_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -343,7 +343,7 @@ class OrderController extends InitController
             $this->assign('action_user', $_SESSION['admin_name']);
 
             $smarty->template_dir = '../' . DATA_DIR;
-            $smarty->display('order_print.html');
+            return $this->display('order_print.html');
         } /* 打印快递单 */
         elseif (isset($_GET['shipping_print'])) {
             //$this->assign('print_time',   local_date($_CFG['time_format']));
@@ -432,7 +432,7 @@ class OrderController extends InitController
 
                 $this->assign('shipping', $shipping);
 
-                $smarty->display('print.htm');
+                return $this->display('print.htm');
             } elseif (!empty($shipping['shipping_print'])) {
                 /* 代码 */
                 echo $smarty->fetch("str:" . $shipping['shipping_print']);
@@ -455,7 +455,7 @@ class OrderController extends InitController
 
             /* 显示模板 */
             assign_query_info();
-            $smarty->display('order_info.htm');
+            return $this->display('order_info.htm');
         }
     }
 
@@ -486,7 +486,7 @@ class OrderController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('delivery_list.htm');
+        return $this->display('delivery_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -602,7 +602,7 @@ class OrderController extends InitController
         $this->assign('action_link', array('href' => 'order.php?act=delivery_list&' . list_link_postfix(), 'text' => $_LANG['09_delivery_order']));
         $this->assign('action_act', ($delivery_order['status'] == 2) ? 'delivery_ship' : 'delivery_cancel_ship');
         assign_query_info();
-        $smarty->display('delivery_info.htm');
+        return $this->display('delivery_info.htm');
         exit; //
     }
 
@@ -945,7 +945,7 @@ class OrderController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('back_list.htm');
+        return $this->display('back_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -1047,7 +1047,7 @@ class OrderController extends InitController
         $this->assign('ur_here', $_LANG['back_operate'] . $_LANG['detail']);
         $this->assign('action_link', array('href' => 'order.php?act=back_list&' . list_link_postfix(), 'text' => $_LANG['10_back_order']));
         assign_query_info();
-        $smarty->display('back_info.htm');
+        return $this->display('back_info.htm');
         exit; //
     }
 
@@ -1981,7 +1981,7 @@ class OrderController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('order_step.htm');
+        return $this->display('order_step.htm');
     }
 
     /*------------------------------------------------------ */
@@ -2069,7 +2069,7 @@ class OrderController extends InitController
             /* 显示模板 */
             $this->assign('ur_here', $_LANG['refund']);
             assign_query_info();
-            $smarty->display('order_refund.htm');
+            return $this->display('order_refund.htm');
         } else {
             die('invalid params');
         }
@@ -2098,7 +2098,7 @@ class OrderController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('merge_order.htm');
+        return $this->display('merge_order.htm');
     }
 
     /*------------------------------------------------------ */
@@ -2135,7 +2135,7 @@ class OrderController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('order_templates.htm');
+        return $this->display('order_templates.htm');
     }
     /*------------------------------------------------------ */
     //-- 订单打印模板（提交修改）
@@ -2324,7 +2324,7 @@ class OrderController extends InitController
             /* 显示模板 */
             $this->assign('ur_here', $_LANG['order_operate'] . $_LANG['op_split']);
             assign_query_info();
-            $smarty->display('order_delivery_info.htm');
+            return $this->display('order_delivery_info.htm');
             exit;
         } /* 未发货 */
         elseif (isset($_POST['unship'])) {
@@ -2614,7 +2614,7 @@ class OrderController extends InitController
             /* 显示模板 */
             $this->assign('ur_here', $_LANG['order_operate'] . $action);
             assign_query_info();
-            $smarty->display('order_operate.htm');
+            return $this->display('order_operate.htm');
         } else {
             /* 直接处理 */
             if (!$batch) {
@@ -2856,7 +2856,7 @@ class OrderController extends InitController
 
             /* 显示模板 */
             assign_query_info();
-            $smarty->display('order_operate_info.htm');
+            return $this->display('order_operate_info.htm');
         }
     }
 

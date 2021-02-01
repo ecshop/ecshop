@@ -39,7 +39,7 @@ class AttributeController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('attribute_list.htm');
+        return $this->display('attribute_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -112,7 +112,7 @@ class AttributeController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('attribute_info.htm');
+        return $this->display('attribute_info.htm');
     }
 
     /*------------------------------------------------------ */

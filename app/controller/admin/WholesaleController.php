@@ -40,7 +40,7 @@ class WholesaleController extends InitController
 
         /* 显示商品列表页面 */
         assign_query_info();
-        $smarty->display('wholesale_list.htm');
+        return $this->display('wholesale_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -198,7 +198,7 @@ class WholesaleController extends InitController
         $this->assign('action_link', array('href' => $href, 'text' => $_LANG['wholesale_list']));
         assign_query_info();
 
-        $smarty->display('wholesale_batch_info.htm');
+        return $this->display('wholesale_batch_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -380,7 +380,7 @@ class WholesaleController extends InitController
         }
         $this->assign('action_link', array('href' => $href, 'text' => $_LANG['wholesale_list']));
         assign_query_info();
-        $smarty->display('wholesale_info.htm');
+        return $this->display('wholesale_info.htm');
     }
 
     /*------------------------------------------------------ */

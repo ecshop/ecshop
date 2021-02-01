@@ -37,7 +37,7 @@ class VoteController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('vote_list.htm');
+        return $this->display('vote_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -81,7 +81,7 @@ class VoteController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('vote_info.htm');
+        return $this->display('vote_info.htm');
     }
 
     public function insertAction()
@@ -143,7 +143,7 @@ class VoteController extends InitController
         $this->assign('vote_arr', $vote_arr);
 
         assign_query_info();
-        $smarty->display('vote_info.htm');
+        return $this->display('vote_info.htm');
     }
 
     public function updateAction()
@@ -188,7 +188,7 @@ class VoteController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('vote_option.htm');
+        return $this->display('vote_option.htm');
     }
 
     /*------------------------------------------------------ */

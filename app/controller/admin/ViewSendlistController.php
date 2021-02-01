@@ -22,7 +22,7 @@ class ViewSendlistController extends InitController
         $this->assign('page_count', $listdb['page_count']);
 
         assign_query_info();
-        $smarty->display('view_sendlist.htm');
+        return $this->display('view_sendlist.htm');
     }
 
     public function queryAction()

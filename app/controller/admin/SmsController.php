@@ -39,12 +39,12 @@ if ($action == 'display_send_ui') {
         }
         assign_query_info();
         $this->assign('send_rank', $send_rank);
-        $smarty->display('sms_send_ui.htm');
+        return $this->display('sms_send_ui.htm');
     } else {
         $this->assign('ur_here', $_LANG['register_sms']);
         $this->assign('sms_site_info', $sms->get_site_info());
         assign_query_info();
-        $smarty->display('sms_register_ui.htm');
+        return $this->display('sms_register_ui.htm');
     }
 }
 if ($action == 'sms_sign') {
@@ -72,12 +72,12 @@ if ($action == 'sms_sign') {
         $this->assign('default_sign', $default_sms_sign['value']);
 
 
-        $smarty->display('sms_sign.htm');
+        return $this->display('sms_sign.htm');
     } else {
         $this->assign('ur_here', $_LANG['register_sms']);
         $this->assign('sms_site_info', $sms->get_site_info());
         assign_query_info();
-        $smarty->display('sms_register_ui.htm');
+        return $this->display('sms_register_ui.htm');
     }
 }
 if ($action == 'sms_sign_add') {
@@ -144,7 +144,7 @@ if ($action == 'sms_sign_add') {
         $this->assign('ur_here', $_LANG['register_sms']);
         $this->assign('sms_site_info', $sms->get_site_info());
         assign_query_info();
-        $smarty->display('sms_register_ui.htm');
+        return $this->display('sms_register_ui.htm');
     }
 }
 if ($action == 'sms_sign_update') {
@@ -213,7 +213,7 @@ if ($action == 'sms_sign_update') {
         $this->assign('ur_here', $_LANG['register_sms']);
         $this->assign('sms_site_info', $sms->get_site_info());
         assign_query_info();
-        $smarty->display('sms_register_ui.htm');
+        return $this->display('sms_register_ui.htm');
     }
 }
 if ($action == 'sms_sign_default') {
@@ -250,7 +250,7 @@ if ($action == 'sms_sign_default') {
         $this->assign('ur_here', $_LANG['register_sms']);
         $this->assign('sms_site_info', $sms->get_site_info());
         assign_query_info();
-        $smarty->display('sms_register_ui.htm');
+        return $this->display('sms_register_ui.htm');
     }
 
 

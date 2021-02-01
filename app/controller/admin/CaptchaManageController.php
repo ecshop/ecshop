@@ -50,7 +50,7 @@ class CaptchaManageController extends InitController
         $this->assign('captcha_width', $_CFG['captcha_width']);
         $this->assign('captcha_height', $_CFG['captcha_height']);
         $this->assign('ur_here', $_LANG['captcha_manage']);
-        $smarty->display('captcha_manage.htm');
+        return $this->display('captcha_manage.htm');
     }
 
     /*------------------------------------------------------ */

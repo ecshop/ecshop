@@ -104,6 +104,6 @@ class CompareController extends InitController
 
         assign_dynamic('compare');
 
-        $smarty->display('compare.dwt');
+        return $this->display('compare.dwt');
     }
 }

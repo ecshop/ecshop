@@ -46,7 +46,7 @@ class TopicController extends InitController
 
         assign_query_info();
         $this->assign('action_link', array('text' => $_LANG['topic_add'], 'href' => 'topic.php?act=add'));
-        $smarty->display('topic_list.htm');
+        return $this->display('topic_list.htm');
     }
 
     /* 添加,编辑 */
@@ -115,7 +115,7 @@ class TopicController extends InitController
             create_html_editor('topic_intro');
             $this->assign('act', "insert");
         }
-        $smarty->display('topic_edit.htm');
+        return $this->display('topic_edit.htm');
     }
 
     public function insertAction()

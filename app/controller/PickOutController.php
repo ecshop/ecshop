@@ -239,7 +239,7 @@ class PickOutController extends InitController
         $this->assign('count', $goods_count);
         $this->assign('picks', $picks);
         $this->assign('condition', $condition);
-        $smarty->display('pick_out.dwt');
+        return $this->display('pick_out.dwt');
     }
 
 

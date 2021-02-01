@@ -48,7 +48,7 @@ class GetPasswordController extends InitController
         $this->assign('ur_here', $_LANG['get_newpassword']);
 
         assign_query_info();
-        $smarty->display('get_pwd.htm');
+        return $this->display('get_pwd.htm');
     }
 
     /*------------------------------------------------------ */

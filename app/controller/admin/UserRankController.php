@@ -31,7 +31,7 @@ class UserRankController extends InitController
         $this->assign('user_ranks', $ranks);
 
         assign_query_info();
-        $smarty->display('user_rank.htm');
+        return $this->display('user_rank.htm');
     }
 
     /*------------------------------------------------------ */
@@ -70,7 +70,7 @@ class UserRankController extends InitController
         $this->assign('form_action', $form_action);
 
         assign_query_info();
-        $smarty->display('user_rank_info.htm');
+        return $this->display('user_rank_info.htm');
     }
 
     /*------------------------------------------------------ */

@@ -35,7 +35,7 @@ class AffiliateCkController extends InitController
             $this->assign('action_link', array('text' => $_LANG['back_note'], 'href' => "users.php?act=edit&id=" . intval($_GET['auid'])));
         }
         assign_query_info();
-        $smarty->display('affiliate_ck_list.htm');
+        return $this->display('affiliate_ck_list.htm');
     }
     /*------------------------------------------------------ */
     //-- 分页

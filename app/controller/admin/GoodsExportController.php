@@ -27,7 +27,7 @@ class GoodsExportController extends InitController
         $this->assign('data_format', $data_format_array);
         $this->assign('goods_fields', $goods_fields);
         assign_query_info();
-        $smarty->display('goods_export.htm');
+        return $this->display('goods_export.htm');
     }
 
     public function act_export_ecshopAction()

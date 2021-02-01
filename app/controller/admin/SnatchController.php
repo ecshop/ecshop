@@ -34,7 +34,7 @@ class SnatchController extends InitController
         $this->assign('form_action', 'insert');
 
         assign_query_info();
-        $smarty->display('snatch_info.htm');
+        return $this->display('snatch_info.htm');
     }
 
     public function insertAction()
@@ -115,7 +115,7 @@ class SnatchController extends InitController
 
         $this->assign('full_page', 1);
         assign_query_info();
-        $smarty->display('snatch_list.htm');
+        return $this->display('snatch_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -201,7 +201,7 @@ class SnatchController extends InitController
         $this->assign('good_products_select', get_good_products_select($snatch['goods_id']));
 
         assign_query_info();
-        $smarty->display('snatch_info.htm');
+        return $this->display('snatch_info.htm');
     }
 
     public function updateAction()
@@ -286,7 +286,7 @@ class SnatchController extends InitController
         $this->assign('result', get_snatch_result($id));
         $this->assign('ur_here', $_LANG['view_detail']);
         $this->assign('action_link', array('text' => $_LANG['02_snatch_list'], 'href' => 'snatch.php?act=list'));
-        $smarty->display('snatch_view.htm');
+        return $this->display('snatch_view.htm');
     }
 
     /*------------------------------------------------------ */

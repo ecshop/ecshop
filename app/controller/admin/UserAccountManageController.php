@@ -68,7 +68,7 @@ class UserAccountManageController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('user_account_manage.htm');
+        return $this->display('user_account_manage.htm');
     }
 
     public function surplusAction()
@@ -86,7 +86,7 @@ class UserAccountManageController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('order_surplus_list.htm');
+        return $this->display('order_surplus_list.htm');
     }
 
     /*------------------------------------------------------ */

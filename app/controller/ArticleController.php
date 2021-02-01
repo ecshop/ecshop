@@ -87,9 +87,9 @@ class ArticleController extends InitController
         assign_dynamic('article');
 
         if (isset($article) && $article['cat_id'] > 2) {
-            $smarty->display('article.dwt');
+            return $this->display('article.dwt');
         } else {
-            $smarty->display('article_pro.dwt');
+            return $this->display('article_pro.dwt');
         }
     }
 

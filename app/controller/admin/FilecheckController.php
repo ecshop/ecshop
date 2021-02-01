@@ -33,7 +33,7 @@ class FilecheckController extends InitController
                 $this->assign('ur_here', $_LANG['fileperms_verify']);
             }
             assign_query_info();
-            $smarty->display('filecheck.htm');
+            return $this->display('filecheck.htm');
         } elseif ($step == 3) {
             @set_time_limit(0);
 
@@ -116,7 +116,7 @@ class FilecheckController extends InitController
             $this->assign('action_link', array('text' => $_LANG['filecheck_return'], 'href' => 'filecheck.php?step=1'));
 
             assign_query_info();
-            $smarty->display('filecheck.htm');
+            return $this->display('filecheck.htm');
         }
     }
 

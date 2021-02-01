@@ -58,7 +58,7 @@ class PaymentController extends InitController
         $this->assign('ur_here', $_LANG['02_payment_list']);
         $this->assign('modules', $modules);
         $this->assign('tenpayc2c', $tenpayc2c);
-        $smarty->display('payment_list.htm');
+        return $this->display('payment_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -104,7 +104,7 @@ class PaymentController extends InitController
 
         $this->assign('action_link', array('text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list'));
         $this->assign('pay', $pay);
-        $smarty->display('payment_edit.htm');
+        return $this->display('payment_edit.htm');
     }
 
     public function get_configAction()
@@ -223,7 +223,7 @@ class PaymentController extends InitController
         $this->assign('action_link', array('text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list'));
         $this->assign('ur_here', $_LANG['edit'] . $_LANG['payment']);
         $this->assign('pay', $pay);
-        $smarty->display('payment_edit.htm');
+        return $this->display('payment_edit.htm');
     }
 
     /*------------------------------------------------------ */

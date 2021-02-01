@@ -47,7 +47,7 @@ class AccountLogController extends InitController
         $this->assign('page_count', $account_list['page_count']);
 
         assign_query_info();
-        $smarty->display('account_list.htm');
+        return $this->display('account_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -108,7 +108,7 @@ class AccountLogController extends InitController
         $this->assign('ur_here', $_LANG['add_account']);
         $this->assign('action_link', array('href' => 'account_log.php?act=list&user_id=' . $user_id, 'text' => $_LANG['account_list']));
         assign_query_info();
-        $smarty->display('account_info.htm');
+        return $this->display('account_info.htm');
     }
 
     /*------------------------------------------------------ */

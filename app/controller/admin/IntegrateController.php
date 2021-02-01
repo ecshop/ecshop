@@ -29,7 +29,7 @@ class IntegrateController extends InitController
         $this->assign('modules', $modules);
 
         assign_query_info();
-        $smarty->display('integrates_list.htm');
+        return $this->display('integrates_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -83,7 +83,7 @@ class IntegrateController extends InitController
             $this->assign('set_list', get_charset_list());
             $this->assign('ur_here', $_LANG['integrate_setup']);
             $this->assign('code', $_GET['code']);
-            $smarty->display('integrates_setup.htm');
+            return $this->display('integrates_setup.htm');
         }
     }
 
@@ -129,7 +129,7 @@ class IntegrateController extends InitController
             $this->assign('ur_here', $_LANG['integrate_setup']);
             $this->assign('code', $_GET['code']);
             $this->assign('cfg', $cfg);
-            $smarty->display('integrates_setup.htm');
+            return $this->display('integrates_setup.htm');
         }
     }
 
@@ -222,7 +222,7 @@ class IntegrateController extends InitController
         $this->assign('domain', '@ecshop');
         $this->assign('lang_total', sprintf($_LANG['shop_user_total'], $total));
         $this->assign('size', $size);
-        $smarty->display('integrates_check.htm');
+        return $this->display('integrates_check.htm');
     }
 
     /*------------------------------------------------------ */
@@ -331,7 +331,7 @@ class IntegrateController extends InitController
 
         $this->assign('ur_here', $_LANG['ucenter_import_username']);
         $this->assign('user_startid_intro', sprintf($_LANG['user_startid_intro'], $maxuid, $maxuid));
-        $smarty->display('integrates_uc_import.htm');
+        return $this->display('integrates_uc_import.htm');
     }
 
     /*------------------------------------------------------ */
@@ -529,7 +529,7 @@ class IntegrateController extends InitController
         $this->assign('page_count', $arr['page_count']);
         $this->assign('full_page', 1);
 
-        $smarty->display('integrates_modify.htm');
+        return $this->display('integrates_modify.htm');
     }
 
     /*------------------------------------------------------ */
@@ -671,7 +671,7 @@ class IntegrateController extends InitController
         $this->assign('tasks', $tasks);
         $this->assign('ur_here', $_LANG['user_sync']);
         $this->assign('size', $size);
-        $smarty->display('integrates_sync.htm');
+        return $this->display('integrates_sync.htm');
     }
 
     /*------------------------------------------------------ */
@@ -928,7 +928,7 @@ class IntegrateController extends InitController
         $this->assign('integral_name', $_CFG['integral_name']);
         $this->assign('full_page', 1);
         $this->assign('points', $points);
-        $smarty->display('integrates_points.htm');
+        return $this->display('integrates_points.htm');
     }
 
     public function edit_pointsAction()

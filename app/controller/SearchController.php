@@ -74,7 +74,7 @@ class SearchController extends InitController
         $this->assign('action', 'form');
         $this->assign('use_storage', $_CFG['use_storage']);
 
-        $smarty->display('search.dwt');
+        return $this->display('search.dwt');
 
         exit;
     }
@@ -423,7 +423,7 @@ class SearchController extends InitController
         $this->assign('top_goods', get_top10());           // 销售排行
         $this->assign('promotion_info', get_promotion_info());
 
-        $smarty->display('search.dwt');
+        return $this->display('search.dwt');
     }
 
     /**

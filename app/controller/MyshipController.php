@@ -85,6 +85,6 @@ class MyshipController extends InitController
 
         $this->assign('shipping_list', $shipping_list);
 
-        $smarty->display('myship.dwt');
+        return $this->display('myship.dwt');
     }
 }

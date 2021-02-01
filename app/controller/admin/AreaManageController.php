@@ -63,7 +63,7 @@ class AreaManageController extends InitController
         $this->assign('full_page', 1);
 
         assign_query_info();
-        $smarty->display('area_list.htm');
+        return $this->display('area_list.htm');
     }
 
     /*------------------------------------------------------ */

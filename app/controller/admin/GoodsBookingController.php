@@ -32,7 +32,7 @@ class GoodsBookingController extends InitController
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
-        $smarty->display('booking_list.htm');
+        return $this->display('booking_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -85,7 +85,7 @@ class GoodsBookingController extends InitController
         $this->assign('booking', get_booking_info($id));
         $this->assign('ur_here', $_LANG['detail']);
         $this->assign('action_link', array('text' => $_LANG['06_undispose_booking'], 'href' => 'goods_booking.php?act=list_all'));
-        $smarty->display('booking_info.htm');
+        return $this->display('booking_info.htm');
     }
 
     /*------------------------------------------------------ */

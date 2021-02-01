@@ -39,6 +39,6 @@ class GenGoodsScriptController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('gen_goods_script.htm');
+        return $this->display('gen_goods_script.htm');
     }
 }

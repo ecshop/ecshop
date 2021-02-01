@@ -19,7 +19,7 @@ class IndexController extends InitController
     public function indexAction()
     {
         $this->assign('shop_url', urlencode($ecs->url()));
-        $smarty->display('index.htm');
+        return $this->display('index.htm');
     }
 
     /*------------------------------------------------------ */
@@ -48,7 +48,7 @@ class IndexController extends InitController
         $this->assign('admin_id', $_SESSION['admin_id']);
         $this->assign('certi', $_CFG['certi']);
 
-        $smarty->display('top.htm');
+        return $this->display('top.htm');
     }
 
     /*------------------------------------------------------ */
@@ -57,7 +57,7 @@ class IndexController extends InitController
 
     public function calculatorAction()
     {
-        $smarty->display('calculator.htm');
+        return $this->display('calculator.htm');
     }
 
     /*------------------------------------------------------ */
@@ -115,7 +115,7 @@ class IndexController extends InitController
         $this->assign('help_lang', $_CFG['lang']);
         $this->assign('charset', EC_CHARSET);
         $this->assign('admin_id', $_SESSION['admin_id']);
-        $smarty->display('menu.htm');
+        return $this->display('menu.htm');
     }
 
 
@@ -407,7 +407,7 @@ class IndexController extends InitController
         $this->assign('ecs_lang', $_CFG['lang']);
         $this->assign('ecs_charset', strtoupper(EC_CHARSET));
         $this->assign('install_date', local_date($_CFG['date_format'], $_CFG['install_date']));
-        $smarty->display('start.htm');
+        return $this->display('start.htm');
     }
 
     public function main_apiAction()
@@ -512,7 +512,7 @@ class IndexController extends InitController
         assign_query_info();
 
         $this->assign('ur_here', $_LANG['ur_config']);
-        $smarty->display('setting_first.htm');
+        return $this->display('setting_first.htm');
     }
 
     /*------------------------------------------------------ */
@@ -677,7 +677,7 @@ class IndexController extends InitController
         assign_query_info();
 
         $this->assign('ur_here', $_LANG['ur_add']);
-        $smarty->display('setting_second.htm');
+        return $this->display('setting_second.htm');
     }
 
     /*------------------------------------------------------ */
@@ -865,7 +865,7 @@ class IndexController extends InitController
         }
 
         assign_query_info();
-        $smarty->display('setting_third.htm');
+        return $this->display('setting_third.htm');
     }
 
     /*------------------------------------------------------ */
@@ -875,7 +875,7 @@ class IndexController extends InitController
     public function about_usAction()
     {
         assign_query_info();
-        $smarty->display('about_us.htm');
+        return $this->display('about_us.htm');
     }
 
     /*------------------------------------------------------ */
@@ -884,7 +884,7 @@ class IndexController extends InitController
 
     public function dragAction()
     {
-        $smarty->display('drag.htm');
+        return $this->display('drag.htm');
     }
 
     /*------------------------------------------------------ */

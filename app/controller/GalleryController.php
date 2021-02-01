@@ -50,6 +50,6 @@ class GalleryController extends InitController
         $this->assign('shop_name', $_CFG['shop_name']);
         $this->assign('watermark', str_replace('../', './', $_CFG['watermark']));
         $this->assign('gallery', $gallery);
-        $smarty->display('gallery.dwt');
+        return $this->display('gallery.dwt');
     }
 }

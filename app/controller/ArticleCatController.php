@@ -86,6 +86,6 @@ class ArticleCatController extends InitController
 
         $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typearticle_cat" . $cat_id . ".xml" : 'feed.php?type=article_cat' . $cat_id); // RSS URL
 
-        $smarty->display('article_cat.dwt');
+        return $this->display('article_cat.dwt');
     }
 }

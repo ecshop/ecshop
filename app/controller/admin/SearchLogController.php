@@ -25,7 +25,7 @@ class SearchLogController extends InitController
         $this->assign('start_date', local_date('Y-m-d'));
         $this->assign('end_date', local_date('Y-m-d'));
         assign_query_info();
-        $smarty->display('search_log_list.htm');
+        return $this->display('search_log_list.htm');
     }
 
     public function queryAction()

@@ -89,7 +89,7 @@ class UserController extends InitController
         $this->assign('info', get_user_default($user_id));
         $this->assign('user_notice', $_CFG['user_notice']);
         $this->assign('prompt', get_user_prompt($user_id));
-        $smarty->display('user_clips.dwt');
+        return $this->display('user_clips.dwt');
     }
 
     /* 显示会员注册界面 */
@@ -116,7 +116,7 @@ class UserController extends InitController
         /* 增加是否关闭注册 */
         $this->assign('shop_reg_closed', $_CFG['shop_reg_closed']);
 //    $this->assign('back_act', $back_act);
-        $smarty->display('user_passport.dwt');
+        return $this->display('user_passport.dwt');
     } /* 注册会员的处理 */
     public function act_registerAction()
     {
@@ -124,7 +124,7 @@ class UserController extends InitController
         if ($_CFG['shop_reg_closed']) {
             $this->assign('action', 'register');
             $this->assign('shop_reg_closed', $_CFG['shop_reg_closed']);
-            $smarty->display('user_passport.dwt');
+            return $this->display('user_passport.dwt');
         } else {
             include_once(ROOT_PATH . 'includes/lib_passport.php');
 
@@ -265,7 +265,7 @@ class UserController extends InitController
         }
 
         $this->assign('back_act', $back_act);
-        $smarty->display('user_passport.dwt');
+        return $this->display('user_passport.dwt');
     } /* 处理会员的登录 */
     public function act_loginAction()
     {
@@ -407,7 +407,7 @@ class UserController extends InitController
         $this->assign('passwd_questions', $_LANG['passwd_questions']);
 
         $this->assign('profile', $user_info);
-        $smarty->display('user_transaction.dwt');
+        return $this->display('user_transaction.dwt');
     } /* 修改个人资料的处理 */
     public function act_edit_profileAction()
     {
@@ -505,16 +505,16 @@ class UserController extends InitController
             $this->assign('uid', $uid);
             $this->assign('code', $code);
             $this->assign('action', 'reset_password');
-            $smarty->display('user_passport.dwt');
+            return $this->display('user_passport.dwt');
         } else {
             //显示用户名和email表单
-            $smarty->display('user_passport.dwt');
+            return $this->display('user_passport.dwt');
         }
     } /* 密码找回-->输入用户名界面 */
     public function qpassword_nameAction()
     {
         //显示输入要找回密码的账号表单
-        $smarty->display('user_passport.dwt');
+        return $this->display('user_passport.dwt');
     } /* 密码找回-->根据注册用户名取得密码提示问题界面 */
     public function get_passwd_questionAction()
     {
@@ -544,7 +544,7 @@ class UserController extends InitController
         }
 
         $this->assign('passwd_question', $_LANG['passwd_questions'][$user_question_arr['passwd_question']]);
-        $smarty->display('user_passport.dwt');
+        return $this->display('user_passport.dwt');
     } /* 密码找回-->根据提交的密码答案进行相应处理 */
     public function check_answerAction()
     {
@@ -573,7 +573,7 @@ class UserController extends InitController
             unset($_SESSION['temp_user_name']);
             $this->assign('uid', $_SESSION['user_id']);
             $this->assign('action', 'reset_password');
-            $smarty->display('user_passport.dwt');
+            return $this->display('user_passport.dwt');
         }
     } /* 发送密码修改确认邮件 */
     public function send_pwd_emailAction()
@@ -607,7 +607,7 @@ class UserController extends InitController
     public function reset_passwordAction()
     {
         //显示重置密码的表单
-        $smarty->display('user_passport.dwt');
+        return $this->display('user_passport.dwt');
     } /* 修改会员密码 */
     public function act_edit_passwordAction()
     {
@@ -666,7 +666,7 @@ class UserController extends InitController
         $this->assign('merge', $merge);
         $this->assign('pager', $pager);
         $this->assign('orders', $orders);
-        $smarty->display('user_transaction.dwt');
+        return $this->display('user_transaction.dwt');
     } /* 查看订单详情 */
     public function order_detailAction()
     {
@@ -731,7 +731,7 @@ class UserController extends InitController
 
         $this->assign('order', $order);
         $this->assign('goods_list', $goods_list);
-        $smarty->display('user_transaction.dwt');
+        return $this->display('user_transaction.dwt');
     } /* 取消订单 */
     public function cancel_orderAction()
     {
@@ -793,7 +793,7 @@ class UserController extends InitController
         $this->assign('integral_scale', $_CFG['integral_scale']);
         $this->assign('name_of_region', array($_CFG['name_of_region_1'], $_CFG['name_of_region_2'], $_CFG['name_of_region_3'], $_CFG['name_of_region_4']));
 
-        $smarty->display('user_transaction.dwt');
+        return $this->display('user_transaction.dwt');
     } /* 添加/编辑收货地址的处理 */
     public function act_edit_addressAction()
     {
@@ -854,7 +854,7 @@ class UserController extends InitController
         );
         $this->assign('lang_list', $lang_list);
         $this->assign('user_id', $user_id);
-        $smarty->display('user_clips.dwt');
+        return $this->display('user_clips.dwt');
     } /* 删除收藏的商品 */
     public function delete_collectionAction()
     {
@@ -916,7 +916,7 @@ class UserController extends InitController
         $this->assign('message_list', get_message_list($user_id, $_SESSION['user_name'], $pager['size'], $pager['start'], $order_id));
         $this->assign('pager', $pager);
         $this->assign('order_info', $order_info);
-        $smarty->display('user_clips.dwt');
+        return $this->display('user_clips.dwt');
     } /* 显示评论列表 */
     public function comment_listAction()
     {
@@ -932,7 +932,7 @@ class UserController extends InitController
 
         $this->assign('comment_list', get_comment_list($user_id, $pager['size'], $pager['start']));
         $this->assign('pager', $pager);
-        $smarty->display('user_clips.dwt');
+        return $this->display('user_clips.dwt');
     } /* 添加我的留言 */
     public function act_add_messageAction()
     {
@@ -965,7 +965,7 @@ class UserController extends InitController
 
         $this->assign('tags', get_user_tags($user_id));
         $this->assign('tags_from', 'user');
-        $smarty->display('user_clips.dwt');
+        return $this->display('user_clips.dwt');
     } /* 删除标签云的处理 */
     public function act_del_tagAction()
     {
@@ -992,7 +992,7 @@ class UserController extends InitController
 
         $this->assign('booking_list', get_booking_list($user_id, $pager['size'], $pager['start']));
         $this->assign('pager', $pager);
-        $smarty->display('user_clips.dwt');
+        return $this->display('user_clips.dwt');
     } /* 添加缺货登记页面 */
     public function add_bookingAction()
     {
@@ -1023,7 +1023,7 @@ class UserController extends InitController
         $this->assign('goods_attr', $goods_attr);
 
         $this->assign('info', get_goodsinfo($goods_id));
-        $smarty->display('user_clips.dwt');
+        return $this->display('user_clips.dwt');
     } /* 添加缺货登记的处理 */
     public function act_add_bookingAction()
     {
@@ -1086,7 +1086,7 @@ class UserController extends InitController
     } /* 会员退款申请界面 */
     public function account_raplyAction()
     {
-        $smarty->display('user_transaction.dwt');
+        return $this->display('user_transaction.dwt');
     } /* 会员预付款界面 */
     public function account_depositAction()
     {
@@ -1097,7 +1097,7 @@ class UserController extends InitController
 
         $this->assign('payment', get_online_payment_list(false));
         $this->assign('order', $account);
-        $smarty->display('user_transaction.dwt');
+        return $this->display('user_transaction.dwt');
     } /* 会员账目明细界面 */
     public function account_detailAction()
     {
@@ -1145,7 +1145,7 @@ class UserController extends InitController
         $this->assign('surplus_amount', price_format($surplus_amount, false));
         $this->assign('account_log', $account_log);
         $this->assign('pager', $pager);
-        $smarty->display('user_transaction.dwt');
+        return $this->display('user_transaction.dwt');
     } /* 会员充值和提现申请记录 */
     public function account_logAction()
     {
@@ -1175,7 +1175,7 @@ class UserController extends InitController
         $this->assign('surplus_amount', price_format($surplus_amount, false));
         $this->assign('account_log', $account_log);
         $this->assign('pager', $pager);
-        $smarty->display('user_transaction.dwt');
+        return $this->display('user_transaction.dwt');
     } /* 对会员余额申请的处理 */
     public function act_accountAction()
     {
@@ -1269,7 +1269,7 @@ class UserController extends InitController
             $this->assign('pay_fee', price_format($payment_info['pay_fee'], false));
             $this->assign('amount', price_format($amount, false));
             $this->assign('order', $order);
-            $smarty->display('user_transaction.dwt');
+            return $this->display('user_transaction.dwt');
         }
     } /* 删除会员余额 */
     public function cancelAction()
@@ -1353,7 +1353,7 @@ class UserController extends InitController
             $this->assign('pay_fee', price_format($payment_info['pay_fee'], false));
             $this->assign('amount', price_format($order['surplus_amount'], false));
             $this->assign('action', 'act_account');
-            $smarty->display('user_transaction.dwt');
+            return $this->display('user_transaction.dwt');
         } /* 重新选择支付方式 */
         else {
             include_once(ROOT_PATH . 'includes/lib_clips.php');
@@ -1361,7 +1361,7 @@ class UserController extends InitController
             $this->assign('payment', get_online_payment_list());
             $this->assign('order', $order);
             $this->assign('action', 'account_deposit');
-            $smarty->display('user_transaction.dwt');
+            return $this->display('user_transaction.dwt');
         }
     } /* 添加标签(ajax) */
     public function add_tagAction()
@@ -1705,21 +1705,21 @@ class UserController extends InitController
 
         $this->assign('pager', $pager);
         $this->assign('bonus', $bonus);
-        $smarty->display('user_transaction.dwt');
+        return $this->display('user_transaction.dwt');
     } /* 我的团购列表 */
     public function group_buyAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
         //待议
-        $smarty->display('user_transaction.dwt');
+        return $this->display('user_transaction.dwt');
     } /* 团购订单详情 */
     public function group_buy_detailAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
         //待议
-        $smarty->display('user_transaction.dwt');
+        return $this->display('user_transaction.dwt');
     } // 用户推荐页面
 
     public function affiliateAction()
@@ -1885,7 +1885,7 @@ class UserController extends InitController
         $this->assign('shopurl', $ecs->url());
         $this->assign('logosrc', 'themes/' . $_CFG['template'] . '/images/logo.gif');
 
-        $smarty->display('user_clips.dwt');
+        return $this->display('user_clips.dwt');
     } //首页邮件订阅ajax操做和验证操作
 
     public function email_listAction()
@@ -2031,7 +2031,7 @@ class UserController extends InitController
         $pager = get_pager('user.php', array('act' => $action), $record_count, $page);
         $this->assign('pager', $pager);
         $this->assign('orders', $orders);
-        $smarty->display('user_transaction.dwt');
+        return $this->display('user_transaction.dwt');
     }
 
     public function order_queryAction()
@@ -2175,7 +2175,7 @@ class UserController extends InitController
         $this->assign('exchange_type', $exchange_type);
         $this->assign('action', $action);
         $this->assign('lang', $_LANG);
-        $smarty->display('user_transaction.dwt');
+        return $this->display('user_transaction.dwt');
     }
 
     public function act_transform_pointsAction()

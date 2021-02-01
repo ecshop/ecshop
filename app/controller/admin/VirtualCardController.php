@@ -44,7 +44,7 @@ class VirtualCardController extends InitController
 
         $this->assign('ur_here', $_LANG['replenish']);
         $this->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id=' . $card['goods_id']));
-        $smarty->display('replenish_info.htm');
+        return $this->display('replenish_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -73,7 +73,7 @@ class VirtualCardController extends InitController
         $this->assign('ur_here', $_LANG['replenish']);
         $this->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id=' . $card['goods_id']));
         $this->assign('card', $card);
-        $smarty->display('replenish_info.htm');
+        return $this->display('replenish_info.htm');
     }
 
     public function actionAction()
@@ -171,7 +171,7 @@ class VirtualCardController extends InitController
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
-        $smarty->display('replenish_list.htm');
+        return $this->display('replenish_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -219,7 +219,7 @@ class VirtualCardController extends InitController
         $this->assign('ur_here', $_LANG['batch_card_add']);
         $this->assign('action_link', array('text' => $_LANG['virtual_card_list'], 'href' => 'goods.php?act=list&extension_code=virtual_card'));
         $this->assign('goods_id', $_REQUEST['goods_id']);
-        $smarty->display('batch_card_info.htm');
+        return $this->display('batch_card_info.htm');
     }
 
     public function batch_confirmAction()
@@ -257,7 +257,7 @@ class VirtualCardController extends InitController
         $this->assign('ur_here', $_LANG['batch_card_add']);
         $this->assign('action_link', array('text' => $_LANG['batch_card_add'], 'href' => 'virtual_card.php?act=batch_card_add&goods_id=' . $_REQUEST['goods_id']));
         $this->assign('list', $rec);
-        $smarty->display('batch_card_confirm.htm');
+        return $this->display('batch_card_confirm.htm');
     } /* 批量上传处理 */
     public function batch_insertAction()
     {
@@ -295,7 +295,7 @@ class VirtualCardController extends InitController
         $this->assign('ur_here', $_LANG['virtual_card_change']);
 
         assign_query_info();
-        $smarty->display('virtual_card_change.htm');
+        return $this->display('virtual_card_change.htm');
     }
 
     /*------------------------------------------------------ */

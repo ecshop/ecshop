@@ -26,7 +26,7 @@ class PictureBatchController extends InitController
             $this->assign('ur_here', $_LANG['12_batch_pic']);
             $this->assign('cat_list', cat_list(0, 0));
             $this->assign('brand_list', get_brand_list());
-            $smarty->display('picture_batch.htm');
+            return $this->display('picture_batch.htm');
         } elseif (!empty($_GET['get_goods'])) {
             include_once(ROOT_PATH . 'includes/cls_json.php');
             $json = new JSON();

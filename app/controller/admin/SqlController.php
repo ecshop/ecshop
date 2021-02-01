@@ -23,7 +23,7 @@ class SqlController extends InitController
         $this->assign('type', -1);
         $this->assign('ur_here', $_LANG['04_sql_query']);
 
-        $smarty->display('sql.htm');
+        return $this->display('sql.htm');
     }
 
     public function queryAction()
@@ -44,7 +44,7 @@ class SqlController extends InitController
         assign_query_info();
         $this->assign('ur_here', $_LANG['04_sql_query']);
 
-        $smarty->display('sql.htm');
+        return $this->display('sql.htm');
     }
 
     /**

@@ -51,6 +51,6 @@ class ReceiveController extends InitController
         assign_dynamic('receive');
 
         $this->assign('msg', $msg);
-        $smarty->display('receive.dwt');
+        return $this->display('receive.dwt');
     }
 }

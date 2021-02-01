@@ -65,7 +65,7 @@ class EditLanguagesController extends InitController
         $this->assign('language_arr', $language_arr); //需要编辑的语言项列表
 
         assign_query_info();
-        $smarty->display('language_list.htm');
+        return $this->display('language_list.htm');
     }
 
     /*------------------------------------------------------ */

@@ -73,7 +73,7 @@ class SnatchController extends InitController
         $this->assign('price_list', get_price_list($id));
         $this->assign('promotion_info', get_promotion_info());
         $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typesnatch.xml" : 'feed.php?type=snatch'); // RSS URL
-        $smarty->display('snatch.dwt');
+        return $this->display('snatch.dwt');
 
         exit;
     }
@@ -82,7 +82,7 @@ class SnatchController extends InitController
     public function new_price_listAction()
     {
         $this->assign('price_list', get_price_list($id));
-        $smarty->display('library/snatch_price.lbi');
+        return $this->display('library/snatch_price.lbi');
 
         exit;
     }

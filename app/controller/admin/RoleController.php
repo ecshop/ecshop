@@ -45,7 +45,7 @@ class RoleController extends InitController
             $this->assign('random', mt_rand());
         }
 
-        $smarty->display('login.htm');
+        return $this->display('login.htm');
     }
 
 
@@ -62,7 +62,7 @@ class RoleController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('role_list.htm');
+        return $this->display('role_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -122,7 +122,7 @@ class RoleController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('role_info.htm');
+        return $this->display('role_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -208,7 +208,7 @@ class RoleController extends InitController
         $this->assign('user_id', $_GET['id']);
 
         assign_query_info();
-        $smarty->display('role_info.htm');
+        return $this->display('role_info.htm');
     }
 
     /*------------------------------------------------------ */

@@ -55,7 +55,7 @@ class GroupBuyController extends InitController
         assign_dynamic('group_buy_list');
 
         /* 显示模板 */
-        $smarty->display('group_buy_list.dwt');
+        return $this->display('group_buy_list.dwt');
     }
 
     /*------------------------------------------------------ */
@@ -112,7 +112,7 @@ class GroupBuyController extends InitController
         $db->query($sql);
 
         $this->assign('now_time', gmtime());           // 当前系统时间
-        $smarty->display('group_buy_goods.dwt');
+        return $this->display('group_buy_goods.dwt');
     }
 
     /*------------------------------------------------------ */

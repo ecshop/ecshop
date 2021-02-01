@@ -31,7 +31,7 @@ class NavigatorController extends InitController
         $this->assign('page_count', $navdb['page_count']);
 
         assign_query_info();
-        $smarty->display('navigator.htm');
+        return $this->display('navigator.htm');
     }
     /*------------------------------------------------------ */
     //-- 自定义导航栏列表Ajax
@@ -64,7 +64,7 @@ class NavigatorController extends InitController
             assign_query_info();
             $this->assign('sysmain', $sysmain);
             $this->assign('rt', $rt);
-            $smarty->display('navigator_add.htm');
+            return $this->display('navigator_add.htm');
         } elseif ($_REQUEST['step'] == 2) {
             $item_name = $_REQUEST['item_name'];
             $item_url = $_REQUEST['item_url'];
@@ -120,7 +120,7 @@ class NavigatorController extends InitController
             assign_query_info();
             $this->assign('sysmain', $sysmain);
             $this->assign('rt', $rt);
-            $smarty->display('navigator_add.htm');
+            return $this->display('navigator_add.htm');
         } elseif ($_REQUEST['step'] == 2) {
             $item_name = $_REQUEST['item_name'];
             $item_url = $_REQUEST['item_url'];

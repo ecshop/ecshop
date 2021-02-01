@@ -117,7 +117,7 @@ class CheckFilePrivController extends InitController
         $this->assign('ur_here', $_LANG['check_file_priv']);
         $this->assign('list', $list);
         $this->assign('tpl_msg', $tpl_msg);
-        $smarty->display('file_priv.html');
+        return $this->display('file_priv.html');
     }
 
     /**

@@ -97,6 +97,6 @@ class TopicController extends InitController
         $this->assign('base_style', '#' . $topic['base_style']);     // 基本风格样式颜色
 
         /* 显示模板 */
-        $smarty->display($templates);
+        return $this->display($templates);
     }
 }

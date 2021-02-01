@@ -55,7 +55,7 @@ class MailTemplateController extends InitController
         $this->assign('templates', $templates);
         $this->assign('template', $content);
         $this->assign('full_page', 1);
-        $smarty->display('mail_template.htm');
+        return $this->display('mail_template.htm');
     }
 
     /*------------------------------------------------------ */

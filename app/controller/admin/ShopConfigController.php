@@ -53,7 +53,7 @@ class ShopConfigController extends InitController
         $this->assign('cfg', $_CFG);
 
         assign_query_info();
-        $smarty->display('shop_config.htm');
+        return $this->display('shop_config.htm');
     }
 
     /*------------------------------------------------------ */
@@ -70,7 +70,7 @@ class ShopConfigController extends InitController
 
         $this->assign('ur_here', $_LANG['mail_settings']);
         $this->assign('cfg', $arr[5]['vars']);
-        $smarty->display('shop_config_mail_settings.htm');
+        return $this->display('shop_config_mail_settings.htm');
     }
 
     /*------------------------------------------------------ */

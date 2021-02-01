@@ -30,7 +30,7 @@ class ShophelpController extends InitController
         $this->assign('list', get_shophelp_list());
 
         assign_query_info();
-        $smarty->display('shophelp_cat_list.htm');
+        return $this->display('shophelp_cat_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -45,7 +45,7 @@ class ShophelpController extends InitController
         $this->assign('list', shophelp_article_list($_REQUEST['cat_id']));
 
         assign_query_info();
-        $smarty->display('shophelp_article_list.htm');
+        return $this->display('shophelp_article_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -92,7 +92,7 @@ class ShophelpController extends InitController
         $this->assign('ur_here', $_LANG['article_add']);
         $this->assign('action_link', array('text' => $_LANG['cat_list'], 'href' => 'shophelp.php?act=list_cat'));
         $this->assign('form_action', 'insert');
-        $smarty->display('shophelp_info.htm');
+        return $this->display('shophelp_info.htm');
     }
 
     public function insertAction()
@@ -144,7 +144,7 @@ class ShophelpController extends InitController
         $this->assign('form_action', 'update');
 
         assign_query_info();
-        $smarty->display('shophelp_info.htm');
+        return $this->display('shophelp_info.htm');
     }
 
     public function updateAction()

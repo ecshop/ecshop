@@ -42,7 +42,7 @@ class AdsController extends InitController
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
-        $smarty->display('ads_list.htm');
+        return $this->display('ads_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -95,7 +95,7 @@ class AdsController extends InitController
         $this->assign('cfg_lang', $_CFG['lang']);
 
         assign_query_info();
-        $smarty->display('ads_info.htm');
+        return $this->display('ads_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -281,7 +281,7 @@ class AdsController extends InitController
         $this->assign('ads', $ads_arr);
 
         assign_query_info();
-        $smarty->display('ads_info.htm');
+        return $this->display('ads_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -411,7 +411,7 @@ class AdsController extends InitController
         $this->assign('lang_list', $lang_list);
 
         assign_query_info();
-        $smarty->display('ads_js.htm');
+        return $this->display('ads_js.htm');
     }
 
     /*------------------------------------------------------ */

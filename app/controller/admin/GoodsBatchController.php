@@ -56,7 +56,7 @@ class GoodsBatchController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('goods_batch_add.htm');
+        return $this->display('goods_batch_add.htm');
     }
 
     /*------------------------------------------------------ */
@@ -313,7 +313,7 @@ class GoodsBatchController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('goods_batch_confirm.htm');
+        return $this->display('goods_batch_confirm.htm');
     }
 
     /*------------------------------------------------------ */
@@ -528,7 +528,7 @@ class GoodsBatchController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('goods_batch_select.htm');
+        return $this->display('goods_batch_select.htm');
     }
 
     /*------------------------------------------------------ */
@@ -612,7 +612,7 @@ class GoodsBatchController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('goods_batch_edit.htm');
+        return $this->display('goods_batch_edit.htm');
     }
 
     /*------------------------------------------------------ */

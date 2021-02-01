@@ -29,7 +29,7 @@ class RegFieldsController extends InitController
         $this->assign('reg_fields', $fields);
 
         assign_query_info();
-        $smarty->display('reg_fields.htm');
+        return $this->display('reg_fields.htm');
     }
 
 
@@ -65,7 +65,7 @@ class RegFieldsController extends InitController
         $this->assign('form_action', $form_action);
 
         assign_query_info();
-        $smarty->display('reg_field_info.htm');
+        return $this->display('reg_field_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -116,7 +116,7 @@ class RegFieldsController extends InitController
         $this->assign('form_action', $form_action);
 
         assign_query_info();
-        $smarty->display('reg_field_info.htm');
+        return $this->display('reg_field_info.htm');
     }
 
     /*------------------------------------------------------ */

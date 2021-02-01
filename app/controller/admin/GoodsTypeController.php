@@ -38,7 +38,7 @@ class GoodsTypeController extends InitController
 
         $this->assign('action_link', array('text' => $_LANG['new_goods_type'], 'href' => 'goods_type.php?act=add'));
 
-        $smarty->display('goods_type.htm');
+        return $this->display('goods_type.htm');
     }
 
     /*------------------------------------------------------ */
@@ -116,7 +116,7 @@ class GoodsTypeController extends InitController
         $this->assign('goods_type', array('enabled' => 1));
 
         assign_query_info();
-        $smarty->display('goods_type_info.htm');
+        return $this->display('goods_type_info.htm');
     }
 
     public function insertAction()
@@ -154,7 +154,7 @@ class GoodsTypeController extends InitController
         $this->assign('goods_type', $goods_type);
 
         assign_query_info();
-        $smarty->display('goods_type_info.htm');
+        return $this->display('goods_type_info.htm');
     }
 
     public function updateAction()

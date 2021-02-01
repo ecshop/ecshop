@@ -23,7 +23,7 @@ class EmailListController extends InitController
         $this->assign('record_count', $emaildb['record_count']);
         $this->assign('page_count', $emaildb['page_count']);
         assign_query_info();
-        $smarty->display('email_list.htm');
+        return $this->display('email_list.htm');
     }
 
     public function exportAction()

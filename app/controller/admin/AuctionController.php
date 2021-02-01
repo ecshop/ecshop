@@ -42,7 +42,7 @@ class AuctionController extends InitController
 
         /* 显示商品列表页面 */
         assign_query_info();
-        $smarty->display('auction_list.htm');
+        return $this->display('auction_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -162,7 +162,7 @@ class AuctionController extends InitController
         $this->assign('ur_here', $_LANG['auction_log']);
         $this->assign('action_link', array('href' => 'auction.php?act=list&' . list_link_postfix(), 'text' => $_LANG['auction_list']));
         assign_query_info();
-        $smarty->display('auction_log.htm');
+        return $this->display('auction_log.htm');
     }
 
     /*------------------------------------------------------ */
@@ -226,7 +226,7 @@ class AuctionController extends InitController
         }
         $this->assign('action_link', list_link($is_add));
         assign_query_info();
-        $smarty->display('auction_info.htm');
+        return $this->display('auction_info.htm');
     }
 
     /*------------------------------------------------------ */

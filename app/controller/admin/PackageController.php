@@ -41,7 +41,7 @@ class PackageController extends InitController
         $this->assign('form_action', 'insert');
 
         assign_query_info();
-        $smarty->display('package_info.htm');
+        return $this->display('package_info.htm');
     }
 
     public function insertAction()
@@ -106,7 +106,7 @@ class PackageController extends InitController
         $this->assign('package_goods_list', $package_goods_list);
 
         assign_query_info();
-        $smarty->display('package_info.htm');
+        return $this->display('package_info.htm');
     }
 
     public function updateAction()
@@ -185,7 +185,7 @@ class PackageController extends InitController
 
         $this->assign('full_page', 1);
         assign_query_info();
-        $smarty->display('package_list.htm');
+        return $this->display('package_list.htm');
     }
 
     /*------------------------------------------------------ */

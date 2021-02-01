@@ -59,7 +59,7 @@ class ShippingController extends InitController
         $this->assign('ur_here', $_LANG['03_shipping_list']);
         $this->assign('modules', $modules);
         assign_query_info();
-        $smarty->display('shipping_list.htm');
+        return $this->display('shipping_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -160,7 +160,7 @@ class ShippingController extends InitController
         $this->assign('shipping', $row);
         $this->assign('shipping_id', $shipping_id);
 
-        $smarty->display('print_index.htm');
+        return $this->display('print_index.htm');
     }
 
     /*------------------------------------------------------ */
@@ -293,7 +293,7 @@ class ShippingController extends InitController
 
         assign_query_info();
 
-        $smarty->display('shipping_template.htm');
+        return $this->display('shipping_template.htm');
     }
 
     /*------------------------------------------------------ */

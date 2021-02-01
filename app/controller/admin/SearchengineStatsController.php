@@ -104,7 +104,7 @@ class SearchengineStatsController extends InitController
         $this->assign('lang', $_LANG);
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('searchengine_stats.htm');
+        return $this->display('searchengine_stats.htm');
     }
 
     public function downloadAction()

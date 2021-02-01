@@ -46,7 +46,7 @@ class ArticleController extends InitController
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
-        $smarty->display('article_list.htm');
+        return $this->display('article_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -106,7 +106,7 @@ class ArticleController extends InitController
         $this->assign('form_action', 'insert');
 
         assign_query_info();
-        $smarty->display('article_info.htm');
+        return $this->display('article_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -210,7 +210,7 @@ class ArticleController extends InitController
         $this->assign('form_action', 'update');
 
         assign_query_info();
-        $smarty->display('article_info.htm');
+        return $this->display('article_info.htm');
     }
 
     public function updateAction()

@@ -28,7 +28,7 @@ class BrandController extends InitController
 
             $this->assign('brand_list', get_brands());
 
-            return $smarty->display('brand_list.dwt');
+            return $this->display('brand_list.dwt');
         }
 
         /* 初始化分页信息 */
@@ -99,7 +99,7 @@ class BrandController extends InitController
         assign_pager('brand', $cate, $count, $size, $sort, $order, $page, '', $brand_id, 0, 0, $display); // 分页
         assign_dynamic('brand'); // 动态内容
 
-        $smarty->display('brand.dwt');
+        return $this->display('brand.dwt');
     }
 
 

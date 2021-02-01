@@ -53,7 +53,7 @@ class UserAccountController extends InitController
         $this->assign('full_page', 1);
 
         assign_query_info();
-        $smarty->display('user_account_list.htm');
+        return $this->display('user_account_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -113,7 +113,7 @@ class UserAccountController extends InitController
         $this->assign('action_link', array('href' => $href, 'text' => $_LANG['09_user_account']));
 
         assign_query_info();
-        $smarty->display('user_account_info.htm');
+        return $this->display('user_account_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -272,7 +272,7 @@ class UserAccountController extends InitController
 
         /* 页面显示 */
         assign_query_info();
-        $smarty->display('user_account_check.htm');
+        return $this->display('user_account_check.htm');
     }
 
     /*------------------------------------------------------ */

@@ -1914,7 +1914,7 @@ class FlowController extends InitController
         $this->assign('step', $_REQUEST['step']);
         assign_dynamic('shopping_flow');
 
-        $smarty->display('flow.dwt');
+        return $this->display('flow.dwt');
     }
 
     /**

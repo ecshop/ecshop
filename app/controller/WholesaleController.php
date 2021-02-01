@@ -89,7 +89,7 @@ class WholesaleController extends InitController
         assign_dynamic('wholesale');
 
         /* 显示模板 */
-        $smarty->display('wholesale_list.dwt');
+        return $this->display('wholesale_list.dwt');
     }
 
     /*------------------------------------------------------ */

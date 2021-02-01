@@ -34,7 +34,7 @@ class AdPositionController extends InitController
         $this->assign('page_count', $position_list['page_count']);
 
         assign_query_info();
-        $smarty->display('ad_position_list.htm');
+        return $this->display('ad_position_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -52,7 +52,7 @@ class AdPositionController extends InitController
         $this->assign('posit_arr', array('position_style' => '<table cellpadding="0" cellspacing="0">' . "\n" . '{foreach from=$ads item=ad}' . "\n" . '<tr><td>{$ad}</td></tr>' . "\n" . '{/foreach}' . "\n" . '</table>'));
 
         assign_query_info();
-        $smarty->display('ad_position_info.htm');
+        return $this->display('ad_position_info.htm');
     }
 
     public function insertAction()
@@ -111,7 +111,7 @@ class AdPositionController extends InitController
         $this->assign('form_act', 'update');
 
         assign_query_info();
-        $smarty->display('ad_position_info.htm');
+        return $this->display('ad_position_info.htm');
     }
 
     public function updateAction()

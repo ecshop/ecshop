@@ -38,7 +38,7 @@ class SuppliersController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('suppliers_list.htm');
+        return $this->display('suppliers_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -284,7 +284,7 @@ class SuppliersController extends InitController
 
         assign_query_info();
 
-        $smarty->display('suppliers_info.htm');
+        return $this->display('suppliers_info.htm');
     }
 
     public function editAction()
@@ -319,7 +319,7 @@ class SuppliersController extends InitController
 
         assign_query_info();
 
-        $smarty->display('suppliers_info.htm');
+        return $this->display('suppliers_info.htm');
     }
 
     /*------------------------------------------------------ */

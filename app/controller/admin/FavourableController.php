@@ -42,7 +42,7 @@ class FavourableController extends InitController
 
         /* 显示商品列表页面 */
         assign_query_info();
-        $smarty->display('favourable_list.htm');
+        return $this->display('favourable_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -236,7 +236,7 @@ class FavourableController extends InitController
         }
         $this->assign('action_link', array('href' => $href, 'text' => $_LANG['favourable_list']));
         assign_query_info();
-        $smarty->display('favourable_info.htm');
+        return $this->display('favourable_info.htm');
     }
 
     /*------------------------------------------------------ */

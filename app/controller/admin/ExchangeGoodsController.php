@@ -42,7 +42,7 @@ class ExchangeGoodsController extends InitController
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
-        $smarty->display('exchange_goods_list.htm');
+        return $this->display('exchange_goods_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -89,7 +89,7 @@ class ExchangeGoodsController extends InitController
         $this->assign('form_action', 'insert');
 
         assign_query_info();
-        $smarty->display('exchange_goods_info.htm');
+        return $this->display('exchange_goods_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -151,7 +151,7 @@ class ExchangeGoodsController extends InitController
         $this->assign('form_action', 'update');
 
         assign_query_info();
-        $smarty->display('exchange_goods_info.htm');
+        return $this->display('exchange_goods_info.htm');
     }
 
     /*------------------------------------------------------ */

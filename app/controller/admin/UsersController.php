@@ -41,7 +41,7 @@ class UsersController extends InitController
         $this->assign('sort_user_id', '<img src="images/sort_desc.gif">');
 
         assign_query_info();
-        $smarty->display('users_list.htm');
+        return $this->display('users_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -87,7 +87,7 @@ class UsersController extends InitController
         $this->assign('special_ranks', get_rank_list(true));
 
         assign_query_info();
-        $smarty->display('user_info.htm');
+        return $this->display('user_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -298,7 +298,7 @@ class UsersController extends InitController
         $this->assign('user', $user);
         $this->assign('form_action', 'update');
         $this->assign('special_ranks', get_rank_list(true));
-        $smarty->display('user_info.htm');
+        return $this->display('user_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -512,7 +512,7 @@ class UsersController extends InitController
         assign_query_info();
         $this->assign('ur_here', $_LANG['address_list']);
         $this->assign('action_link', array('text' => $_LANG['03_users_list'], 'href' => 'users.php?act=list&' . list_link_postfix()));
-        $smarty->display('user_address_list.htm');
+        return $this->display('user_address_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -592,7 +592,7 @@ class UsersController extends InitController
         $this->assign('action_link', array('text' => $_LANG['back_note'], 'href' => "users.php?act=edit&id=$auid"));
 
         assign_query_info();
-        $smarty->display('affiliate_list.htm');
+        return $this->display('affiliate_list.htm');
     }
 
     /**

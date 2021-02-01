@@ -91,6 +91,6 @@ class AdsenseController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('adsense.htm');
+        return $this->display('adsense.htm');
     }
 }

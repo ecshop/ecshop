@@ -36,7 +36,7 @@ class PackController extends InitController
         $this->assign('page_count', $packs_list['page_count']);
 
         assign_query_info();
-        $smarty->display('pack_list.htm');
+        return $this->display('pack_list.htm');
     }
     /*------------------------------------------------------ */
     //-- ajax 列表
@@ -71,7 +71,7 @@ class PackController extends InitController
         $this->assign('action_link', array('text' => $_LANG['06_pack_list'], 'href' => 'pack.php?act=list'));
 
         assign_query_info();
-        $smarty->display('pack_info.htm');
+        return $this->display('pack_info.htm');
     }
 
     public function insertAction()
@@ -125,7 +125,7 @@ class PackController extends InitController
         $this->assign('action_link', array('text' => $_LANG['06_pack_list'], 'href' => 'pack.php?act=list&' . list_link_postfix()));
         $this->assign('pack', $pack);
         $this->assign('form_action', 'update');
-        $smarty->display('pack_info.htm');
+        return $this->display('pack_info.htm');
     }
 
     public function updateAction()

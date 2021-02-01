@@ -61,7 +61,7 @@ class QuotationController extends InitController
             $this->assign('helps', get_shop_help()); // 网店帮助
         }
 
-        $smarty->display('quotation.dwt');
+        return $this->display('quotation.dwt');
     }
 
 

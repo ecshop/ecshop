@@ -41,7 +41,7 @@ class GroupBuyController extends InitController
 
         /* 显示商品列表页面 */
         assign_query_info();
-        $smarty->display('group_buy_list.htm');
+        return $this->display('group_buy_list.htm');
     }
 
     public function queryAction()
@@ -99,7 +99,7 @@ class GroupBuyController extends InitController
 
         /* 显示模板 */
         assign_query_info();
-        $smarty->display('group_buy_info.htm');
+        return $this->display('group_buy_info.htm');
     }
 
     /*------------------------------------------------------ */

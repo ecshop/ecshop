@@ -35,7 +35,7 @@ class CommentManageController extends InitController
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
-        $smarty->display('comment_list.htm');
+        return $this->display('comment_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -119,7 +119,7 @@ class CommentManageController extends InitController
 
         /* 页面显示 */
         assign_query_info();
-        $smarty->display('comment_info.htm');
+        return $this->display('comment_info.htm');
     }
     /*------------------------------------------------------ */
     //-- 处理 回复用户评论

@@ -29,7 +29,7 @@ class ShopinfoController extends InitController
         $this->assign('list', shopinfo_article_list());
 
         assign_query_info();
-        $smarty->display('shopinfo_list.htm');
+        return $this->display('shopinfo_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -62,7 +62,7 @@ class ShopinfoController extends InitController
         $this->assign('form_action', 'insert');
 
         assign_query_info();
-        $smarty->display('shopinfo_info.htm');
+        return $this->display('shopinfo_info.htm');
     }
 
     public function insertAction()
@@ -116,7 +116,7 @@ class ShopinfoController extends InitController
         $this->assign('action_link', array('text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list'));
         $this->assign('article', $article);
         $this->assign('form_action', 'update');
-        $smarty->display('shopinfo_info.htm');
+        return $this->display('shopinfo_info.htm');
     }
 
     public function updateAction()

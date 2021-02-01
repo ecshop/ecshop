@@ -32,7 +32,7 @@ class MagazineListController extends InitController
         $this->assign('send_rank', $send_rank);
 
         assign_query_info();
-        $smarty->display('magazine_list.htm');
+        return $this->display('magazine_list.htm');
     }
 
     public function queryAction()
@@ -57,7 +57,7 @@ class MagazineListController extends InitController
             $this->assign(array('ur_here' => $_LANG['magazine_list'], 'act' => 'add'));
             create_html_editor('magazine_content');
             assign_query_info();
-            $smarty->display('magazine_list_add.htm');
+            return $this->display('magazine_list_add.htm');
         } elseif ($_POST['step'] == 2) {
             $magazine_name = trim($_POST['magazine_name']);
             $magazine_content = trim($_POST['magazine_content']);
@@ -82,7 +82,7 @@ class MagazineListController extends InitController
             $this->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'magazine_list.php?act=list'));
             create_html_editor('magazine_content', $rt['template_content']);
             assign_query_info();
-            $smarty->display('magazine_list_add.htm');
+            return $this->display('magazine_list_add.htm');
         } elseif ($_POST['step'] == 2) {
             $magazine_name = trim($_POST['magazine_name']);
             $magazine_content = trim($_POST['magazine_content']);

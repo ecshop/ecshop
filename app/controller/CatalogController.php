@@ -30,7 +30,7 @@ class CatalogController extends InitController
         $this->assign('brand_list', get_brands());    // 所以品牌赋值
         $this->assign('promotion_info', get_promotion_info());
 
-        $smarty->display('catalog.dwt');
+        return $this->display('catalog.dwt');
     }
 
     /**

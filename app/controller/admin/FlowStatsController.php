@@ -284,7 +284,7 @@ class FlowStatsController extends InitController
 
         /* 显示页面 */
         assign_query_info();
-        $smarty->display('flow_stats.htm');
+        return $this->display('flow_stats.htm');
     }
 
     /* 报表下载 */

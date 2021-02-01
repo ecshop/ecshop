@@ -32,7 +32,7 @@ class MessageController extends InitController
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
-        $smarty->display('message_list.htm');
+        return $this->display('message_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -72,7 +72,7 @@ class MessageController extends InitController
         $this->assign('admin_list', $admin_list);
 
         assign_query_info();
-        $smarty->display('message_info.htm');
+        return $this->display('message_info.htm');
     }
 
     /*------------------------------------------------------ */
@@ -146,7 +146,7 @@ class MessageController extends InitController
         $this->assign('msg_arr', $msg_arr);
 
         assign_query_info();
-        $smarty->display('message_info.htm');
+        return $this->display('message_info.htm');
     }
 
     public function updateAction()
@@ -206,7 +206,7 @@ class MessageController extends InitController
         $this->assign('msg_arr', $msg_arr);
 
         assign_query_info();
-        $smarty->display('message_view.htm');
+        return $this->display('message_view.htm');
     }
 
     /*------------------------------------------------------ */
@@ -232,7 +232,7 @@ class MessageController extends InitController
         $this->assign('msg_val', $msg_val);
 
         assign_query_info();
-        $smarty->display('message_info.htm');
+        return $this->display('message_info.htm');
     }
 
     /*------------------------------------------------------ */

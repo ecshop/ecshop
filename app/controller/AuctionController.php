@@ -55,7 +55,7 @@ class AuctionController extends InitController
         assign_dynamic('auction_list');
 
         /* 显示模板 */
-        $smarty->display('auction_list.dwt');
+        return $this->display('auction_list.dwt');
     }
 
     /*------------------------------------------------------ */
@@ -131,7 +131,7 @@ class AuctionController extends InitController
         $db->query($sql);
 
         $this->assign('now_time', gmtime());           // 当前系统时间
-        $smarty->display('auction.dwt');
+        return $this->display('auction.dwt');
     }
 
     /*------------------------------------------------------ */

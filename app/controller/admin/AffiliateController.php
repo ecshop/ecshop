@@ -24,7 +24,7 @@ class AffiliateController extends InitController
 
         $this->assign('ur_here', $_LANG['affiliate']);
         $this->assign('config', $config);
-        $smarty->display('affiliate.htm');
+        return $this->display('affiliate.htm');
     }
 
     public function queryAction()

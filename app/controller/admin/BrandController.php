@@ -35,7 +35,7 @@ class BrandController extends InitController
         $this->assign('page_count', $brand_list['page_count']);
 
         assign_query_info();
-        $smarty->display('brand_list.htm');
+        return $this->display('brand_list.htm');
     }
 
     /*------------------------------------------------------ */
@@ -52,7 +52,7 @@ class BrandController extends InitController
 
         assign_query_info();
         $this->assign('brand', array('sort_order' => 50, 'is_show' => 1));
-        $smarty->display('brand_info.htm');
+        return $this->display('brand_info.htm');
     }
 
     public function insertAction()
@@ -116,7 +116,7 @@ class BrandController extends InitController
         $this->assign('form_action', 'updata');
 
         assign_query_info();
-        $smarty->display('brand_info.htm');
+        return $this->display('brand_info.htm');
     }
 
     public function updataAction()

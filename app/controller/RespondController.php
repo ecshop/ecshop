@@ -7,7 +7,7 @@ namespace app\controller;
  */
 class RespondController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
 
 

@@ -20,7 +20,7 @@ class FilecheckController extends InitController
         }
     }
 
-    public function index()
+    public function indexAction()
     {
 
         $step = empty($_REQUEST['step']) ? 1 : max(1, intval($_REQUEST['step']));

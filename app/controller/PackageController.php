@@ -7,7 +7,7 @@ namespace app\controller;
  */
 class PackageController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
 
         require_once(ROOT_PATH . 'includes/lib_order.php');

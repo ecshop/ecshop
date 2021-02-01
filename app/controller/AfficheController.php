@@ -7,7 +7,7 @@ namespace app\controller;
  */
 class AfficheController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
 
         define('INIT_NO_SMARTY', true);

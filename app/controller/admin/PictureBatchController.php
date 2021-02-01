@@ -13,7 +13,7 @@ class PictureBatchController extends InitController
 
     }
 
-    public function index()
+    public function indexAction()
     {
 
 

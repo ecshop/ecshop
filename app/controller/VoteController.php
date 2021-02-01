@@ -7,7 +7,7 @@ namespace app\controller;
  */
 class VoteController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
         require(ROOT_PATH . 'includes/cls_json.php');
 

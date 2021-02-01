@@ -7,7 +7,7 @@ namespace app\controller;
  */
 class ReceiveController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
 
 

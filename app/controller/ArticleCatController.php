@@ -7,7 +7,7 @@ namespace app\controller;
  */
 class ArticleCatController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
 
         if ((DEBUG_MODE & 2) != 2) {

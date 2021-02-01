@@ -4,7 +4,7 @@ namespace app\controller\api;
 
 class CronController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
 
         $timestamp = gmtime();

@@ -7,7 +7,7 @@ namespace app\controller;
  */
 class QuotationController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
 
         $action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';

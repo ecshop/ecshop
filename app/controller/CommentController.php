@@ -7,7 +7,7 @@ namespace app\controller;
  */
 class CommentController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
 
 

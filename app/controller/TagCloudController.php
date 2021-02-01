@@ -7,7 +7,7 @@ namespace app\controller;
  */
 class TagCloudController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
         assign_template();
         $position = assign_ur_here(0, $_LANG['tag_cloud']);

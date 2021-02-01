@@ -7,7 +7,7 @@ namespace app\controller;
  */
 class PickOutController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
 
         $condition = array();

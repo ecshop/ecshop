@@ -7,7 +7,7 @@ namespace app\controller;
  */
 class FeedController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
 
         define('INIT_NO_USERS', true);

@@ -13,7 +13,7 @@ class CloudController extends InitController
 
     }
 
-    public function index()
+    public function indexAction()
     {
         require(ROOT_PATH . 'includes/cls_transport.php');
         require(ROOT_PATH . 'includes/cls_json.php');

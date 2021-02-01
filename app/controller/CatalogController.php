@@ -7,7 +7,7 @@ namespace app\controller;
  */
 class CatalogController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
 
         if ((DEBUG_MODE & 2) != 2) {

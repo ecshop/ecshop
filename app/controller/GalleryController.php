@@ -7,7 +7,7 @@ namespace app\controller;
  */
 class GalleryController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
 
 

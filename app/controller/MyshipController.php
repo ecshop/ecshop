@@ -7,7 +7,7 @@ namespace app\controller;
  */
 class MyshipController extends InitController
 {
-    public function index()
+    public function indexAction()
     {
 
 

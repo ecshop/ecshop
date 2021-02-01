@@ -16,7 +16,7 @@ class IndexController extends InitController
     /*------------------------------------------------------ */
 //-- 框架
     /*------------------------------------------------------ */
-    public function index()
+    public function indexAction()
     {
         $smarty->assign('shop_url', urlencode($ecs->url()));
         $smarty->display('index.htm');

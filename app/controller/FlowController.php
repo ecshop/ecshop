@@ -1923,7 +1923,7 @@ class FlowController extends InitController
         $smarty->assign('fittings_list', $fittings_list);
     }
 
-    function index()
+    public function indexAction()
     {
         $smarty->assign('currency_format', $_CFG['currency_format']);
         $smarty->assign('integral_scale', $_CFG['integral_scale']);

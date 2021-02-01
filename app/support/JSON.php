@@ -1,13 +1,10 @@
 <?php
 
+namespace app\support;
+
 /**
  * JSON 类
  */
-
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
 class JSON
 {
     public function encode($arg)

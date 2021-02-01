@@ -1,19 +1,8 @@
 <?php
 
-/**
- * 短信模块 之 模型（类库）
- */
+namespace app\support;
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-define('SOURCE_TOKEN', 'b11983d30cb6821158744d5d065d0f70');
-define('SOURCE_ID', '620386');
-require_once(ROOT_PATH . 'includes/cls_transport.php');
-
-/* 短信模块主类 */
-
-class sms
+class Sms
 {
     /**
      * 存放提供远程服务的URL。

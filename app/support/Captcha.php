@@ -1,14 +1,11 @@
 <?php
 
+namespace app\support;
+
 /**
  * 验证码图片类
  */
-
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
-class captcha
+class Captcha
 {
     /**
      * 背景图片所在目录

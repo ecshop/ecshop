@@ -1,25 +1,16 @@
 <?php
 
-/**
- * 基础类
- */
+namespace app\support;
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
-class ECS
+class Shop
 {
     public $db_name = '';
     public $prefix = 'ecs_';
 
     /**
-     * 构造函数
-     *
-     * @access  public
-     * @param string $ver 版本号
-     *
-     * @return  void
+     * Shop constructor.
+     * @param $db_name
+     * @param $prefix
      */
     public function __construct($db_name, $prefix)
     {

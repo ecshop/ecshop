@@ -1,14 +1,8 @@
 <?php
 
-/**
- * Google sitemap 类
- */
+namespace app\support\sitemap;
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
-class google_sitemap
+class Sitemap
 {
     public $header = "<\x3Fxml version=\"1.0\" encoding=\"UTF-8\"\x3F>\n\t<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">";
     public $charset = "UTF-8";
@@ -64,23 +58,5 @@ class google_sitemap
         } else {
             return $map;
         }
-    }
-}
-
-class google_sitemap_item
-{
-    /**
-     * @access   public
-     * @param string $loc 位置
-     * @param string $lastmod 日期格式 YYYY-MM-DD
-     * @param string $changefreq 更新频率的单位 (always, hourly, daily, weekly, monthly, yearly, never)
-     * @param string $priority 更新频率 0-1
-     */
-    public function __construct($loc, $lastmod = '', $changefreq = '', $priority = '')
-    {
-        $this->loc = $loc;
-        $this->lastmod = $lastmod;
-        $this->changefreq = $changefreq;
-        $this->priority = $priority;
     }
 }

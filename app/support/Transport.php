@@ -1,14 +1,8 @@
 <?php
 
-/**
- * 服务器之间数据传输器。采集到的信息包括HTTP头和HTTP体，
- */
+namespace app\support;
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
-class transport
+class Transport
 {
     /**
      * 脚本执行时间。－1表示采用PHP的默认值。

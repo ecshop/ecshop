@@ -1,5 +1,7 @@
 <?php
 
+namespace app\support;
+
 /**
  * 后台对上传文件的处理类(实现图片上传，图片缩小， 增加水印)
  * 需要定义以下常量
@@ -12,12 +14,7 @@
  *  define('ERR_INVALID_IMAGE_TYPE',        7);
  *  define('ROOT_PATH',                     '网站根目录')
  */
-
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
-class cls_image
+class Image
 {
     public $error_no = 0;
     public $error_msg = '';

@@ -1,14 +1,11 @@
 <?php
 
+namespace app\support;
+
 /**
  * SQL语句执行类。在调用该类方法之前，请参看相应方法的说明。
  */
-
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
-class sql_executor
+class SqlExecutor
 {
     /**
      * 记录程序执行过程中最后产生的那条错误信息

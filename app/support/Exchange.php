@@ -1,18 +1,8 @@
 <?php
 
-/**
- * 后台自动操作数据库的类文件
- */
+namespace app\support;
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
-/*------------------------------------------------------ */
-//-- 该类用于与数据库数据进行交换
-/*------------------------------------------------------ */
-
-class exchange
+class Exchange
 {
     public $table;
     public $db;

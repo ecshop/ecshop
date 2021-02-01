@@ -1,14 +1,11 @@
 <?php
 
+namespace app\support;
+
 /**
  * 用户级错误处理类
  */
-
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
-class ecs_error
+class Error
 {
     public $_message = array();
     public $_template = '';

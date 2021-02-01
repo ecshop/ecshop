@@ -1,12 +1,6 @@
 <?php
 
-/**
- * 数据库导出类
- */
-
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
+namespace app\support;
 
 /**
  * 对mysql敏感字符串转义
@@ -20,7 +14,7 @@ function dump_escape_string($str)
 {
     global $db;
     /* 取得参数 */
-    return cls_mysql::escape_string($str, $db);
+    return Mysql::escape_string($str, $db);
 }
 
 /**
@@ -40,8 +34,7 @@ function dump_null_string($str)
     return $str;
 }
 
-
-class cls_sql_dump
+class SqlDump
 {
     public $max_size = 2097152; // 2M
     public $is_short = false;

@@ -1,10 +1,8 @@
 <?php
 
-/**
- * 模版类
- */
+namespace app\support;
 
-class cls_template
+class Template
 {
     public $template_dir = '';
     public $cache_dir = '';

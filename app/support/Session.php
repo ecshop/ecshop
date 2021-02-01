@@ -1,14 +1,8 @@
 <?php
 
-/**
- * SESSION 公用类库
- */
+namespace app\support;
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
-class cls_session
+class Session
 {
     public $db = null;
     public $session_table = '';

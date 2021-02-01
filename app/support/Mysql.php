@@ -1,14 +1,8 @@
 <?php
 
-/**
- * MYSQL 公用类库
- */
+namespace app\support;
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
-class cls_mysql
+class Mysql
 {
     public $link_id = null;
 

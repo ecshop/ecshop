@@ -1,12 +1,6 @@
 <?php
 
-/**
- * ZIP 处理类
- */
-
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
+namespace app\support;
 
 class PHPZip
 {

@@ -2,6 +2,8 @@
 
 namespace app\service;
 
+use think\facade\View;
+
 /**
  * 管理中心公用函数库
  */
@@ -295,7 +297,7 @@ class MainManageService
         $editor->Height = '320';
         $editor->Value = $input_value;
         $FCKeditor = $editor->CreateHtml();
-        $smarty->assign('FCKeditor', $FCKeditor);
+        View::assign('FCKeditor', $FCKeditor);
     }
 
     /**

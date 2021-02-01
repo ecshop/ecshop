@@ -164,8 +164,7 @@ class RegFieldsController extends InitController
 
         $url = 'reg_fields.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
-        ecs_header("Location: $url\n");
-        exit;
+        return redirect($url);
     } /*
  *  编辑会员注册项名称
  */

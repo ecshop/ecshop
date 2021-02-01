@@ -118,9 +118,7 @@ class PrivilegeController extends InitController
             // 清除购物车中过期的数据
             clear_cart();
 
-            ecs_header("Location: ./index.php\n");
-
-            exit;
+            return redirect("./index.php");
         } else {
             sys_msg($_LANG['login_faild'], 1);
         }
@@ -601,8 +599,7 @@ class PrivilegeController extends InitController
 
         $url = 'privilege.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
-        ecs_header("Location: $url\n");
-        exit;
+        return redirect($url);
     }
 
     /* 获取管理员列表 */

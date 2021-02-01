@@ -19,8 +19,7 @@ class FlashplayController extends InitController
     {
         /* 判断系统当前设置 如果为用户自定义 则跳转到自定义 */
         if ($_CFG['index_ad'] == 'cus') {
-            ecs_header("Location: flashplay.php?act=custom_list\n");
-            exit;
+            return redirect("flashplay.php?act=custom_list");
         }
 
         $playerdb = get_flash_xml();
@@ -76,8 +75,7 @@ class FlashplayController extends InitController
         put_flash_xml($temp);
         $error_msg = '';
         set_flash_data($_CFG['flash_theme'], $error_msg);
-        ecs_header("Location: flashplay.php?act=list\n");
-        exit;
+        return redirect("flashplay.php?act=list");
     }
 
     public function addAction()

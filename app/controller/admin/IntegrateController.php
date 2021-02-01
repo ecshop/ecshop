@@ -209,8 +209,7 @@ class IntegrateController extends InitController
         if ($total == 0) {
             /* 商城没有用户时，直接保存完成整合 */
             save_integrate_config($_POST['code'], $_POST['cfg']);
-            ecs_header("Location: integrate.php?act=complete\n");
-            exit;
+            return redirect("integrate.php?act=complete");
         }
 
         /* 检测成功临时保存论坛配置参数 */
@@ -609,8 +608,7 @@ class IntegrateController extends InitController
         }
 
         /* 跳转  */
-        ecs_header("Location: integrate.php?act=modify");
-        exit;
+        return redirect("integrate.php?act=modify");
     }
 
     /*------------------------------------------------------ */
@@ -973,8 +971,7 @@ class IntegrateController extends InitController
 
         clear_cache_files();
 
-        ecs_header("Location: integrate.php?act=points_set\n");
-        exit;
+        return redirect("integrate.php?act=points_set");
     }
 
     public function save_pointsAction()

@@ -56,16 +56,14 @@ class CloudController extends InitController
             if (!empty($_GET['link'])) {
                 $url = parse_url($_GET['link']);
                 if (!empty($url['host'])) {
-                    ecs_header("Location: " . $url['scheme'] . "://" . $url['host'] . $url['path'] . "?" . $url['query'] . $query . "\n");
-                    exit();
+                    return redirect("" . $url['scheme'] . "://" . $url['host'] . $url['path'] . "?" . $url['query'] . $query);
                 }
             }
 
             foreach ($must as $v) {
                 $query .= '&' . $v . '=' . $data[$v];
             }
-            ecs_header("Location: http://cloud.ecshop.com/api.php?act=" . $act . $query . "\n");
-            exit();
+            return redirect("http://cloud.ecshop.com/api.php?act=" . $act . $query);
         }
     }
 }

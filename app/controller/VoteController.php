@@ -12,8 +12,7 @@ class VoteController extends InitController
         require(ROOT_PATH . 'includes/cls_json.php');
 
         if (!isset($_REQUEST['vote']) || !isset($_REQUEST['options']) || !isset($_REQUEST['type'])) {
-            ecs_header("Location: ./\n");
-            exit;
+            return redirect("./");
         }
 
         $res = array('error' => 0, 'message' => '', 'content' => '');

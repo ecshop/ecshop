@@ -230,8 +230,7 @@ class VoteController extends InitController
 
                 $url = 'vote.php?act=query_option&vid=' . $vote_id . '&' . str_replace('act=new_option', '', $_SERVER['QUERY_STRING']);
 
-                ecs_header("Location: $url\n");
-                exit;
+                return redirect($url);
             }
         } else {
             make_json_error($_LANG['js_languages']['option_name_empty']);
@@ -320,8 +319,7 @@ class VoteController extends InitController
 
         $url = 'vote.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
-        ecs_header("Location: $url\n");
-        exit;
+        return redirect($url);
     }
 
     /*------------------------------------------------------ */
@@ -341,8 +339,7 @@ class VoteController extends InitController
 
         $url = 'vote.php?act=query_option&vid=' . $vote_id . '&' . str_replace('act=remove_option', '', $_SERVER['QUERY_STRING']);
 
-        ecs_header("Location: $url\n");
-        exit;
+        return redirect($url);
     }
 
     /* 获取在线调查数据列表 */

@@ -387,8 +387,7 @@ class VirtualCardController extends InitController
 
             $url = 'virtual_card.php?act=query_card&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
-            ecs_header("Location: $url\n");
-            exit;
+            return redirect($url);
         } else {
             make_json_error($db->error());
         }

@@ -224,8 +224,7 @@ class TagManageController extends InitController
             admin_log(addslashes($tag_name), 'remove', 'tag_manage');
 
             $url = 'tag_manage.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
-            ecs_header("Location: $url\n");
-            exit;
+            return redirect($url);
         } else {
             make_json_error($db->error());
         }

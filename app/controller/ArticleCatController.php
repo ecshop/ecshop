@@ -15,9 +15,7 @@ class ArticleCatController extends InitController
         } elseif (!empty($_GET['category'])) {
             $cat_id = intval($_GET['category']);
         } else {
-            ecs_header("Location: ./\n");
-
-            exit;
+            return redirect("./");
         }
 
         /* 获得当前页码 */
@@ -46,8 +44,7 @@ class ArticleCatController extends InitController
 
             if ($meta === false || empty($meta)) {
                 /* 如果没有找到任何记录则返回首页 */
-                ecs_header("Location: ./\n");
-                exit;
+                return redirect("./");
             }
 
             $smarty->assign('keywords', htmlspecialchars($meta['keywords']));

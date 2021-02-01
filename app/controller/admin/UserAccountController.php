@@ -238,8 +238,7 @@ class UserAccountController extends InitController
 
         /* 如果参数不合法，返回 */
         if ($id == 0) {
-            ecs_header("Location: user_account.php?act=list\n");
-            exit;
+            return redirect("user_account.php?act=list");
         }
 
         /* 查询当前的预付款信息 */
@@ -291,8 +290,7 @@ class UserAccountController extends InitController
 
         /* 如果参数不合法，返回 */
         if ($id == 0 || empty($admin_note)) {
-            ecs_header("Location: user_account.php?act=list\n");
-            exit;
+            return redirect("user_account.php?act=list");
         }
 
         /* 查询当前的预付款信息 */
@@ -375,8 +373,7 @@ class UserAccountController extends InitController
         if ($db->query($sql, 'SILENT')) {
             admin_log(addslashes($user_name), 'remove', 'user_surplus');
             $url = 'user_account.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
-            ecs_header("Location: $url\n");
-            exit;
+            return redirect($url);
         } else {
             make_json_error($db->error());
         }

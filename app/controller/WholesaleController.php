@@ -245,8 +245,7 @@ class WholesaleController extends InitController
         unset($goods_attr, $attr_id, $goods_list, $wholesale, $goods_attr_name);
 
         /* 刷新页面 */
-        ecs_header("Location: ./wholesale.php\n");
-        exit;
+        return redirect("./wholesale.php");
     }
 
     /*------------------------------------------------------ */
@@ -260,8 +259,7 @@ class WholesaleController extends InitController
         }
 
         /* 刷新页面 */
-        ecs_header("Location: ./wholesale.php\n");
-        exit;
+        return redirect("./wholesale.php");
     }
 
     /*------------------------------------------------------ */

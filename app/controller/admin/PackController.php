@@ -271,8 +271,7 @@ class PackController extends InitController
 
             $url = 'pack.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
-            ecs_header("Location: $url\n");
-            exit;
+            return redirect($url);
         } else {
             make_json_error($_LANG['packremove_falure']);
             return false;

@@ -189,8 +189,7 @@ class NavigatorController extends InitController
         $sql = " DELETE FROM " . $GLOBALS['ecs']->table('nav') . " WHERE id='$id' LIMIT 1";
         $db->query($sql);
         clear_cache_files();
-        ecs_header("Location: navigator.php?act=list\n");
-        exit;
+        return redirect("navigator.php?act=list");
     }
 
     /*------------------------------------------------------ */

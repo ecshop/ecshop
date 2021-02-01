@@ -621,8 +621,7 @@ class GroupBuyController extends InitController
 
         $url = 'group_buy.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
-        ecs_header("Location: $url\n");
-        exit;
+        return redirect($url);
     }
 
     /*

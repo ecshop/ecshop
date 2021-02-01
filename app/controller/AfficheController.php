@@ -13,8 +13,7 @@ class AfficheController extends InitController
 
         /* 没有指定广告的id及跳转地址 */
         if (empty($_GET['ad_id'])) {
-            ecs_header("Location: index.php\n");
-            exit;
+            return redirect("index.php");
         } else {
             $ad_id = intval($_GET['ad_id']);
         }
@@ -108,9 +107,7 @@ class AfficheController extends InitController
 
                 $uri = build_uri('goods', array('gid' => $goods_id), $row['goods_name']);
 
-                ecs_header("Location: $uri\n");
-
-                exit;
+                return redirect($uri);
             } else {
                 /* 更新站内广告的点击次数 */
                 $db->query('UPDATE ' . $ecs->table('ad') . " SET click_count = click_count + 1 WHERE ad_id = '$ad_id'");
@@ -132,8 +129,7 @@ class AfficheController extends InitController
                     $uri = $ecs->url();
                 }
 
-                ecs_header("Location: $uri\n");
-                exit;
+                return redirect($uri);
             }
         }
     }

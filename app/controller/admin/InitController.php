@@ -43,8 +43,7 @@ class InitController extends Controller
 
         /* 对路径进行安全处理 */
         if (strpos(PHP_SELF, '.php/') !== false) {
-            ecs_header("Location:" . substr(PHP_SELF, 0, strpos(PHP_SELF, '.php/') + 4) . "\n");
-            exit();
+            return redirect("" . substr(PHP_SELF, 0, strpos(PHP_SELF, '.php/') + 4));
         }
 
         /* 创建 ECSHOP 对象 */
@@ -112,7 +111,7 @@ class InitController extends Controller
         if (preg_replace('/(?:\.|\s+)[a-z]*$/i', '', $_CFG['ecs_version']) != preg_replace('/(?:\.|\s+)[a-z]*$/i', '', VERSION)
             && file_exists('../upgrade/index.php')) {
             // 转到升级文件
-            ecs_header("Location: ../upgrade/index.php\n");
+            return redirect("../upgrade/index.php");
 
             exit;
         }
@@ -154,7 +153,7 @@ class InitController extends Controller
                     if (!empty($_REQUEST['is_ajax'])) {
                         make_json_error($_LANG['priv_error']);
                     } else {
-                        ecs_header("Location: privilege.php?act=login\n");
+                        return redirect("privilege.php?act=login");
                     }
 
                     exit;
@@ -175,7 +174,7 @@ class InitController extends Controller
                         if (!empty($_REQUEST['is_ajax'])) {
                             make_json_error($_LANG['priv_error']);
                         } else {
-                            ecs_header("Location: privilege.php?act=login\n");
+                            return redirect("privilege.php?act=login");
                         }
 
                         exit;
@@ -185,7 +184,7 @@ class InitController extends Controller
                 if (!empty($_REQUEST['is_ajax'])) {
                     make_json_error($_LANG['priv_error']);
                 } else {
-                    ecs_header("Location: privilege.php?act=login\n");
+                    return redirect("privilege.php?act=login");
                 }
 
                 exit;
@@ -202,7 +201,7 @@ class InitController extends Controller
                 if (!empty($_REQUEST['is_ajax'])) {
                     make_json_error($_LANG['priv_error']);
                 } else {
-                    ecs_header("Location: privilege.php?act=login\n");
+                    return redirect("privilege.php?act=login");
                 }
 
                 exit;

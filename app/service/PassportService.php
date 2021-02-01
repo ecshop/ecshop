@@ -186,9 +186,7 @@ class PassportService
     function check_userinfo($user_name, $email)
     {
         if (empty($user_name) || empty($email)) {
-            ecs_header("Location: user.php?act=get_password\n");
-
-            exit;
+            return redirect("user.php?act=get_password");
         }
 
         /* 检测用户名和邮件地址是否匹配 */
@@ -214,9 +212,7 @@ class PassportService
     function send_pwd_email($uid, $user_name, $email, $code)
     {
         if (empty($uid) || empty($user_name) || empty($email) || empty($code)) {
-            ecs_header("Location: user.php?act=get_password\n");
-
-            exit;
+            return redirect("user.php?act=get_password");
         }
 
         /* 设置重置邮件模板所需要的内容信息 */

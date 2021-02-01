@@ -259,8 +259,7 @@ class AttributeController extends InitController
 
         $url = 'attribute.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
-        ecs_header("Location: $url\n");
-        exit;
+        return redirect($url);
     }
 
     /*------------------------------------------------------ */

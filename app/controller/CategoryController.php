@@ -17,9 +17,7 @@ class CategoryController extends InitController
             $cat_id = intval($_REQUEST['category']);
         } else {
             /* 如果分类ID为0，则返回首页 */
-            ecs_header("Location: ./\n");
-
-            exit;
+            return redirect("./");
         }
 
 
@@ -57,9 +55,7 @@ class CategoryController extends InitController
                 $smarty->assign('cat_style', htmlspecialchars($cat['style']));
             } else {
                 /* 如果分类不存在则返回首页 */
-                ecs_header("Location: ./\n");
-
-                exit;
+                return redirect("./");
             }
 
             /* 赋值固定内容 */

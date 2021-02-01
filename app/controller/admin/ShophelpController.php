@@ -235,8 +235,7 @@ class ShophelpController extends InitController
 
         $url = 'shophelp.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
-        ecs_header("Location: $url\n");
-        exit;
+        return redirect($url);
     }
 
     /*------------------------------------------------------ */
@@ -259,9 +258,7 @@ class ShophelpController extends InitController
 
         $url = 'shophelp.php?act=query_art&cat=' . $cat_id . '&' . str_replace('act=remove_art', '', $_SERVER['QUERY_STRING']);
 
-        ecs_header("Location: $url\n");
-
-        exit;
+        return redirect($url);
     }
 
     /*------------------------------------------------------ */
@@ -282,15 +279,13 @@ class ShophelpController extends InitController
 
                 admin_log($cat_name, 'add', 'shophelpcat');
 
-                ecs_header("Location: shophelp.php?act=query\n");
-                exit;
+                return redirect("shophelp.php?act=query");
             }
         } else {
             make_json_error($_LANG['js_languages']['no_catname']);
         }
 
-        ecs_header("Location: shophelp.php?act=list_cat\n");
-        exit;
+        return redirect("shophelp.php?act=list_cat");
     }
 
     /*------------------------------------------------------ */

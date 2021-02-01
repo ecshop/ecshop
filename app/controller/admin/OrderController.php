@@ -1111,8 +1111,7 @@ class OrderController extends InitController
             $db->query($sql);
 
             /* 下一步 */
-            ecs_header("Location: order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=goods\n");
-            exit;
+            return redirect("order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=goods");
         } /* 编辑商品信息 */
         elseif ('edit_goods' == $step) {
             if (isset($_POST['rec_id'])) {
@@ -1162,8 +1161,7 @@ class OrderController extends InitController
             }
 
             /* 跳回订单商品 */
-            ecs_header("Location: order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=goods\n");
-            exit;
+            return redirect("order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=goods");
         } /* 添加商品 */
         elseif ('add_goods' == $step) {
             /* 取得参数 */
@@ -1284,14 +1282,12 @@ class OrderController extends InitController
             admin_log($sn, 'edit', 'order');
 
             /* 跳回订单商品 */
-            ecs_header("Location: order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=goods\n");
-            exit;
+            return redirect("order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=goods");
         } /* 商品 */
         elseif ('goods' == $step) {
             /* 下一步 */
             if (isset($_POST['next'])) {
-                ecs_header("Location: order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=consignee\n");
-                exit;
+                return redirect("order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=consignee");
             } /* 完成 */
             elseif (isset($_POST['finish'])) {
                 /* 初始化提示信息和链接 */
@@ -1307,8 +1303,7 @@ class OrderController extends InitController
                     sys_msg(join(chr(13), $msgs), 0, $links);
                 } else {
                     /* 跳转到订单详情 */
-                    ecs_header("Location: order.php?act=info&order_id=" . $order_id . "\n");
-                    exit;
+                    return redirect("order.php?act=info&order_id=" . $order_id);
                 }
             }
         } /* 保存收货人信息 */
@@ -1329,12 +1324,10 @@ class OrderController extends InitController
                 /* 下一步 */
                 if (exist_real_goods($order_id)) {
                     /* 存在实体商品，去配送方式 */
-                    ecs_header("Location: order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=shipping\n");
-                    exit;
+                    return redirect("order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=shipping");
                 } else {
                     /* 不存在实体商品，去支付方式 */
-                    ecs_header("Location: order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=payment\n");
-                    exit;
+                    return redirect("order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=payment");
                 }
             } elseif (isset($_POST['finish'])) {
                 /* 如果是编辑且存在实体商品，检查收货人地区的改变是否影响原来选的配送 */
@@ -1367,11 +1360,10 @@ class OrderController extends InitController
 
                 /* 完成 */
                 if ($agency_changed) {
-                    ecs_header("Location: order.php?act=list\n");
+                    return redirect("order.php?act=list");
                 } else {
-                    ecs_header("Location: order.php?act=info&order_id=" . $order_id . "\n");
+                    return redirect("order.php?act=info&order_id=" . $order_id);
                 }
-                exit;
             }
         } /* 保存配送信息 */
         elseif ('shipping' == $step) {
@@ -1420,8 +1412,7 @@ class OrderController extends InitController
 
             if (isset($_POST['next'])) {
                 /* 下一步 */
-                ecs_header("Location: order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=payment\n");
-                exit;
+                return redirect("order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=payment");
             } elseif (isset($_POST['finish'])) {
                 /* 初始化提示信息和链接 */
                 $msgs = array();
@@ -1447,8 +1438,7 @@ class OrderController extends InitController
                     sys_msg(join(chr(13), $msgs), 0, $links);
                 } else {
                     /* 完成 */
-                    ecs_header("Location: order.php?act=info&order_id=" . $order_id . "\n");
-                    exit;
+                    return redirect("order.php?act=info&order_id=" . $order_id);
                 }
             }
         } /* 保存支付信息 */
@@ -1492,8 +1482,7 @@ class OrderController extends InitController
 
             if (isset($_POST['next'])) {
                 /* 下一步 */
-                ecs_header("Location: order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=other\n");
-                exit;
+                return redirect("order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=other");
             } elseif (isset($_POST['finish'])) {
                 /* 初始化提示信息和链接 */
                 $msgs = array();
@@ -1508,8 +1497,7 @@ class OrderController extends InitController
                     sys_msg(join(chr(13), $msgs), 0, $links);
                 } else {
                     /* 完成 */
-                    ecs_header("Location: order.php?act=info&order_id=" . $order_id . "\n");
-                    exit;
+                    return redirect("order.php?act=info&order_id=" . $order_id);
                 }
             }
         } elseif ('other' == $step) {
@@ -1555,12 +1543,10 @@ class OrderController extends InitController
 
             if (isset($_POST['next'])) {
                 /* 下一步 */
-                ecs_header("Location: order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=money\n");
-                exit;
+                return redirect("order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=money");
             } elseif (isset($_POST['finish'])) {
                 /* 完成 */
-                ecs_header("Location: order.php?act=info&order_id=" . $order_id . "\n");
-                exit;
+                return redirect("order.php?act=info&order_id=" . $order_id);
             }
         } elseif ('money' == $step) {
             /* 取得订单信息 */
@@ -1724,8 +1710,7 @@ class OrderController extends InitController
                 if (!empty($msgs)) {
                     sys_msg(join(chr(13), $msgs), 0, $links);
                 } else {
-                    ecs_header("Location: order.php?act=info&order_id=" . $order_id . "\n");
-                    exit;
+                    return redirect("order.php?act=info&order_id=" . $order_id);
                 }
             }
         } /* 保存发货后的配送方式和发货单号 */
@@ -1752,8 +1737,7 @@ class OrderController extends InitController
             admin_log($sn, 'edit', 'order');
 
             if (isset($_POST['finish'])) {
-                ecs_header("Location: order.php?act=info&order_id=" . $order_id . "\n");
-                exit;
+                return redirect("order.php?act=info&order_id=" . $order_id);
             }
         }
     }
@@ -2038,8 +2022,7 @@ class OrderController extends InitController
             update_order_amount($order_id);
 
             /* 跳回订单商品 */
-            ecs_header("Location: order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=goods\n");
-            exit;
+            return redirect("order.php?act=" . $step_act . "&order_id=" . $order_id . "&step=goods");
         } /* 取消刚添加或编辑的订单 */
         elseif ('cancel_order' == $func) {
             $step_act = $_GET['step_act'];
@@ -2051,12 +2034,10 @@ class OrderController extends InitController
                         " WHERE order_id = '$order_id' LIMIT 1";
                     $db->query($sql);
                 }
-                ecs_header("Location: order.php?act=list\n");
-                exit;
+                return redirect("order.php?act=list");
             } else {
                 /* 如果是编辑，返回订单信息 */
-                ecs_header("Location: order.php?act=info&order_id=" . $order_id . "\n");
-                exit;
+                return redirect("order.php?act=info&order_id=" . $order_id);
             }
         } /* 编辑订单时由于订单已付款且金额减少而退款 */
         elseif ('refund' == $func) {
@@ -2072,8 +2053,7 @@ class OrderController extends InitController
             update_order($order_id, array('order_amount' => 0, 'money_paid' => $order['money_paid'] - $refund_amount));
 
             /* 返回订单详情 */
-            ecs_header("Location: order.php?act=info&order_id=" . $order_id . "\n");
-            exit;
+            return redirect("order.php?act=info&order_id=" . $order_id);
         } /* 载入退款页面 */
         elseif ('load_refund' == $func) {
             $refund_amount = floatval($_REQUEST['refund_amount']);
@@ -2615,8 +2595,7 @@ class OrderController extends InitController
         elseif (isset($_POST['to_delivery'])) {
             $url = 'order.php?act=delivery_list&order_sn=' . $_REQUEST['order_sn'];
 
-            ecs_header("Location: $url\n");
-            exit;
+            return redirect($url);
         }
 
         /* 直接处理还是跳到详细页面 */
@@ -2641,14 +2620,12 @@ class OrderController extends InitController
             /* 直接处理 */
             if (!$batch) {
                 /* 一个订单 */
-                ecs_header("Location: order.php?act=operate_post&order_id=" . $order_id .
-                    "&operation=" . $operation . "&action_note=" . urlencode($action_note) . "\n");
-                exit;
+                return redirect("order.php?act=operate_post&order_id=" . $order_id .
+                    "&operation=" . $operation . "&action_note=" . urlencode($action_note));
             } else {
                 /* 多个订单 */
-                ecs_header("Location: order.php?act=batch_operate_post&order_id=" . $order_id .
-                    "&operation=" . $operation . "&action_note=" . urlencode($action_note) . "\n");
-                exit;
+                return redirect("Location: order.php?act=batch_operate_post&order_id=" . $order_id .
+                    "&operation=" . $operation . "&action_note=" . urlencode($action_note));
             }
         }
     }
@@ -3661,7 +3638,7 @@ class OrderController extends InitController
         if ($GLOBALS['db']->errno() == 0) {
             $url = 'order.php?act=query&' . str_replace('act=remove_order', '', $_SERVER['QUERY_STRING']);
 
-            ecs_header("Location: $url\n");
+            return redirect($url);
             exit;
         } else {
             make_json_error($GLOBALS['db']->errorMsg());

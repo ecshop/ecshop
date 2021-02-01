@@ -246,8 +246,7 @@ class RoleController extends InitController
             $url = 'role.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
         }
 
-        ecs_header("Location: $url\n");
-        exit;
+        return redirect($url);
     }
 
     /* 获取角色列表 */

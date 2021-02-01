@@ -291,8 +291,7 @@ class FriendLinkController extends InitController
 
         $url = 'friend_link.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
-        ecs_header("Location: $url\n");
-        exit;
+        return redirect($url);
     }
 
     /*------------------------------------------------------ */

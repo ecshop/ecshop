@@ -192,8 +192,7 @@ class CommentManageController extends InitController
         /* 记录管理员操作 */
         admin_log(addslashes($_LANG['reply']), 'edit', 'users_comment');
 
-        ecs_header("Location: comment_manage.php?act=reply&id=$_REQUEST[comment_id]&send_ok=$send_ok\n");
-        exit;
+        return redirect("comment_manage.php?act=reply&id=$_REQUEST[comment_id]&send_ok=$send_ok");
     }
     /*------------------------------------------------------ */
     //-- 更新评论的状态为显示或者禁止
@@ -210,7 +209,7 @@ class CommentManageController extends InitController
             /* 清除缓存 */
             clear_cache_files();
 
-            ecs_header("Location: comment_manage.php?act=reply&id=$_REQUEST[id]\n");
+            return redirect("comment_manage.php?act=reply&id=$_REQUEST[id]");
             exit;
         } else {
             /* 禁止评论显示 */
@@ -220,8 +219,7 @@ class CommentManageController extends InitController
             /* 清除缓存 */
             clear_cache_files();
 
-            ecs_header("Location: comment_manage.php?act=reply&id=$_REQUEST[id]\n");
-            exit;
+            return redirect("comment_manage.php?act=reply&id=$_REQUEST[id]");
         }
     }
 
@@ -244,7 +242,7 @@ class CommentManageController extends InitController
 
         $url = 'comment_manage.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
-        ecs_header("Location: $url\n");
+        return redirect($url);
         exit;
     }
 

@@ -458,8 +458,7 @@ class AdsController extends InitController
 
         $url = 'ads.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
-        ecs_header("Location: $url\n");
-        exit;
+        return redirect($url);
     }
 
     /* 获取广告数据列表 */

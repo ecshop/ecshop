@@ -66,8 +66,7 @@ class AffiliateController extends InitController
             make_json_error($_LANG['level_error']);
         }
 
-        ecs_header("Location: affiliate.php?act=query\n");
-        exit;
+        return redirect("affiliate.php?act=query");
     }
     /*------------------------------------------------------ */
     //-- 修改配置
@@ -178,8 +177,7 @@ class AffiliateController extends InitController
         $config['on'] = 1;
         $config['config']['separate_by'] = 0;
         put_affiliate($config);
-        ecs_header("Location: affiliate.php?act=list\n");
-        exit;
+        return redirect("affiliate.php?act=list");
     }
 
     public function get_affiliate()

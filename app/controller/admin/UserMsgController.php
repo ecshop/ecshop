@@ -52,8 +52,7 @@ class UserMsgController extends InitController
 
         $db->query($sql);
 
-        ecs_header("Location: user_msg.php?act=add&order_id=$_POST[order_id]&user_id=$_POST[user_id]\n");
-        exit;
+        return redirect("user_msg.php?act=add&order_id=$_POST[order_id]&user_id=$_POST[user_id]");
     }
 
     public function remove_msgAction()
@@ -73,8 +72,7 @@ class UserMsgController extends InitController
             }
         }
 
-        ecs_header("Location: user_msg.php?act=add&order_id=$_GET[order_id]&user_id=$_GET[user_id]\n");
-        exit;
+        return redirect("user_msg.php?act=add&order_id=$_GET[order_id]&user_id=$_GET[user_id]");
     }
     /*------------------------------------------------------ */
     //-- 更新留言的状态为显示或者禁止
@@ -89,8 +87,7 @@ class UserMsgController extends InitController
             /* 清除缓存 */
             clear_cache_files();
 
-            ecs_header("Location: user_msg.php?act=view&id=$_REQUEST[id]\n");
-            exit;
+            return redirect("user_msg.php?act=view&id=$_REQUEST[id]");
         } else {
             /* 禁止留言显示 */
             $sql = "UPDATE " . $ecs->table('feedback') . " SET msg_status = 0 WHERE msg_id = '$_REQUEST[id]'";
@@ -99,8 +96,7 @@ class UserMsgController extends InitController
             /* 清除缓存 */
             clear_cache_files();
 
-            ecs_header("Location: user_msg.php?act=view&id=$_REQUEST[id]\n");
-            exit;
+            return redirect("user_msg.php?act=view&id=$_REQUEST[id]");
         }
     }
     /*------------------------------------------------------ */
@@ -162,8 +158,7 @@ class UserMsgController extends InitController
 
             admin_log(addslashes($msg_title), 'remove', 'message');
             $url = 'user_msg.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
-            ecs_header("Location: $url\n");
-            exit;
+            return redirect($url);
         } else {
             make_json_error($GLOBALS['db']->error());
         }
@@ -266,8 +261,7 @@ class UserMsgController extends InitController
             }
         }
 
-        ecs_header("Location: ?act=view&id=" . $_REQUEST['msg_id'] . "&send_ok=$send_ok\n");
-        exit;
+        return redirect("?act=view&id=" . $_REQUEST['msg_id'] . "&send_ok=$send_ok");
     }
 
     /*------------------------------------------------------ */
@@ -283,8 +277,7 @@ class UserMsgController extends InitController
         /* 更新数据库 */
         $db->query("UPDATE " . $ecs->table('feedback') . " SET message_img = '' WHERE msg_id = '$_GET[id]'");
 
-        ecs_header("Location: user_msg.php?act=view&amp;id=" . $_GET['id'] . "\n");
-        exit;
+        return redirect("user_msg.php?act=view&amp;id=" . $_GET['id']);
     }
 
     /**

@@ -66,15 +66,13 @@ class AuctionController extends InitController
         /* 取得参数：拍卖活动id */
         $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
         if ($id <= 0) {
-            ecs_header("Location: ./\n");
-            exit;
+            return redirect("./");
         }
 
         /* 取得拍卖活动信息 */
         $auction = auction_info($id);
         if (empty($auction)) {
-            ecs_header("Location: ./\n");
-            exit;
+            return redirect("./");
         }
 
         if ($auction['status_no'] == FINISHED && $auction['last_bid']['bid_user'] == $_SESSION['user_id']
@@ -104,8 +102,7 @@ class AuctionController extends InitController
             $goods_id = $auction['goods_id'];
             $goods = goods_info($goods_id);
             if (empty($goods)) {
-                ecs_header("Location: ./\n");
-                exit;
+                return redirect("./");
             }
             $goods['url'] = build_uri('goods', array('gid' => $goods_id), $goods['goods_name']);
             $smarty->assign('auction_goods', $goods);
@@ -147,15 +144,13 @@ class AuctionController extends InitController
         /* 取得参数：拍卖活动id */
         $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
         if ($id <= 0) {
-            ecs_header("Location: ./\n");
-            exit;
+            return redirect("./");
         }
 
         /* 取得拍卖活动信息 */
         $auction = auction_info($id);
         if (empty($auction)) {
-            ecs_header("Location: ./\n");
-            exit;
+            return redirect("./");
         }
 
         /* 活动是否正在进行 */
@@ -255,8 +250,7 @@ class AuctionController extends InitController
         }
 
         /* 跳转到活动详情页 */
-        ecs_header("Location: auction.php?act=view&id=$id\n");
-        exit;
+        return redirect("auction.php?act=view&id=$id");
     }
 
     /*------------------------------------------------------ */
@@ -267,15 +261,13 @@ class AuctionController extends InitController
         /* 查询：取得参数：拍卖活动id */
         $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
         if ($id <= 0) {
-            ecs_header("Location: ./\n");
-            exit;
+            return redirect("./");
         }
 
         /* 查询：取得拍卖活动信息 */
         $auction = auction_info($id);
         if (empty($auction)) {
-            ecs_header("Location: ./\n");
-            exit;
+            return redirect("./");
         }
 
         /* 查询：活动是否已结束 */
@@ -360,8 +352,7 @@ class AuctionController extends InitController
         $_SESSION['extension_id'] = $id;
 
         /* 进入收货人页面 */
-        ecs_header("Location: ./flow.php?step=consignee\n");
-        exit;
+        return redirect("./flow.php?step=consignee");
     }
 
     /**

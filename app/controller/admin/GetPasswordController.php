@@ -23,8 +23,7 @@ class GetPasswordController extends InitController
             $adminid = !empty($_GET['uid']) ? intval($_GET['uid']) : 0;
 
             if ($adminid == 0 || empty($code)) {
-                ecs_header("Location: privilege.php?act=login\n");
-                exit;
+                return redirect("privilege.php?act=login");
             }
 
             /* 以用户的原密码，与code的值匹配 */
@@ -63,7 +62,7 @@ class GetPasswordController extends InitController
             $admin_email = !empty($_POST['email']) ? trim($_POST['email']) : '';
 
             if (empty($admin_username) || empty($admin_email)) {
-                ecs_header("Location: privilege.php?act=login\n");
+                return redirect("privilege.php?act=login");
                 exit;
             }
 
@@ -116,8 +115,7 @@ class GetPasswordController extends InitController
             $code = isset($_POST['code']) ? trim($_POST['code']) : '';
 
             if (empty($new_password) || empty($code) || $adminid == 0) {
-                ecs_header("Location: privilege.php?act=login\n");
-                exit;
+                return redirect("privilege.php?act=login");
             }
 
             /* 以用户的原密码，与code的值匹配 */

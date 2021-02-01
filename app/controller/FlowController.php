@@ -41,10 +41,8 @@ class FlowController extends InitController
 
         if (!empty($_REQUEST['goods_id']) && empty($_POST['goods'])) {
             if (!is_numeric($_REQUEST['goods_id']) || intval($_REQUEST['goods_id']) <= 0) {
-                ecs_header("Location:./\n");
+                return redirect("./");
             }
-            $goods_id = intval($_REQUEST['goods_id']);
-            exit;
         }
 
         $result = array('error' => 0, 'message' => '', 'content' => '', 'goods_id' => '');
@@ -143,8 +141,7 @@ class FlowController extends InitController
         if (!cart_goods_exists($goods_id, array())) {
             addto_cart($goods_id);
         }
-        ecs_header("Location:./flow.php\n");
-        exit;
+        return redirect("./flow.php");
     }
 
     public function loginAction()
@@ -206,12 +203,10 @@ class FlowController extends InitController
                     /* 检查购物车中是否有商品 没有商品则跳转到首页 */
                     $sql = "SELECT COUNT(*) FROM " . $ecs->table('cart') . " WHERE " . $where;
                     if ($db->getOne($sql) > 0) {
-                        ecs_header("Location: flow.php?step=checkout\n");
+                        return redirect("flow.php?step=checkout");
                     } else {
-                        ecs_header("Location:index.php\n");
+                        return redirect("index.php");
                     }
-
-                    exit;
                 } else {
                     $_SESSION['login_fail']++;
                     return $this->show_message($_LANG['signin_failed'], '', 'flow.php?step=login');
@@ -233,8 +228,7 @@ class FlowController extends InitController
 
                 if (register(trim($_POST['username']), trim($_POST['password']), trim($_POST['email']))) {
                     /* 用户注册成功 */
-                    ecs_header("Location: flow.php?step=consignee\n");
-                    exit;
+                    return redirect("flow.php?step=consignee");
                 } else {
                     $this->assign_template();
                     return $err->show();
@@ -338,8 +332,7 @@ class FlowController extends InitController
             /* 保存到session */
             $_SESSION['flow_consignee'] = stripslashes_deep($consignee);
 
-            ecs_header("Location: flow.php?step=checkout\n");
-            exit;
+            return redirect("flow.php?step=checkout");
         }
     }
 
@@ -353,8 +346,7 @@ class FlowController extends InitController
         $consignee_id = intval($_GET['id']);
 
         if (drop_consignee($consignee_id)) {
-            ecs_header("Location: flow.php?step=consignee\n");
-            exit;
+            return redirect("flow.php?step=consignee");
         } else {
             return $this->show_message($_LANG['not_fount_consignee']);
         }
@@ -400,8 +392,7 @@ class FlowController extends InitController
          */
         if (empty($_SESSION['direct_shopping']) && $_SESSION['user_id'] == 0) {
             /* 用户没有登录且没有选定匿名购物，转向到登录页面 */
-            ecs_header("Location: flow.php?step=login\n");
-            exit;
+            return redirect("flow.php?step=login");
         }
 
         $consignee = get_consignee($_SESSION['user_id']);
@@ -409,8 +400,7 @@ class FlowController extends InitController
         /* 检查收货人信息是否完整 */
         if (!check_consignee_info($consignee, $flow_type)) {
             /* 如果不完整则转向到收货人信息填写界面 */
-            ecs_header("Location: flow.php?step=consignee\n");
-            exit;
+            return redirect("flow.php?step=consignee");
         }
 
         $_SESSION['flow_consignee'] = $consignee;
@@ -1210,8 +1200,7 @@ class FlowController extends InitController
          */
         if (empty($_SESSION['direct_shopping']) && $_SESSION['user_id'] == 0) {
             /* 用户没有登录且没有选定匿名购物，转向到登录页面 */
-            ecs_header("Location: flow.php?step=login\n");
-            exit;
+            return redirect("flow.php?step=login");
         }
 
         $consignee = get_consignee($_SESSION['user_id']);
@@ -1219,8 +1208,7 @@ class FlowController extends InitController
         /* 检查收货人信息是否完整 */
         if (!check_consignee_info($consignee, $flow_type)) {
             /* 如果不完整则转向到收货人信息填写界面 */
-            ecs_header("Location: flow.php?step=consignee\n");
-            exit;
+            return redirect("flow.php?step=consignee");
         }
 
         $_POST['how_oos'] = isset($_POST['how_oos']) ? intval($_POST['how_oos']) : 0;
@@ -1618,8 +1606,7 @@ class FlowController extends InitController
         $rec_id = intval($_GET['id']);
         flow_drop_cart_goods($rec_id);
 
-        ecs_header("Location: flow.php\n");
-        exit;
+        return redirect("flow.php");
     } /* 把优惠活动加入购物车 */
 
 
@@ -1685,8 +1672,7 @@ class FlowController extends InitController
         }
 
         /* 刷新购物车 */
-        ecs_header("Location: flow.php\n");
-        exit;
+        return redirect("flow.php");
     }
 
     public function clearAction()
@@ -1697,7 +1683,7 @@ class FlowController extends InitController
         }
         $db->query($sql);
 
-        ecs_header("Location:./\n");
+        return redirect("./");
     }
 
     public function drop_to_collectAction()
@@ -1716,8 +1702,7 @@ class FlowController extends InitController
             }
             flow_drop_cart_goods($rec_id);
         }
-        ecs_header("Location: flow.php\n");
-        exit;
+        return redirect("flow.php");
     } /* 验证红包序列号 */
 
 
@@ -1861,8 +1846,7 @@ class FlowController extends InitController
 
         /* 如果是一步购物，跳到结算中心 */
         if ($_CFG['one_step_buy'] == '1') {
-            ecs_header("Location: flow.php?step=checkout\n");
-            exit;
+            return redirect("flow.php?step=checkout");
         }
 
         /* 取得商品列表，计算合计 */

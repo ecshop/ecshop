@@ -19,13 +19,11 @@ class ArticleController extends InitController
             $article = get_article_info($article_id);
 
             if (empty($article)) {
-                ecs_header("Location: ./\n");
-                exit;
+                return redirect("./");
             }
 
             if (!empty($article['link']) && $article['link'] != 'http://' && $article['link'] != 'https://') {
-                ecs_header("location:$article[link]\n");
-                exit;
+                return redirect($article['link']);
             }
 
             $smarty->assign('article_categories', article_categories_tree($article_id)); //文章分类树

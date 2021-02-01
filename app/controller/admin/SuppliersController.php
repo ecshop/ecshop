@@ -124,8 +124,7 @@ class SuppliersController extends InitController
             $order_exists = $db->getOne($sql, true);
             if ($order_exists > 0) {
                 $url = 'suppliers.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
-                ecs_header("Location: $url\n");
-                exit;
+                return redirect($url);
             }
 
             /* 判断供货商是否存在商品 */
@@ -135,7 +134,7 @@ class SuppliersController extends InitController
             $goods_exists = $db->getOne($sql, true);
             if ($goods_exists > 0) {
                 $url = 'suppliers.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
-                ecs_header("Location: $url\n");
+                return redirect($url);
                 exit;
             }
 
@@ -158,7 +157,7 @@ class SuppliersController extends InitController
         }
 
         $url = 'suppliers.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
-        ecs_header("Location: $url\n");
+        return redirect($url);
 
         exit;
     }

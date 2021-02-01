@@ -14,8 +14,7 @@ class SnatchController extends InitController
             $id = get_last_snatch();
             if ($id) {
                 $page = build_uri('snatch', array('sid' => $id));
-                ecs_header("Location: $page\n");
-                exit;
+                return redirect($page);
             } else {
                 /* 当前没有任何可默认的活动 */
                 $id = 0;
@@ -171,8 +170,7 @@ class SnatchController extends InitController
     public function buyAction()
     {
         if (empty($id)) {
-            ecs_header("Location: ./\n");
-            exit;
+            return redirect("./");
         }
 
         if (empty($_SESSION['user_id'])) {
@@ -181,17 +179,14 @@ class SnatchController extends InitController
 
         $snatch = get_snatch($id);
 
-
         if (empty($snatch)) {
-            ecs_header("Location: ./\n");
-            exit;
+            return redirect("./");
         }
 
         /* 未结束，不能购买 */
         if (empty($snatch['is_end'])) {
             $page = build_uri('snatch', array('sid' => $id));
-            ecs_header("Location: $page\n");
-            exit;
+            return redirect($page);
         }
 
         $result = get_snatch_result($id);
@@ -260,8 +255,7 @@ class SnatchController extends InitController
         $_SESSION['extension_id'] = $id;
 
         /* 进入收货人页面 */
-        ecs_header("Location: ./flow.php?step=consignee\n");
-        exit;
+        return redirect("./flow.php?step=consignee");
     }
 
     /**

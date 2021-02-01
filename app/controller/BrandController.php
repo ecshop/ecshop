@@ -52,8 +52,7 @@ class BrandController extends InitController
             $brand_info = get_brand_info($brand_id);
 
             if (empty($brand_info)) {
-                ecs_header("Location: ./\n");
-                exit;
+                return redirect("./");
             }
 
             $smarty->assign('data_dir', DATA_DIR);

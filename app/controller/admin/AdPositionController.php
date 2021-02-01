@@ -273,8 +273,7 @@ class AdPositionController extends InitController
 
         $url = 'ad_position.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
-        ecs_header("Location: $url\n");
-        exit;
+        return redirect($url);
     }
 
     /* 获取广告位置列表 */

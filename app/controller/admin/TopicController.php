@@ -279,8 +279,7 @@ class TopicController extends InitController
 
         if (!empty($_REQUEST['is_ajax'])) {
             $url = 'topic.php?act=query&' . str_replace('act=delete', '', $_SERVER['QUERY_STRING']);
-            ecs_header("Location: $url\n");
-            exit;
+            return redirect($url);
         }
 
         $links[] = array('href' => 'topic.php', 'text' => $_LANG['back_list']);

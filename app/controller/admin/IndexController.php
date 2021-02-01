@@ -140,9 +140,7 @@ class IndexController extends InitController
         if (isset($_SESSION['shop_guide']) && $_SESSION['shop_guide'] === true) {
             unset($_SESSION['shop_guide']);//销毁session
 
-            ecs_header("Location: ./index.php?act=first\n");
-
-            exit();
+            return redirect("./index.php?act=first");
         }
 
         $gd = gd_version();

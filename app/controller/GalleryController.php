@@ -21,9 +21,7 @@ class GalleryController extends InitController
 
         /* 如果该商品不存在，返回首页 */
         if ($goods_name === false) {
-            ecs_header("Location: ./\n");
-
-            exit;
+            return redirect("./");
         }
 
         /* 获得所有的图片 */

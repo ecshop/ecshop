@@ -110,8 +110,7 @@ class ExchangeController extends InitController
 
             if ($goods === false) {
                 /* 如果没有找到任何记录则跳回到首页 */
-                ecs_header("Location: ./\n");
-                exit;
+                return redirect("./");
             } else {
                 if ($goods['brand_id'] > 0) {
                     $goods['goods_brand_url'] = build_uri('brand', array('bid' => $goods['brand_id']), $goods['goods_brand']);
@@ -180,15 +179,13 @@ class ExchangeController extends InitController
         /* 查询：取得参数：商品id */
         $goods_id = isset($_POST['goods_id']) ? intval($_POST['goods_id']) : 0;
         if ($goods_id <= 0) {
-            ecs_header("Location: ./\n");
-            exit;
+            return redirect("./");
         }
 
         /* 查询：取得兑换商品信息 */
         $goods = get_exchange_goods_info($goods_id);
         if (empty($goods)) {
-            ecs_header("Location: ./\n");
-            exit;
+            return redirect("./");
         }
         /* 查询：检查兑换商品是否有库存 */
         if ($goods['goods_number'] == 0 && $_CFG['use_storage'] == 1) {
@@ -274,8 +271,7 @@ class ExchangeController extends InitController
         $_SESSION['extension_id'] = $goods_id;
 
         /* 进入收货人页面 */
-        ecs_header("Location: ./flow.php?step=consignee\n");
-        exit;
+        return redirect("./flow.php?step=consignee");
     }
 
     /**

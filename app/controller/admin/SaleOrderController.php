@@ -15,7 +15,6 @@ class SaleOrderController extends InitController
 }
 
 
-
 require_once(ROOT_PATH . 'includes/lib_order.php');
 require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
 $smarty->assign('lang', $_LANG);
@@ -29,7 +28,8 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
     }
 
     /* 下载报表 */
-    function downloadAction() {
+    function downloadAction()
+    {
         $goods_order_data = get_sales_order(false);
         $goods_order_data = $goods_order_data['sales_order_data'];
 
@@ -53,6 +53,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
         }
         exit;
     }
+
     $goods_order_data = get_sales_order();
     $smarty->assign('goods_order_data', $goods_order_data['sales_order_data']);
     $smarty->assign('filter', $goods_order_data['filter']);
@@ -64,7 +65,8 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
 
     make_json_result($smarty->fetch('sale_order.htm'), '', array('filter' => $goods_order_data['filter'], 'page_count' => $goods_order_data['page_count']));
 }
-function listAction() {
+function listAction()
+{
     /* 权限检查 */
     admin_priv('sale_order_stats');
 

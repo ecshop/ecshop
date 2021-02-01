@@ -15,8 +15,6 @@ class CloudController extends InitController
 
     public function index()
     {
-
-
         require(ROOT_PATH . 'includes/cls_transport.php');
         require(ROOT_PATH . 'includes/cls_json.php');
 
@@ -70,7 +68,6 @@ class CloudController extends InitController
             ecs_header("Location: http://cloud.ecshop.com/api.php?act=" . $act . $query . "\n");
             exit();
         }
-
     }
 }
 

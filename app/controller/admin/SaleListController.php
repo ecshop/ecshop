@@ -15,7 +15,6 @@ class SaleListController extends InitController
 }
 
 
-
 require_once(ROOT_PATH . 'includes/lib_order.php');
 require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
 $smarty->assign('lang', $_LANG);
@@ -30,7 +29,8 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
     /*------------------------------------------------------ */
     //--Excel文件下载
     /*------------------------------------------------------ */
-    function downloadAction() {
+    function downloadAction()
+    {
         $file_name = $_REQUEST['start_date'] . '_' . $_REQUEST['end_date'] . '_sale';
         $goods_sales_list = get_sale_list(false);
         header("Content-type: application/vnd.ms-excel; charset=utf-8");
@@ -56,6 +56,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
         }
         exit;
     }
+
     $sale_list_data = get_sale_list();
     $smarty->assign('goods_sales_list', $sale_list_data['sale_list_data']);
     $smarty->assign('filter', $sale_list_data['filter']);
@@ -67,7 +68,8 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
 /*------------------------------------------------------ */
 //--商品明细列表
 /*------------------------------------------------------ */
-function listAction() {
+function listAction()
+{
     /* 权限判断 */
     admin_priv('sale_order_stats');
     /* 时间参数 */
@@ -96,6 +98,7 @@ function listAction() {
     assign_query_info();
     $smarty->display('sale_list.htm');
 }
+
 /*------------------------------------------------------ */
 //--获取销售明细需要的函数
 /*------------------------------------------------------ */

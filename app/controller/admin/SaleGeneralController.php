@@ -68,7 +68,8 @@ $data_list = $db->getAll($sql);
 /*------------------------------------------------------ */
 //-- 显示统计信息
 /*------------------------------------------------------ */
-function listAction() {
+function listAction()
+{
     /* 赋值查询时间段 */
     $smarty->assign('start_time', local_date('Y-m-d', $start_time));
     $smarty->assign('end_time', local_date('Y-m-d', $end_time));
@@ -113,7 +114,8 @@ function listAction() {
 /*------------------------------------------------------ */
 //-- 下载EXCEL报表
 /*------------------------------------------------------ */
-function downloadAction() {
+function downloadAction()
+{
     /* 文件名 */
     $filename = !empty($_REQUEST['filename']) ? trim($_REQUEST['filename']) : '';
 

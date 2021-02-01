@@ -58,98 +58,98 @@ class CronController extends InitController
             $db->query($sql);
         }
         write_error_arr($error_log);
-        }
+    }
 
-function get_next_time($cron)
-{
-    $y = local_date('Y', $GLOBALS['timestamp']);
-    $mo = local_date('n', $GLOBALS['timestamp']);
-    $d = local_date('j', $GLOBALS['timestamp']);
-    $w = local_date('w', $GLOBALS['timestamp']);
-    $h = local_date('G', $GLOBALS['timestamp']);
-    $sh = $sm = 0;
-    $sy = $y;
-    if ($cron['day']) {
-        $sd = $cron['day'];
-        $smo = $mo + 1;
-    } else {
-        $sd = $d;
-        $smo = $mo;
-        if ($cron['week'] != '') {
-            $sd += $cron['week'] - $w + 7;
-        }
-    }
-    if ($cron['hour']) {
-        $sh = $cron['hour'];
-        if (empty($cron['day']) && $cron['week'] == '') {
-            $sd++;
-        }
-    }
-    //$next = gmmktime($sh,$sm,0,$smo,$sd,$sy);
-    $next = local_strtotime("$sy-$smo-$sd $sh:$sm:0");
-    if ($next < $GLOBALS['timestamp']) {
-        if ($cron['m']) {
-            return $GLOBALS['timestamp'] + 60 - intval(local_date('s', $GLOBALS['timestamp']));
+    function get_next_time($cron)
+    {
+        $y = local_date('Y', $GLOBALS['timestamp']);
+        $mo = local_date('n', $GLOBALS['timestamp']);
+        $d = local_date('j', $GLOBALS['timestamp']);
+        $w = local_date('w', $GLOBALS['timestamp']);
+        $h = local_date('G', $GLOBALS['timestamp']);
+        $sh = $sm = 0;
+        $sy = $y;
+        if ($cron['day']) {
+            $sd = $cron['day'];
+            $smo = $mo + 1;
         } else {
-            return $GLOBALS['timestamp'];
+            $sd = $d;
+            $smo = $mo;
+            if ($cron['week'] != '') {
+                $sd += $cron['week'] - $w + 7;
+            }
         }
-    } else {
-        return $next;
-    }
-}
-
-function get_cron_info()
-{
-    $crondb = array();
-
-    $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('crons') . " WHERE enable = 1 AND nextime < $GLOBALS[timestamp]";
-    $query = $GLOBALS['db']->query($sql);
-
-    while ($rt = $GLOBALS['db']->fetch_array($query)) {
-        $rt['cron'] = array('day' => $rt['day'], 'week' => $rt['week'], 'm' => $rt['minute'], 'hour' => $rt['hour']);
-        $rt['cron_config'] = unserialize($rt['cron_config']);
-        $rt['minute'] = trim($rt['minute']);
-        $rt['allow_ip'] = trim($rt['allow_ip']);
-        $crondb[] = $rt;
-    }
-
-    return $crondb;
-}
-
-function make_error_arr($msg, $file)
-{
-    $file = str_replace(ROOT_PATH, '', $file);
-
-    return array('info' => $msg, 'file' => $file, 'time' => $GLOBALS['timestamp']);
-}
-
-function write_error_arr($err_arr)
-{
-    if (!empty($err_arr)) {
-        $query = '';
-        foreach ($err_arr as $key => $val) {
-            $query .= $query ? ",('$val[info]', '$val[file]', '$val[time]')" : "('$val[info]', '$val[file]', '$val[time]')";
+        if ($cron['hour']) {
+            $sh = $cron['hour'];
+            if (empty($cron['day']) && $cron['week'] == '') {
+                $sd++;
+            }
         }
-        if ($query) {
-            $sql = "INSERT INTO " . $GLOBALS['ecs']->table('error_log') . "(info, file, time) VALUES " . $query;
-            $GLOBALS['db']->query($sql);
+        //$next = gmmktime($sh,$sm,0,$smo,$sd,$sy);
+        $next = local_strtotime("$sy-$smo-$sd $sh:$sm:0");
+        if ($next < $GLOBALS['timestamp']) {
+            if ($cron['m']) {
+                return $GLOBALS['timestamp'] + 60 - intval(local_date('s', $GLOBALS['timestamp']));
+            } else {
+                return $GLOBALS['timestamp'];
+            }
+        } else {
+            return $next;
         }
     }
-}
 
-function check_method()
-{
-    $if_cron = PHP_SAPI == 'cli' ? true : false;
-    if (!empty($GLOBALS['_CFG']['cron_method'])) {
-        if (!$if_cron) {
-            die('Hacking attempt');
+    function get_cron_info()
+    {
+        $crondb = array();
+
+        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('crons') . " WHERE enable = 1 AND nextime < $GLOBALS[timestamp]";
+        $query = $GLOBALS['db']->query($sql);
+
+        while ($rt = $GLOBALS['db']->fetch_array($query)) {
+            $rt['cron'] = array('day' => $rt['day'], 'week' => $rt['week'], 'm' => $rt['minute'], 'hour' => $rt['hour']);
+            $rt['cron_config'] = unserialize($rt['cron_config']);
+            $rt['minute'] = trim($rt['minute']);
+            $rt['allow_ip'] = trim($rt['allow_ip']);
+            $crondb[] = $rt;
         }
-    } else {
-        if ($if_cron) {
-            die('Hacking attempt');
-        } elseif (!isset($_GET['t']) || $GLOBALS['timestamp'] - intval($_GET['t']) > 60 || empty($_SERVER['HTTP_REFERER'])) {
-            exit;
+
+        return $crondb;
+    }
+
+    function make_error_arr($msg, $file)
+    {
+        $file = str_replace(ROOT_PATH, '', $file);
+
+        return array('info' => $msg, 'file' => $file, 'time' => $GLOBALS['timestamp']);
+    }
+
+    function write_error_arr($err_arr)
+    {
+        if (!empty($err_arr)) {
+            $query = '';
+            foreach ($err_arr as $key => $val) {
+                $query .= $query ? ",('$val[info]', '$val[file]', '$val[time]')" : "('$val[info]', '$val[file]', '$val[time]')";
+            }
+            if ($query) {
+                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('error_log') . "(info, file, time) VALUES " . $query;
+                $GLOBALS['db']->query($sql);
+            }
         }
     }
-}
+
+    function check_method()
+    {
+        $if_cron = PHP_SAPI == 'cli' ? true : false;
+        if (!empty($GLOBALS['_CFG']['cron_method'])) {
+            if (!$if_cron) {
+                die('Hacking attempt');
+            }
+        } else {
+            if ($if_cron) {
+                die('Hacking attempt');
+            } elseif (!isset($_GET['t']) || $GLOBALS['timestamp'] - intval($_GET['t']) > 60 || empty($_SERVER['HTTP_REFERER'])) {
+                exit;
+            }
+        }
+    }
 }

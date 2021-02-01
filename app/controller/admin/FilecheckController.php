@@ -12,7 +12,6 @@ class FilecheckController extends InitController
         parent::initialize();
 
 
-
         /* 检查权限 */
         admin_priv('file_check');
 
@@ -122,33 +121,33 @@ class FilecheckController extends InitController
         }
     }
 
-/**检查文件
- * @param string $currentdir //待检查目录
- * @param string $ext //待检查的文件类型
- * @param int $sub //是否检查子目录
- * @param string $skip //不检查的目录或文件
- */
-function checkfiles($currentdir, $ext = '', $sub = 1, $skip = '')
-{
-    global $md5data;
+    /**检查文件
+     * @param string $currentdir //待检查目录
+     * @param string $ext //待检查的文件类型
+     * @param int $sub //是否检查子目录
+     * @param string $skip //不检查的目录或文件
+     */
+    function checkfiles($currentdir, $ext = '', $sub = 1, $skip = '')
+    {
+        global $md5data;
 
-    $currentdir = ROOT_PATH . str_replace(ROOT_PATH, '', $currentdir);
-    $dir = @opendir($currentdir);
-    $exts = '/(' . $ext . ')$/i';
-    $skips = explode(',', $skip);
+        $currentdir = ROOT_PATH . str_replace(ROOT_PATH, '', $currentdir);
+        $dir = @opendir($currentdir);
+        $exts = '/(' . $ext . ')$/i';
+        $skips = explode(',', $skip);
 
-    while ($entry = @readdir($dir)) {
-        $file = $currentdir . $entry;
+        while ($entry = @readdir($dir)) {
+            $file = $currentdir . $entry;
 
-        if ($entry != '.' && $entry != '..' && $entry != '.svn' && (preg_match($exts, $entry) || ($sub && is_dir($file))) && !in_array($entry, $skips)) {
-            if ($sub && is_dir($file)) {
-                checkfiles($file . '/', $ext, $sub, $skip);
-            } else {
-                if (str_replace(ROOT_PATH, '', $file) != './md5.php') {
-                    $md5data[str_replace(ROOT_PATH, '', $file)] = md5_file($file);
+            if ($entry != '.' && $entry != '..' && $entry != '.svn' && (preg_match($exts, $entry) || ($sub && is_dir($file))) && !in_array($entry, $skips)) {
+                if ($sub && is_dir($file)) {
+                    checkfiles($file . '/', $ext, $sub, $skip);
+                } else {
+                    if (str_replace(ROOT_PATH, '', $file) != './md5.php') {
+                        $md5data[str_replace(ROOT_PATH, '', $file)] = md5_file($file);
+                    }
                 }
             }
         }
     }
-}
 }

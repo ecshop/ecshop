@@ -83,7 +83,8 @@ class InitController extends Controller
         $_CFG = load_config();
 
 // TODO : 登录部分准备拿出去做，到时候把以下操作一起挪过去
-        function captchaAction() {
+        function captchaAction()
+        {
             include(ROOT_PATH . 'includes/cls_captcha.php');
 
             $img = new captcha('../data/captcha/');

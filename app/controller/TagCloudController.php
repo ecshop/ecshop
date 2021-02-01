@@ -37,7 +37,6 @@ class TagCloudController extends InitController
         $smarty->assign('tags', $tags);
 
         $smarty->display('tag_cloud.dwt');
-
     }
 }
 

@@ -51,46 +51,45 @@ class VoteController extends InitController
     }
 
 
+    /**
+     * 检查是否已经提交过投票
+     *
+     * @param integer $vote_id
+     * @param string $ip_address
+     * @return  boolean
+     */
+    function vote_already_submited($vote_id, $ip_address)
+    {
+        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('vote_log') . " " .
+            "WHERE ip_address = '$ip_address' AND vote_id = '$vote_id' ";
 
-/**
- * 检查是否已经提交过投票
- *
- * @param integer $vote_id
- * @param string $ip_address
- * @return  boolean
- */
-function vote_already_submited($vote_id, $ip_address)
-{
-    $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('vote_log') . " " .
-        "WHERE ip_address = '$ip_address' AND vote_id = '$vote_id' ";
+        return ($GLOBALS['db']->getOne($sql) > 0);
+    }
 
-    return ($GLOBALS['db']->getOne($sql) > 0);
-}
+    /**
+     * 保存投票结果信息
+     *
+     * @param integer $vote_id
+     * @param string $ip_address
+     * @param string $option_id
+     * @return  void
+     */
+    function save_vote($vote_id, $ip_address, $option_id)
+    {
+        $sql = "INSERT INTO " . $GLOBALS['ecs']->table('vote_log') . " (vote_id, ip_address, vote_time) " .
+            "VALUES ('$vote_id', '$ip_address', " . gmtime() . ")";
+        $res = $GLOBALS['db']->query($sql);
 
-/**
- * 保存投票结果信息
- *
- * @param integer $vote_id
- * @param string $ip_address
- * @param string $option_id
- * @return  void
- */
-function save_vote($vote_id, $ip_address, $option_id)
-{
-    $sql = "INSERT INTO " . $GLOBALS['ecs']->table('vote_log') . " (vote_id, ip_address, vote_time) " .
-        "VALUES ('$vote_id', '$ip_address', " . gmtime() . ")";
-    $res = $GLOBALS['db']->query($sql);
+        /* 更新投票主题的数量 */
+        $sql = "UPDATE " . $GLOBALS['ecs']->table('vote') . " SET " .
+            "vote_count = vote_count + 1 " .
+            "WHERE vote_id = '$vote_id'";
+        $GLOBALS['db']->query($sql);
 
-    /* 更新投票主题的数量 */
-    $sql = "UPDATE " . $GLOBALS['ecs']->table('vote') . " SET " .
-        "vote_count = vote_count + 1 " .
-        "WHERE vote_id = '$vote_id'";
-    $GLOBALS['db']->query($sql);
-
-    /* 更新投票选项的数量 */
-    $sql = "UPDATE " . $GLOBALS['ecs']->table('vote_option') . " SET " .
-        "option_count = option_count + 1 " .
-        "WHERE " . db_create_in($option_id, 'option_id');
-    $GLOBALS['db']->query($sql);
-}
+        /* 更新投票选项的数量 */
+        $sql = "UPDATE " . $GLOBALS['ecs']->table('vote_option') . " SET " .
+            "option_count = option_count + 1 " .
+            "WHERE " . db_create_in($option_id, 'option_id');
+        $GLOBALS['db']->query($sql);
+    }
 }

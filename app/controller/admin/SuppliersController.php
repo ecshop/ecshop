@@ -14,250 +14,257 @@ class SuppliersController extends InitController
 
     }
 
-/*------------------------------------------------------ */
+    /*------------------------------------------------------ */
 //-- 供货商列表
-/*------------------------------------------------------ */
-function listAction() {
-    /* 检查权限 */
-    admin_priv('suppliers_manage');
+    /*------------------------------------------------------ */
+    function listAction()
+    {
+        /* 检查权限 */
+        admin_priv('suppliers_manage');
 
-    /* 查询 */
-    $result = suppliers_list();
+        /* 查询 */
+        $result = suppliers_list();
 
-    /* 模板赋值 */
-    $smarty->assign('ur_here', $_LANG['suppliers_list']); // 当前导航
-    $smarty->assign('action_link', array('href' => 'suppliers.php?act=add', 'text' => $_LANG['add_suppliers']));
+        /* 模板赋值 */
+        $smarty->assign('ur_here', $_LANG['suppliers_list']); // 当前导航
+        $smarty->assign('action_link', array('href' => 'suppliers.php?act=add', 'text' => $_LANG['add_suppliers']));
 
-    $smarty->assign('full_page', 1); // 翻页参数
+        $smarty->assign('full_page', 1); // 翻页参数
 
-    $smarty->assign('suppliers_list', $result['result']);
-    $smarty->assign('filter', $result['filter']);
-    $smarty->assign('record_count', $result['record_count']);
-    $smarty->assign('page_count', $result['page_count']);
-    $smarty->assign('sort_suppliers_id', '<img src="images/sort_desc.gif">');
+        $smarty->assign('suppliers_list', $result['result']);
+        $smarty->assign('filter', $result['filter']);
+        $smarty->assign('record_count', $result['record_count']);
+        $smarty->assign('page_count', $result['page_count']);
+        $smarty->assign('sort_suppliers_id', '<img src="images/sort_desc.gif">');
 
-    /* 显示模板 */
-    assign_query_info();
-    $smarty->display('suppliers_list.htm');
-}
+        /* 显示模板 */
+        assign_query_info();
+        $smarty->display('suppliers_list.htm');
+    }
 
-/*------------------------------------------------------ */
+    /*------------------------------------------------------ */
 //-- 排序、分页、查询
-/*------------------------------------------------------ */
-function queryAction() {
-    check_authz_json('suppliers_manage');
+    /*------------------------------------------------------ */
+    function queryAction()
+    {
+        check_authz_json('suppliers_manage');
 
-    $result = suppliers_list();
+        $result = suppliers_list();
 
-    $smarty->assign('suppliers_list', $result['result']);
-    $smarty->assign('filter', $result['filter']);
-    $smarty->assign('record_count', $result['record_count']);
-    $smarty->assign('page_count', $result['page_count']);
+        $smarty->assign('suppliers_list', $result['result']);
+        $smarty->assign('filter', $result['filter']);
+        $smarty->assign('record_count', $result['record_count']);
+        $smarty->assign('page_count', $result['page_count']);
 
-    /* 排序标记 */
-    $sort_flag = sort_flag($result['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        /* 排序标记 */
+        $sort_flag = sort_flag($result['filter']);
+        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
-    make_json_result(
-        $smarty->fetch('suppliers_list.htm'),
-        '',
-        array('filter' => $result['filter'], 'page_count' => $result['page_count'])
-    );
-}
+        make_json_result(
+            $smarty->fetch('suppliers_list.htm'),
+            '',
+            array('filter' => $result['filter'], 'page_count' => $result['page_count'])
+        );
+    }
 
-/*------------------------------------------------------ */
+    /*------------------------------------------------------ */
 //-- 列表页编辑名称
-/*------------------------------------------------------ */
-function edit_suppliers_nameAction() {
-    check_authz_json('suppliers_manage');
+    /*------------------------------------------------------ */
+    function edit_suppliers_nameAction()
+    {
+        check_authz_json('suppliers_manage');
 
-    $id = intval($_POST['id']);
-    $name = json_str_iconv(trim($_POST['val']));
+        $id = intval($_POST['id']);
+        $name = json_str_iconv(trim($_POST['val']));
 
-    /* 判断名称是否重复 */
-    $sql = "SELECT suppliers_id
+        /* 判断名称是否重复 */
+        $sql = "SELECT suppliers_id
             FROM " . $ecs->table('suppliers') . "
             WHERE suppliers_name = '$name'
             AND suppliers_id <> '$id' ";
-    if ($db->getOne($sql)) {
-        make_json_error(sprintf($_LANG['suppliers_name_exist'], $name));
-    } else {
-        /* 保存供货商信息 */
-        $sql = "UPDATE " . $ecs->table('suppliers') . "
+        if ($db->getOne($sql)) {
+            make_json_error(sprintf($_LANG['suppliers_name_exist'], $name));
+        } else {
+            /* 保存供货商信息 */
+            $sql = "UPDATE " . $ecs->table('suppliers') . "
                 SET suppliers_name = '$name'
                 WHERE suppliers_id = '$id'";
-        if ($result = $db->query($sql)) {
-            /* 记日志 */
-            admin_log($name, 'edit', 'suppliers');
+            if ($result = $db->query($sql)) {
+                /* 记日志 */
+                admin_log($name, 'edit', 'suppliers');
 
-            clear_cache_files();
+                clear_cache_files();
 
-            make_json_result(stripslashes($name));
-        } else {
-            make_json_result(sprintf($_LANG['agency_edit_fail'], $name));
+                make_json_result(stripslashes($name));
+            } else {
+                make_json_result(sprintf($_LANG['agency_edit_fail'], $name));
+            }
         }
     }
-}
 
-/*------------------------------------------------------ */
+    /*------------------------------------------------------ */
 //-- 删除供货商
-/*------------------------------------------------------ */
-function removeAction() {
-    check_authz_json('suppliers_manage');
+    /*------------------------------------------------------ */
+    function removeAction()
+    {
+        check_authz_json('suppliers_manage');
 
-    $id = intval($_REQUEST['id']);
-    $sql = "SELECT *
+        $id = intval($_REQUEST['id']);
+        $sql = "SELECT *
             FROM " . $ecs->table('suppliers') . "
             WHERE suppliers_id = '$id'";
-    $suppliers = $db->getRow($sql, true);
+        $suppliers = $db->getRow($sql, true);
 
-    if ($suppliers['suppliers_id']) {
-        /* 判断供货商是否存在订单 */
-        $sql = "SELECT COUNT(*)
+        if ($suppliers['suppliers_id']) {
+            /* 判断供货商是否存在订单 */
+            $sql = "SELECT COUNT(*)
                 FROM " . $ecs->table('order_info') . "AS O, " . $ecs->table('order_goods') . " AS OG, " . $ecs->table('goods') . " AS G
                 WHERE O.order_id = OG.order_id
                 AND OG.goods_id = G.goods_id
                 AND G.suppliers_id = '$id'";
-        $order_exists = $db->getOne($sql, true);
-        if ($order_exists > 0) {
-            $url = 'suppliers.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
-            ecs_header("Location: $url\n");
-            exit;
-        }
+            $order_exists = $db->getOne($sql, true);
+            if ($order_exists > 0) {
+                $url = 'suppliers.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+                ecs_header("Location: $url\n");
+                exit;
+            }
 
-        /* 判断供货商是否存在商品 */
-        $sql = "SELECT COUNT(*)
+            /* 判断供货商是否存在商品 */
+            $sql = "SELECT COUNT(*)
                 FROM " . $ecs->table('goods') . "AS G
                 WHERE G.suppliers_id = '$id'";
-        $goods_exists = $db->getOne($sql, true);
-        if ($goods_exists > 0) {
-            $url = 'suppliers.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
-            ecs_header("Location: $url\n");
-            exit;
-        }
-
-        $sql = "DELETE FROM " . $ecs->table('suppliers') . "
-            WHERE suppliers_id = '$id'";
-        $db->query($sql);
-
-        /* 删除管理员、发货单关联、退货单关联和订单关联的供货商 */
-        $table_array = array('admin_user', 'delivery_order', 'back_order');
-        foreach ($table_array as $value) {
-            $sql = "DELETE FROM " . $ecs->table($value) . " WHERE suppliers_id = '$id'";
-            $db->query($sql, 'SILENT');
-        }
-
-        /* 记日志 */
-        admin_log($suppliers['suppliers_name'], 'remove', 'suppliers');
-
-        /* 清除缓存 */
-        clear_cache_files();
-    }
-
-    $url = 'suppliers.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
-    ecs_header("Location: $url\n");
-
-    exit;
-}
-
-/*------------------------------------------------------ */
-//-- 修改供货商状态
-/*------------------------------------------------------ */
-function is_checkAction() {
-    check_authz_json('suppliers_manage');
-
-    $id = intval($_REQUEST['id']);
-    $sql = "SELECT suppliers_id, is_check
-            FROM " . $ecs->table('suppliers') . "
-            WHERE suppliers_id = '$id'";
-    $suppliers = $db->getRow($sql, true);
-
-    if ($suppliers['suppliers_id']) {
-        $_suppliers['is_check'] = empty($suppliers['is_check']) ? 1 : 0;
-        $db->autoExecute($ecs->table('suppliers'), $_suppliers, '', "suppliers_id = '$id'");
-        clear_cache_files();
-        make_json_result($_suppliers['is_check']);
-    }
-
-    exit;
-}
-
-/*------------------------------------------------------ */
-//-- 批量操作
-/*------------------------------------------------------ */
-function batchAction() {
-    /* 取得要操作的记录编号 */
-    if (empty($_POST['checkboxes'])) {
-        sys_msg($_LANG['no_record_selected']);
-    } else {
-        /* 检查权限 */
-        admin_priv('suppliers_manage');
-
-        $ids = $_POST['checkboxes'];
-
-        if (isset($_POST['remove'])) {
-            $sql = "SELECT *
-                    FROM " . $ecs->table('suppliers') . "
-                    WHERE suppliers_id " . db_create_in($ids);
-            $suppliers = $db->getAll($sql);
-
-            foreach ($suppliers as $key => $value) {
-                /* 判断供货商是否存在订单 */
-                $sql = "SELECT COUNT(*)
-                        FROM " . $ecs->table('order_info') . "AS O, " . $ecs->table('order_goods') . " AS OG, " . $ecs->table('goods') . " AS G
-                        WHERE O.order_id = OG.order_id
-                        AND OG.goods_id = G.goods_id
-                        AND G.suppliers_id = '" . $value['suppliers_id'] . "'";
-                $order_exists = $db->getOne($sql, true);
-                if ($order_exists > 0) {
-                    unset($suppliers[$key]);
-                }
-
-                /* 判断供货商是否存在商品 */
-                $sql = "SELECT COUNT(*)
-                        FROM " . $ecs->table('goods') . "AS G
-                        WHERE G.suppliers_id = '" . $value['suppliers_id'] . "'";
-                $goods_exists = $db->getOne($sql, true);
-                if ($goods_exists > 0) {
-                    unset($suppliers[$key]);
-                }
+            $goods_exists = $db->getOne($sql, true);
+            if ($goods_exists > 0) {
+                $url = 'suppliers.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+                ecs_header("Location: $url\n");
+                exit;
             }
-            if (empty($suppliers)) {
-                sys_msg($_LANG['batch_drop_no']);
-            }
-
 
             $sql = "DELETE FROM " . $ecs->table('suppliers') . "
-                WHERE suppliers_id " . db_create_in($ids);
+            WHERE suppliers_id = '$id'";
             $db->query($sql);
 
-            /* 更新管理员、发货单关联、退货单关联和订单关联的供货商 */
+            /* 删除管理员、发货单关联、退货单关联和订单关联的供货商 */
             $table_array = array('admin_user', 'delivery_order', 'back_order');
             foreach ($table_array as $value) {
-                $sql = "DELETE FROM " . $ecs->table($value) . " WHERE suppliers_id " . db_create_in($ids) . " ";
+                $sql = "DELETE FROM " . $ecs->table($value) . " WHERE suppliers_id = '$id'";
                 $db->query($sql, 'SILENT');
             }
 
             /* 记日志 */
-            $suppliers_names = '';
-            foreach ($suppliers as $value) {
-                $suppliers_names .= $value['suppliers_name'] . '|';
-            }
-            admin_log($suppliers_names, 'remove', 'suppliers');
+            admin_log($suppliers['suppliers_name'], 'remove', 'suppliers');
 
             /* 清除缓存 */
             clear_cache_files();
+        }
 
-            sys_msg($_LANG['batch_drop_ok']);
+        $url = 'suppliers.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+        ecs_header("Location: $url\n");
+
+        exit;
+    }
+
+    /*------------------------------------------------------ */
+//-- 修改供货商状态
+    /*------------------------------------------------------ */
+    function is_checkAction()
+    {
+        check_authz_json('suppliers_manage');
+
+        $id = intval($_REQUEST['id']);
+        $sql = "SELECT suppliers_id, is_check
+            FROM " . $ecs->table('suppliers') . "
+            WHERE suppliers_id = '$id'";
+        $suppliers = $db->getRow($sql, true);
+
+        if ($suppliers['suppliers_id']) {
+            $_suppliers['is_check'] = empty($suppliers['is_check']) ? 1 : 0;
+            $db->autoExecute($ecs->table('suppliers'), $_suppliers, '', "suppliers_id = '$id'");
+            clear_cache_files();
+            make_json_result($_suppliers['is_check']);
+        }
+
+        exit;
+    }
+
+    /*------------------------------------------------------ */
+//-- 批量操作
+    /*------------------------------------------------------ */
+    function batchAction()
+    {
+        /* 取得要操作的记录编号 */
+        if (empty($_POST['checkboxes'])) {
+            sys_msg($_LANG['no_record_selected']);
+        } else {
+            /* 检查权限 */
+            admin_priv('suppliers_manage');
+
+            $ids = $_POST['checkboxes'];
+
+            if (isset($_POST['remove'])) {
+                $sql = "SELECT *
+                    FROM " . $ecs->table('suppliers') . "
+                    WHERE suppliers_id " . db_create_in($ids);
+                $suppliers = $db->getAll($sql);
+
+                foreach ($suppliers as $key => $value) {
+                    /* 判断供货商是否存在订单 */
+                    $sql = "SELECT COUNT(*)
+                        FROM " . $ecs->table('order_info') . "AS O, " . $ecs->table('order_goods') . " AS OG, " . $ecs->table('goods') . " AS G
+                        WHERE O.order_id = OG.order_id
+                        AND OG.goods_id = G.goods_id
+                        AND G.suppliers_id = '" . $value['suppliers_id'] . "'";
+                    $order_exists = $db->getOne($sql, true);
+                    if ($order_exists > 0) {
+                        unset($suppliers[$key]);
+                    }
+
+                    /* 判断供货商是否存在商品 */
+                    $sql = "SELECT COUNT(*)
+                        FROM " . $ecs->table('goods') . "AS G
+                        WHERE G.suppliers_id = '" . $value['suppliers_id'] . "'";
+                    $goods_exists = $db->getOne($sql, true);
+                    if ($goods_exists > 0) {
+                        unset($suppliers[$key]);
+                    }
+                }
+                if (empty($suppliers)) {
+                    sys_msg($_LANG['batch_drop_no']);
+                }
+
+
+                $sql = "DELETE FROM " . $ecs->table('suppliers') . "
+                WHERE suppliers_id " . db_create_in($ids);
+                $db->query($sql);
+
+                /* 更新管理员、发货单关联、退货单关联和订单关联的供货商 */
+                $table_array = array('admin_user', 'delivery_order', 'back_order');
+                foreach ($table_array as $value) {
+                    $sql = "DELETE FROM " . $ecs->table($value) . " WHERE suppliers_id " . db_create_in($ids) . " ";
+                    $db->query($sql, 'SILENT');
+                }
+
+                /* 记日志 */
+                $suppliers_names = '';
+                foreach ($suppliers as $value) {
+                    $suppliers_names .= $value['suppliers_name'] . '|';
+                }
+                admin_log($suppliers_names, 'remove', 'suppliers');
+
+                /* 清除缓存 */
+                clear_cache_files();
+
+                sys_msg($_LANG['batch_drop_ok']);
+            }
         }
     }
-}
 
-/*------------------------------------------------------ */
+    /*------------------------------------------------------ */
 //-- 添加、编辑供货商
-/*------------------------------------------------------ */
+    /*------------------------------------------------------ */
 
-    function addAction() {
+    function addAction()
+    {
         $suppliers = array();
 
         /* 取得所有管理员，*/
@@ -282,7 +289,8 @@ function batchAction() {
         $smarty->display('suppliers_info.htm');
     }
 
-    function editAction() {
+    function editAction()
+    {
         $suppliers = array();
 
         /* 取得供货商信息 */
@@ -316,12 +324,13 @@ function batchAction() {
         $smarty->display('suppliers_info.htm');
     }
 
-/*------------------------------------------------------ */
+    /*------------------------------------------------------ */
 //-- 提交添加、编辑供货商
-/*------------------------------------------------------ */
+    /*------------------------------------------------------ */
 
 
-    function insertAction() {
+    function insertAction()
+    {
         /* 提交值 */
         $suppliers = array('suppliers_name' => trim($_POST['suppliers_name']),
             'suppliers_desc' => trim($_POST['suppliers_desc']),
@@ -357,7 +366,8 @@ function batchAction() {
         sys_msg($_LANG['add_suppliers_ok'], 0, $links);
     }
 
-    function updateAction() {
+    function updateAction()
+    {
         /* 提交值 */
         $suppliers = array('id' => trim($_POST['id']));
 
@@ -405,59 +415,59 @@ function batchAction() {
         sys_msg($_LANG['edit_suppliers_ok'], 0, $links);
     }
 
-/**
- *  获取供应商列表信息
- *
- * @access  public
- * @param
- *
- * @return void
- */
-function suppliers_list()
-{
-    $result = get_filter();
-    if ($result === false) {
-        $aiax = isset($_GET['is_ajax']) ? $_GET['is_ajax'] : 0;
+    /**
+     *  获取供应商列表信息
+     *
+     * @access  public
+     * @param
+     *
+     * @return void
+     */
+    function suppliers_list()
+    {
+        $result = get_filter();
+        if ($result === false) {
+            $aiax = isset($_GET['is_ajax']) ? $_GET['is_ajax'] : 0;
 
-        /* 过滤信息 */
-        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'suppliers_id' : trim($_REQUEST['sort_by']);
-        $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'ASC' : trim($_REQUEST['sort_order']);
+            /* 过滤信息 */
+            $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'suppliers_id' : trim($_REQUEST['sort_by']);
+            $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'ASC' : trim($_REQUEST['sort_order']);
 
-        $where = 'WHERE 1 ';
+            $where = 'WHERE 1 ';
 
-        /* 分页大小 */
-        $filter['page'] = empty($_REQUEST['page']) || (intval($_REQUEST['page']) <= 0) ? 1 : intval($_REQUEST['page']);
+            /* 分页大小 */
+            $filter['page'] = empty($_REQUEST['page']) || (intval($_REQUEST['page']) <= 0) ? 1 : intval($_REQUEST['page']);
 
-        if (isset($_REQUEST['page_size']) && intval($_REQUEST['page_size']) > 0) {
-            $filter['page_size'] = intval($_REQUEST['page_size']);
-        } elseif (isset($_COOKIE['ECSCP']['page_size']) && intval($_COOKIE['ECSCP']['page_size']) > 0) {
-            $filter['page_size'] = intval($_COOKIE['ECSCP']['page_size']);
-        } else {
-            $filter['page_size'] = 15;
-        }
+            if (isset($_REQUEST['page_size']) && intval($_REQUEST['page_size']) > 0) {
+                $filter['page_size'] = intval($_REQUEST['page_size']);
+            } elseif (isset($_COOKIE['ECSCP']['page_size']) && intval($_COOKIE['ECSCP']['page_size']) > 0) {
+                $filter['page_size'] = intval($_COOKIE['ECSCP']['page_size']);
+            } else {
+                $filter['page_size'] = 15;
+            }
 
-        /* 记录总数 */
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('suppliers') . $where;
-        $filter['record_count'] = $GLOBALS['db']->getOne($sql);
-        $filter['page_count'] = $filter['record_count'] > 0 ? ceil($filter['record_count'] / $filter['page_size']) : 1;
+            /* 记录总数 */
+            $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('suppliers') . $where;
+            $filter['record_count'] = $GLOBALS['db']->getOne($sql);
+            $filter['page_count'] = $filter['record_count'] > 0 ? ceil($filter['record_count'] / $filter['page_size']) : 1;
 
-        /* 查询 */
-        $sql = "SELECT suppliers_id, suppliers_name, suppliers_desc, is_check
+            /* 查询 */
+            $sql = "SELECT suppliers_id, suppliers_name, suppliers_desc, is_check
                 FROM " . $GLOBALS['ecs']->table("suppliers") . "
                 $where
                 ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'] . "
                 LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ", " . $filter['page_size'] . " ";
 
-        set_filter($filter, $sql);
-    } else {
-        $sql = $result['sql'];
-        $filter = $result['filter'];
+            set_filter($filter, $sql);
+        } else {
+            $sql = $result['sql'];
+            $filter = $result['filter'];
+        }
+
+        $row = $GLOBALS['db']->getAll($sql);
+
+        $arr = array('result' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+
+        return $arr;
     }
-
-    $row = $GLOBALS['db']->getAll($sql);
-
-    $arr = array('result' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
-
-    return $arr;
-}
 }

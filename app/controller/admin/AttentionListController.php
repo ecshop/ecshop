@@ -31,7 +31,7 @@ class AttentionListController extends InitController
         $this->assign('filter', $goodsdb['filter']);
         $this->assign('record_count', $goodsdb['record_count']);
         $this->assign('page_count', $goodsdb['page_count']);
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('attention_list.htm'),
             '',
             array('filter' => $goodsdb['filter'], 'page_count' => $goodsdb['page_count'])

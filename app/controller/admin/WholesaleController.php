@@ -59,7 +59,7 @@ class WholesaleController extends InitController
         $sort_flag = sort_flag($list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('wholesale_list.htm'),
             '',
             array('filter' => $list['filter'], 'page_count' => $list['page_count'])
@@ -76,7 +76,7 @@ class WholesaleController extends InitController
         $id = intval($_GET['id']);
         $wholesale = wholesale_info($id);
         if (empty($wholesale)) {
-            make_json_error($_LANG['wholesale_not_exist']);
+            return make_json_error($_LANG['wholesale_not_exist']);
         }
         $name = $wholesale['goods_name'];
 
@@ -143,7 +143,7 @@ class WholesaleController extends InitController
             " WHERE act_id = '$id' LIMIT 1";
         $db->query($sql);
 
-        make_json_result($val);
+        return make_json_result($val);
     }
 
     /*------------------------------------------------------ */
@@ -560,7 +560,7 @@ class WholesaleController extends InitController
             );
         }
 
-        make_json_result($arr);
+        return make_json_result($arr);
     }
 
     /*------------------------------------------------------ */

@@ -39,7 +39,7 @@ class ShopinfoController extends InitController
     {
         $this->assign('list', shopinfo_article_list());
 
-        make_json_result($smarty->fetch('shopinfo_list.htm'));
+        return make_json_result($smarty->fetch('shopinfo_list.htm'));
     }
 
     /*------------------------------------------------------ */
@@ -163,10 +163,10 @@ class ShopinfoController extends InitController
             if ($exc->edit("title = '$title'", $id)) {
                 clear_cache_files();
                 admin_log($title, 'edit', 'shopinfo');
-                make_json_result(stripslashes($title));
+                return make_json_result(stripslashes($title));
             }
         } else {
-            make_json_error(sprintf($_LANG['title_exist'], $title));
+            return make_json_error(sprintf($_LANG['title_exist'], $title));
         }
     }
 

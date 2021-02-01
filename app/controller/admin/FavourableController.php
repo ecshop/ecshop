@@ -61,7 +61,7 @@ class FavourableController extends InitController
         $sort_flag = sort_flag($list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('favourable_list.htm'),
             '',
             array('filter' => $list['filter'], 'page_count' => $list['page_count'])
@@ -78,7 +78,7 @@ class FavourableController extends InitController
         $id = intval($_GET['id']);
         $favourable = favourable_info($id);
         if (empty($favourable)) {
-            make_json_error($_LANG['favourable_not_exist']);
+            return make_json_error($_LANG['favourable_not_exist']);
         }
         $name = $favourable['act_name'];
         $exc->drop($id);
@@ -141,7 +141,7 @@ class FavourableController extends InitController
             " WHERE act_id = '$id' LIMIT 1";
         $db->query($sql);
 
-        make_json_result($val);
+        return make_json_result($val);
     }
 
     /*------------------------------------------------------ */
@@ -378,7 +378,7 @@ class FavourableController extends InitController
             ));
         }
 
-        make_json_result($arr);
+        return make_json_result($arr);
     }
 
     /*

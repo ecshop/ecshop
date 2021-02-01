@@ -59,7 +59,7 @@ class SuppliersController extends InitController
         $sort_flag = sort_flag($result['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('suppliers_list.htm'),
             '',
             array('filter' => $result['filter'], 'page_count' => $result['page_count'])
@@ -82,7 +82,7 @@ class SuppliersController extends InitController
             WHERE suppliers_name = '$name'
             AND suppliers_id <> '$id' ";
         if ($db->getOne($sql)) {
-            make_json_error(sprintf($_LANG['suppliers_name_exist'], $name));
+            return make_json_error(sprintf($_LANG['suppliers_name_exist'], $name));
         } else {
             /* 保存供货商信息 */
             $sql = "UPDATE " . $ecs->table('suppliers') . "
@@ -94,9 +94,9 @@ class SuppliersController extends InitController
 
                 clear_cache_files();
 
-                make_json_result(stripslashes($name));
+                return make_json_result(stripslashes($name));
             } else {
-                make_json_result(sprintf($_LANG['agency_edit_fail'], $name));
+                return make_json_result(sprintf($_LANG['agency_edit_fail'], $name));
             }
         }
     }
@@ -179,7 +179,7 @@ class SuppliersController extends InitController
             $_suppliers['is_check'] = empty($suppliers['is_check']) ? 1 : 0;
             $db->autoExecute($ecs->table('suppliers'), $_suppliers, '', "suppliers_id = '$id'");
             clear_cache_files();
-            make_json_result($_suppliers['is_check']);
+            return make_json_result($_suppliers['is_check']);
         }
 
         exit;

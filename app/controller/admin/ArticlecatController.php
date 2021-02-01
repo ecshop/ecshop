@@ -42,7 +42,7 @@ class ArticlecatController extends InitController
         }
         $this->assign('articlecat', $articlecat);
 
-        make_json_result($smarty->fetch('articlecat_list.htm'));
+        return make_json_result($smarty->fetch('articlecat_list.htm'));
     }
 
     /*------------------------------------------------------ */
@@ -252,13 +252,13 @@ class ArticlecatController extends InitController
 
         /* 检查输入的值是否合法 */
         if (!preg_match("/^[0-9]+$/", $order)) {
-            make_json_error(sprintf($_LANG['enter_int'], $order));
+            return make_json_error(sprintf($_LANG['enter_int'], $order));
         } else {
             if ($exc->edit("sort_order = '$order'", $id)) {
                 clear_cache_files();
-                make_json_result(stripslashes($order));
+                return make_json_result(stripslashes($order));
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
     }
@@ -276,19 +276,19 @@ class ArticlecatController extends InitController
         $cat_type = $db->getOne($sql);
         if ($cat_type == 2 || $cat_type == 3 || $cat_type == 4) {
             /* 系统保留分类，不能删除 */
-            make_json_error($_LANG['not_allow_remove']);
+            return make_json_error($_LANG['not_allow_remove']);
         }
 
         $sql = "SELECT COUNT(*) FROM " . $ecs->table('article_cat') . " WHERE parent_id = '$id'";
         if ($db->getOne($sql) > 0) {
             /* 还有子分类，不能删除 */
-            make_json_error($_LANG['is_fullcat']);
+            return make_json_error($_LANG['is_fullcat']);
         }
 
         /* 非空的分类不允许删除 */
         $sql = "SELECT COUNT(*) FROM " . $ecs->table('article') . " WHERE cat_id = '$id'";
         if ($db->getOne($sql) > 0) {
-            make_json_error(sprintf($_LANG['not_emptycat']));
+            return make_json_error(sprintf($_LANG['not_emptycat']));
         } else {
             $exc->drop($id);
             $db->query("DELETE FROM " . $ecs->table('nav') . "WHERE  ctype = 'a' AND cid = '$id' AND type = 'middle'");
@@ -333,9 +333,9 @@ class ArticlecatController extends InitController
                 $db->query("UPDATE " . $ecs->table('nav') . " SET ifshow = 0 WHERE ctype='a' AND cid='$id' AND type = 'middle'");
             }
             clear_cache_files();
-            make_json_result($val);
+            return make_json_result($val);
         } else {
-            make_json_error($db->error());
+            return make_json_error($db->error());
         }
     }
 

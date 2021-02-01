@@ -252,15 +252,15 @@ class FlashplayController extends InitController
 
                 $error_msg = '';
                 if (set_flash_data($flash_theme, $error_msg)) {
-                    make_json_error($error_msg);
+                    return make_json_error($error_msg);
                 } else {
-                    make_json_result($flash_theme, $_LANG['install_success']);
+                    return make_json_result($flash_theme, $_LANG['install_success']);
                 }
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         } else {
-            make_json_result($flash_theme, $_LANG['install_success']);
+            return make_json_result($flash_theme, $_LANG['install_success']);
         }
     }
 
@@ -481,7 +481,7 @@ class FlashplayController extends InitController
         $id = empty($_GET['id']) ? 0 : intval(trim($_GET['id']));
         $is_ajax = $_GET['is_ajax'];
         if (!$id || $is_ajax != '1') {
-            make_json_error($_LANG['edit_no']);
+            return make_json_error($_LANG['edit_no']);
         }
 
         /* 修改状态 */
@@ -515,9 +515,9 @@ class FlashplayController extends InitController
 
             $smarty->fetch('flashplay_custom.htm');
 
-            make_json_result($smarty->fetch('flashplay_custom.htm'));
+            return make_json_result($smarty->fetch('flashplay_custom.htm'));
         } else {
-            make_json_error($_LANG['edit_no']);
+            return make_json_error($_LANG['edit_no']);
         }
     }
 

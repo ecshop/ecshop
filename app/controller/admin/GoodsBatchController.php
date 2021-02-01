@@ -791,6 +791,6 @@ class GoodsBatchController extends InitController
         $filter->real_goods = -1;
         $arr = get_goods_list($filter);
 
-        make_json_result($arr);
+        return make_json_result($arr);
     }
 }

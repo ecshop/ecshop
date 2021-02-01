@@ -194,7 +194,7 @@ class MainManageService
     public function check_authz_json($authz)
     {
         if (!check_authz($authz)) {
-            make_json_error($GLOBALS['_LANG']['priv_error']);
+            return make_json_error($GLOBALS['_LANG']['priv_error']);
         }
     }
 
@@ -533,7 +533,7 @@ class MainManageService
      */
     public function make_json_result($content, $message = '', $append = array())
     {
-        make_json_response($content, 0, $message, $append);
+        return make_json_response($content, 0, $message, $append);
     }
 
     /**
@@ -545,7 +545,7 @@ class MainManageService
      */
     public function make_json_error($msg)
     {
-        make_json_response('', 1, $msg);
+        return make_json_response('', 1, $msg);
     }
 
     /**

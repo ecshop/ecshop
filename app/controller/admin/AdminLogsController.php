@@ -64,7 +64,7 @@ class AdminLogsController extends InitController
         $sort_flag = sort_flag($log_list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('admin_logs.htm'),
             '',
             array('filter' => $log_list['filter'], 'page_count' => $log_list['page_count'])

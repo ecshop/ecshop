@@ -90,12 +90,12 @@ class PictureBatchController extends InitController
 
                 /* 检查GD */
                 if ($image->gd_version() < 1) {
-                    make_json_error($_LANG['missing_gd']);
+                    return make_json_error($_LANG['missing_gd']);
                 }
 
                 /* 如果需要添加水印，检查水印文件 */
                 if ((!empty($_CFG['watermark'])) && ($_CFG['watermark_place'] > 0) && $watermark && (!$image->validate_image($_CFG['watermark']))) {
-                    make_json_error($image->error_msg());
+                    return make_json_error($image->error_msg());
                 }
                 $title = '';
 
@@ -256,7 +256,7 @@ class PictureBatchController extends InitController
                             $GLOBALS['err_msg'][] = $msg;
                             continue;
                         } else {
-                            make_json_error($msg);
+                            return make_json_error($msg);
                         }
                     }
 
@@ -269,7 +269,7 @@ class PictureBatchController extends InitController
                             $GLOBALS['err_msg'][] = $msg;
                             continue;
                         } else {
-                            make_json_error($msg);
+                            return make_json_error($msg);
                         }
                     }
 
@@ -307,7 +307,7 @@ class PictureBatchController extends InitController
                             $GLOBALS['err_msg'][] = $msg;
                             continue;
                         } else {
-                            make_json_error($msg);
+                            return make_json_error($msg);
                         }
                     }
                     /* 重新格式化图片名称 */
@@ -355,7 +355,7 @@ class PictureBatchController extends InitController
                             $GLOBALS['err_msg'][] = $msg;
                             continue;
                         } else {
-                            make_json_error($msg);
+                            return make_json_error($msg);
                         }
                     }
                     /* 重新格式化图片名称 */
@@ -389,7 +389,7 @@ class PictureBatchController extends InitController
                             $GLOBALS['err_msg'][] = $msg;
                             continue;
                         } else {
-                            make_json_error($msg);
+                            return make_json_error($msg);
                         }
                     }
                     /* 重新格式化图片名称 */
@@ -483,7 +483,7 @@ class PictureBatchController extends InitController
             if ($silent) {
                 $GLOBALS['err_msg'][] = $msg;
             } else {
-                make_json_error($msg);
+                return make_json_error($msg);
             }
         } else {
             if (file_exists(ROOT_PATH . $old_image . '.bak')) {

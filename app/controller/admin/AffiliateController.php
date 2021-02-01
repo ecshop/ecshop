@@ -31,7 +31,7 @@ class AffiliateController extends InitController
     {
         $this->assign('ur_here', $_LANG['affiliate']);
         $this->assign('config', $config);
-        make_json_result($smarty->fetch('affiliate.htm'), '', null);
+        return make_json_result($smarty->fetch('affiliate.htm'), '', null);
     }
     /*------------------------------------------------------ */
     //-- 增加下线分配方案
@@ -63,7 +63,7 @@ class AffiliateController extends InitController
 
             put_affiliate($config);
         } else {
-            make_json_error($_LANG['level_error']);
+            return make_json_error($_LANG['level_error']);
         }
 
         return redirect("affiliate.php?act=query");
@@ -138,7 +138,7 @@ class AffiliateController extends InitController
         $config['item'][$key]['level_point'] = $val;
         $config['on'] = 1;
         put_affiliate($config);
-        make_json_result(stripcslashes($val));
+        return make_json_result(stripcslashes($val));
     }
     /*------------------------------------------------------ */
     //-- Ajax修改设置
@@ -160,7 +160,7 @@ class AffiliateController extends InitController
         $config['item'][$key]['level_money'] = $val;
         $config['on'] = 1;
         put_affiliate($config);
-        make_json_result(stripcslashes($val));
+        return make_json_result(stripcslashes($val));
     }
     /*------------------------------------------------------ */
     //-- 删除下线分成

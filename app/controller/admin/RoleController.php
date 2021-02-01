@@ -72,7 +72,7 @@ class RoleController extends InitController
     {
         $this->assign('admin_list', get_role_list());
 
-        make_json_result($smarty->fetch('role_list.htm'));
+        return make_json_result($smarty->fetch('role_list.htm'));
     }
 
     /*------------------------------------------------------ */
@@ -240,7 +240,7 @@ class RoleController extends InitController
         $num_sql = "SELECT count(*) FROM " . $ecs->table('admin_user') . " WHERE role_id = '$_GET[id]'";
         $remove_num = $db->getOne($num_sql);
         if ($remove_num > 0) {
-            make_json_error($_LANG['remove_cannot_user']);
+            return make_json_error($_LANG['remove_cannot_user']);
         } else {
             $exc->drop($id);
             $url = 'role.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);

@@ -62,7 +62,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
     $this->assign('record_count', $sale_list_data['record_count']);
     $this->assign('page_count', $sale_list_data['page_count']);
 
-    make_json_result($smarty->fetch('sale_list.htm'), '', array('filter' => $sale_list_data['filter'], 'page_count' => $sale_list_data['page_count']));
+    return make_json_result($smarty->fetch('sale_list.htm'), '', array('filter' => $sale_list_data['filter'], 'page_count' => $sale_list_data['page_count']));
 }
 /*------------------------------------------------------ */
 //--商品明细列表

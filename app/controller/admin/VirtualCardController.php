@@ -190,7 +190,7 @@ class VirtualCardController extends InitController
         $sort_flag = sort_flag($list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('replenish_list.htm'),
             '',
             array('filter' => $list['filter'], 'page_count' => $list['page_count'])
@@ -363,9 +363,9 @@ class VirtualCardController extends InitController
             $goods_id = $db->getOne($sql);
 
             update_goods_number($goods_id);
-            make_json_result($val);
+            return make_json_result($val);
         } else {
-            make_json_error($_LANG['action_fail'] . "\n" . $db->error());
+            return make_json_error($_LANG['action_fail'] . "\n" . $db->error());
         }
     }
 
@@ -389,7 +389,7 @@ class VirtualCardController extends InitController
 
             return redirect($url);
         } else {
-            make_json_error($db->error());
+            return make_json_error($db->error());
         }
     }
 
@@ -403,10 +403,10 @@ class VirtualCardController extends InitController
         $new_key = json_str_iconv(trim($_GET['new_key']));
         // 检查原加密串和新加密串是否相同
         if ($old_key == $new_key || crc32($old_key) == crc32($new_key)) {
-            make_json_error($GLOBALS['_LANG']['same_string']);
+            return make_json_error($GLOBALS['_LANG']['same_string']);
         }
         if ($old_key != AUTH_KEY) {
-            make_json_error($GLOBALS['_LANG']['invalid_old_string']);
+            return make_json_error($GLOBALS['_LANG']['invalid_old_string']);
         } else {
             $f = ROOT_PATH . 'data/config.php';
             file_put_contents($f, str_replace("'AUTH_KEY', '" . AUTH_KEY . "'", "'AUTH_KEY', '" . $new_key . "'", file_get_contents($f)));
@@ -430,7 +430,7 @@ class VirtualCardController extends InitController
             }
         }
 
-        make_json_result(sprintf($GLOBALS['_LANG']['old_stat'], $stat['all'], $stat['new'], $stat['old'], $stat['unknown']));
+        return make_json_result(sprintf($GLOBALS['_LANG']['old_stat'], $stat['all'], $stat['new'], $stat['old'], $stat['unknown']));
     }
 
     /*------------------------------------------------------ */
@@ -456,7 +456,7 @@ class VirtualCardController extends InitController
             $row['crc32'] = $new_crc32;
 
             if (!$db->autoExecute($ecs->table('virtual_card'), $row, 'UPDATE', 'card_id = ' . $row['card_id'])) {
-                make_json_error($updated, 0, $_LANG['update_error'] . "\n" . $db->error());
+                return make_json_error($updated, 0, $_LANG['update_error'] . "\n" . $db->error());
             }
 
             $updated++;
@@ -467,7 +467,7 @@ class VirtualCardController extends InitController
         $left_num = $db->getOne($sql);
 
         if ($left_num > 0) {
-            make_json_result($updated);
+            return make_json_result($updated);
         } else {
             // 查询统计信息
             $stat = array('new' => 0, 'unknown' => 0);
@@ -481,7 +481,7 @@ class VirtualCardController extends InitController
                 }
             }
 
-            make_json_result($updated, sprintf($_LANG['new_stat'], $stat['new'], $stat['unknown']));
+            return make_json_result($updated, sprintf($_LANG['new_stat'], $stat['new'], $stat['unknown']));
         }
     }
 

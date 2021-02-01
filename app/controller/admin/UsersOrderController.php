@@ -56,7 +56,7 @@ class UsersOrderController extends InitController
         $sort_flag = sort_flag($user_orderinfo['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result($smarty->fetch('users_order.htm'), '', array('filter' => $user_orderinfo['filter'], 'page_count' => $user_orderinfo['page_count']));
+        return make_json_result($smarty->fetch('users_order.htm'), '', array('filter' => $user_orderinfo['filter'], 'page_count' => $user_orderinfo['page_count']));
     }
 
     public function listAction()

@@ -1033,7 +1033,7 @@ class SuppliersGoodsController extends InitController
 
         if ($exc->edit("goods_name = '$goods_name', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result(stripslashes($goods_name));
+            return make_json_result(stripslashes($goods_name));
         }
     }
 
@@ -1049,12 +1049,12 @@ class SuppliersGoodsController extends InitController
 
         /* 检查是否重复 */
         if (!$exc->is_only('goods_sn', $goods_sn, $goods_id)) {
-            make_json_error($_LANG['goods_sn_exists']);
+            return make_json_error($_LANG['goods_sn_exists']);
         }
 
         if ($exc->edit("goods_sn = '$goods_sn', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result(stripslashes($goods_sn));
+            return make_json_result(stripslashes($goods_sn));
         }
     }
 
@@ -1067,10 +1067,10 @@ class SuppliersGoodsController extends InitController
 
         /* 检查是否重复 */
         if (!$exc->is_only('goods_sn', $goods_sn, $goods_id)) {
-            make_json_error($_LANG['goods_sn_exists']);
+            return make_json_error($_LANG['goods_sn_exists']);
         }
 
-        make_json_result('');
+        return make_json_result('');
     }
     /*------------------------------------------------------ */
     //-- 修改商品价格
@@ -1084,11 +1084,11 @@ class SuppliersGoodsController extends InitController
         $price_rate = floatval($_CFG['market_price_rate'] * $goods_price);
 
         if ($goods_price < 0 || $goods_price == 0 && $_POST['val'] != "$goods_price") {
-            make_json_error($_LANG['shop_price_invalid']);
+            return make_json_error($_LANG['shop_price_invalid']);
         } else {
             if ($exc->edit("shop_price = '$goods_price', market_price = '$price_rate', last_update=" . gmtime(), $goods_id)) {
                 clear_cache_files();
-                make_json_result(number_format($goods_price, 2, '.', ''));
+                return make_json_result(number_format($goods_price, 2, '.', ''));
             }
         }
     }
@@ -1104,12 +1104,12 @@ class SuppliersGoodsController extends InitController
         $goods_num = intval($_POST['val']);
 
         if ($goods_num < 0 || $goods_num == 0 && $_POST['val'] != "$goods_num") {
-            make_json_error($_LANG['goods_number_error']);
+            return make_json_error($_LANG['goods_number_error']);
         }
 
         if ($exc->edit("goods_number = '$goods_num', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result($goods_num);
+            return make_json_result($goods_num);
         }
     }
 
@@ -1125,7 +1125,7 @@ class SuppliersGoodsController extends InitController
 
         if ($exc->edit("is_on_sale = '$on_sale', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result($on_sale);
+            return make_json_result($on_sale);
         }
     }
 
@@ -1141,7 +1141,7 @@ class SuppliersGoodsController extends InitController
 
         if ($exc->edit("is_best = '$is_best', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result($is_best);
+            return make_json_result($is_best);
         }
     }
 
@@ -1157,7 +1157,7 @@ class SuppliersGoodsController extends InitController
 
         if ($exc->edit("is_new = '$is_new', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result($is_new);
+            return make_json_result($is_new);
         }
     }
 
@@ -1173,7 +1173,7 @@ class SuppliersGoodsController extends InitController
 
         if ($exc->edit("is_hot = '$is_hot', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result($is_hot);
+            return make_json_result($is_hot);
         }
     }
 
@@ -1189,7 +1189,7 @@ class SuppliersGoodsController extends InitController
 
         if ($exc->edit("sort_order = '$sort_order', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result($sort_order);
+            return make_json_result($sort_order);
         }
     }
 
@@ -1224,7 +1224,7 @@ class SuppliersGoodsController extends InitController
 
         $tpl = $is_delete ? 'goods_trash.htm' : 'goods_list.htm';
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch($tpl),
             '',
             array('filter' => $goods_list['filter'], 'page_count' => $goods_list['page_count'])
@@ -1286,7 +1286,7 @@ class SuppliersGoodsController extends InitController
         // 取得参数
         $goods_id = intval($_REQUEST['id']);
         if ($goods_id <= 0) {
-            make_json_error('invalid params');
+            return make_json_error('invalid params');
         }
 
         /* 取得商品信息 */
@@ -1296,11 +1296,11 @@ class SuppliersGoodsController extends InitController
             " WHERE goods_id = '$goods_id'";
         $goods = $db->getRow($sql);
         if (empty($goods)) {
-            make_json_error($_LANG['goods_not_exist']);
+            return make_json_error($_LANG['goods_not_exist']);
         }
 
         if ($goods['is_delete'] != 1) {
-            make_json_error($_LANG['goods_not_in_recycle_bin']);
+            return make_json_error($_LANG['goods_not_in_recycle_bin']);
         }
 
         /* 删除商品图片和轮播图片 */
@@ -1395,7 +1395,7 @@ class SuppliersGoodsController extends InitController
 
         $content = build_attr_html($goods_type, $goods_id);
 
-        make_json_result($content);
+        return make_json_result($content);
     }
 
     /*------------------------------------------------------ */
@@ -1428,7 +1428,7 @@ class SuppliersGoodsController extends InitController
         $GLOBALS['db']->query($sql);
 
         clear_cache_files();
-        make_json_result($img_id);
+        return make_json_result($img_id);
     }
 
     /*------------------------------------------------------ */
@@ -1450,7 +1450,7 @@ class SuppliersGoodsController extends InitController
                 'data' => $val['shop_price']);
         }
 
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -1491,7 +1491,7 @@ class SuppliersGoodsController extends InitController
         }
 
         clear_cache_files();
-        make_json_result($options);
+        return make_json_result($options);
     }
 
     /*------------------------------------------------------ */
@@ -1540,7 +1540,7 @@ class SuppliersGoodsController extends InitController
         }
 
         clear_cache_files();
-        make_json_result($options);
+        return make_json_result($options);
     }
 
     /*------------------------------------------------------ */
@@ -1575,7 +1575,7 @@ class SuppliersGoodsController extends InitController
         }
 
         clear_cache_files();
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -1611,7 +1611,7 @@ class SuppliersGoodsController extends InitController
         }
 
         clear_cache_files();
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -1640,7 +1640,7 @@ class SuppliersGoodsController extends InitController
             $arr[] = array('value' => $row['article_id'], 'text' => $row['title'], 'data' => '');
         }
 
-        make_json_result($arr);
+        return make_json_result($arr);
     }
 
     /*------------------------------------------------------ */
@@ -1674,7 +1674,7 @@ class SuppliersGoodsController extends InitController
         }
 
         clear_cache_files();
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -1704,7 +1704,7 @@ class SuppliersGoodsController extends InitController
         }
 
         clear_cache_files();
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /**

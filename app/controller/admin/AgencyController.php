@@ -52,7 +52,7 @@ class AgencyController extends InitController
         $sort_flag = sort_flag($agency_list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('agency_list.htm'),
             '',
             array('filter' => $agency_list['filter'], 'page_count' => $agency_list['page_count'])
@@ -71,14 +71,14 @@ class AgencyController extends InitController
 
         /* 检查名称是否重复 */
         if ($exc->num("agency_name", $name, $id) != 0) {
-            make_json_error(sprintf($_LANG['agency_name_exist'], $name));
+            return make_json_error(sprintf($_LANG['agency_name_exist'], $name));
         } else {
             if ($exc->edit("agency_name = '$name'", $id)) {
                 admin_log($name, 'edit', 'agency');
                 clear_cache_files();
-                make_json_result(stripslashes($name));
+                return make_json_result(stripslashes($name));
             } else {
-                make_json_result(sprintf($_LANG['agency_edit_fail'], $name));
+                return make_json_result(sprintf($_LANG['agency_edit_fail'], $name));
             }
         }
     }

@@ -46,7 +46,7 @@ class MagazineListController extends InitController
         $sort_flag = sort_flag($magazinedb['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result($smarty->fetch('magazine_list.htm'), '', array('filter' => $magazinedb['filter'], 'page_count' => $magazinedb['page_count']));
+        return make_json_result($smarty->fetch('magazine_list.htm'), '', array('filter' => $magazinedb['filter'], 'page_count' => $magazinedb['page_count']));
     }
 
     public function addAction()

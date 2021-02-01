@@ -37,7 +37,7 @@ class ArticleAutoController extends InitController
         $sort_flag = sort_flag($goodsdb['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result($smarty->fetch('goods_auto.htm'), '', array('filter' => $goodsdb['filter'], 'page_count' => $goodsdb['page_count']));
+        return make_json_result($smarty->fetch('goods_auto.htm'), '', array('filter' => $goodsdb['filter'], 'page_count' => $goodsdb['page_count']));
     }
 
     public function delAction()
@@ -54,20 +54,20 @@ class ArticleAutoController extends InitController
         check_authz_json('goods_auto');
 
         if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
-            make_json_error('');
+            return make_json_error('');
         }
 
         $id = intval($_POST['id']);
         $time = local_strtotime(trim($_POST['val']));
         if ($id <= 0 || $_POST['val'] == '0000-00-00' || $time <= 0) {
-            make_json_error('');
+            return make_json_error('');
         }
 
         $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'article',
             'starttime' => $time), array('starttime' => (string)$time));
 
         clear_cache_files();
-        make_json_result(stripslashes($_POST['val']), '', array('act' => 'article_auto', 'id' => $id));
+        return make_json_result(stripslashes($_POST['val']), '', array('act' => 'article_auto', 'id' => $id));
     }
 
     public function edit_endtimeAction()
@@ -75,20 +75,20 @@ class ArticleAutoController extends InitController
         check_authz_json('goods_auto');
 
         if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
-            make_json_error('');
+            return make_json_error('');
         }
 
         $id = intval($_POST['id']);
         $time = local_strtotime(trim($_POST['val']));
         if ($id <= 0 || $_POST['val'] == '0000-00-00' || $time <= 0) {
-            make_json_error('');
+            return make_json_error('');
         }
 
         $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'article',
             'endtime' => $time), array('endtime' => (string)$time));
 
         clear_cache_files();
-        make_json_result(stripslashes($_POST['val']), '', array('act' => 'article_auto', 'id' => $id));
+        return make_json_result(stripslashes($_POST['val']), '', array('act' => 'article_auto', 'id' => $id));
     } //批量发布
 
     public function batch_startAction()

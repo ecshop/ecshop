@@ -56,7 +56,7 @@ class GroupBuyController extends InitController
         $sort_flag = sort_flag($list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('group_buy_list.htm'),
             '',
             array('filter' => $list['filter'], 'page_count' => $list['page_count'])
@@ -538,7 +538,7 @@ class GroupBuyController extends InitController
         $filter = $json->decode($_GET['JSON']);
         $arr = get_goods_list($filter);
 
-        make_json_result($arr);
+        return make_json_result($arr);
     }
 
     /*------------------------------------------------------ */
@@ -564,7 +564,7 @@ class GroupBuyController extends InitController
 
         clear_cache_files();
 
-        make_json_result(number_format($val, 2));
+        return make_json_result(number_format($val, 2));
     }
 
     /*------------------------------------------------------ */
@@ -590,7 +590,7 @@ class GroupBuyController extends InitController
 
         clear_cache_files();
 
-        make_json_result($val);
+        return make_json_result($val);
     }
 
     /*------------------------------------------------------ */
@@ -608,7 +608,7 @@ class GroupBuyController extends InitController
 
         /* 如果团购活动已经有订单，不能删除 */
         if ($group_buy['valid_order'] > 0) {
-            make_json_error($_LANG['error_exist_order']);
+            return make_json_error($_LANG['error_exist_order']);
         }
 
         /* 删除团购活动 */

@@ -1118,7 +1118,7 @@ class GoodsController extends InitController
 
         if ($exc->edit("goods_name = '$goods_name', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result(stripslashes($goods_name));
+            return make_json_result(stripslashes($goods_name));
         }
     }
 
@@ -1134,15 +1134,15 @@ class GoodsController extends InitController
 
         /* 检查是否重复 */
         if (!$exc->is_only('goods_sn', $goods_sn, $goods_id)) {
-            make_json_error($_LANG['goods_sn_exists']);
+            return make_json_error($_LANG['goods_sn_exists']);
         }
         $sql = "SELECT goods_id FROM " . $ecs->table('products') . "WHERE product_sn='$goods_sn'";
         if ($db->getOne($sql)) {
-            make_json_error($_LANG['goods_sn_exists']);
+            return make_json_error($_LANG['goods_sn_exists']);
         }
         if ($exc->edit("goods_sn = '$goods_sn', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result(stripslashes($goods_sn));
+            return make_json_result(stripslashes($goods_sn));
         }
     }
 
@@ -1155,15 +1155,15 @@ class GoodsController extends InitController
 
         /* 检查是否重复 */
         if (!$exc->is_only('goods_sn', $goods_sn, $goods_id)) {
-            make_json_error($_LANG['goods_sn_exists']);
+            return make_json_error($_LANG['goods_sn_exists']);
         }
         if (!empty($goods_sn)) {
             $sql = "SELECT goods_id FROM " . $ecs->table('products') . "WHERE product_sn='$goods_sn'";
             if ($db->getOne($sql)) {
-                make_json_error($_LANG['goods_sn_exists']);
+                return make_json_error($_LANG['goods_sn_exists']);
             }
         }
-        make_json_result('');
+        return make_json_result('');
     }
 
     public function check_products_goods_snAction()
@@ -1174,7 +1174,7 @@ class GoodsController extends InitController
         $goods_sn = json_str_iconv(trim($_REQUEST['goods_sn']));
         $products_sn = explode('||', $goods_sn);
         if (!is_array($products_sn)) {
-            make_json_result('');
+            return make_json_result('');
         } else {
             foreach ($products_sn as $val) {
                 if (empty($val)) {
@@ -1182,21 +1182,21 @@ class GoodsController extends InitController
                 }
                 if (is_array($int_arry)) {
                     if (in_array($val, $int_arry)) {
-                        make_json_error($val . $_LANG['goods_sn_exists']);
+                        return make_json_error($val . $_LANG['goods_sn_exists']);
                     }
                 }
                 $int_arry[] = $val;
                 if (!$exc->is_only('goods_sn', $val, '0')) {
-                    make_json_error($val . $_LANG['goods_sn_exists']);
+                    return make_json_error($val . $_LANG['goods_sn_exists']);
                 }
                 $sql = "SELECT goods_id FROM " . $ecs->table('products') . "WHERE product_sn='$val'";
                 if ($db->getOne($sql)) {
-                    make_json_error($val . $_LANG['goods_sn_exists']);
+                    return make_json_error($val . $_LANG['goods_sn_exists']);
                 }
             }
         }
         /* 检查是否重复 */
-        make_json_result('');
+        return make_json_result('');
     }
 
     /*------------------------------------------------------ */
@@ -1211,11 +1211,11 @@ class GoodsController extends InitController
         $price_rate = floatval($_CFG['market_price_rate'] * $goods_price);
 
         if ($goods_price < 0 || $goods_price == 0 && $_POST['val'] != "$goods_price") {
-            make_json_error($_LANG['shop_price_invalid']);
+            return make_json_error($_LANG['shop_price_invalid']);
         } else {
             if ($exc->edit("shop_price = '$goods_price', market_price = '$price_rate', last_update=" . gmtime(), $goods_id)) {
                 clear_cache_files();
-                make_json_result(number_format($goods_price, 2, '.', ''));
+                return make_json_result(number_format($goods_price, 2, '.', ''));
             }
         }
     }
@@ -1231,16 +1231,16 @@ class GoodsController extends InitController
         $goods_num = intval($_POST['val']);
 
         if ($goods_num < 0 || $goods_num == 0 && $_POST['val'] != "$goods_num") {
-            make_json_error($_LANG['goods_number_error']);
+            return make_json_error($_LANG['goods_number_error']);
         }
 
         if (check_goods_product_exist($goods_id) == 1) {
-            make_json_error($_LANG['sys']['wrong'] . $_LANG['cannot_goods_number']);
+            return make_json_error($_LANG['sys']['wrong'] . $_LANG['cannot_goods_number']);
         }
 
         if ($exc->edit("goods_number = '$goods_num', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result($goods_num);
+            return make_json_result($goods_num);
         }
     }
 
@@ -1256,7 +1256,7 @@ class GoodsController extends InitController
 
         if ($exc->edit("is_on_sale = '$on_sale', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result($on_sale);
+            return make_json_result($on_sale);
         }
     }
 
@@ -1272,7 +1272,7 @@ class GoodsController extends InitController
 
         if ($exc->edit("is_best = '$is_best', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result($is_best);
+            return make_json_result($is_best);
         }
     }
 
@@ -1288,7 +1288,7 @@ class GoodsController extends InitController
 
         if ($exc->edit("is_new = '$is_new', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result($is_new);
+            return make_json_result($is_new);
         }
     }
 
@@ -1304,7 +1304,7 @@ class GoodsController extends InitController
 
         if ($exc->edit("is_hot = '$is_hot', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result($is_hot);
+            return make_json_result($is_hot);
         }
     }
 
@@ -1320,7 +1320,7 @@ class GoodsController extends InitController
 
         if ($exc->edit("sort_order = '$sort_order', last_update=" . gmtime(), $goods_id)) {
             clear_cache_files();
-            make_json_result($sort_order);
+            return make_json_result($sort_order);
         }
     }
 
@@ -1359,7 +1359,7 @@ class GoodsController extends InitController
 
         $tpl = $is_delete ? 'goods_trash.htm' : 'goods_list.htm';
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch($tpl),
             '',
             array('filter' => $goods_list['filter'], 'page_count' => $goods_list['page_count'])
@@ -1421,7 +1421,7 @@ class GoodsController extends InitController
         // 取得参数
         $goods_id = intval($_REQUEST['id']);
         if ($goods_id <= 0) {
-            make_json_error('invalid params');
+            return make_json_error('invalid params');
         }
 
         /* 取得商品信息 */
@@ -1431,11 +1431,11 @@ class GoodsController extends InitController
             " WHERE goods_id = '$goods_id'";
         $goods = $db->getRow($sql);
         if (empty($goods)) {
-            make_json_error($_LANG['goods_not_exist']);
+            return make_json_error($_LANG['goods_not_exist']);
         }
 
         if ($goods['is_delete'] != 1) {
-            make_json_error($_LANG['goods_not_in_recycle_bin']);
+            return make_json_error($_LANG['goods_not_in_recycle_bin']);
         }
 
         /* 删除商品图片和轮播图片 */
@@ -1535,7 +1535,7 @@ class GoodsController extends InitController
 
         $content = build_attr_html($goods_type, $goods_id);
 
-        make_json_result($content);
+        return make_json_result($content);
     }
 
     /*------------------------------------------------------ */
@@ -1568,7 +1568,7 @@ class GoodsController extends InitController
         $GLOBALS['db']->query($sql);
 
         clear_cache_files();
-        make_json_result($img_id);
+        return make_json_result($img_id);
     }
 
     /*------------------------------------------------------ */
@@ -1590,7 +1590,7 @@ class GoodsController extends InitController
                 'data' => $val['shop_price']);
         }
 
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -1631,7 +1631,7 @@ class GoodsController extends InitController
         }
 
         clear_cache_files();
-        make_json_result($options);
+        return make_json_result($options);
     }
 
     /*------------------------------------------------------ */
@@ -1680,7 +1680,7 @@ class GoodsController extends InitController
         }
 
         clear_cache_files();
-        make_json_result($options);
+        return make_json_result($options);
     }
 
     /*------------------------------------------------------ */
@@ -1715,7 +1715,7 @@ class GoodsController extends InitController
         }
 
         clear_cache_files();
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -1751,7 +1751,7 @@ class GoodsController extends InitController
         }
 
         clear_cache_files();
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -1780,7 +1780,7 @@ class GoodsController extends InitController
             $arr[] = array('value' => $row['article_id'], 'text' => $row['title'], 'data' => '');
         }
 
-        make_json_result($arr);
+        return make_json_result($arr);
     }
 
     /*------------------------------------------------------ */
@@ -1814,7 +1814,7 @@ class GoodsController extends InitController
         }
 
         clear_cache_files();
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -1844,7 +1844,7 @@ class GoodsController extends InitController
         }
 
         clear_cache_files();
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -1941,7 +1941,7 @@ class GoodsController extends InitController
     {
         /* 是否存在商品id */
         if (empty($_REQUEST['goods_id'])) {
-            make_json_error($_LANG['sys']['wrong'] . $_LANG['cannot_found_goods']);
+            return make_json_error($_LANG['sys']['wrong'] . $_LANG['cannot_found_goods']);
         } else {
             $goods_id = intval($_REQUEST['goods_id']);
         }
@@ -1950,7 +1950,7 @@ class GoodsController extends InitController
         $sql = "SELECT goods_sn, goods_name, goods_type, shop_price FROM " . $ecs->table('goods') . " WHERE goods_id = '$goods_id'";
         $goods = $db->getRow($sql);
         if (empty($goods)) {
-            make_json_error($_LANG['sys']['wrong'] . $_LANG['cannot_found_goods']);
+            return make_json_error($_LANG['sys']['wrong'] . $_LANG['cannot_found_goods']);
         }
         $this->assign('sn', sprintf($_LANG['good_goods_sn'], $goods['goods_sn']));
         $this->assign('price', sprintf($_LANG['good_shop_price'], $goods['shop_price']));
@@ -1961,7 +1961,7 @@ class GoodsController extends InitController
         /* 获取商品规格列表 */
         $attribute = get_goods_specifications_list($goods_id);
         if (empty($attribute)) {
-            make_json_error($_LANG['sys']['wrong'] . $_LANG['cannot_found_goods']);
+            return make_json_error($_LANG['sys']['wrong'] . $_LANG['cannot_found_goods']);
         }
         foreach ($attribute as $attribute_value) {
             //转换成数组
@@ -1991,7 +1991,7 @@ class GoodsController extends InitController
         $sort_flag = sort_flag($product['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('product_info.htm'),
             '',
             array('filter' => $product['filter'], 'page_count' => $product['page_count'])
@@ -2008,7 +2008,7 @@ class GoodsController extends InitController
 
         /* 是否存在商品id */
         if (empty($_REQUEST['id'])) {
-            make_json_error($_LANG['product_id_null']);
+            return make_json_error($_LANG['product_id_null']);
         } else {
             $product_id = intval($_REQUEST['id']);
         }
@@ -2047,7 +2047,7 @@ class GoodsController extends InitController
         $product_sn = ($_LANG['n_a'] == $product_sn) ? '' : $product_sn;
 
         if (check_product_sn_exist($product_sn, $product_id)) {
-            make_json_error($_LANG['sys']['wrong'] . $_LANG['exist_same_product_sn']);
+            return make_json_error($_LANG['sys']['wrong'] . $_LANG['exist_same_product_sn']);
         }
 
         /* 修改 */
@@ -2055,7 +2055,7 @@ class GoodsController extends InitController
         $result = $db->query($sql);
         if ($result) {
             clear_cache_files();
-            make_json_result($product_sn);
+            return make_json_result($product_sn);
         }
     }
 
@@ -2079,7 +2079,7 @@ class GoodsController extends InitController
             /* 修改商品库存 */
             if (update_goods_stock($product['goods_id'], $product_number - $product['product_number'])) {
                 clear_cache_files();
-                make_json_result($product_number);
+                return make_json_result($product_number);
             }
         }
     }

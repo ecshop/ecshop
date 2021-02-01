@@ -134,7 +134,7 @@ class SnatchController extends InitController
         $sort_flag = sort_flag($snatchs['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('snatch_list.htm'),
             '',
             array('filter' => $snatchs['filter'], 'page_count' => $snatchs['page_count'])
@@ -157,11 +157,11 @@ class SnatchController extends InitController
             " FROM " . $ecs->table('goods_activity') .
             " WHERE act_type='" . GAT_SNATCH . "' AND act_name='$val' AND act_id <> '$id'";
         if ($db->getOne($sql)) {
-            make_json_error(sprintf($_LANG['snatch_name_exist'], $val));
+            return make_json_error(sprintf($_LANG['snatch_name_exist'], $val));
         }
 
         $exc->edit("act_name='$val'", $id);
-        make_json_result(stripslashes($val));
+        return make_json_result(stripslashes($val));
     }
 
     /*------------------------------------------------------ */
@@ -305,7 +305,7 @@ class SnatchController extends InitController
         $sort_flag = sort_flag($bid_list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('snatch_view.htm'),
             '',
             array('filter' => $bid_list['filter'], 'page_count' => $bid_list['page_count'])
@@ -329,7 +329,7 @@ class SnatchController extends InitController
             $arr['products'] = get_good_products($arr['goods'][0]['goods_id']);
         }
 
-        make_json_result($arr);
+        return make_json_result($arr);
     }
 
     /*------------------------------------------------------ */
@@ -347,7 +347,7 @@ class SnatchController extends InitController
             $arr['products'] = get_good_products($filters->goods_id);
         }
 
-        make_json_result($arr);
+        return make_json_result($arr);
     }
 
     /**

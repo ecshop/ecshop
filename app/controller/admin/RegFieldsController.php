@@ -42,7 +42,7 @@ class RegFieldsController extends InitController
         $fields = $db->getAll("SELECT * FROM " . $ecs->table('reg_fields') . "ORDER BY id");
 
         $this->assign('reg_fields', $fields);
-        make_json_result($smarty->fetch('reg_fields.htm'));
+        return make_json_result($smarty->fetch('reg_fields.htm'));
     }
 
     /*------------------------------------------------------ */
@@ -178,12 +178,12 @@ class RegFieldsController extends InitController
                 /* 管理员日志 */
                 admin_log($val, 'edit', 'reg_fields');
                 clear_cache_files();
-                make_json_result(stripcslashes($val));
+                return make_json_result(stripcslashes($val));
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         } else {
-            make_json_error(sprintf($_LANG['field_name_exist'], htmlspecialchars($val)));
+            return make_json_error(sprintf($_LANG['field_name_exist'], htmlspecialchars($val)));
         }
     } /*
  *  编辑会员注册项排序权值
@@ -198,12 +198,12 @@ class RegFieldsController extends InitController
                 /* 管理员日志 */
                 admin_log($val, 'edit', 'reg_fields');
                 clear_cache_files();
-                make_json_result(stripcslashes($val));
+                return make_json_result(stripcslashes($val));
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         } else {
-            make_json_error($_LANG['order_not_num']);
+            return make_json_error($_LANG['order_not_num']);
         }
     }
 
@@ -219,7 +219,7 @@ class RegFieldsController extends InitController
 
         if ($exc->edit("display = '$is_dis'", $id)) {
             clear_cache_files();
-            make_json_result($is_dis);
+            return make_json_result($is_dis);
         }
     }
 
@@ -235,7 +235,7 @@ class RegFieldsController extends InitController
 
         if ($exc->edit("is_need = '$is_need'", $id)) {
             clear_cache_files();
-            make_json_result($is_need);
+            return make_json_result($is_need);
         }
     }
 }

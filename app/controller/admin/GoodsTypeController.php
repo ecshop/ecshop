@@ -54,7 +54,7 @@ class GoodsTypeController extends InitController
         $this->assign('record_count', $good_type_list['record_count']);
         $this->assign('page_count', $good_type_list['page_count']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('goods_type.htm'),
             '',
             array('filter' => $good_type_list['filter'], 'page_count' => $good_type_list['page_count'])
@@ -79,9 +79,9 @@ class GoodsTypeController extends InitController
 
             admin_log($type_name, 'edit', 'goods_type');
 
-            make_json_result(stripslashes($type_name));
+            return make_json_result(stripslashes($type_name));
         } else {
-            make_json_error($_LANG['repeat_type_name']);
+            return make_json_error($_LANG['repeat_type_name']);
         }
     }
 
@@ -98,7 +98,7 @@ class GoodsTypeController extends InitController
 
         $exc->edit("enabled='$val'", $id);
 
-        make_json_result($val);
+        return make_json_result($val);
     }
 
     /*------------------------------------------------------ */
@@ -216,7 +216,7 @@ class GoodsTypeController extends InitController
 
             return redirect($url);
         } else {
-            make_json_error($_LANG['remove_failed']);
+            return make_json_error($_LANG['remove_failed']);
         }
     }
 

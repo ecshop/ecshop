@@ -452,9 +452,9 @@ class TemplateController extends InitController
         if ($step_one && $step_two) {
             clear_all_files(); //清除模板编译文件
 
-            make_json_result(read_style_and_tpl($tpl_name, $tpl_fg), $_LANG['install_template_success']);
+            return make_json_result(read_style_and_tpl($tpl_name, $tpl_fg), $_LANG['install_template_success']);
         } else {
-            make_json_error($db->error());
+            return make_json_error($db->error());
         }
     }
 
@@ -475,9 +475,9 @@ class TemplateController extends InitController
         $done = $zip->zip('../themes/' . $tpl . '/', $filename);
 
         if ($done) {
-            make_json_result($filename);
+            return make_json_result($filename);
         } else {
-            make_json_error($_LANG['backup_failed']);
+            return make_json_error($_LANG['backup_failed']);
         }
     }
 
@@ -490,7 +490,7 @@ class TemplateController extends InitController
         $library = load_library($_CFG['template'], trim($_GET['lib']));
         $message = ($library['mark'] & 7) ? '' : $_LANG['library_not_written'];
 
-        make_json_result($library['html'], $message);
+        return make_json_result($library['html'], $message);
     }
 
     /*------------------------------------------------------ */
@@ -510,9 +510,9 @@ class TemplateController extends InitController
         if (@file_exists($lib_file) === true && @file_put_contents($lib_file, $html)) {
             @file_put_contents('../temp/backup/library/' . $_CFG['template'] . '-' . $_POST['lib'] . '.lbi', $org_html);
 
-            make_json_result('', $_LANG['update_lib_success']);
+            return make_json_result('', $_LANG['update_lib_success']);
         } else {
-            make_json_error(sprintf($_LANG['update_lib_failed'], 'themes/' . $_CFG['template'] . '/library'));
+            return make_json_error(sprintf($_LANG['update_lib_failed'], 'themes/' . $_CFG['template'] . '/library'));
         }
     }
 
@@ -529,9 +529,9 @@ class TemplateController extends InitController
         $lib_backup = str_replace("0xa", '', $lib_backup); // 过滤 0xa 非法字符
 
         if (file_exists($lib_backup) && filemtime($lib_backup) >= filemtime($lib_file)) {
-            make_json_result(str_replace("\xEF\xBB\xBF", '', file_get_contents($lib_backup)));
+            return make_json_result(str_replace("\xEF\xBB\xBF", '', file_get_contents($lib_backup)));
         } else {
-            make_json_result(str_replace("\xEF\xBB\xBF", '', file_get_contents($lib_file)));
+            return make_json_result(str_replace("\xEF\xBB\xBF", '', file_get_contents($lib_file)));
         }
     }
 

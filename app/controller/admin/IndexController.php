@@ -895,7 +895,7 @@ class IndexController extends InitController
         if (empty($_SESSION['last_check'])) {
             $_SESSION['last_check'] = gmtime();
 
-            make_json_result('', '', array('new_orders' => 0, 'new_paid' => 0));
+            return make_json_result('', '', array('new_orders' => 0, 'new_paid' => 0));
         }
 
         /* 新订单 */
@@ -911,9 +911,9 @@ class IndexController extends InitController
         $_SESSION['last_check'] = gmtime();
 
         if (!(is_numeric($arr['new_orders']) && is_numeric($arr['new_paid']))) {
-            make_json_error($db->error());
+            return make_json_error($db->error());
         } else {
-            make_json_result('', '', $arr);
+            return make_json_result('', '', $arr);
         }
     }
 
@@ -937,7 +937,7 @@ class IndexController extends InitController
     public function send_mailAction()
     {
         if ($_CFG['send_mail_on'] == 'off') {
-            make_json_result('', $_LANG['send_mail_off'], 0);
+            return make_json_result('', $_LANG['send_mail_off'], 0);
             exit();
         }
         $sql = "SELECT * FROM " . $ecs->table('email_sendlist') . " ORDER BY pri DESC, last_send ASC LIMIT 1";
@@ -945,7 +945,7 @@ class IndexController extends InitController
 
         //发送列表为空
         if (empty($row['id'])) {
-            make_json_result('', $_LANG['mailsend_null'], 0);
+            return make_json_result('', $_LANG['mailsend_null'], 0);
         }
 
         //发送列表不为空，邮件地址为空
@@ -953,7 +953,7 @@ class IndexController extends InitController
             $sql = "DELETE FROM " . $ecs->table('email_sendlist') . " WHERE id = '$row[id]'";
             $db->query($sql);
             $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('email_sendlist'));
-            make_json_result('', $_LANG['mailsend_skip'], array('count' => $count, 'goon' => 1));
+            return make_json_result('', $_LANG['mailsend_skip'], array('count' => $count, 'goon' => 1));
         }
 
         //查询相关模板
@@ -982,7 +982,7 @@ class IndexController extends InitController
                 } else {
                     $msg = sprintf($_LANG['mailsend_finished'], $row['email']);
                 }
-                make_json_result('', $msg, array('count' => $count));
+                return make_json_result('', $msg, array('count' => $count));
             } else {
                 //发送出错
 
@@ -996,14 +996,14 @@ class IndexController extends InitController
                 $db->query($sql);
 
                 $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('email_sendlist'));
-                make_json_result('', sprintf($_LANG['mailsend_fail'], $row['email']), array('count' => $count));
+                return make_json_result('', sprintf($_LANG['mailsend_fail'], $row['email']), array('count' => $count));
             }
         } else {
             //无效的邮件队列
             $sql = "DELETE FROM " . $ecs->table('email_sendlist') . " WHERE id = '$row[id]'";
             $db->query($sql);
             $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('email_sendlist'));
-            make_json_result('', sprintf($_LANG['mailsend_fail'], $row['email']), array('count' => $count));
+            return make_json_result('', sprintf($_LANG['mailsend_fail'], $row['email']), array('count' => $count));
         }
     }
 
@@ -1025,15 +1025,15 @@ class IndexController extends InitController
             switch ($license['flag']) {
                 case 'login_succ':
                     if (isset($license['request']['info']['service']['ecshop_b2c']['cert_auth']['auth_str'])) {
-                        make_json_result(process_login_license($license['request']['info']['service']['ecshop_b2c']['cert_auth']));
+                        return make_json_result(process_login_license($license['request']['info']['service']['ecshop_b2c']['cert_auth']));
                     } else {
-                        make_json_error(0);
+                        return make_json_error(0);
                     }
                     break;
 
                 case 'login_fail':
                 case 'login_ping_fail':
-                    make_json_error(0);
+                    return make_json_error(0);
                     break;
 
                 case 'reg_succ':
@@ -1041,26 +1041,26 @@ class IndexController extends InitController
                     switch ($_license['flag']) {
                         case 'login_succ':
                             if (isset($_license['request']['info']['service']['ecshop_b2c']['cert_auth']['auth_str']) && $_license['request']['info']['service']['ecshop_b2c']['cert_auth']['auth_str'] != '') {
-                                make_json_result(process_login_license($license['request']['info']['service']['ecshop_b2c']['cert_auth']));
+                                return make_json_result(process_login_license($license['request']['info']['service']['ecshop_b2c']['cert_auth']));
                             } else {
-                                make_json_error(0);
+                                return make_json_error(0);
                             }
                             break;
 
                         case 'login_fail':
                         case 'login_ping_fail':
-                            make_json_error(0);
+                            return make_json_error(0);
                             break;
                     }
                     break;
 
                 case 'reg_fail':
                 case 'reg_ping_fail':
-                    make_json_error(0);
+                    return make_json_error(0);
                     break;
             }
         } else {
-            make_json_error(0);
+            return make_json_error(0);
         }
     }
 

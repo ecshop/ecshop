@@ -43,7 +43,7 @@ class UserRankController extends InitController
         $ranks = $db->getAll("SELECT * FROM " . $ecs->table('user_rank'));
 
         $this->assign('user_ranks', $ranks);
-        make_json_result($smarty->fetch('user_rank.htm'));
+        return make_json_result($smarty->fetch('user_rank.htm'));
     }
 
     /*------------------------------------------------------ */
@@ -161,12 +161,12 @@ class UserRankController extends InitController
                 /* 管理员日志 */
                 admin_log($val, 'edit', 'user_rank');
                 clear_cache_files();
-                make_json_result(stripcslashes($val));
+                return make_json_result(stripcslashes($val));
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         } else {
-            make_json_error(sprintf($_LANG['rank_name_exists'], htmlspecialchars($val)));
+            return make_json_error(sprintf($_LANG['rank_name_exists'], htmlspecialchars($val)));
         }
     } /*
  *  ajax编辑积分下限
@@ -180,19 +180,19 @@ class UserRankController extends InitController
 
         $rank = $db->getRow("SELECT max_points, special_rank FROM " . $ecs->table('user_rank') . " WHERE rank_id = '$rank_id'");
         if ($val >= $rank['max_points'] && $rank['special_rank'] == 0) {
-            make_json_error($_LANG['js_languages']['integral_max_small']);
+            return make_json_error($_LANG['js_languages']['integral_max_small']);
         }
 
         if ($rank['special_rank'] == 0 && !$exc->is_only('min_points', $val, $rank_id)) {
-            make_json_error(sprintf($_LANG['integral_min_exists'], $val));
+            return make_json_error(sprintf($_LANG['integral_min_exists'], $val));
         }
 
         if ($exc->edit("min_points = '$val'", $rank_id)) {
             $rank_name = $exc->get_name($rank_id);
             admin_log(addslashes($rank_name), 'edit', 'user_rank');
-            make_json_result($val);
+            return make_json_result($val);
         } else {
-            make_json_error($db->error());
+            return make_json_error($db->error());
         }
     } /*
  *  ajax修改积分上限
@@ -207,18 +207,18 @@ class UserRankController extends InitController
         $rank = $db->getRow("SELECT min_points, special_rank FROM " . $ecs->table('user_rank') . " WHERE rank_id = '$rank_id'");
 
         if ($val <= $rank['min_points'] && $rank['special_rank'] == 0) {
-            make_json_error($_LANG['js_languages']['integral_max_small']);
+            return make_json_error($_LANG['js_languages']['integral_max_small']);
         }
 
         if ($rank['special_rank'] == 0 && !$exc->is_only('max_points', $val, $rank_id)) {
-            make_json_error(sprintf($_LANG['integral_max_exists'], $val));
+            return make_json_error(sprintf($_LANG['integral_max_exists'], $val));
         }
         if ($exc->edit("max_points = '$val'", $rank_id)) {
             $rank_name = $exc->get_name($rank_id);
             admin_log(addslashes($rank_name), 'edit', 'user_rank');
-            make_json_result($val);
+            return make_json_result($val);
         } else {
-            make_json_error($db->error());
+            return make_json_error($db->error());
         }
     } /*
  *  修改折扣率
@@ -231,16 +231,16 @@ class UserRankController extends InitController
         $val = empty($_REQUEST['val']) ? 0 : intval($_REQUEST['val']);
 
         if ($val < 1 || $val > 100) {
-            make_json_error($_LANG['js_languages']['discount_invalid']);
+            return make_json_error($_LANG['js_languages']['discount_invalid']);
         }
 
         if ($exc->edit("discount = '$val'", $rank_id)) {
             $rank_name = $exc->get_name($rank_id);
             admin_log(addslashes($rank_name), 'edit', 'user_rank');
             clear_cache_files();
-            make_json_result($val);
+            return make_json_result($val);
         } else {
-            make_json_error($val);
+            return make_json_error($val);
         }
     }
 
@@ -257,9 +257,9 @@ class UserRankController extends InitController
         if ($exc->edit("special_rank = '$is_special'", $rank_id)) {
             $rank_name = $exc->get_name($rank_id);
             admin_log(addslashes($rank_name), 'edit', 'user_rank');
-            make_json_result($is_special);
+            return make_json_result($is_special);
         } else {
-            make_json_error($db->error());
+            return make_json_error($db->error());
         }
     }
     /*------------------------------------------------------ */
@@ -276,9 +276,9 @@ class UserRankController extends InitController
             $rank_name = $exc->get_name($rank_id);
             admin_log(addslashes($rank_name), 'edit', 'user_rank');
             clear_cache_files();
-            make_json_result($is_show);
+            return make_json_result($is_show);
         } else {
-            make_json_error($db->error());
+            return make_json_error($db->error());
         }
     }
 }

@@ -280,7 +280,7 @@ class CronController extends InitController
             "SET enable = '$val' " .
             "WHERE cron_code = '$id' LIMIT 1";
         $db->query($sql);
-        make_json_result($val);
+        return make_json_result($val);
     }
 
     public function doAction()

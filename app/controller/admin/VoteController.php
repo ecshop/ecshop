@@ -52,7 +52,7 @@ class VoteController extends InitController
         $this->assign('record_count', $vote_list['record_count']);
         $this->assign('page_count', $vote_list['page_count']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('vote_list.htm'),
             '',
             array('filter' => $vote_list['filter'], 'page_count' => $vote_list['page_count'])
@@ -201,7 +201,7 @@ class VoteController extends InitController
         $this->assign('id', $id);
         $this->assign('option_arr', get_optionlist($id));
 
-        make_json_result($smarty->fetch('vote_option.htm'));
+        return make_json_result($smarty->fetch('vote_option.htm'));
     }
 
     /*------------------------------------------------------ */
@@ -219,7 +219,7 @@ class VoteController extends InitController
             $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('vote_option') .
                 " WHERE option_name = '$option_name' AND vote_id = '$vote_id'";
             if ($db->getOne($sql) != 0) {
-                make_json_error($_LANG['vote_option_exist']);
+                return make_json_error($_LANG['vote_option_exist']);
             } else {
                 $sql = 'INSERT INTO ' . $ecs->table('vote_option') . ' (vote_id, option_name, option_count) ' .
                     "VALUES ('$vote_id', '$option_name', 0)";
@@ -233,7 +233,7 @@ class VoteController extends InitController
                 return redirect($url);
             }
         } else {
-            make_json_error($_LANG['js_languages']['option_name_empty']);
+            return make_json_error($_LANG['js_languages']['option_name_empty']);
         }
     }
 
@@ -249,11 +249,11 @@ class VoteController extends InitController
 
         /* 检查名称是否重复 */
         if ($exc->num("vote_name", $vote_name, $id) != 0) {
-            make_json_error(sprintf($_LANG['vote_name_exist'], $vote_name));
+            return make_json_error(sprintf($_LANG['vote_name_exist'], $vote_name));
         } else {
             if ($exc->edit("vote_name = '$vote_name'", $id)) {
                 admin_log($vote_name, 'edit', 'vote');
-                make_json_result(stripslashes($vote_name));
+                return make_json_result(stripslashes($vote_name));
             }
         }
     }
@@ -274,11 +274,11 @@ class VoteController extends InitController
         $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('vote_option') .
             " WHERE option_name = '$option_name' AND vote_id = '$vote_id' AND option_id <> $id";
         if ($db->getOne($sql) != 0) {
-            make_json_error(sprintf($_LANG['vote_option_exist'], $option_name));
+            return make_json_error(sprintf($_LANG['vote_option_exist'], $option_name));
         } else {
             if ($exc_opn->edit("option_name = '$option_name'", $id)) {
                 admin_log($option_name, 'edit', 'vote');
-                make_json_result(stripslashes($option_name));
+                return make_json_result(stripslashes($option_name));
             }
         }
     }
@@ -296,7 +296,7 @@ class VoteController extends InitController
 
         if ($exc_opn->edit("option_order = '$option_order'", $id)) {
             admin_log($_LANG['edit_option_order'], 'edit', 'vote');
-            make_json_result(stripslashes($option_order));
+            return make_json_result(stripslashes($option_order));
         }
     }
 

@@ -144,7 +144,7 @@ class TagManageController extends InitController
         $sort_flag = sort_flag($tag_list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('tag_manage.htm'),
             '',
             array('filter' => $tag_list['filter'], 'page_count' => $tag_list['page_count'])
@@ -171,7 +171,7 @@ class TagManageController extends InitController
             );
         }
 
-        make_json_result($arr);
+        return make_json_result($arr);
     }
 
     /*------------------------------------------------------ */
@@ -226,7 +226,7 @@ class TagManageController extends InitController
             $url = 'tag_manage.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
             return redirect($url);
         } else {
-            make_json_error($db->error());
+            return make_json_error($db->error());
         }
     }
 
@@ -242,10 +242,10 @@ class TagManageController extends InitController
         $id = intval($_POST['id']);
 
         if (!tag_is_only($name, $id)) {
-            make_json_error(sprintf($_LANG['tagword_exist'], $name));
+            return make_json_error(sprintf($_LANG['tagword_exist'], $name));
         } else {
             edit_tag($name, $id);
-            make_json_result(stripslashes($name));
+            return make_json_result(stripslashes($name));
         }
     }
 

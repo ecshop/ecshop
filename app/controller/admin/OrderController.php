@@ -95,7 +95,7 @@ class OrderController extends InitController
         $this->assign('page_count', $order_list['page_count']);
         $sort_flag = sort_flag($order_list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
-        make_json_result($smarty->fetch('order_list.htm'), '', array('filter' => $order_list['filter'], 'page_count' => $order_list['page_count']));
+        return make_json_result($smarty->fetch('order_list.htm'), '', array('filter' => $order_list['filter'], 'page_count' => $order_list['page_count']));
     }
 
     /*------------------------------------------------------ */
@@ -506,7 +506,7 @@ class OrderController extends InitController
 
         $sort_flag = sort_flag($result['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
-        make_json_result($smarty->fetch('delivery_list.htm'), '', array('filter' => $result['filter'], 'page_count' => $result['page_count']));
+        return make_json_result($smarty->fetch('delivery_list.htm'), '', array('filter' => $result['filter'], 'page_count' => $result['page_count']));
     }
 
     /*------------------------------------------------------ */
@@ -965,7 +965,7 @@ class OrderController extends InitController
 
         $sort_flag = sort_flag($result['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
-        make_json_result($smarty->fetch('back_list.htm'), '', array('filter' => $result['filter'], 'page_count' => $result['page_count']));
+        return make_json_result($smarty->fetch('back_list.htm'), '', array('filter' => $result['filter'], 'page_count' => $result['page_count']));
     }
 
     /*------------------------------------------------------ */
@@ -3624,7 +3624,7 @@ class OrderController extends InitController
         $order = order_info($order_id);
         $operable_list = operable_list($order);
         if (!isset($operable_list['remove'])) {
-            make_json_error('Hacking attempt');
+            return make_json_error('Hacking attempt');
             exit;
         }
 
@@ -3640,7 +3640,7 @@ class OrderController extends InitController
             return redirect($url);
             exit;
         } else {
-            make_json_error($GLOBALS['db']->errorMsg());
+            return make_json_error($GLOBALS['db']->errorMsg());
         }
     }
 
@@ -3721,19 +3721,19 @@ class OrderController extends InitController
         $order_id = empty($_POST['id']) ? 0 : intval($_POST['id']);
 
         if ($order_id == 0) {
-            make_json_error('NO ORDER ID');
+            return make_json_error('NO ORDER ID');
             exit;
         }
 
         $sql = 'UPDATE ' . $GLOBALS['ecs']->table('order_info') . " SET invoice_no='$no' WHERE order_id = '$order_id'";
         if ($GLOBALS['db']->query($sql)) {
             if (empty($no)) {
-                make_json_result('N/A');
+                return make_json_result('N/A');
             } else {
-                make_json_result(stripcslashes($no));
+                return make_json_result(stripcslashes($no));
             }
         } else {
-            make_json_error($GLOBALS['db']->errorMsg());
+            return make_json_error($GLOBALS['db']->errorMsg());
         }
     }
 
@@ -3750,19 +3750,19 @@ class OrderController extends InitController
         $order_id = empty($_POST['id']) ? 0 : intval($_POST['id']);
 
         if ($order_id == 0) {
-            make_json_error('NO ORDER ID');
+            return make_json_error('NO ORDER ID');
             exit;
         }
 
         $sql = 'UPDATE ' . $GLOBALS['ecs']->table('order_info') . " SET pay_note='$no' WHERE order_id = '$order_id'";
         if ($GLOBALS['db']->query($sql)) {
             if (empty($no)) {
-                make_json_result('N/A');
+                return make_json_result('N/A');
             } else {
-                make_json_result(stripcslashes($no));
+                return make_json_result(stripcslashes($no));
             }
         } else {
-            make_json_error($GLOBALS['db']->errorMsg());
+            return make_json_error($GLOBALS['db']->errorMsg());
         }
     }
 
@@ -3774,7 +3774,7 @@ class OrderController extends InitController
         /* 取得订单商品 */
         $order_id = isset($_REQUEST['order_id']) ? intval($_REQUEST['order_id']) : 0;
         if (empty($order_id)) {
-            make_json_response('', 1, $_LANG['error_get_goods_info']);
+            return make_json_response('', 1, $_LANG['error_get_goods_info']);
         }
         $goods_list = array();
         $goods_attr = array();
@@ -3806,7 +3806,7 @@ class OrderController extends InitController
         $this->assign('goods_list', $goods_list);
         $str = $smarty->fetch('order_goods_info.htm');
         $goods[] = array('order_id' => $order_id, 'str' => $str);
-        make_json_result($goods);
+        return make_json_result($goods);
     }
 
     /**

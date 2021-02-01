@@ -79,7 +79,7 @@ class AccountLogController extends InitController
         $this->assign('record_count', $account_list['record_count']);
         $this->assign('page_count', $account_list['page_count']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('account_list.htm'),
             '',
             array('filter' => $account_list['filter'], 'page_count' => $account_list['page_count'])

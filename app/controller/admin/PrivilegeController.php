@@ -147,7 +147,7 @@ class PrivilegeController extends InitController
     {
         $this->assign('admin_list', get_admin_userlist());
 
-        make_json_result($smarty->fetch('privilege_list.htm'));
+        return make_json_result($smarty->fetch('privilege_list.htm'));
     }
 
     /*------------------------------------------------------ */
@@ -577,17 +577,17 @@ class PrivilegeController extends InitController
 
         /* demo这个管理员不允许删除 */
         if ($admin_name == 'demo') {
-            make_json_error($_LANG['edit_remove_cannot']);
+            return make_json_error($_LANG['edit_remove_cannot']);
         }
 
         /* ID为1的不允许删除 */
         if ($id == 1) {
-            make_json_error($_LANG['remove_cannot']);
+            return make_json_error($_LANG['remove_cannot']);
         }
 
         /* 管理员不能删除自己 */
         if ($id == $_SESSION['admin_id']) {
-            make_json_error($_LANG['remove_self_cannot']);
+            return make_json_error($_LANG['remove_self_cannot']);
         }
 
         if ($exc->drop($id)) {

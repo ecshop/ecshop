@@ -204,7 +204,7 @@ class PackageController extends InitController
         $sort_flag = sort_flag($packages['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('package_list.htm'),
             '',
             array('filter' => $packages['filter'], 'page_count' => $packages['page_count'])
@@ -227,11 +227,11 @@ class PackageController extends InitController
             " FROM " . $ecs->table('goods_activity') .
             " WHERE act_type='" . GAT_PACKAGE . "' AND act_name='$val' AND act_id <> '$id'";
         if ($db->getOne($sql)) {
-            make_json_error(sprintf($_LANG['package_exist'], $val));
+            return make_json_error(sprintf($_LANG['package_exist'], $val));
         }
 
         $exc->edit("act_name='$val'", $id);
-        make_json_result(stripslashes($val));
+        return make_json_result(stripslashes($val));
     }
 
     /*------------------------------------------------------ */
@@ -256,7 +256,7 @@ class PackageController extends InitController
             $opt[$key]['products'] = get_good_products($val['goods_id']);
         }
 
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -296,7 +296,7 @@ class PackageController extends InitController
         }
 
         clear_cache_files();
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -354,7 +354,7 @@ class PackageController extends InitController
         }
 
         clear_cache_files();
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
 

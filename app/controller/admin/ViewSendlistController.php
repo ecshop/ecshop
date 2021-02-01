@@ -36,7 +36,7 @@ class ViewSendlistController extends InitController
         $sort_flag = sort_flag($listdb['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result($smarty->fetch('view_sendlist.htm'), '', array('filter' => $listdb['filter'], 'page_count' => $listdb['page_count']));
+        return make_json_result($smarty->fetch('view_sendlist.htm'), '', array('filter' => $listdb['filter'], 'page_count' => $listdb['page_count']));
     }
 
     public function delAction()

@@ -66,7 +66,7 @@ class ArticleController extends InitController
         $sort_flag = sort_flag($article_list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('article_list.htm'),
             '',
             array('filter' => $article_list['filter'], 'page_count' => $article_list['page_count'])
@@ -290,14 +290,14 @@ class ArticleController extends InitController
 
         /* 检查文章标题是否重复 */
         if ($exc->num("title", $title, $id) != 0) {
-            make_json_error(sprintf($_LANG['title_exist'], $title));
+            return make_json_error(sprintf($_LANG['title_exist'], $title));
         } else {
             if ($exc->edit("title = '$title'", $id)) {
                 clear_cache_files();
                 admin_log($title, 'edit', 'article');
-                make_json_result(stripslashes($title));
+                return make_json_result(stripslashes($title));
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
     }
@@ -315,7 +315,7 @@ class ArticleController extends InitController
         $exc->edit("is_open = '$val'", $id);
         clear_cache_files();
 
-        make_json_result($val);
+        return make_json_result($val);
     }
 
     /*------------------------------------------------------ */
@@ -331,7 +331,7 @@ class ArticleController extends InitController
         $exc->edit("article_type = '$val'", $id);
         clear_cache_files();
 
-        make_json_result($val);
+        return make_json_result($val);
     }
 
 
@@ -398,7 +398,7 @@ class ArticleController extends InitController
                 'data' => '');
         }
 
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -433,7 +433,7 @@ class ArticleController extends InitController
                 'data' => '');
         }
 
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -455,7 +455,7 @@ class ArticleController extends InitController
                 'data' => $val['shop_price']);
         }
 
-        make_json_result($opt);
+        return make_json_result($opt);
     }
     /*------------------------------------------------------ */
     //-- 批量操作

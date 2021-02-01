@@ -47,7 +47,7 @@ class NavigatorController extends InitController
         $sort_flag = sort_flag($navdb['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result($smarty->fetch('navigator.htm'), '', array('filter' => $navdb['filter'], 'page_count' => $navdb['page_count']));
+        return make_json_result($smarty->fetch('navigator.htm'), '', array('filter' => $navdb['filter'], 'page_count' => $navdb['page_count']));
     }
     /*------------------------------------------------------ */
     //-- 自定义导航栏增加
@@ -204,13 +204,13 @@ class NavigatorController extends InitController
 
         /* 检查输入的值是否合法 */
         if (!preg_match("/^[0-9]+$/", $order)) {
-            make_json_error(sprintf($_LANG['enter_int'], $order));
+            return make_json_error(sprintf($_LANG['enter_int'], $order));
         } else {
             if ($exc->edit("vieworder = '$order'", $id)) {
                 clear_cache_files();
-                make_json_result(stripslashes($order));
+                return make_json_result(stripslashes($order));
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
     }
@@ -232,9 +232,9 @@ class NavigatorController extends InitController
 
         if (nav_update($id, array('ifshow' => $val)) != false) {
             clear_cache_files();
-            make_json_result($val);
+            return make_json_result($val);
         } else {
-            make_json_error($db->error());
+            return make_json_error($db->error());
         }
     }
 
@@ -249,9 +249,9 @@ class NavigatorController extends InitController
 
         if (nav_update($id, array('opennew' => $val)) != false) {
             clear_cache_files();
-            make_json_result($val);
+            return make_json_result($val);
         } else {
-            make_json_error($db->error());
+            return make_json_error($db->error());
         }
     }
 

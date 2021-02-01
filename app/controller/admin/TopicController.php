@@ -255,7 +255,7 @@ class TopicController extends InitController
                 'text' => $val['goods_name']);
         }
 
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     public function deleteAction()
@@ -300,7 +300,7 @@ class TopicController extends InitController
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         $tpl = 'topic_list.htm';
-        make_json_result($smarty->fetch($tpl), '', array('filter' => $topic_list['filter'], 'page_count' => $topic_list['page_count']));
+        return make_json_result($smarty->fetch($tpl), '', array('filter' => $topic_list['filter'], 'page_count' => $topic_list['page_count']));
     }
 
     /**

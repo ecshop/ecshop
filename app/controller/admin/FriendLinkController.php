@@ -60,7 +60,7 @@ class FriendLinkController extends InitController
         $sort_flag = sort_flag($links_list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('link_list.htm'),
             '',
             array('filter' => $links_list['filter'], 'page_count' => $links_list['page_count'])
@@ -256,14 +256,14 @@ class FriendLinkController extends InitController
 
         /* 检查链接名称是否重复 */
         if ($exc->num("link_name", $link_name, $id) != 0) {
-            make_json_error(sprintf($_LANG['link_name_exist'], $link_name));
+            return make_json_error(sprintf($_LANG['link_name_exist'], $link_name));
         } else {
             if ($exc->edit("link_name = '$link_name'", $id)) {
                 admin_log($link_name, 'edit', 'friendlink');
                 clear_cache_files();
-                make_json_result(stripslashes($link_name));
+                return make_json_result(stripslashes($link_name));
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
     }
@@ -306,11 +306,11 @@ class FriendLinkController extends InitController
 
         /* 检查输入的值是否合法 */
         if (!preg_match("/^[0-9]+$/", $order)) {
-            make_json_error(sprintf($_LANG['enter_int'], $order));
+            return make_json_error(sprintf($_LANG['enter_int'], $order));
         } else {
             if ($exc->edit("show_order = '$order'", $id)) {
                 clear_cache_files();
-                make_json_result(stripslashes($order));
+                return make_json_result(stripslashes($order));
             }
         }
     }

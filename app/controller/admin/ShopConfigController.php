@@ -210,9 +210,9 @@ class ShopConfigController extends InitController
         $_CFG['mail_charset'] = trim($_POST['mail_charset']);
 
         if (send_mail('', $email, $_LANG['test_mail_title'], $_LANG['cfg_name']['email_content'], 0)) {
-            make_json_result('', $_LANG['sendemail_success'] . $email);
+            return make_json_result('', $_LANG['sendemail_success'] . $email);
         } else {
-            make_json_error(join("\n", $err->_message));
+            return make_json_error(join("\n", $err->_message));
         }
     }
 

@@ -85,7 +85,7 @@ class ConvertController extends InitController
 
         $diff_arr = array_diff($required_table_list, $table_list);
         if ($diff_arr) {
-            make_json_error(sprintf($_LANG['table_error'], join(',', $table_list)));
+            return make_json_error(sprintf($_LANG['table_error'], join(',', $table_list)));
         }
 
         /* 检查源目录是否存在，是否可读 */
@@ -93,16 +93,16 @@ class ConvertController extends InitController
         foreach ($dir_list as $dir) {
             $cur_dir = ($config->path . $dir);
             if (!file_exists($cur_dir) || !is_dir($cur_dir)) {
-                make_json_error(sprintf($_LANG['dir_error'], $cur_dir));
+                return make_json_error(sprintf($_LANG['dir_error'], $cur_dir));
             }
 
             if (file_mode_info($cur_dir) & 1 != 1) {
-                make_json_error(sprintf($_LANG['dir_not_readable'], $cur_dir));
+                return make_json_error(sprintf($_LANG['dir_not_readable'], $cur_dir));
             }
 
             $res = check_files_readable($cur_dir);
             if ($res !== true) {
-                make_json_error(sprintf($_LANG['file_not_readable'], $res));
+                return make_json_error(sprintf($_LANG['file_not_readable'], $res));
             }
         }
 
@@ -123,11 +123,11 @@ class ConvertController extends InitController
         /* 检查目的目录是否存在，是否可写 */
         foreach ($to_dir_list as $to_dir) {
             if (!file_exists($to_dir) || !is_dir($to_dir)) {
-                make_json_error(sprintf($_LANG['dir_error'], $to_dir));
+                return make_json_error(sprintf($_LANG['dir_error'], $to_dir));
             }
 
             if (file_mode_info($to_dir) & 4 != 4) {
-                make_json_error(sprintf($_LANG['dir_not_writable'], $to_dir));
+                return make_json_error(sprintf($_LANG['dir_not_writable'], $to_dir));
             }
         }
 
@@ -141,7 +141,7 @@ class ConvertController extends InitController
         $step = $convert->next_step('');
 
         /* 返回 */
-        make_json_result($step, $_LANG[$step]);
+        return make_json_result($step, $_LANG[$step]);
     }
 
     /*------------------------------------------------------ */
@@ -175,14 +175,14 @@ class ConvertController extends InitController
         /* 执行步骤 */
         $result = $convert->process($step);
         if ($result !== true) {
-            make_json_error($result);
+            return make_json_error($result);
         }
 
         /* 取得下一步操作 */
         $step = $convert->next_step($step);
 
         /* 返回 */
-        make_json_result($step, empty($_LANG[$step]) ? '' : $_LANG[$step]);
+        return make_json_result($step, empty($_LANG[$step]) ? '' : $_LANG[$step]);
     }
 
     /**

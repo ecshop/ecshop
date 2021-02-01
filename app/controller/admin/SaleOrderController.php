@@ -62,7 +62,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
     $sort_flag = sort_flag($goods_order_data['filter']);
     $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-    make_json_result($smarty->fetch('sale_order.htm'), '', array('filter' => $goods_order_data['filter'], 'page_count' => $goods_order_data['page_count']));
+    return make_json_result($smarty->fetch('sale_order.htm'), '', array('filter' => $goods_order_data['filter'], 'page_count' => $goods_order_data['page_count']));
 }
 function listAction()
 {

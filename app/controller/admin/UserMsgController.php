@@ -134,7 +134,7 @@ class UserMsgController extends InitController
         $sort_flag = sort_flag($msg_list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result($smarty->fetch('msg_list.htm'), '', array('filter' => $msg_list['filter'], 'page_count' => $msg_list['page_count']));
+        return make_json_result($smarty->fetch('msg_list.htm'), '', array('filter' => $msg_list['filter'], 'page_count' => $msg_list['page_count']));
     }
     /*------------------------------------------------------ */
     //-- ajax 删除留言
@@ -160,7 +160,7 @@ class UserMsgController extends InitController
             $url = 'user_msg.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
             return redirect($url);
         } else {
-            make_json_error($GLOBALS['db']->error());
+            return make_json_error($GLOBALS['db']->error());
         }
     }
 

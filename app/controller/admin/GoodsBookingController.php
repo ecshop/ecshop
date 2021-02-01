@@ -50,7 +50,7 @@ class GoodsBookingController extends InitController
         $sort_flag = sort_flag($list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('booking_list.htm'),
             '',
             array('filter' => $list['filter'], 'page_count' => $list['page_count'])

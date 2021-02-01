@@ -102,7 +102,7 @@ class MailTemplateController extends InitController
         $this->assign('templates', $templates);
         $this->assign('template', $content);
 
-        make_json_result($smarty->fetch('mail_template.htm'));
+        return make_json_result($smarty->fetch('mail_template.htm'));
     }
 
     /*------------------------------------------------------ */

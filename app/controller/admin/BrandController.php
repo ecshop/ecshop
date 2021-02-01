@@ -175,13 +175,13 @@ class BrandController extends InitController
 
         /* 检查名称是否重复 */
         if ($exc->num("brand_name", $name, $id) != 0) {
-            make_json_error(sprintf($_LANG['brandname_exist'], $name));
+            return make_json_error(sprintf($_LANG['brandname_exist'], $name));
         } else {
             if ($exc->edit("brand_name = '$name'", $id)) {
                 admin_log($name, 'edit', 'brand');
-                make_json_result(stripslashes($name));
+                return make_json_result(stripslashes($name));
             } else {
-                make_json_result(sprintf($_LANG['brandedit_fail'], $name));
+                return make_json_result(sprintf($_LANG['brandedit_fail'], $name));
             }
         }
     }
@@ -191,7 +191,7 @@ class BrandController extends InitController
         $brand = empty($_REQUEST['brand']) ? '' : json_str_iconv(trim($_REQUEST['brand']));
 
         if (brand_exists($brand)) {
-            make_json_error($_LANG['brand_name_exist']);
+            return make_json_error($_LANG['brand_name_exist']);
         } else {
             $sql = "INSERT INTO " . $ecs->table('brand') . "(brand_name)" .
                 "VALUES ( '$brand')";
@@ -201,7 +201,7 @@ class BrandController extends InitController
 
             $arr = array("id" => $brand_id, "brand" => $brand);
 
-            make_json_result($arr);
+            return make_json_result($arr);
         }
     }
     /*------------------------------------------------------ */
@@ -218,9 +218,9 @@ class BrandController extends InitController
         if ($exc->edit("sort_order = '$order'", $id)) {
             admin_log(addslashes($name), 'edit', 'brand');
 
-            make_json_result($order);
+            return make_json_result($order);
         } else {
-            make_json_error(sprintf($_LANG['brandedit_fail'], $name));
+            return make_json_error(sprintf($_LANG['brandedit_fail'], $name));
         }
     }
 
@@ -236,7 +236,7 @@ class BrandController extends InitController
 
         $exc->edit("is_show='$val'", $id);
 
-        make_json_result($val);
+        return make_json_result($val);
     }
 
     /*------------------------------------------------------ */
@@ -299,7 +299,7 @@ class BrandController extends InitController
         $this->assign('record_count', $brand_list['record_count']);
         $this->assign('page_count', $brand_list['page_count']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('brand_list.htm'),
             '',
             array('filter' => $brand_list['filter'], 'page_count' => $brand_list['page_count'])

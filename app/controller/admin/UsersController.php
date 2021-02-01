@@ -59,7 +59,7 @@ class UsersController extends InitController
         $sort_flag = sort_flag($user_list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result($smarty->fetch('users_list.htm'), '', array('filter' => $user_list['filter'], 'page_count' => $user_list['page_count']));
+        return make_json_result($smarty->fetch('users_list.htm'), '', array('filter' => $user_list['filter'], 'page_count' => $user_list['page_count']));
     }
 
     /*------------------------------------------------------ */
@@ -415,12 +415,12 @@ class UsersController extends InitController
         $id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 
         if ($id == 0) {
-            make_json_error('NO USER ID');
+            return make_json_error('NO USER ID');
             return;
         }
 
         if ($username == '') {
-            make_json_error($GLOBALS['_LANG']['username_empty']);
+            return make_json_error($GLOBALS['_LANG']['username_empty']);
             return;
         }
 
@@ -433,10 +433,10 @@ class UsersController extends InitController
             }
 
             admin_log(addslashes($username), 'edit', 'users');
-            make_json_result(stripcslashes($username));
+            return make_json_result(stripcslashes($username));
         } else {
             $msg = ($users->error == ERR_USERNAME_EXISTS) ? $GLOBALS['_LANG']['username_exists'] : $GLOBALS['_LANG']['edit_user_failed'];
-            make_json_error($msg);
+            return make_json_error($msg);
         }
     }
 
@@ -461,13 +461,13 @@ class UsersController extends InitController
             if ($users->edit_user(array('username' => $username, 'email' => $email))) {
                 admin_log(addslashes($username), 'edit', 'users');
 
-                make_json_result(stripcslashes($email));
+                return make_json_result(stripcslashes($email));
             } else {
                 $msg = ($users->error == ERR_EMAIL_EXISTS) ? $GLOBALS['_LANG']['email_exists'] : $GLOBALS['_LANG']['edit_user_failed'];
-                make_json_error($msg);
+                return make_json_error($msg);
             }
         } else {
-            make_json_error($GLOBALS['_LANG']['invalid_email']);
+            return make_json_error($GLOBALS['_LANG']['invalid_email']);
         }
     }
 

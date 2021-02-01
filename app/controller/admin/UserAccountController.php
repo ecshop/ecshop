@@ -355,7 +355,7 @@ class UserAccountController extends InitController
         $sort_flag = sort_flag($list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result($smarty->fetch('user_account_list.htm'), '', array('filter' => $list['filter'], 'page_count' => $list['page_count']));
+        return make_json_result($smarty->fetch('user_account_list.htm'), '', array('filter' => $list['filter'], 'page_count' => $list['page_count']));
     }
     /*------------------------------------------------------ */
     //-- ajax删除一条信息
@@ -375,7 +375,7 @@ class UserAccountController extends InitController
             $url = 'user_account.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
             return redirect($url);
         } else {
-            make_json_error($db->error());
+            return make_json_error($db->error());
         }
     }
 

@@ -54,7 +54,7 @@ class BonusController extends InitController
         $sort_flag = sort_flag($list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('bonus_type.htm'),
             '',
             array('filter' => $list['filter'], 'page_count' => $list['page_count'])
@@ -74,11 +74,11 @@ class BonusController extends InitController
 
         /* 检查红包类型名称是否重复 */
         if (!$exc->is_only('type_name', $id, $val)) {
-            make_json_error($_LANG['type_name_exist']);
+            return make_json_error($_LANG['type_name_exist']);
         } else {
             $exc->edit("type_name='$val'", $id);
 
-            make_json_result(stripslashes($val));
+            return make_json_result(stripslashes($val));
         }
     }
 
@@ -95,11 +95,11 @@ class BonusController extends InitController
 
         /* 检查红包类型名称是否重复 */
         if ($val <= 0) {
-            make_json_error($_LANG['type_money_error']);
+            return make_json_error($_LANG['type_money_error']);
         } else {
             $exc->edit("type_money='$val'", $id);
 
-            make_json_result(number_format($val, 2));
+            return make_json_result(number_format($val, 2));
         }
     }
 
@@ -115,11 +115,11 @@ class BonusController extends InitController
         $val = floatval($_POST['val']);
 
         if ($val < 0) {
-            make_json_error($_LANG['min_amount_empty']);
+            return make_json_error($_LANG['min_amount_empty']);
         } else {
             $exc->edit("min_amount='$val'", $id);
 
-            make_json_result(number_format($val, 2));
+            return make_json_result(number_format($val, 2));
         }
     }
 
@@ -610,7 +610,7 @@ class BonusController extends InitController
                 'data' => $val['shop_price']);
         }
 
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -642,7 +642,7 @@ class BonusController extends InitController
                 'data' => '');
         }
 
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -673,7 +673,7 @@ class BonusController extends InitController
                 'data' => '');
         }
 
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /*------------------------------------------------------ */
@@ -687,7 +687,7 @@ class BonusController extends InitController
             " WHERE user_name LIKE '%" . mysql_like_quote($keywords) . "%' OR user_id LIKE '%" . mysql_like_quote($keywords) . "%'";
         $row = $db->getAll($sql);
 
-        make_json_result($row);
+        return make_json_result($row);
     }
 
     /*------------------------------------------------------ */
@@ -748,7 +748,7 @@ class BonusController extends InitController
         $sort_flag = sort_flag($list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('bonus_list.htm'),
             '',
             array('filter' => $list['filter'], 'page_count' => $list['page_count'])

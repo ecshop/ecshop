@@ -52,7 +52,7 @@ class PackController extends InitController
         $sort_flag = sort_flag($packs_list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result($smarty->fetch('pack_list.htm'), '', array('filter' => $packs_list['filter'], 'page_count' => $packs_list['page_count']));
+        return make_json_result($smarty->fetch('pack_list.htm'), '', array('filter' => $packs_list['filter'], 'page_count' => $packs_list['page_count']));
     }
     /*------------------------------------------------------ */
     //-- 添加新包装
@@ -203,12 +203,12 @@ class PackController extends InitController
         $pack_name = $exc->get_name($id);
 
         if (!$exc->is_only('pack_name', $val, $id)) {
-            make_json_error(sprintf($_LANG['packname_exist'], $pack_name));
+            return make_json_error(sprintf($_LANG['packname_exist'], $pack_name));
         } else {
             $exc->edit("pack_name='$val'", $id);
 
             admin_log($val, 'edit', 'pack');
-            make_json_result(stripslashes($val));
+            return make_json_result(stripslashes($val));
         }
     }
 
@@ -228,7 +228,7 @@ class PackController extends InitController
 
         $exc->edit("pack_fee='$val'", $id);
         admin_log(addslashes($pack_name), 'edit', 'pack');
-        make_json_result(number_format($val, 2));
+        return make_json_result(number_format($val, 2));
     }
 
     /*------------------------------------------------------ */
@@ -247,7 +247,7 @@ class PackController extends InitController
 
         $exc->edit("free_money='$val'", $id);
         admin_log(addslashes($pack_name), 'edit', 'pack');
-        make_json_result(number_format($val, 2));
+        return make_json_result(number_format($val, 2));
     }
 
     /*------------------------------------------------------ */
@@ -273,7 +273,7 @@ class PackController extends InitController
 
             return redirect($url);
         } else {
-            make_json_error($_LANG['packremove_falure']);
+            return make_json_error($_LANG['packremove_falure']);
             return false;
         }
     }

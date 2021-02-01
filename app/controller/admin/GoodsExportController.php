@@ -121,7 +121,7 @@ class GoodsExportController extends InitController
     {
         $cat_id = isset($_REQUEST['cat_id']) ? intval($_REQUEST['cat_id']) : 0;
         $goods_fields = my_array_merge($_LANG['custom'], get_attributes($cat_id));
-        make_json_result($goods_fields);
+        return make_json_result($goods_fields);
     }
 
     public function act_export_customAction()
@@ -219,7 +219,7 @@ class GoodsExportController extends InitController
                 'goods_name' => $val['goods_name']
             );
         }
-        make_json_result($opt);
+        return make_json_result($opt);
     }
 
     /**

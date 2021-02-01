@@ -58,7 +58,7 @@ class AttributeController extends InitController
         $sort_flag = sort_flag($list['filter']);
         $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        make_json_result(
+        return make_json_result(
             $smarty->fetch('attribute_list.htm'),
             '',
             array('filter' => $list['filter'], 'page_count' => $list['page_count'])
@@ -217,14 +217,14 @@ class AttributeController extends InitController
 
         /* 检查属性名称是否重复 */
         if (!$exc->is_only('attr_name', $val, $id, " cat_id = '$cat_id'")) {
-            make_json_error($_LANG['name_exist']);
+            return make_json_error($_LANG['name_exist']);
         }
 
         $exc->edit("attr_name='$val'", $id);
 
         admin_log($val, 'edit', 'attribute');
 
-        make_json_result(stripslashes($val));
+        return make_json_result(stripslashes($val));
     }
 
     /*------------------------------------------------------ */
@@ -242,7 +242,7 @@ class AttributeController extends InitController
 
         admin_log(addslashes($exc->get_name($id)), 'edit', 'attribute');
 
-        make_json_result(stripslashes($val));
+        return make_json_result(stripslashes($val));
     }
 
     /*------------------------------------------------------ */
@@ -284,7 +284,7 @@ class AttributeController extends InitController
             $drop_confirm = $_LANG['drop_confirm'];
         }
 
-        make_json_result(array('attr_id' => $id, 'drop_confirm' => $drop_confirm));
+        return make_json_result(array('attr_id' => $id, 'drop_confirm' => $drop_confirm));
     }
 
     /*------------------------------------------------------ */
@@ -298,7 +298,7 @@ class AttributeController extends InitController
         $cat_id = intval($_GET['cat_id']);
         $groups = get_attr_groups($cat_id);
 
-        make_json_result($groups);
+        return make_json_result($groups);
     }
 
     /**

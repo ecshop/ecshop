@@ -14,8 +14,6 @@ class CloudController extends InitController
 
     public function indexAction()
     {
-        require(ROOT_PATH . 'includes/cls_transport.php');
-        require(ROOT_PATH . 'includes/cls_json.php');
 
         $data['api_ver'] = '1.0';
         $data['version'] = VERSION;

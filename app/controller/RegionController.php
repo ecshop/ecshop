@@ -12,7 +12,6 @@ class RegionController extends InitController
         define('INIT_NO_USERS', true);
         define('INIT_NO_SMARTY', true);
 
-        require(ROOT_PATH . 'includes/cls_json.php');
 
         header('Content-type: text/html; charset=' . EC_CHARSET);
 

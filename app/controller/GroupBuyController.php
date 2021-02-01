@@ -194,7 +194,6 @@ class GroupBuyController extends InitController
         $goods_attr = join(chr(13) . chr(10), $attr_list);
 
         /* 更新：清空购物车中所有团购商品 */
-        include_once(ROOT_PATH . 'includes/lib_order.php');
         clear_cart(CART_GROUP_BUY_GOODS);
 
         /* 更新：加入购物车 */

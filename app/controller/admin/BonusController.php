@@ -480,7 +480,6 @@ class BonusController extends InitController
         }
 
         /* 取得红包信息 */
-        include_once(ROOT_PATH . 'includes/lib_order.php');
         $bonus = bonus_info($bonus_id);
         if (empty($bonus)) {
             sys_msg($_LANG['bonus_not_exist']);
@@ -596,7 +595,6 @@ class BonusController extends InitController
     /*------------------------------------------------------ */
     public function get_goods_listAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         $filters = $json->decode($_GET['JSON']);
@@ -618,7 +616,6 @@ class BonusController extends InitController
     /*------------------------------------------------------ */
     public function add_bonus_goodsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         check_authz_json('bonus_manage');
@@ -650,7 +647,6 @@ class BonusController extends InitController
     /*------------------------------------------------------ */
     public function drop_bonus_goodsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         check_authz_json('bonus_manage');

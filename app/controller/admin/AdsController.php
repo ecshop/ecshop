@@ -12,7 +12,6 @@ class AdsController extends InitController
         parent::initialize();
 
 
-        include_once(ROOT_PATH . 'includes/cls_image.php');
         $image = new cls_image($_CFG['bgcolor']);
         $exc = new exchange($ecs->table("ad"), $db, 'ad_id', 'ad_name');
         $allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp', 'swf');

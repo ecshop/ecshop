@@ -12,7 +12,6 @@ class PackController extends InitController
         parent::initialize();
 
 
-        include_once(ROOT_PATH . 'includes/cls_image.php');
         $image = new cls_image($_CFG['bgcolor']);
 
         $exc = new exchange($ecs->table("pack"), $db, 'pack_id', 'pack_name');

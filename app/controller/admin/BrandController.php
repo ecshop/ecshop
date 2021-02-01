@@ -11,7 +11,6 @@ class BrandController extends InitController
     {
         parent::initialize();
 
-        include_once(ROOT_PATH . 'includes/cls_image.php');
         $image = new cls_image($_CFG['bgcolor']);
 
         $exc = new exchange($ecs->table("brand"), $db, 'brand_id', 'brand_name');

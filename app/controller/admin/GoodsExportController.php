@@ -35,7 +35,6 @@ class GoodsExportController extends InitController
         /* 检查权限 */
         admin_priv('goods_export');
 
-        include_once('includes/cls_phpzip.php');
         $zip = new PHPZip;
 
         $where = get_export_where_sql($_POST);
@@ -134,7 +133,6 @@ class GoodsExportController extends InitController
         /* 检查权限 */
         admin_priv('goods_export');
 
-        include_once('includes/cls_phpzip.php');
         $zip = new PHPZip;
 
         $where = get_export_where_sql($_POST);
@@ -208,7 +206,6 @@ class GoodsExportController extends InitController
 
     public function get_goods_listAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
         $filters = $json->decode($_REQUEST['JSON']);
         $arr = get_goods_list($filters);

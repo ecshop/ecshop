@@ -11,7 +11,6 @@ class CaptchaController extends InitController
     {
         define('INIT_NO_SMARTY', true);
 
-        require(ROOT_PATH . 'includes/cls_captcha.php');
 
         $img = new captcha(ROOT_PATH . 'data/captcha/', $_CFG['captcha_width'], $_CFG['captcha_height']);
         @ob_end_clean(); //清除之前出现的多余输入

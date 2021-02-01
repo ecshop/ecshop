@@ -156,7 +156,6 @@ class GoodsController extends InitController
 
     public function priceAction()
     {
-        include('includes/cls_json.php');
 
         $json = new JSON;
         $res = array('err_msg' => '', 'result' => '', 'qty' => 1);
@@ -188,7 +187,6 @@ class GoodsController extends InitController
 
     public function gotopageAction()
     {
-        include('includes/cls_json.php');
 
         $json = new JSON;
         $res = array('err_msg' => '', 'result' => '');

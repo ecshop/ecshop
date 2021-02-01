@@ -90,7 +90,6 @@ class SnatchController extends InitController
     /* 用户出价处理 */
     public function bidAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON();
         $result = array('error' => 0, 'content' => '');
 
@@ -224,7 +223,6 @@ class SnatchController extends InitController
         }
 
         /* 清空购物车中所有商品 */
-        include_once(ROOT_PATH . 'includes/lib_order.php');
         clear_cart(CART_SNATCH_GOODS);
 
         /* 加入购物车 */

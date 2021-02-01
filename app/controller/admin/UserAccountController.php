@@ -187,7 +187,6 @@ class UserAccountController extends InitController
 
         //如果是预付款并且未确认，向pay_log插入一条记录
         if ($process_type == 0 && $is_paid == 0) {
-            include_once(ROOT_PATH . 'includes/lib_order.php');
 
             /* 取支付方式信息 */
             $payment_info = array();

@@ -548,7 +548,6 @@ class ClipsService
             " WHERE user_id = '" . $user_id . "' AND add_time > '" . local_strtotime('-1 months') . "'";
         $info['order_count'] = $GLOBALS['db']->getOne($sql);
 
-        include_once(ROOT_PATH . 'includes/lib_order.php');
         $sql = "SELECT order_id, order_sn " .
             " FROM " . $GLOBALS['ecs']->table('order_info') .
             " WHERE user_id = '" . $user_id . "' AND shipping_time > '" . $last_time . "'" . order_query_sql('shipped');

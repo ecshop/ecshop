@@ -11,8 +11,6 @@ class OrderController extends InitController
     {
         parent::initialize();
 
-        require_once(ROOT_PATH . 'includes/lib_order.php');
-        require_once(ROOT_PATH . 'includes/lib_goods.php');
     }
 
     /*------------------------------------------------------ */
@@ -781,7 +779,6 @@ class OrderController extends InitController
 
             /* 如果需要，发短信 */
             if ($GLOBALS['_CFG']['sms_order_shipped'] == '1' && $order['mobile'] != '') {
-                include_once('../includes/cls_sms.php');
                 $sms = new sms();
                 $sms->send($order['mobile'], sprintf(
                     $GLOBALS['_LANG']['order_shipped_sms'],
@@ -3537,7 +3534,6 @@ class OrderController extends InitController
 
     public function jsonAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON();
 
         $func = $_REQUEST['func'];
@@ -3590,7 +3586,6 @@ class OrderController extends InitController
         /* 检查权限 */
         admin_priv('order_os_edit');
 
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON();
 
         $from_order_sn = empty($_POST['from_order_sn']) ? '' : json_str_iconv(substr($_POST['from_order_sn'], 1));
@@ -3649,7 +3644,6 @@ class OrderController extends InitController
     /*------------------------------------------------------ */
     public function search_usersAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON();
 
         $id_name = empty($_GET['id_name']) ? '' : json_str_iconv(trim($_GET['id_name']));
@@ -3679,7 +3673,6 @@ class OrderController extends InitController
     /*------------------------------------------------------ */
     public function search_goodsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON();
 
         $keyword = empty($_GET['keyword']) ? '' : json_str_iconv(trim($_GET['keyword']));
@@ -3880,7 +3873,6 @@ class OrderController extends InitController
      */
     public function update_order_amount($order_id)
     {
-        include_once(ROOT_PATH . 'includes/lib_order.php');
         //更新订单总金额
         $sql = "UPDATE " . $GLOBALS['ecs']->table('order_info') .
             " SET order_amount = " . order_due_field() .
@@ -4055,7 +4047,6 @@ class OrderController extends InitController
         if (!empty($list['split'])) {
             /* 如果是团购活动且未处理成功，不能发货 */
             if ($order['extension_code'] == 'group_buy') {
-                include_once(ROOT_PATH . 'includes/lib_goods.php');
                 $group_buy = group_buy_info(intval($order['extension_id']));
                 if ($group_buy['status'] != GBS_SUCCEED) {
                     unset($list['split']);
@@ -5258,7 +5249,6 @@ class OrderController extends InitController
         }
 
         /* 包含加密解密函数所在文件 */
-        include_once(ROOT_PATH . 'includes/lib_code.php');
 
         // 取出超值礼包中的虚拟商品信息
         foreach ($goods as $virtual_goods_key => $virtual_goods_value) {

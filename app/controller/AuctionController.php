@@ -139,7 +139,6 @@ class AuctionController extends InitController
     /*------------------------------------------------------ */
     public function bidAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_order.php');
 
         /* 取得参数：拍卖活动id */
         $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
@@ -323,7 +322,6 @@ class AuctionController extends InitController
         }
 
         /* 清空购物车中所有拍卖商品 */
-        include_once(ROOT_PATH . 'includes/lib_order.php');
         clear_cart(CART_AUCTION_GOODS);
 
         /* 加入购物车 */

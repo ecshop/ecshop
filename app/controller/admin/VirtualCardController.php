@@ -10,7 +10,6 @@ class VirtualCardController extends InitController
     public function initialize()
     {
         parent::initialize();
-        require_once(ROOT_PATH . 'includes/lib_code.php');
     }
 
 

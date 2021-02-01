@@ -16,11 +16,9 @@ class MessageController extends InitController
 
     public function act_add_messageAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         /* 验证码防止灌水刷屏 */
         if ((intval($_CFG['captcha']) & CAPTCHA_MESSAGE) && gd_version() > 0) {
-            include_once('includes/cls_captcha.php');
             $validator = new captcha();
             if (!$validator->check_word($_POST['captcha'])) {
                 return $this->show_message($_LANG['invalid_captcha']);

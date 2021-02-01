@@ -12,8 +12,6 @@ class DatabaseController extends InitController
         parent::initialize();
 
 
-        require_once(ROOT_PATH . ADMIN_PATH . '/includes/cls_sql_dump.php');
-
         @ini_set('memory_limit', '1G');
     }
 

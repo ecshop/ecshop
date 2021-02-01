@@ -11,8 +11,6 @@ class GroupBuyController extends InitController
     {
         parent::initialize();
 
-        require_once(ROOT_PATH . 'includes/lib_goods.php');
-        require_once(ROOT_PATH . 'includes/lib_order.php');
 
         /* 检查权限 */
         admin_priv('group_by');
@@ -532,7 +530,6 @@ class GroupBuyController extends InitController
     {
         check_authz_json('group_by');
 
-        include_once(ROOT_PATH . 'includes/cls_json.php');
 
         $json = new JSON;
         $filter = $json->decode($_GET['JSON']);

@@ -536,7 +536,6 @@ class CommonService
     {
         $template = basename(PHP_SELF);
         $template = substr($template, 0, strrpos($template, '.'));
-        include_once(ROOT_PATH . ADMIN_PATH . '/includes/lib_template.php');
         static $static_page_libs = null;
         if ($static_page_libs == null) {
             $static_page_libs = $page_libs;
@@ -888,7 +887,6 @@ class CommonService
     public function virtual_card_shipping($goods, $order_sn, &$msg, $process = 'other')
     {
         /* 包含加密解密函数所在文件 */
-        include_once(ROOT_PATH . 'includes/lib_code.php');
 
         /* 检查有没有缺货 */
         $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('virtual_card') . " WHERE goods_id = '$goods[goods_id]' AND is_saled = 0 ";
@@ -995,7 +993,6 @@ class CommonService
     public function virtual_card_result($order_sn, $goods)
     {
         /* 包含加密解密函数所在文件 */
-        include_once(ROOT_PATH . 'includes/lib_code.php');
 
         /* 获取已经发送的卡片数据 */
         $sql = "SELECT card_sn, card_password, end_date, crc32 FROM " . $GLOBALS['ecs']->table('virtual_card') . " WHERE goods_id= '$goods[goods_id]' AND order_sn = '$order_sn' ";
@@ -1835,7 +1832,6 @@ class CommonService
         if (isset($GLOBALS['_CFG']['integrate_code']) && $GLOBALS['_CFG']['integrate_code'] == 'ucenter') {
             restore_error_handler();
             if (!function_exists($func)) {
-                include_once(ROOT_PATH . 'includes/lib_uc.php');
             }
 
             $res = call_user_func_array($func, $params);

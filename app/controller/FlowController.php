@@ -9,7 +9,6 @@ class FlowController extends InitController
 {
     public function initialize()
     {
-        require(ROOT_PATH . 'includes/lib_order.php');
 
         /* 载入语言文件 */
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');
@@ -35,7 +34,6 @@ class FlowController extends InitController
 
     public function add_to_cartAction()
     {
-        include_once('includes/cls_json.php');
         $_POST['goods'] = strip_tags(urldecode($_POST['goods']));
         $_POST['goods'] = json_str_iconv($_POST['goods']);
 
@@ -176,7 +174,6 @@ class FlowController extends InitController
                 $this->assign('rand', mt_rand());
             }
         } else {
-            include_once('includes/lib_passport.php');
             if (!empty($_POST['act']) && $_POST['act'] == 'signin') {
                 $captcha = intval($_CFG['captcha']);
                 if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
@@ -185,7 +182,6 @@ class FlowController extends InitController
                     }
 
                     /* 检查验证码 */
-                    include_once('includes/cls_captcha.php');
 
                     $validator = new captcha();
                     $validator->session_word = 'captcha_login';
@@ -218,7 +214,6 @@ class FlowController extends InitController
                     }
 
                     /* 检查验证码 */
-                    include_once('includes/cls_captcha.php');
 
                     $validator = new captcha();
                     if (!$validator->check_word($_POST['captcha'])) {
@@ -244,7 +239,6 @@ class FlowController extends InitController
         /*------------------------------------------------------ */
         //-- 收货人信息
         /*------------------------------------------------------ */
-        include_once('includes/lib_transaction.php');
 
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             /* 取得购物类型 */
@@ -321,7 +315,6 @@ class FlowController extends InitController
             );
 
             if ($_SESSION['user_id'] > 0) {
-                include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
                 /* 如果用户已经登录，则保存收货人信息 */
                 $consignee['user_id'] = $_SESSION['user_id'];
@@ -341,7 +334,6 @@ class FlowController extends InitController
         /*------------------------------------------------------ */
         //-- 删除收货人信息
         /*------------------------------------------------------ */
-        include_once('includes/lib_transaction.php');
 
         $consignee_id = intval($_GET['id']);
 
@@ -630,7 +622,6 @@ class FlowController extends InitController
         /*------------------------------------------------------ */
         //-- 改变配送方式
         /*------------------------------------------------------ */
-        include_once('includes/cls_json.php');
         $json = new JSON;
         $result = array('error' => '', 'content' => '', 'need_insure' => 0);
 
@@ -687,7 +678,6 @@ class FlowController extends InitController
         //-- 选定/取消配送的保价
         /*------------------------------------------------------ */
 
-        include_once('includes/cls_json.php');
         $json = new JSON;
         $result = array('error' => '', 'content' => '', 'need_insure' => 0);
 
@@ -740,7 +730,6 @@ class FlowController extends InitController
         //-- 改变支付方式
         /*------------------------------------------------------ */
 
-        include_once('includes/cls_json.php');
         $json = new JSON;
         $result = array('error' => '', 'content' => '', 'need_insure' => 0, 'payment' => 1);
 
@@ -795,7 +784,6 @@ class FlowController extends InitController
         //-- 改变商品包装
         /*------------------------------------------------------ */
 
-        include_once('includes/cls_json.php');
         $json = new JSON;
         $result = array('error' => '', 'content' => '', 'need_insure' => 0);
 
@@ -848,7 +836,6 @@ class FlowController extends InitController
         //-- 改变贺卡
         /*------------------------------------------------------ */
 
-        include_once('includes/cls_json.php');
         $json = new JSON;
         $result = array('error' => '', 'content' => '', 'need_insure' => 0);
 
@@ -900,7 +887,6 @@ class FlowController extends InitController
         /*------------------------------------------------------ */
         //-- 改变余额
         /*------------------------------------------------------ */
-        include_once('includes/cls_json.php');
 
         $surplus = floatval($_GET['surplus']);
         $user_info = user_info($_SESSION['user_id']);
@@ -949,7 +935,6 @@ class FlowController extends InitController
         /*------------------------------------------------------ */
         //-- 改变积分
         /*------------------------------------------------------ */
-        include_once('includes/cls_json.php');
 
         $points = floatval($_GET['points']);
         $user_info = user_info($_SESSION['user_id']);
@@ -1003,7 +988,6 @@ class FlowController extends InitController
         /*------------------------------------------------------ */
         //-- 改变红包
         /*------------------------------------------------------ */
-        include_once('includes/cls_json.php');
         $result = array('error' => '', 'content' => '');
 
         /* 取得购物类型 */
@@ -1054,7 +1038,6 @@ class FlowController extends InitController
         /*------------------------------------------------------ */
         //-- 改变发票的设置
         /*------------------------------------------------------ */
-        include_once('includes/cls_json.php');
         $result = array('error' => '', 'content' => '');
         $json = new JSON();
         $_GET['inv_type'] = !empty($_GET['inv_type']) ? json_str_iconv(urldecode($_GET['inv_type'])) : '';
@@ -1162,8 +1145,6 @@ class FlowController extends InitController
 
     public function doneAction()
     {
-        include_once('includes/lib_clips.php');
-        include_once('includes/lib_payment.php');
 
         $where = "session_id = '" . SESS_ID . "'";
         if ($_SESSION['user_id']) {
@@ -1493,7 +1474,6 @@ class FlowController extends InitController
 
         /* 如果需要，发短信 */
         if ($_CFG['sms_order_placed'] == '1' && $_CFG['sms_shop_mobile'] != '') {
-            include_once('includes/cls_sms.php');
             $sms = new sms();
             $msg = $order['pay_status'] == PS_UNPAYED ?
                 $_LANG['order_placed_sms'] : $_LANG['order_placed_sms'] . '[' . $_LANG['sms_paid'] . ']';
@@ -1726,7 +1706,6 @@ class FlowController extends InitController
 //    die(sprintf($_LANG['bonus_is_ok'], price_format($bonus['type_money'], false)));
         $bonus_kill = price_format($bonus['type_money'], false);
 
-        include_once('includes/cls_json.php');
         $result = array('error' => '', 'content' => '');
 
         /* 取得购物类型 */
@@ -1793,7 +1772,6 @@ class FlowController extends InitController
 
     public function add_package_to_cartAction()
     {
-        include_once('includes/cls_json.php');
         $_POST['package_info'] = json_str_iconv($_POST['package_info']);
 
         $result = array('error' => 0, 'message' => '', 'content' => '', 'package_id' => '');
@@ -1865,7 +1843,6 @@ class FlowController extends InitController
 
         // 显示收藏夹内的商品
         if ($_SESSION['user_id'] > 0) {
-            require_once(ROOT_PATH . 'includes/lib_clips.php');
             $collection_goods = get_collection_goods($_SESSION['user_id']);
             $this->assign('collection_goods', $collection_goods);
             $where = "user_id = '" . intval($_SESSION['user_id']) . "' ";

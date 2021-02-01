@@ -10,7 +10,6 @@ class GoodsBatchController extends InitController
     public function initialize()
     {
         parent::initialize();
-        require('includes/lib_goods.php');
     }
 
     /*------------------------------------------------------ */
@@ -326,7 +325,6 @@ class GoodsBatchController extends InitController
         admin_priv('goods_batch');
 
         if (isset($_POST['checked'])) {
-            include_once(ROOT_PATH . 'includes/cls_image.php');
             $image = new cls_image($_CFG['bgcolor']);
 
             /* 字段默认值 */

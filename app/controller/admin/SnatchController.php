@@ -318,7 +318,6 @@ class SnatchController extends InitController
 
     public function search_goodsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         $filters = $json->decode($_GET['JSON']);
@@ -338,7 +337,6 @@ class SnatchController extends InitController
 
     public function search_productsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         $filters = $json->decode($_GET['JSON']);

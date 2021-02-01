@@ -159,7 +159,6 @@ class TagManageController extends InitController
     {
         check_authz_json('tag_manage');
 
-        include_once(ROOT_PATH . 'includes/cls_json.php');
 
         $json = new JSON;
         $filter = $json->decode($_GET['JSON']);
@@ -209,7 +208,6 @@ class TagManageController extends InitController
     {
         check_authz_json('tag_manage');
 
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         $id = intval($_GET['id']);

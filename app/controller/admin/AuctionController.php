@@ -11,7 +11,6 @@ class AuctionController extends InitController
     {
         parent::initialize();
 
-        require(ROOT_PATH . 'includes/lib_goods.php');
 
         $exc = new exchange($ecs->table('goods_activity'), $db, 'act_id', 'act_name');
     }
@@ -378,7 +377,6 @@ class AuctionController extends InitController
     {
         check_authz_json('auction');
 
-        include_once(ROOT_PATH . 'includes/cls_json.php');
 
         $json = new JSON;
         $filter = $json->decode($_GET['JSON']);
@@ -397,7 +395,6 @@ class AuctionController extends InitController
 
     public function search_productsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         $filters = $json->decode($_GET['JSON']);

@@ -14,8 +14,6 @@ class SmsController extends InitController
 }
 
 
-require_once(ROOT_PATH . 'includes/cls_sms.php');
-
 $action = isset($_REQUEST['act']) ? $_REQUEST['act'] : 'display_my_info';
 if (isset($_POST['sms_sign_update'])) {
     $action = 'sms_sign_update';

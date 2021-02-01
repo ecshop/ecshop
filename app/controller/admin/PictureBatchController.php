@@ -14,8 +14,6 @@ class PictureBatchController extends InitController
 
     public function indexAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_image.php');
-        include_once(ROOT_PATH . '/' . ADMIN_PATH . '/includes/lib_goods.php');
         $image = new cls_image($_CFG['bgcolor']);
 
         /* 权限检查 */
@@ -28,7 +26,6 @@ class PictureBatchController extends InitController
             $this->assign('brand_list', get_brand_list());
             return $this->display('picture_batch.htm');
         } elseif (!empty($_GET['get_goods'])) {
-            include_once(ROOT_PATH . 'includes/cls_json.php');
             $json = new JSON();
             $brand_id = intval($_GET['brand_id']);
             $cat_id = intval($_GET['cat_id']);
@@ -45,7 +42,6 @@ class PictureBatchController extends InitController
 
             die($json->encode($db->getAll($sql)));
         } else {
-            include_once(ROOT_PATH . 'includes/cls_json.php');
             $json = new JSON();
             $proc_thumb = (isset($GLOBALS['shop_id']) && $GLOBALS['shop_id'] > 0);
             $do_album = empty($_GET['do_album']) ? 0 : 1;

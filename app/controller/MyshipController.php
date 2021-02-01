@@ -9,8 +9,6 @@ class MyshipController extends InitController
 {
     public function indexAction()
     {
-        require_once(ROOT_PATH . 'includes/lib_order.php');
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
         /* 载入语言文件 */
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');

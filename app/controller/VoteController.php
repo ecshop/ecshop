@@ -9,7 +9,6 @@ class VoteController extends InitController
 {
     public function indexAction()
     {
-        require(ROOT_PATH . 'includes/cls_json.php');
 
         if (!isset($_REQUEST['vote']) || !isset($_REQUEST['options']) || !isset($_REQUEST['type'])) {
             return redirect("./");

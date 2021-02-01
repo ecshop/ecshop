@@ -10,7 +10,6 @@ class TemplateController extends InitController
     public function initialize()
     {
         parent::initialize();
-        require_once('includes/lib_template.php');
     }
 
     /*------------------------------------------------------ */
@@ -465,7 +464,6 @@ class TemplateController extends InitController
     public function backupAction()
     {
         check_authz_json('backup_setting');
-        include_once('includes/cls_phpzip.php');
         $tpl = $_CFG['template'];
         //$tpl = trim($_REQUEST['tpl_name']);
 

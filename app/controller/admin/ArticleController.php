@@ -12,7 +12,6 @@ class ArticleController extends InitController
         parent::initialize();
 
         require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
-        require_once(ROOT_PATH . 'includes/cls_image.php');
 
         /*初始化数据交换对象 */
         $exc = new exchange($ecs->table("article"), $db, 'article_id', 'title');
@@ -369,7 +368,6 @@ class ArticleController extends InitController
     /*------------------------------------------------------ */
     public function add_link_goodsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         check_authz_json('article_manage');
@@ -406,7 +404,6 @@ class ArticleController extends InitController
     /*------------------------------------------------------ */
     public function drop_link_goodsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         check_authz_json('article_manage');
@@ -441,7 +438,6 @@ class ArticleController extends InitController
     /*------------------------------------------------------ */
     public function get_goods_listAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         $filters = $json->decode($_GET['JSON']);

@@ -12,9 +12,7 @@ class SearchController extends InitController
         if (empty($_GET['encode'])) {
             $string = array_merge($_GET, $_POST);
             if (get_magic_quotes_gpc()) {
-                require(dirname(__FILE__) . '/includes/lib_base.php');
-                //require(dirname(__FILE__) . '/includes/lib_common.php');
-
+                //
                 $string = stripslashes_deep($string);
             }
             $string['search_encode_time'] = time();

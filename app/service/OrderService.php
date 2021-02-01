@@ -1899,7 +1899,6 @@ class OrderService
             "WHERE order_id " . db_create_in(array($from_order['order_id'], $to_order['order_id']));
         $GLOBALS['db']->query($sql);
 
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
         /* 插入支付日志 */
         insert_pay_log($order_id, $order['order_amount'], PAY_ORDER);
 
@@ -2280,7 +2279,6 @@ class OrderService
     {
         /* 判断是否团购 */
         if ($order['extension_code'] == 'group_buy') {
-            include_once(ROOT_PATH . 'includes/lib_goods.php');
             $group_buy = group_buy_info(intval($order['extension_id']));
 
             return array('custom_points' => $group_buy['gift_integral'], 'rank_points' => $order['goods_amount']);

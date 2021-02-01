@@ -30,7 +30,6 @@ class TagCloudController extends InitController
         $tags = get_tags();
 
         if (!empty($tags)) {
-            include_once(ROOT_PATH . 'includes/lib_clips.php');
             color_tag($tags);
         }
 

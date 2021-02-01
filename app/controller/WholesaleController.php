@@ -267,7 +267,6 @@ class WholesaleController extends InitController
     /*------------------------------------------------------ */
     public function submit_orderAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_order.php');
 
         /* 检查购物车中是否有商品 */
         if (count($_SESSION['wholesale_goods']) == 0) {
@@ -351,7 +350,6 @@ class WholesaleController extends InitController
 
         /* 如果需要，发短信 */
         if ($_CFG['sms_order_placed'] == '1' && $_CFG['sms_shop_mobile'] != '') {
-            include_once('includes/cls_sms.php');
             $sms = new sms();
             $msg = $_LANG['order_placed_sms'];
             $sms->send($_CFG['sms_shop_mobile'], sprintf($msg, $order['consignee'], $order['tel']), '', 13, 1);

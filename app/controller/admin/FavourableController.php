@@ -12,8 +12,6 @@ class FavourableController extends InitController
         parent::initialize();
 
 
-        require(ROOT_PATH . 'includes/lib_goods.php');
-
         $exc = new exchange($ecs->table('favourable_activity'), $db, 'act_id', 'act_name');
     }
 
@@ -347,7 +345,6 @@ class FavourableController extends InitController
         /* 检查权限 */
         check_authz_json('favourable');
 
-        include_once(ROOT_PATH . 'includes/cls_json.php');
 
         $json = new JSON;
         $filter = $json->decode($_GET['JSON']);

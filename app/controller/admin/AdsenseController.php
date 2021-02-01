@@ -11,7 +11,6 @@ class AdsenseController extends InitController
     {
         parent::initialize();
 
-        require_once(ROOT_PATH . 'includes/lib_order.php');
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/ads.php');
     }
 

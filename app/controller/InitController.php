@@ -25,15 +25,6 @@ class InitController extends Controller
         define('PHP_SELF', $php_self);
 
         require(ROOT_PATH . 'includes/inc_constant.php');
-        require(ROOT_PATH . 'includes/cls_ecshop.php');
-        require(ROOT_PATH . 'includes/cls_error.php');
-        require(ROOT_PATH . 'includes/lib_time.php');
-        require(ROOT_PATH . 'includes/lib_base.php');
-        require(ROOT_PATH . 'includes/lib_common.php');
-        require(ROOT_PATH . 'includes/lib_main.php');
-        require(ROOT_PATH . 'includes/lib_insert.php');
-        require(ROOT_PATH . 'includes/lib_goods.php');
-        require(ROOT_PATH . 'includes/lib_article.php');
 
         /* 对用户传入的变量进行转义操作。*/
         if (!empty($_GET)) {
@@ -52,7 +43,6 @@ class InitController extends Controller
         define('IMAGE_DIR', $ecs->image_dir());
 
         /* 初始化数据库类 */
-        require(ROOT_PATH . 'includes/cls_mysql.php');
         $db = new cls_mysql($db_host, $db_user, $db_pass, $db_name);
         $db->set_disable_cache_tables(array($ecs->table('sessions'), $ecs->table('sessions_data'), $ecs->table('cart')));
         $db_host = $db_user = $db_pass = $db_name = null;
@@ -92,7 +82,6 @@ class InitController extends Controller
 
         if (!defined('INIT_NO_USERS')) {
             /* 初始化session */
-            include(ROOT_PATH . 'includes/cls_session.php');
 
             $sess = new cls_session($db, $ecs->table('sessions'), $ecs->table('sessions_data'));
 
@@ -106,7 +95,6 @@ class InitController extends Controller
             header('Content-type: text/html; charset=' . EC_CHARSET);
 
             /* 创建 Smarty 对象。*/
-            require(ROOT_PATH . 'includes/cls_template.php');
             $smarty = new cls_template;
 
             $smarty->cache_lifetime = $_CFG['cache_time'];

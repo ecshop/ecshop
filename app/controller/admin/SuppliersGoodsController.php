@@ -11,8 +11,6 @@ class SuppliersGoodsController extends InitController
     {
         parent::initialize();
 
-        require_once(ROOT_PATH . '/admin/includes/lib_goods.php');
-        include_once(ROOT_PATH . '/includes/cls_image.php');
         $image = new cls_image($_CFG['bgcolor']);
         $exc = new exchange($ecs->table('goods'), $db, 'goods_id', 'goods_name');
     }
@@ -1436,7 +1434,6 @@ class SuppliersGoodsController extends InitController
     /*------------------------------------------------------ */
     public function get_goods_listAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         $filters = $json->decode($_GET['JSON']);
@@ -1458,7 +1455,6 @@ class SuppliersGoodsController extends InitController
     /*------------------------------------------------------ */
     public function add_link_goodsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         check_authz_json('goods_manage');
@@ -1499,7 +1495,6 @@ class SuppliersGoodsController extends InitController
     /*------------------------------------------------------ */
     public function drop_link_goodsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         check_authz_json('goods_manage');
@@ -1549,7 +1544,6 @@ class SuppliersGoodsController extends InitController
 
     public function add_group_goodsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         check_authz_json('goods_manage');
@@ -1584,7 +1578,6 @@ class SuppliersGoodsController extends InitController
 
     public function drop_group_goodsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         check_authz_json('goods_manage');
@@ -1620,7 +1613,6 @@ class SuppliersGoodsController extends InitController
 
     public function get_article_listAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         $filters = (array)$json->decode(json_str_iconv($_GET['JSON']));
@@ -1649,7 +1641,6 @@ class SuppliersGoodsController extends InitController
 
     public function add_goods_articleAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         check_authz_json('goods_manage');
@@ -1682,7 +1673,6 @@ class SuppliersGoodsController extends InitController
     /*------------------------------------------------------ */
     public function drop_goods_articleAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         check_authz_json('goods_manage');

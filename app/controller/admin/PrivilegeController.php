@@ -53,7 +53,6 @@ class PrivilegeController extends InitController
     public function signinAction()
     {
         if (intval($_CFG['captcha']) & CAPTCHA_ADMIN) {
-            include_once(ROOT_PATH . 'includes/cls_captcha.php');
 
             /* 检查验证码是否正确 */
             $validator = new captcha();

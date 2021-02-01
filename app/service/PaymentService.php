@@ -151,7 +151,6 @@ class PaymentService
 
                     /* 如果需要，发短信 */
                     if ($GLOBALS['_CFG']['sms_order_payed'] == '1' && $GLOBALS['_CFG']['sms_shop_mobile'] != '') {
-                        include_once(ROOT_PATH . 'includes/cls_sms.php');
                         $sms = new sms();
                         $sms->send(
                             $GLOBALS['_CFG']['sms_shop_mobile'],

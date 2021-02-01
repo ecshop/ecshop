@@ -11,7 +11,6 @@ class CardController extends InitController
     {
         parent::initialize();
 
-        include_once(ROOT_PATH . 'includes/cls_image.php');
         $image = new cls_image($_CFG['bgcolor']);
 
         $exc = new exchange($ecs->table("card"), $db, 'card_id', 'card_name');

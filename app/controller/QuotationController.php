@@ -67,7 +67,6 @@ class QuotationController extends InitController
 
     public function get_quotation_where($filter)
     {
-        include_once(ROOT_PATH . ADMIN_PATH . '/includes/lib_main.php');
         $_filter = new StdClass();
         $_filter->cat_id = $filter['cat_id'];
         $_filter->brand_id = $filter['brand_id'];

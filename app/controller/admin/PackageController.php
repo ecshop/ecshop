@@ -240,7 +240,6 @@ class PackageController extends InitController
 
     public function search_goodsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         $filters = $json->decode($_GET['JSON']);
@@ -265,7 +264,6 @@ class PackageController extends InitController
 
     public function add_package_goodsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         check_authz_json('package_manage');
@@ -305,7 +303,6 @@ class PackageController extends InitController
 
     public function drop_package_goodsAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         check_authz_json('package_manage');

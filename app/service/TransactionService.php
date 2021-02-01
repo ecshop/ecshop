@@ -512,7 +512,6 @@ class TransactionService
      */
     public function get_order_detail($order_id, $user_id = 0)
     {
-        include_once(ROOT_PATH . 'includes/lib_order.php');
 
         $order_id = intval($order_id);
         if ($order_id <= 0) {
@@ -654,7 +653,6 @@ class TransactionService
      */
     public function get_user_merge($user_id)
     {
-        include_once(ROOT_PATH . 'includes/lib_order.php');
         $sql = "SELECT order_sn FROM " . $GLOBALS['ecs']->table('order_info') .
             " WHERE user_id  = '$user_id' " . order_query_sql('unprocessed') .
             "AND extension_code = '' " .

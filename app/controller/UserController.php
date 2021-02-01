@@ -79,7 +79,6 @@ class UserController extends InitController
     //用户中心欢迎页
     public function defaultAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
         if ($rank = get_rank_info()) {
             $this->assign('rank_name', sprintf($_LANG['your_level'], $rank['rank_name']));
             if (!empty($rank['next_rank_name'])) {
@@ -126,7 +125,6 @@ class UserController extends InitController
             $this->assign('shop_reg_closed', $_CFG['shop_reg_closed']);
             return $this->display('user_passport.dwt');
         } else {
-            include_once(ROOT_PATH . 'includes/lib_passport.php');
 
             $username = isset($_POST['username']) ? trim($_POST['username']) : '';
             $password = isset($_POST['password']) ? trim($_POST['password']) : '';
@@ -164,7 +162,6 @@ class UserController extends InitController
                 }
 
                 /* 检查验证码 */
-                include_once('includes/cls_captcha.php');
 
                 $validator = new captcha();
                 if (!$validator->check_word($_POST['captcha'])) {
@@ -213,7 +210,6 @@ class UserController extends InitController
     {
         $hash = empty($_GET['hash']) ? '' : trim($_GET['hash']);
         if ($hash) {
-            include_once(ROOT_PATH . 'includes/lib_passport.php');
             $id = register_hash('decode', $hash);
             if ($id > 0) {
                 $sql = "UPDATE " . $ecs->table('users') . " SET is_validated = 1 WHERE user_id='$id'";
@@ -227,7 +223,6 @@ class UserController extends InitController
     } /* 验证用户注册用户名是否可以注册 */
     public function is_registeredAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_passport.php');
 
         $username = trim($_GET['username']);
         $username = json_str_iconv($username);
@@ -281,7 +276,6 @@ class UserController extends InitController
             }
 
             /* 检查验证码 */
-            include_once('includes/cls_captcha.php');
 
             $validator = new captcha();
             $validator->session_word = 'captcha_login';
@@ -303,7 +297,6 @@ class UserController extends InitController
     } /* 处理 ajax 的登录请求 */
     public function signinAction()
     {
-        include_once('includes/cls_json.php');
         $json = new JSON;
 
         $username = !empty($_POST['username']) ? json_str_iconv(trim($_POST['username'])) : '';
@@ -320,7 +313,6 @@ class UserController extends InitController
             }
 
             /* 检查验证码 */
-            include_once('includes/cls_captcha.php');
 
             $validator = new captcha();
             $validator->session_word = 'captcha_login';
@@ -361,7 +353,6 @@ class UserController extends InitController
     } /* 个人资料页面 */
     public function profileAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
         $user_info = get_profile($user_id);
 
@@ -411,7 +402,6 @@ class UserController extends InitController
     } /* 修改个人资料的处理 */
     public function act_edit_profileAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
         $birthday = trim($_POST['birthdayYear']) . '-' . trim($_POST['birthdayMonth']) . '-' .
             trim($_POST['birthdayDay']);
@@ -490,7 +480,6 @@ class UserController extends InitController
     } /* 密码找回-->修改密码界面 */
     public function get_passwordAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_passport.php');
 
         if (isset($_GET['code']) && isset($_GET['uid'])) { //从邮件处获得的act
             $code = trim($_GET['code']);
@@ -555,7 +544,6 @@ class UserController extends InitController
             }
 
             /* 检查验证码 */
-            include_once('includes/cls_captcha.php');
 
             $validator = new captcha();
             $validator->session_word = 'captcha_login';
@@ -578,7 +566,6 @@ class UserController extends InitController
     } /* 发送密码修改确认邮件 */
     public function send_pwd_emailAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_passport.php');
 
         /* 初始化会员用户名和邮件地址 */
         $user_name = !empty($_POST['user_name']) ? trim($_POST['user_name']) : '';
@@ -611,7 +598,6 @@ class UserController extends InitController
     } /* 修改会员密码 */
     public function act_edit_passwordAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_passport.php');
 
         $old_password = isset($_POST['old_password']) ? trim($_POST['old_password']) : null;
         $new_password = isset($_POST['new_password']) ? trim($_POST['new_password']) : '';
@@ -639,7 +625,6 @@ class UserController extends InitController
     } /* 添加一个红包 */
     public function act_add_bonusAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
         $bouns_sn = isset($_POST['bonus_sn']) ? intval($_POST['bonus_sn']) : '';
 
@@ -652,7 +637,6 @@ class UserController extends InitController
     } /* 查看订单列表 */
     public function order_listAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 
@@ -670,10 +654,6 @@ class UserController extends InitController
     } /* 查看订单详情 */
     public function order_detailAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
-        include_once(ROOT_PATH . 'includes/lib_payment.php');
-        include_once(ROOT_PATH . 'includes/lib_order.php');
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 
@@ -735,8 +715,6 @@ class UserController extends InitController
     } /* 取消订单 */
     public function cancel_orderAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
-        include_once(ROOT_PATH . 'includes/lib_order.php');
 
         $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 
@@ -749,7 +727,6 @@ class UserController extends InitController
     } /* 收货地址列表界面*/
     public function address_listAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
         include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
         $this->assign('lang', $_LANG);
 
@@ -797,7 +774,6 @@ class UserController extends InitController
     } /* 添加/编辑收货地址的处理 */
     public function act_edit_addressAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
         include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
         $this->assign('lang', $_LANG);
 
@@ -824,7 +800,6 @@ class UserController extends InitController
     } /* 删除收货地址 */
     public function drop_consigneeAction()
     {
-        include_once('includes/lib_transaction.php');
 
         $consignee_id = intval($_GET['id']);
 
@@ -836,7 +811,6 @@ class UserController extends InitController
     } /* 显示收藏商品列表 */
     public function collection_listAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 
@@ -858,7 +832,6 @@ class UserController extends InitController
     } /* 删除收藏的商品 */
     public function delete_collectionAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $collection_id = isset($_GET['collection_id']) ? intval($_GET['collection_id']) : 0;
 
@@ -886,7 +859,6 @@ class UserController extends InitController
     } /* 显示留言列表 */
     public function message_listAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 
@@ -920,7 +892,6 @@ class UserController extends InitController
     } /* 显示评论列表 */
     public function comment_listAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 
@@ -936,7 +907,6 @@ class UserController extends InitController
     } /* 添加我的留言 */
     public function act_add_messageAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $message = array(
             'user_id' => $user_id,
@@ -959,7 +929,6 @@ class UserController extends InitController
     } /* 标签云列表 */
     public function tag_listAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $good_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
@@ -969,7 +938,6 @@ class UserController extends InitController
     } /* 删除标签云的处理 */
     public function act_del_tagAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $tag_words = isset($_GET['tag_words']) ? trim($_GET['tag_words']) : '';
         delete_tag($tag_words, $user_id);
@@ -978,7 +946,6 @@ class UserController extends InitController
     } /* 显示缺货登记列表 */
     public function booking_listAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 
@@ -996,7 +963,6 @@ class UserController extends InitController
     } /* 添加缺货登记页面 */
     public function add_bookingAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $goods_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         if ($goods_id == 0) {
@@ -1027,7 +993,6 @@ class UserController extends InitController
     } /* 添加缺货登记的处理 */
     public function act_add_bookingAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $booking = array(
             'goods_id' => isset($_POST['id']) ? intval($_POST['id']) : 0,
@@ -1059,7 +1024,6 @@ class UserController extends InitController
     } /* 删除缺货登记 */
     public function act_del_bookingAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         if ($id == 0 || $user_id == 0) {
@@ -1073,7 +1037,6 @@ class UserController extends InitController
     } /* 确认收货 */
     public function affirm_receivedAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
         $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 
@@ -1090,7 +1053,6 @@ class UserController extends InitController
     } /* 会员预付款界面 */
     public function account_depositAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $surplus_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $account = get_surplus_info($surplus_id);
@@ -1101,7 +1063,6 @@ class UserController extends InitController
     } /* 会员账目明细界面 */
     public function account_detailAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 
@@ -1149,7 +1110,6 @@ class UserController extends InitController
     } /* 会员充值和提现申请记录 */
     public function account_logAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 
@@ -1179,8 +1139,6 @@ class UserController extends InitController
     } /* 对会员余额申请的处理 */
     public function act_accountAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
-        include_once(ROOT_PATH . 'includes/lib_order.php');
         $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : 0;
         if ($amount <= 0) {
             return $this->show_message($_LANG['amount_gt_zero']);
@@ -1224,7 +1182,6 @@ class UserController extends InitController
                 return $this->show_message($_LANG['select_payment_pls']);
             }
 
-            include_once(ROOT_PATH . 'includes/lib_payment.php');
 
             //获取支付方式名称
             $payment_info = array();
@@ -1274,7 +1231,6 @@ class UserController extends InitController
     } /* 删除会员余额 */
     public function cancelAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
 
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         if ($id == 0 || $user_id == 0) {
@@ -1288,9 +1244,6 @@ class UserController extends InitController
     } /* 会员通过帐目明细列表进行再付款的操作 */
     public function payAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_clips.php');
-        include_once(ROOT_PATH . 'includes/lib_payment.php');
-        include_once(ROOT_PATH . 'includes/lib_order.php');
 
         //变量初始化
         $surplus_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -1356,7 +1309,6 @@ class UserController extends InitController
             return $this->display('user_transaction.dwt');
         } /* 重新选择支付方式 */
         else {
-            include_once(ROOT_PATH . 'includes/lib_clips.php');
 
             $this->assign('payment', get_online_payment_list());
             $this->assign('order', $order);
@@ -1366,8 +1318,6 @@ class UserController extends InitController
     } /* 添加标签(ajax) */
     public function add_tagAction()
     {
-        include_once('includes/cls_json.php');
-        include_once('includes/lib_clips.php');
 
         $result = array('error' => 0, 'message' => '', 'content' => '');
         $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
@@ -1396,7 +1346,6 @@ class UserController extends InitController
     } /* 添加收藏商品(ajax) */
     public function collectAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON();
         $result = array('error' => 0, 'message' => '');
         $goods_id = $_GET['id'];
@@ -1460,8 +1409,6 @@ class UserController extends InitController
     } /* 合并订单 */
     public function merge_orderAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
-        include_once(ROOT_PATH . 'includes/lib_order.php');
         $from_order = isset($_POST['from_order']) ? trim($_POST['from_order']) : '';
         $to_order = isset($_POST['to_order']) ? trim($_POST['to_order']) : '';
         if (merge_user_order($from_order, $to_order, $user_id)) {
@@ -1473,8 +1420,6 @@ class UserController extends InitController
     } /* 将指定订单中商品添加到购物车 */
     public function return_to_cartAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
         $json = new JSON();
 
         $result = array('error' => 0, 'message' => '', 'content' => '');
@@ -1539,7 +1484,6 @@ class UserController extends InitController
             return $err->show($_LANG['order_detail'], 'user.php?act=order_detail&order_id=' . $order_id);
         }
 
-        include_once(ROOT_PATH . 'includes/lib_order.php');
 
         /* 取得订单 */
         $order = order_info($order_id);
@@ -1631,7 +1575,6 @@ class UserController extends InitController
             return redirect("./");
         }
 
-        include_once(ROOT_PATH . 'includes/lib_order.php');
         $payment_info = payment_info($pay_id);
         if (empty($payment_info)) {
             return redirect("./");
@@ -1673,7 +1616,6 @@ class UserController extends InitController
     } /* 保存订单详情收货地址 */
     public function save_order_addressAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
         $address = array(
             'consignee' => isset($_POST['consignee']) ? compile_str(trim($_POST['consignee'])) : '',
@@ -1695,7 +1637,6 @@ class UserController extends InitController
     } /* 我的红包列表 */
     public function bonusAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
         $record_count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('user_bonus') . " WHERE user_id = '$user_id'");
@@ -1709,14 +1650,12 @@ class UserController extends InitController
     } /* 我的团购列表 */
     public function group_buyAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
         //待议
         return $this->display('user_transaction.dwt');
     } /* 团购订单详情 */
     public function group_buy_detailAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
         //待议
         return $this->display('user_transaction.dwt');
@@ -1976,8 +1915,6 @@ class UserController extends InitController
     } /* ajax 发送验证邮件 */
     public function send_hash_mailAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
-        include_once(ROOT_PATH . 'includes/lib_passport.php');
         $json = new JSON();
 
         $result = array('error' => 0, 'message' => '', 'content' => '');
@@ -2002,8 +1939,6 @@ class UserController extends InitController
 
     public function track_packagesAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_transaction.php');
-        include_once(ROOT_PATH . 'includes/lib_order.php');
 
         $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 
@@ -2038,7 +1973,6 @@ class UserController extends InitController
     {
         $_GET['order_sn'] = trim(substr($_GET['order_sn'], 1));
         $order_sn = empty($_GET['order_sn']) ? '' : addslashes($_GET['order_sn']);
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON();
 
         $result = array('error' => 0, 'message' => '', 'content' => '');
@@ -2290,7 +2224,6 @@ class UserController extends InitController
             return $this->show_message($_LANG['exchange_deny'], $_LANG['transform_points'], 'user.php?act=transform_points');
         }
         $netamount = floor($exchange_amount / $ratio);
-        include_once(ROOT_PATH . './includes/lib_uc.php');
         $result = exchange_points($row['user_id'], $fromcredits, $creditdesc, $appiddesc, $netamount);
         if ($result === true) {
             $sql = "UPDATE " . $ecs->table('users') . " SET {$shop_points[$fromcredits]}={$shop_points[$fromcredits]}-'$exchange_amount' WHERE user_id='{$row['user_id']}'";

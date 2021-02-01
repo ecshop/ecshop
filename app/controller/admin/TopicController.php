@@ -89,7 +89,6 @@ class TopicController extends InitController
 
             create_html_editor('topic_intro', $topic['intro']);
 
-            require(ROOT_PATH . 'includes/cls_json.php');
 
             $json = new JSON;
             $topic['data'] = addcslashes($topic['data'], "'");
@@ -211,7 +210,6 @@ class TopicController extends InitController
 
         $title_pic = empty($title_pic) ? $_POST['title_img_url'] : $title_pic;
 
-        require(ROOT_PATH . 'includes/cls_json.php');
 
         $start_time = local_strtotime($_POST['start_time']);
         $end_time = local_strtotime($_POST['end_time']);
@@ -242,7 +240,6 @@ class TopicController extends InitController
 
     public function get_goods_listAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
 
         $filters = $json->decode($_GET['JSON']);

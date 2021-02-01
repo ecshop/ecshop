@@ -10,7 +10,6 @@ class IndexController extends InitController
     public function initialize()
     {
         parent::initialize();
-        require_once(ROOT_PATH . '/includes/lib_order.php');
     }
 
     /*------------------------------------------------------ */
@@ -412,11 +411,9 @@ class IndexController extends InitController
 
     public function main_apiAction()
     {
-        require_once(ROOT_PATH . '/includes/lib_base.php');
         $data = read_static_cache('api_str');
 
         if ($data === false || API_TIME < date('Y-m-d H:i:s', time() - 43200)) {
-            include_once(ROOT_PATH . 'includes/cls_transport.php');
             $t = new transport;
             $api_comment = $t->request('https://api.github.com/repos/ecshop/ecshop/releases/latest', '', 'GET');
             if (isset($api_comment["body"])) {
@@ -733,11 +730,9 @@ class IndexController extends InitController
             $cat_id = $db->insert_Id();
 
             //货号
-            require_once(ROOT_PATH . ADMIN_PATH . '/includes/lib_goods.php');
             $max_id = $db->getOne("SELECT MAX(goods_id) + 1 FROM " . $ecs->table('goods'));
             $goods_sn = generate_goods_sn($max_id);
 
-            include_once(ROOT_PATH . 'includes/cls_image.php');
             $image = new cls_image($_CFG['bgcolor']);
 
             if (!empty($good_name)) {
@@ -1016,10 +1011,6 @@ class IndexController extends InitController
 
         if (isset($is_ajax) && $is_ajax) {
             // license 检查
-            include_once(ROOT_PATH . 'includes/cls_transport.php');
-            include_once(ROOT_PATH . 'includes/cls_json.php');
-            include_once(ROOT_PATH . 'includes/lib_main.php');
-            include_once(ROOT_PATH . 'includes/lib_license.php');
 
             $license = license_check();
             switch ($license['flag']) {

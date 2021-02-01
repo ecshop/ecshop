@@ -340,7 +340,6 @@ class IntegrateController extends InitController
     public function check_userAction()
     {
         $code = $_SESSION['code'];
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         include_once(ROOT_PATH . "includes/modules/integrates/" . $code . ".php");
         $cls_user = new $code($_SESSION['cfg']);
         $json = new JSON();
@@ -431,7 +430,6 @@ class IntegrateController extends InitController
     public function import_userAction()
     {
         $cfg = $_SESSION['cfg'];
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $ucdb = new cls_mysql($cfg['db_host'], $cfg['db_user'], $cfg['db_pass'], $cfg['db_name'], $cfg['db_charset']);
         $json = new JSON();
         $result = array('error' => 0, 'message' => '');
@@ -685,7 +683,6 @@ class IntegrateController extends InitController
             $size = intval($_GET['size']);
         }
 
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON();
         $result = array('message' => '', 'error' => 0, 'content' => '', 'id' => '', 'end' => 0, 'size' => $size);
 
@@ -781,8 +778,6 @@ class IntegrateController extends InitController
     /*------------------------------------------------------ */
     public function setup_ucenterAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
-        include_once(ROOT_PATH . 'includes/cls_transport.php');
         $json = new JSON();
         $result = array('error' => 0, 'message' => '');
 

@@ -18,10 +18,6 @@ class InitController extends Controller
         define('PHP_SELF', $php_self);
 
         require(ROOT_PATH . 'includes/inc_constant.php');
-        require(ROOT_PATH . 'includes/cls_ecshop.php');
-        require(ROOT_PATH . 'includes/lib_base.php');
-        require(ROOT_PATH . 'includes/lib_common.php');
-        require(ROOT_PATH . 'includes/lib_time.php');
 
         /* 对用户传入的变量进行转义操作。*/
         if (!get_magic_quotes_gpc()) {
@@ -41,12 +37,10 @@ class InitController extends Controller
         $data_dir = $ecs->data_dir();
 
         /* 初始化数据库类 */
-        require(ROOT_PATH . 'includes/cls_mysql.php');
         $db = new cls_mysql($db_host, $db_user, $db_pass, $db_name);
         $db_host = $db_user = $db_pass = $db_name = null;
 
         /* 初始化session */
-        require(ROOT_PATH . 'includes/cls_session.php');
         $sess_name = defined("SESS_NAME") ? SESS_NAME : 'ECS_ID';
         $sess = new cls_session($db, $ecs->table('sessions'), $ecs->table('sessions_data'), $sess_name);
 

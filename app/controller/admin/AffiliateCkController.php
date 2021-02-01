@@ -97,7 +97,6 @@ class AffiliateCkController extends InitController
 */
     public function separateAction()
     {
-        include_once(ROOT_PATH . 'includes/lib_order.php');
         $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
         empty($affiliate) && $affiliate = array();
 
@@ -235,16 +234,16 @@ class AffiliateCkController extends InitController
                     " ORDER BY order_id DESC" .
                     " LIMIT " . $filter['start'] . ",$filter[page_size]";
 
-            /*
-                SQL解释：
+                /*
+                    SQL解释：
 
-                列出同时满足以下条件的订单分成情况：
-                1、有效订单o.user_id > 0
-                2、满足以下情况之一：
-                    a.有用户注册上线的未分成订单 u.parent_id > 0 AND o.is_separate = 0
-                    b.已分成订单 o.is_separate > 0
+                    列出同时满足以下条件的订单分成情况：
+                    1、有效订单o.user_id > 0
+                    2、满足以下情况之一：
+                        a.有用户注册上线的未分成订单 u.parent_id > 0 AND o.is_separate = 0
+                        b.已分成订单 o.is_separate > 0
 
-            */
+                */
             } else {
                 //推荐订单分成
                 $sql = "SELECT o.*, a.log_id,a.user_id as suid, a.user_name as auser, a.money, a.point, a.separate_type,u.parent_id as up FROM " . $GLOBALS['ecs']->table('order_info') . " o" .

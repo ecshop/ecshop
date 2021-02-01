@@ -10,7 +10,6 @@ class AccountLogController extends InitController
     public function initialize()
     {
         parent::initialize();
-        include_once(ROOT_PATH . 'includes/lib_order.php');
     }
 
     /*------------------------------------------------------ */

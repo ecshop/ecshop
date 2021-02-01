@@ -9,7 +9,6 @@ class CommentController extends InitController
 {
     public function indexAction()
     {
-        require(ROOT_PATH . 'includes/cls_json.php');
         if (!isset($_REQUEST['cmt']) && !isset($_REQUEST['act'])) {
             /* 只有在没有提交评论内容以及没有act的情况下才跳转 */
             return redirect("./");
@@ -38,7 +37,6 @@ class CommentController extends InitController
             } else {
                 if ((intval($_CFG['captcha']) & CAPTCHA_COMMENT) && gd_version() > 0) {
                     /* 检查验证码 */
-                    include_once('includes/cls_captcha.php');
 
                     $validator = new captcha();
                     if (!$validator->check_word($cmt->captcha)) {

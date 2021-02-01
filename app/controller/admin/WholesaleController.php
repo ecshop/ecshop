@@ -10,7 +10,6 @@ class WholesaleController extends InitController
     public function initialize()
     {
         parent::initialize();
-        include_once('../includes/lib_goods.php');
     }
 
 
@@ -548,7 +547,6 @@ class WholesaleController extends InitController
     {
         check_authz_json('whole_sale');
 
-        include_once(ROOT_PATH . 'includes/cls_json.php');
 
         $json = new JSON;
         $filter = $json->decode($_GET['JSON']);
@@ -569,7 +567,6 @@ class WholesaleController extends InitController
 
     public function get_goods_infoAction()
     {
-        include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON();
 
         $goods_id = intval($_REQUEST['goods_id']);

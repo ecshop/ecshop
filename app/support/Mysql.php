@@ -270,7 +270,6 @@ class Mysql
 
         return Cache::remember(md5($sql), function () use ($sql) {
             return $this->getRow($sql, true);
-            ;
         });
     }
 

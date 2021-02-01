@@ -269,7 +269,7 @@ class TemplateService
      * @param string $template_style 模版风格名
      * @return  array
      */
-    function get_template_info($template_name, $template_style = '')
+    public function get_template_info($template_name, $template_style = '')
     {
         if (empty($template_style) || $template_style == '') {
             $template_style = '';
@@ -346,7 +346,7 @@ class TemplateService
      * @param string $tmp_file 模版文件名称
      * @return  array
      */
-    function get_template_region($tmp_name, $tmp_file, $lib = true)
+    public function get_template_region($tmp_name, $tmp_file, $lib = true)
     {
         global $dyna_libs;
 
@@ -413,7 +413,7 @@ class TemplateService
      * @param array $libs 包含设定内容的数组
      * @return  void
      */
-    function get_setted($lib, &$arr)
+    public function get_setted($lib, &$arr)
     {
         $options = array('region' => '', 'sort_order' => 0, 'display' => 0);
 
@@ -438,7 +438,7 @@ class TemplateService
      * @param array $curr_page_libs 缺少xml文件时的默认编辑区信息数组
      * @return  array   $edit_libs        返回可编辑的库文件数组
      */
-    function get_editable_libs($curr_template, $curr_page_libs)
+    public function get_editable_libs($curr_template, $curr_page_libs)
     {
         global $_CFG;
         $vals = array();

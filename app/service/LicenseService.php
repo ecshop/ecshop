@@ -17,7 +17,7 @@ class LicenseService
      *
      * @return  array
      */
-    function get_shop_license()
+    public function get_shop_license()
     {
         // 取出网店 license
         $sql = "SELECT code, value
@@ -40,7 +40,7 @@ class LicenseService
      * @param string     证书token
      * @return  string
      */
-    function make_shopex_ac($post_params, $token)
+    public function make_shopex_ac($post_params, $token)
     {
         if (!is_array($post_params)) {
             return;
@@ -65,7 +65,7 @@ class LicenseService
      * @param array $license 网店license信息
      * @return  array
      */
-    function exchange_shop_license($certi, $license)
+    public function exchange_shop_license($certi, $license)
     {
         if (!is_array($certi)) {
             return array();
@@ -94,7 +94,7 @@ class LicenseService
      * @param array $cert_auth 登录返回的用户信息
      * @return  array
      */
-    function process_login_license($cert_auth)
+    public function process_login_license($cert_auth)
     {
         if (!is_array($cert_auth)) {
             return array();
@@ -120,7 +120,7 @@ class LicenseService
      * @return  array     $return_array['flag'] = login_succ、login_fail、login_ping_fail、login_param_fail；
      *                    $return_array['request']；
      */
-    function license_login($certi_added = '')
+    public function license_login($certi_added = '')
     {
         // 登录信息配置
         $certi['certi_app'] = ''; // 证书方法
@@ -182,7 +182,7 @@ class LicenseService
      * @return  array     $return_array['flag'] = reg_succ、reg_fail、reg_ping_fail；
      *                    $return_array['request']；
      */
-    function license_reg($certi_added = '')
+    public function license_reg($certi_added = '')
     {
         // 登录信息配置
         $certi['certi_app'] = ''; // 证书方法

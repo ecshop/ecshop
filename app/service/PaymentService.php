@@ -13,7 +13,7 @@ class PaymentService
      * 取得返回信息地址
      * @param string $code 支付方式代码
      */
-    function return_url($code)
+    public function return_url($code)
     {
         return $GLOBALS['ecs']->url() . 'respond.php?code=' . $code;
     }
@@ -22,7 +22,7 @@ class PaymentService
      *  取得某支付方式信息
      * @param string $code 支付方式代码
      */
-    function get_payment($code)
+    public function get_payment($code)
     {
         $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('payment') .
             " WHERE pay_code = '$code' AND enabled = '1'";
@@ -44,7 +44,7 @@ class PaymentService
      * @param string $order_sn 订单sn
      * @param blob $voucher 是否为会员充值
      */
-    function get_order_id_by_sn($order_sn, $voucher = 'false')
+    public function get_order_id_by_sn($order_sn, $voucher = 'false')
     {
         if ($voucher == 'true') {
             if (is_numeric($order_sn)) {
@@ -70,7 +70,7 @@ class PaymentService
      *  通过订单ID取得订单商品名称
      * @param string $order_id 订单ID
      */
-    function get_goods_name_by_id($order_id)
+    public function get_goods_name_by_id($order_id)
     {
         $sql = 'SELECT goods_name FROM ' . $GLOBALS['ecs']->table('order_goods') . " WHERE order_id = '$order_id'";
         $goods_name = $GLOBALS['db']->getCol($sql);
@@ -85,7 +85,7 @@ class PaymentService
      * @param float $money 支付接口返回的金额
      * @return  true
      */
-    function check_money($log_id, $money)
+    public function check_money($log_id, $money)
     {
         if (is_numeric($log_id)) {
             $sql = 'SELECT order_amount FROM ' . $GLOBALS['ecs']->table('pay_log') .
@@ -110,7 +110,7 @@ class PaymentService
      * @param string $note 备注
      * @return  void
      */
-    function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
+    public function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
     {
         /* 取得支付编号 */
         $log_id = intval($log_id);

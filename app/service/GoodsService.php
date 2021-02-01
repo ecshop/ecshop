@@ -12,7 +12,7 @@ class GoodsService
     /**
      * 商品推荐usort用自定义排序行数
      */
-    function goods_sort($goods_a, $goods_b)
+    public function goods_sort($goods_a, $goods_b)
     {
         if ($goods_a['sort_order'] == $goods_b['sort_order']) {
             return 0;
@@ -27,7 +27,7 @@ class GoodsService
      * @param integer $cat_id 分类编号
      * @return  array
      */
-    function get_categories_tree($cat_id = 0)
+    public function get_categories_tree($cat_id = 0)
     {
         if ($cat_id > 0) {
             $sql = 'SELECT parent_id FROM ' . $GLOBALS['ecs']->table('category') . " WHERE cat_id = '$cat_id'";
@@ -67,7 +67,7 @@ class GoodsService
         }
     }
 
-    function get_child_tree($tree_id = 0)
+    public function get_child_tree($tree_id = 0)
     {
         $three_arr = array();
         $sql = 'SELECT count(*) FROM ' . $GLOBALS['ecs']->table('category') . " WHERE parent_id = '$tree_id' AND is_show = 1 ";
@@ -98,7 +98,7 @@ class GoodsService
      * @param string $cats 查询的分类
      * @return  array
      */
-    function get_top10($cats = '')
+    public function get_top10($cats = '')
     {
         $cats = get_children($cats);
         $where = !empty($cats) ? "AND ($cats OR " . get_extension_goods($cats) . ") " : '';
@@ -156,7 +156,7 @@ class GoodsService
      * @param string $type 推荐类型，可以是 best, new, hot
      * @return  array
      */
-    function get_recommend_goods($type = '', $cats = '')
+    public function get_recommend_goods($type = '', $cats = '')
     {
         if (!in_array($type, array('best', 'new', 'hot'))) {
             return array();
@@ -292,7 +292,7 @@ class GoodsService
      * @access  public
      * @return  array
      */
-    function get_promote_goods($cats = '')
+    public function get_promote_goods($cats = '')
     {
         $time = gmtime();
         $order_type = $GLOBALS['_CFG']['recommend_order'];
@@ -351,7 +351,7 @@ class GoodsService
      * @param string $ext 商品扩展查询
      * @return  array
      */
-    function get_category_recommend_goods($type = '', $cats = '', $brand = 0, $min = 0, $max = 0, $ext = '')
+    public function get_category_recommend_goods($type = '', $cats = '', $brand = 0, $min = 0, $max = 0, $ext = '')
     {
         $brand_where = ($brand > 0) ? " AND g.brand_id = '$brand'" : '';
 
@@ -430,7 +430,7 @@ class GoodsService
      * @param integer $goods_id
      * @return  void
      */
-    function get_goods_info($goods_id)
+    public function get_goods_info($goods_id)
     {
         $time = gmtime();
         $sql = 'SELECT g.*, c.measure_unit, b.brand_id, b.brand_name AS goods_brand, m.type_money AS bonus_money, ' .
@@ -526,7 +526,7 @@ class GoodsService
      * @param integer $goods_id
      * @return  array
      */
-    function get_goods_properties($goods_id)
+    public function get_goods_properties($goods_id)
     {
         /* 对属性进行重新排序和分组 */
         $sql = "SELECT attr_group " .
@@ -586,7 +586,7 @@ class GoodsService
      * @param array $attr // 包含了属性名称,ID的数组
      * @return  array
      */
-    function get_same_attribute_goods($attr)
+    public function get_same_attribute_goods($attr)
     {
         $lnk = array();
 
@@ -634,7 +634,7 @@ class GoodsService
      * @param integer $goods_id
      * @return  array
      */
-    function get_goods_gallery($goods_id)
+    public function get_goods_gallery($goods_id)
     {
         $sql = 'SELECT img_id, img_url, thumb_url, img_desc' .
             ' FROM ' . $GLOBALS['ecs']->table('goods_gallery') .
@@ -658,7 +658,7 @@ class GoodsService
      * @param string $order_rule 指定商品排序规则
      * @return  array
      */
-    function assign_cat_goods($cat_id, $num = 0, $from = 'web', $order_rule = '')
+    public function assign_cat_goods($cat_id, $num = 0, $from = 'web', $order_rule = '')
     {
         $children = get_children($cat_id);
 
@@ -724,7 +724,7 @@ class GoodsService
      * @param string $order_rule 指定商品排序规则
      * @return  void
      */
-    function assign_brand_goods($brand_id, $num = 0, $cat_id = 0, $order_rule = '')
+    public function assign_brand_goods($brand_id, $num = 0, $cat_id = 0, $order_rule = '')
     {
         $sql = 'SELECT g.goods_id, g.goods_name, g.market_price, g.shop_price AS org_price, ' .
             "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " .
@@ -789,7 +789,7 @@ class GoodsService
      * @param string $cat_id 分类查询字符串
      * @return  string
      */
-    function get_extension_goods($cats)
+    public function get_extension_goods($cats)
     {
         $extension_goods_array = '';
         $sql = 'SELECT goods_id FROM ' . $GLOBALS['ecs']->table('goods_cat') . " AS g WHERE $cats";
@@ -806,7 +806,7 @@ class GoodsService
      * @param string $end 促销结束日期
      * @return  float   如果还在促销期则返回促销价，否则返回0
      */
-    function bargain_price($price, $start, $end)
+    public function bargain_price($price, $start, $end)
     {
         if ($price == 0) {
             return 0;
@@ -827,7 +827,7 @@ class GoodsService
      * @param mix $spec 规格ID的数组或者逗号分隔的字符串
      * @return  void
      */
-    function spec_price($spec)
+    public function spec_price($spec)
     {
         if (!empty($spec)) {
             if (is_array($spec)) {
@@ -856,7 +856,7 @@ class GoodsService
      * @return  array
      *                  status          状态：
      */
-    function group_buy_info($group_buy_id, $current_num = 0)
+    public function group_buy_info($group_buy_id, $current_num = 0)
     {
         /* 取得团购活动信息 */
         $group_buy_id = intval($group_buy_id);
@@ -936,7 +936,7 @@ class GoodsService
      *                  valid_order     有效订单数
      *                  valid_goods     有效商品数
      */
-    function group_buy_stat($group_buy_id, $deposit)
+    public function group_buy_stat($group_buy_id, $deposit)
     {
         $group_buy_id = intval($group_buy_id);
 
@@ -987,7 +987,7 @@ class GoodsService
      * @param array
      * @return  integer
      */
-    function group_buy_status($group_buy)
+    public function group_buy_status($group_buy)
     {
         $now = gmtime();
         if ($group_buy['is_finished'] == 0) {
@@ -1019,7 +1019,7 @@ class GoodsService
      * @param int $act_id 活动id
      * @return  array
      */
-    function auction_info($act_id, $config = false)
+    public function auction_info($act_id, $config = false)
     {
         $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('goods_activity') . " WHERE act_id = '$act_id'";
         $auction = $GLOBALS['db']->getRow($sql);
@@ -1082,7 +1082,7 @@ class GoodsService
      * @param int $act_id 活动id
      * @return  array
      */
-    function auction_log($act_id)
+    public function auction_log($act_id)
     {
         $log = array();
         $sql = "SELECT a.*, u.user_name " .
@@ -1106,7 +1106,7 @@ class GoodsService
      * @param array $auction 拍卖活动原始信息
      * @return  int
      */
-    function auction_status($auction)
+    public function auction_status($auction)
     {
         $now = gmtime();
         if ($auction['is_finished'] == 0) {
@@ -1129,7 +1129,7 @@ class GoodsService
      * @param int $goods_id 商品id
      * @return  array
      */
-    function goods_info($goods_id)
+    public function goods_info($goods_id)
     {
         $sql = "SELECT g.*, b.brand_name " .
             "FROM " . $GLOBALS['ecs']->table('goods') . " AS g " .
@@ -1154,7 +1154,7 @@ class GoodsService
      * @param int $act_id 活动id
      * @return  array
      */
-    function favourable_info($act_id)
+    public function favourable_info($act_id)
     {
         $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('favourable_activity') .
             " WHERE act_id = '$act_id'";
@@ -1178,7 +1178,7 @@ class GoodsService
      * @param int $act_id 活动id
      * @return  array
      */
-    function wholesale_info($act_id)
+    public function wholesale_info($act_id)
     {
         $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('wholesale') .
             " WHERE act_id = '$act_id'";
@@ -1196,7 +1196,7 @@ class GoodsService
      * @param string $style 样式参数
      * @return  string
      */
-    function add_style($goods_name, $style)
+    public function add_style($goods_name, $style)
     {
         $goods_style_name = $goods_name;
 
@@ -1219,7 +1219,7 @@ class GoodsService
      * @param int $goods_id 商品id
      * @return  array
      */
-    function get_goods_attr($goods_id)
+    public function get_goods_attr($goods_id)
     {
         $attr_list = array();
         $sql = "SELECT a.attr_id, a.attr_name " .
@@ -1257,7 +1257,7 @@ class GoodsService
      * @param array $goods_list
      * @return  array
      */
-    function get_goods_fittings($goods_list = array())
+    public function get_goods_fittings($goods_list = array())
     {
         $temp_index = 0;
         $arr = array();
@@ -1302,7 +1302,7 @@ class GoodsService
      * @param array $spec_goods_attr_id
      * @return      array
      */
-    function get_products_info($goods_id, $spec_goods_attr_id)
+    public function get_products_info($goods_id, $spec_goods_attr_id)
     {
         $return_array = array();
 

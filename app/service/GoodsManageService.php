@@ -13,7 +13,7 @@ class GoodsManageService
      * 取得推荐类型列表
      * @return  array   推荐类型列表
      */
-    function get_intro_list()
+    public function get_intro_list()
     {
         return array(
             'is_best' => $GLOBALS['_LANG']['is_best'],
@@ -28,7 +28,7 @@ class GoodsManageService
      * 取得重量单位列表
      * @return  array   重量单位列表
      */
-    function get_unit_list()
+    public function get_unit_list()
     {
         return array(
             '1' => $GLOBALS['_LANG']['unit_kg'],
@@ -40,7 +40,7 @@ class GoodsManageService
      * 取得会员等级列表
      * @return  array   会员等级列表
      */
-    function get_user_rank_list()
+    public function get_user_rank_list()
     {
         $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('user_rank') .
             " ORDER BY min_points";
@@ -53,7 +53,7 @@ class GoodsManageService
      * @param int $goods_id 商品编号
      * @return  array   会员价格列表 user_rank => user_price
      */
-    function get_member_price_list($goods_id)
+    public function get_member_price_list($goods_id)
     {
         /* 取得会员价格 */
         $price_list = array();
@@ -77,7 +77,7 @@ class GoodsManageService
      * @param array $value_price_list 属性值数组
      * @return  array                       返回受到影响的goods_attr_id数组
      */
-    function handle_goods_attr($goods_id, $id_list, $is_spec_list, $value_price_list)
+    public function handle_goods_attr($goods_id, $id_list, $is_spec_list, $value_price_list)
     {
         $goods_attr_id = array();
 
@@ -135,7 +135,7 @@ class GoodsManageService
      * @param array $price_list 价格列表
      * @return  void
      */
-    function handle_member_price($goods_id, $rank_list, $price_list)
+    public function handle_member_price($goods_id, $rank_list, $price_list)
     {
         /* 循环处理每个会员等级 */
         foreach ($rank_list as $key => $rank) {
@@ -177,7 +177,7 @@ class GoodsManageService
      * @param array $cat_list 分类编号数组
      * @return  void
      */
-    function handle_other_cat($goods_id, $cat_list)
+    public function handle_other_cat($goods_id, $cat_list)
     {
         /* 查询现有的扩展分类 */
         $sql = "SELECT cat_id FROM " . $GLOBALS['ecs']->table('goods_cat') .
@@ -209,7 +209,7 @@ class GoodsManageService
      * @param int $goods_id
      * @return  void
      */
-    function handle_link_goods($goods_id)
+    public function handle_link_goods($goods_id)
     {
         $sql = "UPDATE " . $GLOBALS['ecs']->table('link_goods') . " SET " .
             " goods_id = '$goods_id' " .
@@ -229,7 +229,7 @@ class GoodsManageService
      * @param int $goods_id
      * @return  void
      */
-    function handle_group_goods($goods_id)
+    public function handle_group_goods($goods_id)
     {
         $sql = "UPDATE " . $GLOBALS['ecs']->table('group_goods') . " SET " .
             " parent_id = '$goods_id' " .
@@ -243,7 +243,7 @@ class GoodsManageService
      * @param int $goods_id
      * @return  void
      */
-    function handle_goods_article($goods_id)
+    public function handle_goods_article($goods_id)
     {
         $sql = "UPDATE " . $GLOBALS['ecs']->table('goods_article') . " SET " .
             " goods_id = '$goods_id' " .
@@ -259,7 +259,7 @@ class GoodsManageService
      * @param array $image_descs
      * @return  void
      */
-    function handle_gallery_image($goods_id, $image_files, $image_descs, $image_urls)
+    public function handle_gallery_image($goods_id, $image_files, $image_descs, $image_urls)
     {
         /* 是否处理缩略图 */
         $proc_thumb = (isset($GLOBALS['shop_id']) && $GLOBALS['shop_id'] > 0) ? false : true;
@@ -358,7 +358,7 @@ class GoodsManageService
      * @param string $value 字段值
      * @return  bool
      */
-    function update_goods($goods_id, $field, $value)
+    public function update_goods($goods_id, $field, $value)
     {
         if ($goods_id) {
             /* 清除缓存 */
@@ -378,7 +378,7 @@ class GoodsManageService
      * @param mix $goods_id 商品id列表：可以逗号格开，也可以是数组
      * @return  void
      */
-    function delete_goods($goods_id)
+    public function delete_goods($goods_id)
     {
         if (empty($goods_id)) {
             return;
@@ -479,7 +479,7 @@ class GoodsManageService
      * @param int $goods_id 商品编号
      * @return  string  唯一的货号
      */
-    function generate_goods_sn($goods_id)
+    public function generate_goods_sn($goods_id)
     {
         $goods_sn = $GLOBALS['_CFG']['sn_prefix'] . str_repeat('0', 6 - strlen($goods_id)) . $goods_id;
 
@@ -506,7 +506,7 @@ class GoodsManageService
      * @param int $goods_id 商品id；默认值为：0，没有商品id
      * @return  bool                        true，重复；false，不重复
      */
-    function check_goods_sn_exist($goods_sn, $goods_id = 0)
+    public function check_goods_sn_exist($goods_sn, $goods_id = 0)
     {
         $goods_sn = trim($goods_sn);
         $goods_id = intval($goods_id);
@@ -538,7 +538,7 @@ class GoodsManageService
      * @param int $goods_id 商品编号
      * @return  array   规格与属性列表
      */
-    function get_attr_list($cat_id, $goods_id = 0)
+    public function get_attr_list($cat_id, $goods_id = 0)
     {
         if (empty($cat_id)) {
             return array();
@@ -563,7 +563,7 @@ class GoodsManageService
      * @access  public
      * @return  array
      */
-    function get_goods_type_specifications()
+    public function get_goods_type_specifications()
     {
         // 查询
         $sql = "SELECT DISTINCT cat_id
@@ -588,7 +588,7 @@ class GoodsManageService
      * @param int $goods_id 商品编号
      * @return  string
      */
-    function build_attr_html($cat_id, $goods_id = 0)
+    public function build_attr_html($cat_id, $goods_id = 0)
     {
         $attr = get_attr_list($cat_id, $goods_id);
         $html = '<table width="100%" id="attrTable">';
@@ -644,7 +644,7 @@ class GoodsManageService
      * @param integer $goods_id
      * @return  array
      */
-    function get_linked_goods($goods_id)
+    public function get_linked_goods($goods_id)
     {
         $sql = "SELECT lg.link_goods_id AS goods_id, g.goods_name, lg.is_double " .
             "FROM " . $GLOBALS['ecs']->table('link_goods') . " AS lg, " .
@@ -674,7 +674,7 @@ class GoodsManageService
      * @param integer $goods_id
      * @return  array
      */
-    function get_group_goods($goods_id)
+    public function get_group_goods($goods_id)
     {
         $sql = "SELECT gg.goods_id, CONCAT(g.goods_name, ' -- [', gg.goods_price, ']') AS goods_name " .
             "FROM " . $GLOBALS['ecs']->table('group_goods') . " AS gg, " .
@@ -696,7 +696,7 @@ class GoodsManageService
      * @param integer $goods_id
      * @return  array
      */
-    function get_goods_articles($goods_id)
+    public function get_goods_articles($goods_id)
     {
         $sql = "SELECT g.article_id, a.title " .
             "FROM " . $GLOBALS['ecs']->table('goods_article') . " AS g, " .
@@ -720,7 +720,7 @@ class GoodsManageService
      * @params  integer $conditions
      * @return  array
      */
-    function goods_list($is_delete, $real_goods = 1, $conditions = '')
+    public function goods_list($is_delete, $real_goods = 1, $conditions = '')
     {
         /* 过滤条件 */
         $param_str = '-' . $is_delete . '-' . $real_goods;
@@ -834,7 +834,7 @@ class GoodsManageService
      * @params      string      $conditions     sql条件，AND语句开头
      * @return      string number               -1，错误；1，存在；0，不存在
      */
-    function check_goods_product_exist($goods_id, $conditions = '')
+    public function check_goods_product_exist($goods_id, $conditions = '')
     {
         if (empty($goods_id)) {
             return -1;  //$goods_id不能为空
@@ -862,7 +862,7 @@ class GoodsManageService
      * @params      string      $conditions     sql条件，AND语句开头
      * @return      string number
      */
-    function product_number_count($goods_id, $conditions = '')
+    public function product_number_count($goods_id, $conditions = '')
     {
         if (empty($goods_id)) {
             return -1;  //$goods_id不能为空
@@ -885,7 +885,7 @@ class GoodsManageService
      * @params      integer         $goods_id
      * @return      array
      */
-    function product_goods_attr_list($goods_id)
+    public function product_goods_attr_list($goods_id)
     {
         if (empty($goods_id)) {
             return array();  //$goods_id不能为空
@@ -909,7 +909,7 @@ class GoodsManageService
      * @params      integer         $goods_id
      * @return      array
      */
-    function get_goods_specifications_list($goods_id)
+    public function get_goods_specifications_list($goods_id)
     {
         if (empty($goods_id)) {
             return array();  //$goods_id不能为空
@@ -935,7 +935,7 @@ class GoodsManageService
      * @params  string  $conditions
      * @return  array
      */
-    function product_list($goods_id, $conditions = '')
+    public function product_list($goods_id, $conditions = '')
     {
         /* 过滤条件 */
         $param_str = '-' . $goods_id;
@@ -980,7 +980,7 @@ class GoodsManageService
                 ORDER BY $filter[sort_by] $filter[sort_order]";
 
             $filter['keyword'] = stripslashes($filter['keyword']);
-            //set_filter($filter, $sql, $param_str);
+        //set_filter($filter, $sql, $param_str);
         } else {
             $sql = $result['sql'];
             $filter = $result['filter'];
@@ -1011,7 +1011,7 @@ class GoodsManageService
      * @param int $filed 字段
      * @return  array
      */
-    function get_product_info($product_id, $filed = '')
+    public function get_product_info($product_id, $filed = '')
     {
         $return_array = array();
 
@@ -1036,7 +1036,7 @@ class GoodsManageService
      * @param int $goods_id 商品id
      * @return  bool                          true，存在；false，不存在
      */
-    function check_goods_specifications_exist($goods_id)
+    public function check_goods_specifications_exist($goods_id)
     {
         $goods_id = intval($goods_id);
 
@@ -1062,7 +1062,7 @@ class GoodsManageService
      * @param int $product_id 商品的货品id；默认值为：0，没有货品id
      * @return  bool                          true，重复；false，不重复
      */
-    function check_goods_attr_exist($goods_attr, $goods_id, $product_id = 0)
+    public function check_goods_attr_exist($goods_attr, $goods_id, $product_id = 0)
     {
         $goods_id = intval($goods_id);
         if (strlen($goods_attr) == 0 || empty($goods_id)) {
@@ -1096,7 +1096,7 @@ class GoodsManageService
      * @param int $product_id 商品的货品id；默认值为：0，没有货品id
      * @return  bool                          true，重复；false，不重复
      */
-    function check_product_sn_exist($product_sn, $product_id = 0)
+    public function check_product_sn_exist($product_sn, $product_id = 0)
     {
         $product_sn = trim($product_sn);
         $product_id = intval($product_id);
@@ -1131,7 +1131,7 @@ class GoodsManageService
      * 格式化商品图片名称（按目录存储）
      *
      */
-    function reformat_image_name($type, $goods_id, $source_img, $position = '')
+    public function reformat_image_name($type, $goods_id, $source_img, $position = '')
     {
         $rand_name = gmtime() . sprintf("%03d", mt_rand(1, 999));
         $img_ext = substr($source_img, strrpos($source_img, '.'));
@@ -1182,7 +1182,7 @@ class GoodsManageService
         return false;
     }
 
-    function move_image_file($source, $dest)
+    public function move_image_file($source, $dest)
     {
         if (@copy($source, $dest)) {
             @unlink($source);

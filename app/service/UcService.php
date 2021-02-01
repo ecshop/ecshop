@@ -18,7 +18,7 @@ class UcService
      *
      * @return void
      */
-    function add_feed($id, $feed_type)
+    public function add_feed($id, $feed_type)
     {
         $feed = array();
         if ($feed_type == BUY_GOODS) {
@@ -55,7 +55,7 @@ class UcService
      *
      * @return  void
      */
-    function get_linked_tags($tag_data)
+    public function get_linked_tags($tag_data)
     {
         //取所有应用列表
         $app_list = uc_call("uc_app_ls");
@@ -103,7 +103,7 @@ class UcService
      *
      * @return boolean
      */
-    function exchange_points($uid, $fromcredits, $tocredits, $toappid, $netamount)
+    public function exchange_points($uid, $fromcredits, $tocredits, $toappid, $netamount)
     {
         $ucresult = uc_call('uc_credit_exchange_request', array($uid, $fromcredits, $tocredits, $toappid, $netamount));
         if (!$ucresult) {

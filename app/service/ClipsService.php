@@ -19,7 +19,7 @@ class ClipsService
      *
      * @return  array   $arr
      */
-    function get_collection_goods($user_id, $num = 10, $start = 0)
+    public function get_collection_goods($user_id, $num = 10, $start = 0)
     {
         $sql = 'SELECT g.goods_id, g.goods_name, g.market_price, g.shop_price AS org_price, ' .
             "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " .
@@ -62,7 +62,7 @@ class ClipsService
      *
      * @return  int
      */
-    function get_booking_rec($user_id, $goods_id)
+    public function get_booking_rec($user_id, $goods_id)
     {
         $sql = 'SELECT COUNT(*) ' .
             'FROM ' . $GLOBALS['ecs']->table('booking_goods') .
@@ -82,7 +82,7 @@ class ClipsService
      * @return  array   $msg            留言及回复列表
      * @return  string  $order_id       订单ID
      */
-    function get_message_list($user_id, $user_name, $num, $start, $order_id = 0)
+    public function get_message_list($user_id, $user_name, $num, $start, $order_id = 0)
     {
         /* 获取留言数据 */
         $msg = array();
@@ -132,7 +132,7 @@ class ClipsService
      *
      * @return  boolen      $bool
      */
-    function add_message($message)
+    public function add_message($message)
     {
         $upload_size_limit = $GLOBALS['_CFG']['upload_size_limit'] == '-1' ? ini_get('upload_max_filesize') : $GLOBALS['_CFG']['upload_size_limit'];
         $status = 1 - $GLOBALS['_CFG']['message_check'];
@@ -186,7 +186,7 @@ class ClipsService
      *
      * @return array        $arr            tags列表
      */
-    function get_user_tags($user_id = 0)
+    public function get_user_tags($user_id = 0)
     {
         if (empty($user_id)) {
             $GLOBALS['error_no'] = 1;
@@ -212,7 +212,7 @@ class ClipsService
      *
      * @return  boolen      bool
      */
-    function delete_tag($tag_words, $user_id)
+    public function delete_tag($tag_words, $user_id)
     {
         $sql = "DELETE FROM " . $GLOBALS['ecs']->table('tag') .
             " WHERE tag_words = '$tag_words' AND user_id = '$user_id'";
@@ -230,7 +230,7 @@ class ClipsService
      *
      * @return  array   $booking
      */
-    function get_booking_list($user_id, $num, $start)
+    public function get_booking_list($user_id, $num, $start)
     {
         $booking = array();
         $sql = "SELECT bg.rec_id, bg.goods_id, bg.goods_number, bg.booking_time, bg.dispose_note, g.goods_name " .
@@ -260,7 +260,7 @@ class ClipsService
      *
      * @return  array   $info
      */
-    function get_goodsinfo($goods_id)
+    public function get_goodsinfo($goods_id)
     {
         $info = array();
         $sql = "SELECT goods_name FROM " . $GLOBALS['ecs']->table('goods') . " WHERE goods_id = '$goods_id'";
@@ -291,7 +291,7 @@ class ClipsService
      * @param int $user_id 会员的ID
      * @return  boolen      $bool
      */
-    function delete_booking($booking_id, $user_id)
+    public function delete_booking($booking_id, $user_id)
     {
         $sql = 'DELETE FROM ' . $GLOBALS['ecs']->table('booking_goods') .
             " WHERE rec_id = '$booking_id' AND user_id = '$user_id'";
@@ -306,7 +306,7 @@ class ClipsService
      *
      * @return void
      */
-    function add_booking($booking)
+    public function add_booking($booking)
     {
         $sql = "INSERT INTO " . $GLOBALS['ecs']->table('booking_goods') .
             " VALUES ('', '$_SESSION[user_id]', '$booking[email]', '$booking[linkman]', " .
@@ -326,7 +326,7 @@ class ClipsService
      *
      * @return  int
      */
-    function insert_user_account($surplus, $amount)
+    public function insert_user_account($surplus, $amount)
     {
         $sql = 'INSERT INTO ' . $GLOBALS['ecs']->table('user_account') .
             ' (user_id, admin_user, amount, add_time, paid_time, admin_note, user_note, process_type, payment, is_paid)' .
@@ -344,7 +344,7 @@ class ClipsService
      *
      * @return  int
      */
-    function update_user_account($surplus)
+    public function update_user_account($surplus)
     {
         $sql = 'UPDATE ' . $GLOBALS['ecs']->table('user_account') . ' SET ' .
             "amount     = '$surplus[amount]', " .
@@ -367,7 +367,7 @@ class ClipsService
      *
      * @return  int
      */
-    function insert_pay_log($id, $amount, $type = PAY_SURPLUS, $is_paid = 0)
+    public function insert_pay_log($id, $amount, $type = PAY_SURPLUS, $is_paid = 0)
     {
         $sql = 'INSERT INTO ' . $GLOBALS['ecs']->table('pay_log') . " (order_id, order_amount, order_type, is_paid)" .
             " VALUES  ('$id', '$amount', '$type', '$is_paid')";
@@ -385,7 +385,7 @@ class ClipsService
      *
      * @return  int
      */
-    function get_paylog_id($surplus_id, $pay_type = PAY_SURPLUS)
+    public function get_paylog_id($surplus_id, $pay_type = PAY_SURPLUS)
     {
         $sql = 'SELECT log_id FROM' . $GLOBALS['ecs']->table('pay_log') .
             " WHERE order_id = '$surplus_id' AND order_type = '$pay_type' AND is_paid = 0";
@@ -401,7 +401,7 @@ class ClipsService
      *
      * @return  int
      */
-    function get_surplus_info($surplus_id)
+    public function get_surplus_info($surplus_id)
     {
         $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('user_account') .
             " WHERE id = '$surplus_id'";
@@ -414,7 +414,7 @@ class ClipsService
      * @param bool $include_balance 是否包含余额支付（冲值时不应包括）
      * @return  array   已安装的配送方式列表
      */
-    function get_online_payment_list($include_balance = true)
+    public function get_online_payment_list($include_balance = true)
     {
         $sql = 'SELECT pay_id, pay_code, pay_name, pay_fee, pay_desc ' .
             'FROM ' . $GLOBALS['ecs']->table('payment') .
@@ -435,7 +435,7 @@ class ClipsService
      * @param int $start 开始显示的条数
      * @return  array
      */
-    function get_account_log($user_id, $num, $start)
+    public function get_account_log($user_id, $num, $start)
     {
         $account_log = array();
         $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('user_account') .
@@ -488,7 +488,7 @@ class ClipsService
      * @param int $user_id 会员的ID
      * @return  boolen
      */
-    function del_user_account($rec_id, $user_id)
+    public function del_user_account($rec_id, $user_id)
     {
         $sql = 'DELETE FROM ' . $GLOBALS['ecs']->table('user_account') .
             " WHERE is_paid = 0 AND id = '$rec_id' AND user_id = '$user_id'";
@@ -502,7 +502,7 @@ class ClipsService
      * @param int $user_id 会员ID
      * @return  int
      */
-    function get_user_surplus($user_id)
+    public function get_user_surplus($user_id)
     {
         $sql = "SELECT SUM(user_money) FROM " . $GLOBALS['ecs']->table('account_log') .
             " WHERE user_id = '$user_id'";
@@ -518,7 +518,7 @@ class ClipsService
      *
      * @return  array       $info               默认页面所需资料数组
      */
-    function get_user_default($user_id)
+    public function get_user_default($user_id)
     {
         $user_bonus = get_user_bonus();
 
@@ -565,7 +565,7 @@ class ClipsService
      * @param string $tag
      * @return  void
      */
-    function add_tag($id, $tag)
+    public function add_tag($id, $tag)
     {
         if (empty($tag)) {
             return;
@@ -593,7 +593,7 @@ class ClipsService
      * @param array
      * @return   none
      */
-    function color_tag(&$tags)
+    public function color_tag(&$tags)
     {
         $tagmark = array(
             array('color' => '#666666', 'size' => '0.8em', 'ifbold' => 1),
@@ -652,7 +652,7 @@ class ClipsService
      * @access   public
      * @return array
      */
-    function get_rank_info()
+    public function get_rank_info()
     {
         global $db, $ecs;
 
@@ -686,7 +686,7 @@ class ClipsService
      *
      * @return  array
      */
-    function get_user_prompt($user_id)
+    public function get_user_prompt($user_id)
     {
         $prompt = array();
         $now = gmtime();
@@ -759,7 +759,7 @@ class ClipsService
      * @param int $start 列表起始页
      * @return  array
      */
-    function get_comment_list($user_id, $page_size, $start)
+    public function get_comment_list($user_id, $page_size, $start)
     {
         $sql = "SELECT c.*, g.goods_name AS cmt_name, r.content AS reply_content, r.add_time AS reply_time " .
             " FROM " . $GLOBALS['ecs']->table('comment') . " AS c " .

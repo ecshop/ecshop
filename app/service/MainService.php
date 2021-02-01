@@ -15,7 +15,7 @@ class MainService
      * @access  public
      * @return  void
      */
-    function update_user_info()
+    public function update_user_info()
     {
         if (!$_SESSION['user_id']) {
             return false;
@@ -89,7 +89,7 @@ class MainService
      *
      * @return array        $user       用户信息数组
      */
-    function get_user_info($id = 0)
+    public function get_user_info($id = 0)
     {
         if ($id == 0) {
             $id = $_SESSION['user_id'];
@@ -117,7 +117,7 @@ class MainService
      * @param string $str 商品名、文章标题或其他附加的内容（无链接）
      * @return  array
      */
-    function assign_ur_here($cat = 0, $str = '')
+    public function assign_ur_here($cat = 0, $str = '')
     {
         /* 判断是否重写，取得文件名 */
         $cur_url = basename(PHP_SELF);
@@ -220,7 +220,7 @@ class MainService
      * @param integer $cat 分类编号
      * @return  array
      */
-    function get_parent_cats($cat)
+    public function get_parent_cats($cat)
     {
         if ($cat == 0) {
             return array();
@@ -264,7 +264,7 @@ class MainService
      * @param array $arr 分类数组
      * @return  string
      */
-    function build_pagetitle($arr, $type = 'category')
+    public function build_pagetitle($arr, $type = 'category')
     {
         $str = '';
 
@@ -283,7 +283,7 @@ class MainService
      * @param array $arr 分类数组
      * @return  void
      */
-    function build_urhere($arr, $type = 'category')
+    public function build_urhere($arr, $type = 'category')
     {
         krsort($arr);
 
@@ -312,7 +312,7 @@ class MainService
      * @param string $tmp 模板名称
      * @return  void
      */
-    function assign_dynamic($tmp)
+    public function assign_dynamic($tmp)
     {
         $sql = 'SELECT id, number, type FROM ' . $GLOBALS['ecs']->table('template') .
             " WHERE filename = '$tmp' AND type > 0 AND remarks ='' AND theme='" . $GLOBALS['_CFG']['template'] . "'";
@@ -350,7 +350,7 @@ class MainService
      * @param integer $num 文章数量
      * @return  array
      */
-    function assign_articles($id, $num)
+    public function assign_articles($id, $num)
     {
         $sql = 'SELECT cat_name FROM ' . $GLOBALS['ecs']->table('article_cat') . " WHERE cat_id = '" . $id . "'";
 
@@ -370,7 +370,7 @@ class MainService
      * @access  public
      * @return  array
      */
-    function get_shop_help()
+    public function get_shop_help()
     {
         $sql = 'SELECT c.cat_id, c.cat_name, c.sort_order, a.article_id, a.title, a.file_url, a.open_type ' .
             'FROM ' . $GLOBALS['ecs']->table('article') . ' AS a ' .
@@ -411,7 +411,7 @@ class MainService
      * @param string $price_max 最高价格
      * @return  void
      */
-    function assign_pager(
+    public function assign_pager(
         $app,
         $cat,
         $record_count,
@@ -427,8 +427,7 @@ class MainService
         $filter_attr = '',
         $url_format = '',
         $sch_array = ''
-    )
-    {
+    ) {
         $sch = array('keywords' => $keywords,
             'sort' => $sort,
             'order' => $order,
@@ -561,7 +560,7 @@ class MainService
      *
      * @return  array       $pager
      */
-    function get_pager($url, $param, $record_count, $page = 1, $size = 10)
+    public function get_pager($url, $param, $record_count, $page = 1, $size = 10)
     {
         $size = intval($size);
         if ($size < 1) {
@@ -651,7 +650,7 @@ class MainService
      * @param integer $id 调查的编号
      * @return  array
      */
-    function get_vote($id = '')
+    public function get_vote($id = '')
     {
         /* 随机取得一个调查的主题 */
         if (empty($id)) {
@@ -717,7 +716,7 @@ class MainService
      * @access  public
      * @return  string
      */
-    function get_user_browser()
+    public function get_user_browser()
     {
         if (empty($_SERVER['HTTP_USER_AGENT'])) {
             return '';
@@ -769,7 +768,7 @@ class MainService
      * @access  public
      * @return  string
      */
-    function is_spider($record = true)
+    public function is_spider($record = true)
     {
         static $spider = null;
 
@@ -834,7 +833,7 @@ class MainService
      * @access  private
      * @return  void
      */
-    function get_os()
+    public function get_os()
     {
         if (empty($_SERVER['HTTP_USER_AGENT'])) {
             return 'Unknown';
@@ -912,7 +911,7 @@ class MainService
      * @access  public
      * @return  void
      */
-    function visit_stats()
+    public function visit_stats()
     {
         if (isset($GLOBALS['_CFG']['visit_stats']) && $GLOBALS['_CFG']['visit_stats'] == 'off') {
             return;
@@ -968,7 +967,7 @@ class MainService
      * @access  public
      * @return  void
      */
-    function save_searchengine_keyword($domain, $path)
+    public function save_searchengine_keyword($domain, $path)
     {
         if (strpos($domain, 'google.com.tw') !== false && preg_match('/q=([^&]*)/i', $path, $regs)) {
             $searchengine = 'GOOGLE TAIWAN';
@@ -1055,7 +1054,7 @@ class MainService
      * @param integer $user_id
      * @return  array
      */
-    function get_tags($goods_id = 0, $user_id = 0)
+    public function get_tags($goods_id = 0, $user_id = 0)
     {
         $where = '';
         if ($goods_id > 0) {
@@ -1090,7 +1089,7 @@ class MainService
      *
      * @return array()
      */
-    function get_dyna_libs($theme, $tmp)
+    public function get_dyna_libs($theme, $tmp)
     {
         $tmp_arr = explode('.', $tmp);
         $ext = end($tmp_arr);
@@ -1121,7 +1120,7 @@ class MainService
      *
      * @return string        结果
      */
-    function dyna_libs_replace($matches)
+    public function dyna_libs_replace($matches)
     {
         $key = '/' . $matches[1];
 
@@ -1160,7 +1159,7 @@ class MainService
      *
      * @return string               上传图片名
      */
-    function upload_file($upload, $type)
+    public function upload_file($upload, $type)
     {
         if (!empty($upload['tmp_name'])) {
             $ftype = check_file_type($upload['tmp_name'], $upload['name'], '|png|jpg|jpeg|gif|doc|xls|txt|zip|ppt|pdf|rar|docx|xlsx|pptx|');
@@ -1199,7 +1198,7 @@ class MainService
      * @param char        operate 操作符号，只能返回‘+’或‘*’;
      * @return  float       value   浮点数
      */
-    function parse_rate_value($str, &$operate)
+    public function parse_rate_value($str, &$operate)
     {
         $operate = '+';
         $is_rate = false;
@@ -1229,7 +1228,7 @@ class MainService
      * @access  public
      * @return  void
      */
-    function recalculate_price()
+    public function recalculate_price()
     {
         /* 取得有可能改变价格的商品：除配件和赠品之外的商品 */
         $sql = 'SELECT c.rec_id, c.goods_id, c.goods_attr_id, g.promote_price, g.promote_start_date, c.goods_number,' .
@@ -1270,7 +1269,7 @@ class MainService
      * @params  integer     $page
      * @return  array
      */
-    function assign_comment($id, $type, $page = 1)
+    public function assign_comment($id, $type, $page = 1)
     {
         /* 取得评论列表 */
         $count = $GLOBALS['db']->getOne('SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('comment') .
@@ -1332,7 +1331,7 @@ class MainService
      *
      * @return int      $gmt_time;
      */
-    function time2gmt($time)
+    public function time2gmt($time)
     {
         return strtotime(gmdate('Y-m-d H:i:s', $time));
     }
@@ -1344,7 +1343,7 @@ class MainService
      * @param integer $user_id
      * @return  void
      */
-    function get_user_bonus($user_id = 0)
+    public function get_user_bonus($user_id = 0)
     {
         if ($user_id == 0) {
             $user_id = $_SESSION['user_id'];
@@ -1367,7 +1366,7 @@ class MainService
      *
      * @return void
      */
-    function set_affiliate()
+    public function set_affiliate()
     {
         $config = unserialize($GLOBALS['_CFG']['affiliate']);
         if (!empty($_GET['u']) && $config['on'] == 1) {
@@ -1396,7 +1395,7 @@ class MainService
      *
      * @return int
      */
-    function get_affiliate()
+    public function get_affiliate()
     {
         if (!empty($_COOKIE['ecshop_affiliate_uid'])) {
             $uid = intval($_COOKIE['ecshop_affiliate_uid']);
@@ -1417,7 +1416,7 @@ class MainService
      * @param integer $cat_id 分类编号
      * @return  array
      */
-    function article_categories_tree($cat_id = 0)
+    public function article_categories_tree($cat_id = 0)
     {
         if ($cat_id > 0) {
             $sql = 'SELECT parent_id FROM ' . $GLOBALS['ecs']->table('article_cat') . " WHERE cat_id = '$cat_id'";
@@ -1471,7 +1470,7 @@ class MainService
      * @param integer $cat 分类编号
      * @return  array
      */
-    function get_article_parent_cats($cat)
+    public function get_article_parent_cats($cat)
     {
         if ($cat == 0) {
             return array();
@@ -1514,7 +1513,7 @@ class MainService
      * @param int $def_num 默认数量：如果没有设置模板，显示的数量
      * @return  int         数量
      */
-    function get_library_number($library, $template = null)
+    public function get_library_number($library, $template = null)
     {
         global $page_libs;
 
@@ -1562,7 +1561,7 @@ class MainService
      * @param string $type 位置，如top、bottom、middle
      * @return  array         列表
      */
-    function get_navigator($ctype = '', $catlist = array())
+    public function get_navigator($ctype = '', $catlist = array())
     {
         $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('nav') . '
             WHERE ifshow = \'1\' ORDER BY type, vieworder';
@@ -1630,7 +1629,7 @@ class MainService
      *
      * @return  str
      */
-    function license_info()
+    public function license_info()
     {
         if ($GLOBALS['_CFG']['licensed'] > 0) {
             /* 获取HOST */
@@ -1649,7 +1648,7 @@ class MainService
         }
     }
 
-    function url_domain()
+    public function url_domain()
     {
         $curr = strpos(PHP_SELF, ADMIN_PATH . '/') !== false ?
             preg_replace('/(.*)(' . ADMIN_PATH . ')(\/?)(.)*/i', '\1', dirname(PHP_SELF)) :
@@ -1664,8 +1663,8 @@ class MainService
         return $root;
     }
 
-//更新离线购物车
-    function update_cart_offline()
+    //更新离线购物车
+    public function update_cart_offline()
     {
         if (!$_SESSION['user_id']) {
             return false;

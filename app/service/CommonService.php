@@ -17,7 +17,7 @@ class CommonService
      *
      * @return   void
      */
-    function db_create_in($item_list, $field_name = '')
+    public function db_create_in($item_list, $field_name = '')
     {
         if (empty($item_list)) {
             return $field_name . " IN ('') ";
@@ -48,7 +48,7 @@ class CommonService
      *
      * @return bool
      */
-    function is_email($user_email)
+    public function is_email($user_email)
     {
         $chars = "/^([a-z0-9+_]|\\-|\\.)+@(([a-z0-9_]|\\-)+\\.)+[a-z]{2,6}\$/i";
         if (strpos($user_email, '@') !== false && strpos($user_email, '.') !== false) {
@@ -69,7 +69,7 @@ class CommonService
      * @param string $time
      * @return  void
      */
-    function is_time($time)
+    public function is_time($time)
     {
         $pattern = '/[\d]{4}-[\d]{1,2}-[\d]{1,2}\s[\d]{1,2}:[\d]{1,2}:[\d]{1,2}/';
 
@@ -82,7 +82,7 @@ class CommonService
      * @access  public
      * @return  void
      */
-    function assign_query_info()
+    public function assign_query_info()
     {
         if ($GLOBALS['db']->queryTime == '') {
             $query_time = 0;
@@ -108,7 +108,7 @@ class CommonService
      * @param array $arr 地区数组 *
      * @return  void
      */
-    function region_result($parent, $sel_name, $type)
+    public function region_result($parent, $sel_name, $type)
     {
         global $cp;
 
@@ -132,7 +132,7 @@ class CommonService
      * @param int     country    国家的编号
      * @return      array
      */
-    function get_regions($type = 0, $parent = 0)
+    public function get_regions($type = 0, $parent = 0)
     {
         $sql = 'SELECT region_id, region_name FROM ' . $GLOBALS['ecs']->table('region') .
             " WHERE region_type = '$type' AND parent_id = '$parent'";
@@ -148,7 +148,7 @@ class CommonService
      *
      * @return array;
      */
-    function get_shipping_config($area_id)
+    public function get_shipping_config($area_id)
     {
         /* 获得配置信息 */
         $sql = 'SELECT configure FROM ' . $GLOBALS['ecs']->table('shipping_area') . " WHERE shipping_area_id = '$area_id'";
@@ -170,7 +170,7 @@ class CommonService
      * @access  public
      * @return  object
      */
-    function init_users()
+    public function init_users()
     {
         $set_modules = false;
         static $cls = null;
@@ -195,7 +195,7 @@ class CommonService
      * @param int $is_show_all 如果为true显示所有分类，如果为false隐藏不可见分类。
      * @return  mix
      */
-    function cat_list($cat_id = 0, $selected = 0, $re_type = true, $level = 0, $is_show_all = true)
+    public function cat_list($cat_id = 0, $selected = 0, $re_type = true, $level = 0, $is_show_all = true)
     {
         static $res = null;
 
@@ -315,7 +315,7 @@ class CommonService
      * @param int $level 级别
      * @return  void
      */
-    function cat_options($spec_cat_id, $arr)
+    public function cat_options($spec_cat_id, $arr)
     {
         static $cat_options = array();
 
@@ -441,7 +441,7 @@ class CommonService
      * @access  public
      * @return  array
      */
-    function load_config()
+    public function load_config()
     {
         $arr = array();
 
@@ -513,7 +513,7 @@ class CommonService
      * 取得品牌列表
      * @return array 品牌列表 id => name
      */
-    function get_brand_list()
+    public function get_brand_list()
     {
         $sql = 'SELECT brand_id, brand_name FROM ' . $GLOBALS['ecs']->table('brand') . ' ORDER BY sort_order';
         $res = $GLOBALS['db']->getAll($sql);
@@ -533,7 +533,7 @@ class CommonService
      * @param int $cat
      * @return  array
      */
-    function get_brands($cat = 0, $app = 'brand')
+    public function get_brands($cat = 0, $app = 'brand')
     {
         global $page_libs;
         $template = basename(PHP_SELF);
@@ -572,7 +572,7 @@ class CommonService
      * @access  public
      * @return  array
      */
-    function get_promotion_info($goods_id = '')
+    public function get_promotion_info($goods_id = '')
     {
         $snatch = array();
         $group = array();
@@ -710,7 +710,7 @@ class CommonService
      * @param integer $cat 指定的分类ID
      * @return  string
      */
-    function get_children($cat = 0)
+    public function get_children($cat = 0)
     {
         return 'g.cat_id ' . db_create_in(array_unique(array_merge(array($cat), array_keys(cat_list($cat, 0, false)))));
     }
@@ -723,7 +723,7 @@ class CommonService
      *
      * @return void
      */
-    function get_article_children($cat = 0)
+    public function get_article_children($cat = 0)
     {
         return db_create_in(array_unique(array_merge(array($cat), array_keys(article_cat_list($cat, 0, false)))), 'cat_id');
     }
@@ -736,7 +736,7 @@ class CommonService
      *
      * @return array
      */
-    function get_mail_template($tpl_name)
+    public function get_mail_template($tpl_name)
     {
         $sql = 'SELECT template_subject, is_html, template_content FROM ' . $GLOBALS['ecs']->table('mail_templates') . " WHERE template_code = '$tpl_name'";
 
@@ -755,7 +755,7 @@ class CommonService
      * @param string $username 用户名，用户自己的操作则为 buyer
      * @return  void
      */
-    function order_action($order_sn, $order_status, $shipping_status, $pay_status, $note = '', $username = null, $place = 0)
+    public function order_action($order_sn, $order_status, $shipping_status, $pay_status, $note = '', $username = null, $place = 0)
     {
         if (is_null($username)) {
             $username = $_SESSION['admin_name'];
@@ -776,7 +776,7 @@ class CommonService
      * @param float $price 商品价格
      * @return  string
      */
-    function price_format($price, $change_price = true)
+    public function price_format($price, $change_price = true)
     {
         if ($price === '') {
             $price = 0;
@@ -822,7 +822,7 @@ class CommonService
      *
      * @return array()
      */
-    function get_virtual_goods($order_id, $shipping = false)
+    public function get_virtual_goods($order_id, $shipping = false)
     {
         if ($shipping) {
             $sql = 'SELECT goods_id, goods_name, send_number AS num, extension_code FROM ' .
@@ -854,7 +854,7 @@ class CommonService
      *
      * @return bool
      */
-    function virtual_goods_ship(&$virtual_goods, &$msg, $order_sn, $return_result = false, $process = 'other')
+    public function virtual_goods_ship(&$virtual_goods, &$msg, $order_sn, $return_result = false, $process = 'other')
     {
         $virtual_card = array();
         foreach ($virtual_goods as $code => $goods_list) {
@@ -887,7 +887,7 @@ class CommonService
      *
      * @return  boolen
      */
-    function virtual_card_shipping($goods, $order_sn, &$msg, $process = 'other')
+    public function virtual_card_shipping($goods, $order_sn, &$msg, $process = 'other')
     {
         /* 包含加密解密函数所在文件 */
         include_once(ROOT_PATH . 'includes/lib_code.php');
@@ -994,7 +994,7 @@ class CommonService
      *
      * @return void
      */
-    function virtual_card_result($order_sn, $goods)
+    public function virtual_card_result($order_sn, $goods)
     {
         /* 包含加密解密函数所在文件 */
         include_once(ROOT_PATH . 'includes/lib_code.php');
@@ -1033,7 +1033,7 @@ class CommonService
      * @return  array           array(user_name, bie_price, bid_time, num)
      *                          num通常为1，如果为2表示有2个用户取到最小值，但结果只返回最早出价用户。
      */
-    function get_snatch_result($id)
+    public function get_snatch_result($id)
     {
         $sql = 'SELECT u.user_id, u.user_name, u.email, lg.bid_price, lg.bid_time, count(*) as num' .
             ' FROM ' . $GLOBALS['ecs']->table('snatch_log') . ' AS lg ' .
@@ -1084,7 +1084,7 @@ class CommonService
      *
      * @return int        返回清除的文件个数
      */
-    function clear_tpl_files($is_cache = true, $ext = '')
+    public function clear_tpl_files($is_cache = true, $ext = '')
     {
         $dirs = array();
 
@@ -1152,7 +1152,7 @@ class CommonService
      * @param mix $ext 模版文件名， 不包含后缀
      * @return  void
      */
-    function clear_compiled_files($ext = '')
+    public function clear_compiled_files($ext = '')
     {
         return clear_tpl_files(false, $ext);
     }
@@ -1164,7 +1164,7 @@ class CommonService
      * @param mix $ext 模版文件名， 不包含后缀
      * @return  void
      */
-    function clear_cache_files($ext = '')
+    public function clear_cache_files($ext = '')
     {
         return clear_tpl_files(true, $ext);
     }
@@ -1176,7 +1176,7 @@ class CommonService
      * @param mix $ext 模版文件名后缀
      * @return  void
      */
-    function clear_all_files($ext = '')
+    public function clear_all_files($ext = '')
     {
         return clear_tpl_files(false, $ext) + clear_tpl_files(true, $ext);
     }
@@ -1188,7 +1188,7 @@ class CommonService
      * @param string $files
      * @return  void
      */
-    function smarty_insert_scripts($args)
+    public function smarty_insert_scripts($args)
     {
         static $scripts = array();
 
@@ -1216,7 +1216,7 @@ class CommonService
      * @param integer $count
      * @return  string
      */
-    function smarty_create_pages($params)
+    public function smarty_create_pages($params)
     {
         extract($params);
 
@@ -1259,7 +1259,7 @@ class CommonService
      * @param string $keywords 搜索关键词字符串
      * @return  void
      */
-    function build_uri($app, $params, $append = '', $page = 0, $keywords = '', $size = 0)
+    public function build_uri($app, $params, $append = '', $page = 0, $keywords = '', $size = 0)
     {
         static $rewrite = null;
 
@@ -1522,7 +1522,7 @@ class CommonService
      * @param float $weight 重量
      * @return  string  格式化后的重量
      */
-    function formated_weight($weight)
+    public function formated_weight($weight)
     {
         $weight = round(floatval($weight), 3);
         if ($weight > 0) {
@@ -1549,7 +1549,7 @@ class CommonService
      * @param int $change_type 变动类型：参见常量文件
      * @return  void
      */
-    function log_account_change($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0, $change_desc = '', $change_type = ACT_OTHER)
+    public function log_account_change($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0, $change_desc = '', $change_type = ACT_OTHER)
     {
         /* 插入帐户变动记录 */
         $account_log = array(
@@ -1585,7 +1585,7 @@ class CommonService
      * @param int $level 限定返回的级数。为0时返回所有级数
      * @return  mix
      */
-    function article_cat_list($cat_id = 0, $selected = 0, $re_type = true, $level = 0)
+    public function article_cat_list($cat_id = 0, $selected = 0, $re_type = true, $level = 0)
     {
         static $res = null;
 
@@ -1670,7 +1670,7 @@ class CommonService
      * @param int $level 级别
      * @return  void
      */
-    function article_cat_options($spec_cat_id, $arr)
+    public function article_cat_options($spec_cat_id, $arr)
     {
         static $cat_options = array();
 
@@ -1789,7 +1789,7 @@ class CommonService
      *
      * @return  mixed
      */
-    function uc_call($func, $params = null)
+    public function uc_call($func, $params = null)
     {
         restore_error_handler();
         if (!function_exists($func)) {
@@ -1808,7 +1808,7 @@ class CommonService
      *
      * @return
      */
-    function exception_handler($errno, $errstr, $errfile, $errline)
+    public function exception_handler($errno, $errstr, $errfile, $errline)
     {
         return;
     }
@@ -1819,7 +1819,7 @@ class CommonService
      * @param string $image 原商品相册图片地址
      * @return string   $url
      */
-    function get_image_path($image = '')
+    public function get_image_path($image = '')
     {
         return empty($image) ? $GLOBALS['_CFG']['no_picture'] : $image;
     }
@@ -1832,7 +1832,7 @@ class CommonService
      *
      * @return  mixed
      */
-    function user_uc_call($func, $params = null)
+    public function user_uc_call($func, $params = null)
     {
         if (isset($GLOBALS['_CFG']['integrate_code']) && $GLOBALS['_CFG']['integrate_code'] == 'ucenter') {
             restore_error_handler();
@@ -1858,7 +1858,7 @@ class CommonService
      *
      * @return  优惠价格列表
      */
-    function get_volume_price_list($goods_id, $price_type = '1')
+    public function get_volume_price_list($goods_id, $price_type = '1')
     {
         $volume_price = array();
         $temp_index = '0';
@@ -1890,7 +1890,7 @@ class CommonService
      *
      * @return  商品最终购买价格
      */
-    function get_final_price($goods_id, $goods_num = '1', $is_spec_price = false, $spec = array())
+    public function get_final_price($goods_id, $goods_num = '1', $is_spec_price = false, $spec = array())
     {
         $final_price = '0'; //商品最终购买价格
         $volume_price = '0'; //商品优惠价格
@@ -1969,7 +1969,7 @@ class CommonService
      *
      * @return      string
      */
-    function sort_goods_attr_id_array($goods_attr_id_array, $sort = 'asc')
+    public function sort_goods_attr_id_array($goods_attr_id_array, $sort = 'asc')
     {
         if (empty($goods_attr_id_array)) {
             return $goods_attr_id_array;
@@ -2004,7 +2004,7 @@ class CommonService
      *
      * @return      string
      */
-    function is_spec($goods_attr_id_array, $sort = 'asc')
+    public function is_spec($goods_attr_id_array, $sort = 'asc')
     {
         if (empty($goods_attr_id_array)) {
             return $goods_attr_id_array;
@@ -2042,7 +2042,7 @@ class CommonService
      *
      * @return array       array(package_id, package_name, goods_id,start_time, end_time, min_price, integral)
      */
-    function get_package_info($id)
+    public function get_package_info($id)
     {
         global $ecs, $db, $_CFG;
         $id = is_numeric($id) ? intval($id) : 0;
@@ -2121,7 +2121,7 @@ class CommonService
      * @param integer $package_id
      * @return  array
      */
-    function get_package_goods($package_id)
+    public function get_package_goods($package_id)
     {
         $sql = "SELECT pg.goods_id, g.goods_name, pg.goods_number, p.goods_attr, p.product_number, p.product_id
             FROM " . $GLOBALS['ecs']->table('package_goods') . " AS pg
@@ -2200,7 +2200,7 @@ class CommonService
      *
      * @return  array
      */
-    function get_good_products($goods_id, $conditions = '')
+    public function get_good_products($goods_id, $conditions = '')
     {
         if (empty($goods_id)) {
             return array();
@@ -2259,7 +2259,7 @@ class CommonService
      *
      * @return  array
      */
-    function get_good_products_select($goods_id)
+    public function get_good_products_select($goods_id)
     {
         $return_array = array();
         $products = get_good_products($goods_id);
@@ -2283,7 +2283,7 @@ class CommonService
      *
      * @return  array
      */
-    function get_specifications_list($goods_id, $conditions = '')
+    public function get_specifications_list($goods_id, $conditions = '')
     {
         /* 取商品属性 */
         $sql = "SELECT ga.goods_attr_id, ga.attr_id, ga.attr_value, a.attr_name
@@ -2300,5 +2300,4 @@ class CommonService
 
         return $return_array;
     }
-
 }

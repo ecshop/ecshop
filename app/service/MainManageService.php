@@ -16,7 +16,7 @@ class MainManageService
      * @param string $directory 插件存放的目录
      * @return      array
      */
-    function read_modules($directory = '.')
+    public function read_modules($directory = '.')
     {
         global $_LANG;
 
@@ -50,7 +50,7 @@ class MainManageService
      * @param boolen $auto_redirect 是否需要自动跳转
      * @return      void
      */
-    function sys_msg($msg_detail, $msg_type = 0, $links = array(), $auto_redirect = true)
+    public function sys_msg($msg_detail, $msg_type = 0, $links = array(), $auto_redirect = true)
     {
         if (count($links) == 0) {
             $links[0]['text'] = $GLOBALS['_LANG']['go_back'];
@@ -80,7 +80,7 @@ class MainManageService
      * @param string $content 操作的内容
      * @return  void
      */
-    function admin_log($sn = '', $action, $content)
+    public function admin_log($sn = '', $action, $content)
     {
         $log_info = $GLOBALS['_LANG']['log_action'][$action] . $GLOBALS['_LANG']['log_action'][$content] . ': ' . addslashes($sn);
 
@@ -97,7 +97,7 @@ class MainManageService
      * @param string $prefix 年月日变量的共同的前缀。
      * @return date                日期变量。
      */
-    function sys_joindate($prefix)
+    public function sys_joindate($prefix)
     {
         /* 返回年-月-日的日期格式 */
         $year = empty($_POST[$prefix . 'Year']) ? '0' : $_POST[$prefix . 'Year'];
@@ -117,7 +117,7 @@ class MainManageService
      * @param string $last_time 最后登录时间
      * @return  void
      */
-    function set_admin_session($user_id, $username, $action_list, $last_time)
+    public function set_admin_session($user_id, $username, $action_list, $last_time)
     {
         $_SESSION['admin_id'] = $user_id;
         $_SESSION['admin_name'] = $username;
@@ -134,7 +134,7 @@ class MainManageService
      * @param string $value 该配置信息值
      * @return  void
      */
-    function insert_config($parent, $code, $value)
+    public function insert_config($parent, $code, $value)
     {
         global $ecs, $db, $_LANG;
 
@@ -154,7 +154,7 @@ class MainManageService
      * @param string $msg_type 返回的类型
      * @return true/false
      */
-    function admin_priv($priv_str, $msg_type = '', $msg_output = true)
+    public function admin_priv($priv_str, $msg_type = '', $msg_output = true)
     {
         global $_LANG;
 
@@ -180,7 +180,7 @@ class MainManageService
      * @param string $authz
      * @return  boolean
      */
-    function check_authz($authz)
+    public function check_authz($authz)
     {
         return (preg_match('/,*' . $authz . ',*/', $_SESSION['action_list']) || $_SESSION['action_list'] == 'all');
     }
@@ -192,7 +192,7 @@ class MainManageService
      * @param string $authz
      * @return  void
      */
-    function check_authz_json($authz)
+    public function check_authz_json($authz)
     {
         if (!check_authz($authz)) {
             make_json_error($GLOBALS['_LANG']['priv_error']);
@@ -204,7 +204,7 @@ class MainManageService
      *
      * @return  array       分类数组 bonus_typeid => bonus_type_name
      */
-    function get_bonus_type()
+    public function get_bonus_type()
     {
         $bonus = array();
         $sql = 'SELECT type_id, type_name, type_money FROM ' . $GLOBALS['ecs']->table('bonus_type') .
@@ -223,7 +223,7 @@ class MainManageService
      * @param bool $is_special 是否只显示特殊会员组
      * @return  array     rank_id=>rank_name
      */
-    function get_rank_list($is_special = false)
+    public function get_rank_list($is_special = false)
     {
         $rank_list = array();
         $sql = 'SELECT rank_id, rank_name, min_points FROM ' . $GLOBALS['ecs']->table('user_rank');
@@ -246,7 +246,7 @@ class MainManageService
      *
      * @return  array       分类数组 user_id => user_name
      */
-    function get_user_rank($rankid, $where)
+    public function get_user_rank($rankid, $where)
     {
         $user_list = array();
         $sql = 'SELECT user_id, user_name FROM ' . $GLOBALS['ecs']->table('users') . $where .
@@ -265,7 +265,7 @@ class MainManageService
      *
      * @return  array       分类数组 position_id => position_name
      */
-    function get_position_list()
+    public function get_position_list()
     {
         $position_list = array();
         $sql = 'SELECT position_id, position_name, ad_width, ad_height ' .
@@ -284,7 +284,7 @@ class MainManageService
      * @param string  input_name  输入框名称
      * @param string  input_value 输入框值
      */
-    function create_html_editor($input_name, $input_value = '')
+    public function create_html_editor($input_name, $input_value = '')
     {
         global $smarty;
 
@@ -302,7 +302,7 @@ class MainManageService
      * 取得商品列表：用于把商品添加到组合、关联类、赠品类
      * @param object $filters 过滤条件
      */
-    function get_goods_list($filter)
+    public function get_goods_list($filter)
     {
         $filter->keyword = json_str_iconv($filter->keyword);
         $where = get_where_sql($filter); // 取得过滤条件
@@ -320,7 +320,7 @@ class MainManageService
      * 取得文章列表：用于商品关联文章
      * @param object $filters 过滤条件
      */
-    function get_article_list($filter)
+    public function get_article_list($filter)
     {
         /* 创建数据容器对象 */
         $ol = new OptionList();
@@ -346,7 +346,7 @@ class MainManageService
      * 返回是否
      * @param int $var 变量 1, 0
      */
-    function get_yes_no($var)
+    public function get_yes_no($var)
     {
         return empty($var) ? '<img src="images/no.gif" border="0" />' : '<img src="images/yes.gif" border="0" />';
     }
@@ -356,7 +356,7 @@ class MainManageService
      * @param object $filter
      * @return  string
      */
-    function get_where_sql($filter)
+    public function get_where_sql($filter)
     {
         $time = date('Y-m-d');
 
@@ -387,7 +387,7 @@ class MainManageService
      * @param int $region_id 上级地区id
      * @return  void
      */
-    function area_list($region_id)
+    public function area_list($region_id)
     {
         $area_arr = array();
 
@@ -413,7 +413,7 @@ class MainManageService
      * @param integer $n 颜色顺序
      * @return  void
      */
-    function chart_color($n)
+    public function chart_color($n)
     {
         /* 随机显示颜色代码 */
         $arr = array('33FF66', 'FF6600', '3399FF', '009966', 'CC3399', 'FFCC33', '6699CC', 'CC3366', '33FF66', 'FF6600', '3399FF');
@@ -432,7 +432,7 @@ class MainManageService
      * @param integer $selected 选定的类型编号
      * @return  string
      */
-    function goods_type_list($selected)
+    public function goods_type_list($selected)
     {
         $sql = 'SELECT cat_id, cat_name FROM ' . $GLOBALS['ecs']->table('goods_type') . ' WHERE enabled = 1';
         $res = $GLOBALS['db']->query($sql);
@@ -451,7 +451,7 @@ class MainManageService
      * 取得货到付款和非货到付款的支付方式
      * @return  array('is_cod' => '', 'is_not_cod' => '')
      */
-    function get_pay_ids()
+    public function get_pay_ids()
     {
         $ids = array('is_cod' => '0', 'is_not_cod' => '0');
         $sql = 'SELECT pay_id, is_cod FROM ' . $GLOBALS['ecs']->table('payment') . ' WHERE enabled = 1';
@@ -472,7 +472,7 @@ class MainManageService
      * 清空表数据
      * @param string $table_name 表名称
      */
-    function truncate_table($table_name)
+    public function truncate_table($table_name)
     {
         $sql = 'TRUNCATE TABLE ' . $GLOBALS['ecs']->table($table_name);
 
@@ -487,7 +487,7 @@ class MainManageService
      *
      * @return void
      */
-    function get_charset_list()
+    public function get_charset_list()
     {
         return array(
             'UTF8' => 'UTF-8',
@@ -507,7 +507,7 @@ class MainManageService
      * @param array $append
      * @return  void
      */
-    function make_json_response($content = '', $error = "0", $message = '', $append = array())
+    public function make_json_response($content = '', $error = "0", $message = '', $append = array())
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
 
@@ -533,7 +533,7 @@ class MainManageService
      * @param
      * @return  void
      */
-    function make_json_result($content, $message = '', $append = array())
+    public function make_json_result($content, $message = '', $append = array())
     {
         make_json_response($content, 0, $message, $append);
     }
@@ -545,7 +545,7 @@ class MainManageService
      * @param string $msg
      * @return  void
      */
-    function make_json_error($msg)
+    public function make_json_error($msg)
     {
         make_json_response('', 1, $msg);
     }
@@ -557,7 +557,7 @@ class MainManageService
      * @param array $filter
      * @return  array
      */
-    function sort_flag($filter)
+    public function sort_flag($filter)
     {
         $flag['tag'] = 'sort_' . preg_replace('/^.*\./', '', $filter['sort_by']);
         $flag['img'] = '<img src="images/' . ($filter['sort_order'] == "DESC" ? 'sort_desc.gif' : 'sort_asc.gif') . '"/>';
@@ -571,7 +571,7 @@ class MainManageService
      * @access  public
      * @return  array
      */
-    function page_and_size($filter)
+    public function page_and_size($filter)
     {
         if (isset($_REQUEST['page_size']) && intval($_REQUEST['page_size']) > 0) {
             $filter['page_size'] = intval($_REQUEST['page_size']);
@@ -605,7 +605,7 @@ class MainManageService
      *
      * @return  int         $val
      */
-    function return_bytes($val)
+    public function return_bytes($val)
     {
         $val = trim($val);
         $last = strtolower($val[strlen($val) - 1]);
@@ -630,7 +630,7 @@ class MainManageService
      *
      * @return  array
      */
-    function get_attr_groups($cat_id)
+    public function get_attr_groups($cat_id)
     {
         $sql = "SELECT attr_group FROM " . $GLOBALS['ecs']->table('goods_type') . " WHERE cat_id='$cat_id'";
         $grp = str_replace("\r", '', $GLOBALS['db']->getOne($sql));
@@ -645,7 +645,7 @@ class MainManageService
     /**
      * 生成链接后缀
      */
-    function list_link_postfix()
+    public function list_link_postfix()
     {
         return 'uselastfilter=1';
     }
@@ -656,7 +656,7 @@ class MainManageService
      * @param string $sql 查询语句
      * @param string $param_str 参数字符串，由list函数的参数组成
      */
-    function set_filter($filter, $sql, $param_str = '')
+    public function set_filter($filter, $sql, $param_str = '')
     {
         $filterfile = basename(PHP_SELF, '.php');
         if ($param_str) {
@@ -672,7 +672,7 @@ class MainManageService
      * @param string $param_str 参数字符串，由list函数的参数组成
      * @return  如果有，返回array('filter' => $filter, 'sql' => $sql)；否则返回false
      */
-    function get_filter($param_str = '')
+    public function get_filter($param_str = '')
     {
         $filterfile = basename(PHP_SELF, '.php');
         if ($param_str) {
@@ -694,7 +694,7 @@ class MainManageService
      * @param string $url 参数字符串，一个urld地址,对url地址进行校正
      * @return  返回校正过的url;
      */
-    function sanitize_url($url, $check = 'http://')
+    public function sanitize_url($url, $check = 'http://')
     {
         if (strpos($url, $check) === false) {
             $url = $check . $url;
@@ -711,14 +711,14 @@ class MainManageService
      *
      * @return  boolean
      */
-    function cat_exists($cat_name, $parent_cat, $exclude = 0)
+    public function cat_exists($cat_name, $parent_cat, $exclude = 0)
     {
         $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') .
             " WHERE parent_id = '$parent_cat' AND cat_name = '$cat_name' AND cat_id<>'$exclude'";
         return ($GLOBALS['db']->getOne($sql) > 0) ? true : false;
     }
 
-    function brand_exists($brand_name)
+    public function brand_exists($brand_name)
     {
         $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('brand') .
             " WHERE brand_name = '" . $brand_name . "'";
@@ -733,7 +733,7 @@ class MainManageService
      *
      * @return  Array
      */
-    function admin_info()
+    public function admin_info()
     {
         $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('admin_user') . "
             WHERE user_id = '$_SESSION[admin_id]'
@@ -753,7 +753,7 @@ class MainManageService
      * @param string $conditions
      * @return      array
      */
-    function suppliers_list_info($conditions = '')
+    public function suppliers_list_info($conditions = '')
     {
         $where = '';
         if (!empty($conditions)) {
@@ -774,7 +774,7 @@ class MainManageService
      *
      * @return  array
      */
-    function suppliers_list_name()
+    public function suppliers_list_name()
     {
         /* 查询 */
         $suppliers_list = suppliers_list_info(' is_check = 1 ');

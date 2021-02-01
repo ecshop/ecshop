@@ -14,7 +14,7 @@ class TimeService
      *
      * @return  integer
      */
-    function gmtime()
+    public function gmtime()
     {
         return (time() - date('Z'));
     }
@@ -24,7 +24,7 @@ class TimeService
      *
      * @return  integer
      */
-    function server_timezone()
+    public function server_timezone()
     {
         if (function_exists('date_default_timezone_get')) {
             return date_default_timezone_get();
@@ -47,7 +47,7 @@ class TimeService
      *
      * @return void
      */
-    function local_mktime($hour = null, $minute = null, $second = null, $month = null, $day = null, $year = null)
+    public function local_mktime($hour = null, $minute = null, $second = null, $month = null, $day = null, $year = null)
     {
         $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : $GLOBALS['_CFG']['timezone'];
 
@@ -70,7 +70,7 @@ class TimeService
      * @return  string
      */
 
-    function local_date($format, $time = null)
+    public function local_date($format, $time = null)
     {
         $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : $GLOBALS['_CFG']['timezone'];
 
@@ -93,7 +93,7 @@ class TimeService
      *
      * @return  integer
      */
-    function gmstr2time($str)
+    public function gmstr2time($str)
     {
         $time = strtotime($str);
 
@@ -112,7 +112,7 @@ class TimeService
      *
      * @return  integer
      */
-    function local_strtotime($str)
+    public function local_strtotime($str)
     {
         $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : $GLOBALS['_CFG']['timezone'];
 
@@ -132,7 +132,7 @@ class TimeService
      *
      * @return  array
      */
-    function local_gettime($timestamp = null)
+    public function local_gettime($timestamp = null)
     {
         $tmp = local_getdate($timestamp);
         return $tmp[0];
@@ -145,7 +145,7 @@ class TimeService
      *
      * @return  array
      */
-    function local_getdate($timestamp = null)
+    public function local_getdate($timestamp = null)
     {
         $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : $GLOBALS['_CFG']['timezone'];
 

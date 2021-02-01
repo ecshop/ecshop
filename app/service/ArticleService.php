@@ -19,7 +19,7 @@ class ArticleService
      *
      * @return  array
      */
-    function get_cat_articles($cat_id, $page = 1, $size = 20, $requirement = '')
+    public function get_cat_articles($cat_id, $page = 1, $size = 20, $requirement = '')
     {
         //取出所有非0的文章
         if ($cat_id == '-1') {
@@ -66,7 +66,7 @@ class ArticleService
      *
      * @return  integer
      */
-    function get_article_count($cat_id, $requirement = '')
+    public function get_article_count($cat_id, $requirement = '')
     {
         global $db, $ecs;
         if ($requirement != '') {

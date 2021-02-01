@@ -15,7 +15,7 @@ class CodeService
      * @param string $key 密钥
      * @return  string  加密后的字符串
      */
-    function encrypt($str, $key = AUTH_KEY)
+    public function encrypt($str, $key = AUTH_KEY)
     {
         $coded = '';
         $keylength = strlen($key);
@@ -33,7 +33,7 @@ class CodeService
      * @param string $key 密钥
      * @return  string  加密前的字符串
      */
-    function decrypt($str, $key = AUTH_KEY)
+    public function decrypt($str, $key = AUTH_KEY)
     {
         $coded = '';
         $keylength = strlen($key);

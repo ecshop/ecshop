@@ -18,7 +18,7 @@ class BaseService
      *
      * @return  string
      */
-    function sub_str($str, $length = 0, $append = true)
+    public function sub_str($str, $length = 0, $append = true)
     {
         $str = trim($str);
         $strlength = strlen($str);
@@ -54,7 +54,7 @@ class BaseService
      * @access  public
      * @return  string
      */
-    function real_ip()
+    public function real_ip()
     {
         static $realip = null;
 
@@ -108,7 +108,7 @@ class BaseService
      *
      * @return  int
      */
-    function str_len($str)
+    public function str_len($str)
     {
         $length = strlen(preg_replace('/[\x00-\x7F]/', '', $str));
 
@@ -125,7 +125,7 @@ class BaseService
      * @access  public
      * @return  string
      */
-    function get_crlf()
+    public function get_crlf()
     {
         /* LF (Line Feed, 0x0A, \N) 和 CR(Carriage Return, 0x0D, \R) */
         if (stristr($_SERVER['HTTP_USER_AGENT'], 'Win')) {
@@ -151,7 +151,7 @@ class BaseService
      *
      * @return boolean
      */
-    function send_mail($name, $email, $subject, $content, $type = 0, $notification = false)
+    public function send_mail($name, $email, $subject, $content, $type = 0, $notification = false)
     {
         /* 如果邮件编码不是EC_CHARSET，创建字符集转换对象，转换编码 */
         if ($GLOBALS['_CFG']['mail_charset'] != EC_CHARSET) {
@@ -266,7 +266,7 @@ class BaseService
      * @access      public
      * @return      int         可能的值为0，1，2
      */
-    function gd_version()
+    public function gd_version()
     {
         include_once(ROOT_PATH . 'includes/cls_image.php');
 
@@ -284,7 +284,7 @@ class BaseService
      *                          返回值在二进制计数法中，四位由高到低分别代表
      *                          可执行rename()函数权限、可对文件追加内容权限、可写入文件权限、可读取文件权限。
      */
-    function file_mode_info($file_path)
+    public function file_mode_info($file_path)
     {
         /* 如果不存在，则不可读、不可写、不可改 */
         if (!file_exists($file_path)) {
@@ -378,7 +378,7 @@ class BaseService
      *
      * @return      bool
      */
-    function make_dir($folder)
+    public function make_dir($folder)
     {
         $reval = false;
 
@@ -434,7 +434,7 @@ class BaseService
      *
      * @return  boolean
      */
-    function gzip_enabled()
+    public function gzip_enabled()
     {
         static $enabled_gzip = null;
 
@@ -453,7 +453,7 @@ class BaseService
      *
      * @return  mix
      */
-    function addslashes_deep($value)
+    public function addslashes_deep($value)
     {
         if (empty($value)) {
             return $value;
@@ -469,7 +469,7 @@ class BaseService
      * @param mix $obj 对象或者数组
      * @return   mix                  对象或者数组
      */
-    function addslashes_deep_obj($obj)
+    public function addslashes_deep_obj($obj)
     {
         if (is_object($obj) == true) {
             foreach ($obj as $key => $val) {
@@ -490,7 +490,7 @@ class BaseService
      *
      * @return  mix
      */
-    function stripslashes_deep($value)
+    public function stripslashes_deep($value)
     {
         if (empty($value)) {
             return $value;
@@ -507,7 +507,7 @@ class BaseService
      *
      * @return  string       $str         处理后字串
      */
-    function make_semiangle($str)
+    public function make_semiangle($str)
     {
         $arr = array('０' => '0', '１' => '1', '２' => '2', '３' => '3', '４' => '4',
             '５' => '5', '６' => '6', '７' => '7', '８' => '8', '９' => '9',
@@ -541,7 +541,7 @@ class BaseService
      * @access      public
      * @return      string
      */
-    function compile_str($str)
+    public function compile_str($str)
     {
         $arr = array('<' => '＜', '>' => '＞', '"' => '”', "'" => '’');
 
@@ -557,7 +557,7 @@ class BaseService
      * @param string      limit_ext_types     允许的文件类型
      * @return      string
      */
-    function check_file_type($filename, $realname = '', $limit_ext_types = '')
+    public function check_file_type($filename, $realname = '', $limit_ext_types = '')
     {
         if ($realname) {
             $extname = strtolower(substr($realname, strrpos($realname, '.') + 1));
@@ -653,7 +653,7 @@ class BaseService
      * @param string      string  内容
      * @return      string
      */
-    function mysql_like_quote($str)
+    public function mysql_like_quote($str)
     {
         return strtr($str, array("\\\\" => "\\\\\\\\", '_' => '\_', '%' => '\%', "\'" => "\\\\\'"));
     }
@@ -665,7 +665,7 @@ class BaseService
      *
      * @return string
      **/
-    function real_server_ip()
+    public function real_server_ip()
     {
         static $serverip = null;
 
@@ -693,7 +693,7 @@ class BaseService
      *
      * @return  void
      **/
-    function ecs_header($string, $replace = true, $http_response_code = 0)
+    public function ecs_header($string, $replace = true, $http_response_code = 0)
     {
         if (strpos($string, '../upgrade/index.php') === 0) {
             echo '<script type="text/javascript">window.location.href="' . $string . '";</script>';
@@ -709,12 +709,12 @@ class BaseService
         @header($string, $replace);
     }
 
-    function ecs_iconv($source_lang, $target_lang, $source_string = '')
+    public function ecs_iconv($source_lang, $target_lang, $source_string = '')
     {
         return $source_string;
     }
 
-    function ecs_geoip($ip)
+    public function ecs_geoip($ip)
     {
         static $fp = null, $offset = array(), $index = null;
 
@@ -766,7 +766,7 @@ class BaseService
      *
      * @return  string
      */
-    function trim_right($str)
+    public function trim_right($str)
     {
         $len = strlen($str);
         /* 为空或单个字符直接返回 */
@@ -798,7 +798,7 @@ class BaseService
      * @param string $target_name
      * @return blog
      */
-    function move_upload_file($file_name, $target_name = '')
+    public function move_upload_file($file_name, $target_name = '')
     {
         if (function_exists("move_uploaded_file")) {
             if (move_uploaded_file($file_name, $target_name)) {
@@ -821,7 +821,7 @@ class BaseService
      * @param string $str
      * @return string
      */
-    function json_str_iconv($str)
+    public function json_str_iconv($str)
     {
         if (EC_CHARSET != 'utf-8') {
             if (is_string($str)) {
@@ -849,7 +849,7 @@ class BaseService
      * @param string $str
      * @return string
      */
-    function to_utf8_iconv($str)
+    public function to_utf8_iconv($str)
     {
         if (EC_CHARSET != 'utf-8') {
             if (is_string($str)) {
@@ -877,7 +877,7 @@ class BaseService
      * @param array $allow_type
      * @return string
      */
-    function get_file_suffix($file_name, $allow_type = array())
+    public function get_file_suffix($file_name, $allow_type = array())
     {
         $file_name_arr = explode('.', $file_name);
         $file_suffix = strtolower(array_pop($file_name_arr));
@@ -897,7 +897,7 @@ class BaseService
      * @param $name
      * @return false|mixed|object
      */
-    function read_static_cache($name)
+    public function read_static_cache($name)
     {
         $cache = cache($name);
 
@@ -909,7 +909,7 @@ class BaseService
      * @param $name
      * @param $value
      */
-    function write_static_cache($name, $value)
+    public function write_static_cache($name, $value)
     {
         cache($name, $value);
     }

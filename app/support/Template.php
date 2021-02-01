@@ -386,8 +386,8 @@ class Template
                     $t = $this->get_para(substr($tag, 7), false);
 
                     $out = "<?php \n" . '$k = ' . preg_replace_callback("/(\'\\$[^,]+)/", function ($r) {
-                            return stripcslashes(trim($r[1], '\''));
-                        }, var_export($t, true)) . ";\n";
+                        return stripcslashes(trim($r[1], '\''));
+                    }, var_export($t, true)) . ";\n";
                     $out .= 'echo $this->_echash . $k[\'name\'] . \'|\' . serialize($k) . $this->_echash;' . "\n?>";
 
                     return $out;

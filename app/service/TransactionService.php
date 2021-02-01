@@ -17,7 +17,7 @@ class TransactionService
      *
      * @return  boolen      $bool
      */
-    function edit_profile($profile)
+    public function edit_profile($profile)
     {
         if (empty($profile['user_id'])) {
             $GLOBALS['err']->add($GLOBALS['_LANG']['not_login']);
@@ -79,7 +79,7 @@ class TransactionService
      *
      * @return void
      */
-    function get_profile($user_id)
+    public function get_profile($user_id)
     {
         global $user;
 
@@ -156,7 +156,7 @@ class TransactionService
      * @param int $user_id 用户编号
      * @return  array
      */
-    function get_consignee_list($user_id)
+    public function get_consignee_list($user_id)
     {
         $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('user_address') .
             " WHERE user_id = '$user_id' LIMIT 5";
@@ -173,7 +173,7 @@ class TransactionService
      *
      * @return  boolen      $result
      */
-    function add_bonus($user_id, $bouns_sn)
+    public function add_bonus($user_id, $bouns_sn)
     {
         if (empty($user_id)) {
             $GLOBALS['err']->add($GLOBALS['_LANG']['not_login']);
@@ -235,7 +235,7 @@ class TransactionService
      * @param int $start 列表起始位置
      * @return  array       $order_list     订单列表
      */
-    function get_user_orders($user_id, $num = 10, $start = 0)
+    public function get_user_orders($user_id, $num = 10, $start = 0)
     {
         /* 取得订单列表 */
         $arr = array();
@@ -289,7 +289,7 @@ class TransactionService
      *
      * @return void
      */
-    function cancel_order($order_id, $user_id = 0)
+    public function cancel_order($order_id, $user_id = 0)
     {
         /* 查询订单信息，检查状态 */
         $sql = "SELECT user_id, order_id, order_sn , surplus , integral , bonus_id, order_status, shipping_status, pay_status FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_id = '$order_id'";
@@ -383,7 +383,7 @@ class TransactionService
      *
      * @return  bool        $bool
      */
-    function affirm_received($order_id, $user_id = 0)
+    public function affirm_received($order_id, $user_id = 0)
     {
         /* 查询订单信息，检查状态 */
         $sql = "SELECT user_id, order_sn , order_status, shipping_status, pay_status FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_id = '$order_id'";
@@ -427,7 +427,7 @@ class TransactionService
      * @param boolean $default 是否将该收货人信息设置为默认收货人信息
      * @return  boolean
      */
-    function save_consignee($consignee, $default = false)
+    public function save_consignee($consignee, $default = false)
     {
         if ($consignee['address_id'] > 0) {
             /* 修改地址 */
@@ -456,7 +456,7 @@ class TransactionService
      * @param integer $id
      * @return  boolean
      */
-    function drop_consignee($id)
+    public function drop_consignee($id)
     {
         $sql = "SELECT user_id FROM " . $GLOBALS['ecs']->table('user_address') . " WHERE address_id = '$id'";
         $uid = $GLOBALS['db']->getOne($sql);
@@ -478,7 +478,7 @@ class TransactionService
      * @param array $address
      * @return  bool
      */
-    function update_address($address)
+    public function update_address($address)
     {
         $address_id = intval($address['address_id']);
         unset($address['address_id']);
@@ -511,7 +511,7 @@ class TransactionService
      *
      * @return   arr        $order          订单所有信息的数组
      */
-    function get_order_detail($order_id, $user_id = 0)
+    public function get_order_detail($order_id, $user_id = 0)
     {
         include_once(ROOT_PATH . 'includes/lib_order.php');
 
@@ -653,7 +653,7 @@ class TransactionService
      *
      * @return  array       $merge          可合并订单数组
      */
-    function get_user_merge($user_id)
+    public function get_user_merge($user_id)
     {
         include_once(ROOT_PATH . 'includes/lib_order.php');
         $sql = "SELECT order_sn FROM " . $GLOBALS['ecs']->table('order_info') .
@@ -679,7 +679,7 @@ class TransactionService
      *
      * @return  boolen      $bool
      */
-    function merge_user_order($from_order, $to_order, $user_id = 0)
+    public function merge_user_order($from_order, $to_order, $user_id = 0)
     {
         if ($user_id > 0) {
             /* 检查订单是否属于指定用户 */
@@ -713,7 +713,7 @@ class TransactionService
      *
      * @return  mix         $message        成功返回true, 错误返回出错信息
      */
-    function return_to_cart($order_id)
+    public function return_to_cart($order_id)
     {
         /* 初始化基本件数量 goods_id => goods_number */
         $basic_number = array();
@@ -860,7 +860,7 @@ class TransactionService
      *
      * @return  boolen  $bool
      */
-    function save_order_address($address, $user_id)
+    public function save_order_address($address, $user_id)
     {
         $GLOBALS['err']->clean();
         /* 数据验证 */
@@ -908,7 +908,7 @@ class TransactionService
      *
      * @return  array       $arr             红保列表
      */
-    function get_user_bouns_list($user_id, $num = 10, $start = 0)
+    public function get_user_bouns_list($user_id, $num = 10, $start = 0)
     {
         $sql = "SELECT u.bonus_sn, u.order_id, b.type_name, b.type_money, b.min_goods_amount, b.use_start_date, b.use_end_date " .
             " FROM " . $GLOBALS['ecs']->table('user_bonus') . " AS u ," .
@@ -953,7 +953,7 @@ class TransactionService
      *
      * @return  array       $arr             团购活动列表
      */
-    function get_user_group_buy($user_id, $num = 10, $start = 0)
+    public function get_user_group_buy($user_id, $num = 10, $start = 0)
     {
         return true;
     }
@@ -963,7 +963,7 @@ class TransactionService
      *
      *
      */
-    function get_group_buy_detail($user_id, $group_buy_id)
+    public function get_group_buy_detail($user_id, $group_buy_id)
     {
         return true;
     }
@@ -973,7 +973,7 @@ class TransactionService
      *
      *
      */
-    function deleteRepeat($array)
+    public function deleteRepeat($array)
     {
         $_card_sn_record = array();
         foreach ($array as $_k => $_v) {

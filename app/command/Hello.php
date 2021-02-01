@@ -18,18 +18,6 @@ class Hello extends Command
     protected function execute(Input $input, Output $output)
     {
         // 指令输出
-        $list = array_merge(
-            glob(dirname(__DIR__) . '/controller/*.php'),
-            glob(dirname(__DIR__) . '/controller/*/*.php'),
-            glob(dirname(__DIR__) . '/helper/*.php'),
-            glob(dirname(__DIR__) . '/library/*.php')
-        );
-
-        foreach ($list as $item) {
-            $dir = dirname($item);
-            $class = str_replace(['cls_', 'lib_'], '', basename($item, '.php'));
-            $to = $dir . '/' . parse_name($class, 1) . '.php';
-            rename($item, $to);
-        }
+        echo "hello \n";
     }
 }

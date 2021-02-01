@@ -52,7 +52,7 @@ class GroupBuyController extends InitController
         $this->assign('promotion_info', get_promotion_info());
         $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typegroup_buy.xml" : 'feed.php?type=group_buy'); // RSS URL
 
-        assign_dynamic('group_buy_list');
+        $this->assign_dynamic('group_buy_list');
 
         /* 显示模板 */
         return $this->display('group_buy_list.dwt');
@@ -104,7 +104,7 @@ class GroupBuyController extends InitController
         $this->assign('helps', get_shop_help());       // 网店帮助
         $this->assign('top_goods', get_top10());           // 销售排行
         $this->assign('promotion_info', get_promotion_info());
-        assign_dynamic('group_buy_goods');
+        $this->assign_dynamic('group_buy_goods');
 
         //更新商品点击次数
         $sql = 'UPDATE ' . $ecs->table('goods') . ' SET click_count = click_count + 1 ' .

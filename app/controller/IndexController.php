@@ -68,7 +68,7 @@ class IndexController extends InitController
         }
 
         /* 页面中的动态内容 */
-        assign_dynamic('index');
+        $this->assign_dynamic('index');
 
         return $this->display('index.dwt');
     }

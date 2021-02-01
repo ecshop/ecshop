@@ -60,7 +60,7 @@ class SearchController extends InitController
         $this->assign('goods_attributes', $attributes['attr']);
 
         $this->assign_template();
-        assign_dynamic('search');
+        $this->assign_dynamic('search');
         $position = assign_ur_here(0, $_LANG['advanced_search']);
         $this->assign('page_title', $position['title']);    // 页面标题
         $this->assign('ur_here', $position['ur_here']);  // 当前位置
@@ -413,7 +413,7 @@ class SearchController extends InitController
         $this->assign('pager', $pager);
 
         $this->assign_template();
-        assign_dynamic('search');
+        $this->assign_dynamic('search');
         $position = assign_ur_here(0, $ur_here . ($_REQUEST['keywords'] ? '_' . $_REQUEST['keywords'] : ''));
         $this->assign('page_title', $position['title']);    // 页面标题
         $this->assign('ur_here', $position['ur_here']);  // 当前位置

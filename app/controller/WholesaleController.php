@@ -86,7 +86,7 @@ class WholesaleController extends InitController
         $this->assign('helps', get_shop_help());       // 网店帮助
         $this->assign('top_goods', get_top10());           // 销售排行
 
-        assign_dynamic('wholesale');
+        $this->assign_dynamic('wholesale');
 
         /* 显示模板 */
         return $this->display('wholesale_list.dwt');

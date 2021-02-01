@@ -20,12 +20,10 @@ class ActivityController extends InitController
     public function indexAction()
     {
         $this->assign_template();
-        assign_dynamic('activity');
+        $this->assign_dynamic('activity');
         $position = assign_ur_here(0, $_LANG['shopping_activity']);
         $this->assign('page_title', $position['title']);    // 页面标题
         $this->assign('ur_here', $position['ur_here']);  // 当前位置
-
-// 数据准备
 
         /* 取得用户等级 */
         $user_rank_list = array();
@@ -35,9 +33,6 @@ class ActivityController extends InitController
         while ($row = $db->fetchRow($res)) {
             $user_rank_list[$row['rank_id']] = $row['rank_name'];
         }
-
-
-        // 开始工作
 
         $sql = "SELECT * FROM " . $ecs->table('favourable_activity') . " ORDER BY `sort_order` ASC,`end_time` DESC";
         $res = $db->query($sql);

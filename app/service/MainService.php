@@ -306,43 +306,6 @@ class MainService
     }
 
     /**
-     * 获得指定页面的动态内容
-     *
-     * @access  public
-     * @param string $tmp 模板名称
-     * @return  void
-     */
-    public function assign_dynamic($tmp)
-    {
-        $sql = 'SELECT id, number, type FROM ' . $GLOBALS['ecs']->table('template') .
-            " WHERE filename = '$tmp' AND type > 0 AND remarks ='' AND theme='" . $GLOBALS['_CFG']['template'] . "'";
-        $res = $GLOBALS['db']->getAll($sql);
-
-        foreach ($res as $row) {
-            switch ($row['type']) {
-                case 1:
-                    /* 分类下的商品 */
-                    View::assign('goods_cat_' . $row['id'], assign_cat_goods($row['id'], $row['number']));
-                    break;
-                case 2:
-                    /* 品牌的商品 */
-                    $brand_goods = assign_brand_goods($row['id'], $row['number']);
-
-                    View::assign('brand_goods_' . $row['id'], $brand_goods['goods']);
-                    View::assign('goods_brand_' . $row['id'], $brand_goods['brand']);
-                    break;
-                case 3:
-                    /* 文章列表 */
-                    $cat_articles = assign_articles($row['id'], $row['number']);
-
-                    View::assign('articles_cat_' . $row['id'], $cat_articles['cat']);
-                    View::assign('articles_' . $row['id'], $cat_articles['arr']);
-                    break;
-            }
-        }
-    }
-
-    /**
      * 分配文章列表给smarty
      *
      * @access  public

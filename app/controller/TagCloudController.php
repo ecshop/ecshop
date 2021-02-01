@@ -25,7 +25,7 @@ class TagCloudController extends InitController
             $this->assign('vote', $vote['content']);
         }
 
-        assign_dynamic('tag_cloud');
+        $this->assign_dynamic('tag_cloud');
 
         $tags = get_tags();
 

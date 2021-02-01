@@ -16,7 +16,7 @@ class FlowController extends InitController
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
 
         $this->assign_template();
-        assign_dynamic('flow');
+        $this->assign_dynamic('flow');
         $position = assign_ur_here(0, $_LANG['shopping_flow']);
         $this->assign('page_title', $position['title']);    // 页面标题
         $this->assign('ur_here', $position['ur_here']);  // 当前位置
@@ -1912,7 +1912,7 @@ class FlowController extends InitController
         $this->assign('currency_format', $_CFG['currency_format']);
         $this->assign('integral_scale', $_CFG['integral_scale']);
         $this->assign('step', $_REQUEST['step']);
-        assign_dynamic('shopping_flow');
+        $this->assign_dynamic('shopping_flow');
 
         return $this->display('flow.dwt');
     }

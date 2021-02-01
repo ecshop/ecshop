@@ -85,7 +85,7 @@ class ExchangeController extends InitController
         $this->assign('integral_min', $integral_min);
 
         assign_pager('exchange', $cat_id, $count, $size, $sort, $order, $page, '', '', $integral_min, $integral_max, $display); // 分页
-        assign_dynamic('exchange_list'); // 动态内容
+        $this->assign_dynamic('exchange_list'); // 动态内容
 
         $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typeexchange.xml" : 'feed.php?type=exchange'); // RSS URL
         return $this->display('exchange_list.dwt');
@@ -154,7 +154,7 @@ class ExchangeController extends InitController
 
             $this->assign('pictures', get_goods_gallery($goods_id));                    // 商品相册
 
-            assign_dynamic('exchange_goods');
+            $this->assign_dynamic('exchange_goods');
         }
 
         return $this->display('exchange_goods.dwt');

@@ -84,7 +84,7 @@ class ArticleController extends InitController
             $this->assign('prev_article', $prev_article);
         }
 
-        assign_dynamic('article');
+        $this->assign_dynamic('article');
 
         if (isset($article) && $article['cat_id'] > 2) {
             return $this->display('article.dwt');

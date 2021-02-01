@@ -320,7 +320,7 @@ class CategoryController extends InitController
         $this->assign('script_name', 'category');
 
         assign_pager('category', $cat_id, $count, $size, $sort, $order, $page, '', $brand, $price_min, $price_max, $display, $filter_attr_str); // 分页
-        assign_dynamic('category'); // 动态内容
+        $this->assign_dynamic('category'); // 动态内容
 
         return $this->display('category.dwt');
     }

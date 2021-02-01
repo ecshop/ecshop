@@ -20,7 +20,7 @@ class CatalogController extends InitController
 
 
         $this->assign_template();
-        assign_dynamic('catalog');
+        $this->assign_dynamic('catalog');
         $position = assign_ur_here(0, $_LANG['catalog']);
         $this->assign('page_title', $position['title']);   // 页面标题
         $this->assign('ur_here', $position['ur_here']); // 当前位置

@@ -82,7 +82,7 @@ class ArticleCatController extends InitController
         $this->assign('cat_id', $cat_id);
         /* 分页 */
         assign_pager('article_cat', $cat_id, $count, $size, '', '', $page, $goon_keywords);
-        assign_dynamic('article_cat');
+        $this->assign_dynamic('article_cat');
 
         $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typearticle_cat" . $cat_id . ".xml" : 'feed.php?type=article_cat' . $cat_id); // RSS URL
 

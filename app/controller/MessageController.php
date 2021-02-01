@@ -100,7 +100,7 @@ class MessageController extends InitController
         $pagesize = get_library_number('message_list', 'message_board');
         $pager = get_pager('message.php', array(), $record_count, $page, $pagesize);
         $msg_lists = get_msg_list($pagesize, $pager['start']);
-        assign_dynamic('message_board');
+        $this->assign_dynamic('message_board');
         $this->assign('rand', mt_rand());
         $this->assign('msg_lists', $msg_lists);
         $this->assign('pager', $pager);

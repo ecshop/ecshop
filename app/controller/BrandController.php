@@ -97,7 +97,7 @@ class BrandController extends InitController
         $this->assign('script_name', 'brand');
 
         assign_pager('brand', $cate, $count, $size, $sort, $order, $page, '', $brand_id, 0, 0, $display); // 分页
-        assign_dynamic('brand'); // 动态内容
+        $this->assign_dynamic('brand'); // 动态内容
 
         return $this->display('brand.dwt');
     }

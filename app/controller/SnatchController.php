@@ -64,7 +64,7 @@ class SnatchController extends InitController
         }
 
         $this->assign_template();
-        assign_dynamic('snatch');
+        $this->assign_dynamic('snatch');
         $this->assign('page_title', $position['title']);
         $this->assign('ur_here', $position['ur_here']);
         $this->assign('categories', get_categories_tree()); // 分类树

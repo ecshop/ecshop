@@ -232,7 +232,7 @@ class PickOutController extends InitController
             $this->assign('vote', $vote['content']);
         }
 
-        assign_dynamic('pick_out');
+        $this->assign_dynamic('pick_out');
 
         $this->assign('url', $url);
         $this->assign('pickout_goods', $goods);

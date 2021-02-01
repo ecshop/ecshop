@@ -118,7 +118,7 @@ class GoodsController extends InitController
             $package_goods_list = get_package_goods_list($goods['goods_id']);
             $this->assign('package_goods_list', $package_goods_list);    // 获取关联礼包
 
-            assign_dynamic('goods');
+            $this->assign_dynamic('goods');
             $volume_price_list = get_volume_price_list($goods['goods_id'], '1');
             $this->assign('volume_price_list', $volume_price_list);    // 商品优惠价格区间
         }

@@ -102,7 +102,7 @@ class CompareController extends InitController
         $this->assign('categories', get_categories_tree()); // 分类树
         $this->assign('helps', get_shop_help());       // 网店帮助
 
-        assign_dynamic('compare');
+        $this->assign_dynamic('compare');
 
         return $this->display('compare.dwt');
     }

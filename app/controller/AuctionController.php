@@ -52,7 +52,7 @@ class AuctionController extends InitController
         $this->assign('promotion_info', get_promotion_info());
         $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typeauction.xml" : 'feed.php?type=auction'); // RSS URL
 
-        assign_dynamic('auction_list');
+        $this->assign_dynamic('auction_list');
 
         /* 显示模板 */
         return $this->display('auction_list.dwt');
@@ -123,7 +123,7 @@ class AuctionController extends InitController
         $this->assign('top_goods', get_top10());           // 销售排行
         $this->assign('promotion_info', get_promotion_info());
 
-        assign_dynamic('auction');
+        $this->assign_dynamic('auction');
 
         //更新商品点击次数
         $sql = 'UPDATE ' . $ecs->table('goods') . ' SET click_count = click_count + 1 ' .

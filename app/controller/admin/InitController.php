@@ -15,13 +15,7 @@ class InitController extends Controller
     {
         define('ECS_ADMIN', true);
 
-        if (isset($_SERVER['PHP_SELF'])) {
-            define('PHP_SELF', $_SERVER['PHP_SELF']);
-        } else {
-            define('PHP_SELF', $_SERVER['SCRIPT_NAME']);
-        }
-
-        require(ROOT_PATH . 'includes/inc_constant.php');
+        define('PHP_SELF', parse_name(request()->controller()) . '.php');
 
         /* 对用户传入的变量进行转义操作。*/
         if (!empty($_GET)) {

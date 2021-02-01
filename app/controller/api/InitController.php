@@ -11,13 +11,7 @@ class InitController extends Controller
 {
     protected function initialize()
     {
-        $php_self = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
-        if ('/' == substr($php_self, -1)) {
-            $php_self .= 'index.php';
-        }
-        define('PHP_SELF', $php_self);
-
-        require(ROOT_PATH . 'includes/inc_constant.php');
+        define('PHP_SELF', parse_name(request()->controller()) . '.php');
 
         /* 对用户传入的变量进行转义操作。*/
         if (!get_magic_quotes_gpc()) {

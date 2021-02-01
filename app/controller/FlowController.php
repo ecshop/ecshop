@@ -1825,7 +1825,9 @@ function add_package_to_cartAction() {
     }
     $result['confirm_type'] = !empty($_CFG['cart_confirm']) ? $_CFG['cart_confirm'] : 2;
     die($json->encode($result));
-} else {
+}
+
+function cartAction() {
     $flow_type = isset($_REQUEST['type']) ? $_REQUEST['type'] : CART_GENERAL_GOODS;
     $flow_type = strip_tags($flow_type);
     $flow_type = json_str_iconv($flow_type);
@@ -1896,13 +1898,14 @@ function add_package_to_cartAction() {
     $smarty->assign('fittings_list', $fittings_list);
 }
 
-$smarty->assign('currency_format', $_CFG['currency_format']);
-$smarty->assign('integral_scale', $_CFG['integral_scale']);
-$smarty->assign('step', $_REQUEST['step']);
-assign_dynamic('shopping_flow');
+function index() {
+    $smarty->assign('currency_format', $_CFG['currency_format']);
+    $smarty->assign('integral_scale', $_CFG['integral_scale']);
+    $smarty->assign('step', $_REQUEST['step']);
+    assign_dynamic('shopping_flow');
 
-$smarty->display('flow.dwt');
-
+    $smarty->display('flow.dwt');
+}
 /**
  * 获得用户的可用积分
  *

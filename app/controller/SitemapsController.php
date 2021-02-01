@@ -5,7 +5,7 @@ namespace app\controller;
 /**
  * 文章分类
  */
-class ArticleCatController extends InitController
+class SitemapsController extends InitController
 {
     public function index()
     {

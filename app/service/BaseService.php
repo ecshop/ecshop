@@ -444,60 +444,6 @@ class BaseService
     }
 
     /**
-     * 递归方式的对变量中的特殊字符进行转义
-     *
-     * @access  public
-     * @param mix $value
-     *
-     * @return  mix
-     */
-    public function addslashes_deep($value)
-    {
-        if (empty($value)) {
-            return $value;
-        } else {
-            return is_array($value) ? array_map('addslashes_deep', $value) : addslashes($value);
-        }
-    }
-
-    /**
-     * 将对象成员变量或者数组的特殊字符进行转义
-     *
-     * @access   public
-     * @param mix $obj 对象或者数组
-     * @return   mix                  对象或者数组
-     */
-    public function addslashes_deep_obj($obj)
-    {
-        if (is_object($obj) == true) {
-            foreach ($obj as $key => $val) {
-                $obj->$key = addslashes_deep($val);
-            }
-        } else {
-            $obj = addslashes_deep($obj);
-        }
-
-        return $obj;
-    }
-
-    /**
-     * 递归方式的对变量中的特殊字符去除转义
-     *
-     * @access  public
-     * @param mix $value
-     *
-     * @return  mix
-     */
-    public function stripslashes_deep($value)
-    {
-        if (empty($value)) {
-            return $value;
-        } else {
-            return is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value);
-        }
-    }
-
-    /**
      *  将一个字串中含有全角的数字字符、字母、空格或'%+-()'字符转换为相应半角字符
      *
      * @access  public

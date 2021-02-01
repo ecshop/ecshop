@@ -10,7 +10,7 @@ class MessageController extends InitController
     public function initialize()
     {
         if (empty($_CFG['message_board'])) {
-            show_message($_LANG['message_board_close']);
+            return $this->show_message($_LANG['message_board_close']);
         }
     }
 
@@ -23,7 +23,7 @@ class MessageController extends InitController
             include_once('includes/cls_captcha.php');
             $validator = new captcha();
             if (!$validator->check_word($_POST['captcha'])) {
-                show_message($_LANG['invalid_captcha']);
+                return $this->show_message($_LANG['invalid_captcha']);
             }
         } else {
             /* 没有验证码时，用时间来限制机器人发帖或恶意发评论 */
@@ -33,7 +33,7 @@ class MessageController extends InitController
 
             $cur_time = gmtime();
             if (($cur_time - $_SESSION['send_time']) < 30) { // 小于30秒禁止发评论
-                show_message($_LANG['cmt_spam_warning']);
+                return $this->show_message($_LANG['cmt_spam_warning']);
             }
         }
         $user_name = '';
@@ -67,7 +67,7 @@ class MessageController extends InitController
                 $_SESSION['send_time'] = $cur_time;
             }
             $msg_info = $_CFG['message_check'] ? $_LANG['message_submit_wait'] : $_LANG['message_submit_done'];
-            show_message($msg_info, $_LANG['message_list_lnk'], 'message.php');
+            return $this->show_message($msg_info, $_LANG['message_list_lnk'], 'message.php');
         } else {
             $err->show($_LANG['message_list_lnk'], 'message.php');
         }

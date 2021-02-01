@@ -91,8 +91,7 @@ class CompareController extends InitController
             $smarty->assign('attribute', $attribute);
             $smarty->assign('goods_list', $arr);
         } else {
-            show_message($_LANG['compare_no_goods']);
-            exit;
+            return $this->show_message($_LANG['compare_no_goods']);
         }
 
         $this->assign_template();

@@ -184,7 +184,7 @@ class FlowController extends InitController
                 $captcha = intval($_CFG['captcha']);
                 if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
                     if (empty($_POST['captcha'])) {
-                        show_message($_LANG['invalid_captcha']);
+                        return $this->show_message($_LANG['invalid_captcha']);
                     }
 
                     /* 检查验证码 */
@@ -193,7 +193,7 @@ class FlowController extends InitController
                     $validator = new captcha();
                     $validator->session_word = 'captcha_login';
                     if (!$validator->check_word($_POST['captcha'])) {
-                        show_message($_LANG['invalid_captcha']);
+                        return $this->show_message($_LANG['invalid_captcha']);
                     }
                 }
 
@@ -214,12 +214,12 @@ class FlowController extends InitController
                     exit;
                 } else {
                     $_SESSION['login_fail']++;
-                    show_message($_LANG['signin_failed'], '', 'flow.php?step=login');
+                    return $this->show_message($_LANG['signin_failed'], '', 'flow.php?step=login');
                 }
             } elseif (!empty($_POST['act']) && $_POST['act'] == 'signup') {
                 if ((intval($_CFG['captcha']) & CAPTCHA_REGISTER) && gd_version() > 0) {
                     if (empty($_POST['captcha'])) {
-                        show_message($_LANG['invalid_captcha']);
+                        return $this->show_message($_LANG['invalid_captcha']);
                     }
 
                     /* 检查验证码 */
@@ -227,7 +227,7 @@ class FlowController extends InitController
 
                     $validator = new captcha();
                     if (!$validator->check_word($_POST['captcha'])) {
-                        show_message($_LANG['invalid_captcha']);
+                        return $this->show_message($_LANG['invalid_captcha']);
                     }
                 }
 
@@ -355,7 +355,7 @@ class FlowController extends InitController
             ecs_header("Location: flow.php?step=consignee\n");
             exit;
         } else {
-            show_message($_LANG['not_fount_consignee']);
+            return $this->show_message($_LANG['not_fount_consignee']);
         }
     }
 
@@ -389,7 +389,7 @@ class FlowController extends InitController
             " WHERE " . $where . " AND parent_id = 0 AND is_gift = 0 AND rec_type = '$flow_type'";
 
         if ($db->getOne($sql) == 0) {
-            show_message($_LANG['no_goods_in_cart'], '', '', 'warning');
+            return $this->show_message($_LANG['no_goods_in_cart'], '', '', 'warning');
         }
 
         /*
@@ -504,11 +504,11 @@ class FlowController extends InitController
                 if ($flow_type == CART_GROUP_BUY_GOODS) {
                     $group_buy_id = $_SESSION['extension_id'];
                     if ($group_buy_id <= 0) {
-                        show_message('error group_buy_id');
+                        return $this->show_message('error group_buy_id');
                     }
                     $group_buy = group_buy_info($group_buy_id);
                     if (empty($group_buy)) {
-                        show_message('group buy not exists: ' . $group_buy_id);
+                        return $this->show_message('group buy not exists: ' . $group_buy_id);
                     }
 
                     if ($group_buy['deposit'] > 0) {
@@ -1187,7 +1187,7 @@ class FlowController extends InitController
             " WHERE " . $where .
             "AND parent_id = 0 AND is_gift = 0 AND rec_type = '$flow_type'";
         if ($db->getOne($sql) == 0) {
-            show_message($_LANG['no_goods_in_cart'], '', '', 'warning');
+            return $this->show_message($_LANG['no_goods_in_cart'], '', '', 'warning');
         }
 
         /* 检查商品库存 */
@@ -1311,12 +1311,12 @@ class FlowController extends InitController
         $cart_goods = cart_goods($flow_type);
 
         if (empty($cart_goods)) {
-            show_message($_LANG['no_goods_in_cart'], $_LANG['back_home'], './', 'warning');
+            return $this->show_message($_LANG['no_goods_in_cart'], $_LANG['back_home'], './', 'warning');
         }
 
         /* 检查商品总额是否达到最低限购金额 */
         if ($flow_type == CART_GENERAL_GOODS && cart_amount(true, CART_GENERAL_GOODS) < $_CFG['min_goods_amount']) {
-            show_message(sprintf($_LANG['goods_amount_not_enough'], price_format($_CFG['min_goods_amount'], false)));
+            return $this->show_message(sprintf($_LANG['goods_amount_not_enough'], price_format($_CFG['min_goods_amount'], false)));
         }
 
         /* 收货人信息 */
@@ -1334,7 +1334,7 @@ class FlowController extends InitController
         if (isset($is_real_good)) {
             $sql = "SELECT shipping_id FROM " . $ecs->table('shipping') . " WHERE shipping_id=" . $order['shipping_id'] . " AND enabled =1";
             if (!$db->getOne($sql)) {
-                show_message($_LANG['flow_no_shipping']);
+                return $this->show_message($_LANG['flow_no_shipping']);
             }
         }
         /* 订单中的总额 */
@@ -1392,7 +1392,7 @@ class FlowController extends InitController
                 $order['surplus'] = 0;
             }
             if ($order['order_amount'] > ($user_info['user_money'] + $user_info['credit_line'])) {
-                show_message($_LANG['balance_not_enough']);
+                return $this->show_message($_LANG['balance_not_enough']);
             } else {
                 $order['surplus'] = $order['order_amount'];
                 $order['order_amount'] = 0;
@@ -1603,7 +1603,7 @@ class FlowController extends InitController
             flow_update_cart($_POST['goods_number']);
         }
 
-        show_message($_LANG['update_cart_notice'], $_LANG['back_to_cart'], 'flow.php');
+        return $this->show_message($_LANG['update_cart_notice'], $_LANG['back_to_cart'], 'flow.php');
         exit;
     }
 
@@ -1632,25 +1632,25 @@ class FlowController extends InitController
         $act_id = intval($_POST['act_id']);
         $favourable = favourable_info($act_id);
         if (empty($favourable)) {
-            show_message($_LANG['favourable_not_exist']);
+            return $this->show_message($_LANG['favourable_not_exist']);
         }
 
         /* 判断用户能否享受该优惠 */
         if (!favourable_available($favourable)) {
-            show_message($_LANG['favourable_not_available']);
+            return $this->show_message($_LANG['favourable_not_available']);
         }
 
         /* 检查购物车中是否已有该优惠 */
         $cart_favourable = cart_favourable();
         if (favourable_used($favourable, $cart_favourable)) {
-            show_message($_LANG['favourable_used']);
+            return $this->show_message($_LANG['favourable_used']);
         }
 
         /* 赠品（特惠品）优惠 */
         if ($favourable['act_type'] == FAT_GOODS) {
             /* 检查是否选择了赠品 */
             if (empty($_POST['gift'])) {
-                show_message($_LANG['pls_select_gift']);
+                return $this->show_message($_LANG['pls_select_gift']);
             }
 
             /* 检查是否已在购物车 */
@@ -1662,13 +1662,13 @@ class FlowController extends InitController
                 " AND goods_id " . db_create_in($_POST['gift']);
             $gift_name = $db->getCol($sql);
             if (!empty($gift_name)) {
-                show_message(sprintf($_LANG['gift_in_cart'], join(',', $gift_name)));
+                return $this->show_message(sprintf($_LANG['gift_in_cart'], join(',', $gift_name)));
             }
 
             /* 检查数量是否超过上限 */
             $count = isset($cart_favourable[$act_id]) ? $cart_favourable[$act_id] : 0;
             if ($favourable['act_type_ext'] > 0 && $count + count($_POST['gift']) > $favourable['act_type_ext']) {
-                show_message($_LANG['gift_count_exceed']);
+                return $this->show_message($_LANG['gift_count_exceed']);
             }
 
             /* 添加赠品到购物车 */
@@ -1989,7 +1989,7 @@ class FlowController extends InitController
             //查询：系统启用了库存，检查输入的商品数量是否有效
             if (intval($GLOBALS['_CFG']['use_storage']) > 0 && $goods['extension_code'] != 'package_buy') {
                 if ($row['goods_number'] < $val) {
-                    show_message(sprintf(
+                    return $this->show_message(sprintf(
                         $GLOBALS['_LANG']['stock_insufficiency'],
                         $row['goods_name'],
                         $row['goods_number'],
@@ -2004,7 +2004,7 @@ class FlowController extends InitController
 
                     $product_number = $GLOBALS['db']->getOne($sql);
                     if ($product_number < $val) {
-                        show_message(sprintf(
+                        return $this->show_message(sprintf(
                             $GLOBALS['_LANG']['stock_insufficiency'],
                             $row['goods_name'],
                             $product_number['product_number'],
@@ -2015,7 +2015,7 @@ class FlowController extends InitController
                 }
             } elseif (intval($GLOBALS['_CFG']['use_storage']) > 0 && $goods['extension_code'] == 'package_buy') {
                 if (judge_package_stock($goods['goods_id'], $val)) {
-                    show_message($GLOBALS['_LANG']['package_stock_insufficiency']);
+                    return $this->show_message($GLOBALS['_LANG']['package_stock_insufficiency']);
                     exit;
                 }
             }
@@ -2116,7 +2116,7 @@ class FlowController extends InitController
             //系统启用了库存，检查输入的商品数量是否有效
             if (intval($GLOBALS['_CFG']['use_storage']) > 0 && $goods['extension_code'] != 'package_buy') {
                 if ($row['goods_number'] < $val) {
-                    show_message(sprintf(
+                    return $this->show_message(sprintf(
                         $GLOBALS['_LANG']['stock_insufficiency'],
                         $row['goods_name'],
                         $row['goods_number'],
@@ -2131,7 +2131,7 @@ class FlowController extends InitController
                     $sql = "SELECT product_number FROM " . $GLOBALS['ecs']->table('products') . " WHERE goods_id = '" . $goods['goods_id'] . "' AND product_id = '" . $row['product_id'] . "'";
                     $product_number = $GLOBALS['db']->getOne($sql);
                     if ($product_number < $val) {
-                        show_message(sprintf(
+                        return $this->show_message(sprintf(
                             $GLOBALS['_LANG']['stock_insufficiency'],
                             $row['goods_name'],
                             $row['goods_number'],
@@ -2142,7 +2142,7 @@ class FlowController extends InitController
                 }
             } elseif (intval($GLOBALS['_CFG']['use_storage']) > 0 && $goods['extension_code'] == 'package_buy') {
                 if (judge_package_stock($goods['goods_id'], $val)) {
-                    show_message($GLOBALS['_LANG']['package_stock_insufficiency']);
+                    return $this->show_message($GLOBALS['_LANG']['package_stock_insufficiency']);
                     exit;
                 }
             }

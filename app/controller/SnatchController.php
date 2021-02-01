@@ -54,7 +54,7 @@ class SnatchController extends InitController
                 unset($goods_specifications, $good_products, $_good_products, $products_info);
             }
         } else {
-            show_message($_LANG['now_not_snatch']);
+            return $this->show_message($_LANG['now_not_snatch']);
         }
 
         /* 调查 */
@@ -176,7 +176,7 @@ class SnatchController extends InitController
         }
 
         if (empty($_SESSION['user_id'])) {
-            show_message($_LANG['not_login']);
+            return $this->show_message($_LANG['not_login']);
         }
 
         $snatch = get_snatch($id);
@@ -197,12 +197,12 @@ class SnatchController extends InitController
         $result = get_snatch_result($id);
 
         if ($_SESSION['user_id'] != $result['user_id']) {
-            show_message($_LANG['not_for_you']);
+            return $this->show_message($_LANG['not_for_you']);
         }
 
         //检查是否已经购买过
         if ($result['order_count'] > 0) {
-            show_message($_LANG['order_placed']);
+            return $this->show_message($_LANG['order_placed']);
         }
 
         /* 处理规格属性 */

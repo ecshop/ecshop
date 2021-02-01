@@ -143,24 +143,24 @@ class UserController extends InitController
             $back_act = isset($_POST['back_act']) ? trim($_POST['back_act']) : '';
 
             if (empty($_POST['agreement'])) {
-                show_message($_LANG['passport_js']['agreement']);
+                return $this->show_message($_LANG['passport_js']['agreement']);
             }
             if (strlen($username) < 3) {
-                show_message($_LANG['passport_js']['username_shorter']);
+                return $this->show_message($_LANG['passport_js']['username_shorter']);
             }
 
             if (strlen($password) < 6) {
-                show_message($_LANG['passport_js']['password_shorter']);
+                return $this->show_message($_LANG['passport_js']['password_shorter']);
             }
 
             if (strpos($password, ' ') > 0) {
-                show_message($_LANG['passwd_balnk']);
+                return $this->show_message($_LANG['passwd_balnk']);
             }
 
             /* 验证码检查 */
             if ((intval($_CFG['captcha']) & CAPTCHA_REGISTER) && gd_version() > 0) {
                 if (empty($_POST['captcha'])) {
-                    show_message($_LANG['invalid_captcha'], $_LANG['sign_up'], 'user.php?act=register', 'error');
+                    return $this->show_message($_LANG['invalid_captcha'], $_LANG['sign_up'], 'user.php?act=register', 'error');
                 }
 
                 /* 检查验证码 */
@@ -168,7 +168,7 @@ class UserController extends InitController
 
                 $validator = new captcha();
                 if (!$validator->check_word($_POST['captcha'])) {
-                    show_message($_LANG['invalid_captcha'], $_LANG['sign_up'], 'user.php?act=register', 'error');
+                    return $this->show_message($_LANG['invalid_captcha'], $_LANG['sign_up'], 'user.php?act=register', 'error');
                 }
             }
 
@@ -202,7 +202,7 @@ class UserController extends InitController
                     send_regiter_hash($_SESSION['user_id']);
                 }
                 $ucdata = empty($user->ucdata) ? "" : $user->ucdata;
-                show_message(sprintf($_LANG['register_success'], $username . $ucdata), array($_LANG['back_up_page'], $_LANG['profile_lnk']), array($back_act, 'user.php'), 'info');
+                return $this->show_message(sprintf($_LANG['register_success'], $username . $ucdata), array($_LANG['back_up_page'], $_LANG['profile_lnk']), array($back_act, 'user.php'), 'info');
             } else {
                 $err->show($_LANG['sign_up'], 'user.php?act=register');
             }
@@ -219,10 +219,10 @@ class UserController extends InitController
                 $db->query($sql);
                 $sql = 'SELECT user_name, email FROM ' . $ecs->table('users') . " WHERE user_id = '$id'";
                 $row = $db->getRow($sql);
-                show_message(sprintf($_LANG['validate_ok'], $row['user_name'], $row['email']), $_LANG['profile_lnk'], 'user.php');
+                return $this->show_message(sprintf($_LANG['validate_ok'], $row['user_name'], $row['email']), $_LANG['profile_lnk'], 'user.php');
             }
         }
-        show_message($_LANG['validate_fail']);
+        return $this->show_message($_LANG['validate_fail']);
     } /* 验证用户注册用户名是否可以注册 */
     public function is_registeredAction()
     {
@@ -276,7 +276,7 @@ class UserController extends InitController
         $captcha = intval($_CFG['captcha']);
         if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
             if (empty($_POST['captcha'])) {
-                show_message($_LANG['invalid_captcha'], $_LANG['relogin_lnk'], 'user.php', 'error');
+                return $this->show_message($_LANG['invalid_captcha'], $_LANG['relogin_lnk'], 'user.php', 'error');
             }
 
             /* 检查验证码 */
@@ -285,7 +285,7 @@ class UserController extends InitController
             $validator = new captcha();
             $validator->session_word = 'captcha_login';
             if (!$validator->check_word($_POST['captcha'])) {
-                show_message($_LANG['invalid_captcha'], $_LANG['relogin_lnk'], 'user.php', 'error');
+                return $this->show_message($_LANG['invalid_captcha'], $_LANG['relogin_lnk'], 'user.php', 'error');
             }
         }
 
@@ -294,10 +294,10 @@ class UserController extends InitController
             recalculate_price();
 
             $ucdata = isset($user->ucdata) ? $user->ucdata : '';
-            show_message($_LANG['login_success'] . $ucdata, array($_LANG['back_up_page'], $_LANG['profile_lnk']), array($back_act, 'user.php'), 'info');
+            return $this->show_message($_LANG['login_success'] . $ucdata, array($_LANG['back_up_page'], $_LANG['profile_lnk']), array($back_act, 'user.php'), 'info');
         } else {
             $_SESSION['login_fail']++;
-            show_message($_LANG['login_failure'], $_LANG['relogin_lnk'], 'user.php', 'error');
+            return $this->show_message($_LANG['login_failure'], $_LANG['relogin_lnk'], 'user.php', 'error');
         }
     } /* 处理 ajax 的登录请求 */
     public function signinAction()
@@ -356,7 +356,7 @@ class UserController extends InitController
 
         $user->logout();
         $ucdata = empty($user->ucdata) ? "" : $user->ucdata;
-        show_message($_LANG['logout'] . $ucdata, array($_LANG['back_up_page'], $_LANG['back_home_lnk']), array($back_act, 'index.php'), 'info');
+        return $this->show_message($_LANG['logout'] . $ucdata, array($_LANG['back_up_page'], $_LANG['back_home_lnk']), array($back_act, 'index.php'), 'info');
     } /* 个人资料页面 */
     public function profileAction()
     {
@@ -448,22 +448,22 @@ class UserController extends InitController
         }
 
         if (!empty($office_phone) && !preg_match('/^[\d|\_|\-|\s]+$/', $office_phone)) {
-            show_message($_LANG['passport_js']['office_phone_invalid']);
+            return $this->show_message($_LANG['passport_js']['office_phone_invalid']);
         }
         if (!empty($home_phone) && !preg_match('/^[\d|\_|\-|\s]+$/', $home_phone)) {
-            show_message($_LANG['passport_js']['home_phone_invalid']);
+            return $this->show_message($_LANG['passport_js']['home_phone_invalid']);
         }
         if (!is_email($email)) {
-            show_message($_LANG['msg_email_format']);
+            return $this->show_message($_LANG['msg_email_format']);
         }
         if (!empty($msn) && !is_email($msn)) {
-            show_message($_LANG['passport_js']['msn_invalid']);
+            return $this->show_message($_LANG['passport_js']['msn_invalid']);
         }
         if (!empty($qq) && !preg_match('/^\d+$/', $qq)) {
-            show_message($_LANG['passport_js']['qq_invalid']);
+            return $this->show_message($_LANG['passport_js']['qq_invalid']);
         }
         if (!empty($mobile_phone) && !preg_match('/^[\d-\s]+$/', $mobile_phone)) {
-            show_message($_LANG['passport_js']['mobile_phone_invalid']);
+            return $this->show_message($_LANG['passport_js']['mobile_phone_invalid']);
         }
 
 
@@ -477,14 +477,14 @@ class UserController extends InitController
 
 
         if (edit_profile($profile)) {
-            show_message($_LANG['edit_profile_success'], $_LANG['profile_lnk'], 'user.php?act=profile', 'info');
+            return $this->show_message($_LANG['edit_profile_success'], $_LANG['profile_lnk'], 'user.php?act=profile', 'info');
         } else {
             if ($user->error == ERR_EMAIL_EXISTS) {
                 $msg = sprintf($_LANG['email_exist'], $profile['email']);
             } else {
                 $msg = $_LANG['edit_profile_failed'];
             }
-            show_message($msg, '', '', 'info');
+            return $this->show_message($msg, '', '', 'info');
         }
     } /* 密码找回-->修改密码界面 */
     public function get_passwordAction()
@@ -498,7 +498,7 @@ class UserController extends InitController
             /* 判断链接的合法性 */
             $user_info = $user->get_profile_by_id($uid);
             if (empty($user_info) || ($user_info && md5($user_info['user_id'] . $_CFG['hash_code'] . $user_info['reg_time']) != $code)) {
-                show_message($_LANG['parm_error'], $_LANG['back_home_lnk'], './', 'info');
+                return $this->show_message($_LANG['parm_error'], $_LANG['back_home_lnk'], './', 'info');
             }
 
             $smarty->assign('uid', $uid);
@@ -518,7 +518,7 @@ class UserController extends InitController
     public function get_passwd_questionAction()
     {
         if (empty($_POST['user_name'])) {
-            show_message($_LANG['no_passwd_question'], $_LANG['back_home_lnk'], './', 'info');
+            return $this->show_message($_LANG['no_passwd_question'], $_LANG['back_home_lnk'], './', 'info');
         } else {
             $user_name = trim($_POST['user_name']);
         }
@@ -529,7 +529,7 @@ class UserController extends InitController
 
         //如果没有设置密码问题，给出错误提示
         if (empty($user_question_arr['passwd_answer'])) {
-            show_message($_LANG['no_passwd_question'], $_LANG['back_home_lnk'], './', 'info');
+            return $this->show_message($_LANG['no_passwd_question'], $_LANG['back_home_lnk'], './', 'info');
         }
 
         $_SESSION['temp_user'] = $user_question_arr['user_id'];  //设置临时用户，不具有有效身份
@@ -550,7 +550,7 @@ class UserController extends InitController
         $captcha = intval($_CFG['captcha']);
         if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
             if (empty($_POST['captcha'])) {
-                show_message($_LANG['invalid_captcha'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'error');
+                return $this->show_message($_LANG['invalid_captcha'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'error');
             }
 
             /* 检查验证码 */
@@ -559,12 +559,12 @@ class UserController extends InitController
             $validator = new captcha();
             $validator->session_word = 'captcha_login';
             if (!$validator->check_word($_POST['captcha'])) {
-                show_message($_LANG['invalid_captcha'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'error');
+                return $this->show_message($_LANG['invalid_captcha'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'error');
             }
         }
 
         if (empty($_POST['passwd_answer']) || $_POST['passwd_answer'] != $_SESSION['passwd_answer']) {
-            show_message($_LANG['wrong_passwd_answer'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'info');
+            return $this->show_message($_LANG['wrong_passwd_answer'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'info');
         } else {
             $_SESSION['user_id'] = $_SESSION['temp_user'];
             $_SESSION['user_name'] = $_SESSION['temp_user_name'];
@@ -593,14 +593,14 @@ class UserController extends InitController
             $code = md5($user_info['user_id'] . $_CFG['hash_code'] . $user_info['reg_time']);
             //发送邮件的函数
             if (send_pwd_email($user_info['user_id'], $user_name, $email, $code)) {
-                show_message($_LANG['send_success'] . $email, $_LANG['back_home_lnk'], './', 'info');
+                return $this->show_message($_LANG['send_success'] . $email, $_LANG['back_home_lnk'], './', 'info');
             } else {
                 //发送邮件出错
-                show_message($_LANG['fail_send_password'], $_LANG['back_page_up'], './', 'info');
+                return $this->show_message($_LANG['fail_send_password'], $_LANG['back_page_up'], './', 'info');
             }
         } else {
             //用户名与邮件地址不匹配
-            show_message($_LANG['username_no_email'], $_LANG['back_page_up'], '', 'info');
+            return $this->show_message($_LANG['username_no_email'], $_LANG['back_page_up'], '', 'info');
         }
     } /* 重置新密码 */
     public function reset_passwordAction()
@@ -618,7 +618,7 @@ class UserController extends InitController
         $code = isset($_POST['code']) ? trim($_POST['code']) : '';
 
         if (strlen($new_password) < 6) {
-            show_message($_LANG['passport_js']['password_shorter']);
+            return $this->show_message($_LANG['passport_js']['password_shorter']);
         }
 
         $user_info = $user->get_profile_by_id($user_id); //论坛记录
@@ -628,12 +628,12 @@ class UserController extends InitController
                 $sql = "UPDATE " . $ecs->table('users') . "SET `ec_salt`='0' WHERE user_id= '" . $user_id . "'";
                 $db->query($sql);
                 $user->logout();
-                show_message($_LANG['edit_password_success'], $_LANG['relogin_lnk'], 'user.php?act=login', 'info');
+                return $this->show_message($_LANG['edit_password_success'], $_LANG['relogin_lnk'], 'user.php?act=login', 'info');
             } else {
-                show_message($_LANG['edit_password_failure'], $_LANG['back_page_up'], '', 'info');
+                return $this->show_message($_LANG['edit_password_failure'], $_LANG['back_page_up'], '', 'info');
             }
         } else {
-            show_message($_LANG['edit_password_failure'], $_LANG['back_page_up'], '', 'info');
+            return $this->show_message($_LANG['edit_password_failure'], $_LANG['back_page_up'], '', 'info');
         }
     } /* 添加一个红包 */
     public function act_add_bonusAction()
@@ -643,7 +643,7 @@ class UserController extends InitController
         $bouns_sn = isset($_POST['bonus_sn']) ? intval($_POST['bonus_sn']) : '';
 
         if (add_bonus($user_id, $bouns_sn)) {
-            show_message($_LANG['add_bonus_sucess'], $_LANG['back_up_page'], 'user.php?act=bonus', 'info');
+            return $this->show_message($_LANG['add_bonus_sucess'], $_LANG['back_up_page'], 'user.php?act=bonus', 'info');
         } else {
             $err->show($_LANG['back_up_page'], 'user.php?act=bonus');
         }
@@ -818,7 +818,7 @@ class UserController extends InitController
         );
 
         if (update_address($address)) {
-            show_message($_LANG['edit_address_success'], $_LANG['address_list_lnk'], 'user.php?act=address_list');
+            return $this->show_message($_LANG['edit_address_success'], $_LANG['address_list_lnk'], 'user.php?act=address_list');
         }
     } /* 删除收货地址 */
     public function drop_consigneeAction()
@@ -831,7 +831,7 @@ class UserController extends InitController
             ecs_header("Location: user.php?act=address_list\n");
             exit;
         } else {
-            show_message($_LANG['del_address_false']);
+            return $this->show_message($_LANG['del_address_false']);
         }
     } /* 显示收藏商品列表 */
     public function collection_listAction()
@@ -954,7 +954,7 @@ class UserController extends InitController
         );
 
         if (add_message($message)) {
-            show_message($_LANG['add_message_success'], $_LANG['message_list_lnk'], 'user.php?act=message_list&order_id=' . $message['order_id'], 'info');
+            return $this->show_message($_LANG['add_message_success'], $_LANG['message_list_lnk'], 'user.php?act=message_list&order_id=' . $message['order_id'], 'info');
         } else {
             $err->show($_LANG['message_list_lnk'], 'user.php?act=message_list');
         }
@@ -1003,7 +1003,7 @@ class UserController extends InitController
 
         $goods_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         if ($goods_id == 0) {
-            show_message($_LANG['no_goods_id'], $_LANG['back_page_up'], '', 'error');
+            return $this->show_message($_LANG['no_goods_id'], $_LANG['back_page_up'], '', 'error');
         }
 
         /* 根据规格属性获取货品规格信息 */
@@ -1045,11 +1045,11 @@ class UserController extends InitController
         // 查看此商品是否已经登记过
         $rec_id = get_booking_rec($user_id, $booking['goods_id']);
         if ($rec_id > 0) {
-            show_message($_LANG['booking_rec_exist'], $_LANG['back_page_up'], '', 'error');
+            return $this->show_message($_LANG['booking_rec_exist'], $_LANG['back_page_up'], '', 'error');
         }
 
         if (add_booking($booking)) {
-            show_message(
+            return $this->show_message(
                 $_LANG['booking_success'],
                 $_LANG['back_booking_list'],
                 'user.php?act=booking_list',
@@ -1187,7 +1187,7 @@ class UserController extends InitController
         include_once(ROOT_PATH . 'includes/lib_order.php');
         $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : 0;
         if ($amount <= 0) {
-            show_message($_LANG['amount_gt_zero']);
+            return $this->show_message($_LANG['amount_gt_zero']);
         }
 
         /* 变量初始化 */
@@ -1206,7 +1206,7 @@ class UserController extends InitController
             $sur_amount = get_user_surplus($user_id);
             if ($amount > $sur_amount) {
                 $content = $_LANG['surplus_amount_error'];
-                show_message($content, $_LANG['back_page_up'], '', 'info');
+                return $this->show_message($content, $_LANG['back_page_up'], '', 'info');
             }
 
             //插入会员账目明细
@@ -1217,15 +1217,15 @@ class UserController extends InitController
             /* 如果成功提交 */
             if ($surplus['rec_id'] > 0) {
                 $content = $_LANG['surplus_appl_submit'];
-                show_message($content, $_LANG['back_account_log'], 'user.php?act=account_log', 'info');
+                return $this->show_message($content, $_LANG['back_account_log'], 'user.php?act=account_log', 'info');
             } else {
                 $content = $_LANG['process_false'];
-                show_message($content, $_LANG['back_page_up'], '', 'info');
+                return $this->show_message($content, $_LANG['back_page_up'], '', 'info');
             }
         } /* 如果是会员预付款，跳转到下一步，进行线上支付的操作 */
         else {
             if ($surplus['payment_id'] <= 0) {
-                show_message($_LANG['select_payment_pls']);
+                return $this->show_message($_LANG['select_payment_pls']);
             }
 
             include_once(ROOT_PATH . 'includes/lib_payment.php');
@@ -1475,7 +1475,7 @@ class UserController extends InitController
         $from_order = isset($_POST['from_order']) ? trim($_POST['from_order']) : '';
         $to_order = isset($_POST['to_order']) ? trim($_POST['to_order']) : '';
         if (merge_user_order($from_order, $to_order, $user_id)) {
-            show_message($_LANG['merge_order_success'], $_LANG['order_list_lnk'], 'user.php?act=order_list', 'info');
+            return $this->show_message($_LANG['merge_order_success'], $_LANG['order_list_lnk'], 'user.php?act=order_list', 'info');
         } else {
             $err->show($_LANG['order_list_lnk']);
         }
@@ -1975,7 +1975,7 @@ class UserController extends InitController
                     $info = $_LANG['hash_wrong'];
                 }
             }
-            show_message($info, $_LANG['back_home_lnk'], 'index.php');
+            return $this->show_message($info, $_LANG['back_home_lnk'], 'index.php');
         } elseif ($job == 'del_check') {
             if (empty($ck)) {
                 $info = sprintf($_LANG['email_invalid'], $email);
@@ -1990,7 +1990,7 @@ class UserController extends InitController
             } else {
                 $info = $_LANG['email_not_alive'];
             }
-            show_message($info, $_LANG['back_home_lnk'], 'index.php');
+            return $this->show_message($info, $_LANG['back_home_lnk'], 'index.php');
         }
     } /* ajax 发送验证邮件 */
     public function send_hash_mailAction()
@@ -2204,7 +2204,7 @@ class UserController extends InitController
 
 
         if ($num <= 0 || $num != floor($num)) {
-            show_message($_LANG['invalid_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
+            return $this->show_message($_LANG['invalid_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
         }
 
         $num = floor($num); //格式化为整数
@@ -2243,7 +2243,7 @@ class UserController extends InitController
 
         /* 检查积分是否超过最大值 */
         if ($max_points <= 0 || $num > $max_points) {
-            show_message($_LANG['overflow_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
+            return $this->show_message($_LANG['overflow_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
         }
 
         switch ($rule_key) {
@@ -2251,28 +2251,28 @@ class UserController extends InitController
                 $result_points = floor($num * $to / $from);
                 $user->set_points($row['user_name'], array($bbs_key => 0 - $num)); //调整论坛积分
                 log_account_change($row['user_id'], 0, 0, 0, $result_points, $_LANG['transform_points'], ACT_OTHER);
-                show_message(sprintf($_LANG['to_pay_points'], $num, $points_name[$bbs_key]['title'], $result_points), $_LANG['transform_points'], 'user.php?act=transform_points');
+                return $this->show_message(sprintf($_LANG['to_pay_points'], $num, $points_name[$bbs_key]['title'], $result_points), $_LANG['transform_points'], 'user.php?act=transform_points');
 
             // no break
             case TO_R:
                 $result_points = floor($num * $to / $from);
                 $user->set_points($row['user_name'], array($bbs_key => 0 - $num)); //调整论坛积分
                 log_account_change($row['user_id'], 0, 0, $result_points, 0, $_LANG['transform_points'], ACT_OTHER);
-                show_message(sprintf($_LANG['to_rank_points'], $num, $points_name[$bbs_key]['title'], $result_points), $_LANG['transform_points'], 'user.php?act=transform_points');
+                return $this->show_message(sprintf($_LANG['to_rank_points'], $num, $points_name[$bbs_key]['title'], $result_points), $_LANG['transform_points'], 'user.php?act=transform_points');
 
             // no break
             case FROM_P:
                 $result_points = floor($num * $to / $from);
                 log_account_change($row['user_id'], 0, 0, 0, 0 - $num, $_LANG['transform_points'], ACT_OTHER); //调整商城积分
                 $user->set_points($row['user_name'], array($bbs_key => $result_points)); //调整论坛积分
-                show_message(sprintf($_LANG['from_pay_points'], $num, $result_points, $points_name[$bbs_key]['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
+                return $this->show_message(sprintf($_LANG['from_pay_points'], $num, $result_points, $points_name[$bbs_key]['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
 
             // no break
             case FROM_R:
                 $result_points = floor($num * $to / $from);
                 log_account_change($row['user_id'], 0, 0, 0 - $num, 0, $_LANG['transform_points'], ACT_OTHER); //调整商城积分
                 $user->set_points($row['user_name'], array($bbs_key => $result_points)); //调整论坛积分
-                show_message(sprintf($_LANG['from_rank_points'], $num, $result_points, $points_name[$bbs_key]['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
+                return $this->show_message(sprintf($_LANG['from_rank_points'], $num, $result_points, $points_name[$bbs_key]['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
         }
     }
 
@@ -2297,10 +2297,10 @@ class UserController extends InitController
         $ratio = 0;
 
         if ($exchange_amount <= 0) {
-            show_message($_LANG['invalid_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
+            return $this->show_message($_LANG['invalid_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
         }
         if ($exchange_amount > $row[$shop_points[$fromcredits]]) {
-            show_message($_LANG['overflow_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
+            return $this->show_message($_LANG['overflow_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
         }
         foreach ($rule as $credit) {
             if ($credit['appiddesc'] == $appiddesc && $credit['creditdesc'] == $creditdesc && $credit['creditsrc'] == $fromcredits) {
@@ -2309,7 +2309,7 @@ class UserController extends InitController
             }
         }
         if ($ratio == 0) {
-            show_message($_LANG['exchange_deny'], $_LANG['transform_points'], 'user.php?act=transform_points');
+            return $this->show_message($_LANG['exchange_deny'], $_LANG['transform_points'], 'user.php?act=transform_points');
         }
         $netamount = floor($exchange_amount / $ratio);
         include_once(ROOT_PATH . './includes/lib_uc.php');
@@ -2319,9 +2319,9 @@ class UserController extends InitController
             $db->query($sql);
             $sql = "INSERT INTO " . $ecs->table('account_log') . "(user_id, {$shop_points[$fromcredits]}, change_time, change_desc, change_type)" . " VALUES ('{$row['user_id']}', '-$exchange_amount', '" . gmtime() . "', '" . $cfg['uc_lang']['exchange'] . "', '98')";
             $db->query($sql);
-            show_message(sprintf($_LANG['exchange_success'], $exchange_amount, $_LANG['exchange_points'][$fromcredits], $netamount, $credit['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
+            return $this->show_message(sprintf($_LANG['exchange_success'], $exchange_amount, $_LANG['exchange_points'][$fromcredits], $netamount, $credit['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
         } else {
-            show_message($_LANG['exchange_error_1'], $_LANG['transform_points'], 'user.php?act=transform_points');
+            return $this->show_message($_LANG['exchange_error_1'], $_LANG['transform_points'], 'user.php?act=transform_points');
         }
     } /* 清除商品浏览历史 */
     public function clear_historyAction()

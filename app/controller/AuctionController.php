@@ -160,20 +160,20 @@ class AuctionController extends InitController
 
         /* 活动是否正在进行 */
         if ($auction['status_no'] != UNDER_WAY) {
-            show_message($_LANG['au_not_under_way'], '', '', 'error');
+            return $this->show_message($_LANG['au_not_under_way'], '', '', 'error');
         }
 
         /* 是否登录 */
         $user_id = $_SESSION['user_id'];
         if ($user_id <= 0) {
-            show_message($_LANG['au_bid_after_login']);
+            return $this->show_message($_LANG['au_bid_after_login']);
         }
         $user = user_info($user_id);
 
         /* 取得出价 */
         $bid_price = isset($_POST['price']) ? round(floatval($_POST['price']), 2) : 0;
         if ($bid_price <= 0) {
-            show_message($_LANG['au_bid_price_error'], '', '', 'error');
+            return $this->show_message($_LANG['au_bid_price_error'], '', '', 'error');
         }
 
         /* 如果有一口价且出价大于等于一口价，则按一口价算 */
@@ -199,20 +199,20 @@ class AuctionController extends InitController
             }
 
             if ($bid_price < $min_price) {
-                show_message(sprintf($_LANG['au_your_lowest_price'], price_format($min_price, false)), '', '', 'error');
+                return $this->show_message(sprintf($_LANG['au_your_lowest_price'], price_format($min_price, false)), '', '', 'error');
             }
         }
 
         /* 检查联系两次拍卖人是否相同 */
         if ($auction['last_bid']['bid_user'] == $user_id && $bid_price != $auction['end_price']) {
-            show_message($_LANG['au_bid_repeat_user'], '', '', 'error');
+            return $this->show_message($_LANG['au_bid_repeat_user'], '', '', 'error');
         }
 
         /* 是否需要保证金 */
         if ($auction['deposit'] > 0) {
             /* 可用资金够吗 */
             if ($user['user_money'] < $auction['deposit']) {
-                show_message($_LANG['au_user_money_short'], '', '', 'error');
+                return $this->show_message($_LANG['au_user_money_short'], '', '', 'error');
             }
 
             /* 如果不是第一个出价，解冻上一个用户的保证金 */
@@ -280,28 +280,28 @@ class AuctionController extends InitController
 
         /* 查询：活动是否已结束 */
         if ($auction['status_no'] != FINISHED) {
-            show_message($_LANG['au_not_finished'], '', '', 'error');
+            return $this->show_message($_LANG['au_not_finished'], '', '', 'error');
         }
 
         /* 查询：有人出价吗 */
         if ($auction['bid_user_count'] <= 0) {
-            show_message($_LANG['au_no_bid'], '', '', 'error');
+            return $this->show_message($_LANG['au_no_bid'], '', '', 'error');
         }
 
         /* 查询：是否已经有订单 */
         if ($auction['order_count'] > 0) {
-            show_message($_LANG['au_order_placed']);
+            return $this->show_message($_LANG['au_order_placed']);
         }
 
         /* 查询：是否登录 */
         $user_id = $_SESSION['user_id'];
         if ($user_id <= 0) {
-            show_message($_LANG['au_buy_after_login']);
+            return $this->show_message($_LANG['au_buy_after_login']);
         }
 
         /* 查询：最后出价的是该用户吗 */
         if ($auction['last_bid']['bid_user'] != $user_id) {
-            show_message($_LANG['au_final_bid_not_you'], '', '', 'error');
+            return $this->show_message($_LANG['au_final_bid_not_you'], '', '', 'error');
         }
 
         /* 查询：取得商品信息 */

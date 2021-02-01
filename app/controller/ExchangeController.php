@@ -174,7 +174,7 @@ class ExchangeController extends InitController
 
         /* 查询：判断是否登录 */
         if ($_SESSION['user_id'] <= 0) {
-            show_message($_LANG['eg_error_login'], array($_LANG['back_up_page']), array($back_act), 'error');
+            return $this->show_message($_LANG['eg_error_login'], array($_LANG['back_up_page']), array($back_act), 'error');
         }
 
         /* 查询：取得参数：商品id */
@@ -192,17 +192,17 @@ class ExchangeController extends InitController
         }
         /* 查询：检查兑换商品是否有库存 */
         if ($goods['goods_number'] == 0 && $_CFG['use_storage'] == 1) {
-            show_message($_LANG['eg_error_number'], array($_LANG['back_up_page']), array($back_act), 'error');
+            return $this->show_message($_LANG['eg_error_number'], array($_LANG['back_up_page']), array($back_act), 'error');
         }
         /* 查询：检查兑换商品是否是取消 */
         if ($goods['is_exchange'] == 0) {
-            show_message($_LANG['eg_error_status'], array($_LANG['back_up_page']), array($back_act), 'error');
+            return $this->show_message($_LANG['eg_error_status'], array($_LANG['back_up_page']), array($back_act), 'error');
         }
 
         $user_info = get_user_info($_SESSION['user_id']);
         $user_points = $user_info['pay_points']; // 用户的积分总数
         if ($goods['exchange_integral'] > $user_points) {
-            show_message($_LANG['eg_error_integral'], array($_LANG['back_up_page']), array($back_act), 'error');
+            return $this->show_message($_LANG['eg_error_integral'], array($_LANG['back_up_page']), array($back_act), 'error');
         }
 
         /* 查询：取得规格 */
@@ -226,7 +226,7 @@ class ExchangeController extends InitController
 
         //查询：商品存在规格 是货品 检查该货品库存
         if ((!empty($specs)) && ($product_info['product_number'] == 0) && ($_CFG['use_storage'] == 1)) {
-            show_message($_LANG['eg_error_number'], array($_LANG['back_up_page']), array($back_act), 'error');
+            return $this->show_message($_LANG['eg_error_number'], array($_LANG['back_up_page']), array($back_act), 'error');
         }
 
         /* 查询：查询规格名称和值，不考虑价格 */

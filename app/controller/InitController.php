@@ -5,17 +5,15 @@ namespace app\controller;
 use app\support\Controller;
 
 /**
- * 前台公用文件
+ * Class InitController
+ * @package app\controller
  */
 class InitController extends Controller
 {
     protected function initialize()
     {
-        if (!file_exists(ROOT_PATH . 'data/install.lock') && !file_exists(ROOT_PATH . 'includes/install.lock')
-            && !defined('NO_CHECK_INSTALL')) {
-            header("Location: ./install/index.php\n");
-
-            exit;
+        if (file_exists(runtime_path('install.lock'))) {
+            redirect('install')->send();
         }
 
         $php_self = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];

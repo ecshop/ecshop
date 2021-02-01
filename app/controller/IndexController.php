@@ -7,10 +7,6 @@ namespace app\controller;
  */
 class IndexController extends InitController
 {
-    public function initialize()
-    {
-    }
-
     public function indexAction()
     {
         $this->assign_template();

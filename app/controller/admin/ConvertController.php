@@ -162,7 +162,6 @@ class ConvertController extends InitController
         $config = $_SESSION['convert_config'];
 
         $sdb = new cls_mysql($config->host, $config->user, $config->pass, $config->db);
-        $sdb->set_mysql_charset($config->charset);
 
         /* 创建插件对象 */
         include_once(ROOT_PATH . 'includes/modules/convert/' . $config->code . '.php');

@@ -254,7 +254,7 @@ class SqlDump
     {
         /* 系统信息 */
         $sys_info['os'] = PHP_OS;
-        $sys_info['web_server'] = $GLOBALS['ecs']->get_domain();
+        $sys_info['web_server'] = $GLOBALS['ecs']->get_domain(); // TODO
         $sys_info['php_ver'] = PHP_VERSION;
         $sys_info['mysql_ver'] = $this->db->version();
         $sys_info['date'] = date('Y-m-d H:i:s');

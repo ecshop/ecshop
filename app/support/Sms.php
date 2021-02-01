@@ -200,7 +200,7 @@ class Sms
         $email = $this->get_admin_email();
         $email = $email ? $email : '';
         /* 获得当前网店的域名 */
-        $domain = $this->ecs->get_domain();
+        $domain = $this->ecs->get_domain(); // TODO
         $domain = $domain ? $domain : '';
         /* 赋给smarty模板 */
         $sms_site_info['email'] = $email;

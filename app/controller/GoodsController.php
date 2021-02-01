@@ -22,106 +22,106 @@ class GoodsController extends InitController
 
     public function indexAction()
     {
-            $smarty->assign('image_width', $_CFG['image_width']);
-            $smarty->assign('image_height', $_CFG['image_height']);
-            $smarty->assign('helps', get_shop_help()); // 网店帮助
-            $smarty->assign('id', $goods_id);
-            $smarty->assign('type', 0);
-            $smarty->assign('cfg', $_CFG);
-            $smarty->assign('promotion', get_promotion_info($goods_id));//促销信息
-            $smarty->assign('promotion_info', get_promotion_info());
+        $smarty->assign('image_width', $_CFG['image_width']);
+        $smarty->assign('image_height', $_CFG['image_height']);
+        $smarty->assign('helps', get_shop_help()); // 网店帮助
+        $smarty->assign('id', $goods_id);
+        $smarty->assign('type', 0);
+        $smarty->assign('cfg', $_CFG);
+        $smarty->assign('promotion', get_promotion_info($goods_id));//促销信息
+        $smarty->assign('promotion_info', get_promotion_info());
 
-            /* 获得商品的信息 */
-            $goods = get_goods_info($goods_id);
+        /* 获得商品的信息 */
+        $goods = get_goods_info($goods_id);
 
-            if ($goods === false) {
-                /* 如果没有找到任何记录则跳回到首页 */
-                return redirect("./");
-            } else {
-                if ($goods['brand_id'] > 0) {
-                    $goods['goods_brand_url'] = build_uri('brand', array('bid' => $goods['brand_id']), $goods['goods_brand']);
-                }
-
-                $shop_price = $goods['shop_price'];
-                $linked_goods = get_linked_goods($goods_id);
-
-                $goods['goods_style_name'] = add_style($goods['goods_name'], $goods['goods_name_style']);
-
-                /* 购买该商品可以得到多少钱的红包 */
-                if ($goods['bonus_type_id'] > 0) {
-                    $time = gmtime();
-                    $sql = "SELECT type_money FROM " . $ecs->table('bonus_type') .
-                        " WHERE type_id = '$goods[bonus_type_id]' " .
-                        " AND send_type = '" . SEND_BY_GOODS . "' " .
-                        " AND send_start_date <= '$time'" .
-                        " AND send_end_date >= '$time'";
-                    $goods['bonus_money'] = floatval($db->getOne($sql));
-                    if ($goods['bonus_money'] > 0) {
-                        $goods['bonus_money'] = price_format($goods['bonus_money']);
-                    }
-                }
-
-                $smarty->assign('goods', $goods);
-                $smarty->assign('goods_id', $goods['goods_id']);
-                $smarty->assign('promote_end_time', $goods['gmt_end_time']);
-                $smarty->assign('categories', get_categories_tree($goods['cat_id']));  // 分类树
-
-                /* meta */
-                $smarty->assign('keywords', htmlspecialchars($goods['keywords']));
-                $smarty->assign('description', htmlspecialchars($goods['goods_brief']));
-
-
-                $catlist = array();
-                foreach (get_parent_cats($goods['cat_id']) as $k => $v) {
-                    $catlist[] = $v['cat_id'];
-                }
-
-                $this->assign_template('c', $catlist);
-
-                /* 上一个商品下一个商品 */
-                $prev_gid = $db->getOne("SELECT goods_id FROM " . $ecs->table('goods') . " WHERE cat_id=" . $goods['cat_id'] . " AND goods_id > " . $goods['goods_id'] . " AND is_on_sale = 1 AND is_alone_sale = 1 AND is_delete = 0 LIMIT 1");
-                if (!empty($prev_gid)) {
-                    $prev_good['url'] = build_uri('goods', array('gid' => $prev_gid), $goods['goods_name']);
-                    $smarty->assign('prev_good', $prev_good);//上一个商品
-                }
-
-                $next_gid = $db->getOne("SELECT max(goods_id) FROM " . $ecs->table('goods') . " WHERE cat_id=" . $goods['cat_id'] . " AND goods_id < " . $goods['goods_id'] . " AND is_on_sale = 1 AND is_alone_sale = 1 AND is_delete = 0");
-                if (!empty($next_gid)) {
-                    $next_good['url'] = build_uri('goods', array('gid' => $next_gid), $goods['goods_name']);
-                    $smarty->assign('next_good', $next_good);//下一个商品
-                }
-
-                $position = assign_ur_here($goods['cat_id'], $goods['goods_name']);
-
-                /* current position */
-                $smarty->assign('page_title', $position['title']);                    // 页面标题
-                $smarty->assign('ur_here', $position['ur_here']);                  // 当前位置
-
-                $properties = get_goods_properties($goods_id);  // 获得商品的规格和属性
-
-                $smarty->assign('properties', $properties['pro']);                              // 商品属性
-                $smarty->assign('specification', $properties['spe']);                              // 商品规格
-                $smarty->assign('attribute_linked', get_same_attribute_goods($properties));           // 相同属性的关联商品
-                $smarty->assign('related_goods', $linked_goods);                                   // 关联商品
-                $smarty->assign('goods_article_list', get_linked_articles($goods_id));                  // 关联文章
-                $smarty->assign('fittings', get_goods_fittings(array($goods_id)));                   // 配件
-                $smarty->assign('rank_prices', get_user_rank_prices($goods_id, $shop_price));    // 会员等级价格
-                $smarty->assign('pictures', get_goods_gallery($goods_id));                    // 商品相册
-                $smarty->assign('bought_goods', get_also_bought($goods_id));                      // 购买了该商品的用户还购买了哪些商品
-                $smarty->assign('goods_rank', get_goods_rank($goods_id));                       // 商品的销售排名
-
-                //获取tag
-                $tag_array = get_tags($goods_id);
-                $smarty->assign('tags', $tag_array);                                       // 商品的标记
-
-                //获取关联礼包
-                $package_goods_list = get_package_goods_list($goods['goods_id']);
-                $smarty->assign('package_goods_list', $package_goods_list);    // 获取关联礼包
-
-                assign_dynamic('goods');
-                $volume_price_list = get_volume_price_list($goods['goods_id'], '1');
-                $smarty->assign('volume_price_list', $volume_price_list);    // 商品优惠价格区间
+        if ($goods === false) {
+            /* 如果没有找到任何记录则跳回到首页 */
+            return redirect("./");
+        } else {
+            if ($goods['brand_id'] > 0) {
+                $goods['goods_brand_url'] = build_uri('brand', array('bid' => $goods['brand_id']), $goods['goods_brand']);
             }
+
+            $shop_price = $goods['shop_price'];
+            $linked_goods = get_linked_goods($goods_id);
+
+            $goods['goods_style_name'] = add_style($goods['goods_name'], $goods['goods_name_style']);
+
+            /* 购买该商品可以得到多少钱的红包 */
+            if ($goods['bonus_type_id'] > 0) {
+                $time = gmtime();
+                $sql = "SELECT type_money FROM " . $ecs->table('bonus_type') .
+                    " WHERE type_id = '$goods[bonus_type_id]' " .
+                    " AND send_type = '" . SEND_BY_GOODS . "' " .
+                    " AND send_start_date <= '$time'" .
+                    " AND send_end_date >= '$time'";
+                $goods['bonus_money'] = floatval($db->getOne($sql));
+                if ($goods['bonus_money'] > 0) {
+                    $goods['bonus_money'] = price_format($goods['bonus_money']);
+                }
+            }
+
+            $smarty->assign('goods', $goods);
+            $smarty->assign('goods_id', $goods['goods_id']);
+            $smarty->assign('promote_end_time', $goods['gmt_end_time']);
+            $smarty->assign('categories', get_categories_tree($goods['cat_id']));  // 分类树
+
+            /* meta */
+            $smarty->assign('keywords', htmlspecialchars($goods['keywords']));
+            $smarty->assign('description', htmlspecialchars($goods['goods_brief']));
+
+
+            $catlist = array();
+            foreach (get_parent_cats($goods['cat_id']) as $k => $v) {
+                $catlist[] = $v['cat_id'];
+            }
+
+            $this->assign_template('c', $catlist);
+
+            /* 上一个商品下一个商品 */
+            $prev_gid = $db->getOne("SELECT goods_id FROM " . $ecs->table('goods') . " WHERE cat_id=" . $goods['cat_id'] . " AND goods_id > " . $goods['goods_id'] . " AND is_on_sale = 1 AND is_alone_sale = 1 AND is_delete = 0 LIMIT 1");
+            if (!empty($prev_gid)) {
+                $prev_good['url'] = build_uri('goods', array('gid' => $prev_gid), $goods['goods_name']);
+                $smarty->assign('prev_good', $prev_good);//上一个商品
+            }
+
+            $next_gid = $db->getOne("SELECT max(goods_id) FROM " . $ecs->table('goods') . " WHERE cat_id=" . $goods['cat_id'] . " AND goods_id < " . $goods['goods_id'] . " AND is_on_sale = 1 AND is_alone_sale = 1 AND is_delete = 0");
+            if (!empty($next_gid)) {
+                $next_good['url'] = build_uri('goods', array('gid' => $next_gid), $goods['goods_name']);
+                $smarty->assign('next_good', $next_good);//下一个商品
+            }
+
+            $position = assign_ur_here($goods['cat_id'], $goods['goods_name']);
+
+            /* current position */
+            $smarty->assign('page_title', $position['title']);                    // 页面标题
+            $smarty->assign('ur_here', $position['ur_here']);                  // 当前位置
+
+            $properties = get_goods_properties($goods_id);  // 获得商品的规格和属性
+
+            $smarty->assign('properties', $properties['pro']);                              // 商品属性
+            $smarty->assign('specification', $properties['spe']);                              // 商品规格
+            $smarty->assign('attribute_linked', get_same_attribute_goods($properties));           // 相同属性的关联商品
+            $smarty->assign('related_goods', $linked_goods);                                   // 关联商品
+            $smarty->assign('goods_article_list', get_linked_articles($goods_id));                  // 关联文章
+            $smarty->assign('fittings', get_goods_fittings(array($goods_id)));                   // 配件
+            $smarty->assign('rank_prices', get_user_rank_prices($goods_id, $shop_price));    // 会员等级价格
+            $smarty->assign('pictures', get_goods_gallery($goods_id));                    // 商品相册
+            $smarty->assign('bought_goods', get_also_bought($goods_id));                      // 购买了该商品的用户还购买了哪些商品
+            $smarty->assign('goods_rank', get_goods_rank($goods_id));                       // 商品的销售排名
+
+            //获取tag
+            $tag_array = get_tags($goods_id);
+            $smarty->assign('tags', $tag_array);                                       // 商品的标记
+
+            //获取关联礼包
+            $package_goods_list = get_package_goods_list($goods['goods_id']);
+            $smarty->assign('package_goods_list', $package_goods_list);    // 获取关联礼包
+
+            assign_dynamic('goods');
+            $volume_price_list = get_volume_price_list($goods['goods_id'], '1');
+            $smarty->assign('volume_price_list', $volume_price_list);    // 商品优惠价格区间
+        }
 
         /* 记录浏览历史 */
         if (!empty($_COOKIE['ECS']['history'])) {
@@ -433,7 +433,7 @@ class GoodsController extends InitController
                 " GROUP BY g.goods_id HAVING num > $sales_count";
             $res = $GLOBALS['db']->query($sql);
 
-            $rank = $GLOBALS['db']->num_rows($res) + 1;
+            $rank = count($res) + 1;
 
             if ($rank > 10) {
                 $rank = 0;

@@ -30,29 +30,29 @@ class GroupBuyController extends InitController
             $page = $page > $page_count ? $page_count : $page;
         }
 
-            if ($count > 0) {
-                /* 取得当前页的团购活动 */
-                $gb_list = group_buy_list($size, $page);
-                $smarty->assign('gb_list', $gb_list);
+        if ($count > 0) {
+            /* 取得当前页的团购活动 */
+            $gb_list = group_buy_list($size, $page);
+            $smarty->assign('gb_list', $gb_list);
 
-                /* 设置分页链接 */
-                $pager = get_pager('group_buy.php', array('act' => 'list'), $count, $page, $size);
-                $smarty->assign('pager', $pager);
-            }
+            /* 设置分页链接 */
+            $pager = get_pager('group_buy.php', array('act' => 'list'), $count, $page, $size);
+            $smarty->assign('pager', $pager);
+        }
 
-            /* 模板赋值 */
-            $smarty->assign('cfg', $_CFG);
-            $this->assign_template();
-            $position = assign_ur_here();
-            $smarty->assign('page_title', $position['title']);    // 页面标题
-            $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
-            $smarty->assign('categories', get_categories_tree()); // 分类树
-            $smarty->assign('helps', get_shop_help());       // 网店帮助
-            $smarty->assign('top_goods', get_top10());           // 销售排行
-            $smarty->assign('promotion_info', get_promotion_info());
-            $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typegroup_buy.xml" : 'feed.php?type=group_buy'); // RSS URL
+        /* 模板赋值 */
+        $smarty->assign('cfg', $_CFG);
+        $this->assign_template();
+        $position = assign_ur_here();
+        $smarty->assign('page_title', $position['title']);    // 页面标题
+        $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+        $smarty->assign('categories', get_categories_tree()); // 分类树
+        $smarty->assign('helps', get_shop_help());       // 网店帮助
+        $smarty->assign('top_goods', get_top10());           // 销售排行
+        $smarty->assign('promotion_info', get_promotion_info());
+        $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typegroup_buy.xml" : 'feed.php?type=group_buy'); // RSS URL
 
-            assign_dynamic('group_buy_list');
+        assign_dynamic('group_buy_list');
 
         /* 显示模板 */
         $smarty->display('group_buy_list.dwt');
@@ -76,35 +76,35 @@ class GroupBuyController extends InitController
             return redirect("./");
         }
 
-            $group_buy['gmt_end_date'] = $group_buy['end_date'];
-            $smarty->assign('group_buy', $group_buy);
+        $group_buy['gmt_end_date'] = $group_buy['end_date'];
+        $smarty->assign('group_buy', $group_buy);
 
-            /* 取得团购商品信息 */
-            $goods_id = $group_buy['goods_id'];
-            $goods = goods_info($goods_id);
-            if (empty($goods)) {
-                return redirect("./");
-            }
-            $goods['url'] = build_uri('goods', array('gid' => $goods_id), $goods['goods_name']);
-            $smarty->assign('gb_goods', $goods);
+        /* 取得团购商品信息 */
+        $goods_id = $group_buy['goods_id'];
+        $goods = goods_info($goods_id);
+        if (empty($goods)) {
+            return redirect("./");
+        }
+        $goods['url'] = build_uri('goods', array('gid' => $goods_id), $goods['goods_name']);
+        $smarty->assign('gb_goods', $goods);
 
-            /* 取得商品的规格 */
-            $properties = get_goods_properties($goods_id);
-            $smarty->assign('specification', $properties['spe']); // 商品规格
+        /* 取得商品的规格 */
+        $properties = get_goods_properties($goods_id);
+        $smarty->assign('specification', $properties['spe']); // 商品规格
 
-            //模板赋值
-            $smarty->assign('cfg', $_CFG);
-            $this->assign_template();
+        //模板赋值
+        $smarty->assign('cfg', $_CFG);
+        $this->assign_template();
 
-            $position = assign_ur_here(0, $goods['goods_name']);
-            $smarty->assign('page_title', $position['title']);    // 页面标题
-            $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+        $position = assign_ur_here(0, $goods['goods_name']);
+        $smarty->assign('page_title', $position['title']);    // 页面标题
+        $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
 
-            $smarty->assign('categories', get_categories_tree()); // 分类树
-            $smarty->assign('helps', get_shop_help());       // 网店帮助
-            $smarty->assign('top_goods', get_top10());           // 销售排行
-            $smarty->assign('promotion_info', get_promotion_info());
-            assign_dynamic('group_buy_goods');
+        $smarty->assign('categories', get_categories_tree()); // 分类树
+        $smarty->assign('helps', get_shop_help());       // 网店帮助
+        $smarty->assign('top_goods', get_top10());           // 销售排行
+        $smarty->assign('promotion_info', get_promotion_info());
+        assign_dynamic('group_buy_goods');
 
         //更新商品点击次数
         $sql = 'UPDATE ' . $ecs->table('goods') . ' SET click_count = click_count + 1 ' .

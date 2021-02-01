@@ -246,7 +246,7 @@ class InitController extends Controller
      * @param string $auto_redirect 是否自动跳转
      * @return  void
      */
-    function show_message($content, $links = '', $hrefs = '', $type = 'info', $auto_redirect = true)
+    public function show_message($content, $links = '', $hrefs = '', $type = 'info', $auto_redirect = true)
     {
         $this->assign_template();
 

@@ -2,6 +2,8 @@
 
 namespace app\support;
 
+use think\facade\Cache;
+
 class Mysql
 {
     public $link_id = null;
@@ -12,22 +14,13 @@ class Mysql
     public $queryTime = '';
     public $queryLog = array();
 
-    public $max_cache_time = 300; // 最大的缓存时间，以秒为单位
-
-    public $cache_data_dir = 'temp/query_caches/';
     public $root_path = '';
 
     public $error_message = array();
     public $platform = '';
     public $version = '';
     public $dbhash = '';
-    public $starttime = 0;
-    public $timeline = 0;
     public $timezone = 0;
-
-    public $mysql_config_cache_file_time = 0;
-
-    public $mysql_disable_cache_tables = array(); // 不允许被缓存的表，遇到将不会进行缓存
 
     public function __construct($dbhost, $dbuser, $dbpw, $dbname = '', $charset = 'utf8', $pconnect = 0, $quiet = 0)
     {
@@ -81,50 +74,6 @@ class Mysql
         mysqli_query($this->link_id, "SET character_set_connection=$charset, character_set_results=$charset, character_set_client=binary");
         mysqli_query($this->link_id, "SET sql_mode=''");
 
-        $sqlcache_config_file = $this->root_path . $this->cache_data_dir . 'sqlcache_config_file_' . $this->dbhash . '.php';
-        if (file_exists($sqlcache_config_file)) {
-            include($sqlcache_config_file);
-        }
-
-        $this->starttime = time();
-
-        if ($this->max_cache_time && $this->starttime > $this->mysql_config_cache_file_time + $this->max_cache_time) {
-            if ($dbhost != '.') {
-                $result = mysqli_query($this->link_id, "SHOW VARIABLES LIKE 'basedir'");
-                $row = mysqli_fetch_assoc($result);
-                if (!empty($row['Value'][1]) && $row['Value'][1] == ':' && !empty($row['Value'][2]) && $row['Value'][2] == "\\") {
-                    $this->platform = 'WINDOWS';
-                } else {
-                    $this->platform = 'OTHER';
-                }
-            } else {
-                $this->platform = 'WINDOWS';
-            }
-
-            if ($this->platform == 'OTHER' &&
-                ($dbhost != '.' && strtolower($dbhost) != 'localhost:3306' && $dbhost != '127.0.0.1:3306') ||
-                (date_default_timezone_get() == 'UTC')) {
-                $result = mysqli_query($this->link_id, "SELECT UNIX_TIMESTAMP() AS timeline, UNIX_TIMESTAMP('" . date('Y-m-d H:i:s', $this->starttime) . "') AS timezone");
-                $row = mysqli_fetch_assoc($result);
-
-                if ($dbhost != '.' && strtolower($dbhost) != 'localhost:3306' && $dbhost != '127.0.0.1:3306') {
-                    $this->timeline = $this->starttime - $row['timeline'];
-                }
-
-                if (date_default_timezone_get() == 'UTC') {
-                    $this->timezone = $this->starttime - $row['timezone'];
-                }
-            }
-
-            $content = '<' . "?php\r\n" .
-                '$this->mysql_config_cache_file_time = ' . $this->starttime . ";\r\n" .
-                '$this->timeline = ' . $this->timeline . ";\r\n" .
-                '$this->timezone = ' . $this->timezone . ";\r\n" .
-                '$this->platform = ' . "'" . $this->platform . "';\r\n?" . '>';
-
-            file_put_contents($sqlcache_config_file, $content);
-        }
-
         /* 选择数据库 */
         if ($dbname) {
             if (mysqli_select_db($this->link_id, $dbname) === false) {
@@ -173,11 +122,6 @@ class Mysql
             $this->queryTime = microtime(true);
         }
 
-        /* 当当前的时间大于类初始化时间的时候，自动执行 ping 这个自动重新连接操作 */
-        if (time() > $this->starttime + 1) {
-            mysqli_ping($this->link_id);
-        }
-
         if (!($query = mysqli_query($this->link_id, $sql)) && $type != 'SILENT') {
             $this->error_message[]['message'] = 'MySQL Query Error';
             $this->error_message[]['sql'] = $sql;
@@ -207,26 +151,6 @@ class Mysql
         return mysqli_errno($this->link_id);
     }
 
-    public function result($query, $row)
-    {
-        return mysqli_result($query, $row);
-    }
-
-    public function num_rows($query)
-    {
-        return mysqli_num_rows($query);
-    }
-
-    public function num_fields($query)
-    {
-        return mysqli_num_fields($query);
-    }
-
-    public function free_result($query)
-    {
-        return mysqli_free_result($query);
-    }
-
     public function insert_id()
     {
         return mysqli_insert_id($this->link_id);
@@ -235,11 +159,6 @@ class Mysql
     public function fetchRow($query)
     {
         return mysqli_fetch_assoc($query);
-    }
-
-    public function fetch_fields($query)
-    {
-        return mysqli_fetch_field($query);
     }
 
     public function version()
@@ -257,15 +176,10 @@ class Mysql
         return mysqli_real_escape_string($db->link_id, $unescaped_string);
     }
 
-    public function close()
-    {
-        return mysqli_close($this->link_id);
-    }
-
     public function ErrorMsg($message = '', $sql = '')
     {
         if ($message) {
-            echo "<b>ECSHOP info</b>: $message\n\n<br /><br />";
+            echo "<b>Error info</b>: $message\n\n<br /><br />";
         } else {
             echo "<b>MySQL server error report:";
             print_r($this->error_message);
@@ -305,27 +219,13 @@ class Mysql
         }
     }
 
-    public function getOneCached($sql, $cached = 'FILEFIRST')
+    public function getOneCached($sql)
     {
         $sql = trim($sql . ' LIMIT 1');
 
-        $cachefirst = ($cached == 'FILEFIRST' || ($cached == 'MYSQLFIRST' && $this->platform != 'WINDOWS')) && $this->max_cache_time;
-        if (!$cachefirst) {
+        return Cache::remember(md5($sql), function() use ($sql) {
             return $this->getOne($sql, true);
-        } else {
-            $result = $this->getSqlCacheData($sql, $cached);
-            if (empty($result['storecache']) == true) {
-                return $result['data'];
-            }
-        }
-
-        $arr = $this->getOne($sql, true);
-
-        if ($arr !== false && $cachefirst) {
-            $this->setSqlCacheData($result, $arr);
-        }
-
-        return $arr;
+        });
     }
 
     public function getAll($sql)
@@ -343,25 +243,11 @@ class Mysql
         }
     }
 
-    public function getAllCached($sql, $cached = 'FILEFIRST')
+    public function getAllCached($sql)
     {
-        $cachefirst = ($cached == 'FILEFIRST' || ($cached == 'MYSQLFIRST' && $this->platform != 'WINDOWS')) && $this->max_cache_time;
-        if (!$cachefirst) {
+        return Cache::remember(md5($sql), function() use ($sql) {
             return $this->getAll($sql);
-        } else {
-            $result = $this->getSqlCacheData($sql, $cached);
-            if (empty($result['storecache']) == true) {
-                return $result['data'];
-            }
-        }
-
-        $arr = $this->getAll($sql);
-
-        if ($arr !== false && $cachefirst) {
-            $this->setSqlCacheData($result, $arr);
-        }
-
-        return $arr;
+        });
     }
 
     public function getRow($sql, $limited = false)
@@ -378,27 +264,13 @@ class Mysql
         }
     }
 
-    public function getRowCached($sql, $cached = 'FILEFIRST')
+    public function getRowCached($sql)
     {
         $sql = trim($sql . ' LIMIT 1');
 
-        $cachefirst = ($cached == 'FILEFIRST' || ($cached == 'MYSQLFIRST' && $this->platform != 'WINDOWS')) && $this->max_cache_time;
-        if (!$cachefirst) {
-            return $this->getRow($sql, true);
-        } else {
-            $result = $this->getSqlCacheData($sql, $cached);
-            if (empty($result['storecache']) == true) {
-                return $result['data'];
-            }
-        }
-
-        $arr = $this->getRow($sql, true);
-
-        if ($arr !== false && $cachefirst) {
-            $this->setSqlCacheData($result, $arr);
-        }
-
-        return $arr;
+        return Cache::remember(md5($sql), function() use ($sql) {
+            return $this->getRow($sql, true);;
+        });
     }
 
     public function getCol($sql)
@@ -416,25 +288,11 @@ class Mysql
         }
     }
 
-    public function getColCached($sql, $cached = 'FILEFIRST')
+    public function getColCached($sql)
     {
-        $cachefirst = ($cached == 'FILEFIRST' || ($cached == 'MYSQLFIRST' && $this->platform != 'WINDOWS')) && $this->max_cache_time;
-        if (!$cachefirst) {
+        return Cache::remember(md5($sql), function() use ($sql) {
             return $this->getCol($sql);
-        } else {
-            $result = $this->getSqlCacheData($sql, $cached);
-            if (empty($result['storecache']) == true) {
-                return $result['data'];
-            }
-        }
-
-        $arr = $this->getCol($sql);
-
-        if ($arr !== false && $cachefirst) {
-            $this->setSqlCacheData($result, $arr);
-        }
-
-        return $arr;
+        });
     }
 
     public function autoExecute($table, $field_values, $mode = 'INSERT', $where = '', $querymode = '')
@@ -552,91 +410,6 @@ class Mysql
         }
     }
 
-    public function setMaxCacheTime($second)
-    {
-        $this->max_cache_time = $second;
-    }
-
-    public function getMaxCacheTime()
-    {
-        return $this->max_cache_time;
-    }
-
-    public function getSqlCacheData($sql, $cached = '')
-    {
-        $sql = trim($sql);
-
-        $result = array();
-        $result['filename'] = $this->root_path . $this->cache_data_dir . 'sqlcache_' . abs(crc32($this->dbhash . $sql)) . '_' . md5($this->dbhash . $sql) . '.php';
-
-        $data = file_get_contents($result['filename']);
-        if (isset($data[23])) {
-            $filetime = substr($data, 13, 10);
-            $data = substr($data, 23);
-
-            if (($cached == 'FILEFIRST' && time() > $filetime + $this->max_cache_time) || ($cached == 'MYSQLFIRST' && $this->table_lastupdate($this->get_table_name($sql)) > $filetime)) {
-                $result['storecache'] = true;
-            } else {
-                $result['data'] = unserialize($data);
-                if ($result['data'] === false) {
-                    $result['storecache'] = true;
-                } else {
-                    $result['storecache'] = false;
-                }
-            }
-        } else {
-            $result['storecache'] = true;
-        }
-
-        return $result;
-    }
-
-    public function setSqlCacheData($result, $data)
-    {
-        if ($result['storecache'] === true && $result['filename']) {
-            file_put_contents($result['filename'], '<?php exit;?>' . time() . serialize($data));
-            clearstatcache();
-        }
-    }
-
-    /* 获取 SQL 语句中最后更新的表的时间，有多个表的情况下，返回最新的表的时间 */
-    public function table_lastupdate($tables)
-    {
-        if ($this->link_id === null) {
-            $this->connect($this->settings['dbhost'], $this->settings['dbuser'], $this->settings['dbpw'], $this->settings['dbname'], $this->settings['charset'], $this->settings['pconnect']);
-            $this->settings = array();
-        }
-
-        $lastupdatetime = '0000-00-00 00:00:00';
-
-        $tables = str_replace('`', '', $tables);
-        $this->mysql_disable_cache_tables = str_replace('`', '', $this->mysql_disable_cache_tables);
-
-        foreach ($tables as $table) {
-            if (in_array($table, $this->mysql_disable_cache_tables) == true) {
-                $lastupdatetime = '2037-12-31 23:59:59';
-
-                break;
-            }
-
-            if (strstr($table, '.') != null) {
-                $tmp = explode('.', $table);
-                $sql = 'SHOW TABLE STATUS FROM `' . trim($tmp[0]) . "` LIKE '" . trim($tmp[1]) . "'";
-            } else {
-                $sql = "SHOW TABLE STATUS LIKE '" . trim($table) . "'";
-            }
-            $result = mysqli_query($this->link_id, $sql);
-
-            $row = mysqli_fetch_assoc($result);
-            if ($row['Update_time'] > $lastupdatetime) {
-                $lastupdatetime = $row['Update_time'];
-            }
-        }
-        $lastupdatetime = strtotime($lastupdatetime) - $this->timezone + $this->timeline;
-
-        return $lastupdatetime;
-    }
-
     public function get_table_name($query_item)
     {
         $query_item = trim($query_item);
@@ -661,19 +434,5 @@ class Mysql
         }
 
         return $table_names;
-    }
-
-    /* 设置不允许进行缓存的表 */
-    public function set_disable_cache_tables($tables)
-    {
-        if (!is_array($tables)) {
-            $tables = explode(',', $tables);
-        }
-
-        foreach ($tables as $table) {
-            $this->mysql_disable_cache_tables[] = $table;
-        }
-
-        array_unique($this->mysql_disable_cache_tables);
     }
 }

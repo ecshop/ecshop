@@ -41,7 +41,7 @@ class ReceiveController extends InitController
 
         /* 显示模板 */
         $this->assign_template();
-        $position = assign_ur_here();
+        $position = $this->assign_ur_here();
         $this->assign('page_title', $position['title']);    // 页面标题
         $this->assign('ur_here', $position['ur_here']);  // 当前位置
 

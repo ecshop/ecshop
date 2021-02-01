@@ -260,7 +260,7 @@ class CategoryController extends InitController
 
         $this->assign_template('c', array($cat_id));
 
-        $position = assign_ur_here($cat_id, $brand_name);
+        $position = $this->assign_ur_here($cat_id, $brand_name);
         $this->assign('page_title', $position['title']);    // 页面标题
         $this->assign('ur_here', $position['ur_here']);  // 当前位置
 

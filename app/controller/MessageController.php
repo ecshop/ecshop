@@ -77,7 +77,7 @@ class MessageController extends InitController
     public function defaultAction()
     {
         $this->assign_template();
-        $position = assign_ur_here(0, $_LANG['message_board']);
+        $position = $this->assign_ur_here(0, $_LANG['message_board']);
         $this->assign('page_title', $position['title']);    // 页面标题
         $this->assign('ur_here', $position['ur_here']);  // 当前位置
         $this->assign('helps', get_shop_help());       // 网店帮助

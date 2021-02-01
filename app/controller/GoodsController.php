@@ -91,7 +91,7 @@ class GoodsController extends InitController
                 $this->assign('next_good', $next_good);//下一个商品
             }
 
-            $position = assign_ur_here($goods['cat_id'], $goods['goods_name']);
+            $position = $this->assign_ur_here($goods['cat_id'], $goods['goods_name']);
 
             /* current position */
             $this->assign('page_title', $position['title']);                    // 页面标题

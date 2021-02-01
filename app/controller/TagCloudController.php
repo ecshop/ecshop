@@ -10,7 +10,7 @@ class TagCloudController extends InitController
     public function indexAction()
     {
         $this->assign_template();
-        $position = assign_ur_here(0, $_LANG['tag_cloud']);
+        $position = $this->assign_ur_here(0, $_LANG['tag_cloud']);
         $this->assign('page_title', $position['title']);    // 页面标题
         $this->assign('ur_here', $position['ur_here']);  // 当前位置
         $this->assign('categories', get_categories_tree()); // 分类树

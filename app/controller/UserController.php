@@ -58,7 +58,7 @@ class UserController extends InitController
         /* 如果是显示页面，对页面进行相应赋值 */
         if (in_array($action, $ui_arr)) {
             $this->assign_template();
-            $position = assign_ur_here(0, $_LANG['user_center']);
+            $position = $this->assign_ur_here(0, $_LANG['user_center']);
             $this->assign('page_title', $position['title']); // 页面标题
             $this->assign('ur_here', $position['ur_here']);
             $sql = "SELECT value FROM " . $ecs->table('shop_config') . " WHERE id = 419";

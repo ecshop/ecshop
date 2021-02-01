@@ -23,7 +23,7 @@ class PackageController extends InitController
 
         $this->assign_template();
         $this->assign_dynamic('package');
-        $position = assign_ur_here(0, $_LANG['shopping_package']);
+        $position = $this->assign_ur_here(0, $_LANG['shopping_package']);
         $this->assign('page_title', $position['title']);    // 页面标题
         $this->assign('ur_here', $position['ur_here']);  // 当前位置
 

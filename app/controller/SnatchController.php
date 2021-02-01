@@ -30,7 +30,7 @@ class SnatchController extends InitController
     {
         $goods = get_snatch($id);
         if ($goods) {
-            $position = assign_ur_here(0, $goods['snatch_name']);
+            $position = $this->assign_ur_here(0, $goods['snatch_name']);
             $myprice = get_myprice($id);
             if ($goods['is_end']) {
                 //如果活动已经结束,获取活动结果

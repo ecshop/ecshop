@@ -58,7 +58,7 @@ class ArticleController extends InitController
 
         $this->assign_template('a', $catlist);
 
-        $position = assign_ur_here($article['cat_id'], $article['title']);
+        $position = $this->assign_ur_here($article['cat_id'], $article['title']);
         $this->assign('page_title', $position['title']);    // 页面标题
         $this->assign('ur_here', $position['ur_here']);  // 当前位置
         $this->assign('comment_type', 1);

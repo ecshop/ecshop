@@ -43,7 +43,7 @@ class AuctionController extends InitController
         /* 模板赋值 */
         $this->assign('cfg', $_CFG);
         $this->assign_template();
-        $position = assign_ur_here();
+        $position = $this->assign_ur_here();
         $this->assign('page_title', $position['title']);    // 页面标题
         $this->assign('ur_here', $position['ur_here']);  // 当前位置
         $this->assign('categories', get_categories_tree()); // 分类树
@@ -114,7 +114,7 @@ class AuctionController extends InitController
         $this->assign('cfg', $_CFG);
         $this->assign_template();
 
-        $position = assign_ur_here(0, $goods['goods_name']);
+        $position = $this->assign_ur_here(0, $goods['goods_name']);
         $this->assign('page_title', $position['title']);    // 页面标题
         $this->assign('ur_here', $position['ur_here']);  // 当前位置
 

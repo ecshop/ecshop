@@ -18,7 +18,7 @@ class BrandController extends InitController
         }
         if (empty($brand_id)) {
             $this->assign_template();
-            $position = assign_ur_here('', $_LANG['all_brand']);
+            $position = $this->assign_ur_here('', $_LANG['all_brand']);
             $this->assign('page_title', $position['title']);    // 页面标题
             $this->assign('ur_here', $position['ur_here']);  // 当前位置
 
@@ -59,7 +59,7 @@ class BrandController extends InitController
 
         /* 赋值固定内容 */
         $this->assign_template();
-        $position = assign_ur_here($cate, $brand_info['brand_name']);
+        $position = $this->assign_ur_here($cate, $brand_info['brand_name']);
         $this->assign('page_title', $position['title']);   // 页面标题
         $this->assign('ur_here', $position['ur_here']); // 当前位置
         $this->assign('brand_id', $brand_id);

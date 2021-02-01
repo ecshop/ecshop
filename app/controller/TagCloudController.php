@@ -9,8 +9,6 @@ class TagCloudController extends InitController
 {
     public function index()
     {
-
-
         assign_template();
         $position = assign_ur_here(0, $_LANG['tag_cloud']);
         $smarty->assign('page_title', $position['title']);    // 页面标题

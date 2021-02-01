@@ -7,12 +7,8 @@ namespace app\controller;
  */
 class RespondController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
 
 
 require(ROOT_PATH . 'includes/lib_payment.php');
@@ -67,3 +63,7 @@ $smarty->assign('message', $msg);
 $smarty->assign('shop_url', $ecs->url());
 
 $smarty->display('respond.dwt');
+    }
+}
+
+

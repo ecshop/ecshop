@@ -7,12 +7,8 @@ namespace app\controller;
  */
 class MyshipController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
 
 
 require_once(ROOT_PATH . 'includes/lib_order.php');
@@ -92,3 +88,7 @@ foreach ($shipping_list as $key => $val) {
 $smarty->assign('shipping_list', $shipping_list);
 
 $smarty->display('myship.dwt');
+    }
+}
+
+

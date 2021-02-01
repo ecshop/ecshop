@@ -9,8 +9,6 @@ class TopicController extends InitController
 {
     public function index()
     {
-
-
         if ((DEBUG_MODE & 2) != 2) {
             $smarty->caching = true;
         }
@@ -111,6 +109,3 @@ class TopicController extends InitController
         $smarty->display($templates, $cache_id);
     }
 }
-
-
-

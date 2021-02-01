@@ -9,18 +9,12 @@ class MessageController extends InitController
 {
     public function initialize()
     {
-
+        if (empty($_CFG['message_board'])) {
+            show_message($_LANG['message_board_close']);
+        }
     }
-}
 
-
-
-
-if (empty($_CFG['message_board'])) {
-    show_message($_LANG['message_board_close']);
-}
-$action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
-if ($action == 'act_add_message') {
+function act_add_messageAction {
     include_once(ROOT_PATH . 'includes/lib_clips.php');
 
     /* 验证码防止灌水刷屏 */
@@ -78,7 +72,7 @@ if ($action == 'act_add_message') {
     }
 }
 
-if ($action == 'default') {
+function defaultAction() {
     assign_template();
     $position = assign_ur_here(0, $_LANG['message_board']);
     $smarty->assign('page_title', $position['title']);    // 页面标题
@@ -187,4 +181,4 @@ function get_msg_list($num, $start)
     }
 
     return $msg;
-}
+}}

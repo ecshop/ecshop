@@ -7,12 +7,8 @@ namespace app\controller;
  */
 class ReceiveController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
 
 
 
@@ -57,3 +53,7 @@ assign_dynamic('receive');
 
 $smarty->assign('msg', $msg);
 $smarty->display('receive.dwt');
+    }
+}
+
+

@@ -7,13 +7,8 @@ namespace app\controller;
  */
 class QuotationController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
-
 
 $action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
 if ($action == 'print_quotation') {
@@ -69,6 +64,11 @@ if (is_null($smarty->get_template_vars('helps'))) {
 }
 
 $smarty->display('quotation.dwt');
+    }
+
+
+
+
 
 function get_quotation_where($filter)
 {
@@ -136,4 +136,5 @@ function product_info($goods_attr, $goods_id)
         $i++;
     }
     return ($product_info);
+}
 }

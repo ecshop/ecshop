@@ -11,7 +11,7 @@ class AuctionController extends InitController
     {
 
     }
-}
+
 /*------------------------------------------------------ */
 //-- 拍卖活动列表
 /*------------------------------------------------------ */
@@ -440,4 +440,5 @@ function auction_list($size, $page)
     $auction_list = @array_merge($auction_list['under_way'], $auction_list['finished']);
 
     return $auction_list;
+}
 }

@@ -19,7 +19,7 @@ class ActivityController extends InitController
 
     }
 
-    public function index()
+    public function indexAction()
     {
 
         assign_template();

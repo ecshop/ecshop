@@ -9,26 +9,22 @@ class SnatchController extends InitController
 {
     public function initialize()
     {
-
+        /* 设置活动的SESSION */
+        if (empty($_REQUEST['id'])) {
+            $id = get_last_snatch();
+            if ($id) {
+                $page = build_uri('snatch', array('sid' => $id));
+                ecs_header("Location: $page\n");
+                exit;
+            } else {
+                /* 当前没有任何可默认的活动 */
+                $id = 0;
+            }
+        } else {
+            $id = intval($_REQUEST['id']);
+        }
     }
-}
 
-
-
-/* 设置活动的SESSION */
-if (empty($_REQUEST['id'])) {
-    $id = get_last_snatch();
-    if ($id) {
-        $page = build_uri('snatch', array('sid' => $id));
-        ecs_header("Location: $page\n");
-        exit;
-    } else {
-        /* 当前没有任何可默认的活动 */
-        $id = 0;
-    }
-} else {
-    $id = intval($_REQUEST['id']);
-}
 
 /* 显示页面部分 */
 function listAction() {
@@ -429,4 +425,5 @@ function get_last_snatch()
         " WHERE  start_time < '$now' AND end_time > '$now' AND act_type = " . GAT_SNATCH .
         " ORDER BY end_time ASC LIMIT 1";
     return $GLOBALS['db']->getOne($sql);
+}
 }

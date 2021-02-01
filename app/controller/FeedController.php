@@ -7,14 +7,8 @@ namespace app\controller;
  */
 class FeedController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
-
-
 
 define('INIT_NO_USERS', true);
 define('INIT_NO_SMARTY', true);
@@ -227,5 +221,7 @@ if (isset($_REQUEST['type'])) {
         }
 
         $rss->outputRSS($ver);
+    }
+}
     }
 }

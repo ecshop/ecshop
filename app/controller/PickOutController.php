@@ -7,14 +7,8 @@ namespace app\controller;
  */
 class PickOutController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
-
-
 
 $condition = array();
 $picks = array();
@@ -247,6 +241,8 @@ $smarty->assign('count', $goods_count);
 $smarty->assign('picks', $picks);
 $smarty->assign('condition', $condition);
 $smarty->display('pick_out.dwt');
+    }
+
 
 /**
  *  生成搜索的链接地址
@@ -266,4 +262,5 @@ function search_url(&$attr_picks, $attr_id = 0)
     }
 
     return $str;
+}
 }

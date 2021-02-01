@@ -7,14 +7,8 @@ namespace app\controller;
  */
 class CompareController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
-
-
 
 if (!empty($_REQUEST['goods']) && is_array($_REQUEST['goods']) && count($_REQUEST['goods']) > 1) {
     foreach ($_REQUEST['goods'] as $key => $val) {
@@ -113,3 +107,8 @@ $smarty->assign('helps', get_shop_help());       // 网店帮助
 assign_dynamic('compare');
 
 $smarty->display('compare.dwt');
+    }
+}
+
+
+

@@ -7,13 +7,8 @@ namespace app\controller;
  */
 class PackageController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
-
 
 require_once(ROOT_PATH . 'includes/lib_order.php');
 include_once(ROOT_PATH . 'includes/lib_transaction.php');
@@ -89,3 +84,5 @@ $smarty->assign('lang', $_LANG);
 
 $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typepackage.xml" : 'feed.php?type=package'); // RSS URL
 $smarty->display('package.dwt');
+    }
+}

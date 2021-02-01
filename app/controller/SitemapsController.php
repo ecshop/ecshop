@@ -3,34 +3,12 @@
 namespace app\controller;
 
 /**
- * google sitemap 文件
+ * 文章分类
  */
-
-class sitemap
+class ArticleCatController extends InitController
 {
-    public $head = "<\x3Fxml version=\"1.0\" encoding=\"UTF-8\"\x3F>\n<urlset xmlns=\"http://www.google.com/schemas/sitemap/0.84\">\n";
-    public $footer = "</urlset>\n";
-    public $item;
-
-    public function item($item)
+    public function index()
     {
-        $this->item .= "<url>\n";
-        foreach ($item as $key => $val) {
-            $this->item .= " <$key>" . htmlentities($val, ENT_QUOTES) . "</$key>\n";
-        }
-        $this->item .= "</url>\n";
-    }
-
-    public function generate()
-    {
-        $all = $this->head;
-        $all .= $this->item;
-        $all .= $this->footer;
-
-        return $all;
-    }
-}
-
 define('INIT_NO_USERS', true);
 define('INIT_NO_SMARTY', true);
 if (file_exists(ROOT_PATH . DATA_DIR . '/sitemap.dat') && time() - filemtime(ROOT_PATH . DATA_DIR . '/sitemap.dat') < 86400) {
@@ -109,3 +87,5 @@ if (function_exists('gzencode')) {
     header('Content-type: application/xml; charset=utf-8');
 }
 die($out);
+    }
+}

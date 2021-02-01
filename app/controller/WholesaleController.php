@@ -9,16 +9,11 @@ class WholesaleController extends InitController
 {
     public function initialize()
     {
-
-
         /* 如果没登录，提示登录 */
         if ($_SESSION['user_rank'] <= 0) {
             show_message($_LANG['ws_user_rank'], $_LANG['ws_return_home'], 'index.php');
         }
     }
-
-
-
 
 /*------------------------------------------------------ */
 //-- 批发活动列表
@@ -480,30 +475,7 @@ function is_attr_matching(&$goods_list, $reference)
         }
     }
 
-
-//    foreach ($goods_attr as $attr_id => $goods_attr_id)
-//    {
-//        if (isset($reference[$attr_id]) && $reference[$attr_id] != 0 && $reference[$attr_id] != $goods_attr_id)
-//        {
-//            return false;
-//        }
-//    }
-
     return false;
 }
 
-///**
-// * 购物车中的商品属性与当前购买的商品属性是否匹配
-// * @param   array   $goods_attr     用户选择的商品属性
-// * @param   array   $reference      参照的商品属性
-// * @return  bool
-// */
-//function is_attr_same($goods_attr, $reference)
-//{
-//    /* 比较元素个数是否相同 */
-//    if (count($goods_attr) == count($reference)) {
-//    }
-//
-//    return true;
-//}
 }

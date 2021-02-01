@@ -7,12 +7,8 @@ namespace app\controller;
  */
 class RegionController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
 
 define('INIT_NO_USERS', true);
 define('INIT_NO_SMARTY', true);
@@ -31,3 +27,7 @@ $arr['target'] = htmlspecialchars($arr['target']);
 
 $json = new JSON;
 echo $json->encode($arr);
+    }
+}
+
+

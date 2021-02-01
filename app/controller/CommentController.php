@@ -7,12 +7,8 @@ namespace app\controller;
  */
 class CommentController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
 
 
 require(ROOT_PATH . 'includes/cls_json.php');
@@ -219,6 +215,10 @@ if ($result['error'] == 0) {
 }
 
 echo $json->encode($result);
+    }
+
+
+
 
 /**
  * 添加评论内容
@@ -250,4 +250,5 @@ function add_comment($cmt)
         add_feed($GLOBALS['db']->insert_id(), COMMENT_GOODS);
     }*/
     return $result;
+}
 }

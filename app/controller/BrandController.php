@@ -7,12 +7,8 @@ namespace app\controller;
  */
 class BrandController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
 
 if ((DEBUG_MODE & 2) != 2) {
     $smarty->caching = true;
@@ -127,6 +123,10 @@ if (!$smarty->is_cached('brand.dwt', $cache_id)) {
 }
 
 $smarty->display('brand.dwt', $cache_id);
+    }
+
+
+
 
 /**
  * 获得指定品牌的详细信息
@@ -314,4 +314,5 @@ function brand_related_cat($brand)
     }
 
     return $arr;
+}
 }

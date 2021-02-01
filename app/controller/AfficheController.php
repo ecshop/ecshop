@@ -7,12 +7,8 @@ namespace app\controller;
  */
 class AfficheController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
 
 define('INIT_NO_SMARTY', true);
 
@@ -141,3 +137,7 @@ if ($_GET['act'] == 'js') {
         exit;
     }
 }
+    }
+}
+
+

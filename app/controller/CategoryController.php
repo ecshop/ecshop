@@ -7,14 +7,8 @@ namespace app\controller;
  */
 class CategoryController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
-
-
 
 if ((DEBUG_MODE & 2) != 2) {
     $smarty->caching = true;
@@ -352,6 +346,11 @@ if (!$smarty->is_cached('category.dwt', $cache_id)) {
 }
 
 $smarty->display('category.dwt', $cache_id);
+    }
+
+
+
+
 
 /**
  * 获得分类的信息
@@ -515,4 +514,5 @@ function get_parent_grade($cat_id)
     }
 
     return $grade_arr[$cat_id];
+}
 }

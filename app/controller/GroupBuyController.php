@@ -11,14 +11,12 @@ class GroupBuyController extends InitController
     {
 
     }
-}
 
 
 
 
-if ((DEBUG_MODE & 2) != 2) {
-    $smarty->caching = true;
-}
+
+
 
 /*------------------------------------------------------ */
 //-- 团购商品 --> 团购活动商品列表
@@ -330,4 +328,5 @@ function group_buy_list($size, $page)
     }
 
     return $gb_list;
+}
 }

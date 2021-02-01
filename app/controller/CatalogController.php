@@ -7,14 +7,8 @@ namespace app\controller;
  */
 class CatalogController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
-
-
 
 if ((DEBUG_MODE & 2) != 2) {
     $smarty->caching = true;
@@ -44,6 +38,7 @@ if (!$smarty->is_cached('catalog.dwt')) {
 }
 
 $smarty->display('catalog.dwt');
+    }
 
 /**
  * 计算指定分类的商品数量
@@ -64,4 +59,5 @@ function calculate_goods_num($cat_list, $cat_id)
     }
 
     return $goods_num;
+}
 }

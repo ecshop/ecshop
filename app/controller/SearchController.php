@@ -10,9 +10,6 @@ class SearchController extends InitController
     public function initialize()
     {
 
-    }
-}
-
 
 
 if (empty($_GET['encode'])) {
@@ -53,7 +50,7 @@ if (empty($_GET['encode'])) {
 
 $_REQUEST = array_merge($_REQUEST, addslashes_deep($string));
 
-$_REQUEST['act'] = !empty($_REQUEST['act']) ? trim($_REQUEST['act']) : '';
+    }
 
 /*------------------------------------------------------ */
 //-- 高级搜索
@@ -503,4 +500,5 @@ function get_seachable_attributes($cat_id = 0)
     }
 
     return $attributes;
+}
 }

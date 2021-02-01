@@ -10,9 +10,6 @@ class ArticleController extends InitController
     public function initialize()
     {
 
-    }
-}
-
 
 if ((DEBUG_MODE & 2) != 2) {
     $smarty->caching = true;
@@ -114,6 +111,9 @@ if (isset($article) && $article['cat_id'] > 2) {
     $smarty->display('article_pro.dwt', $cache_id);
 }
 
+    }
+
+
 /**
  * 获得指定的文章的详细信息
  *
@@ -183,4 +183,5 @@ function article_related_goods($id)
     }
 
     return $arr;
+}
 }

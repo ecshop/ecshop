@@ -9,33 +9,13 @@ class IndexController extends InitController
 {
     public function initialize()
     {
-
-    }
-}
-
-
-
-
 if ((DEBUG_MODE & 2) != 2) {
     $smarty->caching = true;
 }
+    }
 
-//判断是否有ajax请求
-$act = !empty($_GET['act']) ? $_GET['act'] : '';
-if ($act == 'cat_rec') {
-    $rec_array = array(1 => 'best', 2 => 'new', 3 => 'hot');
-    $rec_type = !empty($_REQUEST['rec_type']) ? intval($_REQUEST['rec_type']) : '1';
-    $cat_id = !empty($_REQUEST['cid']) ? intval($_REQUEST['cid']) : '0';
-    include_once('includes/cls_json.php');
-    $json = new JSON;
-    $result = array('error' => 0, 'content' => '', 'type' => $rec_type, 'cat_id' => $cat_id);
-
-    $children = get_children($cat_id);
-    $smarty->assign($rec_array[$rec_type] . '_goods', get_category_recommend_goods($rec_array[$rec_type], $children));    // 推荐商品
-    $smarty->assign('cat_rec_sign', 1);
-    $result['content'] = $smarty->fetch('library/recommend_' . $rec_array[$rec_type] . '.lbi');
-    die($json->encode($result));
-}
+function indexAction()
+{
 
 /*------------------------------------------------------ */
 //-- 判断是否存在缓存，如果存在则调用缓存，反之读取相应内容
@@ -103,6 +83,26 @@ if (!$smarty->is_cached('index.dwt', $cache_id)) {
 }
 
 $smarty->display('index.dwt', $cache_id);
+}
+
+
+
+//判断是否有ajax请求
+function cat_recAction() {
+    $rec_array = array(1 => 'best', 2 => 'new', 3 => 'hot');
+    $rec_type = !empty($_REQUEST['rec_type']) ? intval($_REQUEST['rec_type']) : '1';
+    $cat_id = !empty($_REQUEST['cid']) ? intval($_REQUEST['cid']) : '0';
+    include_once('includes/cls_json.php');
+    $json = new JSON;
+    $result = array('error' => 0, 'content' => '', 'type' => $rec_type, 'cat_id' => $cat_id);
+
+    $children = get_children($cat_id);
+    $smarty->assign($rec_array[$rec_type] . '_goods', get_category_recommend_goods($rec_array[$rec_type], $children));    // 推荐商品
+    $smarty->assign('cat_rec_sign', 1);
+    $result['content'] = $smarty->fetch('library/recommend_' . $rec_array[$rec_type] . '.lbi');
+    die($json->encode($result));
+}
+
 
 /**
  * 调用发货单查询
@@ -277,4 +277,5 @@ function index_get_links()
     }
 
     return $links;
+}
 }

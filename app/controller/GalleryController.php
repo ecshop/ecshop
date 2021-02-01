@@ -7,13 +7,8 @@ namespace app\controller;
  */
 class GalleryController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
-
 
 
 /* 参数 */
@@ -58,3 +53,8 @@ $smarty->assign('shop_name', $_CFG['shop_name']);
 $smarty->assign('watermark', str_replace('../', './', $_CFG['watermark']));
 $smarty->assign('gallery', $gallery);
 $smarty->display('gallery.dwt');
+    }
+}
+
+
+

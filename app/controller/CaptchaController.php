@@ -7,13 +7,8 @@ namespace app\controller;
  */
 class CaptchaController extends InitController
 {
-    public function initialize()
+    public function index()
     {
-
-    }
-}
-
-
 define('INIT_NO_SMARTY', true);
 
 require(ROOT_PATH . 'includes/cls_captcha.php');
@@ -24,3 +19,5 @@ if (isset($_REQUEST['is_login'])) {
     $img->session_word = 'captcha_login';
 }
 $img->generate_image();
+    }
+}

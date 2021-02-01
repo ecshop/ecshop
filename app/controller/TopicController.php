@@ -24,9 +24,6 @@ class TopicController extends InitController
 
         $templates = empty($topic['template']) ? 'topic.dwt' : $topic['template'];
 
-        $cache_id = sprintf('%X', crc32($_SESSION['user_rank'] . '-' . $_CFG['lang'] . '-' . $topic_id));
-
-        if (!$smarty->is_cached($templates, $cache_id)) {
             $sql = "SELECT * FROM " . $ecs->table('topic') . " WHERE topic_id = '$topic_id'";
 
             $topic = $db->getRow($sql);
@@ -100,9 +97,7 @@ class TopicController extends InitController
             $smarty->assign('title_pic', $topic['title_pic']);      // 分类标题图片地址
             $smarty->assign('base_style', '#' . $topic['base_style']);     // 基本风格样式颜色
 
-            $template_file = empty($topic['template']) ? 'topic.dwt' : $topic['template'];
-        }
         /* 显示模板 */
-        $smarty->display($templates, $cache_id);
+        $smarty->display($templates);
     }
 }

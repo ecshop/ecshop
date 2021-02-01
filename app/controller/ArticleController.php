@@ -15,13 +15,6 @@ class ArticleController extends InitController
             $article_id = $db->getOne("SELECT article_id FROM " . $ecs->table('article') . " WHERE cat_id = '" . intval($_REQUEST['cat_id']) . "' ");
         }
 
-        /*------------------------------------------------------ */
-        //-- PROCESSOR
-        /*------------------------------------------------------ */
-
-        $cache_id = sprintf('%X', crc32($_REQUEST['id'] . '-' . $_CFG['lang']));
-
-        if (!$smarty->is_cached('article.dwt', $cache_id)) {
             /* 文章详情 */
             $article = get_article_info($article_id);
 
@@ -94,11 +87,11 @@ class ArticleController extends InitController
             }
 
             assign_dynamic('article');
-        }
+
         if (isset($article) && $article['cat_id'] > 2) {
-            $smarty->display('article.dwt', $cache_id);
+            $smarty->display('article.dwt');
         } else {
-            $smarty->display('article_pro.dwt', $cache_id);
+            $smarty->display('article_pro.dwt');
         }
     }
 

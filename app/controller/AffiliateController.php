@@ -19,18 +19,12 @@ class AffiliateController extends InitController
             header('content-type: application/x-javascript; charset=' . ($charset == 'UTF8' ? 'utf-8' : $charset));
         }
 
-        /*------------------------------------------------------ */
-        //-- 判断是否存在缓存，如果存在则调用缓存，反之读取相应内�?/*------------------------------------------------------ */
-        /* 缓存编号 */
-        $cache_id = sprintf('%X', crc32($_SERVER['QUERY_STRING']));
-
         $goodsid = intval($_GET['gid']);
         $userid = intval($_GET['u']);
         $type = intval($_GET['type']);
 
 
         $tpl = ROOT_PATH . DATA_DIR . '/affiliate.html';
-        if (!$smarty->is_cached($tpl, $cache_id)) {
             $time = gmtime();
             /* 根据参数生成查询语句 */
 
@@ -52,8 +46,8 @@ class AffiliateController extends InitController
 
             $smarty->assign('url', $ecs->url());
             $smarty->assign('goods_url', $goods_url);
-        }
-        $output = $smarty->fetch($tpl, $cache_id);
+
+        $output = $smarty->fetch($tpl);
         $output = str_replace("\r", '', $output);
         $output = str_replace("\n", '', $output);
 

@@ -11,12 +11,6 @@ class GroupBuyController extends InitController
     {
     }
 
-
-
-
-
-
-
     /*------------------------------------------------------ */
     //-- 团购商品 --> 团购活动商品列表
     /*------------------------------------------------------ */
@@ -34,18 +28,8 @@ class GroupBuyController extends InitController
             /* 取得当前页 */
             $page = isset($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
             $page = $page > $page_count ? $page_count : $page;
-
-            /* 缓存id：语言 - 每页记录数 - 当前页 */
-            $cache_id = $_CFG['lang'] . '-' . $size . '-' . $page;
-            $cache_id = sprintf('%X', crc32($cache_id));
-        } else {
-            /* 缓存id：语言 */
-            $cache_id = $_CFG['lang'];
-            $cache_id = sprintf('%X', crc32($cache_id));
         }
 
-        /* 如果没有缓存，生成缓存 */
-        if (!$smarty->is_cached('group_buy_list.dwt', $cache_id)) {
             if ($count > 0) {
                 /* 取得当前页的团购活动 */
                 $gb_list = group_buy_list($size, $page);
@@ -69,10 +53,9 @@ class GroupBuyController extends InitController
             $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typegroup_buy.xml" : 'feed.php?type=group_buy'); // RSS URL
 
             assign_dynamic('group_buy_list');
-        }
 
         /* 显示模板 */
-        $smarty->display('group_buy_list.dwt', $cache_id);
+        $smarty->display('group_buy_list.dwt');
     }
 
     /*------------------------------------------------------ */
@@ -94,21 +77,7 @@ class GroupBuyController extends InitController
             ecs_header("Location: ./\n");
             exit;
         }
-//    elseif ($group_buy['is_on_sale'] == 0 || $group_buy['is_alone_sale'] == 0)
-//    {
-//        header("Location: ./\n");
-//        exit;
-//    }
 
-        /* 缓存id：语言，团购活动id，状态，（如果是进行中）当前数量和是否登录 */
-        $cache_id = $_CFG['lang'] . '-' . $group_buy_id . '-' . $group_buy['status'];
-        if ($group_buy['status'] == GBS_UNDER_WAY) {
-            $cache_id = $cache_id . '-' . $group_buy['valid_goods'] . '-' . intval($_SESSION['user_id'] > 0);
-        }
-        $cache_id = sprintf('%X', crc32($cache_id));
-
-        /* 如果没有缓存，生成缓存 */
-        if (!$smarty->is_cached('group_buy_goods.dwt', $cache_id)) {
             $group_buy['gmt_end_date'] = $group_buy['end_date'];
             $smarty->assign('group_buy', $group_buy);
 
@@ -139,7 +108,6 @@ class GroupBuyController extends InitController
             $smarty->assign('top_goods', get_top10());           // 销售排行
             $smarty->assign('promotion_info', get_promotion_info());
             assign_dynamic('group_buy_goods');
-        }
 
         //更新商品点击次数
         $sql = 'UPDATE ' . $ecs->table('goods') . ' SET click_count = click_count + 1 ' .
@@ -147,7 +115,7 @@ class GroupBuyController extends InitController
         $db->query($sql);
 
         $smarty->assign('now_time', gmtime());           // 当前系统时间
-        $smarty->display('group_buy_goods.dwt', $cache_id);
+        $smarty->display('group_buy_goods.dwt');
     }
 
     /*------------------------------------------------------ */

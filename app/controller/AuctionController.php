@@ -28,18 +28,8 @@ class AuctionController extends InitController
             /* 取得当前页 */
             $page = isset($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
             $page = $page > $page_count ? $page_count : $page;
-
-            /* 缓存id：语言 - 每页记录数 - 当前页 */
-            $cache_id = $_CFG['lang'] . '-' . $size . '-' . $page;
-            $cache_id = sprintf('%X', crc32($cache_id));
-        } else {
-            /* 缓存id：语言 */
-            $cache_id = $_CFG['lang'];
-            $cache_id = sprintf('%X', crc32($cache_id));
         }
 
-        /* 如果没有缓存，生成缓存 */
-        if (!$smarty->is_cached('auction_list.dwt', $cache_id)) {
             if ($count > 0) {
                 /* 取得当前页的拍卖活动 */
                 $auction_list = auction_list($size, $page);
@@ -63,10 +53,9 @@ class AuctionController extends InitController
             $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typeauction.xml" : 'feed.php?type=auction'); // RSS URL
 
             assign_dynamic('auction_list');
-        }
 
         /* 显示模板 */
-        $smarty->display('auction_list.dwt', $cache_id);
+        $smarty->display('auction_list.dwt');
     }
 
     /*------------------------------------------------------ */
@@ -88,22 +77,11 @@ class AuctionController extends InitController
             exit;
         }
 
-        /* 缓存id：语言，拍卖活动id，状态，如果是进行中，还要最后出价的时间（如果有的话） */
-        $cache_id = $_CFG['lang'] . '-' . $id . '-' . $auction['status_no'];
-        if ($auction['status_no'] == UNDER_WAY) {
-            if (isset($auction['last_bid'])) {
-                $cache_id = $cache_id . '-' . $auction['last_bid']['bid_time'];
-            }
-        } elseif ($auction['status_no'] == FINISHED && $auction['last_bid']['bid_user'] == $_SESSION['user_id']
+        if ($auction['status_no'] == FINISHED && $auction['last_bid']['bid_user'] == $_SESSION['user_id']
             && $auction['order_count'] == 0) {
             $auction['is_winner'] = 1;
-            $cache_id = $cache_id . '-' . $auction['last_bid']['bid_time'] . '-1';
         }
 
-        $cache_id = sprintf('%X', crc32($cache_id));
-
-        /* 如果没有缓存，生成缓存 */
-        if (!$smarty->is_cached('auction.dwt', $cache_id)) {
             //取货品信息
             if ($auction['product_id'] > 0) {
                 $goods_specifications = get_specifications_list($auction['goods_id']);
@@ -149,7 +127,6 @@ class AuctionController extends InitController
             $smarty->assign('promotion_info', get_promotion_info());
 
             assign_dynamic('auction');
-        }
 
         //更新商品点击次数
         $sql = 'UPDATE ' . $ecs->table('goods') . ' SET click_count = click_count + 1 ' .
@@ -157,7 +134,7 @@ class AuctionController extends InitController
         $db->query($sql);
 
         $smarty->assign('now_time', gmtime());           // 当前系统时间
-        $smarty->display('auction.dwt', $cache_id);
+        $smarty->display('auction.dwt');
     }
 
     /*------------------------------------------------------ */

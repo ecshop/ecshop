@@ -22,9 +22,6 @@ class GoodsController extends InitController
 
     public function indexAction()
     {
-        $cache_id = $goods_id . '-' . $_SESSION['user_rank'] . '-' . $_CFG['lang'];
-        $cache_id = sprintf('%X', crc32($cache_id));
-        if (!$smarty->is_cached('goods.dwt', $cache_id)) {
             $smarty->assign('image_width', $_CFG['image_width']);
             $smarty->assign('image_height', $_CFG['image_height']);
             $smarty->assign('helps', get_shop_help()); // 网店帮助
@@ -126,7 +123,6 @@ class GoodsController extends InitController
                 $volume_price_list = get_volume_price_list($goods['goods_id'], '1');
                 $smarty->assign('volume_price_list', $volume_price_list);    // 商品优惠价格区间
             }
-        }
 
         /* 记录浏览历史 */
         if (!empty($_COOKIE['ECS']['history'])) {
@@ -149,7 +145,7 @@ class GoodsController extends InitController
         $db->query('UPDATE ' . $ecs->table('goods') . " SET click_count = click_count + 1 WHERE goods_id = '$_REQUEST[id]'");
 
         $smarty->assign('now_time', gmtime());           // 当前系统时间
-        $smarty->display('goods.dwt', $cache_id);
+        $smarty->display('goods.dwt');
     }
 
 

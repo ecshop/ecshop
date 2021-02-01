@@ -34,13 +34,6 @@ class ExchangeController extends InitController
         $display = in_array($display, array('list', 'grid', 'text')) ? $display : 'text';
         setcookie('ECS[display]', $display, gmtime() + 86400 * 7, null, null, null, true);
 
-        /* 页面的缓存ID */
-        $cache_id = sprintf('%X', crc32($cat_id . '-' . $display . '-' . $sort . '-' . $order . '-' . $page . '-' . $size . '-' . $_SESSION['user_rank'] . '-' .
-            $_CFG['lang'] . '-' . $integral_max . '-' . $integral_min));
-
-        if (!$smarty->is_cached('exchange.dwt', $cache_id)) {
-            /* 如果页面没有被缓存则重新获取页面的内容 */
-
             $children = get_children($cat_id);
 
             $cat = get_cat_info($cat_id);   // 获得分类的相关信息
@@ -91,13 +84,11 @@ class ExchangeController extends InitController
             $smarty->assign('integral_max', $integral_max);
             $smarty->assign('integral_min', $integral_min);
 
-
             assign_pager('exchange', $cat_id, $count, $size, $sort, $order, $page, '', '', $integral_min, $integral_max, $display); // 分页
             assign_dynamic('exchange_list'); // 动态内容
-        }
 
         $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typeexchange.xml" : 'feed.php?type=exchange'); // RSS URL
-        $smarty->display('exchange_list.dwt', $cache_id);
+        $smarty->display('exchange_list.dwt');
     }
 
     /*------------------------------------------------------ */
@@ -107,10 +98,6 @@ class ExchangeController extends InitController
     {
         $goods_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
-        $cache_id = $goods_id . '-' . $_SESSION['user_rank'] . '-' . $_CFG['lang'] . '-exchange';
-        $cache_id = sprintf('%X', crc32($cache_id));
-
-        if (!$smarty->is_cached('exchange_goods.dwt', $cache_id)) {
             $smarty->assign('image_width', $_CFG['image_width']);
             $smarty->assign('image_height', $_CFG['image_height']);
             $smarty->assign('helps', get_shop_help()); // 网店帮助
@@ -170,9 +157,8 @@ class ExchangeController extends InitController
 
                 assign_dynamic('exchange_goods');
             }
-        }
 
-        $smarty->display('exchange_goods.dwt', $cache_id);
+        $smarty->display('exchange_goods.dwt');
     }
 
     /*------------------------------------------------------ */

@@ -9,7 +9,6 @@ class CatalogController extends InitController
 {
     public function indexAction()
     {
-        if (!$smarty->is_cached('catalog.dwt')) {
             /* 取出所有分类 */
             $cat_list = cat_list(0, 0, false);
 
@@ -30,7 +29,6 @@ class CatalogController extends InitController
             $smarty->assign('cat_list', $cat_list);       // 分类列表
             $smarty->assign('brand_list', get_brands());    // 所以品牌赋值
             $smarty->assign('promotion_info', get_promotion_info());
-        }
 
         $smarty->display('catalog.dwt');
     }

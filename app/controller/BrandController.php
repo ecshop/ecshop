@@ -17,9 +17,7 @@ class BrandController extends InitController
             $brand_id = intval($_REQUEST['brand']);
         }
         if (empty($brand_id)) {
-            /* 缓存编号 */
-            $cache_id = sprintf('%X', crc32($_CFG['lang']));
-            if (!$smarty->is_cached('brand_list.dwt', $cache_id)) {
+
                 assign_template();
                 $position = assign_ur_here('', $_LANG['all_brand']);
                 $smarty->assign('page_title', $position['title']);    // 页面标题
@@ -30,8 +28,8 @@ class BrandController extends InitController
                 $smarty->assign('top_goods', get_top10());           // 销售排行
 
                 $smarty->assign('brand_list', get_brands());
-            }
-            $smarty->display('brand_list.dwt', $cache_id);
+
+            $smarty->display('brand_list.dwt');
             exit();
         }
 
@@ -51,14 +49,6 @@ class BrandController extends InitController
         $display = in_array($display, array('list', 'grid', 'text')) ? $display : 'text';
         setcookie('ECS[display]', $display, gmtime() + 86400 * 7, null, null, null, true);
 
-        /*------------------------------------------------------ */
-        //-- PROCESSOR
-        /*------------------------------------------------------ */
-
-        /* 页面的缓存ID */
-        $cache_id = sprintf('%X', crc32($brand_id . '-' . $display . '-' . $sort . '-' . $order . '-' . $page . '-' . $size . '-' . $_SESSION['user_rank'] . '-' . $_CFG['lang'] . '-' . $cate));
-
-        if (!$smarty->is_cached('brand.dwt', $cache_id)) {
             $brand_info = get_brand_info($brand_id);
 
             if (empty($brand_info)) {
@@ -111,9 +101,8 @@ class BrandController extends InitController
 
             assign_pager('brand', $cate, $count, $size, $sort, $order, $page, '', $brand_id, 0, 0, $display); // 分页
             assign_dynamic('brand'); // 动态内容
-        }
 
-        $smarty->display('brand.dwt', $cache_id);
+        $smarty->display('brand.dwt');
     }
 
 

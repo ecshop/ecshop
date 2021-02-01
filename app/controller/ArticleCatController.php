@@ -23,14 +23,6 @@ class ArticleCatController extends InitController
         /* 获得当前页码 */
         $page = !empty($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
 
-        /*------------------------------------------------------ */
-        //-- PROCESSOR
-        /*------------------------------------------------------ */
-
-        /* 获得页面的缓存ID */
-        $cache_id = sprintf('%X', crc32($cat_id . '-' . $page . '-' . $_CFG['lang']));
-
-        if (!$smarty->is_cached('article_cat.dwt', $cache_id)) {
             /* 如果页面没有被缓存则重新获得页面的内容 */
 
             assign_template('a', array($cat_id));
@@ -94,10 +86,9 @@ class ArticleCatController extends InitController
             /* 分页 */
             assign_pager('article_cat', $cat_id, $count, $size, '', '', $page, $goon_keywords);
             assign_dynamic('article_cat');
-        }
 
         $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typearticle_cat" . $cat_id . ".xml" : 'feed.php?type=article_cat' . $cat_id); // RSS URL
 
-        $smarty->display('article_cat.dwt', $cache_id);
+        $smarty->display('article_cat.dwt');
     }
 }

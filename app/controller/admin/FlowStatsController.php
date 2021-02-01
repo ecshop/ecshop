@@ -19,8 +19,7 @@ class FlowStatsController extends InitController
     public function viewAction()
     {
         if ($_CFG['visit_stats'] == 'off') {
-            sys_msg($_LANG['stats_off']);
-            exit();
+            return sys_msg($_LANG['stats_off']);
         }
         admin_priv('client_flow_stats');
         $is_multi = empty($_POST['is_multi']) ? false : true;

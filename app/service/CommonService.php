@@ -1864,7 +1864,7 @@ class CommonService
         $temp_index = '0';
 
         $sql = "SELECT `volume_number` , `volume_price`" .
-            " FROM " . $GLOBALS['ecs']->table('volume_price') . "" .
+            " FROM " . $GLOBALS['ecs']->table('volume_price') .
             " WHERE `goods_id` = '" . $goods_id . "' AND `price_type` = '" . $price_type . "'" .
             " ORDER BY `volume_number`";
 

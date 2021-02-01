@@ -29,8 +29,7 @@ class BrandController extends InitController
 
                 $smarty->assign('brand_list', get_brands());
 
-            $smarty->display('brand_list.dwt');
-            exit();
+            return $smarty->display('brand_list.dwt');
         }
 
         /* 初始化分页信息 */

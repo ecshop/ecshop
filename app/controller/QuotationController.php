@@ -45,8 +45,7 @@ class QuotationController extends InitController
             $smarty->assign('extend_rank', $user_men);
             $smarty->assign('goods_list', $goods_list);
 
-            $html = $smarty->fetch('quotation_print.html');
-            exit($html);
+            return $smarty->fetch('quotation_print.html');
         }
 
         $this->assign_template();

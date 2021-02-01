@@ -2589,8 +2589,7 @@ class OrderController extends InitController
                     '<div style="PAGE-BREAK-AFTER:always"></div>';
             }
 
-            echo $html;
-            exit;
+            return $html;
         } /* 去发货 */
         elseif (isset($_POST['to_delivery'])) {
             $url = 'order.php?act=delivery_list&order_sn=' . $_REQUEST['order_sn'];

@@ -177,7 +177,7 @@ class InsertService
         $need_cache = $GLOBALS['smarty']->caching;
         $GLOBALS['smarty']->caching = false;
 
-        $GLOBALS['smarty']->assign('ads', $ads);
+        View::assign('ads', $ads);
         $val = $GLOBALS['smarty']->fetch($position_style);
 
         $GLOBALS['smarty']->caching = $need_cache;
@@ -197,15 +197,15 @@ class InsertService
         $GLOBALS['smarty']->caching = false;
 
         if ($_SESSION['user_id'] > 0) {
-            $GLOBALS['smarty']->assign('user_info', get_user_info());
+            View::assign('user_info', get_user_info());
         } else {
             if (!empty($_COOKIE['ECS']['username'])) {
-                $GLOBALS['smarty']->assign('ecs_username', stripslashes($_COOKIE['ECS']['username']));
+                View::assign('ecs_username', stripslashes($_COOKIE['ECS']['username']));
             }
             $captcha = intval($GLOBALS['_CFG']['captcha']);
             if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
-                $GLOBALS['smarty']->assign('enabled_captcha', 1);
-                $GLOBALS['smarty']->assign('rand', mt_rand());
+                View::assign('enabled_captcha', 1);
+                View::assign('rand', mt_rand());
             }
         }
         $output = $GLOBALS['smarty']->fetch('library/member_info.lbi');
@@ -233,16 +233,16 @@ class InsertService
 
         /* 验证码相关设置 */
         if ((intval($GLOBALS['_CFG']['captcha']) & CAPTCHA_COMMENT) && gd_version() > 0) {
-            $GLOBALS['smarty']->assign('enabled_captcha', 1);
-            $GLOBALS['smarty']->assign('rand', mt_rand());
+            View::assign('enabled_captcha', 1);
+            View::assign('rand', mt_rand());
         }
-        $GLOBALS['smarty']->assign('username', stripslashes($_SESSION['user_name']));
-        $GLOBALS['smarty']->assign('email', $_SESSION['email']);
-        $GLOBALS['smarty']->assign('comment_type', $arr['type']);
-        $GLOBALS['smarty']->assign('id', $arr['id']);
+        View::assign('username', stripslashes($_SESSION['user_name']));
+        View::assign('email', $_SESSION['email']);
+        View::assign('comment_type', $arr['type']);
+        View::assign('id', $arr['id']);
         $cmt = assign_comment($arr['id'], $arr['type']);
-        $GLOBALS['smarty']->assign('comments', $cmt['comments']);
-        $GLOBALS['smarty']->assign('pager', $cmt['pager']);
+        View::assign('comments', $cmt['comments']);
+        View::assign('pager', $cmt['pager']);
 
 
         $val = $GLOBALS['smarty']->fetch('library/comments_list.lbi');
@@ -296,8 +296,8 @@ class InsertService
         $pager['page_next'] = $page < $page_count ? 'javascript:gotoBuyPage(' . ($page + 1) . ",$arr[id])" : 'javascript:;';
         $pager['page_last'] = $page < $page_count ? 'javascript:gotoBuyPage(' . $page_count . ",$arr[id])" : 'javascript:;';
 
-        $GLOBALS['smarty']->assign('notes', $bought_notes);
-        $GLOBALS['smarty']->assign('pager', $pager);
+        View::assign('notes', $bought_notes);
+        View::assign('pager', $pager);
 
 
         $val = $GLOBALS['smarty']->fetch('library/bought_notes.lbi');
@@ -319,8 +319,8 @@ class InsertService
     {
         $vote = get_vote();
         if (!empty($vote)) {
-            $GLOBALS['smarty']->assign('vote_id', $vote['id']);
-            $GLOBALS['smarty']->assign('vote', $vote['content']);
+            View::assign('vote_id', $vote['id']);
+            View::assign('vote', $vote['content']);
         }
         $val = $GLOBALS['smarty']->fetch('library/vote.lbi');
 

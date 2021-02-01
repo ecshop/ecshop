@@ -700,7 +700,7 @@ class GoodsService
         }
 
         if ($from == 'web') {
-            $GLOBALS['smarty']->assign('cat_goods_' . $cat_id, $goods);
+            View::assign('cat_goods_' . $cat_id, $goods);
         } elseif ($from == 'wap') {
             $cat['goods'] = $goods;
         }

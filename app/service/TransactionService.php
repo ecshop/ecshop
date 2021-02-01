@@ -622,7 +622,7 @@ class TransactionService
                 }
             }
             $var_card = deleteRepeat($virtual_card);
-            $GLOBALS['smarty']->assign('virtual_card', $var_card);
+            View::assign('virtual_card', $var_card);
         }
 
         /* 确认时间 支付时间 发货时间 */

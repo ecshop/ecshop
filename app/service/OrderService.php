@@ -2338,12 +2338,12 @@ class OrderService
             /* 如果有红包，发送邮件 */
             if ($count > 0) {
                 $tpl = get_mail_template('send_bonus');
-                $GLOBALS['smarty']->assign('user_name', $user['user_name']);
-                $GLOBALS['smarty']->assign('count', $count);
-                $GLOBALS['smarty']->assign('money', $money);
-                $GLOBALS['smarty']->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
-                $GLOBALS['smarty']->assign('send_date', local_date($GLOBALS['_CFG']['date_format']));
-                $GLOBALS['smarty']->assign('sent_date', local_date($GLOBALS['_CFG']['date_format']));
+                View::assign('user_name', $user['user_name']);
+                View::assign('count', $count);
+                View::assign('money', $money);
+                View::assign('shop_name', $GLOBALS['_CFG']['shop_name']);
+                View::assign('send_date', local_date($GLOBALS['_CFG']['date_format']));
+                View::assign('sent_date', local_date($GLOBALS['_CFG']['date_format']));
                 $content = $GLOBALS['smarty']->fetch('str:' . $tpl['template_content']);
                 send_mail($user['user_name'], $user['email'], $tpl['template_subject'], $content, $tpl['is_html']);
             }

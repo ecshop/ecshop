@@ -227,7 +227,7 @@ class PaymentService
                                     }
                                 }
 
-                                $GLOBALS['smarty']->assign('virtual_card', $virtual_card);
+                                View::assign('virtual_card', $virtual_card);
                             }
                         }
                     } else {

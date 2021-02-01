@@ -98,8 +98,8 @@ class Error
                 $message['content'] = '<div>' . htmlspecialchars($msg) . '</div>';
             }
 
-            $GLOBALS['smarty']->assign('auto_redirect', true);
-            $GLOBALS['smarty']->assign('message', $message);
+            View::assign('auto_redirect', true);
+            View::assign('message', $message);
             return $GLOBALS['smarty']->display($this->_template);
         }
     }

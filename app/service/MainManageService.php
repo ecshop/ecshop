@@ -59,12 +59,12 @@ class MainManageService
 
         assign_query_info();
 
-        $GLOBALS['smarty']->assign('ur_here', $GLOBALS['_LANG']['system_message']);
-        $GLOBALS['smarty']->assign('msg_detail', $msg_detail);
-        $GLOBALS['smarty']->assign('msg_type', $msg_type);
-        $GLOBALS['smarty']->assign('links', $links);
-        $GLOBALS['smarty']->assign('default_url', $links[0]['href']);
-        $GLOBALS['smarty']->assign('auto_redirect', $auto_redirect);
+        View::assign('ur_here', $GLOBALS['_LANG']['system_message']);
+        View::assign('msg_detail', $msg_detail);
+        View::assign('msg_type', $msg_type);
+        View::assign('links', $links);
+        View::assign('default_url', $links[0]['href']);
+        View::assign('auto_redirect', $auto_redirect);
 
         $GLOBALS['smarty']->display('message.htm');
 

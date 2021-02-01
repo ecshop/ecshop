@@ -89,16 +89,16 @@ class CommonService
         } else {
             $query_time = number_format(microtime(true) - $GLOBALS['db']->queryTime, 6);
         }
-        $GLOBALS['smarty']->assign('query_info', sprintf($GLOBALS['_LANG']['query_info'], $GLOBALS['db']->queryCount, $query_time));
+        View::assign('query_info', sprintf($GLOBALS['_LANG']['query_info'], $GLOBALS['db']->queryCount, $query_time));
 
         /* 内存占用情况 */
         if ($GLOBALS['_LANG']['memory_info'] && function_exists('memory_get_usage')) {
-            $GLOBALS['smarty']->assign('memory_info', sprintf($GLOBALS['_LANG']['memory_info'], memory_get_usage() / 1048576));
+            View::assign('memory_info', sprintf($GLOBALS['_LANG']['memory_info'], memory_get_usage() / 1048576));
         }
 
         /* 是否启用了 gzip */
         $gzip_enabled = gzip_enabled() ? $GLOBALS['_LANG']['gzip_enabled'] : $GLOBALS['_LANG']['gzip_disabled'];
-        $GLOBALS['smarty']->assign('gzip_enabled', $gzip_enabled);
+        View::assign('gzip_enabled', $gzip_enabled);
     }
 
     /**
@@ -869,7 +869,7 @@ class CommonService
                         return false;
                     }
                 }
-                $GLOBALS['smarty']->assign('virtual_card', $virtual_card);
+                View::assign('virtual_card', $virtual_card);
             }
         }
 
@@ -970,14 +970,14 @@ class CommonService
         }
 
         /* 发送邮件 */
-        $GLOBALS['smarty']->assign('virtual_card', $cards);
-        $GLOBALS['smarty']->assign('order', $order);
-        $GLOBALS['smarty']->assign('goods', $goods);
+        View::assign('virtual_card', $cards);
+        View::assign('order', $order);
+        View::assign('goods', $goods);
 
-        $GLOBALS['smarty']->assign('send_time', date('Y-m-d H:i:s'));
-        $GLOBALS['smarty']->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
-        $GLOBALS['smarty']->assign('send_date', date('Y-m-d'));
-        $GLOBALS['smarty']->assign('sent_date', date('Y-m-d'));
+        View::assign('send_time', date('Y-m-d H:i:s'));
+        View::assign('shop_name', $GLOBALS['_CFG']['shop_name']);
+        View::assign('send_date', date('Y-m-d'));
+        View::assign('sent_date', date('Y-m-d'));
 
         $tpl = get_mail_template('virtual_card');
         $content = $GLOBALS['smarty']->fetch('str:' . $tpl['template_content']);

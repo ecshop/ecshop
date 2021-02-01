@@ -219,11 +219,11 @@ class PassportService
         $template = get_mail_template('send_password');
         $reset_email = $GLOBALS['ecs']->url() . 'user.php?act=get_password&uid=' . $uid . '&code=' . $code;
 
-        $GLOBALS['smarty']->assign('user_name', $user_name);
-        $GLOBALS['smarty']->assign('reset_email', $reset_email);
-        $GLOBALS['smarty']->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
-        $GLOBALS['smarty']->assign('send_date', date('Y-m-d'));
-        $GLOBALS['smarty']->assign('sent_date', date('Y-m-d'));
+        View::assign('user_name', $user_name);
+        View::assign('reset_email', $reset_email);
+        View::assign('shop_name', $GLOBALS['_CFG']['shop_name']);
+        View::assign('send_date', date('Y-m-d'));
+        View::assign('sent_date', date('Y-m-d'));
 
         $content = $GLOBALS['smarty']->fetch('str:' . $template['template_content']);
 
@@ -253,10 +253,10 @@ class PassportService
         $sql = "SELECT user_name, email FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id = '$user_id'";
         $row = $GLOBALS['db']->getRow($sql);
 
-        $GLOBALS['smarty']->assign('user_name', $row['user_name']);
-        $GLOBALS['smarty']->assign('validate_email', $validate_email);
-        $GLOBALS['smarty']->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
-        $GLOBALS['smarty']->assign('send_date', date($GLOBALS['_CFG']['date_format']));
+        View::assign('user_name', $row['user_name']);
+        View::assign('validate_email', $validate_email);
+        View::assign('shop_name', $GLOBALS['_CFG']['shop_name']);
+        View::assign('send_date', date($GLOBALS['_CFG']['date_format']));
 
         $content = $GLOBALS['smarty']->fetch('str:' . $template['template_content']);
 

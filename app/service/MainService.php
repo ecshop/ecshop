@@ -1370,40 +1370,6 @@ class MainService
         return $cmt;
     }
 
-    function assign_template($ctype = '', $catlist = array())
-    {
-        global $smarty;
-
-        $smarty->assign('image_width', $GLOBALS['_CFG']['image_width']);
-        $smarty->assign('image_height', $GLOBALS['_CFG']['image_height']);
-        $smarty->assign('points_name', $GLOBALS['_CFG']['integral_name']);
-        $smarty->assign('qq', explode(',', $GLOBALS['_CFG']['qq']));
-        $smarty->assign('ww', explode(',', $GLOBALS['_CFG']['ww']));
-        $smarty->assign('ym', explode(',', $GLOBALS['_CFG']['ym']));
-        $smarty->assign('msn', explode(',', $GLOBALS['_CFG']['msn']));
-        $smarty->assign('skype', explode(',', $GLOBALS['_CFG']['skype']));
-        $smarty->assign('stats_code', $GLOBALS['_CFG']['stats_code']);
-        $smarty->assign('copyright', sprintf($GLOBALS['_LANG']['copyright'], date('Y'), $GLOBALS['_CFG']['shop_name']));
-        $smarty->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
-        $smarty->assign('service_email', $GLOBALS['_CFG']['service_email']);
-        $smarty->assign('service_phone', $GLOBALS['_CFG']['service_phone']);
-        $smarty->assign('shop_address', $GLOBALS['_CFG']['shop_address']);
-        $smarty->assign('licensed', license_info());
-        $smarty->assign('ecs_version', VERSION);
-        $smarty->assign('icp_number', $GLOBALS['_CFG']['icp_number']);
-        $smarty->assign('username', !empty($_SESSION['user_name']) ? $_SESSION['user_name'] : '');
-        $smarty->assign('category_list', cat_list(0, 0, true, 2, false));
-        $smarty->assign('catalog_list', cat_list(0, 0, false, 1, false));
-        $smarty->assign('navigator_list', get_navigator($ctype, $catlist));  //自定义导航栏
-
-        if (!empty($GLOBALS['_CFG']['search_keywords'])) {
-            $searchkeywords = explode(',', trim($GLOBALS['_CFG']['search_keywords']));
-        } else {
-            $searchkeywords = array();
-        }
-        $smarty->assign('searchkeywords', $searchkeywords);
-    }
-
     /**
      * 将一个本地时间戳转成GMT时间戳
      *

@@ -64,7 +64,7 @@ class SnatchController extends InitController
             $smarty->assign('vote', $vote['content']);
         }
 
-        assign_template();
+        $this->assign_template();
         assign_dynamic('snatch');
         $smarty->assign('page_title', $position['title']);
         $smarty->assign('ur_here', $position['ur_here']);

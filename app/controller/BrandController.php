@@ -18,7 +18,7 @@ class BrandController extends InitController
         }
         if (empty($brand_id)) {
 
-                assign_template();
+                $this->assign_template();
                 $position = assign_ur_here('', $_LANG['all_brand']);
                 $smarty->assign('page_title', $position['title']);    // 页面标题
                 $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
@@ -61,7 +61,7 @@ class BrandController extends InitController
             $smarty->assign('description', htmlspecialchars($brand_info['brand_desc']));
 
             /* 赋值固定内容 */
-            assign_template();
+            $this->assign_template();
             $position = assign_ur_here($cate, $brand_info['brand_name']);
             $smarty->assign('page_title', $position['title']);   // 页面标题
             $smarty->assign('ur_here', $position['ur_here']); // 当前位置

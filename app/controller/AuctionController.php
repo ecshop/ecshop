@@ -42,7 +42,7 @@ class AuctionController extends InitController
 
             /* 模板赋值 */
             $smarty->assign('cfg', $_CFG);
-            assign_template();
+            $this->assign_template();
             $position = assign_ur_here();
             $smarty->assign('page_title', $position['title']);    // 页面标题
             $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
@@ -115,7 +115,7 @@ class AuctionController extends InitController
 
             //模板赋值
             $smarty->assign('cfg', $_CFG);
-            assign_template();
+            $this->assign_template();
 
             $position = assign_ur_here(0, $goods['goods_name']);
             $smarty->assign('page_title', $position['title']);    // 页面标题

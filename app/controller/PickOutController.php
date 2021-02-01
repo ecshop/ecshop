@@ -212,7 +212,7 @@ class PickOutController extends InitController
 
         $picks[] = array('name' => $_LANG['remove_all'], 'url' => 'pick_out.php');
 
-        assign_template();
+        $this->assign_template();
         $position = assign_ur_here(0, $_LANG['pick_out']);
         $smarty->assign('page_title', $position['title']);    // 页面标题
         $smarty->assign('ur_here', $position['ur_here']);  // 当前位置

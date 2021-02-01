@@ -43,7 +43,7 @@ class ExchangeController extends InitController
                 $smarty->assign('description', htmlspecialchars($cat['cat_desc']));
             }
 
-            assign_template();
+            $this->assign_template();
 
             $position = assign_ur_here('exchange');
             $smarty->assign('page_title', $position['title']);    // 页面标题
@@ -127,7 +127,7 @@ class ExchangeController extends InitController
                 $smarty->assign('keywords', htmlspecialchars($goods['keywords']));
                 $smarty->assign('description', htmlspecialchars($goods['goods_brief']));
 
-                assign_template();
+                $this->assign_template();
 
                 /* 上一个商品下一个商品 */
                 $sql = "SELECT eg.goods_id FROM " . $ecs->table('exchange_goods') . " AS eg," . $GLOBALS['ecs']->table('goods') . " AS g WHERE eg.goods_id = g.goods_id AND eg.goods_id > " . $goods['goods_id'] . " AND eg.is_exchange = 1 AND g.is_delete = 0 LIMIT 1";

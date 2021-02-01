@@ -40,7 +40,7 @@ class ReceiveController extends InitController
         }
 
         /* 显示模板 */
-        assign_template();
+        $this->assign_template();
         $position = assign_ur_here();
         $smarty->assign('page_title', $position['title']);    // 页面标题
         $smarty->assign('ur_here', $position['ur_here']);  // 当前位置

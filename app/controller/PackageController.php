@@ -21,7 +21,7 @@ class PackageController extends InitController
         //-- PROCESSOR
         /*------------------------------------------------------ */
 
-        assign_template();
+        $this->assign_template();
         assign_dynamic('package');
         $position = assign_ur_here(0, $_LANG['shopping_package']);
         $smarty->assign('page_title', $position['title']);    // 页面标题

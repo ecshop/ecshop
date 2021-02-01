@@ -57,7 +57,7 @@ class UserController extends InitController
 
         /* 如果是显示页面，对页面进行相应赋值 */
         if (in_array($action, $ui_arr)) {
-            assign_template();
+            $this->assign_template();
             $position = assign_ur_here(0, $_LANG['user_center']);
             $smarty->assign('page_title', $position['title']); // 页面标题
             $smarty->assign('ur_here', $position['ur_here']);

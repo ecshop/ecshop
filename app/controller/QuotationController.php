@@ -49,7 +49,7 @@ class QuotationController extends InitController
             exit($html);
         }
 
-        assign_template();
+        $this->assign_template();
 
         $position = assign_ur_here(0, $_LANG['quotation']);
         $smarty->assign('page_title', $position['title']);   // 页面标题

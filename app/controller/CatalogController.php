@@ -19,7 +19,7 @@ class CatalogController extends InitController
             }
 
 
-            assign_template();
+            $this->assign_template();
             assign_dynamic('catalog');
             $position = assign_ur_here(0, $_LANG['catalog']);
             $smarty->assign('page_title', $position['title']);   // 页面标题

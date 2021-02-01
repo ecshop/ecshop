@@ -14,7 +14,7 @@ class IndexController extends InitController
     public function indexAction()
     {
 
-            assign_template();
+            $this->assign_template();
 
             $position = assign_ur_here();
             $smarty->assign('page_title', $position['title']);    // 页面标题

@@ -25,7 +25,7 @@ class ArticleCatController extends InitController
 
             /* 如果页面没有被缓存则重新获得页面的内容 */
 
-            assign_template('a', array($cat_id));
+            $this->assign_template('a', array($cat_id));
             $position = assign_ur_here($cat_id);
             $smarty->assign('page_title', $position['title']);     // 页面标题
             $smarty->assign('ur_here', $position['ur_here']);   // 当前位置

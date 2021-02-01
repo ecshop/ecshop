@@ -19,7 +19,7 @@ class ActivityController extends InitController
 
     public function indexAction()
     {
-        assign_template();
+        $this->assign_template();
         assign_dynamic('activity');
         $position = assign_ur_here(0, $_LANG['shopping_activity']);
         $smarty->assign('page_title', $position['title']);    // 页面标题

@@ -75,7 +75,7 @@ class MessageController extends InitController
 
     public function defaultAction()
     {
-        assign_template();
+        $this->assign_template();
         $position = assign_ur_here(0, $_LANG['message_board']);
         $smarty->assign('page_title', $position['title']);    // 页面标题
         $smarty->assign('ur_here', $position['ur_here']);  // 当前位置

@@ -262,7 +262,7 @@ class CategoryController extends InitController
                 }
             }
 
-            assign_template('c', array($cat_id));
+            $this->assign_template('c', array($cat_id));
 
             $position = assign_ur_here($cat_id, $brand_name);
             $smarty->assign('page_title', $position['title']);    // 页面标题

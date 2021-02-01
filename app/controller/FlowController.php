@@ -15,7 +15,7 @@ class FlowController extends InitController
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
 
-        assign_template();
+        $this->assign_template();
         assign_dynamic('flow');
         $position = assign_ur_here(0, $_LANG['shopping_flow']);
         $smarty->assign('page_title', $position['title']);    // 页面标题

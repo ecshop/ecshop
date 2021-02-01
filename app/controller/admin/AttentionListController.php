@@ -10,7 +10,7 @@ class AttentionListController extends InitController
         admin_priv('attention_list');
     }
 
-    function listAction()
+    public function listAction()
     {
         $goodsdb = get_attention();
         $smarty->assign('full_page', 1);
@@ -24,7 +24,7 @@ class AttentionListController extends InitController
         $smarty->display('attention_list.htm');
     }
 
-    function queryAction()
+    public function queryAction()
     {
         $goodsdb = get_attention();
         $smarty->assign('goodsdb', $goodsdb['goodsdb']);
@@ -38,7 +38,7 @@ class AttentionListController extends InitController
         );
     }
 
-    function addtolistAction()
+    public function addtolistAction()
     {
         $id = intval($_REQUEST['id']);
         $pri = (intval($_REQUEST['pri']) == 1) ? 1 : 0;
@@ -86,7 +86,7 @@ class AttentionListController extends InitController
         }
     }
 
-    function batch_addtolistAction()
+    public function batch_addtolistAction()
     {
         $olddate = $_REQUEST['date'];
         $date = local_strtotime(trim($_REQUEST['date']));
@@ -138,7 +138,7 @@ class AttentionListController extends InitController
         }
     }
 
-    function get_attention()
+    public function get_attention()
     {
         $result = get_filter();
 

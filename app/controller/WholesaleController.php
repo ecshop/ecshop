@@ -16,9 +16,9 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批发活动列表
+    //-- 批发活动列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $search_category = empty($_REQUEST['search_category']) ? 0 : intval($_REQUEST['search_category']);
         $search_keywords = isset($_REQUEST['search_keywords']) ? trim($_REQUEST['search_keywords']) : '';
@@ -93,9 +93,9 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 下载价格单
+    //-- 下载价格单
     /*------------------------------------------------------ */
-    function price_listAction()
+    public function price_listAction()
     {
         $data = $_LANG['goods_name'] . "\t" . $_LANG['goods_attr'] . "\t" . $_LANG['number'] . "\t" . $_LANG['ws_price'] . "\t\n";
         $sql = "SELECT * FROM " . $ecs->table('wholesale') .
@@ -127,9 +127,9 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 加入购物车
+    //-- 加入购物车
     /*------------------------------------------------------ */
-    function add_to_cartAction()
+    public function add_to_cartAction()
     {
         /* 取得参数 */
         $act_id = intval($_POST['act_id']);
@@ -250,9 +250,9 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 从购物车删除
+    //-- 从购物车删除
     /*------------------------------------------------------ */
-    function drop_goodsAction()
+    public function drop_goodsAction()
     {
         $key = intval($_REQUEST['key']);
         if (isset($_SESSION['wholesale_goods'][$key])) {
@@ -265,9 +265,9 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 提交订单
+    //-- 提交订单
     /*------------------------------------------------------ */
-    function submit_orderAction()
+    public function submit_orderAction()
     {
         include_once(ROOT_PATH . 'includes/lib_order.php');
 
@@ -373,7 +373,7 @@ class WholesaleController extends InitController
      * @param string $where 查询条件
      * @return  array
      */
-    function wholesale_list($size, $page, $where)
+    public function wholesale_list($size, $page, $where)
     {
         $list = array();
         $sql = "SELECT w.*, g.goods_thumb, g.goods_name as goods_name " .
@@ -404,7 +404,7 @@ class WholesaleController extends InitController
      * @param int $goods_id 商品ID
      * @return  array
      */
-    function get_price_ladder($goods_id)
+    public function get_price_ladder($goods_id)
     {
         /* 显示商品规格 */
         $goods_attr_list = array_values(get_goods_attr($goods_id));
@@ -456,7 +456,7 @@ class WholesaleController extends InitController
      * @param array $reference 参照的商品属性
      * @return  bool
      */
-    function is_attr_matching(&$goods_list, $reference)
+    public function is_attr_matching(&$goods_list, $reference)
     {
         foreach ($goods_list as $key => $goods) {
             // 需要相同的元素个数
@@ -482,5 +482,4 @@ class WholesaleController extends InitController
 
         return false;
     }
-
 }

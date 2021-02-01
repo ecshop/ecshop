@@ -16,9 +16,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 红包类型列表页面
+    //-- 红包类型列表页面
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $smarty->assign('ur_here', $_LANG['04_bonustype_list']);
         $smarty->assign('action_link', array('text' => $_LANG['bonustype_add'], 'href' => 'bonus.php?act=add'));
@@ -39,10 +39,10 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 翻页、排序
+    //-- 翻页、排序
     /*------------------------------------------------------ */
 
-    function queryAction()
+    public function queryAction()
     {
         $list = get_type_list();
 
@@ -62,10 +62,10 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑红包类型名称
+    //-- 编辑红包类型名称
     /*------------------------------------------------------ */
 
-    function edit_type_nameAction()
+    public function edit_type_nameAction()
     {
         check_authz_json('bonus_manage');
 
@@ -83,10 +83,10 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑红包金额
+    //-- 编辑红包金额
     /*------------------------------------------------------ */
 
-    function edit_type_moneyAction()
+    public function edit_type_moneyAction()
     {
         check_authz_json('bonus_manage');
 
@@ -104,10 +104,10 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑订单下限
+    //-- 编辑订单下限
     /*------------------------------------------------------ */
 
-    function edit_min_amountAction()
+    public function edit_min_amountAction()
     {
         check_authz_json('bonus_manage');
 
@@ -124,9 +124,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除红包类型
+    //-- 删除红包类型
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('bonus_manage');
 
@@ -147,9 +147,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 红包类型添加页面
+    //-- 红包类型添加页面
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         admin_priv('bonus_manage');
 
@@ -174,9 +174,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 红包类型添加的处理
+    //-- 红包类型添加的处理
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         /* 去掉红包类型名称前后的空格 */
         $type_name = !empty($_POST['type_name']) ? trim($_POST['type_name']) : '';
@@ -227,9 +227,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 红包类型编辑页面
+    //-- 红包类型编辑页面
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         admin_priv('bonus_manage');
 
@@ -253,9 +253,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 红包类型编辑的处理
+    //-- 红包类型编辑的处理
     /*------------------------------------------------------ */
-    function updateAction()
+    public function updateAction()
     {
         /* 获得日期信息 */
         $send_startdate = local_strtotime($_POST['send_start_date']);
@@ -293,9 +293,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 红包发送页面
+    //-- 红包发送页面
     /*------------------------------------------------------ */
-    function sendAction()
+    public function sendAction()
     {
         admin_priv('bonus_manage');
 
@@ -342,9 +342,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 处理红包的发送页面
+    //-- 处理红包的发送页面
     /*------------------------------------------------------ */
-    function send_by_userAction()
+    public function send_by_userAction()
     {
         $user_list = array();
         $start = empty($_REQUEST['start']) ? 0 : intval($_REQUEST['start']);
@@ -469,10 +469,10 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 发送邮件
+    //-- 发送邮件
     /*------------------------------------------------------ */
 
-    function send_mailAction()
+    public function send_mailAction()
     {
         /* 取得参数：红包id */
         $bonus_id = intval($_REQUEST['bonus_id']);
@@ -497,10 +497,10 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 按印刷品发放红包
+    //-- 按印刷品发放红包
     /*------------------------------------------------------ */
 
-    function send_by_printAction()
+    public function send_by_printAction()
     {
         @set_time_limit(0);
 
@@ -533,9 +533,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 导出线下发放的信息
+    //-- 导出线下发放的信息
     /*------------------------------------------------------ */
-    function gen_excelAction()
+    public function gen_excelAction()
     {
         @set_time_limit(0);
 
@@ -593,9 +593,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索商品
+    //-- 搜索商品
     /*------------------------------------------------------ */
-    function get_goods_listAction()
+    public function get_goods_listAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -615,9 +615,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加发放红包的商品
+    //-- 添加发放红包的商品
     /*------------------------------------------------------ */
-    function add_bonus_goodsAction()
+    public function add_bonus_goodsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -647,9 +647,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除发放红包的商品
+    //-- 删除发放红包的商品
     /*------------------------------------------------------ */
-    function drop_bonus_goodsAction()
+    public function drop_bonus_goodsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -678,9 +678,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索用户
+    //-- 搜索用户
     /*------------------------------------------------------ */
-    function search_usersAction()
+    public function search_usersAction()
     {
         $keywords = json_str_iconv(trim($_GET['keywords']));
 
@@ -692,10 +692,10 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 红包列表
+    //-- 红包列表
     /*------------------------------------------------------ */
 
-    function bonus_listAction()
+    public function bonus_listAction()
     {
         $smarty->assign('full_page', 1);
         $smarty->assign('ur_here', $_LANG['bonus_list']);
@@ -725,10 +725,10 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 红包列表翻页、排序
+    //-- 红包列表翻页、排序
     /*------------------------------------------------------ */
 
-    function query_bonusAction()
+    public function query_bonusAction()
     {
         $list = get_bonus_list();
 
@@ -757,9 +757,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除红包
+    //-- 删除红包
     /*------------------------------------------------------ */
-    function remove_bonusAction()
+    public function remove_bonusAction()
     {
         check_authz_json('bonus_manage');
 
@@ -774,9 +774,9 @@ class BonusController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量操作
+    //-- 批量操作
     /*------------------------------------------------------ */
-    function batchAction()
+    public function batchAction()
     {
         /* 检查权限 */
         admin_priv('bonus_manage');
@@ -817,7 +817,7 @@ class BonusController extends InitController
      * @access  public
      * @return void
      */
-    function get_type_list()
+    public function get_type_list()
     {
         /* 获得所有红包类型的发放数量 */
         $sql = "SELECT bonus_type_id, COUNT(*) AS sent_count" .
@@ -884,7 +884,7 @@ class BonusController extends InitController
      * @param integer $type_id
      * @return  array
      */
-    function get_bonus_goods($type_id)
+    public function get_bonus_goods($type_id)
     {
         $sql = "SELECT goods_id, goods_name FROM " . $GLOBALS['ecs']->table('goods') .
             " WHERE bonus_type_id = '$type_id'";
@@ -899,7 +899,7 @@ class BonusController extends InitController
      * @param   $page_param
      * @return void
      */
-    function get_bonus_list()
+    public function get_bonus_list()
     {
         /* 查询条件 */
         $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'bonus_type_id' : trim($_REQUEST['sort_by']);
@@ -939,7 +939,7 @@ class BonusController extends InitController
      * @param int $bonus_type_id 红包类型id
      * @return  array
      */
-    function bonus_type_info($bonus_type_id)
+    public function bonus_type_info($bonus_type_id)
     {
         $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('bonus_type') .
             " WHERE type_id = '$bonus_type_id'";
@@ -953,7 +953,7 @@ class BonusController extends InitController
      * @param array $bonus_id_list 红包id数组
      * @return  int     成功发送数量
      */
-    function send_bonus_mail($bonus_type_id, $bonus_id_list)
+    public function send_bonus_mail($bonus_type_id, $bonus_id_list)
     {
         /* 取得红包类型信息 */
         $bonus_type = bonus_type_info($bonus_type_id);
@@ -1006,7 +1006,7 @@ class BonusController extends InitController
         return $send_count;
     }
 
-    function add_to_maillist($username, $email, $subject, $content, $is_html)
+    public function add_to_maillist($username, $email, $subject, $content, $is_html)
     {
         $time = time();
         $content = addslashes($content);

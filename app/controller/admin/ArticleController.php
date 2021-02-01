@@ -16,17 +16,16 @@ class ArticleController extends InitController
 
         /*初始化数据交换对象 */
         $exc = new exchange($ecs->table("article"), $db, 'article_id', 'title');
-//$image = new cls_image();
+        //$image = new cls_image();
 
         /* 允许上传的文件类型 */
         $allow_file_types = '|GIF|JPG|PNG|BMP|SWF|DOC|XLS|PPT|MID|WAV|ZIP|RAR|PDF|CHM|RM|TXT|';
-
     }
 
     /*------------------------------------------------------ */
-//-- 文章列表
+    //-- 文章列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 取得过滤条件 */
         $filter = array();
@@ -51,9 +50,9 @@ class ArticleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 翻页，排序
+    //-- 翻页，排序
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         check_authz_json('article_manage');
 
@@ -75,9 +74,9 @@ class ArticleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加文章
+    //-- 添加文章
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 权限判断 */
         admin_priv('article_manage');
@@ -111,9 +110,9 @@ class ArticleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加文章
+    //-- 添加文章
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         /* 权限判断 */
         admin_priv('article_manage');
@@ -182,9 +181,9 @@ class ArticleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑
+    //-- 编辑
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         /* 权限判断 */
         admin_priv('article_manage');
@@ -214,7 +213,7 @@ class ArticleController extends InitController
         $smarty->display('article_info.htm');
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 权限判断 */
         admin_priv('article_manage');
@@ -280,9 +279,9 @@ class ArticleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑文章主题
+    //-- 编辑文章主题
     /*------------------------------------------------------ */
-    function edit_titleAction()
+    public function edit_titleAction()
     {
         check_authz_json('article_manage');
 
@@ -304,9 +303,9 @@ class ArticleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 切换是否显示
+    //-- 切换是否显示
     /*------------------------------------------------------ */
-    function toggle_showAction()
+    public function toggle_showAction()
     {
         check_authz_json('article_manage');
 
@@ -320,9 +319,9 @@ class ArticleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 切换文章重要性
+    //-- 切换文章重要性
     /*------------------------------------------------------ */
-    function toggle_typeAction()
+    public function toggle_typeAction()
     {
         check_authz_json('article_manage');
 
@@ -337,9 +336,9 @@ class ArticleController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 删除文章主题
+    //-- 删除文章主题
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('article_manage');
 
@@ -367,9 +366,9 @@ class ArticleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 将商品加入关联
+    //-- 将商品加入关联
     /*------------------------------------------------------ */
-    function add_link_goodsAction()
+    public function add_link_goodsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -404,9 +403,9 @@ class ArticleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 将商品删除关联
+    //-- 将商品删除关联
     /*------------------------------------------------------ */
-    function drop_link_goodsAction()
+    public function drop_link_goodsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -439,9 +438,9 @@ class ArticleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索商品
+    //-- 搜索商品
     /*------------------------------------------------------ */
-    function get_goods_listAction()
+    public function get_goods_listAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -460,10 +459,10 @@ class ArticleController extends InitController
         make_json_result($opt);
     }
     /*------------------------------------------------------ */
-//-- 批量操作
+    //-- 批量操作
     /*------------------------------------------------------ */
 
-    function batchAction()
+    public function batchAction()
     {
         /* 批量删除 */
         if (isset($_POST['type'])) {
@@ -543,7 +542,7 @@ class ArticleController extends InitController
     }
 
     /* 把商品删除关联 */
-    function drop_link_goods($goods_id, $article_id)
+    public function drop_link_goods($goods_id, $article_id)
     {
         $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods_article') .
             " WHERE goods_id = '$goods_id' AND article_id = '$article_id' LIMIT 1";
@@ -552,7 +551,7 @@ class ArticleController extends InitController
     }
 
     /* 取得文章关联商品 */
-    function get_article_goods($article_id)
+    public function get_article_goods($article_id)
     {
         $list = array();
         $sql = 'SELECT g.goods_id, g.goods_name' .
@@ -565,7 +564,7 @@ class ArticleController extends InitController
     }
 
     /* 获得文章列表 */
-    function get_articleslist()
+    public function get_articleslist()
     {
         $result = get_filter();
         if ($result === false) {
@@ -618,7 +617,7 @@ class ArticleController extends InitController
     }
 
     /* 上传文件 */
-    function upload_article_file($upload)
+    public function upload_article_file($upload)
     {
         if (!make_dir("../" . DATA_DIR . "/article")) {
             /* 创建目录失败 */

@@ -13,14 +13,13 @@ class PrivilegeController extends InitController
 
         /* 初始化 $exc 对象 */
         $exc = new exchange($ecs->table("admin_user"), $db, 'user_id', 'user_name');
-
     }
 
 
     /*------------------------------------------------------ */
-//-- 退出登录
+    //-- 退出登录
     /*------------------------------------------------------ */
-    function logoutAction()
+    public function logoutAction()
     {
         /* 清除cookie */
         setcookie('ECSCP[admin_id]', '', 1, null, null, null, true);
@@ -32,9 +31,9 @@ class PrivilegeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 登陆界面
+    //-- 登陆界面
     /*------------------------------------------------------ */
-    function loginAction()
+    public function loginAction()
     {
         header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
         header("Cache-Control: no-cache, must-revalidate");
@@ -49,9 +48,9 @@ class PrivilegeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 验证登陆信息
+    //-- 验证登陆信息
     /*------------------------------------------------------ */
-    function signinAction()
+    public function signinAction()
     {
         if (intval($_CFG['captcha']) & CAPTCHA_ADMIN) {
             include_once(ROOT_PATH . 'includes/cls_captcha.php');
@@ -128,9 +127,9 @@ class PrivilegeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 管理员列表页面
+    //-- 管理员列表页面
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 模板赋值 */
         $smarty->assign('ur_here', $_LANG['admin_list']);
@@ -144,9 +143,9 @@ class PrivilegeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 查询
+    //-- 查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $smarty->assign('admin_list', get_admin_userlist());
 
@@ -154,9 +153,9 @@ class PrivilegeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加管理员页面
+    //-- 添加管理员页面
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 检查权限 */
         admin_priv('admin_manage');
@@ -174,9 +173,9 @@ class PrivilegeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加管理员的处理
+    //-- 添加管理员的处理
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         admin_priv('admin_manage');
         if ($_POST['token'] != $_CFG['token']) {
@@ -238,9 +237,9 @@ class PrivilegeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑管理员信息
+    //-- 编辑管理员信息
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         /* 不能编辑demo这个管理员 */
         if ($_SESSION['admin_name'] == 'demo') {
@@ -287,15 +286,15 @@ class PrivilegeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 更新管理员信息
+    //-- 更新管理员信息
     /*------------------------------------------------------ */
 
-    function updateAction()
+    public function updateAction()
     {
         update_selfAction();
     }
 
-    function update_selfAction()
+    public function update_selfAction()
     {
 
         /* 变量初始化 */
@@ -411,9 +410,9 @@ class PrivilegeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑个人资料
+    //-- 编辑个人资料
     /*------------------------------------------------------ */
-    function modifAction()
+    public function modifAction()
     {
         /* 不能编辑demo这个管理员 */
         if ($_SESSION['admin_name'] == 'demo') {
@@ -477,9 +476,9 @@ class PrivilegeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 为管理员分配权限
+    //-- 为管理员分配权限
     /*------------------------------------------------------ */
-    function allotAction()
+    public function allotAction()
     {
         include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/priv_action.php');
 
@@ -536,9 +535,9 @@ class PrivilegeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 更新管理员的权限
+    //-- 更新管理员的权限
     /*------------------------------------------------------ */
-    function update_allotAction()
+    public function update_allotAction()
     {
         admin_priv('admin_manage');
         if ($_POST['token'] != $_CFG['token']) {
@@ -567,9 +566,9 @@ class PrivilegeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除一个管理员
+    //-- 删除一个管理员
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('admin_drop');
 
@@ -607,7 +606,7 @@ class PrivilegeController extends InitController
     }
 
     /* 获取管理员列表 */
-    function get_admin_userlist()
+    public function get_admin_userlist()
     {
         $list = array();
         $sql = 'SELECT user_id, user_name, email, add_time, last_login ' .
@@ -623,7 +622,7 @@ class PrivilegeController extends InitController
     }
 
     /* 清除购物车中过期的数据 */
-    function clear_cart()
+    public function clear_cart()
     {
         /* 取得有效的session */
         $sql = "SELECT DISTINCT session_id " .
@@ -639,7 +638,7 @@ class PrivilegeController extends InitController
     }
 
     /* 获取角色列表 */
-    function get_role_list()
+    public function get_role_list()
     {
         $list = array();
         $sql = 'SELECT role_id, role_name, action_list ' .

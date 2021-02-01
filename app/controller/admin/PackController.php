@@ -16,14 +16,13 @@ class PackController extends InitController
         $image = new cls_image($_CFG['bgcolor']);
 
         $exc = new exchange($ecs->table("pack"), $db, 'pack_id', 'pack_name');
-
     }
 
 
     /*------------------------------------------------------ */
-//-- 包装列表
+    //-- 包装列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $smarty->assign('ur_here', $_LANG['06_pack_list']);
         $smarty->assign('action_link', array('text' => $_LANG['pack_add'], 'href' => 'pack.php?act=add'));
@@ -40,9 +39,9 @@ class PackController extends InitController
         $smarty->display('pack_list.htm');
     }
     /*------------------------------------------------------ */
-//-- ajax 列表
+    //-- ajax 列表
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $packs_list = packs_list();
         $smarty->assign('packs_list', $packs_list['packs_list']);
@@ -56,9 +55,9 @@ class PackController extends InitController
         make_json_result($smarty->fetch('pack_list.htm'), '', array('filter' => $packs_list['filter'], 'page_count' => $packs_list['page_count']));
     }
     /*------------------------------------------------------ */
-//-- 添加新包装
+    //-- 添加新包装
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 权限判断 */
         admin_priv('pack');
@@ -75,7 +74,7 @@ class PackController extends InitController
         $smarty->display('pack_info.htm');
     }
 
-    function insertAction()
+    public function insertAction()
     {
         /* 权限判断 */
         admin_priv('pack');
@@ -113,9 +112,9 @@ class PackController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑包装
+    //-- 编辑包装
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         /* 权限判断 */
         admin_priv('pack');
@@ -129,7 +128,7 @@ class PackController extends InitController
         $smarty->display('pack_info.htm');
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 权限判断 */
         admin_priv('pack');
@@ -170,7 +169,7 @@ class PackController extends InitController
     }
 
     /* 删除卡片图片 */
-    function drop_pack_imgAction()
+    public function drop_pack_imgAction()
     {
         /* 权限判断 */
         admin_priv('pack');
@@ -190,10 +189,10 @@ class PackController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑包装名称
+    //-- 编辑包装名称
     /*------------------------------------------------------ */
 
-    function edit_nameAction()
+    public function edit_nameAction()
     {
         check_authz_json('pack');
 
@@ -214,10 +213,10 @@ class PackController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑包装费用
+    //-- 编辑包装费用
     /*------------------------------------------------------ */
 
-    function edit_pack_feeAction()
+    public function edit_pack_feeAction()
     {
         check_authz_json('pack');
 
@@ -233,10 +232,10 @@ class PackController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑免费额度
+    //-- 编辑免费额度
     /*------------------------------------------------------ */
 
-    function edit_free_moneyAction()
+    public function edit_free_moneyAction()
     {
         check_authz_json('pack');
 
@@ -252,10 +251,10 @@ class PackController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除包装
+    //-- 删除包装
     /*------------------------------------------------------ */
 
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('pack');
 
@@ -280,7 +279,7 @@ class PackController extends InitController
         }
     }
 
-    function packs_list()
+    public function packs_list()
     {
         $result = get_filter();
         if ($result === false) {

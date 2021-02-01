@@ -10,13 +10,12 @@ class TagManageController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
     /*------------------------------------------------------ */
-//-- 获取标签数据列表
+    //-- 获取标签数据列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 权限判断 */
         admin_priv('tag_manage');
@@ -41,14 +40,14 @@ class TagManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加 ,编辑
+    //-- 添加 ,编辑
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         editAction();
     }
 
-    function editAction()
+    public function editAction()
     {
         admin_priv('tag_manage');
 
@@ -77,14 +76,14 @@ class TagManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 更新
+    //-- 更新
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         updateAction();
     }
 
-    function updateAction()
+    public function updateAction()
     {
         admin_priv('tag_manage');
 
@@ -129,10 +128,10 @@ class TagManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 翻页，排序
+    //-- 翻页，排序
     /*------------------------------------------------------ */
 
-    function queryAction()
+    public function queryAction()
     {
         check_authz_json('tag_manage');
 
@@ -153,10 +152,10 @@ class TagManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索
+    //-- 搜索
     /*------------------------------------------------------ */
 
-    function search_goodsAction()
+    public function search_goodsAction()
     {
         check_authz_json('tag_manage');
 
@@ -176,9 +175,9 @@ class TagManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量删除标签
+    //-- 批量删除标签
     /*------------------------------------------------------ */
-    function batch_dropAction()
+    public function batch_dropAction()
     {
         admin_priv('tag_manage');
 
@@ -203,10 +202,10 @@ class TagManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除标签
+    //-- 删除标签
     /*------------------------------------------------------ */
 
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('tag_manage');
 
@@ -233,10 +232,10 @@ class TagManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑标签名称
+    //-- 编辑标签名称
     /*------------------------------------------------------ */
 
-    function edit_tag_name()
+    public function edit_tag_name()
     {
         check_authz_json('tag_manage');
 
@@ -258,7 +257,7 @@ class TagManageController extends InitController
      * @param $id  标签id
      * @return bool
      */
-    function tag_is_only($name, $tag_id, $goods_id = '')
+    public function tag_is_only($name, $tag_id, $goods_id = '')
     {
         if (empty($goods_id)) {
             $db = $GLOBALS['db'];
@@ -284,7 +283,7 @@ class TagManageController extends InitController
      * @param  $id
      * @return void
      */
-    function edit_tag($name, $id, $goods_id = '')
+    public function edit_tag($name, $id, $goods_id = '')
     {
         $db = $GLOBALS['db'];
         $sql = 'UPDATE ' . $GLOBALS['ecs']->table('tag') . " SET tag_words = '$name'";
@@ -302,7 +301,7 @@ class TagManageController extends InitController
      * @access  public
      * @return  array
      */
-    function get_tag_list()
+    public function get_tag_list()
     {
         $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 't.tag_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
@@ -332,7 +331,7 @@ class TagManageController extends InitController
      * return array
      */
 
-    function get_tag_info($tag_id)
+    public function get_tag_info($tag_id)
     {
         $sql = 'SELECT t.tag_id, t.tag_words, t.goods_id, g.goods_name FROM ' . $GLOBALS['ecs']->table('tag') . ' AS t' .
             ' LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON t.goods_id=g.goods_id' .

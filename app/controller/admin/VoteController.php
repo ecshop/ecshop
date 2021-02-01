@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controller\admin;
+
 /**
  *  调查管理程序
  */
@@ -18,9 +19,9 @@ class VoteController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 投票列表页面
+    //-- 投票列表页面
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 模板赋值 */
         $smarty->assign('ur_here', $_LANG['list_vote']);
@@ -40,9 +41,9 @@ class VoteController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序、分页、查询
+    //-- 排序、分页、查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $vote_list = get_votelist();
 
@@ -59,9 +60,9 @@ class VoteController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加新的投票页面
+    //-- 添加新的投票页面
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 权限检查 */
         admin_priv('vote_priv');
@@ -83,7 +84,7 @@ class VoteController extends InitController
         $smarty->display('vote_info.htm');
     }
 
-    function insertAction()
+    public function insertAction()
     {
         admin_priv('vote_priv');
 
@@ -124,9 +125,9 @@ class VoteController extends InitController
         }
     }
     /*------------------------------------------------------ */
-//-- 在线调查编辑页面
+    //-- 在线调查编辑页面
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         admin_priv('vote_priv');
 
@@ -145,7 +146,7 @@ class VoteController extends InitController
         $smarty->display('vote_info.htm');
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 获得广告的开始时期与结束日期 */
         $start_time = local_strtotime($_POST['start_time']);
@@ -171,9 +172,9 @@ class VoteController extends InitController
         sys_msg($_LANG['edit'] . ' ' . $_POST['vote_name'] . ' ' . $_LANG['attradd_succed'], 0, $link);
     }
     /*------------------------------------------------------ */
-//-- 调查选项列表页面
+    //-- 调查选项列表页面
     /*------------------------------------------------------ */
-    function optionAction()
+    public function optionAction()
     {
         $id = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
@@ -191,9 +192,9 @@ class VoteController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 调查选项查询
+    //-- 调查选项查询
     /*------------------------------------------------------ */
-    function query_optionAction()
+    public function query_optionAction()
     {
         $id = intval($_GET['vid']);
 
@@ -204,9 +205,9 @@ class VoteController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加新调查选项
+    //-- 添加新调查选项
     /*------------------------------------------------------ */
-    function new_optionAction()
+    public function new_optionAction()
     {
         check_authz_json('vote_priv');
 
@@ -238,9 +239,9 @@ class VoteController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑调查主题
+    //-- 编辑调查主题
     /*------------------------------------------------------ */
-    function edit_vote_nameAction()
+    public function edit_vote_nameAction()
     {
         check_authz_json('vote_priv');
 
@@ -259,9 +260,9 @@ class VoteController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑调查选项
+    //-- 编辑调查选项
     /*------------------------------------------------------ */
-    function edit_option_nameAction()
+    public function edit_option_nameAction()
     {
         check_authz_json('vote_priv');
 
@@ -285,9 +286,9 @@ class VoteController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 编辑调查选项排序值
+    //-- 编辑调查选项排序值
     /*------------------------------------------------------ */
-    function edit_option_orderAction()
+    public function edit_option_orderAction()
     {
         check_authz_json('vote_priv');
 
@@ -302,9 +303,9 @@ class VoteController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 删除在线调查主题
+    //-- 删除在线调查主题
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('vote_priv');
 
@@ -324,9 +325,9 @@ class VoteController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除在线调查选项
+    //-- 删除在线调查选项
     /*------------------------------------------------------ */
-    function remove_optionAction()
+    public function remove_optionAction()
     {
         check_authz_json('vote_priv');
 
@@ -345,7 +346,7 @@ class VoteController extends InitController
     }
 
     /* 获取在线调查数据列表 */
-    function get_votelist()
+    public function get_votelist()
     {
         $filter = array();
 
@@ -370,7 +371,7 @@ class VoteController extends InitController
     }
 
     /* 获取调查选项列表 */
-    function get_optionlist($id)
+    public function get_optionlist($id)
     {
         $list = array();
         $sql = 'SELECT option_id, vote_id, option_name, option_count, option_order' .

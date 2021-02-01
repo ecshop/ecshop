@@ -9,7 +9,6 @@ class ArticleCatController extends InitController
 {
     public function indexAction()
     {
-
         if ((DEBUG_MODE & 2) != 2) {
             $smarty->caching = true;
         }
@@ -18,7 +17,7 @@ class ArticleCatController extends InitController
         clear_cache_files();
 
         /*------------------------------------------------------ */
-//-- INPUT
+        //-- INPUT
         /*------------------------------------------------------ */
 
         /* 获得指定的分类ID */
@@ -36,7 +35,7 @@ class ArticleCatController extends InitController
         $page = !empty($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
 
         /*------------------------------------------------------ */
-//-- PROCESSOR
+        //-- PROCESSOR
         /*------------------------------------------------------ */
 
         /* 获得页面的缓存ID */
@@ -113,6 +112,3 @@ class ArticleCatController extends InitController
         $smarty->display('article_cat.dwt', $cache_id);
     }
 }
-
-
-

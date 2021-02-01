@@ -2,7 +2,6 @@
 
 namespace app\controller\admin;
 
-
 /**
  * 超值礼包管理程序
  */
@@ -12,13 +11,12 @@ class PackageController extends InitController
     {
         parent::initialize();
         $exc = new exchange($ecs->table("goods_activity"), $db, 'act_id', 'act_name');
-
     }
 
     /*------------------------------------------------------ */
-//-- 添加活动
+    //-- 添加活动
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 权限判断 */
         admin_priv('package_manage');
@@ -46,7 +44,7 @@ class PackageController extends InitController
         $smarty->display('package_info.htm');
     }
 
-    function insertAction()
+    public function insertAction()
     {
         /* 权限判断 */
         admin_priv('package_manage');
@@ -89,9 +87,9 @@ class PackageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑活动
+    //-- 编辑活动
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         /* 权限判断 */
         admin_priv('package_manage');
@@ -111,7 +109,7 @@ class PackageController extends InitController
         $smarty->display('package_info.htm');
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 权限判断 */
         admin_priv('package_manage');
@@ -147,10 +145,10 @@ class PackageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除指定的活动
+    //-- 删除指定的活动
     /*------------------------------------------------------ */
 
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('package_manage');
 
@@ -169,9 +167,9 @@ class PackageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 活动列表
+    //-- 活动列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $smarty->assign('ur_here', $_LANG['14_package_list']);
         $smarty->assign('action_link', array('text' => $_LANG['package_add'], 'href' => 'package.php?act=add'));
@@ -192,10 +190,10 @@ class PackageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 查询、翻页、排序
+    //-- 查询、翻页、排序
     /*------------------------------------------------------ */
 
-    function queryAction()
+    public function queryAction()
     {
         $packages = get_packagelist();
 
@@ -215,10 +213,10 @@ class PackageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑活动名称
+    //-- 编辑活动名称
     /*------------------------------------------------------ */
 
-    function edit_package_nameAction()
+    public function edit_package_nameAction()
     {
         check_authz_json('package_manage');
 
@@ -238,10 +236,10 @@ class PackageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索商品
+    //-- 搜索商品
     /*------------------------------------------------------ */
 
-    function search_goodsAction()
+    public function search_goodsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -263,10 +261,10 @@ class PackageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 增加一个商品
+    //-- 增加一个商品
     /*------------------------------------------------------ */
 
-    function add_package_goodsAction()
+    public function add_package_goodsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -303,10 +301,10 @@ class PackageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除一个商品
+    //-- 删除一个商品
     /*------------------------------------------------------ */
 
-    function drop_package_goodsAction()
+    public function drop_package_goodsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -368,7 +366,7 @@ class PackageController extends InitController
      *
      * @return void
      */
-    function get_packagelist()
+    public function get_packagelist()
     {
         $result = get_filter();
         if ($result === false) {
@@ -425,7 +423,7 @@ class PackageController extends InitController
      * @param int $package_id
      * @return  void
      */
-    function handle_packagep_goods($package_id)
+    public function handle_packagep_goods($package_id)
     {
         $sql = "UPDATE " . $GLOBALS['ecs']->table('package_goods') . " SET " .
             " package_id = '$package_id' " .

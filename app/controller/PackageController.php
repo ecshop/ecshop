@@ -9,7 +9,6 @@ class PackageController extends InitController
 {
     public function indexAction()
     {
-
         require_once(ROOT_PATH . 'includes/lib_order.php');
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
@@ -19,7 +18,7 @@ class PackageController extends InitController
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/package.php');
 
         /*------------------------------------------------------ */
-//-- PROCESSOR
+        //-- PROCESSOR
         /*------------------------------------------------------ */
 
         assign_template();

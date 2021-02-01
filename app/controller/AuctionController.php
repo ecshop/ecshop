@@ -9,13 +9,12 @@ class AuctionController extends InitController
 {
     public function initialize()
     {
-
     }
 
     /*------------------------------------------------------ */
-//-- 拍卖活动列表
+    //-- 拍卖活动列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 取得拍卖活动总数 */
         $count = auction_count();
@@ -71,9 +70,9 @@ class AuctionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 拍卖商品 --> 商品详情
+    //-- 拍卖商品 --> 商品详情
     /*------------------------------------------------------ */
-    function viewAction()
+    public function viewAction()
     {
         /* 取得参数：拍卖活动id */
         $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
@@ -162,9 +161,9 @@ class AuctionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 拍卖商品 --> 出价
+    //-- 拍卖商品 --> 出价
     /*------------------------------------------------------ */
-    function bidAction()
+    public function bidAction()
     {
         include_once(ROOT_PATH . 'includes/lib_order.php');
 
@@ -284,9 +283,9 @@ class AuctionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 拍卖商品 --> 购买
+    //-- 拍卖商品 --> 购买
     /*------------------------------------------------------ */
-    function buyAction()
+    public function buyAction()
     {
         /* 查询：取得参数：拍卖活动id */
         $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
@@ -392,7 +391,7 @@ class AuctionController extends InitController
      * 取得拍卖活动数量
      * @return  int
      */
-    function auction_count()
+    public function auction_count()
     {
         $now = gmtime();
         $sql = "SELECT COUNT(*) " .
@@ -409,7 +408,7 @@ class AuctionController extends InitController
      * @param int $page 当前页
      * @return  array
      */
-    function auction_list($size, $page)
+    public function auction_list($size, $page)
     {
         $auction_list = array();
         $auction_list['finished'] = $auction_list['finished'] = array();

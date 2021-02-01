@@ -54,5 +54,3 @@ class ReceiveController extends InitController
         $smarty->display('receive.dwt');
     }
 }
-
-

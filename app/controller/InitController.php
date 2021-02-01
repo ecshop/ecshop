@@ -11,7 +11,6 @@ class InitController extends Controller
 {
     protected function initialize()
     {
-
         if (!file_exists(ROOT_PATH . 'data/install.lock') && !file_exists(ROOT_PATH . 'includes/install.lock')
             && !defined('NO_CHECK_INSTALL')) {
             header("Location: ./install/index.php\n");
@@ -217,6 +216,5 @@ class InitController extends Controller
         } else {
             ob_start();
         }
-
     }
 }

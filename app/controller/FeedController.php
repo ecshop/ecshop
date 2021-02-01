@@ -9,7 +9,6 @@ class FeedController extends InitController
 {
     public function indexAction()
     {
-
         define('INIT_NO_USERS', true);
         define('INIT_NO_SMARTY', true);
 

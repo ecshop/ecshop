@@ -22,7 +22,6 @@ class FilecheckController extends InitController
 
     public function indexAction()
     {
-
         $step = empty($_REQUEST['step']) ? 1 : max(1, intval($_REQUEST['step']));
 
         if ($step == 1 || $step == 2) {
@@ -127,7 +126,7 @@ class FilecheckController extends InitController
      * @param int $sub //是否检查子目录
      * @param string $skip //不检查的目录或文件
      */
-    function checkfiles($currentdir, $ext = '', $sub = 1, $skip = '')
+    public function checkfiles($currentdir, $ext = '', $sub = 1, $skip = '')
     {
         global $md5data;
 

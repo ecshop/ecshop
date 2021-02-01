@@ -11,15 +11,14 @@ class AttributeController extends InitController
     {
         parent::initialize();
         $exc = new exchange($ecs->table("attribute"), $db, 'attr_id', 'attr_name');
-
     }
 
 
 
     /*------------------------------------------------------ */
-//-- 属性列表
+    //-- 属性列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $goods_type = isset($_GET['goods_type']) ? intval($_GET['goods_type']) : 0;
 
@@ -44,10 +43,10 @@ class AttributeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序、翻页
+    //-- 排序、翻页
     /*------------------------------------------------------ */
 
-    function queryAction()
+    public function queryAction()
     {
         $list = get_attrlist();
 
@@ -67,14 +66,14 @@ class AttributeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加/编辑属性
+    //-- 添加/编辑属性
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         editAction();
     }
 
-    function editAction()
+    public function editAction()
     {
         /* 检查权限 */
         admin_priv('attr_manage');
@@ -117,14 +116,14 @@ class AttributeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 插入/更新属性
+    //-- 插入/更新属性
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         updateAction();
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 检查权限 */
         admin_priv('attr_manage');
@@ -172,9 +171,9 @@ class AttributeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除属性(一个或多个)
+    //-- 删除属性(一个或多个)
     /*------------------------------------------------------ */
-    function batchAction()
+    public function batchAction()
     {
         /* 检查权限 */
         admin_priv('attr_manage');
@@ -203,10 +202,10 @@ class AttributeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑属性名称
+    //-- 编辑属性名称
     /*------------------------------------------------------ */
 
-    function edit_attr_nameAction()
+    public function edit_attr_nameAction()
     {
         check_authz_json('attr_manage');
 
@@ -229,10 +228,10 @@ class AttributeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑排序序号
+    //-- 编辑排序序号
     /*------------------------------------------------------ */
 
-    function edit_sort_orderAction()
+    public function edit_sort_orderAction()
     {
         check_authz_json('attr_manage');
 
@@ -247,9 +246,9 @@ class AttributeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除商品属性
+    //-- 删除商品属性
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('attr_manage');
 
@@ -265,9 +264,9 @@ class AttributeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 获取某属性商品数量
+    //-- 获取某属性商品数量
     /*------------------------------------------------------ */
-    function get_attr_numAction()
+    public function get_attr_numAction()
     {
         check_authz_json('attr_manage');
 
@@ -290,10 +289,10 @@ class AttributeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 获得指定商品类型下的所有属性分组
+    //-- 获得指定商品类型下的所有属性分组
     /*------------------------------------------------------ */
 
-    function get_attr_groupsAction()
+    public function get_attr_groupsAction()
     {
         check_authz_json('attr_manage');
 
@@ -308,7 +307,7 @@ class AttributeController extends InitController
      *
      * @return  array
      */
-    function get_attrlist()
+    public function get_attrlist()
     {
         /* 查询条件 */
         $filter = array();

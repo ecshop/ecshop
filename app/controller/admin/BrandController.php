@@ -15,14 +15,13 @@ class BrandController extends InitController
         $image = new cls_image($_CFG['bgcolor']);
 
         $exc = new exchange($ecs->table("brand"), $db, 'brand_id', 'brand_name');
-
     }
 
 
     /*------------------------------------------------------ */
-//-- 品牌列表
+    //-- 品牌列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $smarty->assign('ur_here', $_LANG['06_goods_brand_list']);
         $smarty->assign('action_link', array('text' => $_LANG['07_brand_add'], 'href' => 'brand.php?act=add'));
@@ -40,9 +39,9 @@ class BrandController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加品牌
+    //-- 添加品牌
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 权限判断 */
         admin_priv('brand_manage');
@@ -56,7 +55,7 @@ class BrandController extends InitController
         $smarty->display('brand_info.htm');
     }
 
-    function insertAction()
+    public function insertAction()
     {
         /*检查品牌名是否重复*/
         admin_priv('brand_manage');
@@ -101,9 +100,9 @@ class BrandController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑品牌
+    //-- 编辑品牌
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         /* 权限判断 */
         admin_priv('brand_manage');
@@ -120,7 +119,7 @@ class BrandController extends InitController
         $smarty->display('brand_info.htm');
     }
 
-    function updataAction()
+    public function updataAction()
     {
         admin_priv('brand_manage');
         if ($_POST['brand_name'] != $_POST['old_brandname']) {
@@ -165,9 +164,9 @@ class BrandController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑品牌名称
+    //-- 编辑品牌名称
     /*------------------------------------------------------ */
-    function edit_brand_nameAction()
+    public function edit_brand_nameAction()
     {
         check_authz_json('brand_manage');
 
@@ -187,7 +186,7 @@ class BrandController extends InitController
         }
     }
 
-    function add_brandAction()
+    public function add_brandAction()
     {
         $brand = empty($_REQUEST['brand']) ? '' : json_str_iconv(trim($_REQUEST['brand']));
 
@@ -206,9 +205,9 @@ class BrandController extends InitController
         }
     }
     /*------------------------------------------------------ */
-//-- 编辑排序序号
+    //-- 编辑排序序号
     /*------------------------------------------------------ */
-    function edit_sort_orderAction()
+    public function edit_sort_orderAction()
     {
         check_authz_json('brand_manage');
 
@@ -226,9 +225,9 @@ class BrandController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 切换是否显示
+    //-- 切换是否显示
     /*------------------------------------------------------ */
-    function toggle_showAction()
+    public function toggle_showAction()
     {
         check_authz_json('brand_manage');
 
@@ -241,9 +240,9 @@ class BrandController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除品牌
+    //-- 删除品牌
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('brand_manage');
 
@@ -269,9 +268,9 @@ class BrandController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除品牌图片
+    //-- 删除品牌图片
     /*------------------------------------------------------ */
-    function drop_logoAction()
+    public function drop_logoAction()
     {
         /* 权限判断 */
         admin_priv('brand_manage');
@@ -291,9 +290,9 @@ class BrandController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序、分页、查询
+    //-- 排序、分页、查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $brand_list = get_brandlist();
         $smarty->assign('brand_list', $brand_list['brand']);
@@ -314,7 +313,7 @@ class BrandController extends InitController
      * @access  public
      * @return  array
      */
-    function get_brandlist()
+    public function get_brandlist()
     {
         $result = get_filter();
         if ($result === false) {

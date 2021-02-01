@@ -10,13 +10,12 @@ class MessageController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
     /*------------------------------------------------------ */
-//-- 留言列表页面
+    //-- 留言列表页面
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $smarty->assign('full_page', 1);
         $smarty->assign('ur_here', $_LANG['msg_list']);
@@ -37,9 +36,9 @@ class MessageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 翻页、排序
+    //-- 翻页、排序
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $list = get_message_list();
 
@@ -59,9 +58,9 @@ class MessageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 留言发送页面
+    //-- 留言发送页面
     /*------------------------------------------------------ */
-    function sendAction()
+    public function sendAction()
     {
         /* 获取管理员列表 */
         $admin_list = $db->getAll('SELECT user_id, user_name FROM ' . $ecs->table('admin_user'));
@@ -77,9 +76,9 @@ class MessageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 处理留言的发送
+    //-- 处理留言的发送
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         $rec_arr = $_POST['receiver_id'];
 
@@ -126,9 +125,9 @@ class MessageController extends InitController
         }
     }
     /*------------------------------------------------------ */
-//-- 留言编辑页面
+    //-- 留言编辑页面
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         $id = intval($_REQUEST['id']);
 
@@ -150,7 +149,7 @@ class MessageController extends InitController
         $smarty->display('message_info.htm');
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 获得留言数据*/
         $msg_arr = array();
@@ -172,9 +171,9 @@ class MessageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 留言查看页面
+    //-- 留言查看页面
     /*------------------------------------------------------ */
-    function viewAction()
+    public function viewAction()
     {
         $msg_id = intval($_REQUEST['id']);
 
@@ -211,9 +210,9 @@ class MessageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//--留言回复页面
+    //--留言回复页面
     /*------------------------------------------------------ */
-    function replyAction()
+    public function replyAction()
     {
         $msg_id = intval($_REQUEST['id']);
 
@@ -237,9 +236,9 @@ class MessageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//--留言回复的处理
+    //--留言回复的处理
     /*------------------------------------------------------ */
-    function re_msgAction()
+    public function re_msgAction()
     {
         $sql = "INSERT INTO " . $ecs->table('admin_message') . " (sender_id, receiver_id, sent_time, " .
             "read_time, readed, deleted, title, message) " .
@@ -257,9 +256,9 @@ class MessageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量删除留言记录
+    //-- 批量删除留言记录
     /*------------------------------------------------------ */
-    function drop_msgAction()
+    public function drop_msgAction()
     {
         if (isset($_POST['checkboxes'])) {
             $count = 0;
@@ -281,9 +280,9 @@ class MessageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除留言
+    //-- 删除留言
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         $id = intval($_GET['id']);
 
@@ -302,7 +301,7 @@ class MessageController extends InitController
      *
      * @return void
      */
-    function get_message_list()
+    public function get_message_list()
     {
         /* 查询条件 */
         $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'sent_time' : trim($_REQUEST['sort_by']);

@@ -11,13 +11,12 @@ class ArticlecatController extends InitController
     {
         parent::initialize();
         $exc = new exchange($ecs->table("article_cat"), $db, 'cat_id', 'cat_name');
-
     }
 
     /*------------------------------------------------------ */
-//-- 分类列表
+    //-- 分类列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $articlecat = article_cat_list(0, 0, false);
         foreach ($articlecat as $key => $cat) {
@@ -33,9 +32,9 @@ class ArticlecatController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 查询
+    //-- 查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $articlecat = article_cat_list(0, 0, false);
         foreach ($articlecat as $key => $cat) {
@@ -47,9 +46,9 @@ class ArticlecatController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加分类
+    //-- 添加分类
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 权限判断 */
         admin_priv('article_cat');
@@ -63,7 +62,7 @@ class ArticlecatController extends InitController
         $smarty->display('articlecat_info.htm');
     }
 
-    function insertAction()
+    public function insertAction()
     {
         /* 权限判断 */
         admin_priv('article_cat');
@@ -111,9 +110,9 @@ class ArticlecatController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑文章分类
+    //-- 编辑文章分类
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         /* 权限判断 */
         admin_priv('article_cat');
@@ -152,7 +151,7 @@ class ArticlecatController extends InitController
         $smarty->display('articlecat_info.htm');
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 权限判断 */
         admin_priv('article_cat');
@@ -242,9 +241,9 @@ class ArticlecatController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 编辑文章分类的排序
+    //-- 编辑文章分类的排序
     /*------------------------------------------------------ */
-    function edit_sort_orderAction()
+    public function edit_sort_orderAction()
     {
         check_authz_json('article_cat');
 
@@ -265,9 +264,9 @@ class ArticlecatController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除文章分类
+    //-- 删除文章分类
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('article_cat');
 
@@ -303,10 +302,10 @@ class ArticlecatController extends InitController
         exit;
     }
     /*------------------------------------------------------ */
-//-- 切换是否显示在导航栏
+    //-- 切换是否显示在导航栏
     /*------------------------------------------------------ */
 
-    function toggle_show_in_navAction()
+    public function toggle_show_in_navAction()
     {
         check_authz_json('cat_manage');
 
@@ -349,7 +348,7 @@ class ArticlecatController extends InitController
      *
      * @return  mix
      */
-    function cat_update($cat_id, $args)
+    public function cat_update($cat_id, $args)
     {
         if (empty($args) || empty($cat_id)) {
             return false;

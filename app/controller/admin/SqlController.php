@@ -10,14 +10,13 @@ class SqlController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
     /*------------------------------------------------------ */
-//-- 用户帐号列表
+    //-- 用户帐号列表
     /*------------------------------------------------------ */
 
-    function mainAction()
+    public function mainAction()
     {
         admin_priv('sql_query');
         assign_query_info();
@@ -27,7 +26,7 @@ class SqlController extends InitController
         $smarty->display('sql.htm');
     }
 
-    function queryAction()
+    public function queryAction()
     {
         admin_priv('sql_query');
         if (!empty($_POST['sql'])) {
@@ -56,7 +55,7 @@ class SqlController extends InitController
      *
      * @return void
      */
-    function assign_sql($sql)
+    public function assign_sql($sql)
     {
         global $db, $smarty, $_LANG;
 

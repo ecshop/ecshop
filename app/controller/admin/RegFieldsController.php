@@ -11,14 +11,13 @@ class RegFieldsController extends InitController
     {
         parent::initialize();
         $exc = new exchange($ecs->table("reg_fields"), $db, 'id', 'reg_field_name');
-
     }
 
     /*------------------------------------------------------ */
-//-- 会员注册项列表
+    //-- 会员注册项列表
     /*------------------------------------------------------ */
 
-    function listAction()
+    public function listAction()
     {
         $fields = array();
         $fields = $db->getAll("SELECT * FROM " . $ecs->table('reg_fields') . " ORDER BY dis_order, id");
@@ -35,9 +34,9 @@ class RegFieldsController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 翻页，排序
+    //-- 翻页，排序
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $fields = array();
         $fields = $db->getAll("SELECT * FROM " . $ecs->table('reg_fields') . "ORDER BY id");
@@ -47,10 +46,10 @@ class RegFieldsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加会员注册项
+    //-- 添加会员注册项
     /*------------------------------------------------------ */
 
-    function addAction()
+    public function addAction()
     {
         admin_priv('reg_fields');
 
@@ -70,10 +69,10 @@ class RegFieldsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 增加会员注册项到数据库
+    //-- 增加会员注册项到数据库
     /*------------------------------------------------------ */
 
-    function insertAction()
+    public function insertAction()
     {
         admin_priv('reg_fields');
 
@@ -98,10 +97,10 @@ class RegFieldsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑会员注册项
+    //-- 编辑会员注册项
     /*------------------------------------------------------ */
 
-    function editAction()
+    public function editAction()
     {
         admin_priv('reg_fields');
 
@@ -121,10 +120,10 @@ class RegFieldsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 更新会员注册项
+    //-- 更新会员注册项
     /*------------------------------------------------------ */
 
-    function updateAction()
+    public function updateAction()
     {
         admin_priv('reg_fields');
 
@@ -145,9 +144,9 @@ class RegFieldsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除会员注册项
+    //-- 删除会员注册项
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('reg_fields');
 
@@ -170,7 +169,7 @@ class RegFieldsController extends InitController
     } /*
  *  编辑会员注册项名称
  */
-    function edit_nameAction()
+    public function edit_nameAction()
     {
         $id = intval($_REQUEST['id']);
         $val = empty($_REQUEST['val']) ? '' : json_str_iconv(trim($_REQUEST['val']));
@@ -190,7 +189,7 @@ class RegFieldsController extends InitController
     } /*
  *  编辑会员注册项排序权值
  */
-    function edit_orderAction()
+    public function edit_orderAction()
     {
         $id = intval($_REQUEST['id']);
         $val = isset($_REQUEST['val']) ? json_str_iconv(trim($_REQUEST['val'])) : '';
@@ -210,9 +209,9 @@ class RegFieldsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改会员注册项显示状态
+    //-- 修改会员注册项显示状态
     /*------------------------------------------------------ */
-    function toggle_disAction()
+    public function toggle_disAction()
     {
         check_authz_json('reg_fields');
 
@@ -226,9 +225,9 @@ class RegFieldsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改会员注册项必填状态
+    //-- 修改会员注册项必填状态
     /*------------------------------------------------------ */
-    function toggle_needAction()
+    public function toggle_needAction()
     {
         check_authz_json('reg_fields');
 

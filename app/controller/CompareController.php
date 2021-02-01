@@ -9,7 +9,6 @@ class CompareController extends InitController
 {
     public function indexAction()
     {
-
         if (!empty($_REQUEST['goods']) && is_array($_REQUEST['goods']) && count($_REQUEST['goods']) > 1) {
             foreach ($_REQUEST['goods'] as $key => $val) {
                 $_REQUEST['goods'][$key] = intval($val);
@@ -109,6 +108,3 @@ class CompareController extends InitController
         $smarty->display('compare.dwt');
     }
 }
-
-
-

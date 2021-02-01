@@ -19,16 +19,16 @@ class VisitSoldController extends InitController
     }
 
 
-    function listAction()
+    public function listAction()
     {
         $this->downloadAction();
     }
 
 
     /*------------------------------------------------------ */
-//--访问购买比例
+    //--访问购买比例
     /*------------------------------------------------------ */
-    function downloadAction()
+    public function downloadAction()
     {
         /* 变量的初始化 */
         $cat_id = (!empty($_REQUEST['cat_id'])) ? intval($_REQUEST['cat_id']) : 0;
@@ -72,7 +72,7 @@ class VisitSoldController extends InitController
     }
 
     /*------------------------------------------------------ */
-//--订单统计需要的函数
+    //--订单统计需要的函数
     /*------------------------------------------------------ */
     /**
      * 取得访问和购买次数统计数据
@@ -82,7 +82,7 @@ class VisitSoldController extends InitController
      * @param int $show_num 显示个数
      * @return  array           $click_sold_info  访问购买比例数据
      */
-    function click_sold_info($cat_id, $brand_id, $show_num)
+    public function click_sold_info($cat_id, $brand_id, $show_num)
     {
         global $db, $ecs;
 

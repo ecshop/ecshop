@@ -9,14 +9,12 @@ class ArticleController extends InitController
 {
     public function initialize()
     {
-
-
         if ((DEBUG_MODE & 2) != 2) {
             $smarty->caching = true;
         }
 
         /*------------------------------------------------------ */
-//-- INPUT
+        //-- INPUT
         /*------------------------------------------------------ */
 
         $_REQUEST['id'] = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
@@ -26,7 +24,7 @@ class ArticleController extends InitController
         }
 
         /*------------------------------------------------------ */
-//-- PROCESSOR
+        //-- PROCESSOR
         /*------------------------------------------------------ */
 
         $cache_id = sprintf('%X', crc32($_REQUEST['id'] . '-' . $_CFG['lang']));
@@ -110,7 +108,6 @@ class ArticleController extends InitController
         } else {
             $smarty->display('article_pro.dwt', $cache_id);
         }
-
     }
 
 
@@ -121,7 +118,7 @@ class ArticleController extends InitController
      * @param integer $article_id
      * @return  array
      */
-    function get_article_info($article_id)
+    public function get_article_info($article_id)
     {
         /* 获得文章的信息 */
         $sql = "SELECT a.*, IFNULL(AVG(r.comment_rank), 0) AS comment_rank " .
@@ -150,7 +147,7 @@ class ArticleController extends InitController
      * @param integer $id
      * @return  array
      */
-    function article_related_goods($id)
+    public function article_related_goods($id)
     {
         $sql = 'SELECT g.goods_id, g.goods_name, g.goods_thumb, g.goods_img, g.shop_price AS org_price, ' .
             "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " .

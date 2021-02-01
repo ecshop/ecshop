@@ -16,9 +16,9 @@ class GuestStatsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 客户统计列表
+    //-- 客户统计列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 权限判断 */
         admin_priv('client_flow_stats');

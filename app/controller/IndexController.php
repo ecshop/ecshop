@@ -14,11 +14,11 @@ class IndexController extends InitController
         }
     }
 
-    function indexAction()
+    public function indexAction()
     {
 
         /*------------------------------------------------------ */
-//-- 判断是否存在缓存，如果存在则调用缓存，反之读取相应内容
+        //-- 判断是否存在缓存，如果存在则调用缓存，反之读取相应内容
         /*------------------------------------------------------ */
         /* 缓存编号 */
         $cache_id = sprintf('%X', crc32($_SESSION['user_rank'] . '-' . $_CFG['lang']));
@@ -86,8 +86,8 @@ class IndexController extends InitController
     }
 
 
-//判断是否有ajax请求
-    function cat_recAction()
+    //判断是否有ajax请求
+    public function cat_recAction()
     {
         $rec_array = array(1 => 'best', 2 => 'new', 3 => 'hot');
         $rec_type = !empty($_REQUEST['rec_type']) ? intval($_REQUEST['rec_type']) : '1';
@@ -109,7 +109,7 @@ class IndexController extends InitController
      *
      * @return  array
      */
-    function index_get_invoice_query()
+    public function index_get_invoice_query()
     {
         $sql = 'SELECT o.order_sn, o.invoice_no, s.shipping_code FROM ' . $GLOBALS['ecs']->table('order_info') . ' AS o' .
             ' LEFT JOIN ' . $GLOBALS['ecs']->table('shipping') . ' AS s ON s.shipping_id = o.shipping_id' .
@@ -138,7 +138,7 @@ class IndexController extends InitController
      *
      * @return  array
      */
-    function index_get_new_articles()
+    public function index_get_new_articles()
     {
         $sql = 'SELECT a.article_id, a.title, ac.cat_name, a.add_time, a.file_url, a.open_type, ac.cat_id, ac.cat_name ' .
             ' FROM ' . $GLOBALS['ecs']->table('article') . ' AS a, ' .
@@ -168,7 +168,7 @@ class IndexController extends InitController
      *
      * @return  array
      */
-    function index_get_group_buy()
+    public function index_get_group_buy()
     {
         $time = gmtime();
         $limit = get_library_number('group_buy', 'index');
@@ -219,7 +219,7 @@ class IndexController extends InitController
      * 取得拍卖活动列表
      * @return  array
      */
-    function index_get_auction()
+    public function index_get_auction()
     {
         $now = gmtime();
         $limit = get_library_number('auction', 'index');
@@ -258,7 +258,7 @@ class IndexController extends InitController
      *
      * @return  array
      */
-    function index_get_links()
+    public function index_get_links()
     {
         $sql = 'SELECT link_logo, link_name, link_url FROM ' . $GLOBALS['ecs']->table('friend_link') . ' ORDER BY show_order';
         $res = $GLOBALS['db']->getAll($sql);

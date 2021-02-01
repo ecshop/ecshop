@@ -10,13 +10,12 @@ class UsersController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
     /*------------------------------------------------------ */
-//-- 用户帐号列表
+    //-- 用户帐号列表
     /*------------------------------------------------------ */
 
-    function listAction()
+    public function listAction()
     {
         /* 检查权限 */
         admin_priv('users_manage');
@@ -46,9 +45,9 @@ class UsersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- ajax返回用户列表
+    //-- ajax返回用户列表
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $user_list = user_list();
 
@@ -64,9 +63,9 @@ class UsersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加会员帐号
+    //-- 添加会员帐号
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 检查权限 */
         admin_priv('users_manage');
@@ -92,9 +91,9 @@ class UsersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加会员帐号
+    //-- 添加会员帐号
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         /* 检查权限 */
         admin_priv('users_manage');
@@ -179,10 +178,10 @@ class UsersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑用户帐号
+    //-- 编辑用户帐号
     /*------------------------------------------------------ */
 
-    function editAction()
+    public function editAction()
     {
         /* 检查权限 */
         admin_priv('users_manage');
@@ -303,10 +302,10 @@ class UsersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 更新用户帐号
+    //-- 更新用户帐号
     /*------------------------------------------------------ */
 
-    function updateAction()
+    public function updateAction()
     {
         /* 检查权限 */
         admin_priv('users_manage');
@@ -381,10 +380,10 @@ class UsersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量删除会员帐号
+    //-- 批量删除会员帐号
     /*------------------------------------------------------ */
 
-    function batch_removeAction()
+    public function batch_removeAction()
     {
         /* 检查权限 */
         admin_priv('users_drop');
@@ -407,7 +406,7 @@ class UsersController extends InitController
             sys_msg($_LANG['no_select_user'], 0, $lnk);
         }
     } /* 编辑用户名 */
-    function edit_usernameAction()
+    public function edit_usernameAction()
     {
         /* 检查权限 */
         check_authz_json('users_manage');
@@ -442,9 +441,9 @@ class UsersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑email
+    //-- 编辑email
     /*------------------------------------------------------ */
-    function edit_emailAction()
+    public function edit_emailAction()
     {
         /* 检查权限 */
         check_authz_json('users_manage');
@@ -473,10 +472,10 @@ class UsersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除会员帐号
+    //-- 删除会员帐号
     /*------------------------------------------------------ */
 
-    function removeAction()
+    public function removeAction()
     {
         /* 检查权限 */
         admin_priv('users_drop');
@@ -496,9 +495,9 @@ class UsersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//--  收货地址查看
+    //--  收货地址查看
     /*------------------------------------------------------ */
-    function address_listAction()
+    public function address_listAction()
     {
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $sql = "SELECT a.*, c.region_name AS country_name, p.region_name AS province, ct.region_name AS city_name, d.region_name AS district_name " .
@@ -517,10 +516,10 @@ class UsersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 脱离推荐关系
+    //-- 脱离推荐关系
     /*------------------------------------------------------ */
 
-    function remove_parentAction()
+    public function remove_parentAction()
     {
         /* 检查权限 */
         admin_priv('users_manage');
@@ -539,10 +538,10 @@ class UsersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 查看用户推荐会员列表
+    //-- 查看用户推荐会员列表
     /*------------------------------------------------------ */
 
-    function aff_listAction()
+    public function aff_listAction()
     {
         /* 检查权限 */
         admin_priv('users_manage');
@@ -604,7 +603,7 @@ class UsersController extends InitController
      *
      * @return void
      */
-    function user_list()
+    public function user_list()
     {
         $result = get_filter();
         if ($result === false) {

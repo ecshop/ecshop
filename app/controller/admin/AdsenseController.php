@@ -15,15 +15,15 @@ class AdsenseController extends InitController
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/ads.php');
     }
 
-    function listAction()
+    public function listAction()
     {
         $this->downloadAction();
     }
 
     /*------------------------------------------------------ */
-//-- 站外投放广告的统计
+    //-- 站外投放广告的统计
     /*------------------------------------------------------ */
-    function downloadAction()
+    public function downloadAction()
     {
         admin_priv('ad_manage');
 

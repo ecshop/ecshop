@@ -21,7 +21,7 @@ class UserController extends InitController
         $back_act = '';
 
 
-// 不需要登录的操作或自己验证是否登录（如ajax处理）的act
+        // 不需要登录的操作或自己验证是否登录（如ajax处理）的act
         $not_login_arr =
             array('login', 'act_login', 'register', 'act_register', 'act_edit_password', 'get_password', 'send_pwd_email', 'password', 'signin', 'add_tag', 'collect', 'return_to_cart', 'logout', 'email_list', 'validate_email', 'send_hash_mail', 'order_query', 'is_registered', 'check_email', 'clear_history', 'qpassword_name', 'get_passwd_question', 'check_answer');
 
@@ -74,11 +74,10 @@ class UserController extends InitController
             $smarty->assign('action', $action);
             $smarty->assign('lang', $_LANG);
         }
-
     }
 
-//用户中心欢迎页
-    function defaultAction()
+    //用户中心欢迎页
+    public function defaultAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
         if ($rank = get_rank_info()) {
@@ -94,7 +93,7 @@ class UserController extends InitController
     }
 
     /* 显示会员注册界面 */
-    function registerAction()
+    public function registerAction()
     {
         if ((!isset($back_act) || empty($back_act)) && isset($GLOBALS['_SERVER']['HTTP_REFERER'])) {
             $back_act = strpos($GLOBALS['_SERVER']['HTTP_REFERER'], 'user.php') ? './index.php' : $GLOBALS['_SERVER']['HTTP_REFERER'];
@@ -119,7 +118,7 @@ class UserController extends InitController
 //    $smarty->assign('back_act', $back_act);
         $smarty->display('user_passport.dwt');
     } /* 注册会员的处理 */
-    function act_registerAction()
+    public function act_registerAction()
     {
         /* 增加是否关闭注册 */
         if ($_CFG['shop_reg_closed']) {
@@ -209,7 +208,7 @@ class UserController extends InitController
             }
         }
     } /* 验证用户注册邮件 */
-    function validate_emailAction()
+    public function validate_emailAction()
     {
         $hash = empty($_GET['hash']) ? '' : trim($_GET['hash']);
         if ($hash) {
@@ -225,7 +224,7 @@ class UserController extends InitController
         }
         show_message($_LANG['validate_fail']);
     } /* 验证用户注册用户名是否可以注册 */
-    function is_registeredAction()
+    public function is_registeredAction()
     {
         include_once(ROOT_PATH . 'includes/lib_passport.php');
 
@@ -238,7 +237,7 @@ class UserController extends InitController
             echo 'true';
         }
     } /* 验证用户邮箱地址是否被注册 */
-    function check_emailAction()
+    public function check_emailAction()
     {
         $email = trim($_GET['email']);
         if ($user->check_email($email)) {
@@ -247,7 +246,7 @@ class UserController extends InitController
             echo 'ok';
         }
     } /* 用户登录界面 */
-    function loginAction()
+    public function loginAction()
     {
         if (empty($back_act)) {
             if (empty($back_act) && isset($GLOBALS['_SERVER']['HTTP_REFERER'])) {
@@ -267,7 +266,7 @@ class UserController extends InitController
         $smarty->assign('back_act', $back_act);
         $smarty->display('user_passport.dwt');
     } /* 处理会员的登录 */
-    function act_loginAction()
+    public function act_loginAction()
     {
         $username = isset($_POST['username']) ? trim($_POST['username']) : '';
         $password = isset($_POST['password']) ? trim($_POST['password']) : '';
@@ -301,7 +300,7 @@ class UserController extends InitController
             show_message($_LANG['login_failure'], $_LANG['relogin_lnk'], 'user.php', 'error');
         }
     } /* 处理 ajax 的登录请求 */
-    function signinAction()
+    public function signinAction()
     {
         include_once('includes/cls_json.php');
         $json = new JSON;
@@ -349,7 +348,7 @@ class UserController extends InitController
         }
         die($json->encode($result));
     } /* 退出会员中心 */
-    function logoutAction()
+    public function logoutAction()
     {
         if ((!isset($back_act) || empty($back_act)) && isset($GLOBALS['_SERVER']['HTTP_REFERER'])) {
             $back_act = strpos($GLOBALS['_SERVER']['HTTP_REFERER'], 'user.php') ? './index.php' : $GLOBALS['_SERVER']['HTTP_REFERER'];
@@ -359,7 +358,7 @@ class UserController extends InitController
         $ucdata = empty($user->ucdata) ? "" : $user->ucdata;
         show_message($_LANG['logout'] . $ucdata, array($_LANG['back_up_page'], $_LANG['back_home_lnk']), array($back_act, 'index.php'), 'info');
     } /* 个人资料页面 */
-    function profileAction()
+    public function profileAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
@@ -409,7 +408,7 @@ class UserController extends InitController
         $smarty->assign('profile', $user_info);
         $smarty->display('user_transaction.dwt');
     } /* 修改个人资料的处理 */
-    function act_edit_profileAction()
+    public function act_edit_profileAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
@@ -488,7 +487,7 @@ class UserController extends InitController
             show_message($msg, '', '', 'info');
         }
     } /* 密码找回-->修改密码界面 */
-    function get_passwordAction()
+    public function get_passwordAction()
     {
         include_once(ROOT_PATH . 'includes/lib_passport.php');
 
@@ -511,12 +510,12 @@ class UserController extends InitController
             $smarty->display('user_passport.dwt');
         }
     } /* 密码找回-->输入用户名界面 */
-    function qpassword_nameAction()
+    public function qpassword_nameAction()
     {
         //显示输入要找回密码的账号表单
         $smarty->display('user_passport.dwt');
     } /* 密码找回-->根据注册用户名取得密码提示问题界面 */
-    function get_passwd_questionAction()
+    public function get_passwd_questionAction()
     {
         if (empty($_POST['user_name'])) {
             show_message($_LANG['no_passwd_question'], $_LANG['back_home_lnk'], './', 'info');
@@ -546,7 +545,7 @@ class UserController extends InitController
         $smarty->assign('passwd_question', $_LANG['passwd_questions'][$user_question_arr['passwd_question']]);
         $smarty->display('user_passport.dwt');
     } /* 密码找回-->根据提交的密码答案进行相应处理 */
-    function check_answerAction()
+    public function check_answerAction()
     {
         $captcha = intval($_CFG['captcha']);
         if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
@@ -576,7 +575,7 @@ class UserController extends InitController
             $smarty->display('user_passport.dwt');
         }
     } /* 发送密码修改确认邮件 */
-    function send_pwd_emailAction()
+    public function send_pwd_emailAction()
     {
         include_once(ROOT_PATH . 'includes/lib_passport.php');
 
@@ -604,12 +603,12 @@ class UserController extends InitController
             show_message($_LANG['username_no_email'], $_LANG['back_page_up'], '', 'info');
         }
     } /* 重置新密码 */
-    function reset_passwordAction()
+    public function reset_passwordAction()
     {
         //显示重置密码的表单
         $smarty->display('user_passport.dwt');
     } /* 修改会员密码 */
-    function act_edit_passwordAction()
+    public function act_edit_passwordAction()
     {
         include_once(ROOT_PATH . 'includes/lib_passport.php');
 
@@ -637,7 +636,7 @@ class UserController extends InitController
             show_message($_LANG['edit_password_failure'], $_LANG['back_page_up'], '', 'info');
         }
     } /* 添加一个红包 */
-    function act_add_bonusAction()
+    public function act_add_bonusAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
@@ -649,7 +648,7 @@ class UserController extends InitController
             $err->show($_LANG['back_up_page'], 'user.php?act=bonus');
         }
     } /* 查看订单列表 */
-    function order_listAction()
+    public function order_listAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
@@ -667,7 +666,7 @@ class UserController extends InitController
         $smarty->assign('orders', $orders);
         $smarty->display('user_transaction.dwt');
     } /* 查看订单详情 */
-    function order_detailAction()
+    public function order_detailAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
         include_once(ROOT_PATH . 'includes/lib_payment.php');
@@ -733,7 +732,7 @@ class UserController extends InitController
         $smarty->assign('goods_list', $goods_list);
         $smarty->display('user_transaction.dwt');
     } /* 取消订单 */
-    function cancel_orderAction()
+    public function cancel_orderAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
         include_once(ROOT_PATH . 'includes/lib_order.php');
@@ -747,7 +746,7 @@ class UserController extends InitController
             $err->show($_LANG['order_list_lnk'], 'user.php?act=order_list');
         }
     } /* 收货地址列表界面*/
-    function address_listAction()
+    public function address_listAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
         include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
@@ -795,7 +794,7 @@ class UserController extends InitController
 
         $smarty->display('user_transaction.dwt');
     } /* 添加/编辑收货地址的处理 */
-    function act_edit_addressAction()
+    public function act_edit_addressAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
         include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
@@ -822,7 +821,7 @@ class UserController extends InitController
             show_message($_LANG['edit_address_success'], $_LANG['address_list_lnk'], 'user.php?act=address_list');
         }
     } /* 删除收货地址 */
-    function drop_consigneeAction()
+    public function drop_consigneeAction()
     {
         include_once('includes/lib_transaction.php');
 
@@ -835,7 +834,7 @@ class UserController extends InitController
             show_message($_LANG['del_address_false']);
         }
     } /* 显示收藏商品列表 */
-    function collection_listAction()
+    public function collection_listAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -857,7 +856,7 @@ class UserController extends InitController
         $smarty->assign('user_id', $user_id);
         $smarty->display('user_clips.dwt');
     } /* 删除收藏的商品 */
-    function delete_collectionAction()
+    public function delete_collectionAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -870,7 +869,7 @@ class UserController extends InitController
         ecs_header("Location: user.php?act=collection_list\n");
         exit;
     } /* 添加关注商品 */
-    function add_to_attentionAction()
+    public function add_to_attentionAction()
     {
         $rec_id = (int)$_GET['rec_id'];
         if ($rec_id) {
@@ -879,7 +878,7 @@ class UserController extends InitController
         ecs_header("Location: user.php?act=collection_list\n");
         exit;
     } /* 取消关注商品 */
-    function del_attentionAction()
+    public function del_attentionAction()
     {
         $rec_id = (int)$_GET['rec_id'];
         if ($rec_id) {
@@ -888,7 +887,7 @@ class UserController extends InitController
         ecs_header("Location: user.php?act=collection_list\n");
         exit;
     } /* 显示留言列表 */
-    function message_listAction()
+    public function message_listAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -922,7 +921,7 @@ class UserController extends InitController
         $smarty->assign('order_info', $order_info);
         $smarty->display('user_clips.dwt');
     } /* 显示评论列表 */
-    function comment_listAction()
+    public function comment_listAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -938,7 +937,7 @@ class UserController extends InitController
         $smarty->assign('pager', $pager);
         $smarty->display('user_clips.dwt');
     } /* 添加我的留言 */
-    function act_add_messageAction()
+    public function act_add_messageAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -960,7 +959,7 @@ class UserController extends InitController
             $err->show($_LANG['message_list_lnk'], 'user.php?act=message_list');
         }
     } /* 标签云列表 */
-    function tag_listAction()
+    public function tag_listAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -970,7 +969,7 @@ class UserController extends InitController
         $smarty->assign('tags_from', 'user');
         $smarty->display('user_clips.dwt');
     } /* 删除标签云的处理 */
-    function act_del_tagAction()
+    public function act_del_tagAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -980,7 +979,7 @@ class UserController extends InitController
         ecs_header("Location: user.php?act=tag_list\n");
         exit;
     } /* 显示缺货登记列表 */
-    function booking_listAction()
+    public function booking_listAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -998,7 +997,7 @@ class UserController extends InitController
         $smarty->assign('pager', $pager);
         $smarty->display('user_clips.dwt');
     } /* 添加缺货登记页面 */
-    function add_bookingAction()
+    public function add_bookingAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -1029,7 +1028,7 @@ class UserController extends InitController
         $smarty->assign('info', get_goodsinfo($goods_id));
         $smarty->display('user_clips.dwt');
     } /* 添加缺货登记的处理 */
-    function act_add_bookingAction()
+    public function act_add_bookingAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -1060,7 +1059,7 @@ class UserController extends InitController
             $err->show($_LANG['booking_list_lnk'], 'user.php?act=booking_list');
         }
     } /* 删除缺货登记 */
-    function act_del_bookingAction()
+    public function act_del_bookingAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -1076,7 +1075,7 @@ class UserController extends InitController
             exit;
         }
     } /* 确认收货 */
-    function affirm_receivedAction()
+    public function affirm_receivedAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
@@ -1089,11 +1088,11 @@ class UserController extends InitController
             $err->show($_LANG['order_list_lnk'], 'user.php?act=order_list');
         }
     } /* 会员退款申请界面 */
-    function account_raplyAction()
+    public function account_raplyAction()
     {
         $smarty->display('user_transaction.dwt');
     } /* 会员预付款界面 */
-    function account_depositAction()
+    public function account_depositAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -1104,7 +1103,7 @@ class UserController extends InitController
         $smarty->assign('order', $account);
         $smarty->display('user_transaction.dwt');
     } /* 会员账目明细界面 */
-    function account_detailAction()
+    public function account_detailAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -1152,7 +1151,7 @@ class UserController extends InitController
         $smarty->assign('pager', $pager);
         $smarty->display('user_transaction.dwt');
     } /* 会员充值和提现申请记录 */
-    function account_logAction()
+    public function account_logAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -1182,7 +1181,7 @@ class UserController extends InitController
         $smarty->assign('pager', $pager);
         $smarty->display('user_transaction.dwt');
     } /* 对会员余额申请的处理 */
-    function act_accountAction()
+    public function act_accountAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
         include_once(ROOT_PATH . 'includes/lib_order.php');
@@ -1277,7 +1276,7 @@ class UserController extends InitController
             $smarty->display('user_transaction.dwt');
         }
     } /* 删除会员余额 */
-    function cancelAction()
+    public function cancelAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -1293,7 +1292,7 @@ class UserController extends InitController
             exit;
         }
     } /* 会员通过帐目明细列表进行再付款的操作 */
-    function payAction()
+    public function payAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
         include_once(ROOT_PATH . 'includes/lib_payment.php');
@@ -1373,7 +1372,7 @@ class UserController extends InitController
             $smarty->display('user_transaction.dwt');
         }
     } /* 添加标签(ajax) */
-    function add_tagAction()
+    public function add_tagAction()
     {
         include_once('includes/cls_json.php');
         include_once('includes/lib_clips.php');
@@ -1403,7 +1402,7 @@ class UserController extends InitController
         echo $json->encode($result);
         exit;
     } /* 添加收藏商品(ajax) */
-    function collectAction()
+    public function collectAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON();
@@ -1439,7 +1438,7 @@ class UserController extends InitController
             }
         }
     } /* 删除留言 */
-    function del_msgAction()
+    public function del_msgAction()
     {
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $order_id = empty($_GET['order_id']) ? 0 : intval($_GET['order_id']);
@@ -1459,7 +1458,7 @@ class UserController extends InitController
         ecs_header("Location: user.php?act=message_list&order_id=$order_id\n");
         exit;
     } /* 删除评论 */
-    function del_cmtAction()
+    public function del_cmtAction()
     {
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         if ($id > 0) {
@@ -1469,7 +1468,7 @@ class UserController extends InitController
         ecs_header("Location: user.php?act=comment_list\n");
         exit;
     } /* 合并订单 */
-    function merge_orderAction()
+    public function merge_orderAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
         include_once(ROOT_PATH . 'includes/lib_order.php');
@@ -1481,7 +1480,7 @@ class UserController extends InitController
             $err->show($_LANG['order_list_lnk']);
         }
     } /* 将指定订单中商品添加到购物车 */
-    function return_to_cartAction()
+    public function return_to_cartAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
@@ -1528,7 +1527,7 @@ class UserController extends InitController
             die($json->encode($result));
         }
     } /* 编辑使用余额支付的处理 */
-    function act_edit_surplusAction()
+    public function act_edit_surplusAction()
     {
         /* 检查是否登录 */
         if ($_SESSION['user_id'] <= 0) {
@@ -1630,7 +1629,7 @@ class UserController extends InitController
         ecs_header('Location: user.php?act=order_detail&order_id=' . $order_id . "\n");
         exit;
     } /* 编辑使用余额支付的处理 */
-    function act_edit_paymentAction()
+    public function act_edit_paymentAction()
     {
         /* 检查是否登录 */
         if ($_SESSION['user_id'] <= 0) {
@@ -1691,7 +1690,7 @@ class UserController extends InitController
         ecs_header("Location: user.php?act=order_detail&order_id=$order_id\n");
         exit;
     } /* 保存订单详情收货地址 */
-    function save_order_addressAction()
+    public function save_order_addressAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
@@ -1713,7 +1712,7 @@ class UserController extends InitController
             $err->show($_LANG['order_list_lnk'], 'user.php?act=order_list');
         }
     } /* 我的红包列表 */
-    function bonusAction()
+    public function bonusAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
@@ -1727,14 +1726,14 @@ class UserController extends InitController
         $smarty->assign('bonus', $bonus);
         $smarty->display('user_transaction.dwt');
     } /* 我的团购列表 */
-    function group_buyAction()
+    public function group_buyAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
         //待议
         $smarty->display('user_transaction.dwt');
     } /* 团购订单详情 */
-    function group_buy_detailAction()
+    public function group_buy_detailAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
@@ -1742,7 +1741,7 @@ class UserController extends InitController
         $smarty->display('user_transaction.dwt');
     } // 用户推荐页面
 
-    function affiliateAction()
+    public function affiliateAction()
     {
         $goodsid = intval(isset($_REQUEST['goodsid']) ? $_REQUEST['goodsid'] : 0);
         if (empty($goodsid)) {
@@ -1908,7 +1907,7 @@ class UserController extends InitController
         $smarty->display('user_clips.dwt');
     } //首页邮件订阅ajax操做和验证操作
 
-    function email_listAction()
+    public function email_listAction()
     {
         $job = $_GET['job'];
 
@@ -1994,7 +1993,7 @@ class UserController extends InitController
             show_message($info, $_LANG['back_home_lnk'], 'index.php');
         }
     } /* ajax 发送验证邮件 */
-    function send_hash_mailAction()
+    public function send_hash_mailAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         include_once(ROOT_PATH . 'includes/lib_passport.php');
@@ -2020,7 +2019,7 @@ class UserController extends InitController
         die($json->encode($result));
     }
 
-    function track_packagesAction()
+    public function track_packagesAction()
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
         include_once(ROOT_PATH . 'includes/lib_order.php');
@@ -2054,7 +2053,7 @@ class UserController extends InitController
         $smarty->display('user_transaction.dwt');
     }
 
-    function order_queryAction()
+    public function order_queryAction()
     {
         $_GET['order_sn'] = trim(substr($_GET['order_sn'], 1));
         $order_sn = empty($_GET['order_sn']) ? '' : addslashes($_GET['order_sn']);
@@ -2118,7 +2117,7 @@ class UserController extends InitController
         die($json->encode($result));
     }
 
-    function transform_pointsAction()
+    public function transform_pointsAction()
     {
         $rule = array();
         if (!empty($_CFG['points_rule'])) {
@@ -2198,7 +2197,7 @@ class UserController extends InitController
         $smarty->display('user_transaction.dwt');
     }
 
-    function act_transform_pointsAction()
+    public function act_transform_pointsAction()
     {
         $rule_index = empty($_POST['rule_index']) ? '' : trim($_POST['rule_index']);
         $num = empty($_POST['num']) ? 0 : intval($_POST['num']);
@@ -2277,7 +2276,7 @@ class UserController extends InitController
         }
     }
 
-    function act_transform_ucenter_pointsAction()
+    public function act_transform_ucenter_pointsAction()
     {
         $rule = array();
         if ($_CFG['points_rule']) {
@@ -2325,7 +2324,7 @@ class UserController extends InitController
             show_message($_LANG['exchange_error_1'], $_LANG['transform_points'], 'user.php?act=transform_points');
         }
     } /* 清除商品浏览历史 */
-    function clear_historyAction()
+    public function clear_historyAction()
     {
         setcookie('ECS[history]', '', 1, null, null, null, true);
     }

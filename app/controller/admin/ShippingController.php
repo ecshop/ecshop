@@ -11,14 +11,13 @@ class ShippingController extends InitController
     {
         parent::initialize();
         $exc = new exchange($ecs->table('shipping'), $db, 'shipping_code', 'shipping_name');
-
     }
 
     /*------------------------------------------------------ */
-//-- 配送方式列表
+    //-- 配送方式列表
     /*------------------------------------------------------ */
 
-    function listAction()
+    public function listAction()
     {
         $modules = read_modules(ROOT_PATH . 'includes/modules/shipping');
 
@@ -64,10 +63,10 @@ class ShippingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 安装配送方式
+    //-- 安装配送方式
     /*------------------------------------------------------ */
 
-    function installAction()
+    public function installAction()
     {
         admin_priv('ship_manage');
 
@@ -103,10 +102,10 @@ class ShippingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 卸载配送方式
+    //-- 卸载配送方式
     /*------------------------------------------------------ */
 
-    function uninstallAction()
+    public function uninstallAction()
     {
         global $ecs, $_LANG;
 
@@ -140,10 +139,10 @@ class ShippingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 模板Flash编辑器
+    //-- 模板Flash编辑器
     /*------------------------------------------------------ */
 
-    function print_indexAction()
+    public function print_indexAction()
     {
         //检查登录权限
         admin_priv('ship_manage');
@@ -165,10 +164,10 @@ class ShippingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 模板Flash编辑器
+    //-- 模板Flash编辑器
     /*------------------------------------------------------ */
 
-    function recovery_default_templateAction()
+    public function recovery_default_templateAction()
     {
         /* 检查登录权限 */
         admin_priv('ship_manage');
@@ -190,10 +189,10 @@ class ShippingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 模板Flash编辑器 上传图片
+    //-- 模板Flash编辑器 上传图片
     /*------------------------------------------------------ */
 
-    function print_uploadAction()
+    public function print_uploadAction()
     {
         //检查登录权限
         admin_priv('ship_manage');
@@ -236,10 +235,10 @@ class ShippingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 模板Flash编辑器 删除图片
+    //-- 模板Flash编辑器 删除图片
     /*------------------------------------------------------ */
 
-    function print_delAction()
+    public function print_delAction()
     {
         /* 检查权限 */
         check_authz_json('ship_manage');
@@ -265,10 +264,10 @@ class ShippingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑打印模板
+    //-- 编辑打印模板
     /*------------------------------------------------------ */
 
-    function edit_print_templateAction()
+    public function edit_print_templateAction()
     {
         admin_priv('ship_manage');
 
@@ -298,10 +297,10 @@ class ShippingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑打印模板
+    //-- 编辑打印模板
     /*------------------------------------------------------ */
 
-    function do_edit_print_templateAction()
+    public function do_edit_print_templateAction()
     {
         /* 检查权限 */
         admin_priv('ship_manage');
@@ -329,10 +328,10 @@ class ShippingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑配送方式名称
+    //-- 编辑配送方式名称
     /*------------------------------------------------------ */
 
-    function edit_nameAction()
+    public function edit_nameAction()
     {
         /* 检查权限 */
         check_authz_json('ship_manage');
@@ -357,10 +356,10 @@ class ShippingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑配送方式描述
+    //-- 编辑配送方式描述
     /*------------------------------------------------------ */
 
-    function edit_descAction()
+    public function edit_descAction()
     {
         /* 检查权限 */
         check_authz_json('ship_manage');
@@ -375,10 +374,10 @@ class ShippingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改配送方式保价费
+    //-- 修改配送方式保价费
     /*------------------------------------------------------ */
 
-    function edit_insureAction()
+    public function edit_insureAction()
     {
         /* 检查权限 */
         check_authz_json('ship_manage');
@@ -409,17 +408,17 @@ class ShippingController extends InitController
         make_json_result(stripcslashes($val));
     }
 
-    function shipping_privAction()
+    public function shipping_privAction()
     {
         check_authz_json('ship_manage');
 
         make_json_result('');
     }
     /*------------------------------------------------------ */
-//-- 修改配送方式排序
+    //-- 修改配送方式排序
     /*------------------------------------------------------ */
 
-    function edit_orderAction()
+    public function edit_orderAction()
     {
         /* 检查权限 */
         check_authz_json('ship_manage');
@@ -439,7 +438,7 @@ class ShippingController extends InitController
      * @access  private
      * @return  Bool
      */
-    function get_site_root_url()
+    public function get_site_root_url()
     {
         return 'http://' . $_SERVER['HTTP_HOST'] . str_replace('/' . ADMIN_PATH . '/shipping.php', '', PHP_SELF);
     }
@@ -452,7 +451,7 @@ class ShippingController extends InitController
      *
      * @return  Bool
      */
-    function is_print_bg_default($print_bg)
+    public function is_print_bg_default($print_bg)
     {
         $_bg = basename($print_bg);
 

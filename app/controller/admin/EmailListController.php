@@ -11,10 +11,9 @@ class EmailListController extends InitController
     {
         parent::initialize();
         admin_priv('email_list');
-
     }
 
-    function listAction()
+    public function listAction()
     {
         $emaildb = get_email_list();
         $smarty->assign('full_page', 1);
@@ -27,7 +26,7 @@ class EmailListController extends InitController
         $smarty->display('email_list.htm');
     }
 
-    function exportAction()
+    public function exportAction()
     {
         $sql = "SELECT email FROM " . $ecs->table('email_list') . "WHERE stat = 1";
         $emails = $db->getAll($sql);
@@ -47,7 +46,7 @@ class EmailListController extends InitController
         exit;
     }
 
-    function queryAction()
+    public function queryAction()
     {
         $emaildb = get_email_list();
         $smarty->assign('emaildb', $emaildb['emaildb']);
@@ -66,9 +65,9 @@ class EmailListController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量删除
+    //-- 批量删除
     /*------------------------------------------------------ */
-    function batch_removeAction()
+    public function batch_removeAction()
     {
         if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
             sys_msg($_LANG['no_select_email'], 1);
@@ -83,9 +82,9 @@ class EmailListController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量恢复
+    //-- 批量恢复
     /*------------------------------------------------------ */
-    function batch_unremoveAction()
+    public function batch_unremoveAction()
     {
         if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
             sys_msg($_LANG['no_select_email'], 1);
@@ -100,9 +99,9 @@ class EmailListController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量退订
+    //-- 批量退订
     /*------------------------------------------------------ */
-    function batch_exitAction()
+    public function batch_exitAction()
     {
         if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
             sys_msg($_LANG['no_select_email'], 1);
@@ -116,7 +115,7 @@ class EmailListController extends InitController
         sys_msg(sprintf($_LANG['batch_exit_succeed'], $db->affected_rows()), 0, $lnk);
     }
 
-    function get_email_list()
+    public function get_email_list()
     {
         $result = get_filter();
         if ($result === false) {

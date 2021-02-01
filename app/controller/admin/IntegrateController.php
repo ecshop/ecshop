@@ -10,13 +10,12 @@ class IntegrateController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
     /*------------------------------------------------------ */
-//-- 会员数据整合插件列表
+    //-- 会员数据整合插件列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $modules = read_modules('../includes/modules/integrates');
         for ($i = 0; $i < count($modules); $i++) {
@@ -34,9 +33,9 @@ class IntegrateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 安装会员数据整合插件
+    //-- 安装会员数据整合插件
     /*------------------------------------------------------ */
-    function installAction()
+    public function installAction()
     {
         admin_priv('integrate_users', '');
 
@@ -88,7 +87,7 @@ class IntegrateController extends InitController
         }
     }
 
-    function view_install_logAction()
+    public function view_install_logAction()
     {
         $code = empty($_GET['code']) ? '' : trim(addslashes($_GET['code']));
         if (empty($code) || file_exists(ROOT_PATH . DATA_DIR . '/integrate_' . $code . '_log.php')) {
@@ -112,10 +111,10 @@ class IntegrateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 设置会员数据整合插件
+    //-- 设置会员数据整合插件
     /*------------------------------------------------------ */
 
-    function setupAction()
+    public function setupAction()
     {
         admin_priv('integrate_users', '');
 
@@ -135,9 +134,9 @@ class IntegrateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 检查用户填写资料
+    //-- 检查用户填写资料
     /*------------------------------------------------------ */
-    function check_configAction()
+    public function check_configAction()
     {
         $code = $_POST['code'];
 
@@ -228,9 +227,9 @@ class IntegrateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 保存UCenter填写的资料
+    //-- 保存UCenter填写的资料
     /*------------------------------------------------------ */
-    function save_uc_configAction()
+    public function save_uc_configAction()
     {
         $code = $_POST['code'];
 
@@ -265,9 +264,9 @@ class IntegrateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 第一次保存UCenter安装的资料
+    //-- 第一次保存UCenter安装的资料
     /*------------------------------------------------------ */
-    function save_uc_config_firstAction()
+    public function save_uc_config_firstAction()
     {
         $code = $_POST['code'];
 
@@ -337,9 +336,9 @@ class IntegrateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 用户重名检查
+    //-- 用户重名检查
     /*------------------------------------------------------ */
-    function check_userAction()
+    public function check_userAction()
     {
         $code = $_SESSION['code'];
         include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -430,7 +429,7 @@ class IntegrateController extends InitController
         die($json->encode($result));
     }
 
-    function import_userAction()
+    public function import_userAction()
     {
         $cfg = $_SESSION['cfg'];
         include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -503,9 +502,9 @@ class IntegrateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 重名用户处理
+    //-- 重名用户处理
     /*------------------------------------------------------ */
-    function modifyAction()
+    public function modifyAction()
     {
         /* 检查是否有改名失败的用户 */
         $sql = "SELECT COUNT(*) FROM " . $ecs->table('users') . " WHERE flag = 1";
@@ -535,9 +534,9 @@ class IntegrateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- ajax 用户列表查询
+    //-- ajax 用户列表查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $arr = conflict_userlist();
         $smarty->assign('list', $arr['list']);
@@ -549,9 +548,9 @@ class IntegrateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 重名用户处理过程
+    //-- 重名用户处理过程
     /*------------------------------------------------------ */
-    function act_modifyAction()
+    public function act_modifyAction()
     {
         /* 先处理要改名的用户，改名用户要先检查是否有重名情况，有则标记出来 */
         $alias = array();
@@ -615,9 +614,9 @@ class IntegrateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 将商城数据同步到论坛
+    //-- 将商城数据同步到论坛
     /*------------------------------------------------------ */
-    function syncAction()
+    public function syncAction()
     {
         $size = 100;
         $total = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table("users"));
@@ -678,9 +677,9 @@ class IntegrateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 完成任务
+    //-- 完成任务
     /*------------------------------------------------------ */
-    function taskAction()
+    public function taskAction()
     {
         if (empty($_GET['size']) || $_GET['size'] < 0) {
             $size = 100;
@@ -780,9 +779,9 @@ class IntegrateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 保存UCenter设置
+    //-- 保存UCenter设置
     /*------------------------------------------------------ */
-    function setup_ucenterAction()
+    public function setup_ucenterAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         include_once(ROOT_PATH . 'includes/cls_transport.php');
@@ -850,12 +849,12 @@ class IntegrateController extends InitController
     }
 
     /* 显示整合成功信息 */
-    function completeAction()
+    public function completeAction()
     {
         sys_msg($_LANG['sync_ok'], 0, array(array('text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list')));
     }
 
-    function points_setAction()
+    public function points_setAction()
     {
         $rule_index = empty($_GET['rule_index']) ? '' : trim($_GET['rule_index']);
 
@@ -934,7 +933,7 @@ class IntegrateController extends InitController
         $smarty->display('integrates_points.htm');
     }
 
-    function edit_pointsAction()
+    public function edit_pointsAction()
     {
         $rule_index = empty($_REQUEST['rule_index']) ? '' : trim($_REQUEST['rule_index']);
 
@@ -978,7 +977,7 @@ class IntegrateController extends InitController
         exit;
     }
 
-    function save_pointsAction()
+    public function save_pointsAction()
     {
         $keys = array_keys($_POST);
         $cfg = array();
@@ -1010,7 +1009,7 @@ class IntegrateController extends InitController
      *
      * @return void
      */
-    function conflict_userlist()
+    public function conflict_userlist()
     {
         $filter['flag'] = empty($_REQUEST['flag']) ? 0 : intval($_REQUEST['flag']);
         $where = ' WHERE flag';
@@ -1050,7 +1049,7 @@ class IntegrateController extends InitController
      *
      * @return void
      */
-    function save_integrate_config($code, $cfg)
+    public function save_integrate_config($code, $cfg)
     {
         $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('shop_config') . " WHERE code = 'integrate_code'";
 

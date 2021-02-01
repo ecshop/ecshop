@@ -14,7 +14,7 @@ class MessageController extends InitController
         }
     }
 
-    function act_add_messageAction
+    public function act_add_messageAction()
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
 
@@ -73,7 +73,7 @@ class MessageController extends InitController
         }
     }
 
-    function defaultAction()
+    public function defaultAction()
     {
         assign_template();
         $position = assign_ur_here(0, $_LANG['message_board']);
@@ -114,7 +114,7 @@ class MessageController extends InitController
      *
      * @return  array
      */
-    function get_msg_list($num, $start)
+    public function get_msg_list($num, $start)
     {
         /* 获取留言数据 */
         $msg = array();

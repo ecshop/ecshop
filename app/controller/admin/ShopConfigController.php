@@ -10,15 +10,14 @@ class ShopConfigController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
     /* 代码 */
 
     /*------------------------------------------------------ */
-//-- 列表编辑 ?act=list_edit
+    //-- 列表编辑 ?act=list_edit
     /*------------------------------------------------------ */
-    function list_editAction()
+    public function list_editAction()
     {
         /* 检查权限 */
         admin_priv('shop_config');
@@ -58,9 +57,9 @@ class ShopConfigController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 邮件服务器设置
+    //-- 邮件服务器设置
     /*------------------------------------------------------ */
-    function mail_settingsAction()
+    public function mail_settingsAction()
     {
         /* 检查权限 */
         admin_priv('shop_config');
@@ -75,9 +74,9 @@ class ShopConfigController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 提交   ?act=post
+    //-- 提交   ?act=post
     /*------------------------------------------------------ */
-    function postAction()
+    public function postAction()
     {
         $type = empty($_POST['type']) ? '' : $_POST['type'];
 
@@ -191,9 +190,9 @@ class ShopConfigController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 发送测试邮件
+    //-- 发送测试邮件
     /*------------------------------------------------------ */
-    function send_test_emailAction()
+    public function send_test_emailAction()
     {
         /* 检查权限 */
         check_authz_json('shop_config');
@@ -218,9 +217,9 @@ class ShopConfigController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除上传文件
+    //-- 删除上传文件
     /*------------------------------------------------------ */
-    function delAction()
+    public function delAction()
     {
         /* 检查权限 */
         check_authz_json('shop_config');
@@ -253,7 +252,7 @@ class ShopConfigController extends InitController
      *
      * @return  boolean
      */
-    function update_configure($key, $val = '')
+    public function update_configure($key, $val = '')
     {
         if (!empty($key)) {
             $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') . " SET value='$val' WHERE code='$key'";
@@ -272,7 +271,7 @@ class ShopConfigController extends InitController
      *
      * @return  array
      */
-    function get_settings($groups = null, $excludes = null)
+    public function get_settings($groups = null, $excludes = null)
     {
         global $db, $ecs, $_LANG;
 

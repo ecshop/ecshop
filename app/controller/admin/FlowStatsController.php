@@ -16,7 +16,7 @@ class FlowStatsController extends InitController
         $smarty->assign('lang', $_LANG);
     }
 
-    function viewAction()
+    public function viewAction()
     {
         if ($_CFG['visit_stats'] == 'off') {
             sys_msg($_LANG['stats_off']);
@@ -289,7 +289,7 @@ class FlowStatsController extends InitController
     }
 
     /* 报表下载 */
-    function downloadAction()
+    public function downloadAction()
     {
         $filename = !empty($_REQUEST['filename']) ? trim($_REQUEST['filename']) : '';
 

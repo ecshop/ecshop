@@ -15,12 +15,11 @@ class UserMsgController extends InitController
         admin_priv('feedback_priv');
         /*初始化数据交换对象 */
         $exc = new exchange($ecs->table("feedback"), $db, 'msg_id', 'msg_title');
-
     }
     /*------------------------------------------------------ */
-//-- 发送留言
+    //-- 发送留言
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         $user_id = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
         $order_id = empty($_GET['order_id']) ? 0 : intval($_GET['order_id']);
@@ -45,7 +44,7 @@ class UserMsgController extends InitController
         $smarty->display('msg_add.htm');
     }
 
-    function insertAction()
+    public function insertAction()
     {
         $sql = "INSERT INTO " . $ecs->table('feedback') . "(parent_id, user_id, user_name, user_email, msg_title, msg_type, msg_content, msg_time, message_img, order_id)" .
             " VALUES (0, '$_POST[user_id]', '$_SESSION[admin_name]', ' ', " .
@@ -57,7 +56,7 @@ class UserMsgController extends InitController
         exit;
     }
 
-    function remove_msgAction()
+    public function remove_msgAction()
     {
         $msg_id = empty($_GET['msg_id']) ? 0 : intval($_GET['msg_id']);
         $order_id = empty($_GET['order_id']) ? 0 : intval($_GET['order_id']);
@@ -78,9 +77,9 @@ class UserMsgController extends InitController
         exit;
     }
     /*------------------------------------------------------ */
-//-- 更新留言的状态为显示或者禁止
+    //-- 更新留言的状态为显示或者禁止
     /*------------------------------------------------------ */
-    function checkAction()
+    public function checkAction()
     {
         if ($_REQUEST['check'] == 'allow') {
             /* 允许留言显示 */
@@ -105,9 +104,9 @@ class UserMsgController extends InitController
         }
     }
     /*------------------------------------------------------ */
-//-- 列出所有留言
+    //-- 列出所有留言
     /*------------------------------------------------------ */
-    function list_allAction()
+    public function list_allAction()
     {
         assign_query_info();
         $msg_list = msg_list();
@@ -125,9 +124,9 @@ class UserMsgController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- ajax显示留言列表
+    //-- ajax显示留言列表
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $msg_list = msg_list();
 
@@ -142,9 +141,9 @@ class UserMsgController extends InitController
         make_json_result($smarty->fetch('msg_list.htm'), '', array('filter' => $msg_list['filter'], 'page_count' => $msg_list['page_count']));
     }
     /*------------------------------------------------------ */
-//-- ajax 删除留言
+    //-- ajax 删除留言
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         $msg_id = intval($_REQUEST['id']);
 
@@ -171,9 +170,9 @@ class UserMsgController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量操作删除、允许显示、禁止显示用户评论
+    //-- 批量操作删除、允许显示、禁止显示用户评论
     /*------------------------------------------------------ */
-    function batchAction()
+    public function batchAction()
     {
         admin_priv('feedback_priv');
         $action = isset($_POST['sel_action']) ? trim($_POST['sel_action']) : 'def';
@@ -212,9 +211,9 @@ class UserMsgController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 回复留言
+    //-- 回复留言
     /*------------------------------------------------------ */
-    function viewAction()
+    public function viewAction()
     {
         $smarty->assign('send_fail', !empty($_REQUEST['send_ok']));
         $smarty->assign('msg', get_feedback_detail(intval($_REQUEST['id'])));
@@ -225,7 +224,7 @@ class UserMsgController extends InitController
         $smarty->display('msg_info.htm');
     }
 
-    function actionAction()
+    public function actionAction()
     {
         if (empty($_REQUEST['parent_id'])) {
             $sql = "INSERT INTO " . $ecs->table('feedback') . " (msg_title, msg_time, user_id, user_name , " .
@@ -272,9 +271,9 @@ class UserMsgController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除会员上传的文件
+    //-- 删除会员上传的文件
     /*------------------------------------------------------ */
-    function drop_fileAction()
+    public function drop_fileAction()
     {
         /* 删除上传的文件 */
         $file = $_GET['file'];
@@ -296,7 +295,7 @@ class UserMsgController extends InitController
      *
      * @return void
      */
-    function msg_list()
+    public function msg_list()
     {
         /* 过滤条件 */
         $filter['keywords'] = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);
@@ -351,7 +350,7 @@ class UserMsgController extends InitController
      *
      * @return  array
      */
-    function get_feedback_detail($id)
+    public function get_feedback_detail($id)
     {
         global $ecs, $db, $_CFG;
 

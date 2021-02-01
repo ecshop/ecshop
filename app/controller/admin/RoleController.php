@@ -13,15 +13,14 @@ class RoleController extends InitController
 
         /* 初始化 $exc 对象 */
         $exc = new exchange($ecs->table("role"), $db, 'role_id', 'role_name');
-
     }
 
 
 
     /*------------------------------------------------------ */
-//-- 退出登录
+    //-- 退出登录
     /*------------------------------------------------------ */
-    function logoutAction()
+    public function logoutAction()
     {
         /* 清除cookie */
         setcookie('ECSCP[admin_id]', '', 1, null, null, null, true);
@@ -33,9 +32,9 @@ class RoleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 登陆界面
+    //-- 登陆界面
     /*------------------------------------------------------ */
-    function loginAction()
+    public function loginAction()
     {
         header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
         header("Cache-Control: no-cache, must-revalidate");
@@ -51,9 +50,9 @@ class RoleController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 角色列表页面
+    //-- 角色列表页面
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 模板赋值 */
         $smarty->assign('ur_here', $_LANG['admin_role']);
@@ -67,9 +66,9 @@ class RoleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 查询
+    //-- 查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $smarty->assign('admin_list', get_role_list());
 
@@ -77,9 +76,9 @@ class RoleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加角色页面
+    //-- 添加角色页面
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 检查权限 */
         admin_priv('admin_manage');
@@ -127,9 +126,9 @@ class RoleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加角色的处理
+    //-- 添加角色的处理
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         admin_priv('admin_manage');
         $act_list = @join(",", $_POST['action_code']);
@@ -152,9 +151,9 @@ class RoleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑角色信息
+    //-- 编辑角色信息
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/priv_action.php');
         $_REQUEST['id'] = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
@@ -213,9 +212,9 @@ class RoleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 更新角色信息
+    //-- 更新角色信息
     /*------------------------------------------------------ */
-    function updateAction()
+    public function updateAction()
     {
         /* 更新管理员的权限 */
         $act_list = @join(",", $_POST['action_code']);
@@ -231,9 +230,9 @@ class RoleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除一个角色
+    //-- 删除一个角色
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('admin_drop');
 
@@ -252,7 +251,7 @@ class RoleController extends InitController
     }
 
     /* 获取角色列表 */
-    function get_role_list()
+    public function get_role_list()
     {
         $list = array();
         $sql = 'SELECT role_id, role_name, action_list, role_describe ' .

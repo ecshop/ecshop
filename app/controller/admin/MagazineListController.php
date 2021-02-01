@@ -8,10 +8,9 @@ class MagazineListController extends InitController
     {
         parent::initialize();
         admin_priv('magazine_list');
-
     }
 
-    function listAction()
+    public function listAction()
     {
         $smarty->assign('ur_here', $_LANG['magazine_list']);
         $smarty->assign('action_link', array('text' => $_LANG['add_new'], 'href' => 'magazine_list.php?act=add'));
@@ -36,7 +35,7 @@ class MagazineListController extends InitController
         $smarty->display('magazine_list.htm');
     }
 
-    function queryAction()
+    public function queryAction()
     {
         $magazinedb = get_magazine();
         $smarty->assign('magazinedb', $magazinedb['magazinedb']);
@@ -50,7 +49,7 @@ class MagazineListController extends InitController
         make_json_result($smarty->fetch('magazine_list.htm'), '', array('filter' => $magazinedb['filter'], 'page_count' => $magazinedb['page_count']));
     }
 
-    function addAction()
+    public function addAction()
     {
         if (empty($_POST['step'])) {
             include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
@@ -72,7 +71,7 @@ class MagazineListController extends InitController
         }
     }
 
-    function editAction()
+    public function editAction()
     {
         include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
         $id = intval($_REQUEST['id']);
@@ -95,7 +94,7 @@ class MagazineListController extends InitController
         }
     }
 
-    function delAction()
+    public function delAction()
     {
         $id = intval($_REQUEST['id']);
         $db->query("DELETE  FROM " . $ecs->table('mail_templates') . " WHERE type = 'magazine' AND template_id = '$id' LIMIT 1");
@@ -103,7 +102,7 @@ class MagazineListController extends InitController
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
 
-    function addtolistAction()
+    public function addtolistAction()
     {
         $id = intval($_REQUEST['id']);
         $pri = !empty($_REQUEST['pri']) ? 1 : 0;
@@ -196,7 +195,7 @@ class MagazineListController extends InitController
     }
 
 
-    function get_magazine()
+    public function get_magazine()
     {
         $result = get_filter();
 

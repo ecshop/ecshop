@@ -19,10 +19,10 @@ class GroupBuyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 团购活动列表
+    //-- 团购活动列表
     /*------------------------------------------------------ */
 
-    function listAction()
+    public function listAction()
     {
         /* 模板赋值 */
         $smarty->assign('full_page', 1);
@@ -44,7 +44,7 @@ class GroupBuyController extends InitController
         $smarty->display('group_buy_list.htm');
     }
 
-    function queryAction()
+    public function queryAction()
     {
         $list = group_buy_list();
 
@@ -64,15 +64,15 @@ class GroupBuyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加/编辑团购活动
+    //-- 添加/编辑团购活动
     /*------------------------------------------------------ */
 
-    function addAction()
+    public function addAction()
     {
         editAction();
     }
 
-    function editAction()
+    public function editAction()
     {
         /* 初始化/取得团购活动信息 */
         if ($act == 'add') { // TODO
@@ -103,10 +103,10 @@ class GroupBuyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加/编辑团购活动的提交
+    //-- 添加/编辑团购活动的提交
     /*------------------------------------------------------ */
 
-    function insert_updateAction()
+    public function insert_updateAction()
     {
         /* 取得团购活动id */
         $group_buy_id = intval($_POST['act_id']);
@@ -489,9 +489,9 @@ class GroupBuyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量删除团购活动
+    //-- 批量删除团购活动
     /*------------------------------------------------------ */
-    function batch_dropAction()
+    public function batch_dropAction()
     {
         if (isset($_POST['checkboxes'])) {
             $del_count = 0; //初始化删除数量
@@ -525,10 +525,10 @@ class GroupBuyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索商品
+    //-- 搜索商品
     /*------------------------------------------------------ */
 
-    function search_goodsAction()
+    public function search_goodsAction()
     {
         check_authz_json('group_by');
 
@@ -542,10 +542,10 @@ class GroupBuyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑保证金
+    //-- 编辑保证金
     /*------------------------------------------------------ */
 
-    function edit_depositAction()
+    public function edit_depositAction()
     {
         check_authz_json('group_by');
 
@@ -568,10 +568,10 @@ class GroupBuyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑保证金
+    //-- 编辑保证金
     /*------------------------------------------------------ */
 
-    function edit_restrict_amountAction()
+    public function edit_restrict_amountAction()
     {
         check_authz_json('group_by');
 
@@ -594,10 +594,10 @@ class GroupBuyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除团购活动
+    //-- 删除团购活动
     /*------------------------------------------------------ */
 
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('group_by');
 
@@ -629,7 +629,7 @@ class GroupBuyController extends InitController
      * 取得团购活动列表
      * @return   array
      */
-    function group_buy_list()
+    public function group_buy_list()
     {
         $result = get_filter();
         if ($result === false) {
@@ -712,7 +712,7 @@ class GroupBuyController extends InitController
      * @param int $goods_id 商品id
      * @return  array
      */
-    function goods_group_buy($goods_id)
+    public function goods_group_buy($goods_id)
     {
         $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('goods_activity') .
             " WHERE goods_id = '$goods_id' " .
@@ -728,7 +728,7 @@ class GroupBuyController extends InitController
      * @param bool $is_add 是否添加（插入）
      * @return  array('href' => $href, 'text' => $text)
      */
-    function list_link($is_add = true)
+    public function list_link($is_add = true)
     {
         $href = 'group_buy.php?act=list';
         if (!$is_add) {

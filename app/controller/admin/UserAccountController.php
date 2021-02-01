@@ -10,13 +10,12 @@ class UserAccountController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
     /*------------------------------------------------------ */
-//-- 会员余额记录列表
+    //-- 会员余额记录列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 权限判断 */
         admin_priv('surplus_manage');
@@ -58,14 +57,14 @@ class UserAccountController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加/编辑会员余额页面
+    //-- 添加/编辑会员余额页面
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         editAction();
     }
 
-    function editAction()
+    public function editAction()
     {
         admin_priv('surplus_manage'); //权限判断
 
@@ -118,15 +117,15 @@ class UserAccountController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加/编辑会员余额的处理部分
+    //-- 添加/编辑会员余额的处理部分
     /*------------------------------------------------------ */
 
-    function insertAction()
+    public function insertAction()
     {
         updateAction();
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 权限判断 */
         admin_priv('surplus_manage');
@@ -227,9 +226,9 @@ class UserAccountController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 审核会员余额页面
+    //-- 审核会员余额页面
     /*------------------------------------------------------ */
-    function checkAction()
+    public function checkAction()
     {
         /* 检查权限 */
         admin_priv('surplus_manage');
@@ -278,9 +277,9 @@ class UserAccountController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 更新会员余额的状态
+    //-- 更新会员余额的状态
     /*------------------------------------------------------ */
-    function actionAction()
+    public function actionAction()
     {
         /* 检查权限 */
         admin_priv('surplus_manage');
@@ -345,9 +344,9 @@ class UserAccountController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- ajax帐户信息列表
+    //-- ajax帐户信息列表
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $list = account_list();
         $smarty->assign('list', $list['list']);
@@ -361,9 +360,9 @@ class UserAccountController extends InitController
         make_json_result($smarty->fetch('user_account_list.htm'), '', array('filter' => $list['filter'], 'page_count' => $list['page_count']));
     }
     /*------------------------------------------------------ */
-//-- ajax删除一条信息
+    //-- ajax删除一条信息
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         /* 检查权限 */
         check_authz_json('surplus_manage');
@@ -384,7 +383,7 @@ class UserAccountController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 会员余额函数部分
+    //-- 会员余额函数部分
     /*------------------------------------------------------ */
     /**
      * 查询会员余额的数量
@@ -392,7 +391,7 @@ class UserAccountController extends InitController
      * @param int $user_id 会员ID
      * @return  int
      */
-    function get_user_surplus($user_id)
+    public function get_user_surplus($user_id)
     {
         $sql = "SELECT SUM(user_money) FROM " . $GLOBALS['ecs']->table('account_log') .
             " WHERE user_id = '$user_id'";
@@ -411,7 +410,7 @@ class UserAccountController extends InitController
      *
      * @return  int
      */
-    function update_user_account($id, $amount, $admin_note, $is_paid)
+    public function update_user_account($id, $amount, $admin_note, $is_paid)
     {
         $sql = "UPDATE " . $GLOBALS['ecs']->table('user_account') . " SET " .
             "admin_user  = '$_SESSION[admin_name]', " .
@@ -430,7 +429,7 @@ class UserAccountController extends InitController
      *
      * @return void
      */
-    function account_list()
+    public function account_list()
     {
         $result = get_filter();
         if ($result === false) {

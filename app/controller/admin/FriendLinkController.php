@@ -16,14 +16,13 @@ class FriendLinkController extends InitController
         $image = new cls_image($_CFG['bgcolor']);
 
         $exc = new exchange($ecs->table('friend_link'), $db, 'link_id', 'link_name');
-
     }
 
 
     /*------------------------------------------------------ */
-//-- 友情链接列表页面
+    //-- 友情链接列表页面
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 模板赋值 */
         $smarty->assign('ur_here', $_LANG['list_link']);
@@ -46,9 +45,9 @@ class FriendLinkController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序、分页、查询
+    //-- 排序、分页、查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         /* 获取友情链接数据 */
         $links_list = get_links_list();
@@ -69,9 +68,9 @@ class FriendLinkController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加新链接页面
+    //-- 添加新链接页面
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         admin_priv('friendlink');
 
@@ -85,9 +84,9 @@ class FriendLinkController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 处理添加的链接
+    //-- 处理添加的链接
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         /* 变量初始化 */
         $link_logo = '';
@@ -149,9 +148,9 @@ class FriendLinkController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 友情链接编辑页面
+    //-- 友情链接编辑页面
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         admin_priv('friendlink');
 
@@ -186,9 +185,9 @@ class FriendLinkController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑链接的处理页面
+    //-- 编辑链接的处理页面
     /*------------------------------------------------------ */
-    function updateAction()
+    public function updateAction()
     {
         /* 变量初始化 */
         $id = (!empty($_REQUEST['id'])) ? intval($_REQUEST['id']) : 0;
@@ -246,9 +245,9 @@ class FriendLinkController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑链接名称
+    //-- 编辑链接名称
     /*------------------------------------------------------ */
-    function edit_link_nameAction()
+    public function edit_link_nameAction()
     {
         check_authz_json('friendlink');
 
@@ -270,9 +269,9 @@ class FriendLinkController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除友情链接
+    //-- 删除友情链接
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('friendlink');
 
@@ -297,9 +296,9 @@ class FriendLinkController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑排序
+    //-- 编辑排序
     /*------------------------------------------------------ */
-    function edit_show_orderAction()
+    public function edit_show_orderAction()
     {
         check_authz_json('friendlink');
 
@@ -318,7 +317,7 @@ class FriendLinkController extends InitController
     }
 
     /* 获取友情链接数据列表 */
-    function get_links_list()
+    public function get_links_list()
     {
         $result = get_filter();
         if ($result === false) {

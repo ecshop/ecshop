@@ -18,9 +18,9 @@ class OrderStatsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//--订单统计
+    //--订单统计
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         admin_priv('sale_order_stats');
 
@@ -273,7 +273,7 @@ class OrderStatsController extends InitController
         $smarty->display('order_stats.htm');
     }
 
-    function download()
+    public function download()
     {
         $filename = !empty($_REQUEST['filename']) ? trim($_REQUEST['filename']) : '';
 
@@ -325,7 +325,7 @@ class OrderStatsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//--订单统计需要的函数
+    //--订单统计需要的函数
     /*------------------------------------------------------ */
     /**
      * 取得订单概况数据(包括订单的几种状态)
@@ -333,7 +333,7 @@ class OrderStatsController extends InitController
      * @param       $end_date      查询的结束日期
      * @return      $order_info    订单概况数据
      */
-    function get_orderinfo($start_date, $end_date)
+    public function get_orderinfo($start_date, $end_date)
     {
         $order_info = array();
 

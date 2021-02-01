@@ -11,13 +11,12 @@ class TemplateController extends InitController
     {
         parent::initialize();
         require_once('includes/lib_template.php');
-
     }
 
     /*------------------------------------------------------ */
-//-- 模版列表
+    //-- 模版列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         admin_priv('template_select');
 
@@ -73,10 +72,10 @@ class TemplateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 设置模板的内容
+    //-- 设置模板的内容
     /*------------------------------------------------------ */
 
-    function setupAction()
+    public function setupAction()
     {
         admin_priv('template_setup');
 
@@ -198,10 +197,10 @@ class TemplateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 提交模板内容设置
+    //-- 提交模板内容设置
     /*------------------------------------------------------ */
 
-    function settingAction()
+    public function settingAction()
     {
         admin_priv('template_setup');
 
@@ -395,10 +394,10 @@ class TemplateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 管理库项目
+    //-- 管理库项目
     /*------------------------------------------------------ */
 
-    function libraryAction()
+    public function libraryAction()
     {
         admin_priv('library_manage');
 
@@ -434,10 +433,10 @@ class TemplateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 安装模版
+    //-- 安装模版
     /*------------------------------------------------------ */
 
-    function installAction()
+    public function installAction()
     {
         check_authz_json('backup_setting');
 
@@ -460,10 +459,10 @@ class TemplateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 备份模版
+    //-- 备份模版
     /*------------------------------------------------------ */
 
-    function backupAction()
+    public function backupAction()
     {
         check_authz_json('backup_setting');
         include_once('includes/cls_phpzip.php');
@@ -483,10 +482,10 @@ class TemplateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 载入指定库项目的内容
+    //-- 载入指定库项目的内容
     /*------------------------------------------------------ */
 
-    function load_libraryAction()
+    public function load_libraryAction()
     {
         $library = load_library($_CFG['template'], trim($_GET['lib']));
         $message = ($library['mark'] & 7) ? '' : $_LANG['library_not_written'];
@@ -495,10 +494,10 @@ class TemplateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 更新库项目内容
+    //-- 更新库项目内容
     /*------------------------------------------------------ */
 
-    function update_libraryAction()
+    public function update_libraryAction()
     {
         check_authz_json('library_manage');
 
@@ -518,9 +517,9 @@ class TemplateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 还原库项目
+    //-- 还原库项目
     /*------------------------------------------------------ */
-    function restore_libraryAction()
+    public function restore_libraryAction()
     {
         admin_priv('backup_setting');
         $lib_name = trim($_GET['lib']);
@@ -538,9 +537,9 @@ class TemplateController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 布局备份
+    //-- 布局备份
     /*------------------------------------------------------ */
-    function backup_settingAction()
+    public function backup_settingAction()
     {
         admin_priv('backup_setting');
 
@@ -565,7 +564,7 @@ class TemplateController extends InitController
         $smarty->display('templates_backup.htm');
     }
 
-    function act_backup_settingAction()
+    public function act_backup_settingAction()
     {
         $remarks = empty($_POST['remarks']) ? local_date($_CFG['time_format']) : trim($_POST['remarks']);
 
@@ -591,7 +590,7 @@ class TemplateController extends InitController
         sys_msg($_LANG['backup_template_ok'], 0, array(array('text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting')));
     }
 
-    function del_backupAction()
+    public function del_backupAction()
     {
         $remarks = empty($_GET['remarks']) ? '' : trim($_GET['remarks']);
         if ($remarks) {
@@ -601,7 +600,7 @@ class TemplateController extends InitController
         sys_msg($_LANG['del_backup_ok'], 0, array(array('text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting')));
     }
 
-    function restore_backupAction()
+    public function restore_backupAction()
     {
         $remarks = empty($_GET['remarks']) ? '' : trim($_GET['remarks']);
         if ($remarks) {
@@ -654,7 +653,7 @@ class TemplateController extends InitController
         sys_msg($_LANG['restore_backup_ok'], 0, array(array('text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting')));
     }
 
-    function array_sort($a, $b)
+    public function array_sort($a, $b)
     {
         $cmp = strcmp($a['region'], $b['region']);
 
@@ -673,7 +672,7 @@ class TemplateController extends InitController
      * @param string $lib_name 库项目名称
      * @return  array
      */
-    function load_library($curr_template, $lib_name)
+    public function load_library($curr_template, $lib_name)
     {
         $lib_name = str_replace("0xa", '', $lib_name); // 过滤 0xa 非法字符
 
@@ -692,7 +691,7 @@ class TemplateController extends InitController
      * @param int $flag 1，AJAX数据；2，Array
      * @return
      */
-    function read_tpl_style($tpl_name, $flag = 1)
+    public function read_tpl_style($tpl_name, $flag = 1)
     {
         if (empty($tpl_name) && $flag == 1) {
             return 0;
@@ -753,7 +752,7 @@ class TemplateController extends InitController
      * @param string $tpl_style 模版风格名
      * @return
      */
-    function read_style_and_tpl($tpl_name, $tpl_style)
+    public function read_style_and_tpl($tpl_name, $tpl_style)
     {
         $style_info = array();
         $style_info = get_template_info($tpl_name, $tpl_style);

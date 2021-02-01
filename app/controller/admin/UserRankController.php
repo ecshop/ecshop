@@ -13,14 +13,13 @@ class UserRankController extends InitController
 
         $exc = new exchange($ecs->table("user_rank"), $db, 'rank_id', 'rank_name');
         $exc_user = new exchange($ecs->table("users"), $db, 'user_rank', 'user_rank');
-
     }
 
     /*------------------------------------------------------ */
-//-- 会员等级列表
+    //-- 会员等级列表
     /*------------------------------------------------------ */
 
-    function listAction()
+    public function listAction()
     {
         $ranks = array();
         $ranks = $db->getAll("SELECT * FROM " . $ecs->table('user_rank'));
@@ -36,9 +35,9 @@ class UserRankController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 翻页，排序
+    //-- 翻页，排序
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $ranks = array();
         $ranks = $db->getAll("SELECT * FROM " . $ecs->table('user_rank'));
@@ -48,10 +47,10 @@ class UserRankController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加会员等级
+    //-- 添加会员等级
     /*------------------------------------------------------ */
 
-    function addAction()
+    public function addAction()
     {
         admin_priv('user_rank');
 
@@ -75,10 +74,10 @@ class UserRankController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 增加会员等级到数据库
+    //-- 增加会员等级到数据库
     /*------------------------------------------------------ */
 
-    function insertAction()
+    public function insertAction()
     {
         admin_priv('user_rank');
 
@@ -129,9 +128,9 @@ class UserRankController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除会员等级
+    //-- 删除会员等级
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('user_rank');
 
@@ -153,7 +152,7 @@ class UserRankController extends InitController
     } /*
  *  编辑会员等级名称
  */
-    function edit_nameAction()
+    public function edit_nameAction()
     {
         $id = intval($_REQUEST['id']);
         $val = empty($_REQUEST['val']) ? '' : json_str_iconv(trim($_REQUEST['val']));
@@ -173,7 +172,7 @@ class UserRankController extends InitController
     } /*
  *  ajax编辑积分下限
  */
-    function edit_min_pointsAction()
+    public function edit_min_pointsAction()
     {
         check_authz_json('user_rank');
 
@@ -199,7 +198,7 @@ class UserRankController extends InitController
     } /*
  *  ajax修改积分上限
  */
-    function edit_max_pointsAction()
+    public function edit_max_pointsAction()
     {
         check_authz_json('user_rank');
 
@@ -225,7 +224,7 @@ class UserRankController extends InitController
     } /*
  *  修改折扣率
  */
-    function edit_discountAction()
+    public function edit_discountAction()
     {
         check_authz_json('user_rank');
 
@@ -247,9 +246,9 @@ class UserRankController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 切换是否是特殊会员组
+    //-- 切换是否是特殊会员组
     /*------------------------------------------------------ */
-    function toggle_specialAction()
+    public function toggle_specialAction()
     {
         check_authz_json('user_rank');
 
@@ -265,9 +264,9 @@ class UserRankController extends InitController
         }
     }
     /*------------------------------------------------------ */
-//-- 切换是否显示价格
+    //-- 切换是否显示价格
     /*------------------------------------------------------ */
-    function toggle_showpriceAction()
+    public function toggle_showpriceAction()
     {
         check_authz_json('user_rank');
 

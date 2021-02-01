@@ -16,7 +16,7 @@ class CronController extends InitController
         $exc = new exchange($ecs->table('crons'), $db, 'cron_code', 'cron_name');
     }
 
-    function listAction()
+    public function listAction()
     {
         $cron_list = array();
         $sql = "SELECT * FROM " . $ecs->table('crons');
@@ -51,7 +51,7 @@ class CronController extends InitController
         $smarty->display('cron_list.htm');
     }
 
-    function installAction()
+    public function installAction()
     {
         if (empty($_POST['step'])) {
             /* 取相应插件信息 */
@@ -149,7 +149,7 @@ class CronController extends InitController
         }
     }
 
-    function editAction()
+    public function editAction()
     {
         if (empty($_POST['step'])) {
             if (isset($_REQUEST['code'])) {
@@ -262,7 +262,7 @@ class CronController extends InitController
         }
     }
 
-    function uninstallAction()
+    public function uninstallAction()
     {
         $sql = "DELETE FROM " . $ecs->table('crons') .
             "WHERE cron_code = '$_REQUEST[code]' LIMIT 1";
@@ -271,7 +271,7 @@ class CronController extends InitController
         sys_msg($_LANG['uninstall_ok'], 0, $links);
     }
 
-    function toggle_showAction()
+    public function toggle_showAction()
     {
         $id = trim($_POST['id']);
         $val = intval($_POST['val']);
@@ -283,7 +283,7 @@ class CronController extends InitController
         make_json_result($val);
     }
 
-    function doAction()
+    public function doAction()
     {
         if (isset($set_modules)) {
             $set_modules = false;
@@ -311,7 +311,7 @@ class CronController extends InitController
         sys_msg($_LANG['do_ok'], 0, $links);
     }
 
-    function get_next_time($cron)
+    public function get_next_time($cron)
     {
         $timestamp = gmtime();
         $y = local_date('Y', $timestamp);
@@ -339,7 +339,7 @@ class CronController extends InitController
         return $next;
     }
 
-    function get_minute($cron_minute)
+    public function get_minute($cron_minute)
     {
         $cron_minute = explode(',', $cron_minute);
         $cron_minute = array_unique($cron_minute);
@@ -354,7 +354,7 @@ class CronController extends InitController
         return trim(implode(',', $cron_minute));
     }
 
-    function get_dwh()
+    public function get_dwh()
     {
         $days = $week = $hours = array();
         for ($i = 1; $i <= 31; $i++) {

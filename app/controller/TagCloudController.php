@@ -39,4 +39,3 @@ class TagCloudController extends InitController
         $smarty->display('tag_cloud.dwt');
     }
 }
-

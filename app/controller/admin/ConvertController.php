@@ -10,17 +10,16 @@ class ConvertController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
 
 
 
     /*------------------------------------------------------ */
-//-- 转换程序主页面
+    //-- 转换程序主页面
     /*------------------------------------------------------ */
 
-    function mainAction()
+    public function mainAction()
     {
         admin_priv('convert');
 
@@ -57,10 +56,10 @@ class ConvertController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 转换前检查
+    //-- 转换前检查
     /*------------------------------------------------------ */
 
-    function checkAction()
+    public function checkAction()
     {
         /* 检查权限 */
         check_authz_json('convert');
@@ -146,10 +145,10 @@ class ConvertController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 转换操作
+    //-- 转换操作
     /*------------------------------------------------------ */
 
-    function processAction()
+    public function processAction()
     {
         /* 设置执行时间 */
         set_time_limit(0);
@@ -193,7 +192,7 @@ class ConvertController extends InitController
      * @param string $dirname 目录名：以 / 结尾，以 / 分隔
      * @return  mix     如果所有文件可读，返回true；否则，返回第一个不可读的文件名
      */
-    function check_files_readable($dirname)
+    public function check_files_readable($dirname)
     {
         /* 遍历文件，检查文件是否可读 */
         if ($dh = opendir($dirname)) {
@@ -220,7 +219,7 @@ class ConvertController extends InitController
      * @param string $file_prefix 文件名前缀
      * @return  mix     成功返回true，否则返回第一个失败的文件名
      */
-    function copy_files($from_dir, $to_dir, $file_prefix = '')
+    public function copy_files($from_dir, $to_dir, $file_prefix = '')
     {
         /* 遍历并复制文件 */
         if ($dh = opendir($from_dir)) {
@@ -247,7 +246,7 @@ class ConvertController extends InitController
      * @param string $file_prefix 文件前缀
      * @return  mix     成功返回true，否则返回第一个失败的文件名
      */
-    function copy_dirs($from_dir, $to_dir, $file_prefix = '')
+    public function copy_dirs($from_dir, $to_dir, $file_prefix = '')
     {
         $result = true;
         if (!is_dir($from_dir)) {

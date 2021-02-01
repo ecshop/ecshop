@@ -10,7 +10,6 @@ class SaleOrderController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 }
 

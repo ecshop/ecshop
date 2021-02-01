@@ -9,8 +9,6 @@ class CommentController extends InitController
 {
     public function indexAction()
     {
-
-
         require(ROOT_PATH . 'includes/cls_json.php');
         if (!isset($_REQUEST['cmt']) && !isset($_REQUEST['act'])) {
             /* 只有在没有提交评论内容以及没有act的情况下才跳转 */
@@ -225,7 +223,7 @@ class CommentController extends InitController
      * @param object $cmt
      * @return  void
      */
-    function add_comment($cmt)
+    public function add_comment($cmt)
     {
         /* 评论是否需要审核 */
         $status = 1 - $GLOBALS['_CFG']['comment_check'];

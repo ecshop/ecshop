@@ -15,9 +15,9 @@ class CategoryController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 商品分类列表
+    //-- 商品分类列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 获取分类列表 */
         $cat_list = cat_list(0, 0, false);
@@ -35,9 +35,9 @@ class CategoryController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序、分页、查询
+    //-- 排序、分页、查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $cat_list = cat_list(0, 0, false);
         $smarty->assign('cat_info', $cat_list);
@@ -45,9 +45,9 @@ class CategoryController extends InitController
         make_json_result($smarty->fetch('category_list.htm'));
     }
     /*------------------------------------------------------ */
-//-- 添加商品分类
+    //-- 添加商品分类
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 权限检查 */
         admin_priv('cat_manage');
@@ -71,9 +71,9 @@ class CategoryController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 商品分类添加时的处理
+    //-- 商品分类添加时的处理
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         /* 权限检查 */
         admin_priv('cat_manage');
@@ -135,9 +135,9 @@ class CategoryController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑商品分类信息
+    //-- 编辑商品分类信息
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         admin_priv('cat_manage');   // 权限检查
         $cat_id = intval($_REQUEST['cat_id']);
@@ -192,7 +192,7 @@ class CategoryController extends InitController
         $smarty->display('category_info.htm');
     }
 
-    function add_categoryAction()
+    public function add_categoryAction()
     {
         $parent_id = empty($_REQUEST['parent_id']) ? 0 : intval($_REQUEST['parent_id']);
         $category = empty($_REQUEST['cat']) ? '' : json_str_iconv(trim($_REQUEST['cat']));
@@ -215,9 +215,9 @@ class CategoryController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑商品分类信息
+    //-- 编辑商品分类信息
     /*------------------------------------------------------ */
-    function updateAction()
+    public function updateAction()
     {
         /* 权限检查 */
         admin_priv('cat_manage');
@@ -304,9 +304,9 @@ class CategoryController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量转移商品分类页面
+    //-- 批量转移商品分类页面
     /*------------------------------------------------------ */
-    function moveAction()
+    public function moveAction()
     {
         /* 权限检查 */
         admin_priv('cat_drop');
@@ -326,9 +326,9 @@ class CategoryController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 处理批量转移商品分类的处理程序
+    //-- 处理批量转移商品分类的处理程序
     /*------------------------------------------------------ */
-    function move_catAction()
+    public function move_catAction()
     {
         /* 权限检查 */
         admin_priv('cat_drop');
@@ -356,10 +356,10 @@ class CategoryController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑排序序号
+    //-- 编辑排序序号
     /*------------------------------------------------------ */
 
-    function edit_sort_orderAction()
+    public function edit_sort_orderAction()
     {
         check_authz_json('cat_manage');
 
@@ -375,10 +375,10 @@ class CategoryController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑数量单位
+    //-- 编辑数量单位
     /*------------------------------------------------------ */
 
-    function edit_measure_unitAction()
+    public function edit_measure_unitAction()
     {
         check_authz_json('cat_manage');
 
@@ -394,10 +394,10 @@ class CategoryController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑排序序号
+    //-- 编辑排序序号
     /*------------------------------------------------------ */
 
-    function edit_gradeAction()
+    public function edit_gradeAction()
     {
         check_authz_json('cat_manage');
 
@@ -418,10 +418,10 @@ class CategoryController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 切换是否显示在导航栏
+    //-- 切换是否显示在导航栏
     /*------------------------------------------------------ */
 
-    function toggle_show_in_navAction()
+    public function toggle_show_in_navAction()
     {
         check_authz_json('cat_manage');
 
@@ -458,10 +458,10 @@ class CategoryController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 切换是否显示
+    //-- 切换是否显示
     /*------------------------------------------------------ */
 
-    function toggle_is_showAction()
+    public function toggle_is_showAction()
     {
         check_authz_json('cat_manage');
 
@@ -477,9 +477,9 @@ class CategoryController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除商品分类
+    //-- 删除商品分类
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('cat_manage');
 
@@ -519,7 +519,7 @@ class CategoryController extends InitController
      *
      * @return  mix
      */
-    function get_cat_info($cat_id)
+    public function get_cat_info($cat_id)
     {
         $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('category') . " WHERE cat_id='$cat_id' LIMIT 1";
         return $GLOBALS['db']->getRow($sql);
@@ -533,7 +533,7 @@ class CategoryController extends InitController
      *
      * @return  mix
      */
-    function cat_update($cat_id, $args)
+    public function cat_update($cat_id, $args)
     {
         if (empty($args) || empty($cat_id)) {
             return false;
@@ -551,7 +551,7 @@ class CategoryController extends InitController
      *
      * @return void
      */
-    function get_attr_list()
+    public function get_attr_list()
     {
         $sql = "SELECT a.attr_id, a.cat_id, a.attr_name " .
             " FROM " . $GLOBALS['ecs']->table('attribute') . " AS a,  " .
@@ -579,7 +579,7 @@ class CategoryController extends InitController
      *
      * @return void
      */
-    function insert_cat_recommend($recommend_type, $cat_id)
+    public function insert_cat_recommend($recommend_type, $cat_id)
     {
         //检查分类是否为首页推荐
         if (!empty($recommend_type)) {

@@ -9,7 +9,6 @@ class QuotationController extends InitController
 {
     public function indexAction()
     {
-
         $action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
         if ($action == 'print_quotation') {
             $smarty->template_dir = DATA_DIR;
@@ -67,7 +66,7 @@ class QuotationController extends InitController
     }
 
 
-    function get_quotation_where($filter)
+    public function get_quotation_where($filter)
     {
         include_once(ROOT_PATH . ADMIN_PATH . '/includes/lib_main.php');
         $_filter = new StdClass();
@@ -79,7 +78,7 @@ class QuotationController extends InitController
         return $where;
     }
 
-    function calc_user_rank($rank, $rank_point)
+    public function calc_user_rank($rank, $rank_point)
     {
         $_tmprank = array();
         foreach ($rank as $_rank) {
@@ -96,7 +95,7 @@ class QuotationController extends InitController
         return $_tmprank;
     }
 
-    function serve_user($goods_list)
+    public function serve_user($goods_list)
     {
         foreach ($goods_list as $key => $all_list) {
             $goods_id = $all_list['goods_id'];
@@ -119,7 +118,7 @@ class QuotationController extends InitController
         return $arr_list;
     }
 
-    function product_info($goods_attr, $goods_id)
+    public function product_info($goods_attr, $goods_id)
     {
         $goods_attr = str_replace('|', ' OR goods_attr_id=', $goods_attr);
         $sql = "SELECT attr_value,attr_price FROM " . $GLOBALS['ecs']->table('goods_attr') . " WHERE goods_id='$goods_id' AND (goods_attr_id = $goods_attr)";

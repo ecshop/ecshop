@@ -11,13 +11,12 @@ class ShippingAreaController extends InitController
     {
         parent::initialize();
         $exc = new exchange($ecs->table('shipping_area'), $db, 'shipping_area_id', 'shipping_area_name');
-
     }
 
     /*------------------------------------------------------ */
-//-- 配送区域列表
+    //-- 配送区域列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $shipping_id = intval($_REQUEST['shipping']);
 
@@ -35,10 +34,10 @@ class ShippingAreaController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 新建配送区域
+    //-- 新建配送区域
     /*------------------------------------------------------ */
 
-    function addAction()
+    public function addAction()
     {
         admin_priv('shiparea_manage');
 
@@ -79,7 +78,7 @@ class ShippingAreaController extends InitController
         $smarty->display('shipping_area_info.htm');
     }
 
-    function insertAction()
+    public function insertAction()
     {
         admin_priv('shiparea_manage');
 
@@ -145,10 +144,10 @@ class ShippingAreaController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑配送区域
+    //-- 编辑配送区域
     /*------------------------------------------------------ */
 
-    function editAction()
+    public function editAction()
     {
         admin_priv('shiparea_manage');
 
@@ -211,7 +210,7 @@ class ShippingAreaController extends InitController
         $smarty->display('shipping_area_info.htm');
     }
 
-    function updateAction()
+    public function updateAction()
     {
         admin_priv('shiparea_manage');
 
@@ -303,9 +302,9 @@ class ShippingAreaController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量删除配送区域
+    //-- 批量删除配送区域
     /*------------------------------------------------------ */
-    function multi_removeAction()
+    public function multi_removeAction()
     {
         admin_priv('shiparea_manage');
 
@@ -325,10 +324,10 @@ class ShippingAreaController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑配送区域名称
+    //-- 编辑配送区域名称
     /*------------------------------------------------------ */
 
-    function edit_areaAction()
+    public function edit_areaAction()
     {
         /* 检查权限 */
         check_authz_json('shiparea_manage');
@@ -356,10 +355,10 @@ class ShippingAreaController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除配送区域
+    //-- 删除配送区域
     /*------------------------------------------------------ */
 
-    function remove_areaAction()
+    public function remove_areaAction()
     {
         check_authz_json('shiparea_manage');
 
@@ -381,7 +380,7 @@ class ShippingAreaController extends InitController
      * 取得配送区域列表
      * @param int $shipping_id 配送id
      */
-    function get_shipping_area_list($shipping_id)
+    public function get_shipping_area_list($shipping_id)
     {
         $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('shipping_area');
         if ($shipping_id > 0) {

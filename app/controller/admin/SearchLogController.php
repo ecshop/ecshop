@@ -13,7 +13,7 @@ class SearchLogController extends InitController
         admin_priv('search_log');
     }
 
-    function listAction()
+    public function listAction()
     {
         $logdb = get_search_log();
         $smarty->assign('ur_here', $_LANG['search_log']);
@@ -28,7 +28,7 @@ class SearchLogController extends InitController
         $smarty->display('search_log_list.htm');
     }
 
-    function queryAction()
+    public function queryAction()
     {
         $logdb = get_search_log();
         $smarty->assign('full_page', 0);
@@ -45,7 +45,7 @@ class SearchLogController extends InitController
         );
     }
 
-    function get_search_log()
+    public function get_search_log()
     {
         $where = '';
         if (isset($_REQUEST['start_dateYear']) && isset($_REQUEST['end_dateYear'])) {

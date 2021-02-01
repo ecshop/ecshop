@@ -11,13 +11,12 @@ class SuppliersController extends InitController
     {
         parent::initialize();
         define('SUPPLIERS_ACTION_LIST', 'delivery_view,back_view');
-
     }
 
     /*------------------------------------------------------ */
-//-- 供货商列表
+    //-- 供货商列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 检查权限 */
         admin_priv('suppliers_manage');
@@ -43,9 +42,9 @@ class SuppliersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序、分页、查询
+    //-- 排序、分页、查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         check_authz_json('suppliers_manage');
 
@@ -68,9 +67,9 @@ class SuppliersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 列表页编辑名称
+    //-- 列表页编辑名称
     /*------------------------------------------------------ */
-    function edit_suppliers_nameAction()
+    public function edit_suppliers_nameAction()
     {
         check_authz_json('suppliers_manage');
 
@@ -103,9 +102,9 @@ class SuppliersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除供货商
+    //-- 删除供货商
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('suppliers_manage');
 
@@ -165,9 +164,9 @@ class SuppliersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改供货商状态
+    //-- 修改供货商状态
     /*------------------------------------------------------ */
-    function is_checkAction()
+    public function is_checkAction()
     {
         check_authz_json('suppliers_manage');
 
@@ -188,9 +187,9 @@ class SuppliersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量操作
+    //-- 批量操作
     /*------------------------------------------------------ */
-    function batchAction()
+    public function batchAction()
     {
         /* 取得要操作的记录编号 */
         if (empty($_POST['checkboxes'])) {
@@ -260,10 +259,10 @@ class SuppliersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加、编辑供货商
+    //-- 添加、编辑供货商
     /*------------------------------------------------------ */
 
-    function addAction()
+    public function addAction()
     {
         $suppliers = array();
 
@@ -289,7 +288,7 @@ class SuppliersController extends InitController
         $smarty->display('suppliers_info.htm');
     }
 
-    function editAction()
+    public function editAction()
     {
         $suppliers = array();
 
@@ -325,11 +324,11 @@ class SuppliersController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 提交添加、编辑供货商
+    //-- 提交添加、编辑供货商
     /*------------------------------------------------------ */
 
 
-    function insertAction()
+    public function insertAction()
     {
         /* 提交值 */
         $suppliers = array('suppliers_name' => trim($_POST['suppliers_name']),
@@ -366,7 +365,7 @@ class SuppliersController extends InitController
         sys_msg($_LANG['add_suppliers_ok'], 0, $links);
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 提交值 */
         $suppliers = array('id' => trim($_POST['id']));
@@ -423,7 +422,7 @@ class SuppliersController extends InitController
      *
      * @return void
      */
-    function suppliers_list()
+    public function suppliers_list()
     {
         $result = get_filter();
         if ($result === false) {

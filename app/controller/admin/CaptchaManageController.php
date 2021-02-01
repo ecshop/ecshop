@@ -13,9 +13,9 @@ class CaptchaManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 验证码设置
+    //-- 验证码设置
     /*------------------------------------------------------ */
-    function mainAction()
+    public function mainAction()
     {
         if (gd_version() == 0) {
             sys_msg($_LANG['captcha_note'], 1);
@@ -54,9 +54,9 @@ class CaptchaManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 保存设置
+    //-- 保存设置
     /*------------------------------------------------------ */
-    function save_configAction()
+    public function save_configAction()
     {
         $captcha = 0;
         $captcha = empty($_POST['captcha_register']) ? $captcha : $captcha | CAPTCHA_REGISTER;

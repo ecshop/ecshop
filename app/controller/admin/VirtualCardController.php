@@ -19,9 +19,9 @@ class VirtualCardController extends InitController
     /* 包含文件 */
 
     /*------------------------------------------------------ */
-//-- 补货处理
+    //-- 补货处理
     /*------------------------------------------------------ */
-    function replenishAction()
+    public function replenishAction()
     {
         assign_query_info();
 
@@ -48,9 +48,9 @@ class VirtualCardController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑补货信息
+    //-- 编辑补货信息
     /*------------------------------------------------------ */
-    function edit_replenishAction()
+    public function edit_replenishAction()
     {
         /* 检查权限 */
         admin_priv('virualcard');
@@ -76,7 +76,7 @@ class VirtualCardController extends InitController
         $smarty->display('replenish_info.htm');
     }
 
-    function actionAction()
+    public function actionAction()
     {
         /* 检查权限 */
         admin_priv('virualcard');
@@ -129,9 +129,9 @@ class VirtualCardController extends InitController
         }
     }
     /*------------------------------------------------------ */
-//-- 补货列表
+    //-- 补货列表
     /*------------------------------------------------------ */
-    function cardAction()
+    public function cardAction()
     {
         /* 检查权限 */
         admin_priv('virualcard');
@@ -175,10 +175,10 @@ class VirtualCardController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 虚拟卡列表，用于排序、翻页
+    //-- 虚拟卡列表，用于排序、翻页
     /*------------------------------------------------------ */
 
-    function query_cardAction()
+    public function query_cardAction()
     {
         $list = get_replenish_list();
 
@@ -196,7 +196,7 @@ class VirtualCardController extends InitController
             array('filter' => $list['filter'], 'page_count' => $list['page_count'])
         );
     } /* 批量删除card */
-    function batch_drop_cardAction()
+    public function batch_drop_cardAction()
     {
         /* 检查权限 */
         admin_priv('virualcard');
@@ -211,7 +211,7 @@ class VirtualCardController extends InitController
         }
     } /* 批量上传页面 */
 
-    function batch_card_addAction()
+    public function batch_card_addAction()
     {
         /* 检查权限 */
         admin_priv('virualcard');
@@ -222,7 +222,7 @@ class VirtualCardController extends InitController
         $smarty->display('batch_card_info.htm');
     }
 
-    function batch_confirmAction()
+    public function batch_confirmAction()
     {
         /* 检查上传是否成功 */
         if ($_FILES['uploadfile']['tmp_name'] == '' || $_FILES['uploadfile']['tmp_name'] == 'none') {
@@ -259,7 +259,7 @@ class VirtualCardController extends InitController
         $smarty->assign('list', $rec);
         $smarty->display('batch_card_confirm.htm');
     } /* 批量上传处理 */
-    function batch_insertAction()
+    public function batch_insertAction()
     {
         /* 检查权限 */
         admin_priv('virualcard');
@@ -284,10 +284,10 @@ class VirtualCardController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 更改加密串
+    //-- 更改加密串
     /*------------------------------------------------------ */
 
-    function changeAction()
+    public function changeAction()
     {
         /* 检查权限 */
         admin_priv('virualcard');
@@ -299,10 +299,10 @@ class VirtualCardController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 提交更改
+    //-- 提交更改
     /*------------------------------------------------------ */
 
-    function submit_changeAction()
+    public function submit_changeAction()
     {
         /* 检查权限 */
         admin_priv('virualcard');
@@ -345,10 +345,10 @@ class VirtualCardController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 切换是否已出售状态
+    //-- 切换是否已出售状态
     /*------------------------------------------------------ */
 
-    function toggle_soldAction()
+    public function toggle_soldAction()
     {
         check_authz_json('virualcard');
 
@@ -370,9 +370,9 @@ class VirtualCardController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除卡片
+    //-- 删除卡片
     /*------------------------------------------------------ */
-    function remove_cardAction()
+    public function remove_cardAction()
     {
         check_authz_json('virualcard');
 
@@ -395,10 +395,10 @@ class VirtualCardController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 开始更改加密串：先检查原串和新串
+    //-- 开始更改加密串：先检查原串和新串
     /*------------------------------------------------------ */
 
-    function start_changeAction()
+    public function start_changeAction()
     {
         $old_key = json_str_iconv(trim($_GET['old_key']));
         $new_key = json_str_iconv(trim($_GET['new_key']));
@@ -435,10 +435,10 @@ class VirtualCardController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 更新加密串
+    //-- 更新加密串
     /*------------------------------------------------------ */
 
-    function on_changeAction()
+    public function on_changeAction()
     {
         // 重新加密卡号和密码
         $each_num = 1;
@@ -491,7 +491,7 @@ class VirtualCardController extends InitController
      *
      * @return array
      */
-    function get_replenish_list()
+    public function get_replenish_list()
     {
         /* 查询条件 */
         $filter['goods_id'] = empty($_REQUEST['goods_id']) ? 0 : intval($_REQUEST['goods_id']);
@@ -559,7 +559,7 @@ class VirtualCardController extends InitController
      *
      * @return bool
      */
-    function update_goods_number($goods_id)
+    public function update_goods_number($goods_id)
     {
         $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('virtual_card') . " WHERE goods_id = '$goods_id' AND is_saled = 0";
         $goods_number = $GLOBALS['db']->getOne($sql);

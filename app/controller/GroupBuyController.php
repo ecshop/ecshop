@@ -9,7 +9,6 @@ class GroupBuyController extends InitController
 {
     public function initialize()
     {
-
     }
 
 
@@ -19,9 +18,9 @@ class GroupBuyController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 团购商品 --> 团购活动商品列表
+    //-- 团购商品 --> 团购活动商品列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 取得团购活动总数 */
         $count = group_buy_count();
@@ -77,9 +76,9 @@ class GroupBuyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 团购商品 --> 商品详情
+    //-- 团购商品 --> 商品详情
     /*------------------------------------------------------ */
-    function viewAction()
+    public function viewAction()
     {
         /* 取得参数：团购活动id */
         $group_buy_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
@@ -152,10 +151,10 @@ class GroupBuyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 团购商品 --> 购买
+    //-- 团购商品 --> 购买
     /*------------------------------------------------------ */
 
-    function buyAction()
+    public function buyAction()
     {
         /* 查询：判断是否登录 */
         if ($_SESSION['user_id'] <= 0) {
@@ -269,7 +268,7 @@ class GroupBuyController extends InitController
     }
 
     /* 取得团购活动总数 */
-    function group_buy_count()
+    public function group_buy_count()
     {
         $now = gmtime();
         $sql = "SELECT COUNT(*) " .
@@ -286,7 +285,7 @@ class GroupBuyController extends InitController
      * @param int $page 当前页
      * @return  array
      */
-    function group_buy_list($size, $page)
+    public function group_buy_list($size, $page)
     {
         /* 取得团购活动 */
         $gb_list = array();

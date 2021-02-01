@@ -15,14 +15,13 @@ class CardController extends InitController
         $image = new cls_image($_CFG['bgcolor']);
 
         $exc = new exchange($ecs->table("card"), $db, 'card_id', 'card_name');
-
     }
 
 
     /*------------------------------------------------------ */
-//-- 包装列表
+    //-- 包装列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         assign_query_info();
         $smarty->assign('ur_here', $_LANG['07_card_list']);
@@ -40,9 +39,9 @@ class CardController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- ajax列表
+    //-- ajax列表
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $cards_list = cards_list();
         $smarty->assign('card_list', $cards_list['card_list']);
@@ -56,9 +55,9 @@ class CardController extends InitController
         make_json_result($smarty->fetch('card_list.htm'), '', array('filter' => $cards_list['filter'], 'page_count' => $cards_list['page_count']));
     }
     /*------------------------------------------------------ */
-//-- 删除贺卡
+    //-- 删除贺卡
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         /* 检查权限 */
         check_authz_json('card_manage');
@@ -84,9 +83,9 @@ class CardController extends InitController
         }
     }
     /*------------------------------------------------------ */
-//-- 添加新包装
+    //-- 添加新包装
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 权限判断 */
         admin_priv('card_manage');
@@ -104,7 +103,7 @@ class CardController extends InitController
         $smarty->display('card_info.htm');
     }
 
-    function insertAction()
+    public function insertAction()
     {
         /* 权限判断 */
         admin_priv('card_manage');
@@ -137,9 +136,9 @@ class CardController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑包装
+    //-- 编辑包装
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         /* 权限判断 */
         admin_priv('card_manage');
@@ -156,7 +155,7 @@ class CardController extends InitController
         $smarty->display('card_info.htm');
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 权限判断 */
         admin_priv('card_manage');
@@ -188,7 +187,7 @@ class CardController extends InitController
             die($db->error());
         }
     } /* 删除卡片图片 */
-    function drop_card_imgAction()
+    public function drop_card_imgAction()
     {
         /* 权限判断 */
         admin_priv('card_manage');
@@ -207,9 +206,9 @@ class CardController extends InitController
         sys_msg($_LANG['drop_card_img_success'], 0, $link);
     }
     /*------------------------------------------------------ */
-//-- ajax编辑卡片名字
+    //-- ajax编辑卡片名字
     /*------------------------------------------------------ */
-    function edit_card_nameAction()
+    public function edit_card_nameAction()
     {
         check_authz_json('card_manage');
         $card_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
@@ -227,9 +226,9 @@ class CardController extends InitController
         }
     }
     /*------------------------------------------------------ */
-//-- ajax编辑卡片费用
+    //-- ajax编辑卡片费用
     /*------------------------------------------------------ */
-    function edit_card_feeAction()
+    public function edit_card_feeAction()
     {
         check_authz_json('card_manage');
         $card_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
@@ -244,9 +243,9 @@ class CardController extends InitController
         }
     }
     /*------------------------------------------------------ */
-//-- ajax编辑免费额度
+    //-- ajax编辑免费额度
     /*------------------------------------------------------ */
-    function edit_free_moneyAction()
+    public function edit_free_moneyAction()
     {
         check_authz_json('card_manage');
         $card_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
@@ -261,7 +260,7 @@ class CardController extends InitController
         }
     }
 
-    function cards_list()
+    public function cards_list()
     {
         $result = get_filter();
         if ($result === false) {

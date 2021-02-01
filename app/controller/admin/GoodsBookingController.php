@@ -14,9 +14,9 @@ class GoodsBookingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 列出所有订购信息
+    //-- 列出所有订购信息
     /*------------------------------------------------------ */
-    function list_allAction()
+    public function list_allAction()
     {
         $smarty->assign('ur_here', $_LANG['list_all']);
         $smarty->assign('full_page', 1);
@@ -36,9 +36,9 @@ class GoodsBookingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 翻页、排序
+    //-- 翻页、排序
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $list = get_bookinglist();
 
@@ -58,10 +58,10 @@ class GoodsBookingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除缺货登记
+    //-- 删除缺货登记
     /*------------------------------------------------------ */
 
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('booking');
 
@@ -76,9 +76,9 @@ class GoodsBookingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 显示详情
+    //-- 显示详情
     /*------------------------------------------------------ */
-    function detailAction()
+    public function detailAction()
     {
         $id = intval($_REQUEST['id']);
 
@@ -90,9 +90,9 @@ class GoodsBookingController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 处理提交数据
+    //-- 处理提交数据
     /*------------------------------------------------------ */
-    function updateAction()
+    public function updateAction()
     {
         /* 权限判断 */
         admin_priv('booking');
@@ -145,7 +145,7 @@ class GoodsBookingController extends InitController
      *
      * @return array
      */
-    function get_bookinglist()
+    public function get_bookinglist()
     {
         /* 查询条件 */
         $filter['keywords'] = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);
@@ -191,7 +191,7 @@ class GoodsBookingController extends InitController
      *
      * @return  array
      */
-    function get_booking_info($id)
+    public function get_booking_info($id)
     {
         global $ecs, $db, $_CFG, $_LANG;
 

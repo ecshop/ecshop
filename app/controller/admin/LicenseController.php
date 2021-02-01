@@ -7,13 +7,12 @@ class LicenseController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
     /*------------------------------------------------------ */
-//-- 证书编辑页
+    //-- 证书编辑页
     /*------------------------------------------------------ */
-    function list_editAction()
+    public function list_editAction()
     {
         /* 检查权限 */
         admin_priv('shop_authorized');
@@ -35,10 +34,10 @@ class LicenseController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 证书下载
+    //-- 证书下载
     /*------------------------------------------------------ */
 
-    function downloadAction()
+    public function downloadAction()
     {
         /* 检查权限 */
         admin_priv('shop_authorized');
@@ -60,10 +59,10 @@ class LicenseController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 证书上传
+    //-- 证书上传
     /*------------------------------------------------------ */
 
-    function uploadAction()
+    public function uploadAction()
     {
         /* 检查权限 */
         admin_priv('shop_authorized');
@@ -117,10 +116,10 @@ class LicenseController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 证书删除
+    //-- 证书删除
     /*------------------------------------------------------ */
 
-    function delAction()
+    public function delAction()
     {
         /* 检查权限 */
         admin_priv('shop_authorized');

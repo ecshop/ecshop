@@ -11,13 +11,12 @@ class AccountLogController extends InitController
     {
         parent::initialize();
         include_once(ROOT_PATH . 'includes/lib_order.php');
-
     }
 
     /*------------------------------------------------------ */
-//-- 办事处列表
+    //-- 办事处列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 检查参数 */
         $user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
@@ -52,9 +51,9 @@ class AccountLogController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序、分页、查询
+    //-- 排序、分页、查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         /* 检查参数 */
         $user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
@@ -88,9 +87,9 @@ class AccountLogController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 调节帐户
+    //-- 调节帐户
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 检查权限 */
         admin_priv('account_manage');
@@ -113,14 +112,14 @@ class AccountLogController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 提交添加、编辑办事处
+    //-- 提交添加、编辑办事处
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         $this->updateAction();
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 检查权限 */
         admin_priv('account_manage');
@@ -168,7 +167,7 @@ class AccountLogController extends InitController
      *                  frozen_money表示冻结资金，rank_points表示等级积分，pay_points表示消费积分
      * @return  array
      */
-    function get_accountlist($user_id, $account_type = '')
+    public function get_accountlist($user_id, $account_type = '')
     {
         /* 检查参数 */
         $where = " WHERE user_id = '$user_id' ";

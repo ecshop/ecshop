@@ -11,7 +11,6 @@ class InitController extends Controller
 {
     protected function initialize()
     {
-
         $php_self = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
         if ('/' == substr($php_self, -1)) {
             $php_self .= 'index.php';
@@ -71,4 +70,3 @@ class InitController extends Controller
         header('Content-type: text/html; charset=' . EC_CHARSET);
     }
 }
-

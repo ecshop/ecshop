@@ -14,7 +14,7 @@ class SitemapController extends InitController
         admin_priv('sitemap');
     }
 
-    function indexAction()
+    public function indexAction()
     {
         /*------------------------------------------------------ */
         //-- 设置更新频率
@@ -27,7 +27,7 @@ class SitemapController extends InitController
         $smarty->display('sitemap.htm');
     }
 
-    function doAction()
+    public function doAction()
     {
         /*------------------------------------------------------ */
         //-- 生成站点地图

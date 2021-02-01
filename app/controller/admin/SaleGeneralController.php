@@ -10,7 +10,6 @@ class SaleGeneralController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 }
 

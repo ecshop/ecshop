@@ -10,7 +10,7 @@ class ViewSendlistController extends InitController
         admin_priv('view_sendlist');
     }
 
-    function listAction()
+    public function listAction()
     {
         $listdb = get_sendlist();
         $smarty->assign('ur_here', $_LANG['view_sendlist']);
@@ -25,7 +25,7 @@ class ViewSendlistController extends InitController
         $smarty->display('view_sendlist.htm');
     }
 
-    function queryAction()
+    public function queryAction()
     {
         $listdb = get_sendlist();
         $smarty->assign('listdb', $listdb['listdb']);
@@ -39,7 +39,7 @@ class ViewSendlistController extends InitController
         make_json_result($smarty->fetch('view_sendlist.htm'), '', array('filter' => $listdb['filter'], 'page_count' => $listdb['page_count']));
     }
 
-    function delAction()
+    public function delAction()
     {
         $id = (int)$_REQUEST['id'];
         $sql = "DELETE FROM " . $GLOBALS['ecs']->table('email_sendlist') . " WHERE id = '$id' LIMIT 1";
@@ -49,10 +49,10 @@ class ViewSendlistController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量删除
+    //-- 批量删除
     /*------------------------------------------------------ */
 
-    function batch_removeAction()
+    public function batch_removeAction()
     {
         /* 检查权限 */
         if (isset($_POST['checkboxes'])) {
@@ -68,10 +68,10 @@ class ViewSendlistController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量发送
+    //-- 批量发送
     /*------------------------------------------------------ */
 
-    function batch_sendAction()
+    public function batch_sendAction()
     {
         /* 检查权限 */
         if (isset($_POST['checkboxes'])) {
@@ -139,10 +139,10 @@ class ViewSendlistController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 全部发送
+    //-- 全部发送
     /*------------------------------------------------------ */
 
-    function all_sendAction()
+    public function all_sendAction()
     {
         $sql = "SELECT * FROM " . $ecs->table('email_sendlist') . " ORDER BY pri DESC, last_send ASC LIMIT 1";
         $row = $db->getRow($sql);
@@ -203,7 +203,7 @@ class ViewSendlistController extends InitController
         sys_msg($_LANG['mailsend_finished'], 0, $links);
     }
 
-    function get_sendlist()
+    public function get_sendlist()
     {
         $result = get_filter();
         if ($result === false) {

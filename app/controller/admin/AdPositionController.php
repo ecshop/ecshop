@@ -18,9 +18,9 @@ class AdPositionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 广告位置列表
+    //-- 广告位置列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $smarty->assign('ur_here', $_LANG['ad_position']);
         $smarty->assign('action_link', array('text' => $_LANG['position_add'], 'href' => 'ad_position.php?act=add'));
@@ -38,9 +38,9 @@ class AdPositionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加广告位页面
+    //-- 添加广告位页面
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         admin_priv('ad_manage');
 
@@ -55,7 +55,7 @@ class AdPositionController extends InitController
         $smarty->display('ad_position_info.htm');
     }
 
-    function insertAction()
+    public function insertAction()
     {
         admin_priv('ad_manage');
 
@@ -93,9 +93,9 @@ class AdPositionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 广告位编辑页面
+    //-- 广告位编辑页面
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         admin_priv('ad_manage');
 
@@ -114,7 +114,7 @@ class AdPositionController extends InitController
         $smarty->display('ad_position_info.htm');
     }
 
-    function updateAction()
+    public function updateAction()
     {
         admin_priv('ad_manage');
 
@@ -153,9 +153,9 @@ class AdPositionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序、分页、查询
+    //-- 排序、分页、查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $position_list = ad_position_list();
 
@@ -172,9 +172,9 @@ class AdPositionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑广告位置名称
+    //-- 编辑广告位置名称
     /*------------------------------------------------------ */
-    function edit_position_nameAction()
+    public function edit_position_nameAction()
     {
         check_authz_json('ad_manage');
 
@@ -195,9 +195,9 @@ class AdPositionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑广告位宽高
+    //-- 编辑广告位宽高
     /*------------------------------------------------------ */
-    function edit_ad_widthAction()
+    public function edit_ad_widthAction()
     {
         check_authz_json('ad_manage');
 
@@ -224,9 +224,9 @@ class AdPositionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑广告位宽高
+    //-- 编辑广告位宽高
     /*------------------------------------------------------ */
-    function edit_ad_heightAction()
+    public function edit_ad_heightAction()
     {
         check_authz_json('ad_manage');
 
@@ -253,9 +253,9 @@ class AdPositionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除广告位置
+    //-- 删除广告位置
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('ad_manage');
 
@@ -278,7 +278,7 @@ class AdPositionController extends InitController
     }
 
     /* 获取广告位置列表 */
-    function ad_position_list()
+    public function ad_position_list()
     {
         $filter = array();
 

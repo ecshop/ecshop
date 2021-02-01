@@ -15,9 +15,9 @@ class AreaManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 列出某地区下的所有地区列表
+    //-- 列出某地区下的所有地区列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         admin_priv('area_manage');
 
@@ -67,10 +67,10 @@ class AreaManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加新的地区
+    //-- 添加新的地区
     /*------------------------------------------------------ */
 
-    function add_areaAction()
+    public function add_areaAction()
     {
         check_authz_json('area_manage');
 
@@ -105,10 +105,10 @@ class AreaManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑区域名称
+    //-- 编辑区域名称
     /*------------------------------------------------------ */
 
-    function edit_area_nameAction()
+    public function edit_area_nameAction()
     {
         check_authz_json('area_manage');
 
@@ -136,9 +136,9 @@ class AreaManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除区域
+    //-- 删除区域
     /*------------------------------------------------------ */
-    function drop_areaAction()
+    public function drop_areaAction()
     {
         check_authz_json('area_manage');
 
@@ -182,7 +182,7 @@ class AreaManageController extends InitController
         }
     }
 
-    function new_region_id($region_id)
+    public function new_region_id($region_id)
     {
         $regions_id = array();
         if (empty($region_id)) {

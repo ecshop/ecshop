@@ -6,7 +6,6 @@ class CronController extends InitController
 {
     public function indexAction()
     {
-
         $timestamp = gmtime();
         check_method();
         $error_log = array();
@@ -60,7 +59,7 @@ class CronController extends InitController
         write_error_arr($error_log);
     }
 
-    function get_next_time($cron)
+    public function get_next_time($cron)
     {
         $y = local_date('Y', $GLOBALS['timestamp']);
         $mo = local_date('n', $GLOBALS['timestamp']);
@@ -98,7 +97,7 @@ class CronController extends InitController
         }
     }
 
-    function get_cron_info()
+    public function get_cron_info()
     {
         $crondb = array();
 
@@ -116,14 +115,14 @@ class CronController extends InitController
         return $crondb;
     }
 
-    function make_error_arr($msg, $file)
+    public function make_error_arr($msg, $file)
     {
         $file = str_replace(ROOT_PATH, '', $file);
 
         return array('info' => $msg, 'file' => $file, 'time' => $GLOBALS['timestamp']);
     }
 
-    function write_error_arr($err_arr)
+    public function write_error_arr($err_arr)
     {
         if (!empty($err_arr)) {
             $query = '';
@@ -137,7 +136,7 @@ class CronController extends InitController
         }
     }
 
-    function check_method()
+    public function check_method()
     {
         $if_cron = PHP_SAPI == 'cli' ? true : false;
         if (!empty($GLOBALS['_CFG']['cron_method'])) {

@@ -14,14 +14,13 @@ class AuctionController extends InitController
         require(ROOT_PATH . 'includes/lib_goods.php');
 
         $exc = new exchange($ecs->table('goods_activity'), $db, 'act_id', 'act_name');
-
     }
 
     /*------------------------------------------------------ */
-//-- 活动列表页
+    //-- 活动列表页
     /*------------------------------------------------------ */
 
-    function listAction()
+    public function listAction()
     {
         /* 检查权限 */
         admin_priv('auction');
@@ -47,10 +46,10 @@ class AuctionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 分页、排序、查询
+    //-- 分页、排序、查询
     /*------------------------------------------------------ */
 
-    function queryAction()
+    public function queryAction()
     {
         $list = auction_list();
 
@@ -70,9 +69,9 @@ class AuctionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除
+    //-- 删除
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('auction');
 
@@ -100,9 +99,9 @@ class AuctionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量操作
+    //-- 批量操作
     /*------------------------------------------------------ */
-    function batchAction()
+    public function batchAction()
     {
         /* 取得要操作的记录编号 */
         if (empty($_POST['checkboxes'])) {
@@ -138,10 +137,10 @@ class AuctionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 查看出价记录
+    //-- 查看出价记录
     /*------------------------------------------------------ */
 
-    function view_logAction()
+    public function view_logAction()
     {
         /* 检查权限 */
         admin_priv('auction');
@@ -168,14 +167,14 @@ class AuctionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加、编辑
+    //-- 添加、编辑
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         editAction();
     }
 
-    function editAction()
+    public function editAction()
     {
         /* 检查权限 */
         admin_priv('auction');
@@ -232,14 +231,14 @@ class AuctionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加、编辑后提交
+    //-- 添加、编辑后提交
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         updateAction();
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 检查权限 */
         admin_priv('auction');
@@ -314,10 +313,10 @@ class AuctionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 处理冻结资金
+    //-- 处理冻结资金
     /*------------------------------------------------------ */
 
-    function settle_moneyAction()
+    public function settle_moneyAction()
     {
         /* 检查权限 */
         admin_priv('auction');
@@ -373,10 +372,10 @@ class AuctionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索商品
+    //-- 搜索商品
     /*------------------------------------------------------ */
 
-    function search_goodsAction()
+    public function search_goodsAction()
     {
         check_authz_json('auction');
 
@@ -394,10 +393,10 @@ class AuctionController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索货品
+    //-- 搜索货品
     /*------------------------------------------------------ */
 
-    function search_productsAction()
+    public function search_productsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -415,7 +414,7 @@ class AuctionController extends InitController
      * 取得拍卖活动列表
      * @return   array
      */
-    function auction_list()
+    public function auction_list()
     {
         $result = get_filter();
         if ($result === false) {
@@ -480,7 +479,7 @@ class AuctionController extends InitController
      * @param string $text 文字
      * @return  array('href' => $href, 'text' => $text)
      */
-    function list_link($is_add = true, $text = '')
+    public function list_link($is_add = true, $text = '')
     {
         $href = 'auction.php?act=list';
         if (!$is_add) {

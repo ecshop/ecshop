@@ -9,8 +9,6 @@ class MyshipController extends InitController
 {
     public function indexAction()
     {
-
-
         require_once(ROOT_PATH . 'includes/lib_order.php');
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
@@ -19,7 +17,7 @@ class MyshipController extends InitController
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');
 
         /*------------------------------------------------------ */
-//-- INPUT
+        //-- INPUT
         /*------------------------------------------------------ */
 
         if ($_SESSION['user_id'] > 0) {
@@ -37,7 +35,7 @@ class MyshipController extends InitController
         }
 
         /*------------------------------------------------------ */
-//-- PROCESSOR
+        //-- PROCESSOR
         /*------------------------------------------------------ */
 
         assign_template();
@@ -90,5 +88,3 @@ class MyshipController extends InitController
         $smarty->display('myship.dwt');
     }
 }
-
-

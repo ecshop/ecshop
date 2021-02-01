@@ -15,9 +15,9 @@ class AgencyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 办事处列表
+    //-- 办事处列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $smarty->assign('ur_here', $_LANG['agency_list']);
         $smarty->assign('action_link', array('text' => $_LANG['add_agency'], 'href' => 'agency.php?act=add'));
@@ -38,9 +38,9 @@ class AgencyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序、分页、查询
+    //-- 排序、分页、查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $agency_list = get_agencylist();
         $smarty->assign('agency_list', $agency_list['agency']);
@@ -60,9 +60,9 @@ class AgencyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 列表页编辑名称
+    //-- 列表页编辑名称
     /*------------------------------------------------------ */
-    function edit_agency_nameAction()
+    public function edit_agency_nameAction()
     {
         check_authz_json('agency_manage');
 
@@ -84,9 +84,9 @@ class AgencyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除办事处
+    //-- 删除办事处
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('agency_manage');
 
@@ -114,9 +114,9 @@ class AgencyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量操作
+    //-- 批量操作
     /*------------------------------------------------------ */
-    function batchAction()
+    public function batchAction()
     {
         /* 取得要操作的记录编号 */
         if (empty($_POST['checkboxes'])) {
@@ -152,14 +152,14 @@ class AgencyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加、编辑办事处
+    //-- 添加、编辑办事处
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         editAction();
     }
 
-    function editAction()
+    public function editAction()
     {
         /* 检查权限 */
         admin_priv('agency_manage');
@@ -226,14 +226,14 @@ class AgencyController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 提交添加、编辑办事处
+    //-- 提交添加、编辑办事处
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         updateAction();
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 检查权限 */
         admin_priv('agency_manage');
@@ -314,7 +314,7 @@ class AgencyController extends InitController
      * 取得办事处列表
      * @return  array
      */
-    function get_agencylist()
+    public function get_agencylist()
     {
         $result = get_filter();
         if ($result === false) {

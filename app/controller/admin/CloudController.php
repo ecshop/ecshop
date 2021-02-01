@@ -10,7 +10,6 @@ class CloudController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
     public function indexAction()
@@ -70,4 +69,3 @@ class CloudController extends InitController
         }
     }
 }
-

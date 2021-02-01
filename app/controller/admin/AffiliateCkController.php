@@ -17,9 +17,9 @@ class AffiliateCkController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 分成页
+    //-- 分成页
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         isset($_GET['auid']) && $_GET['auid'] = intval($_GET['auid']);
         $logdb = get_affiliate_ck();
@@ -38,9 +38,9 @@ class AffiliateCkController extends InitController
         $smarty->display('affiliate_ck_list.htm');
     }
     /*------------------------------------------------------ */
-//-- 分页
+    //-- 分页
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         isset($_GET['auid']) && $_GET['auid'] = intval($_GET['auid']);
         $logdb = get_affiliate_ck();
@@ -57,7 +57,7 @@ class AffiliateCkController extends InitController
     } /*
     取消分成，不再能对该订单进行分成
 */
-    function delAction()
+    public function delAction()
     {
         $oid = (int)$_REQUEST['oid'];
         $stat = $db->getOne("SELECT is_separate FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_id = '$oid'");
@@ -72,7 +72,7 @@ class AffiliateCkController extends InitController
     } /*
     撤销某次分成，将已分成的收回来
 */
-    function rollbackAction()
+    public function rollbackAction()
     {
         $logid = (int)$_REQUEST['logid'];
         $stat = $db->getRow("SELECT * FROM " . $GLOBALS['ecs']->table('affiliate_log') . " WHERE log_id = '$logid'");
@@ -95,7 +95,7 @@ class AffiliateCkController extends InitController
     } /*
     分成
 */
-    function separateAction()
+    public function separateAction()
     {
         include_once(ROOT_PATH . 'includes/lib_order.php');
         $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
@@ -178,7 +178,7 @@ class AffiliateCkController extends InitController
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
 
-    function get_affiliate_ck()
+    public function get_affiliate_ck()
     {
         $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
         empty($affiliate) && $affiliate = array();
@@ -235,16 +235,16 @@ class AffiliateCkController extends InitController
                     " ORDER BY order_id DESC" .
                     " LIMIT " . $filter['start'] . ",$filter[page_size]";
 
-                /*
-                    SQL解释：
+            /*
+                SQL解释：
 
-                    列出同时满足以下条件的订单分成情况：
-                    1、有效订单o.user_id > 0
-                    2、满足以下情况之一：
-                        a.有用户注册上线的未分成订单 u.parent_id > 0 AND o.is_separate = 0
-                        b.已分成订单 o.is_separate > 0
+                列出同时满足以下条件的订单分成情况：
+                1、有效订单o.user_id > 0
+                2、满足以下情况之一：
+                    a.有用户注册上线的未分成订单 u.parent_id > 0 AND o.is_separate = 0
+                    b.已分成订单 o.is_separate > 0
 
-                */
+            */
             } else {
                 //推荐订单分成
                 $sql = "SELECT o.*, a.log_id,a.user_id as suid, a.user_name as auser, a.money, a.point, a.separate_type,u.parent_id as up FROM " . $GLOBALS['ecs']->table('order_info') . " o" .
@@ -301,7 +301,7 @@ class AffiliateCkController extends InitController
         return $arr;
     }
 
-    function write_affiliate_log($oid, $uid, $username, $money, $point, $separate_by)
+    public function write_affiliate_log($oid, $uid, $username, $money, $point, $separate_by)
     {
         $time = gmtime();
         $sql = "INSERT INTO " . $GLOBALS['ecs']->table('affiliate_log') . "( order_id, user_id, user_name, time, money, point, separate_type)" .

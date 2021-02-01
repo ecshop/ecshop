@@ -10,14 +10,13 @@ class GenGoodsScriptController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
     /*------------------------------------------------------ */
-//-- 生成代码
+    //-- 生成代码
     /*------------------------------------------------------ */
 
-    function setupAction()
+    public function setupAction()
     {
         /* 检查权限 */
         admin_priv('gen_goods_script');

@@ -10,13 +10,12 @@ class AdminLogsController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
     /*------------------------------------------------------ */
-//-- 获取所有日志列表
+    //-- 获取所有日志列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 权限的判断 */
         admin_priv('logs_manage');
@@ -51,9 +50,9 @@ class AdminLogsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序、分页、查询
+    //-- 排序、分页、查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $log_list = get_admin_logs();
 
@@ -73,9 +72,9 @@ class AdminLogsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量删除日志记录
+    //-- 批量删除日志记录
     /*------------------------------------------------------ */
-    function batch_dropAction()
+    public function batch_dropAction()
     {
         admin_priv('logs_drop');
 
@@ -138,7 +137,7 @@ class AdminLogsController extends InitController
     }
 
     /* 获取管理员操作记录 */
-    function get_admin_logs()
+    public function get_admin_logs()
     {
         $user_id = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
         $admin_ip = !empty($_REQUEST['ip']) ? $_REQUEST['ip'] : '';

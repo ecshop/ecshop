@@ -9,13 +9,12 @@ class CategoryController extends InitController
 {
     public function indexAction()
     {
-
         if ((DEBUG_MODE & 2) != 2) {
             $smarty->caching = true;
         }
 
         /*------------------------------------------------------ */
-//-- INPUT
+        //-- INPUT
         /*------------------------------------------------------ */
 
         /* 获得请求的分类 ID */
@@ -55,7 +54,7 @@ class CategoryController extends InitController
         $display = in_array($display, array('list', 'grid', 'text')) ? $display : 'text';
         setcookie('ECS[display]', $display, gmtime() + 86400 * 7, null, null, null, true);
         /*------------------------------------------------------ */
-//-- PROCESSOR
+        //-- PROCESSOR
         /*------------------------------------------------------ */
 
         /* 页面的缓存ID */
@@ -356,7 +355,7 @@ class CategoryController extends InitController
      *
      * @return  void
      */
-    function get_cat_info($cat_id)
+    public function get_cat_info($cat_id)
     {
         return $GLOBALS['db']->getRow('SELECT cat_name, keywords, cat_desc, style, grade, filter_attr, parent_id FROM ' . $GLOBALS['ecs']->table('category') .
             " WHERE cat_id = '$cat_id'");
@@ -369,7 +368,7 @@ class CategoryController extends InitController
      * @param string $children
      * @return  array
      */
-    function category_get_goods($children, $brand, $min, $max, $ext, $size, $page, $sort, $order)
+    public function category_get_goods($children, $brand, $min, $max, $ext, $size, $page, $sort, $order)
     {
         $display = $GLOBALS['display'];
         $where = "g.is_on_sale = 1 AND g.is_alone_sale = 1 AND " .
@@ -450,7 +449,7 @@ class CategoryController extends InitController
      * @param string $cat_id
      * @return  integer
      */
-    function get_cagtegory_goods_count($children, $brand = 0, $min = 0, $max = 0, $ext = '')
+    public function get_cagtegory_goods_count($children, $brand = 0, $min = 0, $max = 0, $ext = '')
     {
         $where = "g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 AND ($children OR " . get_extension_goods($children) . ')';
 
@@ -478,7 +477,7 @@ class CategoryController extends InitController
      *
      * @return int
      */
-    function get_parent_grade($cat_id)
+    public function get_parent_grade($cat_id)
     {
         static $res = null;
 

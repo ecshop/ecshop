@@ -10,7 +10,6 @@ class SmsController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 }
 

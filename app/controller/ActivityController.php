@@ -9,19 +9,16 @@ class ActivityController extends InitController
 {
     public function initialize()
     {
-
         require_once(ROOT_PATH . 'includes/lib_order.php');
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
         /* 载入语言文件 */
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');
-
     }
 
     public function indexAction()
     {
-
         assign_template();
         assign_dynamic('activity');
         $position = assign_ur_here(0, $_LANG['shopping_activity']);
@@ -40,7 +37,7 @@ class ActivityController extends InitController
         }
 
 
-// 开始工作
+        // 开始工作
 
         $sql = "SELECT * FROM " . $ecs->table('favourable_activity') . " ORDER BY `sort_order` ASC,`end_time` DESC";
         $res = $db->query($sql);
@@ -117,6 +114,5 @@ class ActivityController extends InitController
 
         $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typeactivity.xml" : 'feed.php?type=activity'); // RSS URL
         $smarty->display('activity.dwt');
-
     }
 }

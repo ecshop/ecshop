@@ -19,9 +19,9 @@ class AdsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 广告列表页面
+    //-- 广告列表页面
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         admin_priv('ad_manage');
         $pid = !empty($_REQUEST['pid']) ? intval($_REQUEST['pid']) : 0;
@@ -46,9 +46,9 @@ class AdsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序、分页、查询
+    //-- 排序、分页、查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $ads_list = get_adslist();
 
@@ -68,9 +68,9 @@ class AdsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加新广告页面
+    //-- 添加新广告页面
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         admin_priv('ad_manage');
 
@@ -99,9 +99,9 @@ class AdsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 新广告的处理
+    //-- 新广告的处理
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         admin_priv('ad_manage');
 
@@ -229,9 +229,9 @@ class AdsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 广告编辑页面
+    //-- 广告编辑页面
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         admin_priv('ad_manage');
 
@@ -285,9 +285,9 @@ class AdsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 广告编辑的处理
+    //-- 广告编辑的处理
     /*------------------------------------------------------ */
-    function updateAction()
+    public function updateAction()
     {
         admin_priv('ad_manage');
 
@@ -386,9 +386,9 @@ class AdsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//--生成广告的JS代码
+    //--生成广告的JS代码
     /*------------------------------------------------------ */
-    function add_jsAction()
+    public function add_jsAction()
     {
         admin_priv('ad_manage');
 
@@ -415,9 +415,9 @@ class AdsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑广告名称
+    //-- 编辑广告名称
     /*------------------------------------------------------ */
-    function edit_ad_nameAction()
+    public function edit_ad_nameAction()
     {
         check_authz_json('ad_manage');
 
@@ -438,9 +438,9 @@ class AdsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除广告位置
+    //-- 删除广告位置
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('ad_manage');
 
@@ -463,7 +463,7 @@ class AdsController extends InitController
     }
 
     /* 获取广告数据列表 */
-    function get_adslist()
+    public function get_adslist()
     {
         /* 过滤查询 */
         $pid = !empty($_REQUEST['pid']) ? intval($_REQUEST['pid']) : 0;

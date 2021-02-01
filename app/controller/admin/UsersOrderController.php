@@ -14,15 +14,14 @@ class UsersOrderController extends InitController
         require_once(ROOT_PATH . 'includes/lib_order.php');
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
         $smarty->assign('lang', $_LANG);
-
     }
 
-    function query()
+    public function query()
     {
         download();
     }
 
-    function download()
+    public function download()
     {
         /* 检查权限 */
         check_authz_json('client_flow_stats');
@@ -60,7 +59,7 @@ class UsersOrderController extends InitController
         make_json_result($smarty->fetch('users_order.htm'), '', array('filter' => $user_orderinfo['filter'], 'page_count' => $user_orderinfo['page_count']));
     }
 
-    function listAction()
+    public function listAction()
     {
         /* 权限判断 */
         admin_priv('client_flow_stats');
@@ -93,14 +92,14 @@ class UsersOrderController extends InitController
 
 
     /*------------------------------------------------------ */
-//--会员排行需要的函数
+    //--会员排行需要的函数
     /*------------------------------------------------------ */
     /*
      * 取得会员订单量/购物额排名统计数据
      * @param   bool  $is_pagination  是否分页
      * @return  array   取得会员订单量/购物额排名统计数据
      */
-    function get_user_orderinfo($is_pagination = true)
+    public function get_user_orderinfo($is_pagination = true)
     {
         global $db, $ecs, $start_date, $end_date;
 

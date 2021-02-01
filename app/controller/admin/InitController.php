@@ -82,7 +82,7 @@ class InitController extends Controller
         /* 载入系统参数 */
         $_CFG = load_config();
 
-// TODO : 登录部分准备拿出去做，到时候把以下操作一起挪过去
+        // TODO : 登录部分准备拿出去做，到时候把以下操作一起挪过去
         function captchaAction()
         {
             include(ROOT_PATH . 'includes/cls_captcha.php');
@@ -215,7 +215,7 @@ class InitController extends Controller
             }
         }
 
-//header('Cache-control: private');
+        //header('Cache-control: private');
         header('content-type: text/html; charset=' . EC_CHARSET);
         header('Expires: Fri, 14 Mar 1980 20:53:00 GMT');
         header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');

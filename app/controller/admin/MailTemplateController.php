@@ -11,13 +11,12 @@ class MailTemplateController extends InitController
     {
         parent::initialize();
         admin_priv('mail_template');
-
     }
 
     /*------------------------------------------------------ */
-//-- 模版列表
+    //-- 模版列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
 
@@ -60,9 +59,9 @@ class MailTemplateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 载入指定模版
+    //-- 载入指定模版
     /*------------------------------------------------------ */
-    function loat_templateAction()
+    public function loat_templateAction()
     {
         include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
 
@@ -107,10 +106,10 @@ class MailTemplateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 保存模板内容
+    //-- 保存模板内容
     /*------------------------------------------------------ */
 
-    function save_templateAction()
+    public function save_templateAction()
     {
         if (empty($_POST['subject'])) {
             sys_msg($_LANG['subject_empty'], 1, array(), false);
@@ -150,7 +149,7 @@ class MailTemplateController extends InitController
      * @param string $temp 邮件模板的ID
      * @return  array
      */
-    function load_template($temp_id)
+    public function load_template($temp_id)
     {
         $sql = "SELECT template_subject, template_content, is_html " .
             "FROM " . $GLOBALS['ecs']->table('mail_templates') . " WHERE template_id='$temp_id'";

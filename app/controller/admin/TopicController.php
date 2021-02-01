@@ -22,13 +22,12 @@ class TopicController extends InitController
             '6' => 'ffd700'
         );
         $allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp', 'swf');
-
     }
 
     /*------------------------------------------------------ */
-//-- 专题列表页面
+    //-- 专题列表页面
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         admin_priv('topic_manage');
 
@@ -51,12 +50,12 @@ class TopicController extends InitController
     }
 
     /* 添加,编辑 */
-    function addAction()
+    public function addAction()
     {
         editAction();
     }
 
-    function editAction()
+    public function editAction()
     {
         admin_priv('topic_manage');
 
@@ -119,12 +118,12 @@ class TopicController extends InitController
         $smarty->display('topic_edit.htm');
     }
 
-    function insertAction()
+    public function insertAction()
     {
         updateAction();
     }
 
-    function updateAction()
+    public function updateAction()
     {
         admin_priv('topic_manage');
 
@@ -241,7 +240,7 @@ class TopicController extends InitController
         sys_msg($_LANG['succed'], 0, $links);
     }
 
-    function get_goods_listAction()
+    public function get_goods_listAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -259,7 +258,7 @@ class TopicController extends InitController
         make_json_result($opt);
     }
 
-    function deleteAction()
+    public function deleteAction()
     {
         admin_priv('topic_manage');
 
@@ -288,7 +287,7 @@ class TopicController extends InitController
         sys_msg($_LANG['succed'], 0, $links);
     }
 
-    function queryAction()
+    public function queryAction()
     {
         $topic_list = get_topic_list();
         $smarty->assign('topic_list', $topic_list['item']);
@@ -310,7 +309,7 @@ class TopicController extends InitController
      * @access  public
      * @return void
      */
-    function get_topic_list()
+    public function get_topic_list()
     {
         $result = get_filter();
         if ($result === false) {
@@ -354,7 +353,7 @@ class TopicController extends InitController
      * @param string $text 文字
      * @return  array('href' => $href, 'text' => $text)
      */
-    function list_link($is_add = true, $text = '')
+    public function list_link($is_add = true, $text = '')
     {
         $href = 'topic.php?act=list';
         if (!$is_add) {
@@ -367,7 +366,7 @@ class TopicController extends InitController
         return array('href' => $href, 'text' => $text);
     }
 
-    function get_toppic_width_height()
+    public function get_toppic_width_height()
     {
         $width_height = array();
 
@@ -404,7 +403,7 @@ class TopicController extends InitController
         return $width_height;
     }
 
-    function get_url_image($url)
+    public function get_url_image($url)
     {
         $url_arr = explode('.', $url);
         $ext = strtolower(end($url_arr));

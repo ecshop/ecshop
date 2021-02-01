@@ -15,9 +15,9 @@ class NavigatorController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 自定义导航栏列表
+    //-- 自定义导航栏列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $smarty->assign('ur_here', $_LANG['navigator']);
         $smarty->assign('action_link', array('text' => $_LANG['add_new'], 'href' => 'navigator.php?act=add'));
@@ -34,9 +34,9 @@ class NavigatorController extends InitController
         $smarty->display('navigator.htm');
     }
     /*------------------------------------------------------ */
-//-- 自定义导航栏列表Ajax
+    //-- 自定义导航栏列表Ajax
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $navdb = get_nav();
         $smarty->assign('navdb', $navdb['navdb']);
@@ -50,9 +50,9 @@ class NavigatorController extends InitController
         make_json_result($smarty->fetch('navigator.htm'), '', array('filter' => $navdb['filter'], 'page_count' => $navdb['page_count']));
     }
     /*------------------------------------------------------ */
-//-- 自定义导航栏增加
+    //-- 自定义导航栏增加
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         if (empty($_REQUEST['step'])) {
             $rt = array('act' => 'add');
@@ -98,9 +98,9 @@ class NavigatorController extends InitController
         }
     }
     /*------------------------------------------------------ */
-//-- 自定义导航栏编辑
+    //-- 自定义导航栏编辑
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         $id = $_REQUEST['id'];
         if (empty($_REQUEST['step'])) {
@@ -175,9 +175,9 @@ class NavigatorController extends InitController
         }
     }
     /*------------------------------------------------------ */
-//-- 自定义导航栏删除
+    //-- 自定义导航栏删除
     /*------------------------------------------------------ */
-    function delAction()
+    public function delAction()
     {
         $id = (int)$_GET['id'];
         $row = $db->getRow("SELECT ctype,cid,type FROM " . $GLOBALS['ecs']->table('nav') . " WHERE id = '$id' LIMIT 1");
@@ -194,9 +194,9 @@ class NavigatorController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑排序
+    //-- 编辑排序
     /*------------------------------------------------------ */
-    function edit_sort_orderAction()
+    public function edit_sort_orderAction()
     {
         check_authz_json('nav');
 
@@ -217,10 +217,10 @@ class NavigatorController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 切换是否显示
+    //-- 切换是否显示
     /*------------------------------------------------------ */
 
-    function toggle_ifshowAction()
+    public function toggle_ifshowAction()
     {
         $id = intval($_POST['id']);
         $val = intval($_POST['val']);
@@ -240,10 +240,10 @@ class NavigatorController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 切换是否新窗口
+    //-- 切换是否新窗口
     /*------------------------------------------------------ */
 
-    function toggle_opennewAction()
+    public function toggle_opennewAction()
     {
         $id = intval($_POST['id']);
         $val = intval($_POST['val']);
@@ -257,7 +257,7 @@ class NavigatorController extends InitController
     }
 
 
-    function get_nav()
+    public function get_nav()
     {
         $result = get_filter();
         if ($result === false) {
@@ -300,17 +300,17 @@ class NavigatorController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序相关
+    //-- 排序相关
     /*------------------------------------------------------ */
-    function sort_nav($a, $b)
+    public function sort_nav($a, $b)
     {
         return $a['vieworder'] > $b['vieworder'] ? 1 : -1;
     }
 
     /*------------------------------------------------------ */
-//-- 获得系统列表
+    //-- 获得系统列表
     /*------------------------------------------------------ */
-    function get_sysnav()
+    public function get_sysnav()
     {
         global $_LANG;
         $sysmain = array(
@@ -343,9 +343,9 @@ class NavigatorController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 列表项修改
+    //-- 列表项修改
     /*------------------------------------------------------ */
-    function nav_update($id, $args)
+    public function nav_update($id, $args)
     {
         if (empty($args) || empty($id)) {
             return false;
@@ -355,9 +355,9 @@ class NavigatorController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 根据URI对导航栏项目进行分析，确定其为商品分类还是文章分类
+    //-- 根据URI对导航栏项目进行分析，确定其为商品分类还是文章分类
     /*------------------------------------------------------ */
-    function analyse_uri($uri)
+    public function analyse_uri($uri)
     {
         $uri = strtolower(str_replace('&amp;', '&', $uri));
         $arr = explode('-', $uri);
@@ -407,9 +407,9 @@ class NavigatorController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 是否显示
+    //-- 是否显示
     /*------------------------------------------------------ */
-    function is_show_in_nav($type, $id)
+    public function is_show_in_nav($type, $id)
     {
         if ($type == 'c') {
             $tablename = $GLOBALS['ecs']->table('category');
@@ -420,9 +420,9 @@ class NavigatorController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 设置是否显示
+    //-- 设置是否显示
     /*------------------------------------------------------ */
-    function set_show_in_nav($type, $id, $val)
+    public function set_show_in_nav($type, $id, $val)
     {
         if ($type == 'c') {
             $tablename = $GLOBALS['ecs']->table('category');

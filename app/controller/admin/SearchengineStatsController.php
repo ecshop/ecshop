@@ -11,11 +11,10 @@ class SearchengineStatsController extends InitController
     {
         parent::initialize();
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
-
     }
 
 
-    function indexAction()
+    public function indexAction()
     {
         admin_priv('client_flow_stats');
 
@@ -108,7 +107,7 @@ class SearchengineStatsController extends InitController
         $smarty->display('searchengine_stats.htm');
     }
 
-    function downloadAction()
+    public function downloadAction()
     {
         $start_date = empty($_REQUEST['start_date']) ? strtotime('-20 day') : intval($_REQUEST['start_date']);
         $end_date = empty($_REQUEST['end_date']) ? time() : intval($_REQUEST['end_date']);

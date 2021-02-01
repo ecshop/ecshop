@@ -10,13 +10,12 @@ class GetPasswordController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
     /*------------------------------------------------------ */
-//-- 填写管理员帐号和email页面
+    //-- 填写管理员帐号和email页面
     /*------------------------------------------------------ */
-    function indexAction()
+    public function indexAction()
     {
         //验证从邮件地址过来的链接
         if (!empty($_GET['act']) && $_GET['act'] == 'reset_pwd') {
@@ -54,9 +53,9 @@ class GetPasswordController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 验证管理员帐号和email, 发送邮件
+    //-- 验证管理员帐号和email, 发送邮件
     /*------------------------------------------------------ */
-    function doAction()
+    public function doAction()
     {
         /* 发送找回密码确认邮件 */
         if (!empty($_POST['action']) && $_POST['action'] == 'get_pwd') {

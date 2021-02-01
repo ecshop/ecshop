@@ -9,7 +9,6 @@ class FlowController extends InitController
 {
     public function initialize()
     {
-
         require(ROOT_PATH . 'includes/lib_order.php');
 
         /* 载入语言文件 */
@@ -30,11 +29,11 @@ class FlowController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加商品到购物车
+    //-- 添加商品到购物车
     /*------------------------------------------------------ */
 
 
-    function add_to_cartAction()
+    public function add_to_cartAction()
     {
         include_once('includes/cls_json.php');
         $_POST['goods'] = strip_tags(urldecode($_POST['goods']));
@@ -137,7 +136,7 @@ class FlowController extends InitController
         die($json->encode($result));
     }
 
-    function link_buyAction()
+    public function link_buyAction()
     {
         $goods_id = intval($_GET['goods_id']);
 
@@ -148,7 +147,7 @@ class FlowController extends InitController
         exit;
     }
 
-    function loginAction()
+    public function loginAction()
     {
         include_once('languages/' . $_CFG['lang'] . '/user.php');
 
@@ -245,7 +244,7 @@ class FlowController extends InitController
         }
     }
 
-    function consigneeAction()
+    public function consigneeAction()
     {
         /*------------------------------------------------------ */
         //-- 收货人信息
@@ -343,7 +342,7 @@ class FlowController extends InitController
         }
     }
 
-    function drop_consigneeAction()
+    public function drop_consigneeAction()
     {
         /*------------------------------------------------------ */
         //-- 删除收货人信息
@@ -360,7 +359,7 @@ class FlowController extends InitController
         }
     }
 
-    function checkoutAction()
+    public function checkoutAction()
     {
         /*------------------------------------------------------ */
         //-- 订单确认
@@ -635,7 +634,7 @@ class FlowController extends InitController
         $_SESSION['flow_order'] = $order;
     }
 
-    function select_shippingAction()
+    public function select_shippingAction()
     {
         /*------------------------------------------------------ */
         //-- 改变配送方式
@@ -691,7 +690,7 @@ class FlowController extends InitController
         exit;
     }
 
-    function select_insureAction()
+    public function select_insureAction()
     {
         /*------------------------------------------------------ */
         //-- 选定/取消配送的保价
@@ -744,7 +743,7 @@ class FlowController extends InitController
         exit;
     }
 
-    function select_paymentAction()
+    public function select_paymentAction()
     {
         /*------------------------------------------------------ */
         //-- 改变支付方式
@@ -799,7 +798,7 @@ class FlowController extends InitController
         exit;
     }
 
-    function select_packAction()
+    public function select_packAction()
     {
         /*------------------------------------------------------ */
         //-- 改变商品包装
@@ -852,7 +851,7 @@ class FlowController extends InitController
         exit;
     }
 
-    function select_cardAction()
+    public function select_cardAction()
     {
         /*------------------------------------------------------ */
         //-- 改变贺卡
@@ -905,7 +904,7 @@ class FlowController extends InitController
         exit;
     }
 
-    function change_surplusAction()
+    public function change_surplusAction()
     {
         /*------------------------------------------------------ */
         //-- 改变余额
@@ -954,7 +953,7 @@ class FlowController extends InitController
         die($json->encode($result));
     }
 
-    function change_integralAction()
+    public function change_integralAction()
     {
         /*------------------------------------------------------ */
         //-- 改变积分
@@ -1008,7 +1007,7 @@ class FlowController extends InitController
         die($json->encode($result));
     }
 
-    function change_bonusAction()
+    public function change_bonusAction()
     {
         /*------------------------------------------------------ */
         //-- 改变红包
@@ -1059,7 +1058,7 @@ class FlowController extends InitController
         die($json->encode($result));
     }
 
-    function change_needinvAction()
+    public function change_needinvAction()
     {
         /*------------------------------------------------------ */
         //-- 改变发票的设置
@@ -1115,7 +1114,7 @@ class FlowController extends InitController
         }
     }
 
-    function change_oosAction()
+    public function change_oosAction()
     {
         /*------------------------------------------------------ */
         //-- 改变缺货处理时的方式
@@ -1130,7 +1129,7 @@ class FlowController extends InitController
         $_SESSION['flow_order'] = $order;
     }
 
-    function check_surplusAction()
+    public function check_surplusAction()
     {
         /*------------------------------------------------------ */
         //-- 检查用户输入的余额
@@ -1145,7 +1144,7 @@ class FlowController extends InitController
         exit;
     }
 
-    function check_integralAction()
+    public function check_integralAction()
     {
         /*------------------------------------------------------ */
         //-- 检查用户输入的余额
@@ -1166,11 +1165,11 @@ class FlowController extends InitController
         exit;
     }
     /*------------------------------------------------------ */
-//-- 完成所有订单操作，提交到数据库
+    //-- 完成所有订单操作，提交到数据库
     /*------------------------------------------------------ */
 
 
-    function doneAction()
+    public function doneAction()
     {
         include_once('includes/lib_clips.php');
         include_once('includes/lib_payment.php');
@@ -1594,11 +1593,11 @@ class FlowController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 更新购物车
+    //-- 更新购物车
     /*------------------------------------------------------ */
 
 
-    function update_cartAction()
+    public function update_cartAction()
     {
         if (isset($_POST['goods_number']) && is_array($_POST['goods_number'])) {
             flow_update_cart($_POST['goods_number']);
@@ -1609,11 +1608,11 @@ class FlowController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除购物车中的商品
+    //-- 删除购物车中的商品
     /*------------------------------------------------------ */
 
 
-    function drop_goodsAction()
+    public function drop_goodsAction()
     {
         $rec_id = intval($_GET['id']);
         flow_drop_cart_goods($rec_id);
@@ -1623,7 +1622,7 @@ class FlowController extends InitController
     } /* 把优惠活动加入购物车 */
 
 
-    function add_favourableAction()
+    public function add_favourableAction()
     {
         $where = "session_id = '" . SESS_ID . "'";
         if ($_SESSION['user_id']) {
@@ -1689,7 +1688,7 @@ class FlowController extends InitController
         exit;
     }
 
-    function clearAction()
+    public function clearAction()
     {
         $sql = "DELETE FROM " . $ecs->table('cart') . " WHERE session_id='" . SESS_ID . "'";
         if ($_SESSION['user_id']) {
@@ -1700,7 +1699,7 @@ class FlowController extends InitController
         ecs_header("Location:./\n");
     }
 
-    function drop_to_collectAction()
+    public function drop_to_collectAction()
     {
         $where = "session_id = '" . SESS_ID . "'";
         if ($_SESSION['user_id'] > 0) {
@@ -1721,7 +1720,7 @@ class FlowController extends InitController
     } /* 验证红包序列号 */
 
 
-    function validate_bonusAction()
+    public function validate_bonusAction()
     {
         $bonus_sn = trim($_REQUEST['bonus_sn']);
         if (is_numeric($bonus_sn)) {
@@ -1802,11 +1801,11 @@ class FlowController extends InitController
         die($json->encode($result));
     }
     /*------------------------------------------------------ */
-//-- 添加礼包到购物车
+    //-- 添加礼包到购物车
     /*------------------------------------------------------ */
 
 
-    function add_package_to_cartAction()
+    public function add_package_to_cartAction()
     {
         include_once('includes/cls_json.php');
         $_POST['package_info'] = json_str_iconv($_POST['package_info']);
@@ -1851,7 +1850,7 @@ class FlowController extends InitController
         die($json->encode($result));
     }
 
-    function cartAction()
+    public function cartAction()
     {
         $flow_type = isset($_REQUEST['type']) ? $_REQUEST['type'] : CART_GENERAL_GOODS;
         $flow_type = strip_tags($flow_type);
@@ -1939,7 +1938,7 @@ class FlowController extends InitController
      * @access  private
      * @return  integral
      */
-    function flow_available_points()
+    public function flow_available_points()
     {
         $where = "c.session_id = '" . SESS_ID . "'";
         if ($_SESSION['user_id']) {
@@ -1962,7 +1961,7 @@ class FlowController extends InitController
      * @param array $arr
      * @return  void
      */
-    function flow_update_cart($arr)
+    public function flow_update_cart($arr)
     {
         $where = "session_id = '" . SESS_ID . "'";
         if ($_SESSION['user_id']) {
@@ -2092,7 +2091,7 @@ class FlowController extends InitController
      *
      * @return  void
      */
-    function flow_cart_stock($arr)
+    public function flow_cart_stock($arr)
     {
         $where = "session_id = '" . SESS_ID . "'";
         if ($_SESSION['user_id']) {
@@ -2157,7 +2156,7 @@ class FlowController extends InitController
      * @param integer $id
      * @return  void
      */
-    function flow_drop_cart_goods($id)
+    public function flow_drop_cart_goods($id)
     {
         $where = "session_id = '" . SESS_ID . "'";
         if ($_SESSION['user_id']) {
@@ -2213,7 +2212,7 @@ class FlowController extends InitController
      * @access  public
      * @return  void
      */
-    function flow_clear_cart_alone()
+    public function flow_clear_cart_alone()
     {
         $where = "session_id = '" . SESS_ID . "'";
         if ($_SESSION['user_id']) {
@@ -2283,7 +2282,7 @@ class FlowController extends InitController
      * @param array $b 优惠活动b
      * @return  int     相等返回0，小于返回-1，大于返回1
      */
-    function cmp_favourable($a, $b)
+    public function cmp_favourable($a, $b)
     {
         if ($a['available'] == $b['available']) {
             if ($a['sort_order'] == $b['sort_order']) {
@@ -2301,7 +2300,7 @@ class FlowController extends InitController
      * @param int $user_rank 用户等级id，0表示非会员
      * @return  array
      */
-    function favourable_list($user_rank)
+    public function favourable_list($user_rank)
     {
         /* 购物车中已有的优惠活动及数量 */
         $used_list = cart_favourable();
@@ -2354,7 +2353,7 @@ class FlowController extends InitController
      * @param array $favourable 优惠活动信息
      * @return  bool
      */
-    function favourable_available($favourable)
+    public function favourable_available($favourable)
     {
         /* 会员等级是否符合 */
         $user_rank = $_SESSION['user_rank'];
@@ -2375,7 +2374,7 @@ class FlowController extends InitController
      * @param array $favourable 优惠活动
      * @return  string
      */
-    function act_range_desc($favourable)
+    public function act_range_desc($favourable)
     {
         if ($favourable['act_range'] == FAR_BRAND) {
             $sql = "SELECT brand_name FROM " . $GLOBALS['ecs']->table('brand') .
@@ -2398,7 +2397,7 @@ class FlowController extends InitController
      * 取得购物车中已有的优惠活动及数量
      * @return  array
      */
-    function cart_favourable()
+    public function cart_favourable()
     {
         $where = "session_id = '" . SESS_ID . "'";
         if ($_SESSION['user_id']) {
@@ -2424,7 +2423,7 @@ class FlowController extends InitController
      * @param array $favourable 优惠活动
      * @param array $cart_favourable购物车中已有的优惠活动及数量
      */
-    function favourable_used($favourable, $cart_favourable)
+    public function favourable_used($favourable, $cart_favourable)
     {
         if ($favourable['act_type'] == FAT_GOODS) {
             return isset($cart_favourable[$favourable['act_id']]) &&
@@ -2441,7 +2440,7 @@ class FlowController extends InitController
      * @param int $id 赠品id
      * @param float $price 赠品价格
      */
-    function add_gift_to_cart($act_id, $id, $price)
+    public function add_gift_to_cart($act_id, $id, $price)
     {
         $sql = "INSERT INTO " . $GLOBALS['ecs']->table('cart') . " (" .
             "user_id, session_id, goods_id, goods_sn, goods_name, market_price, goods_price, " .
@@ -2459,7 +2458,7 @@ class FlowController extends InitController
      * @param string $act_name 优惠活动name
      * @param float $amount 优惠金额
      */
-    function add_favourable_to_cart($act_id, $act_name, $amount)
+    public function add_favourable_to_cart($act_id, $act_name, $amount)
     {
         $sql = "INSERT INTO " . $GLOBALS['ecs']->table('cart') . "(" .
             "user_id, session_id, goods_id, goods_sn, goods_name, market_price, goods_price, " .
@@ -2474,7 +2473,7 @@ class FlowController extends InitController
      * @param array $favourable 优惠活动
      * @return  float
      */
-    function cart_favourable_amount($favourable)
+    public function cart_favourable_amount($favourable)
     {
         $where = "session_id = '" . SESS_ID . "'";
         if ($_SESSION['user_id']) {

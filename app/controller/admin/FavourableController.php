@@ -15,14 +15,13 @@ class FavourableController extends InitController
         require(ROOT_PATH . 'includes/lib_goods.php');
 
         $exc = new exchange($ecs->table('favourable_activity'), $db, 'act_id', 'act_name');
-
     }
 
     /*------------------------------------------------------ */
-//-- 活动列表页
+    //-- 活动列表页
     /*------------------------------------------------------ */
 
-    function listAction()
+    public function listAction()
     {
         admin_priv('favourable');
 
@@ -47,10 +46,10 @@ class FavourableController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 分页、排序、查询
+    //-- 分页、排序、查询
     /*------------------------------------------------------ */
 
-    function queryAction()
+    public function queryAction()
     {
         $list = favourable_list();
 
@@ -70,9 +69,9 @@ class FavourableController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除
+    //-- 删除
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('favourable');
 
@@ -97,9 +96,9 @@ class FavourableController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量操作
+    //-- 批量操作
     /*------------------------------------------------------ */
-    function batchAction()
+    public function batchAction()
     {
         /* 取得要操作的记录编号 */
         if (empty($_POST['checkboxes'])) {
@@ -129,9 +128,9 @@ class FavourableController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改排序
+    //-- 修改排序
     /*------------------------------------------------------ */
-    function edit_sort_orderAction()
+    public function edit_sort_orderAction()
     {
         check_authz_json('favourable');
 
@@ -147,14 +146,14 @@ class FavourableController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加、编辑
+    //-- 添加、编辑
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         editAction();
     }
 
-    function editAction()
+    public function editAction()
     {
         /* 检查权限 */
         admin_priv('favourable');
@@ -242,14 +241,14 @@ class FavourableController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加、编辑后提交
+    //-- 添加、编辑后提交
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         updateAction();
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 检查权限 */
         admin_priv('favourable');
@@ -341,10 +340,10 @@ class FavourableController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索商品
+    //-- 搜索商品
     /*------------------------------------------------------ */
 
-    function searchAction()
+    public function searchAction()
     {
         /* 检查权限 */
         check_authz_json('favourable');
@@ -387,7 +386,7 @@ class FavourableController extends InitController
      * 取得优惠活动列表
      * @return   array
      */
-    function favourable_list()
+    public function favourable_list()
     {
         $result = get_filter();
         if ($result === false) {

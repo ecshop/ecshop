@@ -19,7 +19,7 @@ class DatabaseController extends InitController
 
 
     /* 备份页面 */
-    function backupAction()
+    public function backupAction()
     {
         $tables = $db->getCol("SHOW TABLES LIKE '" . mysql_like_quote($ecs->prefix) . "%'");
         $allow_max_size = return_bytes(@ini_get('upload_max_filesize')); // 单位为字节
@@ -58,7 +58,7 @@ class DatabaseController extends InitController
     }
 
     /* 备份恢复页面 */
-    function restoreAction()
+    public function restoreAction()
     {
         /* 权限判断 */
         admin_priv('db_renew');
@@ -110,7 +110,7 @@ class DatabaseController extends InitController
         $smarty->display('db_restore.htm');
     }
 
-    function dumpsqlAction()
+    public function dumpsqlAction()
     {
         /* 权限判断 */
         $token = trim($_REQUEST['token']);
@@ -264,7 +264,7 @@ class DatabaseController extends InitController
     }
 
     /* 删除备份 */
-    function removeAction()
+    public function removeAction()
     {
         /* 权限判断 */
         admin_priv('db_backup');
@@ -315,7 +315,7 @@ class DatabaseController extends InitController
     }
 
     /* 从服务器上导入数据 */
-    function importAction()
+    public function importAction()
     {
         /* 权限判断 */
         admin_priv('db_renew');
@@ -387,9 +387,9 @@ class DatabaseController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 上传sql 文件
+    //-- 上传sql 文件
     /*------------------------------------------------------ */
-    function upload_sqlAction()
+    public function upload_sqlAction()
     {
         /* 权限判断 */
         admin_priv('db_renew');
@@ -465,9 +465,9 @@ class DatabaseController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 优化页面
+    //-- 优化页面
     /*------------------------------------------------------ */
-    function optimizeAction()
+    public function optimizeAction()
     {
         /* 初始化数据 */
         admin_priv('db_backup');
@@ -496,7 +496,7 @@ class DatabaseController extends InitController
         $smarty->display('optimize.htm');
     }
 
-    function run_optimizeAction()
+    public function run_optimizeAction()
     {
         admin_priv('db_backup');
         $tables = $db->getCol("SHOW TABLES LIKE '" . mysql_like_quote($ecs->prefix) . "%'");
@@ -520,7 +520,7 @@ class DatabaseController extends InitController
      *
      * @return void
      */
-    function sql_import($sql_file)
+    public function sql_import($sql_file)
     {
         $sql_str = array_filter(file($sql_file), 'remove_comment');
         $sql_str = str_replace("\r", '', implode('', $sql_str));
@@ -551,7 +551,7 @@ class DatabaseController extends InitController
      *
      * @return void
      */
-    function num_bitunit($num)
+    public function num_bitunit($num)
     {
         $bitunit = array(' B', ' KB', ' MB', ' GB');
         for ($key = 0, $count = count($bitunit); $key < $count; $key++) {
@@ -570,7 +570,7 @@ class DatabaseController extends InitController
      * @param
      * @return  void
      */
-    function remove_comment($var)
+    public function remove_comment($var)
     {
         return (substr($var, 0, 2) != '--');
     }

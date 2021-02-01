@@ -16,10 +16,10 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 订单查询
+    //-- 订单查询
     /*------------------------------------------------------ */
 
-    function order_queryAction()
+    public function order_queryAction()
     {
         /* 检查权限 */
         admin_priv('order_view');
@@ -48,10 +48,10 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 订单列表
+    //-- 订单列表
     /*------------------------------------------------------ */
 
-    function listAction()
+    public function listAction()
     {
         /* 检查权限 */
         admin_priv('order_view');
@@ -80,9 +80,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序、分页、查询
+    //-- 排序、分页、查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         /* 检查权限 */
         admin_priv('order_view');
@@ -99,10 +99,10 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 订单详情页面
+    //-- 订单详情页面
     /*------------------------------------------------------ */
 
-    function infoAction()
+    public function infoAction()
     {
         /* 根据订单id或订单号查询订单信息 */
         if (isset($_REQUEST['order_id'])) {
@@ -460,9 +460,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 发货单列表
+    //-- 发货单列表
     /*------------------------------------------------------ */
-    function delivery_listAction()
+    public function delivery_listAction()
     {
         /* 检查权限 */
         admin_priv('delivery_view');
@@ -490,9 +490,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索、排序、分页
+    //-- 搜索、排序、分页
     /*------------------------------------------------------ */
-    function delivery_queryAction()
+    public function delivery_queryAction()
     {
         /* 检查权限 */
         admin_priv('delivery_view');
@@ -510,9 +510,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 发货单详细
+    //-- 发货单详细
     /*------------------------------------------------------ */
-    function delivery_infoAction()
+    public function delivery_infoAction()
     {
         /* 检查权限 */
         admin_priv('delivery_view');
@@ -607,9 +607,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 发货单发货确认
+    //-- 发货单发货确认
     /*------------------------------------------------------ */
-    function delivery_shipAction()
+    public function delivery_shipAction()
     {
         /* 检查权限 */
         admin_priv('delivery_view');
@@ -802,9 +802,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 发货单取消发货
+    //-- 发货单取消发货
     /*------------------------------------------------------ */
-    function delivery_cancel_shipAction()
+    public function delivery_cancel_shipAction()
     {
         /* 检查权限 */
         admin_priv('delivery_view');
@@ -919,9 +919,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 退货单列表
+    //-- 退货单列表
     /*------------------------------------------------------ */
-    function back_listAction()
+    public function back_listAction()
     {
         /* 检查权限 */
         admin_priv('back_view');
@@ -949,9 +949,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索、排序、分页
+    //-- 搜索、排序、分页
     /*------------------------------------------------------ */
-    function back_queryAction()
+    public function back_queryAction()
     {
         /* 检查权限 */
         admin_priv('back_view');
@@ -969,9 +969,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 退货单详细
+    //-- 退货单详细
     /*------------------------------------------------------ */
-    function back_infoAction()
+    public function back_infoAction()
     {
         /* 检查权限 */
         admin_priv('back_view');
@@ -1052,10 +1052,10 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改订单（处理提交）
+    //-- 修改订单（处理提交）
     /*------------------------------------------------------ */
 
-    function step_postAction()
+    public function step_postAction()
     {
         /* 检查权限 */
         admin_priv('order_edit');
@@ -1759,15 +1759,15 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改订单（载入页面）
+    //-- 修改订单（载入页面）
     /*------------------------------------------------------ */
 
-    function addAction()
+    public function addAction()
     {
         editAction();
     }
 
-    function editAction()
+    public function editAction()
     {
         /* 检查权限 */
         admin_priv('order_edit');
@@ -2001,10 +2001,10 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 处理
+    //-- 处理
     /*------------------------------------------------------ */
 
-    function processAction()
+    public function processAction()
     {
         /* 取得参数 func */
         $func = isset($_GET['func']) ? $_GET['func'] : '';
@@ -2096,10 +2096,10 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 合并订单
+    //-- 合并订单
     /*------------------------------------------------------ */
 
-    function mergeAction()
+    public function mergeAction()
     {
         /* 检查权限 */
         admin_priv('order_os_edit');
@@ -2122,10 +2122,10 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 订单打印模板（载入页面）
+    //-- 订单打印模板（载入页面）
     /*------------------------------------------------------ */
 
-    function templatesAction()
+    public function templatesAction()
     {
         /* 检查权限 */
         admin_priv('order_os_edit');
@@ -2158,10 +2158,10 @@ class OrderController extends InitController
         $smarty->display('order_templates.htm');
     }
     /*------------------------------------------------------ */
-//-- 订单打印模板（提交修改）
+    //-- 订单打印模板（提交修改）
     /*------------------------------------------------------ */
 
-    function edit_templatesAction()
+    public function edit_templatesAction()
     {
         /* 更新模板文件的内容 */
         $file_name = @fopen('../' . DATA_DIR . '/order_print.html', 'w+');
@@ -2174,10 +2174,10 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 操作订单状态（载入页面）
+    //-- 操作订单状态（载入页面）
     /*------------------------------------------------------ */
 
-    function operateAction()
+    public function operateAction()
     {
         $order_id = '';
         /* 检查权限 */
@@ -2654,10 +2654,10 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 操作订单状态（处理批量提交）
+    //-- 操作订单状态（处理批量提交）
     /*------------------------------------------------------ */
 
-    function batch_operate_postAction()
+    public function batch_operate_postAction()
     {
         /* 检查权限 */
         admin_priv('order_os_edit');
@@ -2885,10 +2885,10 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 操作订单状态（处理提交）
+    //-- 操作订单状态（处理提交）
     /*------------------------------------------------------ */
 
-    function operate_postAction()
+    public function operate_postAction()
     {
         /* 检查权限 */
         admin_priv('order_os_edit');
@@ -3559,7 +3559,7 @@ class OrderController extends InitController
         sys_msg($_LANG['act_ok'] . $msg, 0, $links);
     }
 
-    function jsonAction()
+    public function jsonAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON();
@@ -3607,9 +3607,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 合并订单
+    //-- 合并订单
     /*------------------------------------------------------ */
-    function ajax_merge_orderAction()
+    public function ajax_merge_orderAction()
     {
         /* 检查权限 */
         admin_priv('order_os_edit');
@@ -3632,9 +3632,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除订单
+    //-- 删除订单
     /*------------------------------------------------------ */
-    function remove_orderAction()
+    public function remove_orderAction()
     {
         /* 检查权限 */
         admin_priv('order_edit');
@@ -3669,9 +3669,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 根据关键字和id搜索用户
+    //-- 根据关键字和id搜索用户
     /*------------------------------------------------------ */
-    function search_usersAction()
+    public function search_usersAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON();
@@ -3699,9 +3699,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 根据关键字搜索商品
+    //-- 根据关键字搜索商品
     /*------------------------------------------------------ */
-    function search_goodsAction()
+    public function search_goodsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON();
@@ -3733,9 +3733,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑收货单号
+    //-- 编辑收货单号
     /*------------------------------------------------------ */
-    function edit_invoice_noAction()
+    public function edit_invoice_noAction()
     {
         /* 检查权限 */
         check_authz_json('order_edit');
@@ -3762,9 +3762,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑付款备注
+    //-- 编辑付款备注
     /*------------------------------------------------------ */
-    function edit_pay_noteAction()
+    public function edit_pay_noteAction()
     {
         /* 检查权限 */
         check_authz_json('order_edit');
@@ -3791,9 +3791,9 @@ class OrderController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 获取订单商品信息
+    //-- 获取订单商品信息
     /*------------------------------------------------------ */
-    function get_goods_infoAction()
+    public function get_goods_infoAction()
     {
         /* 取得订单商品 */
         $order_id = isset($_REQUEST['order_id']) ? intval($_REQUEST['order_id']) : 0;
@@ -3837,7 +3837,7 @@ class OrderController extends InitController
      * 取得状态列表
      * @param string $type 类型：all | order | shipping | payment
      */
-    function get_status_list($type = 'all')
+    public function get_status_list($type = 'all')
     {
         global $_LANG;
 
@@ -3870,7 +3870,7 @@ class OrderController extends InitController
      * 退回余额、积分、红包（取消、无效、退货时），把订单使用余额、积分、红包设为0
      * @param array $order 订单信息
      */
-    function return_user_surplus_integral_bonus($order)
+    public function return_user_surplus_integral_bonus($order)
     {
         /* 处理余额、积分、红包 */
         if ($order['user_id'] > 0 && $order['surplus'] > 0) {
@@ -3903,7 +3903,7 @@ class OrderController extends InitController
      * @param int $order_id 订单id
      * @return  bool
      */
-    function update_order_amount($order_id)
+    public function update_order_amount($order_id)
     {
         include_once(ROOT_PATH . 'includes/lib_order.php');
         //更新订单总金额
@@ -3921,7 +3921,7 @@ class OrderController extends InitController
      * @return  array   可执行的操作  confirm, pay, unpay, prepare, ship, unship, receive, cancel, invalid, return, drop
      * 格式 array('confirm' => true, 'pay' => true)
      */
-    function operable_list($order)
+    public function operable_list($order)
     {
         /* 取得订单状态、发货状态、付款状态 */
         $os = $order['order_status'];
@@ -4107,7 +4107,7 @@ class OrderController extends InitController
      * @param array $msgs 提示信息
      * @param array $links 链接信息
      */
-    function handle_order_money_change($order, &$msgs, &$links)
+    public function handle_order_money_change($order, &$msgs, &$links)
     {
         $order_id = $order['order_id'];
         if ($order['pay_status'] == PS_PAYED || $order['pay_status'] == PS_PAYING) {
@@ -4135,7 +4135,7 @@ class OrderController extends InitController
      *
      * @return void
      */
-    function order_list()
+    public function order_list()
     {
         $result = get_filter();
         if ($result === false) {
@@ -4341,7 +4341,7 @@ class OrderController extends InitController
      * 如果未支付，修改支付金额；否则，生成新的支付log
      * @param int $order_id 订单id
      */
-    function update_pay_log($order_id)
+    public function update_pay_log($order_id)
     {
         $order_id = intval($order_id);
         if ($order_id > 0) {
@@ -4374,7 +4374,7 @@ class OrderController extends InitController
      * 取得供货商列表
      * @return array    二维数组
      */
-    function get_suppliers_list()
+    public function get_suppliers_list()
     {
         $sql = 'SELECT *
             FROM ' . $GLOBALS['ecs']->table('suppliers') . '
@@ -4394,7 +4394,7 @@ class OrderController extends InitController
      * @param array $order 订单数组
      * @return array
      */
-    function get_order_goods($order)
+    public function get_order_goods($order)
     {
         $goods_list = array();
         $goods_attr = array();
@@ -4440,7 +4440,7 @@ class OrderController extends InitController
      * @param integer $package_id 订单商品表礼包类商品id
      * @return array
      */
-    function get_package_goods_list($package_id)
+    public function get_package_goods_list($package_id)
     {
         $sql = "SELECT pg.goods_id, g.goods_name, (CASE WHEN pg.product_id > 0 THEN p.product_number ELSE g.goods_number END) AS goods_number, p.goods_attr, p.product_id, pg.goods_number AS
             order_goods_number, g.goods_sn, g.is_real, p.product_sn
@@ -4533,7 +4533,7 @@ class OrderController extends InitController
      *
      * @return  int
      */
-    function order_delivery_num($order_id, $goods_id, $product_id = 0)
+    public function order_delivery_num($order_id, $goods_id, $product_id = 0)
     {
         $sql = 'SELECT SUM(G.send_number) AS sums
             FROM ' . $GLOBALS['ecs']->table('delivery_goods') . ' AS G, ' . $GLOBALS['ecs']->table('delivery_order') . ' AS O
@@ -4559,7 +4559,7 @@ class OrderController extends InitController
      * @param int $order_id 订单 id
      * @return  int     1，已发货；0，未发货
      */
-    function order_deliveryed($order_id)
+    public function order_deliveryed($order_id)
     {
         $return_res = 0;
 
@@ -4587,7 +4587,7 @@ class OrderController extends InitController
      * @param array $goods_list
      * @return  Bool
      */
-    function update_order_goods($order_id, $_sended, $goods_list = array())
+    public function update_order_goods($order_id, $_sended, $goods_list = array())
     {
         if (!is_array($_sended) || empty($order_id)) {
             return false;
@@ -4652,7 +4652,7 @@ class OrderController extends InitController
      * @param array $virtual_goods 虚拟商品列表
      * @return  Bool
      */
-    function update_order_virtual_goods($order_id, $_sended, $virtual_goods)
+    public function update_order_virtual_goods($order_id, $_sended, $virtual_goods)
     {
         if (!is_array($_sended) || empty($order_id)) {
             return false;
@@ -4681,7 +4681,7 @@ class OrderController extends InitController
      * @param int $order_id 订单 id
      * @return  int     1，全部发货；0，未全部发货
      */
-    function get_order_finish($order_id)
+    public function get_order_finish($order_id)
     {
         $return_res = 0;
 
@@ -4707,7 +4707,7 @@ class OrderController extends InitController
      * @param int $order_id 订单 id
      * @return  int     1，全部发货；0，未全部发货；-1，部分发货；-2，完全没发货；
      */
-    function get_all_delivery_finish($order_id)
+    public function get_all_delivery_finish($order_id)
     {
         $return_res = 0;
 
@@ -4748,7 +4748,7 @@ class OrderController extends InitController
         return $return_res;
     }
 
-    function trim_array_walk(&$array_value)
+    public function trim_array_walk(&$array_value)
     {
         if (is_array($array_value)) {
             array_walk($array_value, 'trim_array_walk');
@@ -4757,7 +4757,7 @@ class OrderController extends InitController
         }
     }
 
-    function intval_array_walk(&$array_value)
+    public function intval_array_walk(&$array_value)
     {
         if (is_array($array_value)) {
             array_walk($array_value, 'intval_array_walk');
@@ -4771,7 +4771,7 @@ class OrderController extends InitController
      * @param int $order_id 订单 id
      * @return  int     1，成功；0，失败
      */
-    function del_order_delivery($order_id)
+    public function del_order_delivery($order_id)
     {
         $return_res = 0;
 
@@ -4799,7 +4799,7 @@ class OrderController extends InitController
      * @param int $action_array 操作列表 Array('delivery', 'back', ......)
      * @return  int     1，成功；0，失败
      */
-    function del_delivery($order_id, $action_array)
+    public function del_delivery($order_id, $action_array)
     {
         $return_res = 0;
 
@@ -4839,7 +4839,7 @@ class OrderController extends InitController
      *
      * @return void
      */
-    function delivery_list()
+    public function delivery_list()
     {
         $result = get_filter();
         if ($result === false) {
@@ -4950,7 +4950,7 @@ class OrderController extends InitController
      *
      * @return void
      */
-    function back_list()
+    public function back_list()
     {
         $result = get_filter();
         if ($result === false) {
@@ -5046,7 +5046,7 @@ class OrderController extends InitController
      * @param string $delivery_sn 发货单号
      * @return  array   发货单信息（金额都有相应格式化的字段，前缀是formated_）
      */
-    function delivery_order_info($delivery_id, $delivery_sn = '')
+    public function delivery_order_info($delivery_id, $delivery_sn = '')
     {
         $return_order = array();
         if (empty($delivery_id) || !is_numeric($delivery_id)) {
@@ -5097,7 +5097,7 @@ class OrderController extends InitController
      * @param int $back_id 退货单 id（如果 back_id > 0 就按 id 查，否则按 sn 查）
      * @return  array   退货单信息（金额都有相应格式化的字段，前缀是 formated_ ）
      */
-    function back_order_info($back_id)
+    public function back_order_info($back_id)
     {
         $return_order = array();
         if (empty($back_id) || !is_numeric($back_id)) {
@@ -5148,7 +5148,7 @@ class OrderController extends InitController
      * @param int     礼包ID
      * @return  array   格式化结果
      */
-    function package_goods(&$package_goods, $goods_number, $order_id, $extension_code, $package_id)
+    public function package_goods(&$package_goods, $goods_number, $order_id, $extension_code, $package_id)
     {
         $return_array = array();
 
@@ -5190,7 +5190,7 @@ class OrderController extends InitController
      *
      * @return  int     数值
      */
-    function package_sended($package_id, $goods_id, $order_id, $extension_code, $product_id = 0)
+    public function package_sended($package_id, $goods_id, $order_id, $extension_code, $product_id = 0)
     {
         if (empty($package_id) || empty($goods_id) || empty($order_id) || empty($extension_code)) {
             return false;
@@ -5218,7 +5218,7 @@ class OrderController extends InitController
      * @param array $goods_list
      * @return  Bool
      */
-    function change_order_goods_storage_split($order_id, $_sended, $goods_list = array())
+    public function change_order_goods_storage_split($order_id, $_sended, $goods_list = array())
     {
         /* 参数检查 */
         if (!is_array($_sended) || empty($order_id)) {
@@ -5276,7 +5276,7 @@ class OrderController extends InitController
      *
      * @return  boolen
      */
-    function package_virtual_card_shipping($goods, $order_sn)
+    public function package_virtual_card_shipping($goods, $order_sn)
     {
         if (!is_array($goods)) {
             return false;
@@ -5363,7 +5363,7 @@ class OrderController extends InitController
      *
      * @return  void
      */
-    function delivery_return_goods($delivery_id, $delivery_order)
+    public function delivery_return_goods($delivery_id, $delivery_order)
     {
         /* 查询：取得发货单商品 */
         $goods_sql = "SELECT *
@@ -5392,7 +5392,7 @@ class OrderController extends InitController
      *
      * @return  void
      */
-    function del_order_invoice_no($order_id, $delivery_invoice_no)
+    public function del_order_invoice_no($order_id, $delivery_invoice_no)
     {
         /* 查询：取得订单中的发货单号 */
         $sql = "SELECT invoice_no
@@ -5425,7 +5425,7 @@ class OrderController extends InitController
      * @access  private
      * @return  Bool
      */
-    function get_site_root_url()
+    public function get_site_root_url()
     {
         return 'http://' . $_SERVER['HTTP_HOST'] . str_replace('/' . ADMIN_PATH . '/order.php', '', PHP_SELF);
     }

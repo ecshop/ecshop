@@ -9,7 +9,6 @@ class RegionController extends InitController
 {
     public function indexAction()
     {
-
         define('INIT_NO_USERS', true);
         define('INIT_NO_SMARTY', true);
 
@@ -29,5 +28,3 @@ class RegionController extends InitController
         echo $json->encode($arr);
     }
 }
-
-

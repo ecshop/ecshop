@@ -30,19 +30,18 @@ class UserAccountManageController extends InitController
             $start_date = $today - 86400 * 7;
             $end_date = $today;
         }
-
     }
 
     /*------------------------------------------------------ */
-//--数据查询
+    //--数据查询
     /*------------------------------------------------------ */
     /* 时间参数 */
 
 
     /*------------------------------------------------------ */
-//--商品明细列表
+    //--商品明细列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $account = $money_list = array();
         $account['voucher_amount'] = get_total_amount($start_date, $end_date);//充值总额
@@ -72,7 +71,7 @@ class UserAccountManageController extends InitController
         $smarty->display('user_account_manage.htm');
     }
 
-    function surplusAction()
+    public function surplusAction()
     {
         $order_list = order_list();
 
@@ -91,9 +90,9 @@ class UserAccountManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- ajax返回用户列表
+    //-- ajax返回用户列表
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $order_list = order_list();
 
@@ -113,7 +112,7 @@ class UserAccountManageController extends InitController
      * @param string $type 0,充值 1,提现
      * @return  array
      */
-    function get_total_amount($start_date, $end_date, $type = 0)
+    public function get_total_amount($start_date, $end_date, $type = 0)
     {
         $sql = " SELECT IFNULL(SUM(amount), 0) AS total_amount FROM " . $GLOBALS['ecs']->table('user_account') . " AS a, " . $GLOBALS['ecs']->table('users') . " AS u " .
             " WHERE process_type = $type AND is_paid = 1 AND a.user_id = u.user_id AND paid_time >= '$start_date' AND paid_time < '" . ($end_date + 86400) . "'";
@@ -132,7 +131,7 @@ class UserAccountManageController extends InitController
      *
      * @return void
      */
-    function order_list()
+    public function order_list()
     {
         global $start_date, $end_date;
 

@@ -10,10 +10,9 @@ class CheckFilePrivController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
-    function checkAction()
+    public function checkAction()
     {
         /* 检查权限 */
         admin_priv('file_priv');
@@ -130,7 +129,7 @@ class CheckFilePrivController extends InitController
      *
      * @return int       $mark          文件权限掩码
      */
-    function check_file_in_array($arr, &$err_msg)
+    public function check_file_in_array($arr, &$err_msg)
     {
         $read = true;
         $writen = true;

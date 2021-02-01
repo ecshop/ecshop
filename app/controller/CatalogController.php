@@ -9,7 +9,6 @@ class CatalogController extends InitController
 {
     public function indexAction()
     {
-
         if ((DEBUG_MODE & 2) != 2) {
             $smarty->caching = true;
         }
@@ -48,7 +47,7 @@ class CatalogController extends InitController
      *
      * @return void
      */
-    function calculate_goods_num($cat_list, $cat_id)
+    public function calculate_goods_num($cat_list, $cat_id)
     {
         $goods_num = 0;
 

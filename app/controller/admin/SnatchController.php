@@ -11,13 +11,12 @@ class SnatchController extends InitController
     {
         parent::initialize();
         $exc = new exchange($ecs->table("goods_activity"), $db, 'act_id', 'act_name');
-
     }
 
     /*------------------------------------------------------ */
-//-- 添加活动
+    //-- 添加活动
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 权限判断 */
         admin_priv('snatch_manage');
@@ -38,7 +37,7 @@ class SnatchController extends InitController
         $smarty->display('snatch_info.htm');
     }
 
-    function insertAction()
+    public function insertAction()
     {
         /* 权限判断 */
         admin_priv('snatch_manage');
@@ -97,9 +96,9 @@ class SnatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 活动列表
+    //-- 活动列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $smarty->assign('ur_here', $_LANG['02_snatch_list']);
         $smarty->assign('action_link', array('text' => $_LANG['snatch_add'], 'href' => 'snatch.php?act=add'));
@@ -120,10 +119,10 @@ class SnatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 查询、翻页、排序
+    //-- 查询、翻页、排序
     /*------------------------------------------------------ */
 
-    function queryAction()
+    public function queryAction()
     {
         $snatchs = get_snatchlist();
 
@@ -143,10 +142,10 @@ class SnatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑活动名称
+    //-- 编辑活动名称
     /*------------------------------------------------------ */
 
-    function edit_snatch_nameAction()
+    public function edit_snatch_nameAction()
     {
         check_authz_json('snatch_manage');
 
@@ -166,10 +165,10 @@ class SnatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除指定的活动
+    //-- 删除指定的活动
     /*------------------------------------------------------ */
 
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('attr_manage');
 
@@ -184,9 +183,9 @@ class SnatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑活动
+    //-- 编辑活动
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         /* 权限判断 */
         admin_priv('snatch_manage');
@@ -206,7 +205,7 @@ class SnatchController extends InitController
         $smarty->display('snatch_info.htm');
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 权限判断 */
         admin_priv('snatch_manage');
@@ -264,9 +263,9 @@ class SnatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 查看活动详情
+    //-- 查看活动详情
     /*------------------------------------------------------ */
-    function viewAction()
+    public function viewAction()
     {
         /* 权限判断 */
         admin_priv('snatch_manage');
@@ -292,10 +291,10 @@ class SnatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序、翻页活动详情
+    //-- 排序、翻页活动详情
     /*------------------------------------------------------ */
 
-    function query_bidAction()
+    public function query_bidAction()
     {
         $bid_list = get_snatch_detail();
 
@@ -315,10 +314,10 @@ class SnatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索商品
+    //-- 搜索商品
     /*------------------------------------------------------ */
 
-    function search_goodsAction()
+    public function search_goodsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -335,10 +334,10 @@ class SnatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索货品
+    //-- 搜索货品
     /*------------------------------------------------------ */
 
-    function search_productsAction()
+    public function search_productsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -359,7 +358,7 @@ class SnatchController extends InitController
      *
      * @return void
      */
-    function get_snatchlist()
+    public function get_snatchlist()
     {
         $result = get_filter();
         if ($result === false) {
@@ -419,7 +418,7 @@ class SnatchController extends InitController
      *
      * @return array       array(snatch_id, snatch_name, goods_id,start_time, end_time, min_price, integral)
      */
-    function get_snatch_info($id)
+    public function get_snatch_info($id)
     {
         global $ecs, $db, $_CFG;
 
@@ -450,7 +449,7 @@ class SnatchController extends InitController
      *
      * @return array
      */
-    function get_snatch_detail()
+    public function get_snatch_detail()
     {
         $filter['snatch_id'] = empty($_REQUEST['snatch_id']) ? 0 : intval($_REQUEST['snatch_id']);
         $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'bid_time' : trim($_REQUEST['sort_by']);

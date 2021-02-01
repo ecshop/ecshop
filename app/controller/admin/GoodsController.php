@@ -15,18 +15,17 @@ class GoodsController extends InitController
         include_once(ROOT_PATH . '/includes/cls_image.php');
         $image = new cls_image($_CFG['bgcolor']);
         $exc = new exchange($ecs->table('goods'), $db, 'goods_id', 'goods_name');
-
     }
 
     /*------------------------------------------------------ */
-//-- 商品列表，商品回收站
+    //-- 商品列表，商品回收站
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         trashAction();
     }
 
-    function trashAction()
+    public function trashAction()
     {
         admin_priv('goods_manage');
 
@@ -98,19 +97,19 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加新商品 编辑商品
+    //-- 添加新商品 编辑商品
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         copyAction();
     }
 
-    function editAction()
+    public function editAction()
     {
         copyAction();
     }
 
-    function copyAction()
+    public function copyAction()
     {
         include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
 
@@ -427,14 +426,14 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 插入商品 更新商品
+    //-- 插入商品 更新商品
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         updateAction();
     }
 
-    function updateAction()
+    public function updateAction()
     {
         $code = empty($_REQUEST['extension_code']) ? '' : trim($_REQUEST['extension_code']);
 
@@ -986,10 +985,10 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量操作
+    //-- 批量操作
     /*------------------------------------------------------ */
 
-    function batchAction()
+    public function batchAction()
     {
         $code = empty($_REQUEST['extension_code']) ? '' : trim($_REQUEST['extension_code']);
 
@@ -1089,10 +1088,10 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 显示图片
+    //-- 显示图片
     /*------------------------------------------------------ */
 
-    function show_imageAction()
+    public function show_imageAction()
     {
         if (isset($GLOBALS['shop_id']) && $GLOBALS['shop_id'] > 0) {
             $img_url = $_GET['img_url'];
@@ -1108,9 +1107,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改商品名称
+    //-- 修改商品名称
     /*------------------------------------------------------ */
-    function edit_goods_nameAction()
+    public function edit_goods_nameAction()
     {
         check_authz_json('goods_manage');
 
@@ -1124,9 +1123,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改商品货号
+    //-- 修改商品货号
     /*------------------------------------------------------ */
-    function edit_goods_snAction()
+    public function edit_goods_snAction()
     {
         check_authz_json('goods_manage');
 
@@ -1147,7 +1146,7 @@ class GoodsController extends InitController
         }
     }
 
-    function check_goods_snAction()
+    public function check_goods_snAction()
     {
         check_authz_json('goods_manage');
 
@@ -1167,7 +1166,7 @@ class GoodsController extends InitController
         make_json_result('');
     }
 
-    function check_products_goods_snAction()
+    public function check_products_goods_snAction()
     {
         check_authz_json('goods_manage');
 
@@ -1201,9 +1200,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改商品价格
+    //-- 修改商品价格
     /*------------------------------------------------------ */
-    function edit_goods_priceAction()
+    public function edit_goods_priceAction()
     {
         check_authz_json('goods_manage');
 
@@ -1222,9 +1221,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改商品库存数量
+    //-- 修改商品库存数量
     /*------------------------------------------------------ */
-    function edit_goods_numberAction()
+    public function edit_goods_numberAction()
     {
         check_authz_json('goods_manage');
 
@@ -1246,9 +1245,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改上架状态
+    //-- 修改上架状态
     /*------------------------------------------------------ */
-    function toggle_on_saleAction()
+    public function toggle_on_saleAction()
     {
         check_authz_json('goods_manage');
 
@@ -1262,9 +1261,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改精品推荐状态
+    //-- 修改精品推荐状态
     /*------------------------------------------------------ */
-    function toggle_bestAction()
+    public function toggle_bestAction()
     {
         check_authz_json('goods_manage');
 
@@ -1278,9 +1277,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改新品推荐状态
+    //-- 修改新品推荐状态
     /*------------------------------------------------------ */
-    function toggle_newAction()
+    public function toggle_newAction()
     {
         check_authz_json('goods_manage');
 
@@ -1294,9 +1293,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改热销推荐状态
+    //-- 修改热销推荐状态
     /*------------------------------------------------------ */
-    function toggle_hotAction()
+    public function toggle_hotAction()
     {
         check_authz_json('goods_manage');
 
@@ -1310,9 +1309,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改商品排序
+    //-- 修改商品排序
     /*------------------------------------------------------ */
-    function edit_sort_orderAction()
+    public function edit_sort_orderAction()
     {
         check_authz_json('goods_manage');
 
@@ -1326,9 +1325,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 排序、分页、查询
+    //-- 排序、分页、查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $is_delete = empty($_REQUEST['is_delete']) ? 0 : intval($_REQUEST['is_delete']);
         $code = empty($_REQUEST['extension_code']) ? '' : trim($_REQUEST['extension_code']);
@@ -1368,9 +1367,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 放入回收站
+    //-- 放入回收站
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         $goods_id = intval($_REQUEST['id']);
 
@@ -1391,10 +1390,10 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 还原回收站中的商品
+    //-- 还原回收站中的商品
     /*------------------------------------------------------ */
 
-    function restore_goodsAction()
+    public function restore_goodsAction()
     {
         $goods_id = intval($_REQUEST['id']);
 
@@ -1414,9 +1413,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 彻底删除商品
+    //-- 彻底删除商品
     /*------------------------------------------------------ */
-    function drop_goodsAction()
+    public function drop_goodsAction()
     {
         // 检查权限
         check_authz_json('remove_back');
@@ -1529,9 +1528,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 切换商品类型
+    //-- 切换商品类型
     /*------------------------------------------------------ */
-    function get_attrAction()
+    public function get_attrAction()
     {
         check_authz_json('goods_manage');
 
@@ -1544,9 +1543,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除图片
+    //-- 删除图片
     /*------------------------------------------------------ */
-    function drop_imageAction()
+    public function drop_imageAction()
     {
         check_authz_json('goods_manage');
 
@@ -1577,9 +1576,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索商品，仅返回名称及ID
+    //-- 搜索商品，仅返回名称及ID
     /*------------------------------------------------------ */
-    function get_goods_listAction()
+    public function get_goods_listAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -1599,9 +1598,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 把商品加入关联
+    //-- 把商品加入关联
     /*------------------------------------------------------ */
-    function add_link_goodsAction()
+    public function add_link_goodsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -1640,9 +1639,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除关联商品
+    //-- 删除关联商品
     /*------------------------------------------------------ */
-    function drop_link_goodsAction()
+    public function drop_link_goodsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -1689,10 +1688,10 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 增加一个配件
+    //-- 增加一个配件
     /*------------------------------------------------------ */
 
-    function add_group_goodsAction()
+    public function add_group_goodsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -1724,10 +1723,10 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除一个配件
+    //-- 删除一个配件
     /*------------------------------------------------------ */
 
-    function drop_group_goodsAction()
+    public function drop_group_goodsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -1760,10 +1759,10 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索文章
+    //-- 搜索文章
     /*------------------------------------------------------ */
 
-    function get_article_listAction()
+    public function get_article_listAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -1789,10 +1788,10 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加关联文章
+    //-- 添加关联文章
     /*------------------------------------------------------ */
 
-    function add_goods_articleAction()
+    public function add_goods_articleAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -1823,9 +1822,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除关联文章
+    //-- 删除关联文章
     /*------------------------------------------------------ */
-    function drop_goods_articleAction()
+    public function drop_goods_articleAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -1853,9 +1852,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 货品列表
+    //-- 货品列表
     /*------------------------------------------------------ */
-    function product_listAction()
+    public function product_listAction()
     {
         admin_priv('goods_manage');
 
@@ -1940,9 +1939,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 货品排序、分页、查询
+    //-- 货品排序、分页、查询
     /*------------------------------------------------------ */
-    function product_queryAction()
+    public function product_queryAction()
     {
         /* 是否存在商品id */
         if (empty($_REQUEST['goods_id'])) {
@@ -2004,9 +2003,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 货品删除
+    //-- 货品删除
     /*------------------------------------------------------ */
-    function product_removeAction()
+    public function product_removeAction()
     {
         /* 检查权限 */
         check_authz_json('remove_back');
@@ -2042,9 +2041,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改货品价格
+    //-- 修改货品价格
     /*------------------------------------------------------ */
-    function edit_product_snAction()
+    public function edit_product_snAction()
     {
         check_authz_json('goods_manage');
 
@@ -2066,9 +2065,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改货品库存
+    //-- 修改货品库存
     /*------------------------------------------------------ */
-    function edit_product_numberAction()
+    public function edit_product_numberAction()
     {
         check_authz_json('goods_manage');
 
@@ -2091,9 +2090,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 货品添加 执行
+    //-- 货品添加 执行
     /*------------------------------------------------------ */
-    function product_add_executeAction()
+    public function product_add_executeAction()
     {
         admin_priv('goods_manage');
 
@@ -2199,9 +2198,9 @@ class GoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 货品批量操作
+    //-- 货品批量操作
     /*------------------------------------------------------ */
-    function batch_productAction()
+    public function batch_productAction()
     {
         /* 定义返回 */
         $link[] = array('href' => 'goods.php?act=product_list&goods_id=' . $_POST['goods_id'], 'text' => $_LANG['item_list']);
@@ -2257,7 +2256,7 @@ class GoodsController extends InitController
      * @param string $extension_code 虚拟商品扩展代码，实体商品为空
      * @return  array('href' => $href, 'text' => $text)
      */
-    function list_link($is_add = true, $extension_code = '')
+    public function list_link($is_add = true, $extension_code = '')
     {
         $href = 'goods.php?act=list';
         if (!empty($extension_code)) {
@@ -2281,7 +2280,7 @@ class GoodsController extends InitController
      * @param string $extension_code 虚拟商品扩展代码，实体商品为空
      * @return  array('href' => $href, 'text' => $text)
      */
-    function add_link($extension_code = '')
+    public function add_link($extension_code = '')
     {
         $href = 'goods.php?act=add';
         if (!empty($extension_code)) {
@@ -2304,7 +2303,7 @@ class GoodsController extends InitController
      *
      * @return boolean
      */
-    function goods_parse_url($url)
+    public function goods_parse_url($url)
     {
         $parse_url = @parse_url($url);
         return (!empty($parse_url['scheme']) && !empty($parse_url['host']));
@@ -2317,7 +2316,7 @@ class GoodsController extends InitController
      * @param array $price_list 价格列表
      * @return  void
      */
-    function handle_volume_price($goods_id, $number_list, $price_list)
+    public function handle_volume_price($goods_id, $number_list, $price_list)
     {
         $sql = "DELETE FROM " . $GLOBALS['ecs']->table('volume_price') .
             " WHERE price_type = '1' AND goods_id = '$goods_id'";
@@ -2344,7 +2343,7 @@ class GoodsController extends InitController
      * @param string $value 字段值
      * @return  bool
      */
-    function update_goods_stock($goods_id, $value)
+    public function update_goods_stock($goods_id, $value)
     {
         if ($goods_id) {
             /* $res = $goods_number - $old_product_number + $product_number; */

@@ -11,14 +11,13 @@ class GoodsBatchController extends InitController
     {
         parent::initialize();
         require('includes/lib_goods.php');
-
     }
 
     /*------------------------------------------------------ */
-//-- 批量上传
+    //-- 批量上传
     /*------------------------------------------------------ */
 
-    function addAction()
+    public function addAction()
     {
         /* 检查权限 */
         admin_priv('goods_batch');
@@ -61,10 +60,10 @@ class GoodsBatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量上传：处理
+    //-- 批量上传：处理
     /*------------------------------------------------------ */
 
-    function uploadAction()
+    public function uploadAction()
     {
         /* 检查权限 */
         admin_priv('goods_batch');
@@ -318,10 +317,10 @@ class GoodsBatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量上传：入库
+    //-- 批量上传：入库
     /*------------------------------------------------------ */
 
-    function insertAction()
+    public function insertAction()
     {
         /* 检查权限 */
         admin_priv('goods_batch');
@@ -509,10 +508,10 @@ class GoodsBatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量修改：选择商品
+    //-- 批量修改：选择商品
     /*------------------------------------------------------ */
 
-    function selectAction()
+    public function selectAction()
     {
         /* 检查权限 */
         admin_priv('goods_batch');
@@ -533,10 +532,10 @@ class GoodsBatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量修改：修改
+    //-- 批量修改：修改
     /*------------------------------------------------------ */
 
-    function editAction()
+    public function editAction()
     {
         /* 检查权限 */
         admin_priv('goods_batch');
@@ -617,10 +616,10 @@ class GoodsBatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量修改：提交
+    //-- 批量修改：提交
     /*------------------------------------------------------ */
 
-    function updateAction()
+    public function updateAction()
     {
         /* 检查权限 */
         admin_priv('goods_batch');
@@ -746,10 +745,10 @@ class GoodsBatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 下载文件
+    //-- 下载文件
     /*------------------------------------------------------ */
 
-    function downloadAction()
+    public function downloadAction()
     {
         /* 检查权限 */
         admin_priv('goods_batch');
@@ -780,10 +779,10 @@ class GoodsBatchController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 取得商品
+    //-- 取得商品
     /*------------------------------------------------------ */
 
-    function get_goodsAction()
+    public function get_goodsAction()
     {
         $filter = new stdclass;
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controller\admin;
+
 /**
  * 控制台首页
  */
@@ -10,11 +11,10 @@ class IndexController extends InitController
     {
         parent::initialize();
         require_once(ROOT_PATH . '/includes/lib_order.php');
-
     }
 
     /*------------------------------------------------------ */
-//-- 框架
+    //-- 框架
     /*------------------------------------------------------ */
     public function indexAction()
     {
@@ -23,9 +23,9 @@ class IndexController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 顶部框架的内容
+    //-- 顶部框架的内容
     /*------------------------------------------------------ */
-    function topAction()
+    public function topAction()
     {
         // 获得管理员设置的菜单
         $lst = array();
@@ -52,18 +52,18 @@ class IndexController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 计算器
+    //-- 计算器
     /*------------------------------------------------------ */
 
-    function calculatorAction()
+    public function calculatorAction()
     {
         $smarty->display('calculator.htm');
     }
 
     /*------------------------------------------------------ */
-//-- 左边的框架
+    //-- 左边的框架
     /*------------------------------------------------------ */
-    function menuAction()
+    public function menuAction()
     {
         include_once('includes/inc_menu.php');
 
@@ -120,10 +120,10 @@ class IndexController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 清除缓存
+    //-- 清除缓存
     /*------------------------------------------------------ */
 
-    function clear_cacheAction()
+    public function clear_cacheAction()
     {
         clear_all_files();
 
@@ -132,9 +132,9 @@ class IndexController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 主窗口，起始页
+    //-- 主窗口，起始页
     /*------------------------------------------------------ */
-    function mainAction()
+    public function mainAction()
     {
         //开店向导第一步
         if (isset($_SESSION['shop_guide']) && $_SESSION['shop_guide'] === true) {
@@ -412,7 +412,7 @@ class IndexController extends InitController
         $smarty->display('start.htm');
     }
 
-    function main_apiAction()
+    public function main_apiAction()
     {
         require_once(ROOT_PATH . '/includes/lib_base.php');
         $data = read_static_cache('api_str');
@@ -441,10 +441,10 @@ class IndexController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 开店向导第一步
+    //-- 开店向导第一步
     /*------------------------------------------------------ */
 
-    function firstAction()
+    public function firstAction()
     {
         $smarty->assign('countries', get_regions());
         $smarty->assign('provinces', get_regions(1, 1));
@@ -518,10 +518,10 @@ class IndexController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 开店向导第二步
+    //-- 开店向导第二步
     /*------------------------------------------------------ */
 
-    function secondAction()
+    public function secondAction()
     {
         admin_priv('shop_config');
 
@@ -683,10 +683,10 @@ class IndexController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 开店向导第三步
+    //-- 开店向导第三步
     /*------------------------------------------------------ */
 
-    function thirdAction()
+    public function thirdAction()
     {
         admin_priv('goods_manage');
 
@@ -871,28 +871,28 @@ class IndexController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 关于 ECSHOP
+    //-- 关于 ECSHOP
     /*------------------------------------------------------ */
 
-    function about_usAction()
+    public function about_usAction()
     {
         assign_query_info();
         $smarty->display('about_us.htm');
     }
 
     /*------------------------------------------------------ */
-//-- 拖动的帧
+    //-- 拖动的帧
     /*------------------------------------------------------ */
 
-    function dragAction()
+    public function dragAction()
     {
         $smarty->display('drag.htm');
     }
 
     /*------------------------------------------------------ */
-//-- 检查订单
+    //-- 检查订单
     /*------------------------------------------------------ */
-    function check_orderAction()
+    public function check_orderAction()
     {
         if (empty($_SESSION['last_check'])) {
             $_SESSION['last_check'] = gmtime();
@@ -920,23 +920,23 @@ class IndexController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- Totolist操作
+    //-- Totolist操作
     /*------------------------------------------------------ */
-    function save_todolistAction()
+    public function save_todolistAction()
     {
         $content = json_str_iconv($_POST["content"]);
         $sql = "UPDATE" . $GLOBALS['ecs']->table('admin_user') . " SET todolist='" . $content . "' WHERE user_id = " . $_SESSION['admin_id'];
         $GLOBALS['db']->query($sql);
     }
 
-    function get_todolistAction()
+    public function get_todolistAction()
     {
         $sql = "SELECT todolist FROM " . $GLOBALS['ecs']->table('admin_user') . " WHERE user_id = " . $_SESSION['admin_id'];
         $content = $GLOBALS['db']->getOne($sql);
         echo $content;
     } // 邮件群发处理
 
-    function send_mailAction()
+    public function send_mailAction()
     {
         if ($_CFG['send_mail_on'] == 'off') {
             make_json_result('', $_LANG['send_mail_off'], 0);
@@ -1010,9 +1010,9 @@ class IndexController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- license操作
+    //-- license操作
     /*------------------------------------------------------ */
-    function licenseAction()
+    public function licenseAction()
     {
         $is_ajax = $_GET['is_ajax'];
 
@@ -1070,7 +1070,7 @@ class IndexController extends InitController
      * license check
      * @return  bool
      */
-    function license_check()
+    public function license_check()
     {
         // return 返回数组
         $return_array = array();

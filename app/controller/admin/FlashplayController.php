@@ -13,9 +13,9 @@ class FlashplayController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 系统
+    //-- 系统
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 判断系统当前设置 如果为用户自定义 则跳转到自定义 */
         if ($_CFG['index_ad'] == 'cus') {
@@ -51,7 +51,7 @@ class FlashplayController extends InitController
         $smarty->display('flashplay_list.htm');
     }
 
-    function delAction()
+    public function delAction()
     {
         admin_priv('flash_manage');
 
@@ -80,7 +80,7 @@ class FlashplayController extends InitController
         exit;
     }
 
-    function addAction()
+    public function addAction()
     {
         admin_priv('flash_manage');
 
@@ -158,7 +158,7 @@ class FlashplayController extends InitController
         }
     }
 
-    function editAction()
+    public function editAction()
     {
         admin_priv('flash_manage');
 
@@ -243,7 +243,7 @@ class FlashplayController extends InitController
         }
     }
 
-    function installAction()
+    public function installAction()
     {
         check_authz_json('flash_manage');
         $flash_theme = trim($_GET['flashtpl']);
@@ -267,10 +267,10 @@ class FlashplayController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 用户自定义
+    //-- 用户自定义
     /*------------------------------------------------------ */
 
-    function custom_listAction()
+    public function custom_listAction()
     {
         /* 标签初始化 */
         $group_list = array(
@@ -306,10 +306,10 @@ class FlashplayController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 用户自定义添加
+    //-- 用户自定义添加
     /*------------------------------------------------------ */
 
-    function custom_addAction()
+    public function custom_addAction()
     {
         /* 标签初始化 */
         $group_list = array(
@@ -346,10 +346,10 @@ class FlashplayController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 用户自定义 添加广告入库
+    //-- 用户自定义 添加广告入库
     /*------------------------------------------------------ */
 
-    function custom_insertAction()
+    public function custom_insertAction()
     {
         admin_priv('flash_manage');
 
@@ -442,10 +442,10 @@ class FlashplayController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 用户自定义 删除广告
+    //-- 用户自定义 删除广告
     /*------------------------------------------------------ */
 
-    function custom_delAction()
+    public function custom_delAction()
     {
         admin_priv('flash_manage');
 
@@ -472,10 +472,10 @@ class FlashplayController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 用户自定义 启用与关闭广告
+    //-- 用户自定义 启用与关闭广告
     /*------------------------------------------------------ */
 
-    function custom_statusAction()
+    public function custom_statusAction()
     {
         check_authz_json('flash_manage');
 
@@ -524,10 +524,10 @@ class FlashplayController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 用户自定义 修改
+    //-- 用户自定义 修改
     /*------------------------------------------------------ */
 
-    function custom_editAction()
+    public function custom_editAction()
     {
         $id = empty($_GET['id']) ? 0 : intval(trim($_GET['id']));
 
@@ -551,10 +551,10 @@ class FlashplayController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 用户自定义 更新数据库
+    //-- 用户自定义 更新数据库
     /*------------------------------------------------------ */
 
-    function custom_updateAction()
+    public function custom_updateAction()
     {
         admin_priv('flash_manage');
 
@@ -645,7 +645,7 @@ class FlashplayController extends InitController
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
 
-    function get_flash_xml()
+    public function get_flash_xml()
     {
         $flashdb = array();
         if (file_exists(ROOT_PATH . DATA_DIR . '/flash_data.xml')) {
@@ -665,7 +665,7 @@ class FlashplayController extends InitController
         return $flashdb;
     }
 
-    function put_flash_xml($flashdb)
+    public function put_flash_xml($flashdb)
     {
         if (!empty($flashdb)) {
             $xml = '<?xml version="1.0" encoding="' . EC_CHARSET . '"?><bcaster>';
@@ -679,7 +679,7 @@ class FlashplayController extends InitController
         }
     }
 
-    function get_url_image($url)
+    public function get_url_image($url)
     {
         $url_arr = explode('.', $url);
         $ext = strtolower(end($url_arr));
@@ -706,7 +706,7 @@ class FlashplayController extends InitController
         return $tmp_file;
     }
 
-    function get_width_height()
+    public function get_width_height()
     {
         $curr_template = $GLOBALS['_CFG']['template'];
         $path = ROOT_PATH . 'themes/' . $curr_template . '/library/';
@@ -733,7 +733,7 @@ class FlashplayController extends InitController
         return $width_height;
     }
 
-    function get_flash_templates($dir)
+    public function get_flash_templates($dir)
     {
         $flashtpls = array();
         $template_dir = @opendir($dir);
@@ -746,7 +746,7 @@ class FlashplayController extends InitController
         return $flashtpls;
     }
 
-    function get_flash_tpl_info($dir, $file)
+    public function get_flash_tpl_info($dir, $file)
     {
         $info = array();
         if (is_file($dir . $file . '/preview.jpg')) {
@@ -761,7 +761,7 @@ class FlashplayController extends InitController
         return $info;
     }
 
-    function set_flash_data($tplname, &$msg)
+    public function set_flash_data($tplname, &$msg)
     {
         $flashdata = get_flash_xml();
         if (empty($flashdata)) {
@@ -798,7 +798,7 @@ class FlashplayController extends InitController
         return $msg !== true;
     }
 
-    function set_flash_uproll($tplname, $flashdata)
+    public function set_flash_uproll($tplname, $flashdata)
     {
         $data_file = ROOT_PATH . DATA_DIR . '/flashdata/' . $tplname . '/data.xml';
         $xmldata = '<?xml version="1.0" encoding="' . EC_CHARSET . '"?><myMenu>';
@@ -810,7 +810,7 @@ class FlashplayController extends InitController
         return true;
     }
 
-    function set_flash_focus($tplname, $flashdata)
+    public function set_flash_focus($tplname, $flashdata)
     {
         $data_file = ROOT_PATH . DATA_DIR . '/flashdata/' . $tplname . '/data.js';
         $jsdata = '';
@@ -833,7 +833,7 @@ class FlashplayController extends InitController
         return true;
     }
 
-    function set_flash_default($tplname, $flashdata)
+    public function set_flash_default($tplname, $flashdata)
     {
         $data_file = ROOT_PATH . DATA_DIR . '/flashdata/' . $tplname . '/data.xml';
         $xmldata = '<?xml version="1.0" encoding="' . EC_CHARSET . '"?><bcaster>';
@@ -853,7 +853,7 @@ class FlashplayController extends InitController
      *
      * @return void
      */
-    function ad_list()
+    public function ad_list()
     {
         $result = get_filter();
         if ($result === false) {
@@ -901,7 +901,7 @@ class FlashplayController extends InitController
      * @access  private
      * @return  Bool
      */
-    function modfiy_ad_status($ad_id, $ad_status = 0)
+    public function modfiy_ad_status($ad_id, $ad_status = 0)
     {
         $return = false;
 

@@ -15,14 +15,13 @@ class ShopinfoController extends InitController
         require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
 
         $exc = new exchange($ecs->table("article"), $db, 'article_id', 'title');
-
     }
 
 
     /*------------------------------------------------------ */
-//-- 文章列表
+    //-- 文章列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         $smarty->assign('ur_here', $_LANG['shop_info']);
         $smarty->assign('action_link', array('text' => $_LANG['shopinfo_add'], 'href' => 'shopinfo.php?act=add'));
@@ -34,9 +33,9 @@ class ShopinfoController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 查询
+    //-- 查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $smarty->assign('list', shopinfo_article_list());
 
@@ -44,9 +43,9 @@ class ShopinfoController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加新文章
+    //-- 添加新文章
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 权限判断 */
         admin_priv('shopinfo_manage');
@@ -66,7 +65,7 @@ class ShopinfoController extends InitController
         $smarty->display('shopinfo_info.htm');
     }
 
-    function insertAction()
+    public function insertAction()
     {
         /* 权限判断 */
         admin_priv('shopinfo_manage');
@@ -98,9 +97,9 @@ class ShopinfoController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 文章编辑
+    //-- 文章编辑
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         /* 权限判断 */
         admin_priv('shopinfo_manage');
@@ -120,7 +119,7 @@ class ShopinfoController extends InitController
         $smarty->display('shopinfo_info.htm');
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 权限判断 */
         admin_priv('shopinfo_manage');
@@ -150,9 +149,9 @@ class ShopinfoController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑文章主题
+    //-- 编辑文章主题
     /*------------------------------------------------------ */
-    function edit_titleAction()
+    public function edit_titleAction()
     {
         check_authz_json('shopinfo_manage');
 
@@ -172,9 +171,9 @@ class ShopinfoController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除文章
+    //-- 删除文章
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('shopinfo_manage');
 
@@ -194,7 +193,7 @@ class ShopinfoController extends InitController
     }
 
     /* 获取网店信息文章数据 */
-    function shopinfo_article_list()
+    public function shopinfo_article_list()
     {
         $list = array();
         $sql = 'SELECT article_id, title ,add_time' .

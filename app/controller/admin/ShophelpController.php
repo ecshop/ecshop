@@ -17,13 +17,12 @@ class ShophelpController extends InitController
         /*初始化数据交换对象 */
         $exc_article = new exchange($ecs->table("article"), $db, 'article_id', 'title');
         $exc_cat = new exchange($ecs->table("article_cat"), $db, 'cat_id', 'cat_name');
-
     }
 
     /*------------------------------------------------------ */
-//-- 列出所有文章分类
+    //-- 列出所有文章分类
     /*------------------------------------------------------ */
-    function list_catAction()
+    public function list_catAction()
     {
         $smarty->assign('action_link', array('text' => $_LANG['article_add'], 'href' => 'shophelp.php?act=add'));
         $smarty->assign('ur_here', $_LANG['cat_list']);
@@ -35,9 +34,9 @@ class ShophelpController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 分类下的文章
+    //-- 分类下的文章
     /*------------------------------------------------------ */
-    function list_articleAction()
+    public function list_articleAction()
     {
         $smarty->assign('ur_here', $_LANG['article_list']);
         $smarty->assign('action_link', array('text' => $_LANG['article_add'], 'href' => 'shophelp.php?act=add&cat_id=' . $_REQUEST['cat_id']));
@@ -50,9 +49,9 @@ class ShophelpController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 查询分类下的文章
+    //-- 查询分类下的文章
     /*------------------------------------------------------ */
-    function query_artAction()
+    public function query_artAction()
     {
         $cat_id = intval($_GET['cat']);
 
@@ -61,9 +60,9 @@ class ShophelpController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 查询
+    //-- 查询
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $smarty->assign('list', get_shophelp_list());
 
@@ -71,9 +70,9 @@ class ShophelpController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加文章
+    //-- 添加文章
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 权限判断 */
         admin_priv('shophelp_manage');
@@ -96,7 +95,7 @@ class ShophelpController extends InitController
         $smarty->display('shophelp_info.htm');
     }
 
-    function insertAction()
+    public function insertAction()
     {
         /* 权限判断 */
         admin_priv('shophelp_manage');
@@ -123,9 +122,9 @@ class ShophelpController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑文章
+    //-- 编辑文章
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         /* 权限判断 */
         admin_priv('shophelp_manage');
@@ -148,7 +147,7 @@ class ShophelpController extends InitController
         $smarty->display('shophelp_info.htm');
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 权限判断 */
         admin_priv('shophelp_manage');
@@ -172,9 +171,9 @@ class ShophelpController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑分类的名称
+    //-- 编辑分类的名称
     /*------------------------------------------------------ */
-    function edit_catnameAction()
+    public function edit_catnameAction()
     {
         check_authz_json('shophelp_manage');
 
@@ -196,9 +195,9 @@ class ShophelpController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑分类的排序
+    //-- 编辑分类的排序
     /*------------------------------------------------------ */
-    function edit_cat_orderAction()
+    public function edit_cat_orderAction()
     {
         check_authz_json('shophelp_manage');
 
@@ -217,9 +216,9 @@ class ShophelpController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除分类
+    //-- 删除分类
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('shophelp_manage');
 
@@ -241,9 +240,9 @@ class ShophelpController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除分类下的某文章
+    //-- 删除分类下的某文章
     /*------------------------------------------------------ */
-    function remove_artAction()
+    public function remove_artAction()
     {
         check_authz_json('shophelp_manage');
 
@@ -266,9 +265,9 @@ class ShophelpController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加一个新分类
+    //-- 添加一个新分类
     /*------------------------------------------------------ */
-    function add_catnameAction()
+    public function add_catnameAction()
     {
         check_authz_json('shophelp_manage');
 
@@ -295,9 +294,9 @@ class ShophelpController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑文章标题
+    //-- 编辑文章标题
     /*------------------------------------------------------ */
-    function edit_titleAction()
+    public function edit_titleAction()
     {
         check_authz_json('shophelp_manage');
 
@@ -317,7 +316,7 @@ class ShophelpController extends InitController
     }
 
     /* 获得网店帮助文章分类 */
-    function get_shophelp_list()
+    public function get_shophelp_list()
     {
         $list = array();
         $sql = 'SELECT cat_id, cat_name, sort_order' .
@@ -335,7 +334,7 @@ class ShophelpController extends InitController
     }
 
     /* 获得网店帮助某分类下的文章 */
-    function shophelp_article_list($cat_id)
+    public function shophelp_article_list($cat_id)
     {
         $list = array();
         $sql = 'SELECT article_id, title, article_type , add_time' .

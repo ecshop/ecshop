@@ -13,9 +13,9 @@ class AffiliateController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 分成管理页
+    //-- 分成管理页
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         assign_query_info();
         if (empty($_REQUEST['is_ajax'])) {
@@ -27,16 +27,16 @@ class AffiliateController extends InitController
         $smarty->display('affiliate.htm');
     }
 
-    function queryAction()
+    public function queryAction()
     {
         $smarty->assign('ur_here', $_LANG['affiliate']);
         $smarty->assign('config', $config);
         make_json_result($smarty->fetch('affiliate.htm'), '', null);
     }
     /*------------------------------------------------------ */
-//-- 增加下线分配方案
+    //-- 增加下线分配方案
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         if (count($config['item']) < 5) {
             //下线不能超过5层
@@ -70,9 +70,9 @@ class AffiliateController extends InitController
         exit;
     }
     /*------------------------------------------------------ */
-//-- 修改配置
+    //-- 修改配置
     /*------------------------------------------------------ */
-    function updataAction()
+    public function updataAction()
     {
         $separate_by = (intval($_POST['separate_by']) == 1) ? 1 : 0;
 
@@ -106,9 +106,9 @@ class AffiliateController extends InitController
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
     /*------------------------------------------------------ */
-//-- 推荐开关
+    //-- 推荐开关
     /*------------------------------------------------------ */
-    function onAction()
+    public function onAction()
     {
         $on = (intval($_POST['on']) == 1) ? 1 : 0;
 
@@ -118,9 +118,9 @@ class AffiliateController extends InitController
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
     /*------------------------------------------------------ */
-//-- Ajax修改设置
+    //-- Ajax修改设置
     /*------------------------------------------------------ */
-    function edit_pointAction()
+    public function edit_pointAction()
     {
 
         /* 取得参数 */
@@ -142,9 +142,9 @@ class AffiliateController extends InitController
         make_json_result(stripcslashes($val));
     }
     /*------------------------------------------------------ */
-//-- Ajax修改设置
+    //-- Ajax修改设置
     /*------------------------------------------------------ */
-    function edit_moneyAction()
+    public function edit_moneyAction()
     {
         $key = trim($_POST['id']) - 1;
         $val = (float)trim($_POST['val']);
@@ -164,9 +164,9 @@ class AffiliateController extends InitController
         make_json_result(stripcslashes($val));
     }
     /*------------------------------------------------------ */
-//-- 删除下线分成
+    //-- 删除下线分成
     /*------------------------------------------------------ */
-    function delAction()
+    public function delAction()
     {
         $key = trim($_GET['id']) - 1;
         unset($config['item'][$key]);
@@ -182,7 +182,7 @@ class AffiliateController extends InitController
         exit;
     }
 
-    function get_affiliate()
+    public function get_affiliate()
     {
         $config = unserialize($GLOBALS['_CFG']['affiliate']);
         empty($config) && $config = array();
@@ -190,7 +190,7 @@ class AffiliateController extends InitController
         return $config;
     }
 
-    function put_affiliate($config)
+    public function put_affiliate($config)
     {
         $temp = serialize($config);
         $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') .

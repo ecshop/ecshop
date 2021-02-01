@@ -11,14 +11,13 @@ class PaymentController extends InitController
     {
         parent::initialize();
         $exc = new exchange($ecs->table('payment'), $db, 'pay_code', 'pay_name');
-
     }
 
     /*------------------------------------------------------ */
-//-- 支付方式列表 ?act=list
+    //-- 支付方式列表 ?act=list
     /*------------------------------------------------------ */
 
-    function listAction()
+    public function listAction()
     {
         /* 查询数据库中启用的支付方式 */
         $pay_list = array();
@@ -63,10 +62,10 @@ class PaymentController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 安装支付方式 ?act=install&code=".$code."
+    //-- 安装支付方式 ?act=install&code=".$code."
     /*------------------------------------------------------ */
 
-    function installAction()
+    public function installAction()
     {
         admin_priv('payment');
 
@@ -108,7 +107,7 @@ class PaymentController extends InitController
         $smarty->display('payment_edit.htm');
     }
 
-    function get_configAction()
+    public function get_configAction()
     {
         check_authz_json('payment');
 
@@ -152,9 +151,9 @@ class PaymentController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑支付方式 ?act=edit&code={$code}
+    //-- 编辑支付方式 ?act=edit&code={$code}
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         admin_priv('payment');
 
@@ -228,9 +227,9 @@ class PaymentController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 提交支付方式 post
+    //-- 提交支付方式 post
     /*------------------------------------------------------ */
-    function submit()
+    public function submit()
     {
         admin_priv('payment');
 
@@ -303,9 +302,9 @@ class PaymentController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 卸载支付方式 ?act=uninstall&code={$code}
+    //-- 卸载支付方式 ?act=uninstall&code={$code}
     /*------------------------------------------------------ */
-    function uninstallAction()
+    public function uninstallAction()
     {
         admin_priv('payment');
 
@@ -323,10 +322,10 @@ class PaymentController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改支付方式名称
+    //-- 修改支付方式名称
     /*------------------------------------------------------ */
 
-    function edit_nameAction()
+    public function edit_nameAction()
     {
         /* 检查权限 */
         check_authz_json('payment');
@@ -351,10 +350,10 @@ class PaymentController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改支付方式描述
+    //-- 修改支付方式描述
     /*------------------------------------------------------ */
 
-    function edit_descAction()
+    public function edit_descAction()
     {
         /* 检查权限 */
         check_authz_json('payment');
@@ -369,10 +368,10 @@ class PaymentController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改支付方式排序
+    //-- 修改支付方式排序
     /*------------------------------------------------------ */
 
-    function edit_orderAction()
+    public function edit_orderAction()
     {
         /* 检查权限 */
         check_authz_json('payment');
@@ -387,10 +386,10 @@ class PaymentController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改支付方式费用
+    //-- 修改支付方式费用
     /*------------------------------------------------------ */
 
-    function edit_pay_feeAction()
+    public function edit_pay_feeAction()
     {
         /* 检查权限 */
         check_authz_json('payment');

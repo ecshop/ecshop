@@ -7,11 +7,10 @@ class GoodsExportController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
 
-    function goods_exportAction()
+    public function goods_exportAction()
     {
         /* 检查权限 */
         admin_priv('goods_export');
@@ -31,7 +30,7 @@ class GoodsExportController extends InitController
         $smarty->display('goods_export.htm');
     }
 
-    function act_export_ecshopAction()
+    public function act_export_ecshopAction()
     {
         /* 检查权限 */
         admin_priv('goods_export');
@@ -118,14 +117,14 @@ class GoodsExportController extends InitController
     }
 
     /* 处理Ajax调用 */
-    function get_goods_fieldsAction()
+    public function get_goods_fieldsAction()
     {
         $cat_id = isset($_REQUEST['cat_id']) ? intval($_REQUEST['cat_id']) : 0;
         $goods_fields = my_array_merge($_LANG['custom'], get_attributes($cat_id));
         make_json_result($goods_fields);
     }
 
-    function act_export_customAction()
+    public function act_export_customAction()
     {
         /* 检查输出列 */
         if (empty($_POST['custom_goods_export'])) {
@@ -207,7 +206,7 @@ class GoodsExportController extends InitController
         die($zip->file());
     }
 
-    function get_goods_listAction()
+    public function get_goods_listAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -231,7 +230,7 @@ class GoodsExportController extends InitController
      *
      * @return void
      */
-    function utf82u2($str)
+    public function utf82u2($str)
     {
         $len = strlen($str);
         $start = 0;
@@ -300,7 +299,7 @@ class GoodsExportController extends InitController
      *
      * @return string
      */
-    function image_path_format($content)
+    public function image_path_format($content)
     {
         $prefix = 'http://' . $_SERVER['SERVER_NAME'];
         $pattern = '/(background|src)=[\'|\"]((?!http:\/\/).*?)[\'|\"]/i';
@@ -315,7 +314,7 @@ class GoodsExportController extends InitController
      *
      * @return array
      */
-    function get_attributes($cat_id = 0)
+    public function get_attributes($cat_id = 0)
     {
         $sql = "SELECT `attr_id`, `cat_id`, `attr_name` FROM " . $GLOBALS['ecs']->table('attribute') . " ";
         if (!empty($cat_id)) {
@@ -339,7 +338,7 @@ class GoodsExportController extends InitController
      *
      * @return array
      */
-    function set_goods_field_name($array, $lang)
+    public function set_goods_field_name($array, $lang)
     {
         $tmp_fields = $array;
         foreach ($array as $key => $value) {
@@ -360,7 +359,7 @@ class GoodsExportController extends InitController
      *
      * @return array
      */
-    function my_array_merge($array1, $array2)
+    public function my_array_merge($array1, $array2)
     {
         $new_array = $array1;
         foreach ($array2 as $key => $val) {
@@ -376,7 +375,7 @@ class GoodsExportController extends InitController
      *
      * @return string
      */
-    function get_export_where_sql($filter)
+    public function get_export_where_sql($filter)
     {
         $where = '';
         if (!empty($filter['goods_ids'])) {
@@ -403,7 +402,7 @@ class GoodsExportController extends InitController
      *
      * @param $str string 处理字符串
      */
-    function replace_special_char($str, $replace = true)
+    public function replace_special_char($str, $replace = true)
     {
         $str = str_replace("\r\n", "", image_path_format($str));
         $str = str_replace("\t", "    ", $str);

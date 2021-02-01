@@ -11,12 +11,11 @@ class GoodsTypeController extends InitController
     {
         parent::initialize();
         $exc = new exchange($ecs->table("goods_type"), $db, 'cat_id', 'cat_name');
-
     }
     /*------------------------------------------------------ */
-//-- 管理界面
+    //-- 管理界面
     /*------------------------------------------------------ */
-    function manageAction()
+    public function manageAction()
     {
         assign_query_info();
 
@@ -43,10 +42,10 @@ class GoodsTypeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 获得列表
+    //-- 获得列表
     /*------------------------------------------------------ */
 
-    function queryAction()
+    public function queryAction()
     {
         $good_type_list = get_goodstype();
 
@@ -63,9 +62,9 @@ class GoodsTypeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改商品类型名称
+    //-- 修改商品类型名称
     /*------------------------------------------------------ */
-    function edit_type_nameAction()
+    public function edit_type_nameAction()
     {
         check_authz_json('goods_type');
 
@@ -87,10 +86,10 @@ class GoodsTypeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 切换启用状态
+    //-- 切换启用状态
     /*------------------------------------------------------ */
 
-    function toggle_enabledAction()
+    public function toggle_enabledAction()
     {
         check_authz_json('goods_type');
 
@@ -103,10 +102,10 @@ class GoodsTypeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加商品类型
+    //-- 添加商品类型
     /*------------------------------------------------------ */
 
-    function addAction()
+    public function addAction()
     {
         admin_priv('goods_type');
 
@@ -120,7 +119,7 @@ class GoodsTypeController extends InitController
         $smarty->display('goods_type_info.htm');
     }
 
-    function insertAction()
+    public function insertAction()
     {
         $goods_type['cat_name'] = sub_str($_POST['cat_name'], 60);
         $goods_type['attr_group'] = sub_str($_POST['attr_group'], 255);
@@ -135,10 +134,10 @@ class GoodsTypeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑商品类型
+    //-- 编辑商品类型
     /*------------------------------------------------------ */
 
-    function editAction()
+    public function editAction()
     {
         $goods_type = get_goodstype_info(intval($_GET['cat_id']));
 
@@ -158,7 +157,7 @@ class GoodsTypeController extends InitController
         $smarty->display('goods_type_info.htm');
     }
 
-    function updateAction()
+    public function updateAction()
     {
         $goods_type['cat_name'] = sub_str($_POST['cat_name'], 60);
         $goods_type['attr_group'] = sub_str($_POST['attr_group'], 255);
@@ -192,10 +191,10 @@ class GoodsTypeController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除商品类型
+    //-- 删除商品类型
     /*------------------------------------------------------ */
 
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('goods_type');
 
@@ -228,7 +227,7 @@ class GoodsTypeController extends InitController
      * @access  public
      * @return  array
      */
-    function get_goodstype()
+    public function get_goodstype()
     {
         $result = get_filter();
         if ($result === false) {
@@ -269,7 +268,7 @@ class GoodsTypeController extends InitController
      *
      * @return  array
      */
-    function get_goodstype_info($cat_id)
+    public function get_goodstype_info($cat_id)
     {
         $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('goods_type') . " WHERE cat_id='$cat_id'";
 
@@ -285,7 +284,7 @@ class GoodsTypeController extends InitController
      *
      * @return  void
      */
-    function update_attribute_group($cat_id, $old_group, $new_group)
+    public function update_attribute_group($cat_id, $old_group, $new_group)
     {
         $sql = "UPDATE " . $GLOBALS['ecs']->table('attribute') .
             " SET attr_group='$new_group' WHERE cat_id='$cat_id' AND attr_group='$old_group'";

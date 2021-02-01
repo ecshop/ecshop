@@ -55,6 +55,3 @@ class GalleryController extends InitController
         $smarty->display('gallery.dwt');
     }
 }
-
-
-

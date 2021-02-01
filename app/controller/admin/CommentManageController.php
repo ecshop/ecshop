@@ -10,14 +10,13 @@ class CommentManageController extends InitController
     public function initialize()
     {
         parent::initialize();
-
     }
 
 
     /*------------------------------------------------------ */
-//-- 获取没有回复的评论列表
+    //-- 获取没有回复的评论列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 检查权限 */
         admin_priv('comment_priv');
@@ -40,9 +39,9 @@ class CommentManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 翻页、搜索、排序
+    //-- 翻页、搜索、排序
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         $list = get_comment_list();
 
@@ -62,9 +61,9 @@ class CommentManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 回复用户评论(同时查看评论详情)
+    //-- 回复用户评论(同时查看评论详情)
     /*------------------------------------------------------ */
-    function replyAction()
+    public function replyAction()
     {
         /* 检查权限 */
         admin_priv('comment_priv');
@@ -123,9 +122,9 @@ class CommentManageController extends InitController
         $smarty->display('comment_info.htm');
     }
     /*------------------------------------------------------ */
-//-- 处理 回复用户评论
+    //-- 处理 回复用户评论
     /*------------------------------------------------------ */
-    function actionAction()
+    public function actionAction()
     {
         admin_priv('comment_priv');
 
@@ -197,9 +196,9 @@ class CommentManageController extends InitController
         exit;
     }
     /*------------------------------------------------------ */
-//-- 更新评论的状态为显示或者禁止
+    //-- 更新评论的状态为显示或者禁止
     /*------------------------------------------------------ */
-    function checkAction()
+    public function checkAction()
     {
         if ($_REQUEST['check'] == 'allow') {
             /* 允许评论显示 */
@@ -227,9 +226,9 @@ class CommentManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除某一条评论
+    //-- 删除某一条评论
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('comment_priv');
 
@@ -250,9 +249,9 @@ class CommentManageController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量删除用户评论
+    //-- 批量删除用户评论
     /*------------------------------------------------------ */
-    function batchAction()
+    public function batchAction()
     {
         admin_priv('comment_priv');
         $action = isset($_POST['sel_action']) ? trim($_POST['sel_action']) : 'deny';
@@ -294,7 +293,7 @@ class CommentManageController extends InitController
      * @access  public
      * @return  array
      */
-    function get_comment_list()
+    public function get_comment_list()
     {
         /* 查询条件 */
         $filter['keywords'] = empty($_REQUEST['keywords']) ? 0 : trim($_REQUEST['keywords']);

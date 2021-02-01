@@ -11,7 +11,7 @@ class GoodsAutoController extends InitController
         $smarty->assign('thisfile', 'goods_auto.php');
     }
 
-    function listAction()
+    public function listAction()
     {
         $goodsdb = get_auto_goods();
         $crons_enable = $db->getOne("SELECT enable FROM " . $GLOBALS['ecs']->table('crons') . " WHERE cron_code='auto_manage'");
@@ -27,7 +27,7 @@ class GoodsAutoController extends InitController
         $smarty->display('goods_auto.htm');
     }
 
-    function queryAction()
+    public function queryAction()
     {
         $goodsdb = get_auto_goods();
         $smarty->assign('goodsdb', $goodsdb['goodsdb']);
@@ -42,7 +42,7 @@ class GoodsAutoController extends InitController
         make_json_result($smarty->fetch('goods_auto.htm'), '', array('filter' => $goodsdb['filter'], 'page_count' => $goodsdb['page_count']));
     }
 
-    function delAction()
+    public function delAction()
     {
         $goods_id = (int)$_REQUEST['goods_id'];
         $sql = "DELETE FROM " . $ecs->table('auto_manage') . " WHERE item_id = '$goods_id' AND type = 'goods'";
@@ -51,7 +51,7 @@ class GoodsAutoController extends InitController
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
 
-    function edit_starttimeAction()
+    public function edit_starttimeAction()
     {
         check_authz_json('goods_auto');
 
@@ -72,7 +72,7 @@ class GoodsAutoController extends InitController
         make_json_result(stripslashes($_POST['val']), '', array('act' => 'goods_auto', 'id' => $id));
     }
 
-    function edit_endtimeAction()
+    public function edit_endtimeAction()
     {
         check_authz_json('goods_auto');
 
@@ -93,7 +93,7 @@ class GoodsAutoController extends InitController
         make_json_result(stripslashes($_POST['val']), '', array('act' => 'goods_auto', 'id' => $id));
     } //批量上架
 
-    function batch_startAction()
+    public function batch_startAction()
     {
         admin_priv('goods_auto');
 
@@ -116,7 +116,7 @@ class GoodsAutoController extends InitController
         sys_msg($_LANG['batch_start_succeed'], 0, $lnk);
     } //批量下架
 
-    function batch_endAction()
+    public function batch_endAction()
     {
         admin_priv('goods_auto');
 
@@ -139,7 +139,7 @@ class GoodsAutoController extends InitController
         sys_msg($_LANG['batch_end_succeed'], 0, $lnk);
     }
 
-    function get_auto_goods()
+    public function get_auto_goods()
     {
         $where = ' WHERE g.is_delete <> 1 ';
         if (!empty($_POST['goods_name'])) {

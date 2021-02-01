@@ -17,9 +17,9 @@ class ExchangeGoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 商品列表
+    //-- 商品列表
     /*------------------------------------------------------ */
-    function listAction()
+    public function listAction()
     {
         /* 权限判断 */
         admin_priv('exchange_goods');
@@ -46,9 +46,9 @@ class ExchangeGoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 翻页，排序
+    //-- 翻页，排序
     /*------------------------------------------------------ */
-    function queryAction()
+    public function queryAction()
     {
         check_authz_json('exchange_goods');
 
@@ -70,9 +70,9 @@ class ExchangeGoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加商品
+    //-- 添加商品
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         /* 权限判断 */
         admin_priv('exchange_goods');
@@ -93,9 +93,9 @@ class ExchangeGoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加商品
+    //-- 添加商品
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         /* 权限判断 */
         admin_priv('exchange_goods');
@@ -130,9 +130,9 @@ class ExchangeGoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑
+    //-- 编辑
     /*------------------------------------------------------ */
-    function editAction()
+    public function editAction()
     {
         /* 权限判断 */
         admin_priv('exchange_goods');
@@ -155,9 +155,9 @@ class ExchangeGoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑
+    //-- 编辑
     /*------------------------------------------------------ */
-    function updateAction()
+    public function updateAction()
     {
         /* 权限判断 */
         admin_priv('exchange_goods');
@@ -180,9 +180,9 @@ class ExchangeGoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 编辑使用积分值
+    //-- 编辑使用积分值
     /*------------------------------------------------------ */
-    function edit_exchange_integralAction()
+    public function edit_exchange_integralAction()
     {
         check_authz_json('exchange_goods');
 
@@ -204,9 +204,9 @@ class ExchangeGoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 切换是否兑换
+    //-- 切换是否兑换
     /*------------------------------------------------------ */
-    function toggle_exchangeAction()
+    public function toggle_exchangeAction()
     {
         check_authz_json('exchange_goods');
 
@@ -220,9 +220,9 @@ class ExchangeGoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 切换是否兑换
+    //-- 切换是否兑换
     /*------------------------------------------------------ */
-    function toggle_hotAction()
+    public function toggle_hotAction()
     {
         check_authz_json('exchange_goods');
 
@@ -236,9 +236,9 @@ class ExchangeGoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量删除商品
+    //-- 批量删除商品
     /*------------------------------------------------------ */
-    function batch_removeAction()
+    public function batch_removeAction()
     {
         admin_priv('exchange_goods');
 
@@ -259,9 +259,9 @@ class ExchangeGoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除商品
+    //-- 删除商品
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('exchange_goods');
 
@@ -278,10 +278,10 @@ class ExchangeGoodsController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索商品
+    //-- 搜索商品
     /*------------------------------------------------------ */
 
-    function search_goodsAction()
+    public function search_goodsAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON;
@@ -294,7 +294,7 @@ class ExchangeGoodsController extends InitController
     }
 
     /* 获得商品列表 */
-    function get_exchange_goodslist()
+    public function get_exchange_goodslist()
     {
         $result = get_filter();
         if ($result === false) {

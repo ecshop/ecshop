@@ -15,10 +15,10 @@ class WholesaleController extends InitController
 
 
     /*------------------------------------------------------ */
-//-- 活动列表页
+    //-- 活动列表页
     /*------------------------------------------------------ */
 
-    function listAction()
+    public function listAction()
     {
         admin_priv('whole_sale');
 
@@ -44,10 +44,10 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 分页、排序、查询
+    //-- 分页、排序、查询
     /*------------------------------------------------------ */
 
-    function queryAction()
+    public function queryAction()
     {
         $list = wholesale_list();
 
@@ -67,9 +67,9 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 删除
+    //-- 删除
     /*------------------------------------------------------ */
-    function removeAction()
+    public function removeAction()
     {
         check_authz_json('whole_sale');
 
@@ -98,9 +98,9 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量操作
+    //-- 批量操作
     /*------------------------------------------------------ */
-    function batchAction()
+    public function batchAction()
     {
         /* 取得要操作的记录编号 */
         if (empty($_POST['checkboxes'])) {
@@ -130,9 +130,9 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 修改排序
+    //-- 修改排序
     /*------------------------------------------------------ */
-    function toggle_enabledAction()
+    public function toggle_enabledAction()
     {
         check_authz_json('whole_sale');
 
@@ -148,10 +148,10 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量添加
+    //-- 批量添加
     /*------------------------------------------------------ */
 
-    function batch_addAction()
+    public function batch_addAction()
     {
         /* 检查权限 */
         admin_priv('whole_sale');
@@ -203,10 +203,10 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 批量添加入库
+    //-- 批量添加入库
     /*------------------------------------------------------ */
 
-    function batch_add_insertAction()
+    public function batch_add_insertAction()
     {
         /* 检查权限 */
         admin_priv('whole_sale');
@@ -303,14 +303,14 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加、编辑
+    //-- 添加、编辑
     /*------------------------------------------------------ */
-    function addAction()
+    public function addAction()
     {
         $this->editAction();
     }
 
-    function editAction()
+    public function editAction()
     {
         /* 检查权限 */
         admin_priv('whole_sale');
@@ -385,14 +385,14 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 添加、编辑后提交
+    //-- 添加、编辑后提交
     /*------------------------------------------------------ */
-    function insertAction()
+    public function insertAction()
     {
         $this->updateAction();
     }
 
-    function updateAction()
+    public function updateAction()
     {
         /* 检查权限 */
         admin_priv('whole_sale');
@@ -542,10 +542,10 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 搜索商品
+    //-- 搜索商品
     /*------------------------------------------------------ */
 
-    function search_goodsAction()
+    public function search_goodsAction()
     {
         check_authz_json('whole_sale');
 
@@ -565,10 +565,10 @@ class WholesaleController extends InitController
     }
 
     /*------------------------------------------------------ */
-//-- 取得商品信息
+    //-- 取得商品信息
     /*------------------------------------------------------ */
 
-    function get_goods_infoAction()
+    public function get_goods_infoAction()
     {
         include_once(ROOT_PATH . 'includes/cls_json.php');
         $json = new JSON();
@@ -595,7 +595,7 @@ class WholesaleController extends InitController
      * 取得批发活动列表
      * @return   array
      */
-    function wholesale_list()
+    public function wholesale_list()
     {
         /* 查询会员等级 */
         $rank_list = array();

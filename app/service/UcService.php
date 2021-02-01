@@ -1,8 +1,12 @@
 <?php
 
+namespace app\service;
+
 /**
- * UCenter 函数库
+ * UCenter
  */
+class UcService
+{
 
 
 /**
@@ -107,4 +111,5 @@ function exchange_points($uid, $fromcredits, $tocredits, $toappid, $netamount)
     } else {
         return true;
     }
+}
 }

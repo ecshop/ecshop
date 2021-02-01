@@ -1,13 +1,14 @@
 <?php
 
+namespace app\service;
+
 /**
- * 文章及文章分类相关函数库
+ * 文章及文章分类
+ * Class ArticleService
+ * @package app\service
  */
-
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
+class ArticleService
+{
 /**
  * 获得文章分类下的文章列表
  *
@@ -74,4 +75,5 @@ function get_article_count($cat_id, $requirement = '')
         $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('article') . " WHERE " . get_article_children($cat_id) . " AND is_open = 1");
     }
     return $count;
+}
 }

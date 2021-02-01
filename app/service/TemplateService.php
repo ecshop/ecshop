@@ -1,15 +1,16 @@
 <?php
 
+namespace app\service;
+
 /**
  * 管理中心模版相关公用函数库
  */
+class TemplateService
+{
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
 
-/* 可以设置内容的模板 */
-$template_files = array(
+    /* 可以设置内容的模板 */
+private $template_files = array(
     'index.dwt',
     'article.dwt',
     'article_cat.dwt',
@@ -40,7 +41,7 @@ $template_files = array(
 );
 
 /* 每个模板允许设置的库项目 */
-$page_libs = array(
+    private  $page_libs = array(
     'article' => array(
         '/library/ur_here.lbi' => 0,
         '/library/search_form.lbi' => 0,
@@ -253,7 +254,7 @@ $page_libs = array(
 );
 
 /* 动态库项目 */
-$dyna_libs = array(
+    private $dyna_libs = array(
     'cat_goods',
     'brand_goods',
     'cat_articles',
@@ -465,4 +466,5 @@ function get_editable_libs($curr_template, $curr_page_libs)
     }
 
     return $edit_libs;
+}
 }

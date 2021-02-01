@@ -1,12 +1,14 @@
 <?php
 
+namespace app\service;
+
 /**
  * 基础函数库
  */
+class BaseService
+{
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
+
 
 /**
  * 截取UTF-8编码下字符串的函数
@@ -911,4 +913,5 @@ function read_static_cache($name)
 function write_static_cache($name, $value)
 {
     cache($name, $value);
+}
 }

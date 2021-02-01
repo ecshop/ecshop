@@ -1,14 +1,15 @@
 <?php
 
+namespace app\service;
+
 /**
  * 用户帐号相关函数库
  */
+class PassportService
+{
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
 
-/**
+    /**
  * 用户注册，登录函数
  *
  * @access  public
@@ -329,4 +330,5 @@ function admin_registered($adminname)
     $res = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('admin_user') .
         " WHERE user_name = '$adminname'");
     return $res;
+}
 }

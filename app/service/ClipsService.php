@@ -1,12 +1,12 @@
 <?php
 
+namespace app\service;
+
 /**
  * 用户相关函数库
  */
+class ClipsService {
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
 
 /**
  *  获取指定用户的收藏商品列表
@@ -798,4 +798,5 @@ function get_comment_list($user_id, $page_size, $start)
     }
 
     return $comments;
+}
 }

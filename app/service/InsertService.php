@@ -1,14 +1,15 @@
 <?php
 
+namespace app\service;
+
 /**
  * 动态内容函数库
  */
+class InsertService
+{
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
 
-/**
+    /**
  * 获得查询次数以及查询时间
  *
  * @access  public
@@ -324,4 +325,5 @@ function insert_vote()
     $val = $GLOBALS['smarty']->fetch('library/vote.lbi');
 
     return $val;
+}
 }

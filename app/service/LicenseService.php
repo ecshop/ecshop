@@ -1,14 +1,15 @@
 <?php
 
+namespace app\service;
+
 /**
  * LICENSE 相关函数库
  */
+class LicenseService
+{
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
 
-/**
+    /**
  * 获得网店 license 信息
  *
  * @access  public
@@ -236,4 +237,5 @@ function license_reg($certi_added = '')
     }
 
     return $return_array;
+}
 }

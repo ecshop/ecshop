@@ -1,14 +1,15 @@
 <?php
 
+namespace app\service;
+
 /**
  * 支付接口函数库
  */
+class PaymentService
+{
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
 
-/**
+    /**
  * 取得返回信息地址
  * @param string $code 支付方式代码
  */
@@ -243,4 +244,5 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
             }
         }
     }
+}
 }

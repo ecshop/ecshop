@@ -1,14 +1,15 @@
 <?php
 
+namespace app\service;
+
 /**
  * 购物流程函数库
  */
+class OrderService
+{
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
 
-/**
+    /**
  * 处理序列化的支付、配送的配置参数
  * 返回一个以name为索引的数组
  *
@@ -2671,4 +2672,5 @@ function judge_package_stock($package_id, $package_num = 1)
     }
 
     return false;
+}
 }

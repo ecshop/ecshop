@@ -1,14 +1,15 @@
 <?php
 
+namespace app\service;
+
 /**
  * 用户交易相关函数库
  */
+class TransactionService
+{
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
 
-/**
+    /**
  * 修改个人资料（Email, 性别，生日)
  *
  * @access  public
@@ -985,4 +986,5 @@ function deleteRepeat($array)
         }
     }
     return $array;
+}
 }

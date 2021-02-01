@@ -1,14 +1,15 @@
 <?php
 
+namespace app\service;
+
 /**
  * 商品相关函数库
  */
+class GoodsService
+{
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
 
-/**
+    /**
  * 商品推荐usort用自定义排序行数
  */
 function goods_sort($goods_a, $goods_b)
@@ -1318,4 +1319,5 @@ function get_products_info($goods_id, $spec_goods_attr_id)
         $return_array = $GLOBALS['db']->getRow($sql);
     }
     return $return_array;
+}
 }

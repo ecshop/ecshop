@@ -1,14 +1,15 @@
 <?php
 
+namespace app\service;
+
 /**
  * 管理中心公用函数库
  */
+class MainManageService
+{
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
 
-/**
+    /**
  * 获得所有模块的名称以及链接地址
  *
  * @access      public
@@ -787,4 +788,5 @@ function suppliers_list_name()
     }
 
     return $suppliers_name;
+}
 }

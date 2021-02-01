@@ -1,14 +1,15 @@
 <?php
 
+namespace app\service;
+
 /**
  * 管理中心商品相关函数
  */
+class GoodsManageService
+{
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
 
-/**
+    /**
  * 取得推荐类型列表
  * @return  array   推荐类型列表
  */
@@ -1188,4 +1189,5 @@ function move_image_file($source, $dest)
         return true;
     }
     return false;
+}
 }

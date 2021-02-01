@@ -1,14 +1,16 @@
 <?php
 
+namespace app\service;
+
 /**
  * 时间函数
  */
+class TimeService
+{
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
 
-/**
+
+    /**
  * 获得当前格林威治时间的时间戳
  *
  * @return  integer
@@ -157,4 +159,5 @@ function local_getdate($timestamp = null)
     $local_time = $gmt + ($timezone * 3600);    // 转换为用户所在时区的时间戳
 
     return getdate($local_time);
+}
 }

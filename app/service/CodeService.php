@@ -1,15 +1,15 @@
 <?php
 
+namespace app\service;
+
 /**
  * 加密解密类
  */
-
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
+class CodeService
+{
 
 
-/**
+    /**
  * 加密函数
  * @param string $str 加密前的字符串
  * @param string $key 密钥
@@ -44,4 +44,5 @@ function decrypt($str, $key = AUTH_KEY)
     }
 
     return $coded;
+}
 }

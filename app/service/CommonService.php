@@ -1,17 +1,14 @@
 <?php
 
+namespace app\service;
+
 /**
  * 公用函数库
  */
+class CommonService
+{
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
-/*  开启全局的Cookie的HttpOnly属性 */
-@ini_set("session.cookie_httponly", 1);
-
-/**
+    /**
  * 创建像这样的查询: "IN('a','b')";
  *
  * @access   public
@@ -2304,3 +2301,4 @@ function get_specifications_list($goods_id, $conditions = '')
     return $return_array;
 }
 
+}

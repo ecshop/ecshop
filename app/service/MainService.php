@@ -1,14 +1,14 @@
 <?php
 
+namespace app\service;
+
 /**
  * 前台公用函数库
  */
+class MainService {
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
 
-/**
+    /**
  * 更新用户SESSION,COOKIE及登录时间、登录次数。
  *
  * @access  public
@@ -1806,4 +1806,5 @@ function update_cart_offline()
     }
 
     return true;
+}
 }

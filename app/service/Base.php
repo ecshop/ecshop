@@ -872,10 +872,9 @@ function to_utf8_iconv($str)
 
 /**
  * 获取文件后缀名,并判断是否合法
- *
  * @param string $file_name
  * @param array $allow_type
- * @return blob
+ * @return string
  */
 function get_file_suffix($file_name, $allow_type = array())
 {
@@ -894,46 +893,22 @@ function get_file_suffix($file_name, $allow_type = array())
 
 /**
  * 读结果缓存文件
- *
- * @params  string  $cache_name
- *
- * @return  array   $data
+ * @param $name
+ * @return false|mixed|object
  */
-function read_static_cache($cache_name)
+function read_static_cache($name)
 {
-    if ((DEBUG_MODE & 2) == 2) {
-        return false;
-    }
-    static $result = array();
-    if (!empty($result[$cache_name])) {
-        return $result[$cache_name];
-    }
-    $cache_file_path = ROOT_PATH . '/temp/static_caches/' . $cache_name . '.php';
-    if (file_exists($cache_file_path)) {
-        include_once($cache_file_path);
-        $result[$cache_name] = $data;
-        return $result[$cache_name];
-    } else {
-        return false;
-    }
+    $cache = cache($name);
+
+    return is_null($cache) ? false : $cache;
 }
 
 /**
  * 写结果缓存文件
- *
- * @params  string  $cache_name
- * @params  string  $caches
- *
- * @return
+ * @param $name
+ * @param $value
  */
-function write_static_cache($cache_name, $caches)
+function write_static_cache($name, $value)
 {
-    if ((DEBUG_MODE & 2) == 2) {
-        return false;
-    }
-    $cache_file_path = ROOT_PATH . '/temp/static_caches/' . $cache_name . '.php';
-    $content = "<?php\r\n";
-    $content .= "\$data = " . var_export($caches, true) . ";\r\n";
-    $content .= "?>";
-    file_put_contents($cache_file_path, $content, LOCK_EX);
+    cache($name, $value);
 }

@@ -223,7 +223,7 @@ class Mysql
     {
         $sql = trim($sql . ' LIMIT 1');
 
-        return Cache::remember(md5($sql), function() use ($sql) {
+        return Cache::remember(md5($sql), function () use ($sql) {
             return $this->getOne($sql, true);
         });
     }
@@ -245,7 +245,7 @@ class Mysql
 
     public function getAllCached($sql)
     {
-        return Cache::remember(md5($sql), function() use ($sql) {
+        return Cache::remember(md5($sql), function () use ($sql) {
             return $this->getAll($sql);
         });
     }
@@ -268,8 +268,9 @@ class Mysql
     {
         $sql = trim($sql . ' LIMIT 1');
 
-        return Cache::remember(md5($sql), function() use ($sql) {
-            return $this->getRow($sql, true);;
+        return Cache::remember(md5($sql), function () use ($sql) {
+            return $this->getRow($sql, true);
+            ;
         });
     }
 
@@ -290,7 +291,7 @@ class Mysql
 
     public function getColCached($sql)
     {
-        return Cache::remember(md5($sql), function() use ($sql) {
+        return Cache::remember(md5($sql), function () use ($sql) {
             return $this->getCol($sql);
         });
     }

@@ -109,8 +109,7 @@ class RSSItem
         $date = '',
         $author = '',
         $comments = ''
-    )
-    {
+    ) {
         $this->setAbout($about);
         $this->setTitle($title);
         $this->setLink($link);

@@ -227,8 +227,7 @@ class RSSBuilder
         $image_link = '',
         $category = '',
         $cache = ''
-    )
-    {
+    ) {
         $this->setEncoding($encoding);
         $this->setAbout($about);
         $this->setTitle($title);
@@ -265,8 +264,7 @@ class RSSBuilder
         $rights = '',
         $coverage = '',
         $contributor = ''
-    )
-    {
+    ) {
         $this->setPublisher($publisher);
         $this->setCreator($creator);
         $this->setDate($date);
@@ -843,8 +841,7 @@ class RSSBuilder
         $date = '',
         $author = '',
         $comments = ''
-    )
-    {
+    ) {
         $item = new RSSItem(
             $about,
             $title,

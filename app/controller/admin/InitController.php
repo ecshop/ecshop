@@ -122,7 +122,7 @@ class InitController extends Controller
 
         $smarty->template_dir = ROOT_PATH . ADMIN_PATH . '/templates';
         $smarty->compile_dir = ROOT_PATH . 'temp/compiled/admin';
-            $smarty->force_compile = true;
+        $smarty->force_compile = true;
 
         $smarty->assign('lang', $_LANG);
         $smarty->assign('help_open', $_CFG['help_open']);

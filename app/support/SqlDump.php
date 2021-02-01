@@ -62,8 +62,6 @@ class SqlDump
     }
 
     /**
-
-    /**
      *  获取指定表的定义
      *
      * @access  public

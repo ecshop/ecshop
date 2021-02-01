@@ -133,7 +133,6 @@ class UserAccountManageController extends InitController
      */
     public function order_list()
     {
-        global $start_date, $end_date;
 
         $result = get_filter();
 

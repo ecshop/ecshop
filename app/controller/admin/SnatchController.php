@@ -419,7 +419,6 @@ class SnatchController extends InitController
      */
     public function get_snatch_info($id)
     {
-        global $ecs, $db, $_CFG;
 
         $sql = "SELECT act_id, act_name AS snatch_name, goods_id, product_id, goods_name, start_time, end_time, act_desc, ext_info" .
             " FROM " . $GLOBALS['ecs']->table('goods_activity') .

@@ -311,7 +311,6 @@ class NavigatorController extends InitController
     /*------------------------------------------------------ */
     public function get_sysnav()
     {
-        global $_LANG;
         $sysmain = array(
             array($_LANG['view_cart'], 'flow.php'),
             array($_LANG['pick_out'], 'pick_out.php'),

@@ -3815,7 +3815,6 @@ class OrderController extends InitController
      */
     public function get_status_list($type = 'all')
     {
-        global $_LANG;
 
         $list = array();
 

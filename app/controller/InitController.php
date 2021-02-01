@@ -203,7 +203,6 @@ class InitController extends Controller
 
     protected function assign_template($ctype = '', $catlist = array())
     {
-        global $smarty;
 
         $this->assign('image_width', $GLOBALS['_CFG']['image_width']);
         $this->assign('image_height', $GLOBALS['_CFG']['image_height']);

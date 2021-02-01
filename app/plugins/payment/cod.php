@@ -11,7 +11,6 @@ if (!defined('IN_ECS')) {
 $payment_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/payment/cod.php';
 
 if (file_exists($payment_lang)) {
-    global $_LANG;
 
     include_once($payment_lang);
 }

@@ -107,7 +107,6 @@ class ShippingController extends InitController
 
     public function uninstallAction()
     {
-        global $ecs, $_LANG;
 
         admin_priv('ship_manage');
 

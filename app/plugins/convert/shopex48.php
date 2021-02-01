@@ -156,7 +156,6 @@ class shopex48
      */
     public function process_cat()
     {
-        global $db, $ecs;
 
         /* 清空分类、商品类型、属性 */
         truncate_table('category');
@@ -205,7 +204,6 @@ class shopex48
      */
     public function process_brand()
     {
-        global $db, $ecs;
 
         /* 清空品牌 */
         truncate_table('brand');
@@ -244,7 +242,6 @@ class shopex48
      */
     public function process_goods()
     {
-        global $db, $ecs;
 
         /* 清空商品、商品扩展分类、商品属性、商品相册、关联商品、组合商品、赠品 */
         truncate_table('goods');
@@ -347,7 +344,6 @@ class shopex48
      */
     public function process_users()
     {
-        global $db, $ecs;
 
         /* 清空会员、会员等级、会员价格、用户红包、用户地址、帐户明细 */
         truncate_table('user_rank');
@@ -482,7 +478,6 @@ class shopex48
      */
     public function process_article()
     {
-        global $db, $ecs;
 
         /* 清空文章类型、文章、友情链接 */
         //truncate_table('article_cat');
@@ -535,7 +530,6 @@ class shopex48
      */
     public function process_order()
     {
-        global $db, $ecs;
 
         /* 清空订单、订单商品 */
         truncate_table('order_info');
@@ -614,7 +608,6 @@ class shopex48
      */
     public function process_config()
     {
-        global $ecs, $db;
 
         /* 查询设置 */
         $sql = "SELECT * FROM " . $this->sprefix . "settings";

@@ -273,7 +273,6 @@ class ShopConfigController extends InitController
      */
     public function get_settings($groups = null, $excludes = null)
     {
-        global $db, $ecs, $_LANG;
 
         $config_groups = '';
         $excludes_groups = '';

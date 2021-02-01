@@ -11,7 +11,6 @@ if (!defined('IN_ECS')) {
 $shipping_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/shipping/sf_express.php';
 
 if (file_exists($shipping_lang)) {
-    global $_LANG;
     include_once($shipping_lang);
 }
 

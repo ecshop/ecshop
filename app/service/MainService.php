@@ -1515,7 +1515,6 @@ class MainService
      */
     public function get_library_number($library, $template = null)
     {
-        global $page_libs;
 
         if (empty($template)) {
             $template = basename(PHP_SELF);

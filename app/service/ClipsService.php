@@ -654,7 +654,6 @@ class ClipsService
      */
     public function get_rank_info()
     {
-        global $db, $ecs;
 
         if (!empty($_SESSION['user_rank'])) {
             $sql = "SELECT rank_name, special_rank FROM " . $ecs->table('user_rank') . " WHERE rank_id = '$_SESSION[user_rank]'";

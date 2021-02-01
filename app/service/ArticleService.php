@@ -68,7 +68,6 @@ class ArticleService
      */
     public function get_article_count($cat_id, $requirement = '')
     {
-        global $db, $ecs;
         if ($requirement != '') {
             $count = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('article') . ' WHERE ' . get_article_children($cat_id) . ' AND  title like \'%' . $requirement . '%\'  AND is_open = 1');
         } else {

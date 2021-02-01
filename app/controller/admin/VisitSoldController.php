@@ -84,7 +84,6 @@ class VisitSoldController extends InitController
      */
     public function click_sold_info($cat_id, $brand_id, $show_num)
     {
-        global $db, $ecs;
 
         $where = " WHERE o.order_id = og.order_id AND g.goods_id = og.goods_id " . order_query_sql('finished', 'o.');
         $limit = " LIMIT " . $show_num;

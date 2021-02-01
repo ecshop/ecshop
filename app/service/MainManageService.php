@@ -20,7 +20,6 @@ class MainManageService
      */
     public function read_modules($directory = '.')
     {
-        global $_LANG;
 
         $dir = @opendir($directory);
         $set_modules = true;
@@ -138,7 +137,6 @@ class MainManageService
      */
     public function insert_config($parent, $code, $value)
     {
-        global $ecs, $db, $_LANG;
 
         $sql = 'SELECT id FROM ' . $ecs->table('shop_config') . " WHERE code = '$parent' AND type = 1";
         $parent_id = $db->getOne($sql);
@@ -158,7 +156,6 @@ class MainManageService
      */
     public function admin_priv($priv_str, $msg_type = '', $msg_output = true)
     {
-        global $_LANG;
 
         if ($_SESSION['action_list'] == 'all') {
             return true;
@@ -288,7 +285,6 @@ class MainManageService
      */
     public function create_html_editor($input_name, $input_value = '')
     {
-        global $smarty;
 
         $editor = new FCKeditor($input_name);
         $editor->BasePath = '../includes/fckeditor/';

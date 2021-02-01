@@ -348,7 +348,6 @@ class TemplateService
      */
     public function get_template_region($tmp_name, $tmp_file, $lib = true)
     {
-        global $dyna_libs;
 
         $file = '../themes/' . $tmp_name . '/' . $tmp_file;
 
@@ -440,7 +439,6 @@ class TemplateService
      */
     public function get_editable_libs($curr_template, $curr_page_libs)
     {
-        global $_CFG;
         $vals = array();
         $edit_libs = array();
 

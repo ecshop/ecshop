@@ -57,7 +57,6 @@ class SqlController extends InitController
      */
     public function assign_sql($sql)
     {
-        global $db, $smarty, $_LANG;
 
         $sql = stripslashes($sql);
         $this->assign('sql', $sql);

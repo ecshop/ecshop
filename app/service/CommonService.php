@@ -110,7 +110,6 @@ class CommonService
      */
     public function region_result($parent, $sel_name, $type)
     {
-        global $cp;
 
         $arr = get_regions($type, $parent);
         foreach ($arr as $v) {
@@ -535,7 +534,6 @@ class CommonService
      */
     public function get_brands($cat = 0, $app = 'brand')
     {
-        global $page_libs;
         $template = basename(PHP_SELF);
         $template = substr($template, 0, strrpos($template, '.'));
         include_once(ROOT_PATH . ADMIN_PATH . '/includes/lib_template.php');
@@ -2044,7 +2042,6 @@ class CommonService
      */
     public function get_package_info($id)
     {
-        global $ecs, $db, $_CFG;
         $id = is_numeric($id) ? intval($id) : 0;
         $now = gmtime();
 

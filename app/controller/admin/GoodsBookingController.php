@@ -191,7 +191,6 @@ class GoodsBookingController extends InitController
      */
     public function get_booking_info($id)
     {
-        global $ecs, $db, $_CFG, $_LANG;
 
         $sql = "SELECT bg.rec_id, bg.user_id, IFNULL(u.user_name, '$_LANG[guest_user]') AS user_name, " .
             "bg.link_man, g.goods_name, bg.goods_id, bg.goods_number, " .

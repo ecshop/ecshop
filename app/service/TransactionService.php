@@ -81,7 +81,6 @@ class TransactionService
      */
     public function get_profile($user_id)
     {
-        global $user;
 
 
         /* 会员帐号信息 */

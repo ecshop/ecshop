@@ -128,7 +128,6 @@ class FilecheckController extends InitController
      */
     public function checkfiles($currentdir, $ext = '', $sub = 1, $skip = '')
     {
-        global $md5data;
 
         $currentdir = ROOT_PATH . str_replace(ROOT_PATH, '', $currentdir);
         $dir = @opendir($currentdir);

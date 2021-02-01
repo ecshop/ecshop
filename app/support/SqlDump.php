@@ -12,7 +12,6 @@ namespace app\support;
  */
 function dump_escape_string($str)
 {
-    global $db;
     /* 取得参数 */
     return Mysql::escape_string($str, $db);
 }

@@ -9,7 +9,6 @@ if (!defined('IN_ECS')) {
 }
 $cron_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/cron/auto_manage.php';
 if (file_exists($cron_lang)) {
-    global $_LANG;
 
     include_once($cron_lang);
 }

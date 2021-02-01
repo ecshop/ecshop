@@ -14,7 +14,7 @@ class OrderStatsController extends InitController
         require_once(ROOT_PATH . 'includes/lib_order.php');
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
 
-        $smarty->assign('lang', $_LANG);
+        $this->assign('lang', $_LANG);
     }
 
     /*------------------------------------------------------ */
@@ -239,21 +239,21 @@ class OrderStatsController extends InitController
             $ship_xml .= "</graph>";
         }
         /* 赋值到模板 */
-        $smarty->assign('order_general', $order_general);
-        $smarty->assign('total_turnover', price_format($order_general['total_turnover']));
-        $smarty->assign('click_count', $click_count);         //商品总点击数
-        $smarty->assign('click_ordernum', $click_ordernum);      //每千点订单数
-        $smarty->assign('click_turnover', price_format($click_turnover));  //每千点购物额
+        $this->assign('order_general', $order_general);
+        $this->assign('total_turnover', price_format($order_general['total_turnover']));
+        $this->assign('click_count', $click_count);         //商品总点击数
+        $this->assign('click_ordernum', $click_ordernum);      //每千点订单数
+        $this->assign('click_turnover', price_format($click_turnover));  //每千点购物额
 
-        $smarty->assign('is_multi', $is_multi);
+        $this->assign('is_multi', $is_multi);
 
-        $smarty->assign('order_general_xml', $order_general_xml);
-        $smarty->assign('ship_xml', $ship_xml);
-        $smarty->assign('pay_xml', $pay_xml);
+        $this->assign('order_general_xml', $order_general_xml);
+        $this->assign('ship_xml', $ship_xml);
+        $this->assign('pay_xml', $pay_xml);
 
-        $smarty->assign('ur_here', $_LANG['report_order']);
-        $smarty->assign('start_date', local_date($_CFG['date_format'], $start_date));
-        $smarty->assign('end_date', local_date($_CFG['date_format'], $end_date));
+        $this->assign('ur_here', $_LANG['report_order']);
+        $this->assign('start_date', local_date($_CFG['date_format'], $start_date));
+        $this->assign('end_date', local_date($_CFG['date_format'], $end_date));
 
         for ($i = 0; $i < 5; $i++) {
             if (isset($start_date_arr[$i])) {
@@ -262,11 +262,11 @@ class OrderStatsController extends InitController
                 $start_date_arr[$i] = null;
             }
         }
-        $smarty->assign('start_date_arr', $start_date_arr);
+        $this->assign('start_date_arr', $start_date_arr);
 
         if (!$is_multi) {
             $filename = local_date('Ymd', $start_date) . '_' . local_date('Ymd', $end_date);
-            $smarty->assign('action_link', array('text' => $_LANG['down_order_statistics'], 'href' => 'order_stats.php?act=download&start_date=' . $start_date . '&end_date=' . $end_date . '&filename=' . $filename));
+            $this->assign('action_link', array('text' => $_LANG['down_order_statistics'], 'href' => 'order_stats.php?act=download&start_date=' . $start_date . '&end_date=' . $end_date . '&filename=' . $filename));
         }
 
         assign_query_info();

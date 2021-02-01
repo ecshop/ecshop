@@ -20,8 +20,8 @@ class SqlController extends InitController
     {
         admin_priv('sql_query');
         assign_query_info();
-        $smarty->assign('type', -1);
-        $smarty->assign('ur_here', $_LANG['04_sql_query']);
+        $this->assign('type', -1);
+        $this->assign('ur_here', $_LANG['04_sql_query']);
 
         $smarty->display('sql.htm');
     }
@@ -42,7 +42,7 @@ class SqlController extends InitController
 
         assign_sql($_POST['sql']);
         assign_query_info();
-        $smarty->assign('ur_here', $_LANG['04_sql_query']);
+        $this->assign('ur_here', $_LANG['04_sql_query']);
 
         $smarty->display('sql.htm');
     }
@@ -60,7 +60,7 @@ class SqlController extends InitController
         global $db, $smarty, $_LANG;
 
         $sql = stripslashes($sql);
-        $smarty->assign('sql', $sql);
+        $this->assign('sql', $sql);
 
         /* 解析查询项 */
         $sql = str_replace("\r", '', $sql);
@@ -74,10 +74,10 @@ class SqlController extends InitController
         if (count($query_items) > 1) {
             foreach ($query_items as $key => $value) {
                 if ($db->query($value, 'SILENT')) {
-                    $smarty->assign('type', 1);
+                    $this->assign('type', 1);
                 } else {
-                    $smarty->assign('type', 0);
-                    $smarty->assign('error', $db->error());
+                    $this->assign('type', 0);
+                    $this->assign('error', $db->error());
                     return;
                 }
             }
@@ -87,16 +87,16 @@ class SqlController extends InitController
         /* 单独一条sql语句处理 */
         if (preg_match("/^(?:UPDATE|DELETE|TRUNCATE|ALTER|DROP|FLUSH|INSERT|REPLACE|SET|CREATE)\\s+/i", $sql)) {
             if ($db->query($sql, 'SILENT')) {
-                $smarty->assign('type', 1);
+                $this->assign('type', 1);
             } else {
-                $smarty->assign('type', 0);
-                $smarty->assign('error', $db->error());
+                $this->assign('type', 0);
+                $this->assign('error', $db->error());
             }
         } else {
             $data = $db->getAll($sql);
             if ($data === false) {
-                $smarty->assign('type', 0);
-                $smarty->assign('error', $db->error());
+                $this->assign('type', 0);
+                $this->assign('error', $db->error());
             } else {
                 $result = '';
                 if (is_array($data) && isset($data[0]) === true) {
@@ -118,8 +118,8 @@ class SqlController extends InitController
                     $result = "<center><h3>" . $_LANG['no_data'] . "</h3></center>";
                 }
 
-                $smarty->assign('type', 2);
-                $smarty->assign('result', $result);
+                $this->assign('type', 2);
+                $this->assign('result', $result);
             }
         }
     }

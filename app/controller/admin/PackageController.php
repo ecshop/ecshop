@@ -33,12 +33,12 @@ class PackageController extends InitController
         $end_time = local_date('Y-m-d H:i', strtotime('+1 month'));
         $package = array('package_price' => '', 'start_time' => $start_time, 'end_time' => $end_time);
 
-        $smarty->assign('package', $package);
-        $smarty->assign('ur_here', $_LANG['package_add']);
-        $smarty->assign('action_link', array('text' => $_LANG['14_package_list'], 'href' => 'package.php?act=list'));
-        $smarty->assign('cat_list', cat_list());
-        $smarty->assign('brand_list', get_brand_list());
-        $smarty->assign('form_action', 'insert');
+        $this->assign('package', $package);
+        $this->assign('ur_here', $_LANG['package_add']);
+        $this->assign('action_link', array('text' => $_LANG['14_package_list'], 'href' => 'package.php?act=list'));
+        $this->assign('cat_list', cat_list());
+        $this->assign('brand_list', get_brand_list());
+        $this->assign('form_action', 'insert');
 
         assign_query_info();
         $smarty->display('package_info.htm');
@@ -97,13 +97,13 @@ class PackageController extends InitController
         $package = get_package_info($_REQUEST['id']);
         $package_goods_list = get_package_goods($_REQUEST['id']); // 礼包商品
 
-        $smarty->assign('package', $package);
-        $smarty->assign('ur_here', $_LANG['package_edit']);
-        $smarty->assign('action_link', array('text' => $_LANG['14_package_list'], 'href' => 'package.php?act=list&' . list_link_postfix()));
-        $smarty->assign('cat_list', cat_list());
-        $smarty->assign('brand_list', get_brand_list());
-        $smarty->assign('form_action', 'update');
-        $smarty->assign('package_goods_list', $package_goods_list);
+        $this->assign('package', $package);
+        $this->assign('ur_here', $_LANG['package_edit']);
+        $this->assign('action_link', array('text' => $_LANG['14_package_list'], 'href' => 'package.php?act=list&' . list_link_postfix()));
+        $this->assign('cat_list', cat_list());
+        $this->assign('brand_list', get_brand_list());
+        $this->assign('form_action', 'update');
+        $this->assign('package_goods_list', $package_goods_list);
 
         assign_query_info();
         $smarty->display('package_info.htm');
@@ -170,20 +170,20 @@ class PackageController extends InitController
     /*------------------------------------------------------ */
     public function listAction()
     {
-        $smarty->assign('ur_here', $_LANG['14_package_list']);
-        $smarty->assign('action_link', array('text' => $_LANG['package_add'], 'href' => 'package.php?act=add'));
+        $this->assign('ur_here', $_LANG['14_package_list']);
+        $this->assign('action_link', array('text' => $_LANG['package_add'], 'href' => 'package.php?act=add'));
 
         $packages = get_packagelist();
 
-        $smarty->assign('package_list', $packages['packages']);
-        $smarty->assign('filter', $packages['filter']);
-        $smarty->assign('record_count', $packages['record_count']);
-        $smarty->assign('page_count', $packages['page_count']);
+        $this->assign('package_list', $packages['packages']);
+        $this->assign('filter', $packages['filter']);
+        $this->assign('record_count', $packages['record_count']);
+        $this->assign('page_count', $packages['page_count']);
 
         $sort_flag = sort_flag($packages['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-        $smarty->assign('full_page', 1);
+        $this->assign('full_page', 1);
         assign_query_info();
         $smarty->display('package_list.htm');
     }
@@ -196,13 +196,13 @@ class PackageController extends InitController
     {
         $packages = get_packagelist();
 
-        $smarty->assign('package_list', $packages['packages']);
-        $smarty->assign('filter', $packages['filter']);
-        $smarty->assign('record_count', $packages['record_count']);
-        $smarty->assign('page_count', $packages['page_count']);
+        $this->assign('package_list', $packages['packages']);
+        $this->assign('filter', $packages['filter']);
+        $this->assign('record_count', $packages['record_count']);
+        $this->assign('page_count', $packages['page_count']);
 
         $sort_flag = sort_flag($packages['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result(
             $smarty->fetch('package_list.htm'),

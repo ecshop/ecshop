@@ -24,16 +24,16 @@ class PackController extends InitController
     /*------------------------------------------------------ */
     public function listAction()
     {
-        $smarty->assign('ur_here', $_LANG['06_pack_list']);
-        $smarty->assign('action_link', array('text' => $_LANG['pack_add'], 'href' => 'pack.php?act=add'));
-        $smarty->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['06_pack_list']);
+        $this->assign('action_link', array('text' => $_LANG['pack_add'], 'href' => 'pack.php?act=add'));
+        $this->assign('full_page', 1);
 
         $packs_list = packs_list();
 
-        $smarty->assign('packs_list', $packs_list['packs_list']);
-        $smarty->assign('filter', $packs_list['filter']);
-        $smarty->assign('record_count', $packs_list['record_count']);
-        $smarty->assign('page_count', $packs_list['page_count']);
+        $this->assign('packs_list', $packs_list['packs_list']);
+        $this->assign('filter', $packs_list['filter']);
+        $this->assign('record_count', $packs_list['record_count']);
+        $this->assign('page_count', $packs_list['page_count']);
 
         assign_query_info();
         $smarty->display('pack_list.htm');
@@ -44,13 +44,13 @@ class PackController extends InitController
     public function queryAction()
     {
         $packs_list = packs_list();
-        $smarty->assign('packs_list', $packs_list['packs_list']);
-        $smarty->assign('filter', $packs_list['filter']);
-        $smarty->assign('record_count', $packs_list['record_count']);
-        $smarty->assign('page_count', $packs_list['page_count']);
+        $this->assign('packs_list', $packs_list['packs_list']);
+        $this->assign('filter', $packs_list['filter']);
+        $this->assign('record_count', $packs_list['record_count']);
+        $this->assign('page_count', $packs_list['page_count']);
 
         $sort_flag = sort_flag($packs_list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result($smarty->fetch('pack_list.htm'), '', array('filter' => $packs_list['filter'], 'page_count' => $packs_list['page_count']));
     }
@@ -65,10 +65,10 @@ class PackController extends InitController
         $pack['pack_fee'] = 0;
         $pack['free_money'] = 0;
 
-        $smarty->assign('pack', $pack);
-        $smarty->assign('ur_here', $_LANG['pack_add']);
-        $smarty->assign('form_action', 'insert');
-        $smarty->assign('action_link', array('text' => $_LANG['06_pack_list'], 'href' => 'pack.php?act=list'));
+        $this->assign('pack', $pack);
+        $this->assign('ur_here', $_LANG['pack_add']);
+        $this->assign('form_action', 'insert');
+        $this->assign('action_link', array('text' => $_LANG['06_pack_list'], 'href' => 'pack.php?act=list'));
 
         assign_query_info();
         $smarty->display('pack_info.htm');
@@ -121,10 +121,10 @@ class PackController extends InitController
 
         $sql = "SELECT pack_id, pack_name, pack_fee, free_money, pack_desc, pack_img FROM " . $ecs->table('pack') . " WHERE pack_id='$_REQUEST[id]'";
         $pack = $db->getRow($sql);
-        $smarty->assign('ur_here', $_LANG['pack_edit']);
-        $smarty->assign('action_link', array('text' => $_LANG['06_pack_list'], 'href' => 'pack.php?act=list&' . list_link_postfix()));
-        $smarty->assign('pack', $pack);
-        $smarty->assign('form_action', 'update');
+        $this->assign('ur_here', $_LANG['pack_edit']);
+        $this->assign('action_link', array('text' => $_LANG['06_pack_list'], 'href' => 'pack.php?act=list&' . list_link_postfix()));
+        $this->assign('pack', $pack);
+        $this->assign('form_action', 'update');
         $smarty->display('pack_info.htm');
     }
 

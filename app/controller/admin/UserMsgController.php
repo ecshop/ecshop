@@ -36,11 +36,11 @@ class UserMsgController extends InitController
         }
 
         assign_query_info();
-        $smarty->assign('ur_here', sprintf($_LANG['msg_for_order'], $order_sn));
-        $smarty->assign('action_link', array('text' => $_LANG['order_detail'], 'href' => 'order.php?act=info&order_id=' . $order_id));
-        $smarty->assign('msg_list', $msg_list);
-        $smarty->assign('order_id', $_GET['order_id']);
-        $smarty->assign('user_id', $_GET['user_id']);
+        $this->assign('ur_here', sprintf($_LANG['msg_for_order'], $order_sn));
+        $this->assign('action_link', array('text' => $_LANG['order_detail'], 'href' => 'order.php?act=info&order_id=' . $order_id));
+        $this->assign('msg_list', $msg_list);
+        $this->assign('order_id', $_GET['order_id']);
+        $this->assign('user_id', $_GET['user_id']);
         $smarty->display('msg_add.htm');
     }
 
@@ -107,15 +107,15 @@ class UserMsgController extends InitController
         assign_query_info();
         $msg_list = msg_list();
 
-        $smarty->assign('msg_list', $msg_list['msg_list']);
-        $smarty->assign('filter', $msg_list['filter']);
-        $smarty->assign('record_count', $msg_list['record_count']);
-        $smarty->assign('page_count', $msg_list['page_count']);
-        $smarty->assign('full_page', 1);
-        $smarty->assign('sort_msg_id', '<img src="images/sort_desc.gif">');
+        $this->assign('msg_list', $msg_list['msg_list']);
+        $this->assign('filter', $msg_list['filter']);
+        $this->assign('record_count', $msg_list['record_count']);
+        $this->assign('page_count', $msg_list['page_count']);
+        $this->assign('full_page', 1);
+        $this->assign('sort_msg_id', '<img src="images/sort_desc.gif">');
 
-        $smarty->assign('ur_here', $_LANG['08_unreply_msg']);
-        $smarty->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['08_unreply_msg']);
+        $this->assign('full_page', 1);
         $smarty->display('msg_list.htm');
     }
 
@@ -126,13 +126,13 @@ class UserMsgController extends InitController
     {
         $msg_list = msg_list();
 
-        $smarty->assign('msg_list', $msg_list['msg_list']);
-        $smarty->assign('filter', $msg_list['filter']);
-        $smarty->assign('record_count', $msg_list['record_count']);
-        $smarty->assign('page_count', $msg_list['page_count']);
+        $this->assign('msg_list', $msg_list['msg_list']);
+        $this->assign('filter', $msg_list['filter']);
+        $this->assign('record_count', $msg_list['record_count']);
+        $this->assign('page_count', $msg_list['page_count']);
 
         $sort_flag = sort_flag($msg_list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result($smarty->fetch('msg_list.htm'), '', array('filter' => $msg_list['filter'], 'page_count' => $msg_list['page_count']));
     }
@@ -210,10 +210,10 @@ class UserMsgController extends InitController
     /*------------------------------------------------------ */
     public function viewAction()
     {
-        $smarty->assign('send_fail', !empty($_REQUEST['send_ok']));
-        $smarty->assign('msg', get_feedback_detail(intval($_REQUEST['id'])));
-        $smarty->assign('ur_here', $_LANG['reply']);
-        $smarty->assign('action_link', array('text' => $_LANG['08_unreply_msg'], 'href' => 'user_msg.php?act=list_all'));
+        $this->assign('send_fail', !empty($_REQUEST['send_ok']));
+        $this->assign('msg', get_feedback_detail(intval($_REQUEST['id'])));
+        $this->assign('ur_here', $_LANG['reply']);
+        $this->assign('action_link', array('text' => $_LANG['08_unreply_msg'], 'href' => 'user_msg.php?act=list_all'));
 
         assign_query_info();
         $smarty->display('msg_info.htm');
@@ -245,11 +245,11 @@ class UserMsgController extends InitController
             $template = get_mail_template('user_message');
             $message_content = $message_info['msg_title'] . "\r\n" . $message_info['msg_content'];
 
-            $smarty->assign('user_name', $message_info['user_name']);
-            $smarty->assign('message_note', $_POST['msg_content']);
-            $smarty->assign('message_content', $message_content);
-            $smarty->assign('shop_name', "<a href='" . $ecs->url() . "'>" . $_CFG['shop_name'] . '</a>');
-            $smarty->assign('send_date', date('Y-m-d'));
+            $this->assign('user_name', $message_info['user_name']);
+            $this->assign('message_note', $_POST['msg_content']);
+            $this->assign('message_content', $message_content);
+            $this->assign('shop_name', "<a href='" . $ecs->url() . "'>" . $_CFG['shop_name'] . '</a>');
+            $this->assign('send_date', date('Y-m-d'));
 
             $content = $smarty->fetch('str:' . $template['template_content']);
 

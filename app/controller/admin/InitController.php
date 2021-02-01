@@ -124,13 +124,13 @@ class InitController extends Controller
         $smarty->compile_dir = ROOT_PATH . 'temp/compiled/admin';
         $smarty->force_compile = true;
 
-        $smarty->assign('lang', $_LANG);
-        $smarty->assign('help_open', $_CFG['help_open']);
+        $this->assign('lang', $_LANG);
+        $this->assign('help_open', $_CFG['help_open']);
 
         if (isset($_CFG['enable_order_check'])) {  // 为了从旧版本顺利升级到2.5.0
-            $smarty->assign('enable_order_check', $_CFG['enable_order_check']);
+            $this->assign('enable_order_check', $_CFG['enable_order_check']);
         } else {
-            $smarty->assign('enable_order_check', 0);
+            $this->assign('enable_order_check', 0);
         }
 
         /* 验证管理员身份 */
@@ -191,7 +191,7 @@ class InitController extends Controller
             }
         }
 
-        $smarty->assign('token', $_CFG['token']);
+        $this->assign('token', $_CFG['token']);
 
         if ($_REQUEST['act'] != 'login' && $_REQUEST['act'] != 'signin' &&
             $_REQUEST['act'] != 'forget_pwd' && $_REQUEST['act'] != 'reset_pwd' && $_REQUEST['act'] != 'check_order') {

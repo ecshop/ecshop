@@ -17,7 +17,7 @@ class UserController extends InitController
         $action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
 
         $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
-        $smarty->assign('affiliate', $affiliate);
+        $this->assign('affiliate', $affiliate);
         $back_act = '';
 
 
@@ -59,20 +59,20 @@ class UserController extends InitController
         if (in_array($action, $ui_arr)) {
             $this->assign_template();
             $position = assign_ur_here(0, $_LANG['user_center']);
-            $smarty->assign('page_title', $position['title']); // 页面标题
-            $smarty->assign('ur_here', $position['ur_here']);
+            $this->assign('page_title', $position['title']); // 页面标题
+            $this->assign('ur_here', $position['ur_here']);
             $sql = "SELECT value FROM " . $ecs->table('shop_config') . " WHERE id = 419";
             $row = $db->getRow($sql);
             $car_off = $row['value'];
-            $smarty->assign('car_off', $car_off);
+            $this->assign('car_off', $car_off);
             /* 是否显示积分兑换 */
             if (!empty($_CFG['points_rule']) && unserialize($_CFG['points_rule'])) {
-                $smarty->assign('show_transform_points', 1);
+                $this->assign('show_transform_points', 1);
             }
-            $smarty->assign('helps', get_shop_help());        // 网店帮助
-            $smarty->assign('data_dir', DATA_DIR);   // 数据目录
-            $smarty->assign('action', $action);
-            $smarty->assign('lang', $_LANG);
+            $this->assign('helps', get_shop_help());        // 网店帮助
+            $this->assign('data_dir', DATA_DIR);   // 数据目录
+            $this->assign('action', $action);
+            $this->assign('lang', $_LANG);
         }
     }
 
@@ -81,14 +81,14 @@ class UserController extends InitController
     {
         include_once(ROOT_PATH . 'includes/lib_clips.php');
         if ($rank = get_rank_info()) {
-            $smarty->assign('rank_name', sprintf($_LANG['your_level'], $rank['rank_name']));
+            $this->assign('rank_name', sprintf($_LANG['your_level'], $rank['rank_name']));
             if (!empty($rank['next_rank_name'])) {
-                $smarty->assign('next_rank_name', sprintf($_LANG['next_level'], $rank['next_rank'], $rank['next_rank_name']));
+                $this->assign('next_rank_name', sprintf($_LANG['next_level'], $rank['next_rank'], $rank['next_rank_name']));
             }
         }
-        $smarty->assign('info', get_user_default($user_id));
-        $smarty->assign('user_notice', $_CFG['user_notice']);
-        $smarty->assign('prompt', get_user_prompt($user_id));
+        $this->assign('info', get_user_default($user_id));
+        $this->assign('user_notice', $_CFG['user_notice']);
+        $this->assign('prompt', get_user_prompt($user_id));
         $smarty->display('user_clips.dwt');
     }
 
@@ -102,28 +102,28 @@ class UserController extends InitController
         /* 取出注册扩展字段 */
         $sql = 'SELECT * FROM ' . $ecs->table('reg_fields') . ' WHERE type < 2 AND display = 1 ORDER BY dis_order, id';
         $extend_info_list = $db->getAll($sql);
-        $smarty->assign('extend_info_list', $extend_info_list);
+        $this->assign('extend_info_list', $extend_info_list);
 
         /* 验证码相关设置 */
         if ((intval($_CFG['captcha']) & CAPTCHA_REGISTER) && gd_version() > 0) {
-            $smarty->assign('enabled_captcha', 1);
-            $smarty->assign('rand', mt_rand());
+            $this->assign('enabled_captcha', 1);
+            $this->assign('rand', mt_rand());
         }
 
         /* 密码提示问题 */
-        $smarty->assign('passwd_questions', $_LANG['passwd_questions']);
+        $this->assign('passwd_questions', $_LANG['passwd_questions']);
 
         /* 增加是否关闭注册 */
-        $smarty->assign('shop_reg_closed', $_CFG['shop_reg_closed']);
-//    $smarty->assign('back_act', $back_act);
+        $this->assign('shop_reg_closed', $_CFG['shop_reg_closed']);
+//    $this->assign('back_act', $back_act);
         $smarty->display('user_passport.dwt');
     } /* 注册会员的处理 */
     public function act_registerAction()
     {
         /* 增加是否关闭注册 */
         if ($_CFG['shop_reg_closed']) {
-            $smarty->assign('action', 'register');
-            $smarty->assign('shop_reg_closed', $_CFG['shop_reg_closed']);
+            $this->assign('action', 'register');
+            $this->assign('shop_reg_closed', $_CFG['shop_reg_closed']);
             $smarty->display('user_passport.dwt');
         } else {
             include_once(ROOT_PATH . 'includes/lib_passport.php');
@@ -260,11 +260,11 @@ class UserController extends InitController
 
         $captcha = intval($_CFG['captcha']);
         if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
-            $GLOBALS['smarty']->assign('enabled_captcha', 1);
-            $GLOBALS['smarty']->assign('rand', mt_rand());
+            $this->assign('enabled_captcha', 1);
+            $this->assign('rand', mt_rand());
         }
 
-        $smarty->assign('back_act', $back_act);
+        $this->assign('back_act', $back_act);
         $smarty->display('user_passport.dwt');
     } /* 处理会员的登录 */
     public function act_loginAction()
@@ -334,14 +334,14 @@ class UserController extends InitController
         if ($user->login($username, $password)) {
             update_user_info();  //更新用户信息
             recalculate_price(); // 重新计算购物车中的商品价格
-            $smarty->assign('user_info', get_user_info());
+            $this->assign('user_info', get_user_info());
             $ucdata = empty($user->ucdata) ? "" : $user->ucdata;
             $result['ucdata'] = $ucdata;
             $result['content'] = $smarty->fetch('library/member_info.lbi');
         } else {
             $_SESSION['login_fail']++;
             if ($_SESSION['login_fail'] > 2) {
-                $smarty->assign('enabled_captcha', 1);
+                $this->assign('enabled_captcha', 1);
                 $result['html'] = $smarty->fetch('library/member_info.lbi');
             }
             $result['error'] = 1;
@@ -401,12 +401,12 @@ class UserController extends InitController
             }
         }
 
-        $smarty->assign('extend_info_list', $extend_info_list);
+        $this->assign('extend_info_list', $extend_info_list);
 
         /* 密码提示问题 */
-        $smarty->assign('passwd_questions', $_LANG['passwd_questions']);
+        $this->assign('passwd_questions', $_LANG['passwd_questions']);
 
-        $smarty->assign('profile', $user_info);
+        $this->assign('profile', $user_info);
         $smarty->display('user_transaction.dwt');
     } /* 修改个人资料的处理 */
     public function act_edit_profileAction()
@@ -502,9 +502,9 @@ class UserController extends InitController
                 return $this->show_message($_LANG['parm_error'], $_LANG['back_home_lnk'], './', 'info');
             }
 
-            $smarty->assign('uid', $uid);
-            $smarty->assign('code', $code);
-            $smarty->assign('action', 'reset_password');
+            $this->assign('uid', $uid);
+            $this->assign('code', $code);
+            $this->assign('action', 'reset_password');
             $smarty->display('user_passport.dwt');
         } else {
             //显示用户名和email表单
@@ -539,11 +539,11 @@ class UserController extends InitController
 
         $captcha = intval($_CFG['captcha']);
         if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
-            $GLOBALS['smarty']->assign('enabled_captcha', 1);
-            $GLOBALS['smarty']->assign('rand', mt_rand());
+            $this->assign('enabled_captcha', 1);
+            $this->assign('rand', mt_rand());
         }
 
-        $smarty->assign('passwd_question', $_LANG['passwd_questions'][$user_question_arr['passwd_question']]);
+        $this->assign('passwd_question', $_LANG['passwd_questions'][$user_question_arr['passwd_question']]);
         $smarty->display('user_passport.dwt');
     } /* 密码找回-->根据提交的密码答案进行相应处理 */
     public function check_answerAction()
@@ -571,8 +571,8 @@ class UserController extends InitController
             $_SESSION['user_name'] = $_SESSION['temp_user_name'];
             unset($_SESSION['temp_user']);
             unset($_SESSION['temp_user_name']);
-            $smarty->assign('uid', $_SESSION['user_id']);
-            $smarty->assign('action', 'reset_password');
+            $this->assign('uid', $_SESSION['user_id']);
+            $this->assign('action', 'reset_password');
             $smarty->display('user_passport.dwt');
         }
     } /* 发送密码修改确认邮件 */
@@ -663,9 +663,9 @@ class UserController extends InitController
         $orders = get_user_orders($user_id, $pager['size'], $pager['start']);
         $merge = get_user_merge($user_id);
 
-        $smarty->assign('merge', $merge);
-        $smarty->assign('pager', $pager);
-        $smarty->assign('orders', $orders);
+        $this->assign('merge', $merge);
+        $this->assign('pager', $pager);
+        $this->assign('orders', $orders);
         $smarty->display('user_transaction.dwt');
     } /* 查看订单详情 */
     public function order_detailAction()
@@ -687,7 +687,7 @@ class UserController extends InitController
 
         /* 是否显示添加到购物车 */
         if ($order['extension_code'] != 'group_buy' && $order['extension_code'] != 'exchange_goods') {
-            $smarty->assign('allow_to_cart', 1);
+            $this->assign('allow_to_cart', 1);
         }
 
         /* 订单商品 */
@@ -703,8 +703,8 @@ class UserController extends InitController
             if ($order['order_status'] == OS_UNCONFIRMED || $order['order_status'] == OS_CONFIRMED) {
                 $user = user_info($order['user_id']);
                 if ($user['user_money'] + $user['credit_line'] > 0) {
-                    $smarty->assign('allow_edit_surplus', 1);
-                    $smarty->assign('max_surplus', sprintf($_LANG['max_surplus'], $user['user_money']));
+                    $this->assign('allow_edit_surplus', 1);
+                    $this->assign('max_surplus', sprintf($_LANG['max_surplus'], $user['user_money']));
                 }
             }
         }
@@ -721,7 +721,7 @@ class UserController extends InitController
                     }
                 }
             }
-            $smarty->assign('payment_list', $payment_list);
+            $this->assign('payment_list', $payment_list);
         }
 
         /* 订单 支付 配送 状态语言项 */
@@ -729,8 +729,8 @@ class UserController extends InitController
         $order['pay_status'] = $_LANG['ps'][$order['pay_status']];
         $order['shipping_status'] = $_LANG['ss'][$order['shipping_status']];
 
-        $smarty->assign('order', $order);
-        $smarty->assign('goods_list', $goods_list);
+        $this->assign('order', $order);
+        $this->assign('goods_list', $goods_list);
         $smarty->display('user_transaction.dwt');
     } /* 取消订单 */
     public function cancel_orderAction()
@@ -751,11 +751,11 @@ class UserController extends InitController
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
         include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
-        $smarty->assign('lang', $_LANG);
+        $this->assign('lang', $_LANG);
 
         /* 取得国家列表、商店所在国家、商店所在国家的省列表 */
-        $smarty->assign('country_list', get_regions());
-        $smarty->assign('shop_province_list', get_regions(1, $_CFG['shop_country']));
+        $this->assign('country_list', get_regions());
+        $this->assign('shop_province_list', get_regions(1, $_CFG['shop_country']));
 
         /* 获得用户所有的收货人信息 */
         $consignee_list = get_consignee_list($_SESSION['user_id']);
@@ -765,7 +765,7 @@ class UserController extends InitController
             $consignee_list[] = array('country' => $_CFG['shop_country'], 'email' => isset($_SESSION['email']) ? $_SESSION['email'] : '');
         }
 
-        $smarty->assign('consignee_list', $consignee_list);
+        $this->assign('consignee_list', $consignee_list);
 
         //取得国家列表，如果有收货人列表，取得省市区列表
         foreach ($consignee_list as $region_id => $consignee) {
@@ -782,16 +782,16 @@ class UserController extends InitController
         $address_id = $db->getOne("SELECT address_id FROM " . $ecs->table('users') . " WHERE user_id='$user_id'");
 
         //赋值于模板
-        $smarty->assign('real_goods_count', 1);
-        $smarty->assign('shop_country', $_CFG['shop_country']);
-        $smarty->assign('shop_province', get_regions(1, $_CFG['shop_country']));
-        $smarty->assign('province_list', $province_list);
-        $smarty->assign('address', $address_id);
-        $smarty->assign('city_list', $city_list);
-        $smarty->assign('district_list', $district_list);
-        $smarty->assign('currency_format', $_CFG['currency_format']);
-        $smarty->assign('integral_scale', $_CFG['integral_scale']);
-        $smarty->assign('name_of_region', array($_CFG['name_of_region_1'], $_CFG['name_of_region_2'], $_CFG['name_of_region_3'], $_CFG['name_of_region_4']));
+        $this->assign('real_goods_count', 1);
+        $this->assign('shop_country', $_CFG['shop_country']);
+        $this->assign('shop_province', get_regions(1, $_CFG['shop_country']));
+        $this->assign('province_list', $province_list);
+        $this->assign('address', $address_id);
+        $this->assign('city_list', $city_list);
+        $this->assign('district_list', $district_list);
+        $this->assign('currency_format', $_CFG['currency_format']);
+        $this->assign('integral_scale', $_CFG['integral_scale']);
+        $this->assign('name_of_region', array($_CFG['name_of_region_1'], $_CFG['name_of_region_2'], $_CFG['name_of_region_3'], $_CFG['name_of_region_4']));
 
         $smarty->display('user_transaction.dwt');
     } /* 添加/编辑收货地址的处理 */
@@ -799,7 +799,7 @@ class UserController extends InitController
     {
         include_once(ROOT_PATH . 'includes/lib_transaction.php');
         include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
-        $smarty->assign('lang', $_LANG);
+        $this->assign('lang', $_LANG);
 
         $address = array(
             'user_id' => $user_id,
@@ -844,16 +844,16 @@ class UserController extends InitController
             " WHERE user_id='$user_id' ORDER BY add_time DESC");
 
         $pager = get_pager('user.php', array('act' => $action), $record_count, $page);
-        $smarty->assign('pager', $pager);
-        $smarty->assign('goods_list', get_collection_goods($user_id, $pager['size'], $pager['start']));
-        $smarty->assign('url', $ecs->url());
+        $this->assign('pager', $pager);
+        $this->assign('goods_list', get_collection_goods($user_id, $pager['size'], $pager['start']));
+        $this->assign('url', $ecs->url());
         $lang_list = array(
             'UTF8' => $_LANG['charset']['utf8'],
             'GB2312' => $_LANG['charset']['zh_cn'],
             'BIG5' => $_LANG['charset']['zh_tw'],
         );
-        $smarty->assign('lang_list', $lang_list);
-        $smarty->assign('user_id', $user_id);
+        $this->assign('lang_list', $lang_list);
+        $this->assign('user_id', $user_id);
         $smarty->display('user_clips.dwt');
     } /* 删除收藏的商品 */
     public function delete_collectionAction()
@@ -913,9 +913,9 @@ class UserController extends InitController
 
         $pager = get_pager('user.php', $act, $record_count, $page, 5);
 
-        $smarty->assign('message_list', get_message_list($user_id, $_SESSION['user_name'], $pager['size'], $pager['start'], $order_id));
-        $smarty->assign('pager', $pager);
-        $smarty->assign('order_info', $order_info);
+        $this->assign('message_list', get_message_list($user_id, $_SESSION['user_name'], $pager['size'], $pager['start'], $order_id));
+        $this->assign('pager', $pager);
+        $this->assign('order_info', $order_info);
         $smarty->display('user_clips.dwt');
     } /* 显示评论列表 */
     public function comment_listAction()
@@ -930,8 +930,8 @@ class UserController extends InitController
         $record_count = $db->getOne($sql);
         $pager = get_pager('user.php', array('act' => $action), $record_count, $page, 5);
 
-        $smarty->assign('comment_list', get_comment_list($user_id, $pager['size'], $pager['start']));
-        $smarty->assign('pager', $pager);
+        $this->assign('comment_list', get_comment_list($user_id, $pager['size'], $pager['start']));
+        $this->assign('pager', $pager);
         $smarty->display('user_clips.dwt');
     } /* 添加我的留言 */
     public function act_add_messageAction()
@@ -963,8 +963,8 @@ class UserController extends InitController
 
         $good_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-        $smarty->assign('tags', get_user_tags($user_id));
-        $smarty->assign('tags_from', 'user');
+        $this->assign('tags', get_user_tags($user_id));
+        $this->assign('tags_from', 'user');
         $smarty->display('user_clips.dwt');
     } /* 删除标签云的处理 */
     public function act_del_tagAction()
@@ -990,8 +990,8 @@ class UserController extends InitController
         $record_count = $db->getOne($sql);
         $pager = get_pager('user.php', array('act' => $action), $record_count, $page);
 
-        $smarty->assign('booking_list', get_booking_list($user_id, $pager['size'], $pager['start']));
-        $smarty->assign('pager', $pager);
+        $this->assign('booking_list', get_booking_list($user_id, $pager['size'], $pager['start']));
+        $this->assign('pager', $pager);
         $smarty->display('user_clips.dwt');
     } /* 添加缺货登记页面 */
     public function add_bookingAction()
@@ -1020,9 +1020,9 @@ class UserController extends InitController
             }
             $goods_attr = join(chr(13) . chr(10), $attr_list);
         }
-        $smarty->assign('goods_attr', $goods_attr);
+        $this->assign('goods_attr', $goods_attr);
 
-        $smarty->assign('info', get_goodsinfo($goods_id));
+        $this->assign('info', get_goodsinfo($goods_id));
         $smarty->display('user_clips.dwt');
     } /* 添加缺货登记的处理 */
     public function act_add_bookingAction()
@@ -1095,8 +1095,8 @@ class UserController extends InitController
         $surplus_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $account = get_surplus_info($surplus_id);
 
-        $smarty->assign('payment', get_online_payment_list(false));
-        $smarty->assign('order', $account);
+        $this->assign('payment', get_online_payment_list(false));
+        $this->assign('order', $account);
         $smarty->display('user_transaction.dwt');
     } /* 会员账目明细界面 */
     public function account_detailAction()
@@ -1142,9 +1142,9 @@ class UserController extends InitController
         }
 
         //模板赋值
-        $smarty->assign('surplus_amount', price_format($surplus_amount, false));
-        $smarty->assign('account_log', $account_log);
-        $smarty->assign('pager', $pager);
+        $this->assign('surplus_amount', price_format($surplus_amount, false));
+        $this->assign('account_log', $account_log);
+        $this->assign('pager', $pager);
         $smarty->display('user_transaction.dwt');
     } /* 会员充值和提现申请记录 */
     public function account_logAction()
@@ -1172,9 +1172,9 @@ class UserController extends InitController
         $account_log = get_account_log($user_id, $pager['size'], $pager['start']);
 
         //模板赋值
-        $smarty->assign('surplus_amount', price_format($surplus_amount, false));
-        $smarty->assign('account_log', $account_log);
-        $smarty->assign('pager', $pager);
+        $this->assign('surplus_amount', price_format($surplus_amount, false));
+        $this->assign('account_log', $account_log);
+        $this->assign('pager', $pager);
         $smarty->display('user_transaction.dwt');
     } /* 对会员余额申请的处理 */
     public function act_accountAction()
@@ -1265,10 +1265,10 @@ class UserController extends InitController
             $payment_info['pay_button'] = $pay_obj->get_code($order, $payment);
 
             /* 模板赋值 */
-            $smarty->assign('payment', $payment_info);
-            $smarty->assign('pay_fee', price_format($payment_info['pay_fee'], false));
-            $smarty->assign('amount', price_format($amount, false));
-            $smarty->assign('order', $order);
+            $this->assign('payment', $payment_info);
+            $this->assign('pay_fee', price_format($payment_info['pay_fee'], false));
+            $this->assign('amount', price_format($amount, false));
+            $this->assign('order', $order);
             $smarty->display('user_transaction.dwt');
         }
     } /* 删除会员余额 */
@@ -1348,19 +1348,19 @@ class UserController extends InitController
             $payment_info['pay_button'] = $pay_obj->get_code($order, $payment);
 
             /* 模板赋值 */
-            $smarty->assign('payment', $payment_info);
-            $smarty->assign('order', $order);
-            $smarty->assign('pay_fee', price_format($payment_info['pay_fee'], false));
-            $smarty->assign('amount', price_format($order['surplus_amount'], false));
-            $smarty->assign('action', 'act_account');
+            $this->assign('payment', $payment_info);
+            $this->assign('order', $order);
+            $this->assign('pay_fee', price_format($payment_info['pay_fee'], false));
+            $this->assign('amount', price_format($order['surplus_amount'], false));
+            $this->assign('action', 'act_account');
             $smarty->display('user_transaction.dwt');
         } /* 重新选择支付方式 */
         else {
             include_once(ROOT_PATH . 'includes/lib_clips.php');
 
-            $smarty->assign('payment', get_online_payment_list());
-            $smarty->assign('order', $order);
-            $smarty->assign('action', 'account_deposit');
+            $this->assign('payment', get_online_payment_list());
+            $this->assign('order', $order);
+            $this->assign('action', 'account_deposit');
             $smarty->display('user_transaction.dwt');
         }
     } /* 添加标签(ajax) */
@@ -1703,8 +1703,8 @@ class UserController extends InitController
         $pager = get_pager('user.php', array('act' => $action), $record_count, $page);
         $bonus = get_user_bouns_list($user_id, $pager['size'], $pager['start']);
 
-        $smarty->assign('pager', $pager);
-        $smarty->assign('bonus', $bonus);
+        $this->assign('pager', $pager);
+        $this->assign('bonus', $bonus);
         $smarty->display('user_transaction.dwt');
     } /* 我的团购列表 */
     public function group_buyAction()
@@ -1757,7 +1757,7 @@ class UserController extends InitController
                     $affdb[$i]['point'] = $affiliate['item'][$i - 1]['level_point'];
                     $affdb[$i]['money'] = $affiliate['item'][$i - 1]['level_money'];
                 }
-                $smarty->assign('affdb', $affdb);
+                $this->assign('affdb', $affdb);
 
                 $sqlcount = "SELECT count(*) FROM " . $ecs->table('order_info') . " o" .
                     " LEFT JOIN" . $ecs->table('users') . " u ON o.user_id = u.user_id" .
@@ -1855,21 +1855,21 @@ class UserController extends InitController
                 $pager['array'][$i] = $i;
             }
 
-            $smarty->assign('url_format', $url_format);
-            $smarty->assign('pager', $pager);
+            $this->assign('url_format', $url_format);
+            $this->assign('pager', $pager);
 
 
-            $smarty->assign('affiliate_intro', $affiliate_intro);
-            $smarty->assign('affiliate_type', $affiliate['config']['separate_by']);
+            $this->assign('affiliate_intro', $affiliate_intro);
+            $this->assign('affiliate_type', $affiliate['config']['separate_by']);
 
-            $smarty->assign('logdb', $logdb);
+            $this->assign('logdb', $logdb);
         } else {
             //单个商品推荐
-            $smarty->assign('userid', $user_id);
-            $smarty->assign('goodsid', $goodsid);
+            $this->assign('userid', $user_id);
+            $this->assign('goodsid', $goodsid);
 
             $types = array(1, 2, 3, 4, 5);
-            $smarty->assign('types', $types);
+            $this->assign('types', $types);
 
             $goods = get_goods_info($goodsid);
             $shopurl = $ecs->url();
@@ -1877,13 +1877,13 @@ class UserController extends InitController
             $goods['goods_thumb'] = (strpos($goods['goods_thumb'], 'http://') === false && strpos($goods['goods_thumb'], 'https://') === false) ? $shopurl . $goods['goods_thumb'] : $goods['goods_thumb'];
             $goods['shop_price'] = price_format($goods['shop_price']);
 
-            $smarty->assign('goods', $goods);
+            $this->assign('goods', $goods);
         }
 
-        $smarty->assign('shopname', $_CFG['shop_name']);
-        $smarty->assign('userid', $user_id);
-        $smarty->assign('shopurl', $ecs->url());
-        $smarty->assign('logosrc', 'themes/' . $_CFG['template'] . '/images/logo.gif');
+        $this->assign('shopname', $_CFG['shop_name']);
+        $this->assign('userid', $user_id);
+        $this->assign('shopurl', $ecs->url());
+        $this->assign('logosrc', 'themes/' . $_CFG['template'] . '/images/logo.gif');
 
         $smarty->display('user_clips.dwt');
     } //首页邮件订阅ajax操做和验证操作
@@ -2029,8 +2029,8 @@ class UserController extends InitController
             }
         }
         $pager = get_pager('user.php', array('act' => $action), $record_count, $page);
-        $smarty->assign('pager', $pager);
-        $smarty->assign('orders', $orders);
+        $this->assign('pager', $pager);
+        $this->assign('orders', $orders);
         $smarty->display('user_transaction.dwt');
     }
 
@@ -2093,7 +2093,7 @@ class UserController extends InitController
         if ($row['user_id'] == 0 && $row['shipping_time'] > 0) {
             $order_query['shipping_date'] = local_date($GLOBALS['_CFG']['date_format'], $row['shipping_time']);
         }
-        $smarty->assign('order_query', $order_query);
+        $this->assign('order_query', $order_query);
         $result['content'] = $smarty->fetch('library/order_query.lbi');
         die($json->encode($result));
     }
@@ -2122,14 +2122,14 @@ class UserController extends InitController
                     $to_credits_options[$credit['appiddesc'] . '|' . $credit['creditdesc']] = $credit['title'];
                 }
             }
-            $smarty->assign('selected_org', $rule[0]['creditsrc']);
-            $smarty->assign('selected_dst', $rule[0]['appiddesc'] . '|' . $rule[0]['creditdesc']);
-            $smarty->assign('descreditunit', $rule[0]['unit']);
-            $smarty->assign('orgcredittitle', $_LANG['exchange_points'][$rule[0]['creditsrc']]);
-            $smarty->assign('descredittitle', $rule[0]['title']);
-            $smarty->assign('descreditamount', round((1 / $rule[0]['ratio']), 2));
-            $smarty->assign('to_credits_options', $to_credits_options);
-            $smarty->assign('out_exchange_allow', $out_exchange_allow);
+            $this->assign('selected_org', $rule[0]['creditsrc']);
+            $this->assign('selected_dst', $rule[0]['appiddesc'] . '|' . $rule[0]['creditdesc']);
+            $this->assign('descreditunit', $rule[0]['unit']);
+            $this->assign('orgcredittitle', $_LANG['exchange_points'][$rule[0]['creditsrc']]);
+            $this->assign('descredittitle', $rule[0]['title']);
+            $this->assign('descreditamount', round((1 / $rule[0]['ratio']), 2));
+            $this->assign('to_credits_options', $to_credits_options);
+            $this->assign('out_exchange_allow', $out_exchange_allow);
         } else {
             $exchange_type = 'other';
 
@@ -2168,13 +2168,13 @@ class UserController extends InitController
                         break;
                 }
             }
-            $smarty->assign('bbs_points', $bbs_points);
-            $smarty->assign('rule_list', $rule_list);
+            $this->assign('bbs_points', $bbs_points);
+            $this->assign('rule_list', $rule_list);
         }
-        $smarty->assign('shop_points', $row);
-        $smarty->assign('exchange_type', $exchange_type);
-        $smarty->assign('action', $action);
-        $smarty->assign('lang', $_LANG);
+        $this->assign('shop_points', $row);
+        $this->assign('exchange_type', $exchange_type);
+        $this->assign('action', $action);
+        $this->assign('lang', $_LANG);
         $smarty->display('user_transaction.dwt');
     }
 

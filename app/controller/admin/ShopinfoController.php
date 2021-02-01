@@ -23,10 +23,10 @@ class ShopinfoController extends InitController
     /*------------------------------------------------------ */
     public function listAction()
     {
-        $smarty->assign('ur_here', $_LANG['shop_info']);
-        $smarty->assign('action_link', array('text' => $_LANG['shopinfo_add'], 'href' => 'shopinfo.php?act=add'));
-        $smarty->assign('full_page', 1);
-        $smarty->assign('list', shopinfo_article_list());
+        $this->assign('ur_here', $_LANG['shop_info']);
+        $this->assign('action_link', array('text' => $_LANG['shopinfo_add'], 'href' => 'shopinfo.php?act=add'));
+        $this->assign('full_page', 1);
+        $this->assign('list', shopinfo_article_list());
 
         assign_query_info();
         $smarty->display('shopinfo_list.htm');
@@ -37,7 +37,7 @@ class ShopinfoController extends InitController
     /*------------------------------------------------------ */
     public function queryAction()
     {
-        $smarty->assign('list', shopinfo_article_list());
+        $this->assign('list', shopinfo_article_list());
 
         make_json_result($smarty->fetch('shopinfo_list.htm'));
     }
@@ -57,9 +57,9 @@ class ShopinfoController extends InitController
         /* 初始化 */
         $article['article_type'] = 0;
 
-        $smarty->assign('ur_here', $_LANG['shopinfo_add']);
-        $smarty->assign('action_link', array('text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list'));
-        $smarty->assign('form_action', 'insert');
+        $this->assign('ur_here', $_LANG['shopinfo_add']);
+        $this->assign('action_link', array('text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list'));
+        $this->assign('form_action', 'insert');
 
         assign_query_info();
         $smarty->display('shopinfo_info.htm');
@@ -112,10 +112,10 @@ class ShopinfoController extends InitController
         /* 创建 html editor */
         create_html_editor('FCKeditor1', $article['content']);
 
-        $smarty->assign('ur_here', $_LANG['article_add']);
-        $smarty->assign('action_link', array('text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list'));
-        $smarty->assign('article', $article);
-        $smarty->assign('form_action', 'update');
+        $this->assign('ur_here', $_LANG['article_add']);
+        $this->assign('action_link', array('text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list'));
+        $this->assign('article', $article);
+        $this->assign('form_action', 'update');
         $smarty->display('shopinfo_info.htm');
     }
 

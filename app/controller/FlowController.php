@@ -18,14 +18,14 @@ class FlowController extends InitController
         $this->assign_template();
         assign_dynamic('flow');
         $position = assign_ur_here(0, $_LANG['shopping_flow']);
-        $smarty->assign('page_title', $position['title']);    // 页面标题
-        $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+        $this->assign('page_title', $position['title']);    // 页面标题
+        $this->assign('ur_here', $position['ur_here']);  // 当前位置
 
-        $smarty->assign('categories', get_categories_tree()); // 分类树
-        $smarty->assign('helps', get_shop_help());       // 网店帮助
-        $smarty->assign('lang', $_LANG);
-        $smarty->assign('show_marketprice', $_CFG['show_marketprice']);
-        $smarty->assign('data_dir', DATA_DIR);       // 数据目录
+        $this->assign('categories', get_categories_tree()); // 分类树
+        $this->assign('helps', get_shop_help());       // 网店帮助
+        $this->assign('lang', $_LANG);
+        $this->assign('show_marketprice', $_CFG['show_marketprice']);
+        $this->assign('data_dir', DATA_DIR);       // 数据目录
     }
 
     /*------------------------------------------------------ */
@@ -157,23 +157,23 @@ class FlowController extends InitController
          * 用户登录注册
          */
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $smarty->assign('anonymous_buy', $_CFG['anonymous_buy']);
+            $this->assign('anonymous_buy', $_CFG['anonymous_buy']);
 
             /* 检查是否有赠品，如果有提示登录后重新选择赠品 */
             $sql = "SELECT COUNT(*) FROM " . $ecs->table('cart') . " WHERE " . $where . " AND is_gift > 0";
             if ($db->getOne($sql) > 0) {
-                $smarty->assign('need_rechoose_gift', 1);
+                $this->assign('need_rechoose_gift', 1);
             }
 
             /* 检查是否需要注册码 */
             $captcha = intval($_CFG['captcha']);
             if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
-                $smarty->assign('enabled_login_captcha', 1);
-                $smarty->assign('rand', mt_rand());
+                $this->assign('enabled_login_captcha', 1);
+                $this->assign('rand', mt_rand());
             }
             if ($captcha & CAPTCHA_REGISTER) {
-                $smarty->assign('enabled_register_captcha', 1);
-                $smarty->assign('rand', mt_rand());
+                $this->assign('enabled_register_captcha', 1);
+                $this->assign('rand', mt_rand());
             }
         } else {
             include_once('includes/lib_passport.php');
@@ -259,9 +259,9 @@ class FlowController extends InitController
             }
 
             /* 取得国家列表、商店所在国家、商店所在国家的省列表 */
-            $smarty->assign('country_list', get_regions());
-            $smarty->assign('shop_country', $_CFG['shop_country']);
-            $smarty->assign('shop_province_list', get_regions(1, $_CFG['shop_country']));
+            $this->assign('country_list', get_regions());
+            $this->assign('shop_country', $_CFG['shop_country']);
+            $this->assign('shop_province_list', get_regions(1, $_CFG['shop_country']));
 
             /* 获得用户所有的收货人信息 */
             if ($_SESSION['user_id'] > 0) {
@@ -278,8 +278,8 @@ class FlowController extends InitController
                     $consignee_list[] = array('country' => $_CFG['shop_country']);
                 }
             }
-            $smarty->assign('name_of_region', array($_CFG['name_of_region_1'], $_CFG['name_of_region_2'], $_CFG['name_of_region_3'], $_CFG['name_of_region_4']));
-            $smarty->assign('consignee_list', $consignee_list);
+            $this->assign('name_of_region', array($_CFG['name_of_region_1'], $_CFG['name_of_region_2'], $_CFG['name_of_region_3'], $_CFG['name_of_region_4']));
+            $this->assign('consignee_list', $consignee_list);
 
             /* 取得每个收货地址的省市区列表 */
             $province_list = array();
@@ -294,12 +294,12 @@ class FlowController extends InitController
                 $city_list[$region_id] = get_regions(2, $consignee['province']);
                 $district_list[$region_id] = get_regions(3, $consignee['city']);
             }
-            $smarty->assign('province_list', $province_list);
-            $smarty->assign('city_list', $city_list);
-            $smarty->assign('district_list', $district_list);
+            $this->assign('province_list', $province_list);
+            $this->assign('city_list', $city_list);
+            $this->assign('district_list', $district_list);
 
             /* 返回收货人页面代码 */
-            $smarty->assign('real_goods_count', exist_real_goods(0, $flow_type) ? 1 : 0);
+            $this->assign('real_goods_count', exist_real_goods(0, $flow_type) ? 1 : 0);
         } else {
             /*
              * 保存收货人信息
@@ -363,10 +363,10 @@ class FlowController extends InitController
 
         /* 团购标志 */
         if ($flow_type == CART_GROUP_BUY_GOODS) {
-            $smarty->assign('is_group_buy', 1);
+            $this->assign('is_group_buy', 1);
         } /* 积分兑换商品 */
         elseif ($flow_type == CART_EXCHANGE_GOODS) {
-            $smarty->assign('is_exchange_goods', 1);
+            $this->assign('is_exchange_goods', 1);
         } else {
             //正常购物流程  清空其他购物流程情况
             $_SESSION['flow_order']['extension_code'] = '';
@@ -404,35 +404,35 @@ class FlowController extends InitController
         }
 
         $_SESSION['flow_consignee'] = $consignee;
-        $smarty->assign('consignee', $consignee);
+        $this->assign('consignee', $consignee);
 
         /* 对商品信息赋值 */
         $cart_goods = cart_goods($flow_type); // 取得商品列表，计算合计
-        $smarty->assign('goods_list', $cart_goods);
+        $this->assign('goods_list', $cart_goods);
 
         /* 对是否允许修改购物车赋值 */
         if ($flow_type != CART_GENERAL_GOODS || $_CFG['one_step_buy'] == '1') {
-            $smarty->assign('allow_edit_cart', 0);
+            $this->assign('allow_edit_cart', 0);
         } else {
-            $smarty->assign('allow_edit_cart', 1);
+            $this->assign('allow_edit_cart', 1);
         }
 
         /*
          * 取得购物流程设置
          */
-        $smarty->assign('config', $_CFG);
+        $this->assign('config', $_CFG);
         /*
          * 取得订单信息
          */
         $order = flow_order_info();
-        $smarty->assign('order', $order);
+        $this->assign('order', $order);
 
         /* 计算折扣 */
         if ($flow_type != CART_EXCHANGE_GOODS && $flow_type != CART_GROUP_BUY_GOODS) {
             $discount = compute_discount();
-            $smarty->assign('discount', $discount['discount']);
+            $this->assign('discount', $discount['discount']);
             $favour_name = empty($discount['name']) ? '' : join(',', $discount['name']);
-            $smarty->assign('your_discount', sprintf($_LANG['your_discount'], $favour_name, price_format($discount['discount'])));
+            $this->assign('your_discount', sprintf($_LANG['your_discount'], $favour_name, price_format($discount['discount'])));
         }
 
         /*
@@ -440,9 +440,9 @@ class FlowController extends InitController
          */
         $total = order_fee($order, $cart_goods, $consignee);
 
-        $smarty->assign('total', $total);
-        $smarty->assign('shopping_money', sprintf($_LANG['shopping_money'], $total['formated_goods_price']));
-        $smarty->assign('market_price_desc', sprintf($_LANG['than_market_price'], $total['formated_market_price'], $total['formated_saving'], $total['save_rate']));
+        $this->assign('total', $total);
+        $this->assign('shopping_money', sprintf($_LANG['shopping_money'], $total['formated_goods_price']));
+        $this->assign('market_price_desc', sprintf($_LANG['than_market_price'], $total['formated_market_price'], $total['formated_saving'], $total['save_rate']));
 
         /* 取得配送列表 */
         $region = array($consignee['country'], $consignee['province'], $consignee['city'], $consignee['district']);
@@ -478,9 +478,9 @@ class FlowController extends InitController
             }
         }
 
-        $smarty->assign('shipping_list', $shipping_list);
-        $smarty->assign('insure_disabled', $insure_disabled);
-        $smarty->assign('cod_disabled', $cod_disabled);
+        $this->assign('shipping_list', $shipping_list);
+        $this->assign('insure_disabled', $insure_disabled);
+        $this->assign('cod_disabled', $cod_disabled);
 
         /* 取得支付列表 */
         if ($order['shipping_id'] == 0) {
@@ -507,7 +507,7 @@ class FlowController extends InitController
                         $cod_fee = 0;
 
                         /* 赋值保证金 */
-                        $smarty->assign('gb_deposit', $group_buy['deposit']);
+                        $this->assign('gb_deposit', $group_buy['deposit']);
                     }
                 }
 
@@ -538,25 +538,25 @@ class FlowController extends InitController
                         unset($payment_list[$key]);
                     } else {
                         if ($_SESSION['flow_order']['pay_id'] == $payment['pay_id']) {
-                            $smarty->assign('disable_surplus', 1);
+                            $this->assign('disable_surplus', 1);
                         }
                     }
                 }
             }
         }
-        $smarty->assign('payment_list', $payment_list);
+        $this->assign('payment_list', $payment_list);
 
         /* 取得包装与贺卡 */
         if ($total['real_goods_count'] > 0) {
             /* 只有有实体商品,才要判断包装和贺卡 */
             if (!isset($_CFG['use_package']) || $_CFG['use_package'] == '1') {
                 /* 如果使用包装，取得包装列表及用户选择的包装 */
-                $smarty->assign('pack_list', pack_list());
+                $this->assign('pack_list', pack_list());
             }
 
             /* 如果使用贺卡，取得贺卡列表及用户选择的贺卡 */
             if (!isset($_CFG['use_card']) || $_CFG['use_card'] == '1') {
-                $smarty->assign('card_list', card_list());
+                $this->assign('card_list', card_list());
             }
         }
 
@@ -567,8 +567,8 @@ class FlowController extends InitController
             && $_SESSION['user_id'] > 0
             && $user_info['user_money'] > 0) {
             // 能使用余额
-            $smarty->assign('allow_use_surplus', 1);
-            $smarty->assign('your_surplus', $user_info['user_money']);
+            $this->assign('allow_use_surplus', 1);
+            $this->assign('your_surplus', $user_info['user_money']);
         }
 
         /* 如果使用积分，取得用户可用积分及本订单最多可以使用的积分 */
@@ -577,9 +577,9 @@ class FlowController extends InitController
             && $user_info['pay_points'] > 0
             && ($flow_type != CART_GROUP_BUY_GOODS && $flow_type != CART_EXCHANGE_GOODS)) {
             // 能使用积分
-            $smarty->assign('allow_use_integral', 1);
-            $smarty->assign('order_max_integral', flow_available_points());  // 可用积分
-            $smarty->assign('your_integral', $user_info['pay_points']); // 用户积分
+            $this->assign('allow_use_integral', 1);
+            $this->assign('order_max_integral', flow_available_points());  // 可用积分
+            $this->assign('your_integral', $user_info['pay_points']); // 用户积分
         }
 
         /* 如果使用红包，取得用户可以使用的红包及用户选择的红包 */
@@ -591,17 +591,17 @@ class FlowController extends InitController
                 foreach ($user_bonus as $key => $val) {
                     $user_bonus[$key]['bonus_money_formated'] = price_format($val['type_money'], false);
                 }
-                $smarty->assign('bonus_list', $user_bonus);
+                $this->assign('bonus_list', $user_bonus);
             }
 
             // 能使用红包
-            $smarty->assign('allow_use_bonus', 1);
+            $this->assign('allow_use_bonus', 1);
         }
 
         /* 如果使用缺货处理，取得缺货处理列表 */
         if (!isset($_CFG['use_how_oos']) || $_CFG['use_how_oos'] == '1') {
             if (is_array($GLOBALS['_LANG']['oos']) && !empty($GLOBALS['_LANG']['oos'])) {
-                $smarty->assign('how_oos_list', $GLOBALS['_LANG']['oos']);
+                $this->assign('how_oos_list', $GLOBALS['_LANG']['oos']);
             }
         }
 
@@ -610,7 +610,7 @@ class FlowController extends InitController
             && isset($_CFG['invoice_content'])
             && trim($_CFG['invoice_content']) != '' && $flow_type != CART_EXCHANGE_GOODS) {
             $inv_content_list = explode("\n", str_replace("\r", '', $_CFG['invoice_content']));
-            $smarty->assign('inv_content_list', $inv_content_list);
+            $this->assign('inv_content_list', $inv_content_list);
 
             $inv_type_list = array();
             foreach ($_CFG['invoice_type']['type'] as $key => $type) {
@@ -618,7 +618,7 @@ class FlowController extends InitController
                     $inv_type_list[$type] = $type . ' [' . floatval($_CFG['invoice_type']['rate'][$key]) . '%]';
                 }
             }
-            $smarty->assign('inv_type_list', $inv_type_list);
+            $this->assign('inv_type_list', $inv_type_list);
         }
 
         /* 保存 session */
@@ -647,7 +647,7 @@ class FlowController extends InitController
             $result['error'] = $_LANG['no_goods_in_cart'];
         } else {
             /* 取得购物流程设置 */
-            $smarty->assign('config', $_CFG);
+            $this->assign('config', $_CFG);
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -658,15 +658,15 @@ class FlowController extends InitController
 
             /* 计算订单的费用 */
             $total = order_fee($order, $cart_goods, $consignee);
-            $smarty->assign('total', $total);
+            $this->assign('total', $total);
 
             /* 取得可以得到的积分和红包 */
-            $smarty->assign('total_integral', cart_amount(false, $flow_type) - $total['bonus'] - $total['integral_money']);
-            $smarty->assign('total_bonus', price_format(get_total_bonus(), false));
+            $this->assign('total_integral', cart_amount(false, $flow_type) - $total['bonus'] - $total['integral_money']);
+            $this->assign('total_bonus', price_format(get_total_bonus(), false));
 
             /* 团购标志 */
             if ($flow_type == CART_GROUP_BUY_GOODS) {
-                $smarty->assign('is_group_buy', 1);
+                $this->assign('is_group_buy', 1);
             }
 
             $result['cod_fee'] = $shipping_info['pay_fee'];
@@ -704,7 +704,7 @@ class FlowController extends InitController
             $result['error'] = $_LANG['no_goods_in_cart'];
         } else {
             /* 取得购物流程设置 */
-            $smarty->assign('config', $_CFG);
+            $this->assign('config', $_CFG);
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -716,15 +716,15 @@ class FlowController extends InitController
 
             /* 计算订单的费用 */
             $total = order_fee($order, $cart_goods, $consignee);
-            $smarty->assign('total', $total);
+            $this->assign('total', $total);
 
             /* 取得可以得到的积分和红包 */
-            $smarty->assign('total_integral', cart_amount(false, $flow_type) - $total['bonus'] - $total['integral_money']);
-            $smarty->assign('total_bonus', price_format(get_total_bonus(), false));
+            $this->assign('total_integral', cart_amount(false, $flow_type) - $total['bonus'] - $total['integral_money']);
+            $this->assign('total_bonus', price_format(get_total_bonus(), false));
 
             /* 团购标志 */
             if ($flow_type == CART_GROUP_BUY_GOODS) {
-                $smarty->assign('is_group_buy', 1);
+                $this->assign('is_group_buy', 1);
             }
 
             $result['content'] = $smarty->fetch('library/order_total.lbi');
@@ -757,7 +757,7 @@ class FlowController extends InitController
             $result['error'] = $_LANG['no_goods_in_cart'];
         } else {
             /* 取得购物流程设置 */
-            $smarty->assign('config', $_CFG);
+            $this->assign('config', $_CFG);
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -771,15 +771,15 @@ class FlowController extends InitController
 
             /* 计算订单的费用 */
             $total = order_fee($order, $cart_goods, $consignee);
-            $smarty->assign('total', $total);
+            $this->assign('total', $total);
 
             /* 取得可以得到的积分和红包 */
-            $smarty->assign('total_integral', cart_amount(false, $flow_type) - $total['bonus'] - $total['integral_money']);
-            $smarty->assign('total_bonus', price_format(get_total_bonus(), false));
+            $this->assign('total_integral', cart_amount(false, $flow_type) - $total['bonus'] - $total['integral_money']);
+            $this->assign('total_bonus', price_format(get_total_bonus(), false));
 
             /* 团购标志 */
             if ($flow_type == CART_GROUP_BUY_GOODS) {
-                $smarty->assign('is_group_buy', 1);
+                $this->assign('is_group_buy', 1);
             }
 
             $result['content'] = $smarty->fetch('library/order_total.lbi');
@@ -812,7 +812,7 @@ class FlowController extends InitController
             $result['error'] = $_LANG['no_goods_in_cart'];
         } else {
             /* 取得购物流程设置 */
-            $smarty->assign('config', $_CFG);
+            $this->assign('config', $_CFG);
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -824,15 +824,15 @@ class FlowController extends InitController
 
             /* 计算订单的费用 */
             $total = order_fee($order, $cart_goods, $consignee);
-            $smarty->assign('total', $total);
+            $this->assign('total', $total);
 
             /* 取得可以得到的积分和红包 */
-            $smarty->assign('total_integral', cart_amount(false, $flow_type) - $total['bonus'] - $total['integral_money']);
-            $smarty->assign('total_bonus', price_format(get_total_bonus(), false));
+            $this->assign('total_integral', cart_amount(false, $flow_type) - $total['bonus'] - $total['integral_money']);
+            $this->assign('total_bonus', price_format(get_total_bonus(), false));
 
             /* 团购标志 */
             if ($flow_type == CART_GROUP_BUY_GOODS) {
-                $smarty->assign('is_group_buy', 1);
+                $this->assign('is_group_buy', 1);
             }
 
             $result['content'] = $smarty->fetch('library/order_total.lbi');
@@ -865,7 +865,7 @@ class FlowController extends InitController
             $result['error'] = $_LANG['no_goods_in_cart'];
         } else {
             /* 取得购物流程设置 */
-            $smarty->assign('config', $_CFG);
+            $this->assign('config', $_CFG);
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -877,15 +877,15 @@ class FlowController extends InitController
 
             /* 计算订单的费用 */
             $total = order_fee($order, $cart_goods, $consignee);
-            $smarty->assign('total', $total);
+            $this->assign('total', $total);
 
             /* 取得可以得到的积分和红包 */
-            $smarty->assign('total_integral', cart_amount(false, $flow_type) - $order['bonus'] - $total['integral_money']);
-            $smarty->assign('total_bonus', price_format(get_total_bonus(), false));
+            $this->assign('total_integral', cart_amount(false, $flow_type) - $order['bonus'] - $total['integral_money']);
+            $this->assign('total_bonus', price_format(get_total_bonus(), false));
 
             /* 团购标志 */
             if ($flow_type == CART_GROUP_BUY_GOODS) {
-                $smarty->assign('is_group_buy', 1);
+                $this->assign('is_group_buy', 1);
             }
 
             $result['content'] = $smarty->fetch('library/order_total.lbi');
@@ -912,7 +912,7 @@ class FlowController extends InitController
             $flow_type = isset($_SESSION['flow_type']) ? intval($_SESSION['flow_type']) : CART_GENERAL_GOODS;
 
             /* 取得购物流程设置 */
-            $smarty->assign('config', $_CFG);
+            $this->assign('config', $_CFG);
 
             /* 获得收货人信息 */
             $consignee = get_consignee($_SESSION['user_id']);
@@ -929,11 +929,11 @@ class FlowController extends InitController
 
                 /* 计算订单的费用 */
                 $total = order_fee($order, $cart_goods, $consignee);
-                $smarty->assign('total', $total);
+                $this->assign('total', $total);
 
                 /* 团购标志 */
                 if ($flow_type == CART_GROUP_BUY_GOODS) {
-                    $smarty->assign('is_group_buy', 1);
+                    $this->assign('is_group_buy', 1);
                 }
 
                 $result['content'] = $smarty->fetch('library/order_total.lbi');
@@ -981,12 +981,12 @@ class FlowController extends InitController
             } else {
                 /* 计算订单的费用 */
                 $total = order_fee($order, $cart_goods, $consignee);
-                $smarty->assign('total', $total);
-                $smarty->assign('config', $_CFG);
+                $this->assign('total', $total);
+                $this->assign('config', $_CFG);
 
                 /* 团购标志 */
                 if ($flow_type == CART_GROUP_BUY_GOODS) {
-                    $smarty->assign('is_group_buy', 1);
+                    $this->assign('is_group_buy', 1);
                 }
 
                 $result['content'] = $smarty->fetch('library/order_total.lbi');
@@ -1019,7 +1019,7 @@ class FlowController extends InitController
             $result['error'] = $_LANG['no_goods_in_cart'];
         } else {
             /* 取得购物流程设置 */
-            $smarty->assign('config', $_CFG);
+            $this->assign('config', $_CFG);
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -1035,11 +1035,11 @@ class FlowController extends InitController
 
             /* 计算订单的费用 */
             $total = order_fee($order, $cart_goods, $consignee);
-            $smarty->assign('total', $total);
+            $this->assign('total', $total);
 
             /* 团购标志 */
             if ($flow_type == CART_GROUP_BUY_GOODS) {
-                $smarty->assign('is_group_buy', 1);
+                $this->assign('is_group_buy', 1);
             }
 
             $result['content'] = $smarty->fetch('library/order_total.lbi');
@@ -1075,7 +1075,7 @@ class FlowController extends InitController
             die($json->encode($result));
         } else {
             /* 取得购物流程设置 */
-            $smarty->assign('config', $_CFG);
+            $this->assign('config', $_CFG);
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -1094,11 +1094,11 @@ class FlowController extends InitController
 
             /* 计算订单的费用 */
             $total = order_fee($order, $cart_goods, $consignee);
-            $smarty->assign('total', $total);
+            $this->assign('total', $total);
 
             /* 团购标志 */
             if ($flow_type == CART_GROUP_BUY_GOODS) {
-                $smarty->assign('is_group_buy', 1);
+                $this->assign('is_group_buy', 1);
             }
 
             die($smarty->fetch('library/order_total.lbi'));
@@ -1483,10 +1483,10 @@ class FlowController extends InitController
         /* 增加是否给客服发送邮件选项 */
         if ($_CFG['send_service_email'] && $_CFG['service_email'] != '') {
             $tpl = get_mail_template('remind_of_new_order');
-            $smarty->assign('order', $order);
-            $smarty->assign('goods_list', $cart_goods);
-            $smarty->assign('shop_name', $_CFG['shop_name']);
-            $smarty->assign('send_date', date($_CFG['time_format']));
+            $this->assign('order', $order);
+            $this->assign('goods_list', $cart_goods);
+            $this->assign('shop_name', $_CFG['shop_name']);
+            $this->assign('send_date', date($_CFG['time_format']));
             $content = $smarty->fetch('str:' . $tpl['template_content']);
             send_mail($_CFG['shop_name'], $_CFG['service_email'], $tpl['template_subject'], $content, $tpl['is_html']);
         }
@@ -1563,17 +1563,17 @@ class FlowController extends InitController
 
             $order['pay_desc'] = $payment['pay_desc'];
 
-            $smarty->assign('pay_online', $pay_online);
+            $this->assign('pay_online', $pay_online);
         }
         if (!empty($order['shipping_name'])) {
             $order['shipping_name'] = trim(stripcslashes($order['shipping_name']));
         }
 
         /* 订单信息 */
-        $smarty->assign('order', $order);
-        $smarty->assign('total', $total);
-        $smarty->assign('goods_list', $cart_goods);
-        $smarty->assign('order_submit_back', sprintf($_LANG['order_submit_back'], $_LANG['back_home'], $_LANG['goto_user_center'])); // 返回提示
+        $this->assign('order', $order);
+        $this->assign('total', $total);
+        $this->assign('goods_list', $cart_goods);
+        $this->assign('order_submit_back', sprintf($_LANG['order_submit_back'], $_LANG['back_home'], $_LANG['goto_user_center'])); // 返回提示
 
         user_uc_call('add_feed', array($order['order_id'], BUY_GOODS)); //推送feed到uc
         unset($_SESSION['flow_consignee']); // 清除session中保存的收货人信息
@@ -1742,7 +1742,7 @@ class FlowController extends InitController
             $result['error'] = $_LANG['no_goods_in_cart'];
         } else {
             /* 取得购物流程设置 */
-            $smarty->assign('config', $_CFG);
+            $this->assign('config', $_CFG);
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -1774,11 +1774,11 @@ class FlowController extends InitController
                 $result['error'] = sprintf($_LANG['bonus_min_amount_error'], price_format($bonus['min_goods_amount'], false));
             }
 
-            $smarty->assign('total', $total);
+            $this->assign('total', $total);
 
             /* 团购标志 */
             if ($flow_type == CART_GROUP_BUY_GOODS) {
-                $smarty->assign('is_group_buy', 1);
+                $this->assign('is_group_buy', 1);
             }
 
             $result['content'] = $smarty->fetch('library/order_total.lbi');
@@ -1851,12 +1851,12 @@ class FlowController extends InitController
 
         /* 取得商品列表，计算合计 */
         $cart_goods = get_cart_goods($flow_type);
-        $smarty->assign('goods_list', $cart_goods['goods_list']);
-        $smarty->assign('total', $cart_goods['total']);
+        $this->assign('goods_list', $cart_goods['goods_list']);
+        $this->assign('total', $cart_goods['total']);
 
         //购物车的描述的格式化
-        $smarty->assign('shopping_money', sprintf($_LANG['shopping_money'], $cart_goods['total']['goods_price']));
-        $smarty->assign('market_price_desc', sprintf(
+        $this->assign('shopping_money', sprintf($_LANG['shopping_money'], $cart_goods['total']['goods_price']));
+        $this->assign('market_price_desc', sprintf(
             $_LANG['than_market_price'],
             $cart_goods['total']['market_price'],
             $cart_goods['total']['saving'],
@@ -1867,7 +1867,7 @@ class FlowController extends InitController
         if ($_SESSION['user_id'] > 0) {
             require_once(ROOT_PATH . 'includes/lib_clips.php');
             $collection_goods = get_collection_goods($_SESSION['user_id']);
-            $smarty->assign('collection_goods', $collection_goods);
+            $this->assign('collection_goods', $collection_goods);
             $where = "user_id = '" . intval($_SESSION['user_id']) . "' ";
         } else {
             $where = "session_id = '" . SESS_ID . "' ";
@@ -1877,19 +1877,19 @@ class FlowController extends InitController
         $favourable_list = favourable_list($_SESSION['user_rank']);
         usort($favourable_list, 'cmp_favourable');
 
-        $smarty->assign('favourable_list', $favourable_list);
+        $this->assign('favourable_list', $favourable_list);
 
         /* 计算折扣 */
         $discount = compute_discount();
-        $smarty->assign('discount', $discount['discount']);
+        $this->assign('discount', $discount['discount']);
         $favour_name = empty($discount['name']) ? '' : join(',', $discount['name']);
-        $smarty->assign('your_discount', sprintf($_LANG['your_discount'], $favour_name, price_format($discount['discount'])));
+        $this->assign('your_discount', sprintf($_LANG['your_discount'], $favour_name, price_format($discount['discount'])));
 
         /* 增加是否在购物车里显示商品图 */
-        $smarty->assign('show_goods_thumb', $GLOBALS['_CFG']['show_goods_in_cart']);
+        $this->assign('show_goods_thumb', $GLOBALS['_CFG']['show_goods_in_cart']);
 
         /* 增加是否在购物车里显示商品属性 */
-        $smarty->assign('show_goods_attribute', $GLOBALS['_CFG']['show_attr_in_cart']);
+        $this->assign('show_goods_attribute', $GLOBALS['_CFG']['show_attr_in_cart']);
 
         /* 购物车中商品配件列表 */
         //取得购物车中基本件ID
@@ -1904,14 +1904,14 @@ class FlowController extends InitController
 
         $fittings_list = get_goods_fittings($parent_list);
 
-        $smarty->assign('fittings_list', $fittings_list);
+        $this->assign('fittings_list', $fittings_list);
     }
 
     public function indexAction()
     {
-        $smarty->assign('currency_format', $_CFG['currency_format']);
-        $smarty->assign('integral_scale', $_CFG['integral_scale']);
-        $smarty->assign('step', $_REQUEST['step']);
+        $this->assign('currency_format', $_CFG['currency_format']);
+        $this->assign('integral_scale', $_CFG['integral_scale']);
+        $this->assign('step', $_REQUEST['step']);
         assign_dynamic('shopping_flow');
 
         $smarty->display('flow.dwt');

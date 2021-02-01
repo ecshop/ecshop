@@ -19,19 +19,19 @@ class AgencyController extends InitController
     /*------------------------------------------------------ */
     public function listAction()
     {
-        $smarty->assign('ur_here', $_LANG['agency_list']);
-        $smarty->assign('action_link', array('text' => $_LANG['add_agency'], 'href' => 'agency.php?act=add'));
-        $smarty->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['agency_list']);
+        $this->assign('action_link', array('text' => $_LANG['add_agency'], 'href' => 'agency.php?act=add'));
+        $this->assign('full_page', 1);
 
         $agency_list = get_agencylist();
-        $smarty->assign('agency_list', $agency_list['agency']);
-        $smarty->assign('filter', $agency_list['filter']);
-        $smarty->assign('record_count', $agency_list['record_count']);
-        $smarty->assign('page_count', $agency_list['page_count']);
+        $this->assign('agency_list', $agency_list['agency']);
+        $this->assign('filter', $agency_list['filter']);
+        $this->assign('record_count', $agency_list['record_count']);
+        $this->assign('page_count', $agency_list['page_count']);
 
         /* 排序标记 */
         $sort_flag = sort_flag($agency_list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
         $smarty->display('agency_list.htm');
@@ -43,14 +43,14 @@ class AgencyController extends InitController
     public function queryAction()
     {
         $agency_list = get_agencylist();
-        $smarty->assign('agency_list', $agency_list['agency']);
-        $smarty->assign('filter', $agency_list['filter']);
-        $smarty->assign('record_count', $agency_list['record_count']);
-        $smarty->assign('page_count', $agency_list['page_count']);
+        $this->assign('agency_list', $agency_list['agency']);
+        $this->assign('filter', $agency_list['filter']);
+        $this->assign('record_count', $agency_list['record_count']);
+        $this->assign('page_count', $agency_list['page_count']);
 
         /* 排序标记 */
         $sort_flag = sort_flag($agency_list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result(
             $smarty->fetch('agency_list.htm'),
@@ -165,7 +165,7 @@ class AgencyController extends InitController
 
         /* 是否添加 */
         $is_add = $_REQUEST['act'] == 'add';
-        $smarty->assign('form_action', $is_add ? 'insert' : 'update');
+        $this->assign('form_action', $is_add ? 'insert' : 'update');
 
         /* 初始化、取得办事处信息 */
         if ($is_add) {
@@ -202,24 +202,24 @@ class AgencyController extends InitController
             "FROM " . $ecs->table('admin_user');
         $agency['admin_list'] = $db->getAll($sql);
 
-        $smarty->assign('agency', $agency);
+        $this->assign('agency', $agency);
 
         /* 取得地区 */
         $country_list = get_regions();
-        $smarty->assign('countries', $country_list);
+        $this->assign('countries', $country_list);
 
         /* 显示模板 */
         if ($is_add) {
-            $smarty->assign('ur_here', $_LANG['add_agency']);
+            $this->assign('ur_here', $_LANG['add_agency']);
         } else {
-            $smarty->assign('ur_here', $_LANG['edit_agency']);
+            $this->assign('ur_here', $_LANG['edit_agency']);
         }
         if ($is_add) {
             $href = 'agency.php?act=list';
         } else {
             $href = 'agency.php?act=list&' . list_link_postfix();
         }
-        $smarty->assign('action_link', array('href' => $href, 'text' => $_LANG['agency_list']));
+        $this->assign('action_link', array('href' => $href, 'text' => $_LANG['agency_list']));
         assign_query_info();
         $smarty->display('agency_info.htm');
     }

@@ -31,18 +31,18 @@ if ($action == 'display_send_ui') {
     admin_priv('sms_send');
 
     if ($sms->has_registered()) {
-        $smarty->assign('ur_here', $_LANG['03_sms_send']);
+        $this->assign('ur_here', $_LANG['03_sms_send']);
         $special_ranks = get_rank_list();
         $send_rank['1_0'] = $_LANG['user_list'];
         foreach ($special_ranks as $rank_key => $rank_value) {
             $send_rank['2_' . $rank_key] = $rank_value;
         }
         assign_query_info();
-        $smarty->assign('send_rank', $send_rank);
+        $this->assign('send_rank', $send_rank);
         $smarty->display('sms_send_ui.htm');
     } else {
-        $smarty->assign('ur_here', $_LANG['register_sms']);
-        $smarty->assign('sms_site_info', $sms->get_site_info());
+        $this->assign('ur_here', $_LANG['register_sms']);
+        $this->assign('sms_site_info', $sms->get_site_info());
         assign_query_info();
         $smarty->display('sms_register_ui.htm');
     }
@@ -61,7 +61,7 @@ if ($action == 'sms_sign') {
                     $t[$_CFG['ent_id']][$key]['key'] = $key;
                     $t[$_CFG['ent_id']][$key]['value'] = $val;
                 }
-                $smarty->assign('sms_sign', $t[$_CFG['ent_id']]);
+                $this->assign('sms_sign', $t[$_CFG['ent_id']]);
             }
         } else {
             shop_config_update('sms_sign', '');
@@ -69,13 +69,13 @@ if ($action == 'sms_sign') {
         }
         $sql = "SELECT * FROM " . $ecs->table('shop_config') . "WHERE  code='default_sms_sign'";
         $default_sms_sign = $db->getRow($sql);
-        $smarty->assign('default_sign', $default_sms_sign['value']);
+        $this->assign('default_sign', $default_sms_sign['value']);
 
 
         $smarty->display('sms_sign.htm');
     } else {
-        $smarty->assign('ur_here', $_LANG['register_sms']);
-        $smarty->assign('sms_site_info', $sms->get_site_info());
+        $this->assign('ur_here', $_LANG['register_sms']);
+        $this->assign('sms_site_info', $sms->get_site_info());
         assign_query_info();
         $smarty->display('sms_register_ui.htm');
     }
@@ -93,7 +93,7 @@ if ($action == 'sms_sign_add') {
 
         if (!empty($row['id'])) {
             $sms_sign = unserialize($row['value']);
-            $smarty->assign('sms_sign', $sms_sign);
+            $this->assign('sms_sign', $sms_sign);
             $data = array();
             $data['shopexid'] = $_CFG['ent_id'];
             $data['passwd'] = $_CFG['ent_ac'];
@@ -141,8 +141,8 @@ if ($action == 'sms_sign_add') {
             sys_msg($_LANG['error_smg'], 1, array(), false);
         }
     } else {
-        $smarty->assign('ur_here', $_LANG['register_sms']);
-        $smarty->assign('sms_site_info', $sms->get_site_info());
+        $this->assign('ur_here', $_LANG['register_sms']);
+        $this->assign('sms_site_info', $sms->get_site_info());
         assign_query_info();
         $smarty->display('sms_register_ui.htm');
     }
@@ -154,7 +154,7 @@ if ($action == 'sms_sign_update') {
         $row = $db->getRow($sql);
         if (!empty($row['id'])) {
             $sms_sign = unserialize($row['value']);
-            $smarty->assign('sms_sign', $sms_sign);
+            $this->assign('sms_sign', $sms_sign);
             $extend_no = $_POST['extend_no'];
 
             $content_t = $content_y = $sms_sign[$_CFG['ent_id']][$extend_no];
@@ -210,8 +210,8 @@ if ($action == 'sms_sign_update') {
             sys_msg($_LANG['error_smg'], 1, array(), false);
         }
     } else {
-        $smarty->assign('ur_here', $_LANG['register_sms']);
-        $smarty->assign('sms_site_info', $sms->get_site_info());
+        $this->assign('ur_here', $_LANG['register_sms']);
+        $this->assign('sms_site_info', $sms->get_site_info());
         assign_query_info();
         $smarty->display('sms_register_ui.htm');
     }
@@ -223,7 +223,7 @@ if ($action == 'sms_sign_default') {
         $row = $db->getRow($sql);
         if (!empty($row['id'])) {
             $sms_sign = unserialize($row['value']);
-            $smarty->assign('sms_sign', $sms_sign);
+            $this->assign('sms_sign', $sms_sign);
             $data = array();
             $data['shopexid'] = $_CFG['ent_id'];
             $data['passwd'] = $_CFG['ent_ac'];
@@ -247,8 +247,8 @@ if ($action == 'sms_sign_default') {
             sys_msg($_LANG['error_smg'], 1, array(), false);
         }
     } else {
-        $smarty->assign('ur_here', $_LANG['register_sms']);
-        $smarty->assign('sms_site_info', $sms->get_site_info());
+        $this->assign('ur_here', $_LANG['register_sms']);
+        $this->assign('sms_site_info', $sms->get_site_info());
         assign_query_info();
         $smarty->display('sms_register_ui.htm');
     }

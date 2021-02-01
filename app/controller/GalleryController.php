@@ -47,9 +47,9 @@ class GalleryController extends InitController
             }
         }
 
-        $smarty->assign('shop_name', $_CFG['shop_name']);
-        $smarty->assign('watermark', str_replace('../', './', $_CFG['watermark']));
-        $smarty->assign('gallery', $gallery);
+        $this->assign('shop_name', $_CFG['shop_name']);
+        $this->assign('watermark', str_replace('../', './', $_CFG['watermark']));
+        $this->assign('gallery', $gallery);
         $smarty->display('gallery.dwt');
     }
 }

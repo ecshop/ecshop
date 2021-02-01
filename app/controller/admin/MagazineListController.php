@@ -12,16 +12,16 @@ class MagazineListController extends InitController
 
     public function listAction()
     {
-        $smarty->assign('ur_here', $_LANG['magazine_list']);
-        $smarty->assign('action_link', array('text' => $_LANG['add_new'], 'href' => 'magazine_list.php?act=add'));
-        $smarty->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['magazine_list']);
+        $this->assign('action_link', array('text' => $_LANG['add_new'], 'href' => 'magazine_list.php?act=add'));
+        $this->assign('full_page', 1);
 
         $magazinedb = get_magazine();
 
-        $smarty->assign('magazinedb', $magazinedb['magazinedb']);
-        $smarty->assign('filter', $magazinedb['filter']);
-        $smarty->assign('record_count', $magazinedb['record_count']);
-        $smarty->assign('page_count', $magazinedb['page_count']);
+        $this->assign('magazinedb', $magazinedb['magazinedb']);
+        $this->assign('filter', $magazinedb['filter']);
+        $this->assign('record_count', $magazinedb['record_count']);
+        $this->assign('page_count', $magazinedb['page_count']);
 
         $special_ranks = get_rank_list();
         $send_rank[SEND_LIST . '_0'] = $_LANG['email_user'];
@@ -29,7 +29,7 @@ class MagazineListController extends InitController
         foreach ($special_ranks as $rank_key => $rank_value) {
             $send_rank[SEND_RANK . '_' . $rank_key] = $rank_value;
         }
-        $smarty->assign('send_rank', $send_rank);
+        $this->assign('send_rank', $send_rank);
 
         assign_query_info();
         $smarty->display('magazine_list.htm');
@@ -38,13 +38,13 @@ class MagazineListController extends InitController
     public function queryAction()
     {
         $magazinedb = get_magazine();
-        $smarty->assign('magazinedb', $magazinedb['magazinedb']);
-        $smarty->assign('filter', $magazinedb['filter']);
-        $smarty->assign('record_count', $magazinedb['record_count']);
-        $smarty->assign('page_count', $magazinedb['page_count']);
+        $this->assign('magazinedb', $magazinedb['magazinedb']);
+        $this->assign('filter', $magazinedb['filter']);
+        $this->assign('record_count', $magazinedb['record_count']);
+        $this->assign('page_count', $magazinedb['page_count']);
 
         $sort_flag = sort_flag($magazinedb['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result($smarty->fetch('magazine_list.htm'), '', array('filter' => $magazinedb['filter'], 'page_count' => $magazinedb['page_count']));
     }
@@ -53,8 +53,8 @@ class MagazineListController extends InitController
     {
         if (empty($_POST['step'])) {
             include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
-            $smarty->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'magazine_list.php?act=list'));
-            $smarty->assign(array('ur_here' => $_LANG['magazine_list'], 'act' => 'add'));
+            $this->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'magazine_list.php?act=list'));
+            $this->assign(array('ur_here' => $_LANG['magazine_list'], 'act' => 'add'));
             create_html_editor('magazine_content');
             assign_query_info();
             $smarty->display('magazine_list_add.htm');
@@ -77,9 +77,9 @@ class MagazineListController extends InitController
         $id = intval($_REQUEST['id']);
         if (empty($_POST['step'])) {
             $rt = $db->getRow("SELECT * FROM " . $ecs->table('mail_templates') . " WHERE type = 'magazine' AND template_id = '$id'");
-            $smarty->assign(array('id' => $id, 'act' => 'edit', 'magazine_name' => $rt['template_subject'], 'magazine_content' => $rt['template_content']));
-            $smarty->assign(array('ur_here' => $_LANG['magazine_list'], 'act' => 'edit'));
-            $smarty->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'magazine_list.php?act=list'));
+            $this->assign(array('id' => $id, 'act' => 'edit', 'magazine_name' => $rt['template_subject'], 'magazine_content' => $rt['template_content']));
+            $this->assign(array('ur_here' => $_LANG['magazine_list'], 'act' => 'edit'));
+            $this->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'magazine_list.php?act=list'));
             create_html_editor('magazine_content', $rt['template_content']);
             assign_query_info();
             $smarty->display('magazine_list_add.htm');

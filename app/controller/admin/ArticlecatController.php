@@ -22,10 +22,10 @@ class ArticlecatController extends InitController
         foreach ($articlecat as $key => $cat) {
             $articlecat[$key]['type_name'] = $_LANG['type_name'][$cat['cat_type']];
         }
-        $smarty->assign('ur_here', $_LANG['02_articlecat_list']);
-        $smarty->assign('action_link', array('text' => $_LANG['articlecat_add'], 'href' => 'articlecat.php?act=add'));
-        $smarty->assign('full_page', 1);
-        $smarty->assign('articlecat', $articlecat);
+        $this->assign('ur_here', $_LANG['02_articlecat_list']);
+        $this->assign('action_link', array('text' => $_LANG['articlecat_add'], 'href' => 'articlecat.php?act=add'));
+        $this->assign('full_page', 1);
+        $this->assign('articlecat', $articlecat);
 
         assign_query_info();
         $smarty->display('articlecat_list.htm');
@@ -40,7 +40,7 @@ class ArticlecatController extends InitController
         foreach ($articlecat as $key => $cat) {
             $articlecat[$key]['type_name'] = $_LANG['type_name'][$cat['cat_type']];
         }
-        $smarty->assign('articlecat', $articlecat);
+        $this->assign('articlecat', $articlecat);
 
         make_json_result($smarty->fetch('articlecat_list.htm'));
     }
@@ -53,10 +53,10 @@ class ArticlecatController extends InitController
         /* 权限判断 */
         admin_priv('article_cat');
 
-        $smarty->assign('cat_select', article_cat_list(0));
-        $smarty->assign('ur_here', $_LANG['articlecat_add']);
-        $smarty->assign('action_link', array('text' => $_LANG['02_articlecat_list'], 'href' => 'articlecat.php?act=list'));
-        $smarty->assign('form_action', 'insert');
+        $this->assign('cat_select', article_cat_list(0));
+        $this->assign('ur_here', $_LANG['articlecat_add']);
+        $this->assign('action_link', array('text' => $_LANG['02_articlecat_list'], 'href' => 'articlecat.php?act=list'));
+        $this->assign('form_action', 'insert');
 
         assign_query_info();
         $smarty->display('articlecat_info.htm');
@@ -122,7 +122,7 @@ class ArticlecatController extends InitController
         $cat = $db->getRow($sql);
 
         if ($cat['cat_type'] == 2 || $cat['cat_type'] == 3 || $cat['cat_type'] == 4) {
-            $smarty->assign('disabled', 1);
+            $this->assign('disabled', 1);
         }
         $options = article_cat_list(0, $cat['parent_id'], false);
         $select = '';
@@ -141,11 +141,11 @@ class ArticlecatController extends InitController
             $select .= htmlspecialchars($var['cat_name']) . '</option>';
         }
         unset($options);
-        $smarty->assign('cat', $cat);
-        $smarty->assign('cat_select', $select);
-        $smarty->assign('ur_here', $_LANG['articlecat_edit']);
-        $smarty->assign('action_link', array('text' => $_LANG['02_articlecat_list'], 'href' => 'articlecat.php?act=list'));
-        $smarty->assign('form_action', 'update');
+        $this->assign('cat', $cat);
+        $this->assign('cat_select', $select);
+        $this->assign('ur_here', $_LANG['articlecat_edit']);
+        $this->assign('action_link', array('text' => $_LANG['02_articlecat_list'], 'href' => 'articlecat.php?act=list'));
+        $this->assign('form_action', 'update');
 
         assign_query_info();
         $smarty->display('articlecat_info.htm');

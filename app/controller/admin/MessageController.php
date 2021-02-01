@@ -17,19 +17,19 @@ class MessageController extends InitController
     /*------------------------------------------------------ */
     public function listAction()
     {
-        $smarty->assign('full_page', 1);
-        $smarty->assign('ur_here', $_LANG['msg_list']);
-        $smarty->assign('action_link', array('text' => $_LANG['send_msg'], 'href' => 'message.php?act=send'));
+        $this->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['msg_list']);
+        $this->assign('action_link', array('text' => $_LANG['send_msg'], 'href' => 'message.php?act=send'));
 
         $list = get_message_list();
 
-        $smarty->assign('message_list', $list['item']);
-        $smarty->assign('filter', $list['filter']);
-        $smarty->assign('record_count', $list['record_count']);
-        $smarty->assign('page_count', $list['page_count']);
+        $this->assign('message_list', $list['item']);
+        $this->assign('filter', $list['filter']);
+        $this->assign('record_count', $list['record_count']);
+        $this->assign('page_count', $list['page_count']);
 
         $sort_flag = sort_flag($list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
         $smarty->display('message_list.htm');
@@ -42,13 +42,13 @@ class MessageController extends InitController
     {
         $list = get_message_list();
 
-        $smarty->assign('message_list', $list['item']);
-        $smarty->assign('filter', $list['filter']);
-        $smarty->assign('record_count', $list['record_count']);
-        $smarty->assign('page_count', $list['page_count']);
+        $this->assign('message_list', $list['item']);
+        $this->assign('filter', $list['filter']);
+        $this->assign('record_count', $list['record_count']);
+        $this->assign('page_count', $list['page_count']);
 
         $sort_flag = sort_flag($list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result(
             $smarty->fetch('message_list.htm'),
@@ -65,11 +65,11 @@ class MessageController extends InitController
         /* 获取管理员列表 */
         $admin_list = $db->getAll('SELECT user_id, user_name FROM ' . $ecs->table('admin_user'));
 
-        $smarty->assign('ur_here', $_LANG['send_msg']);
-        $smarty->assign('action_link', array('href' => 'message.php?act=list', 'text' => $_LANG['msg_list']));
-        $smarty->assign('action', 'add');
-        $smarty->assign('form_act', 'insert');
-        $smarty->assign('admin_list', $admin_list);
+        $this->assign('ur_here', $_LANG['send_msg']);
+        $this->assign('action_link', array('href' => 'message.php?act=list', 'text' => $_LANG['msg_list']));
+        $this->assign('action', 'add');
+        $this->assign('form_act', 'insert');
+        $this->assign('admin_list', $admin_list);
 
         assign_query_info();
         $smarty->display('message_info.htm');
@@ -139,11 +139,11 @@ class MessageController extends InitController
             'FROM ' . $ecs->table('admin_message') . " WHERE message_id='$id'";
         $msg_arr = $db->getRow($sql);
 
-        $smarty->assign('ur_here', $_LANG['edit_msg']);
-        $smarty->assign('action_link', array('href' => 'message.php?act=list', 'text' => $_LANG['msg_list']));
-        $smarty->assign('form_act', 'update');
-        $smarty->assign('admin_list', $admin_list);
-        $smarty->assign('msg_arr', $msg_arr);
+        $this->assign('ur_here', $_LANG['edit_msg']);
+        $this->assign('action_link', array('href' => 'message.php?act=list', 'text' => $_LANG['msg_list']));
+        $this->assign('form_act', 'update');
+        $this->assign('admin_list', $admin_list);
+        $this->assign('msg_arr', $msg_arr);
 
         assign_query_info();
         $smarty->display('message_info.htm');
@@ -200,10 +200,10 @@ class MessageController extends InitController
         }
 
         //模板赋值，显示
-        $smarty->assign('ur_here', $_LANG['view_msg']);
-        $smarty->assign('action_link', array('href' => 'message.php?act=list', 'text' => $_LANG['msg_list']));
-        $smarty->assign('admin_user', $_SESSION['admin_name']);
-        $smarty->assign('msg_arr', $msg_arr);
+        $this->assign('ur_here', $_LANG['view_msg']);
+        $this->assign('action_link', array('href' => 'message.php?act=list', 'text' => $_LANG['msg_list']));
+        $this->assign('admin_user', $_SESSION['admin_name']);
+        $this->assign('msg_arr', $msg_arr);
 
         assign_query_info();
         $smarty->display('message_view.htm');
@@ -224,12 +224,12 @@ class MessageController extends InitController
             "WHERE a.message_id = '$msg_id'";
         $msg_val = $db->getRow($sql);
 
-        $smarty->assign('ur_here', $_LANG['reply_msg']);
-        $smarty->assign('action_link', array('href' => 'message.php?act=list', 'text' => $_LANG['msg_list']));
+        $this->assign('ur_here', $_LANG['reply_msg']);
+        $this->assign('action_link', array('href' => 'message.php?act=list', 'text' => $_LANG['msg_list']));
 
-        $smarty->assign('action', 'reply');
-        $smarty->assign('form_act', 're_msg');
-        $smarty->assign('msg_val', $msg_val);
+        $this->assign('action', 'reply');
+        $this->assign('form_act', 're_msg');
+        $this->assign('msg_val', $msg_val);
 
         assign_query_info();
         $smarty->display('message_info.htm');

@@ -25,20 +25,20 @@ class FriendLinkController extends InitController
     public function listAction()
     {
         /* 模板赋值 */
-        $smarty->assign('ur_here', $_LANG['list_link']);
-        $smarty->assign('action_link', array('text' => $_LANG['add_link'], 'href' => 'friend_link.php?act=add'));
-        $smarty->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['list_link']);
+        $this->assign('action_link', array('text' => $_LANG['add_link'], 'href' => 'friend_link.php?act=add'));
+        $this->assign('full_page', 1);
 
         /* 获取友情链接数据 */
         $links_list = get_links_list();
 
-        $smarty->assign('links_list', $links_list['list']);
-        $smarty->assign('filter', $links_list['filter']);
-        $smarty->assign('record_count', $links_list['record_count']);
-        $smarty->assign('page_count', $links_list['page_count']);
+        $this->assign('links_list', $links_list['list']);
+        $this->assign('filter', $links_list['filter']);
+        $this->assign('record_count', $links_list['record_count']);
+        $this->assign('page_count', $links_list['page_count']);
 
         $sort_flag = sort_flag($links_list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
         $smarty->display('link_list.htm');
@@ -52,13 +52,13 @@ class FriendLinkController extends InitController
         /* 获取友情链接数据 */
         $links_list = get_links_list();
 
-        $smarty->assign('links_list', $links_list['list']);
-        $smarty->assign('filter', $links_list['filter']);
-        $smarty->assign('record_count', $links_list['record_count']);
-        $smarty->assign('page_count', $links_list['page_count']);
+        $this->assign('links_list', $links_list['list']);
+        $this->assign('filter', $links_list['filter']);
+        $this->assign('record_count', $links_list['record_count']);
+        $this->assign('page_count', $links_list['page_count']);
 
         $sort_flag = sort_flag($links_list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result(
             $smarty->fetch('link_list.htm'),
@@ -74,10 +74,10 @@ class FriendLinkController extends InitController
     {
         admin_priv('friendlink');
 
-        $smarty->assign('ur_here', $_LANG['add_link']);
-        $smarty->assign('action_link', array('href' => 'friend_link.php?act=list', 'text' => $_LANG['list_link']));
-        $smarty->assign('action', 'add');
-        $smarty->assign('form_act', 'insert');
+        $this->assign('ur_here', $_LANG['add_link']);
+        $this->assign('action_link', array('href' => 'friend_link.php?act=list', 'text' => $_LANG['list_link']));
+        $this->assign('action', 'add');
+        $this->assign('form_act', 'insert');
 
         assign_query_info();
         $smarty->display('link_info.htm');
@@ -171,14 +171,14 @@ class FriendLinkController extends InitController
         $link_arr['link_name'] = sub_str($link_arr['link_name'], 250, false); // 截取字符串为250个字符避免出现非法字符的情况
 
         /* 模板赋值 */
-        $smarty->assign('ur_here', $_LANG['edit_link']);
-        $smarty->assign('action_link', array('href' => 'friend_link.php?act=list&' . list_link_postfix(), 'text' => $_LANG['list_link']));
-        $smarty->assign('form_act', 'update');
-        $smarty->assign('action', 'edit');
+        $this->assign('ur_here', $_LANG['edit_link']);
+        $this->assign('action_link', array('href' => 'friend_link.php?act=list&' . list_link_postfix(), 'text' => $_LANG['list_link']));
+        $this->assign('form_act', 'update');
+        $this->assign('action', 'edit');
 
-        $smarty->assign('type', $type);
-        $smarty->assign('link_logo', $link_logo);
-        $smarty->assign('link_arr', $link_arr);
+        $this->assign('type', $type);
+        $this->assign('link_logo', $link_logo);
+        $this->assign('link_arr', $link_arr);
 
         assign_query_info();
         $smarty->display('link_info.htm');

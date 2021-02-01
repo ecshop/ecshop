@@ -15,17 +15,17 @@ class GoodsExportController extends InitController
         /* 检查权限 */
         admin_priv('goods_export');
 
-        $smarty->assign('ur_here', $_LANG['14_goods_export']);
-        $smarty->assign('cat_list', cat_list());
-        $smarty->assign('brand_list', get_brand_list());
-        $smarty->assign('goods_type_list', goods_type_list(0));
+        $this->assign('ur_here', $_LANG['14_goods_export']);
+        $this->assign('cat_list', cat_list());
+        $this->assign('brand_list', get_brand_list());
+        $this->assign('goods_type_list', goods_type_list(0));
         $goods_fields = my_array_merge($_LANG['custom'], get_attributes());
         $data_format_array = array(
             'ecshop' => $_LANG['export_ecshop'],
             'custom' => $_LANG['export_custom'],
         );
-        $smarty->assign('data_format', $data_format_array);
-        $smarty->assign('goods_fields', $goods_fields);
+        $this->assign('data_format', $data_format_array);
+        $this->assign('goods_fields', $goods_fields);
         assign_query_info();
         $smarty->display('goods_export.htm');
     }

@@ -14,7 +14,7 @@ class SaleGeneralController extends InitController
 }
 
 require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
-$smarty->assign('lang', $_LANG);
+$this->assign('lang', $_LANG);
 
 /* 权限判断 */
 admin_priv('sale_order_stats');
@@ -70,8 +70,8 @@ $data_list = $db->getAll($sql);
 function listAction()
 {
     /* 赋值查询时间段 */
-    $smarty->assign('start_time', local_date('Y-m-d', $start_time));
-    $smarty->assign('end_time', local_date('Y-m-d', $end_time));
+    $this->assign('start_time', local_date('Y-m-d', $start_time));
+    $this->assign('end_time', local_date('Y-m-d', $end_time));
 
     /* 赋值统计数据 */
     $xml = "<chart caption='' xAxisName='%s' showValues='0' decimals='0' formatNumberScale='0'>%s</chart>";
@@ -85,11 +85,11 @@ function listAction()
         $i++;
     }
 
-    $smarty->assign('data_count', sprintf($xml, '', $data_count)); // 订单数统计数据
-    $smarty->assign('data_amount', sprintf($xml, '', $data_amount));    // 销售额统计数据
+    $this->assign('data_count', sprintf($xml, '', $data_count)); // 订单数统计数据
+    $this->assign('data_amount', sprintf($xml, '', $data_amount));    // 销售额统计数据
 
-    $smarty->assign('data_count_name', $_LANG['order_count_trend']);
-    $smarty->assign('data_amount_name', $_LANG['order_amount_trend']);
+    $this->assign('data_count_name', $_LANG['order_count_trend']);
+    $this->assign('data_amount_name', $_LANG['order_amount_trend']);
 
     /* 根据查询类型生成文件名 */
     if ($query_type == 'year') {
@@ -97,7 +97,7 @@ function listAction()
     } else {
         $filename = date('Ym', $start_time) . "_" . date('Ym', $end_time) . '_report';
     }
-    $smarty->assign(
+    $this->assign(
         'action_link',
         array('text' => $_LANG['down_sales_stats'],
             'href' => 'sale_general.php?act=download&filename=' . $filename .
@@ -105,7 +105,7 @@ function listAction()
     );
 
     /* 显示模板 */
-    $smarty->assign('ur_here', $_LANG['report_sell']);
+    $this->assign('ur_here', $_LANG['report_sell']);
     assign_query_info();
     $smarty->display('sale_general.htm');
 }

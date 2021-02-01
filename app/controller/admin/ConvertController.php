@@ -33,7 +33,7 @@ class ConvertController extends InitController
             }
             $modules[$i]['desc'] = $_LANG[$modules[$i]['desc']];
         }
-        $smarty->assign('module_list', $modules);
+        $this->assign('module_list', $modules);
 
         /* 设置默认值 */
         $def_val = array(
@@ -44,13 +44,13 @@ class ConvertController extends InitController
             'prefix' => 'sdb_',
             'path' => ''
         );
-        $smarty->assign('def_val', $def_val);
+        $this->assign('def_val', $def_val);
 
         /* 取得字符集数组 */
-        $smarty->assign('charset_list', get_charset_list());
+        $this->assign('charset_list', get_charset_list());
 
         /* 显示模板 */
-        $smarty->assign('ur_here', $_LANG['convert']);
+        $this->assign('ur_here', $_LANG['convert']);
         assign_query_info();
         $smarty->display('convert_main.htm');
     }

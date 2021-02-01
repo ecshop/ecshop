@@ -26,20 +26,20 @@ class AdsController extends InitController
         admin_priv('ad_manage');
         $pid = !empty($_REQUEST['pid']) ? intval($_REQUEST['pid']) : 0;
 
-        $smarty->assign('ur_here', $_LANG['ad_list']);
-        $smarty->assign('action_link', array('text' => $_LANG['ads_add'], 'href' => 'ads.php?act=add'));
-        $smarty->assign('pid', $pid);
-        $smarty->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['ad_list']);
+        $this->assign('action_link', array('text' => $_LANG['ads_add'], 'href' => 'ads.php?act=add'));
+        $this->assign('pid', $pid);
+        $this->assign('full_page', 1);
 
         $ads_list = get_adslist();
 
-        $smarty->assign('ads_list', $ads_list['ads']);
-        $smarty->assign('filter', $ads_list['filter']);
-        $smarty->assign('record_count', $ads_list['record_count']);
-        $smarty->assign('page_count', $ads_list['page_count']);
+        $this->assign('ads_list', $ads_list['ads']);
+        $this->assign('filter', $ads_list['filter']);
+        $this->assign('record_count', $ads_list['record_count']);
+        $this->assign('page_count', $ads_list['page_count']);
 
         $sort_flag = sort_flag($ads_list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
         $smarty->display('ads_list.htm');
@@ -52,13 +52,13 @@ class AdsController extends InitController
     {
         $ads_list = get_adslist();
 
-        $smarty->assign('ads_list', $ads_list['ads']);
-        $smarty->assign('filter', $ads_list['filter']);
-        $smarty->assign('record_count', $ads_list['record_count']);
-        $smarty->assign('page_count', $ads_list['page_count']);
+        $this->assign('ads_list', $ads_list['ads']);
+        $this->assign('filter', $ads_list['filter']);
+        $this->assign('record_count', $ads_list['record_count']);
+        $this->assign('page_count', $ads_list['page_count']);
 
         $sort_flag = sort_flag($ads_list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result(
             $smarty->fetch('ads_list.htm'),
@@ -80,19 +80,19 @@ class AdsController extends InitController
         $start_time = local_date('Y-m-d');
         $end_time = local_date('Y-m-d', gmtime() + 3600 * 24 * 30);  // 默认结束时间为1个月以后
 
-        $smarty->assign(
+        $this->assign(
             'ads',
             array('ad_link' => $ad_link, 'ad_name' => $ad_name, 'start_time' => $start_time,
                 'end_time' => $end_time, 'enabled' => 1)
         );
 
-        $smarty->assign('ur_here', $_LANG['ads_add']);
-        $smarty->assign('action_link', array('href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']));
-        $smarty->assign('position_list', get_position_list());
+        $this->assign('ur_here', $_LANG['ads_add']);
+        $this->assign('action_link', array('href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']));
+        $this->assign('position_list', get_position_list());
 
-        $smarty->assign('form_act', 'insert');
-        $smarty->assign('action', 'add');
-        $smarty->assign('cfg_lang', $_CFG['lang']);
+        $this->assign('form_act', 'insert');
+        $this->assign('action', 'add');
+        $this->assign('cfg_lang', $_CFG['lang']);
 
         assign_query_info();
         $smarty->display('ads_info.htm');
@@ -247,38 +247,38 @@ class AdsController extends InitController
         if ($ads_arr['media_type'] == '0') {
             if (strpos($ads_arr['ad_code'], 'http://') === false && strpos($ads_arr['ad_code'], 'https://') === false) {
                 $src = '../' . DATA_DIR . '/afficheimg/' . $ads_arr['ad_code'];
-                $smarty->assign('img_src', $src);
+                $this->assign('img_src', $src);
             } else {
                 $src = $ads_arr['ad_code'];
-                $smarty->assign('url_src', $src);
+                $this->assign('url_src', $src);
             }
         }
         if ($ads_arr['media_type'] == '1') {
             if (strpos($ads_arr['ad_code'], 'http://') === false && strpos($ads_arr['ad_code'], 'https://') === false) {
                 $src = '../' . DATA_DIR . '/afficheimg/' . $ads_arr['ad_code'];
-                $smarty->assign('flash_url', $src);
+                $this->assign('flash_url', $src);
             } else {
                 $src = $ads_arr['ad_code'];
-                $smarty->assign('flash_url', $src);
+                $this->assign('flash_url', $src);
             }
-            $smarty->assign('src', $src);
+            $this->assign('src', $src);
         }
         if ($ads_arr['media_type'] == 0) {
-            $smarty->assign('media_type', $_LANG['ad_img']);
+            $this->assign('media_type', $_LANG['ad_img']);
         } elseif ($ads_arr['media_type'] == 1) {
-            $smarty->assign('media_type', $_LANG['ad_flash']);
+            $this->assign('media_type', $_LANG['ad_flash']);
         } elseif ($ads_arr['media_type'] == 2) {
-            $smarty->assign('media_type', $_LANG['ad_html']);
+            $this->assign('media_type', $_LANG['ad_html']);
         } elseif ($ads_arr['media_type'] == 3) {
-            $smarty->assign('media_type', $_LANG['ad_text']);
+            $this->assign('media_type', $_LANG['ad_text']);
         }
 
-        $smarty->assign('ur_here', $_LANG['ads_edit']);
-        $smarty->assign('action_link', array('href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']));
-        $smarty->assign('form_act', 'update');
-        $smarty->assign('action', 'edit');
-        $smarty->assign('position_list', get_position_list());
-        $smarty->assign('ads', $ads_arr);
+        $this->assign('ur_here', $_LANG['ads_edit']);
+        $this->assign('action_link', array('href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']));
+        $this->assign('form_act', 'update');
+        $this->assign('action', 'edit');
+        $this->assign('position_list', get_position_list());
+        $this->assign('ads', $ads_arr);
 
         assign_query_info();
         $smarty->display('ads_info.htm');
@@ -404,11 +404,11 @@ class AdsController extends InitController
 
         $site_url = $ecs->url() . 'affiche.php?act=js&type=' . $_REQUEST['type'] . '&ad_id=' . intval($_REQUEST['id']);
 
-        $smarty->assign('ur_here', $_LANG['add_js_code']);
-        $smarty->assign('action_link', array('href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']));
-        $smarty->assign('url', $site_url);
-        $smarty->assign('js_code', $js_code);
-        $smarty->assign('lang_list', $lang_list);
+        $this->assign('ur_here', $_LANG['add_js_code']);
+        $this->assign('action_link', array('href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']));
+        $this->assign('url', $site_url);
+        $this->assign('js_code', $js_code);
+        $this->assign('lang_list', $lang_list);
 
         assign_query_info();
         $smarty->display('ads_js.htm');

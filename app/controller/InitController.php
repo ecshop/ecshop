@@ -116,12 +116,12 @@ class InitController extends Controller
             $smarty->direct_output = true;
             $smarty->force_compile = true;
 
-            $smarty->assign('lang', $_LANG);
-            $smarty->assign('ecs_charset', EC_CHARSET);
+            $this->assign('lang', $_LANG);
+            $this->assign('ecs_charset', EC_CHARSET);
             if (!empty($_CFG['stylename'])) {
-                $smarty->assign('ecs_css_path', 'themes/' . $_CFG['template'] . '/style_' . $_CFG['stylename'] . '.css');
+                $this->assign('ecs_css_path', 'themes/' . $_CFG['template'] . '/style_' . $_CFG['stylename'] . '.css');
             } else {
-                $smarty->assign('ecs_css_path', 'themes/' . $_CFG['template'] . '/style.css');
+                $this->assign('ecs_css_path', 'themes/' . $_CFG['template'] . '/style.css');
             }
         }
 
@@ -189,7 +189,7 @@ class InitController extends Controller
             }
 
             if (isset($smarty)) {
-                $smarty->assign('ecs_session', $_SESSION);
+                $this->assign('ecs_session', $_SESSION);
             }
         }
 
@@ -205,34 +205,34 @@ class InitController extends Controller
     {
         global $smarty;
 
-        $smarty->assign('image_width', $GLOBALS['_CFG']['image_width']);
-        $smarty->assign('image_height', $GLOBALS['_CFG']['image_height']);
-        $smarty->assign('points_name', $GLOBALS['_CFG']['integral_name']);
-        $smarty->assign('qq', explode(',', $GLOBALS['_CFG']['qq']));
-        $smarty->assign('ww', explode(',', $GLOBALS['_CFG']['ww']));
-        $smarty->assign('ym', explode(',', $GLOBALS['_CFG']['ym']));
-        $smarty->assign('msn', explode(',', $GLOBALS['_CFG']['msn']));
-        $smarty->assign('skype', explode(',', $GLOBALS['_CFG']['skype']));
-        $smarty->assign('stats_code', $GLOBALS['_CFG']['stats_code']);
-        $smarty->assign('copyright', sprintf($GLOBALS['_LANG']['copyright'], date('Y'), $GLOBALS['_CFG']['shop_name']));
-        $smarty->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
-        $smarty->assign('service_email', $GLOBALS['_CFG']['service_email']);
-        $smarty->assign('service_phone', $GLOBALS['_CFG']['service_phone']);
-        $smarty->assign('shop_address', $GLOBALS['_CFG']['shop_address']);
-        $smarty->assign('licensed', license_info());
-        $smarty->assign('ecs_version', VERSION);
-        $smarty->assign('icp_number', $GLOBALS['_CFG']['icp_number']);
-        $smarty->assign('username', !empty($_SESSION['user_name']) ? $_SESSION['user_name'] : '');
-        $smarty->assign('category_list', cat_list(0, 0, true, 2, false));
-        $smarty->assign('catalog_list', cat_list(0, 0, false, 1, false));
-        $smarty->assign('navigator_list', get_navigator($ctype, $catlist));  //自定义导航栏
+        $this->assign('image_width', $GLOBALS['_CFG']['image_width']);
+        $this->assign('image_height', $GLOBALS['_CFG']['image_height']);
+        $this->assign('points_name', $GLOBALS['_CFG']['integral_name']);
+        $this->assign('qq', explode(',', $GLOBALS['_CFG']['qq']));
+        $this->assign('ww', explode(',', $GLOBALS['_CFG']['ww']));
+        $this->assign('ym', explode(',', $GLOBALS['_CFG']['ym']));
+        $this->assign('msn', explode(',', $GLOBALS['_CFG']['msn']));
+        $this->assign('skype', explode(',', $GLOBALS['_CFG']['skype']));
+        $this->assign('stats_code', $GLOBALS['_CFG']['stats_code']);
+        $this->assign('copyright', sprintf($GLOBALS['_LANG']['copyright'], date('Y'), $GLOBALS['_CFG']['shop_name']));
+        $this->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
+        $this->assign('service_email', $GLOBALS['_CFG']['service_email']);
+        $this->assign('service_phone', $GLOBALS['_CFG']['service_phone']);
+        $this->assign('shop_address', $GLOBALS['_CFG']['shop_address']);
+        $this->assign('licensed', license_info());
+        $this->assign('ecs_version', VERSION);
+        $this->assign('icp_number', $GLOBALS['_CFG']['icp_number']);
+        $this->assign('username', !empty($_SESSION['user_name']) ? $_SESSION['user_name'] : '');
+        $this->assign('category_list', cat_list(0, 0, true, 2, false));
+        $this->assign('catalog_list', cat_list(0, 0, false, 1, false));
+        $this->assign('navigator_list', get_navigator($ctype, $catlist));  //自定义导航栏
 
         if (!empty($GLOBALS['_CFG']['search_keywords'])) {
             $searchkeywords = explode(',', trim($GLOBALS['_CFG']['search_keywords']));
         } else {
             $searchkeywords = array();
         }
-        $smarty->assign('searchkeywords', $searchkeywords);
+        $this->assign('searchkeywords', $searchkeywords);
     }
 
     /**
@@ -267,15 +267,15 @@ class InitController extends Controller
 
         $msg['type'] = $type;
         $position = assign_ur_here(0, $GLOBALS['_LANG']['sys_msg']);
-        $GLOBALS['smarty']->assign('page_title', $position['title']);   // 页面标题
-        $GLOBALS['smarty']->assign('ur_here', $position['ur_here']); // 当前位置
+        $this->assign('page_title', $position['title']);   // 页面标题
+        $this->assign('ur_here', $position['ur_here']); // 当前位置
 
         if (is_null($GLOBALS['smarty']->get_template_vars('helps'))) {
-            $GLOBALS['smarty']->assign('helps', get_shop_help()); // 网店帮助
+            $this->assign('helps', get_shop_help()); // 网店帮助
         }
 
-        $GLOBALS['smarty']->assign('auto_redirect', $auto_redirect);
-        $GLOBALS['smarty']->assign('message', $msg);
+        $this->assign('auto_redirect', $auto_redirect);
+        $this->assign('message', $msg);
         return $GLOBALS['smarty']->display('message.dwt');
     }
 }

@@ -16,14 +16,14 @@ class SearchLogController extends InitController
     public function listAction()
     {
         $logdb = get_search_log();
-        $smarty->assign('ur_here', $_LANG['search_log']);
-        $smarty->assign('full_page', 1);
-        $smarty->assign('logdb', $logdb['logdb']);
-        $smarty->assign('filter', $logdb['filter']);
-        $smarty->assign('record_count', $logdb['record_count']);
-        $smarty->assign('page_count', $logdb['page_count']);
-        $smarty->assign('start_date', local_date('Y-m-d'));
-        $smarty->assign('end_date', local_date('Y-m-d'));
+        $this->assign('ur_here', $_LANG['search_log']);
+        $this->assign('full_page', 1);
+        $this->assign('logdb', $logdb['logdb']);
+        $this->assign('filter', $logdb['filter']);
+        $this->assign('record_count', $logdb['record_count']);
+        $this->assign('page_count', $logdb['page_count']);
+        $this->assign('start_date', local_date('Y-m-d'));
+        $this->assign('end_date', local_date('Y-m-d'));
         assign_query_info();
         $smarty->display('search_log_list.htm');
     }
@@ -31,13 +31,13 @@ class SearchLogController extends InitController
     public function queryAction()
     {
         $logdb = get_search_log();
-        $smarty->assign('full_page', 0);
-        $smarty->assign('logdb', $logdb['logdb']);
-        $smarty->assign('filter', $logdb['filter']);
-        $smarty->assign('record_count', $logdb['record_count']);
-        $smarty->assign('page_count', $logdb['page_count']);
-        $smarty->assign('start_date', local_date('Y-m-d'));
-        $smarty->assign('end_date', local_date('Y-m-d'));
+        $this->assign('full_page', 0);
+        $this->assign('logdb', $logdb['logdb']);
+        $this->assign('filter', $logdb['filter']);
+        $this->assign('record_count', $logdb['record_count']);
+        $this->assign('page_count', $logdb['page_count']);
+        $this->assign('start_date', local_date('Y-m-d'));
+        $this->assign('end_date', local_date('Y-m-d'));
         make_json_result(
             $smarty->fetch('search_log_list.htm'),
             '',

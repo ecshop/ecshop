@@ -19,16 +19,16 @@ class NavigatorController extends InitController
     /*------------------------------------------------------ */
     public function listAction()
     {
-        $smarty->assign('ur_here', $_LANG['navigator']);
-        $smarty->assign('action_link', array('text' => $_LANG['add_new'], 'href' => 'navigator.php?act=add'));
-        $smarty->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['navigator']);
+        $this->assign('action_link', array('text' => $_LANG['add_new'], 'href' => 'navigator.php?act=add'));
+        $this->assign('full_page', 1);
 
         $navdb = get_nav();
 
-        $smarty->assign('navdb', $navdb['navdb']);
-        $smarty->assign('filter', $navdb['filter']);
-        $smarty->assign('record_count', $navdb['record_count']);
-        $smarty->assign('page_count', $navdb['page_count']);
+        $this->assign('navdb', $navdb['navdb']);
+        $this->assign('filter', $navdb['filter']);
+        $this->assign('record_count', $navdb['record_count']);
+        $this->assign('page_count', $navdb['page_count']);
 
         assign_query_info();
         $smarty->display('navigator.htm');
@@ -39,13 +39,13 @@ class NavigatorController extends InitController
     public function queryAction()
     {
         $navdb = get_nav();
-        $smarty->assign('navdb', $navdb['navdb']);
-        $smarty->assign('filter', $navdb['filter']);
-        $smarty->assign('record_count', $navdb['record_count']);
-        $smarty->assign('page_count', $navdb['page_count']);
+        $this->assign('navdb', $navdb['navdb']);
+        $this->assign('filter', $navdb['filter']);
+        $this->assign('record_count', $navdb['record_count']);
+        $this->assign('page_count', $navdb['page_count']);
 
         $sort_flag = sort_flag($navdb['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result($smarty->fetch('navigator.htm'), '', array('filter' => $navdb['filter'], 'page_count' => $navdb['page_count']));
     }
@@ -59,11 +59,11 @@ class NavigatorController extends InitController
 
             $sysmain = get_sysnav();
 
-            $smarty->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'navigator.php?act=list'));
-            $smarty->assign('ur_here', $_LANG['navigator']);
+            $this->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'navigator.php?act=list'));
+            $this->assign('ur_here', $_LANG['navigator']);
             assign_query_info();
-            $smarty->assign('sysmain', $sysmain);
-            $smarty->assign('rt', $rt);
+            $this->assign('sysmain', $sysmain);
+            $this->assign('rt', $rt);
             $smarty->display('navigator_add.htm');
         } elseif ($_REQUEST['step'] == 2) {
             $item_name = $_REQUEST['item_name'];
@@ -115,11 +115,11 @@ class NavigatorController extends InitController
 
             $sysmain = get_sysnav();
 
-            $smarty->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'navigator.php?act=list'));
-            $smarty->assign('ur_here', $_LANG['navigator']);
+            $this->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'navigator.php?act=list'));
+            $this->assign('ur_here', $_LANG['navigator']);
             assign_query_info();
-            $smarty->assign('sysmain', $sysmain);
-            $smarty->assign('rt', $rt);
+            $this->assign('sysmain', $sysmain);
+            $this->assign('rt', $rt);
             $smarty->display('navigator_add.htm');
         } elseif ($_REQUEST['step'] == 2) {
             $item_name = $_REQUEST['item_name'];

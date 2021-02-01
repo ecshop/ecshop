@@ -19,18 +19,18 @@ class AffiliateController extends InitController
     {
         assign_query_info();
         if (empty($_REQUEST['is_ajax'])) {
-            $smarty->assign('full_page', 1);
+            $this->assign('full_page', 1);
         }
 
-        $smarty->assign('ur_here', $_LANG['affiliate']);
-        $smarty->assign('config', $config);
+        $this->assign('ur_here', $_LANG['affiliate']);
+        $this->assign('config', $config);
         $smarty->display('affiliate.htm');
     }
 
     public function queryAction()
     {
-        $smarty->assign('ur_here', $_LANG['affiliate']);
-        $smarty->assign('config', $config);
+        $this->assign('ur_here', $_LANG['affiliate']);
+        $this->assign('config', $config);
         make_json_result($smarty->fetch('affiliate.htm'), '', null);
     }
     /*------------------------------------------------------ */

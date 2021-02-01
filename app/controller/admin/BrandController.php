@@ -23,16 +23,16 @@ class BrandController extends InitController
     /*------------------------------------------------------ */
     public function listAction()
     {
-        $smarty->assign('ur_here', $_LANG['06_goods_brand_list']);
-        $smarty->assign('action_link', array('text' => $_LANG['07_brand_add'], 'href' => 'brand.php?act=add'));
-        $smarty->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['06_goods_brand_list']);
+        $this->assign('action_link', array('text' => $_LANG['07_brand_add'], 'href' => 'brand.php?act=add'));
+        $this->assign('full_page', 1);
 
         $brand_list = get_brandlist();
 
-        $smarty->assign('brand_list', $brand_list['brand']);
-        $smarty->assign('filter', $brand_list['filter']);
-        $smarty->assign('record_count', $brand_list['record_count']);
-        $smarty->assign('page_count', $brand_list['page_count']);
+        $this->assign('brand_list', $brand_list['brand']);
+        $this->assign('filter', $brand_list['filter']);
+        $this->assign('record_count', $brand_list['record_count']);
+        $this->assign('page_count', $brand_list['page_count']);
 
         assign_query_info();
         $smarty->display('brand_list.htm');
@@ -46,12 +46,12 @@ class BrandController extends InitController
         /* 权限判断 */
         admin_priv('brand_manage');
 
-        $smarty->assign('ur_here', $_LANG['07_brand_add']);
-        $smarty->assign('action_link', array('text' => $_LANG['06_goods_brand_list'], 'href' => 'brand.php?act=list'));
-        $smarty->assign('form_action', 'insert');
+        $this->assign('ur_here', $_LANG['07_brand_add']);
+        $this->assign('action_link', array('text' => $_LANG['06_goods_brand_list'], 'href' => 'brand.php?act=list'));
+        $this->assign('form_action', 'insert');
 
         assign_query_info();
-        $smarty->assign('brand', array('sort_order' => 50, 'is_show' => 1));
+        $this->assign('brand', array('sort_order' => 50, 'is_show' => 1));
         $smarty->display('brand_info.htm');
     }
 
@@ -110,10 +110,10 @@ class BrandController extends InitController
             "FROM " . $ecs->table('brand') . " WHERE brand_id='$_REQUEST[id]'";
         $brand = $db->getRow($sql);
 
-        $smarty->assign('ur_here', $_LANG['brand_edit']);
-        $smarty->assign('action_link', array('text' => $_LANG['06_goods_brand_list'], 'href' => 'brand.php?act=list&' . list_link_postfix()));
-        $smarty->assign('brand', $brand);
-        $smarty->assign('form_action', 'updata');
+        $this->assign('ur_here', $_LANG['brand_edit']);
+        $this->assign('action_link', array('text' => $_LANG['06_goods_brand_list'], 'href' => 'brand.php?act=list&' . list_link_postfix()));
+        $this->assign('brand', $brand);
+        $this->assign('form_action', 'updata');
 
         assign_query_info();
         $smarty->display('brand_info.htm');
@@ -294,10 +294,10 @@ class BrandController extends InitController
     public function queryAction()
     {
         $brand_list = get_brandlist();
-        $smarty->assign('brand_list', $brand_list['brand']);
-        $smarty->assign('filter', $brand_list['filter']);
-        $smarty->assign('record_count', $brand_list['record_count']);
-        $smarty->assign('page_count', $brand_list['page_count']);
+        $this->assign('brand_list', $brand_list['brand']);
+        $this->assign('filter', $brand_list['filter']);
+        $this->assign('record_count', $brand_list['record_count']);
+        $this->assign('page_count', $brand_list['page_count']);
 
         make_json_result(
             $smarty->fetch('brand_list.htm'),

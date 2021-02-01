@@ -13,7 +13,7 @@ class UserAccountManageController extends InitController
 
         require_once(ROOT_PATH . 'includes/lib_order.php');
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
-        $smarty->assign('lang', $_LANG);
+        $this->assign('lang', $_LANG);
 
         /* 权限判断 */
         admin_priv('user_account_manage');
@@ -61,10 +61,10 @@ class UserAccountManageController extends InitController
         $account['integral_money'] = price_format($money_list['integral_money']);   //积分使用余额
 
         /* 赋值到模板 */
-        $smarty->assign('account', $account);
-        $smarty->assign('start_date', local_date('Y-m-d', $start_date));
-        $smarty->assign('end_date', local_date('Y-m-d', $end_date));
-        $smarty->assign('ur_here', $_LANG['user_account_manage']);
+        $this->assign('account', $account);
+        $this->assign('start_date', local_date('Y-m-d', $start_date));
+        $this->assign('end_date', local_date('Y-m-d', $end_date));
+        $this->assign('ur_here', $_LANG['user_account_manage']);
 
         /* 显示页面 */
         assign_query_info();
@@ -76,13 +76,13 @@ class UserAccountManageController extends InitController
         $order_list = order_list();
 
         /* 赋值到模板 */
-        $smarty->assign('order_list', $order_list['order_list']);
-        $smarty->assign('ur_here', $_LANG['order_by_surplus']);
-        $smarty->assign('filter', $order_list['filter']);
-        $smarty->assign('record_count', $order_list['record_count']);
-        $smarty->assign('page_count', $order_list['page_count']);
-        $smarty->assign('full_page', 1);
-        $smarty->assign('action_link', array('text' => $_LANG['user_account_manage'], 'href' => 'user_account_manage.php?act=list&start_date=' . local_date('Y-m-d', $start_date) . '&end_date=' . local_date('Y-m-d', $end_date)));
+        $this->assign('order_list', $order_list['order_list']);
+        $this->assign('ur_here', $_LANG['order_by_surplus']);
+        $this->assign('filter', $order_list['filter']);
+        $this->assign('record_count', $order_list['record_count']);
+        $this->assign('page_count', $order_list['page_count']);
+        $this->assign('full_page', 1);
+        $this->assign('action_link', array('text' => $_LANG['user_account_manage'], 'href' => 'user_account_manage.php?act=list&start_date=' . local_date('Y-m-d', $start_date) . '&end_date=' . local_date('Y-m-d', $end_date)));
 
         /* 显示页面 */
         assign_query_info();
@@ -96,13 +96,13 @@ class UserAccountManageController extends InitController
     {
         $order_list = order_list();
 
-        $smarty->assign('order_list', $order_list['order_list']);
-        $smarty->assign('filter', $order_list['filter']);
-        $smarty->assign('record_count', $order_list['record_count']);
-        $smarty->assign('page_count', $order_list['page_count']);
+        $this->assign('order_list', $order_list['order_list']);
+        $this->assign('filter', $order_list['filter']);
+        $this->assign('record_count', $order_list['record_count']);
+        $this->assign('page_count', $order_list['page_count']);
 
         $sort_flag = sort_flag($order_list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result($smarty->fetch('order_surplus_list.htm'), '', array('filter' => $order_list['filter'], 'page_count' => $order_list['page_count']));
     }

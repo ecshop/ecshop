@@ -46,8 +46,8 @@ class CronController extends InitController
             }
         }
         assign_query_info();
-        $smarty->assign('ur_here', $_LANG['07_cron_schcron']);
-        $smarty->assign('modules', $modules);
+        $this->assign('ur_here', $_LANG['07_cron_schcron']);
+        $this->assign('modules', $modules);
         $smarty->display('cron_list.htm');
     }
 
@@ -93,11 +93,11 @@ class CronController extends InitController
                 'search' => 0,
             );
 
-            $smarty->assign('days', $day);
-            $smarty->assign('page_list', $page_list);
-            $smarty->assign('week', $week);
-            $smarty->assign('hours', $hours);
-            $smarty->assign('cron', $cron);
+            $this->assign('days', $day);
+            $this->assign('page_list', $page_list);
+            $this->assign('week', $week);
+            $this->assign('hours', $hours);
+            $this->assign('cron', $cron);
             $smarty->display('cron_edit.htm');
         } elseif ($_POST['step'] == 2) {
             $links[] = array('text' => $_LANG['back_list'], 'href' => 'cron.php?act=list');
@@ -210,12 +210,12 @@ class CronController extends InitController
             }
 
             assign_query_info();
-            $smarty->assign('ur_here', $_LANG['edit'] . $_LANG['cron_code']);
-            $smarty->assign('cron', $cron);
-            $smarty->assign('days', $day);
-            $smarty->assign('week', $week);
-            $smarty->assign('hours', $hours);
-            $smarty->assign('page_list', $page_list);
+            $this->assign('ur_here', $_LANG['edit'] . $_LANG['cron_code']);
+            $this->assign('cron', $cron);
+            $this->assign('days', $day);
+            $this->assign('week', $week);
+            $this->assign('hours', $hours);
+            $this->assign('page_list', $page_list);
             $smarty->display('cron_edit.htm');
         } elseif ($_POST['step'] == 2) {
             $links[] = array('text' => $_LANG['back_list'], 'href' => 'cron.php?act=list');

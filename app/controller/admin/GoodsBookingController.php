@@ -18,18 +18,18 @@ class GoodsBookingController extends InitController
     /*------------------------------------------------------ */
     public function list_allAction()
     {
-        $smarty->assign('ur_here', $_LANG['list_all']);
-        $smarty->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['list_all']);
+        $this->assign('full_page', 1);
 
         $list = get_bookinglist();
 
-        $smarty->assign('booking_list', $list['item']);
-        $smarty->assign('filter', $list['filter']);
-        $smarty->assign('record_count', $list['record_count']);
-        $smarty->assign('page_count', $list['page_count']);
+        $this->assign('booking_list', $list['item']);
+        $this->assign('filter', $list['filter']);
+        $this->assign('record_count', $list['record_count']);
+        $this->assign('page_count', $list['page_count']);
 
         $sort_flag = sort_flag($list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
         $smarty->display('booking_list.htm');
@@ -42,13 +42,13 @@ class GoodsBookingController extends InitController
     {
         $list = get_bookinglist();
 
-        $smarty->assign('booking_list', $list['item']);
-        $smarty->assign('filter', $list['filter']);
-        $smarty->assign('record_count', $list['record_count']);
-        $smarty->assign('page_count', $list['page_count']);
+        $this->assign('booking_list', $list['item']);
+        $this->assign('filter', $list['filter']);
+        $this->assign('record_count', $list['record_count']);
+        $this->assign('page_count', $list['page_count']);
 
         $sort_flag = sort_flag($list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result(
             $smarty->fetch('booking_list.htm'),
@@ -81,10 +81,10 @@ class GoodsBookingController extends InitController
     {
         $id = intval($_REQUEST['id']);
 
-        $smarty->assign('send_fail', !empty($_REQUEST['send_ok']));
-        $smarty->assign('booking', get_booking_info($id));
-        $smarty->assign('ur_here', $_LANG['detail']);
-        $smarty->assign('action_link', array('text' => $_LANG['06_undispose_booking'], 'href' => 'goods_booking.php?act=list_all'));
+        $this->assign('send_fail', !empty($_REQUEST['send_ok']));
+        $this->assign('booking', get_booking_info($id));
+        $this->assign('ur_here', $_LANG['detail']);
+        $this->assign('action_link', array('text' => $_LANG['06_undispose_booking'], 'href' => 'goods_booking.php?act=list_all'));
         $smarty->display('booking_info.htm');
     }
 
@@ -116,12 +116,12 @@ class GoodsBookingController extends InitController
             $template = get_mail_template('goods_booking');
             $goods_link = $ecs->url() . 'goods.php?id=' . $booking_info['goods_id'];
 
-            $smarty->assign('user_name', $booking_info['link_man']);
-            $smarty->assign('goods_link', $goods_link);
-            $smarty->assign('goods_name', $booking_info['goods_name']);
-            $smarty->assign('dispose_note', $dispose_note);
-            $smarty->assign('shop_name', "<a href='" . $ecs->url() . "'>" . $_CFG['shop_name'] . '</a>');
-            $smarty->assign('send_date', date('Y-m-d'));
+            $this->assign('user_name', $booking_info['link_man']);
+            $this->assign('goods_link', $goods_link);
+            $this->assign('goods_name', $booking_info['goods_name']);
+            $this->assign('dispose_note', $dispose_note);
+            $this->assign('shop_name', "<a href='" . $ecs->url() . "'>" . $_CFG['shop_name'] . '</a>');
+            $this->assign('send_date', date('Y-m-d'));
 
             $content = $smarty->fetch('str:' . $template['template_content']);
 

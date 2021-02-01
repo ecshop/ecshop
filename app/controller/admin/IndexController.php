@@ -18,7 +18,7 @@ class IndexController extends InitController
     /*------------------------------------------------------ */
     public function indexAction()
     {
-        $smarty->assign('shop_url', urlencode($ecs->url()));
+        $this->assign('shop_url', urlencode($ecs->url()));
         $smarty->display('index.htm');
     }
 
@@ -43,10 +43,10 @@ class IndexController extends InitController
         // 获得管理员设置的菜单
 
         // 获得管理员ID
-        $smarty->assign('send_mail_on', $_CFG['send_mail_on']);
-        $smarty->assign('nav_list', $lst);
-        $smarty->assign('admin_id', $_SESSION['admin_id']);
-        $smarty->assign('certi', $_CFG['certi']);
+        $this->assign('send_mail_on', $_CFG['send_mail_on']);
+        $this->assign('nav_list', $lst);
+        $this->assign('admin_id', $_SESSION['admin_id']);
+        $this->assign('certi', $_CFG['certi']);
 
         $smarty->display('top.htm');
     }
@@ -110,11 +110,11 @@ class IndexController extends InitController
             }
         }
 
-        $smarty->assign('menus', $menus);
-        $smarty->assign('no_help', $_LANG['no_help']);
-        $smarty->assign('help_lang', $_CFG['lang']);
-        $smarty->assign('charset', EC_CHARSET);
-        $smarty->assign('admin_id', $_SESSION['admin_id']);
+        $this->assign('menus', $menus);
+        $this->assign('no_help', $_LANG['no_help']);
+        $this->assign('help_lang', $_CFG['lang']);
+        $this->assign('charset', EC_CHARSET);
+        $this->assign('admin_id', $_SESSION['admin_id']);
         $smarty->display('menu.htm');
     }
 
@@ -234,7 +234,7 @@ class IndexController extends InitController
         }
         clearstatcache();
 
-        $smarty->assign('warning_arr', $warning);
+        $this->assign('warning_arr', $warning);
 
         /* 管理员留言信息 */
         $sql = "SELECT message_id, sender_id, receiver_id, sent_time, readed, deleted, title, message, user_name " .
@@ -243,7 +243,7 @@ class IndexController extends InitController
             "a.readed = 0 AND deleted = 0 ORDER BY a.sent_time DESC";
         $admin_msg = $db->getAll($sql);
 
-        $smarty->assign('admin_msg', $admin_msg);
+        $this->assign('admin_msg', $admin_msg);
 
         /* 取得支持货到付款和不支持货到付款的支付方式 */
         $ids = get_pay_ids();
@@ -278,8 +278,8 @@ class IndexController extends InitController
         $order['stats'] = $db->getRow('SELECT COUNT(*) AS oCount, IFNULL(SUM(order_amount), 0) AS oAmount' .
             ' FROM ' . $ecs->table('order_info'));
 
-        $smarty->assign('order', $order);
-        $smarty->assign('status', $status);
+        $this->assign('order', $order);
+        $this->assign('status', $status);
 
         /* 商品信息 */
         $goods['total'] = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
@@ -320,8 +320,8 @@ class IndexController extends InitController
             $goods['warn'] = 0;
             $virtual_card['warn'] = 0;
         }
-        $smarty->assign('goods', $goods);
-        $smarty->assign('virtual_card', $virtual_card);
+        $this->assign('goods', $goods);
+        $this->assign('virtual_card', $virtual_card);
 
         /* 访问统计信息 */
         $today = local_getdate();
@@ -329,20 +329,20 @@ class IndexController extends InitController
             ' WHERE access_time > ' . (mktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']) - date('Z'));
 
         $today_visit = $db->getOne($sql);
-        $smarty->assign('today_visit', $today_visit);
+        $this->assign('today_visit', $today_visit);
 
         $online_users = $sess->get_users_count();
-        $smarty->assign('online_users', $online_users);
+        $this->assign('online_users', $online_users);
 
         /* 最近反馈 */
         $sql = "SELECT COUNT(f.msg_id) " .
             "FROM " . $ecs->table('feedback') . " AS f " .
             "LEFT JOIN " . $ecs->table('feedback') . " AS r ON r.parent_id=f.msg_id " .
             'WHERE f.parent_id=0 AND ISNULL(r.msg_id) ';
-        $smarty->assign('feedback_number', $db->getOne($sql));
+        $this->assign('feedback_number', $db->getOne($sql));
 
         /* 未审核评论 */
-        $smarty->assign('comment_number', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('comment') .
+        $this->assign('comment_number', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('comment') .
             ' WHERE status = 0 AND parent_id = 0'));
 
         $mysql_ver = $db->version();   // 获得 MySQL 版本
@@ -392,21 +392,21 @@ class IndexController extends InitController
         /* 允许上传的最大文件大小 */
         $sys_info['max_filesize'] = ini_get('upload_max_filesize');
 
-        $smarty->assign('sys_info', $sys_info);
+        $this->assign('sys_info', $sys_info);
 
         /* 缺货登记 */
-        $smarty->assign('booking_goods', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('booking_goods') . ' WHERE is_dispose = 0'));
+        $this->assign('booking_goods', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('booking_goods') . ' WHERE is_dispose = 0'));
 
         /* 退款申请 */
-        $smarty->assign('new_repay', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('user_account') . ' WHERE process_type = ' . SURPLUS_RETURN . ' AND is_paid = 0 '));
+        $this->assign('new_repay', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('user_account') . ' WHERE process_type = ' . SURPLUS_RETURN . ' AND is_paid = 0 '));
 
 
         assign_query_info();
-        $smarty->assign('ecs_version', VERSION);
-        $smarty->assign('ecs_release', RELEASE);
-        $smarty->assign('ecs_lang', $_CFG['lang']);
-        $smarty->assign('ecs_charset', strtoupper(EC_CHARSET));
-        $smarty->assign('install_date', local_date($_CFG['date_format'], $_CFG['install_date']));
+        $this->assign('ecs_version', VERSION);
+        $this->assign('ecs_release', RELEASE);
+        $this->assign('ecs_lang', $_CFG['lang']);
+        $this->assign('ecs_charset', strtoupper(EC_CHARSET));
+        $this->assign('install_date', local_date($_CFG['date_format'], $_CFG['install_date']));
         $smarty->display('start.htm');
     }
 
@@ -444,19 +444,19 @@ class IndexController extends InitController
 
     public function firstAction()
     {
-        $smarty->assign('countries', get_regions());
-        $smarty->assign('provinces', get_regions(1, 1));
-        $smarty->assign('cities', get_regions(2, 2));
+        $this->assign('countries', get_regions());
+        $this->assign('provinces', get_regions(1, 1));
+        $this->assign('cities', get_regions(2, 2));
 
         $sql = 'SELECT value from ' . $ecs->table('shop_config') . " WHERE code='shop_name'";
         $shop_name = $db->getOne($sql);
 
-        $smarty->assign('shop_name', $shop_name);
+        $this->assign('shop_name', $shop_name);
 
         $sql = 'SELECT value from ' . $ecs->table('shop_config') . " WHERE code='shop_title'";
         $shop_title = $db->getOne($sql);
 
-        $smarty->assign('shop_title', $shop_title);
+        $this->assign('shop_title', $shop_title);
 
         //获取配送方式
         $directory = ROOT_PATH . 'includes/modules/shipping';
@@ -492,7 +492,7 @@ class IndexController extends InitController
             $modules[$i]['cod'] = $modules[$i]['cod'];
             $modules[$i]['install'] = 0;
         }
-        $smarty->assign('modules', $modules);
+        $this->assign('modules', $modules);
 
         unset($modules);
 
@@ -507,11 +507,11 @@ class IndexController extends InitController
             }
             $modules[$i]['desc'] = $_LANG[$modules[$i]['desc']];
         }
-        $smarty->assign('modules_payment', $modules);
+        $this->assign('modules_payment', $modules);
 
         assign_query_info();
 
-        $smarty->assign('ur_here', $_LANG['ur_config']);
+        $this->assign('ur_here', $_LANG['ur_config']);
         $smarty->display('setting_first.htm');
     }
 
@@ -676,7 +676,7 @@ class IndexController extends InitController
 
         assign_query_info();
 
-        $smarty->assign('ur_here', $_LANG['ur_add']);
+        $this->assign('ur_here', $_LANG['ur_add']);
         $smarty->display('setting_second.htm');
     }
 

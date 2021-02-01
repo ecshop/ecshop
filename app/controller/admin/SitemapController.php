@@ -21,9 +21,9 @@ class SitemapController extends InitController
         /*------------------------------------------------------ */
         assign_query_info();
         $config = unserialize($_CFG['sitemap']);
-        $smarty->assign('config', $config);
-        $smarty->assign('ur_here', $_LANG['sitemap']);
-        $smarty->assign('arr_changefreq', array(1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1));
+        $this->assign('config', $config);
+        $this->assign('ur_here', $_LANG['sitemap']);
+        $this->assign('arr_changefreq', array(1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1));
         $smarty->display('sitemap.htm');
     }
 

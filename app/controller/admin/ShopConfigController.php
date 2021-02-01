@@ -32,25 +32,25 @@ class ShopConfigController extends InitController
         }
         @closedir($dir);
 
-        $smarty->assign('lang_list', $lang_list);
-        $smarty->assign('ur_here', $_LANG['01_shop_config']);
-        $smarty->assign('group_list', get_settings(null, array('5')));
-        $smarty->assign('countries', get_regions());
+        $this->assign('lang_list', $lang_list);
+        $this->assign('ur_here', $_LANG['01_shop_config']);
+        $this->assign('group_list', get_settings(null, array('5')));
+        $this->assign('countries', get_regions());
 
         if (strpos(strtolower($_SERVER['SERVER_SOFTWARE']), 'iis') !== false) {
             $rewrite_confirm = $_LANG['rewrite_confirm_iis'];
         } else {
             $rewrite_confirm = $_LANG['rewrite_confirm_apache'];
         }
-        $smarty->assign('rewrite_confirm', $rewrite_confirm);
+        $this->assign('rewrite_confirm', $rewrite_confirm);
 
         if ($_CFG['shop_country'] > 0) {
-            $smarty->assign('provinces', get_regions(1, $_CFG['shop_country']));
+            $this->assign('provinces', get_regions(1, $_CFG['shop_country']));
             if ($_CFG['shop_province']) {
-                $smarty->assign('cities', get_regions(2, $_CFG['shop_province']));
+                $this->assign('cities', get_regions(2, $_CFG['shop_province']));
             }
         }
-        $smarty->assign('cfg', $_CFG);
+        $this->assign('cfg', $_CFG);
 
         assign_query_info();
         $smarty->display('shop_config.htm');
@@ -68,8 +68,8 @@ class ShopConfigController extends InitController
 
         assign_query_info();
 
-        $smarty->assign('ur_here', $_LANG['mail_settings']);
-        $smarty->assign('cfg', $arr[5]['vars']);
+        $this->assign('ur_here', $_LANG['mail_settings']);
+        $this->assign('cfg', $arr[5]['vars']);
         $smarty->display('shop_config_mail_settings.htm');
     }
 

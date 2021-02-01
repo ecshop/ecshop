@@ -24,16 +24,16 @@ class CardController extends InitController
     public function listAction()
     {
         assign_query_info();
-        $smarty->assign('ur_here', $_LANG['07_card_list']);
-        $smarty->assign('action_link', array('text' => $_LANG['card_add'], 'href' => 'card.php?act=add'));
-        $smarty->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['07_card_list']);
+        $this->assign('action_link', array('text' => $_LANG['card_add'], 'href' => 'card.php?act=add'));
+        $this->assign('full_page', 1);
 
         $cards_list = cards_list();
 
-        $smarty->assign('card_list', $cards_list['card_list']);
-        $smarty->assign('filter', $cards_list['filter']);
-        $smarty->assign('record_count', $cards_list['record_count']);
-        $smarty->assign('page_count', $cards_list['page_count']);
+        $this->assign('card_list', $cards_list['card_list']);
+        $this->assign('filter', $cards_list['filter']);
+        $this->assign('record_count', $cards_list['record_count']);
+        $this->assign('page_count', $cards_list['page_count']);
 
         $smarty->display('card_list.htm');
     }
@@ -44,13 +44,13 @@ class CardController extends InitController
     public function queryAction()
     {
         $cards_list = cards_list();
-        $smarty->assign('card_list', $cards_list['card_list']);
-        $smarty->assign('filter', $cards_list['filter']);
-        $smarty->assign('record_count', $cards_list['record_count']);
-        $smarty->assign('page_count', $cards_list['page_count']);
+        $this->assign('card_list', $cards_list['card_list']);
+        $this->assign('filter', $cards_list['filter']);
+        $this->assign('record_count', $cards_list['record_count']);
+        $this->assign('page_count', $cards_list['page_count']);
 
         $sort_flag = sort_flag($cards_list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result($smarty->fetch('card_list.htm'), '', array('filter' => $cards_list['filter'], 'page_count' => $cards_list['page_count']));
     }
@@ -93,10 +93,10 @@ class CardController extends InitController
         $card['card_fee'] = 0;
         $card['free_money'] = 0;
 
-        $smarty->assign('card', $card);
-        $smarty->assign('ur_here', $_LANG['card_add']);
-        $smarty->assign('action_link', array('text' => $_LANG['07_card_list'], 'href' => 'card.php?act=list'));
-        $smarty->assign('form_action', 'insert');
+        $this->assign('card', $card);
+        $this->assign('ur_here', $_LANG['card_add']);
+        $this->assign('action_link', array('text' => $_LANG['07_card_list'], 'href' => 'card.php?act=list'));
+        $this->assign('form_action', 'insert');
 
         assign_query_info();
         $smarty->display('card_info.htm');
@@ -145,10 +145,10 @@ class CardController extends InitController
         $sql = "SELECT card_id, card_name, card_fee, free_money, card_desc, card_img FROM " . $ecs->table('card') . " WHERE card_id='$_REQUEST[id]'";
         $card = $db->getRow($sql);
 
-        $smarty->assign('ur_here', $_LANG['card_edit']);
-        $smarty->assign('action_link', array('text' => $_LANG['07_card_list'], 'href' => 'card.php?act=list&' . list_link_postfix()));
-        $smarty->assign('card', $card);
-        $smarty->assign('form_action', 'update');
+        $this->assign('ur_here', $_LANG['card_edit']);
+        $this->assign('action_link', array('text' => $_LANG['07_card_list'], 'href' => 'card.php?act=list&' . list_link_postfix()));
+        $this->assign('card', $card);
+        $this->assign('form_action', 'update');
 
         assign_query_info();
         $smarty->display('card_info.htm');

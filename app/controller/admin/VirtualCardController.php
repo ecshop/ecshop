@@ -40,10 +40,10 @@ class VirtualCardController extends InitController
         }
 
         $card = array('goods_id' => $_REQUEST['goods_id'], 'goods_name' => $goods_name, 'end_date' => date('Y-m-d', strtotime('+1 year')));
-        $smarty->assign('card', $card);
+        $this->assign('card', $card);
 
-        $smarty->assign('ur_here', $_LANG['replenish']);
-        $smarty->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id=' . $card['goods_id']));
+        $this->assign('ur_here', $_LANG['replenish']);
+        $this->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id=' . $card['goods_id']));
         $smarty->display('replenish_info.htm');
     }
 
@@ -70,9 +70,9 @@ class VirtualCardController extends InitController
             $card['card_password'] = '***';
         }
 
-        $smarty->assign('ur_here', $_LANG['replenish']);
-        $smarty->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id=' . $card['goods_id']));
-        $smarty->assign('card', $card);
+        $this->assign('ur_here', $_LANG['replenish']);
+        $this->assign('action_link', array('text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id=' . $card['goods_id']));
+        $this->assign('card', $card);
         $smarty->display('replenish_info.htm');
     }
 
@@ -152,23 +152,23 @@ class VirtualCardController extends InitController
             $_REQUEST['order_sn'] = '';
         }
 
-        $smarty->assign('goods_id', $_REQUEST['goods_id']);
-        $smarty->assign('full_page', 1);
-        $smarty->assign('lang', $_LANG);
-        $smarty->assign('ur_here', $goods_name);
-        $smarty->assign('action_link', array('text' => $_LANG['replenish'],
+        $this->assign('goods_id', $_REQUEST['goods_id']);
+        $this->assign('full_page', 1);
+        $this->assign('lang', $_LANG);
+        $this->assign('ur_here', $goods_name);
+        $this->assign('action_link', array('text' => $_LANG['replenish'],
             'href' => 'virtual_card.php?act=replenish&goods_id=' . $_REQUEST['goods_id']));
-        $smarty->assign('goods_id', $_REQUEST['goods_id']);
+        $this->assign('goods_id', $_REQUEST['goods_id']);
 
         $list = get_replenish_list();
 
-        $smarty->assign('card_list', $list['item']);
-        $smarty->assign('filter', $list['filter']);
-        $smarty->assign('record_count', $list['record_count']);
-        $smarty->assign('page_count', $list['page_count']);
+        $this->assign('card_list', $list['item']);
+        $this->assign('filter', $list['filter']);
+        $this->assign('record_count', $list['record_count']);
+        $this->assign('page_count', $list['page_count']);
 
         $sort_flag = sort_flag($list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
         $smarty->display('replenish_list.htm');
@@ -182,13 +182,13 @@ class VirtualCardController extends InitController
     {
         $list = get_replenish_list();
 
-        $smarty->assign('card_list', $list['item']);
-        $smarty->assign('filter', $list['filter']);
-        $smarty->assign('record_count', $list['record_count']);
-        $smarty->assign('page_count', $list['page_count']);
+        $this->assign('card_list', $list['item']);
+        $this->assign('filter', $list['filter']);
+        $this->assign('record_count', $list['record_count']);
+        $this->assign('page_count', $list['page_count']);
 
         $sort_flag = sort_flag($list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result(
             $smarty->fetch('replenish_list.htm'),
@@ -216,9 +216,9 @@ class VirtualCardController extends InitController
         /* 检查权限 */
         admin_priv('virualcard');
 
-        $smarty->assign('ur_here', $_LANG['batch_card_add']);
-        $smarty->assign('action_link', array('text' => $_LANG['virtual_card_list'], 'href' => 'goods.php?act=list&extension_code=virtual_card'));
-        $smarty->assign('goods_id', $_REQUEST['goods_id']);
+        $this->assign('ur_here', $_LANG['batch_card_add']);
+        $this->assign('action_link', array('text' => $_LANG['virtual_card_list'], 'href' => 'goods.php?act=list&extension_code=virtual_card'));
+        $this->assign('goods_id', $_REQUEST['goods_id']);
         $smarty->display('batch_card_info.htm');
     }
 
@@ -254,9 +254,9 @@ class VirtualCardController extends InitController
             $i++;
         }
 
-        $smarty->assign('ur_here', $_LANG['batch_card_add']);
-        $smarty->assign('action_link', array('text' => $_LANG['batch_card_add'], 'href' => 'virtual_card.php?act=batch_card_add&goods_id=' . $_REQUEST['goods_id']));
-        $smarty->assign('list', $rec);
+        $this->assign('ur_here', $_LANG['batch_card_add']);
+        $this->assign('action_link', array('text' => $_LANG['batch_card_add'], 'href' => 'virtual_card.php?act=batch_card_add&goods_id=' . $_REQUEST['goods_id']));
+        $this->assign('list', $rec);
         $smarty->display('batch_card_confirm.htm');
     } /* 批量上传处理 */
     public function batch_insertAction()
@@ -292,7 +292,7 @@ class VirtualCardController extends InitController
         /* 检查权限 */
         admin_priv('virualcard');
 
-        $smarty->assign('ur_here', $_LANG['virtual_card_change']);
+        $this->assign('ur_here', $_LANG['virtual_card_change']);
 
         assign_query_info();
         $smarty->display('virtual_card_change.htm');

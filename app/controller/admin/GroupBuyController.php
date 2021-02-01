@@ -25,19 +25,19 @@ class GroupBuyController extends InitController
     public function listAction()
     {
         /* 模板赋值 */
-        $smarty->assign('full_page', 1);
-        $smarty->assign('ur_here', $_LANG['group_buy_list']);
-        $smarty->assign('action_link', array('href' => 'group_buy.php?act=add', 'text' => $_LANG['add_group_buy']));
+        $this->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['group_buy_list']);
+        $this->assign('action_link', array('href' => 'group_buy.php?act=add', 'text' => $_LANG['add_group_buy']));
 
         $list = group_buy_list();
 
-        $smarty->assign('group_buy_list', $list['item']);
-        $smarty->assign('filter', $list['filter']);
-        $smarty->assign('record_count', $list['record_count']);
-        $smarty->assign('page_count', $list['page_count']);
+        $this->assign('group_buy_list', $list['item']);
+        $this->assign('filter', $list['filter']);
+        $this->assign('record_count', $list['record_count']);
+        $this->assign('page_count', $list['page_count']);
 
         $sort_flag = sort_flag($list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         /* 显示商品列表页面 */
         assign_query_info();
@@ -48,13 +48,13 @@ class GroupBuyController extends InitController
     {
         $list = group_buy_list();
 
-        $smarty->assign('group_buy_list', $list['item']);
-        $smarty->assign('filter', $list['filter']);
-        $smarty->assign('record_count', $list['record_count']);
-        $smarty->assign('page_count', $list['page_count']);
+        $this->assign('group_buy_list', $list['item']);
+        $this->assign('filter', $list['filter']);
+        $this->assign('record_count', $list['record_count']);
+        $this->assign('page_count', $list['page_count']);
 
         $sort_flag = sort_flag($list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result(
             $smarty->fetch('group_buy_list.htm'),
@@ -89,13 +89,13 @@ class GroupBuyController extends InitController
             }
             $group_buy = group_buy_info($group_buy_id);
         }
-        $smarty->assign('group_buy', $group_buy);
+        $this->assign('group_buy', $group_buy);
 
         /* 模板赋值 */
-        $smarty->assign('ur_here', $_LANG['add_group_buy']);
-        $smarty->assign('action_link', list_link($_REQUEST['act'] == 'add'));
-        $smarty->assign('cat_list', cat_list());
-        $smarty->assign('brand_list', get_brand_list());
+        $this->assign('ur_here', $_LANG['add_group_buy']);
+        $this->assign('action_link', list_link($_REQUEST['act'] == 'add'));
+        $this->assign('cat_list', cat_list());
+        $this->assign('brand_list', get_brand_list());
 
         /* 显示模板 */
         assign_query_info();
@@ -349,15 +349,15 @@ class GroupBuyController extends InitController
             $res = $db->query($sql);
             while ($order = $db->fetchRow($res)) {
                 /* 邮件模板赋值 */
-                $smarty->assign('consignee', $order['consignee']);
-                $smarty->assign('add_time', local_date($_CFG['time_format'], $order['add_time']));
-                $smarty->assign('goods_name', $group_buy['goods_name']);
-                $smarty->assign('goods_number', $order['goods_number']);
-                $smarty->assign('order_sn', $order['order_sn']);
-                $smarty->assign('order_amount', price_format($order['order_amount']));
-                $smarty->assign('shop_url', $ecs->url() . 'user.php?act=order_detail&order_id=' . $order['order_id']);
-                $smarty->assign('shop_name', $_CFG['shop_name']);
-                $smarty->assign('send_date', local_date($_CFG['date_format']));
+                $this->assign('consignee', $order['consignee']);
+                $this->assign('add_time', local_date($_CFG['time_format'], $order['add_time']));
+                $this->assign('goods_name', $group_buy['goods_name']);
+                $this->assign('goods_number', $order['goods_number']);
+                $this->assign('order_sn', $order['order_sn']);
+                $this->assign('order_amount', price_format($order['order_amount']));
+                $this->assign('shop_url', $ecs->url() . 'user.php?act=order_detail&order_id=' . $order['order_id']);
+                $this->assign('shop_name', $_CFG['shop_name']);
+                $this->assign('send_date', local_date($_CFG['date_format']));
 
                 /* 取得模板内容，发邮件 */
                 $content = $smarty->fetch('str:' . $tpl['template_content']);

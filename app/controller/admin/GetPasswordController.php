@@ -37,15 +37,15 @@ class GetPasswordController extends InitController
 
                 sys_msg($_LANG['code_param_error'], 0, $link);
             } else {
-                $smarty->assign('adminid', $adminid);
-                $smarty->assign('code', $code);
-                $smarty->assign('form_act', 'reset_pwd');
+                $this->assign('adminid', $adminid);
+                $this->assign('code', $code);
+                $this->assign('form_act', 'reset_pwd');
             }
         } elseif (!empty($_GET['act']) && $_GET['act'] == 'forget_pwd') {
-            $smarty->assign('form_act', 'forget_pwd');
+            $this->assign('form_act', 'forget_pwd');
         }
 
-        $smarty->assign('ur_here', $_LANG['get_newpassword']);
+        $this->assign('ur_here', $_LANG['get_newpassword']);
 
         assign_query_info();
         $smarty->display('get_pwd.htm');
@@ -80,11 +80,11 @@ class GetPasswordController extends InitController
                 $template = get_mail_template('send_password');
                 $reset_email = $ecs->url() . ADMIN_PATH . '/get_password.php?act=reset_pwd&uid=' . $admin_id . '&code=' . $code;
 
-                $smarty->assign('user_name', $admin_username);
-                $smarty->assign('reset_email', $reset_email);
-                $smarty->assign('shop_name', $_CFG['shop_name']);
-                $smarty->assign('send_date', local_date($_CFG['date_format']));
-                $smarty->assign('sent_date', local_date($_CFG['date_format']));
+                $this->assign('user_name', $admin_username);
+                $this->assign('reset_email', $reset_email);
+                $this->assign('shop_name', $_CFG['shop_name']);
+                $this->assign('send_date', local_date($_CFG['date_format']));
+                $this->assign('sent_date', local_date($_CFG['date_format']));
 
                 $content = $smarty->fetch('str:' . $template['template_content']);
 

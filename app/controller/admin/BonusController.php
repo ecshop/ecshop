@@ -20,19 +20,19 @@ class BonusController extends InitController
     /*------------------------------------------------------ */
     public function listAction()
     {
-        $smarty->assign('ur_here', $_LANG['04_bonustype_list']);
-        $smarty->assign('action_link', array('text' => $_LANG['bonustype_add'], 'href' => 'bonus.php?act=add'));
-        $smarty->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['04_bonustype_list']);
+        $this->assign('action_link', array('text' => $_LANG['bonustype_add'], 'href' => 'bonus.php?act=add'));
+        $this->assign('full_page', 1);
 
         $list = get_type_list();
 
-        $smarty->assign('type_list', $list['item']);
-        $smarty->assign('filter', $list['filter']);
-        $smarty->assign('record_count', $list['record_count']);
-        $smarty->assign('page_count', $list['page_count']);
+        $this->assign('type_list', $list['item']);
+        $this->assign('filter', $list['filter']);
+        $this->assign('record_count', $list['record_count']);
+        $this->assign('page_count', $list['page_count']);
 
         $sort_flag = sort_flag($list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
         $smarty->display('bonus_type.htm');
@@ -46,13 +46,13 @@ class BonusController extends InitController
     {
         $list = get_type_list();
 
-        $smarty->assign('type_list', $list['item']);
-        $smarty->assign('filter', $list['filter']);
-        $smarty->assign('record_count', $list['record_count']);
-        $smarty->assign('page_count', $list['page_count']);
+        $this->assign('type_list', $list['item']);
+        $this->assign('filter', $list['filter']);
+        $this->assign('record_count', $list['record_count']);
+        $this->assign('page_count', $list['page_count']);
 
         $sort_flag = sort_flag($list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result(
             $smarty->fetch('bonus_type.htm'),
@@ -152,13 +152,13 @@ class BonusController extends InitController
     {
         admin_priv('bonus_manage');
 
-        $smarty->assign('lang', $_LANG);
-        $smarty->assign('ur_here', $_LANG['bonustype_add']);
-        $smarty->assign('action_link', array('href' => 'bonus.php?act=list', 'text' => $_LANG['04_bonustype_list']));
-        $smarty->assign('action', 'add');
+        $this->assign('lang', $_LANG);
+        $this->assign('ur_here', $_LANG['bonustype_add']);
+        $this->assign('action_link', array('href' => 'bonus.php?act=list', 'text' => $_LANG['04_bonustype_list']));
+        $this->assign('action', 'add');
 
-        $smarty->assign('form_act', 'insert');
-        $smarty->assign('cfg_lang', $_CFG['lang']);
+        $this->assign('form_act', 'insert');
+        $this->assign('cfg_lang', $_CFG['lang']);
 
         $next_month = local_strtotime('+1 months');
         $bonus_arr['send_start_date'] = local_date('Y-m-d');
@@ -166,7 +166,7 @@ class BonusController extends InitController
         $bonus_arr['send_end_date'] = local_date('Y-m-d', $next_month);
         $bonus_arr['use_end_date'] = local_date('Y-m-d', $next_month);
 
-        $smarty->assign('bonus_arr', $bonus_arr);
+        $this->assign('bonus_arr', $bonus_arr);
 
         assign_query_info();
         $smarty->display('bonus_type_info.htm');
@@ -241,11 +241,11 @@ class BonusController extends InitController
         $bonus_arr['use_start_date'] = local_date('Y-m-d', $bonus_arr['use_start_date']);
         $bonus_arr['use_end_date'] = local_date('Y-m-d', $bonus_arr['use_end_date']);
 
-        $smarty->assign('lang', $_LANG);
-        $smarty->assign('ur_here', $_LANG['bonustype_edit']);
-        $smarty->assign('action_link', array('href' => 'bonus.php?act=list&' . list_link_postfix(), 'text' => $_LANG['04_bonustype_list']));
-        $smarty->assign('form_act', 'update');
-        $smarty->assign('bonus_arr', $bonus_arr);
+        $this->assign('lang', $_LANG);
+        $this->assign('ur_here', $_LANG['bonustype_edit']);
+        $this->assign('action_link', array('href' => 'bonus.php?act=list&' . list_link_postfix(), 'text' => $_LANG['04_bonustype_list']));
+        $this->assign('form_act', 'update');
+        $this->assign('bonus_arr', $bonus_arr);
 
         assign_query_info();
         $smarty->display('bonus_type_info.htm');
@@ -303,12 +303,12 @@ class BonusController extends InitController
 
         assign_query_info();
 
-        $smarty->assign('ur_here', $_LANG['send_bonus']);
-        $smarty->assign('action_link', array('href' => 'bonus.php?act=list', 'text' => $_LANG['04_bonustype_list']));
+        $this->assign('ur_here', $_LANG['send_bonus']);
+        $this->assign('action_link', array('href' => 'bonus.php?act=list', 'text' => $_LANG['04_bonustype_list']));
 
         if ($_REQUEST['send_by'] == SEND_BY_USER) {
-            $smarty->assign('id', $id);
-            $smarty->assign('ranklist', get_rank_list());
+            $this->assign('id', $id);
+            $this->assign('ranklist', get_rank_list());
 
             $smarty->display('bonus_by_user.htm');
         } elseif ($_REQUEST['send_by'] == SEND_BY_GOODS) {
@@ -323,18 +323,18 @@ class BonusController extends InitController
             $sql = "SELECT goods_id FROM " . $ecs->table('goods') .
                 " WHERE bonus_type_id > 0 AND bonus_type_id <> '$_REQUEST[id]'";
             $other_goods_list = $db->getCol($sql);
-            $smarty->assign('other_goods', join(',', $other_goods_list));
+            $this->assign('other_goods', join(',', $other_goods_list));
 
             /* 模板赋值 */
-            $smarty->assign('cat_list', cat_list());
-            $smarty->assign('brand_list', get_brand_list());
+            $this->assign('cat_list', cat_list());
+            $this->assign('brand_list', get_brand_list());
 
-            $smarty->assign('bonus_type', $bonus_type);
-            $smarty->assign('goods_list', $goods_list);
+            $this->assign('bonus_type', $bonus_type);
+            $this->assign('goods_list', $goods_list);
 
             $smarty->display('bonus_by_goods.htm');
         } elseif ($_REQUEST['send_by'] == SEND_BY_PRINT) {
-            $smarty->assign('type_list', get_bonus_type());
+            $this->assign('type_list', get_bonus_type());
 
             $smarty->display('bonus_by_print.htm');
         }
@@ -418,12 +418,12 @@ class BonusController extends InitController
 
         foreach ($user_list as $key => $val) {
             /* 发送邮件通知 */
-            $smarty->assign('user_name', $val['user_name']);
-            $smarty->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
-            $smarty->assign('send_date', $today);
-            $smarty->assign('sent_date', $today);
-            $smarty->assign('count', 1);
-            $smarty->assign('money', price_format($bonus_type['type_money']));
+            $this->assign('user_name', $val['user_name']);
+            $this->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
+            $this->assign('send_date', $today);
+            $this->assign('sent_date', $today);
+            $this->assign('count', 1);
+            $this->assign('money', price_format($bonus_type['type_money']));
 
             $content = $smarty->fetch('str:' . $tpl['template_content']);
 
@@ -696,28 +696,28 @@ class BonusController extends InitController
 
     public function bonus_listAction()
     {
-        $smarty->assign('full_page', 1);
-        $smarty->assign('ur_here', $_LANG['bonus_list']);
-        $smarty->assign('action_link', array('href' => 'bonus.php?act=list', 'text' => $_LANG['04_bonustype_list']));
+        $this->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['bonus_list']);
+        $this->assign('action_link', array('href' => 'bonus.php?act=list', 'text' => $_LANG['04_bonustype_list']));
 
         $list = get_bonus_list();
 
         /* 赋值是否显示红包序列号 */
         $bonus_type = bonus_type_info(intval($_REQUEST['bonus_type']));
         if ($bonus_type['send_type'] == SEND_BY_PRINT) {
-            $smarty->assign('show_bonus_sn', 1);
+            $this->assign('show_bonus_sn', 1);
         } /* 赋值是否显示发邮件操作和是否发过邮件 */
         elseif ($bonus_type['send_type'] == SEND_BY_USER) {
-            $smarty->assign('show_mail', 1);
+            $this->assign('show_mail', 1);
         }
 
-        $smarty->assign('bonus_list', $list['item']);
-        $smarty->assign('filter', $list['filter']);
-        $smarty->assign('record_count', $list['record_count']);
-        $smarty->assign('page_count', $list['page_count']);
+        $this->assign('bonus_list', $list['item']);
+        $this->assign('filter', $list['filter']);
+        $this->assign('record_count', $list['record_count']);
+        $this->assign('page_count', $list['page_count']);
 
         $sort_flag = sort_flag($list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         assign_query_info();
         $smarty->display('bonus_list.htm');
@@ -734,19 +734,19 @@ class BonusController extends InitController
         /* 赋值是否显示红包序列号 */
         $bonus_type = bonus_type_info(intval($_REQUEST['bonus_type']));
         if ($bonus_type['send_type'] == SEND_BY_PRINT) {
-            $smarty->assign('show_bonus_sn', 1);
+            $this->assign('show_bonus_sn', 1);
         } /* 赋值是否显示发邮件操作和是否发过邮件 */
         elseif ($bonus_type['send_type'] == SEND_BY_USER) {
-            $smarty->assign('show_mail', 1);
+            $this->assign('show_mail', 1);
         }
 
-        $smarty->assign('bonus_list', $list['item']);
-        $smarty->assign('filter', $list['filter']);
-        $smarty->assign('record_count', $list['record_count']);
-        $smarty->assign('page_count', $list['page_count']);
+        $this->assign('bonus_list', $list['item']);
+        $this->assign('filter', $list['filter']);
+        $this->assign('record_count', $list['record_count']);
+        $this->assign('page_count', $list['page_count']);
 
         $sort_flag = sort_flag($list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result(
             $smarty->fetch('bonus_list.htm'),
@@ -979,12 +979,12 @@ class BonusController extends InitController
         $tpl = get_mail_template('send_bonus');
         $today = local_date($GLOBALS['_CFG']['date_format']);
         foreach ($bonus_list as $bonus) {
-            $GLOBALS['smarty']->assign('user_name', $bonus['user_name']);
-            $GLOBALS['smarty']->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
-            $GLOBALS['smarty']->assign('send_date', $today);
-            $GLOBALS['smarty']->assign('sent_date', $today);
-            $GLOBALS['smarty']->assign('count', 1);
-            $GLOBALS['smarty']->assign('money', price_format($bonus_type['type_money']));
+            $this->assign('user_name', $bonus['user_name']);
+            $this->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
+            $this->assign('send_date', $today);
+            $this->assign('sent_date', $today);
+            $this->assign('count', 1);
+            $this->assign('money', price_format($bonus_type['type_money']));
 
             $content = $GLOBALS['smarty']->fetch('str:' . $tpl['template_content']);
             if (add_to_maillist($bonus['user_name'], $bonus['email'], $tpl['template_subject'], $content, $tpl['is_html'], false)) {

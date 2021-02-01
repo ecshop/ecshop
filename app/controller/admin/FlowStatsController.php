@@ -13,7 +13,7 @@ class FlowStatsController extends InitController
 
 
         require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
-        $smarty->assign('lang', $_LANG);
+        $this->assign('lang', $_LANG);
     }
 
     public function viewAction()
@@ -254,15 +254,15 @@ class FlowStatsController extends InitController
         }
 
         /* 模板赋值 */
-        $smarty->assign('ur_here', $_LANG['flow_stats']);
-        $smarty->assign('general_data', $general_xml);
-        $smarty->assign('area_data', $area_xml);
-        $smarty->assign('is_multi', $is_multi);
-        $smarty->assign('from_data', $from_xml);
+        $this->assign('ur_here', $_LANG['flow_stats']);
+        $this->assign('general_data', $general_xml);
+        $this->assign('area_data', $area_xml);
+        $this->assign('is_multi', $is_multi);
+        $this->assign('from_data', $from_xml);
         /* 显示日期 */
 
-        $smarty->assign('start_date', local_date('Y-m-d', $start_date));
-        $smarty->assign('end_date', local_date('Y-m-d', $end_date));
+        $this->assign('start_date', local_date('Y-m-d', $start_date));
+        $this->assign('end_date', local_date('Y-m-d', $end_date));
 
         for ($i = 0; $i < 5; $i++) {
             if (isset($start_date_arr[$i])) {
@@ -271,13 +271,13 @@ class FlowStatsController extends InitController
                 $start_date_arr[$i] = null;
             }
         }
-        $smarty->assign('start_date_arr', $start_date_arr);
+        $this->assign('start_date_arr', $start_date_arr);
 
         if (!$is_multi) {
             $filename = gmdate($_CFG['date_format'], intval($start_date) + intval($timezone) * 3600) . '_' .
                 gmdate($_CFG['date_format'], intval($end_date) + intval($timezone) * 3600);
 
-            $smarty->assign('action_link', array('text' => $_LANG['down_flow_stats'],
+            $this->assign('action_link', array('text' => $_LANG['down_flow_stats'],
                 'href' => 'flow_stats.php?act=download&filename=' . $filename .
                     '&start_date=' . $start_date . '&end_date=' . $end_date));
         }

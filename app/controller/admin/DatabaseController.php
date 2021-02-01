@@ -30,7 +30,7 @@ class DatabaseController extends InitController
         $mask = file_mode_info($path);
         if ($mask === false) {
             $warning = sprintf($_LANG['dir_not_exist'], $path);
-            $smarty->assign('warning', $warning);
+            $this->assign('warning', $warning);
         } elseif ($mask != 15) {
             $warning = sprintf($_LANG['dir_priv'], $path) . '<br/>';
             if (($mask & 1) < 1) {
@@ -45,15 +45,15 @@ class DatabaseController extends InitController
             if (($mask & 8) < 1) {
                 $warning .= $_LANG['cannot_modify'];
             }
-            $smarty->assign('warning', $warning);
+            $this->assign('warning', $warning);
         }
 
         assign_query_info();
-        $smarty->assign('action_link', array('text' => $_LANG['restore'], 'href' => 'database.php?act=restore'));
-        $smarty->assign('tables', $tables);
-        $smarty->assign('vol_size', $allow_max_size);
-        $smarty->assign('sql_name', cls_sql_dump::get_random_name() . '.sql');
-        $smarty->assign('ur_here', $_LANG['02_db_manage']);
+        $this->assign('action_link', array('text' => $_LANG['restore'], 'href' => 'database.php?act=restore'));
+        $this->assign('tables', $tables);
+        $this->assign('vol_size', $allow_max_size);
+        $this->assign('sql_name', cls_sql_dump::get_random_name() . '.sql');
+        $this->assign('ur_here', $_LANG['02_db_manage']);
         $smarty->display('db_backup.htm');
     }
 
@@ -70,10 +70,10 @@ class DatabaseController extends InitController
         $mask = file_mode_info($path);
         if ($mask === false) {
             $warning = sprintf($_LANG['dir_not_exist'], $path);
-            $smarty->assign('warning', $warning);
+            $this->assign('warning', $warning);
         } elseif (($mask & 1) < 1) {
             $warning = $path . '&nbsp;&nbsp;' . $_LANG['cannot_read'];
-            $smarty->assign('warning', $warning);
+            $this->assign('warning', $warning);
         } else {
             /* 获取文件列表 */
             $real_list = array();
@@ -104,9 +104,9 @@ class DatabaseController extends InitController
         }
 
         assign_query_info();
-        $smarty->assign('action_link', array('text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup'));
-        $smarty->assign('ur_here', $_LANG['restore']);
-        $smarty->assign('list', $list);
+        $this->assign('action_link', array('text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup'));
+        $this->assign('ur_here', $_LANG['restore']);
+        $this->assign('list', $list);
         $smarty->display('db_restore.htm');
     }
 
@@ -236,8 +236,8 @@ class DatabaseController extends InitController
                     $list[] = array('name' => $sql_file_name . '_' . $i . '.sql', 'href' => '../' . DATA_DIR . '/sqldata/' . $sql_file_name . '_' . $i . '.sql');
                 }
 
-                $smarty->assign('list', $list);
-                $smarty->assign('title', $_LANG['backup_success']);
+                $this->assign('list', $list);
+                $this->assign('title', $_LANG['backup_success']);
                 $smarty->display('sql_dump_msg.htm');
             } else {
                 /* 只有一个文件 */
@@ -245,8 +245,8 @@ class DatabaseController extends InitController
                     sys_msg(sprintf($_LANG['fail_write_file'], $sql_file_name . '_' . $vol . '.sql'), 1, array(array('text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup')), false);
                 };
 
-                $smarty->assign('list', array(array('name' => $sql_file_name . '.sql', 'href' => '../' . DATA_DIR . '/sqldata/' . $sql_file_name . '.sql')));
-                $smarty->assign('title', $_LANG['backup_success']);
+                $this->assign('list', array(array('name' => $sql_file_name . '.sql', 'href' => '../' . DATA_DIR . '/sqldata/' . $sql_file_name . '.sql')));
+                $this->assign('title', $_LANG['backup_success']);
                 $smarty->display('sql_dump_msg.htm');
             }
         } else {
@@ -256,9 +256,9 @@ class DatabaseController extends InitController
             }
 
             $lnk = 'database.php?act=dumpsql&token=' . $_CFG['token'] . '&sql_file_name=' . $sql_file_name . '&vol_size=' . $max_size . '&vol=' . ($vol + 1);
-            $smarty->assign('title', sprintf($_LANG['backup_title'], '#' . $vol));
-            $smarty->assign('auto_redirect', 1);
-            $smarty->assign('auto_link', $lnk);
+            $this->assign('title', sprintf($_LANG['backup_title'], '#' . $vol));
+            $this->assign('auto_redirect', 1);
+            $this->assign('auto_link', $lnk);
             $smarty->display('sql_dump_msg.htm');
         }
     }
@@ -490,9 +490,9 @@ class DatabaseController extends InitController
         unset($ret);
         /* 赋值 */
         assign_query_info();
-        $smarty->assign('list', $list);
-        $smarty->assign('num', $num);
-        $smarty->assign('ur_here', $_LANG['03_db_optimize']);
+        $this->assign('list', $list);
+        $this->assign('num', $num);
+        $this->assign('ur_here', $_LANG['03_db_optimize']);
         $smarty->display('optimize.htm');
     }
 

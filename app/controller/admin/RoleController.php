@@ -41,8 +41,8 @@ class RoleController extends InitController
         header("Pragma: no-cache");
 
         if ((intval($_CFG['captcha']) & CAPTCHA_ADMIN) && gd_version() > 0) {
-            $smarty->assign('gd_version', gd_version());
-            $smarty->assign('random', mt_rand());
+            $this->assign('gd_version', gd_version());
+            $this->assign('random', mt_rand());
         }
 
         $smarty->display('login.htm');
@@ -55,10 +55,10 @@ class RoleController extends InitController
     public function listAction()
     {
         /* 模板赋值 */
-        $smarty->assign('ur_here', $_LANG['admin_role']);
-        $smarty->assign('action_link', array('href' => 'role.php?act=add', 'text' => $_LANG['admin_add_role']));
-        $smarty->assign('full_page', 1);
-        $smarty->assign('admin_list', get_role_list());
+        $this->assign('ur_here', $_LANG['admin_role']);
+        $this->assign('action_link', array('href' => 'role.php?act=add', 'text' => $_LANG['admin_add_role']));
+        $this->assign('full_page', 1);
+        $this->assign('admin_list', get_role_list());
 
         /* 显示页面 */
         assign_query_info();
@@ -70,7 +70,7 @@ class RoleController extends InitController
     /*------------------------------------------------------ */
     public function queryAction()
     {
-        $smarty->assign('admin_list', get_role_list());
+        $this->assign('admin_list', get_role_list());
 
         make_json_result($smarty->fetch('role_list.htm'));
     }
@@ -113,12 +113,12 @@ class RoleController extends InitController
         }
 
         /* 模板赋值 */
-        $smarty->assign('ur_here', $_LANG['admin_add_role']);
-        $smarty->assign('action_link', array('href' => 'role.php?act=list', 'text' => $_LANG['admin_list_role']));
-        $smarty->assign('form_act', 'insert');
-        $smarty->assign('action', 'add');
-        $smarty->assign('lang', $_LANG);
-        $smarty->assign('priv_arr', $priv_arr);
+        $this->assign('ur_here', $_LANG['admin_add_role']);
+        $this->assign('action_link', array('href' => 'role.php?act=list', 'text' => $_LANG['admin_list_role']));
+        $this->assign('form_act', 'insert');
+        $this->assign('action', 'add');
+        $this->assign('lang', $_LANG);
+        $this->assign('priv_arr', $priv_arr);
 
         /* 显示页面 */
         assign_query_info();
@@ -198,14 +198,14 @@ class RoleController extends InitController
 
         /* 模板赋值 */
 
-        $smarty->assign('user', $user_info);
-        $smarty->assign('form_act', 'update');
-        $smarty->assign('action', 'edit');
-        $smarty->assign('ur_here', $_LANG['admin_edit_role']);
-        $smarty->assign('action_link', array('href' => 'role.php?act=list', 'text' => $_LANG['admin_list_role']));
-        $smarty->assign('lang', $_LANG);
-        $smarty->assign('priv_arr', $priv_arr);
-        $smarty->assign('user_id', $_GET['id']);
+        $this->assign('user', $user_info);
+        $this->assign('form_act', 'update');
+        $this->assign('action', 'edit');
+        $this->assign('ur_here', $_LANG['admin_edit_role']);
+        $this->assign('action_link', array('href' => 'role.php?act=list', 'text' => $_LANG['admin_list_role']));
+        $this->assign('lang', $_LANG);
+        $this->assign('priv_arr', $priv_arr);
+        $this->assign('user_id', $_GET['id']);
 
         assign_query_info();
         $smarty->display('role_info.htm');

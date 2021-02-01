@@ -46,10 +46,10 @@ class CaptchaManageController extends InitController
             $captcha_check['login_fail_no'] = 'checked="checked"';
         }
 
-        $smarty->assign('captcha', $captcha_check);
-        $smarty->assign('captcha_width', $_CFG['captcha_width']);
-        $smarty->assign('captcha_height', $_CFG['captcha_height']);
-        $smarty->assign('ur_here', $_LANG['captcha_manage']);
+        $this->assign('captcha', $captcha_check);
+        $this->assign('captcha_width', $_CFG['captcha_width']);
+        $this->assign('captcha_height', $_CFG['captcha_height']);
+        $this->assign('ur_here', $_LANG['captcha_manage']);
         $smarty->display('captcha_manage.htm');
     }
 

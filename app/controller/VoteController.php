@@ -30,8 +30,8 @@ class VoteController extends InitController
 
             $vote = get_vote($vote_id);
             if (!empty($vote)) {
-                $smarty->assign('vote_id', $vote['id']);
-                $smarty->assign('vote', $vote['content']);
+                $this->assign('vote_id', $vote['id']);
+                $this->assign('vote', $vote['content']);
             }
 
             $str = $smarty->fetch("library/vote.lbi");

@@ -21,18 +21,18 @@ class TagManageController extends InitController
         admin_priv('tag_manage');
 
         /* 模板赋值 */
-        $smarty->assign('ur_here', $_LANG['tag_list']);
-        $smarty->assign('action_link', array('href' => 'tag_manage.php?act=add', 'text' => $_LANG['add_tag']));
-        $smarty->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['tag_list']);
+        $this->assign('action_link', array('href' => 'tag_manage.php?act=add', 'text' => $_LANG['add_tag']));
+        $this->assign('full_page', 1);
 
         $tag_list = get_tag_list();
-        $smarty->assign('tag_list', $tag_list['tags']);
-        $smarty->assign('filter', $tag_list['filter']);
-        $smarty->assign('record_count', $tag_list['record_count']);
-        $smarty->assign('page_count', $tag_list['page_count']);
+        $this->assign('tag_list', $tag_list['tags']);
+        $this->assign('filter', $tag_list['filter']);
+        $this->assign('record_count', $tag_list['record_count']);
+        $this->assign('page_count', $tag_list['page_count']);
 
         $sort_flag = sort_flag($tag_list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         /* 页面显示 */
         assign_query_info();
@@ -52,7 +52,7 @@ class TagManageController extends InitController
         admin_priv('tag_manage');
 
         $is_add = $_REQUEST['act'] == 'add';
-        $smarty->assign('insert_or_update', $is_add ? 'insert' : 'update');
+        $this->assign('insert_or_update', $is_add ? 'insert' : 'update');
 
         if ($is_add) {
             $tag = array(
@@ -61,15 +61,15 @@ class TagManageController extends InitController
                 'goods_id' => 0,
                 'goods_name' => $_LANG['pls_select_goods']
             );
-            $smarty->assign('ur_here', $_LANG['add_tag']);
+            $this->assign('ur_here', $_LANG['add_tag']);
         } else {
             $tag_id = $_GET['id'];
             $tag = get_tag_info($tag_id);
             $tag['tag_words'] = htmlspecialchars($tag['tag_words']);
-            $smarty->assign('ur_here', $_LANG['tag_edit']);
+            $this->assign('ur_here', $_LANG['tag_edit']);
         }
-        $smarty->assign('tag', $tag);
-        $smarty->assign('action_link', array('href' => 'tag_manage.php?act=list', 'text' => $_LANG['tag_list']));
+        $this->assign('tag', $tag);
+        $this->assign('action_link', array('href' => 'tag_manage.php?act=list', 'text' => $_LANG['tag_list']));
 
         assign_query_info();
         $smarty->display('tag_edit.htm');
@@ -136,13 +136,13 @@ class TagManageController extends InitController
         check_authz_json('tag_manage');
 
         $tag_list = get_tag_list();
-        $smarty->assign('tag_list', $tag_list['tags']);
-        $smarty->assign('filter', $tag_list['filter']);
-        $smarty->assign('record_count', $tag_list['record_count']);
-        $smarty->assign('page_count', $tag_list['page_count']);
+        $this->assign('tag_list', $tag_list['tags']);
+        $this->assign('filter', $tag_list['filter']);
+        $this->assign('record_count', $tag_list['record_count']);
+        $this->assign('page_count', $tag_list['page_count']);
 
         $sort_flag = sort_flag($tag_list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result(
             $smarty->fetch('tag_manage.htm'),

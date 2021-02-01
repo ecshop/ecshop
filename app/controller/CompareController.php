@@ -88,19 +88,19 @@ class CompareController extends InitController
                 $attribute[$rt['attr_id']] = $rt['attr_name'];
             }
 
-            $smarty->assign('attribute', $attribute);
-            $smarty->assign('goods_list', $arr);
+            $this->assign('attribute', $attribute);
+            $this->assign('goods_list', $arr);
         } else {
             return $this->show_message($_LANG['compare_no_goods']);
         }
 
         $this->assign_template();
         $position = assign_ur_here(0, $_LANG['goods_compare']);
-        $smarty->assign('page_title', $position['title']);    // 页面标题
-        $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+        $this->assign('page_title', $position['title']);    // 页面标题
+        $this->assign('ur_here', $position['ur_here']);  // 当前位置
 
-        $smarty->assign('categories', get_categories_tree()); // 分类树
-        $smarty->assign('helps', get_shop_help());       // 网店帮助
+        $this->assign('categories', get_categories_tree()); // 分类树
+        $this->assign('helps', get_shop_help());       // 网店帮助
 
         assign_dynamic('compare');
 

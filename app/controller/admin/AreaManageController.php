@@ -23,7 +23,7 @@ class AreaManageController extends InitController
 
         /* 取得参数：上级地区id */
         $region_id = empty($_REQUEST['pid']) ? 0 : intval($_REQUEST['pid']);
-        $smarty->assign('parent_id', $region_id);
+        $this->assign('parent_id', $region_id);
 
         /* 取得列表显示的地区的类型 */
         if ($region_id == 0) {
@@ -31,11 +31,11 @@ class AreaManageController extends InitController
         } else {
             $region_type = $exc->get_name($region_id, 'region_type') + 1;
         }
-        $smarty->assign('region_type', $region_type);
+        $this->assign('region_type', $region_type);
 
         /* 获取地区列表 */
         $region_arr = area_list($region_id);
-        $smarty->assign('region_arr', $region_arr);
+        $this->assign('region_arr', $region_arr);
 
         /* 当前的地区名称 */
         if ($region_id > 0) {
@@ -47,7 +47,7 @@ class AreaManageController extends InitController
         } else {
             $area = $_LANG['country'];
         }
-        $smarty->assign('area_here', $area);
+        $this->assign('area_here', $area);
 
         /* 返回上一级的链接 */
         if ($region_id > 0) {
@@ -56,11 +56,11 @@ class AreaManageController extends InitController
         } else {
             $action_link = '';
         }
-        $smarty->assign('action_link', $action_link);
+        $this->assign('action_link', $action_link);
 
         /* 赋值模板显示 */
-        $smarty->assign('ur_here', $_LANG['05_area_list']);
-        $smarty->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['05_area_list']);
+        $this->assign('full_page', 1);
 
         assign_query_info();
         $smarty->display('area_list.htm');
@@ -94,9 +94,9 @@ class AreaManageController extends InitController
 
             /* 获取地区列表 */
             $region_arr = area_list($parent_id);
-            $smarty->assign('region_arr', $region_arr);
+            $this->assign('region_arr', $region_arr);
 
-            $smarty->assign('region_type', $region_type);
+            $this->assign('region_type', $region_type);
 
             make_json_result($smarty->fetch('area_list.htm'));
         } else {
@@ -173,8 +173,8 @@ class AreaManageController extends InitController
 
             /* 获取地区列表 */
             $region_arr = area_list($region['parent_id']);
-            $smarty->assign('region_arr', $region_arr);
-            $smarty->assign('region_type', $region['region_type']);
+            $this->assign('region_arr', $region_arr);
+            $this->assign('region_type', $region['region_type']);
 
             make_json_result($smarty->fetch('area_list.htm'));
         } else {

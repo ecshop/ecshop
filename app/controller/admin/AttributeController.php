@@ -22,20 +22,20 @@ class AttributeController extends InitController
     {
         $goods_type = isset($_GET['goods_type']) ? intval($_GET['goods_type']) : 0;
 
-        $smarty->assign('ur_here', $_LANG['09_attribute_list']);
-        $smarty->assign('action_link', array('href' => 'attribute.php?act=add&goods_type=' . $goods_type, 'text' => $_LANG['10_attribute_add']));
-        $smarty->assign('goods_type_list', goods_type_list($goods_type)); // 取得商品类型
-        $smarty->assign('full_page', 1);
+        $this->assign('ur_here', $_LANG['09_attribute_list']);
+        $this->assign('action_link', array('href' => 'attribute.php?act=add&goods_type=' . $goods_type, 'text' => $_LANG['10_attribute_add']));
+        $this->assign('goods_type_list', goods_type_list($goods_type)); // 取得商品类型
+        $this->assign('full_page', 1);
 
         $list = get_attrlist();
 
-        $smarty->assign('attr_list', $list['item']);
-        $smarty->assign('filter', $list['filter']);
-        $smarty->assign('record_count', $list['record_count']);
-        $smarty->assign('page_count', $list['page_count']);
+        $this->assign('attr_list', $list['item']);
+        $this->assign('filter', $list['filter']);
+        $this->assign('record_count', $list['record_count']);
+        $this->assign('page_count', $list['page_count']);
 
         $sort_flag = sort_flag($list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         /* 显示模板 */
         assign_query_info();
@@ -50,13 +50,13 @@ class AttributeController extends InitController
     {
         $list = get_attrlist();
 
-        $smarty->assign('attr_list', $list['item']);
-        $smarty->assign('filter', $list['filter']);
-        $smarty->assign('record_count', $list['record_count']);
-        $smarty->assign('page_count', $list['page_count']);
+        $this->assign('attr_list', $list['item']);
+        $this->assign('filter', $list['filter']);
+        $this->assign('record_count', $list['record_count']);
+        $this->assign('page_count', $list['page_count']);
 
         $sort_flag = sort_flag($list['filter']);
-        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
 
         make_json_result(
             $smarty->fetch('attribute_list.htm'),
@@ -80,7 +80,7 @@ class AttributeController extends InitController
 
         /* 添加还是编辑的标识 */
         $is_add = $_REQUEST['act'] == 'add';
-        $smarty->assign('form_act', $is_add ? 'insert' : 'update');
+        $this->assign('form_act', $is_add ? 'insert' : 'update');
 
         /* 取得属性信息 */
         if ($is_add) {
@@ -100,15 +100,15 @@ class AttributeController extends InitController
             $attr = $db->getRow($sql);
         }
 
-        $smarty->assign('attr', $attr);
-        $smarty->assign('attr_groups', get_attr_groups($attr['cat_id']));
+        $this->assign('attr', $attr);
+        $this->assign('attr_groups', get_attr_groups($attr['cat_id']));
 
         /* 取得商品分类列表 */
-        $smarty->assign('goods_type_list', goods_type_list($attr['cat_id']));
+        $this->assign('goods_type_list', goods_type_list($attr['cat_id']));
 
         /* 模板赋值 */
-        $smarty->assign('ur_here', $is_add ? $_LANG['10_attribute_add'] : $_LANG['52_attribute_add']);
-        $smarty->assign('action_link', array('href' => 'attribute.php?act=list', 'text' => $_LANG['09_attribute_list']));
+        $this->assign('ur_here', $is_add ? $_LANG['10_attribute_add'] : $_LANG['52_attribute_add']);
+        $this->assign('action_link', array('href' => 'attribute.php?act=list', 'text' => $_LANG['09_attribute_list']));
 
         /* 显示模板 */
         assign_query_info();

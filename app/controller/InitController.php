@@ -6,6 +6,7 @@ use app\service\ShopService;
 use app\support\Controller;
 use app\support\Error;
 use app\support\Shop;
+use think\facade\Lang;
 
 /**
  * Class InitController
@@ -49,7 +50,9 @@ class InitController extends Controller
         config(['shop' => $shopService->getConfig()]);
 
         /* 载入语言文件 */
-        require(ROOT_PATH . 'languages/' . config('shop.lang') . '/common.php');
+        Lang::load(root_path('resource/lang/' . config('shop.lang')) . 'common.php');
+        Lang::load(root_path('resource/lang/' . config('shop.lang')) . 'shopping_flow.php');
+        Lang::load(root_path('resource/lang/' . config('shop.lang')) . 'user.php');
 
         if (config('shop.shop_closed') == 1) {
             /* 商店关闭了，输出关闭的消息 */

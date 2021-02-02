@@ -1,9 +1,5 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
-
 /* 图片处理相关常数 */
 define('ERR_INVALID_IMAGE', 1);
 define('ERR_NO_GD', 2);

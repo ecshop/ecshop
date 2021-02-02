@@ -7,14 +7,6 @@ namespace app\controller;
  */
 class ActivityController extends InitController
 {
-    public function initialize()
-    {
-
-        /* 载入语言文件 */
-        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/shopping_flow.php');
-        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/user.php');
-    }
-
     public function indexAction()
     {
         $this->assign_template();

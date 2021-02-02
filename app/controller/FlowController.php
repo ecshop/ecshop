@@ -9,11 +9,6 @@ class FlowController extends InitController
 {
     public function initialize()
     {
-
-        /* 载入语言文件 */
-        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/user.php');
-        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/shopping_flow.php');
-
         $this->assign_template();
         $this->assign_dynamic('flow');
         $position = $this->assign_ur_here(0, $_LANG['shopping_flow']);

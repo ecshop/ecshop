@@ -9,15 +9,6 @@ class MyshipController extends InitController
 {
     public function indexAction()
     {
-
-        /* 载入语言文件 */
-        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/shopping_flow.php');
-        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/user.php');
-
-        /*------------------------------------------------------ */
-        //-- INPUT
-        /*------------------------------------------------------ */
-
         if ($_SESSION['user_id'] > 0) {
             $consignee_list = get_consignee_list($_SESSION['user_id']);
 

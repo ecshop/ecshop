@@ -727,9 +727,6 @@ class UserController extends InitController
     } /* 收货地址列表界面*/
     public function address_listAction()
     {
-        include_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/shopping_flow.php');
-        $this->assign('lang', $_LANG);
-
         /* 取得国家列表、商店所在国家、商店所在国家的省列表 */
         $this->assign('country_list', get_regions());
         $this->assign('shop_province_list', get_regions(1, config('shop.shop_country')));
@@ -774,9 +771,6 @@ class UserController extends InitController
     } /* 添加/编辑收货地址的处理 */
     public function act_edit_addressAction()
     {
-        include_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/shopping_flow.php');
-        $this->assign('lang', $_LANG);
-
         $address = array(
             'user_id' => $user_id,
             'address_id' => intval($_POST['address_id']),

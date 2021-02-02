@@ -9,16 +9,6 @@ class PackageController extends InitController
 {
     public function indexAction()
     {
-
-        /* 载入语言文件 */
-        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/shopping_flow.php');
-        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/user.php');
-        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/package.php');
-
-        /*------------------------------------------------------ */
-        //-- PROCESSOR
-        /*------------------------------------------------------ */
-
         $this->assign_template();
         $this->assign_dynamic('package');
         $position = $this->assign_ur_here(0, $_LANG['shopping_package']);

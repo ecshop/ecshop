@@ -1,5 +1,7 @@
 <?php
 
+require __DIR__ . '/constant.php';
+
 /**
  * 递归方式的对变量中的特殊字符进行转义
  * @param $value

@@ -18,7 +18,7 @@ class GoodsAutoController extends InitController
         $this->assign('crons_enable', $crons_enable);
         $this->assign('full_page', 1);
         $this->assign('ur_here', $_LANG['goods_auto']);
-        $this->assign('cfg_lang', $_CFG['lang']);
+        $this->assign('cfg_lang', config('shop.lang'));
         $this->assign('goodsdb', $goodsdb['goodsdb']);
         $this->assign('filter', $goodsdb['filter']);
         $this->assign('record_count', $goodsdb['record_count']);
@@ -32,7 +32,7 @@ class GoodsAutoController extends InitController
         $goodsdb = get_auto_goods();
         $this->assign('goodsdb', $goodsdb['goodsdb']);
         $this->assign('filter', $goodsdb['filter']);
-        $this->assign('cfg_lang', $_CFG['lang']);
+        $this->assign('cfg_lang', config('shop.lang'));
         $this->assign('record_count', $goodsdb['record_count']);
         $this->assign('page_count', $goodsdb['page_count']);
 

@@ -2,6 +2,7 @@
 
 namespace app\controller\api;
 
+use app\service\ShopService;
 use app\support\Controller;
 
 /**
@@ -39,7 +40,8 @@ class InitController extends Controller
         $sess = new cls_session($db, table('sessions'), table('sessions_data'), $sess_name);
 
         /* 载入系统参数 */
-        $_CFG = load_config();
+        $shopService = new ShopService();
+        config(['config' => $shopService->getConfig()]);
 
         /* 初始化用户插件 */
         $user = init_users();

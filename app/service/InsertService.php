@@ -36,7 +36,7 @@ class InsertService
         $online_count = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . table('sessions'));
 
         /* 加入触发cron代码 */
-        $cron_method = empty($GLOBALS['_CFG']['cron_method']) ? '<img src="api/cron.php?t=' . gmtime() . '" alt="" style="width:0px;height:0px;" />' : '';
+        $cron_method = empty(config('shop.cron_method')) ? '<img src="api/cron.php?t=' . gmtime() . '" alt="" style="width:0px;height:0px;" />' : '';
 
         return sprintf($GLOBALS['_LANG']['query_info'], $GLOBALS['db']->queryCount, $query_time, $online_count) . $gzip_enabled . $memory_usage . $cron_method;
     }
@@ -59,7 +59,7 @@ class InsertService
             while ($row = $GLOBALS['db']->fetch_array($query)) {
                 $goods['goods_id'] = $row['goods_id'];
                 $goods['goods_name'] = $row['goods_name'];
-                $goods['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+                $goods['short_name'] = config('shop.goods_name_length') > 0 ? sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
                 $goods['goods_thumb'] = get_image_path($row['goods_thumb']);
                 $goods['shop_price'] = price_format($row['shop_price']);
                 $goods['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
@@ -202,7 +202,7 @@ class InsertService
             if (!empty($_COOKIE['ECS']['username'])) {
                 View::assign('ecs_username', stripslashes($_COOKIE['ECS']['username']));
             }
-            $captcha = intval($GLOBALS['_CFG']['captcha']);
+            $captcha = intval(config('shop.captcha'));
             if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
                 View::assign('enabled_captcha', 1);
                 View::assign('rand', mt_rand());
@@ -232,7 +232,7 @@ class InsertService
         $arr['type'] = addslashes($arr['type']);
 
         /* 验证码相关设置 */
-        if ((intval($GLOBALS['_CFG']['captcha']) & CAPTCHA_COMMENT) && gd_version() > 0) {
+        if ((intval(config('shop.captcha')) & CAPTCHA_COMMENT) && gd_version() > 0) {
             View::assign('enabled_captcha', 1);
             View::assign('rand', mt_rand());
         }

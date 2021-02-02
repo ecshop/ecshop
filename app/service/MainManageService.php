@@ -211,7 +211,7 @@ class MainManageService
         $res = $GLOBALS['db']->query($sql);
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
-            $bonus[$row['type_id']] = $row['type_name'] . ' [' . sprintf($GLOBALS['_CFG']['currency_format'], $row['type_money']) . ']';
+            $bonus[$row['type_id']] = $row['type_name'] . ' [' . sprintf(config('shop.currency_format'), $row['type_money']) . ']';
         }
 
         return $bonus;

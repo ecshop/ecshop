@@ -11,8 +11,8 @@ class MyshipController extends InitController
     {
 
         /* 载入语言文件 */
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/shopping_flow.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/user.php');
 
         /*------------------------------------------------------ */
         //-- INPUT
@@ -26,7 +26,7 @@ class MyshipController extends InitController
             $choose['city'] = isset($_POST['city']) ? intval($_POST['city']) : $consignee_list[0]['city'];
             $choose['district'] = isset($_POST['district']) ? intval($_POST['district']) : (isset($consignee_list[0]['district']) ? $consignee_list[0]['district'] : 0);
         } else {
-            $choose['country'] = isset($_POST['country']) ? intval($_POST['country']) : $_CFG['shop_country'];
+            $choose['country'] = isset($_POST['country']) ? intval($_POST['country']) : config('shop.shop_country');
             $choose['province'] = isset($_POST['province']) ? intval($_POST['province']) : 2;
             $choose['city'] = isset($_POST['city']) ? intval($_POST['city']) : 35;
             $choose['district'] = isset($_POST['district']) ? intval($_POST['district']) : 417;

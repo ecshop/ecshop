@@ -243,7 +243,7 @@ class UserAccountController extends InitController
         /* 查询当前的预付款信息 */
         $account = array();
         $account = $db->getRow("SELECT * FROM " . table('user_account') . " WHERE id = '$id'");
-        $account['add_time'] = local_date($_CFG['time_format'], $account['add_time']);
+        $account['add_time'] = local_date(config('shop.time_format'), $account['add_time']);
 
         //余额类型:预付款，退款申请，购买商品，取消订单
         if ($account['process_type'] == 0) {
@@ -493,7 +493,7 @@ class UserAccountController extends InitController
         $list = $GLOBALS['db']->getAll($sql);
         foreach ($list as $key => $value) {
             $list[$key]['surplus_amount'] = price_format(abs($value['amount']), false);
-            $list[$key]['add_date'] = local_date($GLOBALS['_CFG']['time_format'], $value['add_time']);
+            $list[$key]['add_date'] = local_date(config('shop.time_format'), $value['add_time']);
             $list[$key]['process_type_name'] = $GLOBALS['_LANG']['surplus_type_' . $value['process_type']];
         }
         $arr = array('list' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);

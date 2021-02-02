@@ -11,7 +11,7 @@ class OrderStatsController extends InitController
     {
         parent::initialize();
 
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/statistic.php');
 
         $this->assign('lang', $_LANG);
     }
@@ -47,7 +47,7 @@ class OrderStatsController extends InitController
         $click_turnover = $click_count > 0 ? round(($order_general['total_turnover'] * 1000) / $click_count, 2) : 0;
 
         /* 时区 */
-        $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : $GLOBALS['_CFG']['timezone'];
+        $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : config('shop.timezone');
 
         /* 时间参数 */
         $is_multi = empty($_POST['is_multi']) ? false : true;
@@ -251,8 +251,8 @@ class OrderStatsController extends InitController
         $this->assign('pay_xml', $pay_xml);
 
         $this->assign('ur_here', $_LANG['report_order']);
-        $this->assign('start_date', local_date($_CFG['date_format'], $start_date));
-        $this->assign('end_date', local_date($_CFG['date_format'], $end_date));
+        $this->assign('start_date', local_date(config('shop.date_format'), $start_date));
+        $this->assign('end_date', local_date(config('shop.date_format'), $end_date));
 
         for ($i = 0; $i < 5; $i++) {
             if (isset($start_date_arr[$i])) {

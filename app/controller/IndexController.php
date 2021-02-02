@@ -16,11 +16,11 @@ class IndexController extends InitController
         $this->assign('ur_here', $position['ur_here']);  // 当前位置
 
         /* meta information */
-        $this->assign('keywords', htmlspecialchars($_CFG['shop_keywords']));
-        $this->assign('description', htmlspecialchars($_CFG['shop_desc']));
-        $this->assign('flash_theme', $_CFG['flash_theme']);  // Flash轮播图片模板
+        $this->assign('keywords', htmlspecialchars(config('shop.shop_keywords')));
+        $this->assign('description', htmlspecialchars(config('shop.shop_desc')));
+        $this->assign('flash_theme', config('shop.flash_theme'));  // Flash轮播图片模板
 
-        $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed.xml' : 'feed.php'); // RSS URL
+        $this->assign('feed_url', (config('shop.rewrite') == 1) ? 'feed.xml' : 'feed.php'); // RSS URL
 
         $this->assign('categories', get_categories_tree()); // 分类树
         $this->assign('helps', get_shop_help());       // 网店帮助
@@ -37,11 +37,11 @@ class IndexController extends InitController
         $this->assign('new_articles', index_get_new_articles());   // 最新文章
         $this->assign('group_buy_goods', index_get_group_buy());      // 团购商品
         $this->assign('auction_list', index_get_auction());        // 拍卖活动
-        $this->assign('shop_notice', $_CFG['shop_notice']);       // 商店公告
+        $this->assign('shop_notice', config('shop.shop_notice'));       // 商店公告
 
         /* 首页主广告设置 */
-        $this->assign('index_ad', $_CFG['index_ad']);
-        if ($_CFG['index_ad'] == 'cus') {
+        $this->assign('index_ad', config('shop.index_ad'));
+        if (config('shop.index_ad') == 'cus') {
             $sql = 'SELECT ad_type, content, url FROM ' . table("ad_custom") . ' WHERE ad_status = 1';
             $ad = $db->getRow($sql, true);
             $this->assign('ad', $ad);
@@ -127,17 +127,17 @@ class IndexController extends InitController
             ' FROM ' . table('article') . ' AS a, ' .
             table('article_cat') . ' AS ac' .
             ' WHERE a.is_open = 1 AND a.cat_id = ac.cat_id AND ac.cat_type = 1' .
-            ' ORDER BY a.article_type DESC, a.add_time DESC LIMIT ' . $GLOBALS['_CFG']['article_number'];
+            ' ORDER BY a.article_type DESC, a.add_time DESC LIMIT ' . config('shop.article_number');
         $res = $GLOBALS['db']->getAll($sql);
 
         $arr = array();
         foreach ($res as $idx => $row) {
             $arr[$idx]['id'] = $row['article_id'];
             $arr[$idx]['title'] = $row['title'];
-            $arr[$idx]['short_title'] = $GLOBALS['_CFG']['article_title_length'] > 0 ?
-                sub_str($row['title'], $GLOBALS['_CFG']['article_title_length']) : $row['title'];
+            $arr[$idx]['short_title'] = config('shop.article_title_length') > 0 ?
+                sub_str($row['title'], config('shop.article_title_length')) : $row['title'];
             $arr[$idx]['cat_name'] = $row['cat_name'];
-            $arr[$idx]['add_time'] = local_date($GLOBALS['_CFG']['date_format'], $row['add_time']);
+            $arr[$idx]['add_time'] = local_date(config('shop.date_format'), $row['add_time']);
             $arr[$idx]['url'] = $row['open_type'] != 1 ?
                 build_uri('article', array('aid' => $row['article_id']), $row['title']) : trim($row['file_url']);
             $arr[$idx]['cat_url'] = build_uri('article_cat', array('acid' => $row['cat_id']), $row['cat_name']);
@@ -188,8 +188,8 @@ class IndexController extends InitController
                 ksort($price_ladder);
                 $row['last_price'] = price_format(end($price_ladder));
                 $row['url'] = build_uri('group_buy', array('gbid' => $row['group_buy_id']));
-                $row['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                    sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+                $row['short_name'] = config('shop.goods_name_length') > 0 ?
+                    sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
                 $row['short_style_name'] = add_style($row['short_name'], '');
                 $group_buy_list[] = $row;
             }
@@ -227,8 +227,8 @@ class IndexController extends InitController
             $arr['formated_end_price'] = price_format($arr['end_price']);
             $arr['thumb'] = get_image_path($row['goods_thumb']);
             $arr['url'] = build_uri('auction', array('auid' => $arr['act_id']));
-            $arr['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                sub_str($arr['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $arr['goods_name'];
+            $arr['short_name'] = config('shop.goods_name_length') > 0 ?
+                sub_str($arr['goods_name'], config('shop.goods_name_length')) : $arr['goods_name'];
             $arr['short_style_name'] = add_style($arr['short_name'], '');
             $list[] = $arr;
         }

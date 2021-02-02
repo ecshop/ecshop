@@ -23,7 +23,7 @@ class PassportService
     public function register($username, $password, $email, $other = array())
     {
         /* 检查注册是否关闭 */
-        if (!empty($GLOBALS['_CFG']['shop_reg_closed'])) {
+        if (!empty(config('shop.shop_reg_closed'))) {
             $GLOBALS['err']->add($GLOBALS['_LANG']['shop_register_closed']);
         }
         /* 检查username */
@@ -81,12 +81,12 @@ class PassportService
             $GLOBALS['user']->set_cookie($username);
 
             /* 注册送积分 */
-            if (!empty($GLOBALS['_CFG']['register_points'])) {
-                log_account_change($_SESSION['user_id'], 0, 0, $GLOBALS['_CFG']['register_points'], $GLOBALS['_CFG']['register_points'], $GLOBALS['_LANG']['register_points']);
+            if (!empty(config('shop.register_points'))) {
+                log_account_change($_SESSION['user_id'], 0, 0, config('shop.register_points'), config('shop.register_points'), $GLOBALS['_LANG']['register_points']);
             }
 
             /*推荐处理*/
-            $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
+            $affiliate = unserialize(config('shop.affiliate'));
             if (isset($affiliate['on']) && $affiliate['on'] == 1) {
                 // 推荐开关开启
                 $up_uid = get_affiliate();
@@ -221,7 +221,7 @@ class PassportService
 
         View::assign('user_name', $user_name);
         View::assign('reset_email', $reset_email);
-        View::assign('shop_name', $GLOBALS['_CFG']['shop_name']);
+        View::assign('shop_name', config('shop.shop_name'));
         View::assign('send_date', date('Y-m-d'));
         View::assign('sent_date', date('Y-m-d'));
 
@@ -255,8 +255,8 @@ class PassportService
 
         View::assign('user_name', $row['user_name']);
         View::assign('validate_email', $validate_email);
-        View::assign('shop_name', $GLOBALS['_CFG']['shop_name']);
-        View::assign('send_date', date($GLOBALS['_CFG']['date_format']));
+        View::assign('shop_name', config('shop.shop_name'));
+        View::assign('send_date', date(config('shop.date_format')));
 
         $content = $GLOBALS['smarty']->fetch('str:' . $template['template_content']);
 
@@ -285,7 +285,7 @@ class PassportService
                 " WHERE user_id = '$user_id' LIMIT 1";
             $reg_time = $GLOBALS['db']->getOne($sql);
 
-            $hash = substr(md5($user_id . $GLOBALS['_CFG']['hash_code'] . $reg_time), 16, 4);
+            $hash = substr(md5($user_id . config('shop.hash_code') . $reg_time), 16, 4);
 
             return base64_encode($user_id . ',' . $hash);
         } else {
@@ -306,7 +306,7 @@ class PassportService
                 " WHERE user_id = '$user_id' LIMIT 1";
             $reg_time = $GLOBALS['db']->getOne($sql);
 
-            $pre_salt = substr(md5($user_id . $GLOBALS['_CFG']['hash_code'] . $reg_time), 16, 4);
+            $pre_salt = substr(md5($user_id . config('shop.hash_code') . $reg_time), 16, 4);
 
             if ($pre_salt == $salt) {
                 return $user_id;

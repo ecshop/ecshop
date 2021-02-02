@@ -42,7 +42,7 @@ class ArticleController extends InitController
         $this->assign('promotion_info', get_promotion_info());
 
         /* 验证码相关设置 */
-        if ((intval($_CFG['captcha']) & CAPTCHA_COMMENT) && gd_version() > 0) {
+        if ((intval(config('shop.captcha')) & CAPTCHA_COMMENT) && gd_version() > 0) {
             $this->assign('enabled_captcha', 1);
             $this->assign('rand', mt_rand());
         }
@@ -112,11 +112,11 @@ class ArticleController extends InitController
 
         if ($row !== false) {
             $row['comment_rank'] = ceil($row['comment_rank']);                              // 用户评论级别取整
-            $row['add_time'] = local_date($GLOBALS['_CFG']['date_format'], $row['add_time']); // 修正添加时间显示
+            $row['add_time'] = local_date(config('shop.date_format'), $row['add_time']); // 修正添加时间显示
 
             /* 作者信息如果为空，则用网站名称替换 */
             if (empty($row['author']) || $row['author'] == '_SHOPHELP') {
-                $row['author'] = $GLOBALS['_CFG']['shop_name'];
+                $row['author'] = config('shop.shop_name');
             }
         }
 
@@ -146,8 +146,8 @@ class ArticleController extends InitController
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             $arr[$row['goods_id']]['goods_id'] = $row['goods_id'];
             $arr[$row['goods_id']]['goods_name'] = $row['goods_name'];
-            $arr[$row['goods_id']]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+            $arr[$row['goods_id']]['short_name'] = config('shop.goods_name_length') > 0 ?
+                sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
             $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_thumb']);
             $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_img']);
             $arr[$row['goods_id']]['market_price'] = price_format($row['market_price']);

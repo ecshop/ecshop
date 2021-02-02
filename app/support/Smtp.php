@@ -68,7 +68,7 @@ class Smtp
 
             return $obj;
         } else {
-            if (!empty($GLOBALS['_CFG']['smtp_ssl'])) {
+            if (!empty(config('shop.smtp_ssl'))) {
                 $this->host = "ssl://" . $this->host;
             }
             $this->connection = @fsockopen($this->host, $this->port, $errno, $errstr, $this->timeout);

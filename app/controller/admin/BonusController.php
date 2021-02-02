@@ -158,7 +158,7 @@ class BonusController extends InitController
         $this->assign('action', 'add');
 
         $this->assign('form_act', 'insert');
-        $this->assign('cfg_lang', $_CFG['lang']);
+        $this->assign('cfg_lang', config('shop.lang'));
 
         $next_month = local_strtotime('+1 months');
         $bonus_arr['send_start_date'] = local_date('Y-m-d');
@@ -414,12 +414,12 @@ class BonusController extends InitController
         $bonus_type = bonus_type_info($_REQUEST['id']);
 
         $tpl = get_mail_template('send_bonus');
-        $today = local_date($_CFG['date_format']);
+        $today = local_date(config('shop.date_format'));
 
         foreach ($user_list as $key => $val) {
             /* 发送邮件通知 */
             $this->assign('user_name', $val['user_name']);
-            $this->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
+            $this->assign('shop_name', config('shop.shop_name'));
             $this->assign('send_date', $today);
             $this->assign('sent_date', $today);
             $this->assign('count', 1);
@@ -919,7 +919,7 @@ class BonusController extends InitController
 
         foreach ($row as $key => $val) {
             $row[$key]['used_time'] = $val['used_time'] == 0 ?
-                $GLOBALS['_LANG']['no_use'] : local_date($GLOBALS['_CFG']['date_format'], $val['used_time']);
+                $GLOBALS['_LANG']['no_use'] : local_date(config('shop.date_format'), $val['used_time']);
             $row[$key]['emailed'] = $GLOBALS['_LANG']['mail_status'][$row[$key]['emailed']];
         }
 
@@ -973,10 +973,10 @@ class BonusController extends InitController
 
         /* 发送邮件 */
         $tpl = get_mail_template('send_bonus');
-        $today = local_date($GLOBALS['_CFG']['date_format']);
+        $today = local_date(config('shop.date_format'));
         foreach ($bonus_list as $bonus) {
             $this->assign('user_name', $bonus['user_name']);
-            $this->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
+            $this->assign('shop_name', config('shop.shop_name'));
             $this->assign('send_date', $today);
             $this->assign('sent_date', $today);
             $this->assign('count', 1);

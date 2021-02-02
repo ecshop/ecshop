@@ -51,7 +51,7 @@ class ArticleCatController extends InitController
         $this->assign('description', htmlspecialchars($meta['cat_desc']));
 
         /* 获得文章总数 */
-        $size = isset($_CFG['article_page_size']) && intval($_CFG['article_page_size']) > 0 ? intval($_CFG['article_page_size']) : 20;
+        $size = intval(config('shop.article_page_size')) > 0 ? intval(config('shop.article_page_size')) : 20;
         $count = get_article_count($cat_id);
         $pages = ($count > 0) ? ceil($count / $size) : 1;
 
@@ -84,7 +84,7 @@ class ArticleCatController extends InitController
         assign_pager('article_cat', $cat_id, $count, $size, '', '', $page, $goon_keywords);
         $this->assign_dynamic('article_cat');
 
-        $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typearticle_cat" . $cat_id . ".xml" : 'feed.php?type=article_cat' . $cat_id); // RSS URL
+        $this->assign('feed_url', (config('shop.rewrite') == 1) ? "feed-typearticle_cat" . $cat_id . ".xml" : 'feed.php?type=article_cat' . $cat_id); // RSS URL
 
         return $this->display('article_cat.dwt');
     }

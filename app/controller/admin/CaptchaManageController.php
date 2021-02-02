@@ -22,7 +22,7 @@ class CaptchaManageController extends InitController
         }
 
         assign_query_info();
-        $captcha = intval($_CFG['captcha']);
+        $captcha = intval(config('shop.captcha'));
 
         $captcha_check = array();
         if ($captcha & CAPTCHA_REGISTER) {
@@ -47,8 +47,8 @@ class CaptchaManageController extends InitController
         }
 
         $this->assign('captcha', $captcha_check);
-        $this->assign('captcha_width', $_CFG['captcha_width']);
-        $this->assign('captcha_height', $_CFG['captcha_height']);
+        $this->assign('captcha_width', config('shop.captcha_width'));
+        $this->assign('captcha_height', config('shop.captcha_height'));
         $this->assign('ur_here', $_LANG['captcha_manage']);
         return $this->display('captcha_manage.htm');
     }

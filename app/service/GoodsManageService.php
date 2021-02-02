@@ -279,7 +279,7 @@ class GoodsManageService
             if ($flag) {
                 // 生成缩略图
                 if ($proc_thumb) {
-                    $thumb_url = $GLOBALS['image']->make_thumb($image_files['tmp_name'][$key], $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
+                    $thumb_url = $GLOBALS['image']->make_thumb($image_files['tmp_name'][$key], config('shop.thumb_width'), config('shop.thumb_height'));
                     $thumb_url = is_string($thumb_url) ? $thumb_url : '';
                 }
 
@@ -308,7 +308,7 @@ class GoodsManageService
                     copy('../' . $img_original, '../' . $newname);
                     $img_url = $newname;
 
-                    $GLOBALS['image']->add_watermark('../' . $img_url, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']);
+                    $GLOBALS['image']->add_watermark('../' . $img_url, '', config('shop.watermark'), config('shop.watermark_place'), config('shop.watermark_alpha'));
                 }
 
                 /* 重新格式化图片名称 */
@@ -319,7 +319,7 @@ class GoodsManageService
                     "VALUES ('$goods_id', '$img_url', '$img_desc', '$thumb_url', '$img_original')";
                 $GLOBALS['db']->query($sql);
                 /* 不保留商品原图的时候删除原图 */
-                if ($proc_thumb && !$GLOBALS['_CFG']['retain_original_img'] && !empty($img_original)) {
+                if ($proc_thumb && !config('shop.retain_original_img') && !empty($img_original)) {
                     $GLOBALS['db']->query("UPDATE " . table('goods_gallery') . " SET img_original='' WHERE `goods_id`='{$goods_id}'");
                     @unlink('../' . $img_original);
                 }
@@ -331,7 +331,7 @@ class GoodsManageService
 
                 // 生成缩略图
                 if ($proc_thumb) {
-                    $thumb_url = $GLOBALS['image']->make_thumb($down_img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
+                    $thumb_url = $GLOBALS['image']->make_thumb($down_img, config('shop.thumb_width'), config('shop.thumb_height'));
                     $thumb_url = is_string($thumb_url) ? $thumb_url : '';
                     $thumb_url = reformat_image_name('gallery_thumb', $goods_id, $thumb_url, 'thumb');
                 }
@@ -481,7 +481,7 @@ class GoodsManageService
      */
     public function generate_goods_sn($goods_id)
     {
-        $goods_sn = $GLOBALS['_CFG']['sn_prefix'] . str_repeat('0', 6 - strlen($goods_id)) . $goods_id;
+        $goods_sn = config('shop.sn_prefix') . str_repeat('0', 6 - strlen($goods_id)) . $goods_id;
 
         $sql = "SELECT goods_sn FROM " . table('goods') .
             " WHERE goods_sn LIKE '" . mysql_like_quote($goods_sn) . "%' AND goods_id <> '$goods_id' " .

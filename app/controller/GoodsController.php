@@ -9,7 +9,7 @@ class GoodsController extends InitController
 {
     public function initialize()
     {
-        $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
+        $affiliate = unserialize(config('shop.affiliate'));
         $this->assign('affiliate', $affiliate);
 
         /*------------------------------------------------------ */
@@ -22,12 +22,12 @@ class GoodsController extends InitController
 
     public function indexAction()
     {
-        $this->assign('image_width', $_CFG['image_width']);
-        $this->assign('image_height', $_CFG['image_height']);
+        $this->assign('image_width', config('shop.image_width'));
+        $this->assign('image_height', config('shop.image_height'));
         $this->assign('helps', get_shop_help()); // 网店帮助
         $this->assign('id', $goods_id);
         $this->assign('type', 0);
-        $this->assign('cfg', $_CFG);
+        $this->assign('cfg', config('shop'));
         $this->assign('promotion', get_promotion_info($goods_id));//促销信息
         $this->assign('promotion_info', get_promotion_info());
 
@@ -130,7 +130,7 @@ class GoodsController extends InitController
             array_unshift($history, $goods_id);
             $history = array_unique($history);
 
-            while (count($history) > $_CFG['history_number']) {
+            while (count($history) > config('shop.history_number')) {
                 array_pop($history);
             }
 
@@ -259,15 +259,15 @@ class GoodsController extends InitController
             "LEFT JOIN " . table('member_price') . " AS mp " .
             "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
             "WHERE lg.goods_id = '$goods_id' AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 " .
-            "LIMIT " . $GLOBALS['_CFG']['related_goods_number'];
+            "LIMIT " . config('shop.related_goods_number');
         $res = $GLOBALS['db']->query($sql);
 
         $arr = array();
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             $arr[$row['goods_id']]['goods_id'] = $row['goods_id'];
             $arr[$row['goods_id']]['goods_name'] = $row['goods_name'];
-            $arr[$row['goods_id']]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+            $arr[$row['goods_id']]['short_name'] = config('shop.goods_name_length') > 0 ?
+                sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
             $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_thumb']);
             $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_img']);
             $arr[$row['goods_id']]['market_price'] = price_format($row['market_price']);
@@ -305,9 +305,9 @@ class GoodsController extends InitController
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             $row['url'] = $row['open_type'] != 1 ?
                 build_uri('article', array('aid' => $row['article_id']), $row['title']) : trim($row['file_url']);
-            $row['add_time'] = local_date($GLOBALS['_CFG']['date_format'], $row['add_time']);
-            $row['short_title'] = $GLOBALS['_CFG']['article_title_length'] > 0 ?
-                sub_str($row['title'], $GLOBALS['_CFG']['article_title_length']) : $row['title'];
+            $row['add_time'] = local_date(config('shop.date_format'), $row['add_time']);
+            $row['short_title'] = config('shop.article_title_length') > 0 ?
+                sub_str($row['title'], config('shop.article_title_length')) : $row['title'];
 
             $arr[] = $row;
         }
@@ -357,7 +357,7 @@ class GoodsController extends InitController
             "WHERE a.goods_id = '$goods_id' AND b.goods_id <> '$goods_id' AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 " .
             'GROUP BY b.goods_id ' .
             'ORDER BY num DESC ' .
-            'LIMIT ' . $GLOBALS['_CFG']['bought_goods'];
+            'LIMIT ' . config('shop.bought_goods');
         $res = $GLOBALS['db']->query($sql);
 
         $key = 0;
@@ -365,8 +365,8 @@ class GoodsController extends InitController
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             $arr[$key]['goods_id'] = $row['goods_id'];
             $arr[$key]['goods_name'] = $row['goods_name'];
-            $arr[$key]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+            $arr[$key]['short_name'] = config('shop.goods_name_length') > 0 ?
+                sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
             $arr[$key]['goods_thumb'] = get_image_path($row['goods_thumb']);
             $arr[$key]['goods_img'] = get_image_path($row['goods_img']);
             $arr[$key]['shop_price'] = price_format($row['shop_price']);
@@ -395,7 +395,7 @@ class GoodsController extends InitController
     public function get_goods_rank($goods_id)
     {
         /* 统计时间段 */
-        $period = intval($GLOBALS['_CFG']['top10_time']);
+        $period = intval(config('shop.top10_time'));
         if ($period == 1) { // 一年
             $ext = " AND o.add_time > '" . local_strtotime('-1 years') . "'";
         } elseif ($period == 2) { // 半年

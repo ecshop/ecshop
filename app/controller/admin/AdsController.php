@@ -12,7 +12,7 @@ class AdsController extends InitController
         parent::initialize();
 
 
-        $image = new cls_image($_CFG['bgcolor']);
+        $image = new cls_image(config('shop.bgcolor'));
         $exc = new exchange(table("ad"), $db, 'ad_id', 'ad_name');
         $allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp', 'swf');
     }
@@ -91,7 +91,7 @@ class AdsController extends InitController
 
         $this->assign('form_act', 'insert');
         $this->assign('action', 'add');
-        $this->assign('cfg_lang', $_CFG['lang']);
+        $this->assign('cfg_lang', config('shop.lang'));
 
         assign_query_info();
         return $this->display('ads_info.htm');
@@ -500,8 +500,8 @@ class AdsController extends InitController
             $rows['type'] .= ($rows['media_type'] == 3) ? $GLOBALS['_LANG']['ad_text'] : '';
 
             /* 格式化日期 */
-            $rows['start_date'] = local_date($GLOBALS['_CFG']['date_format'], $rows['start_time']);
-            $rows['end_date'] = local_date($GLOBALS['_CFG']['date_format'], $rows['end_time']);
+            $rows['start_date'] = local_date(config('shop.date_format'), $rows['start_time']);
+            $rows['end_date'] = local_date(config('shop.date_format'), $rows['end_time']);
 
             $arr[] = $rows;
         }

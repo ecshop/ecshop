@@ -11,9 +11,9 @@ class PackageController extends InitController
     {
 
         /* 载入语言文件 */
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/package.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/shopping_flow.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/user.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/package.php');
 
         /*------------------------------------------------------ */
         //-- PROCESSOR
@@ -79,7 +79,7 @@ class PackageController extends InitController
         $this->assign('helps', get_shop_help());       // 网店帮助
         $this->assign('lang', $_LANG);
 
-        $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typepackage.xml" : 'feed.php?type=package'); // RSS URL
+        $this->assign('feed_url', (config('shop.rewrite') == 1) ? "feed-typepackage.xml" : 'feed.php?type=package'); // RSS URL
         return $this->display('package.dwt');
     }
 }

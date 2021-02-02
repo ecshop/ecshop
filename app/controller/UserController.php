@@ -11,12 +11,12 @@ class UserController extends InitController
     {
 
         /* 载入语言文件 */
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/user.php');
 
         $user_id = $_SESSION['user_id'];
         $action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
 
-        $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
+        $affiliate = unserialize(config('shop.affiliate'));
         $this->assign('affiliate', $affiliate);
         $back_act = '';
 
@@ -66,7 +66,7 @@ class UserController extends InitController
             $car_off = $row['value'];
             $this->assign('car_off', $car_off);
             /* 是否显示积分兑换 */
-            if (!empty($_CFG['points_rule']) && unserialize($_CFG['points_rule'])) {
+            if (!empty(config('shop.points_rule')) && unserialize(config('shop.points_rule'))) {
                 $this->assign('show_transform_points', 1);
             }
             $this->assign('helps', get_shop_help());        // 网店帮助
@@ -86,7 +86,7 @@ class UserController extends InitController
             }
         }
         $this->assign('info', get_user_default($user_id));
-        $this->assign('user_notice', $_CFG['user_notice']);
+        $this->assign('user_notice', config('shop.user_notice'));
         $this->assign('prompt', get_user_prompt($user_id));
         return $this->display('user_clips.dwt');
     }
@@ -104,7 +104,7 @@ class UserController extends InitController
         $this->assign('extend_info_list', $extend_info_list);
 
         /* 验证码相关设置 */
-        if ((intval($_CFG['captcha']) & CAPTCHA_REGISTER) && gd_version() > 0) {
+        if ((intval(config('shop.captcha')) & CAPTCHA_REGISTER) && gd_version() > 0) {
             $this->assign('enabled_captcha', 1);
             $this->assign('rand', mt_rand());
         }
@@ -113,16 +113,16 @@ class UserController extends InitController
         $this->assign('passwd_questions', $_LANG['passwd_questions']);
 
         /* 增加是否关闭注册 */
-        $this->assign('shop_reg_closed', $_CFG['shop_reg_closed']);
+        $this->assign('shop_reg_closed', config('shop.shop_reg_closed'));
 //    $this->assign('back_act', $back_act);
         return $this->display('user_passport.dwt');
     } /* 注册会员的处理 */
     public function act_registerAction()
     {
         /* 增加是否关闭注册 */
-        if ($_CFG['shop_reg_closed']) {
+        if (config('shop.shop_reg_closed')) {
             $this->assign('action', 'register');
-            $this->assign('shop_reg_closed', $_CFG['shop_reg_closed']);
+            $this->assign('shop_reg_closed', config('shop.shop_reg_closed'));
             return $this->display('user_passport.dwt');
         } else {
 
@@ -156,7 +156,7 @@ class UserController extends InitController
             }
 
             /* 验证码检查 */
-            if ((intval($_CFG['captcha']) & CAPTCHA_REGISTER) && gd_version() > 0) {
+            if ((intval(config('shop.captcha')) & CAPTCHA_REGISTER) && gd_version() > 0) {
                 if (empty($_POST['captcha'])) {
                     return $this->show_message($_LANG['invalid_captcha'], $_LANG['sign_up'], 'user.php?act=register', 'error');
                 }
@@ -195,7 +195,7 @@ class UserController extends InitController
                     $db->query($sql);
                 }
                 /* 判断是否需要自动发送注册邮件 */
-                if ($GLOBALS['_CFG']['member_email_validate'] && $GLOBALS['_CFG']['send_verify_email']) {
+                if (config('shop.member_email_validate') && config('shop.send_verify_email')) {
                     send_regiter_hash($_SESSION['user_id']);
                 }
                 $ucdata = empty($user->ucdata) ? "" : $user->ucdata;
@@ -253,7 +253,7 @@ class UserController extends InitController
         }
 
 
-        $captcha = intval($_CFG['captcha']);
+        $captcha = intval(config('shop.captcha'));
         if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
             $this->assign('enabled_captcha', 1);
             $this->assign('rand', mt_rand());
@@ -269,7 +269,7 @@ class UserController extends InitController
         $back_act = isset($_POST['back_act']) ? trim($_POST['back_act']) : '';
 
 
-        $captcha = intval($_CFG['captcha']);
+        $captcha = intval(config('shop.captcha'));
         if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
             if (empty($_POST['captcha'])) {
                 return $this->show_message($_LANG['invalid_captcha'], $_LANG['relogin_lnk'], 'user.php', 'error');
@@ -304,7 +304,7 @@ class UserController extends InitController
         $captcha = !empty($_POST['captcha']) ? json_str_iconv(trim($_POST['captcha'])) : '';
         $result = array('error' => 0, 'content' => '');
 
-        $captcha = intval($_CFG['captcha']);
+        $captcha = intval(config('shop.captcha'));
         if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
             if (empty($captcha)) {
                 $result['error'] = 1;
@@ -487,7 +487,7 @@ class UserController extends InitController
 
             /* 判断链接的合法性 */
             $user_info = $user->get_profile_by_id($uid);
-            if (empty($user_info) || ($user_info && md5($user_info['user_id'] . $_CFG['hash_code'] . $user_info['reg_time']) != $code)) {
+            if (empty($user_info) || ($user_info && md5($user_info['user_id'] . config('shop.hash_code') . $user_info['reg_time']) != $code)) {
                 return $this->show_message($_LANG['parm_error'], $_LANG['back_home_lnk'], './', 'info');
             }
 
@@ -526,7 +526,7 @@ class UserController extends InitController
         $_SESSION['temp_user_name'] = $user_question_arr['user_name'];  //设置临时用户，不具有有效身份
         $_SESSION['passwd_answer'] = $user_question_arr['passwd_answer'];   //存储密码问题答案，减少一次数据库访问
 
-        $captcha = intval($_CFG['captcha']);
+        $captcha = intval(config('shop.captcha'));
         if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
             $this->assign('enabled_captcha', 1);
             $this->assign('rand', mt_rand());
@@ -537,7 +537,7 @@ class UserController extends InitController
     } /* 密码找回-->根据提交的密码答案进行相应处理 */
     public function check_answerAction()
     {
-        $captcha = intval($_CFG['captcha']);
+        $captcha = intval(config('shop.captcha'));
         if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
             if (empty($_POST['captcha'])) {
                 return $this->show_message($_LANG['invalid_captcha'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'error');
@@ -578,7 +578,7 @@ class UserController extends InitController
             //生成code
             //$code = md5($user_info[0] . $user_info[1]);
 
-            $code = md5($user_info['user_id'] . $_CFG['hash_code'] . $user_info['reg_time']);
+            $code = md5($user_info['user_id'] . config('shop.hash_code') . $user_info['reg_time']);
             //发送邮件的函数
             if (send_pwd_email($user_info['user_id'], $user_name, $email, $code)) {
                 return $this->show_message($_LANG['send_success'] . $email, $_LANG['back_home_lnk'], './', 'info');
@@ -610,7 +610,7 @@ class UserController extends InitController
 
         $user_info = $user->get_profile_by_id($user_id); //论坛记录
 
-        if (($user_info && (!empty($code) && md5($user_info['user_id'] . $_CFG['hash_code'] . $user_info['reg_time']) == $code)) || ($_SESSION['user_id'] > 0 && $_SESSION['user_id'] == $user_id && $user->check_user($_SESSION['user_name'], $old_password))) {
+        if (($user_info && (!empty($code) && md5($user_info['user_id'] . config('shop.hash_code') . $user_info['reg_time']) == $code)) || ($_SESSION['user_id'] > 0 && $_SESSION['user_id'] == $user_id && $user->check_user($_SESSION['user_name'], $old_password))) {
             if ($user->edit_user(array('username' => (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']), 'old_password' => $old_password, 'password' => $new_password), empty($code) ? 0 : 1)) {
                 $sql = "UPDATE " . table('users') . "SET `ec_salt`='0' WHERE user_id= '" . $user_id . "'";
                 $db->query($sql);
@@ -727,19 +727,19 @@ class UserController extends InitController
     } /* 收货地址列表界面*/
     public function address_listAction()
     {
-        include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
+        include_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/shopping_flow.php');
         $this->assign('lang', $_LANG);
 
         /* 取得国家列表、商店所在国家、商店所在国家的省列表 */
         $this->assign('country_list', get_regions());
-        $this->assign('shop_province_list', get_regions(1, $_CFG['shop_country']));
+        $this->assign('shop_province_list', get_regions(1, config('shop.shop_country')));
 
         /* 获得用户所有的收货人信息 */
         $consignee_list = get_consignee_list($_SESSION['user_id']);
 
         if (count($consignee_list) < 5 && $_SESSION['user_id'] > 0) {
             /* 如果用户收货人信息的总数小于5 则增加一个新的收货人信息 */
-            $consignee_list[] = array('country' => $_CFG['shop_country'], 'email' => isset($_SESSION['email']) ? $_SESSION['email'] : '');
+            $consignee_list[] = array('country' => config('shop.shop_country'), 'email' => isset($_SESSION['email']) ? $_SESSION['email'] : '');
         }
 
         $this->assign('consignee_list', $consignee_list);
@@ -760,21 +760,21 @@ class UserController extends InitController
 
         //赋值于模板
         $this->assign('real_goods_count', 1);
-        $this->assign('shop_country', $_CFG['shop_country']);
-        $this->assign('shop_province', get_regions(1, $_CFG['shop_country']));
+        $this->assign('shop_country', config('shop.shop_country'));
+        $this->assign('shop_province', get_regions(1, config('shop.shop_country')));
         $this->assign('province_list', $province_list);
         $this->assign('address', $address_id);
         $this->assign('city_list', $city_list);
         $this->assign('district_list', $district_list);
-        $this->assign('currency_format', $_CFG['currency_format']);
-        $this->assign('integral_scale', $_CFG['integral_scale']);
-        $this->assign('name_of_region', array($_CFG['name_of_region_1'], $_CFG['name_of_region_2'], $_CFG['name_of_region_3'], $_CFG['name_of_region_4']));
+        $this->assign('currency_format', config('shop.currency_format'));
+        $this->assign('integral_scale', config('shop.integral_scale'));
+        $this->assign('name_of_region', array(config('shop.name_of_region_1'), config('shop.name_of_region_2'), config('shop.name_of_region_3'), config('shop.name_of_region_4')));
 
         return $this->display('user_transaction.dwt');
     } /* 添加/编辑收货地址的处理 */
     public function act_edit_addressAction()
     {
-        include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
+        include_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/shopping_flow.php');
         $this->assign('lang', $_LANG);
 
         $address = array(
@@ -1091,7 +1091,7 @@ class UserController extends InitController
             " ORDER BY log_id DESC";
         $res = $GLOBALS['db']->selectLimit($sql, $pager['size'], $pager['start']);
         while ($row = $db->fetchRow($res)) {
-            $row['change_time'] = local_date($_CFG['date_format'], $row['change_time']);
+            $row['change_time'] = local_date(config('shop.date_format'), $row['change_time']);
             $row['type'] = $row[$account_type] > 0 ? $_LANG['account_inc'] : $_LANG['account_dec'];
             $row['user_money'] = price_format(abs($row['user_money']), false);
             $row['frozen_money'] = price_format(abs($row['frozen_money']), false);
@@ -1668,7 +1668,7 @@ class UserController extends InitController
             //我的推荐页面
 
             $page = !empty($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
-            $size = !empty($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
+            $size = !empty(config('shop.page_size')) && intval(config('shop.page_size')) > 0 ? intval(config('shop.page_size')) : 10;
 
             empty($affiliate) && $affiliate = array();
 
@@ -1819,10 +1819,10 @@ class UserController extends InitController
             $this->assign('goods', $goods);
         }
 
-        $this->assign('shopname', $_CFG['shop_name']);
+        $this->assign('shopname', config('shop.shop_name'));
         $this->assign('userid', $user_id);
         $this->assign('shopurl', $ecs->url());
-        $this->assign('logosrc', 'themes/' . $_CFG['template'] . '/images/logo.gif');
+        $this->assign('logosrc', 'themes/' . config('shop.template') . '/images/logo.gif');
 
         return $this->display('user_clips.dwt');
     } //首页邮件订阅ajax操做和验证操作
@@ -1855,7 +1855,7 @@ class UserController extends InitController
                 $db->query($sql);
                 $info = $_LANG['email_check'];
                 $url = $ecs->url() . "user.php?act=email_list&job=add_check&hash=$hash&email=$email";
-                send_mail('', $email, $_LANG['check_mail'], sprintf($_LANG['check_mail_content'], $email, $_CFG['shop_name'], $url, $url, $_CFG['shop_name'], local_date('Y-m-d')), 1);
+                send_mail('', $email, $_LANG['check_mail'], sprintf($_LANG['check_mail_content'], $email, config('shop.shop_name'), $url, $url, config('shop.shop_name'), local_date('Y-m-d')), 1);
             } elseif ($ck['stat'] == 1) {
                 $info = sprintf($_LANG['email_alreadyin_list'], $email);
             } else {
@@ -1864,7 +1864,7 @@ class UserController extends InitController
                 $db->query($sql);
                 $info = $_LANG['email_re_check'];
                 $url = $ecs->url() . "user.php?act=email_list&job=add_check&hash=$hash&email=$email";
-                send_mail('', $email, $_LANG['check_mail'], sprintf($_LANG['check_mail_content'], $email, $_CFG['shop_name'], $url, $url, $_CFG['shop_name'], local_date('Y-m-d')), 1);
+                send_mail('', $email, $_LANG['check_mail'], sprintf($_LANG['check_mail_content'], $email, config('shop.shop_name'), $url, $url, config('shop.shop_name'), local_date('Y-m-d')), 1);
             }
             die($info);
         } elseif ($job == 'del') {
@@ -1876,7 +1876,7 @@ class UserController extends InitController
                 $db->query($sql);
                 $info = $_LANG['email_check'];
                 $url = $ecs->url() . "user.php?act=email_list&job=del_check&hash=$hash&email=$email";
-                send_mail('', $email, $_LANG['check_mail'], sprintf($_LANG['check_mail_content'], $email, $_CFG['shop_name'], $url, $url, $_CFG['shop_name'], local_date('Y-m-d')), 1);
+                send_mail('', $email, $_LANG['check_mail'], sprintf($_LANG['check_mail_content'], $email, config('shop.shop_name'), $url, $url, config('shop.shop_name'), local_date('Y-m-d')), 1);
             } else {
                 $info = $_LANG['email_not_alive'];
             }
@@ -2025,7 +2025,7 @@ class UserController extends InitController
         $order_query['user_id'] = $row['user_id'];
         /* 如果是匿名用户显示发货时间 */
         if ($row['user_id'] == 0 && $row['shipping_time'] > 0) {
-            $order_query['shipping_date'] = local_date($GLOBALS['_CFG']['date_format'], $row['shipping_time']);
+            $order_query['shipping_date'] = local_date(config('shop.date_format'), $row['shipping_time']);
         }
         $this->assign('order_query', $order_query);
         $result['content'] = $smarty->fetch('library/order_query.lbi');
@@ -2035,18 +2035,18 @@ class UserController extends InitController
     public function transform_pointsAction()
     {
         $rule = array();
-        if (!empty($_CFG['points_rule'])) {
-            $rule = unserialize($_CFG['points_rule']);
+        if (!empty(config('shop.points_rule'))) {
+            $rule = unserialize(config('shop.points_rule'));
         }
         $cfg = array();
-        if (!empty($_CFG['integrate_config'])) {
-            $cfg = unserialize($_CFG['integrate_config']);
+        if (!empty(config('shop.integrate_config'))) {
+            $cfg = unserialize(config('shop.integrate_config'));
             $_LANG['exchange_points'][0] = empty($cfg['uc_lang']['credits'][0][0]) ? $_LANG['exchange_points'][0] : $cfg['uc_lang']['credits'][0][0];
             $_LANG['exchange_points'][1] = empty($cfg['uc_lang']['credits'][1][0]) ? $_LANG['exchange_points'][1] : $cfg['uc_lang']['credits'][1][0];
         }
         $sql = "SELECT user_id, user_name, pay_points, rank_points FROM " . table('users') . " WHERE user_id='$user_id'";
         $row = $db->getRow($sql);
-        if ($_CFG['integrate_code'] == 'ucenter') {
+        if (config('shop.integrate_code') == 'ucenter') {
             $exchange_type = 'ucenter';
             $to_credits_options = array();
             $out_exchange_allow = array();
@@ -2136,8 +2136,8 @@ class UserController extends InitController
         $points_name = $user->get_points_name();
 
         $rule = array();
-        if ($_CFG['points_rule']) {
-            $rule = unserialize($_CFG['points_rule']);
+        if (config('shop.points_rule')) {
+            $rule = unserialize(config('shop.points_rule'));
         }
         list($from, $to) = explode(':', $rule[$rule_index]);
 
@@ -2191,8 +2191,8 @@ class UserController extends InitController
     public function act_transform_ucenter_pointsAction()
     {
         $rule = array();
-        if ($_CFG['points_rule']) {
-            $rule = unserialize($_CFG['points_rule']);
+        if (config('shop.points_rule')) {
+            $rule = unserialize(config('shop.points_rule'));
         }
         $shop_points = array(0 => 'rank_points', 1 => 'pay_points');
         $sql = "SELECT user_id, user_name, pay_points, rank_points FROM " . table('users') . " WHERE user_id='$user_id'";
@@ -2200,7 +2200,7 @@ class UserController extends InitController
         $exchange_amount = intval($_POST['amount']);
         $fromcredits = intval($_POST['fromcredits']);
         $tocredits = trim($_POST['tocredits']);
-        $cfg = unserialize($_CFG['integrate_config']);
+        $cfg = unserialize(config('shop.integrate_config'));
         if (!empty($cfg)) {
             $_LANG['exchange_points'][0] = empty($cfg['uc_lang']['credits'][0][0]) ? $_LANG['exchange_points'][0] : $cfg['uc_lang']['credits'][0][0];
             $_LANG['exchange_points'][1] = empty($cfg['uc_lang']['credits'][1][0]) ? $_LANG['exchange_points'][1] : $cfg['uc_lang']['credits'][1][0];

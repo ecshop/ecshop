@@ -2,6 +2,8 @@
 
 namespace app\controller\admin;
 
+use app\service\ShopService;
+
 /**
  * 管理中心商店设置
  */
@@ -44,13 +46,13 @@ class ShopConfigController extends InitController
         }
         $this->assign('rewrite_confirm', $rewrite_confirm);
 
-        if ($_CFG['shop_country'] > 0) {
-            $this->assign('provinces', get_regions(1, $_CFG['shop_country']));
-            if ($_CFG['shop_province']) {
-                $this->assign('cities', get_regions(2, $_CFG['shop_province']));
+        if (config('shop.shop_country') > 0) {
+            $this->assign('provinces', get_regions(1, config('shop.shop_country')));
+            if (config('shop.shop_province')) {
+                $this->assign('cities', get_regions(2, config('shop.shop_province')));
             }
         }
-        $this->assign('cfg', $_CFG);
+        $this->assign('cfg', config('shop'));
 
         assign_query_info();
         return $this->display('shop_config.htm');
@@ -118,9 +120,9 @@ class ShopConfigController extends InitController
                     sys_msg(sprintf($_LANG['msg_invalid_file'], $file['name']));
                 } else {
                     if ($code == 'shop_logo') {
-                        $info = get_template_info($_CFG['template']);
+                        $info = get_template_info(config('shop.template'));
 
-                        $file_name = str_replace('{$template}', $_CFG['template'], $file_var_list[$code]['store_dir']) . $info['logo'];
+                        $file_name = str_replace('{$template}', config('shop.template'), $file_var_list[$code]['store_dir']) . $info['logo'];
                     } elseif ($code == 'watermark') {
                         $file_name_arr = explode('.', $file['name']);
                         $ext = array_pop($file_name_arr);
@@ -173,11 +175,12 @@ class ShopConfigController extends InitController
         /* 清除缓存 */
         clear_all_files();
 
-        $_CFG = load_config();
+        $shopService = new ShopService();
+        config(['config' => $shopService->getConfig()]);
 
-        $shop_country = $db->getOne("SELECT region_name FROM " . table('region') . " WHERE region_id='$_CFG[shop_country]'");
-        $shop_province = $db->getOne("SELECT region_name FROM " . table('region') . " WHERE region_id='$_CFG[shop_province]'");
-        $shop_city = $db->getOne("SELECT region_name FROM " . table('region') . " WHERE region_id='$_CFG[shop_city]'");
+        $shop_country = $db->getOne("SELECT region_name FROM " . table('region') . " WHERE region_id='".config('shop.shop_country')."'");
+        $shop_province = $db->getOne("SELECT region_name FROM " . table('region') . " WHERE region_id='".config('shop.shop_province')."'");
+        $shop_city = $db->getOne("SELECT region_name FROM " . table('region') . " WHERE region_id='".config('shop.shop_city')."'");
 
         if ($type == 'mail_setting') {
             $links[] = array('text' => $_LANG['back_mail_settings'], 'href' => 'shop_config.php?act=mail_settings');
@@ -200,13 +203,13 @@ class ShopConfigController extends InitController
         $email = trim($_POST['email']);
 
         /* 更新配置 */
-        $_CFG['mail_service'] = intval($_POST['mail_service']);
-        $_CFG['smtp_host'] = trim($_POST['smtp_host']);
-        $_CFG['smtp_port'] = trim($_POST['smtp_port']);
-        $_CFG['smtp_user'] = json_str_iconv(trim($_POST['smtp_user']));
-        $_CFG['smtp_pass'] = trim($_POST['smtp_pass']);
-        $_CFG['smtp_mail'] = trim($_POST['reply_email']);
-        $_CFG['mail_charset'] = trim($_POST['mail_charset']);
+        config('shop.mail_service') = intval($_POST['mail_service']);
+        config('shop.smtp_host') = trim($_POST['smtp_host']);
+        config('shop.smtp_port') = trim($_POST['smtp_port']);
+        config('shop.smtp_user') = json_str_iconv(trim($_POST['smtp_user']));
+        config('shop.smtp_pass') = trim($_POST['smtp_pass']);
+        config('shop.smtp_mail') = trim($_POST['reply_email']);
+        config('shop.mail_charset') = trim($_POST['mail_charset']);
 
         if (send_mail('', $email, $_LANG['test_mail_title'], $_LANG['cfg_name']['email_content'], 0)) {
             return make_json_result('', $_LANG['sendemail_success'] . $email);
@@ -226,7 +229,7 @@ class ShopConfigController extends InitController
         /* 取得参数 */
         $code = trim($_GET['code']);
 
-        $filename = $_CFG[$code];
+        $filename = config('shop.'.$code);
 
         //删除文件
         @unlink($filename);

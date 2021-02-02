@@ -17,22 +17,22 @@ class CloudController extends InitController
 
         $data['api_ver'] = '1.0';
         $data['version'] = VERSION;
-        $data['ecs_lang'] = $_CFG['lang'];
+        $data['ecs_lang'] = config('shop.lang');
         $data['release'] = RELEASE;
         $data['charset'] = strtoupper(EC_CHARSET);
-        $data['certificate_id'] = $_CFG['certificate_id'];
-        $data['token'] = md5($_CFG['token']);
-        $data['certi'] = $_CFG['certi'];
+        $data['certificate_id'] = config('shop.certificate_id');
+        $data['token'] = md5(config('shop.token'));
+        $data['certi'] = config('shop.certi');
         $data['php_ver'] = PHP_VERSION;
         $data['mysql_ver'] = $db->version();
         $data['shop_url'] = urlencode($ecs->url());
         $data['admin_url'] = urlencode($ecs->url() . ADMIN_PATH);
         $data['sess_id'] = $GLOBALS['sess']->get_session_id();
         $data['stamp'] = time();
-        $data['ent_id'] = $_CFG['ent_id'];
-        $data['ent_ac'] = $_CFG['ent_ac'];
-        $data['ent_sign'] = $_CFG['ent_sign'];
-        $data['ent_email'] = $_CFG['ent_email'];
+        $data['ent_id'] = config('shop.ent_id');
+        $data['ent_ac'] = config('shop.ent_ac');
+        $data['ent_sign'] = config('shop.ent_sign');
+        $data['ent_email'] = config('shop.ent_email');
 
         $act = !empty($_REQUEST['act']) ? $_REQUEST['act'] : 'index';
 

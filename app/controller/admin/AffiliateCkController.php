@@ -11,7 +11,7 @@ class AffiliateCkController extends InitController
         admin_priv('affiliate_ck');
         $timestamp = time();
 
-        $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
+        $affiliate = unserialize(config('shop.affiliate'));
         empty($affiliate) && $affiliate = array();
         $separate_on = $affiliate['on'];
     }
@@ -97,7 +97,7 @@ class AffiliateCkController extends InitController
 */
     public function separateAction()
     {
-        $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
+        $affiliate = unserialize(config('shop.affiliate'));
         empty($affiliate) && $affiliate = array();
 
         $separate_by = $affiliate['config']['separate_by'];
@@ -179,7 +179,7 @@ class AffiliateCkController extends InitController
 
     public function get_affiliate_ck()
     {
-        $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
+        $affiliate = unserialize(config('shop.affiliate'));
         empty($affiliate) && $affiliate = array();
         $separate_by = $affiliate['config']['separate_by'];
 

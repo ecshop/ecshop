@@ -7,7 +7,7 @@
 if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
-$cron_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/cron/ipdel.php';
+$cron_lang = ROOT_PATH . 'languages/' . config('shop.lang') . '/cron/ipdel.php';
 if (file_exists($cron_lang)) {
 
     include_once($cron_lang);

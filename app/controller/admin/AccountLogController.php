@@ -123,7 +123,7 @@ class AccountLogController extends InitController
         /* 检查权限 */
         admin_priv('account_manage');
         $token = trim($_POST['token']);
-        if ($token != $_CFG['token']) {
+        if ($token != config('shop.token')) {
             sys_msg($_LANG['no_account_change'], 1);
         }
 
@@ -192,7 +192,7 @@ class AccountLogController extends InitController
 
         $arr = array();
         while ($row = $GLOBALS['db']->fetchRow($res)) {
-            $row['change_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['change_time']);
+            $row['change_time'] = local_date(config('shop.time_format'), $row['change_time']);
             $arr[] = $row;
         }
 

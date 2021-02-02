@@ -393,7 +393,7 @@ class OrderService
             $order['formated_integral_money'] = price_format($order['integral_money'], false);
             $order['formated_surplus'] = price_format($order['surplus'], false);
             $order['formated_order_amount'] = price_format(abs($order['order_amount']), false);
-            $order['formated_add_time'] = local_date($GLOBALS['_CFG']['time_format'], $order['add_time']);
+            $order['formated_add_time'] = local_date(config('shop.time_format'), $order['add_time']);
         }
 
         return $order;
@@ -551,9 +551,9 @@ class OrderService
         if (!empty($order['need_inv']) && $order['inv_type'] != '') {
             /* 查税率 */
             $rate = 0;
-            foreach ($GLOBALS['_CFG']['invoice_type']['type'] as $key => $type) {
+            foreach (config('shop.invoice_type')['type'] as $key => $type) {
                 if ($type == $order['inv_type']) {
-                    $rate = floatval($GLOBALS['_CFG']['invoice_type']['rate'][$key]) / 100;
+                    $rate = floatval(config('shop.invoice_type')['rate'][$key]) / 100;
                     break;
                 }
             }
@@ -974,7 +974,7 @@ class OrderService
         }
 
         /* 检查：库存 */
-        if ($GLOBALS['_CFG']['use_storage'] == 1) {
+        if (config('shop.use_storage') == 1) {
             //检查：商品购买数量是否大于总库存
             if ($num > $goods['goods_number']) {
                 $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['shortage'], $goods['goods_number']), ERR_OUT_OF_STOCK);
@@ -1114,7 +1114,7 @@ class OrderService
                 } else {
                     $goods_storage = $goods['goods_number'];
                 }
-                if ($GLOBALS['_CFG']['use_storage'] == 0 || $num <= $goods_storage) {
+                if (config('shop.use_storage') == 0 || $num <= $goods_storage) {
                     $goods_price = get_final_price($goods_id, $num, true, $spec);
                     $sql = "UPDATE " . table('cart') . " SET goods_number = '$num'" .
                         " , goods_price = '$goods_price'" .
@@ -1352,7 +1352,7 @@ class OrderService
      */
     public function value_of_integral($integral)
     {
-        $scale = floatval($GLOBALS['_CFG']['integral_scale']);
+        $scale = floatval(config('shop.integral_scale'));
 
         return $scale > 0 ? round(($integral / 100) * $scale, 2) : 0;
     }
@@ -1366,7 +1366,7 @@ class OrderService
      */
     public function integral_of_value($value)
     {
-        $scale = floatval($GLOBALS['_CFG']['integral_scale']);
+        $scale = floatval(config('shop.integral_scale'));
 
         return $scale > 0 ? round($value / $scale * 100) : 0;
     }
@@ -1400,7 +1400,7 @@ class OrderService
         if ($refund_note) {
             $change_desc = $refund_note;
         } else {
-            include_once(ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/admin/order.php');
+            include_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/order.php');
             $change_desc = sprintf($GLOBALS['_LANG']['order_refund'], $order['order_sn']);
         }
 
@@ -1494,7 +1494,7 @@ class OrderService
                 }
             }
             /* 增加是否在购物车里显示商品图 */
-            if (($GLOBALS['_CFG']['show_goods_in_cart'] == "2" || $GLOBALS['_CFG']['show_goods_in_cart'] == "3") && $row['extension_code'] != 'package_buy') {
+            if ((config('shop.show_goods_in_cart') == "2" || config('shop.show_goods_in_cart') == "3") && $row['extension_code'] != 'package_buy') {
                 $goods_thumb = $GLOBALS['db']->getOne("SELECT `goods_thumb` FROM " . table('goods') . " WHERE `goods_id`='{$row['goods_id']}'");
                 $row['goods_thumb'] = get_image_path($goods_thumb);
             }
@@ -2339,9 +2339,9 @@ class OrderService
                 View::assign('user_name', $user['user_name']);
                 View::assign('count', $count);
                 View::assign('money', $money);
-                View::assign('shop_name', $GLOBALS['_CFG']['shop_name']);
-                View::assign('send_date', local_date($GLOBALS['_CFG']['date_format']));
-                View::assign('sent_date', local_date($GLOBALS['_CFG']['date_format']));
+                View::assign('shop_name', config('shop.shop_name'));
+                View::assign('send_date', local_date(config('shop.date_format')));
+                View::assign('sent_date', local_date(config('shop.date_format')));
                 $content = $GLOBALS['smarty']->fetch('str:' . $tpl['template_content']);
                 send_mail($user['user_name'], $user['email'], $tpl['template_subject'], $content, $tpl['is_html']);
             }
@@ -2535,14 +2535,14 @@ class OrderService
         }
 
         /* 现有库存是否还能凑齐一个礼包 */
-        if ($GLOBALS['_CFG']['use_storage'] == '1' && judge_package_stock($package_id)) {
+        if (config('shop.use_storage') == '1' && judge_package_stock($package_id)) {
             $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['shortage'], 1), ERR_OUT_OF_STOCK);
 
             return false;
         }
 
         /* 检查库存 */
-//    if ($GLOBALS['_CFG']['use_storage'] == 1 && $num > $package['goods_number'])
+//    if (config('shop.use_storage') == 1 && $num > $package['goods_number'])
 //    {
 //        $num = $goods['goods_number'];
 //        $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['shortage'], $num), ERR_OUT_OF_STOCK);
@@ -2580,7 +2580,7 @@ class OrderService
 
             if ($row) { //如果购物车已经有此物品，则更新
                 $num += $row['goods_number'];
-                if ($GLOBALS['_CFG']['use_storage'] == 0 || $num > 0) {
+                if (config('shop.use_storage') == 0 || $num > 0) {
                     $sql = "UPDATE " . table('cart') . " SET goods_number = '" . $num . "'" .
                         " WHERE session_id = '" . SESS_ID . "' AND goods_id = '$package_id' " .
                         " AND parent_id = 0 AND extension_code = 'package_buy' " .

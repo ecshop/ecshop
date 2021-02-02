@@ -112,8 +112,8 @@ class Sms
                 $t_contents['0']['content'] = $val['content'];
                 $send_str['contents'] = $this->json->encode($t_contents);
                 $send_str['certi_app'] = 'sms.send';
-                $send_str['entId'] = $GLOBALS['_CFG']['ent_id'];
-                $send_str['entPwd'] = $GLOBALS['_CFG']['ent_ac'];
+                $send_str['entId'] = config('shop.ent_id');
+                $send_str['entPwd'] = config('shop.ent_ac');
                 $send_str['source'] = SOURCE_ID;
 
                 $send_str['sendType'] = 'fan-out';
@@ -137,8 +137,8 @@ class Sms
             }
             $send_str['contents'] = $this->json->encode($contents);
             $send_str['certi_app'] = 'sms.send';
-            $send_str['entId'] = $GLOBALS['_CFG']['ent_id'];
-            $send_str['entPwd'] = $GLOBALS['_CFG']['ent_ac'];
+            $send_str['entId'] = config('shop.ent_id');
+            $send_str['entPwd'] = config('shop.ent_ac');
             $send_str['license'] = '111111';
             $send_str['source'] = SOURCE_ID;
 
@@ -238,8 +238,8 @@ class Sms
     public function getSmsInfo($certi_app = 'sms.info', $version = '1.0', $format = 'json')
     {
         $send_str['certi_app'] = $certi_app;
-        $send_str['entId'] = $GLOBALS['_CFG']['ent_id'];
-        $send_str['entPwd'] = $GLOBALS['_CFG']['ent_ac'];
+        $send_str['entId'] = config('shop.ent_id');
+        $send_str['entPwd'] = config('shop.ent_ac');
         $send_str['source'] = SOURCE_ID;
         $send_str['version'] = $version;
         $send_str['format'] = $format;
@@ -261,7 +261,7 @@ class Sms
         if (empty($phones) || empty($msg)) {
             return false;
         }
-        $msg .= $GLOBALS['_CFG']['default_sms_sign'];
+        $msg .= config('shop.default_sms_sign');
 
         $phone_key = 0;
         $i = 0;

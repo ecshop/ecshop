@@ -35,7 +35,7 @@ class CommentController extends InitController
                 $result['error'] = 1;
                 $result['message'] = $_LANG['error_email'];
             } else {
-                if ((intval($_CFG['captcha']) & CAPTCHA_COMMENT) && gd_version() > 0) {
+                if ((intval(config('shop.captcha')) & CAPTCHA_COMMENT) && gd_version() > 0) {
                     /* 检查验证码 */
 
                     $validator = new captcha();
@@ -43,7 +43,7 @@ class CommentController extends InitController
                         $result['error'] = 1;
                         $result['message'] = $_LANG['invalid_captcha'];
                     } else {
-                        $factor = intval($_CFG['comment_factor']);
+                        $factor = intval(config('shop.comment_factor'));
                         if ($cmt->type == 0 && $factor > 0) {
                             /* 只有商品才检查评论条件 */
                             switch ($factor) {
@@ -114,7 +114,7 @@ class CommentController extends InitController
                         $result['error'] = 1;
                         $result['message'] = $_LANG['cmt_spam_warning'];
                     } else {
-                        $factor = intval($_CFG['comment_factor']);
+                        $factor = intval(config('shop.comment_factor'));
                         if ($cmt->type == 0 && $factor > 0) {
                             /* 只有商品才检查评论条件 */
                             switch ($factor) {
@@ -200,12 +200,12 @@ class CommentController extends InitController
             $this->assign('pager', $comments['pager']);
 
             /* 验证码相关设置 */
-            if ((intval($_CFG['captcha']) & CAPTCHA_COMMENT) && gd_version() > 0) {
+            if ((intval(config('shop.captcha')) & CAPTCHA_COMMENT) && gd_version() > 0) {
                 $this->assign('enabled_captcha', 1);
                 $this->assign('rand', mt_rand());
             }
 
-            $result['message'] = $_CFG['comment_check'] ? $_LANG['cmt_submit_wait'] : $_LANG['cmt_submit_done'];
+            $result['message'] = config('shop.comment_check') ? $_LANG['cmt_submit_wait'] : $_LANG['cmt_submit_done'];
             $result['content'] = $smarty->fetch("library/comments_list.lbi");
         }
 
@@ -223,7 +223,7 @@ class CommentController extends InitController
     public function add_comment($cmt)
     {
         /* 评论是否需要审核 */
-        $status = 1 - $GLOBALS['_CFG']['comment_check'];
+        $status = 1 - config('shop.comment_check');
 
         $user_id = empty($_SESSION['user_id']) ? 0 : $_SESSION['user_id'];
         $email = empty($cmt->email) ? $_SESSION['email'] : trim($cmt->email);

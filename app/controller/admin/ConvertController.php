@@ -27,7 +27,7 @@ class ConvertController extends InitController
         $modules = read_modules(ROOT_PATH . 'includes/modules/convert');
         for ($i = 0; $i < count($modules); $i++) {
             $code = $modules[$i]['code'];
-            $lang_file = ROOT_PATH . 'languages/' . $_CFG['lang'] . '/convert/' . $code . '.php';
+            $lang_file = ROOT_PATH . 'languages/' . config('shop.lang') . '/convert/' . $code . '.php';
             if (file_exists($lang_file)) {
                 include_once($lang_file);
             }
@@ -134,7 +134,7 @@ class ConvertController extends InitController
         $_SESSION['convert_config'] = $config;
 
         /* 包含插件语言文件 */
-        include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/convert/' . $config->code . '.php');
+        include_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/convert/' . $config->code . '.php');
 
         /* 取得第一步操作 */
         $step = $convert->next_step('');
@@ -168,7 +168,7 @@ class ConvertController extends InitController
         $convert = new $config->code($sdb, $config->prefix, $config->path, $config->charset);
 
         /* 包含插件语言文件 */
-        include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/convert/' . $config->code . '.php');
+        include_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/convert/' . $config->code . '.php');
 
         /* 执行步骤 */
         $result = $convert->process($step);

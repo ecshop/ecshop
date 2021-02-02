@@ -11,7 +11,7 @@ class AdPositionController extends InitController
     {
         parent::initialize();
 
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/ads.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/ads.php');
 
         $this->assign('lang', $_LANG);
         $exc = new exchange(table("ad_position"), $db, 'position_id', 'position_name');

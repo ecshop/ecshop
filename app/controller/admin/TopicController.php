@@ -70,7 +70,7 @@ class TopicController extends InitController
 
         $this->assign('cat_list', cat_list(0, 1));
         $this->assign('brand_list', get_brand_list());
-        $this->assign('cfg_lang', $_CFG['lang']);
+        $this->assign('cfg_lang', config('shop.lang'));
         $this->assign('topic_style_color', $topic_style_color);
 
         $width_height = get_toppic_width_height();
@@ -290,7 +290,7 @@ class TopicController extends InitController
         $this->assign('filter', $topic_list['filter']);
         $this->assign('record_count', $topic_list['record_count']);
         $this->assign('page_count', $topic_list['page_count']);
-        $this->assign('use_storage', empty($_CFG['use_storage']) ? 0 : 1);
+        $this->assign('use_storage', empty(config('shop.use_storage')) ? 0 : 1);
 
         /* 排序标记 */
         $sort_flag = sort_flag($topic_list['filter']);
@@ -366,7 +366,7 @@ class TopicController extends InitController
     {
         $width_height = array();
 
-        $file_path = ROOT_PATH . 'themes/' . $GLOBALS['_CFG']['template'] . '/topic.dwt';
+        $file_path = ROOT_PATH . 'themes/' . config('shop.template') . '/topic.dwt';
         if (!file_exists($file_path) || !is_readable($file_path)) {
             return $width_height;
         }

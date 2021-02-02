@@ -39,7 +39,7 @@ class PrivilegeController extends InitController
         header("Cache-Control: no-cache, must-revalidate");
         header("Pragma: no-cache");
 
-        if ((intval($_CFG['captcha']) & CAPTCHA_ADMIN) && gd_version() > 0) {
+        if ((intval(config('shop.captcha')) & CAPTCHA_ADMIN) && gd_version() > 0) {
             $this->assign('gd_version', gd_version());
             $this->assign('random', mt_rand());
         }
@@ -52,7 +52,7 @@ class PrivilegeController extends InitController
     /*------------------------------------------------------ */
     public function signinAction()
     {
-        if (intval($_CFG['captcha']) & CAPTCHA_ADMIN) {
+        if (intval(config('shop.captcha')) & CAPTCHA_ADMIN) {
 
             /* 检查验证码是否正确 */
             $validator = new captcha();
@@ -111,7 +111,7 @@ class PrivilegeController extends InitController
             if (isset($_POST['remember'])) {
                 $time = gmtime() + 3600 * 24 * 365;
                 setcookie('ECSCP[admin_id]', $row['user_id'], $time, null, null, null, true);
-                setcookie('ECSCP[admin_pass]', md5($row['password'] . $_CFG['hash_code'] . $row['add_time']), $time, null, null, null, true);
+                setcookie('ECSCP[admin_pass]', md5($row['password'] . config('shop.hash_code') . $row['add_time']), $time, null, null, null, true);
             }
 
             // 清除购物车中过期的数据
@@ -175,7 +175,7 @@ class PrivilegeController extends InitController
     public function insertAction()
     {
         admin_priv('admin_manage');
-        if ($_POST['token'] != $_CFG['token']) {
+        if ($_POST['token'] != config('shop.token')) {
             sys_msg('add_error', 1);
         }
         /* 判断管理员是否已经存在 */
@@ -300,7 +300,7 @@ class PrivilegeController extends InitController
         $admin_email = !empty($_REQUEST['email']) ? trim($_REQUEST['email']) : '';
         $ec_salt = rand(1, 9999);
         $password = !empty($_POST['new_password']) ? ", password = '" . md5(md5($_POST['new_password']) . $ec_salt) . "'" : '';
-        if ($_POST['token'] != $_CFG['token']) {
+        if ($_POST['token'] != config('shop.token')) {
             sys_msg('update_error', 1);
         }
         if ($act == 'update') {
@@ -477,7 +477,7 @@ class PrivilegeController extends InitController
     /*------------------------------------------------------ */
     public function allotAction()
     {
-        include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/priv_action.php');
+        include_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/priv_action.php');
 
         admin_priv('allot_priv');
         if ($_SESSION['admin_id'] == $_GET['id']) {
@@ -537,7 +537,7 @@ class PrivilegeController extends InitController
     public function update_allotAction()
     {
         admin_priv('admin_manage');
-        if ($_POST['token'] != $_CFG['token']) {
+        if ($_POST['token'] != config('shop.token')) {
             sys_msg('update_allot_error', 1);
         }
         /* 取得当前管理员用户名 */
@@ -610,8 +610,8 @@ class PrivilegeController extends InitController
         $list = $GLOBALS['db']->getAll($sql);
 
         foreach ($list as $key => $val) {
-            $list[$key]['add_time'] = local_date($GLOBALS['_CFG']['time_format'], $val['add_time']);
-            $list[$key]['last_login'] = local_date($GLOBALS['_CFG']['time_format'], $val['last_login']);
+            $list[$key]['add_time'] = local_date(config('shop.time_format'), $val['add_time']);
+            $list[$key]['last_login'] = local_date(config('shop.time_format'), $val['last_login']);
         }
 
         return $list;

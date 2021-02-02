@@ -167,7 +167,7 @@ class AdminLogsController extends InitController
         $res = $GLOBALS['db']->selectLimit($sql, $filter['page_size'], $filter['start']);
 
         while ($rows = $GLOBALS['db']->fetchRow($res)) {
-            $rows['log_time'] = local_date($GLOBALS['_CFG']['time_format'], $rows['log_time']);
+            $rows['log_time'] = local_date(config('shop.time_format'), $rows['log_time']);
 
             $list[] = $rows;
         }

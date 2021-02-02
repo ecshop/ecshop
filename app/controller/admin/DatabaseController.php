@@ -112,7 +112,7 @@ class DatabaseController extends InitController
     {
         /* 权限判断 */
         $token = trim($_REQUEST['token']);
-        if ($token != $_CFG['token']) {
+        if ($token != config('shop.token')) {
             sys_msg($_LANG['backup_failure'], 1);
         }
         admin_priv('db_backup');
@@ -253,7 +253,7 @@ class DatabaseController extends InitController
                 sys_msg(sprintf($_LANG['fail_write_file'], $sql_file_name . '_' . $vol . '.sql'), 1, array(array('text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup')), false);
             }
 
-            $lnk = 'database.php?act=dumpsql&token=' . $_CFG['token'] . '&sql_file_name=' . $sql_file_name . '&vol_size=' . $max_size . '&vol=' . ($vol + 1);
+            $lnk = 'database.php?act=dumpsql&token=' . config('shop.token') . '&sql_file_name=' . $sql_file_name . '&vol_size=' . $max_size . '&vol=' . ($vol + 1);
             $this->assign('title', sprintf($_LANG['backup_title'], '#' . $vol));
             $this->assign('auto_redirect', 1);
             $this->assign('auto_link', $lnk);

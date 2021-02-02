@@ -20,8 +20,8 @@ class TemplateController extends InitController
         admin_priv('template_select');
 
         /* 获得当前的模版的信息 */
-        $curr_template = $_CFG['template'];
-        $curr_style = $_CFG['stylename'];
+        $curr_template = config('shop.template');
+        $curr_style = config('shop.stylename');
 
         /* 获得可用的模版 */
         $available_templates = array();
@@ -78,7 +78,7 @@ class TemplateController extends InitController
     {
         admin_priv('template_setup');
 
-        $template_theme = $_CFG['template'];
+        $template_theme = config('shop.template');
         $curr_template = empty($_REQUEST['template_file']) ? 'index' : $_REQUEST['template_file'];
 
         $temp_options = array();
@@ -203,7 +203,7 @@ class TemplateController extends InitController
     {
         admin_priv('template_setup');
 
-        $curr_template = $_CFG['template'];
+        $curr_template = config('shop.template');
         $db->query("DELETE FROM " . table('template') . " WHERE remarks = '' AND filename = '$_POST[template_file]' AND theme = '$curr_template'");
 
         /* 先处理固定内容 */
@@ -400,7 +400,7 @@ class TemplateController extends InitController
     {
         admin_priv('library_manage');
 
-        $curr_template = $_CFG['template'];
+        $curr_template = config('shop.template');
         $arr_library = array();
         $library_path = '../themes/' . $curr_template . '/library';
         $library_dir = @opendir($library_path);
@@ -464,7 +464,7 @@ class TemplateController extends InitController
     public function backupAction()
     {
         check_authz_json('backup_setting');
-        $tpl = $_CFG['template'];
+        $tpl = config('shop.template');
         //$tpl = trim($_REQUEST['tpl_name']);
 
         $filename = '../temp/backup/' . $tpl . '_' . date('Ymd') . '.zip';
@@ -485,7 +485,7 @@ class TemplateController extends InitController
 
     public function load_libraryAction()
     {
-        $library = load_library($_CFG['template'], trim($_GET['lib']));
+        $library = load_library(config('shop.template'), trim($_GET['lib']));
         $message = ($library['mark'] & 7) ? '' : $_LANG['library_not_written'];
 
         return make_json_result($library['html'], $message);
@@ -500,17 +500,17 @@ class TemplateController extends InitController
         check_authz_json('library_manage');
 
         $html = stripslashes(json_str_iconv($_POST['html']));
-        $lib_file = '../themes/' . $_CFG['template'] . '/library/' . $_POST['lib'] . '.lbi';
+        $lib_file = '../themes/' . config('shop.template') . '/library/' . $_POST['lib'] . '.lbi';
         $lib_file = str_replace("0xa", '', $lib_file); // 过滤 0xa 非法字符
 
         $org_html = str_replace("\xEF\xBB\xBF", '', file_get_contents($lib_file));
 
         if (@file_exists($lib_file) === true && @file_put_contents($lib_file, $html)) {
-            @file_put_contents('../temp/backup/library/' . $_CFG['template'] . '-' . $_POST['lib'] . '.lbi', $org_html);
+            @file_put_contents('../temp/backup/library/' . config('shop.template') . '-' . $_POST['lib'] . '.lbi', $org_html);
 
             return make_json_result('', $_LANG['update_lib_success']);
         } else {
-            return make_json_error(sprintf($_LANG['update_lib_failed'], 'themes/' . $_CFG['template'] . '/library'));
+            return make_json_error(sprintf($_LANG['update_lib_failed'], 'themes/' . config('shop.template') . '/library'));
         }
     }
 
@@ -521,9 +521,9 @@ class TemplateController extends InitController
     {
         admin_priv('backup_setting');
         $lib_name = trim($_GET['lib']);
-        $lib_file = '../themes/' . $_CFG['template'] . '/library/' . $lib_name . '.lbi';
+        $lib_file = '../themes/' . config('shop.template') . '/library/' . $lib_name . '.lbi';
         $lib_file = str_replace("0xa", '', $lib_file); // 过滤 0xa 非法字符
-        $lib_backup = '../temp/backup/library/' . $_CFG['template'] . '-' . $lib_name . '.lbi';
+        $lib_backup = '../temp/backup/library/' . config('shop.template') . '-' . $lib_name . '.lbi';
         $lib_backup = str_replace("0xa", '', $lib_backup); // 过滤 0xa 非法字符
 
         if (file_exists($lib_backup) && filemtime($lib_backup) >= filemtime($lib_file)) {
@@ -541,14 +541,14 @@ class TemplateController extends InitController
     {
         admin_priv('backup_setting');
 
-        $sql = "SELECT DISTINCT(remarks) FROM " . table('template') . " WHERE theme = '" . $_CFG['template'] . "' AND remarks > ''";
+        $sql = "SELECT DISTINCT(remarks) FROM " . table('template') . " WHERE theme = '" . config('shop.template') . "' AND remarks > ''";
         $col = $db->getCol($sql);
         $remarks = array();
         foreach ($col as $val) {
             $remarks[] = array('content' => $val, 'url' => urlencode($val));
         }
 
-        $sql = "SELECT DISTINCT(filename) FROM " . table('template') . " WHERE theme = '" . $_CFG['template'] . "' AND remarks = ''";
+        $sql = "SELECT DISTINCT(filename) FROM " . table('template') . " WHERE theme = '" . config('shop.template') . "' AND remarks = ''";
         $col = $db->getCol($sql);
         $files = array();
         foreach ($col as $val) {
@@ -564,7 +564,7 @@ class TemplateController extends InitController
 
     public function act_backup_settingAction()
     {
-        $remarks = empty($_POST['remarks']) ? local_date($_CFG['time_format']) : trim($_POST['remarks']);
+        $remarks = empty($_POST['remarks']) ? local_date(config('shop.time_format')) : trim($_POST['remarks']);
 
         if (empty($_POST['files'])) {
             $files = array();
@@ -572,7 +572,7 @@ class TemplateController extends InitController
             $files = $_POST['files'];
         }
 
-        $sql = "SELECT COUNT(*) FROM " . table('template') . " WHERE remarks='$remarks' AND theme = '" . $_CFG['template'] . "'";
+        $sql = "SELECT COUNT(*) FROM " . table('template') . " WHERE remarks='$remarks' AND theme = '" . config('shop.template') . "'";
         if ($db->getOne($sql) > 0) {
             sys_msg(sprintf($_LANG['remarks_exist'], $remarks), 1);
         }
@@ -581,7 +581,7 @@ class TemplateController extends InitController
             " (filename, region, library, sort_order, id, number, type, theme, remarks)" .
             " SELECT filename, region, library, sort_order, id, number, type, theme, '$remarks'" .
             " FROM " . table('template') .
-            " WHERE remarks = '' AND theme = '" . $_CFG['template'] . "'" .
+            " WHERE remarks = '' AND theme = '" . config('shop.template') . "'" .
             " AND " . db_create_in($files, 'filename');
 
         $db->query($sql);
@@ -592,7 +592,7 @@ class TemplateController extends InitController
     {
         $remarks = empty($_GET['remarks']) ? '' : trim($_GET['remarks']);
         if ($remarks) {
-            $sql = "DELETE FROM " . table('template') . " WHERE remarks='$remarks' AND theme = '" . $_CFG['template'] . "'";
+            $sql = "DELETE FROM " . table('template') . " WHERE remarks='$remarks' AND theme = '" . config('shop.template') . "'";
             $db->query($sql);
         }
         sys_msg($_LANG['del_backup_ok'], 0, array(array('text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting')));
@@ -604,13 +604,13 @@ class TemplateController extends InitController
         if ($remarks) {
             $sql = "SELECT filename, region, library, sort_order " .
                 " FROM " . table('template') .
-                " WHERE remarks='$remarks' AND theme = '" . $_CFG['template'] . "'" .
+                " WHERE remarks='$remarks' AND theme = '" . config('shop.template') . "'" .
                 " ORDER BY filename, region, sort_order";
             $arr = $db->getAll($sql);
             if ($arr) {
                 $data = array();
                 foreach ($arr as $val) {
-                    $lib_content = file_get_contents(ROOT_PATH . 'themes/' . $_CFG['template'] . $val['library']);
+                    $lib_content = file_get_contents(ROOT_PATH . 'themes/' . config('shop.template') . $val['library']);
                     //去除lib头部
                     $lib_content = preg_replace('/<meta\\shttp-equiv=["|\']Content-Type["|\']\\scontent=["|\']text\/html;\\scharset=utf-8"|\']>/i', '', $lib_content);
                     //去除utf bom
@@ -626,7 +626,7 @@ class TemplateController extends InitController
 
                 foreach ($data as $file => $regions) {
                     $pattern = '/(?:<!--\\s*TemplateBeginEditable\\sname="(' . implode('|', array_keys($regions)) . ')"\\s*-->)(?:.*?)(?:<!--\\s*TemplateEndEditable\\s*-->)/s';
-                    $temple_file = ROOT_PATH . 'themes/' . $_CFG['template'] . '/' . $file . '.dwt';
+                    $temple_file = ROOT_PATH . 'themes/' . config('shop.template') . '/' . $file . '.dwt';
                     $template_content = file_get_contents($temple_file);
                     $match = array();
                     $template_content = preg_replace_callback($pattern, function ($r) use ($regions) {
@@ -637,14 +637,14 @@ class TemplateController extends InitController
 
                 /* 文件修改成功后，恢复数据库 */
                 $sql = "DELETE FROM " . table('template') .
-                    " WHERE remarks = '' AND  theme = '" . $_CFG['template'] . "'" .
+                    " WHERE remarks = '' AND  theme = '" . config('shop.template') . "'" .
                     " AND " . db_create_in(array_keys($data), 'filename');
                 $db->query($sql);
                 $sql = "INSERT INTO " . table('template') .
                     " (filename, region, library, sort_order, id, number, type, theme, remarks)" .
                     " SELECT filename, region, library, sort_order, id, number, type, theme, ''" .
                     " FROM " . table('template') .
-                    " WHERE remarks = '$remarks' AND theme = '" . $_CFG['template'] . "'";
+                    " WHERE remarks = '$remarks' AND theme = '" . config('shop.template') . "'";
                 $db->query($sql);
             }
         }

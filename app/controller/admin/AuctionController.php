@@ -212,7 +212,7 @@ class AuctionController extends InitController
         $this->assign('auction', $auction);
 
         /* 赋值时间控件的语言 */
-        $this->assign('cfg_lang', $_CFG['lang']);
+        $this->assign('cfg_lang', config('shop.lang'));
 
         /* 商品货品表 */
         $this->assign('good_products_select', get_good_products_select($auction['goods_id']));

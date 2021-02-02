@@ -31,7 +31,7 @@ class UcService
                 if (!empty($goods_data['goods_thumb'])) {
                     $url = $GLOBALS['ecs']->url() . $goods_data['goods_thumb'];
                 } else {
-                    $url = $GLOBALS['ecs']->url() . $GLOBALS['_CFG']['no_picture'];
+                    $url = $GLOBALS['ecs']->url() . config('shop.no_picture');
                 }
                 $link = $GLOBALS['ecs']->url() . "goods.php?id=" . $goods_data["goods_id"];
 

@@ -8,7 +8,7 @@ if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
-$payment_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/payment/post.php';
+$payment_lang = ROOT_PATH . 'languages/' . config('shop.lang') . '/payment/post.php';
 
 if (file_exists($payment_lang)) {
 

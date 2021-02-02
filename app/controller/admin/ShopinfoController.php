@@ -200,7 +200,7 @@ class ShopinfoController extends InitController
             ' WHERE cat_id = 0 ORDER BY article_id';
         $res = $GLOBALS['db']->query($sql);
         while ($rows = $GLOBALS['db']->fetchRow($res)) {
-            $rows['add_time'] = local_date($GLOBALS['_CFG']['time_format'], $rows['add_time']);
+            $rows['add_time'] = local_date(config('shop.time_format'), $rows['add_time']);
 
             $list[] = $rows;
         }

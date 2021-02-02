@@ -879,7 +879,7 @@ class Template
     public function smarty_prefilter_preCompile($source)
     {
         $file_type = strtolower(strrchr($this->_current_file, '.'));
-        $tmp_dir = 'themes/' . $GLOBALS['_CFG']['template'] . '/'; // 模板所在路径
+        $tmp_dir = 'themes/' . config('shop.template') . '/'; // 模板所在路径
 
         /**
          * 处理模板文件
@@ -892,7 +892,7 @@ class Template
             }, $source);
 
             /* 检查有无动态库文件，如果有为其赋值 */
-            $dyna_libs = get_dyna_libs($GLOBALS['_CFG']['template'], $this->_current_file);
+            $dyna_libs = get_dyna_libs(config('shop.template'), $this->_current_file);
             if ($dyna_libs) {
                 foreach ($dyna_libs as $region => $libs) {
                     $pattern = '/<!--\\s*TemplateBeginEditable\\sname="' . $region . '"\\s*-->(.*?)<!--\\s*TemplateEndEditable\\s*-->/s';

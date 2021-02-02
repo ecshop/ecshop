@@ -11,7 +11,7 @@ class GoodsController extends InitController
     {
         parent::initialize();
 
-        $image = new cls_image($_CFG['bgcolor']);
+        $image = new cls_image(config('shop.bgcolor'));
         $exc = new exchange(table('goods'), $db, 'goods_id', 'goods_name');
     }
 
@@ -66,7 +66,7 @@ class GoodsController extends InitController
         $this->assign('intro_list', get_intro_list());
         $this->assign('lang', $_LANG);
         $this->assign('list_type', $_REQUEST['act'] == 'list' ? 'goods' : 'trash');
-        $this->assign('use_storage', empty($_CFG['use_storage']) ? 0 : 1);
+        $this->assign('use_storage', empty(config('shop.use_storage')) ? 0 : 1);
 
         $suppliers_list = suppliers_list_info(' is_check = 1 ');
         $suppliers_list_count = count($suppliers_list);
@@ -164,7 +164,7 @@ class GoodsController extends InitController
                 'promote_price' => 0,
                 'market_price' => 0,
                 'integral' => 0,
-                'goods_number' => $_CFG['default_storage'],
+                'goods_number' => config('shop.default_storage'),
                 'warn_number' => 1,
                 'promote_start_date' => local_date('Y-m-d'),
                 'promote_end_date' => local_date('Y-m-d', local_strtotime('+1 month')),
@@ -393,7 +393,7 @@ class GoodsController extends InitController
         $this->assign('unit_list', get_unit_list());
         $this->assign('user_rank_list', get_user_rank_list());
         $this->assign('weight_unit', $is_add ? '1' : ($goods['goods_weight'] >= 1 ? '1' : '0.001'));
-        $this->assign('cfg', $_CFG);
+        $this->assign('cfg', config('shop'));
         $this->assign('form_act', $is_add ? 'insert' : ($_REQUEST['act'] == 'edit' ? 'update' : 'insert'));
         if ($act == 'edit' || $act == 'add') { // TODO
             $this->assign('is_add', true);
@@ -407,8 +407,8 @@ class GoodsController extends InitController
         $this->assign('img_list', $img_list);
         $this->assign('goods_type_list', goods_type_list($goods['goods_type']));
         $this->assign('gd', gd_version());
-        $this->assign('thumb_width', $_CFG['thumb_width']);
-        $this->assign('thumb_height', $_CFG['thumb_height']);
+        $this->assign('thumb_width', config('shop.thumb_width'));
+        $this->assign('thumb_height', config('shop.thumb_height'));
         $this->assign('goods_attr_html', build_attr_html($goods['goods_type'], $goods['goods_id']));
         $volume_price_list = '';
         if (isset($_REQUEST['goods_id'])) {
@@ -562,7 +562,7 @@ class GoodsController extends InitController
 
             /* 复制一份相册图片 */
             /* 添加判断是否自动生成相册图片 */
-            if ($_CFG['auto_generate_gallery']) {
+            if (config('shop.auto_generate_gallery')) {
                 $img = $original_img;   // 相册图片
                 $pos = strpos(basename($img), '.');
                 $newname = dirname($img) . '/' . $image->random_filename() . substr(basename($img), $pos);
@@ -579,15 +579,15 @@ class GoodsController extends InitController
             if ($proc_thumb && $image->gd_version() > 0 && $image->check_img_function($_FILES['goods_img']['type']) || $is_url_goods_img) {
                 if (empty($is_url_goods_img)) {
                     // 如果设置大小不为0，缩放图片
-                    if ($_CFG['image_width'] != 0 || $_CFG['image_height'] != 0) {
-                        $goods_img = $image->make_thumb('../' . $goods_img, $GLOBALS['_CFG']['image_width'], $GLOBALS['_CFG']['image_height']);
+                    if (config('shop.image_width') != 0 || config('shop.image_height') != 0) {
+                        $goods_img = $image->make_thumb('../' . $goods_img, config('shop.image_width'), config('shop.image_height'));
                         if ($goods_img === false) {
                             sys_msg($image->error_msg(), 1, array(), false);
                         }
                     }
 
                     /* 添加判断是否自动生成相册图片 */
-                    if ($_CFG['auto_generate_gallery']) {
+                    if (config('shop.auto_generate_gallery')) {
                         $newname = dirname($img) . '/' . $image->random_filename() . substr(basename($img), $pos);
                         if (!copy('../' . $img, '../' . $newname)) {
                             sys_msg('fail to copy file: ' . realpath('../' . $img), 1, array(), false);
@@ -596,13 +596,13 @@ class GoodsController extends InitController
                     }
 
                     // 加水印
-                    if (intval($_CFG['watermark_place']) > 0 && !empty($GLOBALS['_CFG']['watermark'])) {
-                        if ($image->add_watermark('../' . $goods_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
+                    if (intval(config('shop.watermark_place')) > 0 && !empty(config('shop.watermark'))) {
+                        if ($image->add_watermark('../' . $goods_img, '', config('shop.watermark'), config('shop.watermark_place'), config('shop.watermark_alpha')) === false) {
                             sys_msg($image->error_msg(), 1, array(), false);
                         }
                         /* 添加判断是否自动生成相册图片 */
-                        if ($_CFG['auto_generate_gallery']) {
-                            if ($image->add_watermark('../' . $gallery_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
+                        if (config('shop.auto_generate_gallery')) {
+                            if ($image->add_watermark('../' . $gallery_img, '', config('shop.watermark'), config('shop.watermark_place'), config('shop.watermark_alpha')) === false) {
                                 sys_msg($image->error_msg(), 1, array(), false);
                             }
                         }
@@ -611,9 +611,9 @@ class GoodsController extends InitController
 
                 // 相册缩略图
                 /* 添加判断是否自动生成相册图片 */
-                if ($_CFG['auto_generate_gallery']) {
-                    if ($_CFG['thumb_width'] != 0 || $_CFG['thumb_height'] != 0) {
-                        $gallery_thumb = $image->make_thumb('../' . $img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
+                if (config('shop.auto_generate_gallery')) {
+                    if (config('shop.thumb_width') != 0 || config('shop.thumb_height') != 0) {
+                        $gallery_thumb = $image->make_thumb('../' . $img, config('shop.thumb_width'), config('shop.thumb_height'));
                         if ($gallery_thumb === false) {
                             sys_msg($image->error_msg(), 1, array(), false);
                         }
@@ -635,8 +635,8 @@ class GoodsController extends InitController
             // 未上传，如果自动选择生成，且上传了商品图片，生成所略图
             if ($proc_thumb && isset($_POST['auto_thumb']) && !empty($original_img)) {
                 // 如果设置缩略图大小不为0，生成缩略图
-                if ($_CFG['thumb_width'] != 0 || $_CFG['thumb_height'] != 0) {
-                    $goods_thumb = $image->make_thumb('../' . $original_img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
+                if (config('shop.thumb_width') != 0 || config('shop.thumb_height') != 0) {
+                    $goods_thumb = $image->make_thumb('../' . $original_img, config('shop.thumb_width'), config('shop.thumb_height'));
                     if ($goods_thumb === false) {
                         sys_msg($image->error_msg(), 1, array(), false);
                     }
@@ -947,7 +947,7 @@ class GoodsController extends InitController
         }
 
         /* 不保留商品原图的时候删除原图 */
-        if ($proc_thumb && !$_CFG['retain_original_img'] && !empty($original_img)) {
+        if ($proc_thumb && !config('shop.retain_original_img') && !empty($original_img)) {
             $db->query("UPDATE " . table('goods') . " SET original_img='' WHERE `goods_id`='{$goods_id}'");
             $db->query("UPDATE " . table('goods_gallery') . " SET img_original='' WHERE `goods_id`='{$goods_id}'");
             @unlink('../' . $original_img);
@@ -1206,7 +1206,7 @@ class GoodsController extends InitController
 
         $goods_id = intval($_POST['id']);
         $goods_price = floatval($_POST['val']);
-        $price_rate = floatval($_CFG['market_price_rate'] * $goods_price);
+        $price_rate = floatval(config('shop.market_price_rate') * $goods_price);
 
         if ($goods_price < 0 || $goods_price == 0 && $_POST['val'] != "$goods_price") {
             return make_json_error($_LANG['shop_price_invalid']);
@@ -1345,7 +1345,7 @@ class GoodsController extends InitController
         $this->assign('record_count', $goods_list['record_count']);
         $this->assign('page_count', $goods_list['page_count']);
         $this->assign('list_type', $is_delete ? 'trash' : 'goods');
-        $this->assign('use_storage', empty($_CFG['use_storage']) ? 0 : 1);
+        $this->assign('use_storage', empty(config('shop.use_storage')) ? 0 : 1);
 
         /* 排序标记 */
         $sort_flag = sort_flag($goods_list['filter']);
@@ -1883,7 +1883,7 @@ class GoodsController extends InitController
         $this->assign('attribute_count', $attribute_count);
         $this->assign('attribute_count_3', ($attribute_count + 3));
         $this->assign('product_sn', $goods['goods_sn'] . '_');
-        $this->assign('product_number', $_CFG['default_storage']);
+        $this->assign('product_number', config('shop.default_storage'));
 
         /* 取商品的货品 */
         $product = product_list($goods_id, '');
@@ -1913,7 +1913,7 @@ class GoodsController extends InitController
         $this->assign('action_link', array('href' => 'goods.php?act=list', 'text' => $_LANG['01_goods_list']));
         $this->assign('product_list', $product['product']);
         $this->assign('product_null', empty($product['product']) ? 0 : 1);
-        $this->assign('use_storage', empty($_CFG['use_storage']) ? 0 : 1);
+        $this->assign('use_storage', empty(config('shop.use_storage')) ? 0 : 1);
         $this->assign('goods_id', $goods_id);
         $this->assign('filter', $product['filter']);
         $this->assign('full_page', 1);
@@ -1965,7 +1965,7 @@ class GoodsController extends InitController
         $this->assign('attribute', $_attribute);
         $this->assign('attribute_count_3', ($attribute_count + 3));
         $this->assign('product_sn', $goods['goods_sn'] . '_');
-        $this->assign('product_number', $_CFG['default_storage']);
+        $this->assign('product_number', config('shop.default_storage'));
 
         /* 取商品的货品 */
         $product = product_list($goods_id, '');
@@ -1973,7 +1973,7 @@ class GoodsController extends InitController
         $this->assign('ur_here', $_LANG['18_product_list']);
         $this->assign('action_link', array('href' => 'goods.php?act=list', 'text' => $_LANG['01_goods_list']));
         $this->assign('product_list', $product['product']);
-        $this->assign('use_storage', empty($_CFG['use_storage']) ? 0 : 1);
+        $this->assign('use_storage', empty(config('shop.use_storage')) ? 0 : 1);
         $this->assign('goods_id', $goods_id);
         $this->assign('filter', $product['filter']);
 
@@ -2107,7 +2107,7 @@ class GoodsController extends InitController
         /*  */
         foreach ($product['product_sn'] as $key => $value) {
             //过滤
-            $product['product_number'][$key] = empty($product['product_number'][$key]) ? (empty($_CFG['use_storage']) ? 0 : $_CFG['default_storage']) : trim($product['product_number'][$key]); //库存
+            $product['product_number'][$key] = empty($product['product_number'][$key]) ? (empty(config('shop.use_storage')) ? 0 : config('shop.default_storage')) : trim($product['product_number'][$key]); //库存
 
             //获取规格在商品属性表中的id
             foreach ($product['attr'] as $attr_key => $attr_value) {

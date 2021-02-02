@@ -348,14 +348,14 @@ class GroupBuyController extends InitController
             while ($order = $db->fetchRow($res)) {
                 /* 邮件模板赋值 */
                 $this->assign('consignee', $order['consignee']);
-                $this->assign('add_time', local_date($_CFG['time_format'], $order['add_time']));
+                $this->assign('add_time', local_date(config('shop.time_format'), $order['add_time']));
                 $this->assign('goods_name', $group_buy['goods_name']);
                 $this->assign('goods_number', $order['goods_number']);
                 $this->assign('order_sn', $order['order_sn']);
                 $this->assign('order_amount', price_format($order['order_amount']));
                 $this->assign('shop_url', $ecs->url() . 'user.php?act=order_detail&order_id=' . $order['order_id']);
-                $this->assign('shop_name', $_CFG['shop_name']);
-                $this->assign('send_date', local_date($_CFG['date_format']));
+                $this->assign('shop_name', config('shop.shop_name'));
+                $this->assign('send_date', local_date(config('shop.date_format')));
 
                 /* 取得模板内容，发邮件 */
                 $content = $smarty->fetch('str:' . $tpl['template_content']);
@@ -692,8 +692,8 @@ class GroupBuyController extends InitController
 
             $status = group_buy_status($arr);
 
-            $arr['start_time'] = local_date($GLOBALS['_CFG']['date_format'], $arr['start_time']);
-            $arr['end_time'] = local_date($GLOBALS['_CFG']['date_format'], $arr['end_time']);
+            $arr['start_time'] = local_date(config('shop.date_format'), $arr['start_time']);
+            $arr['end_time'] = local_date(config('shop.date_format'), $arr['end_time']);
             $arr['cur_status'] = $GLOBALS['_LANG']['gbs'][$status];
 
             $list[] = $arr;

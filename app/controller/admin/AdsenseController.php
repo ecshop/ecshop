@@ -11,7 +11,7 @@ class AdsenseController extends InitController
     {
         parent::initialize();
 
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/ads.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/ads.php');
     }
 
     public function listAction()

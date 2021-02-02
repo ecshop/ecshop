@@ -4,7 +4,7 @@
  * 中通速递插件
  */
 
-$shipping_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/shipping/zto.php';
+$shipping_lang = ROOT_PATH . 'languages/' . config('shop.lang') . '/shipping/zto.php';
 if (file_exists($shipping_lang)) {
     include_once($shipping_lang);
 }
@@ -12,7 +12,7 @@ if (file_exists($shipping_lang)) {
 
 /* 模块的基本信息 */
 if (isset($set_modules) && $set_modules == true) {
-    include_once(ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/admin/shipping.php');
+    include_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/shipping.php');
 
     $i = (isset($modules)) ? count($modules) : 0;
 

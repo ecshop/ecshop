@@ -14,7 +14,7 @@ class SaleListController extends InitController
 }
 
 
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
+require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/statistic.php');
 $this->assign('lang', $_LANG);
 
 if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] == 'download')) {
@@ -89,7 +89,7 @@ function listAction()
     $this->assign('start_date', local_date('Y-m-d', $start_date));
     $this->assign('end_date', local_date('Y-m-d', $end_date));
     $this->assign('ur_here', $_LANG['sale_list']);
-    $this->assign('cfg_lang', $_CFG['lang']);
+    $this->assign('cfg_lang', config('shop.lang'));
     $this->assign('action_link', array('text' => $_LANG['down_sales'], 'href' => '#download'));
 
     /* 显示页面 */
@@ -137,7 +137,7 @@ function get_sale_list($is_pagination = true)
 
     foreach ($sale_list_data as $key => $item) {
         $sale_list_data[$key]['sales_price'] = price_format($sale_list_data[$key]['sales_price']);
-        $sale_list_data[$key]['sales_time'] = local_date($GLOBALS['_CFG']['time_format'], $sale_list_data[$key]['sales_time']);
+        $sale_list_data[$key]['sales_time'] = local_date(config('shop.time_format'), $sale_list_data[$key]['sales_time']);
     }
     $arr = array('sale_list_data' => $sale_list_data, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
     return $arr;

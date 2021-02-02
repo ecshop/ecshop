@@ -18,7 +18,7 @@ class FlashplayController extends InitController
     public function listAction()
     {
         /* 判断系统当前设置 如果为用户自定义 则跳转到自定义 */
-        if ($_CFG['index_ad'] == 'cus') {
+        if (config('shop.index_ad') == 'cus') {
             return redirect("flashplay.php?act=custom_list");
         }
 
@@ -40,12 +40,12 @@ class FlashplayController extends InitController
 
         $this->assign('current', 'sys');
         $this->assign('group_list', $group_list);
-        $this->assign('group_selected', $_CFG['index_ad']);
+        $this->assign('group_selected', config('shop.index_ad'));
         $this->assign('uri', $uri);
         $this->assign('ur_here', $_LANG['flashplay']);
         $this->assign('action_link_special', array('text' => $_LANG['add_new'], 'href' => 'flashplay.php?act=add'));
         $this->assign('flashtpls', get_flash_templates($flash_dir));
-        $this->assign('current_flashtpl', $_CFG['flash_theme']);
+        $this->assign('current_flashtpl', config('shop.flash_theme'));
         $this->assign('playerdb', $playerdb);
         return $this->display('flashplay_list.htm');
     }
@@ -74,7 +74,7 @@ class FlashplayController extends InitController
         }
         put_flash_xml($temp);
         $error_msg = '';
-        set_flash_data($_CFG['flash_theme'], $error_msg);
+        set_flash_data(config('shop.flash_theme'), $error_msg);
         return redirect("flashplay.php?act=list");
     }
 
@@ -150,7 +150,7 @@ class FlashplayController extends InitController
 
             put_flash_xml($_flashdb);
             $error_msg = '';
-            set_flash_data($_CFG['flash_theme'], $error_msg);
+            set_flash_data(config('shop.flash_theme'), $error_msg);
             $links[] = array('text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list');
             sys_msg($_LANG['edit_ok'], 0, $links);
         }
@@ -235,7 +235,7 @@ class FlashplayController extends InitController
 
             put_flash_xml($_flashdb);
             $error_msg = '';
-            set_flash_data($_CFG['flash_theme'], $error_msg);
+            set_flash_data(config('shop.flash_theme'), $error_msg);
             $links[] = array('text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list');
             sys_msg($_LANG['edit_ok'], 0, $links);
         }
@@ -245,7 +245,7 @@ class FlashplayController extends InitController
     {
         check_authz_json('flash_manage');
         $flash_theme = trim($_GET['flashtpl']);
-        if ($_CFG['flash_theme'] != $flash_theme) {
+        if (config('shop.flash_theme') != $flash_theme) {
             $sql = "UPDATE " . table('shop_config') . " SET value = '$flash_theme' WHERE code = 'flash_theme'";
             if ($db->query($sql, 'SILENT')) {
                 clear_all_files(); //清除模板编译文件
@@ -272,7 +272,7 @@ class FlashplayController extends InitController
     {
         /* 标签初始化 */
         $group_list = array(
-            'sys' => array('text' => $_LANG['system_set'], 'url' => ($_CFG['index_ad'] == 'cus') ? 'javascript:system_set();void(0);' : 'flashplay.php?act=list'),
+            'sys' => array('text' => $_LANG['system_set'], 'url' => (config('shop.index_ad') == 'cus') ? 'javascript:system_set();void(0);' : 'flashplay.php?act=list'),
             'cus' => array('text' => $_LANG['custom_set'], 'url' => '')
         );
 
@@ -289,7 +289,7 @@ class FlashplayController extends InitController
         $this->assign('full_page', 1);
         $this->assign('current', 'cus');
         $this->assign('group_list', $group_list);
-        $this->assign('group_selected', $_CFG['index_ad']);
+        $this->assign('group_selected', config('shop.index_ad'));
         $this->assign('uri', $uri);
         $this->assign('ur_here', $_LANG['flashplay']);
         $this->assign('action_link_special', array('text' => $_LANG['add_flash'], 'href' => 'flashplay.php?act=custom_add'));
@@ -311,7 +311,7 @@ class FlashplayController extends InitController
     {
         /* 标签初始化 */
         $group_list = array(
-            'sys' => array('text' => $_LANG['system_set'], 'url' => ($_CFG['index_ad'] == 'cus') ? 'javascript:system_set();void(0);' : 'flashplay.php?act=list'),
+            'sys' => array('text' => $_LANG['system_set'], 'url' => (config('shop.index_ad') == 'cus') ? 'javascript:system_set();void(0);' : 'flashplay.php?act=list'),
             'cus' => array('text' => $_LANG['custom_set'], 'url' => '')
         );
 
@@ -328,7 +328,7 @@ class FlashplayController extends InitController
         $this->assign('full_page', 1);
         $this->assign('current', 'cus');
         $this->assign('group_list', $group_list);
-        $this->assign('group_selected', $_CFG['index_ad']);
+        $this->assign('group_selected', config('shop.index_ad'));
         $this->assign('uri', $uri);
         $this->assign('ur_here', $_LANG['add_ad']);
         $this->assign('action_link_special', array('text' => $_LANG['add_flash'], 'href' => 'flashplay.php?act=custom_add'));
@@ -503,7 +503,7 @@ class FlashplayController extends InitController
             $this->assign('ad_list', $ad_list['ad']);
             $this->assign('current', 'cus');
             $this->assign('group_list', $group_list);
-            $this->assign('group_selected', $_CFG['index_ad']);
+            $this->assign('group_selected', config('shop.index_ad'));
             $this->assign('uri', $uri);
             $this->assign('ur_here', $_LANG['flashplay']);
             $this->assign('action_link_special', array('text' => $_LANG['add_flash'], 'href' => 'flashplay.php?act=custom_add'));
@@ -537,7 +537,7 @@ class FlashplayController extends InitController
         $width_height = get_width_height();
         $this->assign('width_height', sprintf($_LANG['width_height'], $width_height['width'], $width_height['height']));
 
-        $this->assign('group_selected', $_CFG['index_ad']);
+        $this->assign('group_selected', config('shop.index_ad'));
         $this->assign('uri', $uri);
         $this->assign('ur_here', $_LANG['flashplay']);
         $this->assign('action_link', array('text' => $_LANG['ad_play_url'], 'href' => 'flashplay.php?act=custom_list'));
@@ -706,7 +706,7 @@ class FlashplayController extends InitController
 
     public function get_width_height()
     {
-        $curr_template = $GLOBALS['_CFG']['template'];
+        $curr_template = config('shop.template');
         $path = ROOT_PATH . 'themes/' . $curr_template . '/library/';
         $template_dir = @opendir($path);
 
@@ -883,7 +883,7 @@ class FlashplayController extends InitController
 
         /* 格式化数据 */
         foreach ($row as $key => $value) {
-            $row[$key]['add_time'] = local_date($GLOBALS['_CFG']['time_format'], $value['add_time']);
+            $row[$key]['add_time'] = local_date(config('shop.time_format'), $value['add_time']);
         }
 
         $arr = array('ad' => $row, 'filter' => $filter);

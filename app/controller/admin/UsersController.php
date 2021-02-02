@@ -70,8 +70,8 @@ class UsersController extends InitController
         /* 检查权限 */
         admin_priv('users_manage');
 
-        $user = array('rank_points' => $_CFG['register_points'],
-            'pay_points' => $_CFG['register_points'],
+        $user = array('rank_points' => config('shop.register_points'),
+            'pay_points' => config('shop.register_points'),
             'sex' => 0,
             'credit_line' => 0
         );
@@ -129,8 +129,8 @@ class UsersController extends InitController
         }
 
         /* 注册送积分 */
-        if (!empty($GLOBALS['_CFG']['register_points'])) {
-            log_account_change($_SESSION['user_id'], 0, 0, $GLOBALS['_CFG']['register_points'], $GLOBALS['_CFG']['register_points'], $_LANG['register_points']);
+        if (!empty(config('shop.register_points'))) {
+            log_account_change($_SESSION['user_id'], 0, 0, config('shop.register_points'), config('shop.register_points'), $_LANG['register_points']);
         }
 
         /*把新注册用户的扩展信息插入数据库*/
@@ -263,7 +263,7 @@ class UsersController extends InitController
         $this->assign('extend_info_list', $extend_info_list);
 
         /* 当前会员推荐信息 */
-        $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
+        $affiliate = unserialize(config('shop.affiliate'));
         $this->assign('affiliate', $affiliate);
 
         empty($affiliate) && $affiliate = array();
@@ -427,7 +427,7 @@ class UsersController extends InitController
         $users = init_users();
 
         if ($users->edit_user($id, $username)) {
-            if ($_CFG['integrate_code'] != 'ecshop') {
+            if (config('shop.integrate_code') != 'ecshop') {
                 /* 更新商城会员表 */
                 $db->query('UPDATE ' . table('users') . " SET user_name = '$username' WHERE user_id = '$id'");
             }
@@ -550,7 +550,7 @@ class UsersController extends InitController
         $auid = $_GET['auid'];
         $user_list['user_list'] = array();
 
-        $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
+        $affiliate = unserialize(config('shop.affiliate'));
         $this->assign('affiliate', $affiliate);
 
         empty($affiliate) && $affiliate = array();
@@ -581,7 +581,7 @@ class UsersController extends InitController
 
         $temp_count = count($user_list['user_list']);
         for ($i = 0; $i < $temp_count; $i++) {
-            $user_list['user_list'][$i]['reg_time'] = local_date($_CFG['date_format'], $user_list['user_list'][$i]['reg_time']);
+            $user_list['user_list'][$i]['reg_time'] = local_date(config('shop.date_format'), $user_list['user_list'][$i]['reg_time']);
         }
 
         $user_list['record_count'] = $all_count;
@@ -661,7 +661,7 @@ class UsersController extends InitController
         $count = count($user_list);
         for ($i = 0; $i < $count; $i++) {
             $user_list[$i]['user_name'] = urldecode($user_list[$i]['user_name']);
-            $user_list[$i]['reg_time'] = local_date($GLOBALS['_CFG']['date_format'], $user_list[$i]['reg_time']);
+            $user_list[$i]['reg_time'] = local_date(config('shop.date_format'), $user_list[$i]['reg_time']);
         }
 
         $arr = array('user_list' => $user_list, 'filter' => $filter,

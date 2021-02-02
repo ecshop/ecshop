@@ -176,9 +176,9 @@ class CommonService
         if ($cls != null) {
             return $cls;
         }
-        include_once(ROOT_PATH . 'includes/modules/integrates/' . $GLOBALS['_CFG']['integrate_code'] . '.php');
-        $cfg = unserialize($GLOBALS['_CFG']['integrate_config']);
-        $cls = new $GLOBALS['_CFG']['integrate_code']($cfg);
+        include_once(ROOT_PATH . 'includes/modules/integrates/' . config('shop.integrate_code') . '.php');
+        $cfg = unserialize(config('shop.integrate_config'));
+        $cls = new config('shop.integrate_code')($cfg);
 
         return $cls;
     }
@@ -705,7 +705,7 @@ class CommonService
             $price = 0;
         }
         if ($change_price && defined('ECS_ADMIN') === false) {
-            switch ($GLOBALS['_CFG']['price_format']) {
+            switch (config('shop.price_format')) {
                 case 0:
                     $price = number_format($price, 2, '.', '');
                     break;
@@ -733,7 +733,7 @@ class CommonService
             $price = number_format($price, 2, '.', '');
         }
 
-        return sprintf($GLOBALS['_CFG']['currency_format'], $price);
+        return sprintf(config('shop.currency_format'), $price);
     }
 
     /**
@@ -846,7 +846,7 @@ class CommonService
 
                 return false;
             }
-            $card_info['end_date'] = date($GLOBALS['_CFG']['date_format'], $virtual_card['end_date']);
+            $card_info['end_date'] = date(config('shop.date_format'), $virtual_card['end_date']);
             $card_ids[] = $virtual_card['card_id'];
             $cards[] = $card_info;
         }
@@ -897,7 +897,7 @@ class CommonService
         View::assign('goods', $goods);
 
         View::assign('send_time', date('Y-m-d H:i:s'));
-        View::assign('shop_name', $GLOBALS['_CFG']['shop_name']);
+        View::assign('shop_name', config('shop.shop_name'));
         View::assign('send_date', date('Y-m-d'));
         View::assign('sent_date', date('Y-m-d'));
 
@@ -939,7 +939,7 @@ class CommonService
                 $row['card_password'] = '***';
             }
 
-            $cards[] = array('card_sn' => $row['card_sn'], 'card_password' => $row['card_password'], 'end_date' => date($GLOBALS['_CFG']['date_format'], $row['end_date']));
+            $cards[] = array('card_sn' => $row['card_sn'], 'card_password' => $row['card_password'], 'end_date' => date(config('shop.date_format'), $row['end_date']));
         }
 
         return $cards;
@@ -965,7 +965,7 @@ class CommonService
         $rec = $GLOBALS['db']->getRow($sql);
 
         if ($rec) {
-            $rec['bid_time'] = local_date($GLOBALS['_CFG']['time_format'], $rec['bid_time']);
+            $rec['bid_time'] = local_date(config('shop.time_format'), $rec['bid_time']);
             $rec['formated_bid_price'] = price_format($rec['bid_price'], false);
 
             /* 活动信息 */
@@ -1185,7 +1185,7 @@ class CommonService
         static $rewrite = null;
 
         if ($rewrite === null) {
-            $rewrite = intval($GLOBALS['_CFG']['rewrite']);
+            $rewrite = intval(config('shop.rewrite'));
         }
 
         $args = array('cid' => 0,
@@ -1742,7 +1742,7 @@ class CommonService
      */
     public function get_image_path($image = '')
     {
-        return empty($image) ? $GLOBALS['_CFG']['no_picture'] : $image;
+        return empty($image) ? config('shop.no_picture') : $image;
     }
 
     /**
@@ -1755,7 +1755,7 @@ class CommonService
      */
     public function user_uc_call($func, $params = null)
     {
-        if (isset($GLOBALS['_CFG']['integrate_code']) && $GLOBALS['_CFG']['integrate_code'] == 'ucenter') {
+        if (isset(config('shop.integrate_code')) && config('shop.integrate_code') == 'ucenter') {
             restore_error_handler();
             if (!function_exists($func)) {
             }

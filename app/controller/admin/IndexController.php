@@ -42,10 +42,10 @@ class IndexController extends InitController
         // 获得管理员设置的菜单
 
         // 获得管理员ID
-        $this->assign('send_mail_on', $_CFG['send_mail_on']);
+        $this->assign('send_mail_on', config('shop.send_mail_on'));
         $this->assign('nav_list', $lst);
         $this->assign('admin_id', $_SESSION['admin_id']);
-        $this->assign('certi', $_CFG['certi']);
+        $this->assign('certi', config('shop.certi'));
 
         return $this->display('top.htm');
     }
@@ -93,7 +93,7 @@ class IndexController extends InitController
                             }
                         }
                     }
-                    if ($k == 'ucenter_setup' && $_CFG['integrate_code'] != 'ucenter') {
+                    if ($k == 'ucenter_setup' && config('shop.integrate_code') != 'ucenter') {
                         continue;
                     }
                     $menus[$key]['children'][$k]['label'] = $_LANG[$k];
@@ -111,7 +111,7 @@ class IndexController extends InitController
 
         $this->assign('menus', $menus);
         $this->assign('no_help', $_LANG['no_help']);
-        $this->assign('help_lang', $_CFG['lang']);
+        $this->assign('help_lang', config('shop.lang'));
         $this->assign('charset', EC_CHARSET);
         $this->assign('admin_id', $_SESSION['admin_id']);
         return $this->display('menu.htm');
@@ -147,7 +147,7 @@ class IndexController extends InitController
         /* 检查文件目录属性 */
         $warning = array();
 
-        if ($_CFG['shop_closed']) {
+        if (config('shop.shop_closed')) {
             $warning[] = $_LANG['shop_closed_tips'];
         }
 
@@ -310,7 +310,7 @@ class IndexController extends InitController
             " AND promote_start_date <= '$time' AND promote_end_date >= '$time' AND is_real=0 AND extension_code='virtual_card'");
 
         /* 缺货商品 */
-        if ($_CFG['use_storage']) {
+        if (config('shop.use_storage')) {
             $sql = 'SELECT COUNT(*) FROM ' . table('goods') . ' WHERE is_delete = 0 AND goods_number <= warn_number AND is_real = 1';
             $goods['warn'] = $db->getOne($sql);
             $sql = 'SELECT COUNT(*) FROM ' . table('goods') . ' WHERE is_delete = 0 AND goods_number <= warn_number AND is_real=0 AND extension_code=\'virtual_card\'';
@@ -403,9 +403,9 @@ class IndexController extends InitController
         assign_query_info();
         $this->assign('ecs_version', VERSION);
         $this->assign('ecs_release', RELEASE);
-        $this->assign('ecs_lang', $_CFG['lang']);
+        $this->assign('ecs_lang', config('shop.lang'));
         $this->assign('ecs_charset', strtoupper(EC_CHARSET));
-        $this->assign('install_date', local_date($_CFG['date_format'], $_CFG['install_date']));
+        $this->assign('install_date', local_date(config('shop.date_format'), config('shop.install_date')));
         return $this->display('start.htm');
     }
 
@@ -477,7 +477,7 @@ class IndexController extends InitController
         ksort($modules);
 
         for ($i = 0; $i < count($modules); $i++) {
-            $lang_file = ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shipping/' . $modules[$i]['code'] . '.php';
+            $lang_file = ROOT_PATH . 'languages/' . config('shop.lang') . '/shipping/' . $modules[$i]['code'] . '.php';
 
             if (file_exists($lang_file)) {
                 include_once($lang_file);
@@ -733,7 +733,7 @@ class IndexController extends InitController
             $max_id = $db->getOne("SELECT MAX(goods_id) + 1 FROM " . table('goods'));
             $goods_sn = generate_goods_sn($max_id);
 
-            $image = new cls_image($_CFG['bgcolor']);
+            $image = new cls_image(config('shop.bgcolor'));
 
             if (!empty($good_name)) {
                 /* 检查图片：如果有错误，检查尺寸是否超过最大值；否则，检查文件类型 */
@@ -788,8 +788,8 @@ class IndexController extends InitController
                     // 如果系统支持GD，缩放商品图片，且给商品图片和相册图片加水印
                     if ($image->gd_version() > 0 && $image->check_img_function($_FILES['goods_img']['type'])) {
                         // 如果设置大小不为0，缩放图片
-                        if ($_CFG['image_width'] != 0 || $_CFG['image_height'] != 0) {
-                            $goods_img = $image->make_thumb('../' . $goods_img, $GLOBALS['_CFG']['image_width'], $GLOBALS['_CFG']['image_height']);
+                        if (config('shop.image_width') != 0 || config('shop.image_height') != 0) {
+                            $goods_img = $image->make_thumb('../' . $goods_img, config('shop.image_width'), config('shop.image_height'));
                             if ($goods_img === false) {
                                 sys_msg($image->error_msg(), 1, array(), false);
                             }
@@ -802,19 +802,19 @@ class IndexController extends InitController
                         $gallery_img = $newname;
 
                         // 加水印
-                        if (intval($_CFG['watermark_place']) > 0 && !empty($GLOBALS['_CFG']['watermark'])) {
-                            if ($image->add_watermark('../' . $goods_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
+                        if (intval(config('shop.watermark_place')) > 0 && !empty(config('shop.watermark'))) {
+                            if ($image->add_watermark('../' . $goods_img, '', config('shop.watermark'), config('shop.watermark_place'), config('shop.watermark_alpha')) === false) {
                                 sys_msg($image->error_msg(), 1, array(), false);
                             }
 
-                            if ($image->add_watermark('../' . $gallery_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
+                            if ($image->add_watermark('../' . $gallery_img, '', config('shop.watermark'), config('shop.watermark_place'), config('shop.watermark_alpha')) === false) {
                                 sys_msg($image->error_msg(), 1, array(), false);
                             }
                         }
 
                         // 相册缩略图
-                        if ($_CFG['thumb_width'] != 0 || $_CFG['thumb_height'] != 0) {
-                            $gallery_thumb = $image->make_thumb('../' . $img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
+                        if (config('shop.thumb_width') != 0 || config('shop.thumb_height') != 0) {
+                            $gallery_thumb = $image->make_thumb('../' . $img, config('shop.thumb_width'), config('shop.thumb_height'));
                             if ($gallery_thumb === false) {
                                 sys_msg($image->error_msg(), 1, array(), false);
                             }
@@ -832,8 +832,8 @@ class IndexController extends InitController
                 // 未上传，如果自动选择生成，且上传了商品图片，生成所略图
                 if (!empty($original_img)) {
                     // 如果设置缩略图大小不为0，生成缩略图
-                    if ($_CFG['thumb_width'] != 0 || $_CFG['thumb_height'] != 0) {
-                        $goods_thumb = $image->make_thumb('../' . $original_img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
+                    if (config('shop.thumb_width') != 0 || config('shop.thumb_height') != 0) {
+                        $goods_thumb = $image->make_thumb('../' . $original_img, config('shop.thumb_width'), config('shop.thumb_height'));
                         if ($goods_thumb === false) {
                             sys_msg($image->error_msg(), 1, array(), false);
                         }
@@ -931,7 +931,7 @@ class IndexController extends InitController
 
     public function send_mailAction()
     {
-        if ($_CFG['send_mail_on'] == 'off') {
+        if (config('shop.send_mail_on') == 'off') {
             return make_json_result('', $_LANG['send_mail_off'], 0);
             exit();
         }

@@ -604,7 +604,7 @@ class ArticleController extends InitController
         $res = $GLOBALS['db']->selectLimit($sql, $filter['page_size'], $filter['start']);
 
         while ($rows = $GLOBALS['db']->fetchRow($res)) {
-            $rows['date'] = local_date($GLOBALS['_CFG']['time_format'], $rows['add_time']);
+            $rows['date'] = local_date(config('shop.time_format'), $rows['add_time']);
 
             $arr[] = $rows;
         }

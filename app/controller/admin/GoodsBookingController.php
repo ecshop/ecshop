@@ -120,7 +120,7 @@ class GoodsBookingController extends InitController
             $this->assign('goods_link', $goods_link);
             $this->assign('goods_name', $booking_info['goods_name']);
             $this->assign('dispose_note', $dispose_note);
-            $this->assign('shop_name', "<a href='" . $ecs->url() . "'>" . $_CFG['shop_name'] . '</a>');
+            $this->assign('shop_name', "<a href='" . $ecs->url() . "'>" . config('shop.shop_name') . '</a>');
             $this->assign('send_date', date('Y-m-d'));
 
             $content = $smarty->fetch('str:' . $template['template_content']);
@@ -174,7 +174,7 @@ class GoodsBookingController extends InitController
         $row = $GLOBALS['db']->getAll($sql);
 
         foreach ($row as $key => $val) {
-            $row[$key]['booking_time'] = local_date($GLOBALS['_CFG']['time_format'], $val['booking_time']);
+            $row[$key]['booking_time'] = local_date(config('shop.time_format'), $val['booking_time']);
         }
         $filter['keywords'] = stripslashes($filter['keywords']);
         $arr = array('item' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
@@ -204,9 +204,9 @@ class GoodsBookingController extends InitController
         $res = $db->getRow($sql);
 
         /* 格式化时间 */
-        $res['booking_time'] = local_date($_CFG['time_format'], $res['booking_time']);
+        $res['booking_time'] = local_date(config('shop.time_format'), $res['booking_time']);
         if (!empty($res['dispose_time'])) {
-            $res['dispose_time'] = local_date($_CFG['time_format'], $res['dispose_time']);
+            $res['dispose_time'] = local_date(config('shop.time_format'), $res['dispose_time']);
         }
 
         return $res;

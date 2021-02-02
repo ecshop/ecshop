@@ -325,7 +325,7 @@ class GoodsBatchController extends InitController
         admin_priv('goods_batch');
 
         if (isset($_POST['checked'])) {
-            $image = new cls_image($_CFG['bgcolor']);
+            $image = new cls_image(config('shop.bgcolor'));
 
             /* 字段默认值 */
             $default_value = array(
@@ -449,7 +449,7 @@ class GoodsBatchController extends InitController
 
                     if (!empty($field_arr['original_img'])) {
                         //设置商品相册原图和商品相册图
-                        if ($_CFG['auto_generate_gallery']) {
+                        if (config('shop.auto_generate_gallery')) {
                             $ext = substr($field_arr['original_img'], strrpos($field_arr['original_img'], '.'));
                             $img = dirname($field_arr['original_img']) . '/' . $image->random_filename() . $ext;
                             $gallery_img = dirname($field_arr['original_img']) . '/' . $image->random_filename() . $ext;
@@ -458,7 +458,7 @@ class GoodsBatchController extends InitController
                             $goods_gallery['img_original'] = reformat_image_name('gallery', $goods_gallery['goods_id'], $img, 'source');
                         }
                         //设置商品原图
-                        if ($_CFG['retain_original_img']) {
+                        if (config('shop.retain_original_img')) {
                             $original_img = reformat_image_name('goods', $goods_gallery['goods_id'], $field_arr['original_img'], 'source');
                         } else {
                             @unlink(ROOT_PATH . $field_arr['original_img']);
@@ -467,7 +467,7 @@ class GoodsBatchController extends InitController
 
                     if (!empty($field_arr['goods_img'])) {
                         //设置商品相册图
-                        if ($_CFG['auto_generate_gallery'] && !empty($gallery_img)) {
+                        if (config('shop.auto_generate_gallery') && !empty($gallery_img)) {
                             $goods_gallery['img_url'] = reformat_image_name('gallery', $goods_gallery['goods_id'], $gallery_img, 'goods');
                         }
                         //设置商品图
@@ -476,7 +476,7 @@ class GoodsBatchController extends InitController
 
                     if (!empty($field_arr['goods_thumb'])) {
                         //设置商品相册缩略图
-                        if ($_CFG['auto_generate_gallery']) {
+                        if (config('shop.auto_generate_gallery')) {
                             $ext = substr($field_arr['goods_thumb'], strrpos($field_arr['goods_thumb'], '.'));
                             $gallery_thumb = dirname($field_arr['goods_thumb']) . '/' . $image->random_filename() . $ext;
                             @copy(ROOT_PATH . $field_arr['goods_thumb'], ROOT_PATH . $gallery_thumb);
@@ -490,7 +490,7 @@ class GoodsBatchController extends InitController
                     $db->query("UPDATE " . table('goods') . " SET goods_img = '$goods_img', goods_thumb = '$goods_thumb', original_img = '$original_img' WHERE goods_id='" . $goods_gallery['goods_id'] . "'");
 
                     //添加商品相册图
-                    if ($_CFG['auto_generate_gallery']) {
+                    if (config('shop.auto_generate_gallery')) {
                         $db->autoExecute(table('goods_gallery'), $goods_gallery, 'INSERT');
                     }
                 }
@@ -756,7 +756,7 @@ class GoodsBatchController extends InitController
         Header("Content-Disposition: attachment; filename=goods_list.csv");
 
         // 下载
-        if ($_GET['charset'] != $_CFG['lang']) {
+        if ($_GET['charset'] != config('shop.lang')) {
             $lang_file = ROOT_PATH . 'languages/' . $_GET['charset'] . '/admin/goods_batch.php';
             if (file_exists($lang_file)) {
                 unset($_LANG['upload_goods']);

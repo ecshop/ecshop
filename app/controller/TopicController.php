@@ -68,8 +68,8 @@ class TopicController extends InitController
 
             $row['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
             $row['goods_style_name'] = add_style($row['goods_name'], $row['goods_name_style']);
-            $row['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+            $row['short_name'] = config('shop.goods_name_length') > 0 ?
+                sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
             $row['goods_thumb'] = get_image_path($row['goods_thumb']);
             $row['short_style_name'] = add_style($row['short_name'], $row['goods_name_style']);
 
@@ -88,7 +88,7 @@ class TopicController extends InitController
         $position = $this->assign_ur_here();
         $this->assign('page_title', $position['title']);       // 页面标题
         $this->assign('ur_here', $position['ur_here'] . '> ' . $topic['title']);     // 当前位置
-        $this->assign('show_marketprice', $_CFG['show_marketprice']);
+        $this->assign('show_marketprice', config('shop.show_marketprice'));
         $this->assign('sort_goods_arr', $sort_goods_arr);          // 商品列表
         $this->assign('topic', $topic);                   // 专题信息
         $this->assign('keywords', $topic['keywords']);       // 专题信息

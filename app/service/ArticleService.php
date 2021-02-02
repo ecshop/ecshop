@@ -49,10 +49,10 @@ class ArticleService
 
                 $arr[$article_id]['id'] = $article_id;
                 $arr[$article_id]['title'] = $row['title'];
-                $arr[$article_id]['short_title'] = $GLOBALS['_CFG']['article_title_length'] > 0 ? sub_str($row['title'], $GLOBALS['_CFG']['article_title_length']) : $row['title'];
-                $arr[$article_id]['author'] = empty($row['author']) || $row['author'] == '_SHOPHELP' ? $GLOBALS['_CFG']['shop_name'] : $row['author'];
+                $arr[$article_id]['short_title'] = config('shop.article_title_length') > 0 ? sub_str($row['title'], config('shop.article_title_length')) : $row['title'];
+                $arr[$article_id]['author'] = empty($row['author']) || $row['author'] == '_SHOPHELP' ? config('shop.shop_name') : $row['author'];
                 $arr[$article_id]['url'] = $row['open_type'] != 1 ? build_uri('article', array('aid' => $article_id), $row['title']) : trim($row['file_url']);
-                $arr[$article_id]['add_time'] = date($GLOBALS['_CFG']['date_format'], $row['add_time']);
+                $arr[$article_id]['add_time'] = date(config('shop.date_format'), $row['add_time']);
             }
         }
 

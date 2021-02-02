@@ -137,7 +137,7 @@ class TransactionService
         $info['question'] = isset($infos['question']) ? htmlspecialchars($infos['question']) : '';
 
         $info['user_money'] = price_format($info['user_money'], false);
-        $info['pay_points'] = $info['pay_points'] . $GLOBALS['_CFG']['integral_name'];
+        $info['pay_points'] = $info['pay_points'] . config('shop.integral_name');
         $info['bonus'] = $bonus;
         $info['qq'] = $infos['qq'];
         $info['msn'] = $infos['msn'];
@@ -270,7 +270,7 @@ class TransactionService
 
             $arr[] = array('order_id' => $row['order_id'],
                 'order_sn' => $row['order_sn'],
-                'order_time' => local_date($GLOBALS['_CFG']['time_format'], $row['add_time']),
+                'order_time' => local_date(config('shop.time_format'), $row['add_time']),
                 'order_status' => $row['order_status'],
                 'total_fee' => price_format($row['total_fee'], false),
                 'handler' => $row['handler']);
@@ -353,7 +353,7 @@ class TransactionService
             }
 
             /* 如果使用库存，且下订单时减库存，则增加库存 */
-            if ($GLOBALS['_CFG']['use_storage'] == '1' && $GLOBALS['_CFG']['stock_dec_time'] == SDT_PLACE) {
+            if (config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_PLACE) {
                 change_order_goods_storage($order['order_id'], false, 1);
             }
 
@@ -625,17 +625,17 @@ class TransactionService
 
         /* 确认时间 支付时间 发货时间 */
         if ($order['confirm_time'] > 0 && ($order['order_status'] == OS_CONFIRMED || $order['order_status'] == OS_SPLITED || $order['order_status'] == OS_SPLITING_PART)) {
-            $order['confirm_time'] = sprintf($GLOBALS['_LANG']['confirm_time'], local_date($GLOBALS['_CFG']['time_format'], $order['confirm_time']));
+            $order['confirm_time'] = sprintf($GLOBALS['_LANG']['confirm_time'], local_date(config('shop.time_format'), $order['confirm_time']));
         } else {
             $order['confirm_time'] = '';
         }
         if ($order['pay_time'] > 0 && $order['pay_status'] != PS_UNPAYED) {
-            $order['pay_time'] = sprintf($GLOBALS['_LANG']['pay_time'], local_date($GLOBALS['_CFG']['time_format'], $order['pay_time']));
+            $order['pay_time'] = sprintf($GLOBALS['_LANG']['pay_time'], local_date(config('shop.time_format'), $order['pay_time']));
         } else {
             $order['pay_time'] = '';
         }
         if ($order['shipping_time'] > 0 && in_array($order['shipping_status'], array(SS_SHIPPED, SS_RECEIVED))) {
-            $order['shipping_time'] = sprintf($GLOBALS['_LANG']['shipping_time'], local_date($GLOBALS['_CFG']['time_format'], $order['shipping_time']));
+            $order['shipping_time'] = sprintf($GLOBALS['_LANG']['shipping_time'], local_date(config('shop.time_format'), $order['shipping_time']));
         } else {
             $order['shipping_time'] = '';
         }
@@ -744,7 +744,7 @@ class TransactionService
                 $product_number = $GLOBALS['db']->getOne($sql);
             }
             // 如果使用库存，且库存不足，修改数量
-            if ($GLOBALS['_CFG']['use_storage'] == 1 && ($row['product_id'] ? ($product_number < $row['goods_number']) : ($goods['goods_number'] < $row['goods_number']))) {
+            if (config('shop.use_storage') == 1 && ($row['product_id'] ? ($product_number < $row['goods_number']) : ($goods['goods_number'] < $row['goods_number']))) {
                 if ($goods['goods_number'] == 0 || $product_number === 0) {
                     // 如果库存为0，处理下一个商品
                     continue;
@@ -932,8 +932,8 @@ class TransactionService
                 $row['status'] = '<a href="user.php?act=order_detail&order_id=' . $row['order_id'] . '" >' . $GLOBALS['_LANG']['had_use'] . '</a>';
             }
 
-            $row['use_startdate'] = local_date($GLOBALS['_CFG']['date_format'], $row['use_start_date']);
-            $row['use_enddate'] = local_date($GLOBALS['_CFG']['date_format'], $row['use_end_date']);
+            $row['use_startdate'] = local_date(config('shop.date_format'), $row['use_start_date']);
+            $row['use_enddate'] = local_date(config('shop.date_format'), $row['use_end_date']);
 
             $arr[] = $row;
         }

@@ -11,7 +11,7 @@ class GuestStatsController extends InitController
     {
         parent::initialize();
 
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/statistic.php');
     }
 
     /*------------------------------------------------------ */

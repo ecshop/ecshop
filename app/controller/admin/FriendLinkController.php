@@ -12,7 +12,7 @@ class FriendLinkController extends InitController
         parent::initialize();
 
 
-        $image = new cls_image($_CFG['bgcolor']);
+        $image = new cls_image(config('shop.bgcolor'));
 
         $exc = new exchange(table('friend_link'), $db, 'link_id', 'link_name');
     }

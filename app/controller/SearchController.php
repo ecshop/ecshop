@@ -70,7 +70,7 @@ class SearchController extends InitController
         $this->assign('cat_list', cat_list(0, 0, true, 2, false));
         $this->assign('brand_list', get_brand_list());
         $this->assign('action', 'form');
-        $this->assign('use_storage', $_CFG['use_storage']);
+        $this->assign('use_storage', config('shop.use_storage'));
 
         return $this->display('search.dwt');
 
@@ -122,7 +122,7 @@ class SearchController extends InitController
             $this->assign('cat_list', cat_list(0, $adv_value['category'], true, 2, false));
             $this->assign('brand_list', get_brand_list());
             $this->assign('action', 'form');
-            $this->assign('use_storage', $_CFG['use_storage']);
+            $this->assign('use_storage', config('shop.use_storage'));
 
             $action = 'form';
         }
@@ -187,9 +187,9 @@ class SearchController extends InitController
         $max_price = $_REQUEST['max_price'] != 0 || $_REQUEST['min_price'] < 0 ? " AND g.shop_price <= '$_REQUEST[max_price]'" : '';
 
         /* 排序、显示方式以及类型 */
-        $default_display_type = $_CFG['show_order_type'] == '0' ? 'list' : ($_CFG['show_order_type'] == '1' ? 'grid' : 'text');
-        $default_sort_order_method = $_CFG['sort_order_method'] == '0' ? 'DESC' : 'ASC';
-        $default_sort_order_type = $_CFG['sort_order_type'] == '0' ? 'goods_id' : ($_CFG['sort_order_type'] == '1' ? 'shop_price' : 'last_update');
+        $default_display_type = config('shop.show_order_type') == '0' ? 'list' : (config('shop.show_order_type') == '1' ? 'grid' : 'text');
+        $default_sort_order_method = config('shop.sort_order_method') == '0' ? 'DESC' : 'ASC';
+        $default_sort_order_type = config('shop.sort_order_type') == '0' ? 'goods_id' : (config('shop.sort_order_type') == '1' ? 'shop_price' : 'last_update');
 
         $sort = (isset($_REQUEST['sort']) && in_array(trim(strtolower($_REQUEST['sort'])), array('goods_id', 'shop_price', 'last_update'))) ? trim($_REQUEST['sort']) : $default_sort_order_type;
         $order = (isset($_REQUEST['order']) && in_array(trim(strtoupper($_REQUEST['order'])), array('ASC', 'DESC'))) ? trim($_REQUEST['order']) : $default_sort_order_method;
@@ -198,7 +198,7 @@ class SearchController extends InitController
         $_SESSION['display_search'] = $display;
 
         $page = !empty($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
-        $size = !empty($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
+        $size = !empty(config('shop.page_size')) && intval(config('shop.page_size')) > 0 ? intval(config('shop.page_size')) : 10;
 
         $intromode = '';    //方式，用于决定搜索结果页标题图片
 
@@ -348,7 +348,7 @@ class SearchController extends InitController
 
             $arr[$row['goods_id']]['goods_id'] = $row['goods_id'];
             if ($display == 'grid') {
-                $arr[$row['goods_id']]['goods_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+                $arr[$row['goods_id']]['goods_name'] = config('shop.goods_name_length') > 0 ? sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
             } else {
                 $arr[$row['goods_id']]['goods_name'] = $row['goods_name'];
             }

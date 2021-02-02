@@ -337,7 +337,7 @@ class ShophelpController extends InitController
             " WHERE cat_id = '$cat_id' ORDER BY article_type DESC";
         $res = $GLOBALS['db']->query($sql);
         while ($rows = $GLOBALS['db']->fetchRow($res)) {
-            $rows['add_time'] = local_date($GLOBALS['_CFG']['time_format'], $rows['add_time']);
+            $rows['add_time'] = local_date(config('shop.time_format'), $rows['add_time']);
 
             $list[] = $rows;
         }

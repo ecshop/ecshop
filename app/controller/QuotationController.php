@@ -12,8 +12,8 @@ class QuotationController extends InitController
         $action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
         if ($action == 'print_quotation') {
             $smarty->template_dir = DATA_DIR;
-            $this->assign('shop_name', $_CFG['shop_title']);
-            $this->assign('cfg', $_CFG);
+            $this->assign('shop_name', config('shop.shop_title'));
+            $this->assign('cfg', config('shop'));
             $where = get_quotation_where($_POST);
             $sql = "SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, c.cat_name AS goods_category,p.product_id,p.product_number,p.goods_attr" .
                 " FROM " . table('goods') . " AS g LEFT JOIN " . table('category') . " AS c ON g.cat_id = c.cat_id LEFT JOIN " . table('products') . "as p  On g.goods_id=p.goods_id" . $where . " AND is_on_sale = 1 AND is_alone_sale = 1 ";

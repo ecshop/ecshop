@@ -442,7 +442,7 @@ class TemplateService
         $vals = array();
         $edit_libs = array();
 
-        if ($xml_content = @file_get_contents(ROOT_PATH . 'themes/' . $_CFG['template'] . '/libs.xml')) {
+        if ($xml_content = @file_get_contents(ROOT_PATH . 'themes/' . config('shop.template') . '/libs.xml')) {
             $p = xml_parser_create();                                                   //把xml解析到数组
             xml_parse_into_struct($p, $xml_content, $vals, $index);
             xml_parser_free($p);

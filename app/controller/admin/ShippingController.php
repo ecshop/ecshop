@@ -22,7 +22,7 @@ class ShippingController extends InitController
         $modules = read_modules(ROOT_PATH . 'includes/modules/shipping');
 
         for ($i = 0; $i < count($modules); $i++) {
-            $lang_file = ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shipping/' . $modules[$i]['code'] . '.php';
+            $lang_file = ROOT_PATH . 'languages/' . config('shop.lang') . '/shipping/' . $modules[$i]['code'] . '.php';
 
             if (file_exists($lang_file)) {
                 include_once($lang_file);

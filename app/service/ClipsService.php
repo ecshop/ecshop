@@ -108,13 +108,13 @@ class ClipsService
             if ($reply) {
                 $msg[$rows['msg_id']]['re_user_name'] = $reply['user_name'];
                 $msg[$rows['msg_id']]['re_user_email'] = $reply['user_email'];
-                $msg[$rows['msg_id']]['re_msg_time'] = local_date($GLOBALS['_CFG']['time_format'], $reply['msg_time']);
+                $msg[$rows['msg_id']]['re_msg_time'] = local_date(config('shop.time_format'), $reply['msg_time']);
                 $msg[$rows['msg_id']]['re_msg_content'] = nl2br(htmlspecialchars($reply['msg_content']));
             }
             //}
 
             $msg[$rows['msg_id']]['msg_content'] = nl2br(htmlspecialchars($rows['msg_content']));
-            $msg[$rows['msg_id']]['msg_time'] = local_date($GLOBALS['_CFG']['time_format'], $rows['msg_time']);
+            $msg[$rows['msg_id']]['msg_time'] = local_date(config('shop.time_format'), $rows['msg_time']);
             $msg[$rows['msg_id']]['msg_type'] = $order_id ? $rows['user_name'] : $GLOBALS['_LANG']['type'][$rows['msg_type']];
             $msg[$rows['msg_id']]['msg_title'] = nl2br(htmlspecialchars($rows['msg_title']));
             $msg[$rows['msg_id']]['message_img'] = $rows['message_img'];
@@ -134,8 +134,8 @@ class ClipsService
      */
     public function add_message($message)
     {
-        $upload_size_limit = $GLOBALS['_CFG']['upload_size_limit'] == '-1' ? ini_get('upload_max_filesize') : $GLOBALS['_CFG']['upload_size_limit'];
-        $status = 1 - $GLOBALS['_CFG']['message_check'];
+        $upload_size_limit = config('shop.upload_size_limit') == '-1' ? ini_get('upload_max_filesize') : config('shop.upload_size_limit');
+        $status = 1 - config('shop.message_check');
 
         $last_char = strtolower($upload_size_limit{strlen($upload_size_limit) - 1});
 
@@ -244,7 +244,7 @@ class ClipsService
             $booking[] = array('rec_id' => $row['rec_id'],
                 'goods_name' => $row['goods_name'],
                 'goods_number' => $row['goods_number'],
-                'booking_time' => local_date($GLOBALS['_CFG']['date_format'], $row['booking_time']),
+                'booking_time' => local_date(config('shop.date_format'), $row['booking_time']),
                 'dispose_note' => $row['dispose_note'],
                 'url' => build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']));
         }
@@ -446,7 +446,7 @@ class ClipsService
 
         if ($res) {
             while ($rows = $GLOBALS['db']->fetchRow($res)) {
-                $rows['add_time'] = local_date($GLOBALS['_CFG']['date_format'], $rows['add_time']);
+                $rows['add_time'] = local_date(config('shop.date_format'), $rows['add_time']);
                 $rows['admin_note'] = nl2br(htmlspecialchars($rows['admin_note']));
                 $rows['short_admin_note'] = ($rows['admin_note'] > '') ? sub_str($rows['admin_note'], 30) : 'N/A';
                 $rows['user_note'] = nl2br(htmlspecialchars($rows['user_note']));
@@ -526,10 +526,10 @@ class ClipsService
         $row = $GLOBALS['db']->getRow($sql);
         $info = array();
         $info['username'] = stripslashes($_SESSION['user_name']);
-        $info['shop_name'] = $GLOBALS['_CFG']['shop_name'];
-        $info['integral'] = $row['pay_points'] . $GLOBALS['_CFG']['integral_name'];
+        $info['shop_name'] = config('shop.shop_name');
+        $info['integral'] = $row['pay_points'] . config('shop.integral_name');
         /* 增加是否开启会员邮件验证开关 */
-        $info['is_validate'] = ($GLOBALS['_CFG']['member_email_validate'] && !$row['is_validated']) ? 0 : 1;
+        $info['is_validate'] = (config('shop.member_email_validate') && !$row['is_validated']) ? 0 : 1;
         $info['credit_line'] = $row['credit_line'];
         $info['formated_credit_line'] = price_format($info['credit_line'], false);
 
@@ -540,7 +540,7 @@ class ClipsService
             $_SESSION['last_time'] = $last_time = gmtime();
         }
 
-        $info['last_time'] = local_date($GLOBALS['_CFG']['time_format'], $last_time);
+        $info['last_time'] = local_date(config('shop.time_format'), $last_time);
         $info['surplus'] = price_format($row['user_money'], false);
         $info['bonus'] = sprintf($GLOBALS['_LANG']['user_bonus_info'], $user_bonus['bonus_count'], price_format($user_bonus['bonus_value'], false));
 
@@ -624,7 +624,7 @@ class ClipsService
             $scount[$val] = $lvl; // 计算不同个数的tag相对应的着色数组key
         }
 
-        $rewrite = intval($GLOBALS['_CFG']['rewrite']) > 0;
+        $rewrite = intval(config('shop.rewrite')) > 0;
 
         /* 遍历所有标签，根据引用次数设定字体大小 */
         foreach ($tags as $key => $val) {
@@ -742,7 +742,7 @@ class ClipsService
 
         /* 格式化时间 */
         foreach ($prompt as $key => $val) {
-            $prompt[$key]['formated_time'] = local_date($GLOBALS['_CFG']['time_format'], $val['add_time']);
+            $prompt[$key]['formated_time'] = local_date(config('shop.time_format'), $val['add_time']);
         }
 
         return $prompt;
@@ -771,9 +771,9 @@ class ClipsService
         $comments = array();
         $to_article = array();
         while ($row = $GLOBALS['db']->fetchRow($res)) {
-            $row['formated_add_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['add_time']);
+            $row['formated_add_time'] = local_date(config('shop.time_format'), $row['add_time']);
             if ($row['reply_time']) {
-                $row['formated_reply_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['reply_time']);
+                $row['formated_reply_time'] = local_date(config('shop.time_format'), $row['reply_time']);
             }
             if ($row['comment_type'] == 1) {
                 $to_article[] = $row["id_value"];

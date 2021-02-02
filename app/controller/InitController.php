@@ -2,7 +2,10 @@
 
 namespace app\controller;
 
+use app\service\ShopService;
 use app\support\Controller;
+use app\support\Error;
+use app\support\Shop;
 
 /**
  * Class InitController
@@ -10,6 +13,11 @@ use app\support\Controller;
  */
 class InitController extends Controller
 {
+    protected $ecs;
+    protected $err;
+    protected $sess;
+    protected $user;
+
     protected function initialize()
     {
         if (file_exists(runtime_path('install.lock'))) {
@@ -29,30 +37,25 @@ class InitController extends Controller
         $_COOKIE = addslashes_deep($_COOKIE);
         $_REQUEST = addslashes_deep($_REQUEST);
 
-        /* 创建 ECSHOP 对象 */
-        $ecs = new ECS($db_name, $prefix);
-        define('DATA_DIR', $ecs->data_dir());
-        define('IMAGE_DIR', $ecs->image_dir());
-
-        /* 初始化数据库类 */
-        $db = new cls_mysql($db_host, $db_user, $db_pass, $db_name);
-        $db->set_disable_cache_tables(array(table('sessions'), table('sessions_data'), table('cart')));
-        $db_host = $db_user = $db_pass = $db_name = null;
+        $this->ecs = new Shop();
+        define('DATA_DIR', $this->ecs->data_dir());
+        define('IMAGE_DIR', $this->ecs->image_dir());
 
         /* 创建错误处理对象 */
-        $err = new ecs_error('message.dwt');
+        $this->err = new Error('message.dwt');
 
         /* 载入系统参数 */
-        $_CFG = load_config();
+        $shopService = new ShopService();
+        config(['shop' => $shopService->getConfig()]);
 
         /* 载入语言文件 */
-        require(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/common.php');
+        require(ROOT_PATH . 'languages/' . config('shop.lang') . '/common.php');
 
-        if ($_CFG['shop_closed'] == 1) {
+        if (config('shop.shop_closed') == 1) {
             /* 商店关闭了，输出关闭的消息 */
             header('Content-type: text/html; charset=' . EC_CHARSET);
 
-            die('<div style="margin: 150px; text-align: center; font-size: 14px"><p>' . $_LANG['shop_closed'] . '</p><p>' . $_CFG['close_comment'] . '</p></div>');
+            die('<div style="margin: 150px; text-align: center; font-size: 14px"><p>' . $_LANG['shop_closed'] . '</p><p>' . config('shop.close_comment') . '</p></div>');
         }
 
         if (is_spider()) {
@@ -60,7 +63,7 @@ class InitController extends Controller
             if (!defined('INIT_NO_USERS')) {
                 define('INIT_NO_USERS', true);
                 /* 整合UC后，如果是蜘蛛访问，初始化UC需要的常量 */
-                if ($_CFG['integrate_code'] == 'ucenter') {
+                if (config('shop.integrate_code') == 'ucenter') {
                     $user = init_users();
                 }
             }
@@ -89,8 +92,8 @@ class InitController extends Controller
             /* 创建 Smarty 对象。*/
             $smarty = new cls_template;
 
-            $smarty->cache_lifetime = $_CFG['cache_time'];
-            $smarty->template_dir = ROOT_PATH . 'themes/' . $_CFG['template'];
+            $smarty->cache_lifetime = config('shop.cache_time');
+            $smarty->template_dir = ROOT_PATH . 'themes/' . config('shop.template');
             $smarty->cache_dir = ROOT_PATH . 'temp/caches';
             $smarty->compile_dir = ROOT_PATH . 'temp/compiled';
             $smarty->direct_output = true;
@@ -98,10 +101,10 @@ class InitController extends Controller
 
             $this->assign('lang', $_LANG);
             $this->assign('ecs_charset', EC_CHARSET);
-            if (!empty($_CFG['stylename'])) {
-                $this->assign('ecs_css_path', 'themes/' . $_CFG['template'] . '/style_' . $_CFG['stylename'] . '.css');
+            if (!empty(config('shop.stylename'))) {
+                $this->assign('ecs_css_path', 'themes/' . config('shop.template') . '/style_' . config('shop.stylename') . '.css');
             } else {
-                $this->assign('ecs_css_path', 'themes/' . $_CFG['template'] . '/style.css');
+                $this->assign('ecs_css_path', 'themes/' . config('shop.template') . '/style.css');
             }
         }
 
@@ -184,30 +187,30 @@ class InitController extends Controller
     protected function assign_template($ctype = '', $catlist = array())
     {
 
-        $this->assign('image_width', $GLOBALS['_CFG']['image_width']);
-        $this->assign('image_height', $GLOBALS['_CFG']['image_height']);
-        $this->assign('points_name', $GLOBALS['_CFG']['integral_name']);
-        $this->assign('qq', explode(',', $GLOBALS['_CFG']['qq']));
-        $this->assign('ww', explode(',', $GLOBALS['_CFG']['ww']));
-        $this->assign('ym', explode(',', $GLOBALS['_CFG']['ym']));
-        $this->assign('msn', explode(',', $GLOBALS['_CFG']['msn']));
-        $this->assign('skype', explode(',', $GLOBALS['_CFG']['skype']));
-        $this->assign('stats_code', $GLOBALS['_CFG']['stats_code']);
-        $this->assign('copyright', sprintf($GLOBALS['_LANG']['copyright'], date('Y'), $GLOBALS['_CFG']['shop_name']));
-        $this->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
-        $this->assign('service_email', $GLOBALS['_CFG']['service_email']);
-        $this->assign('service_phone', $GLOBALS['_CFG']['service_phone']);
-        $this->assign('shop_address', $GLOBALS['_CFG']['shop_address']);
+        $this->assign('image_width', config('shop.image_width'));
+        $this->assign('image_height', config('shop.image_height'));
+        $this->assign('points_name', config('shop.integral_name'));
+        $this->assign('qq', explode(',', config('shop.qq')));
+        $this->assign('ww', explode(',', config('shop.ww')));
+        $this->assign('ym', explode(',', config('shop.ym')));
+        $this->assign('msn', explode(',', config('shop.msn')));
+        $this->assign('skype', explode(',', config('shop.skype')));
+        $this->assign('stats_code', config('shop.stats_code'));
+        $this->assign('copyright', sprintf($GLOBALS['_LANG']['copyright'], date('Y'), config('shop.shop_name')));
+        $this->assign('shop_name', config('shop.shop_name'));
+        $this->assign('service_email', config('shop.service_email'));
+        $this->assign('service_phone', config('shop.service_phone'));
+        $this->assign('shop_address', config('shop.shop_address'));
         $this->assign('licensed', license_info());
         $this->assign('ecs_version', VERSION);
-        $this->assign('icp_number', $GLOBALS['_CFG']['icp_number']);
+        $this->assign('icp_number', config('shop.icp_number'));
         $this->assign('username', !empty($_SESSION['user_name']) ? $_SESSION['user_name'] : '');
         $this->assign('category_list', cat_list(0, 0, true, 2, false));
         $this->assign('catalog_list', cat_list(0, 0, false, 1, false));
         $this->assign('navigator_list', get_navigator($ctype, $catlist));  //自定义导航栏
 
-        if (!empty($GLOBALS['_CFG']['search_keywords'])) {
-            $searchkeywords = explode(',', trim($GLOBALS['_CFG']['search_keywords']));
+        if (!empty(config('shop.search_keywords'))) {
+            $searchkeywords = explode(',', trim(config('shop.search_keywords')));
         } else {
             $searchkeywords = array();
         }
@@ -226,14 +229,14 @@ class InitController extends Controller
     {
         /* 判断是否重写，取得文件名 */
         $cur_url = basename(PHP_SELF);
-        if (intval($GLOBALS['_CFG']['rewrite'])) {
+        if (intval(config('shop.rewrite'))) {
             $filename = strpos($cur_url, '-') ? substr($cur_url, 0, strpos($cur_url, '-')) : substr($cur_url, 0, -4);
         } else {
             $filename = substr($cur_url, 0, -4);
         }
 
         /* 初始化“页面标题”和“当前位置” */
-        $page_title = $GLOBALS['_CFG']['shop_title'];
+        $page_title = config('shop.shop_title');
         $ur_here = '<a href=".">' . $GLOBALS['_LANG']['home'] . '</a>';
 
         /* 根据文件名分别处理中间的部分 */
@@ -328,7 +331,7 @@ class InitController extends Controller
     public function assign_dynamic($tmp)
     {
         $sql = 'SELECT id, number, type FROM ' . table('template') .
-            " WHERE filename = '$tmp' AND type > 0 AND remarks ='' AND theme='" . $GLOBALS['_CFG']['template'] . "'";
+            " WHERE filename = '$tmp' AND type > 0 AND remarks ='' AND theme='" . config('shop.template') . "'";
         $res = $GLOBALS['db']->getAll($sql);
 
         foreach ($res as $row) {

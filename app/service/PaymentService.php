@@ -150,10 +150,10 @@ class PaymentService
                     order_action($order_sn, OS_CONFIRMED, SS_UNSHIPPED, $pay_status, $note, $GLOBALS['_LANG']['buyer']);
 
                     /* 如果需要，发短信 */
-                    if ($GLOBALS['_CFG']['sms_order_payed'] == '1' && $GLOBALS['_CFG']['sms_shop_mobile'] != '') {
+                    if (config('shop.sms_order_payed') == '1' && config('shop.sms_shop_mobile') != '') {
                         $sms = new sms();
                         $sms->send(
-                            $GLOBALS['_CFG']['sms_shop_mobile'],
+                            config('shop.sms_shop_mobile'),
                             sprintf($GLOBALS['_LANG']['order_payed_sms'], $order_sn, $order['consignee'], $order['tel']),
                             '',
                             13,
@@ -200,7 +200,7 @@ class PaymentService
 
                         /* 修改会员帐户金额 */
                         $_LANG = array();
-                        include_once(ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/user.php');
+                        include_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/user.php');
                         log_account_change($arr['user_id'], $arr['amount'], 0, 0, 0, $_LANG['surplus_type_0'], ACT_SAVING);
                     }
                 }

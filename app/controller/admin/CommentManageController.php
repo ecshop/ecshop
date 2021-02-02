@@ -77,7 +77,7 @@ class CommentManageController extends InitController
         $comment_info = $db->getRow($sql);
         $comment_info['content'] = str_replace('\r\n', '<br />', htmlspecialchars($comment_info['content']));
         $comment_info['content'] = nl2br(str_replace('\n', '<br />', $comment_info['content']));
-        $comment_info['add_time'] = local_date($_CFG['time_format'], $comment_info['add_time']);
+        $comment_info['add_time'] = local_date(config('shop.time_format'), $comment_info['add_time']);
 
         /* 获得评论回复内容 */
         $sql = "SELECT * FROM " . table('comment') . " WHERE parent_id = '$_REQUEST[id]'";
@@ -88,7 +88,7 @@ class CommentManageController extends InitController
             $reply_info['add_time'] = '';
         } else {
             $reply_info['content'] = nl2br(htmlspecialchars($reply_info['content']));
-            $reply_info['add_time'] = local_date($_CFG['time_format'], $reply_info['add_time']);
+            $reply_info['add_time'] = local_date(config('shop.time_format'), $reply_info['add_time']);
         }
         /* 获取管理员的用户名和Email地址 */
         $sql = "SELECT user_name, email FROM " . table('admin_user') .
@@ -173,7 +173,7 @@ class CommentManageController extends InitController
             $this->assign('user_name', $comment_info['user_name']);
             $this->assign('recomment', $_POST['content']);
             $this->assign('comment', $comment_info['content']);
-            $this->assign('shop_name', "<a href='" . $ecs->url() . "'>" . $_CFG['shop_name'] . '</a>');
+            $this->assign('shop_name', "<a href='" . $ecs->url() . "'>" . config('shop.shop_name') . '</a>');
             $this->assign('send_date', date('Y-m-d'));
 
             $content = $smarty->fetch('str:' . $template['template_content']);
@@ -324,7 +324,7 @@ class CommentManageController extends InitController
                 "SELECT title FROM " . table('article') . " WHERE article_id='$row[id_value]'";
             $row['title'] = $GLOBALS['db']->getOne($sql);
 
-            $row['add_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['add_time']);
+            $row['add_time'] = local_date(config('shop.time_format'), $row['add_time']);
 
             $arr[] = $row;
         }

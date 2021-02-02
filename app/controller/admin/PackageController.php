@@ -398,8 +398,8 @@ class PackageController extends InitController
         $row = $GLOBALS['db']->getAll($sql);
 
         foreach ($row as $key => $val) {
-            $row[$key]['start_time'] = local_date($GLOBALS['_CFG']['time_format'], $val['start_time']);
-            $row[$key]['end_time'] = local_date($GLOBALS['_CFG']['time_format'], $val['end_time']);
+            $row[$key]['start_time'] = local_date(config('shop.time_format'), $val['start_time']);
+            $row[$key]['end_time'] = local_date(config('shop.time_format'), $val['end_time']);
             $info = unserialize($row[$key]['ext_info']);
             unset($row[$key]['ext_info']);
             if ($info) {

@@ -541,7 +541,7 @@ class VirtualCardController extends InitController
                 $row['card_password'] = '***';
             }
 
-            $row['end_date'] = $row['end_date'] == 0 ? '' : date($GLOBALS['_CFG']['date_format'], $row['end_date']);
+            $row['end_date'] = $row['end_date'] == 0 ? '' : date(config('shop.date_format'), $row['end_date']);
 
             $arr[] = $row;
         }

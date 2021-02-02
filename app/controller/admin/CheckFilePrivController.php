@@ -51,7 +51,7 @@ class CheckFilePrivController extends InitController
             $dir_subdir['images'][] = $val;
         }
 
-        $tpl = 'themes/' . $_CFG['template'] . '/';
+        $tpl = 'themes/' . config('shop.template') . '/';
 
 
         $list = array();

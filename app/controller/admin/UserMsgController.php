@@ -32,7 +32,7 @@ class UserMsgController extends InitController
 
         $msg_list = $db->getAll($sql);
         foreach ($msg_list as $key => $val) {
-            $msg_list[$key]['msg_time'] = local_date($GLOBALS['_CFG']['time_format'], $val['msg_time']);
+            $msg_list[$key]['msg_time'] = local_date(config('shop.time_format'), $val['msg_time']);
         }
 
         assign_query_info();
@@ -248,7 +248,7 @@ class UserMsgController extends InitController
             $this->assign('user_name', $message_info['user_name']);
             $this->assign('message_note', $_POST['msg_content']);
             $this->assign('message_content', $message_content);
-            $this->assign('shop_name', "<a href='" . $ecs->url() . "'>" . $_CFG['shop_name'] . '</a>');
+            $this->assign('shop_name', "<a href='" . $ecs->url() . "'>" . config('shop.shop_name') . '</a>');
             $this->assign('send_date', date('Y-m-d'));
 
             $content = $smarty->fetch('str:' . $template['template_content']);
@@ -327,7 +327,7 @@ class UserMsgController extends InitController
             if ($value['order_id'] > 0) {
                 $msg_list[$key]['order_sn'] = $GLOBALS['db']->getOne("SELECT order_sn FROM " . table('order_info') . " WHERE order_id= " . $value['order_id']);
             }
-            $msg_list[$key]['msg_time'] = local_date($GLOBALS['_CFG']['time_format'], $value['msg_time']);
+            $msg_list[$key]['msg_time'] = local_date(config('shop.time_format'), $value['msg_time']);
             $msg_list[$key]['msg_type'] = $GLOBALS['_LANG']['type'][$value['msg_type']];
         }
         $filter['keywords'] = stripslashes($filter['keywords']);
@@ -355,8 +355,8 @@ class UserMsgController extends InitController
         $msg = $db->getRow($sql);
 
         if ($msg) {
-            $msg['msg_time'] = local_date($_CFG['time_format'], $msg['msg_time']);
-            $msg['reply_time'] = local_date($_CFG['time_format'], $msg['reply_time']);
+            $msg['msg_time'] = local_date(config('shop.time_format'), $msg['msg_time']);
+            $msg['reply_time'] = local_date(config('shop.time_format'), $msg['reply_time']);
         }
 
         return $msg;

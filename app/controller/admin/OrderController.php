@@ -208,11 +208,11 @@ class OrderController extends InitController
         }
 
         /* 其他处理 */
-        $order['order_time'] = local_date($_CFG['time_format'], $order['add_time']);
+        $order['order_time'] = local_date(config('shop.time_format'), $order['add_time']);
         $order['pay_time'] = $order['pay_time'] > 0 ?
-            local_date($_CFG['time_format'], $order['pay_time']) : $_LANG['ps'][PS_UNPAYED];
+            local_date(config('shop.time_format'), $order['pay_time']) : $_LANG['ps'][PS_UNPAYED];
         $order['shipping_time'] = $order['shipping_time'] > 0 ?
-            local_date($_CFG['time_format'], $order['shipping_time']) : $_LANG['ss'][SS_UNSHIPPED];
+            local_date(config('shop.time_format'), $order['shipping_time']) : $_LANG['ss'][SS_UNSHIPPED];
         $order['status'] = $_LANG['os'][$order['order_status']] . ',' . $_LANG['ps'][$order['pay_status']] . ',' . $_LANG['ss'][$order['shipping_status']];
         $order['invoice_no'] = $order['shipping_status'] == SS_UNSHIPPED || $order['shipping_status'] == SS_PREPARING ? $_LANG['ss'][SS_UNSHIPPED] : $order['invoice_no'];
 
@@ -323,7 +323,7 @@ class OrderController extends InitController
             $row['order_status'] = $_LANG['os'][$row['order_status']];
             $row['pay_status'] = $_LANG['ps'][$row['pay_status']];
             $row['shipping_status'] = $_LANG['ss'][$row['shipping_status']];
-            $row['action_time'] = local_date($_CFG['time_format'], $row['log_time']);
+            $row['action_time'] = local_date(config('shop.time_format'), $row['log_time']);
             $act_list[] = $row;
         }
         $this->assign('action_list', $act_list);
@@ -333,23 +333,23 @@ class OrderController extends InitController
 
         /* 是否打印订单，分别赋值 */
         if (isset($_GET['print'])) {
-            $this->assign('shop_name', $_CFG['shop_name']);
+            $this->assign('shop_name', config('shop.shop_name'));
             $this->assign('shop_url', $ecs->url());
-            $this->assign('shop_address', $_CFG['shop_address']);
-            $this->assign('service_phone', $_CFG['service_phone']);
-            $this->assign('print_time', local_date($_CFG['time_format']));
+            $this->assign('shop_address', config('shop.shop_address'));
+            $this->assign('service_phone', config('shop.service_phone'));
+            $this->assign('print_time', local_date(config('shop.time_format')));
             $this->assign('action_user', $_SESSION['admin_name']);
 
             $smarty->template_dir = '../' . DATA_DIR;
             return $this->display('order_print.html');
         } /* 打印快递单 */
         elseif (isset($_GET['shipping_print'])) {
-            //$this->assign('print_time',   local_date($_CFG['time_format']));
+            //$this->assign('print_time',   local_date(config('shop.time_format')));
             //发货地址所在地
             $region_array = array();
-            $region_id = !empty($_CFG['shop_country']) ? $_CFG['shop_country'] . ',' : '';
-            $region_id .= !empty($_CFG['shop_province']) ? $_CFG['shop_province'] . ',' : '';
-            $region_id .= !empty($_CFG['shop_city']) ? $_CFG['shop_city'] . ',' : '';
+            $region_id = !empty(config('shop.shop_country')) ? config('shop.shop_country') . ',' : '';
+            $region_id .= !empty(config('shop.shop_province')) ? config('shop.shop_province') . ',' : '';
+            $region_id .= !empty(config('shop.shop_city')) ? config('shop.shop_city') . ',' : '';
             $region_id = substr($region_id, 0, -1);
             $region = $db->getAll("SELECT region_id, region_name FROM " . table("region") . " WHERE region_id IN ($region_id)");
             if (!empty($region)) {
@@ -357,12 +357,12 @@ class OrderController extends InitController
                     $region_array[$region_data['region_id']] = $region_data['region_name'];
                 }
             }
-            $this->assign('shop_name', $_CFG['shop_name']);
+            $this->assign('shop_name', config('shop.shop_name'));
             $this->assign('order_id', $order_id);
-            $this->assign('province', $region_array[$_CFG['shop_province']]);
-            $this->assign('city', $region_array[$_CFG['shop_city']]);
-            $this->assign('shop_address', $_CFG['shop_address']);
-            $this->assign('service_phone', $_CFG['service_phone']);
+            $this->assign('province', $region_array[config('shop.shop_province')]);
+            $this->assign('city', $region_array[config('shop.shop_city')]);
+            $this->assign('shop_address', config('shop.shop_address'));
+            $this->assign('service_phone', config('shop.service_phone'));
             $shipping = $db->getRow("SELECT * FROM " . table("shipping") . " WHERE shipping_id = " . $order['shipping_id']);
 
             //打印单模式
@@ -386,13 +386,13 @@ class OrderController extends InitController
 
                 /* 标签信息 */
                 $lable_box = array();
-                $lable_box['t_shop_country'] = $region_array[$_CFG['shop_country']]; //网店-国家
-                $lable_box['t_shop_city'] = $region_array[$_CFG['shop_city']]; //网店-城市
-                $lable_box['t_shop_province'] = $region_array[$_CFG['shop_province']]; //网店-省份
-                $lable_box['t_shop_name'] = $_CFG['shop_name']; //网店-名称
+                $lable_box['t_shop_country'] = $region_array[config('shop.shop_country')]; //网店-国家
+                $lable_box['t_shop_city'] = $region_array[config('shop.shop_city')]; //网店-城市
+                $lable_box['t_shop_province'] = $region_array[config('shop.shop_province')]; //网店-省份
+                $lable_box['t_shop_name'] = config('shop.shop_name'); //网店-名称
                 $lable_box['t_shop_district'] = ''; //网店-区/县
-                $lable_box['t_shop_tel'] = $_CFG['service_phone']; //网店-联系电话
-                $lable_box['t_shop_address'] = $_CFG['shop_address']; //网店-地址
+                $lable_box['t_shop_tel'] = config('shop.service_phone'); //网店-联系电话
+                $lable_box['t_shop_address'] = config('shop.shop_address'); //网店-地址
                 $lable_box['t_customer_country'] = $region_array[$order['country']]; //收件人-国家
                 $lable_box['t_customer_province'] = $region_array[$order['province']]; //收件人-省份
                 $lable_box['t_customer_city'] = $region_array[$order['city']]; //收件人-城市
@@ -584,7 +584,7 @@ class OrderController extends InitController
             $row['order_status'] = $_LANG['os'][$row['order_status']];
             $row['pay_status'] = $_LANG['ps'][$row['pay_status']];
             $row['shipping_status'] = ($row['shipping_status'] == SS_SHIPPED_ING) ? $_LANG['ss_admin'][SS_SHIPPED_ING] : $_LANG['ss'][$row['shipping_status']];
-            $row['action_time'] = local_date($_CFG['time_format'], $row['log_time']);
+            $row['action_time'] = local_date(config('shop.time_format'), $row['log_time']);
             $act_list[] = $row;
         }
         $this->assign('action_list', $act_list);
@@ -646,7 +646,7 @@ class OrderController extends InitController
         /* 如果商品存在规格就查询规格，如果不存在规格按商品库存查询 */
         if (!empty($delivery_stock_result)) {
             foreach ($delivery_stock_result as $value) {
-                if (($value['sums'] > $value['storage'] || $value['storage'] <= 0) && (($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_SHIP) || ($_CFG['use_storage'] == '0' && $value['is_real'] == 0))) {
+                if (($value['sums'] > $value['storage'] || $value['storage'] <= 0) && ((config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_SHIP) || (config('shop.use_storage') == '0' && $value['is_real'] == 0))) {
                     /* 操作失败 */
                     $links[] = array('text' => $_LANG['order_info'], 'href' => 'order.php?act=delivery_info&delivery_id=' . $delivery_id);
                     sys_msg(sprintf($_LANG['act_good_vacancy'], $value['goods_name']), 1, $links);
@@ -670,7 +670,7 @@ class OrderController extends InitController
         GROUP BY DG.goods_id ";
             $delivery_stock_result = $GLOBALS['db']->getAll($delivery_stock_sql);
             foreach ($delivery_stock_result as $value) {
-                if (($value['sums'] > $value['goods_number'] || $value['goods_number'] <= 0) && (($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_SHIP) || ($_CFG['use_storage'] == '0' && $value['is_real'] == 0))) {
+                if (($value['sums'] > $value['goods_number'] || $value['goods_number'] <= 0) && ((config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_SHIP) || (config('shop.use_storage') == '0' && $value['is_real'] == 0))) {
                     /* 操作失败 */
                     $links[] = array('text' => $_LANG['order_info'], 'href' => 'order.php?act=delivery_info&delivery_id=' . $delivery_id);
                     sys_msg(sprintf($_LANG['act_good_vacancy'], $value['goods_name']), 1, $links);
@@ -697,7 +697,7 @@ class OrderController extends InitController
         }
 
         /* 如果使用库存，且发货时减库存，则修改库存 */
-        if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_SHIP) {
+        if (config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_SHIP) {
             foreach ($delivery_stock_result as $value) {
 
                 /* 商品（实货）、超级礼包（实货） */
@@ -760,15 +760,15 @@ class OrderController extends InitController
             }
 
             /* 发送邮件 */
-            $cfg = $_CFG['send_ship_email'];
+            $cfg = config('shop.send_ship_email');
             if ($cfg == '1') {
                 $order['invoice_no'] = $invoice_no;
                 $tpl = get_mail_template('deliver_notice');
                 $this->assign('order', $order);
-                $this->assign('send_time', local_date($_CFG['time_format']));
-                $this->assign('shop_name', $_CFG['shop_name']);
-                $this->assign('send_date', local_date($_CFG['date_format']));
-                $this->assign('sent_date', local_date($_CFG['date_format']));
+                $this->assign('send_time', local_date(config('shop.time_format')));
+                $this->assign('shop_name', config('shop.shop_name'));
+                $this->assign('send_date', local_date(config('shop.date_format')));
+                $this->assign('sent_date', local_date(config('shop.date_format')));
                 $this->assign('confirm_url', $ecs->url() . 'receive.php?id=' . $order['order_id'] . '&con=' . rawurlencode($order['consignee']));
                 $this->assign('send_msg_url', $ecs->url() . 'user.php?act=message_list&order_id=' . $order['order_id']);
                 $content = $smarty->fetch('str:' . $tpl['template_content']);
@@ -778,13 +778,13 @@ class OrderController extends InitController
             }
 
             /* 如果需要，发短信 */
-            if ($GLOBALS['_CFG']['sms_order_shipped'] == '1' && $order['mobile'] != '') {
+            if (config('shop.sms_order_shipped') == '1' && $order['mobile'] != '') {
                 $sms = new sms();
                 $sms->send($order['mobile'], sprintf(
                     $GLOBALS['_LANG']['order_shipped_sms'],
                     $order['order_sn'],
                     local_date($GLOBALS['_LANG']['sms_time_format']),
-                    $GLOBALS['_CFG']['shop_name']
+                    config('shop.shop_name')
                 ), 0);
             }
         }
@@ -862,7 +862,7 @@ class OrderController extends InitController
         order_action($order['order_sn'], $order['order_status'], $shipping_status, $order['pay_status'], $action_note, null, 1);
 
         /* 如果使用库存，则增加库存 */
-        if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_SHIP) {
+        if (config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_SHIP) {
             // 检查此单发货商品数量
             $virtual_goods = array();
             $delivery_stock_sql = "SELECT DG.goods_id, DG.product_id, DG.is_real, SUM(DG.send_number) AS sums
@@ -1245,7 +1245,7 @@ class OrderController extends InitController
             $db->query($sql);
 
             /* 如果使用库存，且下订单时减库存，则修改库存 */
-            if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE) {
+            if (config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_PLACE) {
 
                 //（货品）
                 if (!empty($product_info['product_id'])) {
@@ -2001,7 +2001,7 @@ class OrderController extends InitController
             $order_id = intval($_GET['order_id']);
 
             /* 如果使用库存，且下订单时减库存，则修改库存 */
-            if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE) {
+            if (config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_PLACE) {
                 $goods = $db->getRow("SELECT goods_id, goods_number FROM " . table('order_goods') . " WHERE rec_id = " . $rec_id);
                 $sql = "UPDATE " . table('goods') .
                     " SET `goods_number` = goods_number + '" . $goods['goods_number'] . "' " .
@@ -2176,7 +2176,7 @@ class OrderController extends InitController
         elseif (isset($_POST['pay'])) {
             /* 检查权限 */
             admin_priv('order_ps_edit');
-            $require_note = $_CFG['order_pay_note'] == 1;
+            $require_note = config('shop.order_pay_note') == 1;
             $action = $_LANG['op_pay'];
             $operation = 'pay';
         } /* 未付款 */
@@ -2184,7 +2184,7 @@ class OrderController extends InitController
             /* 检查权限 */
             admin_priv('order_ps_edit');
 
-            $require_note = $_CFG['order_unpay_note'] == 1;
+            $require_note = config('shop.order_unpay_note') == 1;
             $order = order_info($order_id);
             if ($order['money_paid'] > 0) {
                 $show_refund = true;
@@ -2248,7 +2248,7 @@ class OrderController extends InitController
             $order['region'] = $db->getOne($sql);
 
             /* 查询：其他处理 */
-            $order['order_time'] = local_date($_CFG['time_format'], $order['add_time']);
+            $order['order_time'] = local_date(config('shop.time_format'), $order['add_time']);
             $order['invoice_no'] = $order['shipping_status'] == SS_UNSHIPPED || $order['shipping_status'] == SS_PREPARING ? $_LANG['ss'][SS_UNSHIPPED] : $order['invoice_no'];
 
             /* 查询：是否保价 */
@@ -2278,7 +2278,7 @@ class OrderController extends InitController
                         foreach ($goods_list[$key]['package_goods_list'] as $pg_key => $pg_value) {
                             $goods_list[$key]['package_goods_list'][$pg_key]['readonly'] = '';
                             /* 使用库存 是否缺货 */
-                            if ($pg_value['storage'] <= 0 && $_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_SHIP) {
+                            if ($pg_value['storage'] <= 0 && config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_SHIP) {
                                 $goods_list[$key]['package_goods_list'][$pg_key]['send'] = $_LANG['act_good_vacancy'];
                                 $goods_list[$key]['package_goods_list'][$pg_key]['readonly'] = 'readonly="readonly"';
                             } /* 将已经全部发货的商品设置为只读 */
@@ -2293,7 +2293,7 @@ class OrderController extends InitController
 
                         $goods_list[$key]['readonly'] = '';
                         /* 是否缺货 */
-                        if ($goods_value['storage'] <= 0 && $_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_SHIP) {
+                        if ($goods_value['storage'] <= 0 && config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_SHIP) {
                             $goods_list[$key]['send'] = $_LANG['act_good_vacancy'];
                             $goods_list[$key]['readonly'] = 'readonly="readonly"';
                         } elseif ($goods_list[$key]['send'] <= 0) {
@@ -2328,17 +2328,17 @@ class OrderController extends InitController
             /* 检查权限 */
             admin_priv('order_ss_edit');
 
-            $require_note = $_CFG['order_unship_note'] == 1;
+            $require_note = config('shop.order_unship_note') == 1;
             $action = $_LANG['op_unship'];
             $operation = 'unship';
         } /* 收货确认 */
         elseif (isset($_POST['receive'])) {
-            $require_note = $_CFG['order_receive_note'] == 1;
+            $require_note = config('shop.order_receive_note') == 1;
             $action = $_LANG['op_receive'];
             $operation = 'receive';
         } /* 取消 */
         elseif (isset($_POST['cancel'])) {
-            $require_note = $_CFG['order_cancel_note'] == 1;
+            $require_note = config('shop.order_cancel_note') == 1;
             $action = $_LANG['op_cancel'];
             $operation = 'cancel';
             $show_cancel_note = true;
@@ -2349,7 +2349,7 @@ class OrderController extends InitController
             $anonymous = $order['user_id'] == 0;
         } /* 无效 */
         elseif (isset($_POST['invalid'])) {
-            $require_note = $_CFG['order_invalid_note'] == 1;
+            $require_note = config('shop.order_invalid_note') == 1;
             $action = $_LANG['op_invalid'];
             $operation = 'invalid';
         } /* 售后 */
@@ -2359,7 +2359,7 @@ class OrderController extends InitController
             $operation = 'after_service';
         } /* 退货 */
         elseif (isset($_POST['return'])) {
-            $require_note = $_CFG['order_return_note'] == 1;
+            $require_note = config('shop.order_return_note') == 1;
             $order = order_info($order_id);
             if ($order['money_paid'] > 0) {
                 $show_refund = true;
@@ -2480,11 +2480,11 @@ class OrderController extends InitController
             }
 
             /* 赋值公用信息 */
-            $this->assign('shop_name', $_CFG['shop_name']);
+            $this->assign('shop_name', config('shop.shop_name'));
             $this->assign('shop_url', $ecs->url());
-            $this->assign('shop_address', $_CFG['shop_address']);
-            $this->assign('service_phone', $_CFG['service_phone']);
-            $this->assign('print_time', local_date($_CFG['time_format']));
+            $this->assign('shop_address', config('shop.shop_address'));
+            $this->assign('service_phone', config('shop.service_phone'));
+            $this->assign('print_time', local_date(config('shop.time_format')));
             $this->assign('action_user', $_SESSION['admin_name']);
 
             $html = '';
@@ -2536,11 +2536,11 @@ class OrderController extends InitController
                 $order['region'] = $db->getOne($sql);
 
                 /* 其他处理 */
-                $order['order_time'] = local_date($_CFG['time_format'], $order['add_time']);
+                $order['order_time'] = local_date(config('shop.time_format'), $order['add_time']);
                 $order['pay_time'] = $order['pay_time'] > 0 ?
-                    local_date($_CFG['time_format'], $order['pay_time']) : $_LANG['ps'][PS_UNPAYED];
+                    local_date(config('shop.time_format'), $order['pay_time']) : $_LANG['ps'][PS_UNPAYED];
                 $order['shipping_time'] = $order['shipping_time'] > 0 ?
-                    local_date($_CFG['time_format'], $order['shipping_time']) : $_LANG['ss'][SS_UNSHIPPED];
+                    local_date(config('shop.time_format'), $order['shipping_time']) : $_LANG['ss'][SS_UNSHIPPED];
                 $order['status'] = $_LANG['os'][$order['order_status']] . ',' . $_LANG['ps'][$order['pay_status']] . ',' . $_LANG['ss'][$order['shipping_status']];
                 $order['invoice_no'] = $order['shipping_status'] == SS_UNSHIPPED || $order['shipping_status'] == SS_PREPARING ? $_LANG['ss'][SS_UNSHIPPED] : $order['invoice_no'];
 
@@ -2672,13 +2672,13 @@ class OrderController extends InitController
                     order_action($order['order_sn'], OS_CONFIRMED, SS_UNSHIPPED, PS_UNPAYED, $action_note);
 
                     /* 发送邮件 */
-                    if ($_CFG['send_confirm_email'] == '1') {
+                    if (config('shop.send_confirm_email') == '1') {
                         $tpl = get_mail_template('order_confirm');
-                        $order['formated_add_time'] = local_date($GLOBALS['_CFG']['time_format'], $order['add_time']);
+                        $order['formated_add_time'] = local_date(config('shop.time_format'), $order['add_time']);
                         $this->assign('order', $order);
-                        $this->assign('shop_name', $_CFG['shop_name']);
-                        $this->assign('send_date', local_date($_CFG['date_format']));
-                        $this->assign('sent_date', local_date($_CFG['date_format']));
+                        $this->assign('shop_name', config('shop.shop_name'));
+                        $this->assign('send_date', local_date(config('shop.date_format')));
+                        $this->assign('sent_date', local_date(config('shop.date_format')));
                         $content = $smarty->fetch('str:' . $tpl['template_content']);
                         send_mail($order['consignee'], $order['email'], $tpl['template_subject'], $content, $tpl['is_html']);
                     }
@@ -2715,17 +2715,17 @@ class OrderController extends InitController
                     order_action($order['order_sn'], OS_INVALID, SS_UNSHIPPED, PS_UNPAYED, $action_note);
 
                     /* 如果使用库存，且下订单时减库存，则增加库存 */
-                    if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE) {
+                    if (config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_PLACE) {
                         change_order_goods_storage($order_id, false, SDT_PLACE);
                     }
 
                     /* 发送邮件 */
-                    if ($_CFG['send_invalid_email'] == '1') {
+                    if (config('shop.send_invalid_email') == '1') {
                         $tpl = get_mail_template('order_invalid');
                         $this->assign('order', $order);
-                        $this->assign('shop_name', $_CFG['shop_name']);
-                        $this->assign('send_date', local_date($_CFG['date_format']));
-                        $this->assign('sent_date', local_date($_CFG['date_format']));
+                        $this->assign('shop_name', config('shop.shop_name'));
+                        $this->assign('send_date', local_date(config('shop.date_format')));
+                        $this->assign('sent_date', local_date(config('shop.date_format')));
                         $content = $smarty->fetch('str:' . $tpl['template_content']);
                         send_mail($order['consignee'], $order['email'], $tpl['template_subject'], $content, $tpl['is_html']);
                     }
@@ -2764,17 +2764,17 @@ class OrderController extends InitController
                     order_action($order['order_sn'], OS_CANCELED, $order['shipping_status'], PS_UNPAYED, $action_note);
 
                     /* 如果使用库存，且下订单时减库存，则增加库存 */
-                    if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE) {
+                    if (config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_PLACE) {
                         change_order_goods_storage($order_id, false, SDT_PLACE);
                     }
 
                     /* 发送邮件 */
-                    if ($_CFG['send_cancel_email'] == '1') {
+                    if (config('shop.send_cancel_email') == '1') {
                         $tpl = get_mail_template('order_cancel');
                         $this->assign('order', $order);
-                        $this->assign('shop_name', $_CFG['shop_name']);
-                        $this->assign('send_date', local_date($_CFG['date_format']));
-                        $this->assign('sent_date', local_date($_CFG['date_format']));
+                        $this->assign('shop_name', config('shop.shop_name'));
+                        $this->assign('send_date', local_date(config('shop.date_format')));
+                        $this->assign('sent_date', local_date(config('shop.date_format')));
                         $content = $smarty->fetch('str:' . $tpl['template_content']);
                         send_mail($order['consignee'], $order['email'], $tpl['template_subject'], $content, $tpl['is_html']);
                     }
@@ -2895,18 +2895,18 @@ class OrderController extends InitController
             order_action($order['order_sn'], OS_CONFIRMED, SS_UNSHIPPED, PS_UNPAYED, $action_note);
 
             /* 如果原来状态不是“未确认”，且使用库存，且下订单时减库存，则减少库存 */
-            if ($order['order_status'] != OS_UNCONFIRMED && $_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE) {
+            if ($order['order_status'] != OS_UNCONFIRMED && config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_PLACE) {
                 change_order_goods_storage($order_id, true, SDT_PLACE);
             }
 
             /* 发送邮件 */
-            $cfg = $_CFG['send_confirm_email'];
+            $cfg = config('shop.send_confirm_email');
             if ($cfg == '1') {
                 $tpl = get_mail_template('order_confirm');
                 $this->assign('order', $order);
-                $this->assign('shop_name', $_CFG['shop_name']);
-                $this->assign('send_date', local_date($_CFG['date_format']));
-                $this->assign('sent_date', local_date($_CFG['date_format']));
+                $this->assign('shop_name', config('shop.shop_name'));
+                $this->assign('send_date', local_date(config('shop.date_format')));
+                $this->assign('sent_date', local_date(config('shop.date_format')));
                 $content = $smarty->fetch('str:' . $tpl['template_content']);
                 if (!send_mail($order['consignee'], $order['email'], $tpl['template_subject'], $content, $tpl['is_html'])) {
                     $msg = $_LANG['send_mail_fail'];
@@ -3005,7 +3005,7 @@ class OrderController extends InitController
                     $order['order_sn'],
                     $_LANG['os'][OS_SPLITED],
                     $_LANG['ss'][SS_SHIPPED_ING],
-                    $GLOBALS['_CFG']['shop_name']
+                    config('shop.shop_name')
                 ), 1, $links);
             }
 
@@ -3098,7 +3098,7 @@ class OrderController extends InitController
                 // 商品（超值礼包）
                 if ($value['extension_code'] == 'package_buy') {
                     foreach ($value['package_goods_list'] as $pg_key => $pg_value) {
-                        if ($pg_value['goods_number'] < $goods_no_package[$pg_value['g_p']] && (($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_SHIP) || ($_CFG['use_storage'] == '0' && $pg_value['is_real'] == 0))) {
+                        if ($pg_value['goods_number'] < $goods_no_package[$pg_value['g_p']] && ((config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_SHIP) || (config('shop.use_storage') == '0' && $pg_value['is_real'] == 0))) {
                             /* 操作失败 */
                             $links[] = array('text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id=' . $order_id);
                             sys_msg(sprintf($_LANG['act_good_vacancy'], $pg_value['goods_name']), 1, $links);
@@ -3117,7 +3117,7 @@ class OrderController extends InitController
                 elseif ($value['extension_code'] == 'virtual_card' || $value['is_real'] == 0) {
                     $sql = "SELECT COUNT(*) FROM " . table('virtual_card') . " WHERE goods_id = '" . $value['goods_id'] . "' AND is_saled = 0 ";
                     $num = $GLOBALS['db']->getOne($sql);
-                    if (($num < $goods_no_package[$value['goods_id']]) && !($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE)) {
+                    if (($num < $goods_no_package[$value['goods_id']]) && !(config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_PLACE)) {
                         /* 操作失败 */
                         $links[] = array('text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id=' . $order_id);
                         sys_msg(sprintf($GLOBALS['_LANG']['virtual_card_oos'] . '【' . $value['goods_name'] . '】'), 1, $links);
@@ -3145,7 +3145,7 @@ class OrderController extends InitController
                     }
                     $num = $GLOBALS['db']->getOne($sql);
 
-                    if (($num < $goods_no_package[$_key]) && $_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_SHIP) {
+                    if (($num < $goods_no_package[$_key]) && config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_SHIP) {
                         /* 操作失败 */
                         $links[] = array('text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id=' . $order_id);
                         sys_msg(sprintf($_LANG['act_good_vacancy'], $value['goods_name']), 1, $links);
@@ -3306,7 +3306,7 @@ class OrderController extends InitController
             }
 
             /* 如果使用库存，则增加库存 */
-            if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_SHIP) {
+            if (config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_SHIP) {
                 change_order_goods_storage($order['order_id'], false, SDT_SHIP);
             }
 
@@ -3359,7 +3359,7 @@ class OrderController extends InitController
             order_action($order['order_sn'], OS_CANCELED, $order['shipping_status'], PS_UNPAYED, $action_note);
 
             /* 如果使用库存，且下订单时减库存，则增加库存 */
-            if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE) {
+            if (config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_PLACE) {
                 change_order_goods_storage($order_id, false, SDT_PLACE);
             }
 
@@ -3367,13 +3367,13 @@ class OrderController extends InitController
             return_user_surplus_integral_bonus($order);
 
             /* 发送邮件 */
-            $cfg = $_CFG['send_cancel_email'];
+            $cfg = config('shop.send_cancel_email');
             if ($cfg == '1') {
                 $tpl = get_mail_template('order_cancel');
                 $this->assign('order', $order);
-                $this->assign('shop_name', $_CFG['shop_name']);
-                $this->assign('send_date', local_date($_CFG['date_format']));
-                $this->assign('sent_date', local_date($_CFG['date_format']));
+                $this->assign('shop_name', config('shop.shop_name'));
+                $this->assign('send_date', local_date(config('shop.date_format')));
+                $this->assign('sent_date', local_date(config('shop.date_format')));
                 $content = $smarty->fetch('str:' . $tpl['template_content']);
                 if (!send_mail($order['consignee'], $order['email'], $tpl['template_subject'], $content, $tpl['is_html'])) {
                     $msg = $_LANG['send_mail_fail'];
@@ -3388,18 +3388,18 @@ class OrderController extends InitController
             order_action($order['order_sn'], OS_INVALID, $order['shipping_status'], PS_UNPAYED, $action_note);
 
             /* 如果使用库存，且下订单时减库存，则增加库存 */
-            if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE) {
+            if (config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_PLACE) {
                 change_order_goods_storage($order_id, false, SDT_PLACE);
             }
 
             /* 发送邮件 */
-            $cfg = $_CFG['send_invalid_email'];
+            $cfg = config('shop.send_invalid_email');
             if ($cfg == '1') {
                 $tpl = get_mail_template('order_invalid');
                 $this->assign('order', $order);
-                $this->assign('shop_name', $_CFG['shop_name']);
-                $this->assign('send_date', local_date($_CFG['date_format']));
-                $this->assign('sent_date', local_date($_CFG['date_format']));
+                $this->assign('shop_name', config('shop.shop_name'));
+                $this->assign('send_date', local_date(config('shop.date_format')));
+                $this->assign('sent_date', local_date(config('shop.date_format')));
                 $content = $smarty->fetch('str:' . $tpl['template_content']);
                 if (!send_mail($order['consignee'], $order['email'], $tpl['template_subject'], $content, $tpl['is_html'])) {
                     $msg = $_LANG['send_mail_fail'];
@@ -3457,10 +3457,10 @@ class OrderController extends InitController
             }
 
             /* 如果使用库存，则增加库存（不论何时减库存都需要） */
-            if ($_CFG['use_storage'] == '1') {
-                if ($_CFG['stock_dec_time'] == SDT_SHIP) {
+            if (config('shop.use_storage') == '1') {
+                if (config('shop.stock_dec_time') == SDT_SHIP) {
                     change_order_goods_storage($order['order_id'], false, SDT_SHIP);
-                } elseif ($_CFG['stock_dec_time'] == SDT_PLACE) {
+                } elseif (config('shop.stock_dec_time') == SDT_PLACE) {
                     change_order_goods_storage($order['order_id'], false, SDT_PLACE);
                 }
             }
@@ -4892,8 +4892,8 @@ class OrderController extends InitController
 
         /* 格式化数据 */
         foreach ($row as $key => $value) {
-            $row[$key]['add_time'] = local_date($GLOBALS['_CFG']['time_format'], $value['add_time']);
-            $row[$key]['update_time'] = local_date($GLOBALS['_CFG']['time_format'], $value['update_time']);
+            $row[$key]['add_time'] = local_date(config('shop.time_format'), $value['add_time']);
+            $row[$key]['update_time'] = local_date(config('shop.time_format'), $value['update_time']);
             if ($value['status'] == 1) {
                 $row[$key]['status_name'] = $GLOBALS['_LANG']['delivery_status'][1];
             } elseif ($value['status'] == 2) {
@@ -4992,9 +4992,9 @@ class OrderController extends InitController
 
         /* 格式化数据 */
         foreach ($row as $key => $value) {
-            $row[$key]['return_time'] = local_date($GLOBALS['_CFG']['time_format'], $value['return_time']);
-            $row[$key]['add_time'] = local_date($GLOBALS['_CFG']['time_format'], $value['add_time']);
-            $row[$key]['update_time'] = local_date($GLOBALS['_CFG']['time_format'], $value['update_time']);
+            $row[$key]['return_time'] = local_date(config('shop.time_format'), $value['return_time']);
+            $row[$key]['add_time'] = local_date(config('shop.time_format'), $value['add_time']);
+            $row[$key]['update_time'] = local_date(config('shop.time_format'), $value['update_time']);
             if ($value['status'] == 1) {
                 $row[$key]['status_name'] = $GLOBALS['_LANG']['delivery_status'][1];
             } else {
@@ -5049,8 +5049,8 @@ class OrderController extends InitController
             $delivery['formated_shipping_fee'] = price_format($delivery['shipping_fee'], false);
 
             /* 格式化时间字段 */
-            $delivery['formated_add_time'] = local_date($GLOBALS['_CFG']['time_format'], $delivery['add_time']);
-            $delivery['formated_update_time'] = local_date($GLOBALS['_CFG']['time_format'], $delivery['update_time']);
+            $delivery['formated_add_time'] = local_date(config('shop.time_format'), $delivery['add_time']);
+            $delivery['formated_update_time'] = local_date(config('shop.time_format'), $delivery['update_time']);
 
             $return_order = $delivery;
         }
@@ -5095,9 +5095,9 @@ class OrderController extends InitController
             $back['formated_shipping_fee'] = price_format($back['shipping_fee'], false);
 
             /* 格式化时间字段 */
-            $back['formated_add_time'] = local_date($GLOBALS['_CFG']['time_format'], $back['add_time']);
-            $back['formated_update_time'] = local_date($GLOBALS['_CFG']['time_format'], $back['update_time']);
-            $back['formated_return_time'] = local_date($GLOBALS['_CFG']['time_format'], $back['return_time']);
+            $back['formated_add_time'] = local_date(config('shop.time_format'), $back['add_time']);
+            $back['formated_update_time'] = local_date(config('shop.time_format'), $back['update_time']);
+            $back['formated_return_time'] = local_date(config('shop.time_format'), $back['return_time']);
 
             $return_order = $back;
         }
@@ -5136,7 +5136,7 @@ class OrderController extends InitController
             }
 
             /* 是否缺货 */
-            if ($return_array[$key]['storage'] <= 0 && $GLOBALS['_CFG']['use_storage'] == '1') {
+            if ($return_array[$key]['storage'] <= 0 && config('shop.use_storage') == '1') {
                 $return_array[$key]['send'] = $GLOBALS['_LANG']['act_good_vacancy'];
                 $return_array[$key]['readonly'] = 'readonly="readonly"';
             }
@@ -5280,7 +5280,7 @@ class OrderController extends InitController
                 } else {
                     return false;
                 }
-                $card_info['end_date'] = date($GLOBALS['_CFG']['date_format'], $virtual_card['end_date']);
+                $card_info['end_date'] = date(config('shop.date_format'), $virtual_card['end_date']);
                 $card_ids[] = $virtual_card['card_id'];
                 $cards[] = $card_info;
             }
@@ -5298,7 +5298,7 @@ class OrderController extends InitController
             $sql = "SELECT order_id, order_sn, consignee, email FROM " . table('order_info') . " WHERE order_sn = '$order_sn'";
             $order = $GLOBALS['db']->getRow($sql);
 
-            $cfg = $GLOBALS['_CFG']['send_ship_email'];
+            $cfg = config('shop.send_ship_email');
             if ($cfg == '1') {
                 /* 发送邮件 */
                 $this->assign('virtual_card', $cards);
@@ -5306,7 +5306,7 @@ class OrderController extends InitController
                 $this->assign('goods', $virtual_goods_value);
 
                 $this->assign('send_time', date('Y-m-d H:i:s'));
-                $this->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
+                $this->assign('shop_name', config('shop.shop_name'));
                 $this->assign('send_date', date('Y-m-d'));
                 $this->assign('sent_date', date('Y-m-d'));
 

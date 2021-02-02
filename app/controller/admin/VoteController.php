@@ -77,7 +77,7 @@ class VoteController extends InitController
         $this->assign('action', 'add');
         $this->assign('form_act', 'insert');
         $this->assign('vote_arr', $vote);
-        $this->assign('cfg_lang', $_CFG['lang']);
+        $this->assign('cfg_lang', config('shop.lang'));
 
         /* 显示页面 */
         assign_query_info();

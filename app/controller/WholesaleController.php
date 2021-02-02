@@ -49,13 +49,13 @@ class WholesaleController extends InitController
         $count = $db->getOne($sql);
 
         if ($count > 0) {
-            $default_display_type = $_CFG['show_order_type'] == '0' ? 'list' : 'text';
+            $default_display_type = config('shop.show_order_type') == '0' ? 'list' : 'text';
             $display = (isset($_REQUEST['display']) && in_array(trim(strtolower($_REQUEST['display'])), array('list', 'text'))) ? trim($_REQUEST['display']) : (isset($_COOKIE['ECS']['display']) ? $_COOKIE['ECS']['display'] : $default_display_type);
             $display = in_array($display, array('list', 'text')) ? $display : 'text';
             setcookie('ECS[display]', $display, gmtime() + 86400 * 7, null, null, null, true);
 
             /* 取得每页记录数 */
-            $size = isset($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
+            $size = intval(config('shop.page_size')) > 0 ? intval(config('shop.page_size')) : 10;
 
             /* 计算总页数 */
             $page_count = ceil($count / $size);
@@ -339,20 +339,20 @@ class WholesaleController extends InitController
         }
 
         /* 给商家发邮件 */
-        if ($_CFG['service_email'] != '') {
+        if (config('shop.service_email') != '') {
             $tpl = get_mail_template('remind_of_new_order');
             $this->assign('order', $order);
-            $this->assign('shop_name', $_CFG['shop_name']);
-            $this->assign('send_date', date($_CFG['time_format']));
+            $this->assign('shop_name', config('shop.shop_name'));
+            $this->assign('send_date', date(config('shop.time_format')));
             $content = $smarty->fetch('str:' . $tpl['template_content']);
-            send_mail($_CFG['shop_name'], $_CFG['service_email'], $tpl['template_subject'], $content, $tpl['is_html']);
+            send_mail(config('shop.shop_name'), config('shop.service_email'), $tpl['template_subject'], $content, $tpl['is_html']);
         }
 
         /* 如果需要，发短信 */
-        if ($_CFG['sms_order_placed'] == '1' && $_CFG['sms_shop_mobile'] != '') {
+        if (config('shop.sms_order_placed') == '1' && config('shop.sms_shop_mobile') != '') {
             $sms = new sms();
             $msg = $_LANG['order_placed_sms'];
-            $sms->send($_CFG['sms_shop_mobile'], sprintf($msg, $order['consignee'], $order['tel']), '', 13, 1);
+            $sms->send(config('shop.sms_shop_mobile'), sprintf($msg, $order['consignee'], $order['tel']), '', 13, 1);
         }
 
         /* 清空购物车 */
@@ -379,7 +379,7 @@ class WholesaleController extends InitController
         $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             if (empty($row['goods_thumb'])) {
-                $row['goods_thumb'] = $GLOBALS['_CFG']['no_picture'];
+                $row['goods_thumb'] = config('shop.no_picture');
             }
             $row['goods_url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
 

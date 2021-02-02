@@ -49,7 +49,7 @@ class TimeService
      */
     public function local_mktime($hour = null, $minute = null, $second = null, $month = null, $day = null, $year = null)
     {
-        $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : $GLOBALS['_CFG']['timezone'];
+        $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : config('shop.timezone');
 
         /**
          * $time = mktime($hour, $minute, $second, $month, $day, $year) - date('Z') + (date('Z') - $timezone * 3600)
@@ -72,7 +72,7 @@ class TimeService
 
     public function local_date($format, $time = null)
     {
-        $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : $GLOBALS['_CFG']['timezone'];
+        $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : config('shop.timezone');
 
         if ($time === null) {
             $time = gmtime();
@@ -114,7 +114,7 @@ class TimeService
      */
     public function local_strtotime($str)
     {
-        $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : $GLOBALS['_CFG']['timezone'];
+        $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : config('shop.timezone');
 
         /**
          * $time = mktime($hour, $minute, $second, $month, $day, $year) - date('Z') + (date('Z') - $timezone * 3600)
@@ -147,7 +147,7 @@ class TimeService
      */
     public function local_getdate($timestamp = null)
     {
-        $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : $GLOBALS['_CFG']['timezone'];
+        $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : config('shop.timezone');
 
         /* 如果时间戳为空，则获得服务器的当前时间 */
         if ($timestamp === null) {

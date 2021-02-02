@@ -25,7 +25,7 @@ class FeedController extends InitController
 
         $uri = $ecs->url();
 
-        $rss = new RSSBuilder(EC_CHARSET, $uri, htmlspecialchars($_CFG['shop_name']), htmlspecialchars($_CFG['shop_desc']), $uri . 'favicon.ico');
+        $rss = new RSSBuilder(EC_CHARSET, $uri, htmlspecialchars(config('shop.shop_name')), htmlspecialchars(config('shop.shop_desc')), $uri . 'favicon.ico');
         $rss->addDCdata('', 'http://www.ecshop.com', date('r'));
 
         if (isset($_REQUEST['type'])) {
@@ -175,7 +175,7 @@ class FeedController extends InitController
                 $sql = 'SELECT article_id, title, author, add_time' .
                     ' FROM ' . table('article') .
                     ' WHERE is_open = 1 AND ' . get_article_children(substr($_REQUEST['type'], 11)) .
-                    ' ORDER BY add_time DESC LIMIT ' . $_CFG['article_page_size'];
+                    ' ORDER BY add_time DESC LIMIT ' . config('shop.article_page_size');
                 $res = $db->query($sql);
 
                 if ($res !== false) {

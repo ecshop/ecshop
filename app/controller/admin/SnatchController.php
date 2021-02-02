@@ -391,8 +391,8 @@ class SnatchController extends InitController
         $row = $GLOBALS['db']->getAll($sql);
 
         foreach ($row as $key => $val) {
-            $row[$key]['start_time'] = local_date($GLOBALS['_CFG']['time_format'], $val['start_time']);
-            $row[$key]['end_time'] = local_date($GLOBALS['_CFG']['time_format'], $val['end_time']);
+            $row[$key]['start_time'] = local_date(config('shop.time_format'), $val['start_time']);
+            $row[$key]['end_time'] = local_date(config('shop.time_format'), $val['end_time']);
             $info = unserialize($row[$key]['ext_info']);
             unset($row[$key]['ext_info']);
             if ($info) {
@@ -468,7 +468,7 @@ class SnatchController extends InitController
         $row = $GLOBALS['db']->getAll($sql);
 
         foreach ($row as $key => $val) {
-            $row[$key]['bid_time'] = date($GLOBALS['_CFG']['time_format'], $val['bid_time']);
+            $row[$key]['bid_time'] = date(config('shop.time_format'), $val['bid_time']);
         }
 
         $arr = array('bid' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);

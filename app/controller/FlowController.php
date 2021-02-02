@@ -11,8 +11,8 @@ class FlowController extends InitController
     {
 
         /* 载入语言文件 */
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/user.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/shopping_flow.php');
 
         $this->assign_template();
         $this->assign_dynamic('flow');
@@ -23,7 +23,7 @@ class FlowController extends InitController
         $this->assign('categories', get_categories_tree()); // 分类树
         $this->assign('helps', get_shop_help());       // 网店帮助
         $this->assign('lang', $_LANG);
-        $this->assign('show_marketprice', $_CFG['show_marketprice']);
+        $this->assign('show_marketprice', config('shop.show_marketprice'));
         $this->assign('data_dir', DATA_DIR);       // 数据目录
     }
 
@@ -91,7 +91,7 @@ class FlowController extends InitController
         }
 
         /* 更新：如果是一步购物，先清空购物车 */
-        if ($_CFG['one_step_buy'] == '1') {
+        if (config('shop.one_step_buy') == '1') {
             clear_cart();
         }
 
@@ -108,14 +108,14 @@ class FlowController extends InitController
             }
             // 更新：添加到购物车
             if (addto_cart($goods->goods_id, $goods->number, $goods->spec, $goods->parent)) {
-                if ($_CFG['cart_confirm'] > 2) {
+                if (config('shop.cart_confirm') > 2) {
                     $result['message'] = '';
                 } else {
-                    $result['message'] = $_CFG['cart_confirm'] == 1 ? $_LANG['addto_cart_success_1'] : $_LANG['addto_cart_success_2'];
+                    $result['message'] = config('shop.cart_confirm') == 1 ? $_LANG['addto_cart_success_1'] : $_LANG['addto_cart_success_2'];
                 }
 
                 $result['content'] = insert_cart_info();
-                $result['one_step_buy'] = $_CFG['one_step_buy'];
+                $result['one_step_buy'] = config('shop.one_step_buy');
             } else {
                 $result['message'] = $err->last_message();
                 $result['error'] = $err->error_no;
@@ -128,7 +128,7 @@ class FlowController extends InitController
             }
         }
 
-        $result['confirm_type'] = !empty($_CFG['cart_confirm']) ? $_CFG['cart_confirm'] : 2;
+        $result['confirm_type'] = !empty(config('shop.cart_confirm')) ? config('shop.cart_confirm') : 2;
         die($json->encode($result));
     }
 
@@ -144,7 +144,7 @@ class FlowController extends InitController
 
     public function loginAction()
     {
-        include_once('languages/' . $_CFG['lang'] . '/user.php');
+        include_once('languages/' . config('shop.lang') . '/user.php');
 
         $where = "session_id = '" . SESS_ID . "'";
         if ($_SESSION['user_id']) {
@@ -155,7 +155,7 @@ class FlowController extends InitController
          * 用户登录注册
          */
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $this->assign('anonymous_buy', $_CFG['anonymous_buy']);
+            $this->assign('anonymous_buy', config('shop.anonymous_buy'));
 
             /* 检查是否有赠品，如果有提示登录后重新选择赠品 */
             $sql = "SELECT COUNT(*) FROM " . table('cart') . " WHERE " . $where . " AND is_gift > 0";
@@ -164,7 +164,7 @@ class FlowController extends InitController
             }
 
             /* 检查是否需要注册码 */
-            $captcha = intval($_CFG['captcha']);
+            $captcha = intval(config('shop.captcha'));
             if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
                 $this->assign('enabled_login_captcha', 1);
                 $this->assign('rand', mt_rand());
@@ -175,7 +175,7 @@ class FlowController extends InitController
             }
         } else {
             if (!empty($_POST['act']) && $_POST['act'] == 'signin') {
-                $captcha = intval($_CFG['captcha']);
+                $captcha = intval(config('shop.captcha'));
                 if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
                     if (empty($_POST['captcha'])) {
                         return $this->show_message($_LANG['invalid_captcha']);
@@ -208,7 +208,7 @@ class FlowController extends InitController
                     return $this->show_message($_LANG['signin_failed'], '', 'flow.php?step=login');
                 }
             } elseif (!empty($_POST['act']) && $_POST['act'] == 'signup') {
-                if ((intval($_CFG['captcha']) & CAPTCHA_REGISTER) && gd_version() > 0) {
+                if ((intval(config('shop.captcha')) & CAPTCHA_REGISTER) && gd_version() > 0) {
                     if (empty($_POST['captcha'])) {
                         return $this->show_message($_LANG['invalid_captcha']);
                     }
@@ -254,8 +254,8 @@ class FlowController extends InitController
 
             /* 取得国家列表、商店所在国家、商店所在国家的省列表 */
             $this->assign('country_list', get_regions());
-            $this->assign('shop_country', $_CFG['shop_country']);
-            $this->assign('shop_province_list', get_regions(1, $_CFG['shop_country']));
+            $this->assign('shop_country', config('shop.shop_country'));
+            $this->assign('shop_province_list', get_regions(1, config('shop.shop_country')));
 
             /* 获得用户所有的收货人信息 */
             if ($_SESSION['user_id'] > 0) {
@@ -263,16 +263,16 @@ class FlowController extends InitController
 
                 if (count($consignee_list) < 5) {
                     /* 如果用户收货人信息的总数小于 5 则增加一个新的收货人信息 */
-                    $consignee_list[] = array('country' => $_CFG['shop_country'], 'email' => isset($_SESSION['email']) ? $_SESSION['email'] : '');
+                    $consignee_list[] = array('country' => config('shop.shop_country'), 'email' => isset($_SESSION['email']) ? $_SESSION['email'] : '');
                 }
             } else {
                 if (isset($_SESSION['flow_consignee'])) {
                     $consignee_list = array($_SESSION['flow_consignee']);
                 } else {
-                    $consignee_list[] = array('country' => $_CFG['shop_country']);
+                    $consignee_list[] = array('country' => config('shop.shop_country'));
                 }
             }
-            $this->assign('name_of_region', array($_CFG['name_of_region_1'], $_CFG['name_of_region_2'], $_CFG['name_of_region_3'], $_CFG['name_of_region_4']));
+            $this->assign('name_of_region', array(config('shop.name_of_region_1'), config('shop.name_of_region_2'), config('shop.name_of_region_3'), config('shop.name_of_region_4')));
             $this->assign('consignee_list', $consignee_list);
 
             /* 取得每个收货地址的省市区列表 */
@@ -403,7 +403,7 @@ class FlowController extends InitController
         $this->assign('goods_list', $cart_goods);
 
         /* 对是否允许修改购物车赋值 */
-        if ($flow_type != CART_GENERAL_GOODS || $_CFG['one_step_buy'] == '1') {
+        if ($flow_type != CART_GENERAL_GOODS || config('shop.one_step_buy') == '1') {
             $this->assign('allow_edit_cart', 0);
         } else {
             $this->assign('allow_edit_cart', 1);
@@ -412,7 +412,7 @@ class FlowController extends InitController
         /*
          * 取得购物流程设置
          */
-        $this->assign('config', $_CFG);
+        $this->assign('config', config('shop'));
         /*
          * 取得订单信息
          */
@@ -541,13 +541,13 @@ class FlowController extends InitController
         /* 取得包装与贺卡 */
         if ($total['real_goods_count'] > 0) {
             /* 只有有实体商品,才要判断包装和贺卡 */
-            if (!isset($_CFG['use_package']) || $_CFG['use_package'] == '1') {
+            if (config('shop.use_package') == '1') {
                 /* 如果使用包装，取得包装列表及用户选择的包装 */
                 $this->assign('pack_list', pack_list());
             }
 
             /* 如果使用贺卡，取得贺卡列表及用户选择的贺卡 */
-            if (!isset($_CFG['use_card']) || $_CFG['use_card'] == '1') {
+            if (config('shop.use_card') == '1') {
                 $this->assign('card_list', card_list());
             }
         }
@@ -555,7 +555,7 @@ class FlowController extends InitController
         $user_info = user_info($_SESSION['user_id']);
 
         /* 如果使用余额，取得用户余额 */
-        if ((!isset($_CFG['use_surplus']) || $_CFG['use_surplus'] == '1')
+        if (config('shop.use_surplus') == '1'
             && $_SESSION['user_id'] > 0
             && $user_info['user_money'] > 0) {
             // 能使用余额
@@ -564,7 +564,7 @@ class FlowController extends InitController
         }
 
         /* 如果使用积分，取得用户可用积分及本订单最多可以使用的积分 */
-        if ((!isset($_CFG['use_integral']) || $_CFG['use_integral'] == '1')
+        if (config('shop.use_integral') == '1'
             && $_SESSION['user_id'] > 0
             && $user_info['pay_points'] > 0
             && ($flow_type != CART_GROUP_BUY_GOODS && $flow_type != CART_EXCHANGE_GOODS)) {
@@ -575,7 +575,7 @@ class FlowController extends InitController
         }
 
         /* 如果使用红包，取得用户可以使用的红包及用户选择的红包 */
-        if ((!isset($_CFG['use_bonus']) || $_CFG['use_bonus'] == '1')
+        if (config('shop.use_bonus') == '1'
             && ($flow_type != CART_GROUP_BUY_GOODS && $flow_type != CART_EXCHANGE_GOODS)) {
             // 取得用户可用红包
             $user_bonus = user_bonus($_SESSION['user_id'], $total['goods_price']);
@@ -591,23 +591,22 @@ class FlowController extends InitController
         }
 
         /* 如果使用缺货处理，取得缺货处理列表 */
-        if (!isset($_CFG['use_how_oos']) || $_CFG['use_how_oos'] == '1') {
+        if (config('shop.use_how_oos') == '1') {
             if (is_array($GLOBALS['_LANG']['oos']) && !empty($GLOBALS['_LANG']['oos'])) {
                 $this->assign('how_oos_list', $GLOBALS['_LANG']['oos']);
             }
         }
 
         /* 如果能开发票，取得发票内容列表 */
-        if ((!isset($_CFG['can_invoice']) || $_CFG['can_invoice'] == '1')
-            && isset($_CFG['invoice_content'])
-            && trim($_CFG['invoice_content']) != '' && $flow_type != CART_EXCHANGE_GOODS) {
-            $inv_content_list = explode("\n", str_replace("\r", '', $_CFG['invoice_content']));
+        if (config('shop.can_invoice') == '1'
+            && trim(config('shop.invoice_content')) != '' && $flow_type != CART_EXCHANGE_GOODS) {
+            $inv_content_list = explode("\n", str_replace("\r", '', config('shop.invoice_content')));
             $this->assign('inv_content_list', $inv_content_list);
 
             $inv_type_list = array();
-            foreach ($_CFG['invoice_type']['type'] as $key => $type) {
+            foreach (config('shop.invoice_type')['type'] as $key => $type) {
                 if (!empty($type)) {
-                    $inv_type_list[$type] = $type . ' [' . floatval($_CFG['invoice_type']['rate'][$key]) . '%]';
+                    $inv_type_list[$type] = $type . ' [' . floatval(config('shop.invoice_type')['rate'][$key]) . '%]';
                 }
             }
             $this->assign('inv_type_list', $inv_type_list);
@@ -638,7 +637,7 @@ class FlowController extends InitController
             $result['error'] = $_LANG['no_goods_in_cart'];
         } else {
             /* 取得购物流程设置 */
-            $this->assign('config', $_CFG);
+            $this->assign('config', config('shop'));
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -694,7 +693,7 @@ class FlowController extends InitController
             $result['error'] = $_LANG['no_goods_in_cart'];
         } else {
             /* 取得购物流程设置 */
-            $this->assign('config', $_CFG);
+            $this->assign('config', config('shop'));
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -746,7 +745,7 @@ class FlowController extends InitController
             $result['error'] = $_LANG['no_goods_in_cart'];
         } else {
             /* 取得购物流程设置 */
-            $this->assign('config', $_CFG);
+            $this->assign('config', config('shop'));
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -800,7 +799,7 @@ class FlowController extends InitController
             $result['error'] = $_LANG['no_goods_in_cart'];
         } else {
             /* 取得购物流程设置 */
-            $this->assign('config', $_CFG);
+            $this->assign('config', config('shop'));
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -852,7 +851,7 @@ class FlowController extends InitController
             $result['error'] = $_LANG['no_goods_in_cart'];
         } else {
             /* 取得购物流程设置 */
-            $this->assign('config', $_CFG);
+            $this->assign('config', config('shop'));
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -898,7 +897,7 @@ class FlowController extends InitController
             $flow_type = isset($_SESSION['flow_type']) ? intval($_SESSION['flow_type']) : CART_GENERAL_GOODS;
 
             /* 取得购物流程设置 */
-            $this->assign('config', $_CFG);
+            $this->assign('config', config('shop'));
 
             /* 获得收货人信息 */
             $consignee = get_consignee($_SESSION['user_id']);
@@ -967,7 +966,7 @@ class FlowController extends InitController
                 /* 计算订单的费用 */
                 $total = order_fee($order, $cart_goods, $consignee);
                 $this->assign('total', $total);
-                $this->assign('config', $_CFG);
+                $this->assign('config', config('shop'));
 
                 /* 团购标志 */
                 if ($flow_type == CART_GROUP_BUY_GOODS) {
@@ -1003,7 +1002,7 @@ class FlowController extends InitController
             $result['error'] = $_LANG['no_goods_in_cart'];
         } else {
             /* 取得购物流程设置 */
-            $this->assign('config', $_CFG);
+            $this->assign('config', config('shop'));
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -1058,7 +1057,7 @@ class FlowController extends InitController
             die($json->encode($result));
         } else {
             /* 取得购物流程设置 */
-            $this->assign('config', $_CFG);
+            $this->assign('config', config('shop'));
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -1164,7 +1163,7 @@ class FlowController extends InitController
 
         /* 检查商品库存 */
         /* 如果使用库存，且下订单时减库存，则减少库存 */
-        if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE) {
+        if (config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_PLACE) {
             $cart_goods_stock = get_cart_goods();
             $_cart_goods_stock = array();
             foreach ($cart_goods_stock['goods_list'] as $value) {
@@ -1285,8 +1284,8 @@ class FlowController extends InitController
         }
 
         /* 检查商品总额是否达到最低限购金额 */
-        if ($flow_type == CART_GENERAL_GOODS && cart_amount(true, CART_GENERAL_GOODS) < $_CFG['min_goods_amount']) {
-            return $this->show_message(sprintf($_LANG['goods_amount_not_enough'], price_format($_CFG['min_goods_amount'], false)));
+        if ($flow_type == CART_GENERAL_GOODS && cart_amount(true, CART_GENERAL_GOODS) < config('shop.min_goods_amount')) {
+            return $this->show_message(sprintf($_LANG['goods_amount_not_enough'], price_format(config('shop.min_goods_amount'), false)));
         }
 
         /* 收货人信息 */
@@ -1395,7 +1394,7 @@ class FlowController extends InitController
             $order['extension_id'] = $_SESSION['extension_id'];
         }
 
-        $affiliate = unserialize($_CFG['affiliate']);
+        $affiliate = unserialize(config('shop.affiliate'));
         if (isset($affiliate['on']) && $affiliate['on'] == 1 && $affiliate['config']['separate_by'] == 1) {
             //推荐订单分成
             $parent_id = get_affiliate();
@@ -1456,28 +1455,28 @@ class FlowController extends InitController
         }
 
         /* 如果使用库存，且下订单时减库存，则减少库存 */
-        if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE) {
+        if (config('shop.use_storage') == '1' && config('shop.stock_dec_time') == SDT_PLACE) {
             change_order_goods_storage($order['order_id'], true, SDT_PLACE);
         }
 
         /* 给商家发邮件 */
         /* 增加是否给客服发送邮件选项 */
-        if ($_CFG['send_service_email'] && $_CFG['service_email'] != '') {
+        if (config('shop.send_service_email') && config('shop.service_email') != '') {
             $tpl = get_mail_template('remind_of_new_order');
             $this->assign('order', $order);
             $this->assign('goods_list', $cart_goods);
-            $this->assign('shop_name', $_CFG['shop_name']);
-            $this->assign('send_date', date($_CFG['time_format']));
+            $this->assign('shop_name', config('shop.shop_name'));
+            $this->assign('send_date', date(config('shop.time_format')));
             $content = $smarty->fetch('str:' . $tpl['template_content']);
-            send_mail($_CFG['shop_name'], $_CFG['service_email'], $tpl['template_subject'], $content, $tpl['is_html']);
+            send_mail(config('shop.shop_name'), config('shop.service_email'), $tpl['template_subject'], $content, $tpl['is_html']);
         }
 
         /* 如果需要，发短信 */
-        if ($_CFG['sms_order_placed'] == '1' && $_CFG['sms_shop_mobile'] != '') {
+        if (config('shop.sms_order_placed') == '1' && config('shop.sms_shop_mobile') != '') {
             $sms = new sms();
             $msg = $order['pay_status'] == PS_UNPAYED ?
                 $_LANG['order_placed_sms'] : $_LANG['order_placed_sms'] . '[' . $_LANG['sms_paid'] . ']';
-            $sms->send($_CFG['sms_shop_mobile'], sprintf($msg, $order['consignee'], $order['tel']), '', 13, 1);
+            $sms->send(config('shop.sms_shop_mobile'), sprintf($msg, $order['consignee'], $order['tel']), '', 13, 1);
         }
 
         /* 如果订单金额为0 处理虚拟卡 */
@@ -1721,7 +1720,7 @@ class FlowController extends InitController
             $result['error'] = $_LANG['no_goods_in_cart'];
         } else {
             /* 取得购物流程设置 */
-            $this->assign('config', $_CFG);
+            $this->assign('config', config('shop'));
 
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -1785,7 +1784,7 @@ class FlowController extends InitController
         $package = $json->decode($_POST['package_info']);
 
         /* 如果是一步购物，先清空购物车 */
-        if ($_CFG['one_step_buy'] == '1') {
+        if (config('shop.one_step_buy') == '1') {
             clear_cart();
         }
 
@@ -1796,21 +1795,21 @@ class FlowController extends InitController
         } else {
             /* 添加到购物车 */
             if (add_package_to_cart($package->package_id, $package->number)) {
-                if ($_CFG['cart_confirm'] > 2) {
+                if (config('shop.cart_confirm') > 2) {
                     $result['message'] = '';
                 } else {
-                    $result['message'] = $_CFG['cart_confirm'] == 1 ? $_LANG['addto_cart_success_1'] : $_LANG['addto_cart_success_2'];
+                    $result['message'] = config('shop.cart_confirm') == 1 ? $_LANG['addto_cart_success_1'] : $_LANG['addto_cart_success_2'];
                 }
 
                 $result['content'] = insert_cart_info();
-                $result['one_step_buy'] = $_CFG['one_step_buy'];
+                $result['one_step_buy'] = config('shop.one_step_buy');
             } else {
                 $result['message'] = $err->last_message();
                 $result['error'] = $err->error_no;
                 $result['package_id'] = stripslashes($package->package_id);
             }
         }
-        $result['confirm_type'] = !empty($_CFG['cart_confirm']) ? $_CFG['cart_confirm'] : 2;
+        $result['confirm_type'] = !empty(config('shop.cart_confirm')) ? config('shop.cart_confirm') : 2;
         die($json->encode($result));
     }
 
@@ -1823,7 +1822,7 @@ class FlowController extends InitController
         $_SESSION['flow_type'] = $flow_type;
 
         /* 如果是一步购物，跳到结算中心 */
-        if ($_CFG['one_step_buy'] == '1') {
+        if (config('shop.one_step_buy') == '1') {
             return redirect("flow.php?step=checkout");
         }
 
@@ -1863,10 +1862,10 @@ class FlowController extends InitController
         $this->assign('your_discount', sprintf($_LANG['your_discount'], $favour_name, price_format($discount['discount'])));
 
         /* 增加是否在购物车里显示商品图 */
-        $this->assign('show_goods_thumb', $GLOBALS['_CFG']['show_goods_in_cart']);
+        $this->assign('show_goods_thumb', config('shop.show_goods_in_cart'));
 
         /* 增加是否在购物车里显示商品属性 */
-        $this->assign('show_goods_attribute', $GLOBALS['_CFG']['show_attr_in_cart']);
+        $this->assign('show_goods_attribute', config('shop.show_attr_in_cart'));
 
         /* 购物车中商品配件列表 */
         //取得购物车中基本件ID
@@ -1886,8 +1885,8 @@ class FlowController extends InitController
 
     public function indexAction()
     {
-        $this->assign('currency_format', $_CFG['currency_format']);
-        $this->assign('integral_scale', $_CFG['integral_scale']);
+        $this->assign('currency_format', config('shop.currency_format'));
+        $this->assign('integral_scale', config('shop.integral_scale'));
         $this->assign('step', $_REQUEST['step']);
         $this->assign_dynamic('shopping_flow');
 
@@ -1949,7 +1948,7 @@ class FlowController extends InitController
             $row = $GLOBALS['db']->getRow($sql);
 
             //查询：系统启用了库存，检查输入的商品数量是否有效
-            if (intval($GLOBALS['_CFG']['use_storage']) > 0 && $goods['extension_code'] != 'package_buy') {
+            if (intval(config('shop.use_storage')) > 0 && $goods['extension_code'] != 'package_buy') {
                 if ($row['goods_number'] < $val) {
                     return $this->show_message(sprintf(
                         $GLOBALS['_LANG']['stock_insufficiency'],
@@ -1975,7 +1974,7 @@ class FlowController extends InitController
                         exit;
                     }
                 }
-            } elseif (intval($GLOBALS['_CFG']['use_storage']) > 0 && $goods['extension_code'] == 'package_buy') {
+            } elseif (intval(config('shop.use_storage')) > 0 && $goods['extension_code'] == 'package_buy') {
                 if (judge_package_stock($goods['goods_id'], $val)) {
                     return $this->show_message($GLOBALS['_LANG']['package_stock_insufficiency']);
                     exit;
@@ -2076,7 +2075,7 @@ class FlowController extends InitController
             $row = $GLOBALS['db']->getRow($sql);
 
             //系统启用了库存，检查输入的商品数量是否有效
-            if (intval($GLOBALS['_CFG']['use_storage']) > 0 && $goods['extension_code'] != 'package_buy') {
+            if (intval(config('shop.use_storage')) > 0 && $goods['extension_code'] != 'package_buy') {
                 if ($row['goods_number'] < $val) {
                     return $this->show_message(sprintf(
                         $GLOBALS['_LANG']['stock_insufficiency'],
@@ -2102,7 +2101,7 @@ class FlowController extends InitController
                         exit;
                     }
                 }
-            } elseif (intval($GLOBALS['_CFG']['use_storage']) > 0 && $goods['extension_code'] == 'package_buy') {
+            } elseif (intval(config('shop.use_storage')) > 0 && $goods['extension_code'] == 'package_buy') {
                 if (judge_package_stock($goods['goods_id'], $val)) {
                     return $this->show_message($GLOBALS['_LANG']['package_stock_insufficiency']);
                     exit;
@@ -2279,8 +2278,8 @@ class FlowController extends InitController
             " ORDER BY sort_order";
         $res = $GLOBALS['db']->query($sql);
         while ($favourable = $GLOBALS['db']->fetchRow($res)) {
-            $favourable['start_time'] = local_date($GLOBALS['_CFG']['time_format'], $favourable['start_time']);
-            $favourable['end_time'] = local_date($GLOBALS['_CFG']['time_format'], $favourable['end_time']);
+            $favourable['start_time'] = local_date(config('shop.time_format'), $favourable['start_time']);
+            $favourable['end_time'] = local_date(config('shop.time_format'), $favourable['end_time']);
             $favourable['formated_min_amount'] = price_format($favourable['min_amount'], false);
             $favourable['formated_max_amount'] = price_format($favourable['max_amount'], false);
             $favourable['gift'] = unserialize($favourable['gift']);

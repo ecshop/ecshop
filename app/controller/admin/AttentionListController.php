@@ -17,7 +17,7 @@ class AttentionListController extends InitController
         $this->assign('ur_here', $_LANG['attention_list']);
         $this->assign('goodsdb', $goodsdb['goodsdb']);
         $this->assign('filter', $goodsdb['filter']);
-        $this->assign('cfg_lang', $_CFG['lang']);
+        $this->assign('cfg_lang', config('shop.lang'));
         $this->assign('record_count', $goodsdb['record_count']);
         $this->assign('page_count', $goodsdb['page_count']);
         assign_query_info();
@@ -64,7 +64,7 @@ class AttentionListController extends InitController
             while ($rt = $db->fetch_array($query)) {
                 $time = time();
                 $goods_url = $ecs->url() . build_uri('goods', array('gid' => $id), $rt['goods_name']);
-                $this->assign(array('user_name' => $rt['user_name'], 'goods_name' => $rt['goods_name'], 'goods_url' => $goods_url, 'shop_name' => $_CFG['shop_title'], 'send_date' => local_date($_CFG['date_format'])));
+                $this->assign(array('user_name' => $rt['user_name'], 'goods_name' => $rt['goods_name'], 'goods_url' => $goods_url, 'shop_name' => config('shop.shop_title'), 'send_date' => local_date(config('shop.date_format'))));
                 $content = $smarty->fetch("str:$template[template_content]");
                 $add .= $add ? ",('$rt[email]','$template[template_id]','$content','$pri','$time')" : "('$rt[email]','$template[template_id]','$content','$pri','$time')";
                 $i++;

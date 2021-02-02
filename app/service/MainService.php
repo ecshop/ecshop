@@ -102,7 +102,7 @@ class MainService
         $bonus = get_user_bonus($id);
 
         $user['username'] = $user['user_name'];
-        $user['user_points'] = $user['pay_points'] . $GLOBALS['_CFG']['integral_name'];
+        $user['user_points'] = $user['pay_points'] . config('shop.integral_name');
         $user['user_money'] = price_format($user['user_money'], false);
         $user['user_bonus'] = price_format($bonus['bonus_value'], false);
 
@@ -244,8 +244,8 @@ class MainService
             $arr[$row['cat_id']]['cat_name'] = $row['cat_name'];
             $arr[$row['cat_id']]['article'][$key]['article_id'] = $row['article_id'];
             $arr[$row['cat_id']]['article'][$key]['title'] = $row['title'];
-            $arr[$row['cat_id']]['article'][$key]['short_title'] = $GLOBALS['_CFG']['article_title_length'] > 0 ?
-                sub_str($row['title'], $GLOBALS['_CFG']['article_title_length']) : $row['title'];
+            $arr[$row['cat_id']]['article'][$key]['short_title'] = config('shop.article_title_length') > 0 ?
+                sub_str($row['title'], config('shop.article_title_length')) : $row['title'];
             $arr[$row['cat_id']]['article'][$key]['url'] = $row['open_type'] != 1 ?
                 build_uri('article', array('aid' => $row['article_id']), $row['title']) : trim($row['file_url']);
         }
@@ -332,7 +332,7 @@ class MainService
                 break;
         }
         /* 分页样式 */
-        $pager['styleid'] = isset($GLOBALS['_CFG']['page_style']) ? intval($GLOBALS['_CFG']['page_style']) : 0;
+        $pager['styleid'] = isset(config('shop.page_style')) ? intval(config('shop.page_style')) : 0;
 
         $page_prev = ($page > 1) ? $page - 1 : 1;
         $page_next = ($page < $page_count) ? $page + 1 : $page_count;
@@ -439,7 +439,7 @@ class MainService
             $page = $page_count;
         }
         /* 分页样式 */
-        $pager['styleid'] = isset($GLOBALS['_CFG']['page_style']) ? intval($GLOBALS['_CFG']['page_style']) : 0;
+        $pager['styleid'] = isset(config('shop.page_style')) ? intval(config('shop.page_style')) : 0;
 
         $page_prev = ($page > 1) ? $page - 1 : 1;
         $page_next = ($page < $page_count) ? $page + 1 : $page_count;
@@ -773,7 +773,7 @@ class MainService
      */
     public function visit_stats()
     {
-        if (isset($GLOBALS['_CFG']['visit_stats']) && $GLOBALS['_CFG']['visit_stats'] == 'off') {
+        if (isset(config('shop.visit_stats')) && config('shop.visit_stats') == 'off') {
             return;
         }
         $time = gmtime();
@@ -1134,7 +1134,7 @@ class MainService
         /* 取得评论列表 */
         $count = $GLOBALS['db']->getOne('SELECT COUNT(*) FROM ' . table('comment') .
             " WHERE id_value = '$id' AND comment_type = '$type' AND status = 1 AND parent_id = 0");
-        $size = !empty($GLOBALS['_CFG']['comments_number']) ? $GLOBALS['_CFG']['comments_number'] : 5;
+        $size = !empty(config('shop.comments_number')) ? config('shop.comments_number') : 5;
 
         $page_count = ($count > 0) ? intval(ceil($count / $size)) : 1;
 
@@ -1153,7 +1153,7 @@ class MainService
             $arr[$row['comment_id']]['content'] = str_replace('\r\n', '<br />', htmlspecialchars($row['content']));
             $arr[$row['comment_id']]['content'] = nl2br(str_replace('\n', '<br />', $arr[$row['comment_id']]['content']));
             $arr[$row['comment_id']]['rank'] = $row['comment_rank'];
-            $arr[$row['comment_id']]['add_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['add_time']);
+            $arr[$row['comment_id']]['add_time'] = local_date(config('shop.time_format'), $row['add_time']);
         }
         /* 取得已有回复的评论 */
         if ($ids) {
@@ -1162,13 +1162,13 @@ class MainService
             $res = $GLOBALS['db']->query($sql);
             while ($row = $GLOBALS['db']->fetch_array($res)) {
                 $arr[$row['parent_id']]['re_content'] = nl2br(str_replace('\n', '<br />', htmlspecialchars($row['content'])));
-                $arr[$row['parent_id']]['re_add_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['add_time']);
+                $arr[$row['parent_id']]['re_add_time'] = local_date(config('shop.time_format'), $row['add_time']);
                 $arr[$row['parent_id']]['re_email'] = $row['email'];
                 $arr[$row['parent_id']]['re_username'] = $row['user_name'];
             }
         }
         /* 分页样式 */
-        //$pager['styleid'] = isset($GLOBALS['_CFG']['page_style'])? intval($GLOBALS['_CFG']['page_style']) : 0;
+        //$pager['styleid'] = isset(config('shop.page_style'))? intval(config('shop.page_style')) : 0;
         $pager['page'] = $page;
         $pager['size'] = $size;
         $pager['record_count'] = $count;
@@ -1228,7 +1228,7 @@ class MainService
      */
     public function set_affiliate()
     {
-        $config = unserialize($GLOBALS['_CFG']['affiliate']);
+        $config = unserialize(config('shop.affiliate'));
         if (!empty($_GET['u']) && $config['on'] == 1) {
             if (!empty($config['config']['expire'])) {
                 if ($config['config']['expire_unit'] == 'hour') {
@@ -1388,7 +1388,7 @@ class MainService
         if (!isset($lib_list[$template])) {
             $lib_list[$template] = array();
             $sql = "SELECT library, number FROM " . table('template') .
-                " WHERE theme = '" . $GLOBALS['_CFG']['template'] . "'" .
+                " WHERE theme = '" . config('shop.template') . "'" .
                 " AND filename = '$template' AND remarks='' ";
             $res = $GLOBALS['db']->query($sql);
             while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -1427,7 +1427,7 @@ class MainService
 
         $cur_url = substr(strrchr($_SERVER['REQUEST_URI'], '/'), 1);
 
-        if (intval($GLOBALS['_CFG']['rewrite'])) {
+        if (intval(config('shop.rewrite'))) {
             if (strpos($cur_url, '-')) {
                 preg_match('/([a-z]*)-([0-9]*)/', $cur_url, $matches);
                 $cur_url = $matches[1] . '.php?id=' . $matches[2];
@@ -1489,7 +1489,7 @@ class MainService
      */
     public function license_info()
     {
-        if ($GLOBALS['_CFG']['licensed'] > 0) {
+        if (config('shop.licensed') > 0) {
             /* 获取HOST */
             if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
                 $host = $_SERVER['HTTP_X_FORWARDED_HOST'];

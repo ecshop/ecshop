@@ -23,7 +23,7 @@ class CategoryController extends InitController
 
         /* 初始化分页信息 */
         $page = isset($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
-        $size = isset($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
+        $size = intval(config('shop.page_size')) > 0 ? intval(config('shop.page_size')) : 10;
         $brand = isset($_REQUEST['brand']) && intval($_REQUEST['brand']) > 0 ? intval($_REQUEST['brand']) : 0;
         $price_max = isset($_REQUEST['price_max']) && intval($_REQUEST['price_max']) > 0 ? intval($_REQUEST['price_max']) : 0;
         $price_min = isset($_REQUEST['price_min']) && intval($_REQUEST['price_min']) > 0 ? intval($_REQUEST['price_min']) : 0;
@@ -35,9 +35,9 @@ class CategoryController extends InitController
 
 
         /* 排序、显示方式以及类型 */
-        $default_display_type = $_CFG['show_order_type'] == '0' ? 'list' : ($_CFG['show_order_type'] == '1' ? 'grid' : 'text');
-        $default_sort_order_method = $_CFG['sort_order_method'] == '0' ? 'DESC' : 'ASC';
-        $default_sort_order_type = $_CFG['sort_order_type'] == '0' ? 'goods_id' : ($_CFG['sort_order_type'] == '1' ? 'shop_price' : 'last_update');
+        $default_display_type = config('shop.show_order_type') == '0' ? 'list' : (config('shop.show_order_type') == '1' ? 'grid' : 'text');
+        $default_sort_order_method = config('shop.sort_order_method') == '0' ? 'DESC' : 'ASC';
+        $default_sort_order_type = config('shop.sort_order_type') == '0' ? 'goods_id' : (config('shop.sort_order_type') == '1' ? 'shop_price' : 'last_update');
 
         $sort = (isset($_REQUEST['sort']) && in_array(trim(strtolower($_REQUEST['sort'])), array('goods_id', 'shop_price', 'last_update'))) ? trim($_REQUEST['sort']) : $default_sort_order_type;
         $order = (isset($_REQUEST['order']) && in_array(trim(strtoupper($_REQUEST['order'])), array('ASC', 'DESC'))) ? trim($_REQUEST['order']) : $default_sort_order_method;
@@ -267,13 +267,13 @@ class CategoryController extends InitController
         $this->assign('categories', get_categories_tree($cat_id)); // 分类树
         $this->assign('helps', get_shop_help());              // 网店帮助
         $this->assign('top_goods', get_top10());                  // 销售排行
-        $this->assign('show_marketprice', $_CFG['show_marketprice']);
+        $this->assign('show_marketprice', config('shop.show_marketprice'));
         $this->assign('category', $cat_id);
         $this->assign('brand_id', $brand);
         $this->assign('price_max', $price_max);
         $this->assign('price_min', $price_min);
         $this->assign('filter_attr', $filter_attr_str);
-        $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-c$cat_id.xml" : 'feed.php?cat=' . $cat_id); // RSS URL
+        $this->assign('feed_url', (config('shop.rewrite') == 1) ? "feed-c$cat_id.xml" : 'feed.php?cat=' . $cat_id); // RSS URL
 
         if ($brand > 0) {
             $arr['all'] = array('brand_id' => 0,
@@ -401,7 +401,7 @@ class CategoryController extends InitController
 
             $arr[$row['goods_id']]['goods_id'] = $row['goods_id'];
             if ($display == 'grid') {
-                $arr[$row['goods_id']]['goods_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+                $arr[$row['goods_id']]['goods_name'] = config('shop.goods_name_length') > 0 ? sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
             } else {
                 $arr[$row['goods_id']]['goods_name'] = $row['goods_name'];
             }

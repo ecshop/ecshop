@@ -18,15 +18,15 @@ class ExchangeController extends InitController
     {
         /* 初始化分页信息 */
         $page = isset($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
-        $size = isset($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
+        $size = intval(config('shop.page_size')) > 0 ? intval(config('shop.page_size')) : 10;
         $cat_id = isset($_REQUEST['cat_id']) && intval($_REQUEST['cat_id']) > 0 ? intval($_REQUEST['cat_id']) : 0;
         $integral_max = isset($_REQUEST['integral_max']) && intval($_REQUEST['integral_max']) > 0 ? intval($_REQUEST['integral_max']) : 0;
         $integral_min = isset($_REQUEST['integral_min']) && intval($_REQUEST['integral_min']) > 0 ? intval($_REQUEST['integral_min']) : 0;
 
         /* 排序、显示方式以及类型 */
-        $default_display_type = $_CFG['show_order_type'] == '0' ? 'list' : ($_CFG['show_order_type'] == '1' ? 'grid' : 'text');
-        $default_sort_order_method = $_CFG['sort_order_method'] == '0' ? 'DESC' : 'ASC';
-        $default_sort_order_type = $_CFG['sort_order_type'] == '0' ? 'goods_id' : ($_CFG['sort_order_type'] == '1' ? 'exchange_integral' : 'last_update');
+        $default_display_type = config('shop.show_order_type') == '0' ? 'list' : (config('shop.show_order_type') == '1' ? 'grid' : 'text');
+        $default_sort_order_method = config('shop.sort_order_method') == '0' ? 'DESC' : 'ASC';
+        $default_sort_order_type = config('shop.sort_order_type') == '0' ? 'goods_id' : (config('shop.sort_order_type') == '1' ? 'exchange_integral' : 'last_update');
 
         $sort = (isset($_REQUEST['sort']) && in_array(trim(strtolower($_REQUEST['sort'])), array('goods_id', 'exchange_integral', 'last_update'))) ? trim($_REQUEST['sort']) : $default_sort_order_type;
         $order = (isset($_REQUEST['order']) && in_array(trim(strtoupper($_REQUEST['order'])), array('ASC', 'DESC'))) ? trim($_REQUEST['order']) : $default_sort_order_method;
@@ -87,7 +87,7 @@ class ExchangeController extends InitController
         assign_pager('exchange', $cat_id, $count, $size, $sort, $order, $page, '', '', $integral_min, $integral_max, $display); // 分页
         $this->assign_dynamic('exchange_list'); // 动态内容
 
-        $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typeexchange.xml" : 'feed.php?type=exchange'); // RSS URL
+        $this->assign('feed_url', (config('shop.rewrite') == 1) ? "feed-typeexchange.xml" : 'feed.php?type=exchange'); // RSS URL
         return $this->display('exchange_list.dwt');
     }
 
@@ -98,12 +98,12 @@ class ExchangeController extends InitController
     {
         $goods_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
-        $this->assign('image_width', $_CFG['image_width']);
-        $this->assign('image_height', $_CFG['image_height']);
+        $this->assign('image_width', config('shop.image_width'));
+        $this->assign('image_height', config('shop.image_height'));
         $this->assign('helps', get_shop_help()); // 网店帮助
         $this->assign('id', $goods_id);
         $this->assign('type', 0);
-        $this->assign('cfg', $_CFG);
+        $this->assign('cfg', config('shop'));
 
         /* 获得商品的信息 */
         $goods = get_exchange_goods_info($goods_id);
@@ -188,7 +188,7 @@ class ExchangeController extends InitController
             return redirect("./");
         }
         /* 查询：检查兑换商品是否有库存 */
-        if ($goods['goods_number'] == 0 && $_CFG['use_storage'] == 1) {
+        if ($goods['goods_number'] == 0 && config('shop.use_storage') == 1) {
             return $this->show_message($_LANG['eg_error_number'], array($_LANG['back_up_page']), array($back_act), 'error');
         }
         /* 查询：检查兑换商品是否是取消 */
@@ -222,7 +222,7 @@ class ExchangeController extends InitController
         }
 
         //查询：商品存在规格 是货品 检查该货品库存
-        if ((!empty($specs)) && ($product_info['product_number'] == 0) && ($_CFG['use_storage'] == 1)) {
+        if ((!empty($specs)) && ($product_info['product_number'] == 0) && (config('shop.use_storage') == 1)) {
             return $this->show_message($_LANG['eg_error_number'], array($_LANG['back_up_page']), array($back_act), 'error');
         }
 
@@ -338,7 +338,7 @@ class ExchangeController extends InitController
 
             $arr[$row['goods_id']]['goods_id'] = $row['goods_id'];
             if ($display == 'grid') {
-                $arr[$row['goods_id']]['goods_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+                $arr[$row['goods_id']]['goods_name'] = config('shop.goods_name_length') > 0 ? sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
             } else {
                 $arr[$row['goods_id']]['goods_name'] = $row['goods_name'];
             }
@@ -423,7 +423,7 @@ class ExchangeController extends InitController
         if (!empty($cats)) {
             $sql .= " AND (" . $cats . " OR " . get_extension_goods($cats) . ")";
         }
-        $order_type = $GLOBALS['_CFG']['recommend_order'];
+        $order_type = config('shop.recommend_order');
         $sql .= ($order_type == 0) ? ' ORDER BY g.sort_order, g.last_update DESC' : ' ORDER BY RAND()';
         $res = $GLOBALS['db']->selectLimit($sql, $num);
 
@@ -434,8 +434,8 @@ class ExchangeController extends InitController
             $goods[$idx]['name'] = $row['goods_name'];
             $goods[$idx]['brief'] = $row['goods_brief'];
             $goods[$idx]['brand_name'] = $row['brand_name'];
-            $goods[$idx]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+            $goods[$idx]['short_name'] = config('shop.goods_name_length') > 0 ?
+                sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
             $goods[$idx]['exchange_integral'] = $row['exchange_integral'];
             $goods[$idx]['thumb'] = get_image_path($row['goods_thumb']);
             $goods[$idx]['goods_img'] = get_image_path($row['goods_img']);
@@ -490,7 +490,7 @@ class ExchangeController extends InitController
                 ($row['goods_weight'] * 1000) . $GLOBALS['_LANG']['gram'];
 
             /* 修正上架时间显示 */
-            $row['add_time'] = local_date($GLOBALS['_CFG']['date_format'], $row['add_time']);
+            $row['add_time'] = local_date(config('shop.date_format'), $row['add_time']);
 
             /* 修正商品图片 */
             $row['goods_img'] = get_image_path($row['goods_img']);

@@ -47,8 +47,8 @@ class GalleryController extends InitController
             }
         }
 
-        $this->assign('shop_name', $_CFG['shop_name']);
-        $this->assign('watermark', str_replace('../', './', $_CFG['watermark']));
+        $this->assign('shop_name', config('shop.shop_name'));
+        $this->assign('watermark', str_replace('../', './', config('shop.watermark')));
         $this->assign('gallery', $gallery);
         return $this->display('gallery.dwt');
     }

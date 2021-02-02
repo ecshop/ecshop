@@ -33,13 +33,13 @@ class BrandController extends InitController
 
         /* 初始化分页信息 */
         $page = !empty($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
-        $size = !empty($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
+        $size = intval(config('shop.page_size')) > 0 ? intval(config('shop.page_size')) : 10;
         $cate = !empty($_REQUEST['cat']) && intval($_REQUEST['cat']) > 0 ? intval($_REQUEST['cat']) : 0;
 
         /* 排序、显示方式以及类型 */
-        $default_display_type = $_CFG['show_order_type'] == '0' ? 'list' : ($_CFG['show_order_type'] == '1' ? 'grid' : 'text');
-        $default_sort_order_method = $_CFG['sort_order_method'] == '0' ? 'DESC' : 'ASC';
-        $default_sort_order_type = $_CFG['sort_order_type'] == '0' ? 'goods_id' : ($_CFG['sort_order_type'] == '1' ? 'shop_price' : 'last_update');
+        $default_display_type = config('shop.show_order_type') == '0' ? 'list' : (config('shop.show_order_type') == '1' ? 'grid' : 'text');
+        $default_sort_order_method = config('shop.sort_order_method') == '0' ? 'DESC' : 'ASC';
+        $default_sort_order_type = config('shop.sort_order_type') == '0' ? 'goods_id' : (config('shop.sort_order_type') == '1' ? 'shop_price' : 'last_update');
 
         $sort = (isset($_REQUEST['sort']) && in_array(trim(strtolower($_REQUEST['sort'])), array('goods_id', 'shop_price', 'last_update'))) ? trim($_REQUEST['sort']) : $default_sort_order_type;
         $order = (isset($_REQUEST['order']) && in_array(trim(strtoupper($_REQUEST['order'])), array('ASC', 'DESC'))) ? trim($_REQUEST['order']) : $default_sort_order_method;
@@ -68,9 +68,9 @@ class BrandController extends InitController
         $this->assign('categories', get_categories_tree());        // 分类树
         $this->assign('helps', get_shop_help());              // 网店帮助
         $this->assign('top_goods', get_top10());                  // 销售排行
-        $this->assign('show_marketprice', $_CFG['show_marketprice']);
+        $this->assign('show_marketprice', config('shop.show_marketprice'));
         $this->assign('brand_cat_list', brand_related_cat($brand_id)); // 相关分类
-        $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-b$brand_id.xml" : 'feed.php?brand=' . $brand_id);
+        $this->assign('feed_url', (config('shop.rewrite') == 1) ? "feed-b$brand_id.xml" : 'feed.php?brand=' . $brand_id);
 
         /* 调查 */
         $vote = get_vote();
@@ -179,8 +179,8 @@ class BrandController extends InitController
                 $goods[$idx]['name'] = $row['goods_name'];
                 $goods[$idx]['brief'] = $row['goods_brief'];
                 $goods[$idx]['brand_name'] = $row['brand_name'];
-                $goods[$idx]['short_style_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                    sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+                $goods[$idx]['short_style_name'] = config('shop.goods_name_length') > 0 ?
+                    sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
                 $goods[$idx]['market_price'] = price_format($row['market_price']);
                 $goods[$idx]['shop_price'] = price_format($row['shop_price']);
                 $goods[$idx]['thumb'] = get_image_path($row['goods_thumb']);
@@ -247,7 +247,7 @@ class BrandController extends InitController
 
             $arr[$row['goods_id']]['goods_id'] = $row['goods_id'];
             if ($GLOBALS['display'] == 'grid') {
-                $arr[$row['goods_id']]['goods_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+                $arr[$row['goods_id']]['goods_name'] = config('shop.goods_name_length') > 0 ? sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
             } else {
                 $arr[$row['goods_id']]['goods_name'] = $row['goods_name'];
             }

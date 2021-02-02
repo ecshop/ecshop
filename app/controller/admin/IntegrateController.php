@@ -19,10 +19,10 @@ class IntegrateController extends InitController
     {
         $modules = read_modules('../includes/modules/integrates');
         for ($i = 0; $i < count($modules); $i++) {
-            $modules[$i]['installed'] = ($modules[$i]['code'] == $_CFG['integrate_code']) ? 1 : 0;
+            $modules[$i]['installed'] = ($modules[$i]['code'] == config('shop.integrate_code')) ? 1 : 0;
         }
 
-        $allow_set_points = $_CFG['integrate_code'] == 'ecshop' ? 0 : 1;
+        $allow_set_points = config('shop.integrate_code') == 'ecshop' ? 0 : 1;
 
         $this->assign('allow_set_points', $allow_set_points);
         $this->assign('ur_here', $_LANG['06_list_integrate']);
@@ -121,7 +121,7 @@ class IntegrateController extends InitController
         if ($_GET['code'] == 'ecshop') {
             sys_msg($_LANG['need_not_setup']);
         } else {
-            $cfg = unserialize($_CFG['integrate_config']);
+            $cfg = unserialize(config('shop.integrate_config'));
             assign_query_info();
 
             $this->assign('save', 1);
@@ -232,7 +232,7 @@ class IntegrateController extends InitController
     {
         $code = $_POST['code'];
 
-        $cfg = unserialize($_CFG['integrate_config']);
+        $cfg = unserialize(config('shop.integrate_config'));
 
         include_once(ROOT_PATH . "includes/modules/integrates/" . $code . ".php");
         $_POST['cfg']['quiet'] = 1;
@@ -861,8 +861,8 @@ class IntegrateController extends InitController
         }
 
         $rule = array(); //取得一样规则
-        if ($_CFG['points_rule']) {
-            $rule = unserialize($_CFG['points_rule']);
+        if (config('shop.points_rule')) {
+            $rule = unserialize(config('shop.points_rule'));
         }
 
         $points_key = array_keys($points);
@@ -920,7 +920,7 @@ class IntegrateController extends InitController
         $this->assign('select_rule', $select_rule);
         $this->assign('exist_rule', $exist_rule);
         $this->assign('rule_list', $rule);
-        $this->assign('integral_name', $_CFG['integral_name']);
+        $this->assign('integral_name', config('shop.integral_name'));
         $this->assign('full_page', 1);
         $this->assign('points', $points);
         return $this->display('integrates_points.htm');
@@ -931,8 +931,8 @@ class IntegrateController extends InitController
         $rule_index = empty($_REQUEST['rule_index']) ? '' : trim($_REQUEST['rule_index']);
 
         $rule = array(); //取得一样规则
-        if ($_CFG['points_rule']) {
-            $rule = unserialize($_CFG['points_rule']);
+        if (config('shop.points_rule')) {
+            $rule = unserialize(config('shop.points_rule'));
         }
 
         if (isset($_POST['from_val']) && isset($_POST['to_val'])) {
@@ -1025,7 +1025,7 @@ class IntegrateController extends InitController
 
         $list_count = count($list);
         for ($i = 0; $i < $list_count; $i++) {
-            $list[$i]['reg_date'] = local_date($GLOBALS['_CFG']['date_format'], $list[$i]['reg_time']);
+            $list[$i]['reg_date'] = local_date(config('shop.date_format'), $list[$i]['reg_time']);
         }
 
         $arr = array('list' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);

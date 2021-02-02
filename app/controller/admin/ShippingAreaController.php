@@ -73,7 +73,7 @@ class ShippingAreaController extends InitController
         $this->assign('fields', $fields);
         $this->assign('form_action', 'insert');
         $this->assign('countries', get_regions());
-        $this->assign('default_country', $_CFG['shop_country']);
+        $this->assign('default_country', config('shop.shop_country'));
         assign_query_info();
         return $this->display('shipping_area_info.htm');
     }

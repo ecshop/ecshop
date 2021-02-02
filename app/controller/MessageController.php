@@ -9,7 +9,7 @@ class MessageController extends InitController
 {
     public function initialize()
     {
-        if (empty($_CFG['message_board'])) {
+        if (empty(config('shop.message_board'))) {
             return $this->show_message($_LANG['message_board_close']);
         }
     }
@@ -18,7 +18,7 @@ class MessageController extends InitController
     {
 
         /* 验证码防止灌水刷屏 */
-        if ((intval($_CFG['captcha']) & CAPTCHA_MESSAGE) && gd_version() > 0) {
+        if ((intval(config('shop.captcha')) & CAPTCHA_MESSAGE) && gd_version() > 0) {
             $validator = new captcha();
             if (!$validator->check_word($_POST['captcha'])) {
                 return $this->show_message($_LANG['invalid_captcha']);
@@ -59,12 +59,12 @@ class MessageController extends InitController
         );
 
         if (add_message($message)) {
-            if (intval($_CFG['captcha']) & CAPTCHA_MESSAGE) {
+            if (intval(config('shop.captcha')) & CAPTCHA_MESSAGE) {
                 unset($_SESSION[$validator->session_word]);
             } else {
                 $_SESSION['send_time'] = $cur_time;
             }
-            $msg_info = $_CFG['message_check'] ? $_LANG['message_submit_wait'] : $_LANG['message_submit_done'];
+            $msg_info = config('shop.message_check') ? $_LANG['message_submit_wait'] : $_LANG['message_submit_done'];
             return $this->show_message($msg_info, $_LANG['message_list_lnk'], 'message.php');
         } else {
             $this->assign_template();
@@ -86,7 +86,7 @@ class MessageController extends InitController
         $this->assign('brand_list', get_brand_list());
         $this->assign('promotion_info', get_promotion_info());
 
-        $this->assign('enabled_mes_captcha', (intval($_CFG['captcha']) & CAPTCHA_MESSAGE));
+        $this->assign('enabled_mes_captcha', (intval(config('shop.captcha')) & CAPTCHA_MESSAGE));
 
         $sql = "SELECT COUNT(*) FROM " . table('comment') . " WHERE STATUS =1 AND comment_type =0 ";
         $record_count = $db->getOne($sql);
@@ -134,7 +134,7 @@ class MessageController extends InitController
                 $msg[$rows['msg_time']]['user_name'] = htmlspecialchars($rows['user_name']);
                 $msg[$rows['msg_time']]['msg_content'] = str_replace('\r\n', '<br />', htmlspecialchars($rows['msg_content']));
                 $msg[$rows['msg_time']]['msg_content'] = str_replace('\n', '<br />', $msg[$rows['msg_time']]['msg_content']);
-                $msg[$rows['msg_time']]['msg_time'] = local_date($GLOBALS['_CFG']['time_format'], $rows['msg_time']);
+                $msg[$rows['msg_time']]['msg_time'] = local_date(config('shop.time_format'), $rows['msg_time']);
                 $msg[$rows['msg_time']]['msg_type'] = $GLOBALS['_LANG']['message_type'][$rows['msg_type']];
                 $msg[$rows['msg_time']]['msg_title'] = nl2br(htmlspecialchars($rows['msg_title']));
                 $msg[$rows['msg_time']]['message_img'] = $rows['message_img'];
@@ -175,7 +175,7 @@ class MessageController extends InitController
                 if ($reply) {
                     $msg[$rows['msg_time']]['re_name'] = $reply['re_name'];
                     $msg[$rows['msg_time']]['re_email'] = $reply['re_email'];
-                    $msg[$rows['msg_time']]['re_time'] = local_date($GLOBALS['_CFG']['time_format'], $reply['re_time']);
+                    $msg[$rows['msg_time']]['re_time'] = local_date(config('shop.time_format'), $reply['re_time']);
                     $msg[$rows['msg_time']]['re_content'] = nl2br(htmlspecialchars($reply['re_content']));
                 }
             }

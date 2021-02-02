@@ -12,13 +12,13 @@ class FlowStatsController extends InitController
         parent::initialize();
 
 
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/statistic.php');
         $this->assign('lang', $_LANG);
     }
 
     public function viewAction()
     {
-        if ($_CFG['visit_stats'] == 'off') {
+        if (config('shop.visit_stats') == 'off') {
             return sys_msg($_LANG['stats_off']);
         }
         admin_priv('client_flow_stats');
@@ -274,8 +274,8 @@ class FlowStatsController extends InitController
         $this->assign('start_date_arr', $start_date_arr);
 
         if (!$is_multi) {
-            $filename = gmdate($_CFG['date_format'], intval($start_date) + intval($timezone) * 3600) . '_' .
-                gmdate($_CFG['date_format'], intval($end_date) + intval($timezone) * 3600);
+            $filename = gmdate(config('shop.date_format'), intval($start_date) + intval($timezone) * 3600) . '_' .
+                gmdate(config('shop.date_format'), intval($end_date) + intval($timezone) * 3600);
 
             $this->assign('action_link', array('text' => $_LANG['down_flow_stats'],
                 'href' => 'flow_stats.php?act=download&filename=' . $filename .

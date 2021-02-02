@@ -20,7 +20,7 @@ class EditLanguagesController extends InitController
     {
         //从languages目录下获取语言项文件
         $lang_arr = array();
-        $lang_path = ROOT_PATH . 'languages/' . $_CFG['lang'];
+        $lang_path = ROOT_PATH . 'languages/' . config('shop.lang');
         $lang_dir = @opendir($lang_path);
 
         while ($file = @readdir($lang_dir)) {
@@ -36,11 +36,11 @@ class EditLanguagesController extends InitController
         /* 获得需要操作的语言包文件 */
         $lang_file = isset($_POST['lang_file']) ? trim($_POST['lang_file']) : '';
         if ($lang_file == 'common') {
-            $file_path = ROOT_PATH . 'languages/' . $_CFG['lang'] . '/common.php';
+            $file_path = ROOT_PATH . 'languages/' . config('shop.lang') . '/common.php';
         } elseif ($lang_file == 'shopping_flow') {
-            $file_path = ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php';
+            $file_path = ROOT_PATH . 'languages/' . config('shop.lang') . '/shopping_flow.php';
         } else {
-            $file_path = ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php';
+            $file_path = ROOT_PATH . 'languages/' . config('shop.lang') . '/user.php';
         }
 
         $file_attr = '';

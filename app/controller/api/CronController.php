@@ -139,7 +139,7 @@ class CronController extends InitController
     public function check_method()
     {
         $if_cron = PHP_SAPI == 'cli' ? true : false;
-        if (!empty($GLOBALS['_CFG']['cron_method'])) {
+        if (!empty(config('shop.cron_method'))) {
             if (!$if_cron) {
                 die('Hacking attempt');
             }

@@ -20,7 +20,7 @@ class AuctionController extends InitController
         $count = auction_count();
         if ($count > 0) {
             /* 取得每页记录数 */
-            $size = isset($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
+            $size = intval(config('shop.page_size')) > 0 ? intval(config('shop.page_size')) : 10;
 
             /* 计算总页数 */
             $page_count = ceil($count / $size);
@@ -41,7 +41,7 @@ class AuctionController extends InitController
         }
 
         /* 模板赋值 */
-        $this->assign('cfg', $_CFG);
+        $this->assign('cfg', config('shop'));
         $this->assign_template();
         $position = $this->assign_ur_here();
         $this->assign('page_title', $position['title']);    // 页面标题
@@ -50,7 +50,7 @@ class AuctionController extends InitController
         $this->assign('helps', get_shop_help());       // 网店帮助
         $this->assign('top_goods', get_top10());           // 销售排行
         $this->assign('promotion_info', get_promotion_info());
-        $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typeauction.xml" : 'feed.php?type=auction'); // RSS URL
+        $this->assign('feed_url', (config('shop.rewrite') == 1) ? "feed-typeauction.xml" : 'feed.php?type=auction'); // RSS URL
 
         $this->assign_dynamic('auction_list');
 
@@ -111,7 +111,7 @@ class AuctionController extends InitController
         $this->assign('auction_log', auction_log($id));
 
         //模板赋值
-        $this->assign('cfg', $_CFG);
+        $this->assign('cfg', config('shop'));
         $this->assign_template();
 
         $position = $this->assign_ur_here(0, $goods['goods_name']);
@@ -391,8 +391,8 @@ class AuctionController extends InitController
             $auction = array_merge($row, $ext_info);
             $auction['status_no'] = auction_status($auction);
 
-            $auction['start_time'] = local_date($GLOBALS['_CFG']['time_format'], $auction['start_time']);
-            $auction['end_time'] = local_date($GLOBALS['_CFG']['time_format'], $auction['end_time']);
+            $auction['start_time'] = local_date(config('shop.time_format'), $auction['start_time']);
+            $auction['end_time'] = local_date(config('shop.time_format'), $auction['end_time']);
             $auction['formated_start_price'] = price_format($auction['start_price']);
             $auction['formated_end_price'] = price_format($auction['end_price']);
             $auction['formated_deposit'] = price_format($auction['deposit']);

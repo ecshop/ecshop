@@ -14,7 +14,7 @@ class PictureBatchController extends InitController
 
     public function indexAction()
     {
-        $image = new cls_image($_CFG['bgcolor']);
+        $image = new cls_image(config('shop.bgcolor'));
 
         /* 权限检查 */
         admin_priv('picture_batch');
@@ -90,7 +90,7 @@ class PictureBatchController extends InitController
                 }
 
                 /* 如果需要添加水印，检查水印文件 */
-                if ((!empty($_CFG['watermark'])) && ($_CFG['watermark_place'] > 0) && $watermark && (!$image->validate_image($_CFG['watermark']))) {
+                if ((!empty(config('shop.watermark'))) && (config('shop.watermark_place') > 0) && $watermark && (!$image->validate_image(config('shop.watermark')))) {
                     return make_json_error($image->error_msg());
                 }
                 $title = '';
@@ -243,7 +243,7 @@ class PictureBatchController extends InitController
                         $dir = dirname(ROOT_PATH . $row['goods_img']) . '/';
                     }
 
-                    $image = $GLOBALS['image']->make_thumb(ROOT_PATH . $row['original_img'], $GLOBALS['_CFG']['image_width'], $GLOBALS['_CFG']['image_height'], $dir); //先生成缩略图
+                    $image = $GLOBALS['image']->make_thumb(ROOT_PATH . $row['original_img'], config('shop.image_width'), config('shop.image_height'), $dir); //先生成缩略图
 
                     if (!$image) {
                         //出错返回
@@ -256,7 +256,7 @@ class PictureBatchController extends InitController
                         }
                     }
 
-                    $image = $GLOBALS['image']->add_watermark(ROOT_PATH . $image, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']);
+                    $image = $GLOBALS['image']->add_watermark(ROOT_PATH . $image, '', config('shop.watermark'), config('shop.watermark_place'), config('shop.watermark_alpha'));
 
                     if (!$image) {
                         //出错返回
@@ -294,7 +294,7 @@ class PictureBatchController extends InitController
                         $dir = dirname(ROOT_PATH . $row['goods_thumb']) . '/';
                     }
 
-                    $goods_thumb = $GLOBALS['image']->make_thumb(ROOT_PATH . $row['original_img'], $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height'], $dir);
+                    $goods_thumb = $GLOBALS['image']->make_thumb(ROOT_PATH . $row['original_img'], config('shop.thumb_width'), config('shop.thumb_height'), $dir);
 
                     /* 出错处理 */
                     if (!$goods_thumb) {
@@ -343,7 +343,7 @@ class PictureBatchController extends InitController
                     $file_name .= cls_image::get_filetype(empty($row['img_url']) ? $row['img_original'] : $row['img_url']);
 
                     copy(ROOT_PATH . $row['img_original'], $dir . $file_name);
-                    $image = $GLOBALS['image']->add_watermark($dir . $file_name, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']);
+                    $image = $GLOBALS['image']->add_watermark($dir . $file_name, '', config('shop.watermark'), config('shop.watermark_place'), config('shop.watermark_alpha'));
                     if (!$image) {
                         @unlink($dir . $file_name);
                         $msg = sprintf($GLOBALS['_LANG']['error_pos'], $row['goods_id']) . "\n" . $GLOBALS['image']->error_msg();
@@ -377,7 +377,7 @@ class PictureBatchController extends InitController
                         $dir = dirname(ROOT_PATH . $row['thumb_url']) . '/';
                     }
 
-                    $thumb_url = $GLOBALS['image']->make_thumb(ROOT_PATH . $row['img_original'], $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height'], $dir);
+                    $thumb_url = $GLOBALS['image']->make_thumb(ROOT_PATH . $row['img_original'], config('shop.thumb_width'), config('shop.thumb_height'), $dir);
 
                     if (!$thumb_url) {
                         $msg = sprintf($GLOBALS['_LANG']['error_pos'], $row['goods_id']) . "\n" . $GLOBALS['image']->error_msg();

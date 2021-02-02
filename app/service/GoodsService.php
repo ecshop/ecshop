@@ -104,7 +104,7 @@ class GoodsService
         $where = !empty($cats) ? "AND ($cats OR " . get_extension_goods($cats) . ") " : '';
 
         /* 排行统计的时间 */
-        switch ($GLOBALS['_CFG']['top10_time']) {
+        switch (config('shop.top10_time')) {
             case 1: // 一年
                 $top10_time = "AND o.order_sn >= '" . date('Ymd', gmtime() - 365 * 86400) . "'";
                 break;
@@ -127,20 +127,20 @@ class GoodsService
             table('order_goods') . ' AS og ' .
             "WHERE g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 $where $top10_time ";
         //判断是否启用库存，库存数量是否大于0
-        if ($GLOBALS['_CFG']['use_storage'] == 1) {
+        if (config('shop.use_storage') == 1) {
             $sql .= " AND g.goods_number > 0 ";
         }
         $sql .= ' AND og.order_id = o.order_id AND og.goods_id = g.goods_id ' .
             "AND (o.order_status = '" . OS_CONFIRMED . "' OR o.order_status = '" . OS_SPLITED . "') " .
             "AND (o.pay_status = '" . PS_PAYED . "' OR o.pay_status = '" . PS_PAYING . "') " .
             "AND (o.shipping_status = '" . SS_SHIPPED . "' OR o.shipping_status = '" . SS_RECEIVED . "') " .
-            'GROUP BY g.goods_id ORDER BY goods_number DESC, g.goods_id DESC LIMIT ' . $GLOBALS['_CFG']['top_number'];
+            'GROUP BY g.goods_id ORDER BY goods_number DESC, g.goods_id DESC LIMIT ' . config('shop.top_number');
 
         $arr = $GLOBALS['db']->getAll($sql);
 
         for ($i = 0, $count = count($arr); $i < $count; $i++) {
-            $arr[$i]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                sub_str($arr[$i]['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $arr[$i]['goods_name'];
+            $arr[$i]['short_name'] = config('shop.goods_name_length') > 0 ?
+                sub_str($arr[$i]['goods_name'], config('shop.goods_name_length')) : $arr[$i]['goods_name'];
             $arr[$i]['url'] = build_uri('goods', array('gid' => $arr[$i]['goods_id']), $arr[$i]['goods_name']);
             $arr[$i]['thumb'] = get_image_path($arr[$i]['goods_thumb']);
             $arr[$i]['price'] = price_format($arr[$i]['shop_price']);
@@ -204,7 +204,7 @@ class GoodsService
             }
 
             $time = gmtime();
-            $order_type = $GLOBALS['_CFG']['recommend_order'];
+            $order_type = config('shop.recommend_order');
 
             //按推荐数量及排序取每一项推荐显示的商品 order_type可以根据后台设定进行各种条件显示
             static $type_array = array();
@@ -264,8 +264,8 @@ class GoodsService
                 $goods[$idx]['brand_name'] = isset($goods_data['brand'][$row['goods_id']]) ? $goods_data['brand'][$row['goods_id']] : '';
                 $goods[$idx]['goods_style_name'] = add_style($row['goods_name'], $row['goods_name_style']);
 
-                $goods[$idx]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                    sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+                $goods[$idx]['short_name'] = config('shop.goods_name_length') > 0 ?
+                    sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
                 $goods[$idx]['short_style_name'] = add_style($goods[$idx]['short_name'], $row['goods_name_style']);
                 $goods[$idx]['market_price'] = price_format($row['market_price']);
                 $goods[$idx]['shop_price'] = price_format($row['shop_price']);
@@ -295,7 +295,7 @@ class GoodsService
     public function get_promote_goods($cats = '')
     {
         $time = gmtime();
-        $order_type = $GLOBALS['_CFG']['recommend_order'];
+        $order_type = config('shop.recommend_order');
 
         /* 取得促销lbi的数量限制 */
         $num = get_library_number("recommend_promotion");
@@ -327,7 +327,7 @@ class GoodsService
             $goods[$idx]['brief'] = $row['goods_brief'];
             $goods[$idx]['brand_name'] = $row['brand_name'];
             $goods[$idx]['goods_style_name'] = add_style($row['goods_name'], $row['goods_name_style']);
-            $goods[$idx]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+            $goods[$idx]['short_name'] = config('shop.goods_name_length') > 0 ? sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
             $goods[$idx]['short_style_name'] = add_style($goods[$idx]['short_name'], $row['goods_name_style']);
             $goods[$idx]['market_price'] = price_format($row['market_price']);
             $goods[$idx]['shop_price'] = price_format($row['shop_price']);
@@ -390,7 +390,7 @@ class GoodsService
             $sql .= " AND (" . $cats . " OR " . get_extension_goods($cats) . ")";
         }
 
-        $order_type = $GLOBALS['_CFG']['recommend_order'];
+        $order_type = config('shop.recommend_order');
         $sql .= ($order_type == 0) ? ' ORDER BY g.sort_order, g.last_update DESC' : ' ORDER BY RAND()';
         $res = $GLOBALS['db']->selectLimit($sql, $num);
 
@@ -408,8 +408,8 @@ class GoodsService
             $goods[$idx]['name'] = $row['goods_name'];
             $goods[$idx]['brief'] = $row['goods_brief'];
             $goods[$idx]['brand_name'] = $row['brand_name'];
-            $goods[$idx]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+            $goods[$idx]['short_name'] = config('shop.goods_name_length') > 0 ?
+                sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
             $goods[$idx]['market_price'] = price_format($row['market_price']);
             $goods[$idx]['shop_price'] = price_format($row['shop_price']);
             $goods[$idx]['thumb'] = get_image_path($row['goods_thumb']);
@@ -490,7 +490,7 @@ class GoodsService
                 ($row['goods_weight'] * 1000) . $GLOBALS['_LANG']['gram'];
 
             /* 修正上架时间显示 */
-            $row['add_time'] = local_date($GLOBALS['_CFG']['date_format'], $row['add_time']);
+            $row['add_time'] = local_date(config('shop.date_format'), $row['add_time']);
 
             /* 促销时间倒计时 */
             $time = gmtime();
@@ -501,10 +501,10 @@ class GoodsService
             }
 
             /* 是否显示商品库存数量 */
-            $row['goods_number'] = ($GLOBALS['_CFG']['use_storage'] == 1) ? $row['goods_number'] : '';
+            $row['goods_number'] = (config('shop.use_storage') == 1) ? $row['goods_number'] : '';
 
             /* 修正积分：转换为可使用多少积分（原来是可以使用多少钱的积分） */
-            $row['integral'] = $GLOBALS['_CFG']['integral_scale'] ? round($row['integral'] * 100 / $GLOBALS['_CFG']['integral_scale']) : 0;
+            $row['integral'] = config('shop.integral_scale') ? round($row['integral'] * 100 / config('shop.integral_scale')) : 0;
 
             /* 修正优惠券 */
             $row['bonus_money'] = ($row['bonus_money'] == 0) ? 0 : price_format($row['bonus_money'], false);
@@ -603,15 +603,15 @@ class GoodsService
                     "LEFT JOIN " . table('member_price') . " AS mp " .
                     "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
                     "WHERE a.attr_id = '$key' AND g.is_on_sale=1 AND a.attr_value = '$val[value]' AND g.goods_id <> '$_REQUEST[id]' " .
-                    'LIMIT ' . $GLOBALS['_CFG']['attr_related_number'];
+                    'LIMIT ' . config('shop.attr_related_number');
                 $res = $GLOBALS['db']->getAll($sql);
 
                 foreach ($res as $row) {
                     $lnk[$key]['goods'][$row['goods_id']]['goods_id'] = $row['goods_id'];
                     $lnk[$key]['goods'][$row['goods_id']]['goods_name'] = $row['goods_name'];
-                    $lnk[$key]['goods'][$row['goods_id']]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                        sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
-                    $lnk[$key]['goods'][$row['goods_id']]['goods_thumb'] = (empty($row['goods_thumb'])) ? $GLOBALS['_CFG']['no_picture'] : $row['goods_thumb'];
+                    $lnk[$key]['goods'][$row['goods_id']]['short_name'] = config('shop.goods_name_length') > 0 ?
+                        sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
+                    $lnk[$key]['goods'][$row['goods_id']]['goods_thumb'] = (empty($row['goods_thumb'])) ? config('shop.no_picture') : $row['goods_thumb'];
                     $lnk[$key]['goods'][$row['goods_id']]['market_price'] = price_format($row['market_price']);
                     $lnk[$key]['goods'][$row['goods_id']]['shop_price'] = price_format($row['shop_price']);
                     $lnk[$key]['goods'][$row['goods_id']]['promote_price'] = bargain_price(
@@ -638,7 +638,7 @@ class GoodsService
     {
         $sql = 'SELECT img_id, img_url, thumb_url, img_desc' .
             ' FROM ' . table('goods_gallery') .
-            " WHERE goods_id = '$goods_id' order by sort_order LIMIT " . $GLOBALS['_CFG']['goods_gallery_number'];
+            " WHERE goods_id = '$goods_id' order by sort_order LIMIT " . config('shop.goods_gallery_number');
         $row = $GLOBALS['db']->getAll($sql);
         /* 格式化相册图片路径 */
         foreach ($row as $key => $gallery_img) {
@@ -691,8 +691,8 @@ class GoodsService
             $goods[$idx]['name'] = $row['goods_name'];
             $goods[$idx]['brief'] = $row['goods_brief'];
             $goods[$idx]['market_price'] = price_format($row['market_price']);
-            $goods[$idx]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+            $goods[$idx]['short_name'] = config('shop.goods_name_length') > 0 ?
+                sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
             $goods[$idx]['shop_price'] = price_format($row['shop_price']);
             $goods[$idx]['thumb'] = get_image_path($row['goods_thumb']);
             $goods[$idx]['goods_img'] = get_image_path($row['goods_img']);
@@ -757,8 +757,8 @@ class GoodsService
 
             $goods[$idx]['id'] = $row['goods_id'];
             $goods[$idx]['name'] = $row['goods_name'];
-            $goods[$idx]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+            $goods[$idx]['short_name'] = config('shop.goods_name_length') > 0 ?
+                sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
             $goods[$idx]['market_price'] = price_format($row['market_price']);
             $goods[$idx]['shop_price'] = price_format($row['shop_price']);
             $goods[$idx]['promote_price'] = $promote_price > 0 ? price_format($promote_price) : '';
@@ -1031,8 +1031,8 @@ class GoodsService
             $auction['start_time'] = local_date('Y-m-d H:i', $auction['start_time']);
             $auction['end_time'] = local_date('Y-m-d H:i', $auction['end_time']);
         } else {
-            $auction['start_time'] = local_date($GLOBALS['_CFG']['time_format'], $auction['start_time']);
-            $auction['end_time'] = local_date($GLOBALS['_CFG']['time_format'], $auction['end_time']);
+            $auction['start_time'] = local_date(config('shop.time_format'), $auction['start_time']);
+            $auction['end_time'] = local_date(config('shop.time_format'), $auction['end_time']);
         }
         $ext_info = unserialize($auction['ext_info']);
         $auction = array_merge($auction, $ext_info);
@@ -1054,7 +1054,7 @@ class GoodsService
                 "ORDER BY a.log_id DESC";
             $row = $GLOBALS['db']->getRow($sql);
             $row['formated_bid_price'] = price_format($row['bid_price'], false);
-            $row['bid_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['bid_time']);
+            $row['bid_time'] = local_date(config('shop.time_format'), $row['bid_time']);
             $auction['last_bid'] = $row;
         }
 
@@ -1093,7 +1093,7 @@ class GoodsService
             "ORDER BY a.log_id DESC";
         $res = $GLOBALS['db']->query($sql);
         while ($row = $GLOBALS['db']->fetchRow($res)) {
-            $row['bid_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['bid_time']);
+            $row['bid_time'] = local_date(config('shop.time_format'), $row['bid_time']);
             $row['formated_bid_price'] = price_format($row['bid_price'], false);
             $log[] = $row;
         }
@@ -1160,8 +1160,8 @@ class GoodsService
             " WHERE act_id = '$act_id'";
         $row = $GLOBALS['db']->getRow($sql);
         if (!empty($row)) {
-            $row['start_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['start_time']);
-            $row['end_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['end_time']);
+            $row['start_time'] = local_date(config('shop.time_format'), $row['start_time']);
+            $row['end_time'] = local_date(config('shop.time_format'), $row['end_time']);
             $row['formated_min_amount'] = price_format($row['min_amount']);
             $row['formated_max_amount'] = price_format($row['max_amount']);
             $row['gift'] = unserialize($row['gift']);
@@ -1277,12 +1277,12 @@ class GoodsService
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             $arr[$temp_index]['parent_id'] = $row['parent_id'];//配件的基本件ID
             $arr[$temp_index]['parent_name'] = $row['parent_name'];//配件的基本件的名称
-            $arr[$temp_index]['parent_short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                sub_str($row['parent_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['parent_name'];//配件的基本件显示的名称
+            $arr[$temp_index]['parent_short_name'] = config('shop.goods_name_length') > 0 ?
+                sub_str($row['parent_name'], config('shop.goods_name_length')) : $row['parent_name'];//配件的基本件显示的名称
             $arr[$temp_index]['goods_id'] = $row['goods_id'];//配件的商品ID
             $arr[$temp_index]['goods_name'] = $row['goods_name'];//配件的名称
-            $arr[$temp_index]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];//配件显示的名称
+            $arr[$temp_index]['short_name'] = config('shop.goods_name_length') > 0 ?
+                sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];//配件显示的名称
             $arr[$temp_index]['fittings_price'] = price_format($row['goods_price']);//配件价格
             $arr[$temp_index]['shop_price'] = price_format($row['shop_price']);//配件原价格
             $arr[$temp_index]['goods_thumb'] = get_image_path($row['goods_thumb']);

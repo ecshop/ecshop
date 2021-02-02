@@ -16,7 +16,7 @@ class SitemapsController extends InitController
         } else {
             $site_url = rtrim($ecs->url(), '/');
             $sitemap = new sitemap;
-            $config = unserialize($_CFG['sitemap']);
+            $config = unserialize(config('shop.sitemap'));
             $item = array(
                 'loc' => "$site_url/",
                 'lastmod' => local_date('Y-m-d'),

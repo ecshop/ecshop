@@ -20,7 +20,7 @@ class GroupBuyController extends InitController
         $count = group_buy_count();
         if ($count > 0) {
             /* 取得每页记录数 */
-            $size = isset($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
+            $size = intval(config('shop.page_size')) > 0 ? intval(config('shop.page_size')) : 10;
 
             /* 计算总页数 */
             $page_count = ceil($count / $size);
@@ -41,7 +41,7 @@ class GroupBuyController extends InitController
         }
 
         /* 模板赋值 */
-        $this->assign('cfg', $_CFG);
+        $this->assign('cfg', config('shop'));
         $this->assign_template();
         $position = $this->assign_ur_here();
         $this->assign('page_title', $position['title']);    // 页面标题
@@ -50,7 +50,7 @@ class GroupBuyController extends InitController
         $this->assign('helps', get_shop_help());       // 网店帮助
         $this->assign('top_goods', get_top10());           // 销售排行
         $this->assign('promotion_info', get_promotion_info());
-        $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typegroup_buy.xml" : 'feed.php?type=group_buy'); // RSS URL
+        $this->assign('feed_url', (config('shop.rewrite') == 1) ? "feed-typegroup_buy.xml" : 'feed.php?type=group_buy'); // RSS URL
 
         $this->assign_dynamic('group_buy_list');
 
@@ -93,7 +93,7 @@ class GroupBuyController extends InitController
         $this->assign('specification', $properties['spe']); // 商品规格
 
         //模板赋值
-        $this->assign('cfg', $_CFG);
+        $this->assign('cfg', config('shop'));
         $this->assign_template();
 
         $position = $this->assign_ur_here(0, $goods['goods_name']);
@@ -262,8 +262,8 @@ class GroupBuyController extends InitController
             $group_buy = array_merge($group_buy, $ext_info);
 
             /* 格式化时间 */
-            $group_buy['formated_start_date'] = local_date($GLOBALS['_CFG']['time_format'], $group_buy['start_date']);
-            $group_buy['formated_end_date'] = local_date($GLOBALS['_CFG']['time_format'], $group_buy['end_date']);
+            $group_buy['formated_start_date'] = local_date(config('shop.time_format'), $group_buy['start_date']);
+            $group_buy['formated_end_date'] = local_date(config('shop.time_format'), $group_buy['end_date']);
 
             /* 格式化保证金 */
             $group_buy['formated_deposit'] = price_format($group_buy['deposit'], false);

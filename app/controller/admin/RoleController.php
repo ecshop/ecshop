@@ -40,7 +40,7 @@ class RoleController extends InitController
         header("Cache-Control: no-cache, must-revalidate");
         header("Pragma: no-cache");
 
-        if ((intval($_CFG['captcha']) & CAPTCHA_ADMIN) && gd_version() > 0) {
+        if ((intval(config('shop.captcha')) & CAPTCHA_ADMIN) && gd_version() > 0) {
             $this->assign('gd_version', gd_version());
             $this->assign('random', mt_rand());
         }
@@ -82,7 +82,7 @@ class RoleController extends InitController
     {
         /* 检查权限 */
         admin_priv('admin_manage');
-        include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/priv_action.php');
+        include_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/priv_action.php');
 
         $priv_str = '';
 
@@ -155,7 +155,7 @@ class RoleController extends InitController
     /*------------------------------------------------------ */
     public function editAction()
     {
-        include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/priv_action.php');
+        include_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/priv_action.php');
         $_REQUEST['id'] = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
         /* 获得该管理员的权限 */
         $priv_str = $db->getOne("SELECT action_list FROM " . table('role') . " WHERE role_id = '$_GET[id]'");

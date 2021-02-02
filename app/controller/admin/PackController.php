@@ -12,7 +12,7 @@ class PackController extends InitController
         parent::initialize();
 
 
-        $image = new cls_image($_CFG['bgcolor']);
+        $image = new cls_image(config('shop.bgcolor'));
 
         $exc = new exchange(table("pack"), $db, 'pack_id', 'pack_name');
     }

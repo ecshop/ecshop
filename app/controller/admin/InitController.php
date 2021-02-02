@@ -2,6 +2,7 @@
 
 namespace app\controller\admin;
 
+use app\service\ShopService;
 use app\support\Controller;
 
 /**
@@ -60,7 +61,8 @@ class InitController extends Controller
         }
 
         /* 载入系统参数 */
-        $_CFG = load_config();
+        $shopService = new ShopService();
+        config(['config' => $shopService->getConfig()]);
 
         // TODO : 登录部分准备拿出去做，到时候把以下操作一起挪过去
         function captchaAction()
@@ -73,11 +75,11 @@ class InitController extends Controller
             exit;
         }
 
-        require(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/common.php');
-        require(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/log_action.php');
+        require(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/common.php');
+        require(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/log_action.php');
 
-        if (file_exists(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/' . basename(PHP_SELF))) {
-            include(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/' . basename(PHP_SELF));
+        if (file_exists(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/' . basename(PHP_SELF))) {
+            include(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/' . basename(PHP_SELF));
         }
 
         if (!file_exists('../temp/caches')) {
@@ -92,7 +94,7 @@ class InitController extends Controller
 
         clearstatcache();
 
-        if (preg_replace('/(?:\.|\s+)[a-z]*$/i', '', $_CFG['ecs_version']) != preg_replace('/(?:\.|\s+)[a-z]*$/i', '', VERSION)
+        if (preg_replace('/(?:\.|\s+)[a-z]*$/i', '', config('shop.ecs_version')) != preg_replace('/(?:\.|\s+)[a-z]*$/i', '', VERSION)
             && file_exists('../upgrade/index.php')) {
             // 转到升级文件
             return redirect("../upgrade/index.php");
@@ -108,13 +110,9 @@ class InitController extends Controller
         $smarty->force_compile = true;
 
         $this->assign('lang', $_LANG);
-        $this->assign('help_open', $_CFG['help_open']);
+        $this->assign('help_open', config('shop.help_open'));
 
-        if (isset($_CFG['enable_order_check'])) {  // 为了从旧版本顺利升级到2.5.0
-            $this->assign('enable_order_check', $_CFG['enable_order_check']);
-        } else {
-            $this->assign('enable_order_check', 0);
-        }
+        $this->assign('enable_order_check', config('shop.enable_order_check'));
 
         /* 验证管理员身份 */
         if ((!isset($_SESSION['admin_id']) || intval($_SESSION['admin_id']) <= 0) &&
@@ -142,7 +140,7 @@ class InitController extends Controller
                     exit;
                 } else {
                     // 检查密码是否正确
-                    if (md5($row['password'] . $_CFG['hash_code'] . $row['add_time']) == $_COOKIE['ECSCP']['admin_pass']) {
+                    if (md5($row['password'] . config('shop.hash_code') . $row['add_time']) == $_COOKIE['ECSCP']['admin_pass']) {
                         !isset($row['last_time']) && $row['last_time'] = '';
                         set_admin_session($row['user_id'], $row['user_name'], $row['action_list'], $row['last_time']);
 
@@ -174,7 +172,7 @@ class InitController extends Controller
             }
         }
 
-        $this->assign('token', $_CFG['token']);
+        $this->assign('token', config('shop.token'));
 
         if ($_REQUEST['act'] != 'login' && $_REQUEST['act'] != 'signin' &&
             $_REQUEST['act'] != 'forget_pwd' && $_REQUEST['act'] != 'reset_pwd' && $_REQUEST['act'] != 'check_order') {

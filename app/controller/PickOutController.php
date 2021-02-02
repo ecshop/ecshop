@@ -199,7 +199,7 @@ class PickOutController extends InitController
 
             $goods[$idx]['id'] = $row['goods_id'];
             $goods[$idx]['name'] = $row['goods_name'];
-            $goods[$idx]['short_name'] = $_CFG['goods_name_length'] > 0 ? sub_str($row['goods_name'], $_CFG['goods_name_length']) : $row['goods_name'];
+            $goods[$idx]['short_name'] = config('shop.goods_name_length') > 0 ? sub_str($row['goods_name'], config('shop.goods_name_length')) : $row['goods_name'];
             $goods[$idx]['market_price'] = $row['market_price'];
             $goods[$idx]['shop_price'] = price_format($row['shop_price']);
             $goods[$idx]['promote_price'] = $promote_price > 0 ? price_format($promote_price) : '';

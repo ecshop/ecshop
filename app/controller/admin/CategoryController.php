@@ -435,7 +435,7 @@ class CategoryController extends InitController
                 $vieworder += 2;
                 $catname = $db->getOne("SELECT cat_name FROM " . table('category') . " WHERE cat_id = '$id'");
                 //显示在自定义导航栏中
-                $_CFG['rewrite'] = 0;
+                config('shop.rewrite') = 0;
                 $uri = build_uri('category', array('cid' => $id), $catname);
 
                 $nid = $db->getOne("SELECT id FROM " . table('nav') . " WHERE ctype = 'c' AND cid = '" . $id . "' AND type = 'middle'");

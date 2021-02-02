@@ -220,7 +220,7 @@ class FavourableController extends InitController
         $this->assign('act_range_ext', $act_range_ext);
 
         /* 赋值时间控件的语言 */
-        $this->assign('cfg_lang', $_CFG['lang']);
+        $this->assign('cfg_lang', config('shop.lang'));
 
         /* 显示模板 */
         if ($is_add) {

@@ -8,7 +8,7 @@ if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
-$shipping_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/shipping/post_mail.php';
+$shipping_lang = ROOT_PATH . 'languages/' . config('shop.lang') . '/shipping/post_mail.php';
 if (file_exists($shipping_lang)) {
     include_once($shipping_lang);
 }

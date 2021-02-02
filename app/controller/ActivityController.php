@@ -11,8 +11,8 @@ class ActivityController extends InitController
     {
 
         /* 载入语言文件 */
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/shopping_flow.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/user.php');
     }
 
     public function indexAction()
@@ -105,7 +105,7 @@ class ActivityController extends InitController
         $this->assign('helps', get_shop_help());       // 网店帮助
         $this->assign('lang', $_LANG);
 
-        $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typeactivity.xml" : 'feed.php?type=activity'); // RSS URL
+        $this->assign('feed_url', (config('shop.rewrite') == 1) ? "feed-typeactivity.xml" : 'feed.php?type=activity'); // RSS URL
         return $this->display('activity.dwt');
     }
 }

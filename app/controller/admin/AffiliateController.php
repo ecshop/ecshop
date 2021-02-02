@@ -182,7 +182,7 @@ class AffiliateController extends InitController
 
     public function get_affiliate()
     {
-        $config = unserialize($GLOBALS['_CFG']['affiliate']);
+        $config = unserialize(config('shop.affiliate'));
         empty($config) && $config = array();
 
         return $config;

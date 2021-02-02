@@ -20,7 +20,7 @@ class SitemapController extends InitController
         //-- 设置更新频率
         /*------------------------------------------------------ */
         assign_query_info();
-        $config = unserialize($_CFG['sitemap']);
+        $config = unserialize(config('shop.sitemap'));
         $this->assign('config', $config);
         $this->assign('ur_here', $_LANG['sitemap']);
         $this->assign('arr_changefreq', array(1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1));

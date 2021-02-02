@@ -54,12 +54,12 @@ if ($action == 'sms_sign') {
         if (!empty($row['id'])) {
             $sms_sign = unserialize($row['value']);
             $t = array();
-            if (is_array($sms_sign) && isset($sms_sign[$_CFG['ent_id']])) {
-                foreach ($sms_sign[$_CFG['ent_id']] as $key => $val) {
-                    $t[$_CFG['ent_id']][$key]['key'] = $key;
-                    $t[$_CFG['ent_id']][$key]['value'] = $val;
+            if (is_array($sms_sign) && isset($sms_sign[config('shop.ent_id')])) {
+                foreach ($sms_sign[config('shop.ent_id')] as $key => $val) {
+                    $t[config('shop.ent_id')][$key]['key'] = $key;
+                    $t[config('shop.ent_id')][$key]['value'] = $val;
                 }
-                $this->assign('sms_sign', $t[$_CFG['ent_id']]);
+                $this->assign('sms_sign', $t[config('shop.ent_id')]);
             }
         } else {
             shop_config_update('sms_sign', '');
@@ -93,8 +93,8 @@ if ($action == 'sms_sign_add') {
             $sms_sign = unserialize($row['value']);
             $this->assign('sms_sign', $sms_sign);
             $data = array();
-            $data['shopexid'] = $_CFG['ent_id'];
-            $data['passwd'] = $_CFG['ent_ac'];
+            $data['shopexid'] = config('shop.ent_id');
+            $data['passwd'] = config('shop.ent_ac');
 
             $content_t = $content_y = trim($_POST['sms_sign']);
             if (EC_CHARSET != 'utf-8') {
@@ -106,8 +106,8 @@ if ($action == 'sms_sign_add') {
             $secret = 't66moqjixb2nntiy2io2';
             $c = new prism_client($url, $key, $secret);
             $params = array(
-                'shopexid' => $_CFG['ent_id'],
-                'passwd' => $_CFG['ent_ac'],
+                'shopexid' => config('shop.ent_id'),
+                'passwd' => config('shop.ent_ac'),
                 'content' => $content_t,
                 'content-type' => 'application/x-www-form-urlencoded'
             );
@@ -115,9 +115,9 @@ if ($action == 'sms_sign_add') {
             $result = json_decode($result, true);
             if ($result['res'] == 'succ' && !empty($result['data']['extend_no'])) {
                 $extend_no = $result['data']['extend_no'];
-                $sms_sign[$_CFG['ent_id']][$extend_no] = $content_y;
+                $sms_sign[config('shop.ent_id')][$extend_no] = $content_y;
                 $sms_sign = serialize($sms_sign);
-                if (empty($_CFG['default_sms_sign'])) {
+                if (empty(config('shop.default_sms_sign'))) {
                     shop_config_update('default_sms_sign', $content_y);
                 }
                 shop_config_update('sms_sign', $sms_sign);
@@ -155,10 +155,10 @@ if ($action == 'sms_sign_update') {
             $this->assign('sms_sign', $sms_sign);
             $extend_no = $_POST['extend_no'];
 
-            $content_t = $content_y = $sms_sign[$_CFG['ent_id']][$extend_no];
+            $content_t = $content_y = $sms_sign[config('shop.ent_id')][$extend_no];
             $new_content_t = $new_content_y = $_POST['new_sms_sign'];
 
-            if (!isset($sms_sign[$_CFG['ent_id']][$extend_no]) || empty($extend_no)) {
+            if (!isset($sms_sign[config('shop.ent_id')][$extend_no]) || empty($extend_no)) {
                 sys_msg($_LANG['error_smg'], 1, array(), false);
             }
             if (EC_CHARSET != 'utf-8') {
@@ -170,8 +170,8 @@ if ($action == 'sms_sign_update') {
             $secret = 't66moqjixb2nntiy2io2';
             $c = new prism_client($url, $key, $secret);
             $params = array(
-                'shopexid' => $_CFG['ent_id'],
-                'passwd' => $_CFG['ent_ac'],
+                'shopexid' => config('shop.ent_id'),
+                'passwd' => config('shop.ent_ac'),
                 'old_content' => $content_t,
                 'new_content' => $new_content_t,
                 'content-type' => 'application/x-www-form-urlencoded'
@@ -181,11 +181,11 @@ if ($action == 'sms_sign_update') {
 
             if ($result['res'] == 'succ' && !empty($result['data']['new_extend_no'])) {
                 $new_extend_no = $result['data']['new_extend_no'];
-                unset($sms_sign[$_CFG['ent_id']][$extend_no]);
-                $sms_sign[$_CFG['ent_id']][$new_extend_no] = $new_content_y;
+                unset($sms_sign[config('shop.ent_id')][$extend_no]);
+                $sms_sign[config('shop.ent_id')][$new_extend_no] = $new_content_y;
 
                 $sms_sign = serialize($sms_sign);
-                if (empty($_CFG['default_sms_sign'])) {
+                if (empty(config('shop.default_sms_sign'))) {
                     shop_config_update('default_sms_sign', $new_content_y);
                 }
                 shop_config_update('sms_sign', $sms_sign);
@@ -223,12 +223,12 @@ if ($action == 'sms_sign_default') {
             $sms_sign = unserialize($row['value']);
             $this->assign('sms_sign', $sms_sign);
             $data = array();
-            $data['shopexid'] = $_CFG['ent_id'];
-            $data['passwd'] = $_CFG['ent_ac'];
+            $data['shopexid'] = config('shop.ent_id');
+            $data['passwd'] = config('shop.ent_ac');
 
             $extend_no = $_POST['extend_no'];
 
-            $sms_sign_default = $sms_sign[$_CFG['ent_id']][$extend_no];
+            $sms_sign_default = $sms_sign[config('shop.ent_id')][$extend_no];
             if (!empty($sms_sign_default)) {
                 shop_config_update('default_sms_sign', $sms_sign_default);
                 /* 清除缓存 */

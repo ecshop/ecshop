@@ -72,7 +72,7 @@ class SnatchController extends InitController
         $this->assign('snatch_list', get_snatch_list());     //所有有效的夺宝奇兵列表
         $this->assign('price_list', get_price_list($id));
         $this->assign('promotion_info', get_promotion_info());
-        $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typesnatch.xml" : 'feed.php?type=snatch'); // RSS URL
+        $this->assign('feed_url', (config('shop.rewrite') == 1) ? "feed-typesnatch.xml" : 'feed.php?type=snatch'); // RSS URL
         return $this->display('snatch.dwt');
 
         exit;
@@ -289,7 +289,7 @@ class SnatchController extends InitController
 
             $sql = 'SELECT pay_points FROM ' . table('users') . " WHERE user_id = '$_SESSION[user_id]'";
             $pay_points = $GLOBALS['db']->getOne($sql);
-            $pay_points = $pay_points . $GLOBALS['_CFG']['integral_name'];
+            $pay_points = $pay_points . config('shop.integral_name');
         }
 
         /* 活动结束时间 */
@@ -383,7 +383,7 @@ class SnatchController extends InitController
             $goods['formated_promote_price'] = ($promote_price > 0) ? price_format($promote_price) : '';
             $goods['goods_thumb'] = get_image_path($goods['goods_thumb']);
             $goods['url'] = build_uri('goods', array('gid' => $goods['goods_id']), $goods['goods_name']);
-            $goods['start_time'] = local_date($GLOBALS['_CFG']['time_format'], $goods['start_time']);
+            $goods['start_time'] = local_date(config('shop.time_format'), $goods['start_time']);
 
             $info = unserialize($goods['ext_info']);
             if ($info) {
@@ -397,7 +397,7 @@ class SnatchController extends InitController
             }
             /* 将结束日期格式化为格林威治标准时间时间戳 */
             $goods['gmt_end_time'] = $goods['end_time'];
-            $goods['end_time'] = local_date($GLOBALS['_CFG']['time_format'], $goods['end_time']);
+            $goods['end_time'] = local_date(config('shop.time_format'), $goods['end_time']);
             $goods['snatch_time'] = sprintf($GLOBALS['_LANG']['snatch_start_time'], $goods['start_time'], $goods['end_time']);
 
             return $goods;

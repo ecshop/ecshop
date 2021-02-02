@@ -339,8 +339,8 @@ class MessageController extends InitController
         $row = $GLOBALS['db']->getAll($sql);
 
         foreach ($row as $key => $val) {
-            $row[$key]['sent_time'] = local_date($GLOBALS['_CFG']['time_format'], $val['sent_time']);
-            $row[$key]['read_time'] = local_date($GLOBALS['_CFG']['time_format'], $val['read_time']);
+            $row[$key]['sent_time'] = local_date(config('shop.time_format'), $val['sent_time']);
+            $row[$key]['read_time'] = local_date(config('shop.time_format'), $val['read_time']);
         }
 
         $arr = array('item' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);

@@ -11,7 +11,7 @@ class UserAccountManageController extends InitController
     {
         parent::initialize();
 
-        require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/statistic.php');
         $this->assign('lang', $_LANG);
 
         /* 权限判断 */
@@ -173,7 +173,7 @@ class UserAccountManageController extends InitController
 
         $count = count($order_list);
         for ($i = 0; $i < $count; $i++) {
-            $order_list[$i]['add_time'] = local_date($GLOBALS['_CFG']['date_format'], $order_list[$i]['add_time']);
+            $order_list[$i]['add_time'] = local_date(config('shop.date_format'), $order_list[$i]['add_time']);
         }
 
         $arr = array('order_list' => $order_list, 'filter' => $filter,

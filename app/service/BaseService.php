@@ -154,24 +154,24 @@ class BaseService
     public function send_mail($name, $email, $subject, $content, $type = 0, $notification = false)
     {
         /* 如果邮件编码不是EC_CHARSET，创建字符集转换对象，转换编码 */
-        if ($GLOBALS['_CFG']['mail_charset'] != EC_CHARSET) {
-            $name = ecs_iconv(EC_CHARSET, $GLOBALS['_CFG']['mail_charset'], $name);
-            $subject = ecs_iconv(EC_CHARSET, $GLOBALS['_CFG']['mail_charset'], $subject);
-            $content = ecs_iconv(EC_CHARSET, $GLOBALS['_CFG']['mail_charset'], $content);
-            $shop_name = ecs_iconv(EC_CHARSET, $GLOBALS['_CFG']['mail_charset'], $GLOBALS['_CFG']['shop_name']);
+        if (config('shop.mail_charset') != EC_CHARSET) {
+            $name = ecs_iconv(EC_CHARSET, config('shop.mail_charset'), $name);
+            $subject = ecs_iconv(EC_CHARSET, config('shop.mail_charset'), $subject);
+            $content = ecs_iconv(EC_CHARSET, config('shop.mail_charset'), $content);
+            $shop_name = ecs_iconv(EC_CHARSET, config('shop.mail_charset'), config('shop.shop_name'));
         }
-        $charset = $GLOBALS['_CFG']['mail_charset'];
+        $charset = config('shop.mail_charset');
         /**
          * 使用mail函数发送邮件
          */
-        if ($GLOBALS['_CFG']['mail_service'] == 0 && function_exists('mail')) {
+        if (config('shop.mail_service') == 0 && function_exists('mail')) {
             /* 邮件的头部信息 */
             $content_type = ($type == 0) ? 'Content-Type: text/plain; charset=' . $charset : 'Content-Type: text/html; charset=' . $charset;
             $headers = array();
-            $headers[] = 'From: "' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
+            $headers[] = 'From: "' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . config('shop.smtp_mail') . '>';
             $headers[] = $content_type . '; format=flowed';
             if ($notification) {
-                $headers[] = 'Disposition-Notification-To: ' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
+                $headers[] = 'Disposition-Notification-To: ' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . config('shop.smtp_mail') . '>';
             }
 
             $res = @mail($email, '=?' . $charset . '?B?' . base64_encode($subject) . '?=', $content, implode("\r\n", $headers));
@@ -195,20 +195,20 @@ class BaseService
             $headers = array();
             $headers[] = 'Date: ' . gmdate('D, j M Y H:i:s') . ' +0000';
             $headers[] = 'To: "' . '=?' . $charset . '?B?' . base64_encode($name) . '?=' . '" <' . $email . '>';
-            $headers[] = 'From: "' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
+            $headers[] = 'From: "' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . config('shop.smtp_mail') . '>';
             $headers[] = 'Subject: ' . '=?' . $charset . '?B?' . base64_encode($subject) . '?=';
             $headers[] = $content_type . '; format=flowed';
             $headers[] = 'Content-Transfer-Encoding: base64';
             $headers[] = 'Content-Disposition: inline';
             if ($notification) {
-                $headers[] = 'Disposition-Notification-To: ' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
+                $headers[] = 'Disposition-Notification-To: ' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . config('shop.smtp_mail') . '>';
             }
 
             /* 获得邮件服务器的参数设置 */
-            $params['host'] = $GLOBALS['_CFG']['smtp_host'];
-            $params['port'] = $GLOBALS['_CFG']['smtp_port'];
-            $params['user'] = $GLOBALS['_CFG']['smtp_user'];
-            $params['pass'] = $GLOBALS['_CFG']['smtp_pass'];
+            $params['host'] = config('shop.smtp_host');
+            $params['port'] = config('shop.smtp_port');
+            $params['user'] = config('shop.smtp_user');
+            $params['pass'] = config('shop.smtp_pass');
 
             if (empty($params['host']) || empty($params['port'])) {
                 // 如果没有设置主机和端口直接返回 false
@@ -228,7 +228,7 @@ class BaseService
 
                 $send_params['recipients'] = $email;
                 $send_params['headers'] = $headers;
-                $send_params['from'] = $GLOBALS['_CFG']['smtp_mail'];
+                $send_params['from'] = config('shop.smtp_mail');
                 $send_params['body'] = $content;
 
                 if (!isset($smtp)) {
@@ -437,7 +437,7 @@ class BaseService
         static $enabled_gzip = null;
 
         if ($enabled_gzip === null) {
-            $enabled_gzip = ($GLOBALS['_CFG']['enable_gzip'] && function_exists('ob_gzhandler'));
+            $enabled_gzip = (config('shop.enable_gzip') && function_exists('ob_gzhandler'));
         }
 
         return $enabled_gzip;

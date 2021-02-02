@@ -82,9 +82,9 @@ class GetPasswordController extends InitController
 
                 $this->assign('user_name', $admin_username);
                 $this->assign('reset_email', $reset_email);
-                $this->assign('shop_name', $_CFG['shop_name']);
-                $this->assign('send_date', local_date($_CFG['date_format']));
-                $this->assign('sent_date', local_date($_CFG['date_format']));
+                $this->assign('shop_name', config('shop.shop_name'));
+                $this->assign('send_date', local_date(config('shop.date_format')));
+                $this->assign('sent_date', local_date(config('shop.date_format')));
 
                 $content = $smarty->fetch('str:' . $template['template_content']);
 

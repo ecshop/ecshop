@@ -56,9 +56,8 @@ class InitController extends Controller
 
         if (config('shop.shop_closed') == 1) {
             /* 商店关闭了，输出关闭的消息 */
-            header('Content-type: text/html; charset=' . EC_CHARSET);
-
-            die('<div style="margin: 150px; text-align: center; font-size: 14px"><p>' . $_LANG['shop_closed'] . '</p><p>' . config('shop.close_comment') . '</p></div>');
+            response('<div style="margin: 150px; text-align: center; font-size: 14px"><p>' . lang('shop_closed') . '</p><p>' . config('shop.close_comment') . '</p></div>')->send();
+            exit;
         }
 
         if (is_spider()) {
@@ -67,7 +66,10 @@ class InitController extends Controller
                 define('INIT_NO_USERS', true);
                 /* 整合UC后，如果是蜘蛛访问，初始化UC需要的常量 */
                 if (config('shop.integrate_code') == 'ucenter') {
-                    $user = init_users();
+                    bind('user', function () {
+                        return init_users();
+                    });
+                    $this->user = init_users();
                 }
             }
             $_SESSION = array();
@@ -102,7 +104,7 @@ class InitController extends Controller
             $smarty->direct_output = true;
             $smarty->force_compile = true;
 
-            $this->assign('lang', $_LANG);
+            $this->assign('lang', lang());
             $this->assign('ecs_charset', EC_CHARSET);
             if (!empty(config('shop.stylename'))) {
                 $this->assign('ecs_css_path', 'themes/' . config('shop.template') . '/style_' . config('shop.stylename') . '.css');
@@ -117,7 +119,7 @@ class InitController extends Controller
 
             if (!isset($_SESSION['user_id'])) {
                 /* 获取投放站点的名称 */
-                $site_name = isset($_GET['from']) ? htmlspecialchars($_GET['from']) : addslashes($_LANG['self_site']);
+                $site_name = isset($_GET['from']) ? htmlspecialchars($_GET['from']) : addslashes(lang('self_site'));
                 $from_ad = !empty($_GET['ad_id']) ? intval($_GET['ad_id']) : 0;
 
                 $_SESSION['from_ad'] = $from_ad; // 用户点击的广告ID
@@ -189,7 +191,6 @@ class InitController extends Controller
 
     protected function assign_template($ctype = '', $catlist = array())
     {
-
         $this->assign('image_width', config('shop.image_width'));
         $this->assign('image_height', config('shop.image_height'));
         $this->assign('points_name', config('shop.integral_name'));
@@ -199,7 +200,7 @@ class InitController extends Controller
         $this->assign('msn', explode(',', config('shop.msn')));
         $this->assign('skype', explode(',', config('shop.skype')));
         $this->assign('stats_code', config('shop.stats_code'));
-        $this->assign('copyright', sprintf($GLOBALS['_LANG']['copyright'], date('Y'), config('shop.shop_name')));
+        $this->assign('copyright', sprintf(lang('copyright'), date('Y'), config('shop.shop_name')));
         $this->assign('shop_name', config('shop.shop_name'));
         $this->assign('service_email', config('shop.service_email'));
         $this->assign('service_phone', config('shop.service_phone'));
@@ -240,7 +241,7 @@ class InitController extends Controller
 
         /* 初始化“页面标题”和“当前位置” */
         $page_title = config('shop.shop_title');
-        $ur_here = '<a href=".">' . $GLOBALS['_LANG']['home'] . '</a>';
+        $ur_here = '<a href=".">' . lang('home') . '</a>';
 
         /* 根据文件名分别处理中间的部分 */
         if ($filename != 'index') {
@@ -282,33 +283,29 @@ class InitController extends Controller
             else {
                 /* 团购 */
                 if ('group_buy' == $filename) {
-                    $page_title = $GLOBALS['_LANG']['group_buy_goods'] . '_' . $page_title;
+                    $page_title = lang('group_buy_goods') . '_' . $page_title;
                     $args = array('gbid' => '0');
-                    $ur_here .= ' <code>&gt;</code> <a href="group_buy.php">' .
-                        $GLOBALS['_LANG']['group_buy_goods'] . '</a>';
+                    $ur_here .= ' <code>&gt;</code> <a href="group_buy.php">' . lang('group_buy_goods') . '</a>';
                 } /* 拍卖 */
                 elseif ('auction' == $filename) {
-                    $page_title = $GLOBALS['_LANG']['auction'] . '_' . $page_title;
+                    $page_title = lang('auction') . '_' . $page_title;
                     $args = array('auid' => '0');
-                    $ur_here .= ' <code>&gt;</code> <a href="auction.php">' .
-                        $GLOBALS['_LANG']['auction'] . '</a>';
+                    $ur_here .= ' <code>&gt;</code> <a href="auction.php">' . lang('auction') . '</a>';
                 } /* 夺宝 */
                 elseif ('snatch' == $filename) {
-                    $page_title = $GLOBALS['_LANG']['snatch'] . '_' . $page_title;
+                    $page_title = lang('snatch') . '_' . $page_title;
                     $args = array('id' => '0');
-                    $ur_here .= ' <code> &gt; </code><a href="snatch.php">' . $GLOBALS['_LANG']['snatch_list'] . '</a>';
+                    $ur_here .= ' <code> &gt; </code><a href="snatch.php">' . lang('snatch_list') . '</a>';
                 } /* 批发 */
                 elseif ('wholesale' == $filename) {
-                    $page_title = $GLOBALS['_LANG']['wholesale'] . '_' . $page_title;
+                    $page_title = lang('wholesale') . '_' . $page_title;
                     $args = array('wsid' => '0');
-                    $ur_here .= ' <code>&gt;</code> <a href="wholesale.php">' .
-                        $GLOBALS['_LANG']['wholesale'] . '</a>';
+                    $ur_here .= ' <code>&gt;</code> <a href="wholesale.php">' . lang('wholesale') . '</a>';
                 } /* 积分兑换 */
                 elseif ('exchange' == $filename) {
-                    $page_title = $GLOBALS['_LANG']['exchange'] . '_' . $page_title;
+                    $page_title = lang('exchange') . '_' . $page_title;
                     $args = array('wsid' => '0');
-                    $ur_here .= ' <code>&gt;</code> <a href="exchange.php">' .
-                        $GLOBALS['_LANG']['exchange'] . '</a>';
+                    $ur_here .= ' <code>&gt;</code> <a href="exchange.php">' . lang('exchange') . '</a>';
                 }
                 /* 其他的在这里补充 */
             }
@@ -385,14 +382,14 @@ class InitController extends Controller
                 $msg['back_url'] = $hrefs['0'];
             }
         } else {
-            $link = empty($links) ? $GLOBALS['_LANG']['back_up_page'] : $links;
+            $link = empty($links) ? lang('back_up_page') : $links;
             $href = empty($hrefs) ? 'javascript:history.back()' : $hrefs;
             $msg['url_info'][$link] = $href;
             $msg['back_url'] = $href;
         }
 
         $msg['type'] = $type;
-        $position = $this->assign_ur_here(0, $GLOBALS['_LANG']['sys_msg']);
+        $position = $this->assign_ur_here(0, lang('sys_msg'));
         $this->assign('page_title', $position['title']);   // 页面标题
         $this->assign('ur_here', $position['ur_here']); // 当前位置
 

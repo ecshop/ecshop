@@ -1755,10 +1755,8 @@ class CommonService
      */
     public function user_uc_call($func, $params = null)
     {
-        if (isset(config('shop.integrate_code')) && config('shop.integrate_code') == 'ucenter') {
+        if (config('shop.integrate_code') == 'ucenter') {
             restore_error_handler();
-            if (!function_exists($func)) {
-            }
 
             $res = call_user_func_array($func, $params);
 

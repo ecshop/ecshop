@@ -332,7 +332,7 @@ class MainService
                 break;
         }
         /* 分页样式 */
-        $pager['styleid'] = isset(config('shop.page_style')) ? intval(config('shop.page_style')) : 0;
+        $pager['styleid'] = intval(config('shop.page_style'));
 
         $page_prev = ($page > 1) ? $page - 1 : 1;
         $page_next = ($page < $page_count) ? $page + 1 : $page_count;
@@ -439,7 +439,7 @@ class MainService
             $page = $page_count;
         }
         /* 分页样式 */
-        $pager['styleid'] = isset(config('shop.page_style')) ? intval(config('shop.page_style')) : 0;
+        $pager['styleid'] = intval(config('shop.page_style'));
 
         $page_prev = ($page > 1) ? $page - 1 : 1;
         $page_next = ($page < $page_count) ? $page + 1 : $page_count;
@@ -623,71 +623,6 @@ class MainService
     }
 
     /**
-     * 判断是否为搜索引擎蜘蛛
-     *
-     * @access  public
-     * @return  string
-     */
-    public function is_spider($record = true)
-    {
-        static $spider = null;
-
-        if ($spider !== null) {
-            return $spider;
-        }
-
-        if (empty($_SERVER['HTTP_USER_AGENT'])) {
-            $spider = '';
-
-            return '';
-        }
-
-        $searchengine_bot = array(
-            'googlebot',
-            'mediapartners-google',
-            'baiduspider+',
-            'msnbot',
-            'yodaobot',
-            'yahoo! slurp;',
-            'yahoo! slurp china;',
-            'iaskspider',
-            'sogou web spider',
-            'sogou push spider'
-        );
-
-        $searchengine_name = array(
-            'GOOGLE',
-            'GOOGLE ADSENSE',
-            'BAIDU',
-            'MSN',
-            'YODAO',
-            'YAHOO',
-            'Yahoo China',
-            'IASK',
-            'SOGOU',
-            'SOGOU'
-        );
-
-        $spider = strtolower($_SERVER['HTTP_USER_AGENT']);
-
-        foreach ($searchengine_bot as $key => $value) {
-            if (strpos($spider, $value) !== false) {
-                $spider = $searchengine_name[$key];
-
-                if ($record === true) {
-                    $GLOBALS['db']->autoReplace(table('searchengine'), array('date' => local_date('Y-m-d'), 'searchengine' => $spider, 'count' => 1), array('count' => 1));
-                }
-
-                return $spider;
-            }
-        }
-
-        $spider = '';
-
-        return '';
-    }
-
-    /**
      * 获得客户端的操作系统
      *
      * @access  private
@@ -773,7 +708,7 @@ class MainService
      */
     public function visit_stats()
     {
-        if (isset(config('shop.visit_stats')) && config('shop.visit_stats') == 'off') {
+        if (config('shop.visit_stats') == 'off') {
             return;
         }
         $time = gmtime();
@@ -1168,7 +1103,7 @@ class MainService
             }
         }
         /* 分页样式 */
-        //$pager['styleid'] = isset(config('shop.page_style'))? intval(config('shop.page_style')) : 0;
+        //$pager['styleid'] = intval(config('shop.page_style'));
         $pager['page'] = $page;
         $pager['size'] = $size;
         $pager['record_count'] = $count;

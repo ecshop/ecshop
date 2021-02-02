@@ -1,23 +1,21 @@
 <?php
 
-namespace app\service;
+namespace app\service\article;
 
 /**
  * 文章及文章分类
  * Class ArticleService
- * @package app\service
+ * @package app\service\article
  */
 class ArticleService
 {
     /**
      * 获得文章分类下的文章列表
-     *
-     * @access  public
-     * @param integer $cat_id
-     * @param integer $page
-     * @param integer $size
-     *
-     * @return  array
+     * @param $cat_id
+     * @param int $page
+     * @param int $size
+     * @param string $requirement
+     * @return array
      */
     public function get_cat_articles($cat_id, $page = 1, $size = 20, $requirement = '')
     {

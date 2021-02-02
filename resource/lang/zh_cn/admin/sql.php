@@ -14,3 +14,5 @@ $_LANG['no_data'] = '返回结果为空';
 
 /*JS 语言项*/
 $_LANG['js_languages']['sql_not_null'] = 'SQL语句为空';
+
+return $_LANG;

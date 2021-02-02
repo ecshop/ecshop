@@ -66,3 +66,5 @@ $_LANG['js_languages']['not_allow_add'] = '系统保留分类，不允许在该�
 $_LANG['js_languages']['drop_confirm'] = '您确定要删除文章吗？';
 
 $_LANG['all_cat'] = '全部分类';
+
+return $_LANG;

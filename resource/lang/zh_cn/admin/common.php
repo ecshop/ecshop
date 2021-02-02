@@ -332,8 +332,6 @@ $_LANG['href_sort_help'] = '点击对列表排序';
 $_LANG['catname_exist'] = '已存在相同的分类名称!';
 $_LANG['brand_name_exist'] = '已存在相同的品牌名称!';
 
-$_LANG['alipay_login'] = '<a href="https://www.alipay.com/user/login.htm?goto=https%3A%2F%2Fwww.alipay.com%2Fhimalayas%2Fpracticality_profile_edit.htm%3Fmarket_type%3Dfrom_agent_contract%26customer_external_id%3D%2BC4335319945672464113" target="_blank">立即免费申请支付接口权限</a>';
-$_LANG['alipay_look'] = '<a href=\"https://www.alipay.com/himalayas/practicality.htm\" target=\"_blank\">请申请成功后登录支付宝账户查看</a>';
-
-
 $_LANG['04_sms_sign'] = '短信签名';
+
+return $_LANG;

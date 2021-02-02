@@ -40,3 +40,5 @@ $_LANG['back_agency_list'] = '返回办事处列表';
 
 $_LANG['js_languages']['region_exists'] = '该地区已存在';
 $_LANG['js_languages']['no_agencyname'] = '没有填办事处名称';
+
+return $_LANG;

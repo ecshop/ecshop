@@ -197,3 +197,5 @@ $_LANG['js_languages']['good_price_not_number'] = '商品价格不是数值';
 
 /*后台语言项*/
 $_LANG['send_mail_off'] = '自动发送邮件关闭';
+
+return $_LANG;

@@ -16,3 +16,5 @@ $_LANG['ipdel_day_range']['90'] = '90天';
 $_LANG['ipdel_day_range']['180'] = '180天';
 $_LANG['ipdel_day_range']['240'] = '240天';
 $_LANG['ipdel_day_range']['360'] = '360天';
+
+return $_LANG;

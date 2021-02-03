@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Service\ShopService;
 use App\Service\System\CrawlerService;
+use App\Service\System\LicenseService;
 use App\Support\Controller;
 use App\Support\Error;
 use App\Support\Shop;
@@ -169,6 +170,7 @@ class InitController extends Controller
 
     protected function assign_template($ctype = '', $catlist = array())
     {
+        $licenseService = new LicenseService();
         $this->assign('image_width', config('shop.image_width'));
         $this->assign('image_height', config('shop.image_height'));
         $this->assign('points_name', config('shop.integral_name'));
@@ -178,12 +180,12 @@ class InitController extends Controller
         $this->assign('msn', explode(',', config('shop.msn')));
         $this->assign('skype', explode(',', config('shop.skype')));
         $this->assign('stats_code', config('shop.stats_code'));
-        $this->assign('copyright', sprintf(lang('copyright'), date('Y'), config('shop.shop_name')));
+        $this->assign('copyright', sprintf(trans('copyright'), date('Y'), config('shop.shop_name')));
         $this->assign('shop_name', config('shop.shop_name'));
         $this->assign('service_email', config('shop.service_email'));
         $this->assign('service_phone', config('shop.service_phone'));
         $this->assign('shop_address', config('shop.shop_address'));
-        $this->assign('licensed', license_info());
+        $this->assign('licensed', $licenseService->license_info());
         $this->assign('ecs_version', VERSION);
         $this->assign('icp_number', config('shop.icp_number'));
         $this->assign('username', !empty($_SESSION['user_name']) ? $_SESSION['user_name'] : '');

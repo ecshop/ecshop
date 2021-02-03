@@ -9,16 +9,6 @@ class FeedController extends InitController
 {
     public function indexAction()
     {
-        define('INIT_NO_USERS', true);
-        define('INIT_NO_SMARTY', true);
-
-
-        header('Content-Type: application/xml; charset=' . EC_CHARSET);
-        header('Cache-Control: no-cache, must-revalidate');
-        header('Expires: Fri, 14 Mar 1980 20:53:00 GMT');
-        header('Last-Modified: ' . date('r'));
-        header('Pragma: no-cache');
-
         $ver = isset($_REQUEST['ver']) ? $_REQUEST['ver'] : '2.00';
         $cat = isset($_REQUEST['cat']) ? ' AND ' . get_children(intval($_REQUEST['cat'])) : '';
         $brd = isset($_REQUEST['brand']) ? ' AND g.brand_id=' . intval($_REQUEST['brand']) . ' ' : '';

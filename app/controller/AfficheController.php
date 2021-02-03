@@ -9,8 +9,6 @@ class AfficheController extends InitController
 {
     public function indexAction()
     {
-        define('INIT_NO_SMARTY', true);
-
         /* 没有指定广告的id及跳转地址 */
         if (empty($_GET['ad_id'])) {
             return redirect("index.php");

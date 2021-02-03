@@ -9,12 +9,6 @@ class RegionController extends InitController
 {
     public function indexAction()
     {
-        define('INIT_NO_USERS', true);
-        define('INIT_NO_SMARTY', true);
-
-
-        header('Content-type: text/html; charset=' . EC_CHARSET);
-
         $type = !empty($_REQUEST['type']) ? intval($_REQUEST['type']) : 0;
         $parent = !empty($_REQUEST['parent']) ? intval($_REQUEST['parent']) : 0;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\support\sitemap;
+namespace App\Support\sitemap;
 
 class Sitemap
 {

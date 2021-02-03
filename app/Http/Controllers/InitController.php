@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Service\ShopService;
-use App\Service\system\CrawlerService;
-use app\support\Controller;
-use app\support\Error;
-use app\support\Shop;
-use think\facade\Lang;
-use think\facade\Session;
+use App\Service\System\CrawlerService;
+use App\Support\Controller;
+use App\Support\Error;
+use App\Support\Shop;
 
 /**
  * Class InitController

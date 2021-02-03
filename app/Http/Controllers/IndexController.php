@@ -15,7 +15,7 @@ class IndexController extends InitController
      * @param Request $request
      * @return Response
      */
-    public function indexAction(Request $request)
+    public function index(Request $request)
     {
         $this->assign_template();
 

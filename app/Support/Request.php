@@ -1,12 +1,12 @@
 <?php
 
-namespace app\support;
+namespace App\Support;
 
 use think\Request as BaseRequest;
 
 /**
  * Class Request
- * @package app\support
+ * @package App\Support
  */
 class Request extends BaseRequest
 {

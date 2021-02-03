@@ -1,6 +1,6 @@
 <?php
 
-namespace app\support;
+namespace App\Support;
 
 /**
  * SQL语句执行类。在调用该类方法之前，请参看相应方法的说明。

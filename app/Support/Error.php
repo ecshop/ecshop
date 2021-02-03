@@ -1,6 +1,6 @@
 <?php
 
-namespace app\support;
+namespace App\Support;
 
 /**
  * 用户级错误处理类

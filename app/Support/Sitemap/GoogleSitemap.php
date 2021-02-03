@@ -1,10 +1,10 @@
 <?php
 
-namespace app\support\sitemap;
+namespace App\Support\sitemap;
 
 /**
  * Class GoogleSitemap
- * @package app\support\sitemap
+ * @package App\Support\sitemap
  */
 class GoogleSitemap
 {

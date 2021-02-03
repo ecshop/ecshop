@@ -1,6 +1,6 @@
 <?php
 
-namespace app\support;
+namespace App\Support;
 
 /**
  * 对mysql敏感字符串转义

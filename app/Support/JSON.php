@@ -1,6 +1,6 @@
 <?php
 
-namespace app\support;
+namespace App\Support;
 
 /**
  * JSON 类

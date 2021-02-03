@@ -1,6 +1,6 @@
 <?php
 
-namespace app\support\rss;
+namespace App\Support\rss;
 
 class RSSBuilder
 {

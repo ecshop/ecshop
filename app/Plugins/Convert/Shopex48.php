@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Convert;
+
 /**
  * shopex4.8转换程序插件
  */
@@ -28,7 +30,7 @@ if (isset($set_modules) && $set_modules == true) {
 
 /* 类 */
 
-class shopex48
+class Shopex48
 {
     /* 数据库连接 ADOConnection 对象 */
     public $sdb;

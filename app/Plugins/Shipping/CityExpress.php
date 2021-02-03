@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Shipping;
+
 /**
  * 城际快递插件
  */
@@ -51,7 +53,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-class city_express
+class CityExpress
 {
     /*------------------------------------------------------ */
     //-- PUBLIC ATTRIBUTEs

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Shipping;
+
 /**
  * 挂号印刷品插件
  */
@@ -52,7 +54,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-class presswork
+class Ppresswork
 {
     /*------------------------------------------------------ */
     //-- PUBLIC ATTRIBUTEs

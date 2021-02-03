@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Payment;
+
 /**
  * 银行汇款（转帐）插件
  */
@@ -49,7 +51,7 @@ if (isset($set_modules) && $set_modules == true) {
 /**
  * 类
  */
-class bank
+class Bank
 {
     /**
      * 构造函数

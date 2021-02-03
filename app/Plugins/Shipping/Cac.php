@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Shipping;
+
 /**
  * 上门取货插件
  */
@@ -52,7 +54,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-class cac
+class Cac
 {
     /*------------------------------------------------------ */
     //-- PUBLIC ATTRIBUTEs

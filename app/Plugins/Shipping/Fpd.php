@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Shipping;
+
 /**
  * 到付运费插件 FPD(freight payable at destination)
  */
@@ -49,7 +51,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-class fpd
+class Fpd
 {
     /*------------------------------------------------------ */
     //-- PUBLIC ATTRIBUTEs

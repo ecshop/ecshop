@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Cron;
+
 /**
  * 定期删除
  */

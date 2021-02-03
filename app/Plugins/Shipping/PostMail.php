@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Shipping;
+
 /**
  * 邮局平邮插件
  */
@@ -61,7 +63,7 @@ if (isset($set_modules) && $set_modules == true) {
  * 保价费 由客户自愿选择，保价费为订单产品价值的1％。客户选择不保价，则保价费＝0
  *
  */
-class post_mail
+class PostMail
 {
     /*------------------------------------------------------ */
     //-- PUBLIC ATTRIBUTEs

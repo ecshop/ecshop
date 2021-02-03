@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Shipping;
+
 /**
  * 顺丰速运 配送方式插件
  */
@@ -65,7 +67,7 @@ if (isset($set_modules) && $set_modules == true) {
  *
  * -------------------------------------------------------------------------------------
  */
-class sf_express
+class SfExpress
 {
     /*------------------------------------------------------ */
     //-- PUBLIC ATTRIBUTEs

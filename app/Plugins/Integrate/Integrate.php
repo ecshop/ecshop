@@ -1,10 +1,12 @@
 <?php
 
+namespace App\Plugins\Integrate;
+
 /**
  * 整合插件类的基类
  */
 
-class integrate
+class Integrate
 {
 
     /*------------------------------------------------------ */

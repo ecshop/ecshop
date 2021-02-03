@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Payment;
+
 /**
  * 邮局汇款插件
  */
@@ -49,7 +51,7 @@ if (isset($set_modules) && $set_modules == true) {
 /**
  * 类
  */
-class post
+class Post
 {
     /**
      * 构造函数

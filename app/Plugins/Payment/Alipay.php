@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Payment;
+
 /**
  * 支付宝插件
  */
@@ -54,7 +56,7 @@ if (isset($set_modules) && $set_modules == true) {
 /**
  * 类
  */
-class alipay
+class Alipay
 {
 
     /**

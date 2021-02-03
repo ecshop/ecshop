@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Payment;
+
 /**
  * 货到付款插件
  */
@@ -52,7 +54,7 @@ if (isset($set_modules) && $set_modules == true) {
 /**
  * 类
  */
-class cod
+class Cod
 {
     /**
      * 构造函数

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Cron;
+
 /**
  * 程序说明
  */

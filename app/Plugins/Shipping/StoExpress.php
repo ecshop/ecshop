@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Shipping;
+
 /**
  * 申通快递 配送方式插件
  */
@@ -66,7 +68,7 @@ if (isset($set_modules) && $set_modules == true) {
  * -------------------------------------------------------------------------------------
  *
  */
-class sto_express
+class StoExpress
 {
     /*------------------------------------------------------ */
     //-- PUBLIC ATTRIBUTEs

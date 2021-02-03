@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Shipping;
+
 /**
  * 邮政包裹插件
  */
@@ -75,7 +77,7 @@ if (isset($set_modules) && $set_modules == true) {
  * -------------------------------------------------------------------------------------
  * 每件挂号费               3.00
  */
-class post_express
+class PostExpress
 {
     /*------------------------------------------------------ */
     //-- PUBLIC ATTRIBUTEs

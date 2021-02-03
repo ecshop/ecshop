@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Shipping;
+
 /**
  * EMS插件
  */
@@ -64,7 +66,7 @@ if (isset($set_modules) && $set_modules == true) {
  * -------------------------------------------------------------------------------------
  *
  */
-class ems
+class Ems
 {
     /*------------------------------------------------------ */
     //-- PUBLIC ATTRIBUTEs

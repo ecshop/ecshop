@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Shipping;
+
 /**
  * 圆通速递插件
  */
@@ -59,7 +61,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-class yto
+class Yto
 {
     /*------------------------------------------------------ */
     //-- PUBLIC ATTRIBUTEs

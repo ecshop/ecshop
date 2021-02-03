@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Plugins\Integrate;
+
+use Swift\Database\DB;
+
 /**
  * 会员数据处理类
  */
@@ -30,9 +34,8 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-require_once(ROOT_PATH . 'includes/modules/integrates/integrate.php');
 
-class ecshop extends integrate
+class Ecshop extends Integrate
 {
     public $is_ecshop = 1;
 
@@ -70,16 +73,12 @@ class ecshop extends integrate
         }
 
         if ($password === null) {
-            $sql = "SELECT " . $this->field_id .
-                " FROM " . $this->table($this->user_table) .
-                " WHERE " . $this->field_name . "='" . $post_username . "'";
-
-            return $this->db->getOne($sql);
+            return DB::table($this->user_table)->where($this->field_name, $post_username)->value($this->field_id);
         } else {
-            $sql = "SELECT user_id, password, salt,ec_salt " .
-                " FROM " . $this->table($this->user_table) .
-                " WHERE user_name='$post_username'";
-            $row = $this->db->getRow($sql);
+            $row = DB::table($this->user_table)->select(['user_id', 'password', 'salt', 'ec_salt'])
+                ->where('user_name', $post_username)->first();
+            $row = collect($row)->toArray();
+
             $ec_salt = $row['ec_salt'];
             if (empty($row)) {
                 return 0;
@@ -92,9 +91,10 @@ class ecshop extends integrate
                     if (empty($ec_salt)) {
                         $ec_salt = rand(1, 9999);
                         $new_password = md5(md5($password) . $ec_salt);
-                        $sql = "UPDATE " . $this->table($this->user_table) . "SET password= '" . $new_password . "',ec_salt='" . $ec_salt . "'" .
-                            " WHERE user_name='$post_username'";
-                        $this->db->query($sql);
+                        DB::table($this->user_table)->where('user_name', $post_username)->update([
+                            'password' => $new_password,
+                            'ec_salt' => $ec_salt,
+                        ]);
                     }
                     return $row['user_id'];
                 }
@@ -126,10 +126,10 @@ class ecshop extends integrate
                     return 0;
                 }
 
-                $sql = "UPDATE " . $this->table($this->user_table) .
-                    " SET password = '" . $this->compile_password(array('password' => $password)) . "', salt=''" .
-                    " WHERE user_id = '$row[user_id]'";
-                $this->db->query($sql);
+                DB::table($this->user_table)->where('user_id', $row['user_id'])->update([
+                    'password' => $this->compile_password(array('password' => $password)),
+                    'salt' => '',
+                ]);
 
                 return $row['user_id'];
             }

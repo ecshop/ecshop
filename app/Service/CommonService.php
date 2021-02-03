@@ -170,14 +170,14 @@ class CommonService
      */
     public function init_users()
     {
-        $set_modules = false;
         static $cls = null;
         if ($cls != null) {
             return $cls;
         }
-        include_once(ROOT_PATH . 'includes/modules/integrates/' . config('shop.integrate_code') . '.php');
+
+        $code = config('shop.integrate_code');
         $cfg = unserialize(config('shop.integrate_config'));
-        $cls = new config('shop.integrate_code')($cfg);
+        $cls = new $code($cfg);
 
         return $cls;
     }

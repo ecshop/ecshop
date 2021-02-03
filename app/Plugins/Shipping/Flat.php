@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Shipping;
+
 /**
  * 市内快递插件
  */
@@ -51,7 +53,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-class flat
+class Flat
 {
     /*------------------------------------------------------ */
     //-- PUBLIC ATTRIBUTEs

@@ -9,13 +9,6 @@ use App\Service\ShopService;
  */
 class ShopConfigController extends InitController
 {
-    public function initialize()
-    {
-        parent::initialize();
-    }
-
-    /* 代码 */
-
     /*------------------------------------------------------ */
     //-- 列表编辑 ?act=list_edit
     /*------------------------------------------------------ */
@@ -203,13 +196,13 @@ class ShopConfigController extends InitController
         $email = trim($_POST['email']);
 
         /* 更新配置 */
-        config('shop.mail_service') = intval($_POST['mail_service']);
-        config('shop.smtp_host') = trim($_POST['smtp_host']);
-        config('shop.smtp_port') = trim($_POST['smtp_port']);
-        config('shop.smtp_user') = json_str_iconv(trim($_POST['smtp_user']));
-        config('shop.smtp_pass') = trim($_POST['smtp_pass']);
-        config('shop.smtp_mail') = trim($_POST['reply_email']);
-        config('shop.mail_charset') = trim($_POST['mail_charset']);
+        $mail_service = intval($_POST['mail_service']);
+        $smtp_host = trim($_POST['smtp_host']);
+        $smtp_port = trim($_POST['smtp_port']);
+        $smtp_user = json_str_iconv(trim($_POST['smtp_user']));
+        $smtp_pass = trim($_POST['smtp_pass']);
+        $smtp_mail = trim($_POST['reply_email']);
+        $mail_charset = trim($_POST['mail_charset']);
 
         if (send_mail('', $email, $_LANG['test_mail_title'], $_LANG['cfg_name']['email_content'], 0)) {
             return make_json_result('', $_LANG['sendemail_success'] . $email);

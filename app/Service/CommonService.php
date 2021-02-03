@@ -1374,6 +1374,7 @@ class CommonService
                 break;
             case 'exchange':
                 if ($rewrite) {
+                    /* @var $cid */
                     $uri = 'exchange-' . $cid;
                     if (isset($price_min)) {
                         $uri .= '-min' . $price_min;
@@ -1391,6 +1392,7 @@ class CommonService
                         $uri .= '-' . $order;
                     }
                 } else {
+                    /* @var $cid */
                     $uri = 'exchange.php?cat_id=' . $cid;
                     if (isset($price_min)) {
                         $uri .= '&amp;integral_min=' . $price_min;
@@ -2045,7 +2047,7 @@ class CommonService
                 LEFT JOIN " . table('products') . " AS p ON pg.product_id = p.product_id
             WHERE pg.package_id = '$package_id'";
         if ($package_id == 0) {
-            $sql .= " AND pg.admin_id = '$_SESSION[admin_id]'";
+            $sql .= " AND pg.admin_id = '". $_SESSION['admin_id'] ."'";
         }
         $resource = $GLOBALS['db']->query($sql);
         if (!$resource) {

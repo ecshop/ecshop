@@ -1,0 +1,184 @@
+<?php
+
+namespace App\Console\Controllers;
+
+/**
+ * 会员资金管理程序
+ */
+class UserAccountManageController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/statistic.php');
+        $this->assign('lang', $_LANG);
+
+        /* 权限判断 */
+        admin_priv('user_account_manage');
+
+        $start_date = $end_date = '';
+        if (isset($_POST) && !empty($_POST)) {
+            $start_date = local_strtotime($_POST['start_date']);
+            $end_date = local_strtotime($_POST['end_date']);
+        } elseif (isset($_GET['start_date']) && !empty($_GET['end_date'])) {
+            $start_date = local_strtotime($_GET['start_date']);
+            $end_date = local_strtotime($_GET['end_date']);
+        } else {
+            $today = local_strtotime(local_date('Y-m-d'));
+            $start_date = $today - 86400 * 7;
+            $end_date = $today;
+        }
+    }
+
+    /*------------------------------------------------------ */
+    //--数据查询
+    /*------------------------------------------------------ */
+    /* 时间参数 */
+
+
+    /*------------------------------------------------------ */
+    //--商品明细列表
+    /*------------------------------------------------------ */
+    public function listAction()
+    {
+        $account = $money_list = array();
+        $account['voucher_amount'] = get_total_amount($start_date, $end_date);//充值总额
+        $account['to_cash_amount'] = get_total_amount($start_date, $end_date, 1);//提现总额
+
+        $sql = " SELECT IFNULL(SUM(user_money), 0) AS user_money, IFNULL(SUM(frozen_money), 0) AS frozen_money FROM " .
+            table('account_log') . " WHERE `change_time` >= " . $start_date . " AND `change_time` < " . ($end_date + 86400);
+        $money_list = $db->getRow($sql);
+        $account['user_money'] = price_format($money_list['user_money']);   //用户可用余额
+        $account['frozen_money'] = price_format($money_list['frozen_money']);   //用户冻结金额
+
+        $sql = "SELECT IFNULL(SUM(surplus), 0) AS surplus, IFNULL(SUM(integral_money), 0) AS integral_money FROM " .
+            table('order_info') . " WHERE 1 AND `add_time` >= " . $start_date . " AND `add_time` < " . ($end_date + 86400);
+        $money_list = $db->getRow($sql);
+
+        $account['surplus'] = price_format($money_list['surplus']);   //交易使用余额
+        $account['integral_money'] = price_format($money_list['integral_money']);   //积分使用余额
+
+        /* 赋值到模板 */
+        $this->assign('account', $account);
+        $this->assign('start_date', local_date('Y-m-d', $start_date));
+        $this->assign('end_date', local_date('Y-m-d', $end_date));
+        $this->assign('ur_here', $_LANG['user_account_manage']);
+
+        /* 显示页面 */
+        assign_query_info();
+        return $this->display('user_account_manage.htm');
+    }
+
+    public function surplusAction()
+    {
+        $order_list = order_list();
+
+        /* 赋值到模板 */
+        $this->assign('order_list', $order_list['order_list']);
+        $this->assign('ur_here', $_LANG['order_by_surplus']);
+        $this->assign('filter', $order_list['filter']);
+        $this->assign('record_count', $order_list['record_count']);
+        $this->assign('page_count', $order_list['page_count']);
+        $this->assign('full_page', 1);
+        $this->assign('action_link', array('text' => $_LANG['user_account_manage'], 'href' => 'user_account_manage.php?act=list&start_date=' . local_date('Y-m-d', $start_date) . '&end_date=' . local_date('Y-m-d', $end_date)));
+
+        /* 显示页面 */
+        assign_query_info();
+        return $this->display('order_surplus_list.htm');
+    }
+
+    /*------------------------------------------------------ */
+    //-- ajax返回用户列表
+    /*------------------------------------------------------ */
+    public function queryAction()
+    {
+        $order_list = order_list();
+
+        $this->assign('order_list', $order_list['order_list']);
+        $this->assign('filter', $order_list['filter']);
+        $this->assign('record_count', $order_list['record_count']);
+        $this->assign('page_count', $order_list['page_count']);
+
+        $sort_flag = sort_flag($order_list['filter']);
+        $this->assign($sort_flag['tag'], $sort_flag['img']);
+
+        return make_json_result($smarty->fetch('order_surplus_list.htm'), '', array('filter' => $order_list['filter'], 'page_count' => $order_list['page_count']));
+    }
+
+    /**
+     * 获得账户变动金额
+     * @param string $type 0,充值 1,提现
+     * @return  array
+     */
+    public function get_total_amount($start_date, $end_date, $type = 0)
+    {
+        $sql = " SELECT IFNULL(SUM(amount), 0) AS total_amount FROM " . table('user_account') . " AS a, " . table('users') . " AS u " .
+            " WHERE process_type = $type AND is_paid = 1 AND a.user_id = u.user_id AND paid_time >= '$start_date' AND paid_time < '" . ($end_date + 86400) . "'";
+
+        $amount = $GLOBALS['db']->getone($sql);
+        $amount = $type ? price_format(abs($amount)) : price_format($amount);
+        return $amount;
+    }
+
+
+    /**
+     *  返回用户订单列表数据
+     *
+     * @access  public
+     * @param
+     *
+     * @return void
+     */
+    public function order_list()
+    {
+
+        $result = get_filter();
+
+        if ($result === false) {
+            /* 过滤条件 */
+            $filter['keywords'] = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);
+            if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1) {
+                $filter['keywords'] = json_str_iconv($filter['keywords']);
+            }
+
+            $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'order_id' : trim($_REQUEST['sort_by']);
+            $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
+            $filter['start_date'] = local_date('Y-m-d', $start_date);
+            $filter['end_date'] = local_date('Y-m-d', $end_date);
+
+            $ex_where = ' WHERE 1 ';
+            if ($filter['keywords']) {
+                $ex_where .= " AND user_name LIKE '%" . mysql_like_quote($filter['keywords']) . "%'";
+            }
+            $ex_where .= " AND o.user_id = u.user_id AND (o.surplus != 0 OR integral_money != 0) AND `add_time` >= " . $start_date . " AND `add_time` < " . ($end_date + 86400);
+            $filter['record_count'] = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . table('order_info') . " AS o, " . table('users') . " AS u " . $ex_where);
+
+            /* 分页大小 */
+            $filter = page_and_size($filter);
+
+            $sql = "SELECT o.order_id, o.order_sn, u.user_name, o.surplus, o.integral_money, o.add_time FROM " .
+                table('order_info') . " AS o," . table('users') . " AS u " . $ex_where .
+                " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
+                " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
+
+            $filter['keywords'] = stripslashes($filter['keywords']);
+            set_filter($filter, $sql);
+        } else {
+            $sql = $result['sql'];
+            $filter = $result['filter'];
+        }
+
+        $order_list = $GLOBALS['db']->getAll($sql);
+
+        $count = count($order_list);
+        for ($i = 0; $i < $count; $i++) {
+            $order_list[$i]['add_time'] = local_date(config('shop.date_format'), $order_list[$i]['add_time']);
+        }
+
+        $arr = array('order_list' => $order_list, 'filter' => $filter,
+            'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+
+        return $arr;
+    }
+}

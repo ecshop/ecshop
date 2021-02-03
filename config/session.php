@@ -1,16 +1,35 @@
 <?php
 
 return [
-    // session name
-    'name' => 'PHPSESSID',
-    // SESSION_ID的提交变量,解决flash上传跨域
-    'var_session_id' => '',
-    // 驱动方式 支持file cache
-    'type' => env('SESSION_DRIVER', 'file'),
-    // 存储连接标识 当type使用cache的时候有效
-    'store' => null,
-    // 过期时间
-    'expire' => env('SESSION_LIFETIME', 1440),
-    // 前缀
-    'prefix' => '',
+    'type' => 'file', // or redis or redis_cluster
+
+    'handler' => Swift\Session\FileSessionHandler::class,
+
+    'config' => [
+        'file' => [
+            'save_path' => runtime_path() . '/sessions',
+        ],
+        'redis' => [
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'port' => env('REDIS_PORT', 6379),
+            'auth' => env('REDIS_PASSWORD', null),
+            'timeout' => 2,
+            'database' => env('REDIS_DB', '0'),
+            'prefix' => 'redis_session_',
+        ],
+        'redis_cluster' => [
+            'host'    => ['127.0.0.1:7000', '127.0.0.1:7001', '127.0.0.1:7001'],
+            'timeout' => 2,
+            'auth'    => '',
+            'prefix'  => 'redis_session_',
+        ]
+    ],
+
+    'session_name' => '_session',
+    'lifetime' => env('SESSION_LIFETIME', 1440),
+    'path' => '/',
+    'domain' => env('SESSION_DOMAIN', ''),
+    'secure' => env('SESSION_SECURE_COOKIE', false),
+    'http_only' => true,
+    'same_site' => '',
 ];

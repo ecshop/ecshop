@@ -1,0 +1,95 @@
+<?php
+
+namespace App\Console\Controllers;
+
+/**
+ * 站外JS投放的统计程序
+ */
+class AdsenseController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+
+        require_once(ROOT_PATH . 'languages/' . config('shop.lang') . '/admin/ads.php');
+    }
+
+    public function listAction()
+    {
+        $this->downloadAction();
+    }
+
+    /*------------------------------------------------------ */
+    //-- 站外投放广告的统计
+    /*------------------------------------------------------ */
+    public function downloadAction()
+    {
+        admin_priv('ad_manage');
+
+        /* 获取广告数据 */
+        $ads_stats = array();
+        $sql = "SELECT a.ad_id, a.ad_name, b.* " .
+            "FROM " . table('ad') . " AS a, " . table('adsense') . " AS b " .
+            "WHERE b.from_ad = a.ad_id ORDER by a.ad_name DESC";
+        $res = $db->query($sql);
+        while ($rows = $db->fetchRow($res)) {
+            /* 获取当前广告所产生的订单总数 */
+            $rows['referer'] = addslashes($rows['referer']);
+            $sql2 = 'SELECT COUNT(order_id) FROM ' . table('order_info') . " WHERE from_ad='$rows[ad_id]' AND referer='$rows[referer]'";
+            $rows['order_num'] = $db->getOne($sql2);
+
+            /* 当前广告所产生的已完成的有效订单 */
+            $sql3 = "SELECT COUNT(order_id) FROM " . table('order_info') .
+                " WHERE from_ad    = '$rows[ad_id]'" .
+                " AND referer = '$rows[referer]' " . order_query_sql('finished');
+            $rows['order_confirm'] = $db->getOne($sql3);
+
+            $ads_stats[] = $rows;
+        }
+        $this->assign('ads_stats', $ads_stats);
+
+        /* 站外JS投放商品的统计数据 */
+        $goods_stats = array();
+        $goods_sql = "SELECT from_ad, referer, clicks FROM " . table('adsense') .
+            " WHERE from_ad = '-1' ORDER by referer DESC";
+        $goods_res = $db->query($goods_sql);
+        while ($rows2 = $db->fetchRow($goods_res)) {
+            /* 获取当前广告所产生的订单总数 */
+            $rows2['referer'] = addslashes($rows2['referer']);
+            $rows2['order_num'] = $db->getOne("SELECT COUNT(order_id) FROM " . table('order_info') . " WHERE referer='$rows2[referer]'");
+
+            /* 当前广告所产生的已完成的有效订单 */
+
+            $sql = "SELECT COUNT(order_id) FROM " . table('order_info') .
+                " WHERE referer='$rows2[referer]'" . order_query_sql('finished');
+            $rows2['order_confirm'] = $db->getOne($sql);
+
+            $rows2['ad_name'] = $_LANG['adsense_js_goods'];
+            $goods_stats[] = $rows2;
+        }
+        function downloadAction()
+        {
+            header("Content-type: application/vnd.ms-excel; charset=utf-8");
+            header("Content-Disposition: attachment; filename=ad_statistics.xls");
+            $data = "$_LANG[adsense_name]\t$_LANG[cleck_referer]\t$_LANG[click_count]\t$_LANG[confirm_order]\t$_LANG[gen_order_amount]\n";
+            $res = array_merge($goods_stats, $ads_stats);
+            foreach ($res as $row) {
+                $data .= "$row[ad_name]\t$row[referer]\t$row[clicks]\t$row[order_confirm]\t$row[order_num]\n";
+            }
+            echo ecs_iconv(EC_CHARSET, 'GB2312', $data);
+            exit;
+        }
+
+        $this->assign('goods_stats', $goods_stats);
+
+        /* 赋值给模板 */
+        $this->assign('action_link', array('href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']));
+        $this->assign('action_link2', array('href' => 'adsense.php?act=download', 'text' => $_LANG['download_ad_statistics']));
+        $this->assign('ur_here', $_LANG['adsense_js_stats']);
+        $this->assign('lang', $_LANG);
+
+        /* 显示页面 */
+        assign_query_info();
+        return $this->display('adsense.htm');
+    }
+}

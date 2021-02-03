@@ -1,0 +1,210 @@
+<?php
+
+namespace App\Console\Controllers;
+
+/**
+ * 网店信息管理页面
+ */
+class ShopinfoController extends InitController
+{
+    public function initialize()
+    {
+        parent::initialize();
+
+
+        require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
+
+        $exc = new exchange(table("article"), $db, 'article_id', 'title');
+    }
+
+
+    /*------------------------------------------------------ */
+    //-- 文章列表
+    /*------------------------------------------------------ */
+    public function listAction()
+    {
+        $this->assign('ur_here', $_LANG['shop_info']);
+        $this->assign('action_link', array('text' => $_LANG['shopinfo_add'], 'href' => 'shopinfo.php?act=add'));
+        $this->assign('full_page', 1);
+        $this->assign('list', shopinfo_article_list());
+
+        assign_query_info();
+        return $this->display('shopinfo_list.htm');
+    }
+
+    /*------------------------------------------------------ */
+    //-- 查询
+    /*------------------------------------------------------ */
+    public function queryAction()
+    {
+        $this->assign('list', shopinfo_article_list());
+
+        return make_json_result($smarty->fetch('shopinfo_list.htm'));
+    }
+
+    /*------------------------------------------------------ */
+    //-- 添加新文章
+    /*------------------------------------------------------ */
+    public function addAction()
+    {
+        /* 权限判断 */
+        admin_priv('shopinfo_manage');
+        $_REQUEST['id'] = intval($_REQUEST['id']);
+
+        /* 创建 html editor */
+        create_html_editor('FCKeditor1');
+
+        /* 初始化 */
+        $article['article_type'] = 0;
+
+        $this->assign('ur_here', $_LANG['shopinfo_add']);
+        $this->assign('action_link', array('text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list'));
+        $this->assign('form_action', 'insert');
+
+        assign_query_info();
+        return $this->display('shopinfo_info.htm');
+    }
+
+    public function insertAction()
+    {
+        /* 权限判断 */
+        admin_priv('shopinfo_manage');
+        $_REQUEST['id'] = intval($_REQUEST['id']);
+
+        /* 判断是否重名 */
+        $is_only = $exc->is_only('title', $_POST['title']);
+
+        if (!$is_only) {
+            sys_msg(sprintf($_LANG['title_exist'], stripslashes($_POST['title'])), 1);
+        }
+
+        /* 插入数据 */
+        $add_time = gmtime();
+        $sql = "INSERT INTO " . table('article') . "(title, cat_id, content, add_time) VALUES('$_POST[title]', '0', '$_POST[FCKeditor1]','$add_time' )";
+        $db->query($sql);
+
+        $link[0]['text'] = $_LANG['continue_add'];
+        $link[0]['href'] = 'shopinfo.php?act=add';
+
+        $link[1]['text'] = $_LANG['back_list'];
+        $link[1]['href'] = 'shopinfo.php?act=list';
+
+        /* 清除缓存 */
+        clear_cache_files();
+
+        admin_log($_POST['title'], 'add', 'shopinfo');
+        sys_msg($_LANG['articleadd_succeed'], 0, $link);
+    }
+
+    /*------------------------------------------------------ */
+    //-- 文章编辑
+    /*------------------------------------------------------ */
+    public function editAction()
+    {
+        /* 权限判断 */
+        admin_priv('shopinfo_manage');
+        $_REQUEST['id'] = intval($_REQUEST['id']);
+
+        /* 取得文章数据 */
+        $sql = "SELECT article_id, title, content FROM " . table('article') . "WHERE article_id =" . $_REQUEST['id'];
+        $article = $db->getRow($sql);
+
+        /* 创建 html editor */
+        create_html_editor('FCKeditor1', $article['content']);
+
+        $this->assign('ur_here', $_LANG['article_add']);
+        $this->assign('action_link', array('text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list'));
+        $this->assign('article', $article);
+        $this->assign('form_action', 'update');
+        return $this->display('shopinfo_info.htm');
+    }
+
+    public function updateAction()
+    {
+        /* 权限判断 */
+        admin_priv('shopinfo_manage');
+        $_REQUEST['id'] = intval($_REQUEST['id']);
+
+        /* 检查重名 */
+        if ($_POST['title'] != $_POST['old_title']) {
+            $is_only = $exc->is_only('title', $_POST['title'], $_POST['id']);
+
+            if (!$is_only) {
+                sys_msg(sprintf($_LANG['title_exist'], stripslashes($_POST['title'])), 1);
+            }
+        }
+
+        /* 更新数据 */
+        $cur_time = gmtime();
+        if ($exc->edit("title='$_POST[title]', content='$_POST[FCKeditor1]',add_time ='$cur_time'", $_POST['id'])) {
+            /* 清除缓存 */
+            clear_cache_files();
+
+            $link[0]['text'] = $_LANG['back_list'];
+            $link[0]['href'] = 'shopinfo.php?act=list';
+
+            sys_msg(sprintf($_LANG['articleedit_succeed'], $_POST['title']), 0, $link);
+            admin_log($_POST['title'], 'edit', 'shopinfo');
+        }
+    }
+
+    /*------------------------------------------------------ */
+    //-- 编辑文章主题
+    /*------------------------------------------------------ */
+    public function edit_titleAction()
+    {
+        check_authz_json('shopinfo_manage');
+
+        $id = intval($_POST['id']);
+        $title = json_str_iconv(trim($_POST['val']));
+
+        /* 检查文章标题是否有重名 */
+        if ($exc->num('title', $title, $id) == 0) {
+            if ($exc->edit("title = '$title'", $id)) {
+                clear_cache_files();
+                admin_log($title, 'edit', 'shopinfo');
+                return make_json_result(stripslashes($title));
+            }
+        } else {
+            return make_json_error(sprintf($_LANG['title_exist'], $title));
+        }
+    }
+
+    /*------------------------------------------------------ */
+    //-- 删除文章
+    /*------------------------------------------------------ */
+    public function removeAction()
+    {
+        check_authz_json('shopinfo_manage');
+
+        $id = intval($_GET['id']);
+
+        /* 获得文章主题 */
+        $title = $exc->get_name($id);
+        if ($exc->drop($id)) {
+            clear_cache_files();
+            admin_log(addslashes($title), 'remove', 'shopinfo');
+        }
+
+        $url = 'shopinfo.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+
+        return redirect($url);
+    }
+
+    /* 获取网店信息文章数据 */
+    public function shopinfo_article_list()
+    {
+        $list = array();
+        $sql = 'SELECT article_id, title ,add_time' .
+            ' FROM ' . table('article') .
+            ' WHERE cat_id = 0 ORDER BY article_id';
+        $res = $GLOBALS['db']->query($sql);
+        while ($rows = $GLOBALS['db']->fetchRow($res)) {
+            $rows['add_time'] = local_date(config('shop.time_format'), $rows['add_time']);
+
+            $list[] = $rows;
+        }
+
+        return $list;
+    }
+}

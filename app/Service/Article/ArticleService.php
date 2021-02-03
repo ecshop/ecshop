@@ -3,7 +3,7 @@
 namespace App\Service\Article;
 
 /**
- * 文章及文章分类
+ * 文章
  * Class ArticleService
  * @package App\Service\Article
  */

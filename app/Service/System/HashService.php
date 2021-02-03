@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\System;
 
 /**
- * 加密解密类
+ * Class HashService
+ * @package App\Service\System
  */
-class CodeService
+class HashService
 {
-
-
     /**
      * 加密函数
      * @param string $str 加密前的字符串

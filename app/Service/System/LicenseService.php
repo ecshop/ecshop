@@ -9,6 +9,31 @@ namespace App\Service\System;
 class LicenseService
 {
     /**
+     * 获得网店 license 信息
+     *
+     * @access  public
+     * @param integer $size
+     *
+     * @return  array
+     */
+    public function get_shop_license()
+    {
+        // 取出网店 license
+        $sql = "SELECT code, value
+            FROM " . table('shop_config') . "
+            WHERE code IN ('certificate_id', 'token', 'certi')
+            LIMIT 0,3";
+        $license_info = $GLOBALS['db']->getAll($sql);
+        $license_info = is_array($license_info) ? $license_info : array();
+        $license = array();
+        foreach ($license_info as $value) {
+            $license[$value['code']] = $value['value'];
+        }
+
+        return $license;
+    }
+
+    /**
      * 授权信息内容
      * @return string
      */

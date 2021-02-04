@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Service\Category;
+namespace App\Service\Goods\Category;
 
 /**
+ * 商品品类
  * Class CategoryService
- * @package App\Service\Category
+ * @package App\Service\Goods\Category
  */
 class CategoryService
 {

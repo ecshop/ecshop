@@ -1,82 +1,13 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Comment;
 
 /**
- * 支付接口函数库
+ * Class OrderPayService
+ * @package App\Service\Comment
  */
-class PaymentService
+class OrderPayService
 {
-
-
-    /**
-     * 取得返回信息地址
-     * @param string $code 支付方式代码
-     */
-    public function return_url($code)
-    {
-        return $GLOBALS['ecs']->url() . 'respond.php?code=' . $code;
-    }
-
-    /**
-     *  取得某支付方式信息
-     * @param string $code 支付方式代码
-     */
-    public function get_payment($code)
-    {
-        $sql = 'SELECT * FROM ' . table('payment') .
-            " WHERE pay_code = '$code' AND enabled = '1'";
-        $payment = $GLOBALS['db']->getRow($sql);
-
-        if ($payment) {
-            $config_list = unserialize($payment['pay_config']);
-
-            foreach ($config_list as $config) {
-                $payment[$config['name']] = $config['value'];
-            }
-        }
-
-        return $payment;
-    }
-
-    /**
-     *  通过订单sn取得订单ID
-     * @param string $order_sn 订单sn
-     * @param blob $voucher 是否为会员充值
-     */
-    public function get_order_id_by_sn($order_sn, $voucher = 'false')
-    {
-        if ($voucher == 'true') {
-            if (is_numeric($order_sn)) {
-                return $GLOBALS['db']->getOne("SELECT log_id FROM " . table('pay_log') . " WHERE order_id=" . $order_sn . ' AND order_type=1');
-            } else {
-                return "";
-            }
-        } else {
-            if (is_numeric($order_sn)) {
-                $sql = 'SELECT order_id FROM ' . table('order_info') . " WHERE order_sn = '$order_sn'";
-                $order_id = $GLOBALS['db']->getOne($sql);
-            }
-            if (!empty($order_id)) {
-                $pay_log_id = $GLOBALS['db']->getOne("SELECT log_id FROM " . table('pay_log') . " WHERE order_id='" . $order_id . "'");
-                return $pay_log_id;
-            } else {
-                return "";
-            }
-        }
-    }
-
-    /**
-     *  通过订单ID取得订单商品名称
-     * @param string $order_id 订单ID
-     */
-    public function get_goods_name_by_id($order_id)
-    {
-        $sql = 'SELECT goods_name FROM ' . table('order_goods') . " WHERE order_id = '$order_id'";
-        $goods_name = $GLOBALS['db']->getCol($sql);
-        return implode(',', $goods_name);
-    }
-
     /**
      * 检查支付的金额是否与订单相符
      *

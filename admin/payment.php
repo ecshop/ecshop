@@ -66,8 +66,6 @@ if ($_REQUEST['act'] == 'list')
        }
     }
 
-    include_once(ROOT_PATH.'includes/lib_compositor.php');
-
     assign_query_info();
 
     $smarty->assign('ur_here', $_LANG['02_payment_list']);

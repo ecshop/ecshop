@@ -295,8 +295,6 @@ function available_payment_list($support_cod, $cod_fee = 0, $is_online = false)
         $modules[] = $row;
     }
 
-    include_once(ROOT_PATH.'includes/lib_compositor.php');
-
     if(isset($modules))
     {
         return $modules;

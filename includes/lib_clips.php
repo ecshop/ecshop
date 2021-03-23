@@ -456,8 +456,6 @@ function get_online_payment_list($include_balance = true)
 
     $modules = $GLOBALS['db']->getAll($sql);
 
-    include_once(ROOT_PATH.'includes/lib_compositor.php');
-
     return $modules;
 }
 

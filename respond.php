@@ -8,20 +8,6 @@ require(ROOT_PATH . 'includes/lib_order.php');
 /* 支付方式代码 */
 $pay_code = !empty($_REQUEST['code']) ? trim($_REQUEST['code']) : '';
 
-//获取首信支付方式
-if (empty($pay_code) && !empty($_REQUEST['v_pmode']) && !empty($_REQUEST['v_pstring'])) {
-    $pay_code = 'cappay';
-}
-
-if (isset($_POST['MerRemark']) && $_POST['MerRemark'] == 'epay') {
-    $pay_code = 'epay';
-}
-
-//获取快钱神州行支付方式
-if (empty($pay_code) && ($_REQUEST['ext1'] == 'shenzhou') && ($_REQUEST['ext2'] == 'ecshop')) {
-    $pay_code = 'shenzhou';
-}
-
 /* 参数是否为空 */
 if (empty($pay_code)) {
     $msg = $_LANG['pay_not_exist'];
@@ -43,8 +29,7 @@ if (empty($pay_code)) {
     if ($db->getOne($sql) == 0) {
         $msg = $_LANG['pay_disabled'];
     } else {
-        $plugin_file = 'includes/modules/payment/' . $pay_code . '.php';
-
+        $plugin_file = ROOT_PATH . 'includes/modules/payment/' . $pay_code . '.php';
         /* 检查插件文件是否存在，如果存在则验证支付是否成功，否则则返回失败信息 */
         if (file_exists($plugin_file)) {
             /* 根据支付方式代码创建支付类的对象并调用其响应操作方法 */

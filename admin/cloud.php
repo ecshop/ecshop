@@ -19,8 +19,6 @@ require(dirname(__FILE__) . '/includes/init.php');
 require(ROOT_PATH . 'includes/cls_transport.php');
 require(ROOT_PATH . 'includes/cls_json.php');
 
-require(ROOT_PATH . 'includes/shopex_json.php');
-
 $data['api_ver'] = '1.0';
 $data['version'] = VERSION;
 $data['patch'] = file_get_contents(ROOT_PATH.ADMIN_PATH."/patch_num");

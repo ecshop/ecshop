@@ -100,16 +100,8 @@ function exchange_shop_license($certi, $license, $use_lib = 0)
     $request = $transport->request($license['certi'], $params, 'POST');
     $request_str = json_str_iconv($request['body']);
 
-    if (empty($use_lib))
-    {
-        $json = new JSON();
-        $request_arr = $json->decode($request_str, 1);
-    }
-    else
-    {
-        include_once(ROOT_PATH . 'includes/shopex_json.php');
-        $request_arr = json_decode($request_str, 1);
-    }
+    $json = new JSON();
+    $request_arr = $json->decode($request_str, 1);
 
     return $request_arr;
 }

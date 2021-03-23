@@ -104,10 +104,6 @@ if (isset($article) && $article['cat_id'] > 2) {
     $smarty->display('article_pro.dwt', $cache_id);
 }
 
-/*------------------------------------------------------ */
-//-- PRIVATE FUNCTION
-/*------------------------------------------------------ */
-
 /**
  * 获得指定的文章的详细信息
  *
@@ -162,8 +158,8 @@ function article_related_goods($id)
         $arr[$row['goods_id']]['goods_name'] = $row['goods_name'];
         $arr[$row['goods_id']]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
             sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
-        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
-        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_thumb']);
+        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_img']);
         $arr[$row['goods_id']]['market_price'] = price_format($row['market_price']);
         $arr[$row['goods_id']]['shop_price'] = price_format($row['shop_price']);
         $arr[$row['goods_id']]['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);

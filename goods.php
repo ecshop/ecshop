@@ -89,7 +89,7 @@ if (!empty($_REQUEST['act']) && $_REQUEST['act'] == 'gotopage') {
         $pager['page'] = $page;
         $pager['size'] = $size = 5;
         $pager['record_count'] = $count;
-        $pager['page_count'] = $page_count = ($count > 0) ? intval(ceil($count / $size)) : 1;;
+        $pager['page_count'] = $page_count = ($count > 0) ? intval(ceil($count / $size)) : 1;
         $pager['page_first'] = "javascript:gotoBuyPage(1,$goods_id)";
         $pager['page_prev'] = $page > 1 ? "javascript:gotoBuyPage(" . ($page - 1) . ",$goods_id)" : 'javascript:;';
         $pager['page_next'] = $page < $page_count ? 'javascript:gotoBuyPage(' . ($page + 1) . ",$goods_id)" : 'javascript:;';
@@ -242,10 +242,6 @@ $db->query('UPDATE ' . $ecs->table('goods') . " SET click_count = click_count + 
 $smarty->assign('now_time', gmtime());           // 当前系统时间
 $smarty->display('goods.dwt', $cache_id);
 
-/*------------------------------------------------------ */
-//-- PRIVATE FUNCTION
-/*------------------------------------------------------ */
-
 /**
  * 获得指定商品的关联商品
  *
@@ -272,8 +268,8 @@ function get_linked_goods($goods_id)
         $arr[$row['goods_id']]['goods_name'] = $row['goods_name'];
         $arr[$row['goods_id']]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
             sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
-        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
-        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_thumb']);
+        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_img']);
         $arr[$row['goods_id']]['market_price'] = price_format($row['market_price']);
         $arr[$row['goods_id']]['shop_price'] = price_format($row['shop_price']);
         $arr[$row['goods_id']]['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
@@ -371,8 +367,8 @@ function get_also_bought($goods_id)
         $arr[$key]['goods_name'] = $row['goods_name'];
         $arr[$key]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
             sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
-        $arr[$key]['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
-        $arr[$key]['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+        $arr[$key]['goods_thumb'] = get_image_path($row['goods_thumb']);
+        $arr[$key]['goods_img'] = get_image_path($row['goods_img']);
         $arr[$key]['shop_price'] = price_format($row['shop_price']);
         $arr[$key]['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
 
@@ -509,7 +505,7 @@ function get_package_goods_list($goods_id)
 
         foreach ($goods_res as $key => $val) {
             $goods_id_array[] = $val['goods_id'];
-            $goods_res[$key]['goods_thumb'] = get_image_path($val['goods_id'], $val['goods_thumb'], true);
+            $goods_res[$key]['goods_thumb'] = get_image_path($val['goods_thumb']);
             $goods_res[$key]['market_price'] = price_format($val['market_price']);
             $goods_res[$key]['rank_price'] = price_format($val['rank_price']);
             $subtotal += $val['rank_price'] * $val['goods_number'];

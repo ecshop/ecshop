@@ -1818,18 +1818,12 @@ function exception_handler($errno, $errstr, $errfile, $errline)
 /**
  * 重新获得商品图片与商品相册的地址
  *
- * @param int $goods_id 商品ID
  * @param string $image 原商品相册图片地址
- * @param boolean $thumb 是否为缩略图
- * @param string $call 调用方法(商品图片还是商品相册)
- * @param boolean $del 是否删除图片
- *
  * @return string   $url
  */
-function get_image_path($goods_id, $image = '', $thumb = false, $call = 'goods', $del = false)
+function get_image_path($image = '')
 {
-    $url = empty($image) ? $GLOBALS['_CFG']['no_picture'] : $image;
-    return $url;
+    return empty($image) ? $GLOBALS['_CFG']['no_picture'] : $image;
 }
 
 /**
@@ -2096,7 +2090,7 @@ function get_package_info($id)
     $virtual_goods_count = 0;
 
     foreach ($goods_res as $key => $val) {
-        $goods_res[$key]['goods_thumb'] = get_image_path($val['goods_id'], $val['goods_thumb'], true);
+        $goods_res[$key]['goods_thumb'] = get_image_path($val['goods_thumb']);
         $goods_res[$key]['market_price_format'] = price_format($val['market_price']);
         $goods_res[$key]['rank_price_format'] = price_format($val['rank_price']);
         $market_price += $val['market_price'] * $val['goods_number'];

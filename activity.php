@@ -83,7 +83,7 @@ while ($row = $db->fetchRow($res)) {
             $row['gift'] = unserialize($row['gift']);
             if (is_array($row['gift'])) {
                 foreach ($row['gift'] as $k => $v) {
-                    $row['gift'][$k]['thumb'] = get_image_path($v['id'], $db->getOne("SELECT goods_thumb FROM " . $ecs->table('goods') . " WHERE goods_id = '" . $v['id'] . "'"), true);
+                    $row['gift'][$k]['thumb'] = get_image_path($db->getOne("SELECT goods_thumb FROM " . $ecs->table('goods') . " WHERE goods_id = '" . $v['id'] . "'"));
                 }
             }
             break;
@@ -102,7 +102,6 @@ while ($row = $db->fetchRow($res)) {
     $list[] = $row;
 }
 
-//print_r($list);
 $smarty->assign('list', $list);
 
 $smarty->assign('helps', get_shop_help());       // 网店帮助

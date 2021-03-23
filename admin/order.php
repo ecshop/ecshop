@@ -3799,7 +3799,7 @@ elseif ($_REQUEST['act'] == 'get_goods_info') {
 
         $row['formated_subtotal'] = price_format($row['goods_price'] * $row['goods_number']);
         $row['formated_goods_price'] = price_format($row['goods_price']);
-        $_goods_thumb = get_image_path($row['goods_id'], $row['goods_thumb'], true);
+        $_goods_thumb = get_image_path($row['goods_thumb']);
         $_goods_thumb = (strpos($_goods_thumb, 'http://') === 0) ? $_goods_thumb : $ecs->url() . $_goods_thumb;
         $row['goods_thumb'] = $_goods_thumb;
         $goods_attr[] = explode(' ', trim($row['goods_attr'])); //将商品属性拆分为一个数组

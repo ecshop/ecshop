@@ -35,8 +35,8 @@ if ($img_count == 0) {
 } else {
     foreach ($img_list as $key => $img) {
         $gallery['list'][] = array(
-            'gallery_thumb' => get_image_path($_REQUEST['id'], $img_list[$key]['thumb_url'], true, 'gallery'),
-            'gallery' => get_image_path($_REQUEST['id'], $img_list[$key]['img_url'], false, 'gallery'),
+            'gallery_thumb' => get_image_path($img_list[$key]['thumb_url']),
+            'gallery' => get_image_path($img_list[$key]['img_url']),
             'img_desc' => $img_list[$key]['img_desc']
         );
     }

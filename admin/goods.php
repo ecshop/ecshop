@@ -227,11 +227,9 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['ac
         }
 
         if (!empty($goods['goods_brief'])) {
-            //$goods['goods_brief'] = trim_right($goods['goods_brief']);
             $goods['goods_brief'] = $goods['goods_brief'];
         }
         if (!empty($goods['keywords'])) {
-            //$goods['keywords']    = trim_right($goods['keywords']);
             $goods['keywords'] = $goods['keywords'];
         }
 
@@ -334,8 +332,8 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['ac
 
         /* 商品图片路径 */
         if (isset($GLOBALS['shop_id']) && ($GLOBALS['shop_id'] > 10) && !empty($goods['original_img'])) {
-            $goods['goods_img'] = get_image_path($_REQUEST['goods_id'], $goods['goods_img']);
-            $goods['goods_thumb'] = get_image_path($_REQUEST['goods_id'], $goods['goods_thumb'], true);
+            $goods['goods_img'] = get_image_path($goods['goods_img']);
+            $goods['goods_thumb'] = get_image_path($goods['goods_thumb']);
         }
 
         /* 图片列表 */
@@ -345,8 +343,8 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['ac
         /* 格式化相册图片路径 */
         if (isset($GLOBALS['shop_id']) && ($GLOBALS['shop_id'] > 0)) {
             foreach ($img_list as $key => $gallery_img) {
-                $gallery_img[$key]['img_url'] = get_image_path($gallery_img['goods_id'], $gallery_img['img_original'], false, 'gallery');
-                $gallery_img[$key]['thumb_url'] = get_image_path($gallery_img['goods_id'], $gallery_img['img_original'], true, 'gallery');
+                $gallery_img[$key]['img_url'] = get_image_path($gallery_img['img_original']);
+                $gallery_img[$key]['thumb_url'] = get_image_path($gallery_img['img_original']);
             }
         } else {
             foreach ($img_list as $key => $gallery_img) {
@@ -520,15 +518,6 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
             if ($row['goods_img'] != '' && is_file('../' . $row['goods_img'])) {
                 @unlink('../' . $row['goods_img']);
             }
-            if ($row['original_img'] != '' && is_file('../' . $row['original_img'])) {
-                /* 先不处理，以防止程序中途出错停止 */
-                //$old_original_img = $row['original_img']; //记录旧图路径
-            }
-            /* 清除原来商品图片 */
-            if ($proc_thumb === false) {
-                get_image_path($_REQUEST[goods_id], $row['goods_img'], false, 'goods', true);
-                get_image_path($_REQUEST[goods_id], $row['goods_thumb'], true, 'goods', true);
-            }
         }
 
         if (empty($is_url_goods_img)) {
@@ -604,18 +593,6 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
                 }
             }
         }
-        /* 取消该原图复制流程 */
-        // else
-        // {
-        //     /* 复制一份原图 */
-        //     $pos        = strpos(basename($img), '.');
-        //     $gallery_img = dirname($img) . '/' . $image->random_filename() . // substr(basename($img), $pos);
-        //     if (!copy('../' . $img, '../' . $gallery_img))
-        //     {
-        //         sys_msg('fail to copy file: ' . realpath('../' . $img), 1, array(), false);
-        //     }
-        //     $gallery_thumb = '';
-        // }
     }
 
 
@@ -968,8 +945,6 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     }
     $link[3] = list_link($is_insert, $code);
 
-
-    //$key_array = array_keys($link);
     for ($i = 0; $i < count($link); $i++) {
         $key_array[] = $i;
     }

@@ -61,7 +61,7 @@ function insert_history()
             $goods['goods_id'] = $row['goods_id'];
             $goods['goods_name'] = $row['goods_name'];
             $goods['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
-            $goods['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
+            $goods['goods_thumb'] = get_image_path($row['goods_thumb']);
             $goods['shop_price'] = price_format($row['shop_price']);
             $goods['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
             $str .= '<ul class="clearfix"><li class="goodsimg"><a href="' . $goods['url'] . '" target="_blank"><img src="' . $goods['goods_thumb'] . '" alt="' . $goods['goods_name'] . '" class="B_blue" /></a></li><li><a href="' . $goods['url'] . '" target="_blank" title="' . $goods['goods_name'] . '">' . $goods['short_name'] . '</a><br />' . $GLOBALS['_LANG']['shop_price'] . '<font class="f1">' . $goods['shop_price'] . '</font><br /></li></ul>';

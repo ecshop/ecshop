@@ -418,10 +418,10 @@ function process_image_ex($page = 1, $page_size = 100, $type = 0, $thumb = true,
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             if ($thumb) {
-                get_image_path($row['goods_id'], '', true, 'goods', true);
+                get_image_path('');
             }
             if ($watermark) {
-                get_image_path($row['goods_id'], '', false, 'goods', true);
+                get_image_path('');
             }
         }
     } else {
@@ -430,10 +430,10 @@ function process_image_ex($page = 1, $page_size = 100, $type = 0, $thumb = true,
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             if ($thumb) {
-                get_image_path($row['goods_id'], $row['img_original'], true, 'gallery', true);
+                get_image_path($row['img_original']);
             }
             if ($watermark) {
-                get_image_path($row['goods_id'], $row['img_original'], false, 'gallery', true);
+                get_image_path($row['img_original']);
             }
         }
     }

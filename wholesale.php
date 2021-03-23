@@ -95,7 +95,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 下载价格单
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'price_list') {
+if ($_REQUEST['act'] == 'price_list') {
     $data = $_LANG['goods_name'] . "\t" . $_LANG['goods_attr'] . "\t" . $_LANG['number'] . "\t" . $_LANG['ws_price'] . "\t\n";
     $sql = "SELECT * FROM " . $ecs->table('wholesale') .
         "WHERE enabled = 1 AND CONCAT(',', rank_ids, ',') LIKE '" . '%,' . $_SESSION['user_rank'] . ',%' . "'";
@@ -128,7 +128,7 @@ elseif ($_REQUEST['act'] == 'price_list') {
 /*------------------------------------------------------ */
 //-- 加入购物车
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add_to_cart') {
+if ($_REQUEST['act'] == 'add_to_cart') {
     /* 取得参数 */
     $act_id = intval($_POST['act_id']);
     $goods_number = $_POST['goods_number'][$act_id];
@@ -250,7 +250,7 @@ elseif ($_REQUEST['act'] == 'add_to_cart') {
 /*------------------------------------------------------ */
 //-- 从购物车删除
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'drop_goods') {
+if ($_REQUEST['act'] == 'drop_goods') {
     $key = intval($_REQUEST['key']);
     if (isset($_SESSION['wholesale_goods'][$key])) {
         unset($_SESSION['wholesale_goods'][$key]);
@@ -264,7 +264,7 @@ elseif ($_REQUEST['act'] == 'drop_goods') {
 /*------------------------------------------------------ */
 //-- 提交订单
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'submit_order') {
+if ($_REQUEST['act'] == 'submit_order') {
     include_once(ROOT_PATH . 'includes/lib_order.php');
 
     /* 检查购物车中是否有商品 */

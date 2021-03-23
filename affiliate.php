@@ -20,9 +20,9 @@ if ($display_mode == 'javascript') {
 }
 
 /*------------------------------------------------------ */
-//-- 鍒ゆ柇鏄?惁瀛樺湪缂撳瓨锛屽?鏋滃瓨鍦ㄥ垯璋冪敤缂撳瓨锛屽弽涔嬭?鍙栫浉搴斿唴瀹
+//-- 判断是否存在缓存，如果存在则调用缓存，反之读取相应内容
 /*------------------------------------------------------ */
-/* 缂撳瓨缂栧彿 */
+/* 缓存编号 */
 $cache_id = sprintf('%X', crc32($_SERVER['QUERY_STRING']));
 
 $goodsid = intval($_GET['gid']);
@@ -33,7 +33,7 @@ $type = intval($_GET['type']);
 $tpl = ROOT_PATH . DATA_DIR . '/affiliate.html';
 if (!$smarty->is_cached($tpl, $cache_id)) {
     $time = gmtime();
-    /* 鏍规嵁鍙傛暟鐢熸垚鏌ヨ?璇?彞 */
+    /* 根据参数生成查询语句 */
 
     $goods_url = $ecs->url() . "goods.php?u=$userid&id=";
     $goods = get_goods_info($goodsid);

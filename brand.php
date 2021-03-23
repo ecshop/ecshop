@@ -118,10 +118,6 @@ if (!$smarty->is_cached('brand.dwt', $cache_id)) {
 
 $smarty->display('brand.dwt', $cache_id);
 
-/*------------------------------------------------------ */
-//-- PRIVATE FUNCTION
-/*------------------------------------------------------ */
-
 /**
  * 获得指定品牌的详细信息
  *
@@ -202,8 +198,8 @@ function brand_recommend_goods($type, $brand, $cat = 0)
                 sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
             $goods[$idx]['market_price'] = price_format($row['market_price']);
             $goods[$idx]['shop_price'] = price_format($row['shop_price']);
-            $goods[$idx]['thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
-            $goods[$idx]['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+            $goods[$idx]['thumb'] = get_image_path($row['goods_thumb']);
+            $goods[$idx]['goods_img'] = get_image_path($row['goods_img']);
             $goods[$idx]['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
 
             $idx++;
@@ -274,8 +270,8 @@ function brand_get_goods($brand_id, $cate, $size, $page, $sort, $order)
         $arr[$row['goods_id']]['shop_price'] = price_format($row['shop_price']);
         $arr[$row['goods_id']]['promote_price'] = ($promote_price > 0) ? price_format($promote_price) : '';
         $arr[$row['goods_id']]['goods_brief'] = $row['goods_brief'];
-        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
-        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_thumb']);
+        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_img']);
         $arr[$row['goods_id']]['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
     }
 

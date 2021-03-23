@@ -71,7 +71,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 拍卖商品 --> 商品详情
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'view') {
+if ($_REQUEST['act'] == 'view') {
     /* 取得参数：拍卖活动id */
     $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
     if ($id <= 0) {
@@ -161,7 +161,7 @@ elseif ($_REQUEST['act'] == 'view') {
 /*------------------------------------------------------ */
 //-- 拍卖商品 --> 出价
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'bid') {
+if ($_REQUEST['act'] == 'bid') {
     include_once(ROOT_PATH . 'includes/lib_order.php');
 
     /* 取得参数：拍卖活动id */
@@ -282,7 +282,7 @@ elseif ($_REQUEST['act'] == 'bid') {
 /*------------------------------------------------------ */
 //-- 拍卖商品 --> 购买
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'buy') {
+if ($_REQUEST['act'] == 'buy') {
     /* 查询：取得参数：拍卖活动id */
     $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
     if ($id <= 0) {
@@ -426,7 +426,7 @@ function auction_list($size, $page)
         $auction['formated_start_price'] = price_format($auction['start_price']);
         $auction['formated_end_price'] = price_format($auction['end_price']);
         $auction['formated_deposit'] = price_format($auction['deposit']);
-        $auction['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
+        $auction['goods_thumb'] = get_image_path($row['goods_thumb']);
         $auction['url'] = build_uri('auction', array('auid' => $auction['act_id']));
 
         if ($auction['status_no'] < 2) {

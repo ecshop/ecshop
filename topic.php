@@ -72,7 +72,7 @@ if (!$smarty->is_cached($templates, $cache_id)) {
         $row['goods_style_name'] = add_style($row['goods_name'], $row['goods_name_style']);
         $row['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
             sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
-        $row['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
+        $row['goods_thumb'] = get_image_path($row['goods_thumb']);
         $row['short_style_name'] = add_style($row['short_name'], $row['goods_name_style']);
 
         foreach ($arr as $key => $value) {

@@ -199,7 +199,7 @@ while ($row = $db->fetchRow($res)) {
     $goods[$idx]['shop_price'] = price_format($row['shop_price']);
     $goods[$idx]['promote_price'] = $promote_price > 0 ? price_format($promote_price) : '';
     $goods[$idx]['brief'] = $row['goods_brief'];
-    $goods[$idx]['thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
+    $goods[$idx]['thumb'] = get_image_path($row['goods_thumb']);
     $goods[$idx]['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
 
     $idx++;

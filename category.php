@@ -341,10 +341,6 @@ if (!$smarty->is_cached('category.dwt', $cache_id)) {
 
 $smarty->display('category.dwt', $cache_id);
 
-/*------------------------------------------------------ */
-//-- PRIVATE FUNCTION
-/*------------------------------------------------------ */
-
 /**
  * 获得分类的信息
  *
@@ -431,8 +427,8 @@ function category_get_goods($children, $brand, $min, $max, $ext, $size, $page, $
         $arr[$row['goods_id']]['shop_price'] = price_format($row['shop_price']);
         $arr[$row['goods_id']]['type'] = $row['goods_type'];
         $arr[$row['goods_id']]['promote_price'] = ($promote_price > 0) ? price_format($promote_price) : '';
-        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
-        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_thumb']);
+        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_img']);
         $arr[$row['goods_id']]['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
     }
 

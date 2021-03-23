@@ -43,14 +43,9 @@ $json = new JSON;
 
 echo $json->encode($res);
 
-/*------------------------------------------------------ */
-//-- PRIVATE FUNCTION
-/*------------------------------------------------------ */
-
 /**
  * 检查是否已经提交过投票
  *
- * @access  private
  * @param integer $vote_id
  * @param string $ip_address
  * @return  boolean
@@ -66,7 +61,6 @@ function vote_already_submited($vote_id, $ip_address)
 /**
  * 保存投票结果信息
  *
- * @access  public
  * @param integer $vote_id
  * @param string $ip_address
  * @param string $option_id

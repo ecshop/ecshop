@@ -386,7 +386,7 @@ function get_snatch($id)
         $goods['formated_market_price'] = price_format($goods['market_price']);
         $goods['formated_shop_price'] = price_format($goods['shop_price']);
         $goods['formated_promote_price'] = ($promote_price > 0) ? price_format($promote_price) : '';
-        $goods['goods_thumb'] = get_image_path($goods['goods_id'], $goods['goods_thumb'], true);
+        $goods['goods_thumb'] = get_image_path($goods['goods_thumb']);
         $goods['url'] = build_uri('goods', array('gid' => $goods['goods_id']), $goods['goods_name']);
         $goods['start_time'] = local_date($GLOBALS['_CFG']['time_format'], $goods['start_time']);
 

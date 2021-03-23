@@ -47,7 +47,7 @@ if (!empty($_REQUEST['goods']) && is_array($_REQUEST['goods']) && count($_REQUES
         $arr[$goods_id]['rank_price'] = price_format($row['rank_price']);
         $arr[$goods_id]['goods_weight'] = (intval($row['goods_weight']) > 0) ?
             ceil($row['goods_weight']) . $_LANG['kilogram'] : ceil($row['goods_weight'] * 1000) . $_LANG['gram'];
-        $arr[$goods_id]['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
+        $arr[$goods_id]['goods_thumb'] = get_image_path($row['goods_thumb']);
         $arr[$goods_id]['goods_brief'] = $row['goods_brief'];
         $arr[$goods_id]['brand_name'] = $row['brand_name'];
 

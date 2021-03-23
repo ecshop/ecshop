@@ -55,7 +55,7 @@ while ($row = $db->fetchRow($res)) {
 
     $subtotal = 0;
     foreach ($goods_res as $key => $val) {
-        $goods_res[$key]['goods_thumb'] = get_image_path($val['goods_id'], $val['goods_thumb'], true);
+        $goods_res[$key]['goods_thumb'] = get_image_path($val['goods_thumb']);
         $goods_res[$key]['market_price'] = price_format($val['market_price']);
         $goods_res[$key]['rank_price'] = price_format($val['rank_price']);
         $subtotal += $val['rank_price'] * $val['goods_number'];

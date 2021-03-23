@@ -1485,7 +1485,7 @@ function get_cart_goods()
         /* 增加是否在购物车里显示商品图 */
         if (($GLOBALS['_CFG']['show_goods_in_cart'] == "2" || $GLOBALS['_CFG']['show_goods_in_cart'] == "3") && $row['extension_code'] != 'package_buy') {
             $goods_thumb = $GLOBALS['db']->getOne("SELECT `goods_thumb` FROM " . $GLOBALS['ecs']->table('goods') . " WHERE `goods_id`='{$row['goods_id']}'");
-            $row['goods_thumb'] = get_image_path($row['goods_id'], $goods_thumb, true);
+            $row['goods_thumb'] = get_image_path($goods_thumb);
         }
         if ($row['extension_code'] == 'package_buy') {
             $row['package_goods_list'] = get_package_goods($row['goods_id']);

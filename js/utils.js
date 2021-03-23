@@ -1,4 +1,3 @@
-/* $Id : utils.js 5052 2007-02-03 10:30:13Z weberliu $ */
 
 var Browser = new Object();
 

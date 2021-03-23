@@ -1,4 +1,3 @@
-/* $Id : region.js 4865 2007-01-31 14:04:10Z paulgao $ */
 
 var region = new Object();
 

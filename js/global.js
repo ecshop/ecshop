@@ -1,4 +1,3 @@
-/* $Id: global.js 15469 2008-12-19 06:34:44Z testyang $ */
 Object.extend = function(destination, source)
 {
   for (property in source) {

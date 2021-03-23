@@ -1,4 +1,3 @@
-/* $Id: listtable.js 14980 2008-10-22 05:01:19Z testyang $ */
 if (typeof Ajax != 'object')
 {
   alert('Ajax object doesn\'t exists.');

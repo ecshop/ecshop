@@ -1,4 +1,3 @@
-/* $Id : auto_complete.js 4865 2007-01-31 14:04:10Z paulgao $ */
 
 function autoComplete(obj, hidden, url, callback)
 {

@@ -1,4 +1,3 @@
-/* $Id : selectzone.js 4824 2007-01-31 08:23:56Z paulgao $ */
 
 /* *
  * SelectZone 类

@@ -1,4 +1,3 @@
-/* $Id: index.js 15469 2008-12-19 06:34:44Z testyang $ */
 var best_str = new Object();
 var new_str = new Object();
 var hot_str = new Object();

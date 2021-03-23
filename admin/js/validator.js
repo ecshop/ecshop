@@ -1,23 +1,3 @@
-/* *
- * ECSHOP 表单验证类
- * ============================================================================
- * 版权所有 (C) 2005-2011 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址 : http : // www.ecshop.com
- * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改和再发布。
- * ============================================================================
- * $Author : paulgao $
- * $Date : 2007-01-31 16:23:56 +0800 (星期三, 31 一月 2007) $
- * $Id : validator.js 4824 2007-01-31 08:23:56Z paulgao $
-
- *//* *
- * 表单验证类
- *
- * @author : weber liu
- * @version : v1.1
- */
-
 var Validator = function(name)
 {
   this.formName = name;
@@ -309,8 +289,6 @@ function showNotice(objId)
 
 /* *
  * add one option of a select to another select.
- *
- * @author  Chunsheng Wang < wwccss@263.net >
  */
 function addItem(src, dst)
 {
@@ -331,8 +309,6 @@ function addItem(src, dst)
 
 /* *
  * move one selected option from a select.
- *
- * @author  Chunsheng Wang < wwccss@263.net >
  */
 function delItem(ItemList)
 {
@@ -348,8 +324,6 @@ function delItem(ItemList)
 
 /* *
  * join items of an select with ",".
- *
- * @author  Chunsheng Wang < wwccss@263.net >
  */
 function joinItem(ItemList)
 {

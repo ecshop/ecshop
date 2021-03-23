@@ -1,4 +1,3 @@
-/* $Id: showdiv.js 15469 2008-12-19 06:34:44Z testyang $ */
 //创建显示层
 var swtemp  = 0;
 var timer   = null;

@@ -5,39 +5,33 @@ define('IN_ECS', true);
 require(dirname(__FILE__) . '/includes/init.php');
 
 $action  = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
-if ($action == 'print_quotation')
-{
+if ($action == 'print_quotation') {
     $smarty->template_dir = DATA_DIR;
     $smarty->assign('shop_name', $_CFG['shop_title']);
-    $smarty->assign('cfg',       $_CFG);
+    $smarty->assign('cfg', $_CFG);
     $where = get_quotation_where($_POST);
     $sql = "SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, c.cat_name AS goods_category,p.product_id,p.product_number,p.goods_attr".
     " FROM " . $ecs->table('goods') . " AS g LEFT JOIN " . $ecs->table('category') . " AS c ON g.cat_id = c.cat_id LEFT JOIN ".$ecs->table('products')."as p  On g.goods_id=p.goods_id" . $where . " AND is_on_sale = 1 AND is_alone_sale = 1 ";
     $goods_list = $db->getAll($sql);
 
-    foreach($goods_list as $key=>$val)
-    {
-        if(!empty($val['product_id']))
-        {
-           $goods_list[$key]['goods_number']=$val['product_number'];
-           $product_info=product_info($val['goods_attr'],$val['goods_id']);
-           $goods_list[$key]['members_price']  = $val['shop_price'];
-           $goods_list[$key]['shop_price'] += $product_info['attr_price'];
-           $goods_list[$key]['product_name']=$product_info['attr_value'];
-           $goods_list[$key]['attr_price']  =$product_info['attr_price'];
-        }
-        else
-        {
-           $goods_list[$key]['members_price']  = $val['shop_price'];
-           $goods_list[$key]['product_name']='&nbsp;';
-           $goods_list[$key]['product_price']=0;
+    foreach ($goods_list as $key=>$val) {
+        if (!empty($val['product_id'])) {
+            $goods_list[$key]['goods_number']=$val['product_number'];
+            $product_info=product_info($val['goods_attr'], $val['goods_id']);
+            $goods_list[$key]['members_price']  = $val['shop_price'];
+            $goods_list[$key]['shop_price'] += $product_info['attr_price'];
+            $goods_list[$key]['product_name']=$product_info['attr_value'];
+            $goods_list[$key]['attr_price']  =$product_info['attr_price'];
+        } else {
+            $goods_list[$key]['members_price']  = $val['shop_price'];
+            $goods_list[$key]['product_name']='&nbsp;';
+            $goods_list[$key]['product_price']=0;
         }
         $goods_list[$key]['goods_key']=$key;
     }
     $user_rank = $db->getAll("SELECT * FROM " .$ecs->table('user_rank') . "WHERE show_price = 1 OR rank_id = '$_SESSION[user_rank]'");
     $rank_point = 0;
-    if (!empty($_SESSION['user_id']))
-    {
+    if (!empty($_SESSION['user_id'])) {
         $rank_point = $db->getOne("SELECT rank_points FROM " . $ecs->table('users') . " WHERE user_id = '$_SESSION[user_id]'");
     }
     $user_rank = calc_user_rank($user_rank, $rank_point);
@@ -54,13 +48,12 @@ assign_template();
 
 $position = assign_ur_here(0, $_LANG['quotation']);
 $smarty->assign('page_title', $position['title']);   // 页面标题
-$smarty->assign('ur_here',    $position['ur_here']); // 当前位置
+$smarty->assign('ur_here', $position['ur_here']); // 当前位置
 
 $smarty->assign('cat_list', cat_list());
-$smarty->assign('brand_list',   get_brand_list());
+$smarty->assign('brand_list', get_brand_list());
 
-if (is_null($smarty->get_template_vars('helps')))
-{
+if (is_null($smarty->get_template_vars('helps'))) {
     $smarty->assign('helps', get_shop_help()); // 网店帮助
 }
 
@@ -81,17 +74,12 @@ function get_quotation_where($filter)
 function calc_user_rank($rank, $rank_point)
 {
     $_tmprank = array();
-    foreach($rank as $_rank)
-    {
-        if ($_rank['show_price'])
-        {
+    foreach ($rank as $_rank) {
+        if ($_rank['show_price']) {
             $_tmprank['ext_price'][] = $_rank['rank_name'];
             $_tmprank['ext_rank'][] = $_rank['discount'];
-        }
-        else
-        {
-            if (!empty($_SESSION['user_id']) && ($rank_point >= $_rank['min_points']))
-            {
+        } else {
+            if (!empty($_SESSION['user_id']) && ($rank_point >= $_rank['min_points'])) {
                 $_tmprank['ext_price'][] = $_rank['rank_name'];
                 $_tmprank['ext_rank'][] = $_rank['discount'];
             }
@@ -102,8 +90,7 @@ function calc_user_rank($rank, $rank_point)
 
 function serve_user($goods_list)
 {
-    foreach ( $goods_list as $key=> $all_list )
-    {
+    foreach ($goods_list as $key=> $all_list) {
         $goods_id = $all_list['goods_id'];
         $goods_key =$all_list['goods_key'];
         $price = $all_list['members_price'];
@@ -114,26 +101,23 @@ function serve_user($goods_list)
                 "WHERE r.show_price = 1 OR r.rank_id = '$_SESSION[user_rank]'";
         $res = $GLOBALS['db']->getAll($sql);
 
-        foreach ( $res as $row )
-        {
+        foreach ($res as $row) {
             $arr[$row['rank_id']] = array(
                       'rank_name' => htmlspecialchars($row['rank_name']),
                       'price'     => price_format($row['price']+$all_list['attr_price']));
-
         }
         $arr_list[$goods_key] = $arr;
     }
     return $arr_list;
 }
-function product_info($goods_attr,$goods_id)
+function product_info($goods_attr, $goods_id)
 {
-    $goods_attr=str_replace('|',' OR goods_attr_id=',$goods_attr);
+    $goods_attr=str_replace('|', ' OR goods_attr_id=', $goods_attr);
     $sql="SELECT attr_value,attr_price FROM ". $GLOBALS['ecs']->table('goods_attr') ." WHERE goods_id='$goods_id' AND (goods_attr_id = $goods_attr)";
     $result =$GLOBALS['db']->getAll($sql);
     $i=1;
     $count=count($result);
-    foreach ($result as $val)
-    {
+    foreach ($result as $val) {
         $i==$count?$f='':$f='<br/>';
         $product_info['attr_value'].=$val['attr_value'].$f;
         $product_info['attr_price']+=$val['attr_price'];
@@ -141,4 +125,3 @@ function product_info($goods_attr,$goods_id)
     }
     return($product_info);
 }
-?>

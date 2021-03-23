@@ -4,8 +4,7 @@ define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 
-if ((DEBUG_MODE & 2) != 2)
-{
+if ((DEBUG_MODE & 2) != 2) {
     $smarty->caching = true;
 }
 
@@ -14,16 +13,11 @@ if ((DEBUG_MODE & 2) != 2)
 /*------------------------------------------------------ */
 
 /* 获得请求的分类 ID */
-if (isset($_REQUEST['id']))
-{
+if (isset($_REQUEST['id'])) {
     $cat_id = intval($_REQUEST['id']);
-}
-elseif (isset($_REQUEST['category']))
-{
+} elseif (isset($_REQUEST['category'])) {
     $cat_id = intval($_REQUEST['category']);
-}
-else
-{
+} else {
     /* 如果分类ID为0，则返回首页 */
     ecs_header("Location: ./\n");
 
@@ -40,7 +34,7 @@ $price_min = isset($_REQUEST['price_min']) && intval($_REQUEST['price_min']) > 0
 $filter_attr_str = isset($_REQUEST['filter_attr']) ? htmlspecialchars(trim($_REQUEST['filter_attr'])) : '0';
 
 $filter_attr_str = trim(urldecode($filter_attr_str));
-$filter_attr_str = preg_match('/^[\d\.]+$/',$filter_attr_str) ? $filter_attr_str : '';
+$filter_attr_str = preg_match('/^[\d\.]+$/', $filter_attr_str) ? $filter_attr_str : '';
 $filter_attr = empty($filter_attr_str) ? '' : explode('.', $filter_attr_str);
 
 
@@ -62,22 +56,18 @@ setcookie('ECS[display]', $display, gmtime() + 86400 * 7);
 $cache_id = sprintf('%X', crc32($cat_id . '-' . $display . '-' . $sort  .'-' . $order  .'-' . $page . '-' . $size . '-' . $_SESSION['user_rank'] . '-' .
     $_CFG['lang'] .'-'. $brand. '-' . $price_max . '-' .$price_min . '-' . $filter_attr_str));
 
-if (!$smarty->is_cached('category.dwt', $cache_id))
-{
+if (!$smarty->is_cached('category.dwt', $cache_id)) {
     /* 如果页面没有被缓存则重新获取页面的内容 */
 
     $children = get_children($cat_id);
 
     $cat = get_cat_info($cat_id);   // 获得分类的相关信息
 
-    if (!empty($cat))
-    {
-        $smarty->assign('keywords',    htmlspecialchars($cat['keywords']));
+    if (!empty($cat)) {
+        $smarty->assign('keywords', htmlspecialchars($cat['keywords']));
         $smarty->assign('description', htmlspecialchars($cat['cat_desc']));
-        $smarty->assign('cat_style',   htmlspecialchars($cat['style']));
-    }
-    else
-    {
+        $smarty->assign('cat_style', htmlspecialchars($cat['style']));
+    } else {
         /* 如果分类不存在则返回首页 */
         ecs_header("Location: ./\n");
 
@@ -85,24 +75,19 @@ if (!$smarty->is_cached('category.dwt', $cache_id))
     }
 
     /* 赋值固定内容 */
-    if ($brand > 0)
-    {
+    if ($brand > 0) {
         $sql = "SELECT brand_name FROM " .$GLOBALS['ecs']->table('brand'). " WHERE brand_id = '$brand'";
         $brand_name = $db->getOne($sql);
-    }
-    else
-    {
+    } else {
         $brand_name = '';
     }
 
     /* 获取价格分级 */
-    if ($cat['grade'] == 0  && $cat['parent_id'] != 0)
-    {
+    if ($cat['grade'] == 0  && $cat['parent_id'] != 0) {
         $cat['grade'] = get_parent_grade($cat_id); //如果当前分类级别为空，取最近的上级分类
     }
 
-    if ($cat['grade'] > 1)
-    {
+    if ($cat['grade'] > 1) {
         /* 需要价格分级 */
 
         /*
@@ -135,30 +120,28 @@ if (!$smarty->is_cached('category.dwt', $cache_id))
         $sql = "SELECT min(g.shop_price) AS min, max(g.shop_price) as max ".
                " FROM " . $ecs->table('goods'). " AS g ".
                " WHERE ($children OR " . get_extension_goods($children) . ') AND g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1  ';
-               //获得当前分类下商品价格的最大值、最小值
+        //获得当前分类下商品价格的最大值、最小值
 
         $row = $db->getRow($sql);
 
         // 取得价格分级最小单位级数，比如，千元商品最小以100为级数
         $price_grade = 0.0001;
-        for($i=-2; $i<= log10($row['max']); $i++)
-        {
+        for ($i=-2; $i<= log10($row['max']); $i++) {
             $price_grade *= 10;
         }
 
         //跨度
         $dx = ceil(($row['max'] - $row['min']) / ($cat['grade']) / $price_grade) * $price_grade;
-        if($dx == 0)
-        {
+        if ($dx == 0) {
             $dx = $price_grade;
         }
 
-        for($i = 1; $row['min'] > $dx * $i; $i ++);
+        for ($i = 1; $row['min'] > $dx * $i; $i ++);
 
-        for($j = 1; $row['min'] > $dx * ($i-1) + $price_grade * $j; $j++);
+        for ($j = 1; $row['min'] > $dx * ($i-1) + $price_grade * $j; $j++);
         $row['min'] = $dx * ($i-1) + $price_grade * ($j - 1);
 
-        for(; $row['max'] >= $dx * $i; $i ++);
+        for (; $row['max'] >= $dx * $i; $i ++);
         $row['max'] = $dx * ($i) + $price_grade * ($j - 1);
 
         $sql = "SELECT (FLOOR((g.shop_price - $row[min]) / $dx)) AS sn, COUNT(*) AS goods_num  ".
@@ -168,8 +151,7 @@ if (!$smarty->is_cached('category.dwt', $cache_id))
 
         $price_grade = $db->getAll($sql);
 
-        foreach ($price_grade as $key=>$val)
-        {
+        foreach ($price_grade as $key=>$val) {
             $temp_key = $key + 1;
             $price_grade[$temp_key]['goods_num'] = $val['goods_num'];
             $price_grade[$temp_key]['start'] = $row['min'] + round($dx * $val['sn']);
@@ -180,12 +162,9 @@ if (!$smarty->is_cached('category.dwt', $cache_id))
             $price_grade[$temp_key]['url'] = build_uri('category', array('cid'=>$cat_id, 'bid'=>$brand, 'price_min'=>$price_grade[$temp_key]['start'], 'price_max'=> $price_grade[$temp_key]['end'], 'filter_attr'=>$filter_attr_str), $cat['cat_name']);
 
             /* 判断价格区间是否被选中 */
-            if (isset($_REQUEST['price_min']) && $price_grade[$temp_key]['start'] == $price_min && $price_grade[$temp_key]['end'] == $price_max)
-            {
+            if (isset($_REQUEST['price_min']) && $price_grade[$temp_key]['start'] == $price_min && $price_grade[$temp_key]['end'] == $price_max) {
                 $price_grade[$temp_key]['selected'] = 1;
-            }
-            else
-            {
+            } else {
                 $price_grade[$temp_key]['selected'] = 0;
             }
         }
@@ -196,8 +175,7 @@ if (!$smarty->is_cached('category.dwt', $cache_id))
         $price_grade[0]['url'] = build_uri('category', array('cid'=>$cat_id, 'bid'=>$brand, 'price_min'=>0, 'price_max'=> 0, 'filter_attr'=>$filter_attr_str), $cat['cat_name']);
         $price_grade[0]['selected'] = empty($price_max) ? 1 : 0;
 
-        $smarty->assign('price_grade',     $price_grade);
-
+        $smarty->assign('price_grade', $price_grade);
     }
 
 
@@ -212,19 +190,15 @@ if (!$smarty->is_cached('category.dwt', $cache_id))
 
     $brands = $GLOBALS['db']->getAll($sql);
 
-    foreach ($brands AS $key => $val)
-    {
+    foreach ($brands as $key => $val) {
         $temp_key = $key + 1;
         $brands[$temp_key]['brand_name'] = $val['brand_name'];
         $brands[$temp_key]['url'] = build_uri('category', array('cid' => $cat_id, 'bid' => $val['brand_id'], 'price_min'=>$price_min, 'price_max'=> $price_max, 'filter_attr'=>$filter_attr_str), $cat['cat_name']);
 
         /* 判断品牌是否被选中 */
-        if ($brand == $brands[$key]['brand_id'])
-        {
+        if ($brand == $brands[$key]['brand_id']) {
             $brands[$temp_key]['selected'] = 1;
-        }
-        else
-        {
+        } else {
             $brands[$temp_key]['selected'] = 0;
         }
     }
@@ -238,16 +212,13 @@ if (!$smarty->is_cached('category.dwt', $cache_id))
 
     /* 属性筛选 */
     $ext = ''; //商品查询条件扩展
-    if ($cat['filter_attr'] > 0)
-    {
+    if ($cat['filter_attr'] > 0) {
         $cat_filter_attr = explode(',', $cat['filter_attr']);       //提取出此分类的筛选属性
         $all_attr_list = array();
 
-        foreach ($cat_filter_attr AS $key => $value)
-        {
+        foreach ($cat_filter_attr as $key => $value) {
             $sql = "SELECT a.attr_name FROM " . $ecs->table('attribute') . " AS a, " . $ecs->table('goods_attr') . " AS ga, " . $ecs->table('goods') . " AS g WHERE ($children OR " . get_extension_goods($children) . ") AND a.attr_id = ga.attr_id AND g.goods_id = ga.goods_id AND g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND a.attr_id='$value'";
-            if($temp_name = $db->getOne($sql))
-            {
+            if ($temp_name = $db->getOne($sql)) {
                 $all_attr_list[$key]['filter_attr_name'] = $temp_name;
 
                 $sql = "SELECT a.attr_id, MIN(a.goods_attr_id ) AS goods_id, a.attr_value AS attr_value FROM " . $ecs->table('goods_attr') . " AS a, " . $ecs->table('goods') .
@@ -260,8 +231,7 @@ if (!$smarty->is_cached('category.dwt', $cache_id))
 
                 $temp_arrt_url_arr = array();
 
-                for ($i = 0; $i < count($cat_filter_attr); $i++)        //获取当前url中已选择属性的值，并保留在数组中
-                {
+                for ($i = 0; $i < count($cat_filter_attr); $i++) {        //获取当前url中已选择属性的值，并保留在数组中
                     $temp_arrt_url_arr[$i] = !empty($filter_attr[$i]) ? $filter_attr[$i] : 0;
                 }
 
@@ -271,8 +241,7 @@ if (!$smarty->is_cached('category.dwt', $cache_id))
                 $all_attr_list[$key]['attr_list'][0]['url'] = build_uri('category', array('cid'=>$cat_id, 'bid'=>$brand, 'price_min'=>$price_min, 'price_max'=>$price_max, 'filter_attr'=>$temp_arrt_url), $cat['cat_name']);
                 $all_attr_list[$key]['attr_list'][0]['selected'] = empty($filter_attr[$key]) ? 1 : 0;
 
-                foreach ($attr_list as $k => $v)
-                {
+                foreach ($attr_list as $k => $v) {
                     $temp_key = $k + 1;
                     $temp_arrt_url_arr[$key] = $v['goods_id'];       //为url中代表当前筛选属性的位置变量赋值,并生成以‘.’分隔的筛选属性字符串
                     $temp_arrt_url = implode('.', $temp_arrt_url_arr);
@@ -280,30 +249,23 @@ if (!$smarty->is_cached('category.dwt', $cache_id))
                     $all_attr_list[$key]['attr_list'][$temp_key]['attr_value'] = $v['attr_value'];
                     $all_attr_list[$key]['attr_list'][$temp_key]['url'] = build_uri('category', array('cid'=>$cat_id, 'bid'=>$brand, 'price_min'=>$price_min, 'price_max'=>$price_max, 'filter_attr'=>$temp_arrt_url), $cat['cat_name']);
 
-                    if (!empty($filter_attr[$key]) AND $filter_attr[$key] == $v['goods_id'])
-                    {
+                    if (!empty($filter_attr[$key]) and $filter_attr[$key] == $v['goods_id']) {
                         $all_attr_list[$key]['attr_list'][$temp_key]['selected'] = 1;
-                    }
-                    else
-                    {
+                    } else {
                         $all_attr_list[$key]['attr_list'][$temp_key]['selected'] = 0;
                     }
                 }
             }
-
         }
 
-        $smarty->assign('filter_attr_list',  $all_attr_list);
+        $smarty->assign('filter_attr_list', $all_attr_list);
         /* 扩展商品查询条件 */
-        if (!empty($filter_attr))
-        {
+        if (!empty($filter_attr)) {
             $ext_sql = "SELECT DISTINCT(b.goods_id) FROM " . $ecs->table('goods_attr') . " AS a, " . $ecs->table('goods_attr') . " AS b " .  "WHERE ";
             $ext_group_goods = array();
 
-            foreach ($filter_attr AS $k => $v)                      // 查出符合所有筛选属性条件的商品id */
-            {
-                if (is_numeric($v) && $v !=0 &&isset($cat_filter_attr[$k]))
-                {
+            foreach ($filter_attr as $k => $v) {                      // 查出符合所有筛选属性条件的商品id */
+                if (is_numeric($v) && $v !=0 &&isset($cat_filter_attr[$k])) {
                     $sql = $ext_sql . "b.attr_value = a.attr_value AND b.attr_id = " . $cat_filter_attr[$k] ." AND a.goods_attr_id = " . $v;
                     $ext_group_goods = $db->getColCached($sql);
                     $ext .= ' AND ' . db_create_in($ext_group_goods, 'g.goods_id');
@@ -315,72 +277,65 @@ if (!$smarty->is_cached('category.dwt', $cache_id))
     assign_template('c', array($cat_id));
 
     $position = assign_ur_here($cat_id, $brand_name);
-    $smarty->assign('page_title',       $position['title']);    // 页面标题
-    $smarty->assign('ur_here',          $position['ur_here']);  // 当前位置
+    $smarty->assign('page_title', $position['title']);    // 页面标题
+    $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
 
-    $smarty->assign('categories',       get_categories_tree($cat_id)); // 分类树
-    $smarty->assign('helps',            get_shop_help());              // 网店帮助
-    $smarty->assign('top_goods',        get_top10());                  // 销售排行
+    $smarty->assign('categories', get_categories_tree($cat_id)); // 分类树
+    $smarty->assign('helps', get_shop_help());              // 网店帮助
+    $smarty->assign('top_goods', get_top10());                  // 销售排行
     $smarty->assign('show_marketprice', $_CFG['show_marketprice']);
-    $smarty->assign('category',         $cat_id);
-    $smarty->assign('brand_id',         $brand);
-    $smarty->assign('price_max',        $price_max);
-    $smarty->assign('price_min',        $price_min);
-    $smarty->assign('filter_attr',      $filter_attr_str);
-    $smarty->assign('feed_url',         ($_CFG['rewrite'] == 1) ? "feed-c$cat_id.xml" : 'feed.php?cat=' . $cat_id); // RSS URL
+    $smarty->assign('category', $cat_id);
+    $smarty->assign('brand_id', $brand);
+    $smarty->assign('price_max', $price_max);
+    $smarty->assign('price_min', $price_min);
+    $smarty->assign('filter_attr', $filter_attr_str);
+    $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-c$cat_id.xml" : 'feed.php?cat=' . $cat_id); // RSS URL
 
-    if ($brand > 0)
-    {
+    if ($brand > 0) {
         $arr['all'] = array('brand_id'  => 0,
                         'brand_name'    => $GLOBALS['_LANG']['all_goods'],
                         'brand_logo'    => '',
                         'goods_num'     => '',
                         'url'           => build_uri('category', array('cid'=>$cat_id), $cat['cat_name'])
                     );
-    }
-    else
-    {
+    } else {
         $arr = array();
     }
 
     $brand_list = array_merge($arr, get_brands($cat_id, 'category'));
 
-    $smarty->assign('data_dir',    DATA_DIR);
-    $smarty->assign('brand_list',      $brand_list);
+    $smarty->assign('data_dir', DATA_DIR);
+    $smarty->assign('brand_list', $brand_list);
     $smarty->assign('promotion_info', get_promotion_info());
 
 
     /* 调查 */
     $vote = get_vote();
-    if (!empty($vote))
-    {
-        $smarty->assign('vote_id',     $vote['id']);
-        $smarty->assign('vote',        $vote['content']);
+    if (!empty($vote)) {
+        $smarty->assign('vote_id', $vote['id']);
+        $smarty->assign('vote', $vote['content']);
     }
 
-    $smarty->assign('best_goods',      get_category_recommend_goods('best', $children, $brand, $price_min, $price_max, $ext));
+    $smarty->assign('best_goods', get_category_recommend_goods('best', $children, $brand, $price_min, $price_max, $ext));
     $smarty->assign('promotion_goods', get_category_recommend_goods('promote', $children, $brand, $price_min, $price_max, $ext));
-    $smarty->assign('hot_goods',       get_category_recommend_goods('hot', $children, $brand, $price_min, $price_max, $ext));
+    $smarty->assign('hot_goods', get_category_recommend_goods('hot', $children, $brand, $price_min, $price_max, $ext));
 
     $count = get_cagtegory_goods_count($children, $brand, $price_min, $price_max, $ext);
     $max_page = ($count> 0) ? ceil($count / $size) : 1;
-    if ($page > $max_page)
-    {
+    if ($page > $max_page) {
         $page = $max_page;
     }
     $goodslist = category_get_goods($children, $brand, $price_min, $price_max, $ext, $size, $page, $sort, $order);
-    if($display == 'grid')
-    {
-        if(count($goodslist) % 2 != 0)
-        {
+    if ($display == 'grid') {
+        if (count($goodslist) % 2 != 0) {
             $goodslist[] = array();
         }
     }
-    $smarty->assign('goods_list',       $goodslist);
-    $smarty->assign('category',         $cat_id);
+    $smarty->assign('goods_list', $goodslist);
+    $smarty->assign('category', $cat_id);
     $smarty->assign('script_name', 'category');
 
-    assign_pager('category',            $cat_id, $count, $size, $sort, $order, $page, '', $brand, $price_min, $price_max, $display, $filter_attr_str); // 分页
+    assign_pager('category', $cat_id, $count, $size, $sort, $order, $page, '', $brand, $price_min, $price_max, $display, $filter_attr_str); // 分页
     assign_dynamic('category'); // 动态内容
 }
 
@@ -416,18 +371,15 @@ function category_get_goods($children, $brand, $min, $max, $ext, $size, $page, $
     $where = "g.is_on_sale = 1 AND g.is_alone_sale = 1 AND ".
             "g.is_delete = 0 AND ($children OR " . get_extension_goods($children) . ')';
 
-    if ($brand > 0)
-    {
+    if ($brand > 0) {
         $where .=  "AND g.brand_id=$brand ";
     }
 
-    if ($min > 0)
-    {
+    if ($min > 0) {
         $where .= " AND g.shop_price >= $min ";
     }
 
-    if ($max > 0)
-    {
+    if ($max > 0) {
         $where .= " AND g.shop_price <= $max ";
     }
 
@@ -442,54 +394,39 @@ function category_get_goods($children, $brand, $min, $max, $ext, $size, $page, $
     $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);
 
     $arr = array();
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
-        if ($row['promote_price'] > 0)
-        {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
+        if ($row['promote_price'] > 0) {
             $promote_price = bargain_price($row['promote_price'], $row['promote_start_date'], $row['promote_end_date']);
-        }
-        else
-        {
+        } else {
             $promote_price = 0;
         }
 
         /* 处理商品水印图片 */
         $watermark_img = '';
 
-        if ($promote_price != 0)
-        {
+        if ($promote_price != 0) {
             $watermark_img = "watermark_promote_small";
-        }
-        elseif ($row['is_new'] != 0)
-        {
+        } elseif ($row['is_new'] != 0) {
             $watermark_img = "watermark_new_small";
-        }
-        elseif ($row['is_best'] != 0)
-        {
+        } elseif ($row['is_best'] != 0) {
             $watermark_img = "watermark_best_small";
-        }
-        elseif ($row['is_hot'] != 0)
-        {
+        } elseif ($row['is_hot'] != 0) {
             $watermark_img = 'watermark_hot_small';
         }
 
-        if ($watermark_img != '')
-        {
+        if ($watermark_img != '') {
             $arr[$row['goods_id']]['watermark_img'] =  $watermark_img;
         }
 
         $arr[$row['goods_id']]['goods_id']         = $row['goods_id'];
-        if($display == 'grid')
-        {
+        if ($display == 'grid') {
             $arr[$row['goods_id']]['goods_name']       = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
-        }
-        else
-        {
+        } else {
             $arr[$row['goods_id']]['goods_name']       = $row['goods_name'];
         }
         $arr[$row['goods_id']]['name']             = $row['goods_name'];
         $arr[$row['goods_id']]['goods_brief']      = $row['goods_brief'];
-        $arr[$row['goods_id']]['goods_style_name'] = add_style($row['goods_name'],$row['goods_name_style']);
+        $arr[$row['goods_id']]['goods_style_name'] = add_style($row['goods_name'], $row['goods_name_style']);
         $arr[$row['goods_id']]['market_price']     = price_format($row['market_price']);
         $arr[$row['goods_id']]['shop_price']       = price_format($row['shop_price']);
         $arr[$row['goods_id']]['type']             = $row['goods_type'];
@@ -513,18 +450,15 @@ function get_cagtegory_goods_count($children, $brand = 0, $min = 0, $max = 0, $e
 {
     $where  = "g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 AND ($children OR " . get_extension_goods($children) . ')';
 
-    if ($brand > 0)
-    {
+    if ($brand > 0) {
         $where .=  " AND g.brand_id = $brand ";
     }
 
-    if ($min > 0)
-    {
+    if ($min > 0) {
         $where .= " AND g.shop_price >= $min ";
     }
 
-    if ($max > 0)
-    {
+    if ($max > 0) {
         $where .= " AND g.shop_price <= $max ";
     }
 
@@ -542,46 +476,35 @@ function get_cagtegory_goods_count($children, $brand = 0, $min = 0, $max = 0, $e
  */
 function get_parent_grade($cat_id)
 {
-    static $res = NULL;
+    static $res = null;
 
-    if ($res === NULL)
-    {
+    if ($res === null) {
         $data = read_static_cache('cat_parent_grade');
-        if ($data === false)
-        {
+        if ($data === false) {
             $sql = "SELECT parent_id, cat_id, grade ".
                    " FROM " . $GLOBALS['ecs']->table('category');
             $res = $GLOBALS['db']->getAll($sql);
             write_static_cache('cat_parent_grade', $res);
-        }
-        else
-        {
+        } else {
             $res = $data;
         }
     }
 
-    if (!$res)
-    {
+    if (!$res) {
         return 0;
     }
 
     $parent_arr = array();
     $grade_arr = array();
 
-    foreach ($res as $val)
-    {
+    foreach ($res as $val) {
         $parent_arr[$val['cat_id']] = $val['parent_id'];
         $grade_arr[$val['cat_id']] = $val['grade'];
     }
 
-    while ($parent_arr[$cat_id] >0 && $grade_arr[$cat_id] == 0)
-    {
+    while ($parent_arr[$cat_id] >0 && $grade_arr[$cat_id] == 0) {
         $cat_id = $parent_arr[$cat_id];
     }
 
     return $grade_arr[$cat_id];
-
 }
-
-
-?>

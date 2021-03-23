@@ -7,12 +7,9 @@ require(dirname(__FILE__) . '/includes/init.php');
 $condition = array();
 $picks = array();
 $cat_id = !empty($_GET['cat_id']) ? intval($_GET['cat_id']) : 0;
-if (!empty($_GET['attr']))
-{
-    foreach($_GET['attr'] as $key => $value)
-    {
-        if (!is_numeric($key))
-        {
+if (!empty($_GET['attr'])) {
+    foreach ($_GET['attr'] as $key => $value) {
+        if (!is_numeric($key)) {
             unset($_GET['attr'][$key]);
             continue;
         }
@@ -21,8 +18,7 @@ if (!empty($_GET['attr']))
     }
 }
 
-if (empty($cat_id))
-{
+if (empty($cat_id)) {
     /* 获取所有符合条件的商品类型 */
     $sql = "SELECT DISTINCT t.cat_id, t.cat_name " .
             "FROM " . $ecs->table('goods_type') . " AS t, " . $ecs->table('attribute') . " AS a, " . $ecs->table('goods_attr') . " AS g " .
@@ -33,8 +29,7 @@ if (empty($cat_id))
     $cat_name = array();
     $in_goods = '';
 
-    while ($row = $db->fetchRow($rs))
-    {
+    while ($row = $db->fetchRow($rs)) {
         $condition[$row['cat_id']]['name'] = $row['cat_name'];
         $in_cat[] = $row['cat_id'];
     }
@@ -56,10 +51,8 @@ if (empty($cat_id))
             " WHERE a.attr_id = g.attr_id ".$in_attr." ORDER BY cat_id";
     $rs = $db->query($sql);
 
-    while ($row = $db->fetchRow($rs))
-    {
-        if (empty($condition[$row['cat_id']]['cat'][$row['attr_id']]['cat_name']))
-        {
+    while ($row = $db->fetchRow($rs)) {
+        if (empty($condition[$row['cat_id']]['cat'][$row['attr_id']]['cat_name'])) {
             $condition[$row['cat_id']]['cat'][$row['attr_id']]['cat_name'] = $row['attr_name'];
         }
 
@@ -74,9 +67,7 @@ if (empty($cat_id))
     $in_goods = $db->GetCol($sql);
     $in_goods = 'AND g.goods_id ' . db_create_in(implode(',', $in_goods));
     $url = "search.php?pickout=1";
-}
-else
-{
+} else {
     /* 取得商品类型名称 */
     $sql = "SELECT cat_name FROM ".$ecs->table('goods_type')." WHERE cat_id = '$cat_id'";
     $cat_name = $db->GetOne($sql);
@@ -87,38 +78,31 @@ else
     $attr_picks = array(); //选择过的attr_id
 
     /* 处理属性,获取满足属性的goods_id */
-    if (!empty($_GET['attr']))
-    {
+    if (!empty($_GET['attr'])) {
         $attr_table = '';
         $attr_where = '';
         $attr_url   = '';
         $i = 0;
         $goods_result = '';
-        foreach ($_GET['attr'] AS $key => $value)
-        {
+        foreach ($_GET['attr'] as $key => $value) {
             $attr_url .= '&attr[' . $key . ']=' . $value;
 
             $attr_picks[] = $key;
-            if ($i > 0)
-            {
-                if (empty($goods_result))
-                {
+            if ($i > 0) {
+                if (empty($goods_result)) {
                     break;
                 }
-                $goods_result = $db->getCol("SELECT goods_id FROM " . $ecs->table("goods_attr") . " WHERE goods_id IN (" . implode(',' , $goods_result) . ") AND attr_id='$key' AND attr_value='$value'");
-            }
-            else
-            {
+                $goods_result = $db->getCol("SELECT goods_id FROM " . $ecs->table("goods_attr") . " WHERE goods_id IN (" . implode(',', $goods_result) . ") AND attr_id='$key' AND attr_value='$value'");
+            } else {
                 $goods_result = $db->getCol("SELECT goods_id FROM " . $ecs->table("goods_attr") . " WHERE attr_id='$key' AND attr_value='$value'");
             }
             $i++;
         }
 
         /* 获取指定attr_id的名字 */
-        $sql = "SELECT attr_id, attr_name FROM ".$ecs->table('attribute')." WHERE attr_id ".db_create_in(implode(',',$attr_picks));
+        $sql = "SELECT attr_id, attr_name FROM ".$ecs->table('attribute')." WHERE attr_id ".db_create_in(implode(',', $attr_picks));
         $rs = $db->query($sql);
-        while ($row = $db->fetchRow($rs))
-        {
+        while ($row = $db->fetchRow($rs)) {
             $picks[] = array('name'=>'<strong>'.$row['attr_name'].':</strong><br />'.htmlspecialchars(urldecode($_GET['attr'][$row['attr_id']])), 'url'=>'pick_out.php?cat_id='.$cat_id.search_url($attr_picks, $row['attr_id']));
         }
 
@@ -126,9 +110,7 @@ else
         $goods_count = count($goods_result);
         /* 获取符合条件的goods_id */
         $in_goods = 'AND g.goods_id '.db_create_in(implode(',', $goods_result));
-    }
-    else
-    {
+    } else {
         /* 仅选择了商品类型的情况 */
 
         /* 查出数量 */
@@ -139,7 +121,6 @@ else
         $sql = "SELECT DISTINCT g.goods_id FROM ".$ecs->table('goods_attr')." AS g, ".$ecs->table('attribute')." AS a WHERE g.attr_id = a.attr_id AND a.cat_id = '$cat_id' LIMIT 100";
         $in_goods = $db->GetCol($sql);
         $in_goods = 'AND g.goods_id '.db_create_in(implode(',', $in_goods));
-
     }
 
     /* 获取符合条件的属性 */
@@ -154,10 +135,8 @@ else
     $sql = "SELECT DISTINCT g.attr_id, a.attr_name, g.attr_value FROM ".$ecs->table('goods_attr')." AS g, ".$ecs->table('attribute') ." AS a WHERE a.attr_id = g.attr_id ".$in_attr.$in_goods;
     $rs = $db->query($sql);
 
-    while ($row = $db->fetchRow($rs))
-    {
-        if (empty($condition[0]['cat'][$row['attr_id']]['cat_name']))
-        {
+    while ($row = $db->fetchRow($rs)) {
+        if (empty($condition[0]['cat'][$row['attr_id']]['cat_name'])) {
             $condition[0]['cat'][$row['attr_id']]['cat_name'] = $row['attr_name'];
         }
         $condition[0]['cat'][$row['attr_id']]['list'][] = array('name'=>$row['attr_value'], 'url'=>'pick_out.php?cat_id='.$cat_id.search_url($attr_picks).'&amp;attr['.$row['attr_id'].']='.urlencode($row['attr_value']));
@@ -165,7 +144,6 @@ else
 
     /* 生成更多商品的url */
     $url = "search.php?pickout=1&amp;cat_id=".$cat_id.search_url($attr_picks);
-
 }
 
 /* 显示商品 */
@@ -188,8 +166,7 @@ $sql = "SELECT b.brand_id, b.brand_name, b.brand_logo, COUNT(g.goods_id) AS good
        " GROUP BY g.brand_id ";
 
 $brand_list = $db->getAll($sql);
-foreach ($brand_list as $key=>$val)
-{
+foreach ($brand_list as $key=>$val) {
     $brand_list[$key]['url'] = $url . '&amp;brand=' . $val['brand_id'];
 }
 
@@ -202,21 +179,16 @@ $sql = "SELECT c.cat_id, c.cat_name, COUNT(g.goods_id) AS goods_num ".
 
 $cat_list = $db->getAll($sql);
 
-foreach ($cat_list as $key=>$val)
-{
+foreach ($cat_list as $key=>$val) {
     $cat_list[$key]['url'] = $url . '&amp;category=' . $val['cat_id'];
 }
 
 
 $idx = 0;
-while ($row = $db->fetchRow($res))
-{
-   if ($row['promote_price'] > 0)
-   {
+while ($row = $db->fetchRow($res)) {
+    if ($row['promote_price'] > 0) {
         $promote_price = bargain_price($row['promote_price'], $row['promote_start_date'], $row['promote_end_date']);
-    }
-    else
-    {
+    } else {
         $promote_price = 0;
     }
 
@@ -237,32 +209,31 @@ $picks[] = array('name'=>$_LANG['remove_all'], 'url'=>'pick_out.php');
 
 assign_template();
 $position = assign_ur_here(0, $_LANG['pick_out']);
-$smarty->assign('page_title',       $position['title']);    // 页面标题
-$smarty->assign('ur_here',          $position['ur_here']);  // 当前位置
+$smarty->assign('page_title', $position['title']);    // 页面标题
+$smarty->assign('ur_here', $position['ur_here']);  // 当前位置
 
-$smarty->assign('brand_list',       $brand_list);       //品牌
-$smarty->assign('cat_list',         $cat_list);        //分类列表
+$smarty->assign('brand_list', $brand_list);       //品牌
+$smarty->assign('cat_list', $cat_list);        //分类列表
 
-$smarty->assign('categories',       get_categories_tree()); // 分类树
-$smarty->assign('helps',            get_shop_help());  // 网店帮助
-$smarty->assign('top_goods',        get_top10());      // 销售排行
-$smarty->assign('data_dir',         DATA_DIR);  // 数据目录
+$smarty->assign('categories', get_categories_tree()); // 分类树
+$smarty->assign('helps', get_shop_help());  // 网店帮助
+$smarty->assign('top_goods', get_top10());      // 销售排行
+$smarty->assign('data_dir', DATA_DIR);  // 数据目录
 
 /* 调查 */
 $vote = get_vote();
-if (!empty($vote))
-{
+if (!empty($vote)) {
     $smarty->assign('vote_id', $vote['id']);
-    $smarty->assign('vote',    $vote['content']);
+    $smarty->assign('vote', $vote['content']);
 }
 
 assign_dynamic('pick_out');
 
-$smarty->assign('url',           $url);
+$smarty->assign('url', $url);
 $smarty->assign('pickout_goods', $goods);
-$smarty->assign('count',         $goods_count);
-$smarty->assign('picks',         $picks);
-$smarty->assign('condition',     $condition);
+$smarty->assign('count', $goods_count);
+$smarty->assign('picks', $picks);
+$smarty->assign('condition', $condition);
 $smarty->display('pick_out.dwt');
 
 /**
@@ -276,15 +247,11 @@ $smarty->display('pick_out.dwt');
 function search_url(&$attr_picks, $attr_id = 0)
 {
     $str = '';
-    foreach ($attr_picks AS $pick_id)
-    {
-        if ($pick_id != $attr_id)
-        {
+    foreach ($attr_picks as $pick_id) {
+        if ($pick_id != $attr_id) {
             $str .= '&amp;attr['.$pick_id.']='.urlencode($_GET['attr'][$pick_id]);
         }
     }
 
     return $str;
 }
-
-?>

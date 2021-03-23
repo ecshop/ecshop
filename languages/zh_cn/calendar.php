@@ -58,5 +58,3 @@ $_LANG['calendar_lang']['time_part'] = "(Shift-)点击鼠标或拖动改变值";
 $_LANG['calendar_lang']['calendar_wk'] = "周";
 $_LANG['calendar_lang']['calendar_day'] = "日";
 $_LANG['calendar_lang']['calendar_time'] = "时间";
-
-?>

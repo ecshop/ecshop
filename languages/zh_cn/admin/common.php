@@ -336,6 +336,3 @@ $_LANG['alipay_look'] = '<a href=\"https://www.alipay.com/himalayas/practicality
 
 
 $_LANG['04_sms_sign'] = '短信签名';
-
-
-?>

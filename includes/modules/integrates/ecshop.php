@@ -1,13 +1,11 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
 /* 模块的基本信息 */
-if (isset($set_modules) && $set_modules == TRUE)
-{
+if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 会员数据整合插件的代码必须和文件名保持一致 */
@@ -31,9 +29,9 @@ if (isset($set_modules) && $set_modules == TRUE)
 require_once(ROOT_PATH . 'includes/modules/integrates/integrate.php');
 class ecshop extends integrate
 {
-    var $is_ecshop = 1;
+    public $is_ecshop = 1;
 
-    function __construct($cfg)
+    public function __construct($cfg)
     {
         $this->ecshop($cfg);
     }
@@ -46,7 +44,7 @@ class ecshop extends integrate
      *
      * @return void
      */
-    function ecshop($cfg)
+    public function ecshop($cfg)
     {
         parent::integrate(array());
         $this->user_table = 'users';
@@ -71,75 +69,59 @@ class ecshop extends integrate
      *
      * @return  int
      */
-    function check_user($username, $password = null)
+    public function check_user($username, $password = null)
     {
-        if ($this->charset != 'UTF8')
-        {
+        if ($this->charset != 'UTF8') {
             $post_username = ecs_iconv('UTF8', $this->charset, $username);
-        }
-        else
-        {
+        } else {
             $post_username = $username;
         }
 
-        if ($password === null)
-        {
+        if ($password === null) {
             $sql = "SELECT " . $this->field_id .
                    " FROM " . $this->table($this->user_table).
                    " WHERE " . $this->field_name . "='" . $post_username . "'";
 
             return $this->db->getOne($sql);
-        }
-        else
-        {
+        } else {
             $sql = "SELECT user_id, password, salt,ec_salt " .
                    " FROM " . $this->table($this->user_table).
                    " WHERE user_name='$post_username'";
             $row = $this->db->getRow($sql);
-			$ec_salt=$row['ec_salt'];
-            if (empty($row))
-            {
+            $ec_salt=$row['ec_salt'];
+            if (empty($row)) {
                 return 0;
             }
 
-            if (empty($row['salt']))
-            {
-                if ($row['password'] != $this->compile_password(array('password'=>$password,'ec_salt'=>$ec_salt)))
-                {
+            if (empty($row['salt'])) {
+                if ($row['password'] != $this->compile_password(array('password'=>$password,'ec_salt'=>$ec_salt))) {
                     return 0;
-                }
-                else
-                {
-					if(empty($ec_salt))
-				    {
-						$ec_salt=rand(1,9999);
-						$new_password=md5(md5($password).$ec_salt);
-					    $sql = "UPDATE ".$this->table($this->user_table)."SET password= '" .$new_password."',ec_salt='".$ec_salt."'".
+                } else {
+                    if (empty($ec_salt)) {
+                        $ec_salt=rand(1, 9999);
+                        $new_password=md5(md5($password).$ec_salt);
+                        $sql = "UPDATE ".$this->table($this->user_table)."SET password= '" .$new_password."',ec_salt='".$ec_salt."'".
                    " WHERE user_name='$post_username'";
-                         $this->db->query($sql);
-
-					}
+                        $this->db->query($sql);
+                    }
                     return $row['user_id'];
                 }
-            }
-            else
-            {
+            } else {
                 /* 如果salt存在，使用salt方式加密验证，验证通过洗白用户密码 */
                 $encrypt_type = substr($row['salt'], 0, 1);
                 $encrypt_salt = substr($row['salt'], 1);
 
                 /* 计算加密后密码 */
                 $encrypt_password = '';
-                switch ($encrypt_type)
-                {
-                    case ENCRYPT_ZC :
+                switch ($encrypt_type) {
+                    case ENCRYPT_ZC:
                         $encrypt_password = md5($encrypt_salt.$password);
                         break;
                     /* 如果还有其他加密方式添加到这里  */
                     //case other :
                     //  ----------------------------------
                     //  break;
-                    case ENCRYPT_UC :
+                    case ENCRYPT_UC:
                         $encrypt_password = md5(md5($password).$encrypt_salt);
                         break;
 
@@ -148,8 +130,7 @@ class ecshop extends integrate
 
                 }
 
-                if ($row['password'] != $encrypt_password)
-                {
+                if ($row['password'] != $encrypt_password) {
                     return 0;
                 }
 
@@ -162,8 +143,4 @@ class ecshop extends integrate
             }
         }
     }
-
-
 }
-
-?>

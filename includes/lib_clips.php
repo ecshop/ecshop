@@ -1,7 +1,6 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
@@ -29,14 +28,10 @@ function get_collection_goods($user_id, $num = 10, $start = 0)
     $res = $GLOBALS['db'] -> selectLimit($sql, $num, $start);
 
     $goods_list = array();
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
-        if ($row['promote_price'] > 0)
-        {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
+        if ($row['promote_price'] > 0) {
             $promote_price = bargain_price($row['promote_price'], $row['promote_start_date'], $row['promote_end_date']);
-        }
-        else
-        {
+        } else {
             $promote_price = 0;
         }
 
@@ -87,35 +82,30 @@ function get_message_list($user_id, $user_name, $num, $start, $order_id = 0)
     /* 获取留言数据 */
     $msg = array();
     $sql = "SELECT * FROM " .$GLOBALS['ecs']->table('feedback');
-    if ($order_id)
-    {
+    if ($order_id) {
         $sql .= " WHERE parent_id = 0 AND order_id = '$order_id' AND user_id = '$user_id' ORDER BY msg_time DESC";
-    }
-    else
-    {
+    } else {
         $sql .= " WHERE parent_id = 0 AND user_id = '$user_id' AND user_name = '" . $_SESSION['user_name'] . "' AND order_id=0 ORDER BY msg_time DESC";
     }
 
     $res = $GLOBALS['db']->SelectLimit($sql, $num, $start);
 
-    while ($rows = $GLOBALS['db']->fetchRow($res))
-    {
+    while ($rows = $GLOBALS['db']->fetchRow($res)) {
         /* 取得留言的回复 */
         //if (empty($order_id))
         //{
-            $reply = array();
-            $sql   = "SELECT user_name, user_email, msg_time, msg_content".
+        $reply = array();
+        $sql   = "SELECT user_name, user_email, msg_time, msg_content".
                      " FROM " .$GLOBALS['ecs']->table('feedback') .
                      " WHERE parent_id = '" . $rows['msg_id'] . "'";
-            $reply = $GLOBALS['db']->getRow($sql);
+        $reply = $GLOBALS['db']->getRow($sql);
 
-            if ($reply)
-            {
-                $msg[$rows['msg_id']]['re_user_name']   = $reply['user_name'];
-                $msg[$rows['msg_id']]['re_user_email']  = $reply['user_email'];
-                $msg[$rows['msg_id']]['re_msg_time']    = local_date($GLOBALS['_CFG']['time_format'], $reply['msg_time']);
-                $msg[$rows['msg_id']]['re_msg_content'] = nl2br(htmlspecialchars($reply['msg_content']));
-            }
+        if ($reply) {
+            $msg[$rows['msg_id']]['re_user_name']   = $reply['user_name'];
+            $msg[$rows['msg_id']]['re_user_email']  = $reply['user_email'];
+            $msg[$rows['msg_id']]['re_msg_time']    = local_date($GLOBALS['_CFG']['time_format'], $reply['msg_time']);
+            $msg[$rows['msg_id']]['re_msg_content'] = nl2br(htmlspecialchars($reply['msg_content']));
+        }
         //}
 
         $msg[$rows['msg_id']]['msg_content'] = nl2br(htmlspecialchars($rows['msg_content']));
@@ -144,8 +134,7 @@ function add_message($message)
 
     $last_char = strtolower($upload_size_limit{strlen($upload_size_limit)-1});
 
-    switch ($last_char)
-    {
+    switch ($last_char) {
         case 'm':
             $upload_size_limit *= 1024*1024;
             break;
@@ -154,27 +143,21 @@ function add_message($message)
             break;
     }
 
-    if ($message['upload'])
-    {
-        if($_FILES['message_img']['size'] / 1024 > $upload_size_limit)
-        {
+    if ($message['upload']) {
+        if ($_FILES['message_img']['size'] / 1024 > $upload_size_limit) {
             $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['upload_file_limit'], $upload_size_limit));
             return false;
         }
         $img_name = upload_file($_FILES['message_img'], 'feedbackimg');
 
-        if ($img_name === false)
-        {
+        if ($img_name === false) {
             return false;
         }
-    }
-    else
-    {
+    } else {
         $img_name = '';
     }
 
-    if (empty($message['msg_title']))
-    {
+    if (empty($message['msg_title'])) {
         $GLOBALS['err']->add($GLOBALS['_LANG']['msg_title_empty']);
 
         return false;
@@ -200,8 +183,7 @@ function add_message($message)
  */
 function get_user_tags($user_id = 0)
 {
-    if (empty($user_id))
-    {
+    if (empty($user_id)) {
         $GLOBALS['error_no'] = 1;
 
         return false;
@@ -209,8 +191,7 @@ function get_user_tags($user_id = 0)
 
     $tags = get_tags(0, $user_id);
 
-    if (!empty($tags))
-    {
+    if (!empty($tags)) {
         color_tag($tags);
     }
 
@@ -228,10 +209,10 @@ function get_user_tags($user_id = 0)
  */
 function delete_tag($tag_words, $user_id)
 {
-     $sql = "DELETE FROM ".$GLOBALS['ecs']->table('tag').
+    $sql = "DELETE FROM ".$GLOBALS['ecs']->table('tag').
             " WHERE tag_words = '$tag_words' AND user_id = '$user_id'";
 
-     return $GLOBALS['db']->query($sql);
+    return $GLOBALS['db']->query($sql);
 }
 
 /**
@@ -251,10 +232,8 @@ function get_booking_list($user_id, $num, $start)
            "FROM " .$GLOBALS['ecs']->table('booking_goods')." AS bg , " .$GLOBALS['ecs']->table('goods')." AS g". " WHERE bg.goods_id = g.goods_id AND bg.user_id = '$user_id' ORDER BY bg.booking_time DESC";
     $res = $GLOBALS['db']->SelectLimit($sql, $num, $start);
 
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
-        if (empty($row['dispose_note']))
-        {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
+        if (empty($row['dispose_note'])) {
             $row['dispose_note'] = 'N/A';
         }
         $booking[] = array('rec_id'       => $row['rec_id'],
@@ -285,8 +264,7 @@ function get_goodsinfo($goods_id)
     $info['goods_number'] = 1;
     $info['id']           = $goods_id;
 
-    if (!empty($_SESSION['user_id']))
-    {
+    if (!empty($_SESSION['user_id'])) {
         $row = array();
         $sql = "SELECT ua.consignee, ua.email, ua.tel, ua.mobile ".
                "FROM ".$GLOBALS['ecs']->table('user_address')." AS ua, ".$GLOBALS['ecs']->table('users')." AS u".
@@ -329,7 +307,7 @@ function add_booking($booking)
             " VALUES ('', '$_SESSION[user_id]', '$booking[email]', '$booking[linkman]', ".
                 "'$booking[tel]', '$booking[goods_id]', '$booking[desc]', ".
                 "'$booking[goods_amount]', '".gmtime()."', 0, '', 0, '')";
-    $GLOBALS['db']->query($sql) or die ($GLOBALS['db']->errorMsg());
+    $GLOBALS['db']->query($sql) or die($GLOBALS['db']->errorMsg());
 
     return $GLOBALS['db']->insert_id();
 }
@@ -390,7 +368,7 @@ function insert_pay_log($id, $amount, $type = PAY_SURPLUS, $is_paid = 0)
             " VALUES  ('$id', '$amount', '$type', '$is_paid')";
     $GLOBALS['db']->query($sql);
 
-     return $GLOBALS['db']->insert_id();
+    return $GLOBALS['db']->insert_id();
 }
 
 /**
@@ -436,8 +414,7 @@ function get_online_payment_list($include_balance = true)
     $sql = 'SELECT pay_id, pay_code, pay_name, pay_fee, pay_desc ' .
             'FROM ' . $GLOBALS['ecs']->table('payment') .
             " WHERE enabled = 1 AND is_cod <> 1";
-    if (!$include_balance)
-    {
+    if (!$include_balance) {
         $sql .= " AND pay_code <> 'balance' ";
     }
 
@@ -464,10 +441,8 @@ function get_account_log($user_id, $num, $start)
            " ORDER BY add_time DESC";
     $res = $GLOBALS['db']->selectLimit($sql, $num, $start);
 
-    if ($res)
-    {
-        while ($rows = $GLOBALS['db']->fetchRow($res))
-        {
+    if ($res) {
+        while ($rows = $GLOBALS['db']->fetchRow($res)) {
             $rows['add_time']         = local_date($GLOBALS['_CFG']['date_format'], $rows['add_time']);
             $rows['admin_note']       = nl2br(htmlspecialchars($rows['admin_note']));
             $rows['short_admin_note'] = ($rows['admin_note'] > '') ? sub_str($rows['admin_note'], 30) : 'N/A';
@@ -477,12 +452,9 @@ function get_account_log($user_id, $num, $start)
             $rows['amount']           = price_format(abs($rows['amount']), false);
 
             /* 会员的操作类型： 冲值，提现 */
-            if ($rows['process_type'] == 0)
-            {
+            if ($rows['process_type'] == 0) {
                 $rows['type'] = $GLOBALS['_LANG']['surplus_type_0'];
-            }
-            else
-            {
+            } else {
                 $rows['type'] = $GLOBALS['_LANG']['surplus_type_1'];
             }
 
@@ -492,8 +464,7 @@ function get_account_log($user_id, $num, $start)
             $pid = $GLOBALS['db']->getOne($sql);
 
             /* 如果是预付款而且还没有付款, 允许付款 */
-            if (($rows['is_paid'] == 0) && ($rows['process_type'] == 0))
-            {
+            if (($rows['is_paid'] == 0) && ($rows['process_type'] == 0)) {
                 $rows['handle'] = '<a href="user.php?act=pay&id='.$rows['id'].'&pid='.$pid.'">'.$GLOBALS['_LANG']['pay'].'</a>';
             }
 
@@ -501,10 +472,8 @@ function get_account_log($user_id, $num, $start)
         }
 
         return $account_log;
-    }
-    else
-    {
-         return false;
+    } else {
+        return false;
     }
 }
 
@@ -564,8 +533,7 @@ function get_user_default($user_id)
     //如果$_SESSION中时间无效说明用户是第一次登录。取当前登录时间。
     $last_time = !isset($_SESSION['last_time']) ? $row['last_login'] : $_SESSION['last_time'];
 
-    if ($last_time == 0)
-    {
+    if ($last_time == 0) {
         $_SESSION['last_time'] = $last_time = gmtime();
     }
 
@@ -596,21 +564,18 @@ function get_user_default($user_id)
  */
 function add_tag($id, $tag)
 {
-    if (empty($tag))
-    {
+    if (empty($tag)) {
         return;
     }
 
     $arr = explode(',', $tag);
 
-    foreach ($arr AS $val)
-    {
+    foreach ($arr as $val) {
         /* 检查是否重复 */
         $sql = "SELECT COUNT(*) FROM ". $GLOBALS['ecs']->table("tag").
                 " WHERE user_id = '".$_SESSION['user_id']."' AND goods_id = '$id' AND tag_words = '$val'";
 
-        if ($GLOBALS['db']->getOne($sql) == 0)
-        {
+        if ($GLOBALS['db']->getOne($sql) == 0) {
             $sql = "INSERT INTO ".$GLOBALS['ecs']->table("tag")." (user_id, goods_id, tag_words) ".
                     "VALUES ('".$_SESSION['user_id']."', '$id', '$val')";
             $GLOBALS['db']->query($sql);
@@ -644,8 +609,7 @@ function color_tag(&$tags)
     $maxlevel = count($tagmark);
     $tcount = $scount = array();
 
-    foreach($tags AS $val)
-    {
+    foreach ($tags as $val) {
         $tcount[] = $val['tag_count']; // 获得tag个数数组
     }
     $tcount = array_unique($tcount); // 去除相同个数的tag
@@ -655,8 +619,7 @@ function color_tag(&$tags)
     $tempcount = count($tcount); // 真正的tag级数
     $per = $maxlevel >= $tempcount ? 1 : $maxlevel / ($tempcount - 1);
 
-    foreach ($tcount AS $key => $val)
-    {
+    foreach ($tcount as $key => $val) {
         $lvl = floor($per * $key);
         $scount[$val] = $lvl; // 计算不同个数的tag相对应的着色数组key
     }
@@ -664,26 +627,19 @@ function color_tag(&$tags)
     $rewrite = intval($GLOBALS['_CFG']['rewrite']) > 0;
 
     /* 遍历所有标签，根据引用次数设定字体大小 */
-    foreach ($tags AS $key => $val)
-    {
+    foreach ($tags as $key => $val) {
         $lvl = $scount[$val['tag_count']]; // 着色数组key
 
         $tags[$key]['color'] = $tagmark[$lvl]['color'];
         $tags[$key]['size']  = $tagmark[$lvl]['size'];
         $tags[$key]['bold']  = $tagmark[$lvl]['ifbold'];
-        if ($rewrite)
-        {
-            if (strtolower(EC_CHARSET) !== 'utf-8')
-            {
+        if ($rewrite) {
+            if (strtolower(EC_CHARSET) !== 'utf-8') {
                 $tags[$key]['url'] = 'tag-' . urlencode(urlencode($val['tag_words'])) . '.html';
-            }
-            else
-            {
+            } else {
                 $tags[$key]['url'] = 'tag-' . urlencode($val['tag_words']) . '.html';
             }
-        }
-        else
-        {
+        } else {
             $tags[$key]['url'] = 'search.php?keywords=' . urlencode($val['tag_words']);
         }
     }
@@ -701,21 +657,16 @@ function get_rank_info()
 {
     global $db,$ecs;
 
-    if (!empty($_SESSION['user_rank']))
-    {
+    if (!empty($_SESSION['user_rank'])) {
         $sql = "SELECT rank_name, special_rank FROM " . $ecs->table('user_rank') . " WHERE rank_id = '$_SESSION[user_rank]'";
         $row = $db->getRow($sql);
-        if (empty($row))
-        {
+        if (empty($row)) {
             return array();
         }
         $rank_name = $row['rank_name'];
-        if ($row['special_rank'])
-        {
+        if ($row['special_rank']) {
             return array('rank_name'=>$rank_name);
-        }
-        else
-        {
+        } else {
             $user_rank = $db->getOne("SELECT rank_points FROM " . $ecs->table('users') . " WHERE user_id = '$_SESSION[user_id]'");
             $sql = "SELECT rank_name,min_points FROM " . $ecs->table('user_rank') . " WHERE min_points > '$user_rank' ORDER BY min_points ASC LIMIT 1";
             $rt  = $db->getRow($sql);
@@ -723,9 +674,7 @@ function get_rank_info()
             $next_rank = $rt['min_points'] - $user_rank;
             return array('rank_name'=>$rank_name,'next_rank_name'=>$next_rank_name,'next_rank'=>$next_rank);
         }
-    }
-    else
-    {
+    } else {
         return array();
     }
 }
@@ -738,7 +687,7 @@ function get_rank_info()
  *
  * @return  array
  */
-function get_user_prompt ($user_id)
+function get_user_prompt($user_id)
 {
     $prompt = array();
     $now = gmtime();
@@ -748,19 +697,16 @@ function get_user_prompt ($user_id)
             " WHERE act_type = '" . GAT_SNATCH . "'" .
             " AND (is_finished = 1 OR (is_finished = 0 AND end_time <= '$now'))";
     $res = $GLOBALS['db']->query($sql);
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
         $act_id = $row['act_id'];
         $result = get_snatch_result($act_id);
-        if (isset($result['order_count']) && $result['order_count'] == 0 && $result['user_id'] == $user_id)
-        {
+        if (isset($result['order_count']) && $result['order_count'] == 0 && $result['user_id'] == $user_id) {
             $prompt[] = array(
-                   'text'=>sprintf($GLOBALS['_LANG']['your_snatch'],$row['goods_name'], $row['act_id']),
+                   'text'=>sprintf($GLOBALS['_LANG']['your_snatch'], $row['goods_name'], $row['act_id']),
                    'add_time'=> $row['end_time']
             );
         }
-        if (isset($auction['last_bid']) && $auction['last_bid']['bid_user'] == $user_id && $auction['order_count'] == 0)
-        {
+        if (isset($auction['last_bid']) && $auction['last_bid']['bid_user'] == $user_id && $auction['order_count'] == 0) {
             $prompt[] = array(
                 'text' => sprintf($GLOBALS['_LANG']['your_auction'], $row['goods_name'], $row['act_id']),
                 'add_time' => $row['end_time']
@@ -776,12 +722,10 @@ function get_user_prompt ($user_id)
             " WHERE act_type = '" . GAT_AUCTION . "'" .
             " AND (is_finished = 1 OR (is_finished = 0 AND end_time <= '$now'))";
     $res = $GLOBALS['db']->query($sql);
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
         $act_id = $row['act_id'];
         $auction = auction_info($act_id);
-        if (isset($auction['last_bid']) && $auction['last_bid']['bid_user'] == $user_id && $auction['order_count'] == 0)
-        {
+        if (isset($auction['last_bid']) && $auction['last_bid']['bid_user'] == $user_id && $auction['order_count'] == 0) {
             $prompt[] = array(
                 'text' => sprintf($GLOBALS['_LANG']['your_auction'], $row['goods_name'], $row['act_id']),
                 'add_time' => $row['end_time']
@@ -794,8 +738,7 @@ function get_user_prompt ($user_id)
     usort($prompt, $cmp);
 
     /* 格式化时间 */
-    foreach ($prompt as $key => $val)
-    {
+    foreach ($prompt as $key => $val) {
         $prompt[$key]['formated_time'] = local_date($GLOBALS['_CFG']['time_format'], $val['add_time']);
     }
 
@@ -824,34 +767,27 @@ function get_comment_list($user_id, $page_size, $start)
 
     $comments = array();
     $to_article = array();
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
         $row['formated_add_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['add_time']);
-        if ($row['reply_time'])
-        {
+        if ($row['reply_time']) {
             $row['formated_reply_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['reply_time']);
         }
-        if ($row['comment_type'] == 1)
-        {
+        if ($row['comment_type'] == 1) {
             $to_article[] = $row["id_value"];
         }
         $comments[] = $row;
     }
 
-    if ($to_article)
-    {
+    if ($to_article) {
         $sql = "SELECT article_id , title FROM " . $GLOBALS['ecs']->table('article') . " WHERE " . db_create_in($to_article, 'article_id');
         $arr = $GLOBALS['db']->getAll($sql);
         $to_cmt_name = array();
-        foreach ($arr as $row)
-        {
+        foreach ($arr as $row) {
             $to_cmt_name[$row['article_id']] = $row['title'];
         }
 
-        foreach ($comments as $key=>$row)
-        {
-            if ($row['comment_type'] == 1)
-            {
+        foreach ($comments as $key=>$row) {
+            if ($row['comment_type'] == 1) {
                 $comments[$key]['cmt_name'] = isset($to_cmt_name[$row['id_value']]) ? $to_cmt_name[$row['id_value']] : '';
             }
         }
@@ -859,4 +795,3 @@ function get_comment_list($user_id, $page_size, $start)
 
     return $comments;
 }
-?>

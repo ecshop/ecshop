@@ -149,5 +149,3 @@ $_LANG['shipping_print']         = '<table style="width:18.8cm; height:3cm;" bor
 <td valign="top" style="width:11.4cm;">&nbsp;</td>
   </tr>
 </table>';
-
-?>

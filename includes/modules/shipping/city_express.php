@@ -1,20 +1,17 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
 $shipping_lang = ROOT_PATH.'languages/' .$GLOBALS['_CFG']['lang']. '/shipping/city_express.php';
-if (file_exists($shipping_lang))
-{
+if (file_exists($shipping_lang)) {
     global $_LANG;
     include_once($shipping_lang);
 }
 
 /* 模块的基本信息 */
-if (isset($set_modules) && $set_modules == TRUE)
-{
+if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 配送方式插件的代码必须和文件名保持一致 */
@@ -26,7 +23,7 @@ if (isset($set_modules) && $set_modules == TRUE)
     $modules[$i]['desc']    = 'city_express_desc';
 
     /* 配送方式是否支持货到付款 */
-    $modules[$i]['cod']     = TRUE;
+    $modules[$i]['cod']     = true;
 
     /* 插件的作者 */
     $modules[$i]['author']  = 'ECSHOP TEAM';
@@ -45,7 +42,7 @@ if (isset($set_modules) && $set_modules == TRUE)
     /* 打印单背景 */
     $modules[$i]['print_bg'] = '';
 
-   /* 打印快递单标签位置信息 */
+    /* 打印快递单标签位置信息 */
     $modules[$i]['config_lable'] = '';
 
     return;
@@ -60,7 +57,7 @@ class city_express
     /**
      * 配置信息
      */
-    var $configure;
+    public $configure;
 
     /*------------------------------------------------------ */
     //-- PUBLIC METHODs
@@ -73,10 +70,9 @@ class city_express
      *
      * @return null
      */
-    function city_express($cfg=array())
+    public function city_express($cfg=array())
     {
-        foreach ($cfg AS $key=>$val)
-        {
+        foreach ($cfg as $key=>$val) {
             $this->configure[$val['name']] = $val['value'];
         }
     }
@@ -88,14 +84,11 @@ class city_express
      * @param   float   $goods_amount   商品金额
      * @return  decimal
      */
-    function calculate($goods_weight, $goods_amount)
+    public function calculate($goods_weight, $goods_amount)
     {
-        if ($this->configure['free_money'] > 0 && $goods_amount >= $this->configure['free_money'])
-        {
+        if ($this->configure['free_money'] > 0 && $goods_amount >= $this->configure['free_money']) {
             return 0;
-        }
-        else
-        {
+        } else {
             return $this->configure['base_fee'];
         }
     }
@@ -108,10 +101,8 @@ class city_express
      * @param   string  $invoice_sn     发货单号
      * @return  string
      */
-    function query($invoice_sn)
+    public function query($invoice_sn)
     {
         return $invoice_sn;
     }
 }
-
-?>

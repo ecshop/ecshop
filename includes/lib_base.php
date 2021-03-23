@@ -1,7 +1,6 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
@@ -19,35 +18,25 @@ function sub_str($str, $length = 0, $append = true)
     $str = trim($str);
     $strlength = strlen($str);
 
-    if ($length == 0 || $length >= $strlength)
-    {
+    if ($length == 0 || $length >= $strlength) {
         return $str;
-    }
-    elseif ($length < 0)
-    {
+    } elseif ($length < 0) {
         $length = $strlength + $length;
-        if ($length < 0)
-        {
+        if ($length < 0) {
             $length = $strlength;
         }
     }
 
-    if (function_exists('mb_substr'))
-    {
+    if (function_exists('mb_substr')) {
         $newstr = mb_substr($str, 0, $length, EC_CHARSET);
-    }
-    elseif (function_exists('iconv_substr'))
-    {
+    } elseif (function_exists('iconv_substr')) {
         $newstr = iconv_substr($str, 0, $length, EC_CHARSET);
-    }
-    else
-    {
+    } else {
         //$newstr = trim_right(substr($str, 0, $length));
         $newstr = substr($str, 0, $length);
     }
 
-    if ($append && $str != $newstr)
-    {
+    if ($append && $str != $newstr) {
         $newstr .= '...';
     }
 
@@ -62,60 +51,41 @@ function sub_str($str, $length = 0, $append = true)
  */
 function real_ip()
 {
-    static $realip = NULL;
+    static $realip = null;
 
-    if ($realip !== NULL)
-    {
+    if ($realip !== null) {
         return $realip;
     }
 
-    if (isset($_SERVER))
-    {
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
-        {
+    if (isset($_SERVER)) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $arr = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
 
             /* 取X-Forwarded-For中第一个非unknown的有效IP字符串 */
-            foreach ($arr AS $ip)
-            {
+            foreach ($arr as $ip) {
                 $ip = trim($ip);
 
-                if ($ip != 'unknown')
-                {
+                if ($ip != 'unknown') {
                     $realip = $ip;
 
                     break;
                 }
             }
-        }
-        elseif (isset($_SERVER['HTTP_CLIENT_IP']))
-        {
+        } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
             $realip = $_SERVER['HTTP_CLIENT_IP'];
-        }
-        else
-        {
-            if (isset($_SERVER['REMOTE_ADDR']))
-            {
+        } else {
+            if (isset($_SERVER['REMOTE_ADDR'])) {
                 $realip = $_SERVER['REMOTE_ADDR'];
-            }
-            else
-            {
+            } else {
                 $realip = '0.0.0.0';
             }
         }
-    }
-    else
-    {
-        if (getenv('HTTP_X_FORWARDED_FOR'))
-        {
+    } else {
+        if (getenv('HTTP_X_FORWARDED_FOR')) {
             $realip = getenv('HTTP_X_FORWARDED_FOR');
-        }
-        elseif (getenv('HTTP_CLIENT_IP'))
-        {
+        } elseif (getenv('HTTP_CLIENT_IP')) {
             $realip = getenv('HTTP_CLIENT_IP');
-        }
-        else
-        {
+        } else {
             $realip = getenv('REMOTE_ADDR');
         }
     }
@@ -137,12 +107,9 @@ function str_len($str)
 {
     $length = strlen(preg_replace('/[\x00-\x7F]/', '', $str));
 
-    if ($length)
-    {
+    if ($length) {
         return strlen($str) - $length + intval($length / 3) * 2;
-    }
-    else
-    {
+    } else {
         return strlen($str);
     }
 }
@@ -155,17 +122,12 @@ function str_len($str)
  */
 function get_crlf()
 {
-/* LF (Line Feed, 0x0A, \N) 和 CR(Carriage Return, 0x0D, \R) */
-    if (stristr($_SERVER['HTTP_USER_AGENT'], 'Win'))
-    {
+    /* LF (Line Feed, 0x0A, \N) 和 CR(Carriage Return, 0x0D, \R) */
+    if (stristr($_SERVER['HTTP_USER_AGENT'], 'Win')) {
         $the_crlf = '\r\n';
-    }
-    elseif (stristr($_SERVER['HTTP_USER_AGENT'], 'Mac'))
-    {
+    } elseif (stristr($_SERVER['HTTP_USER_AGENT'], 'Mac')) {
         $the_crlf = '\r'; // for old MAC OS
-    }
-    else
-    {
+    } else {
         $the_crlf = '\n';
     }
 
@@ -187,8 +149,7 @@ function get_crlf()
 function send_mail($name, $email, $subject, $content, $type = 0, $notification=false)
 {
     /* 如果邮件编码不是EC_CHARSET，创建字符集转换对象，转换编码 */
-    if ($GLOBALS['_CFG']['mail_charset'] != EC_CHARSET)
-    {
+    if ($GLOBALS['_CFG']['mail_charset'] != EC_CHARSET) {
         $name      = ecs_iconv(EC_CHARSET, $GLOBALS['_CFG']['mail_charset'], $name);
         $subject   = ecs_iconv(EC_CHARSET, $GLOBALS['_CFG']['mail_charset'], $subject);
         $content   = ecs_iconv(EC_CHARSET, $GLOBALS['_CFG']['mail_charset'], $content);
@@ -198,36 +159,30 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification=f
     /**
      * 使用mail函数发送邮件
      */
-    if ($GLOBALS['_CFG']['mail_service'] == 0 && function_exists('mail'))
-    {
+    if ($GLOBALS['_CFG']['mail_service'] == 0 && function_exists('mail')) {
         /* 邮件的头部信息 */
         $content_type = ($type == 0) ? 'Content-Type: text/plain; charset=' . $charset : 'Content-Type: text/html; charset=' . $charset;
         $headers = array();
         $headers[] = 'From: "' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?='.'" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
         $headers[] = $content_type . '; format=flowed';
-        if ($notification)
-        {
+        if ($notification) {
             $headers[] = 'Disposition-Notification-To: ' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?='.'" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
         }
 
         $res = @mail($email, '=?' . $charset . '?B?' . base64_encode($subject) . '?=', $content, implode("\r\n", $headers));
 
-        if (!$res)
-        {
+        if (!$res) {
             $GLOBALS['err'] ->add($GLOBALS['_LANG']['sendemail_false']);
 
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
     /**
      * 使用smtp服务发送邮件
      */
-    else
-    {
+    else {
         /* 邮件的头部信息 */
         $content_type = ($type == 0) ?
             'Content-Type: text/plain; charset=' . $charset : 'Content-Type: text/html; charset=' . $charset;
@@ -241,8 +196,7 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification=f
         $headers[] = $content_type . '; format=flowed';
         $headers[] = 'Content-Transfer-Encoding: base64';
         $headers[] = 'Content-Disposition: inline';
-        if ($notification)
-        {
+        if ($notification) {
             $headers[] = 'Disposition-Notification-To: ' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?='.'" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
         }
 
@@ -252,18 +206,14 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification=f
         $params['user'] = $GLOBALS['_CFG']['smtp_user'];
         $params['pass'] = $GLOBALS['_CFG']['smtp_pass'];
 
-        if (empty($params['host']) || empty($params['port']))
-        {
+        if (empty($params['host']) || empty($params['port'])) {
             // 如果没有设置主机和端口直接返回 false
             $GLOBALS['err'] ->add($GLOBALS['_LANG']['smtp_setting_error']);
 
             return false;
-        }
-        else
-        {
+        } else {
             // 发送邮件
-            if (!function_exists('fsockopen'))
-            {
+            if (!function_exists('fsockopen')) {
                 //如果fsockopen被禁用，直接返回
                 $GLOBALS['err']->add($GLOBALS['_LANG']['disabled_fsockopen']);
 
@@ -278,38 +228,24 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification=f
             $send_params['from']       = $GLOBALS['_CFG']['smtp_mail'];
             $send_params['body']       = $content;
 
-            if (!isset($smtp))
-            {
+            if (!isset($smtp)) {
                 $smtp = new smtp($params);
             }
 
-            if ($smtp->connect() && $smtp->send($send_params))
-            {
+            if ($smtp->connect() && $smtp->send($send_params)) {
                 return true;
-            }
-            else
-            {
+            } else {
                 $err_msg = $smtp->error_msg();
-                if (empty($err_msg))
-                {
+                if (empty($err_msg)) {
                     $GLOBALS['err']->add('Unknown Error');
-                }
-                else
-                {
-                    if (strpos($err_msg, 'Failed to connect to server') !== false)
-                    {
+                } else {
+                    if (strpos($err_msg, 'Failed to connect to server') !== false) {
                         $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['smtp_connect_failure'], $params['host'] . ':' . $params['port']));
-                    }
-                    else if (strpos($err_msg, 'AUTH command failed') !== false)
-                    {
+                    } elseif (strpos($err_msg, 'AUTH command failed') !== false) {
                         $GLOBALS['err']->add($GLOBALS['_LANG']['smtp_login_failure']);
-                    }
-                    elseif (strpos($err_msg, 'bad sequence of commands') !== false)
-                    {
+                    } elseif (strpos($err_msg, 'bad sequence of commands') !== false) {
                         $GLOBALS['err']->add($GLOBALS['_LANG']['smtp_refuse']);
-                    }
-                    else
-                    {
+                    } else {
                         $GLOBALS['err']->add($err_msg);
                     }
                 }
@@ -333,8 +269,7 @@ function gd_version()
     return cls_image::gd_version();
 }
 
-if (!function_exists('file_get_contents'))
-{
+if (!function_exists('file_get_contents')) {
     /**
      * 如果系统不存在file_get_contents函数则声明该函数
      *
@@ -344,19 +279,13 @@ if (!function_exists('file_get_contents'))
      */
     function file_get_contents($file)
     {
-        if (($fp = @fopen($file, 'rb')) === false)
-        {
+        if (($fp = @fopen($file, 'rb')) === false) {
             return false;
-        }
-        else
-        {
+        } else {
             $fsize = @filesize($file);
-            if ($fsize)
-            {
+            if ($fsize) {
                 $contents = fread($fp, $fsize);
-            }
-            else
-            {
+            } else {
                 $contents = '';
             }
             fclose($fp);
@@ -366,8 +295,7 @@ if (!function_exists('file_get_contents'))
     }
 }
 
-if (!function_exists('file_put_contents'))
-{
+if (!function_exists('file_put_contents')) {
     define('FILE_APPEND', 'FILE_APPEND');
 
     /**
@@ -382,21 +310,15 @@ if (!function_exists('file_put_contents'))
     {
         $contents = (is_array($data)) ? implode('', $data) : $data;
 
-        if ($flags == 'FILE_APPEND')
-        {
+        if ($flags == 'FILE_APPEND') {
             $mode = 'ab+';
-        }
-        else
-        {
+        } else {
             $mode = 'wb';
         }
 
-        if (($fp = @fopen($file, $mode)) === false)
-        {
+        if (($fp = @fopen($file, $mode)) === false) {
             return false;
-        }
-        else
-        {
+        } else {
             $bytes = fwrite($fp, $contents);
             fclose($fp);
 
@@ -405,8 +327,7 @@ if (!function_exists('file_put_contents'))
     }
 }
 
-if (!function_exists('floatval'))
-{
+if (!function_exists('floatval')) {
     /**
      * 如果系统不存在 floatval 函数则声明该函数
      *
@@ -434,41 +355,34 @@ if (!function_exists('floatval'))
 function file_mode_info($file_path)
 {
     /* 如果不存在，则不可读、不可写、不可改 */
-    if (!file_exists($file_path))
-    {
+    if (!file_exists($file_path)) {
         return false;
     }
 
     $mark = 0;
 
-    if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN')
-    {
+    if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
         /* 测试文件 */
         $test_file = $file_path . '/cf_test.txt';
 
         /* 如果是目录 */
-        if (is_dir($file_path))
-        {
+        if (is_dir($file_path)) {
             /* 检查目录是否可读 */
             $dir = @opendir($file_path);
-            if ($dir === false)
-            {
+            if ($dir === false) {
                 return $mark; //如果目录打开失败，直接返回目录不可修改、不可写、不可读
             }
-            if (@readdir($dir) !== false)
-            {
+            if (@readdir($dir) !== false) {
                 $mark ^= 1; //目录可读 001，目录不可读 000
             }
             @closedir($dir);
 
             /* 检查目录是否可写 */
             $fp = @fopen($test_file, 'wb');
-            if ($fp === false)
-            {
+            if ($fp === false) {
                 return $mark; //如果目录中的文件创建失败，返回不可写。
             }
-            if (@fwrite($fp, 'directory access testing.') !== false)
-            {
+            if (@fwrite($fp, 'directory access testing.') !== false) {
                 $mark ^= 2; //目录可写可读011，目录可写不可读 010
             }
             @fclose($fp);
@@ -477,58 +391,47 @@ function file_mode_info($file_path)
 
             /* 检查目录是否可修改 */
             $fp = @fopen($test_file, 'ab+');
-            if ($fp === false)
-            {
+            if ($fp === false) {
                 return $mark;
             }
-            if (@fwrite($fp, "modify test.\r\n") !== false)
-            {
+            if (@fwrite($fp, "modify test.\r\n") !== false) {
                 $mark ^= 4;
             }
             @fclose($fp);
 
             /* 检查目录下是否有执行rename()函数的权限 */
-            if (@rename($test_file, $test_file) !== false)
-            {
+            if (@rename($test_file, $test_file) !== false) {
                 $mark ^= 8;
             }
             @unlink($test_file);
         }
         /* 如果是文件 */
-        elseif (is_file($file_path))
-        {
+        elseif (is_file($file_path)) {
             /* 以读方式打开 */
             $fp = @fopen($file_path, 'rb');
-            if ($fp)
-            {
+            if ($fp) {
                 $mark ^= 1; //可读 001
             }
             @fclose($fp);
 
             /* 试着修改文件 */
             $fp = @fopen($file_path, 'ab+');
-            if ($fp && @fwrite($fp, '') !== false)
-            {
+            if ($fp && @fwrite($fp, '') !== false) {
                 $mark ^= 6; //可修改可写可读 111，不可修改可写可读011...
             }
             @fclose($fp);
 
             /* 检查目录下是否有执行rename()函数的权限 */
-            if (@rename($test_file, $test_file) !== false)
-            {
+            if (@rename($test_file, $test_file) !== false) {
                 $mark ^= 8;
             }
         }
-    }
-    else
-    {
-        if (@is_readable($file_path))
-        {
+    } else {
+        if (@is_readable($file_path)) {
             $mark ^= 1;
         }
 
-        if (@is_writable($file_path))
-        {
+        if (@is_writable($file_path)) {
             $mark ^= 14;
         }
     }
@@ -538,28 +441,22 @@ function file_mode_info($file_path)
 
 function log_write($arg, $file = '', $line = '')
 {
-    if ((DEBUG_MODE & 4) != 4)
-    {
+    if ((DEBUG_MODE & 4) != 4) {
         return;
     }
 
     $str = "\r\n-- ". date('Y-m-d H:i:s'). " --------------------------------------------------------------\r\n";
     $str .= "FILE: $file\r\nLINE: $line\r\n";
 
-    if (is_array($arg))
-    {
+    if (is_array($arg)) {
         $str .= '$arg = array(';
-        foreach ($arg AS $val)
-        {
-            foreach ($val AS $key => $list)
-            {
+        foreach ($arg as $val) {
+            foreach ($val as $key => $list) {
                 $str .= "'$key' => '$list'\r\n";
             }
         }
         $str .= ")\r\n";
-    }
-    else
-    {
+    } else {
         $str .= $arg;
     }
 
@@ -578,8 +475,7 @@ function make_dir($folder)
 {
     $reval = false;
 
-    if (!file_exists($folder))
-    {
+    if (!file_exists($folder)) {
         /* 如果目录不存在则尝试创建该目录 */
         @umask(0);
 
@@ -590,40 +486,31 @@ function make_dir($folder)
         $base = ($atmp[0][0] == '/') ? '/' : '';
 
         /* 遍历包含路径信息的数组 */
-        foreach ($atmp[1] AS $val)
-        {
-            if ('' != $val)
-            {
+        foreach ($atmp[1] as $val) {
+            if ('' != $val) {
                 $base .= $val;
 
-                if ('..' == $val || '.' == $val)
-                {
+                if ('..' == $val || '.' == $val) {
                     /* 如果目录为.或者..则直接补/继续下一个循环 */
                     $base .= '/';
 
                     continue;
                 }
-            }
-            else
-            {
+            } else {
                 continue;
             }
 
             $base .= '/';
 
-            if (!file_exists($base))
-            {
+            if (!file_exists($base)) {
                 /* 尝试创建目录，如果创建失败则继续循环 */
-                if (@mkdir(rtrim($base, '/'), 0777))
-                {
+                if (@mkdir(rtrim($base, '/'), 0777)) {
                     @chmod($base, 0777);
                     $reval = true;
                 }
             }
         }
-    }
-    else
-    {
+    } else {
         /* 路径已经存在。返回该路径是不是一个目录 */
         $reval = is_dir($folder);
     }
@@ -642,10 +529,9 @@ function make_dir($folder)
  */
 function gzip_enabled()
 {
-    static $enabled_gzip = NULL;
+    static $enabled_gzip = null;
 
-    if ($enabled_gzip === NULL)
-    {
+    if ($enabled_gzip === null) {
         $enabled_gzip = ($GLOBALS['_CFG']['enable_gzip'] && function_exists('ob_gzhandler'));
     }
 
@@ -662,12 +548,9 @@ function gzip_enabled()
  */
 function addslashes_deep($value)
 {
-    if (empty($value))
-    {
+    if (empty($value)) {
         return $value;
-    }
-    else
-    {
+    } else {
         return is_array($value) ? array_map('addslashes_deep', $value) : addslashes($value);
     }
 }
@@ -683,15 +566,11 @@ function addslashes_deep($value)
  */
 function addslashes_deep_obj($obj)
 {
-    if (is_object($obj) == true)
-    {
-        foreach ($obj AS $key => $val)
-        {
+    if (is_object($obj) == true) {
+        foreach ($obj as $key => $val) {
             $obj->$key = addslashes_deep($val);
         }
-    }
-    else
-    {
+    } else {
         $obj = addslashes_deep($obj);
     }
 
@@ -708,12 +587,9 @@ function addslashes_deep_obj($obj)
  */
 function stripslashes_deep($value)
 {
-    if (empty($value))
-    {
+    if (empty($value)) {
         return $value;
-    }
-    else
-    {
+    } else {
         return is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value);
     }
 }
@@ -778,132 +654,87 @@ function compile_str($str)
  */
 function check_file_type($filename, $realname = '', $limit_ext_types = '')
 {
-    if ($realname)
-    {
+    if ($realname) {
         $extname = strtolower(substr($realname, strrpos($realname, '.') + 1));
-    }
-    else
-    {
+    } else {
         $extname = strtolower(substr($filename, strrpos($filename, '.') + 1));
     }
 
-    if ($limit_ext_types && stristr($limit_ext_types, '|' . $extname . '|') === false)
-    {
+    if ($limit_ext_types && stristr($limit_ext_types, '|' . $extname . '|') === false) {
         return '';
     }
 
     $str = $format = '';
 
     $file = @fopen($filename, 'rb');
-    if ($file)
-    {
+    if ($file) {
         $str = @fread($file, 0x400); // 读取前 1024 个字节
         @fclose($file);
-    }
-    else
-    {
-        if (stristr($filename, ROOT_PATH) === false)
-        {
+    } else {
+        if (stristr($filename, ROOT_PATH) === false) {
             if ($extname == 'jpg' || $extname == 'jpeg' || $extname == 'gif' || $extname == 'png' || $extname == 'doc' ||
                 $extname == 'xls' || $extname == 'txt'  || $extname == 'zip' || $extname == 'rar' || $extname == 'ppt' ||
                 $extname == 'pdf' || $extname == 'rm'   || $extname == 'mid' || $extname == 'wav' || $extname == 'bmp' ||
-                $extname == 'swf' || $extname == 'chm'  || $extname == 'sql' || $extname == 'cert'|| $extname == 'pptx' || 
-                $extname == 'xlsx' || $extname == 'docx')
-            {
+                $extname == 'swf' || $extname == 'chm'  || $extname == 'sql' || $extname == 'cert'|| $extname == 'pptx' ||
+                $extname == 'xlsx' || $extname == 'docx') {
                 $format = $extname;
             }
-        }
-        else
-        {
+        } else {
             return '';
         }
     }
 
-    if ($format == '' && strlen($str) >= 2 )
-    {
-        if (substr($str, 0, 4) == 'MThd' && $extname != 'txt')
-        {
+    if ($format == '' && strlen($str) >= 2) {
+        if (substr($str, 0, 4) == 'MThd' && $extname != 'txt') {
             $format = 'mid';
-        }
-        elseif (substr($str, 0, 4) == 'RIFF' && $extname == 'wav')
-        {
+        } elseif (substr($str, 0, 4) == 'RIFF' && $extname == 'wav') {
             $format = 'wav';
-        }
-        elseif (substr($str ,0, 3) == "\xFF\xD8\xFF")
-        {
+        } elseif (substr($str, 0, 3) == "\xFF\xD8\xFF") {
             $format = 'jpg';
-        }
-        elseif (substr($str ,0, 4) == 'GIF8' && $extname != 'txt')
-        {
+        } elseif (substr($str, 0, 4) == 'GIF8' && $extname != 'txt') {
             $format = 'gif';
-        }
-        elseif (substr($str ,0, 8) == "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A")
-        {
+        } elseif (substr($str, 0, 8) == "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A") {
             $format = 'png';
-        }
-        elseif (substr($str ,0, 2) == 'BM' && $extname != 'txt')
-        {
+        } elseif (substr($str, 0, 2) == 'BM' && $extname != 'txt') {
             $format = 'bmp';
-        }
-        elseif ((substr($str ,0, 3) == 'CWS' || substr($str ,0, 3) == 'FWS') && $extname != 'txt')
-        {
+        } elseif ((substr($str, 0, 3) == 'CWS' || substr($str, 0, 3) == 'FWS') && $extname != 'txt') {
             $format = 'swf';
-        }
-        elseif (substr($str ,0, 4) == "\xD0\xCF\x11\xE0")
-        {   // D0CF11E == DOCFILE == Microsoft Office Document
-            if (substr($str,0x200,4) == "\xEC\xA5\xC1\x00" || $extname == 'doc')
-            {
+        } elseif (substr($str, 0, 4) == "\xD0\xCF\x11\xE0") {   // D0CF11E == DOCFILE == Microsoft Office Document
+            if (substr($str, 0x200, 4) == "\xEC\xA5\xC1\x00" || $extname == 'doc') {
                 $format = 'doc';
-            }
-            elseif (substr($str,0x200,2) == "\x09\x08" || $extname == 'xls')
-            {
+            } elseif (substr($str, 0x200, 2) == "\x09\x08" || $extname == 'xls') {
                 $format = 'xls';
-            } elseif (substr($str,0x200,4) == "\xFD\xFF\xFF\xFF" || $extname == 'ppt')
-            {
+            } elseif (substr($str, 0x200, 4) == "\xFD\xFF\xFF\xFF" || $extname == 'ppt') {
                 $format = 'ppt';
             }
-        } elseif (substr($str ,0, 4) == "PK\x03\x04")
-        {
-            if (substr($str,0x200,4) == "\xEC\xA5\xC1\x00" || $extname == 'docx')
-            {
+        } elseif (substr($str, 0, 4) == "PK\x03\x04") {
+            if (substr($str, 0x200, 4) == "\xEC\xA5\xC1\x00" || $extname == 'docx') {
                 $format = 'docx';
-            }
-            elseif (substr($str,0x200,2) == "\x09\x08" || $extname == 'xlsx')
-            {
+            } elseif (substr($str, 0x200, 2) == "\x09\x08" || $extname == 'xlsx') {
                 $format = 'xlsx';
-            } elseif (substr($str,0x200,4) == "\xFD\xFF\xFF\xFF" || $extname == 'pptx')
-            {
+            } elseif (substr($str, 0x200, 4) == "\xFD\xFF\xFF\xFF" || $extname == 'pptx') {
                 $format = 'pptx';
-            }else
-            {
+            } else {
                 $format = 'zip';
             }
-        } elseif (substr($str ,0, 4) == 'Rar!' && $extname != 'txt')
-        {
+        } elseif (substr($str, 0, 4) == 'Rar!' && $extname != 'txt') {
             $format = 'rar';
-        } elseif (substr($str ,0, 4) == "\x25PDF")
-        {
+        } elseif (substr($str, 0, 4) == "\x25PDF") {
             $format = 'pdf';
-        } elseif (substr($str ,0, 3) == "\x30\x82\x0A")
-        {
+        } elseif (substr($str, 0, 3) == "\x30\x82\x0A") {
             $format = 'cert';
-        } elseif (substr($str ,0, 4) == 'ITSF' && $extname != 'txt')
-        {
+        } elseif (substr($str, 0, 4) == 'ITSF' && $extname != 'txt') {
             $format = 'chm';
-        } elseif (substr($str ,0, 4) == "\x2ERMF")
-        {
+        } elseif (substr($str, 0, 4) == "\x2ERMF") {
             $format = 'rm';
-        } elseif ($extname == 'sql')
-        {
+        } elseif ($extname == 'sql') {
             $format = 'sql';
-        } elseif ($extname == 'txt')
-        {
+        } elseif ($extname == 'txt') {
             $format = 'txt';
         }
     }
 
-    if ($limit_ext_types && stristr($limit_ext_types, '|' . $format . '|') === false)
-    {
+    if ($limit_ext_types && stristr($limit_ext_types, '|' . $format . '|') === false) {
         $format = '';
     }
 
@@ -931,26 +762,19 @@ function mysql_like_quote($str)
  **/
 function real_server_ip()
 {
-    static $serverip = NULL;
+    static $serverip = null;
 
-    if ($serverip !== NULL)
-    {
+    if ($serverip !== null) {
         return $serverip;
     }
 
-    if (isset($_SERVER))
-    {
-        if (isset($_SERVER['SERVER_ADDR']))
-        {
+    if (isset($_SERVER)) {
+        if (isset($_SERVER['SERVER_ADDR'])) {
             $serverip = $_SERVER['SERVER_ADDR'];
-        }
-        else
-        {
+        } else {
             $serverip = '0.0.0.0';
         }
-    }
-    else
-    {
+    } else {
         $serverip = getenv('SERVER_ADDR');
     }
 
@@ -966,41 +790,34 @@ function real_server_ip()
  **/
 function ecs_header($string, $replace = true, $http_response_code = 0)
 {
-    if (strpos($string, '../upgrade/index.php') === 0)
-    {
+    if (strpos($string, '../upgrade/index.php') === 0) {
         echo '<script type="text/javascript">window.location.href="' . $string . '";</script>';
     }
     $string = str_replace(array("\r", "\n"), array('', ''), $string);
 
-    if (preg_match('/^\s*location:/is', $string))
-    {
+    if (preg_match('/^\s*location:/is', $string)) {
         @header($string . "\n", $replace);
 
         exit();
     }
 
-    if (empty($http_response_code) || PHP_VERSION < '4.3')
-    {
+    if (empty($http_response_code) || PHP_VERSION < '4.3') {
         @header($string, $replace);
-    }
-    else
-    {
+    } else {
         @header($string, $replace, $http_response_code);
     }
 }
 
 function ecs_iconv($source_lang, $target_lang, $source_string = '')
 {
-    static $chs = NULL;
+    static $chs = null;
 
     /* 如果字符串为空或者字符串不需要转换，直接返回 */
-    if ($source_lang == $target_lang || $source_string == '' || preg_match("/[\x80-\xFF]+/", $source_string) == 0)
-    {
+    if ($source_lang == $target_lang || $source_string == '' || preg_match("/[\x80-\xFF]+/", $source_string) == 0) {
         return $source_string;
     }
 
-    if ($chs === NULL)
-    {
+    if ($chs === null) {
         require_once(ROOT_PATH . 'includes/cls_iconv.php');
         $chs = new Chinese(ROOT_PATH);
     }
@@ -1010,7 +827,7 @@ function ecs_iconv($source_lang, $target_lang, $source_string = '')
 
 function ecs_geoip($ip)
 {
-    static $fp = NULL, $offset = array(), $index = NULL;
+    static $fp = null, $offset = array(), $index = null;
 
     $ip    = gethostbyname($ip);
     $ipdot = explode('.', $ip);
@@ -1018,21 +835,17 @@ function ecs_geoip($ip)
 
     $ipdot[0] = (int)$ipdot[0];
     $ipdot[1] = (int)$ipdot[1];
-    if ($ipdot[0] == 10 || $ipdot[0] == 127 || ($ipdot[0] == 192 && $ipdot[1] == 168) || ($ipdot[0] == 172 && ($ipdot[1] >= 16 && $ipdot[1] <= 31)))
-    {
+    if ($ipdot[0] == 10 || $ipdot[0] == 127 || ($ipdot[0] == 192 && $ipdot[1] == 168) || ($ipdot[0] == 172 && ($ipdot[1] >= 16 && $ipdot[1] <= 31))) {
         return 'LAN';
     }
 
-    if ($fp === NULL)
-    {
+    if ($fp === null) {
         $fp = fopen(ROOT_PATH . 'includes/codetable/ipdata.dat', 'rb');
-        if ($fp === false)
-        {
+        if ($fp === false) {
             return 'Invalid IP data file';
         }
         $offset = unpack('Nlen', fread($fp, 4));
-        if ($offset['len'] < 4)
-        {
+        if ($offset['len'] < 4) {
             return 'Invalid IP data file';
         }
         $index  = fread($fp, $offset['len'] - 4);
@@ -1040,10 +853,8 @@ function ecs_geoip($ip)
 
     $length = $offset['len'] - 1028;
     $start  = unpack('Vlen', $index[$ipdot[0] * 4] . $index[$ipdot[0] * 4 + 1] . $index[$ipdot[0] * 4 + 2] . $index[$ipdot[0] * 4 + 3]);
-    for ($start = $start['len'] * 8 + 1024; $start < $length; $start += 8)
-    {
-        if ($index{$start} . $index{$start + 1} . $index{$start + 2} . $index{$start + 3} >= $ip)
-        {
+    for ($start = $start['len'] * 8 + 1024; $start < $length; $start += 8) {
+        if ($index{$start} . $index{$start + 1} . $index{$start + 2} . $index{$start + 3} >= $ip) {
             $index_offset = unpack('Vlen', $index{$start + 4} . $index{$start + 5} . $index{$start + 6} . "\x0");
             $index_length = unpack('Clen', $index{$start + 7});
             break;
@@ -1054,7 +865,7 @@ function ecs_geoip($ip)
     $area = fread($fp, $index_length['len']);
 
     fclose($fp);
-    $fp = NULL;
+    $fp = null;
 
     return $area;
 }
@@ -1070,29 +881,23 @@ function trim_right($str)
 {
     $len = strlen($str);
     /* 为空或单个字符直接返回 */
-    if ($len == 0 || ord($str{$len-1}) < 127)
-    {
+    if ($len == 0 || ord($str{$len-1}) < 127) {
         return $str;
     }
     /* 有前导字符的直接把前导字符去掉 */
-    if (ord($str{$len-1}) >= 192)
-    {
-       return substr($str, 0, $len-1);
+    if (ord($str{$len-1}) >= 192) {
+        return substr($str, 0, $len-1);
     }
     /* 有非独立的字符，先把非独立字符去掉，再验证非独立的字符是不是一个完整的字，不是连原来前导字符也截取掉 */
     $r_len = strlen(rtrim($str, "\x80..\xBF"));
-    if ($r_len == 0 || ord($str{$r_len-1}) < 127)
-    {
+    if ($r_len == 0 || ord($str{$r_len-1}) < 127) {
         return sub_str($str, 0, $r_len);
     }
 
     $as_num = ord(~$str{$r_len -1});
-    if ($as_num > (1<<(6 + $r_len - $len)))
-    {
+    if ($as_num > (1<<(6 + $r_len - $len))) {
         return $str;
-    }
-    else
-    {
+    } else {
         return substr($str, 0, $r_len-1);
     }
 }
@@ -1106,22 +911,16 @@ function trim_right($str)
  */
 function move_upload_file($file_name, $target_name = '')
 {
-    if (function_exists("move_uploaded_file"))
-    {
-        if (move_uploaded_file($file_name, $target_name))
-        {
-            @chmod($target_name,0755);
+    if (function_exists("move_uploaded_file")) {
+        if (move_uploaded_file($file_name, $target_name)) {
+            @chmod($target_name, 0755);
+            return true;
+        } elseif (copy($file_name, $target_name)) {
+            @chmod($target_name, 0755);
             return true;
         }
-        else if (copy($file_name, $target_name))
-        {
-            @chmod($target_name,0755);
-            return true;
-        }
-    }
-    elseif (copy($file_name, $target_name))
-    {
-        @chmod($target_name,0755);
+    } elseif (copy($file_name, $target_name)) {
+        @chmod($target_name, 0755);
         return true;
     }
     return false;
@@ -1135,30 +934,20 @@ function move_upload_file($file_name, $target_name = '')
  */
 function json_str_iconv($str)
 {
-    if (EC_CHARSET != 'utf-8')
-    {
-        if (is_string($str))
-        {
+    if (EC_CHARSET != 'utf-8') {
+        if (is_string($str)) {
             return addslashes(stripslashes(ecs_iconv('utf-8', EC_CHARSET, $str)));
-        }
-        elseif (is_array($str))
-        {
-            foreach ($str as $key => $value)
-            {
+        } elseif (is_array($str)) {
+            foreach ($str as $key => $value) {
                 $str[$key] = json_str_iconv($value);
             }
             return $str;
-        }
-        elseif (is_object($str))
-        {
-            foreach ($str as $key => $value)
-            {
+        } elseif (is_object($str)) {
+            foreach ($str as $key => $value) {
                 $str->$key = json_str_iconv($value);
             }
             return $str;
-        }
-        else
-        {
+        } else {
             return $str;
         }
     }
@@ -1173,30 +962,20 @@ function json_str_iconv($str)
  */
 function to_utf8_iconv($str)
 {
-    if (EC_CHARSET != 'utf-8')
-    {
-        if (is_string($str))
-        {
+    if (EC_CHARSET != 'utf-8') {
+        if (is_string($str)) {
             return ecs_iconv(EC_CHARSET, 'utf-8', $str);
-        }
-        elseif (is_array($str))
-        {
-            foreach ($str as $key => $value)
-            {
+        } elseif (is_array($str)) {
+            foreach ($str as $key => $value) {
                 $str[$key] = to_utf8_iconv($value);
             }
             return $str;
-        }
-        elseif (is_object($str))
-        {
-            foreach ($str as $key => $value)
-            {
+        } elseif (is_object($str)) {
+            foreach ($str as $key => $value) {
                 $str->$key = to_utf8_iconv($value);
             }
             return $str;
-        }
-        else
-        {
+        } else {
             return $str;
         }
     }
@@ -1213,18 +992,12 @@ function to_utf8_iconv($str)
 function get_file_suffix($file_name, $allow_type = array())
 {
     $file_suffix = strtolower(array_pop(explode('.', $file_name)));
-    if (empty($allow_type))
-    {
+    if (empty($allow_type)) {
         return $file_suffix;
-    }
-    else
-    {
-        if (in_array($file_suffix, $allow_type))
-        {
+    } else {
+        if (in_array($file_suffix, $allow_type)) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -1239,24 +1012,19 @@ function get_file_suffix($file_name, $allow_type = array())
  */
 function read_static_cache($cache_name)
 {
-    if ((DEBUG_MODE & 2) == 2)
-    {
+    if ((DEBUG_MODE & 2) == 2) {
         return false;
     }
     static $result = array();
-    if (!empty($result[$cache_name]))
-    {
+    if (!empty($result[$cache_name])) {
         return $result[$cache_name];
     }
     $cache_file_path = ROOT_PATH . '/temp/static_caches/' . $cache_name . '.php';
-    if (file_exists($cache_file_path))
-    {
+    if (file_exists($cache_file_path)) {
         include_once($cache_file_path);
         $result[$cache_name] = $data;
         return $result[$cache_name];
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
@@ -1271,8 +1039,7 @@ function read_static_cache($cache_name)
  */
 function write_static_cache($cache_name, $caches)
 {
-    if ((DEBUG_MODE & 2) == 2)
-    {
+    if ((DEBUG_MODE & 2) == 2) {
         return false;
     }
     $cache_file_path = ROOT_PATH . '/temp/static_caches/' . $cache_name . '.php';
@@ -1281,5 +1048,3 @@ function write_static_cache($cache_name, $caches)
     $content .= "?>";
     file_put_contents($cache_file_path, $content, LOCK_EX);
 }
-
-?>

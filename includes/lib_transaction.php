@@ -1,7 +1,6 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
@@ -15,8 +14,7 @@ if (!defined('IN_ECS'))
  */
 function edit_profile($profile)
 {
-    if (empty($profile['user_id']))
-    {
+    if (empty($profile['user_id'])) {
         $GLOBALS['err']->add($GLOBALS['_LANG']['not_login']);
 
         return false;
@@ -24,34 +22,26 @@ function edit_profile($profile)
 
     $cfg = array();
     $cfg['username'] = $GLOBALS['db']->getOne("SELECT user_name FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id='" . $profile['user_id'] . "'");
-    if (isset($profile['sex']))
-    {
+    if (isset($profile['sex'])) {
         $cfg['gender'] = intval($profile['sex']);
     }
-    if (!empty($profile['email']))
-    {
-        if (!is_email($profile['email']))
-        {
+    if (!empty($profile['email'])) {
+        if (!is_email($profile['email'])) {
             $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['email_invalid'], $profile['email']));
 
             return false;
         }
         $cfg['email'] = $profile['email'];
     }
-    if (!empty($profile['birthday']))
-    {
+    if (!empty($profile['birthday'])) {
         $cfg['bday'] = $profile['birthday'];
     }
 
 
-    if (!$GLOBALS['user']->edit_user($cfg))
-    {
-        if ($GLOBALS['user']->error == ERR_EMAIL_EXISTS)
-        {
+    if (!$GLOBALS['user']->edit_user($cfg)) {
+        if ($GLOBALS['user']->error == ERR_EMAIL_EXISTS) {
             $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['email_exist'], $profile['email']));
-        }
-        else
-        {
+        } else {
             $GLOBALS['err']->add('DB ERROR!');
         }
 
@@ -60,21 +50,16 @@ function edit_profile($profile)
 
     /* 过滤非法的键值 */
     $other_key_array = array('msn', 'qq', 'office_phone', 'home_phone', 'mobile_phone');
-    foreach ($profile['other'] as $key => $val)
-    {
+    foreach ($profile['other'] as $key => $val) {
         //删除非法key值
-        if (!in_array($key, $other_key_array))
-        {
+        if (!in_array($key, $other_key_array)) {
             unset($profile['other'][$key]);
-        }
-        else
-        {
+        } else {
             $profile['other'][$key] =  htmlspecialchars(trim($val)); //防止用户输入javascript代码
         }
     }
     /* 修改在其他资料 */
-    if (!empty($profile['other']))
-    {
+    if (!empty($profile['other'])) {
         $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('users'), $profile['other'], 'UPDATE', "user_id = '$profile[user_id]'");
     }
 
@@ -107,24 +92,18 @@ function get_profile($user_id)
     $_SESSION['email'] = $row['email'];    //注册SESSION
 
     /* 会员等级 */
-    if ($infos['user_rank'] > 0)
-    {
+    if ($infos['user_rank'] > 0) {
         $sql = "SELECT rank_id, rank_name, discount FROM ".$GLOBALS['ecs']->table('user_rank') .
                " WHERE rank_id = '$infos[user_rank]'";
-    }
-    else
-    {
+    } else {
         $sql = "SELECT rank_id, rank_name, discount, min_points".
                " FROM ".$GLOBALS['ecs']->table('user_rank') .
                " WHERE min_points<= " . intval($infos['rank_points']) . " ORDER BY min_points DESC";
     }
 
-    if ($row = $GLOBALS['db']->getRow($sql))
-    {
+    if ($row = $GLOBALS['db']->getRow($sql)) {
         $info['rank_name']     = $row['rank_name'];
-    }
-    else
-    {
+    } else {
         $info['rank_name'] = $GLOBALS['_LANG']['undifine_rank'];
     }
 
@@ -137,10 +116,8 @@ function get_profile($user_id)
            "WHERE t1.type_id = t2.bonus_type_id AND t2.user_id = '$user_id' AND t1.use_start_date <= '$cur_date' ".
            "AND t1.use_end_date > '$cur_date' AND t2.order_id = 0";
     $bonus = $GLOBALS['db']->getAll($sql);
-    if ($bonus)
-    {
-        for ($i = 0, $count = count($bonus); $i < $count; $i++)
-        {
+    if ($bonus) {
+        for ($i = 0, $count = count($bonus); $i < $count; $i++) {
             $bonus[$i]['type_money'] = price_format($bonus[$i]['type_money'], false);
         }
     }
@@ -193,8 +170,7 @@ function get_consignee_list($user_id)
  */
 function add_bonus($user_id, $bouns_sn)
 {
-    if (empty($user_id))
-    {
+    if (empty($user_id)) {
         $GLOBALS['err']->add($GLOBALS['_LANG']['not_login']);
 
         return false;
@@ -204,10 +180,8 @@ function add_bonus($user_id, $bouns_sn)
     $sql = "SELECT bonus_id, bonus_sn, user_id, bonus_type_id FROM " .$GLOBALS['ecs']->table('user_bonus') .
            " WHERE bonus_sn = '$bouns_sn'";
     $row = $GLOBALS['db']->getRow($sql);
-    if ($row)
-    {
-        if ($row['user_id'] == 0)
-        {
+    if ($row) {
+        if ($row['user_id'] == 0) {
             //红包没有被使用
             $sql = "SELECT send_end_date, use_end_date ".
                    " FROM " . $GLOBALS['ecs']->table('bonus_type') .
@@ -216,8 +190,7 @@ function add_bonus($user_id, $bouns_sn)
             $bonus_time = $GLOBALS['db']->getRow($sql);
 
             $now = gmtime();
-            if ($now > $bonus_time['use_end_date'])
-            {
+            if ($now > $bonus_time['use_end_date']) {
                 $GLOBALS['err']->add($GLOBALS['_LANG']['bonus_use_expire']);
                 return false;
             }
@@ -225,38 +198,27 @@ function add_bonus($user_id, $bouns_sn)
             $sql = "UPDATE " .$GLOBALS['ecs']->table('user_bonus') . " SET user_id = '$user_id' ".
                    "WHERE bonus_id = '$row[bonus_id]'";
             $result = $GLOBALS['db'] ->query($sql);
-            if ($result)
-            {
-                 return true;
-            }
-            else
-            {
+            if ($result) {
+                return true;
+            } else {
                 return $GLOBALS['db']->errorMsg();
             }
-        }
-        else
-        {
-            if ($row['user_id']== $user_id)
-            {
+        } else {
+            if ($row['user_id']== $user_id) {
                 //红包已经添加过了。
                 $GLOBALS['err']->add($GLOBALS['_LANG']['bonus_is_used']);
-            }
-            else
-            {
+            } else {
                 //红包被其他人使用过了。
                 $GLOBALS['err']->add($GLOBALS['_LANG']['bonus_is_used_by_other']);
             }
 
             return false;
         }
-    }
-    else
-    {
+    } else {
         //红包不存在
         $GLOBALS['err']->add($GLOBALS['_LANG']['bonus_not_exist']);
         return false;
     }
-
 }
 
 /**
@@ -279,38 +241,23 @@ function get_user_orders($user_id, $num = 10, $start = 0)
            " WHERE user_id = '$user_id' ORDER BY add_time DESC";
     $res = $GLOBALS['db']->SelectLimit($sql, $num, $start);
 
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
-        if ($row['order_status'] == OS_UNCONFIRMED)
-        {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
+        if ($row['order_status'] == OS_UNCONFIRMED) {
             $row['handler'] = "<a href=\"user.php?act=cancel_order&order_id=" .$row['order_id']. "\" onclick=\"if (!confirm('".$GLOBALS['_LANG']['confirm_cancel']."')) return false;\">".$GLOBALS['_LANG']['cancel']."</a>";
-        }
-        else if ($row['order_status'] == OS_SPLITED)
-        {
+        } elseif ($row['order_status'] == OS_SPLITED) {
             /* 对配送状态的处理 */
-            if ($row['shipping_status'] == SS_SHIPPED)
-            {
+            if ($row['shipping_status'] == SS_SHIPPED) {
                 @$row['handler'] = "<a href=\"user.php?act=affirm_received&order_id=" .$row['order_id']. "\" onclick=\"if (!confirm('".$GLOBALS['_LANG']['confirm_received']."')) return false;\">".$GLOBALS['_LANG']['received']."</a>";
-            }
-            elseif ($row['shipping_status'] == SS_RECEIVED)
-            {
+            } elseif ($row['shipping_status'] == SS_RECEIVED) {
                 @$row['handler'] = '<span style="color:red">'.$GLOBALS['_LANG']['ss_received'] .'</span>';
-            }
-            else
-            {
-                if ($row['pay_status'] == PS_UNPAYED)
-                {
+            } else {
+                if ($row['pay_status'] == PS_UNPAYED) {
                     @$row['handler'] = "<a href=\"user.php?act=order_detail&order_id=" .$row['order_id']. '">' .$GLOBALS['_LANG']['pay_money']. '</a>';
-                }
-                else
-                {
+                } else {
                     @$row['handler'] = "<a href=\"user.php?act=order_detail&order_id=" .$row['order_id']. '">' .$GLOBALS['_LANG']['view_order']. '</a>';
                 }
-
             }
-        }
-        else
-        {
+        } else {
             $row['handler'] = '<span style="color:red">'.$GLOBALS['_LANG']['os'][$row['order_status']] .'</span>';
         }
 
@@ -343,47 +290,41 @@ function cancel_order($order_id, $user_id = 0)
     $sql = "SELECT user_id, order_id, order_sn , surplus , integral , bonus_id, order_status, shipping_status, pay_status FROM " .$GLOBALS['ecs']->table('order_info') ." WHERE order_id = '$order_id'";
     $order = $GLOBALS['db']->GetRow($sql);
 
-    if (empty($order))
-    {
+    if (empty($order)) {
         $GLOBALS['err']->add($GLOBALS['_LANG']['order_exist']);
         return false;
     }
 
     // 如果用户ID大于0，检查订单是否属于该用户
-    if ($user_id > 0 && $order['user_id'] != $user_id)
-    {
+    if ($user_id > 0 && $order['user_id'] != $user_id) {
         $GLOBALS['err'] ->add($GLOBALS['_LANG']['no_priv']);
 
         return false;
     }
 
     // 订单状态只能是“未确认”或“已确认”
-    if ($order['order_status'] != OS_UNCONFIRMED && $order['order_status'] != OS_CONFIRMED)
-    {
+    if ($order['order_status'] != OS_UNCONFIRMED && $order['order_status'] != OS_CONFIRMED) {
         $GLOBALS['err']->add($GLOBALS['_LANG']['current_os_not_unconfirmed']);
 
         return false;
     }
 
     //订单一旦确认，不允许用户取消
-    if ( $order['order_status'] == OS_CONFIRMED)
-    {
+    if ($order['order_status'] == OS_CONFIRMED) {
         $GLOBALS['err']->add($GLOBALS['_LANG']['current_os_already_confirmed']);
 
         return false;
     }
 
     // 发货状态只能是“未发货”
-    if ($order['shipping_status'] != SS_UNSHIPPED)
-    {
+    if ($order['shipping_status'] != SS_UNSHIPPED) {
         $GLOBALS['err']->add($GLOBALS['_LANG']['current_ss_not_cancel']);
 
         return false;
     }
 
     // 如果付款状态是“已付款”、“付款中”，不允许取消，要取消和商家联系
-    if ($order['pay_status'] != PS_UNPAYED)
-    {
+    if ($order['pay_status'] != PS_UNPAYED) {
         $GLOBALS['err']->add($GLOBALS['_LANG']['current_ps_not_cancel']);
 
         return false;
@@ -391,29 +332,24 @@ function cancel_order($order_id, $user_id = 0)
 
     //将用户订单设置为取消
     $sql = "UPDATE ".$GLOBALS['ecs']->table('order_info') ." SET order_status = '".OS_CANCELED."' WHERE order_id = '$order_id'";
-    if ($GLOBALS['db']->query($sql))
-    {
+    if ($GLOBALS['db']->query($sql)) {
         /* 记录log */
-        order_action($order['order_sn'], OS_CANCELED, $order['shipping_status'], PS_UNPAYED,$GLOBALS['_LANG']['buyer_cancel'],'buyer');
+        order_action($order['order_sn'], OS_CANCELED, $order['shipping_status'], PS_UNPAYED, $GLOBALS['_LANG']['buyer_cancel'], 'buyer');
         /* 退货用户余额、积分、红包 */
-        if ($order['user_id'] > 0 && $order['surplus'] > 0)
-        {
+        if ($order['user_id'] > 0 && $order['surplus'] > 0) {
             $change_desc = sprintf($GLOBALS['_LANG']['return_surplus_on_cancel'], $order['order_sn']);
             log_account_change($order['user_id'], $order['surplus'], 0, 0, 0, $change_desc);
         }
-        if ($order['user_id'] > 0 && $order['integral'] > 0)
-        {
+        if ($order['user_id'] > 0 && $order['integral'] > 0) {
             $change_desc = sprintf($GLOBALS['_LANG']['return_integral_on_cancel'], $order['order_sn']);
             log_account_change($order['user_id'], 0, 0, 0, $order['integral'], $change_desc);
         }
-        if ($order['user_id'] > 0 && $order['bonus_id'] > 0)
-        {
+        if ($order['user_id'] > 0 && $order['bonus_id'] > 0) {
             change_user_bonus($order['bonus_id'], $order['order_id'], false);
         }
 
         /* 如果使用库存，且下订单时减库存，则增加库存 */
-        if ($GLOBALS['_CFG']['use_storage'] == '1' && $GLOBALS['_CFG']['stock_dec_time'] == SDT_PLACE)
-        {
+        if ($GLOBALS['_CFG']['use_storage'] == '1' && $GLOBALS['_CFG']['stock_dec_time'] == SDT_PLACE) {
             change_order_goods_storage($order['order_id'], false, 1);
         }
 
@@ -428,12 +364,9 @@ function cancel_order($order_id, $user_id = 0)
         update_order($order['order_id'], $arr);
 
         return true;
-    }
-    else
-    {
+    } else {
         die($GLOBALS['db']->errorMsg());
     }
-
 }
 
 /**
@@ -453,42 +386,33 @@ function affirm_received($order_id, $user_id = 0)
     $order = $GLOBALS['db']->GetRow($sql);
 
     // 如果用户ID大于 0 。检查订单是否属于该用户
-    if ($user_id > 0 && $order['user_id'] != $user_id)
-    {
+    if ($user_id > 0 && $order['user_id'] != $user_id) {
         $GLOBALS['err'] -> add($GLOBALS['_LANG']['no_priv']);
 
         return false;
     }
     /* 检查订单 */
-    elseif ($order['shipping_status'] == SS_RECEIVED)
-    {
+    elseif ($order['shipping_status'] == SS_RECEIVED) {
         $GLOBALS['err'] ->add($GLOBALS['_LANG']['order_already_received']);
 
         return false;
-    }
-    elseif ($order['shipping_status'] != SS_SHIPPED)
-    {
+    } elseif ($order['shipping_status'] != SS_SHIPPED) {
         $GLOBALS['err']->add($GLOBALS['_LANG']['order_invalid']);
 
         return false;
     }
     /* 修改订单发货状态为“确认收货” */
-    else
-    {
+    else {
         $sql = "UPDATE " . $GLOBALS['ecs']->table('order_info') . " SET shipping_status = '" . SS_RECEIVED . "' WHERE order_id = '$order_id'";
-        if ($GLOBALS['db']->query($sql))
-        {
+        if ($GLOBALS['db']->query($sql)) {
             /* 记录日志 */
             order_action($order['order_sn'], $order['order_status'], SS_RECEIVED, $order['pay_status'], '', $GLOBALS['_LANG']['buyer']);
 
             return true;
-        }
-        else
-        {
+        } else {
             die($GLOBALS['db']->errorMsg());
         }
     }
-
 }
 
 /**
@@ -502,20 +426,16 @@ function affirm_received($order_id, $user_id = 0)
  */
 function save_consignee($consignee, $default=false)
 {
-    if ($consignee['address_id'] > 0)
-    {
+    if ($consignee['address_id'] > 0) {
         /* 修改地址 */
         $res = $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('user_address'), $consignee, 'UPDATE', 'address_id = ' . $consignee['address_id']." AND `user_id`= '".$_SESSION['user_id']."'");
-    }
-    else
-    {
+    } else {
         /* 添加地址 */
         $res = $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('user_address'), $consignee, 'INSERT');
         $consignee['address_id'] = $GLOBALS['db']->insert_id();
     }
 
-    if ($default)
-    {
+    if ($default) {
         /* 保存为用户的默认收货地址 */
         $sql = "UPDATE " . $GLOBALS['ecs']->table('users') .
             " SET address_id = '$consignee[address_id]' WHERE user_id = '$_SESSION[user_id]'";
@@ -538,12 +458,9 @@ function drop_consignee($id)
     $sql = "SELECT user_id FROM " .$GLOBALS['ecs']->table('user_address') . " WHERE address_id = '$id'";
     $uid = $GLOBALS['db']->getOne($sql);
 
-    if ($uid != $_SESSION['user_id'])
-    {
+    if ($uid != $_SESSION['user_id']) {
         return false;
-    }
-    else
-    {
+    } else {
         $sql = "DELETE FROM " .$GLOBALS['ecs']->table('user_address') . " WHERE address_id = '$id'";
         $res = $GLOBALS['db']->query($sql);
 
@@ -563,20 +480,16 @@ function update_address($address)
     $address_id = intval($address['address_id']);
     unset($address['address_id']);
 
-    if ($address_id > 0)
-    {
-         /* 更新指定记录 */
+    if ($address_id > 0) {
+        /* 更新指定记录 */
         $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('user_address'), $address, 'UPDATE', 'address_id = ' .$address_id . ' AND user_id = ' . $address['user_id']);
-    }
-    else
-    {
+    } else {
         /* 插入一条新记录 */
         $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('user_address'), $address, 'INSERT');
         $address_id = $GLOBALS['db']->insert_id();
     }
 
-    if (isset($address['defalut']) && $address['default'] > 0 && isset($address['user_id']))
-    {
+    if (isset($address['defalut']) && $address['default'] > 0 && isset($address['user_id'])) {
         $sql = "UPDATE ".$GLOBALS['ecs']->table('users') .
                 " SET address_id = '".$address_id."' ".
                 " WHERE user_id = '" .$address['user_id']. "'";
@@ -600,8 +513,7 @@ function get_order_detail($order_id, $user_id = 0)
     include_once(ROOT_PATH . 'includes/lib_order.php');
 
     $order_id = intval($order_id);
-    if ($order_id <= 0)
-    {
+    if ($order_id <= 0) {
         $GLOBALS['err']->add($GLOBALS['_LANG']['invalid_order_id']);
 
         return false;
@@ -609,33 +521,27 @@ function get_order_detail($order_id, $user_id = 0)
     $order = order_info($order_id);
 
     //检查订单是否属于该用户
-    if ($user_id > 0 && $user_id != $order['user_id'])
-    {
+    if ($user_id > 0 && $user_id != $order['user_id']) {
         $GLOBALS['err']->add($GLOBALS['_LANG']['no_priv']);
 
         return false;
     }
 
     /* 对发货号处理 */
-    if (!empty($order['invoice_no']))
-    {
-         $shipping_code = $GLOBALS['db']->GetOne("SELECT shipping_code FROM ".$GLOBALS['ecs']->table('shipping') ." WHERE shipping_id = '$order[shipping_id]'");
-         $plugin = ROOT_PATH.'includes/modules/shipping/'. $shipping_code. '.php';
-         if (file_exists($plugin))
-        {
-              include_once($plugin);
-              $shipping = new $shipping_code;
-              $order['invoice_no'] = $shipping->query($order['invoice_no']);
+    if (!empty($order['invoice_no'])) {
+        $shipping_code = $GLOBALS['db']->GetOne("SELECT shipping_code FROM ".$GLOBALS['ecs']->table('shipping') ." WHERE shipping_id = '$order[shipping_id]'");
+        $plugin = ROOT_PATH.'includes/modules/shipping/'. $shipping_code. '.php';
+        if (file_exists($plugin)) {
+            include_once($plugin);
+            $shipping = new $shipping_code;
+            $order['invoice_no'] = $shipping->query($order['invoice_no']);
         }
     }
 
     /* 只有未确认才允许用户修改订单地址 */
-    if ($order['order_status'] == OS_UNCONFIRMED)
-    {
+    if ($order['order_status'] == OS_UNCONFIRMED) {
         $order['allow_update_address'] = 1; //允许修改收货地址
-    }
-    else
-    {
+    } else {
         $order['allow_update_address'] = 0;
     }
 
@@ -645,8 +551,7 @@ function get_order_detail($order_id, $user_id = 0)
     /* 如果是未付款状态，生成支付按钮 */
     if ($order['pay_status'] == PS_UNPAYED &&
         ($order['order_status'] == OS_UNCONFIRMED ||
-        $order['order_status'] == OS_CONFIRMED))
-    {
+        $order['order_status'] == OS_CONFIRMED)) {
         /*
          * 在线支付按钮
          */
@@ -655,12 +560,9 @@ function get_order_detail($order_id, $user_id = 0)
         $payment_info = payment_info($order['pay_id']);
 
         //无效支付方式
-        if ($payment_info === false)
-        {
+        if ($payment_info === false) {
             $order['pay_online'] = '';
-        }
-        else
-        {
+        } else {
             //取得支付信息，生成支付代码
             $payment = unserialize_config($payment_info['pay_config']);
 
@@ -676,9 +578,7 @@ function get_order_detail($order_id, $user_id = 0)
             $pay_obj    = new $payment_info['pay_code'];
             $order['pay_online'] = $pay_obj->get_code($order, $payment);
         }
-    }
-    else
-    {
+    } else {
         $order['pay_online'] = '';
     }
 
@@ -690,37 +590,28 @@ function get_order_detail($order_id, $user_id = 0)
     $order['how_surplus_name'] = $order['how_surplus'];
 
     /* 虚拟商品付款后处理 */
-    if ($order['pay_status'] != PS_UNPAYED)
-    {
+    if ($order['pay_status'] != PS_UNPAYED) {
         /* 取得已发货的虚拟商品信息 */
         $virtual_goods = get_virtual_goods($order_id, true);
         $virtual_card = array();
-        foreach ($virtual_goods AS $code => $goods_list)
-        {
+        foreach ($virtual_goods as $code => $goods_list) {
             /* 只处理虚拟卡 */
-            if ($code == 'virtual_card')
-            {
-                foreach ($goods_list as $goods)
-                {
-                    if ($info = virtual_card_result($order['order_sn'], $goods))
-                    {
+            if ($code == 'virtual_card') {
+                foreach ($goods_list as $goods) {
+                    if ($info = virtual_card_result($order['order_sn'], $goods)) {
                         $virtual_card[] = array('goods_id'=>$goods['goods_id'], 'goods_name'=>$goods['goods_name'], 'info'=>$info);
                     }
                 }
             }
             /* 处理超值礼包里面的虚拟卡 */
-            if ($code == 'package_buy')
-            {
-                foreach ($goods_list as $goods)
-                {
+            if ($code == 'package_buy') {
+                foreach ($goods_list as $goods) {
                     $sql = 'SELECT g.goods_id FROM ' . $GLOBALS['ecs']->table('package_goods') . ' AS pg, ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
                            "WHERE pg.goods_id = g.goods_id AND pg.package_id = '" . $goods['goods_id'] . "' AND extension_code = 'virtual_card'";
                     $vcard_arr = $GLOBALS['db']->getAll($sql);
 
-                    foreach ($vcard_arr AS $val)
-                    {
-                        if ($info = virtual_card_result($order['order_sn'], $val))
-                        {
+                    foreach ($vcard_arr as $val) {
+                        if ($info = virtual_card_result($order['order_sn'], $val)) {
                             $virtual_card[] = array('goods_id'=>$goods['goods_id'], 'goods_name'=>$goods['goods_name'], 'info'=>$info);
                         }
                     }
@@ -732,33 +623,23 @@ function get_order_detail($order_id, $user_id = 0)
     }
 
     /* 确认时间 支付时间 发货时间 */
-    if ($order['confirm_time'] > 0 && ($order['order_status'] == OS_CONFIRMED || $order['order_status'] == OS_SPLITED || $order['order_status'] == OS_SPLITING_PART))
-    {
+    if ($order['confirm_time'] > 0 && ($order['order_status'] == OS_CONFIRMED || $order['order_status'] == OS_SPLITED || $order['order_status'] == OS_SPLITING_PART)) {
         $order['confirm_time'] = sprintf($GLOBALS['_LANG']['confirm_time'], local_date($GLOBALS['_CFG']['time_format'], $order['confirm_time']));
-    }
-    else
-    {
+    } else {
         $order['confirm_time'] = '';
     }
-    if ($order['pay_time'] > 0 && $order['pay_status'] != PS_UNPAYED)
-    {
+    if ($order['pay_time'] > 0 && $order['pay_status'] != PS_UNPAYED) {
         $order['pay_time'] = sprintf($GLOBALS['_LANG']['pay_time'], local_date($GLOBALS['_CFG']['time_format'], $order['pay_time']));
-    }
-    else
-    {
+    } else {
         $order['pay_time'] = '';
     }
-    if ($order['shipping_time'] > 0 && in_array($order['shipping_status'], array(SS_SHIPPED, SS_RECEIVED)))
-    {
+    if ($order['shipping_time'] > 0 && in_array($order['shipping_status'], array(SS_SHIPPED, SS_RECEIVED))) {
         $order['shipping_time'] = sprintf($GLOBALS['_LANG']['shipping_time'], local_date($GLOBALS['_CFG']['time_format'], $order['shipping_time']));
-    }
-    else
-    {
+    } else {
         $order['shipping_time'] = '';
     }
 
     return $order;
-
 }
 
 /**
@@ -779,8 +660,7 @@ function get_user_merge($user_id)
     $list = $GLOBALS['db']->GetCol($sql);
 
     $merge = array();
-    foreach ($list as $val)
-    {
+    foreach ($list as $val) {
         $merge[$val] = $val;
     }
 
@@ -798,33 +678,25 @@ function get_user_merge($user_id)
  */
 function merge_user_order($from_order, $to_order, $user_id = 0)
 {
-    if ($user_id > 0)
-    {
+    if ($user_id > 0) {
         /* 检查订单是否属于指定用户 */
-        if (strlen($to_order) > 0)
-        {
+        if (strlen($to_order) > 0) {
             $sql = "SELECT user_id FROM " .$GLOBALS['ecs']->table('order_info').
                    " WHERE order_sn = '$to_order'";
             $order_user = $GLOBALS['db']->getOne($sql);
-            if ($order_user != $user_id)
-            {
+            if ($order_user != $user_id) {
                 $GLOBALS['err']->add($GLOBALS['_LANG']['no_priv']);
             }
-        }
-        else
-        {
+        } else {
             $GLOBALS['err']->add($GLOBALS['_LANG']['order_sn_empty']);
             return false;
         }
     }
 
     $result = merge_order($from_order, $to_order);
-    if ($result === true)
-    {
+    if ($result === true) {
         return true;
-    }
-    else
-    {
+    } else {
         $GLOBALS['err']->add($result);
         return false;
     }
@@ -851,8 +723,7 @@ function return_to_cart($order_id)
     $res = $GLOBALS['db']->query($sql);
 
     $time = gmtime();
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
         // 查该商品信息：是否删除、是否上架
 
         $sql = "SELECT goods_sn, goods_name, goods_number, market_price, " .
@@ -864,34 +735,25 @@ function return_to_cart($order_id)
         $goods = $GLOBALS['db']->getRow($sql);
 
         // 如果该商品不存在，处理下一个商品
-        if (empty($goods))
-        {
+        if (empty($goods)) {
             continue;
         }
-        if($row['product_id'])
-        {
+        if ($row['product_id']) {
             $order_goods_product_id=$row['product_id'];
             $sql="SELECT product_number from ".$GLOBALS['ecs']->table('products')."where product_id='$order_goods_product_id'";
             $product_number=$GLOBALS['db']->getOne($sql);
         }
         // 如果使用库存，且库存不足，修改数量
-        if ($GLOBALS['_CFG']['use_storage'] == 1 && ($row['product_id']?($product_number<$row['goods_number']):($goods['goods_number'] < $row['goods_number'])))
-        {
-            if ($goods['goods_number'] == 0 || $product_number=== 0)
-            {
+        if ($GLOBALS['_CFG']['use_storage'] == 1 && ($row['product_id']?($product_number<$row['goods_number']):($goods['goods_number'] < $row['goods_number']))) {
+            if ($goods['goods_number'] == 0 || $product_number=== 0) {
                 // 如果库存为0，处理下一个商品
                 continue;
-            }
-            else
-            {
-                if($row['product_id'])
-                {
-                 $row['goods_number']=$product_number;
-                }
-                else
-                {
-                // 库存不为0，修改数量
-                $row['goods_number'] = $goods['goods_number'];
+            } else {
+                if ($row['product_id']) {
+                    $row['goods_number']=$product_number;
+                } else {
+                    // 库存不为0，修改数量
+                    $row['goods_number'] = $goods['goods_number'];
                 }
             }
         }
@@ -925,33 +787,28 @@ function return_to_cart($order_id)
         );
 
         // 如果是配件
-        if ($row['parent_id'] > 0)
-        {
+        if ($row['parent_id'] > 0) {
             // 查询基本件信息：是否删除、是否上架、能否作为普通商品销售
             $sql = "SELECT goods_id " .
                     "FROM " . $GLOBALS['ecs']->table('goods') .
                     " WHERE goods_id = '$row[parent_id]' " .
                     " AND is_delete = 0 AND is_on_sale = 1 AND is_alone_sale = 1 LIMIT 1";
             $parent = $GLOBALS['db']->getRow($sql);
-            if ($parent)
-            {
+            if ($parent) {
                 // 如果基本件存在，查询组合关系是否存在
                 $sql = "SELECT goods_price " .
                         "FROM " . $GLOBALS['ecs']->table('group_goods') .
                         " WHERE parent_id = '$row[parent_id]' " .
                         " AND goods_id = '$row[goods_id]' LIMIT 1";
                 $fitting_price = $GLOBALS['db']->getOne($sql);
-                if ($fitting_price)
-                {
+                if ($fitting_price) {
                     // 如果组合关系存在，取配件价格，取基本件数量，改parent_id
                     $return_goods['parent_id']      = $row['parent_id'];
                     $return_goods['goods_price']    = $fitting_price;
                     $return_goods['goods_number']   = $basic_number[$row['parent_id']];
                 }
             }
-        }
-        else
-        {
+        } else {
             // 保存基本件数量
             $basic_number[$row['goods_id']] = $row['goods_number'];
         }
@@ -966,15 +823,12 @@ function return_to_cart($order_id)
                 " AND is_gift = 0 " .
                 " AND rec_type = '" . CART_GENERAL_GOODS . "'";
         $cart_goods = $GLOBALS['db']->getOne($sql);
-        if (empty($cart_goods))
-        {
+        if (empty($cart_goods)) {
             // 没有相同商品，插入
             $return_goods['session_id'] = SESS_ID;
             $return_goods['user_id']    = $_SESSION['user_id'];
             $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('cart'), $return_goods, 'INSERT');
-        }
-        else
-        {
+        } else {
             // 有相同商品，修改数量
             $sql = "UPDATE " . $GLOBALS['ecs']->table('cart') . " SET " .
                     "goods_number = '" . $return_goods['goods_number'] . "' " .
@@ -1010,42 +864,32 @@ function save_order_address($address, $user_id)
     empty($address['consignee']) and $GLOBALS['err']->add($GLOBALS['_LANG']['consigness_empty']);
     empty($address['address']) and $GLOBALS['err']->add($GLOBALS['_LANG']['address_empty']);
     $address['order_id'] == 0 and $GLOBALS['err']->add($GLOBALS['_LANG']['order_id_empty']);
-    if (empty($address['email']))
-    {
+    if (empty($address['email'])) {
         $GLOBALS['err']->add($GLOBALS['email_empty']);
-    }
-    else
-    {
-        if (!is_email($address['email']))
-        {
+    } else {
+        if (!is_email($address['email'])) {
             $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['email_invalid'], $address['email']));
         }
     }
-    if ($GLOBALS['err']->error_no > 0)
-    {
+    if ($GLOBALS['err']->error_no > 0) {
         return false;
     }
 
     /* 检查订单状态 */
     $sql = "SELECT user_id, order_status FROM " .$GLOBALS['ecs']->table('order_info'). " WHERE order_id = '" .$address['order_id']. "'";
     $row = $GLOBALS['db']->getRow($sql);
-    if ($row)
-    {
-        if ($user_id > 0 && $user_id != $row['user_id'])
-        {
+    if ($row) {
+        if ($user_id > 0 && $user_id != $row['user_id']) {
             $GLOBALS['err']->add($GLOBALS['_LANG']['no_priv']);
             return false;
         }
-        if ($row['order_status'] != OS_UNCONFIRMED)
-        {
+        if ($row['order_status'] != OS_UNCONFIRMED) {
             $GLOBALS['err']->add($GLOBALS['_LANG']['require_unconfirmed']);
             return false;
         }
         $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('order_info'), $address, 'UPDATE', "order_id = '$address[order_id]'");
         return true;
-    }
-    else
-    {
+    } else {
         /* 订单不存在 */
         $GLOBALS['err']->add($GLOBALS['_LANG']['order_exist']);
         return false;
@@ -1073,27 +917,18 @@ function get_user_bouns_list($user_id, $num = 10, $start = 0)
     $day = getdate();
     $cur_date = local_mktime(23, 59, 59, $day['mon'], $day['mday'], $day['year']);
 
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
         /* 先判断是否被使用，然后判断是否开始或过期 */
-        if (empty($row['order_id']))
-        {
+        if (empty($row['order_id'])) {
             /* 没有被使用 */
-            if ($row['use_start_date'] > $cur_date)
-            {
+            if ($row['use_start_date'] > $cur_date) {
                 $row['status'] = $GLOBALS['_LANG']['not_start'];
-            }
-            else if ($row['use_end_date'] < $cur_date)
-            {
+            } elseif ($row['use_end_date'] < $cur_date) {
                 $row['status'] = $GLOBALS['_LANG']['overdue'];
-            }
-            else
-            {
+            } else {
                 $row['status'] = $GLOBALS['_LANG']['not_use'];
             }
-        }
-        else
-        {
+        } else {
             $row['status'] = '<a href="user.php?act=order_detail&order_id=' .$row['order_id']. '" >' .$GLOBALS['_LANG']['had_use']. '</a>';
         }
 
@@ -1103,7 +938,6 @@ function get_user_bouns_list($user_id, $num = 10, $start = 0)
         $arr[] = $row;
     }
     return $arr;
-
 }
 
 /**
@@ -1136,17 +970,17 @@ function get_user_group_buy($user_id, $num = 10, $start = 0)
   *
   *
   */
-function deleteRepeat($array){
+function deleteRepeat($array)
+{
     $_card_sn_record = array();
-    foreach ($array as $_k => $_v){
-        foreach ($_v['info'] as $__k => $__v){
-            if (in_array($__v['card_sn'],$_card_sn_record)){
+    foreach ($array as $_k => $_v) {
+        foreach ($_v['info'] as $__k => $__v) {
+            if (in_array($__v['card_sn'], $_card_sn_record)) {
                 unset($array[$_k]['info'][$__k]);
             } else {
-                array_push($_card_sn_record,$__v['card_sn']);
+                array_push($_card_sn_record, $__v['card_sn']);
             }
         }
     }
     return $array;
 }
-?>

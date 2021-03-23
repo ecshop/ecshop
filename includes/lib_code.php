@@ -1,7 +1,6 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
@@ -17,8 +16,7 @@ function encrypt($str, $key = AUTH_KEY)
     $coded = '';
     $keylength = strlen($key);
 
-    for ($i = 0, $count = strlen($str); $i < $count; $i += $keylength)
-    {
+    for ($i = 0, $count = strlen($str); $i < $count; $i += $keylength) {
         $coded .= substr($str, $i, $keylength) ^ $key;
     }
 
@@ -37,12 +35,9 @@ function decrypt($str, $key = AUTH_KEY)
     $keylength = strlen($key);
     $str = base64_decode($str);
 
-    for ($i = 0, $count = strlen($str); $i < $count; $i += $keylength)
-    {
+    for ($i = 0, $count = strlen($str); $i < $count; $i += $keylength) {
         $coded .= substr($str, $i, $keylength) ^ $key;
     }
 
     return $coded;
 }
-
-?>

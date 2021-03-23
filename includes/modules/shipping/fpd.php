@@ -1,20 +1,17 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
 $shipping_lang = ROOT_PATH.'languages/' .$GLOBALS['_CFG']['lang']. '/shipping/fpd.php';
-if (file_exists($shipping_lang))
-{
+if (file_exists($shipping_lang)) {
     global $_LANG;
     include_once($shipping_lang);
 }
 
 /* 模块的基本信息 */
-if (isset($set_modules) && $set_modules == TRUE)
-{
+if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 配送方式插件的代码必须和文件名保持一致 */
@@ -43,7 +40,7 @@ if (isset($set_modules) && $set_modules == TRUE)
     /* 打印单背景 */
     $modules[$i]['print_bg'] = '';
 
-   /* 打印快递单标签位置信息 */
+    /* 打印快递单标签位置信息 */
     $modules[$i]['config_lable'] = '';
 
     return;
@@ -58,7 +55,7 @@ class fpd
     /**
      * 配置信息
      */
-    var $configure;
+    public $configure;
 
     /*------------------------------------------------------ */
     //-- PUBLIC METHODs
@@ -71,7 +68,7 @@ class fpd
      *
      * @return null
      */
-    function fpd($cfg=array())
+    public function fpd($cfg=array())
     {
     }
 
@@ -82,7 +79,7 @@ class fpd
      * @param   float   $goods_amount   商品金额
      * @return  decimal
      */
-    function calculate($goods_weight, $goods_amount)
+    public function calculate($goods_weight, $goods_amount)
     {
         return 0;
     }
@@ -95,10 +92,8 @@ class fpd
      * @param   string  $invoice_sn     发货单号
      * @return  string
      */
-    function query($invoice_sn)
+    public function query($invoice_sn)
     {
         return $invoice_sn;
     }
 }
-
-?>

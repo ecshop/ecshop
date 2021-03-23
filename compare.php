@@ -4,11 +4,8 @@ define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 
-if (!empty($_REQUEST['goods']) && is_array($_REQUEST['goods']) && count($_REQUEST['goods']) > 1)
-{
-
-    foreach ($_REQUEST['goods'] as $key=>$val)
-    {
+if (!empty($_REQUEST['goods']) && is_array($_REQUEST['goods']) && count($_REQUEST['goods']) > 1) {
+    foreach ($_REQUEST['goods'] as $key=>$val) {
         $_REQUEST['goods'][$key]=intval($val);
     }
 
@@ -19,8 +16,7 @@ if (!empty($_REQUEST['goods']) && is_array($_REQUEST['goods']) && count($_REQUES
            ' GROUP BY id_value ';
     $query = $db->query($sql);
     $cmt = array();
-    while ($row = $db->fetch_array($query))
-    {
+    while ($row = $db->fetch_array($query)) {
         $cmt[$row['id_value']] = $row;
     }
 
@@ -41,8 +37,7 @@ if (!empty($_REQUEST['goods']) && is_array($_REQUEST['goods']) && count($_REQUES
     $ids = $_REQUEST['goods'];
     $attr_name = array();
     $type_id = 0;
-    while ($row = $db->fetchRow($res))
-    {
+    while ($row = $db->fetchRow($res)) {
         $goods_id = $row['goods_id'];
         $type_id = $row['goods_type'];
         $arr[$goods_id]['goods_id']     = $goods_id;
@@ -57,17 +52,13 @@ if (!empty($_REQUEST['goods']) && is_array($_REQUEST['goods']) && count($_REQUES
         $arr[$goods_id]['brand_name']   = $row['brand_name'];
 
         $arr[$goods_id]['properties'][$row['attr_id']]['name']  = $row['attr_name'];
-        if (!empty($arr[$goods_id]['properties'][$row['attr_id']]['value']))
-        {
+        if (!empty($arr[$goods_id]['properties'][$row['attr_id']]['value'])) {
             $arr[$goods_id]['properties'][$row['attr_id']]['value'] .= ',' . $row['attr_value'];
-        }
-        else
-        {
+        } else {
             $arr[$goods_id]['properties'][$row['attr_id']]['value'] = $row['attr_value'];
         }
 
-        if (!isset($arr[$goods_id]['comment_rank']))
-        {
+        if (!isset($arr[$goods_id]['comment_rank'])) {
             $arr[$goods_id]['comment_rank']   = isset($cmt[$goods_id]) ? ceil($cmt[$goods_id]['cmt_rank']) : 0;
             $arr[$goods_id]['comment_number'] = isset($cmt[$goods_id]) ? $cmt[$goods_id]['cmt_count']      : 0;
             $arr[$goods_id]['comment_number'] = sprintf($_LANG['comment_num'], $arr[$goods_id]['comment_number']);
@@ -76,8 +67,7 @@ if (!empty($_REQUEST['goods']) && is_array($_REQUEST['goods']) && count($_REQUES
         $tmp = $ids;
         $key = array_search($goods_id, $tmp);
 
-        if ($key !== null && $key !== false)
-        {
+        if ($key !== null && $key !== false) {
             unset($tmp[$key]);
         }
 
@@ -89,16 +79,13 @@ if (!empty($_REQUEST['goods']) && is_array($_REQUEST['goods']) && count($_REQUES
     $attribute = array();
 
     $query = $db->query($sql);
-    while ($rt = $db->fetch_array($query))
-    {
+    while ($rt = $db->fetch_array($query)) {
         $attribute[$rt['attr_id']] = $rt['attr_name'];
     }
 
     $smarty->assign('attribute', $attribute);
     $smarty->assign('goods_list', $arr);
-}
-else
-{
+} else {
     show_message($_LANG['compare_no_goods']);
     exit;
 }
@@ -106,13 +93,11 @@ else
 assign_template();
 $position = assign_ur_here(0, $_LANG['goods_compare']);
 $smarty->assign('page_title', $position['title']);    // 页面标题
-$smarty->assign('ur_here',    $position['ur_here']);  // 当前位置
+$smarty->assign('ur_here', $position['ur_here']);  // 当前位置
 
 $smarty->assign('categories', get_categories_tree()); // 分类树
-$smarty->assign('helps',      get_shop_help());       // 网店帮助
+$smarty->assign('helps', get_shop_help());       // 网店帮助
 
 assign_dynamic('compare');
 
 $smarty->display('compare.dwt');
-
-?>

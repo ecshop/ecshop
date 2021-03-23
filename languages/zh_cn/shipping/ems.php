@@ -63,5 +63,3 @@ $_LANG['shipping_print'] = '<table style="width:18.8cm" border="0" cellspacing="
     <td style="height:5.1cm;">&nbsp;</td>
   </tr>
 </table>';
-
-?>

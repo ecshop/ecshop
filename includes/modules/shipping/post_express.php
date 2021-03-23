@@ -1,20 +1,17 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
 $shipping_lang = ROOT_PATH.'languages/' .$GLOBALS['_CFG']['lang']. '/shipping/post_express.php';
-if (file_exists($shipping_lang))
-{
+if (file_exists($shipping_lang)) {
     global $_LANG;
     include_once($shipping_lang);
 }
 
 /* 模块的基本信息 */
-if (isset($set_modules) && $set_modules == TRUE)
-{
+if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 配送方式插件的代码必须和文件名保持一致 */
@@ -51,7 +48,7 @@ if (isset($set_modules) && $set_modules == TRUE)
     /* 打印单背景 */
     $modules[$i]['print_bg'] = '';
 
-   /* 打印快递单标签位置信息 */
+    /* 打印快递单标签位置信息 */
     $modules[$i]['config_lable'] = '';
 
     return;
@@ -84,7 +81,7 @@ class post_express
     /**
      * 配置信息
      */
-    var $configure;
+    public $configure;
 
     /*------------------------------------------------------ */
     //-- PUBLIC METHODs
@@ -97,10 +94,9 @@ class post_express
      *
      * @return null
      */
-    function post_express($cfg=array())
+    public function post_express($cfg=array())
     {
-        foreach ($cfg AS $key=>$val)
-        {
+        foreach ($cfg as $key=>$val) {
             $this->configure[$val['name']] = $val['value'];
         }
     }
@@ -113,32 +109,22 @@ class post_express
      * @param   float   $goods_number   商品数量
      * @return  decimal
      */
-    function calculate($goods_weight, $goods_amount, $goods_number)
+    public function calculate($goods_weight, $goods_amount, $goods_number)
     {
-        if ($this->configure['free_money'] > 0 && $goods_amount >= $this->configure['free_money'])
-        {
+        if ($this->configure['free_money'] > 0 && $goods_amount >= $this->configure['free_money']) {
             return 0;
-        }
-        else
-        {
+        } else {
             $fee    = $this->configure['base_fee'];
             $this->configure['fee_compute_mode'] = !empty($this->configure['fee_compute_mode']) ? $this->configure['fee_compute_mode'] : 'by_weight';
 
-            if ($this->configure['fee_compute_mode'] == 'by_number')
-            {
+            if ($this->configure['fee_compute_mode'] == 'by_number') {
                 $fee = $goods_number * $this->configure['item_fee'];
-            }
-            else
-            {
-               if ($goods_weight > 5)
-                {
+            } else {
+                if ($goods_weight > 5) {
                     $fee += 8 * $this->configure['step_fee'];
                     $fee += (ceil(($goods_weight - 5) / 0.5)) * $this->configure['step_fee1'];
-                }
-                else
-                {
-                    if ($goods_weight > 1)
-                    {
+                } else {
+                    if ($goods_weight > 1) {
                         $fee += (ceil(($goods_weight - 1) / 0.5)) * $this->configure['step_fee'];
                     }
                 }
@@ -157,7 +143,7 @@ class post_express
      * @param   string  $invoice_sn     发货单号
      * @return  string
      */
-    function query($invoice_sn)
+    public function query($invoice_sn)
     {
         return $invoice_sn;
     }
@@ -171,16 +157,13 @@ class post_express
      *
      * @return  decimal $price        保价费用
      */
-    function calculate_insure($total_price, $insure_rate)
+    public function calculate_insure($total_price, $insure_rate)
     {
         $total_price = ceil($total_price);
         $price = $total_price * $insure_rate;
-        if ($price < 1)
-        {
+        if ($price < 1) {
             $price = 1;
         }
         return ceil($price);
     }
 }
-
-?>

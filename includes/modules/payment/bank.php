@@ -1,22 +1,19 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
 $payment_lang = ROOT_PATH . 'languages/' .$GLOBALS['_CFG']['lang']. '/payment/bank.php';
 
-if (file_exists($payment_lang))
-{
+if (file_exists($payment_lang)) {
     global $_LANG;
 
     include_once($payment_lang);
 }
 
 /* 模块的基本信息 */
-if (isset($set_modules) && $set_modules == TRUE)
-{
+if (isset($set_modules) && $set_modules == true) {
     $i = isset($modules) ? count($modules) : 0;
 
     /* 代码 */
@@ -59,11 +56,11 @@ class bank
      *
      * @return void
      */
-    function bank()
+    public function bank()
     {
     }
 
-    function __construct()
+    public function __construct()
     {
         $this->bank();
     }
@@ -71,7 +68,7 @@ class bank
     /**
      * 提交函数
      */
-    function get_code()
+    public function get_code()
     {
         return '';
     }
@@ -79,10 +76,8 @@ class bank
     /**
      * 处理函数
      */
-    function response()
+    public function response()
     {
         return;
     }
 }
-
-?>

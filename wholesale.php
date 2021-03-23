@@ -5,24 +5,21 @@ define('IN_ECS', true);
 require(dirname(__FILE__) . '/includes/init.php');
 
 /* 如果没登录，提示登录 */
-if ($_SESSION['user_rank'] <= 0)
-{
+if ($_SESSION['user_rank'] <= 0) {
     show_message($_LANG['ws_user_rank'], $_LANG['ws_return_home'], 'index.php');
 }
 
 /*------------------------------------------------------ */
 //-- act 操作项的初始化
 /*------------------------------------------------------ */
-if (empty($_REQUEST['act']))
-{
+if (empty($_REQUEST['act'])) {
     $_REQUEST['act'] = 'list';
 }
 
 /*------------------------------------------------------ */
 //-- 批发活动列表
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'list')
-{
+if ($_REQUEST['act'] == 'list') {
     $search_category = empty($_REQUEST['search_category']) ? 0 : intval($_REQUEST['search_category']);
     $search_keywords = isset($_REQUEST['search_keywords']) ? trim($_REQUEST['search_keywords']) : '';
     $param = array(); // 翻页链接所带参数列表
@@ -34,15 +31,13 @@ if ($_REQUEST['act'] == 'list')
 
     /* 搜索 */
     /* 搜索类别 */
-    if ($search_category)
-    {
+    if ($search_category) {
         $where .= " AND g.cat_id = '$search_category' ";
         $param['search_category'] = $search_category;
         $smarty->assign('search_category', $search_category);
     }
     /* 搜索商品名称和关键字 */
-    if ($search_keywords)
-    {
+    if ($search_keywords) {
         $where .= " AND (g.keywords LIKE '%$search_keywords%'
                     OR g.goods_name LIKE '%$search_keywords%') ";
         $param['search_keywords'] = $search_keywords;
@@ -53,8 +48,7 @@ if ($_REQUEST['act'] == 'list')
     $sql = "SELECT COUNT(*) FROM " . $ecs->table('wholesale') . " AS w, " . $ecs->table('goods') . " AS g " . $where;
     $count = $db->getOne($sql);
 
-    if ($count > 0)
-    {
+    if ($count > 0) {
         $default_display_type = $_CFG['show_order_type'] == '0' ? 'list' : 'text';
         $display  = (isset($_REQUEST['display']) && in_array(trim(strtolower($_REQUEST['display'])), array('list', 'text'))) ? trim($_REQUEST['display']) : (isset($_COOKIE['ECS']['display']) ? $_COOKIE['ECS']['display'] : $default_display_type);
         $display  = in_array($display, array('list', 'text')) ? $display : 'text';
@@ -75,7 +69,7 @@ if ($_REQUEST['act'] == 'list')
         $smarty->assign('wholesale_list', $wholesale_list);
 
         $param['act'] = 'list';
-        $pager = get_pager('wholesale.php', array_reverse ($param, TRUE), $count, $page, $size);
+        $pager = get_pager('wholesale.php', array_reverse($param, true), $count, $page, $size);
         $pager['display'] = $display;
         $smarty->assign('pager', $pager);
 
@@ -87,10 +81,10 @@ if ($_REQUEST['act'] == 'list')
     assign_template();
     $position = assign_ur_here();
     $smarty->assign('page_title', $position['title']);    // 页面标题
-    $smarty->assign('ur_here',    $position['ur_here']);  // 当前位置
+    $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
     $smarty->assign('categories', get_categories_tree()); // 分类树
-    $smarty->assign('helps',      get_shop_help());       // 网店帮助
-    $smarty->assign('top_goods',  get_top10());           // 销售排行
+    $smarty->assign('helps', get_shop_help());       // 网店帮助
+    $smarty->assign('top_goods', get_top10());           // 销售排行
 
     assign_dynamic('wholesale');
 
@@ -101,29 +95,22 @@ if ($_REQUEST['act'] == 'list')
 /*------------------------------------------------------ */
 //-- 下载价格单
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'price_list')
-{
+elseif ($_REQUEST['act'] == 'price_list') {
     $data = $_LANG['goods_name'] . "\t" . $_LANG['goods_attr'] . "\t" . $_LANG['number'] . "\t" . $_LANG['ws_price'] . "\t\n";
     $sql = "SELECT * FROM " . $ecs->table('wholesale') .
             "WHERE enabled = 1 AND CONCAT(',', rank_ids, ',') LIKE '" . '%,' . $_SESSION['user_rank'] . ',%' . "'";
     $res = $db->query($sql);
-    while ($row = $db->fetchRow($res))
-    {
+    while ($row = $db->fetchRow($res)) {
         $price_list = unserialize($row['prices']);
-        foreach ($price_list as $attr_price)
-        {
-            if ($attr_price['attr'])
-            {
+        foreach ($price_list as $attr_price) {
+            if ($attr_price['attr']) {
                 $sql = "SELECT attr_value FROM " . $ecs->table('goods_attr') .
                         " WHERE goods_attr_id " . db_create_in($attr_price['attr']);
                 $goods_attr = join(',', $db->getCol($sql));
-            }
-            else
-            {
+            } else {
                 $goods_attr = '';
             }
-            foreach ($attr_price['qp_list'] as $qp)
-            {
+            foreach ($attr_price['qp_list'] as $qp) {
                 $data .= $row['goods_name'] . "\t" . $goods_attr . "\t" . $qp['quantity'] . "\t" . $qp['price'] . "\t\n";
             }
         }
@@ -131,12 +118,9 @@ elseif ($_REQUEST['act'] == 'price_list')
 
     header("Content-type: application/vnd.ms-excel; charset=utf-8");
     header("Content-Disposition: attachment; filename=price_list.xls");
-    if (EC_CHARSET == 'utf-8')
-    {
+    if (EC_CHARSET == 'utf-8') {
         echo ecs_iconv('UTF8', 'GB2312', $data);
-    }
-    else
-    {
+    } else {
         echo $data;
     }
 }
@@ -144,42 +128,34 @@ elseif ($_REQUEST['act'] == 'price_list')
 /*------------------------------------------------------ */
 //-- 加入购物车
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add_to_cart')
-{
+elseif ($_REQUEST['act'] == 'add_to_cart') {
     /* 取得参数 */
     $act_id         = intval($_POST['act_id']);
     $goods_number   = $_POST['goods_number'][$act_id];
     $attr_id        = isset($_POST['attr_id']) ? $_POST['attr_id'] : array();
-    if(isset($attr_id[$act_id]))
-    {
+    if (isset($attr_id[$act_id])) {
         $goods_attr     = $attr_id[$act_id];
     }
 
     /* 用户提交必须全部通过检查，才能视为完成操作 */
 
     /* 检查数量 */
-    if (empty($goods_number) || (is_array($goods_number) && array_sum($goods_number) <= 0))
-    {
+    if (empty($goods_number) || (is_array($goods_number) && array_sum($goods_number) <= 0)) {
         show_message($_LANG['ws_invalid_goods_number']);
     }
 
     /* 确定购买商品列表 */
     $goods_list = array();
-    if (is_array($goods_number))
-    {
-        foreach ($goods_number as $key => $value)
-        {
-            if (!$value)
-            {
+    if (is_array($goods_number)) {
+        foreach ($goods_number as $key => $value) {
+            if (!$value) {
                 unset($goods_number[$key], $goods_attr[$key]);
                 continue;
             }
 
             $goods_list[] = array('number' => $goods_number[$key], 'goods_attr' => $goods_attr[$key]);
         }
-    }
-    else
-    {
+    } else {
         $goods_list[0] = array('number' => $goods_number, 'goods_attr' => '');
     }
 
@@ -187,18 +163,12 @@ elseif ($_REQUEST['act'] == 'add_to_cart')
     $wholesale = wholesale_info($act_id);
 
     /* 检查session中该商品，该属性是否存在 */
-    if (isset($_SESSION['wholesale_goods']))
-    {
-        foreach ($_SESSION['wholesale_goods'] as $goods)
-        {
-            if ($goods['goods_id'] == $wholesale['goods_id'])
-            {
-                if (empty($goods_attr))
-                {
+    if (isset($_SESSION['wholesale_goods'])) {
+        foreach ($_SESSION['wholesale_goods'] as $goods) {
+            if ($goods['goods_id'] == $wholesale['goods_id']) {
+                if (empty($goods_attr)) {
                     show_message($_LANG['ws_goods_attr_exists']);
-                }
-                elseif (in_array($goods['goods_attr_id'], $goods_attr))
-                {
+                } elseif (in_array($goods['goods_attr_id'], $goods_attr)) {
                     show_message($_LANG['ws_goods_attr_exists']);
                 }
             }
@@ -207,45 +177,33 @@ elseif ($_REQUEST['act'] == 'add_to_cart')
 
     /* 获取购买商品的批发方案的价格阶梯 （一个方案多个属性组合、一个属性组合、一个属性、无属性） */
     $attr_matching = false;
-    foreach ($wholesale['price_list'] as $attr_price)
-    {
+    foreach ($wholesale['price_list'] as $attr_price) {
         // 没有属性
-        if (empty($attr_price['attr']))
-        {
+        if (empty($attr_price['attr'])) {
             $attr_matching = true;
             $goods_list[0]['qp_list'] = $attr_price['qp_list'];
             break;
         }
         // 有属性
-        elseif (($key = is_attr_matching($goods_list, $attr_price['attr'])) !== false)
-        {
+        elseif (($key = is_attr_matching($goods_list, $attr_price['attr'])) !== false) {
             $attr_matching = true;
             $goods_list[$key]['qp_list'] = $attr_price['qp_list'];
         }
     }
-    if (!$attr_matching)
-    {
+    if (!$attr_matching) {
         show_message($_LANG['ws_attr_not_matching']);
     }
 
     /* 检查数量是否达到最低要求 */
-    foreach ($goods_list as $goods_key => $goods)
-    {
-        if ($goods['number'] < $goods['qp_list'][0]['quantity'])
-        {
+    foreach ($goods_list as $goods_key => $goods) {
+        if ($goods['number'] < $goods['qp_list'][0]['quantity']) {
             show_message($_LANG['ws_goods_number_not_enough']);
-        }
-        else
-        {
+        } else {
             $goods_price = 0;
-            foreach ($goods['qp_list'] as $qp)
-            {
-                if ($goods['number'] >= $qp['quantity'])
-                {
+            foreach ($goods['qp_list'] as $qp) {
+                if ($goods['number'] >= $qp['quantity']) {
                     $goods_list[$goods_key]['goods_price'] = $qp['price'];
-                }
-                else
-                {
+                } else {
                     break;
                 }
             }
@@ -253,14 +211,11 @@ elseif ($_REQUEST['act'] == 'add_to_cart')
     }
 
     /* 写入session */
-    foreach ($goods_list as $goods_key => $goods)
-    {
+    foreach ($goods_list as $goods_key => $goods) {
         // 属性名称
         $goods_attr_name = '';
-        if (!empty($goods['goods_attr']))
-        {
-            foreach ($goods['goods_attr'] as $key=> $attr)
-            {
+        if (!empty($goods['goods_attr'])) {
+            foreach ($goods['goods_attr'] as $key=> $attr) {
                 $attr['attr_name']=htmlspecialchars($attr['attr_name']);
                 $goods['goods_attr'][$key]['attr_name']=$attr['attr_name'];
                 $attr['attr_val'] =htmlspecialchars($attr['attr_val']);
@@ -296,11 +251,9 @@ elseif ($_REQUEST['act'] == 'add_to_cart')
 /*------------------------------------------------------ */
 //-- 从购物车删除
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'drop_goods')
-{
+elseif ($_REQUEST['act'] == 'drop_goods') {
     $key = intval($_REQUEST['key']);
-    if (isset($_SESSION['wholesale_goods'][$key]))
-    {
+    if (isset($_SESSION['wholesale_goods'][$key])) {
         unset($_SESSION['wholesale_goods'][$key]);
     }
 
@@ -312,26 +265,22 @@ elseif ($_REQUEST['act'] == 'drop_goods')
 /*------------------------------------------------------ */
 //-- 提交订单
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'submit_order')
-{
+elseif ($_REQUEST['act'] == 'submit_order') {
     include_once(ROOT_PATH . 'includes/lib_order.php');
 
     /* 检查购物车中是否有商品 */
-    if (count($_SESSION['wholesale_goods']) == 0)
-    {
+    if (count($_SESSION['wholesale_goods']) == 0) {
         show_message($_LANG['no_goods_in_cart']);
     }
 
     /* 检查备注信息 */
-    if (empty($_POST['remark']))
-    {
+    if (empty($_POST['remark'])) {
         show_message($_LANG['ws_remark']);
     }
 
     /* 计算商品总额 */
     $goods_amount = 0;
-    foreach ($_SESSION['wholesale_goods'] as $goods)
-    {
+    foreach ($_SESSION['wholesale_goods'] as $goods) {
         $goods_amount += $goods['subtotal'];
     }
 
@@ -348,33 +297,27 @@ elseif ($_REQUEST['act'] == 'submit_order')
 
     /* 插入订单表 */
     $error_no = 0;
-    do
-    {
+    do {
         $order['order_sn'] = get_order_sn(); //获取新订单号
         $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('order_info'), $order, 'INSERT');
 
         $error_no = $GLOBALS['db']->errno();
 
-        if ($error_no > 0 && $error_no != 1062)
-        {
+        if ($error_no > 0 && $error_no != 1062) {
             die($GLOBALS['db']->errorMsg());
         }
-    }
-    while ($error_no == 1062); //如果是订单号重复则重新提交数据
+    } while ($error_no == 1062); //如果是订单号重复则重新提交数据
 
     $new_order_id = $db->insert_id();
     $order['order_id'] = $new_order_id;
 
     /* 插入订单商品 */
-    foreach ($_SESSION['wholesale_goods'] as $goods)
-    {
+    foreach ($_SESSION['wholesale_goods'] as $goods) {
         //如果存在货品
         $product_id = 0;
-        if (!empty($goods['goods_attr_id']))
-        {
+        if (!empty($goods['goods_attr_id'])) {
             $goods_attr_id = array();
-            foreach ($goods['goods_attr_id'] as $value)
-            {
+            foreach ($goods['goods_attr_id'] as $value) {
                 $goods_attr_id[$value['attr_id']] = $value['attr_val_id'];
             }
 
@@ -396,8 +339,7 @@ elseif ($_REQUEST['act'] == 'submit_order')
     }
 
     /* 给商家发邮件 */
-    if ($_CFG['service_email'] != '')
-    {
+    if ($_CFG['service_email'] != '') {
         $tpl = get_mail_template('remind_of_new_order');
         $smarty->assign('order', $order);
         $smarty->assign('shop_name', $_CFG['shop_name']);
@@ -407,12 +349,11 @@ elseif ($_REQUEST['act'] == 'submit_order')
     }
 
     /* 如果需要，发短信 */
-    if ($_CFG['sms_order_placed'] == '1' && $_CFG['sms_shop_mobile'] != '')
-    {
+    if ($_CFG['sms_order_placed'] == '1' && $_CFG['sms_shop_mobile'] != '') {
         include_once('includes/cls_sms.php');
         $sms = new sms();
         $msg = $_LANG['order_placed_sms'];
-        $sms->send($_CFG['sms_shop_mobile'], sprintf($msg, $order['consignee'], $order['tel']),'', 13,1);
+        $sms->send($_CFG['sms_shop_mobile'], sprintf($msg, $order['consignee'], $order['tel']), '', 13, 1);
     }
 
     /* 清空购物车 */
@@ -437,10 +378,8 @@ function wholesale_list($size, $page, $where)
                       $GLOBALS['ecs']->table('goods') . " AS g " . $where .
             " AND w.goods_id = g.goods_id ";
     $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
-        if (empty($row['goods_thumb']))
-        {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
+        if (empty($row['goods_thumb'])) {
             $row['goods_thumb'] = $GLOBALS['_CFG']['no_picture'];
         }
         $row['goods_url'] = build_uri('goods', array('gid'=>$row['goods_id']), $row['goods_name']);
@@ -472,29 +411,22 @@ function get_price_ladder($goods_id)
 
     $arr = array();
     $_arr = unserialize($row['prices']);
-    if (is_array($_arr))
-    {
-        foreach(unserialize($row['prices']) as $key => $val)
-        {
+    if (is_array($_arr)) {
+        foreach (unserialize($row['prices']) as $key => $val) {
             // 显示属性
-            if (!empty($val['attr']))
-            {
-                foreach ($val['attr'] as $attr_key => $attr_val)
-                {
+            if (!empty($val['attr'])) {
+                foreach ($val['attr'] as $attr_key => $attr_val) {
                     // 获取当前属性 $attr_key 的信息
                     $goods_attr = array();
-                    foreach ($goods_attr_list as $goods_attr_val)
-                    {
-                        if ($goods_attr_val['attr_id'] == $attr_key)
-                        {
+                    foreach ($goods_attr_list as $goods_attr_val) {
+                        if ($goods_attr_val['attr_id'] == $attr_key) {
                             $goods_attr = $goods_attr_val;
                             break;
                         }
                     }
 
                     // 重写商品规格的价格阶梯信息
-                    if (!empty($goods_attr))
-                    {
+                    if (!empty($goods_attr)) {
                         $arr[$key]['attr'][] = array(
                             'attr_id'       => $goods_attr['attr_id'],
                             'attr_name'     => $goods_attr['attr_name'],
@@ -506,8 +438,7 @@ function get_price_ladder($goods_id)
             }
 
             // 显示数量与价格
-            foreach($val['qp_list'] as $index => $qp)
-            {
+            foreach ($val['qp_list'] as $index => $qp) {
                 $arr[$key]['qp_list'][$qp['quantity']] = price_format($qp['price']);
             }
         }
@@ -524,29 +455,23 @@ function get_price_ladder($goods_id)
  */
 function is_attr_matching(&$goods_list, $reference)
 {
-    foreach ($goods_list as $key => $goods)
-    {
+    foreach ($goods_list as $key => $goods) {
         // 需要相同的元素个数
-        if (count($goods['goods_attr']) != count($reference))
-        {
+        if (count($goods['goods_attr']) != count($reference)) {
             break;
         }
 
         // 判断用户提交与批发属性是否相同
         $is_check = true;
-        if (is_array($goods['goods_attr']))
-        {
-            foreach ($goods['goods_attr'] as $attr)
-            {
-                if (!(array_key_exists($attr['attr_id'], $reference) && $attr['attr_val_id'] == $reference[$attr['attr_id']]))
-                {
+        if (is_array($goods['goods_attr'])) {
+            foreach ($goods['goods_attr'] as $attr) {
+                if (!(array_key_exists($attr['attr_id'], $reference) && $attr['attr_val_id'] == $reference[$attr['attr_id']])) {
                     $is_check = false;
                     break;
                 }
             }
         }
-        if ($is_check)
-        {
+        if ($is_check) {
             return $key;
             break;
         }
@@ -578,4 +503,3 @@ function is_attr_matching(&$goods_list, $reference)
 //
 //    return true;
 //}
-?>

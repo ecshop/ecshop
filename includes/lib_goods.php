@@ -1,7 +1,6 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
@@ -14,7 +13,6 @@ function goods_sort($goods_a, $goods_b)
         return 0;
     }
     return ($goods_a['sort_order'] < $goods_b['sort_order']) ? -1 : 1;
-
 }
 
 /**
@@ -26,13 +24,10 @@ function goods_sort($goods_a, $goods_b)
  */
 function get_categories_tree($cat_id = 0)
 {
-    if ($cat_id > 0)
-    {
+    if ($cat_id > 0) {
         $sql = 'SELECT parent_id FROM ' . $GLOBALS['ecs']->table('category') . " WHERE cat_id = '$cat_id'";
         $parent_id = $GLOBALS['db']->getOne($sql);
-    }
-    else
-    {
+    } else {
         $parent_id = 0;
     }
 
@@ -42,8 +37,7 @@ function get_categories_tree($cat_id = 0)
      如果不是取当前分类及其下的子分类
     */
     $sql = 'SELECT count(*) FROM ' . $GLOBALS['ecs']->table('category') . " WHERE parent_id = '$parent_id' AND is_show = 1 ";
-    if ($GLOBALS['db']->getOne($sql) || $parent_id == 0)
-    {
+    if ($GLOBALS['db']->getOne($sql) || $parent_id == 0) {
         /* 获取当前分类及其子分类 */
         $sql = 'SELECT cat_id,cat_name ,parent_id,is_show ' .
                 'FROM ' . $GLOBALS['ecs']->table('category') .
@@ -51,23 +45,19 @@ function get_categories_tree($cat_id = 0)
 
         $res = $GLOBALS['db']->getAll($sql);
 
-        foreach ($res AS $row)
-        {
-            if ($row['is_show'])
-            {
+        foreach ($res as $row) {
+            if ($row['is_show']) {
                 $cat_arr[$row['cat_id']]['id']   = $row['cat_id'];
                 $cat_arr[$row['cat_id']]['name'] = $row['cat_name'];
                 $cat_arr[$row['cat_id']]['url']  = build_uri('category', array('cid' => $row['cat_id']), $row['cat_name']);
 
-                if (isset($row['cat_id']) != NULL)
-                {
+                if (isset($row['cat_id']) != null) {
                     $cat_arr[$row['cat_id']]['cat_id'] = get_child_tree($row['cat_id']);
                 }
             }
         }
     }
-    if(isset($cat_arr))
-    {
+    if (isset($cat_arr)) {
         return $cat_arr;
     }
 }
@@ -76,24 +66,20 @@ function get_child_tree($tree_id = 0)
 {
     $three_arr = array();
     $sql = 'SELECT count(*) FROM ' . $GLOBALS['ecs']->table('category') . " WHERE parent_id = '$tree_id' AND is_show = 1 ";
-    if ($GLOBALS['db']->getOne($sql) || $tree_id == 0)
-    {
+    if ($GLOBALS['db']->getOne($sql) || $tree_id == 0) {
         $child_sql = 'SELECT cat_id, cat_name, parent_id, is_show ' .
                 'FROM ' . $GLOBALS['ecs']->table('category') .
                 "WHERE parent_id = '$tree_id' AND is_show = 1 ORDER BY sort_order ASC, cat_id ASC";
         $res = $GLOBALS['db']->getAll($child_sql);
-        foreach ($res AS $row)
-        {
-            if ($row['is_show'])
+        foreach ($res as $row) {
+            if ($row['is_show']) {
+                $three_arr[$row['cat_id']]['id']   = $row['cat_id'];
+            }
+            $three_arr[$row['cat_id']]['name'] = $row['cat_name'];
+            $three_arr[$row['cat_id']]['url']  = build_uri('category', array('cid' => $row['cat_id']), $row['cat_name']);
 
-               $three_arr[$row['cat_id']]['id']   = $row['cat_id'];
-               $three_arr[$row['cat_id']]['name'] = $row['cat_name'];
-               $three_arr[$row['cat_id']]['url']  = build_uri('category', array('cid' => $row['cat_id']), $row['cat_name']);
-
-               if (isset($row['cat_id']) != NULL)
-                   {
-                       $three_arr[$row['cat_id']]['cat_id'] = get_child_tree($row['cat_id']);
-
+            if (isset($row['cat_id']) != null) {
+                $three_arr[$row['cat_id']]['cat_id'] = get_child_tree($row['cat_id']);
             }
         }
     }
@@ -113,8 +99,7 @@ function get_top10($cats = '')
     $where = !empty($cats) ? "AND ($cats OR " . get_extension_goods($cats) . ") " : '';
 
     /* 排行统计的时间 */
-    switch ($GLOBALS['_CFG']['top10_time'])
-    {
+    switch ($GLOBALS['_CFG']['top10_time']) {
         case 1: // 一年
             $top10_time = "AND o.order_sn >= '" . date('Ymd', gmtime() - 365 * 86400) . "'";
         break;
@@ -137,8 +122,7 @@ function get_top10($cats = '')
                 $GLOBALS['ecs']->table('order_goods') . ' AS og ' .
            "WHERE g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 $where $top10_time " ;
     //判断是否启用库存，库存数量是否大于0
-    if ($GLOBALS['_CFG']['use_storage'] == 1)
-    {
+    if ($GLOBALS['_CFG']['use_storage'] == 1) {
         $sql .= " AND g.goods_number > 0 ";
     }
     $sql .= ' AND og.order_id = o.order_id AND og.goods_id = g.goods_id ' .
@@ -149,12 +133,11 @@ function get_top10($cats = '')
            
     $arr = $GLOBALS['db']->getAll($sql);
 
-    for ($i = 0, $count = count($arr); $i < $count; $i++)
-    {
+    for ($i = 0, $count = count($arr); $i < $count; $i++) {
         $arr[$i]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
                                     sub_str($arr[$i]['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $arr[$i]['goods_name'];
         $arr[$i]['url']        = build_uri('goods', array('gid' => $arr[$i]['goods_id']), $arr[$i]['goods_name']);
-        $arr[$i]['thumb'] = get_image_path($arr[$i]['goods_id'], $arr[$i]['goods_thumb'],true);
+        $arr[$i]['thumb'] = get_image_path($arr[$i]['goods_id'], $arr[$i]['goods_thumb'], true);
         $arr[$i]['price'] = price_format($arr[$i]['shop_price']);
     }
 
@@ -170,22 +153,19 @@ function get_top10($cats = '')
  */
 function get_recommend_goods($type = '', $cats = '')
 {
-    if (!in_array($type, array('best', 'new', 'hot')))
-    {
+    if (!in_array($type, array('best', 'new', 'hot'))) {
         return array();
     }
 
     //取不同推荐对应的商品
     static $type_goods = array();
-    if (empty($type_goods[$type]))
-    {
+    if (empty($type_goods[$type])) {
         //初始化数据
         $type_goods['best'] = array();
         $type_goods['new'] = array();
         $type_goods['hot'] = array();
         $data = read_static_cache('recommend_goods');
-        if ($data === false)
-        {
+        if ($data === false) {
             $sql = 'SELECT g.goods_id, g.is_best, g.is_new, g.is_hot, g.is_promote, b.brand_name,g.sort_order ' .
                ' FROM ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
                ' LEFT JOIN ' . $GLOBALS['ecs']->table('brand') . ' AS b ON b.brand_id = g.brand_id ' .
@@ -197,32 +177,24 @@ function get_recommend_goods($type = '', $cats = '')
             $goods_data['new'] = array();
             $goods_data['hot'] = array();
             $goods_data['brand'] = array();
-            if (!empty($goods_res))
-            {
-                foreach($goods_res as $data)
-                {
-                    if ($data['is_best'] == 1)
-                    {
+            if (!empty($goods_res)) {
+                foreach ($goods_res as $data) {
+                    if ($data['is_best'] == 1) {
                         $goods_data['best'][] = array('goods_id' => $data['goods_id'], 'sort_order' => $data['sort_order']);
                     }
-                    if ($data['is_new'] == 1)
-                    {
+                    if ($data['is_new'] == 1) {
                         $goods_data['new'][] = array('goods_id' => $data['goods_id'], 'sort_order' => $data['sort_order']);
                     }
-                    if ($data['is_hot'] == 1)
-                    {
+                    if ($data['is_hot'] == 1) {
                         $goods_data['hot'][] = array('goods_id' => $data['goods_id'], 'sort_order' => $data['sort_order']);
                     }
-                    if ($data['brand_name'] != '')
-                    {
+                    if ($data['brand_name'] != '') {
                         $goods_data['brand'][$data['goods_id']] = $data['brand_name'];
                     }
                 }
             }
             write_static_cache('recommend_goods', $goods_data);
-        }
-        else
-        {
+        } else {
             $goods_data = $data;
         }
 
@@ -232,42 +204,29 @@ function get_recommend_goods($type = '', $cats = '')
         //按推荐数量及排序取每一项推荐显示的商品 order_type可以根据后台设定进行各种条件显示
         static $type_array = array();
         $type2lib = array('best'=>'recommend_best', 'new'=>'recommend_new', 'hot'=>'recommend_hot');
-        if (empty($type_array))
-        {
-            foreach($type2lib as $key => $data)
-            {
-                if (!empty($goods_data[$key]))
-                {
+        if (empty($type_array)) {
+            foreach ($type2lib as $key => $data) {
+                if (!empty($goods_data[$key])) {
                     $num = get_library_number($data);
                     $data_count = count($goods_data[$key]);
                     $num = $data_count > $num  ? $num : $data_count;
-                    if ($order_type == 0)
-                    {
+                    if ($order_type == 0) {
                         //usort($goods_data[$key], 'goods_sort');
                         $rand_key = array_slice($goods_data[$key], 0, $num);
-                        foreach($rand_key as $key_data)
-                        {
+                        foreach ($rand_key as $key_data) {
                             $type_array[$key][] = $key_data['goods_id'];
                         }
-                    }
-                    else
-                    {
+                    } else {
                         $rand_key = array_rand($goods_data[$key], $num);
-                        if ($num == 1)
-                        {
+                        if ($num == 1) {
                             $type_array[$key][] = $goods_data[$key][$rand_key]['goods_id'];
-                        }
-                        else
-                        {
-                            foreach($rand_key as $key_data)
-                            {
+                        } else {
+                            foreach ($rand_key as $key_data) {
                                 $type_array[$key][] = $goods_data[$key][$key_data]['goods_id'];
                             }
                         }
                     }
-                }
-                else
-                {
+                } else {
                     $type_array[$key] = array();
                 }
             }
@@ -286,15 +245,11 @@ function get_recommend_goods($type = '', $cats = '')
         $sql .= ' ORDER BY g.sort_order, g.last_update DESC';
 
         $result = $GLOBALS['db']->getAll($sql);
-        foreach ($result AS $idx => $row)
-        {
-            if ($row['promote_price'] > 0)
-            {
+        foreach ($result as $idx => $row) {
+            if ($row['promote_price'] > 0) {
                 $promote_price = bargain_price($row['promote_price'], $row['promote_start_date'], $row['promote_end_date']);
                 $goods[$idx]['promote_price'] = $promote_price > 0 ? price_format($promote_price) : '';
-            }
-            else
-            {
+            } else {
                 $goods[$idx]['promote_price'] = '';
             }
 
@@ -302,26 +257,23 @@ function get_recommend_goods($type = '', $cats = '')
             $goods[$idx]['name']         = $row['goods_name'];
             $goods[$idx]['brief']        = $row['goods_brief'];
             $goods[$idx]['brand_name']   = isset($goods_data['brand'][$row['goods_id']]) ? $goods_data['brand'][$row['goods_id']] : '';
-            $goods[$idx]['goods_style_name']   = add_style($row['goods_name'],$row['goods_name_style']);
+            $goods[$idx]['goods_style_name']   = add_style($row['goods_name'], $row['goods_name_style']);
 
             $goods[$idx]['short_name']   = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
                                                sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
-            $goods[$idx]['short_style_name']   = add_style($goods[$idx]['short_name'],$row['goods_name_style']);
+            $goods[$idx]['short_style_name']   = add_style($goods[$idx]['short_name'], $row['goods_name_style']);
             $goods[$idx]['market_price'] = price_format($row['market_price']);
             $goods[$idx]['shop_price']   = price_format($row['shop_price']);
             $goods[$idx]['thumb']        = get_image_path($row['goods_id'], $row['goods_thumb'], true);
             $goods[$idx]['goods_img']    = get_image_path($row['goods_id'], $row['goods_img']);
             $goods[$idx]['url']          = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
-            if (in_array($row['goods_id'], $type_array['best']))
-            {
+            if (in_array($row['goods_id'], $type_array['best'])) {
                 $type_goods['best'][] = $goods[$idx];
             }
-            if (in_array($row['goods_id'], $type_array['new']))
-            {
+            if (in_array($row['goods_id'], $type_array['new'])) {
                 $type_goods['new'][] = $goods[$idx];
             }
-            if (in_array($row['goods_id'], $type_array['hot']))
-            {
+            if (in_array($row['goods_id'], $type_array['hot'])) {
                 $type_goods['hot'][] = $goods[$idx];
             }
         }
@@ -357,15 +309,11 @@ function get_promote_goods($cats = '')
     $result = $GLOBALS['db']->getAll($sql);
 
     $goods = array();
-    foreach ($result AS $idx => $row)
-    {
-        if ($row['promote_price'] > 0)
-        {
+    foreach ($result as $idx => $row) {
+        if ($row['promote_price'] > 0) {
             $promote_price = bargain_price($row['promote_price'], $row['promote_start_date'], $row['promote_end_date']);
             $goods[$idx]['promote_price'] = $promote_price > 0 ? price_format($promote_price) : '';
-        }
-        else
-        {
+        } else {
             $goods[$idx]['promote_price'] = '';
         }
 
@@ -373,9 +321,9 @@ function get_promote_goods($cats = '')
         $goods[$idx]['name']         = $row['goods_name'];
         $goods[$idx]['brief']        = $row['goods_brief'];
         $goods[$idx]['brand_name']   = $row['brand_name'];
-        $goods[$idx]['goods_style_name']   = add_style($row['goods_name'],$row['goods_name_style']);
+        $goods[$idx]['goods_style_name']   = add_style($row['goods_name'], $row['goods_name_style']);
         $goods[$idx]['short_name']   = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
-        $goods[$idx]['short_style_name']   = add_style($goods[$idx]['short_name'],$row['goods_name_style']);
+        $goods[$idx]['short_style_name']   = add_style($goods[$idx]['short_name'], $row['goods_name_style']);
         $goods[$idx]['market_price'] = price_format($row['market_price']);
         $goods[$idx]['shop_price']   = price_format($row['shop_price']);
         $goods[$idx]['thumb']        = get_image_path($row['goods_id'], $row['goods_thumb'], true);
@@ -398,7 +346,7 @@ function get_promote_goods($cats = '')
  * @param   string      $ext        商品扩展查询
  * @return  array
  */
-function get_category_recommend_goods($type = '', $cats = '', $brand = 0, $min =0,  $max = 0, $ext='')
+function get_category_recommend_goods($type = '', $cats = '', $brand = 0, $min =0, $max = 0, $ext='')
 {
     $brand_where = ($brand > 0) ? " AND g.brand_id = '$brand'" : '';
 
@@ -417,8 +365,7 @@ function get_category_recommend_goods($type = '', $cats = '', $brand = 0, $min =
     $type2lib = array('best'=>'recommend_best', 'new'=>'recommend_new', 'hot'=>'recommend_hot', 'promote'=>'recommend_promotion');
     $num = get_library_number($type2lib[$type]);
 
-    switch ($type)
-    {
+    switch ($type) {
         case 'best':
             $sql .= ' AND is_best = 1';
             break;
@@ -434,8 +381,7 @@ function get_category_recommend_goods($type = '', $cats = '', $brand = 0, $min =
             break;
     }
 
-    if (!empty($cats))
-    {
+    if (!empty($cats)) {
         $sql .= " AND (" . $cats . " OR " . get_extension_goods($cats) .")";
     }
 
@@ -445,15 +391,11 @@ function get_category_recommend_goods($type = '', $cats = '', $brand = 0, $min =
 
     $idx = 0;
     $goods = array();
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
-        if ($row['promote_price'] > 0)
-        {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
+        if ($row['promote_price'] > 0) {
             $promote_price = bargain_price($row['promote_price'], $row['promote_start_date'], $row['promote_end_date']);
             $goods[$idx]['promote_price'] = $promote_price > 0 ? price_format($promote_price) : '';
-        }
-        else
-        {
+        } else {
             $goods[$idx]['promote_price'] = '';
         }
 
@@ -502,8 +444,7 @@ function get_goods_info($goods_id)
             "GROUP BY g.goods_id";
     $row = $GLOBALS['db']->getRow($sql);
 
-    if ($row !== false)
-    {
+    if ($row !== false) {
         /* 用户评论级别取整 */
         $row['comment_rank']  = ceil($row['comment_rank']) == 0 ? 5 : ceil($row['comment_rank']);
 
@@ -512,37 +453,26 @@ function get_goods_info($goods_id)
         $row['shop_price_formated'] = price_format($row['shop_price']);
 
         /* 修正促销价格 */
-        if ($row['promote_price'] > 0)
-        {
+        if ($row['promote_price'] > 0) {
             $promote_price = bargain_price($row['promote_price'], $row['promote_start_date'], $row['promote_end_date']);
-        }
-        else
-        {
+        } else {
             $promote_price = 0;
         }
 
         /* 处理商品水印图片 */
         $watermark_img = '';
 
-        if ($promote_price != 0)
-        {
+        if ($promote_price != 0) {
             $watermark_img = "watermark_promote";
-        }
-        elseif ($row['is_new'] != 0)
-        {
+        } elseif ($row['is_new'] != 0) {
             $watermark_img = "watermark_new";
-        }
-        elseif ($row['is_best'] != 0)
-        {
+        } elseif ($row['is_best'] != 0) {
             $watermark_img = "watermark_best";
-        }
-        elseif ($row['is_hot'] != 0)
-        {
+        } elseif ($row['is_hot'] != 0) {
             $watermark_img = 'watermark_hot';
         }
 
-        if ($watermark_img != '')
-        {
+        if ($watermark_img != '') {
             $row['watermark_img'] =  $watermark_img;
         }
 
@@ -559,12 +489,9 @@ function get_goods_info($goods_id)
 
         /* 促销时间倒计时 */
         $time = gmtime();
-        if ($time >= $row['promote_start_date'] && $time <= $row['promote_end_date'])
-        {
-             $row['gmt_end_time']  = $row['promote_end_date'];
-        }
-        else
-        {
+        if ($time >= $row['promote_start_date'] && $time <= $row['promote_end_date']) {
+            $row['gmt_end_time']  = $row['promote_end_date'];
+        } else {
             $row['gmt_end_time'] = 0;
         }
 
@@ -582,9 +509,7 @@ function get_goods_info($goods_id)
         $row['goods_thumb'] = get_image_path($goods_id, $row['goods_thumb'], true);
 
         return $row;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
@@ -604,8 +529,7 @@ function get_goods_properties($goods_id)
             "WHERE g.goods_id='$goods_id' AND gt.cat_id=g.goods_type";
     $grp = $GLOBALS['db']->getOne($sql);
 
-    if (!empty($grp))
-    {
+    if (!empty($grp)) {
         $groups = explode("\n", strtr($grp, "\r", ''));
     }
 
@@ -622,19 +546,15 @@ function get_goods_properties($goods_id)
     $arr['spe'] = array();     // 规格
     $arr['lnk'] = array();     // 关联的属性
 
-    foreach ($res AS $row)
-    {
+    foreach ($res as $row) {
         $row['attr_value'] = str_replace("\n", '<br />', $row['attr_value']);
 
-        if ($row['attr_type'] == 0)
-        {
+        if ($row['attr_type'] == 0) {
             $group = (isset($groups[$row['attr_group']])) ? $groups[$row['attr_group']] : $GLOBALS['_LANG']['goods_attr'];
 
             $arr['pro'][$group][$row['attr_id']]['name']  = $row['attr_name'];
             $arr['pro'][$group][$row['attr_id']]['value'] = $row['attr_value'];
-        }
-        else
-        {
+        } else {
             $arr['spe'][$row['attr_id']]['attr_type'] = $row['attr_type'];
             $arr['spe'][$row['attr_id']]['name']     = $row['attr_name'];
             $arr['spe'][$row['attr_id']]['values'][] = array(
@@ -644,8 +564,7 @@ function get_goods_properties($goods_id)
                                                         'id'           => $row['goods_attr_id']);
         }
 
-        if ($row['is_linked'] == 1)
-        {
+        if ($row['is_linked'] == 1) {
             /* 如果该属性需要关联，先保存下来 */
             $arr['lnk'][$row['attr_id']]['name']  = $row['attr_name'];
             $arr['lnk'][$row['attr_id']]['value'] = $row['attr_value'];
@@ -666,10 +585,8 @@ function get_same_attribute_goods($attr)
 {
     $lnk = array();
 
-    if (!empty($attr))
-    {
-        foreach ($attr['lnk'] AS $key => $val)
-        {
+    if (!empty($attr)) {
+        foreach ($attr['lnk'] as $key => $val) {
             $lnk[$key]['title'] = sprintf($GLOBALS['_LANG']['same_attrbiute_goods'], $val['name'], $val['value']);
 
             /* 查找符合条件的商品 */
@@ -684,8 +601,7 @@ function get_same_attribute_goods($attr)
                     'LIMIT ' . $GLOBALS['_CFG']['attr_related_number'];
             $res = $GLOBALS['db']->getAll($sql);
 
-            foreach ($res AS $row)
-            {
+            foreach ($res as $row) {
                 $lnk[$key]['goods'][$row['goods_id']]['goods_id']      = $row['goods_id'];
                 $lnk[$key]['goods'][$row['goods_id']]['goods_name']    = $row['goods_name'];
                 $lnk[$key]['goods'][$row['goods_id']]['short_name']    = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
@@ -693,8 +609,11 @@ function get_same_attribute_goods($attr)
                 $lnk[$key]['goods'][$row['goods_id']]['goods_thumb']     = (empty($row['goods_thumb'])) ? $GLOBALS['_CFG']['no_picture'] : $row['goods_thumb'];
                 $lnk[$key]['goods'][$row['goods_id']]['market_price']  = price_format($row['market_price']);
                 $lnk[$key]['goods'][$row['goods_id']]['shop_price']    = price_format($row['shop_price']);
-                $lnk[$key]['goods'][$row['goods_id']]['promote_price'] = bargain_price($row['promote_price'],
-                    $row['promote_start_date'], $row['promote_end_date']);
+                $lnk[$key]['goods'][$row['goods_id']]['promote_price'] = bargain_price(
+                    $row['promote_price'],
+                    $row['promote_start_date'],
+                    $row['promote_end_date']
+                );
                 $lnk[$key]['goods'][$row['goods_id']]['url']           = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
             }
         }
@@ -717,8 +636,7 @@ function get_goods_gallery($goods_id)
         " WHERE goods_id = '$goods_id' LIMIT " . $GLOBALS['_CFG']['goods_gallery_number'];
     $row = $GLOBALS['db']->getAll($sql);
     /* 格式化相册图片路径 */
-    foreach($row as $key => $gallery_img)
-    {
+    foreach ($row as $key => $gallery_img) {
         $row[$key]['img_url'] = get_image_path($goods_id, $gallery_img['img_url'], false, 'gallery');
         $row[$key]['thumb_url'] = get_image_path($goods_id, $gallery_img['thumb_url'], true, 'gallery');
     }
@@ -750,22 +668,17 @@ function assign_cat_goods($cat_id, $num = 0, $from = 'web', $order_rule = '')
 
     $order_rule = empty($order_rule) ? 'ORDER BY g.sort_order, g.goods_id DESC' : $order_rule;
     $sql .= $order_rule;
-    if ($num > 0)
-    {
+    if ($num > 0) {
         $sql .= ' LIMIT ' . $num;
     }
     $res = $GLOBALS['db']->getAll($sql);
 
     $goods = array();
-    foreach ($res AS $idx => $row)
-    {
-        if ($row['promote_price'] > 0)
-        {
+    foreach ($res as $idx => $row) {
+        if ($row['promote_price'] > 0) {
             $promote_price = bargain_price($row['promote_price'], $row['promote_start_date'], $row['promote_end_date']);
             $goods[$idx]['promote_price'] = $promote_price > 0 ? price_format($promote_price) : '';
-        }
-        else
-        {
+        } else {
             $goods[$idx]['promote_price'] = '';
         }
 
@@ -781,12 +694,9 @@ function assign_cat_goods($cat_id, $num = 0, $from = 'web', $order_rule = '')
         $goods[$idx]['url']          = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
     }
 
-    if ($from == 'web')
-    {
+    if ($from == 'web') {
         $GLOBALS['smarty']->assign('cat_goods_' . $cat_id, $goods);
-    }
-    elseif ($from == 'wap')
-    {
+    } elseif ($from == 'wap') {
         $cat['goods'] = $goods;
     }
 
@@ -809,7 +719,7 @@ function assign_cat_goods($cat_id, $num = 0, $from = 'web', $order_rule = '')
  * @param   string      $order_rule     指定商品排序规则
  * @return  void
  */
-function assign_brand_goods($brand_id, $num = 0, $cat_id = 0,$order_rule = '')
+function assign_brand_goods($brand_id, $num = 0, $cat_id = 0, $order_rule = '')
 {
     $sql =  'SELECT g.goods_id, g.goods_name, g.market_price, g.shop_price AS org_price, ' .
                 "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, ".
@@ -819,32 +729,24 @@ function assign_brand_goods($brand_id, $num = 0, $cat_id = 0,$order_rule = '')
                     "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' ".
             "WHERE g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 AND g.brand_id = '$brand_id'";
 
-    if ($cat_id > 0)
-    {
+    if ($cat_id > 0) {
         $sql .= get_children($cat_id);
     }
 
     $order_rule = empty($order_rule) ? ' ORDER BY g.sort_order, g.goods_id DESC' : $order_rule;
     $sql .= $order_rule;
-    if ($num > 0)
-    {
+    if ($num > 0) {
         $res = $GLOBALS['db']->selectLimit($sql, $num);
-    }
-    else
-    {
+    } else {
         $res = $GLOBALS['db']->query($sql);
     }
 
     $idx = 0;
     $goods = array();
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
-        if ($row['promote_price'] > 0)
-        {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
+        if ($row['promote_price'] > 0) {
             $promote_price = bargain_price($row['promote_price'], $row['promote_start_date'], $row['promote_end_date']);
-        }
-        else
-        {
+        } else {
             $promote_price = 0;
         }
 
@@ -901,19 +803,13 @@ function get_extension_goods($cats)
  */
 function bargain_price($price, $start, $end)
 {
-    if ($price == 0)
-    {
+    if ($price == 0) {
         return 0;
-    }
-    else
-    {
+    } else {
         $time = gmtime();
-        if ($time >= $start && $time <= $end)
-        {
+        if ($time >= $start && $time <= $end) {
             return $price;
-        }
-        else
-        {
+        } else {
             return 0;
         }
     }
@@ -928,17 +824,12 @@ function bargain_price($price, $start, $end)
  */
 function spec_price($spec)
 {
-    if (!empty($spec))
-    {
-        if(is_array($spec))
-        {
-            foreach($spec as $key=>$val)
-            {
+    if (!empty($spec)) {
+        if (is_array($spec)) {
+            foreach ($spec as $key=>$val) {
                 $spec[$key]=addslashes($val);
             }
-        }
-        else
-        {
+        } else {
             $spec=addslashes($spec);
         }
 
@@ -946,9 +837,7 @@ function spec_price($spec)
 
         $sql = 'SELECT SUM(attr_price) AS attr_price FROM ' . $GLOBALS['ecs']->table('goods_attr') . " WHERE $where";
         $price = floatval($GLOBALS['db']->getOne($sql));
-    }
-    else
-    {
+    } else {
         $price = 0;
     }
 
@@ -973,8 +862,7 @@ function group_buy_info($group_buy_id, $current_num = 0)
     $group_buy = $GLOBALS['db']->getRow($sql);
 
     /* 如果为空，返回空数组 */
-    if (empty($group_buy))
-    {
+    if (empty($group_buy)) {
         return array();
     }
 
@@ -990,14 +878,10 @@ function group_buy_info($group_buy_id, $current_num = 0)
 
     /* 处理价格阶梯 */
     $price_ladder = $group_buy['price_ladder'];
-    if (!is_array($price_ladder) || empty($price_ladder))
-    {
+    if (!is_array($price_ladder) || empty($price_ladder)) {
         $price_ladder = array(array('amount' => 0, 'price' => 0));
-    }
-    else
-    {
-        foreach ($price_ladder as $key => $amount_price)
-        {
+    } else {
+        foreach ($price_ladder as $key => $amount_price) {
             $price_ladder[$key]['formated_price'] = price_format($amount_price['price'], false);
         }
     }
@@ -1010,14 +894,10 @@ function group_buy_info($group_buy_id, $current_num = 0)
     /* 计算当前价 */
     $cur_price  = $price_ladder[0]['price']; // 初始化
     $cur_amount = $stat['valid_goods'] + $current_num; // 当前数量
-    foreach ($price_ladder as $amount_price)
-    {
-        if ($cur_amount >= $amount_price['amount'])
-        {
+    foreach ($price_ladder as $amount_price) {
+        if ($cur_amount >= $amount_price['amount']) {
             $cur_price = $amount_price['price'];
-        }
-        else
-        {
+        } else {
             break;
         }
     }
@@ -1031,8 +911,7 @@ function group_buy_info($group_buy_id, $current_num = 0)
 
     /* 状态 */
     $group_buy['status'] = group_buy_status($group_buy);
-    if (isset($GLOBALS['_LANG']['gbs'][$group_buy['status']]))
-    {
+    if (isset($GLOBALS['_LANG']['gbs'][$group_buy['status']])) {
         $group_buy['status_desc'] = $GLOBALS['_LANG']['gbs'][$group_buy['status']];
     }
 
@@ -1073,29 +952,22 @@ function group_buy_stat($group_buy_id, $deposit)
             "AND g.goods_id = '$group_buy_goods_id' " .
             "AND (order_status = '" . OS_CONFIRMED . "' OR order_status = '" . OS_UNCONFIRMED . "')";
     $stat = $GLOBALS['db']->getRow($sql);
-    if ($stat['total_order'] == 0)
-    {
+    if ($stat['total_order'] == 0) {
         $stat['total_goods'] = 0;
     }
 
     /* 取得有效订单数和有效商品数 */
     $deposit = floatval($deposit);
-    if ($deposit > 0 && $stat['total_order'] > 0)
-    {
+    if ($deposit > 0 && $stat['total_order'] > 0) {
         $sql .= " AND (o.money_paid + o.surplus) >= '$deposit'";
         $row = $GLOBALS['db']->getRow($sql);
         $stat['valid_order'] = $row['total_order'];
-        if ($stat['valid_order'] == 0)
-        {
+        if ($stat['valid_order'] == 0) {
             $stat['valid_goods'] = 0;
-        }
-        else
-        {
+        } else {
             $stat['valid_goods'] = $row['total_goods'];
         }
-    }
-    else
-    {
+    } else {
         $stat['valid_order'] = $stat['total_order'];
         $stat['valid_goods'] = $stat['total_goods'];
     }
@@ -1113,36 +985,23 @@ function group_buy_stat($group_buy_id, $deposit)
 function group_buy_status($group_buy)
 {
     $now = gmtime();
-    if ($group_buy['is_finished'] == 0)
-    {
+    if ($group_buy['is_finished'] == 0) {
         /* 未处理 */
-        if ($now < $group_buy['start_time'])
-        {
+        if ($now < $group_buy['start_time']) {
             $status = GBS_PRE_START;
-        }
-        elseif ($now > $group_buy['end_time'])
-        {
+        } elseif ($now > $group_buy['end_time']) {
             $status = GBS_FINISHED;
-        }
-        else
-        {
-            if ($group_buy['restrict_amount'] == 0 || $group_buy['valid_goods'] < $group_buy['restrict_amount'])
-            {
+        } else {
+            if ($group_buy['restrict_amount'] == 0 || $group_buy['valid_goods'] < $group_buy['restrict_amount']) {
                 $status = GBS_UNDER_WAY;
-            }
-            else
-            {
+            } else {
                 $status = GBS_FINISHED;
             }
         }
-    }
-    elseif ($group_buy['is_finished'] == GBS_SUCCEED)
-    {
+    } elseif ($group_buy['is_finished'] == GBS_SUCCEED) {
         /* 已处理，团购成功 */
         $status = GBS_SUCCEED;
-    }
-    elseif ($group_buy['is_finished'] == GBS_FAIL)
-    {
+    } elseif ($group_buy['is_finished'] == GBS_FAIL) {
         /* 已处理，团购失败 */
         $status = GBS_FAIL;
     }
@@ -1159,19 +1018,14 @@ function auction_info($act_id, $config = false)
 {
     $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('goods_activity') . " WHERE act_id = '$act_id'";
     $auction = $GLOBALS['db']->getRow($sql);
-    if ($auction['act_type'] != GAT_AUCTION)
-    {
+    if ($auction['act_type'] != GAT_AUCTION) {
         return array();
     }
     $auction['status_no'] = auction_status($auction);
-    if ($config == true)
-    {
-
+    if ($config == true) {
         $auction['start_time'] = local_date('Y-m-d H:i', $auction['start_time']);
         $auction['end_time'] = local_date('Y-m-d H:i', $auction['end_time']);
-    }
-    else
-    {
+    } else {
         $auction['start_time'] = local_date($GLOBALS['_CFG']['time_format'], $auction['start_time']);
         $auction['end_time'] = local_date($GLOBALS['_CFG']['time_format'], $auction['end_time']);
     }
@@ -1186,8 +1040,7 @@ function auction_info($act_id, $config = false)
     $sql = "SELECT COUNT(DISTINCT bid_user) FROM " . $GLOBALS['ecs']->table('auction_log') .
             " WHERE act_id = '$act_id'";
     $auction['bid_user_count'] = $GLOBALS['db']->getOne($sql);
-    if ($auction['bid_user_count'] > 0)
-    {
+    if ($auction['bid_user_count'] > 0) {
         $sql = "SELECT a.*, u.user_name " .
                 "FROM " . $GLOBALS['ecs']->table('auction_log') . " AS a, " .
                         $GLOBALS['ecs']->table('users') . " AS u " .
@@ -1201,17 +1054,14 @@ function auction_info($act_id, $config = false)
     }
 
     /* 查询已确认订单数 */
-    if ($auction['status_no'] > 1)
-    {
+    if ($auction['status_no'] > 1) {
         $sql = "SELECT COUNT(*)" .
                 " FROM " . $GLOBALS['ecs']->table('order_info') .
                 " WHERE extension_code = 'auction'" .
                 " AND extension_id = '$act_id'" .
                 " AND order_status " . db_create_in(array(OS_CONFIRMED, OS_UNCONFIRMED));
         $auction['order_count'] = $GLOBALS['db']->getOne($sql);
-    }
-    else
-    {
+    } else {
         $auction['order_count'] = 0;
     }
 
@@ -1237,8 +1087,7 @@ function auction_log($act_id)
             "AND act_id = '$act_id' " .
             "ORDER BY a.log_id DESC";
     $res = $GLOBALS['db']->query($sql);
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
         $row['bid_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['bid_time']);
         $row['formated_bid_price'] = price_format($row['bid_price'], false);
         $log[] = $row;
@@ -1255,27 +1104,17 @@ function auction_log($act_id)
 function auction_status($auction)
 {
     $now = gmtime();
-    if ($auction['is_finished'] == 0)
-    {
-        if ($now < $auction['start_time'])
-        {
+    if ($auction['is_finished'] == 0) {
+        if ($now < $auction['start_time']) {
             return PRE_START; // 未开始
-        }
-        elseif ($now > $auction['end_time'])
-        {
+        } elseif ($now > $auction['end_time']) {
             return FINISHED; // 已结束，未处理
-        }
-        else
-        {
+        } else {
             return UNDER_WAY; // 进行中
         }
-    }
-    elseif ($auction['is_finished'] == 1)
-    {
+    } elseif ($auction['is_finished'] == 1) {
         return FINISHED; // 已结束，未处理
-    }
-    else
-    {
+    } else {
         return SETTLED; // 已结束，已处理
     }
 }
@@ -1292,8 +1131,7 @@ function goods_info($goods_id)
                 "LEFT JOIN " . $GLOBALS['ecs']->table('brand') . " AS b ON g.brand_id = b.brand_id " .
             "WHERE g.goods_id = '$goods_id'";
     $row = $GLOBALS['db']->getRow($sql);
-    if (!empty($row))
-    {
+    if (!empty($row)) {
         /* 修正重量显示 */
         $row['goods_weight'] = (intval($row['goods_weight']) > 0) ?
             $row['goods_weight'] . $GLOBALS['_LANG']['kilogram'] :
@@ -1316,15 +1154,13 @@ function favourable_info($act_id)
     $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('favourable_activity') .
             " WHERE act_id = '$act_id'";
     $row = $GLOBALS['db']->getRow($sql);
-    if (!empty($row))
-    {
+    if (!empty($row)) {
         $row['start_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['start_time']);
         $row['end_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['end_time']);
         $row['formated_min_amount'] = price_format($row['min_amount']);
         $row['formated_max_amount'] = price_format($row['max_amount']);
         $row['gift'] = unserialize($row['gift']);
-        if ($row['act_type'] == FAT_GOODS)
-        {
+        if ($row['act_type'] == FAT_GOODS) {
             $row['act_type_ext'] = round($row['act_type_ext']);
         }
     }
@@ -1342,8 +1178,7 @@ function wholesale_info($act_id)
     $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('wholesale') .
             " WHERE act_id = '$act_id'";
     $row = $GLOBALS['db']->getRow($sql);
-    if (!empty($row))
-    {
+    if (!empty($row)) {
         $row['price_list'] = unserialize($row['prices']);
     }
 
@@ -1365,12 +1200,10 @@ function add_style($goods_name, $style)
     $font_color     = !empty($arr[0]) ? $arr[0] : '';
     $font_style = !empty($arr[1]) ? $arr[1] : '';
 
-    if ($font_color!='')
-    {
+    if ($font_color!='') {
         $goods_style_name = '<font color=' . $font_color . '>' . $goods_style_name . '</font>';
     }
-    if ($font_style != '')
-    {
+    if ($font_style != '') {
         $goods_style_name = '<' . $font_style .'>' . $goods_style_name . '</' . $font_style . '>';
     }
     return $goods_style_name;
@@ -1391,14 +1224,10 @@ function get_goods_attr($goods_id)
             "AND a.attr_type = 1";
     $attr_id_list = $GLOBALS['db']->getCol($sql);
     $res = $GLOBALS['db']->query($sql);
-    while ($attr = $GLOBALS['db']->fetchRow($res))
-    {
-        if (defined('ECS_ADMIN'))
-        {
+    while ($attr = $GLOBALS['db']->fetchRow($res)) {
+        if (defined('ECS_ADMIN')) {
             $attr['goods_attr_list'] = array(0 => $GLOBALS['_LANG']['select_please']);
-        }
-        else
-        {
+        } else {
             $attr['goods_attr_list'] = array();
         }
         $attr_list[$attr['attr_id']] = $attr;
@@ -1409,8 +1238,7 @@ function get_goods_attr($goods_id)
             " WHERE goods_id = '$goods_id' " .
             "AND attr_id " . db_create_in($attr_id_list);
     $res = $GLOBALS['db']->query($sql);
-    while ($goods_attr = $GLOBALS['db']->fetchRow($res))
-    {
+    while ($goods_attr = $GLOBALS['db']->fetchRow($res)) {
         $attr_list[$goods_attr['attr_id']]['goods_attr_list'][$goods_attr['goods_attr_id']] = $goods_attr['attr_value'];
     }
 
@@ -1441,8 +1269,7 @@ function get_goods_fittings($goods_list = array())
 
     $res = $GLOBALS['db']->query($sql);
 
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
         $arr[$temp_index]['parent_id']         = $row['parent_id'];//配件的基本件ID
         $arr[$temp_index]['parent_name']       = $row['parent_name'];//配件的基本件的名称
         $arr[$temp_index]['parent_short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
@@ -1474,15 +1301,13 @@ function get_products_info($goods_id, $spec_goods_attr_id)
 {
     $return_array = array();
 
-    if (empty($spec_goods_attr_id) || !is_array($spec_goods_attr_id) || empty($goods_id))
-    {
+    if (empty($spec_goods_attr_id) || !is_array($spec_goods_attr_id) || empty($goods_id)) {
         return $return_array;
     }
 
     $goods_attr_array = sort_goods_attr_id_array($spec_goods_attr_id);
 
-    if(isset($goods_attr_array['sort']))
-    {
+    if (isset($goods_attr_array['sort'])) {
         $goods_attr = implode('|', $goods_attr_array['sort']);
 
         $sql = "SELECT * FROM " .$GLOBALS['ecs']->table('products'). " WHERE goods_id = '$goods_id' AND goods_attr = '$goods_attr' LIMIT 0, 1";
@@ -1490,4 +1315,3 @@ function get_products_info($goods_id, $spec_goods_attr_id)
     }
     return $return_array;
 }
-?>

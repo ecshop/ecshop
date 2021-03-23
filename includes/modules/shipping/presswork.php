@@ -1,20 +1,17 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
 $shipping_lang = ROOT_PATH.'languages/' .$GLOBALS['_CFG']['lang']. '/shipping/presswork.php';
-if (file_exists($shipping_lang))
-{
+if (file_exists($shipping_lang)) {
     global $_LANG;
     include_once($shipping_lang);
 }
 
 /* 模块的基本信息 */
-if (isset($set_modules) && $set_modules == TRUE)
-{
+if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 配送方式插件的代码必须和文件名保持一致 */
@@ -46,7 +43,7 @@ if (isset($set_modules) && $set_modules == TRUE)
     /* 打印单背景 */
     $modules[$i]['print_bg'] = '';
 
-   /* 打印快递单标签位置信息 */
+    /* 打印快递单标签位置信息 */
     $modules[$i]['config_lable'] = '';
 
     return;
@@ -61,7 +58,7 @@ class presswork
     /**
      * 配置信息
      */
-    var $configure;
+    public $configure;
 
     /*------------------------------------------------------ */
     //-- PUBLIC METHODs
@@ -74,10 +71,9 @@ class presswork
      *
      * @return null
      */
-    function presswork($cfg=array())
+    public function presswork($cfg=array())
     {
-        foreach ($cfg AS $key=>$val)
-        {
+        foreach ($cfg as $key=>$val) {
             $this->configure[$val['name']] = $val['value'];
         }
     }
@@ -89,18 +85,14 @@ class presswork
      * @param   float   $goods_amount   商品金额
      * @return  decimal
      */
-    function calculate($goods_weight, $goods_amount)
+    public function calculate($goods_weight, $goods_amount)
     {
-        if ($this->configure['free_money'] > 0 && $goods_amount >= $this->configure['free_money'])
-        {
+        if ($this->configure['free_money'] > 0 && $goods_amount >= $this->configure['free_money']) {
             return 0;
-        }
-        else
-        {
+        } else {
             $fee    = $goods_weight * 4 + 3.4;
 
-            if ($goods_weight > 0.1)
-            {
+            if ($goods_weight > 0.1) {
                 $fee += (ceil(($goods_weight - 0.1) / 0.1)) * 0.4;
             }
 
@@ -116,7 +108,7 @@ class presswork
      * @param   string  $invoice_sn     发货单号
      * @return  string
      */
-    function query($invoice_sn)
+    public function query($invoice_sn)
     {
         return $invoice_sn;
     }
@@ -130,16 +122,13 @@ class presswork
      *
      * @return  decimal $price        保价费用
      */
-    function calculate_insure($total_price, $insure_rate)
+    public function calculate_insure($total_price, $insure_rate)
     {
         $total_price = ceil($total_price);
         $price = $total_price * $insure_rate;
-        if ($price < 1)
-        {
+        if ($price < 1) {
             $price = 1;
         }
         return ceil($price);
     }
 }
-
-?>

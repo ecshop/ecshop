@@ -1,7 +1,6 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
@@ -23,8 +22,7 @@ function get_shop_license()
     $license_info = $GLOBALS['db']->getAll($sql);
     $license_info = is_array($license_info) ? $license_info : array();
     $license = array();
-    foreach ($license_info as $value)
-    {
+    foreach ($license_info as $value) {
         $license[$value['code']] = $value['value'];
     }
 
@@ -39,17 +37,15 @@ function get_shop_license()
  */
 function make_shopex_ac($post_params, $token)
 {
-    if (!is_array($post_params))
-    {
+    if (!is_array($post_params)) {
         return;
     }
 
     // core
     ksort($post_params);
     $str = '';
-    foreach($post_params as $key=>$value){
-        if($key != 'certi_ac')
-        {
+    foreach ($post_params as $key=>$value) {
+        if ($key != 'certi_ac') {
             $str .= $value;
         }
     }
@@ -67,8 +63,7 @@ function make_shopex_ac($post_params, $token)
  */
 function exchange_shop_license($certi, $license, $use_lib = 0)
 {
-    if (!is_array($certi))
-    {
+    if (!is_array($certi)) {
         return array();
     }
 
@@ -76,8 +71,7 @@ function exchange_shop_license($certi, $license, $use_lib = 0)
     include_once(ROOT_PATH . 'includes/cls_json.php');
 
     $params = '';
-    foreach ($certi as $key => $value)
-    {
+    foreach ($certi as $key => $value) {
         $params .= '&' . $key . '=' . $value;
     }
     $params = trim($params, '&');
@@ -101,20 +95,17 @@ function exchange_shop_license($certi, $license, $use_lib = 0)
  */
 function process_login_license($cert_auth)
 {
-    if (!is_array($cert_auth))
-    {
+    if (!is_array($cert_auth)) {
         return array();
     }
 
     $cert_auth['auth_str'] = trim($cert_auth['auth_str']);
-    if (!empty($cert_auth['auth_str']))
-    {
+    if (!empty($cert_auth['auth_str'])) {
         $cert_auth['auth_str'] = $GLOBALS['_LANG']['license_' . $cert_auth['auth_str']];
     }
 
     $cert_auth['auth_type'] = trim($cert_auth['auth_type']);
-    if (!empty($cert_auth['auth_type']))
-    {
+    if (!empty($cert_auth['auth_type'])) {
         $cert_auth['auth_type'] = $GLOBALS['_LANG']['license_' . $cert_auth['auth_type']];
     }
 
@@ -147,10 +138,8 @@ function license_login($certi_added = '')
     // return 返回数组
     $return_array = array();
 
-    if (is_array($certi_added))
-    {
-        foreach ($certi_added as $key => $value)
-        {
+    if (is_array($certi_added)) {
+        foreach ($certi_added as $key => $value) {
             $certi[$key] = $value;
         }
     }
@@ -159,8 +148,7 @@ function license_login($certi_added = '')
     $license = get_shop_license();
 
     // 检测网店 license
-    if (!empty($license['certificate_id']) && !empty($license['token']) && !empty($license['certi']))
-    {
+    if (!empty($license['certificate_id']) && !empty($license['token']) && !empty($license['certi'])) {
         // 登录
         $certi['certi_app'] = 'certi.login'; // 证书方法
         $certi['app_instance_id'] = 'cert_auth'; // 应用服务ID
@@ -168,24 +156,17 @@ function license_login($certi_added = '')
         $certi['certi_ac'] = make_shopex_ac($certi, $license['token']); // 网店验证字符串
 
         $request_arr = exchange_shop_license($certi, $license);
-        if (is_array($request_arr) && $request_arr['res'] == $certi_back['succ'])
-        {
+        if (is_array($request_arr) && $request_arr['res'] == $certi_back['succ']) {
             $return_array['flag'] = 'login_succ';
             $return_array['request'] = $request_arr;
-        }
-        elseif (is_array($request_arr) && $request_arr['res'] == $certi_back['fail'])
-        {
+        } elseif (is_array($request_arr) && $request_arr['res'] == $certi_back['fail']) {
             $return_array['flag'] = 'login_fail';
             $return_array['request'] = $request_arr;
-        }
-        else
-        {
+        } else {
             $return_array['flag'] = 'login_ping_fail';
             $return_array['request'] = array('res' => 'fail');
         }
-    }
-    else
-    {
+    } else {
         $return_array['flag'] = 'login_param_fail';
         $return_array['request'] = array('res' => 'fail');
     }
@@ -219,10 +200,8 @@ function license_reg($certi_added = '')
     // return 返回数组
     $return_array = array();
 
-    if (is_array($certi_added))
-    {
-        foreach ($certi_added as $key => $value)
-        {
+    if (is_array($certi_added)) {
+        foreach ($certi_added as $key => $value) {
             $certi[$key] = $value;
         }
     }
@@ -236,8 +215,7 @@ function license_reg($certi_added = '')
     unset($certi['certificate_id']);
 
     $request_arr = exchange_shop_license($certi, $license);
-    if (is_array($request_arr) && $request_arr['res'] == $certi_back['succ'])
-    {
+    if (is_array($request_arr) && $request_arr['res'] == $certi_back['succ']) {
         // 注册信息入库
         $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') . "
                 SET value = '" . $request_arr['info']['certificate_id'] . "' WHERE code = 'certificate_id'";
@@ -249,18 +227,13 @@ function license_reg($certi_added = '')
         $return_array['flag'] = 'reg_succ';
         $return_array['request'] = $request_arr;
         clear_cache_files();
-    }
-    elseif (is_array($request_arr) && $request_arr['res'] == $certi_back['fail'])
-    {
+    } elseif (is_array($request_arr) && $request_arr['res'] == $certi_back['fail']) {
         $return_array['flag'] = 'reg_fail';
         $return_array['request'] = $request_arr;
-    }
-    else
-    {
+    } else {
         $return_array['flag'] = 'reg_ping_fail';
         $return_array['request'] = array('res' => 'fail');
     }
 
     return $return_array;
 }
-?>

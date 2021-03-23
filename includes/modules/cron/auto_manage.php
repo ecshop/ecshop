@@ -1,20 +1,17 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 $cron_lang = ROOT_PATH . 'languages/' .$GLOBALS['_CFG']['lang']. '/cron/auto_manage.php';
-if (file_exists($cron_lang))
-{
+if (file_exists($cron_lang)) {
     global $_LANG;
 
     include_once($cron_lang);
 }
 
 /* 模块的基本信息 */
-if (isset($set_modules) && $set_modules == TRUE)
-{
+if (isset($set_modules) && $set_modules == true) {
     $i = isset($modules) ? count($modules) : 0;
 
     /* 代码 */
@@ -43,117 +40,81 @@ $time = gmtime();
 $limit = !empty($cron['auto_manage_count']) ? $cron['auto_manage_count'] : 5;
 $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('auto_manage') . " WHERE starttime > '0' AND starttime <= '$time' OR endtime > '0' AND endtime <= '$time' LIMIT $limit";
 $autodb = $db->getAll($sql);
-foreach ($autodb as $key => $val)
-{
+foreach ($autodb as $key => $val) {
     $del = $up = false;
-    if ($val['type'] == 'goods')
-    {
+    if ($val['type'] == 'goods') {
         $goods = true;
         $where = " WHERE goods_id = '$val[item_id]'";
-    }
-    else
-    {
+    } else {
         $goods = false;
         $where = " WHERE article_id = '$val[item_id]'";
     }
 
 
     //上下架判断
-    if(!empty($val['starttime']) && !empty($val['endtime']))
-    {
+    if (!empty($val['starttime']) && !empty($val['endtime'])) {
         //上下架时间均设置
-        if($val['starttime'] <= $time && $time < $val['endtime'])
-        {
+        if ($val['starttime'] <= $time && $time < $val['endtime']) {
             //上架时间 <= 当前时间 < 下架时间
             $up = true;
             $del = false;
-        }
-        elseif($val['starttime'] >= $time && $time > $val['endtime'])
-        {
+        } elseif ($val['starttime'] >= $time && $time > $val['endtime']) {
             //下架时间 <= 当前时间 < 上架时间
             $up = false;
             $del = false;
-        }
-        elseif($val['starttime'] == $time && $time == $val['endtime'])
-        {
+        } elseif ($val['starttime'] == $time && $time == $val['endtime']) {
             //下架时间 == 当前时间 == 上架时间
             $sql = "DELETE FROM " . $GLOBALS['ecs']->table('auto_manage') . "WHERE item_id = '$val[item_id]' AND type = '$val[type]'";
             $db->query($sql);
             continue;
-        }
-        elseif($val['starttime'] > $val['endtime'])
-        {
+        } elseif ($val['starttime'] > $val['endtime']) {
             // 下架时间 < 上架时间 < 当前时间
             $up = true;
             $del = true;
-        }
-        elseif($val['starttime'] < $val['endtime'])
-        {
+        } elseif ($val['starttime'] < $val['endtime']) {
             // 上架时间 < 下架时间 < 当前时间
             $up = false;
             $del = true;
-        }
-        else
-        {
+        } else {
             // 上架时间 = 下架时间 < 当前时间
             $sql = "DELETE FROM " . $GLOBALS['ecs']->table('auto_manage') . "WHERE item_id = '$val[item_id]' AND type = '$val[type]'";
             $db->query($sql);
 
             continue;
         }
-    }
-    elseif(!empty($val['starttime']))
-    {
+    } elseif (!empty($val['starttime'])) {
         //只设置了上架时间
         $up = true;
         $del = true;
-    }
-    else
-    {
+    } else {
         //只设置了下架时间
         $up = false;
         $del = true;
     }
 
-    if ($goods)
-    {
-        if ($up)
-        {
+    if ($goods) {
+        if ($up) {
             $sql = "UPDATE " . $GLOBALS['ecs']->table('goods') . " SET is_on_sale = 1 $where";
-        }
-        else
-        {
+        } else {
             $sql = "UPDATE " . $GLOBALS['ecs']->table('goods') . " SET is_on_sale = 0 $where";
         }
-    }
-    else
-    {
-        if ($up)
-        {
+    } else {
+        if ($up) {
             $sql = "UPDATE " . $GLOBALS['ecs']->table('article') . " SET is_open = 1 $where";
-        }
-        else
-        {
+        } else {
             $sql = "UPDATE " . $GLOBALS['ecs']->table('article') . " SET is_open = 0 $where";
         }
     }
     $db->query($sql);
-    if ($del)
-    {
+    if ($del) {
         $sql = "DELETE FROM " . $GLOBALS['ecs']->table('auto_manage') . "WHERE item_id = '$val[item_id]' AND type = '$val[type]'";
         $db->query($sql);
-    }
-    else
-    {
-        if($up)
-        {
+    } else {
+        if ($up) {
             $sql = "UPDATE " . $GLOBALS['ecs']->table('auto_manage') . " SET starttime = 0 WHERE item_id = '$val[item_id]' AND type = '$val[type]'";
-        }
-        else
-        {
+        } else {
             $sql = "UPDATE " . $GLOBALS['ecs']->table('auto_manage') . " SET endtime = 0 WHERE item_id = '$val[item_id]' AND type = '$val[type]'";
         }
         $db->query($sql);
     }
 }
-?>

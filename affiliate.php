@@ -4,20 +4,17 @@ define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 
-if ((DEBUG_MODE & 2) != 2)
-{
+if ((DEBUG_MODE & 2) != 2) {
     $smarty->caching = true;
 }
 
 //$charset = empty($_GET['charset']) ? 'UTF8' : $_GET['charset'];
 $display_mode = empty($_GET['display_mode']) ? 'javascript' : $_GET['display_mode'];
 
-if ( $display_mode == 'javascript' )
-{
+if ($display_mode == 'javascript') {
     $charset_array=array('UTF8','GBK','gbk','utf8','GB2312','gb2312');
-    if(!in_array($charset,$charset_array))
-    {
-         $charset='UTF8';
+    if (!in_array($charset, $charset_array)) {
+        $charset='UTF8';
     }
     header('content-type: application/x-javascript; charset=' . ($charset == 'UTF8' ? 'utf-8' : $charset));
 }
@@ -34,10 +31,9 @@ $type = intval($_GET['type']);
 
 
 $tpl = ROOT_PATH . DATA_DIR . '/affiliate.html';
-if (!$smarty->is_cached($tpl, $cache_id))
-{
+if (!$smarty->is_cached($tpl, $cache_id)) {
     $time = gmtime();
-   /* 鏍规嵁鍙傛暟鐢熸垚鏌ヨ?璇?彞 */
+    /* 鏍规嵁鍙傛暟鐢熸垚鏌ヨ?璇?彞 */
 
     $goods_url = $ecs->url() . "goods.php?u=$userid&id=";
     $goods = get_goods_info($goodsid);
@@ -62,13 +58,8 @@ $output = $smarty->fetch($tpl, $cache_id);
 $output = str_replace("\r", '', $output);
 $output = str_replace("\n", '', $output);
 
-if ( $display_mode == 'javascript' )
-{
+if ($display_mode == 'javascript') {
     echo "document.write('$output');";
-}
-else if ( $display_mode == 'iframe' )
-{
+} elseif ($display_mode == 'iframe') {
     echo $output;
 }
-
-?>

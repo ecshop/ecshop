@@ -1,20 +1,17 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 $cron_lang = ROOT_PATH . 'languages/' .$GLOBALS['_CFG']['lang']. '/cron/ipdel.php';
-if (file_exists($cron_lang))
-{
+if (file_exists($cron_lang)) {
     global $_LANG;
 
     include_once($cron_lang);
 }
 
 /* 模块的基本信息 */
-if (isset($set_modules) && $set_modules == TRUE)
-{
+if (isset($set_modules) && $set_modules == true) {
     $i = isset($modules) ? count($modules) : 0;
 
     /* 代码 */
@@ -46,5 +43,3 @@ $deltime = gmtime() - $cron['ipdel_day'] * 3600 * 24;
 $sql = "DELETE FROM " . $ecs->table('stats') .
        "WHERE  access_time < '$deltime'";
 $db->query($sql);
-
-?>

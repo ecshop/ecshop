@@ -2,19 +2,16 @@
 
 define('IN_ECS', true);
 
-if (!function_exists("htmlspecialchars_decode"))
-{
+if (!function_exists("htmlspecialchars_decode")) {
     function htmlspecialchars_decode($string, $quote_style = ENT_COMPAT)
     {
         return strtr($string, array_flip(get_html_translation_table(HTML_SPECIALCHARS, $quote_style)));
     }
 }
 
-if (empty($_GET['encode']))
-{
+if (empty($_GET['encode'])) {
     $string = array_merge($_GET, $_POST);
-    if (get_magic_quotes_gpc())
-    {
+    if (get_magic_quotes_gpc()) {
         require(dirname(__FILE__) . '/includes/lib_base.php');
         //require(dirname(__FILE__) . '/includes/lib_common.php');
 
@@ -26,35 +23,23 @@ if (empty($_GET['encode']))
     header("Location: search.php?encode=$string\n");
 
     exit;
-}
-else
-{
+} else {
     $string = base64_decode(trim($_GET['encode']));
-    if ($string !== false)
-    {
+    if ($string !== false) {
         $string = unserialize($string);
-        if ($string !== false)
-        {
+        if ($string !== false) {
             /* 用户在重定向的情况下当作一次访问 */
-            if (!empty($string['search_encode_time']))
-            {
-                if (time() > $string['search_encode_time'] + 2)
-                {
+            if (!empty($string['search_encode_time'])) {
+                if (time() > $string['search_encode_time'] + 2) {
                     define('INGORE_VISIT_STATS', true);
                 }
-            }
-            else
-            {
+            } else {
                 define('INGORE_VISIT_STATS', true);
             }
-        }
-        else
-        {
+        } else {
             $string = array();
         }
-    }
-    else
-    {
+    } else {
         $string = array();
     }
 }
@@ -68,27 +53,26 @@ $_REQUEST['act'] = !empty($_REQUEST['act']) ? trim($_REQUEST['act']) : '';
 /*------------------------------------------------------ */
 //-- 高级搜索
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == 'advanced_search')
-{
+if ($_REQUEST['act'] == 'advanced_search') {
     $goods_type = !empty($_REQUEST['goods_type']) ? intval($_REQUEST['goods_type']) : 0;
     $attributes = get_seachable_attributes($goods_type);
     $smarty->assign('goods_type_selected', $goods_type);
-    $smarty->assign('goods_type_list',     $attributes['cate']);
-    $smarty->assign('goods_attributes',    $attributes['attr']);
+    $smarty->assign('goods_type_list', $attributes['cate']);
+    $smarty->assign('goods_attributes', $attributes['attr']);
 
     assign_template();
     assign_dynamic('search');
     $position = assign_ur_here(0, $_LANG['advanced_search']);
     $smarty->assign('page_title', $position['title']);    // 页面标题
-    $smarty->assign('ur_here',    $position['ur_here']);  // 当前位置
+    $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
 
     $smarty->assign('categories', get_categories_tree()); // 分类树
-    $smarty->assign('helps',      get_shop_help());       // 网店帮助
-    $smarty->assign('top_goods',  get_top10());           // 销售排行
+    $smarty->assign('helps', get_shop_help());       // 网店帮助
+    $smarty->assign('top_goods', get_top10());           // 销售排行
     $smarty->assign('promotion_info', get_promotion_info());
-    $smarty->assign('cat_list',   cat_list(0, 0, true, 2, false));
+    $smarty->assign('cat_list', cat_list(0, 0, true, 2, false));
     $smarty->assign('brand_list', get_brand_list());
-    $smarty->assign('action',     'form');
+    $smarty->assign('action', 'form');
     $smarty->assign('use_storage', $_CFG['use_storage']);
 
     $smarty->display('search.dwt');
@@ -98,8 +82,7 @@ if ($_REQUEST['act'] == 'advanced_search')
 /*------------------------------------------------------ */
 //-- 搜索结果
 /*------------------------------------------------------ */
-else
-{
+else {
     $_REQUEST['keywords']   = !empty($_REQUEST['keywords'])   ? htmlspecialchars(trim($_REQUEST['keywords']))     : '';
     $_REQUEST['brand']      = !empty($_REQUEST['brand'])      ? intval($_REQUEST['brand'])      : 0;
     $_REQUEST['category']   = !empty($_REQUEST['category'])   ? intval($_REQUEST['category'])   : 0;
@@ -110,8 +93,7 @@ else
     $_REQUEST['outstock']   = !empty($_REQUEST['outstock']) ? 1 : 0;
 
     $action = '';
-    if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'form')
-    {
+    if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'form') {
         /* 要显示高级搜索栏 */
         $adv_value['keywords']  = htmlspecialchars(stripcslashes($_REQUEST['keywords']));
         $adv_value['brand']     = $_REQUEST['brand'];
@@ -122,33 +104,27 @@ else
         $attributes = get_seachable_attributes($_REQUEST['goods_type']);
 
         /* 将提交数据重新赋值 */
-        foreach ($attributes['attr'] AS $key => $val)
-        {
-            if (!empty($_REQUEST['attr'][$val['id']]))
-            {
-                if ($val['type'] == 2)
-                {
+        foreach ($attributes['attr'] as $key => $val) {
+            if (!empty($_REQUEST['attr'][$val['id']])) {
+                if ($val['type'] == 2) {
                     $attributes['attr'][$key]['value']['from'] = !empty($_REQUEST['attr'][$val['id']]['from']) ? htmlspecialchars(stripcslashes(trim($_REQUEST['attr'][$val['id']]['from']))) : '';
                     $attributes['attr'][$key]['value']['to']   = !empty($_REQUEST['attr'][$val['id']]['to'])   ? htmlspecialchars(stripcslashes(trim($_REQUEST['attr'][$val['id']]['to'])))   : '';
-                }
-                else
-                {
+                } else {
                     $attributes['attr'][$key]['value'] = !empty($_REQUEST['attr'][$val['id']]) ? htmlspecialchars(stripcslashes(trim($_REQUEST['attr'][$val['id']]))) : '';
                 }
             }
         }
-        if ($_REQUEST['sc_ds'])
-        {
-            $smarty->assign('scck',            'checked');
+        if ($_REQUEST['sc_ds']) {
+            $smarty->assign('scck', 'checked');
         }
-        $smarty->assign('adv_val',             $adv_value);
-        $smarty->assign('goods_type_list',     $attributes['cate']);
-        $smarty->assign('goods_attributes',    $attributes['attr']);
+        $smarty->assign('adv_val', $adv_value);
+        $smarty->assign('goods_type_list', $attributes['cate']);
+        $smarty->assign('goods_attributes', $attributes['attr']);
         $smarty->assign('goods_type_selected', $_REQUEST['goods_type']);
-        $smarty->assign('cat_list',            cat_list(0, $adv_value['category'], true, 2, false));
-        $smarty->assign('brand_list',          get_brand_list());
-        $smarty->assign('action',              'form');
-        $smarty->assign('use_storage',          $_CFG['use_storage']);
+        $smarty->assign('cat_list', cat_list(0, $adv_value['category'], true, 2, false));
+        $smarty->assign('brand_list', get_brand_list());
+        $smarty->assign('action', 'form');
+        $smarty->assign('use_storage', $_CFG['use_storage']);
 
         $action = 'form';
     }
@@ -156,29 +132,21 @@ else
     /* 初始化搜索条件 */
     $keywords  = '';
     $tag_where = '';
-    if (!empty($_REQUEST['keywords']))
-    {
+    if (!empty($_REQUEST['keywords'])) {
         $arr = array();
-        if (stristr($_REQUEST['keywords'], ' AND ') !== false)
-        {
+        if (stristr($_REQUEST['keywords'], ' AND ') !== false) {
             /* 检查关键字中是否有AND，如果存在就是并 */
             $arr        = explode('AND', $_REQUEST['keywords']);
             $operator   = " AND ";
-        }
-        elseif (stristr($_REQUEST['keywords'], ' OR ') !== false)
-        {
+        } elseif (stristr($_REQUEST['keywords'], ' OR ') !== false) {
             /* 检查关键字中是否有OR，如果存在就是或 */
             $arr        = explode('OR', $_REQUEST['keywords']);
             $operator   = " OR ";
-        }
-        elseif (stristr($_REQUEST['keywords'], ' + ') !== false)
-        {
+        } elseif (stristr($_REQUEST['keywords'], ' + ') !== false) {
             /* 检查关键字中是否有加号，如果存在就是或 */
             $arr        = explode('+', $_REQUEST['keywords']);
             $operator   = " OR ";
-        }
-        else
-        {
+        } else {
             /* 检查关键字中是否有空格，如果存在就是并 */
             $arr        = explode(' ', $_REQUEST['keywords']);
             $operator   = " AND ";
@@ -186,10 +154,8 @@ else
 
         $keywords = 'AND (';
         $goods_ids = array();
-        foreach ($arr AS $key => $val)
-        {
-            if ($key > 0 && $key < count($arr) && count($arr) > 1)
-            {
+        foreach ($arr as $key => $val) {
+            if ($key > 0 && $key < count($arr) && count($arr) > 1) {
                 $keywords .= $operator;
             }
             $val        = mysql_like_quote(trim($val));
@@ -198,8 +164,7 @@ else
 
             $sql = 'SELECT DISTINCT goods_id FROM ' . $ecs->table('tag') . " WHERE tag_words LIKE '%$val%' ";
             $res = $db->query($sql);
-            while ($row = $db->FetchRow($res))
-            {
+            while ($row = $db->FetchRow($res)) {
                 $goods_ids[] = $row['goods_id'];
             }
 
@@ -210,8 +175,7 @@ else
 
         $goods_ids = array_unique($goods_ids);
         $tag_where = implode(',', $goods_ids);
-        if (!empty($tag_where))
-        {
+        if (!empty($tag_where)) {
             $tag_where = 'OR g.goods_id ' . db_create_in($tag_where);
         }
     }
@@ -240,10 +204,8 @@ else
 
     $intromode = '';    //方式，用于决定搜索结果页标题图片
 
-    if (!empty($_REQUEST['intro']))
-    {
-        switch ($_REQUEST['intro'])
-        {
+    if (!empty($_REQUEST['intro'])) {
+        switch ($_REQUEST['intro']) {
             case 'best':
                 $intro   = ' AND g.is_best = 1';
                 $intromode = 'best';
@@ -268,14 +230,11 @@ else
             default:
                 $intro   = '';
         }
-    }
-    else
-    {
+    } else {
         $intro = '';
     }
 
-    if (empty($ur_here))
-    {
+    if (empty($ur_here)) {
         $ur_here = $_LANG['search_goods'];
     }
 
@@ -287,36 +246,28 @@ else
     $attr_url = '';
     $attr_arg = array();
 
-    if (!empty($_REQUEST['attr']))
-    {
+    if (!empty($_REQUEST['attr'])) {
         $sql = "SELECT goods_id, COUNT(*) AS num FROM " . $ecs->table("goods_attr") . " WHERE 0 ";
-        foreach ($_REQUEST['attr'] AS $key => $val)
-        {
-            if (is_not_null($val) && is_numeric($key))
-            {
+        foreach ($_REQUEST['attr'] as $key => $val) {
+            if (is_not_null($val) && is_numeric($key)) {
                 $attr_num++;
                 $sql .= " OR (1 ";
 
-                if (is_array($val))
-                {
+                if (is_array($val)) {
                     $sql .= " AND attr_id = '$key'";
 
-                    if (!empty($val['from']))
-                    {
+                    if (!empty($val['from'])) {
                         $sql .= is_numeric($val['from']) ? " AND attr_value >= " . floatval($val['from'])  : " AND attr_value >= '$val[from]'";
                         $attr_arg["attr[$key][from]"] = $val['from'];
                         $attr_url .= "&amp;attr[$key][from]=$val[from]";
                     }
 
-                    if (!empty($val['to']))
-                    {
+                    if (!empty($val['to'])) {
                         $sql .= is_numeric($val['to']) ? " AND attr_value <= " . floatval($val['to']) : " AND attr_value <= '$val[to]'";
                         $attr_arg["attr[$key][to]"] = $val['to'];
                         $attr_url .= "&amp;attr[$key][to]=$val[to]";
                     }
-                }
-                else
-                {
+                } else {
                     /* 处理选购中心过来的链接 */
                     $sql .= isset($_REQUEST['pickout']) ? " AND attr_id = '$key' AND attr_value = '" . $val . "' " : " AND attr_id = '$key' AND attr_value LIKE '%" . mysql_like_quote($val) . "%' ";
                     $attr_url .= "&amp;attr[$key]=$val";
@@ -328,29 +279,22 @@ else
         }
 
         /* 如果检索条件都是无效的，就不用检索 */
-        if ($attr_num > 0)
-        {
+        if ($attr_num > 0) {
             $sql .= " GROUP BY goods_id HAVING num = '$attr_num'";
 
             $row = $db->getCol($sql);
-            if (count($row))
-            {
+            if (count($row)) {
                 $attr_in = " AND " . db_create_in($row, 'g.goods_id');
-            }
-            else
-            {
+            } else {
                 $attr_in = " AND 0 ";
             }
         }
-    }
-    elseif (isset($_REQUEST['pickout']))
-    {
+    } elseif (isset($_REQUEST['pickout'])) {
         /* 从选购中心进入的链接 */
         $sql = "SELECT DISTINCT(goods_id) FROM " . $ecs->table('goods_attr');
         $col = $db->getCol($sql);
         //如果商店没有设置商品属性,那么此检索条件是无效的
-        if (!empty($col))
-        {
+        if (!empty($col)) {
             $attr_in = " AND " . db_create_in($col, 'g.goods_id');
         }
     }
@@ -362,8 +306,7 @@ else
     $count = $db->getOne($sql);
 
     $max_page = ($count> 0) ? ceil($count / $size) : 1;
-    if ($page > $max_page)
-    {
+    if ($page > $max_page) {
         $page = $max_page;
     }
 
@@ -380,14 +323,10 @@ else
     $res = $db->SelectLimit($sql, $size, ($page - 1) * $size);
 
     $arr = array();
-    while ($row = $db->FetchRow($res))
-    {
-        if ($row['promote_price'] > 0)
-        {
+    while ($row = $db->FetchRow($res)) {
+        if ($row['promote_price'] > 0) {
             $promote_price = bargain_price($row['promote_price'], $row['promote_start_date'], $row['promote_end_date']);
-        }
-        else
-        {
+        } else {
             $promote_price = 0;
         }
 
@@ -395,35 +334,24 @@ else
         /* 处理商品水印图片 */
         $watermark_img = '';
 
-        if ($promote_price != 0)
-        {
+        if ($promote_price != 0) {
             $watermark_img = "watermark_promote_small";
-        }
-        elseif ($row['is_new'] != 0)
-        {
+        } elseif ($row['is_new'] != 0) {
             $watermark_img = "watermark_new_small";
-        }
-        elseif ($row['is_best'] != 0)
-        {
+        } elseif ($row['is_best'] != 0) {
             $watermark_img = "watermark_best_small";
-        }
-        elseif ($row['is_hot'] != 0)
-        {
+        } elseif ($row['is_hot'] != 0) {
             $watermark_img = 'watermark_hot_small';
         }
 
-        if ($watermark_img != '')
-        {
+        if ($watermark_img != '') {
             $arr[$row['goods_id']]['watermark_img'] =  $watermark_img;
         }
 
         $arr[$row['goods_id']]['goods_id']      = $row['goods_id'];
-        if($display == 'grid')
-        {
+        if ($display == 'grid') {
             $arr[$row['goods_id']]['goods_name']    = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
-        }
-        else
-        {
+        } else {
             $arr[$row['goods_id']]['goods_name'] = $row['goods_name'];
         }
         $arr[$row['goods_id']]['type']          = $row['goods_type'];
@@ -436,30 +364,26 @@ else
         $arr[$row['goods_id']]['url']           = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
     }
 
-    if($display == 'grid')
-    {
-        if(count($arr) % 2 != 0)
-        {
+    if ($display == 'grid') {
+        if (count($arr) % 2 != 0) {
             $arr[] = array();
         }
     }
     $smarty->assign('goods_list', $arr);
-    $smarty->assign('category',   $category);
-    $smarty->assign('keywords',   htmlspecialchars(stripslashes($_REQUEST['keywords'])));
-    $smarty->assign('search_keywords',   stripslashes(htmlspecialchars_decode($_REQUEST['keywords'])));
-    $smarty->assign('brand',      $_REQUEST['brand']);
-    $smarty->assign('min_price',  $min_price);
-    $smarty->assign('max_price',  $max_price);
-    $smarty->assign('outstock',  $_REQUEST['outstock']);
+    $smarty->assign('category', $category);
+    $smarty->assign('keywords', htmlspecialchars(stripslashes($_REQUEST['keywords'])));
+    $smarty->assign('search_keywords', stripslashes(htmlspecialchars_decode($_REQUEST['keywords'])));
+    $smarty->assign('brand', $_REQUEST['brand']);
+    $smarty->assign('min_price', $min_price);
+    $smarty->assign('max_price', $max_price);
+    $smarty->assign('outstock', $_REQUEST['outstock']);
 
     /* 分页 */
     $url_format = "search.php?category=$category&amp;keywords=" . urlencode(stripslashes($_REQUEST['keywords'])) . "&amp;brand=" . $_REQUEST['brand']."&amp;action=".$action."&amp;goods_type=" . $_REQUEST['goods_type'] . "&amp;sc_ds=" . $_REQUEST['sc_ds'];
-    if (!empty($intromode))
-    {
+    if (!empty($intromode)) {
         $url_format .= "&amp;intro=" . $intromode;
     }
-    if (isset($_REQUEST['pickout']))
-    {
+    if (isset($_REQUEST['pickout'])) {
         $url_format .= '&amp;pickout=1';
     }
     $url_format .= "&amp;min_price=" . $_REQUEST['min_price'] ."&amp;max_price=" . $_REQUEST['max_price'] . "&amp;sort=$sort";
@@ -492,11 +416,11 @@ else
     assign_dynamic('search');
     $position = assign_ur_here(0, $ur_here . ($_REQUEST['keywords'] ? '_' . $_REQUEST['keywords'] : ''));
     $smarty->assign('page_title', $position['title']);    // 页面标题
-    $smarty->assign('ur_here',    $position['ur_here']);  // 当前位置
-    $smarty->assign('intromode',      $intromode);
+    $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+    $smarty->assign('intromode', $intromode);
     $smarty->assign('categories', get_categories_tree()); // 分类树
-    $smarty->assign('helps',       get_shop_help());      // 网店帮助
-    $smarty->assign('top_goods',  get_top10());           // 销售排行
+    $smarty->assign('helps', get_shop_help());      // 网店帮助
+    $smarty->assign('top_goods', get_top10());           // 销售排行
     $smarty->assign('promotion_info', get_promotion_info());
 
     $smarty->display('search.dwt');
@@ -515,12 +439,9 @@ else
  */
 function is_not_null($value)
 {
-    if (is_array($value))
-    {
+    if (is_array($value)) {
         return (!empty($value['from'])) || (!empty($value['to']));
-    }
-    else
-    {
+    } else {
         return !empty($value);
     }
 }
@@ -546,10 +467,8 @@ function get_seachable_attributes($cat_id = 0)
     $cat = $GLOBALS['db']->getAll($sql);
 
     /* 获取可以检索的属性 */
-    if (!empty($cat))
-    {
-        foreach ($cat AS $val)
-        {
+    if (!empty($cat)) {
+        foreach ($cat as $val) {
             $attributes['cate'][$val['cat_id']] = $val['cat_name'];
         }
         $where = $cat_id > 0 ? ' AND a.cat_id = ' . $cat_id : " AND a.cat_id = " . $cat[0]['cat_id'];
@@ -560,16 +479,13 @@ function get_seachable_attributes($cat_id = 0)
                ' ORDER BY cat_id, sort_order ASC';
         $res = $GLOBALS['db']->query($sql);
 
-        while ($row = $GLOBALS['db']->FetchRow($res))
-        {
-            if ($row['attr_index'] == 1 && $row['attr_input_type'] == 1)
-            {
+        while ($row = $GLOBALS['db']->FetchRow($res)) {
+            if ($row['attr_index'] == 1 && $row['attr_input_type'] == 1) {
                 $row['attr_values'] = str_replace("\r", '', $row['attr_values']);
                 $options = explode("\n", $row['attr_values']);
 
                 $attr_value = array();
-                foreach ($options AS $opt)
-                {
+                foreach ($options as $opt) {
                     $attr_value[$opt] = $opt;
                 }
                 $attributes['attr'][] = array(
@@ -578,9 +494,7 @@ function get_seachable_attributes($cat_id = 0)
                     'options' => $attr_value,
                     'type'    => 3
                 );
-            }
-            else
-            {
+            } else {
                 $attributes['attr'][] = array(
                     'id'   => $row['attr_id'],
                     'attr' => $row['attr_name'],
@@ -592,4 +506,3 @@ function get_seachable_attributes($cat_id = 0)
 
     return $attributes;
 }
-?>

@@ -19,5 +19,3 @@ $arr['target']  = htmlspecialchars($arr['target']);
 
 $json = new JSON;
 echo $json->encode($arr);
-
-?>

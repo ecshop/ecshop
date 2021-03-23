@@ -1,14 +1,12 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
 error_reporting(E_ALL);
 
-if (__FILE__ == '')
-{
+if (__FILE__ == '') {
     die('Fatal error code: 0');
 }
 
@@ -16,44 +14,35 @@ if (__FILE__ == '')
 define('ROOT_PATH', str_replace('api', '', str_replace('\\', '/', dirname(__FILE__))));
 
 /* 初始化设置 */
-@ini_set('memory_limit',          '16M');
-@ini_set('session.cache_expire',  180);
+@ini_set('memory_limit', '16M');
+@ini_set('session.cache_expire', 180);
 @ini_set('session.use_trans_sid', 0);
-@ini_set('session.use_cookies',   1);
-@ini_set('session.auto_start',    0);
-@ini_set('display_errors',        1);
+@ini_set('session.use_cookies', 1);
+@ini_set('session.auto_start', 0);
+@ini_set('display_errors', 1);
 
-if (DIRECTORY_SEPARATOR == '\\')
-{
+if (DIRECTORY_SEPARATOR == '\\') {
     @ini_set('include_path', '.;' . ROOT_PATH);
-}
-else
-{
+} else {
     @ini_set('include_path', '.:' . ROOT_PATH);
 }
 
-if (file_exists(ROOT_PATH . 'data/config.php'))
-{
+if (file_exists(ROOT_PATH . 'data/config.php')) {
     include(ROOT_PATH . 'data/config.php');
-}
-else
-{
+} else {
     include(ROOT_PATH . 'includes/config.php');
 }
 
-if (defined('DEBUG_MODE') == false)
-{
+if (defined('DEBUG_MODE') == false) {
     define('DEBUG_MODE', 0);
 }
 
-if (PHP_VERSION >= '5.1' && !empty($timezone))
-{
+if (PHP_VERSION >= '5.1' && !empty($timezone)) {
     date_default_timezone_set($timezone);
 }
 
 $php_self = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
-if ('/' == substr($php_self, -1))
-{
+if ('/' == substr($php_self, -1)) {
     $php_self .= 'index.php';
 }
 define('PHP_SELF', $php_self);
@@ -65,14 +54,11 @@ require(ROOT_PATH . 'includes/lib_common.php');
 require(ROOT_PATH . 'includes/lib_time.php');
 
 /* 对用户传入的变量进行转义操作。*/
-if (!get_magic_quotes_gpc())
-{
-    if (!empty($_GET))
-    {
+if (!get_magic_quotes_gpc()) {
+    if (!empty($_GET)) {
         $_GET  = addslashes_deep($_GET);
     }
-    if (!empty($_POST))
-    {
+    if (!empty($_POST)) {
         $_POST = addslashes_deep($_POST);
     }
 
@@ -87,7 +73,7 @@ $data_dir = $ecs->data_dir();
 /* 初始化数据库类 */
 require(ROOT_PATH . 'includes/cls_mysql.php');
 $db = new cls_mysql($db_host, $db_user, $db_pass, $db_name);
-$db_host = $db_user = $db_pass = $db_name = NULL;
+$db_host = $db_user = $db_pass = $db_name = null;
 
 /* 初始化session */
 require(ROOT_PATH . 'includes/cls_session.php');
@@ -100,21 +86,15 @@ $_CFG = load_config();
 /* 初始化用户插件 */
 $user =& init_users();
 
-if ((DEBUG_MODE & 1) == 1)
-{
+if ((DEBUG_MODE & 1) == 1) {
     error_reporting(E_ALL);
-}
-else
-{
+} else {
     error_reporting(E_ALL ^ E_NOTICE);
 }
 
 /* 判断是否支持 Gzip 模式 */
-if (gzip_enabled())
-{
+if (gzip_enabled()) {
     ob_start('ob_gzhandler');
 }
 
 header('Content-type: text/html; charset=' . EC_CHARSET);
-
-?>

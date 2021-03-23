@@ -22,11 +22,10 @@ define('API_RETURN_SUCCEED', '1');
 define('API_RETURN_FAILED', '-1');
 define('API_RETURN_FORBIDDEN', '-2');
 
-define('IN_ECS', TRUE);
+define('IN_ECS', true);
 require './init.php';
 //数据验证
-if(!defined('IN_UC'))
-{
+if (!defined('IN_UC')) {
     error_reporting(0);
     set_magic_quotes_runtime(0);
     defined('MAGIC_QUOTES_GPC') || define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
@@ -35,18 +34,15 @@ if(!defined('IN_UC'))
 
     $code = @$_GET['code'];
     parse_str(_authcode($code, 'DECODE', UC_KEY), $get);
-    if(MAGIC_QUOTES_GPC)
-    {
+    if (MAGIC_QUOTES_GPC) {
         $get = _stripslashes($get);
     }
 
     $timestamp = time();
-    if($timestamp - $get['time'] > 3600)
-    {
+    if ($timestamp - $get['time'] > 3600) {
         exit('Authracation has expiried');
     }
-    if(empty($get))
-    {
+    if (empty($get)) {
         exit('Invalid Request');
     }
 }
@@ -55,13 +51,10 @@ $action = $get['action'];
 include(ROOT_PATH . 'uc_client/lib/xml.class.php');
 $post = xml_unserialize(file_get_contents('php://input'));
 
-if(in_array($get['action'], array('test', 'deleteuser', 'renameuser', 'gettag', 'synlogin', 'synlogout', 'updatepw', 'updatebadwords', 'updatehosts', 'updateapps', 'updateclient', 'updatecredit', 'getcreditsettings', 'updatecreditsettings')))
-{
+if (in_array($get['action'], array('test', 'deleteuser', 'renameuser', 'gettag', 'synlogin', 'synlogout', 'updatepw', 'updatebadwords', 'updatehosts', 'updateapps', 'updateclient', 'updatecredit', 'getcreditsettings', 'updatecreditsettings'))) {
     $uc_note = new uc_note();
     exit($uc_note->$get['action']($get, $post));
-}
-else
-{
+} else {
     exit(API_RETURN_FAILED);
 }
 
@@ -69,51 +62,47 @@ $ecs_url = str_replace('/api', '', $ecs->url());
 
 class uc_note
 {
-    var $db = '';
-    var $tablepre = '';
-    var $appdir = '';
+    public $db = '';
+    public $tablepre = '';
+    public $appdir = '';
 
-    function _serialize($arr, $htmlon = 0)
+    public function _serialize($arr, $htmlon = 0)
     {
-        if(!function_exists('xml_serialize'))
-        {
+        if (!function_exists('xml_serialize')) {
             include(ROOT_PATH . 'uc_client/lib/xml.class.php');
         }
         return xml_serialize($arr, $htmlon);
     }
 
-    function uc_note()
+    public function uc_note()
     {
         $this->appdir = ROOT_PATH;
         $this->db = $GLOBALS['db'];
     }
 
-    function test($get, $post)
+    public function test($get, $post)
     {
         return API_RETURN_SUCCEED;
     }
 
-    function deleteuser($get, $post)
+    public function deleteuser($get, $post)
     {
         $uids = $get['ids'];
-        if(!API_DELETEUSER)
-        {
+        if (!API_DELETEUSER) {
             return API_RETURN_FORBIDDEN;
         }
 
-        if (delete_user($uids))
-        {
+        if (delete_user($uids)) {
             return API_RETURN_SUCCEED;
         }
     }
 
-    function renameuser($get, $post)
+    public function renameuser($get, $post)
     {
         $uid = $get['uid'];
         $usernameold = $get['oldusername'];
         $usernamenew = $get['newusername'];
-        if(!API_RENAMEUSER)
-        {
+        if (!API_RENAMEUSER) {
             return API_RETURN_FORBIDDEN;
         }
         $this->db->query("UPDATE " . $GLOBALS['ecs']->table("users") . " SET user_name='$usernamenew' WHERE user_id='$uid'");
@@ -124,11 +113,10 @@ class uc_note
         return API_RETURN_SUCCEED;
     }
 
-    function gettag($get, $post)
+    public function gettag($get, $post)
     {
         $name = $get['id'];
-        if(!API_GETTAG)
-        {
+        if (!API_GETTAG) {
             return API_RETURN_FORBIDDEN;
         }
         $tags = fetch_tag($name);
@@ -137,22 +125,20 @@ class uc_note
         return uc_serialize($return, 1);
     }
 
-    function synlogin($get, $post)
+    public function synlogin($get, $post)
     {
         $uid = intval($get['uid']);
         $username = $get['username'];
-        if(!API_SYNLOGIN)
-        {
+        if (!API_SYNLOGIN) {
             return API_RETURN_FORBIDDEN;
         }
         header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
         set_login($uid, $username);
     }
 
-    function synlogout($get, $post)
+    public function synlogout($get, $post)
     {
-        if(!API_SYNLOGOUT)
-        {
+        if (!API_SYNLOGOUT) {
             return API_RETURN_FORBIDDEN;
         }
 
@@ -161,10 +147,9 @@ class uc_note
         set_session();
     }
 
-    function updatepw($get, $post)
+    public function updatepw($get, $post)
     {
-        if(!API_UPDATEPW)
-        {
+        if (!API_UPDATEPW) {
             return API_RETURN_FORBIDDEN;
         }
         $username = $get['username'];
@@ -174,47 +159,44 @@ class uc_note
         return API_RETURN_SUCCEED;
     }
 
-    function updatebadwords($get, $post)
+    public function updatebadwords($get, $post)
     {
-        if(!API_UPDATEBADWORDS)
-        {
+        if (!API_UPDATEBADWORDS) {
             return API_RETURN_FORBIDDEN;
         }
         $cachefile = $this->appdir.'./uc_client/data/cache/badwords.php';
         $fp = fopen($cachefile, 'w');
         $data = array();
-        if(is_array($post)) {
-            foreach($post as $k => $v) {
+        if (is_array($post)) {
+            foreach ($post as $k => $v) {
                 $data['findpattern'][$k] = $v['findpattern'];
                 $data['replace'][$k] = $v['replacement'];
             }
         }
         $s = "<?php\r\n";
-        $s .= '$_CACHE[\'badwords\'] = '.var_export($data, TRUE).";\r\n";
+        $s .= '$_CACHE[\'badwords\'] = '.var_export($data, true).";\r\n";
         fwrite($fp, $s);
         fclose($fp);
         return API_RETURN_SUCCEED;
     }
 
-    function updatehosts($get, $post)
+    public function updatehosts($get, $post)
     {
-        if(!API_UPDATEHOSTS)
-        {
+        if (!API_UPDATEHOSTS) {
             return API_RETURN_FORBIDDEN;
         }
         $cachefile = $this->appdir . './uc_client/data/cache/hosts.php';
         $fp = fopen($cachefile, 'w');
         $s = "<?php\r\n";
-        $s .= '$_CACHE[\'hosts\'] = '.var_export($post, TRUE).";\r\n";
+        $s .= '$_CACHE[\'hosts\'] = '.var_export($post, true).";\r\n";
         fwrite($fp, $s);
         fclose($fp);
         return API_RETURN_SUCCEED;
     }
 
-    function updateapps($get, $post)
+    public function updateapps($get, $post)
     {
-        if(!API_UPDATEAPPS)
-        {
+        if (!API_UPDATEAPPS) {
             return API_RETURN_FORBIDDEN;
         }
         $UC_API = $post['UC_API'];
@@ -222,32 +204,30 @@ class uc_note
         $cachefile = $this->appdir . './uc_client/data/cache/apps.php';
         $fp = fopen($cachefile, 'w');
         $s = "<?php\r\n";
-        $s .= '$_CACHE[\'apps\'] = '.var_export($post, TRUE).";\r\n";
+        $s .= '$_CACHE[\'apps\'] = '.var_export($post, true).";\r\n";
         fwrite($fp, $s);
         fclose($fp);
         #clear_cache_files();
         return API_RETURN_SUCCEED;
     }
 
-    function updateclient($get, $post)
+    public function updateclient($get, $post)
     {
-        if(!API_UPDATECLIENT)
-        {
+        if (!API_UPDATECLIENT) {
             return API_RETURN_FORBIDDEN;
         }
         $cachefile = $this->appdir . './uc_client/data/cache/settings.php';
         $fp = fopen($cachefile, 'w');
         $s = "<?php\r\n";
-        $s .= '$_CACHE[\'settings\'] = '.var_export($post, TRUE).";\r\n";
+        $s .= '$_CACHE[\'settings\'] = '.var_export($post, true).";\r\n";
         fwrite($fp, $s);
         fclose($fp);
         return API_RETURN_SUCCEED;
     }
 
-    function updatecredit($get, $post)
+    public function updatecredit($get, $post)
     {
-        if(!API_UPDATECREDIT)
-        {
+        if (!API_UPDATECREDIT) {
             return API_RETURN_FORBIDDEN;
         }
         $cfg = unserialize($GLOBALS['_CFG']['integrate_config']);
@@ -257,8 +237,7 @@ class uc_note
         $points = array(0 => 'rank_points', 1 => 'pay_points');
         $sql = "UPDATE " . $GLOBALS['ecs']-> table('users') . " SET {$points[$credit]} = {$points[$credit]} + '$amount' WHERE user_id = $uid";
         $this->db->query($sql);
-        if ($this->db->affected_rows() <= 0)
-        {
+        if ($this->db->affected_rows() <= 0) {
             return API_RETURN_FAILED;
         }
         $sql = "INSERT INTO " . $GLOBALS['ecs']->table('account_log') . "(user_id, {$points[$credit]}, change_time, change_desc, change_type)" .
@@ -267,10 +246,9 @@ class uc_note
         return API_RETURN_SUCCEED;
     }
 
-    function getcredit($get, $post)
+    public function getcredit($get, $post)
     {
-        if(!API_GETCREDIT)
-        {
+        if (!API_GETCREDIT) {
             return API_RETURN_FORBIDDEN;
         }
 
@@ -279,10 +257,9 @@ class uc_note
         return $credit >= 1 && $credit <= 8 ? $this->db->result_first("SELECT extcredits$credit FROM ".$this->tablepre."members WHERE uid='$uid'") : 0;*/
     }
 
-    function getcreditsettings($get, $post)
+    public function getcreditsettings($get, $post)
     {
-        if(!API_GETCREDITSETTINGS)
-        {
+        if (!API_GETCREDITSETTINGS) {
             return API_RETURN_FORBIDDEN;
         }
         $cfg = unserialize($GLOBALS['_CFG']['integrate_config']);
@@ -291,22 +268,17 @@ class uc_note
         return uc_serialize($credits);
     }
 
-    function updatecreditsettings($get, $post)
+    public function updatecreditsettings($get, $post)
     {
-        if(!API_UPDATECREDITSETTINGS)
-        {
+        if (!API_UPDATECREDITSETTINGS) {
             return API_RETURN_FORBIDDEN;
         }
 
         $outextcredits = array();
-        foreach($get['credit'] as $appid => $credititems)
-        {
-            if($appid == UC_APPID)
-            {
-                foreach($credititems as $value)
-                {
-                    $outextcredits[] = array
-                    (
+        foreach ($get['credit'] as $appid => $credititems) {
+            if ($appid == UC_APPID) {
+                foreach ($credititems as $value) {
+                    $outextcredits[] = array(
                         'appiddesc' => $value['appiddesc'],
                         'creditdesc' => $value['creditdesc'],
                         'creditsrc' => $value['creditsrc'],
@@ -331,12 +303,9 @@ class uc_note
  */
 function delete_user($uids = '')
 {
-    if (empty($uids))
-    {
+    if (empty($uids)) {
         return;
-    }
-    else
-    {
+    } else {
         $uids = stripslashes($uids);
         $sql = "DELETE FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id IN ($uids)";
         $result = $GLOBALS['db']->query($sql);
@@ -353,33 +322,24 @@ function delete_user($uids = '')
  */
 function set_login($user_id = '', $user_name = '')
 {
-    if (empty($user_id))
-    {
+    if (empty($user_id)) {
         return ;
-    }
-    else
-    {
+    } else {
         $sql = "SELECT user_name, email FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id='$user_id' LIMIT 1";
         $row = $GLOBALS['db']->getRow($sql);
-        if ($row)
-        {
+        if ($row) {
             set_cookie($user_id, $row['user_name'], $row['email']);
             set_session($user_id, $row['user_name'], $row['email']);
             include_once(ROOT_PATH . 'includes/lib_main.php');
             update_user_info();
-        }
-        else
-        {
+        } else {
             include_once(ROOT_PATH . 'uc_client/client.php');
-            if($data = uc_get_user($user_name))
-            {
+            if ($data = uc_get_user($user_name)) {
                 list($uid, $uname, $email) = $data;
                 $sql = "REPLACE INTO " . $GLOBALS['ecs']->table('users') ."(user_id, user_name, email) VALUES('$uid', '$uname', '$email')";
                 $GLOBALS['db']->query($sql);
                 set_login($uid);
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }
@@ -395,21 +355,18 @@ function set_login($user_id = '', $user_name = '')
  */
 function set_cookie($user_id='', $user_name = '', $email = '')
 {
-    if (empty($user_id))
-    {
+    if (empty($user_id)) {
         /* 摧毁cookie */
         $time = time() - 3600;
-        setcookie('ECS[user_id]',  '', $time);
+        setcookie('ECS[user_id]', '', $time);
         setcookie('ECS[username]', '', $time);
-        setcookie('ECS[email]',    '', $time);
-    }
-    else
-    {
+        setcookie('ECS[email]', '', $time);
+    } else {
         /* 设置cookie */
         $time = time() + 3600 * 24 * 30;
-        setcookie("ECS[user_id]",  $user_id,   $time, $GLOBALS['cookie_path'], $GLOBALS['cookie_domain']);
+        setcookie("ECS[user_id]", $user_id, $time, $GLOBALS['cookie_path'], $GLOBALS['cookie_domain']);
         setcookie("ECS[username]", $user_name, $time, $GLOBALS['cookie_path'], $GLOBALS['cookie_domain']);
-        setcookie("ECS[email]",    $email,     $time, $GLOBALS['cookie_path'], $GLOBALS['cookie_domain']);
+        setcookie("ECS[email]", $email, $time, $GLOBALS['cookie_path'], $GLOBALS['cookie_domain']);
     }
 }
 
@@ -420,14 +377,11 @@ function set_cookie($user_id='', $user_name = '', $email = '')
  * @param
  * @return void
  */
-function set_session ($user_id = '', $user_name = '', $email = '')
+function set_session($user_id = '', $user_name = '', $email = '')
 {
-    if (empty($user_id))
-    {
+    if (empty($user_id)) {
         $GLOBALS['sess']->destroy_session();
-    }
-    else
-    {
+    } else {
         $_SESSION['user_id']   = $user_id;
         $_SESSION['user_name'] = $user_name;
         $_SESSION['email']     = $email;
@@ -449,8 +403,7 @@ function fetch_tag($tagname, $num=100)
     $GLOBALS['ecs']->table('goods') ." as g WHERE tag_words = '$tagname' AND t.user_id = u.user_id AND g.goods_id = t.goods_id ORDER BY t.tag_id DESC LIMIT " . $num;
     $arr = $GLOBALS['db']->getAll($sql);
     $tag_list = array();
-    foreach ($arr as $k=>$v)
-    {
+    foreach ($arr as $k=>$v) {
         $tag_list[$k]['goods_name']  = $v['goods_name'];
         $tag_list[$k]['uid']         = $v['user_id'];
         $tag_list[$k]['username']    = $v['user_name'];
@@ -474,9 +427,14 @@ function fetch_tag($tagname, $num=100)
 function _setcookie($var, $value, $life = 0, $prefix = 1)
 {
     global $cookiepre, $cookiedomain, $cookiepath, $timestamp, $_SERVER;
-    setcookie(($prefix ? $cookiepre : '').$var, $value,
-        $life ? $timestamp + $life : 0, $cookiepath,
-        $cookiedomain, $_SERVER['SERVER_PORT'] == 443 ? 1 : 0);
+    setcookie(
+        ($prefix ? $cookiepre : '').$var,
+        $value,
+        $life ? $timestamp + $life : 0,
+        $cookiepath,
+        $cookiedomain,
+        $_SERVER['SERVER_PORT'] == 443 ? 1 : 0
+    );
 }
 
 /**
@@ -504,21 +462,18 @@ function _authcode($string, $operation = 'DECODE', $key = '', $expiry = 0)
     $box = range(0, 255);
 
     $rndkey = array();
-    for($i = 0; $i <= 255; $i++)
-    {
+    for ($i = 0; $i <= 255; $i++) {
         $rndkey[$i] = ord($cryptkey[$i % $key_length]);
     }
 
-    for($j = $i = 0; $i < 256; $i++)
-    {
+    for ($j = $i = 0; $i < 256; $i++) {
         $j = ($j + $box[$i] + $rndkey[$i]) % 256;
         $tmp = $box[$i];
         $box[$i] = $box[$j];
         $box[$j] = $tmp;
     }
 
-    for($a = $j = $i = 0; $i < $string_length; $i++)
-    {
+    for ($a = $j = $i = 0; $i < $string_length; $i++) {
         $a = ($a + 1) % 256;
         $j = ($j + $box[$a]) % 256;
         $tmp = $box[$a];
@@ -527,19 +482,13 @@ function _authcode($string, $operation = 'DECODE', $key = '', $expiry = 0)
         $result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256]));
     }
 
-    if($operation == 'DECODE')
-    {
-        if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26).$keyb), 0, 16))
-        {
+    if ($operation == 'DECODE') {
+        if ((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26).$keyb), 0, 16)) {
             return substr($result, 26);
-        }
-        else
-        {
+        } else {
             return '';
         }
-    }
-    else
-    {
+    } else {
         return $keyc.str_replace('=', '', base64_encode($result));
     }
 }
@@ -554,18 +503,12 @@ function _authcode($string, $operation = 'DECODE', $key = '', $expiry = 0)
  */
 function _stripslashes($string)
 {
-    if(is_array($string))
-    {
-        foreach($string as $key => $val)
-        {
+    if (is_array($string)) {
+        foreach ($string as $key => $val) {
             $string[$key] = _stripslashes($val);
         }
-    }
-    else
-    {
+    } else {
         $string = stripslashes($string);
     }
     return $string;
 }
-
-?>

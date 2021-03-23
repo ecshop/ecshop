@@ -12,25 +12,17 @@ $consignee = !empty($_REQUEST['con']) ? rawurldecode(trim($_REQUEST['con'])) : '
 $sql   = 'SELECT * FROM ' . $ecs->table('order_info') . " WHERE order_id = '$order_id'";
 $order = $db->getRow($sql);
 
-if (empty($order))
-{
+if (empty($order)) {
     $msg = $_LANG['order_not_exists'];
 }
 /* 检查订单 */
-elseif ($order['shipping_status'] == SS_RECEIVED)
-{
+elseif ($order['shipping_status'] == SS_RECEIVED) {
     $msg = $_LANG['order_already_received'];
-}
-elseif ($order['shipping_status'] != SS_SHIPPED)
-{
+} elseif ($order['shipping_status'] != SS_SHIPPED) {
     $msg = $_LANG['order_invalid'];
-}
-elseif ($order['consignee'] != $consignee)
-{
+} elseif ($order['consignee'] != $consignee) {
     $msg = $_LANG['order_invalid'];
-}
-else
-{
+} else {
     /* 修改订单发货状态为“确认收货” */
     $sql = "UPDATE " . $ecs->table('order_info') . " SET shipping_status = '" . SS_RECEIVED . "' WHERE order_id = '$order_id'";
     $db->query($sql);
@@ -45,14 +37,12 @@ else
 assign_template();
 $position = assign_ur_here();
 $smarty->assign('page_title', $position['title']);    // 页面标题
-$smarty->assign('ur_here',    $position['ur_here']);  // 当前位置
+$smarty->assign('ur_here', $position['ur_here']);  // 当前位置
 
 $smarty->assign('categories', get_categories_tree()); // 分类树
-$smarty->assign('helps',      get_shop_help());       // 网店帮助
+$smarty->assign('helps', get_shop_help());       // 网店帮助
 
 assign_dynamic('receive');
 
 $smarty->assign('msg', $msg);
 $smarty->display('receive.dwt');
-
-?>

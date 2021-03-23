@@ -22,10 +22,8 @@ $uri = $ecs->url();
 $rss = new RSSBuilder(EC_CHARSET, $uri, htmlspecialchars($_CFG['shop_name']), htmlspecialchars($_CFG['shop_desc']), $uri . 'favicon.ico');
 $rss->addDCdata('', 'http://www.ecshop.com', date('r'));
 
-if (isset($_REQUEST['type']))
-{
-    if($_REQUEST['type'] == 'group_buy')
-    {
+if (isset($_REQUEST['type'])) {
+    if ($_REQUEST['type'] == 'group_buy') {
         $now = gmtime();
         $sql = 'SELECT act_id, act_name, act_desc, start_time ' .
         "FROM " . $GLOBALS['ecs']->table('goods_activity') .
@@ -33,10 +31,8 @@ if (isset($_REQUEST['type']))
             "AND start_time <= '$now' AND is_finished < 3 ORDER BY start_time DESC";
         $res = $db->query($sql);
 
-        if ($res !== false)
-        {
-            while ($row = $db->fetchRow($res))
-            {
+        if ($res !== false) {
+            while ($row = $db->fetchRow($res)) {
                 $item_url = build_uri('group_buy', array('gbid' => $row['act_id']), $row['act_name']);
                 $separator = (strpos($item_url, '?') === false)? '?' : '&amp;';
                 $about    = $uri . $item_url;
@@ -51,9 +47,7 @@ if (isset($_REQUEST['type']))
 
             $rss->outputRSS($ver);
         }
-    }
-    elseif($_REQUEST['type'] == 'snatch')
-    {
+    } elseif ($_REQUEST['type'] == 'snatch') {
         $now = gmtime();
         $sql = 'SELECT act_id, act_name, act_desc, start_time ' .
         "FROM " . $GLOBALS['ecs']->table('goods_activity') .
@@ -61,10 +55,8 @@ if (isset($_REQUEST['type']))
             "AND start_time <= '$now' AND is_finished < 3 ORDER BY start_time DESC";
         $res = $db->query($sql);
 
-        if ($res !== false)
-        {
-            while ($row = $db->fetchRow($res))
-            {
+        if ($res !== false) {
+            while ($row = $db->fetchRow($res)) {
                 $item_url = build_uri('snatch', array('sid' => $row['act_id']), $row['act_name']);
                 $separator = (strpos($item_url, '?') === false)? '?' : '&amp;';
                 $about    = $uri . $item_url;
@@ -79,9 +71,7 @@ if (isset($_REQUEST['type']))
 
             $rss->outputRSS($ver);
         }
-    }
-    elseif($_REQUEST['type'] == 'auction')
-    {
+    } elseif ($_REQUEST['type'] == 'auction') {
         $now = gmtime();
         $sql = 'SELECT act_id, act_name, act_desc, start_time ' .
         "FROM " . $GLOBALS['ecs']->table('goods_activity') .
@@ -89,10 +79,8 @@ if (isset($_REQUEST['type']))
             "AND start_time <= '$now' AND is_finished < 3 ORDER BY start_time DESC";
         $res = $db->query($sql);
 
-        if ($res !== false)
-        {
-            while ($row = $db->fetchRow($res))
-            {
+        if ($res !== false) {
+            while ($row = $db->fetchRow($res)) {
                 $item_url = build_uri('auction', array('auid' => $row['act_id']), $row['act_name']);
                 $separator = (strpos($item_url, '?') === false)? '?' : '&amp;';
                 $about    = $uri . $item_url;
@@ -107,19 +95,15 @@ if (isset($_REQUEST['type']))
 
             $rss->outputRSS($ver);
         }
-    }
-    elseif($_REQUEST['type'] == 'exchange')
-    {
+    } elseif ($_REQUEST['type'] == 'exchange') {
         $sql = 'SELECT g.goods_id, g.goods_name, g.goods_brief, g.last_update ' .
         "FROM " . $GLOBALS['ecs']->table('exchange_goods') . " AS eg, " .
         $GLOBALS['ecs']->table('goods') . " AS g " .
         "WHERE eg.goods_id = g.goods_id";
         $res = $db->query($sql);
 
-        if ($res !== false)
-        {
-            while ($row = $db->fetchRow($res))
-            {
+        if ($res !== false) {
+            while ($row = $db->fetchRow($res)) {
                 $item_url = build_uri('exchange_goods', array('gid' => $row['goods_id']), $row['goods_name']);
                 $separator = (strpos($item_url, '?') === false)? '?' : '&amp;';
                 $about    = $uri . $item_url;
@@ -134,19 +118,15 @@ if (isset($_REQUEST['type']))
 
             $rss->outputRSS($ver);
         }
-    }
-    elseif($_REQUEST['type'] == 'activity')
-    {
+    } elseif ($_REQUEST['type'] == 'activity') {
         $now = gmtime();
         $sql = 'SELECT act_id, act_name, start_time ' .
         "FROM " . $GLOBALS['ecs']->table('favourable_activity') .
         " WHERE start_time <= '$now' AND end_time >= '$now'";
         $res = $db->query($sql);
 
-        if ($res !== false)
-        {
-            while ($row = $db->fetchRow($res))
-            {
+        if ($res !== false) {
+            while ($row = $db->fetchRow($res)) {
                 $item_url = 'activity.php';
                 $separator = (strpos($item_url, '?') === false)? '?' : '&amp;';
                 $about    = $uri . $item_url;
@@ -161,9 +141,7 @@ if (isset($_REQUEST['type']))
 
             $rss->outputRSS($ver);
         }
-    }
-    elseif($_REQUEST['type'] == 'package')
-    {
+    } elseif ($_REQUEST['type'] == 'package') {
         $now = gmtime();
         $sql = 'SELECT act_id, act_name, act_desc, start_time ' .
         "FROM " . $GLOBALS['ecs']->table('goods_activity') .
@@ -171,10 +149,8 @@ if (isset($_REQUEST['type']))
             "AND start_time <= '$now' AND is_finished < 3 ORDER BY start_time DESC";
         $res = $db->query($sql);
 
-        if ($res !== false)
-        {
-            while ($row = $db->fetchRow($res))
-            {
+        if ($res !== false) {
+            while ($row = $db->fetchRow($res)) {
                 $item_url = 'package.php';
                 $separator = (strpos($item_url, '?') === false)? '?' : '&amp;';
                 $about    = $uri . $item_url;
@@ -189,19 +165,15 @@ if (isset($_REQUEST['type']))
 
             $rss->outputRSS($ver);
         }
-    }
-    elseif(substr($_REQUEST['type'], 0, 11) == 'article_cat')
-    {
+    } elseif (substr($_REQUEST['type'], 0, 11) == 'article_cat') {
         $sql = 'SELECT article_id, title, author, add_time' .
                ' FROM ' .$GLOBALS['ecs']->table('article') .
                ' WHERE is_open = 1 AND ' . get_article_children(substr($_REQUEST['type'], 11)) .
                ' ORDER BY add_time DESC LIMIT ' . $_CFG['article_page_size'];
         $res = $db->query($sql);
 
-        if ($res !== false)
-        {
-            while ($row = $db->fetchRow($res))
-            {
+        if ($res !== false) {
+            while ($row = $db->fetchRow($res)) {
                 $item_url = build_uri('article', array('aid' => $row['article_id']), $row['title']);
                 $separator = (strpos($item_url, '?') === false)? '?' : '&amp;';
                 $about    = $uri . $item_url;
@@ -217,9 +189,7 @@ if (isset($_REQUEST['type']))
             $rss->outputRSS($ver);
         }
     }
-}
-else
-{
+} else {
     $in_cat = $cat > 0 ? ' AND ' . get_children($cat) : '';
 
     $sql = 'SELECT c.cat_name, g.goods_id, g.goods_name, g.goods_brief, g.last_update ' .
@@ -228,10 +198,8 @@ else
             'ORDER BY g.last_update DESC';
     $res = $db->query($sql);
 
-    if ($res !== false)
-    {
-        while ($row = $db->fetchRow($res))
-        {
+    if ($res !== false) {
+        while ($row = $db->fetchRow($res)) {
             $item_url = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
             $separator = (strpos($item_url, '?') === false)? '?' : '&amp;';
             $about    = $uri . $item_url;
@@ -247,5 +215,3 @@ else
         $rss->outputRSS($ver);
     }
 }
-
-?>

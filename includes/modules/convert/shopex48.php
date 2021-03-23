@@ -1,15 +1,13 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
 /**
  * 模块信息
  */
-if (isset($set_modules) && $set_modules == TRUE)
-{
+if (isset($set_modules) && $set_modules == true) {
     $i = isset($modules) ? count($modules) : 0;
 
     /* 代码 */
@@ -28,28 +26,28 @@ if (isset($set_modules) && $set_modules == TRUE)
 class shopex48
 {
     /* 数据库连接 ADOConnection 对象 */
-    var $sdb;
+    public $sdb;
 
     /* 表前缀 */
-    var $sprefix;
+    public $sprefix;
 
     /* 原系统根目录 */
-    var $sroot;
+    public $sroot;
 
     /* 新系统根目录 */
-    var $troot;
+    public $troot;
 
     /* 新系统网站根目录 */
-    var $tdocroot;
+    public $tdocroot;
 
     /* 原系统字符集 */
-    var $scharset;
+    public $scharset;
 
     /* 新系统字符集 */
-    var $tcharset;
+    public $tcharset;
 
     /* 构造函数 */
-    function shopex48(&$sdb, $sprefix, $sroot, $scharset = 'UTF8')
+    public function shopex48(&$sdb, $sprefix, $sroot, $scharset = 'UTF8')
     {
         $this->sdb = $sdb;
         $this->sprefix = $sprefix;
@@ -57,12 +55,9 @@ class shopex48
         $this->troot = str_replace('/includes/modules/convert', '', str_replace('\\', '/', dirname(__FILE__)));
         $this->tdocroot = str_replace('/' . ADMIN_PATH, '', dirname(PHP_SELF));
         $this->scharset = $scharset;
-        if (EC_CHARSET == 'utf-8')
-        {
+        if (EC_CHARSET == 'utf-8') {
             $tcharset = 'UTF8';
-        }
-        elseif (EC_CHARSET == 'gbk')
-        {
+        } elseif (EC_CHARSET == 'gbk') {
             $tcharset = 'GB2312';
         }
         $this->tcharset = $tcharset;
@@ -72,9 +67,9 @@ class shopex48
      * 需要转换的表（用于检查数据库是否完整）
      * @return  array
      */
-    function required_tables()
+    public function required_tables()
     {
-           return array(
+        return array(
          $this->sprefix.'goods',
        );
     }
@@ -83,7 +78,7 @@ class shopex48
      * 必需的目录
      * @return  array
      */
-    function required_dirs()
+    public function required_dirs()
     {
         return array(
             '/images/goods/',
@@ -97,7 +92,7 @@ class shopex48
      * @param   string  $step  当前操作：空表示开始
      * @return  string
      */
-    function next_step($step)
+    public function next_step($step)
     {
         /* 所有操作 */
         $steps = array(
@@ -119,7 +114,7 @@ class shopex48
      * 执行某个步骤
      * @param   string  $step
      */
-    function process($step)
+    public function process($step)
     {
         $func = str_replace('step', 'process', $step);
         return $this->$func();
@@ -129,7 +124,7 @@ class shopex48
      * 复制文件
      * @return  成功返回true，失败返回错误信息
      */
-    function process_file()
+    public function process_file()
     {
         /* 复制品牌图片 */
         $from = $this->sroot . '/images/brand/';
@@ -147,14 +142,14 @@ class shopex48
         $to   = $this->troot . '/data/afficheimg/';
         copy_dirs($from, $to);
 
-        return TRUE;
+        return true;
     }
 
-     /**
-     * 商品分类
-     * @return  成功返回true，失败返回错误信息
-     */
-    function process_cat()
+    /**
+    * 商品分类
+    * @return  成功返回true，失败返回错误信息
+    */
+    public function process_cat()
     {
         global $db, $ecs;
 
@@ -166,8 +161,7 @@ class shopex48
         /* 查询分类并循环处理 */
         $sql = "SELECT * FROM ".$this->sprefix."goods_cat";
         $res = $this->sdb->query($sql);
-        while ($row = $this->sdb->fetchRow($res))
-        {
+        while ($row = $this->sdb->fetchRow($res)) {
             $cat = array();
             $cat['cat_id']      = $row['cat_id'];
             $cat['cat_name']    = $row['cat_name'];
@@ -175,8 +169,7 @@ class shopex48
             $cat['sort_order']  = $row['p_order'];
 
             /* 插入分类 */
-            if (!$db->autoExecute($ecs->table('category'), $cat, 'INSERT', '', 'SILENT'))
-            {
+            if (!$db->autoExecute($ecs->table('category'), $cat, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
         }
@@ -184,14 +177,12 @@ class shopex48
         /* 查询商品类型并循环处理 */
         $sql = "SELECT * FROM ".$this->sprefix."goods_type";
         $res = $this->sdb->query($sql);
-        while ($row = $this->sdb->fetchRow($res))
-        {
+        while ($row = $this->sdb->fetchRow($res)) {
             $type = array();
             $type['cat_id']     = $row['prop_cat_id'];
             $type['cat_name']   = $row['name'];
             $type['enabled']    = '1';
-            if (!$db->autoExecute($ecs->table('goods_type'), $type, 'INSERT', '', 'SILENT'))
-            {
+            if (!$db->autoExecute($ecs->table('goods_type'), $type, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
         }
@@ -207,7 +198,7 @@ class shopex48
      * 品牌
      * @return  成功返回true，失败返回错误信息
      */
-    function process_brand()
+    public function process_brand()
     {
         global $db, $ecs;
 
@@ -217,15 +208,13 @@ class shopex48
         /* 查询品牌并插入 */
         $sql = "SELECT * FROM ".$this->sprefix."brand";
         $res = $this->sdb->query($sql);
-        while ($row = $this->sdb->fetchRow($res))
-        {
+        while ($row = $this->sdb->fetchRow($res)) {
             $brand_logo = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['brand_logo']));
-            $logoarr = explode('|',$brand_logo);
-            if(strpos($logoarr[0],'http') === 0){
+            $logoarr = explode('|', $brand_logo);
+            if (strpos($logoarr[0], 'http') === 0) {
                 $brand_url = $logoarr[0];
-
-            }else{
-                $logourl = explode('/',$logoarr[0],3);
+            } else {
+                $logourl = explode('/', $logoarr[0], 3);
                 $brand_url = $logourl[2];
             }
 
@@ -235,21 +224,20 @@ class shopex48
                 'site_url' => ecs_iconv($this->scharset, $this->tcharset, addslashes($row['brand_url'])),
                 'brand_logo' => $brand_url
             );
-            if (!$db->autoExecute($ecs->table('brand'), $brand, 'INSERT', '', 'SILENT'))
-            {
+            if (!$db->autoExecute($ecs->table('brand'), $brand, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
         }
 
         /* 返回成功 */
-        return TRUE;
+        return true;
     }
 
     /**
      * 商品
      * @return  成功返回true，失败返回错误信息
      */
-    function process_goods()
+    public function process_goods()
     {
         global $db, $ecs;
 
@@ -266,8 +254,7 @@ class shopex48
         $brand_list = array();
         $sql = "SELECT brand_id, brand_name FROM " . $ecs->table('brand');
         $res = $db->query($sql);
-        while ($row = $db->fetchRow($res))
-        {
+        while ($row = $db->fetchRow($res)) {
             $brand_list[$row['brand_name']] = $row['brand_id'];
         }
 
@@ -278,16 +265,14 @@ class shopex48
         $cat_type_list = array();
         $sql = "SELECT cat_id, supplier_cat_id FROM ".$this->sprefix."goods_cat";
         $res = $this->sdb->query($sql);
-        while ($row = $this->sdb->fetchRow($res))
-        {
+        while ($row = $this->sdb->fetchRow($res)) {
             $cat_type_list[$row['cat_id']] = $row['supplier_cat_id'];
         }
 
         /* 查询商品并处理 */
         $sql = "SELECT * FROM ".$this->sprefix."goods";
         $res = $this->sdb->query($sql);
-        while ($row = $this->sdb->fetchRow($res))
-        {
+        while ($row = $this->sdb->fetchRow($res)) {
             $goods = array();
 
 
@@ -314,52 +299,48 @@ class shopex48
             //$goods['is_promote']    = $row['tejia2'];
             //$goods['goods_type']    = isset($cat_type_list[$row['cat_id']]) ? $cat_type_list[$row['cat_id']] : 0;
             $big_pic = $row['big_pic'];
-            $big_pic_arr = explode('|',$big_pic);
+            $big_pic_arr = explode('|', $big_pic);
             $small_pic = $row['small_pic'];
-            $small_pic_arr = explode('|',$small_pic);
+            $small_pic_arr = explode('|', $small_pic);
             $goods['goods_img']     = $small_pic_arr[0];
             $goods['goods_thumb']   = $small_pic_arr[0];
             $goods['original_img']  = $small_pic_arr[0];
             $goods['last_update'] = gmtime();
 
             /* 插入 */
-            if (!$db->autoExecute($ecs->table('goods'), $goods, 'INSERT', '', 'SILENT'))
-            {
+            if (!$db->autoExecute($ecs->table('goods'), $goods, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
 
             /* 商品相册 */
             $sql2 = "SELECT * FROM ".$this->sprefix."gimages";
             $result = $this->sdb->query($sql2);
-            while ($row2 = $this->sdb->fetchRow($result))
-            {
+            while ($row2 = $this->sdb->fetchRow($result)) {
                 $goods_gallery = array();
                 $goods_gallery['goods_id'] = $row2['goods_id'];
                 $big_pic = $row2['big'];
-                $big_pic_arr = explode('|',$big_pic);
+                $big_pic_arr = explode('|', $big_pic);
                 $goods_gallery['img_original']     = $big_pic_arr[0];
                 $small_pic = $row2['small'];
-                $small_pic_arr = explode('|',$small_pic);
+                $small_pic_arr = explode('|', $small_pic);
                 $goods_gallery['thumb_url']   = $small_pic_arr[0];
                 $goods_gallery['img_url'] = $goods_gallery['thumb_url'];
                 //$goods['original_img']  = $big_pic;
 
-                 if (!$db->autoExecute($ecs->table('goods_gallery'), $goods_gallery, 'INSERT', '', 'SILENT'))
-                 {
-                        //return $db->error();
-                 }
+                if (!$db->autoExecute($ecs->table('goods_gallery'), $goods_gallery, 'INSERT', '', 'SILENT')) {
+                    //return $db->error();
+                }
             }
-
         }
 
         /* 返回成功 */
-        return TRUE;
+        return true;
     }
 
     /**
      * 会员等级、会员、会员价格
      */
-    function process_users()
+    public function process_users()
     {
         global $db, $ecs;
 
@@ -375,8 +356,7 @@ class shopex48
         $sql = "SELECT * FROM ".$this->sprefix."member_lv order by point desc";
         $res = $this->sdb->query($sql);
         $max_points = 50000;
-        while ($row = $this->sdb->fetchRow($res))
-        {
+        while ($row = $this->sdb->fetchRow($res)) {
             $user_rank = array();
             $user_rank['rank_id']       = $row['member'];
             $user_rank['rank_name']     = $row['name'];
@@ -386,8 +366,7 @@ class shopex48
             $user_rank['show_price']    = '1';
             $user_rank['special_rank']  = '0';
 
-            if (!$db->autoExecute($ecs->table('user_rank'), $user_rank, 'INSERT', '', 'SILENT'))
-            {
+            if (!$db->autoExecute($ecs->table('user_rank'), $user_rank, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
 
@@ -397,8 +376,7 @@ class shopex48
         /* 查询并插入会员 */
         $sql = "SELECT * FROM ".$this->sprefix."members";
         $res = $this->sdb->query($sql);
-        while ($row = $this->sdb->fetchRow($res))
-        {
+        while ($row = $this->sdb->fetchRow($res)) {
             $user = array();
             $user['user_id']        = $row['member_id'];
             $user['email']          = $row['email'];
@@ -407,11 +385,9 @@ class shopex48
             $user['question']       = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['pw_question']));
             $user['answer']         = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['pw_answer']));
             $user['sex']            = $row['sex'];
-            if (!empty($row['birthday']))
-            {
+            if (!empty($row['birthday'])) {
                 $birthday           = strtotime($row['birthday']);
-                if ($birthday != -1 && $birthday !== false)
-                {
+                if ($birthday != -1 && $birthday !== false) {
                     $user['birthday']   = date('Y-m-d', $birthday);
                 }
             }
@@ -424,8 +400,7 @@ class shopex48
             $user['visit_count']    = '1';
             $user['user_rank']      = '0';
 
-            if (!$db->autoExecute($ecs->table('users'), $user, 'INSERT', '', 'SILENT'))
-            {
+            if (!$db->autoExecute($ecs->table('users'), $user, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
             //uc_call('uc_user_register', array($user['user_name'], $user['password'], $user['email']));
@@ -434,8 +409,7 @@ class shopex48
         /* 收货人地址 */
         $sql = "SELECT * FROM ".$this->sprefix."member_addrs";
         $res = $this->sdb->query($sql);
-        while ($row = $this->sdb->fetchRow($res))
-        {
+        while ($row = $this->sdb->fetchRow($res)) {
             $address = array();
             $address['address_id']      = $row['addr_id'];
             $address['address_name']    = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['name']));
@@ -450,8 +424,7 @@ class shopex48
             $address['province']        = $row['province'];
             $address['city']            = $row['city'];
 
-            if (!$db->autoExecute($ecs->table('user_address'), $address, 'INSERT', '', 'SILENT'))
-            {
+            if (!$db->autoExecute($ecs->table('user_address'), $address, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
         }
@@ -460,10 +433,8 @@ class shopex48
         $temp_arr = array();
         $sql = "SELECT * FROM ".$this->sprefix."goods_lv_price";
         $res = $this->sdb->query($sql);
-        while ($row = $this->sdb->fetchRow($res))
-        {
-            if ($row['goods_id'] > 0 && $row['level_id'] > 0 && !isset($temp_arr[$row['goods_id']][$row['level_id']]))
-            {
+        while ($row = $this->sdb->fetchRow($res)) {
+            if ($row['goods_id'] > 0 && $row['level_id'] > 0 && !isset($temp_arr[$row['goods_id']][$row['level_id']])) {
                 $temp_arr[$row['goods_id']][$row['level_id']] = true;
 
                 $member_price = array();
@@ -471,8 +442,7 @@ class shopex48
                 $member_price['user_rank']  = $row['level_id'];
                 $member_price['user_price'] = $row['price'];
 
-                if (!$db->autoExecute($ecs->table('member_price'), $member_price, 'INSERT', '', 'SILENT'))
-                {
+                if (!$db->autoExecute($ecs->table('member_price'), $member_price, 'INSERT', '', 'SILENT')) {
                     //return $db->error();
                 }
             }
@@ -482,8 +452,7 @@ class shopex48
         /* 帐户明细 */
         $sql = "SELECT * FROM ".$this->sprefix."advance_logs";
         $res = $this->sdb->query($sql);
-        while ($row = $this->sdb->fetchRow($res))
-        {
+        while ($row = $this->sdb->fetchRow($res)) {
             $user_account = array();
             $user_account['user_id']        = $row['member_id'];
             $user_account['admin_user']     = $row['memo'];
@@ -495,19 +464,18 @@ class shopex48
             $user_account['process_type']   = $row['money'] >= 0 ? SURPLUS_SAVE : SURPLUS_RETURN;
             $user_account['is_paid']        = '1';
 
-            if (!$db->autoExecute($ecs->table('user_account'), $user_account, 'INSERT', '', 'SILENT'))
-            {
+            if (!$db->autoExecute($ecs->table('user_account'), $user_account, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
         }
         /* 返回 */
-        return TRUE;
+        return true;
     }
 
     /**
      * 文章
      */
-    function process_article()
+    public function process_article()
     {
         global $db, $ecs;
 
@@ -519,8 +487,7 @@ class shopex48
         /* 文章 */
         $sql = "SELECT * FROM ".$this->sprefix."articles";
         $res = $this->sdb->query($sql);
-        while ($row = $this->sdb->fetchRow($res))
-        {
+        while ($row = $this->sdb->fetchRow($res)) {
             $article = array();
             $article['article_id']  = $row['article_id'];
             $article['cat_id']      = $row['node_id'];
@@ -531,8 +498,7 @@ class shopex48
             $article['is_open']     = $row['ifpub'];
             $article['add_time']    = $row['uptime'];
 
-            if (!$db->autoExecute($ecs->table('article'), $article, 'INSERT', '', 'SILENT'))
-            {
+            if (!$db->autoExecute($ecs->table('article'), $article, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
         }
@@ -540,31 +506,29 @@ class shopex48
         /* 友情链接 */
         $sql = "SELECT * FROM ".$this->sprefix."link";
         $res = $this->sdb->query($sql);
-        while ($row = $this->sdb->fetchRow($res))
-        {
+        while ($row = $this->sdb->fetchRow($res)) {
             $link = array();
             $link['link_id']     = $row['link_id'];
             $link['link_name']   = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['link_name']));
             $link['link_url']    = $row['href'];
             $link['show_order']  = '0';
             $link_logo           = $row['image_url'];
-            $logoarr             = explode('|',$link_logo);
-            $logourl             = explode('/',$logoarr[0],3);
+            $logoarr             = explode('|', $link_logo);
+            $logourl             = explode('/', $logoarr[0], 3);
             $link['link_logo']   = 'data/afficheimg/'.$logourl[2];
-            if (!$db->autoExecute($ecs->table('friend_link'), $link, 'INSERT', '', 'SILENT'))
-            {
+            if (!$db->autoExecute($ecs->table('friend_link'), $link, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
         }
 
         /* 返回 */
-        return TRUE;
+        return true;
     }
 
     /**
      * 订单
      */
-    function process_order()
+    public function process_order()
     {
         global $db, $ecs;
 
@@ -576,8 +540,7 @@ class shopex48
         /* 订单 */
         $sql = "SELECT o.* FROM ".$this->sprefix."orders AS o " ;
         $res = $this->sdb->query($sql);
-        while ($row = $this->sdb->fetchRow($res))
-        {
+        while ($row = $this->sdb->fetchRow($res)) {
             $order = array();
             $order['order_sn']          = $row['order_id'];
             $order['user_id']           = $row['member_id'];
@@ -599,69 +562,52 @@ class shopex48
             $order['shipping_time']     = $row['acttime'];
 
             /* 状态 */
-            if ($row['ordstate'] == '0')
-            {
+            if ($row['ordstate'] == '0') {
                 $order['order_status']      = OS_UNCONFIRMED;
                 $order['shipping_status']   = SS_UNSHIPPED;
-            }
-            elseif ($row['ordstate'] == '1')
-            {
+            } elseif ($row['ordstate'] == '1') {
                 $order['order_status']      = OS_CONFIRMED;
                 $order['shipping_status']   = SS_UNSHIPPED;
-            }
-            elseif ($row['ordstate'] == '9')
-            {
+            } elseif ($row['ordstate'] == '9') {
                 $order['order_status']      = OS_INVALID;
                 $order['shipping_status']   = SS_UNSHIPPED;
-            }
-            else // 3 发货 4 归档
-            {
+            } else { // 3 发货 4 归档
                 $order['order_status']      = OS_CONFIRMED;
                 $order['shipping_status']   = SS_SHIPPED;
             }
 
-            if ($row['pay_status'] == '1')
-            {
+            if ($row['pay_status'] == '1') {
                 $order['pay_status']        = PS_PAYED;
-            }
-            else // 0 未付款 5 退款
-            {
+            } else { // 0 未付款 5 退款
                 $order['pay_status']        = PS_UNPAYED;
             }
 
-            if ($row['userrecsts'] == '1') // 用户操作了
-            {
-                if ($row['recsts'] == '1') // 到货
-                {
-                    if ($order['shipping_status'] == SS_SHIPPED)
-                    {
+            if ($row['userrecsts'] == '1') { // 用户操作了
+                if ($row['recsts'] == '1') { // 到货
+                    if ($order['shipping_status'] == SS_SHIPPED) {
                         $order['shipping_status'] = SS_RECEIVED;
                     }
-                }
-                elseif ($row['recsts'] == '2') // 取消
-                {
+                } elseif ($row['recsts'] == '2') { // 取消
                     $order['order_status']      = OS_CANCELED;
                     $order['pay_status']        = PS_UNPAYED;
                     $order['shipping_status']   = SS_UNSHIPPED;
                 }
             }
 
-            if (!$db->autoExecute($ecs->table('order_info'), $order, 'INSERT', '', 'SILENT'))
-            {
+            if (!$db->autoExecute($ecs->table('order_info'), $order, 'INSERT', '', 'SILENT')) {
                 //return $db->error();
             }
 
             /* 订单商品 */
-
         }
         /* 返回 */
-        return TRUE;
+        return true;
     }
 
     /**
      * 商店设置
      */
-    function process_config()
+    public function process_config()
     {
         global $ecs, $db;
 
@@ -695,23 +641,16 @@ class shopex48
         //$config['smtp_mail']        = $row['offer_smtp_email'];
 
         /* 更新 */
-        foreach ($config as $code => $value)
-        {
+        foreach ($config as $code => $value) {
             $sql = "UPDATE " . $ecs->table('shop_config') . " SET " .
                     "value = '$value' " .
                     "WHERE code = '$code' LIMIT 1";
-            if (!$db->query($sql, 'SILENT'))
-            {
+            if (!$db->query($sql, 'SILENT')) {
                 //return $db->error();
             }
         }
 
         /* 返回 */
-        return TRUE;
+        return true;
     }
-
-
-
 }
-
-?>

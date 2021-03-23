@@ -8,63 +8,63 @@ class integrate
     /*------------------------------------------------------ */
 
     /* 整合对象使用的数据库主机 */
-    var $db_host        = '';
+    public $db_host        = '';
 
     /* 整合对象使用的数据库名 */
-    var $db_name        = '';
+    public $db_name        = '';
 
     /* 整合对象使用的数据库用户名 */
-    var $db_user        = '';
+    public $db_user        = '';
 
     /* 整合对象使用的数据库密码 */
-    var $db_pass        = '';
+    public $db_pass        = '';
 
     /* 整合对象数据表前缀 */
-    var $prefix         = '';
+    public $prefix         = '';
 
     /* 数据库所使用编码 */
-    var $charset        = '';
+    public $charset        = '';
 
     /* 整合对象使用的cookie的domain */
-    var $cookie_domain  = '';
+    public $cookie_domain  = '';
 
     /* 整合对象使用的cookie的path */
-    var $cookie_path    = '/';
+    public $cookie_path    = '/';
 
     /* 整合对象会员表名 */
-    var $user_table = '';
+    public $user_table = '';
 
     /* 会员ID的字段名 */
-    var $field_id       = '';
+    public $field_id       = '';
 
     /* 会员名称的字段名 */
-    var $field_name     = '';
+    public $field_name     = '';
 
     /* 会员密码的字段名 */
-    var $field_pass     = '';
+    public $field_pass     = '';
 
     /* 会员邮箱的字段名 */
-    var $field_email    = '';
+    public $field_email    = '';
 
     /* 会员性别 */
-    var $field_gender = '';
+    public $field_gender = '';
 
     /* 会员生日 */
-    var $field_bday = '';
+    public $field_bday = '';
 
     /* 注册日期的字段名 */
-    var $field_reg_date = '';
+    public $field_reg_date = '';
 
     /* 是否需要同步数据到商城 */
-    var $need_sync = true;
+    public $need_sync = true;
 
-    var $error          = 0;
+    public $error          = 0;
 
     /*------------------------------------------------------ */
     //-- PRIVATE ATTRIBUTEs
     /*------------------------------------------------------ */
 
-    var $db;
+    public $db;
 
     /*------------------------------------------------------ */
     //-- PUBLIC METHODs
@@ -80,7 +80,7 @@ class integrate
      * @param       string  $db_pass    数据库密码
      * @return      void
      */
-    function integrate($cfg)
+    public function integrate($cfg)
     {
         $this->charset = isset($cfg['db_charset']) ? $cfg['db_charset'] : 'UTF8';
         $this->prefix = isset($cfg['prefix']) ? $cfg['prefix'] : '';
@@ -92,30 +92,21 @@ class integrate
         $quiet = empty($cfg['quiet']) ? 0 : 1;
 
         /* 初始化数据库 */
-        if (empty($cfg['db_host']))
-        {
+        if (empty($cfg['db_host'])) {
             $this->db_name = $GLOBALS['ecs']->db_name;
             $this->prefix = $GLOBALS['ecs']->prefix;
             $this->db = &$GLOBALS['db'];
-        }
-        else
-        {
-            if (empty($cfg['is_latin1']))
-            {
-                $this->db = new cls_mysql($cfg['db_host'], $cfg['db_user'], $cfg['db_pass'], $cfg['db_name'], $this->charset, NULL,  $quiet);
-            }
-            else
-            {
-                $this->db = new cls_mysql($cfg['db_host'], $cfg['db_user'], $cfg['db_pass'], $cfg['db_name'], 'latin1', NULL, $quiet) ;
+        } else {
+            if (empty($cfg['is_latin1'])) {
+                $this->db = new cls_mysql($cfg['db_host'], $cfg['db_user'], $cfg['db_pass'], $cfg['db_name'], $this->charset, null, $quiet);
+            } else {
+                $this->db = new cls_mysql($cfg['db_host'], $cfg['db_user'], $cfg['db_pass'], $cfg['db_name'], 'latin1', null, $quiet) ;
             }
         }
 
-        if (!is_resource($this->db->link_id))
-        {
+        if (!is_resource($this->db->link_id)) {
             $this->error = 1; //数据库地址帐号
-        }
-        else
-        {
+        } else {
             $this->error = $this->db->errno();
         }
     }
@@ -129,21 +120,17 @@ class integrate
      *
      * @return void
      */
-    function login($username, $password, $remember = null)
+    public function login($username, $password, $remember = null)
     {
-        if ($this->check_user($username, $password) > 0)
-        {
-            if ($this->need_sync)
-            {
-                $this->sync($username,$password);
+        if ($this->check_user($username, $password) > 0) {
+            if ($this->need_sync) {
+                $this->sync($username, $password);
             }
             $this->set_session($username);
             $this->set_cookie($username, $remember);
 
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -156,7 +143,7 @@ class integrate
      *
      * @return void
      */
-    function logout ()
+    public function logout()
     {
         $this->set_cookie(); //清除cookie
         $this->set_session(); //清除session
@@ -170,11 +157,10 @@ class integrate
      *
      * @return int
      */
-    function add_user($username, $password, $email, $gender = -1, $bday = 0, $reg_date=0, $md5password='')
+    public function add_user($username, $password, $email, $gender = -1, $bday = 0, $reg_date=0, $md5password='')
     {
         /* 将用户添加到整合方 */
-        if ($this->check_user($username) > 0)
-        {
+        if ($this->check_user($username) > 0) {
             $this->error = ERR_USERNAME_EXISTS;
 
             return false;
@@ -183,8 +169,7 @@ class integrate
         $sql = "SELECT " . $this->field_id .
                " FROM " . $this->table($this->user_table).
                " WHERE " . $this->field_email . " = '$email'";
-        if ($this->db->getOne($sql, true) > 0)
-        {
+        if ($this->db->getOne($sql, true) > 0) {
             $this->error = ERR_EMAIL_EXISTS;
 
             return false;
@@ -192,30 +177,24 @@ class integrate
 
         $post_username = $username;
 
-        if ($md5password)
-        {
+        if ($md5password) {
             $post_password = $this->compile_password(array('md5password'=>$md5password));
-        }
-        else
-        {
+        } else {
             $post_password = $this->compile_password(array('password'=>$password));
         }
 
         $fields = array($this->field_name, $this->field_email, $this->field_pass);
         $values = array($post_username, $email, $post_password);
 
-        if ($gender > -1)
-        {
+        if ($gender > -1) {
             $fields[] = $this->field_gender;
             $values[] = $gender;
         }
-        if ($bday)
-        {
+        if ($bday) {
             $fields[] = $this->field_bday;
             $values[] = $bday;
         }
-        if ($reg_date)
-        {
+        if ($reg_date) {
             $fields[] = $this->field_reg_date;
             $values[] = $reg_date;
         }
@@ -226,8 +205,7 @@ class integrate
 
         $this->db->query($sql);
 
-        if ($this->need_sync)
-        {
+        if ($this->need_sync) {
             $this->sync($username, $password);
         }
 
@@ -242,37 +220,29 @@ class integrate
      *
      * @return void
      */
-    function edit_user($cfg)
+    public function edit_user($cfg)
     {
-        if (empty($cfg['username']))
-        {
+        if (empty($cfg['username'])) {
             return false;
-        }
-        else
-        {
+        } else {
             $cfg['post_username'] = $cfg['username'];
-
         }
 
         $values = array();
-        if (!empty($cfg['password']) && empty($cfg['md5password']))
-        {
+        if (!empty($cfg['password']) && empty($cfg['md5password'])) {
             $cfg['md5password'] = md5($cfg['password']);
         }
-        if ((!empty($cfg['md5password'])) && $this->field_pass != 'NULL')
-        {
+        if ((!empty($cfg['md5password'])) && $this->field_pass != 'NULL') {
             $values[] = $this->field_pass . "='" . $this->compile_password(array('md5password'=>$cfg['md5password'])) . "'";
         }
 
-        if ((!empty($cfg['email'])) && $this->field_email != 'NULL')
-        {
+        if ((!empty($cfg['email'])) && $this->field_email != 'NULL') {
             /* 检查email是否重复 */
             $sql = "SELECT " . $this->field_id .
                    " FROM " . $this->table($this->user_table).
                    " WHERE " . $this->field_email . " = '$cfg[email]' ".
                    " AND " . $this->field_name . " != '$cfg[post_username]'";
-            if ($this->db->getOne($sql, true) > 0)
-            {
+            if ($this->db->getOne($sql, true) > 0) {
                 $this->error = ERR_EMAIL_EXISTS;
 
                 return false;
@@ -281,8 +251,7 @@ class integrate
             $sql = "SELECT count(*)" .
                    " FROM " . $this->table($this->user_table).
                    " WHERE " . $this->field_email . " = '$cfg[email]' ";
-            if($this->db->getOne($sql, true) == 0)
-            {
+            if ($this->db->getOne($sql, true) == 0) {
                 // 新的E-mail
                 $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET is_validated = 0 WHERE user_name = '$cfg[post_username]'";
                 $this->db->query($sql);
@@ -290,32 +259,25 @@ class integrate
             $values[] = $this->field_email . "='". $cfg['email'] . "'";
         }
 
-        if (isset($cfg['gender']) && $this->field_gender != 'NULL')
-        {
+        if (isset($cfg['gender']) && $this->field_gender != 'NULL') {
             $values[] = $this->field_gender . "='" . $cfg['gender'] . "'";
         }
 
-        if ((!empty($cfg['bday'])) && $this->field_bday != 'NULL')
-        {
+        if ((!empty($cfg['bday'])) && $this->field_bday != 'NULL') {
             $values[] = $this->field_bday . "='" . $cfg['bday'] . "'";
         }
 
-        if ($values)
-        {
+        if ($values) {
             $sql = "UPDATE " . $this->table($this->user_table).
                    " SET " . implode(', ', $values).
                    " WHERE " . $this->field_name . "='" . $cfg['post_username'] . "' LIMIT 1";
 
             $this->db->query($sql);
 
-            if ($this->need_sync)
-            {
-                if (empty($cfg['md5password']))
-                {
+            if ($this->need_sync) {
+                if (empty($cfg['md5password'])) {
                     $this->sync($cfg['username']);
-                }
-                else
-                {
+                } else {
                     $this->sync($cfg['username'], '', $cfg['md5password']);
                 }
             }
@@ -332,19 +294,17 @@ class integrate
      *
      * @return void
      */
-    function remove_user($id)
+    public function remove_user($id)
     {
         $post_id = $id;
 
-        if ($this->need_sync || (isset($this->is_ecshop) && $this->is_ecshop))
-        {
+        if ($this->need_sync || (isset($this->is_ecshop) && $this->is_ecshop)) {
             /* 如果需要同步或是ecshop插件执行这部分代码 */
             $sql = "SELECT user_id FROM "  . $GLOBALS['ecs']->table('users') . " WHERE ";
             $sql .= (is_array($post_id)) ? db_create_in($post_id, 'user_name') : "user_name='". $post_id . "' LIMIT 1";
             $col = $GLOBALS['db']->getCol($sql);
 
-            if ($col)
-            {
+            if ($col) {
                 $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET parent_id = 0 WHERE " . db_create_in($col, 'parent_id'); //将删除用户的下级的parent_id 改为0
                 $GLOBALS['db']->query($sql);
                 $sql = "DELETE FROM " . $GLOBALS['ecs']->table('users') . " WHERE " . db_create_in($col, 'user_id'); //删除用户
@@ -353,8 +313,7 @@ class integrate
                 $sql = "SELECT order_id FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE " . db_create_in($col, 'user_id');
                 $GLOBALS['db']->query($sql);
                 $col_order_id = $GLOBALS['db']->getCol($sql);
-                if ($col_order_id)
-                {
+                if ($col_order_id) {
                     $sql = "DELETE FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE " . db_create_in($col_order_id, 'order_id');
                     $GLOBALS['db']->query($sql);
                     $sql = "DELETE FROM " . $GLOBALS['ecs']->table('order_goods') . " WHERE " . db_create_in($col_order_id, 'order_id');
@@ -380,19 +339,15 @@ class integrate
             }
         }
 
-        if (isset($this->ecshop) && $this->ecshop)
-        {
+        if (isset($this->ecshop) && $this->ecshop) {
             /* 如果是ecshop插件直接退出 */
             return;
         }
 
         $sql = "DELETE FROM " . $this->table($this->user_table) . " WHERE ";
-        if (is_array($post_id))
-        {
+        if (is_array($post_id)) {
             $sql .= db_create_in($post_id, $this->field_name);
-        }
-        else
-        {
+        } else {
             $sql .= $this->field_name . "='" . $post_id . "' LIMIT 1";
         }
 
@@ -407,7 +362,7 @@ class integrate
      *
      * @return void
      */
-    function get_profile_by_name($username)
+    public function get_profile_by_name($username)
     {
         $post_username = $username;
 
@@ -430,7 +385,7 @@ class integrate
      *
      * @return void
      */
-    function get_profile_by_id($id)
+    public function get_profile_by_id($id)
     {
         $sql = "SELECT " . $this->field_id . " AS user_id," . $this->field_name . " AS user_name," .
                     $this->field_email . " AS email," . $this->field_gender ." AS sex,".
@@ -451,21 +406,17 @@ class integrate
      *
      * @return void
      */
-    function get_cookie()
+    public function get_cookie()
     {
         $id = $this->check_cookie();
-        if ($id)
-        {
-            if ($this->need_sync)
-            {
+        if ($id) {
+            if ($this->need_sync) {
                 $this->sync($id);
             }
             $this->set_session($id);
 
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -478,22 +429,18 @@ class integrate
      *
      * @return  int
      */
-    function check_user($username, $password = null)
+    public function check_user($username, $password = null)
     {
-
         $post_username = $username;
 
         /* 如果没有定义密码则只检查用户名 */
-        if ($password === null)
-        {
+        if ($password === null) {
             $sql = "SELECT " . $this->field_id .
                    " FROM " . $this->table($this->user_table).
                    " WHERE " . $this->field_name . "='" . $post_username . "'";
 
             return $this->db->getOne($sql);
-        }
-        else
-        {
+        } else {
             $sql = "SELECT " . $this->field_id .
                    " FROM " . $this->table($this->user_table).
                    " WHERE " . $this->field_name . "='" . $post_username . "' AND " . $this->field_pass . " ='" . $this->compile_password(array('password'=>$password)) . "'";
@@ -510,16 +457,14 @@ class integrate
      *
      * @return  boolean
      */
-    function check_email($email)
+    public function check_email($email)
     {
-        if (!empty($email))
-        {
-          /* 检查email是否重复 */
+        if (!empty($email)) {
+            /* 检查email是否重复 */
             $sql = "SELECT " . $this->field_id .
                        " FROM " . $this->table($this->user_table).
                        " WHERE " . $this->field_email . " = '$email' ";
-            if ($this->db->getOne($sql, true) > 0)
-            {
+            if ($this->db->getOne($sql, true) > 0) {
                 $this->error = ERR_EMAIL_EXISTS;
                 return true;
             }
@@ -536,7 +481,7 @@ class integrate
      *
      * @return void
      */
-    function check_cookie()
+    public function check_cookie()
     {
         return '';
     }
@@ -549,26 +494,21 @@ class integrate
      *
      * @return void
      */
-    function set_cookie($username='', $remember= null )
+    public function set_cookie($username='', $remember= null)
     {
-        if (empty($username))
-        {
+        if (empty($username)) {
             /* 摧毁cookie */
             $time = time() - 3600;
-            setcookie("ECS[user_id]",  '', $time, $this->cookie_path);            
+            setcookie("ECS[user_id]", '', $time, $this->cookie_path);
             setcookie("ECS[password]", '', $time, $this->cookie_path);
-
-        }
-        elseif ($remember)
-        {
+        } elseif ($remember) {
             /* 设置cookie */
             $time = time() + 3600 * 24 * 15;
 
             setcookie("ECS[username]", $username, $time, $this->cookie_path, $this->cookie_domain);
             $sql = "SELECT user_id, password FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_name='$username' LIMIT 1";
             $row = $GLOBALS['db']->getRow($sql);
-            if ($row)
-            {
+            if ($row) {
                 setcookie("ECS[user_id]", $row['user_id'], $time, $this->cookie_path, $this->cookie_domain);
                 setcookie("ECS[password]", $row['password'], $time, $this->cookie_path, $this->cookie_domain);
             }
@@ -583,19 +523,15 @@ class integrate
      *
      * @return void
      */
-    function set_session ($username='')
+    public function set_session($username='')
     {
-        if (empty($username))
-        {
+        if (empty($username)) {
             $GLOBALS['sess']->destroy_session();
-        }
-        else
-        {
+        } else {
             $sql = "SELECT user_id, password, email FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_name='$username' LIMIT 1";
             $row = $GLOBALS['db']->getRow($sql);
 
-            if ($row)
-            {
+            if ($row) {
                 $_SESSION['user_id']   = $row['user_id'];
                 $_SESSION['user_name'] = $username;
                 $_SESSION['email']     = $row['email'];
@@ -612,7 +548,7 @@ class integrate
      *
      * @return void
      */
-    function table($str)
+    public function table($str)
     {
         return '`' .$this->db_name. '`.`'.$this->prefix.$str.'`';
     }
@@ -625,41 +561,34 @@ class integrate
      *
      * @return void
      */
-    function compile_password ($cfg)
+    public function compile_password($cfg)
     {
-       if (isset($cfg['password']))
-       {
+        if (isset($cfg['password'])) {
             $cfg['md5password'] = md5($cfg['password']);
-       }
-       if (empty($cfg['type']))
-       {
+        }
+        if (empty($cfg['type'])) {
             $cfg['type'] = PWD_MD5;
-       }
+        }
 
-       switch ($cfg['type'])
-       {
-           case PWD_MD5 :
-              	if(!empty($cfg['ec_salt']))
-		       {
-			       return md5($cfg['md5password'].$cfg['ec_salt']);
-		       }
-			   else
-		       {
-                    return $cfg['md5password'];
-			   }
+        switch ($cfg['type']) {
+           case PWD_MD5:
+                  if (!empty($cfg['ec_salt'])) {
+                      return md5($cfg['md5password'].$cfg['ec_salt']);
+                  } else {
+                   return $cfg['md5password'];
+               }
 
-           case PWD_PRE_SALT :
-               if (empty($cfg['salt']))
-               {
-                    $cfg['salt'] = '';
+               // no break
+           case PWD_PRE_SALT:
+               if (empty($cfg['salt'])) {
+                   $cfg['salt'] = '';
                }
 
                return md5($cfg['salt'] . $cfg['md5password']);
 
-           case PWD_SUF_SALT :
-               if (empty($cfg['salt']))
-               {
-                    $cfg['salt'] = '';
+           case PWD_SUF_SALT:
+               if (empty($cfg['salt'])) {
+                   $cfg['salt'] = '';
                }
 
                return md5($cfg['md5password'] . $cfg['salt']);
@@ -677,17 +606,15 @@ class integrate
      *
      * @return void
      */
-    function sync ($username, $password='', $md5password='')
+    public function sync($username, $password='', $md5password='')
     {
-        if ((!empty($password)) && empty($md5password))
-        {
+        if ((!empty($password)) && empty($md5password)) {
             $md5password = md5($password);
         }
 
         $main_profile = $this->get_profile_by_name($username);
 
-        if (empty($main_profile))
-        {
+        if (empty($main_profile)) {
             return false;
         }
 
@@ -696,56 +623,42 @@ class integrate
                " WHERE user_name = '$username'";
 
         $profile = $GLOBALS['db']->getRow($sql);
-        if (empty($profile))
-        {
+        if (empty($profile)) {
             /* 向商城表插入一条新记录 */
-            if (empty($md5password))
-            {
-               $sql = "INSERT INTO " . $GLOBALS['ecs']->table('users').
+            if (empty($md5password)) {
+                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('users').
                             "(user_name, email, sex, birthday, reg_time)".
                       " VALUES('$username', '" .$main_profile['email']."','".
                             $main_profile['sex'] . "','" . $main_profile['birthday'] . "','" . $main_profile['reg_time'] . "')";
-            }
-            else
-            {
-               $sql = "INSERT INTO " . $GLOBALS['ecs']->table('users').
+            } else {
+                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('users').
                             "(user_name, email, sex, birthday, reg_time, password)".
                       " VALUES('$username', '" .$main_profile['email']."','".
                             $main_profile['sex'] . "','" . $main_profile['birthday'] . "','" .
                             $main_profile['reg_time'] . "', '$md5password')";
-
             }
 
             $GLOBALS['db']->query($sql);
 
             return true;
-        }
-        else
-        {
+        } else {
             $values = array();
-            if ($main_profile['email'] != $profile['email'])
-            {
+            if ($main_profile['email'] != $profile['email']) {
                 $values[] = "email='" . $main_profile['email'] . "'";
             }
-            if ($main_profile['sex'] != $profile['sex'])
-            {
+            if ($main_profile['sex'] != $profile['sex']) {
                 $values[] = "sex='" . $main_profile['sex'] . "'";
             }
-            if ($main_profile['birthday'] != $profile['birthday'])
-            {
+            if ($main_profile['birthday'] != $profile['birthday']) {
                 $values[] = "birthday='" . $main_profile['birthday'] . "'";
             }
-            if ((!empty($md5password)) && ($md5password != $profile['password']))
-            {
+            if ((!empty($md5password)) && ($md5password != $profile['password'])) {
                 $values[] = "password='" . $md5password . "'";
             }
 
-            if (empty($values))
-            {
+            if (empty($values)) {
                 return  true;
-            }
-            else
-            {
+            } else {
                 $sql = "UPDATE " . $GLOBALS['ecs']->table('users').
                        " SET " . implode(", ", $values).
                        " WHERE user_name='$username'";
@@ -765,7 +678,7 @@ class integrate
      *
      * @return void
      */
-    function get_points_name ()
+    public function get_points_name()
     {
         return array();
     }
@@ -778,20 +691,17 @@ class integrate
      *
      * @return void
      */
-    function get_points($username)
+    public function get_points($username)
     {
         $credits = $this->get_points_name();
         $fileds = array_keys($credits);
-        if ($fileds)
-        {
-            $sql = "SELECT " . $this->field_id . ', ' . implode(', ',$fileds).
+        if ($fileds) {
+            $sql = "SELECT " . $this->field_id . ', ' . implode(', ', $fileds).
                    " FROM " . $this->table($this->user_table).
                    " WHERE " . $this->field_name . "='$username'";
             $row = $this->db->getRow($sql);
             return $row;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -804,19 +714,17 @@ class integrate
      *
      * @return void
      */
-    function set_points ($username, $credits)
+    public function set_points($username, $credits)
     {
         $user_set = array_keys($credits);
         $points_set = array_keys($this->get_points_name());
 
         $set = array_intersect($user_set, $points_set);
 
-        if ($set)
-        {
+        if ($set) {
             $tmp = array();
-            foreach ($set as $credit)
-            {
-               $tmp[] = $credit . '=' . $credit . '+' . $credits[$credit];
+            foreach ($set as $credit) {
+                $tmp[] = $credit . '=' . $credit . '+' . $credits[$credit];
             }
             $sql = "UPDATE " . $this->table($this->user_table).
                    " SET " . implode(', ', $tmp).
@@ -827,7 +735,7 @@ class integrate
         return true;
     }
 
-    function get_user_info($username)
+    public function get_user_info($username)
     {
         return $this->get_profile_by_name($username);
     }
@@ -841,10 +749,9 @@ class integrate
      *
      * @return void
      */
-    function test_conflict ($user_list)
+    public function test_conflict($user_list)
     {
-        if (empty($user_list))
-        {
+        if (empty($user_list)) {
             return array();
         }
 

@@ -18,8 +18,8 @@ require_once(ROOT_PATH . 'languages/' .$_CFG['lang']. '/admin/package.php');
 assign_template();
 assign_dynamic('package');
 $position = assign_ur_here(0, $_LANG['shopping_package']);
-$smarty->assign('page_title',       $position['title']);    // 页面标题
-$smarty->assign('ur_here',          $position['ur_here']);  // 当前位置
+$smarty->assign('page_title', $position['title']);    // 页面标题
+$smarty->assign('ur_here', $position['ur_here']);  // 当前位置
 
 /* 读出所有礼包信息 */
 
@@ -29,16 +29,13 @@ $sql = "SELECT * FROM " . $ecs->table('goods_activity'). " WHERE `start_time` <=
 $res = $db->query($sql);
 
 $list = array();
-while ($row = $db->fetchRow($res))
-{
+while ($row = $db->fetchRow($res)) {
     $row['start_time']  = local_date('Y-m-d H:i', $row['start_time']);
     $row['end_time']    = local_date('Y-m-d H:i', $row['end_time']);
     $ext_arr = unserialize($row['ext_info']);
     unset($row['ext_info']);
-    if ($ext_arr)
-    {
-        foreach ($ext_arr as $key=>$val)
-        {
+    if ($ext_arr) {
+        foreach ($ext_arr as $key=>$val) {
             $row[$key] = $val;
         }
     }
@@ -57,8 +54,7 @@ while ($row = $db->fetchRow($res))
     $goods_res = $GLOBALS['db']->getAll($sql);
 
     $subtotal = 0;
-    foreach($goods_res as $key => $val)
-    {
+    foreach ($goods_res as $key => $val) {
         $goods_res[$key]['goods_thumb']  = get_image_path($val['goods_id'], $val['goods_thumb'], true);
         $goods_res[$key]['market_price'] = price_format($val['market_price']);
         $goods_res[$key]['rank_price']   = price_format($val['rank_price']);
@@ -74,11 +70,10 @@ while ($row = $db->fetchRow($res))
     $list[] = $row;
 }
 
-$smarty->assign('list',             $list);
+$smarty->assign('list', $list);
 
-$smarty->assign('helps',            get_shop_help());       // 网店帮助
-$smarty->assign('lang',             $_LANG);
+$smarty->assign('helps', get_shop_help());       // 网店帮助
+$smarty->assign('lang', $_LANG);
 
-$smarty->assign('feed_url',         ($_CFG['rewrite'] == 1) ? "feed-typepackage.xml" : 'feed.php?type=package'); // RSS URL
+$smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typepackage.xml" : 'feed.php?type=package'); // RSS URL
 $smarty->display('package.dwt');
-

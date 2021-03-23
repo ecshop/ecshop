@@ -433,4 +433,3 @@ $_LANG['back_mail_settings'] = '返回邮件服务器设置';
 $_LANG['mail_settings'] = '邮件服务器设置';
 
 $_LANG['sms_url'] = '<a href="#" target="_blank">点此注册手机短信服务</a>';
-?>

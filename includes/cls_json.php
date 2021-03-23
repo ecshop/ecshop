@@ -1,31 +1,27 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
-if (!defined('EC_CHARSET'))
-{
+if (!defined('EC_CHARSET')) {
     define('EC_CHARSET', 'utf-8');
 }
 
 class JSON
 {
-    var $at   = 0;
-    var $ch   = '';
-    var $text = '';
+    public $at   = 0;
+    public $ch   = '';
+    public $text = '';
 
-    function encode($arg, $force = true)
+    public function encode($arg, $force = true)
     {
         static $_force;
-        if (is_null($_force))
-        {
+        if (is_null($_force)) {
             $_force = $force;
         }
 
-        if ($_force && EC_CHARSET == 'utf-8' && function_exists('json_encode'))
-        {
+        if ($_force && EC_CHARSET == 'utf-8' && function_exists('json_encode')) {
             return json_encode($arg);
         }
 
@@ -37,37 +33,27 @@ class JSON
         $v           = '';
         $numeric     = true;
 
-        switch (gettype($arg))
-        {
+        switch (gettype($arg)) {
             case 'array':
-                foreach ($arg AS $i => $v)
-                {
-                    if (!is_numeric($i))
-                    {
+                foreach ($arg as $i => $v) {
+                    if (!is_numeric($i)) {
                         $numeric = false;
                         break;
                     }
                 }
 
-                if ($numeric)
-                {
-                    foreach ($arg AS $i => $v)
-                    {
-                        if (strlen($s) > 0)
-                        {
+                if ($numeric) {
+                    foreach ($arg as $i => $v) {
+                        if (strlen($s) > 0) {
                             $s .= ',';
                         }
                         $s .= $this->encode($arg[$i]);
                     }
 
                     $returnValue = '[' . $s . ']';
-                }
-                else
-                {
-                    foreach ($arg AS $i => $v)
-                    {
-                        if (strlen($s) > 0)
-                        {
+                } else {
+                    foreach ($arg as $i => $v) {
+                        if (strlen($s) > 0) {
                             $s .= ',';
                         }
                         $s .= $this->encode($i) . ':' . $this->encode($arg[$i]);
@@ -78,12 +64,10 @@ class JSON
                 break;
 
             case 'object':
-                foreach (get_object_vars($arg) AS $i => $v)
-                {
+                foreach (get_object_vars($arg) as $i => $v) {
                     $v = $this->encode($v);
 
-                    if (strlen($s) > 0)
-                    {
+                    if (strlen($s) > 0) {
                         $s .= ',';
                     }
                     $s .= $this->encode($i) . ':' . $v;
@@ -123,20 +107,16 @@ class JSON
         return $returnValue;
     }
 
-    function decode($text,$type=0) // 榛樿?type=0杩斿洖obj,type=1杩斿洖array
+    public function decode($text, $type=0) // 榛樿?type=0杩斿洖obj,type=1杩斿洖array
     {
-        if (empty($text))
-        {
+        if (empty($text)) {
             return '';
-        }
-        elseif (!is_string($text))
-        {
+        } elseif (!is_string($text)) {
             return false;
         }
 
-        if (EC_CHARSET === 'utf-8' && function_exists('json_decode'))
-        {
-            return addslashes_deep_obj(json_decode(stripslashes($text),$type));
+        if (EC_CHARSET === 'utf-8' && function_exists('json_decode')) {
+            return addslashes_deep_obj(json_decode(stripslashes($text), $type));
         }
 
         $this->at   = 0;
@@ -169,7 +149,7 @@ class JSON
      *
      * @return   void
      */
-    function error($m)
+    public function error($m)
     {
         echo($m . ' at offset ' . $this->at . ': ' . $this->text);
     }
@@ -181,7 +161,7 @@ class JSON
      *
      * @return  string
      */
-    function next()
+    public function next()
     {
         $this->ch = !isset($this->text{$this->at}) ? '' : $this->text{$this->at};
         $this->at++;
@@ -196,27 +176,21 @@ class JSON
      *
      * @return  void
      */
-    function str()
+    public function str()
     {
         $i = '';
         $s = '';
         $t = '';
         $u = '';
 
-        if ($this->ch == '"')
-        {
-            while ($this->next() !== null)
-            {
-                if ($this->ch == '"')
-                {
+        if ($this->ch == '"') {
+            while ($this->next() !== null) {
+                if ($this->ch == '"') {
                     $this->next();
 
                     return $s;
-                }
-                elseif ($this->ch == '\\')
-                {
-                    switch ($this->next())
-                    {
+                } elseif ($this->ch == '\\') {
+                    switch ($this->next()) {
                         case 'b':
                             $s .= '\b';
                             break;
@@ -240,12 +214,10 @@ class JSON
                         case 'u':
                             $u = 0;
 
-                            for ($i = 0; $i < 4; $i++)
-                            {
+                            for ($i = 0; $i < 4; $i++) {
                                 $t = (integer) sprintf('%01c', hexdec($this->next()));
 
-                                if (!is_numeric($t))
-                                {
+                                if (!is_numeric($t)) {
                                     break 2;
                                 }
                                 $u = $u * 16 + $t;
@@ -259,9 +231,7 @@ class JSON
                         default:
                             $s .= $this->ch;
                     }
-                }
-                else
-                {
+                } else {
                     $s .= $this->ch;
                 }
             }
@@ -277,39 +247,31 @@ class JSON
      *
      * @return  void
      */
-    function arr()
+    public function arr()
     {
         $a = array();
 
-        if ($this->ch == '[')
-        {
+        if ($this->ch == '[') {
             $this->next();
 
-            if ($this->ch == ']')
-            {
+            if ($this->ch == ']') {
                 $this->next();
 
                 return $a;
             }
 
-            while (isset($this->ch))
-            {
+            while (isset($this->ch)) {
                 array_push($a, $this->val());
 
-                if ($this->ch == ']')
-                {
+                if ($this->ch == ']') {
                     $this->next();
 
                     return $a;
-
-                }
-                elseif ($this->ch != ',')
-                {
+                } elseif ($this->ch != ',') {
                     break;
                 }
 
                 $this->next();
-
             }
 
             $this->error('Bad array');
@@ -323,42 +285,35 @@ class JSON
      *
      * @return  void
      */
-    function obj()
+    public function obj()
     {
         $k = '';
         $o = new StdClass();
 
-        if ($this->ch == '{')
-        {
+        if ($this->ch == '{') {
             $this->next();
 
-            if ($this->ch == '}')
-            {
+            if ($this->ch == '}') {
                 $this->next();
 
                 return $o;
             }
 
-            while ($this->ch)
-            {
+            while ($this->ch) {
                 $k = $this->str();
 
-                if ($this->ch != ':')
-                {
+                if ($this->ch != ':') {
                     break;
                 }
 
                 $this->next();
                 $o->$k = $this->val();
 
-                if ($this->ch == '}')
-                {
+                if ($this->ch == '}') {
                     $this->next();
 
                     return $o;
-                }
-                elseif ($this->ch != ',')
-                {
+                } elseif ($this->ch != ',') {
                     break;
                 }
 
@@ -376,42 +331,35 @@ class JSON
      *
      * @return  void
      */
-    function assoc()
+    public function assoc()
     {
         $k = '';
         $a = array();
 
-        if ($this->ch == '<')
-        {
+        if ($this->ch == '<') {
             $this->next();
 
-            if ($this->ch == '>')
-            {
+            if ($this->ch == '>') {
                 $this->next();
 
                 return $a;
             }
 
-            while ($this->ch)
-            {
+            while ($this->ch) {
                 $k = $this->str();
 
-                if ($this->ch != ':')
-                {
+                if ($this->ch != ':') {
                     break;
                 }
 
                 $this->next();
                 $a[$k] = $this->val();
 
-                if ($this->ch == '>')
-                {
+                if ($this->ch == '>') {
                     $this->next();
 
                     return $a;
-                }
-                elseif ($this->ch != ',')
-                {
+                } elseif ($this->ch != ',') {
                     break;
                 }
 
@@ -429,46 +377,39 @@ class JSON
      *
      * @return  void
      */
-    function num()
+    public function num()
     {
         $n = '';
         $v = '';
 
-        if ($this->ch == '-')
-        {
+        if ($this->ch == '-') {
             $n = '-';
             $this->next();
         }
 
-        while ($this->ch >= '0' && $this->ch <= '9')
-        {
+        while ($this->ch >= '0' && $this->ch <= '9') {
             $n .= $this->ch;
             $this->next();
         }
 
-        if ($this->ch == '.')
-        {
+        if ($this->ch == '.') {
             $n .= '.';
 
-            while ($this->next() && $this->ch >= '0' && $this->ch <= '9')
-            {
+            while ($this->next() && $this->ch >= '0' && $this->ch <= '9') {
                 $n .= $this->ch;
             }
         }
 
-        if ($this->ch == 'e' || $this->ch == 'E')
-        {
+        if ($this->ch == 'e' || $this->ch == 'E') {
             $n .= 'e';
             $this->next();
 
-            if ($this->ch == '-' || $this->ch == '+')
-            {
+            if ($this->ch == '-' || $this->ch == '+') {
                 $n .= $this->ch;
                 $this->next();
             }
 
-            while ($this->ch >= '0' && $this->ch <= '9')
-            {
+            while ($this->ch >= '0' && $this->ch <= '9') {
                 $n .= $this->ch;
                 $this->next();
             }
@@ -476,12 +417,9 @@ class JSON
 
         $v += $n;
 
-        if (!is_numeric($v))
-        {
+        if (!is_numeric($v)) {
             $this->error('Bad number');
-        }
-        else
-        {
+        } else {
             return $v;
         }
     }
@@ -493,14 +431,12 @@ class JSON
      *
      * @return  mixed
      */
-    function word()
+    public function word()
     {
-        switch ($this->ch)
-        {
+        switch ($this->ch) {
             case 't':
 
-                if ($this->next() == 'r' && $this->next() == 'u' && $this->next() == 'e')
-                {
+                if ($this->next() == 'r' && $this->next() == 'u' && $this->next() == 'e') {
                     $this->next();
 
                     return true;
@@ -508,8 +444,7 @@ class JSON
                 break;
 
             case 'f':
-                if ($this->next() == 'a' && $this->next() == 'l' && $this->next() == 's' && $this->next() == 'e')
-                {
+                if ($this->next() == 'a' && $this->next() == 'l' && $this->next() == 's' && $this->next() == 'e') {
                     $this->next();
 
                     return false;
@@ -517,8 +452,7 @@ class JSON
                 break;
 
             case 'n':
-                if ($this->next() == 'u' && $this->next() == 'l' && $this->next() == 'l')
-                {
+                if ($this->next() == 'u' && $this->next() == 'l' && $this->next() == 'l') {
                     $this->next();
 
                     return null;
@@ -536,10 +470,9 @@ class JSON
      *
      * @return  mixed
      */
-    function val()
+    public function val()
     {
-        switch ($this->ch)
-        {
+        switch ($this->ch) {
             case '{':
                 return $this->obj();
 
@@ -567,16 +500,13 @@ class JSON
      *
      * @return array
      */
-    function object_to_array($obj)
+    public function object_to_array($obj)
     {
         $_arr = is_object($obj) ? get_object_vars($obj) : $obj;
-        foreach ($_arr as $key => $val)
-        {
+        foreach ($_arr as $key => $val) {
             $val = (is_array($val) || is_object($val)) ? $this->object_to_array($val) : $val;
             $arr[$key] = $val;
         }
         return $arr;
     }
 }
-
-?>

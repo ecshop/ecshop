@@ -5,24 +5,19 @@ define('INIT_NO_SMARTY', true);
 require(dirname(__FILE__) . '/includes/init.php');
 
 /* 没有指定广告的id及跳转地址 */
-if (empty($_GET['ad_id']))
-{
+if (empty($_GET['ad_id'])) {
     ecs_header("Location: index.php\n");
     exit;
-}
-else
-{
+} else {
     $ad_id = intval($_GET['ad_id']);
 }
 
 /* act 操作项的初始化*/
 $_GET['act'] = !empty($_GET['act']) ? trim($_GET['act']) : '';
 
-if ($_GET['act'] == 'js')
-{
+if ($_GET['act'] == 'js') {
     /* 编码转换 */
-    if (empty($_GET['charset']))
-    {
+    if (empty($_GET['charset'])) {
         $_GET['charset'] = 'UTF8';
     }
 
@@ -39,11 +34,9 @@ if ($_GET['act'] == 'js')
 
     $ad_info = $db->getRow($sql);
 
-    if (!empty($ad_info))
-    {
+    if (!empty($ad_info)) {
         /* 转换编码 */
-        if ($_GET['charset'] != 'UTF8')
-        {
+        if ($_GET['charset'] != 'UTF8') {
             $ad_info['ad_name'] = ecs_iconv('UTF8', $_GET['charset'], $ad_info['ad_name']);
             $ad_info['ad_code'] = ecs_iconv('UTF8', $_GET['charset'], $ad_info['ad_code']);
         }
@@ -53,8 +46,7 @@ if ($_GET['act'] == 'js')
         $_GET['from'] = !empty($_GET['from']) ? urlencode($_GET['from']) : '';
 
         $str = '';
-        switch ($_GET['type'])
-        {
+        switch ($_GET['type']) {
             case '0':
                 /* 图片广告 */
                 $src = (strpos($ad_info['ad_code'], 'http://') === false && strpos($ad_info['ad_code'], 'https://') === false) ? $url . DATA_DIR . "/afficheimg/$ad_info[ad_code]" : $ad_info['ad_code'];
@@ -80,9 +72,7 @@ if ($_GET['act'] == 'js')
         }
     }
     echo "document.writeln('$str');";
-}
-else
-{
+} else {
     /* 获取投放站点的名称 */
 
     $site_name = !empty($_GET['from']) ?htmlspecialchars($_GET['from'])  : addslashes($_LANG['self_site']);
@@ -95,15 +85,11 @@ else
     $_SESSION['referer'] = stripslashes($site_name);
 
     /* 如果是商品的站外JS */
-    if ($ad_id == '-1')
-    {
+    if ($ad_id == '-1') {
         $sql = "SELECT count(*) FROM " . $ecs->table('adsense') . " WHERE from_ad = '-1' AND referer = '" . $site_name . "'";
-        if($db->getOne($sql) > 0)
-        {
+        if ($db->getOne($sql) > 0) {
             $sql = "UPDATE " . $ecs->table('adsense') . " SET clicks = clicks + 1 WHERE from_ad = '-1' AND referer = '" . $site_name . "'";
-        }
-        else
-        {
+        } else {
             $sql = "INSERT INTO " . $ecs->table('adsense') . "(from_ad, referer, clicks) VALUES ('-1', '" . $site_name . "', '1')";
         }
         $db->query($sql);
@@ -118,19 +104,14 @@ else
         ecs_header("Location: $uri\n");
 
         exit;
-    }
-    else
-    {
+    } else {
         /* 更新站内广告的点击次数 */
         $db->query('UPDATE ' . $ecs->table('ad') . " SET click_count = click_count + 1 WHERE ad_id = '$ad_id'");
 
         $sql = "SELECT count(*) FROM " . $ecs->table('adsense') . " WHERE from_ad = '" . $ad_id . "' AND referer = '" . $site_name . "'";
-        if($db->getOne($sql) > 0)
-        {
+        if ($db->getOne($sql) > 0) {
             $sql = "UPDATE " . $ecs->table('adsense') . " SET clicks = clicks + 1 WHERE from_ad = '" . $ad_id . "' AND referer = '" . $site_name . "'";
-        }
-        else
-        {
+        } else {
             $sql = "INSERT INTO " . $ecs->table('adsense') . "(from_ad, referer, clicks) VALUES ('" . $ad_id . "', '" . $site_name . "', '1')";
         }
         $db->query($sql);
@@ -138,12 +119,9 @@ else
         $sql="SELECT * FROM ". $ecs->table('ad') ." WHERE ad_id = '$ad_id'";
         $ad_info=$db->getRow($sql);
         /* 跳转到广告的链接页面 */
-        if (!empty($ad_info['ad_link']))
-        {
-            $uri = (strpos($ad_info['ad_link'], 'http://') === false && strpos($ad_info['ad_link'], 'https://') === false ) ? $ecs->http() . urldecode($ad_info['ad_link']) : urldecode($ad_info['ad_link']);
-        }
-        else
-        {
+        if (!empty($ad_info['ad_link'])) {
+            $uri = (strpos($ad_info['ad_link'], 'http://') === false && strpos($ad_info['ad_link'], 'https://') === false) ? $ecs->http() . urldecode($ad_info['ad_link']) : urldecode($ad_info['ad_link']);
+        } else {
             $uri = $ecs->url();
         }
 
@@ -151,5 +129,3 @@ else
         exit;
     }
 }
-
-?>

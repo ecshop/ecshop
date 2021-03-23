@@ -1,22 +1,19 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
 $payment_lang = ROOT_PATH . 'languages/' .$GLOBALS['_CFG']['lang']. '/payment/alipay.php';
 
-if (file_exists($payment_lang))
-{
+if (file_exists($payment_lang)) {
     global $_LANG;
 
     include_once($payment_lang);
 }
 
 /* 模块的基本信息 */
-if (isset($set_modules) && $set_modules == TRUE)
-{
+if (isset($set_modules) && $set_modules == true) {
     $i = isset($modules) ? count($modules) : 0;
 
     /* 代码 */
@@ -65,11 +62,11 @@ class alipay
      *
      * @return void
      */
-    function alipay()
+    public function alipay()
     {
     }
 
-    function __construct()
+    public function __construct()
     {
         $this->alipay();
     }
@@ -79,20 +76,17 @@ class alipay
      * @param   array   $order      订单信息
      * @param   array   $payment    支付方式信息
      */
-    function get_code($order, $payment)
+    public function get_code($order, $payment)
     {
-        if (!defined('EC_CHARSET'))
-        {
+        if (!defined('EC_CHARSET')) {
             $charset = 'utf-8';
-        }
-        else
-        {
+        } else {
             $charset = EC_CHARSET;
         }
 
         $real_method = $payment['alipay_pay_method'];
 
-        switch ($real_method){
+        switch ($real_method) {
             case '0':
                 $service = 'trade_create_by_buyer';
                 break;
@@ -134,8 +128,7 @@ class alipay
         $param = '';
         $sign  = '';
 
-        foreach ($parameter AS $key => $val)
-        {
+        foreach ($parameter as $key => $val) {
             $param .= "$key=" .urlencode($val). "&";
             $sign  .= "$key=$val&";
         }
@@ -152,12 +145,10 @@ class alipay
     /**
      * 响应操作
      */
-    function respond()
+    public function respond()
     {
-        if (!empty($_POST))
-        {
-            foreach($_POST as $key => $data)
-            {
+        if (!empty($_POST)) {
+            foreach ($_POST as $key => $data) {
                 $_GET[$key] = $data;
             }
         }
@@ -171,53 +162,40 @@ class alipay
         reset($_GET);
 
         $sign = '';
-        foreach ($_GET AS $key=>$val)
-        {
-            if ($key != 'sign' && $key != 'sign_type' && $key != 'code')
-            {
+        foreach ($_GET as $key=>$val) {
+            if ($key != 'sign' && $key != 'sign_type' && $key != 'code') {
                 $sign .= "$key=$val&";
             }
         }
 
         $sign = substr($sign, 0, -1) . $payment['alipay_key'];
         //$sign = substr($sign, 0, -1) . ALIPAY_AUTH;
-        if (md5($sign) != $_GET['sign'])
-        {
+        if (md5($sign) != $_GET['sign']) {
             return false;
         }
 
         /* 检查支付的金额是否相符 */
-        if (!check_money($order_sn, $_GET['total_fee']))
-        {
+        if (!check_money($order_sn, $_GET['total_fee'])) {
             return false;
         }
 
-        if ($_GET['trade_status'] == 'WAIT_SELLER_SEND_GOODS')
-        {
+        if ($_GET['trade_status'] == 'WAIT_SELLER_SEND_GOODS') {
             /* 改变订单状态 */
             order_paid($order_sn, 2);
 
             return true;
-        }
-        elseif ($_GET['trade_status'] == 'TRADE_FINISHED')
-        {
+        } elseif ($_GET['trade_status'] == 'TRADE_FINISHED') {
             /* 改变订单状态 */
             order_paid($order_sn);
 
             return true;
-        }
-        elseif ($_GET['trade_status'] == 'TRADE_SUCCESS')
-        {
+        } elseif ($_GET['trade_status'] == 'TRADE_SUCCESS') {
             /* 改变订单状态 */
             order_paid($order_sn, 2);
 
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 }
-
-?>

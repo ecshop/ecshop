@@ -7,7 +7,7 @@ require(dirname(__FILE__) . '/includes/init.php');
 /* 检查权限 */
 admin_priv('file_check');
 
-if (!$ecshopfiles = @file('./ecshopfiles.md5'))
+if (!$ecshopfiles = @file(ROOT_PATH . 'temp/ecshopfiles.md5'))
 {
     sys_msg($_LANG['filecheck_nofound_md5file'], 1);
 }

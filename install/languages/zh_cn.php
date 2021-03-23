@@ -3,28 +3,14 @@
 /* 通用语言项 */
 $_LANG['prev_step'] = '上一步：';
 $_LANG['next_step'] = '下一步：';
-$_LANG['copyright'] = '&copy; 2005-2012 <a href="http://www.ecshop.com" target="_blank">上海商派网络科技有限公司</a>。保留所有权利。';
-
+$_LANG['copyright'] = '&copy; 2005-2021 <a href="http://www.ecshop.com" target="_blank">上海商派网络科技有限公司</a>。保留所有权利。';
 
 /* 欢迎页 */
 $_LANG['welcome_title'] = '欢迎您选用ECShop网上商店管理系统！';
-$_LANG['select_installer_lang'] = '界面语言：';
-$_LANG['simplified_chinese'] = '简体中文';
-$_LANG['traditional_chinese'] = '繁体中文';
-$_LANG['americanese'] = 'English';
 $_LANG['agree_license'] = '我已仔细阅读，并同意上述条款中的所有内容';
 $_LANG['check_system_environment'] = '检测系统环境';
 $_LANG['setup_environment'] = '配置安装环境';
 $_LANG['loading'] = '正在加载，请稍等...';
-
-/* UCenter 安装配置 */
-$_LANG['setup_title'] = '请选择用户接口方式';
-$_LANG['check_ucenter'] = '填写完毕，进行下一步';
-$_LANG['ucapi'] = 'UCenter 的 URL';
-$_LANG['ucenter'] = '请填写 UCenter 相关信息：';
-$_LANG['ucfounderpw'] = 'UCenter 创始人密码：';
-$_LANG['uc_intro'] = 'UCenter 是 Comsenz 公司产品的核心服务程序，Discuz! Board 的安装和运行依赖此程序。如果您已经安装了 UCenter，请填写以下信息。否则，请到 <a href="http://www.discuz.com" target="_blank">Comsenz 产品中心</a> 下载并且安装，然后再继续。<br /><br />';
-
 
 /* 环境检测页 */
 $_LANG['checking_title'] = 'ECShop安装程序 第2步/共3步 环境检测';
@@ -87,19 +73,8 @@ $_LANG['captcha_notice'] = '选择此项，进入后台、发表评论无需验�
 $_LANG['pre_goods_types'] = '预选商品类型：';
 $_LANG['install_demo'] = '安装测试数据：';
 $_LANG['demo_notice'] = '选择此项，将默认全选预选商品类型';
-$_LANG['book'] = '书';
-$_LANG['music'] = '音乐';
-$_LANG['movie'] = '电影';
-$_LANG['mobile'] = '手机';
-$_LANG['notebook'] = '笔记本电脑';
-$_LANG['dc'] = '数码相机';
-$_LANG['dv'] = '数码摄像机';
-$_LANG['cosmetics'] = '化妆品';
-$_LANG['mobile2'] = '精品手机';
+
 $_LANG['install_at_once'] = '立即安装';
-$_LANG['default_friend_link'] = 'ECSHOP 网上商店管理系统';
-$_LANG['maifou_friend_link'] = '买否网';
-$_LANG['wdwd_friend_link']='免费开独立网店';
 $_LANG['monitor_title'] = '安装程序监视器';
 $_LANG['admin_user'][] = '商品列表|goods.php?act=list';
 $_LANG['admin_user'][] = '订单列表|order.php?act=list';
@@ -150,23 +125,6 @@ $_LANG['js_languages']['do_others'] = '处理其它............';
 $_LANG['js_languages']['display_detail'] = '显示细节';
 $_LANG['js_languages']['hide_detail'] = '隐藏细节';
 $_LANG['js_languages']['has_been_stopped'] = '安装进程已中止';
-$_LANG['js_languages']['setup_ucenter'] = '注册到UCenter............';
 $_LANG['js_languages']['password_invaild'] = '密码必须同时包含字母及数字';
 $_LANG['js_languages']['password_short'] = '密码长度不能小于8';
 $_LANG['js_languages']['password_not_eq'] = '密码不相同';
-
-/* UCenter 模板用到的语言项*/
-$_LANG['tagtemplates_goodsname'] = '商品名称';
-$_LANG['tagtemplates_uid'] = '用户 ID';
-$_LANG['tagtemplates_username'] = '添加标签者';
-$_LANG['tagtemplates_dateline'] = '日期';
-$_LANG['tagtemplates_url'] = '商品地址';
-$_LANG['tagtemplates_image'] = '商品图片';
-$_LANG['tagtemplates_price'] = '商品价格';
-$_LANG['ucenter_validation_fails'] = '验证失败';
-$_LANG['ucenter_creator_wrong_password'] = '创始人密码错误';
-$_LANG['ucenter_data_error'] = '安装数据错误';
-$_LANG['ucenter_config_error'] = '配置文件写入错误';
-$_LANG['ucenter_datadir_access'] = '请检查data目录是否可写';
-$_LANG['ucenter_tmp_config_error'] = '临时配置文件写入错误';
-?>

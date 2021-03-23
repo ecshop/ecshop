@@ -1,0 +1,86 @@
+ALTER TABLE `ecs_goods_gallery`
+ADD COLUMN `sort_order` int(11) UNSIGNED NOT NULL DEFAULT 0 AFTER `img_original`;
+
+ALTER TABLE `ecs_adsense`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `ecs_area_region`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`),
+ADD UNIQUE INDEX (`shipping_area_id`, `region_id`);
+
+ALTER TABLE `ecs_auto_manage`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`),
+ADD UNIQUE INDEX (`item_id`,`type`);
+
+ALTER TABLE `ecs_cat_recommend`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`),
+ADD UNIQUE INDEX (`cat_id`,`recommend_type`);
+
+ALTER TABLE `ecs_goods_article`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`),
+ADD UNIQUE INDEX (`goods_id`,`article_id`,`admin_id`);
+
+ALTER TABLE `ecs_goods_cat`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`),
+ADD UNIQUE INDEX (`goods_id`,`cat_id`);
+
+ALTER TABLE `ecs_group_goods`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`),
+ADD UNIQUE INDEX (`parent_id`,`goods_id`,`admin_id`);
+
+ALTER TABLE `ecs_keywords`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`),
+ADD UNIQUE INDEX (`date`,`searchengine`,`keyword`);
+
+ALTER TABLE `ecs_link_goods`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`),
+ADD UNIQUE INDEX (`goods_id`,`link_goods_id`,`admin_id`);
+
+ALTER TABLE `ecs_package_goods`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`),
+ADD UNIQUE INDEX (`package_id`,`goods_id`,`admin_id`,`product_id`);
+
+ALTER TABLE `ecs_reg_extend_info`
+CHANGE COLUMN `Id` `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST;
+
+ALTER TABLE `ecs_searchengine`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`),
+ADD UNIQUE INDEX (`date`,`searchengine`);
+
+ALTER TABLE `ecs_stats`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `ecs_template`
+ADD COLUMN `template_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+ADD PRIMARY KEY (`template_id`);
+
+ALTER TABLE `ecs_topic`
+ADD PRIMARY KEY (`topic_id`);
+
+ALTER TABLE `ecs_volume_price`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`),
+ADD UNIQUE INDEX (`price_type`,`goods_id`,`volume_number`);

@@ -1,48 +1,35 @@
 <?php
 
-if (!defined('IN_ECS'))
-{
+if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
 class template
 {
     /**
-    * 用来存储变量的空间
-    *
-    * @access  private
-    * @var     array      $vars
-    */
-    var $vars = array();
+     * 用来存储变量的空间
+     *
+     * @access  private
+     * @var     array $vars
+     */
+    public $vars = array();
 
-   /**
-    * 模板存放的目录路径
-    *
-    * @access  private
-    * @var     string      $path
-    */
-    var $path = '';
+    /**
+     * 模板存放的目录路径
+     *
+     * @access  private
+     * @var     string $path
+     */
+    public $path = '';
 
     /**
      * 构造函数
      *
      * @access  public
-     * @param   string       $path
+     * @param string $path
      * @return  void
      */
-    function __construct($path)
-    {
-        $this->template($path);
-    }
-
-    /**
-     * 构造函数
-     *
-     * @access  public
-     * @param   string       $path
-     * @return  void
-     */
-    function template($path)
+    public function __construct($path)
     {
         $this->path = $path;
     }
@@ -51,11 +38,11 @@ class template
      * 模拟smarty的assign函数
      *
      * @access  public
-     * @param   string       $name    变量的名字
-     * @param   mix           $value   变量的值
+     * @param string $name 变量的名字
+     * @param mix $value 变量的值
      * @return  void
      */
-    function assign($name, $value)
+    public function assign($name, $value)
     {
         $this->vars[$name] = $value;
     }
@@ -64,10 +51,10 @@ class template
      * 模拟smarty的fetch函数
      *
      * @access  public
-     * @param   string       $file   文件相对路径
+     * @param string $file 文件相对路径
      * @return  string      模板的内容(文本格式)
      */
-    function fetch($file)
+    public function fetch($file)
     {
         extract($this->vars);
         ob_start();
@@ -82,13 +69,11 @@ class template
      * 模拟smarty的display函数
      *
      * @access  public
-     * @param   string       $file   文件相对路径
+     * @param string $file 文件相对路径
      * @return  void
      */
-    function display($file)
+    public function display($file)
     {
         echo $this->fetch($file);
     }
 }
-
-?>

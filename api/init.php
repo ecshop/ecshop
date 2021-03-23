@@ -108,10 +108,6 @@ else
 {
     error_reporting(E_ALL ^ E_NOTICE);
 }
-if ((DEBUG_MODE & 4) == 4)
-{
-    include(ROOT_PATH . 'includes/lib.debug.php');
-}
 
 /* 判断是否支持 Gzip 模式 */
 if (gzip_enabled())

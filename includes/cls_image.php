@@ -1,28 +1,5 @@
 <?php
 
-/**
- * ECSHOP 后台对上传文件的处理类(实现图片上传，图片缩小， 增加水印)
- * 需要定义以下常量
- *  define('ERR_INVALID_IMAGE',             1);
- *  define('ERR_NO_GD',                     2);
- *  define('ERR_IMAGE_NOT_EXISTS',          3);
- *  define('ERR_DIRECTORY_READONLY',        4);
- *  define('ERR_UPLOAD_FAILURE',            5);
- *  define('ERR_INVALID_PARAM',             6);
- *  define('ERR_INVALID_IMAGE_TYPE',        7);
- *  define('ROOT_PATH',                     '网站根目录')
- *
- * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
- * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
- * ============================================================================
- * $Author: liubo $
- * $Id: cls_image.php 17217 2011-01-19 06:29:08Z liubo $
-*/
-
 if (!defined('IN_ECS'))
 {
     die('Hacking attempt');

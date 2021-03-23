@@ -52,7 +52,7 @@ if ($_REQUEST['act'] == 'list') {
         $default_display_type = $_CFG['show_order_type'] == '0' ? 'list' : 'text';
         $display = (isset($_REQUEST['display']) && in_array(trim(strtolower($_REQUEST['display'])), array('list', 'text'))) ? trim($_REQUEST['display']) : (isset($_COOKIE['ECS']['display']) ? $_COOKIE['ECS']['display'] : $default_display_type);
         $display = in_array($display, array('list', 'text')) ? $display : 'text';
-        setcookie('ECS[display]', $display, gmtime() + 86400 * 7);
+        setcookie('ECS[display]', $display, gmtime() + 86400 * 7, null, null, null, true);
 
         /* 取得每页记录数 */
         $size = isset($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;

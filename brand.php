@@ -52,7 +52,7 @@ $sort = (isset($_REQUEST['sort']) && in_array(trim(strtolower($_REQUEST['sort'])
 $order = (isset($_REQUEST['order']) && in_array(trim(strtoupper($_REQUEST['order'])), array('ASC', 'DESC'))) ? trim($_REQUEST['order']) : $default_sort_order_method;
 $display = (isset($_REQUEST['display']) && in_array(trim(strtolower($_REQUEST['display'])), array('list', 'grid', 'text'))) ? trim($_REQUEST['display']) : (isset($_COOKIE['ECS']['display']) ? $_COOKIE['ECS']['display'] : $default_display_type);
 $display = in_array($display, array('list', 'grid', 'text')) ? $display : 'text';
-setcookie('ECS[display]', $display, gmtime() + 86400 * 7);
+setcookie('ECS[display]', $display, gmtime() + 86400 * 7, null, null, null, true);
 
 /*------------------------------------------------------ */
 //-- PROCESSOR

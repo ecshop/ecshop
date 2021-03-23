@@ -212,8 +212,8 @@ if ((!isset($_SESSION['admin_id']) || intval($_SESSION['admin_id']) <= 0) &&
 
         if (!$row) {
             // 没有找到这个记录
-            setcookie($_COOKIE['ECSCP']['admin_id'], '', 1);
-            setcookie($_COOKIE['ECSCP']['admin_pass'], '', 1);
+            setcookie($_COOKIE['ECSCP']['admin_id'], '', 1, null, null, null, true);
+            setcookie($_COOKIE['ECSCP']['admin_pass'], '', 1, null, null, null, true);
 
             if (!empty($_REQUEST['is_ajax'])) {
                 make_json_error($_LANG['priv_error']);
@@ -233,8 +233,8 @@ if ((!isset($_SESSION['admin_id']) || intval($_SESSION['admin_id']) <= 0) &&
                     " SET last_login = '" . gmtime() . "', last_ip = '" . real_ip() . "'" .
                     " WHERE user_id = '" . $_SESSION['admin_id'] . "'");
             } else {
-                setcookie($_COOKIE['ECSCP']['admin_id'], '', 1);
-                setcookie($_COOKIE['ECSCP']['admin_pass'], '', 1);
+                setcookie($_COOKIE['ECSCP']['admin_id'], '', 1, null, null, null, true);
+                setcookie($_COOKIE['ECSCP']['admin_pass'], '', 1, null, null, null, true);
 
                 if (!empty($_REQUEST['is_ajax'])) {
                     make_json_error($_LANG['priv_error']);

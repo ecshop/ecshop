@@ -213,8 +213,8 @@ if (!defined('INIT_NO_USERS')) {
         if (!$row) {
             // 没有找到这个记录
             $time = time() - 3600;
-            setcookie("ECS[user_id]", '', $time, '/');
-            setcookie("ECS[password]", '', $time, '/');
+            setcookie("ECS[user_id]", '', $time, '/', null, null, true);
+            setcookie("ECS[password]", '', $time, '/', null, null, true);
         } else {
             $_SESSION['user_id'] = $row['user_id'];
             $_SESSION['user_name'] = $row['user_name'];

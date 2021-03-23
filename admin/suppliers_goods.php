@@ -856,7 +856,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     }
 
     /* 记录上一次选择的分类和品牌 */
-    setcookie('ECSCP[last_choose]', $catgory_id . '|' . $brand_id, gmtime() + 86400);
+    setcookie('ECSCP[last_choose]', $catgory_id . '|' . $brand_id, gmtime() + 86400, null, null, null, true);
     /* 清空缓存 */
     clear_cache_files();
 

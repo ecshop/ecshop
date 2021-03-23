@@ -19,8 +19,8 @@ $exc = new exchange($ecs->table("admin_user"), $db, 'user_id', 'user_name');
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'logout') {
     /* 清除cookie */
-    setcookie('ECSCP[admin_id]', '', 1);
-    setcookie('ECSCP[admin_pass]', '', 1);
+    setcookie('ECSCP[admin_id]', '', 1, null, null, null, true);
+    setcookie('ECSCP[admin_pass]', '', 1, null, null, null, true);
 
     $sess->destroy_session();
 
@@ -105,8 +105,8 @@ elseif ($_REQUEST['act'] == 'signin') {
 
         if (isset($_POST['remember'])) {
             $time = gmtime() + 3600 * 24 * 365;
-            setcookie('ECSCP[admin_id]', $row['user_id'], $time);
-            setcookie('ECSCP[admin_pass]', md5($row['password'] . $_CFG['hash_code']), $time);
+            setcookie('ECSCP[admin_id]', $row['user_id'], $time, null, null, null, true);
+            setcookie('ECSCP[admin_pass]', md5($row['password'] . $_CFG['hash_code'] . $row['add_time']), $time, null, null, null, true);
         }
 
         // 清除购物车中过期的数据

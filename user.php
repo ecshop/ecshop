@@ -2239,5 +2239,5 @@ elseif ($action == 'send_hash_mail') {
     }
 } /* 清除商品浏览历史 */
 elseif ($action == 'clear_history') {
-    setcookie('ECS[history]', '', 1);
+    setcookie('ECS[history]', '', 1, null, null, null, true);
 }

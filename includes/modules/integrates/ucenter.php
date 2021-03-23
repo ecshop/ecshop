@@ -365,18 +365,18 @@ class ucenter extends integrate
         if (empty($username)) {
             /* 摧毁cookie */
             $time = time() - 3600;
-            setcookie("ECS[user_id]", '', $time, $this->cookie_path);
-            setcookie("ECS[password]", '', $time, $this->cookie_path);
+            setcookie("ECS[user_id]", '', $time, $this->cookie_path, null, null, true);
+            setcookie("ECS[password]", '', $time, $this->cookie_path, null, null, true);
         } else {
             /* 设置cookie */
             $time = time() + 3600 * 24 * 30;
 
-            setcookie("ECS[username]", stripslashes($username), $time, $this->cookie_path, $this->cookie_domain);
+            setcookie("ECS[username]", stripslashes($username), $time, $this->cookie_path, $this->cookie_domain, null, true);
             $sql = "SELECT user_id, password FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_name='$username' LIMIT 1";
             $row = $GLOBALS['db']->getRow($sql);
             if ($row) {
-                setcookie("ECS[user_id]", $row['user_id'], $time, $this->cookie_path, $this->cookie_domain);
-                setcookie("ECS[password]", $row['password'], $time, $this->cookie_path, $this->cookie_domain);
+                setcookie("ECS[user_id]", $row['user_id'], $time, $this->cookie_path, $this->cookie_domain, null, true);
+                setcookie("ECS[password]", $row['password'], $time, $this->cookie_path, $this->cookie_domain, null, true);
             }
         }
     }

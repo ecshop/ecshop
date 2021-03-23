@@ -358,15 +358,15 @@ function set_cookie($user_id = '', $user_name = '', $email = '')
     if (empty($user_id)) {
         /* 摧毁cookie */
         $time = time() - 3600;
-        setcookie('ECS[user_id]', '', $time);
-        setcookie('ECS[username]', '', $time);
-        setcookie('ECS[email]', '', $time);
+        setcookie('ECS[user_id]', '', $time, null, null, null, true);
+        setcookie('ECS[username]', '', $time, null, null, null, true);
+        setcookie('ECS[email]', '', $time, null, null, null, true);
     } else {
         /* 设置cookie */
         $time = time() + 3600 * 24 * 30;
-        setcookie("ECS[user_id]", $user_id, $time, $GLOBALS['cookie_path'], $GLOBALS['cookie_domain']);
-        setcookie("ECS[username]", $user_name, $time, $GLOBALS['cookie_path'], $GLOBALS['cookie_domain']);
-        setcookie("ECS[email]", $email, $time, $GLOBALS['cookie_path'], $GLOBALS['cookie_domain']);
+        setcookie("ECS[user_id]", $user_id, $time, $GLOBALS['cookie_path'], $GLOBALS['cookie_domain'], null, true);
+        setcookie("ECS[username]", $user_name, $time, $GLOBALS['cookie_path'], $GLOBALS['cookie_domain'], null, true);
+        setcookie("ECS[email]", $email, $time, $GLOBALS['cookie_path'], $GLOBALS['cookie_domain'], null, true);
     }
 }
 
@@ -433,7 +433,8 @@ function _setcookie($var, $value, $life = 0, $prefix = 1)
         $life ? $timestamp + $life : 0,
         $cookiepath,
         $cookiedomain,
-        $_SERVER['SERVER_PORT'] == 443 ? 1 : 0
+        $_SERVER['SERVER_PORT'] == 443 ? 1 : 0,
+        true
     );
 }
 

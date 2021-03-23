@@ -8,7 +8,7 @@ require(ROOT_PATH . 'includes/cls_json.php');
 
 $data['api_ver'] = '1.0';
 $data['version'] = VERSION;
-$data['patch'] = file_get_contents(ROOT_PATH.ADMIN_PATH."/patch_num");
+$data['patch'] = file_get_contents(ROOT_PATH."temp/patch_num");
 $data['ecs_lang'] = $_CFG['lang'];
 $data['release'] = RELEASE;
 $data['charset'] = strtoupper(EC_CHARSET);

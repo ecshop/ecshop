@@ -1,15 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 2.8.0.3
--- http://www.phpmyadmin.net
---
--- 主机: localhost
--- 生成日期: 2006 年 11 月 02 日 16:55
--- 服务器版本: 3.23.58
--- PHP 版本: 4.4.2
---
--- 数据库: `ecs_liuw`
---
-
 
 --
 -- 导出表中的数据 `ecs_admin_action`

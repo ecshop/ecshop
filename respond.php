@@ -13,8 +13,8 @@ if (empty($pay_code) && !empty($_REQUEST['v_pmode']) && !empty($_REQUEST['v_pstr
     $pay_code = 'cappay';
 }
 
-if (isset($_POST['MerRemark'])  && $_POST['MerRemark']=='epay') {
-    $pay_code ='epay';
+if (isset($_POST['MerRemark']) && $_POST['MerRemark'] == 'epay') {
+    $pay_code = 'epay';
 }
 
 //获取快钱神州行支付方式
@@ -31,11 +31,11 @@ if (empty($pay_code)) {
         $arr1 = explode('?', $pay_code);
         $arr2 = explode('=', $arr1[1]);
 
-        $_REQUEST['code']   = $arr1[0];
+        $_REQUEST['code'] = $arr1[0];
         $_REQUEST[$arr2[0]] = $arr2[1];
-        $_GET['code']       = $arr1[0];
-        $_GET[$arr2[0]]     = $arr2[1];
-        $pay_code           = $arr1[0];
+        $_GET['code'] = $arr1[0];
+        $_GET[$arr2[0]] = $arr2[1];
+        $pay_code = $arr1[0];
     }
 
     /* 判断是否启用 */
@@ -51,7 +51,7 @@ if (empty($pay_code)) {
             include_once($plugin_file);
 
             $payment = new $pay_code();
-            $msg     = (@$payment->respond()) ? $_LANG['pay_success'] : $_LANG['pay_fail'];
+            $msg = (@$payment->respond()) ? $_LANG['pay_success'] : $_LANG['pay_fail'];
         } else {
             $msg = $_LANG['pay_not_exist'];
         }

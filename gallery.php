@@ -5,7 +5,7 @@ define('IN_ECS', true);
 require(dirname(__FILE__) . '/includes/init.php');
 
 /* 参数 */
-$_REQUEST['id']  = isset($_REQUEST['id'])  ? intval($_REQUEST['id'])  : 0; // 商品编号
+$_REQUEST['id'] = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0; // 商品编号
 $_REQUEST['img'] = isset($_REQUEST['img']) ? intval($_REQUEST['img']) : 0; // 图片编号
 
 /* 获得商品名称 */
@@ -20,9 +20,9 @@ if ($goods_name === false) {
 }
 
 /* 获得所有的图片 */
-$sql = 'SELECT img_id, img_desc, thumb_url, img_url'.
-       ' FROM ' .$ecs->table('goods_gallery').
-       " WHERE goods_id = '$_REQUEST[id]' ORDER BY img_id";
+$sql = 'SELECT img_id, img_desc, thumb_url, img_url' .
+    ' FROM ' . $ecs->table('goods_gallery') .
+    " WHERE goods_id = '$_REQUEST[id]' ORDER BY img_id";
 $img_list = $db->getAll($sql);
 
 $img_count = count($img_list);

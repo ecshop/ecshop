@@ -24,26 +24,26 @@ if (empty($_REQUEST['act'])) {
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     /* 初始化分页信息 */
-    $page         = isset($_REQUEST['page'])   && intval($_REQUEST['page'])  > 0 ? intval($_REQUEST['page'])  : 1;
-    $size         = isset($_CFG['page_size'])  && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
-    $cat_id       = isset($_REQUEST['cat_id']) && intval($_REQUEST['cat_id']) > 0 ? intval($_REQUEST['cat_id']) : 0;
+    $page = isset($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
+    $size = isset($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
+    $cat_id = isset($_REQUEST['cat_id']) && intval($_REQUEST['cat_id']) > 0 ? intval($_REQUEST['cat_id']) : 0;
     $integral_max = isset($_REQUEST['integral_max']) && intval($_REQUEST['integral_max']) > 0 ? intval($_REQUEST['integral_max']) : 0;
     $integral_min = isset($_REQUEST['integral_min']) && intval($_REQUEST['integral_min']) > 0 ? intval($_REQUEST['integral_min']) : 0;
 
     /* 排序、显示方式以及类型 */
-    $default_display_type      = $_CFG['show_order_type'] == '0' ? 'list' : ($_CFG['show_order_type'] == '1' ? 'grid' : 'text');
+    $default_display_type = $_CFG['show_order_type'] == '0' ? 'list' : ($_CFG['show_order_type'] == '1' ? 'grid' : 'text');
     $default_sort_order_method = $_CFG['sort_order_method'] == '0' ? 'DESC' : 'ASC';
-    $default_sort_order_type   = $_CFG['sort_order_type'] == '0' ? 'goods_id' : ($_CFG['sort_order_type'] == '1' ? 'exchange_integral' : 'last_update');
+    $default_sort_order_type = $_CFG['sort_order_type'] == '0' ? 'goods_id' : ($_CFG['sort_order_type'] == '1' ? 'exchange_integral' : 'last_update');
 
-    $sort    = (isset($_REQUEST['sort'])  && in_array(trim(strtolower($_REQUEST['sort'])), array('goods_id', 'exchange_integral', 'last_update'))) ? trim($_REQUEST['sort'])  : $default_sort_order_type;
-    $order   = (isset($_REQUEST['order']) && in_array(trim(strtoupper($_REQUEST['order'])), array('ASC', 'DESC')))                              ? trim($_REQUEST['order']) : $default_sort_order_method;
-    $display = (isset($_REQUEST['display']) && in_array(trim(strtolower($_REQUEST['display'])), array('list', 'grid', 'text'))) ? trim($_REQUEST['display'])  : (isset($_COOKIE['ECS']['display']) ? $_COOKIE['ECS']['display'] : $default_display_type);
-    $display  = in_array($display, array('list', 'grid', 'text')) ? $display : 'text';
+    $sort = (isset($_REQUEST['sort']) && in_array(trim(strtolower($_REQUEST['sort'])), array('goods_id', 'exchange_integral', 'last_update'))) ? trim($_REQUEST['sort']) : $default_sort_order_type;
+    $order = (isset($_REQUEST['order']) && in_array(trim(strtoupper($_REQUEST['order'])), array('ASC', 'DESC'))) ? trim($_REQUEST['order']) : $default_sort_order_method;
+    $display = (isset($_REQUEST['display']) && in_array(trim(strtolower($_REQUEST['display'])), array('list', 'grid', 'text'))) ? trim($_REQUEST['display']) : (isset($_COOKIE['ECS']['display']) ? $_COOKIE['ECS']['display'] : $default_display_type);
+    $display = in_array($display, array('list', 'grid', 'text')) ? $display : 'text';
     setcookie('ECS[display]', $display, gmtime() + 86400 * 7);
 
     /* 页面的缓存ID */
-    $cache_id = sprintf('%X', crc32($cat_id . '-' . $display . '-' . $sort  .'-' . $order  .'-' . $page . '-' . $size . '-' . $_SESSION['user_rank'] . '-' .
-        $_CFG['lang'] . '-' . $integral_max . '-' .$integral_min));
+    $cache_id = sprintf('%X', crc32($cat_id . '-' . $display . '-' . $sort . '-' . $order . '-' . $page . '-' . $size . '-' . $_SESSION['user_rank'] . '-' .
+        $_CFG['lang'] . '-' . $integral_max . '-' . $integral_min));
 
     if (!$smarty->is_cached('exchange.dwt', $cache_id)) {
         /* 如果页面没有被缓存则重新获取页面的内容 */
@@ -83,7 +83,7 @@ if ($_REQUEST['act'] == 'list') {
 
 
         $count = get_exchange_goods_count($children, $integral_min, $integral_max);
-        $max_page = ($count> 0) ? ceil($count / $size) : 1;
+        $max_page = ($count > 0) ? ceil($count / $size) : 1;
         if ($page > $max_page) {
             $page = $max_page;
         }
@@ -111,7 +111,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 积分兑换商品详情
 /*------------------------------------------------------ */
 elseif ($_REQUEST['act'] == 'view') {
-    $goods_id = isset($_REQUEST['id'])  ? intval($_REQUEST['id']) : 0;
+    $goods_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
     $cache_id = $goods_id . '-' . $_SESSION['user_rank'] . '-' . $_CFG['lang'] . '-exchange';
     $cache_id = sprintf('%X', crc32($cache_id));
@@ -133,7 +133,7 @@ elseif ($_REQUEST['act'] == 'view') {
             exit;
         } else {
             if ($goods['brand_id'] > 0) {
-                $goods['goods_brand_url'] = build_uri('brand', array('bid'=>$goods['brand_id']), $goods['goods_brand']);
+                $goods['goods_brand_url'] = build_uri('brand', array('bid' => $goods['brand_id']), $goods['goods_brand']);
             }
 
             $goods['goods_style_name'] = add_style($goods['goods_name'], $goods['goods_name_style']);
@@ -149,14 +149,14 @@ elseif ($_REQUEST['act'] == 'view') {
             assign_template();
 
             /* 上一个商品下一个商品 */
-            $sql = "SELECT eg.goods_id FROM " .$ecs->table('exchange_goods'). " AS eg," . $GLOBALS['ecs']->table('goods') . " AS g WHERE eg.goods_id = g.goods_id AND eg.goods_id > " . $goods['goods_id'] . " AND eg.is_exchange = 1 AND g.is_delete = 0 LIMIT 1";
+            $sql = "SELECT eg.goods_id FROM " . $ecs->table('exchange_goods') . " AS eg," . $GLOBALS['ecs']->table('goods') . " AS g WHERE eg.goods_id = g.goods_id AND eg.goods_id > " . $goods['goods_id'] . " AND eg.is_exchange = 1 AND g.is_delete = 0 LIMIT 1";
             $prev_gid = $db->getOne($sql);
             if (!empty($prev_gid)) {
                 $prev_good['url'] = build_uri('exchange_goods', array('gid' => $prev_gid), $goods['goods_name']);
                 $smarty->assign('prev_good', $prev_good);//上一个商品
             }
 
-            $sql = "SELECT max(eg.goods_id) FROM " . $ecs->table('exchange_goods') . " AS eg," . $GLOBALS['ecs']->table('goods') . " AS g WHERE eg.goods_id = g.goods_id AND eg.goods_id < ".$goods['goods_id'] . " AND eg.is_exchange = 1 AND g.is_delete = 0";
+            $sql = "SELECT max(eg.goods_id) FROM " . $ecs->table('exchange_goods') . " AS eg," . $GLOBALS['ecs']->table('goods') . " AS g WHERE eg.goods_id = g.goods_id AND eg.goods_id < " . $goods['goods_id'] . " AND eg.is_exchange = 1 AND g.is_delete = 0";
             $next_gid = $db->getOne($sql);
             if (!empty($next_gid)) {
                 $next_good['url'] = build_uri('exchange_goods', array('gid' => $next_gid), $goods['goods_name']);
@@ -218,7 +218,7 @@ elseif ($_REQUEST['act'] == 'buy') {
         show_message($_LANG['eg_error_status'], array($_LANG['back_up_page']), array($back_act), 'error');
     }
 
-    $user_info   = get_user_info($_SESSION['user_id']);
+    $user_info = get_user_info($_SESSION['user_id']);
     $user_points = $user_info['pay_points']; // 用户的积分总数
     if ($goods['exchange_integral'] > $user_points) {
         show_message($_LANG['eg_error_integral'], array($_LANG['back_up_page']), array($back_act), 'error');
@@ -251,10 +251,10 @@ elseif ($_REQUEST['act'] == 'buy') {
     /* 查询：查询规格名称和值，不考虑价格 */
     $attr_list = array();
     $sql = "SELECT a.attr_name, g.attr_value " .
-            "FROM " . $ecs->table('goods_attr') . " AS g, " .
-                $ecs->table('attribute') . " AS a " .
-            "WHERE g.attr_id = a.attr_id " .
-            "AND g.goods_attr_id " . db_create_in($specs);
+        "FROM " . $ecs->table('goods_attr') . " AS g, " .
+        $ecs->table('attribute') . " AS a " .
+        "WHERE g.attr_id = a.attr_id " .
+        "AND g.goods_attr_id " . db_create_in($specs);
     $res = $db->query($sql);
     while ($row = $db->fetchRow($res)) {
         $attr_list[] = $row['attr_name'] . ': ' . $row['attr_value'];
@@ -268,22 +268,22 @@ elseif ($_REQUEST['act'] == 'buy') {
     /* 更新：加入购物车 */
     $number = 1;
     $cart = array(
-        'user_id'        => $_SESSION['user_id'],
-        'session_id'     => SESS_ID,
-        'goods_id'       => $goods['goods_id'],
-        'product_id'     => $product_info['product_id'],
-        'goods_sn'       => addslashes($goods['goods_sn']),
-        'goods_name'     => addslashes($goods['goods_name']),
-        'market_price'   => $goods['market_price'],
-        'goods_price'    => 0,//$goods['exchange_integral']
-        'goods_number'   => $number,
-        'goods_attr'     => addslashes($goods_attr),
-        'goods_attr_id'  => $specs,
-        'is_real'        => $goods['is_real'],
+        'user_id' => $_SESSION['user_id'],
+        'session_id' => SESS_ID,
+        'goods_id' => $goods['goods_id'],
+        'product_id' => $product_info['product_id'],
+        'goods_sn' => addslashes($goods['goods_sn']),
+        'goods_name' => addslashes($goods['goods_name']),
+        'market_price' => $goods['market_price'],
+        'goods_price' => 0,//$goods['exchange_integral']
+        'goods_number' => $number,
+        'goods_attr' => addslashes($goods_attr),
+        'goods_attr_id' => $specs,
+        'is_real' => $goods['is_real'],
         'extension_code' => addslashes($goods['extension_code']),
-        'parent_id'      => 0,
-        'rec_type'       => CART_EXCHANGE_GOODS,
-        'is_gift'        => 0
+        'parent_id' => 0,
+        'rec_type' => CART_EXCHANGE_GOODS,
+        'is_gift' => 0
     );
     $db->autoExecute($ecs->table('cart'), $cart, 'INSERT');
 
@@ -304,7 +304,7 @@ elseif ($_REQUEST['act'] == 'buy') {
 /**
  * 获得分类的信息
  *
- * @param   integer $cat_id
+ * @param integer $cat_id
  *
  * @return  void
  */
@@ -318,14 +318,14 @@ function get_cat_info($cat_id)
  * 获得分类下的商品
  *
  * @access  public
- * @param   string  $children
+ * @param string $children
  * @return  array
  */
 function exchange_get_goods($children, $min, $max, $ext, $size, $page, $sort, $order)
 {
     $display = $GLOBALS['display'];
-    $where = "eg.is_exchange = 1 AND g.is_delete = 0 AND ".
-             "($children OR " . get_extension_goods($children) . ')';
+    $where = "eg.is_exchange = 1 AND g.is_delete = 0 AND " .
+        "($children OR " . get_extension_goods($children) . ')';
 
     if ($min > 0) {
         $where .= " AND eg.exchange_integral >= $min ";
@@ -337,9 +337,9 @@ function exchange_get_goods($children, $min, $max, $ext, $size, $page, $sort, $o
 
     /* 获得商品列表 */
     $sql = 'SELECT g.goods_id, g.goods_name, g.goods_name_style, eg.exchange_integral, ' .
-                'g.goods_type, g.goods_brief, g.goods_thumb , g.goods_img, eg.is_hot ' .
-            'FROM ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg, ' .$GLOBALS['ecs']->table('goods') . ' AS g ' .
-            "WHERE eg.goods_id = g.goods_id AND $where $ext ORDER BY $sort $order";
+        'g.goods_type, g.goods_brief, g.goods_thumb , g.goods_img, eg.is_hot ' .
+        'FROM ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg, ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
+        "WHERE eg.goods_id = g.goods_id AND $where $ext ORDER BY $sort $order";
     $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);
 
     $arr = array();
@@ -361,23 +361,23 @@ function exchange_get_goods($children, $min, $max, $ext, $size, $page, $sort, $o
         }
 
         if ($watermark_img != '') {
-            $arr[$row['goods_id']]['watermark_img'] =  $watermark_img;
+            $arr[$row['goods_id']]['watermark_img'] = $watermark_img;
         }
 
-        $arr[$row['goods_id']]['goods_id']          = $row['goods_id'];
+        $arr[$row['goods_id']]['goods_id'] = $row['goods_id'];
         if ($display == 'grid') {
-            $arr[$row['goods_id']]['goods_name']    = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+            $arr[$row['goods_id']]['goods_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
         } else {
-            $arr[$row['goods_id']]['goods_name']    = $row['goods_name'];
+            $arr[$row['goods_id']]['goods_name'] = $row['goods_name'];
         }
-        $arr[$row['goods_id']]['name']              = $row['goods_name'];
-        $arr[$row['goods_id']]['goods_brief']       = $row['goods_brief'];
-        $arr[$row['goods_id']]['goods_style_name']  = add_style($row['goods_name'], $row['goods_name_style']);
+        $arr[$row['goods_id']]['name'] = $row['goods_name'];
+        $arr[$row['goods_id']]['goods_brief'] = $row['goods_brief'];
+        $arr[$row['goods_id']]['goods_style_name'] = add_style($row['goods_name'], $row['goods_name_style']);
         $arr[$row['goods_id']]['exchange_integral'] = $row['exchange_integral'];
-        $arr[$row['goods_id']]['type']              = $row['goods_type'];
-        $arr[$row['goods_id']]['goods_thumb']       = get_image_path($row['goods_id'], $row['goods_thumb'], true);
-        $arr[$row['goods_id']]['goods_img']         = get_image_path($row['goods_id'], $row['goods_img']);
-        $arr[$row['goods_id']]['url']               = build_uri('exchange_goods', array('gid'=>$row['goods_id']), $row['goods_name']);
+        $arr[$row['goods_id']]['type'] = $row['goods_type'];
+        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
+        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+        $arr[$row['goods_id']]['url'] = build_uri('exchange_goods', array('gid' => $row['goods_id']), $row['goods_name']);
     }
 
     return $arr;
@@ -387,12 +387,12 @@ function exchange_get_goods($children, $min, $max, $ext, $size, $page, $sort, $o
  * 获得分类下的商品总数
  *
  * @access  public
- * @param   string     $cat_id
+ * @param string $cat_id
  * @return  integer
  */
-function get_exchange_goods_count($children, $min = 0, $max = 0, $ext='')
+function get_exchange_goods_count($children, $min = 0, $max = 0, $ext = '')
 {
-    $where  = "eg.is_exchange = 1 AND g.is_delete = 0 AND ($children OR " . get_extension_goods($children) . ')';
+    $where = "eg.is_exchange = 1 AND g.is_delete = 0 AND ($children OR " . get_extension_goods($children) . ')';
 
 
     if ($min > 0) {
@@ -404,7 +404,7 @@ function get_exchange_goods_count($children, $min = 0, $max = 0, $ext='')
     }
 
     $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg, ' .
-           $GLOBALS['ecs']->table('goods') . " AS g WHERE eg.goods_id = g.goods_id AND $where $ext";
+        $GLOBALS['ecs']->table('goods') . " AS g WHERE eg.goods_id = g.goods_id AND $where $ext";
 
     /* 返回商品总数 */
     return $GLOBALS['db']->getOne($sql);
@@ -414,26 +414,26 @@ function get_exchange_goods_count($children, $min = 0, $max = 0, $ext='')
  * 获得指定分类下的推荐商品
  *
  * @access  public
- * @param   string      $type       推荐类型，可以是 best, new, hot, promote
- * @param   string      $cats       分类的ID
- * @param   integer     $min        商品积分下限
- * @param   integer     $max        商品积分上限
- * @param   string      $ext        商品扩展查询
+ * @param string $type 推荐类型，可以是 best, new, hot, promote
+ * @param string $cats 分类的ID
+ * @param integer $min 商品积分下限
+ * @param integer $max 商品积分上限
+ * @param string $ext 商品扩展查询
  * @return  array
  */
-function get_exchange_recommend_goods($type = '', $cats = '', $min =0, $max = 0, $ext='')
+function get_exchange_recommend_goods($type = '', $cats = '', $min = 0, $max = 0, $ext = '')
 {
     $price_where = ($min > 0) ? " AND g.shop_price >= $min " : '';
     $price_where .= ($max > 0) ? " AND g.shop_price <= $max " : '';
 
-    $sql =  'SELECT g.goods_id, g.goods_name, g.goods_name_style, eg.exchange_integral, ' .
-                'g.goods_brief, g.goods_thumb, goods_img, b.brand_name ' .
-            'FROM ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = eg.goods_id ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('brand') . ' AS b ON b.brand_id = g.brand_id ' .
-            'WHERE eg.is_exchange = 1 AND g.is_delete = 0 ' . $price_where . $ext;
+    $sql = 'SELECT g.goods_id, g.goods_name, g.goods_name_style, eg.exchange_integral, ' .
+        'g.goods_brief, g.goods_thumb, goods_img, b.brand_name ' .
+        'FROM ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg ' .
+        'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = eg.goods_id ' .
+        'LEFT JOIN ' . $GLOBALS['ecs']->table('brand') . ' AS b ON b.brand_id = g.brand_id ' .
+        'WHERE eg.is_exchange = 1 AND g.is_delete = 0 ' . $price_where . $ext;
     $num = 0;
-    $type2lib = array('best'=>'exchange_best', 'new'=>'exchange_new', 'hot'=>'exchange_hot');
+    $type2lib = array('best' => 'exchange_best', 'new' => 'exchange_new', 'hot' => 'exchange_hot');
     $num = get_library_number($type2lib[$type], 'exchange_list');
 
     switch ($type) {
@@ -449,7 +449,7 @@ function get_exchange_recommend_goods($type = '', $cats = '', $min =0, $max = 0,
     }
 
     if (!empty($cats)) {
-        $sql .= " AND (" . $cats . " OR " . get_extension_goods($cats) .")";
+        $sql .= " AND (" . $cats . " OR " . get_extension_goods($cats) . ")";
     }
     $order_type = $GLOBALS['_CFG']['recommend_order'];
     $sql .= ($order_type == 0) ? ' ORDER BY g.sort_order, g.last_update DESC' : ' ORDER BY RAND()';
@@ -458,18 +458,18 @@ function get_exchange_recommend_goods($type = '', $cats = '', $min =0, $max = 0,
     $idx = 0;
     $goods = array();
     while ($row = $GLOBALS['db']->fetchRow($res)) {
-        $goods[$idx]['id']                = $row['goods_id'];
-        $goods[$idx]['name']              = $row['goods_name'];
-        $goods[$idx]['brief']             = $row['goods_brief'];
-        $goods[$idx]['brand_name']        = $row['brand_name'];
-        $goods[$idx]['short_name']        = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-                                                sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+        $goods[$idx]['id'] = $row['goods_id'];
+        $goods[$idx]['name'] = $row['goods_name'];
+        $goods[$idx]['brief'] = $row['goods_brief'];
+        $goods[$idx]['brand_name'] = $row['brand_name'];
+        $goods[$idx]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
+            sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
         $goods[$idx]['exchange_integral'] = $row['exchange_integral'];
-        $goods[$idx]['thumb']             = get_image_path($row['goods_id'], $row['goods_thumb'], true);
-        $goods[$idx]['goods_img']         = get_image_path($row['goods_id'], $row['goods_img']);
-        $goods[$idx]['url']               = build_uri('exchange_goods', array('gid' => $row['goods_id']), $row['goods_name']);
+        $goods[$idx]['thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
+        $goods[$idx]['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+        $goods[$idx]['url'] = build_uri('exchange_goods', array('gid' => $row['goods_id']), $row['goods_name']);
 
-        $goods[$idx]['short_style_name']  = add_style($goods[$idx]['short_name'], $row['goods_name_style']);
+        $goods[$idx]['short_style_name'] = add_style($goods[$idx]['short_name'], $row['goods_name_style']);
         $idx++;
     }
 
@@ -480,19 +480,19 @@ function get_exchange_recommend_goods($type = '', $cats = '', $min =0, $max = 0,
  * 获得积分兑换商品的详细信息
  *
  * @access  public
- * @param   integer     $goods_id
+ * @param integer $goods_id
  * @return  void
  */
 function get_exchange_goods_info($goods_id)
 {
     $time = gmtime();
     $sql = 'SELECT g.*, c.measure_unit, b.brand_id, b.brand_name AS goods_brand, eg.exchange_integral, eg.is_exchange ' .
-            'FROM ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg ON g.goods_id = eg.goods_id ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('category') . ' AS c ON g.cat_id = c.cat_id ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('brand') . ' AS b ON g.brand_id = b.brand_id ' .
-            "WHERE g.goods_id = '$goods_id' AND g.is_delete = 0 " .
-            'GROUP BY g.goods_id';
+        'FROM ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
+        'LEFT JOIN ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg ON g.goods_id = eg.goods_id ' .
+        'LEFT JOIN ' . $GLOBALS['ecs']->table('category') . ' AS c ON g.cat_id = c.cat_id ' .
+        'LEFT JOIN ' . $GLOBALS['ecs']->table('brand') . ' AS b ON g.brand_id = b.brand_id ' .
+        "WHERE g.goods_id = '$goods_id' AND g.is_delete = 0 " .
+        'GROUP BY g.goods_id';
 
     $row = $GLOBALS['db']->getRow($sql);
 
@@ -509,19 +509,19 @@ function get_exchange_goods_info($goods_id)
         }
 
         if ($watermark_img != '') {
-            $row['watermark_img'] =  $watermark_img;
+            $row['watermark_img'] = $watermark_img;
         }
 
         /* 修正重量显示 */
-        $row['goods_weight']  = (intval($row['goods_weight']) > 0) ?
+        $row['goods_weight'] = (intval($row['goods_weight']) > 0) ?
             $row['goods_weight'] . $GLOBALS['_LANG']['kilogram'] :
             ($row['goods_weight'] * 1000) . $GLOBALS['_LANG']['gram'];
 
         /* 修正上架时间显示 */
-        $row['add_time']      = local_date($GLOBALS['_CFG']['date_format'], $row['add_time']);
+        $row['add_time'] = local_date($GLOBALS['_CFG']['date_format'], $row['add_time']);
 
         /* 修正商品图片 */
-        $row['goods_img']   = get_image_path($goods_id, $row['goods_img']);
+        $row['goods_img'] = get_image_path($goods_id, $row['goods_img']);
         $row['goods_thumb'] = get_image_path($goods_id, $row['goods_thumb'], true);
 
         return $row;

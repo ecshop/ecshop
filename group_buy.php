@@ -138,8 +138,8 @@ elseif ($_REQUEST['act'] == 'view') {
     }
 
     //更新商品点击次数
-    $sql = 'UPDATE ' . $ecs->table('goods') . ' SET click_count = click_count + 1 '.
-           "WHERE goods_id = '" . $group_buy['goods_id'] . "'";
+    $sql = 'UPDATE ' . $ecs->table('goods') . ' SET click_count = click_count + 1 ' .
+        "WHERE goods_id = '" . $group_buy['goods_id'] . "'";
     $db->query($sql);
 
     $smarty->assign('now_time', gmtime());           // 当前系统时间
@@ -216,10 +216,10 @@ elseif ($_REQUEST['act'] == 'buy') {
     /* 查询：查询规格名称和值，不考虑价格 */
     $attr_list = array();
     $sql = "SELECT a.attr_name, g.attr_value " .
-            "FROM " . $ecs->table('goods_attr') . " AS g, " .
-                $ecs->table('attribute') . " AS a " .
-            "WHERE g.attr_id = a.attr_id " .
-            "AND g.goods_attr_id " . db_create_in($specs);
+        "FROM " . $ecs->table('goods_attr') . " AS g, " .
+        $ecs->table('attribute') . " AS a " .
+        "WHERE g.attr_id = a.attr_id " .
+        "AND g.goods_attr_id " . db_create_in($specs);
     $res = $db->query($sql);
     while ($row = $db->fetchRow($res)) {
         $attr_list[] = $row['attr_name'] . ': ' . $row['attr_value'];
@@ -233,22 +233,22 @@ elseif ($_REQUEST['act'] == 'buy') {
     /* 更新：加入购物车 */
     $goods_price = $group_buy['deposit'] > 0 ? $group_buy['deposit'] : $group_buy['cur_price'];
     $cart = array(
-        'user_id'        => $_SESSION['user_id'],
-        'session_id'     => SESS_ID,
-        'goods_id'       => $group_buy['goods_id'],
-        'product_id'     => $product_info['product_id'],
-        'goods_sn'       => addslashes($goods['goods_sn']),
-        'goods_name'     => addslashes($goods['goods_name']),
-        'market_price'   => $goods['market_price'],
-        'goods_price'    => $goods_price,
-        'goods_number'   => $number,
-        'goods_attr'     => addslashes($goods_attr),
-        'goods_attr_id'  => $specs,
-        'is_real'        => $goods['is_real'],
+        'user_id' => $_SESSION['user_id'],
+        'session_id' => SESS_ID,
+        'goods_id' => $group_buy['goods_id'],
+        'product_id' => $product_info['product_id'],
+        'goods_sn' => addslashes($goods['goods_sn']),
+        'goods_name' => addslashes($goods['goods_name']),
+        'market_price' => $goods['market_price'],
+        'goods_price' => $goods_price,
+        'goods_number' => $number,
+        'goods_attr' => addslashes($goods_attr),
+        'goods_attr_id' => $specs,
+        'is_real' => $goods['is_real'],
         'extension_code' => addslashes($goods['extension_code']),
-        'parent_id'      => 0,
-        'rec_type'       => CART_GROUP_BUY_GOODS,
-        'is_gift'        => 0
+        'parent_id' => 0,
+        'rec_type' => CART_GROUP_BUY_GOODS,
+        'is_gift' => 0
     );
     $db->autoExecute($ecs->table('cart'), $cart, 'INSERT');
 
@@ -267,17 +267,17 @@ function group_buy_count()
 {
     $now = gmtime();
     $sql = "SELECT COUNT(*) " .
-            "FROM " . $GLOBALS['ecs']->table('goods_activity') .
-            "WHERE act_type = '" . GAT_GROUP_BUY . "' " .
-            "AND start_time <= '$now' AND is_finished < 3";
+        "FROM " . $GLOBALS['ecs']->table('goods_activity') .
+        "WHERE act_type = '" . GAT_GROUP_BUY . "' " .
+        "AND start_time <= '$now' AND is_finished < 3";
 
     return $GLOBALS['db']->getOne($sql);
 }
 
 /**
  * 取得某页的所有团购活动
- * @param   int     $size   每页记录数
- * @param   int     $page   当前页
+ * @param int $size 每页记录数
+ * @param int $page 当前页
  * @return  array
  */
 function group_buy_list($size, $page)
@@ -285,20 +285,20 @@ function group_buy_list($size, $page)
     /* 取得团购活动 */
     $gb_list = array();
     $now = gmtime();
-    $sql = "SELECT b.*, IFNULL(g.goods_thumb, '') AS goods_thumb, b.act_id AS group_buy_id, ".
-                "b.start_time AS start_date, b.end_time AS end_date " .
-            "FROM " . $GLOBALS['ecs']->table('goods_activity') . " AS b " .
-                "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g ON b.goods_id = g.goods_id " .
-            "WHERE b.act_type = '" . GAT_GROUP_BUY . "' " .
-            "AND b.start_time <= '$now' AND b.is_finished < 3 ORDER BY b.act_id DESC";
+    $sql = "SELECT b.*, IFNULL(g.goods_thumb, '') AS goods_thumb, b.act_id AS group_buy_id, " .
+        "b.start_time AS start_date, b.end_time AS end_date " .
+        "FROM " . $GLOBALS['ecs']->table('goods_activity') . " AS b " .
+        "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g ON b.goods_id = g.goods_id " .
+        "WHERE b.act_type = '" . GAT_GROUP_BUY . "' " .
+        "AND b.start_time <= '$now' AND b.is_finished < 3 ORDER BY b.act_id DESC";
     $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);
     while ($group_buy = $GLOBALS['db']->fetchRow($res)) {
         $ext_info = unserialize($group_buy['ext_info']);
         $group_buy = array_merge($group_buy, $ext_info);
 
         /* 格式化时间 */
-        $group_buy['formated_start_date']   = local_date($GLOBALS['_CFG']['time_format'], $group_buy['start_date']);
-        $group_buy['formated_end_date']     = local_date($GLOBALS['_CFG']['time_format'], $group_buy['end_date']);
+        $group_buy['formated_start_date'] = local_date($GLOBALS['_CFG']['time_format'], $group_buy['start_date']);
+        $group_buy['formated_end_date'] = local_date($GLOBALS['_CFG']['time_format'], $group_buy['end_date']);
 
         /* 格式化保证金 */
         $group_buy['formated_deposit'] = price_format($group_buy['deposit'], false);
@@ -319,7 +319,7 @@ function group_buy_list($size, $page)
             $group_buy['goods_thumb'] = get_image_path($group_buy['goods_id'], $group_buy['goods_thumb'], true);
         }
         /* 处理链接 */
-        $group_buy['url'] = build_uri('group_buy', array('gbid'=>$group_buy['group_buy_id']));
+        $group_buy['url'] = build_uri('group_buy', array('gbid' => $group_buy['group_buy_id']));
         /* 加入数组 */
         $gb_list[] = $group_buy;
     }

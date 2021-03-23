@@ -1,36 +1,9 @@
 {include file="pageheader.htm"}
 <!-- directory install start -->
-<ul id="cloud_list" style="padding:0; margin: 0; list-style-type:none; color: #CC0000;">
- 
-</ul>
-<script type="Text/Javascript" language="JavaScript">
-<!--
-  Ajax.call('cloud.php?is_ajax=1&act=cloud_remind','', cloud_api, 'GET', 'JSON');
-    function cloud_api(result)
-    {
-      //alert(result.content);
-      if(result.content=='0')
-      {
-        document.getElementById("cloud_list").style.display ='none';
-      }
-      else
-       {
-         document.getElementById("cloud_list").innerHTML =result.content;
-      }
-    } 
-   function cloud_close(id)
-    {
-      Ajax.call('cloud.php?is_ajax=1&act=close_remind&remind_id='+id,'', cloud_api, 'GET', 'JSON');
-    }
-  //-->
- </script> 
 <ul id="lilist" style="padding:0; margin: 0; list-style-type:none; color: #CC0000;">
   {foreach from=$warning_arr item=warning}
   <li class="Start315">{$warning}</li>
   {/foreach}
-</ul>
-<ul style="padding:0; margin: 0; list-style-type:none; color: #CC0000;">
- <!-- <script type="text/javascript" src="http://bbs.ecshop.com/notice.php?v=1&n=8&f=ul"></script>-->
 </ul>
 <!-- directory install end -->
 <!-- start personal message -->
@@ -231,7 +204,6 @@ onload = function()
   startCheckOrder();
 }
   Ajax.call('index.php?is_ajax=1&act=main_api','', start_api, 'GET', 'TEXT','FLASE');
-  //Ajax.call('cloud.php?is_ajax=1&act=cloud_remind','', cloud_api, 'GET', 'JSON');
    function start_api(result)
     {
       apilist = document.getElementById("lilist").innerHTML;

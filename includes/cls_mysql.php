@@ -31,12 +31,7 @@ class cls_mysql
 
     public $mysql_disable_cache_tables = array(); // 不允许被缓存的表，遇到将不会进行缓存
 
-    public function __construct($dbhost, $dbuser, $dbpw, $dbname = '', $charset = 'gbk', $pconnect = 0, $quiet = 0)
-    {
-        $this->cls_mysql($dbhost, $dbuser, $dbpw, $dbname, $charset, $pconnect, $quiet);
-    }
-
-    public function cls_mysql($dbhost, $dbuser, $dbpw, $dbname = '', $charset = 'gbk', $pconnect = 0, $quiet = 0)
+    public function __construct($dbhost, $dbuser, $dbpw, $dbname = '', $charset = 'utf8', $pconnect = 0, $quiet = 0)
     {
         if (defined('EC_CHARSET')) {
             $charset = strtolower(str_replace('-', '', EC_CHARSET));

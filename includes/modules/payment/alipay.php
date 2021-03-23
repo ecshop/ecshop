@@ -62,13 +62,8 @@ class alipay
      *
      * @return void
      */
-    public function alipay()
-    {
-    }
-
     public function __construct()
     {
-        $this->alipay();
     }
 
     /**

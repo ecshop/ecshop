@@ -31,44 +31,19 @@ class transport
     public $stream_timeout = -1;
 
     /**
-     * 是否使用CURL库来连接。false表示采用fsockopen进行连接。
-     *
-     * @access  private
-     * @var     boolean $use_curl
-     */
-    public $use_curl = false;
-
-    /**
      * 构造函数
      *
      * @access  public
      * @param integer $time_limit
      * @param integer $connect_timeout
      * @param integer $stream_timeout
-     * @param boolean $use_curl
      * @return  void
      */
-    public function __construct($time_limit = -1, $connect_timeout = -1, $stream_timeout = -1, $use_curl = false)
-    {
-        $this->transport($time_limit, $connect_timeout, $stream_timeout, $use_curl);
-    }
-
-    /**
-     * 构造函数
-     *
-     * @access  public
-     * @param integer $time_limit
-     * @param integer $connect_timeout
-     * @param integer $stream_timeout
-     * @param boolean $use_curl
-     * @return  void
-     */
-    public function transport($time_limit = -1, $connect_timeout = -1, $stream_timeout = -1, $use_curl = false)
+    public function __construct($time_limit = -1, $connect_timeout = -1, $stream_timeout = -1)
     {
         $this->time_limit = $time_limit;
         $this->connect_timeout = $connect_timeout;
         $this->stream_timeout = $stream_timeout;
-        $this->use_curl = $use_curl;
     }
 
     /**
@@ -84,10 +59,9 @@ class transport
      */
     public function request($url, $params = '', $method = 'POST', $my_header = '')
     {
-        $fsock_exists = function_exists('fsockopen');
         $curl_exists = function_exists('curl_init');
 
-        if (!$fsock_exists && !$curl_exists) {
+        if (!$curl_exists) {
             die('No method available!');
         }
 
@@ -111,11 +85,7 @@ class transport
             $params = preg_replace('/^&/', '', $temp_str);
         }
 
-        /* 如果fsockopen存在，且用户不指定使用curl，则调用use_socket函数 */
-        if ($fsock_exists && !$this->use_curl) {
-            $response = $this->use_socket($url, $params, $method, $my_header);
-        } /* 只要上述条件中的任一个不成立，流程就转向这里，这时如果curl模块可用，就调用use_curl函数 */
-        elseif ($curl_exists) {
+        if ($curl_exists) {
             $response = $this->use_curl($url, $params, $method, $my_header);
         }
 

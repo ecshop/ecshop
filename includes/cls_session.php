@@ -9,7 +9,7 @@ class cls_session
     public $db = null;
     public $session_table = '';
 
-    public $max_life_time = 1800; // SESSION 杩囨湡鏃堕棿
+    public $max_life_time = 1800; // SESSION 过期时间
 
     public $session_name = '';
     public $session_id = '';
@@ -25,11 +25,6 @@ class cls_session
     public $_time = 0;
 
     public function __construct(&$db, $session_table, $session_data_table, $session_name = 'ECS_ID', $session_id = '')
-    {
-        $this->cls_session($db, $session_table, $session_data_table, $session_name, $session_id);
-    }
-
-    public function cls_session(&$db, $session_table, $session_data_table, $session_name = 'ECS_ID', $session_id = '')
     {
         $GLOBALS['_SESSION'] = array();
 
@@ -55,7 +50,7 @@ class cls_session
         $this->session_table = $session_table;
         $this->session_data_table = $session_data_table;
 
-        $this->db = &$db;
+        $this->db = $db;
         $this->_ip = real_ip();
 
         if ($session_id == '' && !empty($_COOKIE[$this->session_name])) {
@@ -187,7 +182,7 @@ class cls_session
     {
         $this->update_session();
 
-        /* 闅忔満瀵 sessions_data 鐨勫簱杩涜?鍒犻櫎鎿嶄綔 */
+        /* 随机对 sessions_data 的库进行删除操作 */
         if (mt_rand(0, 2) == 2) {
             $this->db->query('DELETE FROM ' . $this->session_data_table . ' WHERE expiry < ' . ($this->_time - $this->max_life_time));
         }
@@ -214,11 +209,11 @@ class cls_session
 
         setcookie($this->session_name, $this->session_id, 1, $this->session_cookie_path, $this->session_cookie_domain, $this->session_cookie_secure);
 
-        /* ECSHOP 鑷?畾涔夋墽琛岄儴鍒 */
+        /* ECSHOP 自定义执行部分 */
         if (!empty($GLOBALS['ecs'])) {
             $this->db->query('DELETE FROM ' . $GLOBALS['ecs']->table('cart') . " WHERE session_id = '$this->session_id'");
         }
-        /* ECSHOP 鑷?畾涔夋墽琛岄儴鍒 */
+        /* ECSHOP 自定义执行部分 */
 
         $this->db->query('DELETE FROM ' . $this->session_data_table . " WHERE sesskey = '" . $this->session_id . "' LIMIT 1");
 

@@ -94,7 +94,7 @@ class post_express
      *
      * @return null
      */
-    public function post_express($cfg = array())
+    public function __construct($cfg = array())
     {
         foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];

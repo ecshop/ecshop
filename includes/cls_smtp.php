@@ -34,7 +34,7 @@ class smtp
      *  timeout     连接超时的时间          默认：5
      * @return  bool
      */
-    public function smtp($params = array())
+    public function __construct($params = array())
     {
         if (!defined('CRLF')) {
             define('CRLF', "\r\n", true);
@@ -90,7 +90,6 @@ class smtp
 
                 return $this->auth ? $this->ehlo() : $this->helo();
             } else {
-                log_write($errstr, __FILE__, __LINE__);
                 $this->errors[] = 'Failed to connect to server: ' . $errstr;
 
                 return false;

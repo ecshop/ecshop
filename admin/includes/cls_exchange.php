@@ -27,10 +27,10 @@ class exchange
      *
      * @return void
      */
-    public function exchange($table, &$db, $id, $name)
+    public function __construct($table, $db, $id, $name)
     {
         $this->table = $table;
-        $this->db = &$db;
+        $this->db = $db;
         $this->id = $id;
         $this->name = $name;
         $this->error_msg = '';

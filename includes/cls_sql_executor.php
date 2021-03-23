@@ -96,24 +96,6 @@ class sql_executor
      */
     public function __construct($db, $charset = 'gbk', $sprefix = 'ecs_', $tprefix = 'ecs_', $log_path = '', $auto_match = false, $ignored_errors = array())
     {
-        $this->sql_executor($db, $charset, $sprefix, $tprefix, $log_path, $auto_match, $ignored_errors);
-    }
-
-    /**
-     * 构造函数
-     *
-     * @access  public
-     * @param mysql $db mysql类对象
-     * @param string $charset 字符集
-     * @param string $sprefix 替换前表前缀
-     * @param string $tprefix 替换后表前缀
-     * @param string $log_path 日志路径
-     * @param boolean $auto_match 是否进行智能化查询
-     * @param array $ignored_errors 忽略的错误号数组
-     * @return  void
-     */
-    public function sql_executor($db, $charset = 'gbk', $sprefix = 'ecs_', $tprefix = 'ecs_', $log_path = '', $auto_match = false, $ignored_errors = array())
-    {
         $this->db = $db;
         $this->db_charset = $charset;
         $this->source_prefix = $sprefix;

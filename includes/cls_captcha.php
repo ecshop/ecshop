@@ -65,13 +65,12 @@ class captcha
     /**
      * 构造函数
      *
-     * @access  public
      * @param string $folder 背景图片所在目录
      * @param integer $width 图片宽度
-     * @param integer $height 图片高度
-     * @return  bool
+     * @param integer $height 图片高度     *
+     * @return void
      */
-    public function captcha($folder = '', $width = 145, $height = 20)
+    public function __construct($folder = '', $width = 145, $height = 20)
     {
         if (!empty($folder)) {
             $this->folder = $folder;
@@ -81,26 +80,8 @@ class captcha
         $this->height = $height;
 
         /* 检查是否支持 GD */
-        if (PHP_VERSION >= '4.3') {
-            return (function_exists('imagecreatetruecolor') || function_exists('imagecreate'));
-        } else {
-            return (((imagetypes() & IMG_GIF) > 0) || ((imagetypes() & IMG_JPG)) > 0);
-        }
+        return (function_exists('imagecreatetruecolor') || function_exists('imagecreate'));
     }
-
-    /**
-     * 构造函数
-     *
-     * @access  public
-     * @param
-     *
-     * @return void
-     */
-    public function __construct($folder = '', $width = 145, $height = 20)
-    {
-        $this->captcha($folder, $width, $height);
-    }
-
 
     /**
      * 检查给出的验证码是否和session中的一致
@@ -197,10 +178,6 @@ class captcha
         }
     }
 
-    /*------------------------------------------------------ */
-    //-- PRIVATE METHODs
-    /*------------------------------------------------------ */
-
     /**
      * 对需要记录的串进行加密
      *
@@ -208,7 +185,7 @@ class captcha
      * @param string $word 原始字符串
      * @return  string
      */
-    public function encrypts_word($word)
+    private function encrypts_word($word)
     {
         return substr(md5($word), 1, 10);
     }
@@ -220,7 +197,7 @@ class captcha
      * @param string $word 原始字符串
      * @return  void
      */
-    public function record_word($word)
+    private function record_word($word)
     {
         $_SESSION[$this->session_word] = base64_encode($this->encrypts_word($word));
     }
@@ -232,7 +209,7 @@ class captcha
      * @param integer $length 验证码长度
      * @return  string
      */
-    public function generate_word($length = 4)
+    private function generate_word($length = 4)
     {
         $chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
 

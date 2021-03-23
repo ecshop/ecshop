@@ -19,18 +19,6 @@ class ecs_error
      */
     public function __construct($tpl)
     {
-        $this->ecs_error($tpl);
-    }
-
-    /**
-     * 构造函数
-     *
-     * @access  public
-     * @param string $tpl
-     * @return  void
-     */
-    public function ecs_error($tpl)
-    {
         $this->_template = $tpl;
     }
 

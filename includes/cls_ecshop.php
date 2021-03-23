@@ -4,10 +4,6 @@ if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
-define('APPNAME', 'ECSHOP');
-define('VERSION', 'v2.7.3');
-define('RELEASE', '20121106');
-
 class ECS
 {
     public $db_name = '';
@@ -21,7 +17,7 @@ class ECS
      *
      * @return  void
      */
-    public function ECS($db_name, $prefix)
+    public function __construct($db_name, $prefix)
     {
         $this->db_name = $db_name;
         $this->prefix = $prefix;

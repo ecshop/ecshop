@@ -71,7 +71,7 @@ class cac
      *
      * @return null
      */
-    public function cac($cfg = array())
+    public function __construct($cfg = array())
     {
     }
 

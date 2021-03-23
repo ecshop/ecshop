@@ -83,7 +83,7 @@ class ems
      *
      * @return null
      */
-    public function ems($cfg = array())
+    public function __construct($cfg = array())
     {
         foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];

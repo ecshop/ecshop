@@ -46,21 +46,7 @@ class ucenter extends integrate
      */
     public function __construct($cfg)
     {
-        /* 使用默认数据库连接 */
-        $this->ucenter($cfg);
-    }
-
-    /**
-     * 构造函数
-     *
-     * @access  public
-     * @param
-     *
-     * @return void
-     */
-    public function ucenter($cfg)
-    {
-        parent::integrate(array());
+        parent::__construct(array());
         $this->user_table = 'users';
         $this->field_id = 'user_id';
         $this->field_name = 'user_name';

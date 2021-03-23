@@ -70,7 +70,7 @@ class flat
      *
      * @return null
      */
-    public function flat($cfg = array())
+    public function __construct($cfg = array())
     {
         foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];

@@ -66,17 +66,6 @@ class sms
      */
     public function __construct()
     {
-        $this->sms();
-    }
-
-    /**
-     * 构造函数
-     *
-     * @access  public
-     * @return  void
-     */
-    public function sms()
-    {
         /* 由于要包含init.php，所以这两个对象一定是存在的，因此直接赋值 */
         $this->db = $GLOBALS['db'];
         $this->ecs = $GLOBALS['ecs'];

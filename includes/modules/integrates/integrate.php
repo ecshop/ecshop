@@ -60,27 +60,18 @@ class integrate
 
     public $error = 0;
 
-    /*------------------------------------------------------ */
-    //-- PRIVATE ATTRIBUTEs
-    /*------------------------------------------------------ */
-
-    public $db;
-
-    /*------------------------------------------------------ */
-    //-- PUBLIC METHODs
-    /*------------------------------------------------------ */
+    private $db;
 
     /**
      * 会员数据整合插件类的构造函数
      *
-     * @access      public
      * @param string $db_host 数据库主机
      * @param string $db_name 数据库名
      * @param string $db_user 数据库用户名
      * @param string $db_pass 数据库密码
      * @return      void
      */
-    public function integrate($cfg)
+    public function __construct($cfg)
     {
         $this->charset = isset($cfg['db_charset']) ? $cfg['db_charset'] : 'UTF8';
         $this->prefix = isset($cfg['prefix']) ? $cfg['prefix'] : '';

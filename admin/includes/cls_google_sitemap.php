@@ -72,7 +72,7 @@ class google_sitemap_item
      * @param string $changefreq 更新频率的单位 (always, hourly, daily, weekly, monthly, yearly, never)
      * @param string $priority 更新频率 0-1
      */
-    public function google_sitemap_item($loc, $lastmod = '', $changefreq = '', $priority = '')
+    public function __construct($loc, $lastmod = '', $changefreq = '', $priority = '')
     {
         $this->loc = $loc;
         $this->lastmod = $lastmod;

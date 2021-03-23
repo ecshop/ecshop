@@ -14,7 +14,8 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('page_count', $goodsdb['page_count']);
     assign_query_info();
     $smarty->display('attention_list.htm');
-} elseif ($_REQUEST['act'] == 'query') {
+}
+if ($_REQUEST['act'] == 'query') {
     $goodsdb = get_attention();
     $smarty->assign('goodsdb', $goodsdb['goodsdb']);
     $smarty->assign('filter', $goodsdb['filter']);
@@ -25,7 +26,8 @@ if ($_REQUEST['act'] == 'list') {
         '',
         array('filter' => $goodsdb['filter'], 'page_count' => $goodsdb['page_count'])
     );
-} elseif ($_REQUEST['act'] == 'addtolist') {
+}
+if ($_REQUEST['act'] == 'addtolist') {
     $id = intval($_REQUEST['id']);
     $pri = (intval($_REQUEST['pri']) == 1) ? 1 : 0;
     $start = empty($_GET['start']) ? 0 : (int)$_GET['start'];
@@ -70,7 +72,8 @@ if ($_REQUEST['act'] == 'list') {
         $links[] = array('text' => $_LANG['attention_list'], 'href' => 'attention_list.php?act=list');
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
-} elseif ($_REQUEST['act'] == 'batch_addtolist') {
+}
+if ($_REQUEST['act'] == 'batch_addtolist') {
     $olddate = $_REQUEST['date'];
     $date = local_strtotime(trim($_REQUEST['date']));
     $pri = (intval($_REQUEST['pri']) == 1) ? 1 : 0;

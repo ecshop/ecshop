@@ -38,7 +38,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 分页、排序、查询
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $list = auction_list();
 
     $smarty->assign('auction_list', $list['item']);
@@ -59,7 +59,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 删除
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('auction');
 
     $id = intval($_GET['id']);
@@ -88,7 +88,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 批量操作
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'batch') {
+if ($_REQUEST['act'] == 'batch') {
     /* 取得要操作的记录编号 */
     if (empty($_POST['checkboxes'])) {
         sys_msg($_LANG['no_record_selected']);
@@ -126,7 +126,7 @@ elseif ($_REQUEST['act'] == 'batch') {
 //-- 查看出价记录
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'view_log') {
+if ($_REQUEST['act'] == 'view_log') {
     /* 检查权限 */
     admin_priv('auction');
 
@@ -155,7 +155,7 @@ elseif ($_REQUEST['act'] == 'view_log') {
 //-- 添加、编辑
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     /* 检查权限 */
     admin_priv('auction');
 
@@ -214,7 +214,7 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 //-- 添加、编辑后提交
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     /* 检查权限 */
     admin_priv('auction');
 
@@ -291,7 +291,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 //-- 处理冻结资金
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'settle_money') {
+if ($_REQUEST['act'] == 'settle_money') {
     /* 检查权限 */
     admin_priv('auction');
 
@@ -349,7 +349,7 @@ elseif ($_REQUEST['act'] == 'settle_money') {
 //-- 搜索商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'search_goods') {
+if ($_REQUEST['act'] == 'search_goods') {
     check_authz_json('auction');
 
     include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -369,7 +369,7 @@ elseif ($_REQUEST['act'] == 'search_goods') {
 //-- 搜索货品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'search_products') {
+if ($_REQUEST['act'] == 'search_products') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 

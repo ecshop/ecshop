@@ -59,15 +59,9 @@ if ($_REQUEST['act'] == 'install') {
         include_once(ROOT_PATH . "includes/modules/integrates/" . $_GET['code'] . ".php");
         $set_modules = false;
 
-//        if ($_GET['code'] == 'ucenter' && !empty($_CFG['integrate_config']))
-//        {
-//            $cfg = unserialize($_CFG['integrate_config']);
-//        }
-//        else
-//        {
         $cfg = $modules[0]['default'];
         $cfg['integrate_url'] = "http://";
-//        }
+
 
         /* 判断 */
 
@@ -83,7 +77,7 @@ if ($_REQUEST['act'] == 'install') {
 }
 
 if ($_REQUEST['act'] == 'view_install_log') {
-    $code = empty($_GET['code']) ? '' : trim($_GET['code']);
+    $code = empty($_GET['code']) ? '' : trim(addslashes($_GET['code']));
     if (empty($code) || file_exists(ROOT_PATH . DATA_DIR . '/integrate_' . $code . '_log.php')) {
         sys_msg($_LANG['lost_intall_log'], 1);
     }
@@ -440,7 +434,7 @@ if ($_REQUEST['act'] == 'import_user') {
     while ($data = $db->fetch_array($query)) {
         $salt = rand(100000, 999999);
         $password = md5($data['password'] . $salt);
-        $data['username'] = addslashes($data['user_name']);
+        $data['username'] = trim(addslashes($data['user_name']));
         $lastuid = $data['user_id'] + $maxuid;
         $uc_userinfo = $ucdb->getRow("SELECT `uid`, `password`, `salt` FROM " . $cfg['db_pre'] . "members WHERE `username`='$data[username]'");
         if (!$uc_userinfo) {
@@ -482,7 +476,7 @@ if ($_REQUEST['act'] == 'import_user') {
     }
     // 保存重复的用户信息
     if (!empty($repeat_user)) {
-        @file_put_contents(ROOT_PATH . 'data/repeat_user.php', $json->encode($repeat_user));
+        @file_put_contents(ROOT_PATH . 'data/repeat_user.php', '<?php die();?>' . $json->encode($repeat_user));
     }
     $result['error'] = 0;
     $result['message'] = $_LANG['import_user_success'];
@@ -735,7 +729,7 @@ if ($_REQUEST['act'] == 'task') {
         /* 插入code到shop_config表 */
         $sql = "SELECT COUNT(*) FROM " . $ecs->table('shop_config') . " WHERE code = 'integrate_code'";
 
-        if ($db->GetOne($sql) == 0) {
+        if ($db->getOne($sql) == 0) {
             $sql = "INSERT INTO " . $ecs->table('shop_config') . " (code, value) " .
                 "VALUES ('integrate_code', '$_SESSION[code]')";
         } else {
@@ -838,7 +832,7 @@ if ($_REQUEST['act'] == 'complete') {
 if ($_REQUEST['act'] == 'points_set') {
     $rule_index = empty($_GET['rule_index']) ? '' : trim($_GET['rule_index']);
 
-    $user = &init_users();
+    $user = init_users();
     $points = $user->get_points_name(); //获取商城可用积分
 
     if (empty($points)) {
@@ -1031,7 +1025,7 @@ function save_integrate_config($code, $cfg)
 {
     $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('shop_config') . " WHERE code = 'integrate_code'";
 
-    if ($GLOBALS['db']->GetOne($sql) == 0) {
+    if ($GLOBALS['db']->getOne($sql) == 0) {
         $sql = "INSERT INTO " . $ecs->table('shop_config') . " (code, value) " .
             "VALUES ('integrate_code', '$code')";
     } else {
@@ -1105,7 +1099,7 @@ function save_integrate_config($code, $cfg)
     }
 
     $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('shop_config') . " WHERE code = 'integrate_config'";
-    if ($GLOBALS['db']->GetOne($sql) == 0) {
+    if ($GLOBALS['db']->getOne($sql) == 0) {
         $sql = "INSERT INTO " . $GLOBALS['ecs']->table('shop_config') . " (code, value) " .
             "VALUES ('integrate_config', '" . serialize($cfg) . "')";
     } else {

@@ -89,12 +89,12 @@ if (empty($_GET['is_ajax'])) {
         $title = '';
 
         if (isset($_GET['total_icon'])) {
-            $count = $db->GetOne("SELECT COUNT(*) FROM " . $ecs->table('goods') . " AS g WHERE g.original_img <> ''" . $goods_where);
+            $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('goods') . " AS g WHERE g.original_img <> ''" . $goods_where);
             $title = sprintf($_LANG['goods_format'], $count, $page_size);
         }
 
         if (isset($_GET['total_album'])) {
-            $count = $GLOBALS['db']->GetOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_gallery') . ' AS album ' . $album_where);
+            $count = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_gallery') . ' AS album ' . $album_where);
             $title = sprintf('&nbsp;' . $_LANG['gallery_format'], $count, $page_size);
             $module_no = 1;
         }
@@ -126,7 +126,7 @@ if (empty($_GET['is_ajax'])) {
         //-- 商品图片
         /*------------------------------------------------------ */
         if ($result['module_no'] == 0) {
-            $count = $GLOBALS['db']->GetOne("SELECT COUNT(*) FROM " . $ecs->table('goods') . " AS g WHERE g.original_img > ''" . $goods_where);
+            $count = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $ecs->table('goods') . " AS g WHERE g.original_img > ''" . $goods_where);
             /* 页数在许可范围内 */
             if ($result['page'] <= ceil($count / $result['page_size'])) {
                 $start_time = gmtime(); //开始执行时间
@@ -158,7 +158,7 @@ if (empty($_GET['is_ajax'])) {
             }
         } elseif ($result['module_no'] == 1 && $result['do_album'] == 1) {
             //商品相册
-            $count = $GLOBALS['db']->GetOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_gallery') . ' AS album ' . $album_where);
+            $count = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_gallery') . ' AS album ' . $album_where);
 
             if ($result['page'] <= ceil($count / $result['page_size'])) {
                 $start_time = gmtime(); // 开始执行时间
@@ -221,7 +221,7 @@ function process_image($page = 1, $page_size = 100, $type = 0, $thumb = true, $w
 {
     if ($type == 0) {
         $sql = "SELECT g.goods_id, g.original_img, g.goods_img, g.goods_thumb FROM " . $GLOBALS['ecs']->table('goods') . " AS g WHERE g.original_img > ''" . $GLOBALS['goods_where'];
-        $res = $GLOBALS['db']->SelectLimit($sql, $page_size, ($page - 1) * $page_size);
+        $res = $GLOBALS['db']->selectLimit($sql, $page_size, ($page - 1) * $page_size);
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             $goods_thumb = '';
             $image = '';
@@ -317,7 +317,7 @@ function process_image($page = 1, $page_size = 100, $type = 0, $thumb = true, $w
     } else {
         /* 遍历商品相册 */
         $sql = "SELECT album.goods_id, album.img_id, album.img_url, album.thumb_url, album.img_original FROM " . $GLOBALS['ecs']->table('goods_gallery') . " AS album " . $GLOBALS['album_where'];
-        $res = $GLOBALS['db']->SelectLimit($sql, $page_size, ($page - 1) * $page_size);
+        $res = $GLOBALS['db']->selectLimit($sql, $page_size, ($page - 1) * $page_size);
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             $thumb_url = '';
@@ -414,7 +414,7 @@ function process_image_ex($page = 1, $page_size = 100, $type = 0, $thumb = true,
 {
     if ($type == 0) {
         $sql = "SELECT g.goods_id, g.original_img, g.goods_img, g.goods_thumb FROM " . $GLOBALS['ecs']->table('goods') . " AS g WHERE g.original_img > ''" . $goods_where;
-        $res = $GLOBALS['db']->SelectLimit($sql, $page_size, ($page - 1) * $page_size);
+        $res = $GLOBALS['db']->selectLimit($sql, $page_size, ($page - 1) * $page_size);
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             if ($thumb) {
@@ -426,7 +426,7 @@ function process_image_ex($page = 1, $page_size = 100, $type = 0, $thumb = true,
         }
     } else {
         $sql = "SELECT album.goods_id, album.img_id, album.img_url, album.thumb_url, album.img_original FROM " . $GLOBALS['ecs']->table('goods_gallery') . " AS album " . $GLOBALS['album_where'];
-        $res = $GLOBALS['db']->SelectLimit($sql, $page_size, ($page - 1) * $page_size);
+        $res = $GLOBALS['db']->selectLimit($sql, $page_size, ($page - 1) * $page_size);
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             if ($thumb) {

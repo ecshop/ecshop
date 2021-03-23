@@ -4,20 +4,20 @@ define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 
-/* act鎿嶄綔椤圭殑鍒濆?鍖 */
+/* act操作项的初始化 */
 $_REQUEST['act'] = trim($_REQUEST['act']);
 if (empty($_REQUEST['act'])) {
     $_REQUEST['act'] = 'list';
 }
 
 /*------------------------------------------------------ */
-//-- 鑾峰彇鏍囩?鏁版嵁鍒楄〃
+//-- 获取标签数据列表
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
-    /* 鏉冮檺鍒ゆ柇 */
+    /* 权限判断 */
     admin_priv('tag_manage');
 
-    /* 妯℃澘璧嬪€ */
+    /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['tag_list']);
     $smarty->assign('action_link', array('href' => 'tag_manage.php?act=add', 'text' => $_LANG['add_tag']));
     $smarty->assign('full_page', 1);
@@ -31,16 +31,16 @@ if ($_REQUEST['act'] == 'list') {
     $sort_flag = sort_flag($tag_list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
-    /* 椤甸潰鏄剧ず */
+    /* 页面显示 */
     assign_query_info();
     $smarty->display('tag_manage.htm');
 }
 
 /*------------------------------------------------------ */
-//-- 娣诲姞 ,缂栬緫
+//-- 添加 ,编辑
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     admin_priv('tag_manage');
 
     $is_add = $_REQUEST['act'] == 'add';
@@ -68,10 +68,10 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 }
 
 /*------------------------------------------------------ */
-//-- 鏇存柊
+//-- 更新
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     admin_priv('tag_manage');
 
     $is_insert = $_REQUEST['act'] == 'insert';
@@ -94,7 +94,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
         admin_log($tag_words, 'add', 'tag');
 
-        /* 娓呴櫎缂撳瓨 */
+        /* 清除缓存 */
         clear_cache_files();
 
         $link[0]['text'] = $_LANG['back_list'];
@@ -104,7 +104,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     } else {
         edit_tag($tag_words, $id, $goods_id);
 
-        /* 娓呴櫎缂撳瓨 */
+        /* 清除缓存 */
         clear_cache_files();
 
         $link[0]['text'] = $_LANG['back_list'];
@@ -115,10 +115,10 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 }
 
 /*------------------------------------------------------ */
-//-- 缈婚〉锛屾帓搴
+//-- 翻页，排序
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     check_authz_json('tag_manage');
 
     $tag_list = get_tag_list();
@@ -138,10 +138,10 @@ elseif ($_REQUEST['act'] == 'query') {
 }
 
 /*------------------------------------------------------ */
-//-- 鎼滅储
+//-- 搜索
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'search_goods') {
+if ($_REQUEST['act'] == 'search_goods') {
     check_authz_json('tag_manage');
 
     include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -160,9 +160,9 @@ elseif ($_REQUEST['act'] == 'search_goods') {
 }
 
 /*------------------------------------------------------ */
-//-- 鎵归噺鍒犻櫎鏍囩?
+//-- 批量删除标签
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'batch_drop') {
+if ($_REQUEST['act'] == 'batch_drop') {
     admin_priv('tag_manage');
 
     if (isset($_POST['checkboxes'])) {
@@ -186,10 +186,10 @@ elseif ($_REQUEST['act'] == 'batch_drop') {
 }
 
 /*------------------------------------------------------ */
-//-- 鍒犻櫎鏍囩?
+//-- 删除标签
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('tag_manage');
 
     include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -197,13 +197,13 @@ elseif ($_REQUEST['act'] == 'remove') {
 
     $id = intval($_GET['id']);
 
-    /* 鑾峰彇鍒犻櫎鐨勬爣绛剧殑鍚嶇О */
+    /* 获取删除的标签的名称 */
     $tag_name = $db->getOne("SELECT tag_words FROM " . $ecs->table('tag') . " WHERE tag_id = '$id'");
 
     $sql = "DELETE FROM " . $ecs->table('tag') . " WHERE tag_id = '$id'";
     $result = $GLOBALS['db']->query($sql);
     if ($result) {
-        /* 绠＄悊鍛樻棩蹇 */
+        /* 管理员日志 */
         admin_log(addslashes($tag_name), 'remove', 'tag_manage');
 
         $url = 'tag_manage.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
@@ -215,10 +215,10 @@ elseif ($_REQUEST['act'] == 'remove') {
 }
 
 /*------------------------------------------------------ */
-//-- 缂栬緫鏍囩?鍚嶇О
+//-- 编辑标签名称
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == "edit_tag_name") {
+if ($_REQUEST['act'] == "edit_tag_name") {
     check_authz_json('tag_manage');
 
     $name = json_str_iconv(trim($_POST['val']));
@@ -233,10 +233,10 @@ elseif ($_REQUEST['act'] == "edit_tag_name") {
 }
 
 /**
- * 鍒ゆ柇鍚屼竴鍟嗗搧鐨勬爣绛炬槸鍚﹀敮涓€
+ * 判断同一商品的标签是否唯一
  *
- * @param $name  鏍囩?鍚
- * @param $id  鏍囩?id
+ * @param $name  标签名
+ * @param $id  标签id
  * @return bool
  */
 function tag_is_only($name, $tag_id, $goods_id = '')
@@ -259,7 +259,7 @@ function tag_is_only($name, $tag_id, $goods_id = '')
 }
 
 /**
- * 鏇存柊鏍囩?
+ * 更新标签
  *
  * @param  $name
  * @param  $id
@@ -279,7 +279,7 @@ function edit_tag($name, $id, $goods_id = '')
 }
 
 /**
- * 鑾峰彇鏍囩?鏁版嵁鍒楄〃
+ * 获取标签数据列表
  * @access  public
  * @return  array
  */
@@ -309,7 +309,7 @@ function get_tag_list()
 }
 
 /**
- * 鍙栧緱鏍囩?鐨勪俊鎭
+ * 取得标签的信息
  * return array
  */
 

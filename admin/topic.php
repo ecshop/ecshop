@@ -107,7 +107,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
         $smarty->assign('act', "insert");
     }
     $smarty->display('topic_edit.htm');
-} elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+}
+if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     admin_priv('topic_manage');
 
     $is_insert = $_REQUEST['act'] == 'insert';
@@ -130,7 +131,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
                 for ($i = 0; $i < 6; $i++) {
                     $name .= chr(mt_rand(97, 122));
                 }
-                $name .= '.' . end(explode('.', $_FILES['topic_img']['name']));
+                $topic_img_name_arr = explode('.', $_FILES['topic_img']['name']);
+                $name .= '.' . end($topic_img_name_arr);
                 $target = ROOT_PATH . DATA_DIR . '/afficheimg/' . $name;
 
                 if (move_upload_file($_FILES['topic_img']['tmp_name'], $target)) {
@@ -173,7 +175,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
         for ($i = 0; $i < 6; $i++) {
             $name .= chr(mt_rand(97, 122));
         }
-        $name .= '.' . end(explode('.', $_FILES['title_pic']['name']));
+        $title_pic_name_arr = explode('.', $_FILES['title_pic']['name']);
+        $name .= '.' . end($title_pic_name_arr);
         $target = ROOT_PATH . DATA_DIR . '/afficheimg/' . $name;
 
         if (move_upload_file($_FILES['title_pic']['tmp_name'], $target)) {
@@ -219,7 +222,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 
     $links[] = array('href' => 'topic.php', 'text' => $_LANG['back_list']);
     sys_msg($_LANG['succed'], 0, $links);
-} elseif ($_REQUEST['act'] == 'get_goods_list') {
+}
+if ($_REQUEST['act'] == 'get_goods_list') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -234,7 +238,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     }
 
     make_json_result($opt);
-} elseif ($_REQUEST["act"] == "delete") {
+}
+if ($_REQUEST["act"] == "delete") {
     admin_priv('topic_manage');
 
     $sql = "DELETE FROM " . $ecs->table('topic') . " WHERE ";
@@ -260,7 +265,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 
     $links[] = array('href' => 'topic.php', 'text' => $_LANG['back_list']);
     sys_msg($_LANG['succed'], 0, $links);
-} elseif ($_REQUEST["act"] == "query") {
+}
+if ($_REQUEST["act"] == "query") {
     $topic_list = get_topic_list();
     $smarty->assign('topic_list', $topic_list['item']);
     $smarty->assign('filter', $topic_list['filter']);
@@ -377,7 +383,8 @@ function get_toppic_width_height()
 
 function get_url_image($url)
 {
-    $ext = strtolower(end(explode('.', $url)));
+    $url_arr = explode('.', $url);
+    $ext = strtolower(end($url_arr));
     if ($ext != "gif" && $ext != "jpg" && $ext != "png" && $ext != "bmp" && $ext != "jpeg") {
         return $url;
     }

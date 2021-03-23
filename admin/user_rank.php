@@ -28,7 +28,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 翻页，排序
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $ranks = array();
     $ranks = $db->getAll("SELECT * FROM " . $ecs->table('user_rank'));
 
@@ -40,7 +40,7 @@ elseif ($_REQUEST['act'] == 'query') {
 //-- 添加会员等级
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     admin_priv('user_rank');
 
     $rank['rank_id'] = 0;
@@ -66,7 +66,7 @@ elseif ($_REQUEST['act'] == 'add') {
 //-- 增加会员等级到数据库
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'insert') {
+if ($_REQUEST['act'] == 'insert') {
     admin_priv('user_rank');
 
     $special_rank = isset($_POST['special_rank']) ? intval($_POST['special_rank']) : 0;
@@ -118,7 +118,7 @@ elseif ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 删除会员等级
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('user_rank');
 
     $rank_id = intval($_GET['id']);
@@ -139,7 +139,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 } /*
  *  编辑会员等级名称
  */
-elseif ($_REQUEST['act'] == 'edit_name') {
+if ($_REQUEST['act'] == 'edit_name') {
     $id = intval($_REQUEST['id']);
     $val = empty($_REQUEST['val']) ? '' : json_str_iconv(trim($_REQUEST['val']));
     check_authz_json('user_rank');
@@ -158,7 +158,7 @@ elseif ($_REQUEST['act'] == 'edit_name') {
 } /*
  *  ajax编辑积分下限
  */
-elseif ($_REQUEST['act'] == 'edit_min_points') {
+if ($_REQUEST['act'] == 'edit_min_points') {
     check_authz_json('user_rank');
 
     $rank_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
@@ -183,7 +183,7 @@ elseif ($_REQUEST['act'] == 'edit_min_points') {
 } /*
  *  ajax修改积分上限
  */
-elseif ($_REQUEST['act'] == 'edit_max_points') {
+if ($_REQUEST['act'] == 'edit_max_points') {
     check_authz_json('user_rank');
 
     $rank_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
@@ -208,7 +208,7 @@ elseif ($_REQUEST['act'] == 'edit_max_points') {
 } /*
  *  修改折扣率
  */
-elseif ($_REQUEST['act'] == 'edit_discount') {
+if ($_REQUEST['act'] == 'edit_discount') {
     check_authz_json('user_rank');
 
     $rank_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
@@ -231,7 +231,7 @@ elseif ($_REQUEST['act'] == 'edit_discount') {
 /*------------------------------------------------------ */
 //-- 切换是否是特殊会员组
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'toggle_special') {
+if ($_REQUEST['act'] == 'toggle_special') {
     check_authz_json('user_rank');
 
     $rank_id = intval($_POST['id']);
@@ -248,7 +248,7 @@ elseif ($_REQUEST['act'] == 'toggle_special') {
 /*------------------------------------------------------ */
 //-- 切换是否显示价格
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'toggle_showprice') {
+if ($_REQUEST['act'] == 'toggle_showprice') {
     check_authz_json('user_rank');
 
     $rank_id = intval($_POST['id']);

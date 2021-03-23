@@ -30,7 +30,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- ajax列表
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $cards_list = cards_list();
     $smarty->assign('card_list', $cards_list['card_list']);
     $smarty->assign('filter', $cards_list['filter']);
@@ -45,7 +45,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 删除贺卡
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     /* 检查权限 */
     check_authz_json('card_manage');
 
@@ -72,7 +72,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 添加新包装
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     /* 权限判断 */
     admin_priv('card_manage');
 
@@ -87,7 +87,8 @@ elseif ($_REQUEST['act'] == 'add') {
 
     assign_query_info();
     $smarty->display('card_info.htm');
-} elseif ($_REQUEST['act'] == 'insert') {
+}
+if ($_REQUEST['act'] == 'insert') {
     /* 权限判断 */
     admin_priv('card_manage');
 
@@ -121,12 +122,12 @@ elseif ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 编辑包装
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     /* 权限判断 */
     admin_priv('card_manage');
 
     $sql = "SELECT card_id, card_name, card_fee, free_money, card_desc, card_img FROM " . $ecs->table('card') . " WHERE card_id='$_REQUEST[id]'";
-    $card = $db->GetRow($sql);
+    $card = $db->getRow($sql);
 
     $smarty->assign('ur_here', $_LANG['card_edit']);
     $smarty->assign('action_link', array('text' => $_LANG['07_card_list'], 'href' => 'card.php?act=list&' . list_link_postfix()));
@@ -135,7 +136,8 @@ elseif ($_REQUEST['act'] == 'edit') {
 
     assign_query_info();
     $smarty->display('card_info.htm');
-} elseif ($_REQUEST['act'] == 'update') {
+}
+if ($_REQUEST['act'] == 'update') {
     /* 权限判断 */
     admin_priv('card_manage');
 
@@ -166,7 +168,7 @@ elseif ($_REQUEST['act'] == 'edit') {
         die($db->error());
     }
 } /* 删除卡片图片 */
-elseif ($_REQUEST['act'] == 'drop_card_img') {
+if ($_REQUEST['act'] == 'drop_card_img') {
     /* 权限判断 */
     admin_priv('card_manage');
     $card_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -186,7 +188,7 @@ elseif ($_REQUEST['act'] == 'drop_card_img') {
 /*------------------------------------------------------ */
 //-- ajax编辑卡片名字
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_card_name') {
+if ($_REQUEST['act'] == 'edit_card_name') {
     check_authz_json('card_manage');
     $card_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
     $card_name = empty($_REQUEST['val']) ? '' : json_str_iconv(trim($_REQUEST['val']));
@@ -205,7 +207,7 @@ elseif ($_REQUEST['act'] == 'edit_card_name') {
 /*------------------------------------------------------ */
 //-- ajax编辑卡片费用
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_card_fee') {
+if ($_REQUEST['act'] == 'edit_card_fee') {
     check_authz_json('card_manage');
     $card_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
     $card_fee = empty($_REQUEST['val']) ? 0.00 : floatval($_REQUEST['val']);
@@ -221,7 +223,7 @@ elseif ($_REQUEST['act'] == 'edit_card_fee') {
 /*------------------------------------------------------ */
 //-- ajax编辑免费额度
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_free_money') {
+if ($_REQUEST['act'] == 'edit_free_money') {
     check_authz_json('card_manage');
     $card_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
     $free_money = empty($_REQUEST['val']) ? 0.00 : floatval($_REQUEST['val']);

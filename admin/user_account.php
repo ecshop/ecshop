@@ -57,7 +57,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 添加/编辑会员余额页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     admin_priv('surplus_manage'); //权限判断
 
     $ur_here = ($_REQUEST['act'] == 'add') ? $_LANG['surplus_add'] : $_LANG['surplus_edit'];
@@ -111,7 +111,7 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 添加/编辑会员余额的处理部分
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     /* 权限判断 */
     admin_priv('surplus_manage');
 
@@ -213,7 +213,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 审核会员余额页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'check') {
+if ($_REQUEST['act'] == 'check') {
     /* 检查权限 */
     admin_priv('surplus_manage');
 
@@ -263,7 +263,7 @@ elseif ($_REQUEST['act'] == 'check') {
 /*------------------------------------------------------ */
 //-- 更新会员余额的状态
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'action') {
+if ($_REQUEST['act'] == 'action') {
     /* 检查权限 */
     admin_priv('surplus_manage');
 
@@ -329,7 +329,7 @@ elseif ($_REQUEST['act'] == 'action') {
 /*------------------------------------------------------ */
 //-- ajax帐户信息列表
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $list = account_list();
     $smarty->assign('list', $list['list']);
     $smarty->assign('filter', $list['filter']);
@@ -344,7 +344,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- ajax删除一条信息
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     /* 检查权限 */
     check_authz_json('surplus_manage');
     $id = @intval($_REQUEST['id']);

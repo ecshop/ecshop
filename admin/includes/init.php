@@ -8,43 +8,23 @@ define('ECS_ADMIN', true);
 
 error_reporting(E_ALL);
 
-if (__FILE__ == '') {
-    die('Fatal error code: 0');
-}
-
 /* 初始化设置 */
-@ini_set('memory_limit', '64M');
+@ini_set('memory_limit', '1G');
 @ini_set('session.cache_expire', 180);
 @ini_set('session.use_trans_sid', 0);
 @ini_set('session.use_cookies', 1);
 @ini_set('session.auto_start', 0);
-@ini_set('display_errors', 1);
+@ini_set('display_errors', 0);
 
-if (DIRECTORY_SEPARATOR == '\\') {
-    @ini_set('include_path', '.;' . ROOT_PATH);
-} else {
-    @ini_set('include_path', '.:' . ROOT_PATH);
-}
+define('ROOT_PATH', str_replace('\\', '/', dirname(__DIR__, 2)) . '/');
 
-if (file_exists('../data/config.php')) {
-    include('../data/config.php');
-} else {
-    include('../includes/config.php');
-}
-
-/* 取得当前ecshop所在的根目录 */
-if (!defined('ADMIN_PATH')) {
-    define('ADMIN_PATH', 'admin');
-}
-define('ROOT_PATH', str_replace(ADMIN_PATH . '/includes/init.php', '', str_replace('\\', '/', __FILE__)));
+require ROOT_PATH . '/data/config.php';
 
 if (defined('DEBUG_MODE') == false) {
     define('DEBUG_MODE', 0);
 }
 
-if (PHP_VERSION >= '5.1' && !empty($timezone)) {
-    date_default_timezone_set($timezone);
-}
+date_default_timezone_set($timezone);
 
 if (isset($_SERVER['PHP_SELF'])) {
     define('PHP_SELF', $_SERVER['PHP_SELF']);
@@ -62,17 +42,15 @@ require(ROOT_PATH . ADMIN_PATH . '/includes/lib_main.php');
 require(ROOT_PATH . ADMIN_PATH . '/includes/cls_exchange.php');
 
 /* 对用户传入的变量进行转义操作。*/
-if (!get_magic_quotes_gpc()) {
-    if (!empty($_GET)) {
-        $_GET = addslashes_deep($_GET);
-    }
-    if (!empty($_POST)) {
-        $_POST = addslashes_deep($_POST);
-    }
-
-    $_COOKIE = addslashes_deep($_COOKIE);
-    $_REQUEST = addslashes_deep($_REQUEST);
+if (!empty($_GET)) {
+    $_GET = addslashes_deep($_GET);
 }
+if (!empty($_POST)) {
+    $_POST = addslashes_deep($_POST);
+}
+
+$_COOKIE = addslashes_deep($_COOKIE);
+$_REQUEST = addslashes_deep($_REQUEST);
 
 /* 对路径进行安全处理 */
 if (strpos(PHP_SELF, '.php/') !== false) {
@@ -141,11 +119,6 @@ if (!file_exists('../temp/compiled/admin')) {
 
 clearstatcache();
 
-/* 如果有新版本，升级 */
-if (!isset($_CFG['ecs_version'])) {
-    $_CFG['ecs_version'] = 'v2.0.5';
-}
-
 if (preg_replace('/(?:\.|\s+)[a-z]*$/i', '', $_CFG['ecs_version']) != preg_replace('/(?:\.|\s+)[a-z]*$/i', '', VERSION)
     && file_exists('../upgrade/index.php')) {
     // 转到升级文件
@@ -164,7 +137,6 @@ if ((DEBUG_MODE & 2) == 2) {
     $smarty->force_compile = true;
 }
 
-
 $smarty->assign('lang', $_LANG);
 $smarty->assign('help_open', $_CFG['help_open']);
 
@@ -174,30 +146,6 @@ if (isset($_CFG['enable_order_check'])) {  // 为了从旧版本顺利升级到2
     $smarty->assign('enable_order_check', 0);
 }
 
-/* 验证通行证信息 */
-if (isset($_GET['ent_id']) && isset($_GET['ent_ac']) && isset($_GET['ent_sign']) && isset($_GET['ent_email'])) {
-    $ent_id = trim($_GET['ent_id']);
-    $ent_ac = trim($_GET['ent_ac']);
-    $ent_sign = trim($_GET['ent_sign']);
-    $ent_email = trim($_GET['ent_email']);
-    $certificate_id = trim($_CFG['certificate_id']);
-    $domain_url = $ecs->url();
-    $token = $_GET['token'];
-    if ($token == md5(md5($_CFG['token']) . $domain_url . ADMIN_PATH)) {
-        require(ROOT_PATH . 'includes/cls_transport.php');
-        $t = new transport('-1', 5);
-        $apiget = "act=ent_sign&ent_id= $ent_id & certificate_id=$certificate_id";
-
-        $t->request('http://cloud.ecshop.com/api.php', $apiget);
-        $db->query('UPDATE ' . $ecs->table('shop_config') . ' SET value = "' . $ent_id . '" WHERE code = "ent_id"');
-        $db->query('UPDATE ' . $ecs->table('shop_config') . ' SET value = "' . $ent_ac . '" WHERE code = "ent_ac"');
-        $db->query('UPDATE ' . $ecs->table('shop_config') . ' SET value = "' . $ent_sign . '" WHERE code = "ent_sign"');
-        $db->query('UPDATE ' . $ecs->table('shop_config') . ' SET value = "' . $ent_email . '" WHERE code = "ent_email"');
-        clear_cache_files();
-        ecs_header("Location: ./index.php\n");
-    }
-}
-
 /* 验证管理员身份 */
 if ((!isset($_SESSION['admin_id']) || intval($_SESSION['admin_id']) <= 0) &&
     $_REQUEST['act'] != 'login' && $_REQUEST['act'] != 'signin' &&
@@ -205,10 +153,10 @@ if ((!isset($_SESSION['admin_id']) || intval($_SESSION['admin_id']) <= 0) &&
     /* session 不存在，检查cookie */
     if (!empty($_COOKIE['ECSCP']['admin_id']) && !empty($_COOKIE['ECSCP']['admin_pass'])) {
         // 找到了cookie, 验证cookie信息
-        $sql = 'SELECT user_id, user_name, password, action_list, last_login ' .
+        $sql = 'SELECT user_id, user_name, password, add_time, action_list, last_login ' .
             ' FROM ' . $ecs->table('admin_user') .
             " WHERE user_id = '" . intval($_COOKIE['ECSCP']['admin_id']) . "'";
-        $row = $db->GetRow($sql);
+        $row = $db->getRow($sql);
 
         if (!$row) {
             // 没有找到这个记录
@@ -224,7 +172,7 @@ if ((!isset($_SESSION['admin_id']) || intval($_SESSION['admin_id']) <= 0) &&
             exit;
         } else {
             // 检查密码是否正确
-            if (md5($row['password'] . $_CFG['hash_code']) == $_COOKIE['ECSCP']['admin_pass']) {
+            if (md5($row['password'] . $_CFG['hash_code'] . $row['add_time']) == $_COOKIE['ECSCP']['admin_pass']) {
                 !isset($row['last_time']) && $row['last_time'] = '';
                 set_admin_session($row['user_id'], $row['user_name'], $row['action_list'], $row['last_time']);
 
@@ -271,13 +219,6 @@ if ($_REQUEST['act'] != 'login' && $_REQUEST['act'] != 'signin' &&
 
         exit;
     }
-}
-
-/* 管理员登录后可在任何页面使用 act=phpinfo 显示 phpinfo() 信息 */
-if ($_REQUEST['act'] == 'phpinfo' && function_exists('phpinfo')) {
-    phpinfo();
-
-    exit;
 }
 
 //header('Cache-control: private');

@@ -30,7 +30,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $articlecat = article_cat_list(0, 0, false);
     foreach ($articlecat as $key => $cat) {
         $articlecat[$key]['type_name'] = $_LANG['type_name'][$cat['cat_type']];
@@ -43,7 +43,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加分类
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     /* 权限判断 */
     admin_priv('article_cat');
 
@@ -54,7 +54,8 @@ elseif ($_REQUEST['act'] == 'add') {
 
     assign_query_info();
     $smarty->display('articlecat_info.htm');
-} elseif ($_REQUEST['act'] == 'insert') {
+}
+if ($_REQUEST['act'] == 'insert') {
     /* 权限判断 */
     admin_priv('article_cat');
 
@@ -103,13 +104,13 @@ elseif ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 编辑文章分类
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     /* 权限判断 */
     admin_priv('article_cat');
 
     $sql = "SELECT cat_id, cat_name, cat_type, cat_desc, show_in_nav, keywords, parent_id,sort_order FROM " .
         $ecs->table('article_cat') . " WHERE cat_id='$_REQUEST[id]'";
-    $cat = $db->GetRow($sql);
+    $cat = $db->getRow($sql);
 
     if ($cat['cat_type'] == 2 || $cat['cat_type'] == 3 || $cat['cat_type'] == 4) {
         $smarty->assign('disabled', 1);
@@ -139,7 +140,8 @@ elseif ($_REQUEST['act'] == 'edit') {
 
     assign_query_info();
     $smarty->display('articlecat_info.htm');
-} elseif ($_REQUEST['act'] == 'update') {
+}
+if ($_REQUEST['act'] == 'update') {
     /* 权限判断 */
     admin_priv('article_cat');
 
@@ -227,11 +229,10 @@ elseif ($_REQUEST['act'] == 'edit') {
 }
 
 
-
 /*------------------------------------------------------ */
 //-- 编辑文章分类的排序
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_sort_order') {
+if ($_REQUEST['act'] == 'edit_sort_order') {
     check_authz_json('article_cat');
 
     $id = intval($_POST['id']);
@@ -253,7 +254,7 @@ elseif ($_REQUEST['act'] == 'edit_sort_order') {
 /*------------------------------------------------------ */
 //-- 删除文章分类
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('article_cat');
 
     $id = intval($_GET['id']);

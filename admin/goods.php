@@ -86,7 +86,7 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'trash') {
 //-- 添加新商品 编辑商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] == 'copy') {
+if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] == 'copy') {
     include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
 
     $is_add = $_REQUEST['act'] == 'add'; // 添加还是编辑的标识
@@ -405,7 +405,7 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['ac
 //-- 插入商品 更新商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     $code = empty($_REQUEST['extension_code']) ? '' : trim($_REQUEST['extension_code']);
 
     /* 是否处理缩略图 */
@@ -643,7 +643,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     $is_promote = empty($promote_price) ? 0 : 1;
     $promote_start_date = ($is_promote && !empty($_POST['promote_start_date'])) ? local_strtotime($_POST['promote_start_date']) : 0;
     $promote_end_date = ($is_promote && !empty($_POST['promote_end_date'])) ? local_strtotime($_POST['promote_end_date']) : 0;
-    $goods_weight = !empty($_POST['goods_weight']) ? $_POST['goods_weight'] * $_POST['weight_unit'] : 0;
+    $goods_weight = !empty($_POST['goods_weight']) ? (float)$_POST['goods_weight'] * (float)$_POST['weight_unit'] : 0;
     $is_best = isset($_POST['is_best']) ? 1 : 0;
     $is_new = isset($_POST['is_new']) ? 1 : 0;
     $is_hot = isset($_POST['is_hot']) ? 1 : 0;
@@ -959,7 +959,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 //-- 批量操作
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'batch') {
+if ($_REQUEST['act'] == 'batch') {
     $code = empty($_REQUEST['extension_code']) ? '' : trim($_REQUEST['extension_code']);
 
     /* 取得要操作的商品编号 */
@@ -1061,11 +1061,11 @@ elseif ($_REQUEST['act'] == 'batch') {
 //-- 显示图片
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'show_image') {
+if ($_REQUEST['act'] == 'show_image') {
     if (isset($GLOBALS['shop_id']) && $GLOBALS['shop_id'] > 0) {
         $img_url = $_GET['img_url'];
     } else {
-        if (strpos($_GET['img_url'], 'http://') === 0) {
+        if (strstr($_GET['img_url'], 'http://') || strstr($_GET['img_url'], 'https://')) {        
             $img_url = $_GET['img_url'];
         } else {
             $img_url = '../' . $_GET['img_url'];
@@ -1078,7 +1078,7 @@ elseif ($_REQUEST['act'] == 'show_image') {
 /*------------------------------------------------------ */
 //-- 修改商品名称
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_goods_name') {
+if ($_REQUEST['act'] == 'edit_goods_name') {
     check_authz_json('goods_manage');
 
     $goods_id = intval($_POST['id']);
@@ -1093,7 +1093,7 @@ elseif ($_REQUEST['act'] == 'edit_goods_name') {
 /*------------------------------------------------------ */
 //-- 修改商品货号
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_goods_sn') {
+if ($_REQUEST['act'] == 'edit_goods_sn') {
     check_authz_json('goods_manage');
 
     $goods_id = intval($_POST['id']);
@@ -1111,7 +1111,8 @@ elseif ($_REQUEST['act'] == 'edit_goods_sn') {
         clear_cache_files();
         make_json_result(stripslashes($goods_sn));
     }
-} elseif ($_REQUEST['act'] == 'check_goods_sn') {
+}
+if ($_REQUEST['act'] == 'check_goods_sn') {
     check_authz_json('goods_manage');
 
     $goods_id = intval($_REQUEST['goods_id']);
@@ -1128,7 +1129,8 @@ elseif ($_REQUEST['act'] == 'edit_goods_sn') {
         }
     }
     make_json_result('');
-} elseif ($_REQUEST['act'] == 'check_products_goods_sn') {
+}
+if ($_REQUEST['act'] == 'check_products_goods_sn') {
     check_authz_json('goods_manage');
 
     $goods_id = intval($_REQUEST['goods_id']);
@@ -1163,7 +1165,7 @@ elseif ($_REQUEST['act'] == 'edit_goods_sn') {
 /*------------------------------------------------------ */
 //-- 修改商品价格
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_goods_price') {
+if ($_REQUEST['act'] == 'edit_goods_price') {
     check_authz_json('goods_manage');
 
     $goods_id = intval($_POST['id']);
@@ -1183,7 +1185,7 @@ elseif ($_REQUEST['act'] == 'edit_goods_price') {
 /*------------------------------------------------------ */
 //-- 修改商品库存数量
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_goods_number') {
+if ($_REQUEST['act'] == 'edit_goods_number') {
     check_authz_json('goods_manage');
 
     $goods_id = intval($_POST['id']);
@@ -1206,7 +1208,7 @@ elseif ($_REQUEST['act'] == 'edit_goods_number') {
 /*------------------------------------------------------ */
 //-- 修改上架状态
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'toggle_on_sale') {
+if ($_REQUEST['act'] == 'toggle_on_sale') {
     check_authz_json('goods_manage');
 
     $goods_id = intval($_POST['id']);
@@ -1221,7 +1223,7 @@ elseif ($_REQUEST['act'] == 'toggle_on_sale') {
 /*------------------------------------------------------ */
 //-- 修改精品推荐状态
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'toggle_best') {
+if ($_REQUEST['act'] == 'toggle_best') {
     check_authz_json('goods_manage');
 
     $goods_id = intval($_POST['id']);
@@ -1236,7 +1238,7 @@ elseif ($_REQUEST['act'] == 'toggle_best') {
 /*------------------------------------------------------ */
 //-- 修改新品推荐状态
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'toggle_new') {
+if ($_REQUEST['act'] == 'toggle_new') {
     check_authz_json('goods_manage');
 
     $goods_id = intval($_POST['id']);
@@ -1251,7 +1253,7 @@ elseif ($_REQUEST['act'] == 'toggle_new') {
 /*------------------------------------------------------ */
 //-- 修改热销推荐状态
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'toggle_hot') {
+if ($_REQUEST['act'] == 'toggle_hot') {
     check_authz_json('goods_manage');
 
     $goods_id = intval($_POST['id']);
@@ -1266,7 +1268,7 @@ elseif ($_REQUEST['act'] == 'toggle_hot') {
 /*------------------------------------------------------ */
 //-- 修改商品排序
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_sort_order') {
+if ($_REQUEST['act'] == 'edit_sort_order') {
     check_authz_json('goods_manage');
 
     $goods_id = intval($_POST['id']);
@@ -1281,7 +1283,7 @@ elseif ($_REQUEST['act'] == 'edit_sort_order') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $is_delete = empty($_REQUEST['is_delete']) ? 0 : intval($_REQUEST['is_delete']);
     $code = empty($_REQUEST['extension_code']) ? '' : trim($_REQUEST['extension_code']);
     $goods_list = goods_list($is_delete, ($code == '') ? 1 : 0);
@@ -1322,7 +1324,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 放入回收站
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     $goods_id = intval($_REQUEST['id']);
 
     /* 检查权限 */
@@ -1345,7 +1347,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 //-- 还原回收站中的商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'restore_goods') {
+if ($_REQUEST['act'] == 'restore_goods') {
     $goods_id = intval($_REQUEST['id']);
 
     check_authz_json('remove_back'); // 检查权限
@@ -1366,7 +1368,7 @@ elseif ($_REQUEST['act'] == 'restore_goods') {
 /*------------------------------------------------------ */
 //-- 彻底删除商品
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'drop_goods') {
+if ($_REQUEST['act'] == 'drop_goods') {
     // 检查权限
     check_authz_json('remove_back');
 
@@ -1480,7 +1482,7 @@ elseif ($_REQUEST['act'] == 'drop_goods') {
 /*------------------------------------------------------ */
 //-- 切换商品类型
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'get_attr') {
+if ($_REQUEST['act'] == 'get_attr') {
     check_authz_json('goods_manage');
 
     $goods_id = empty($_GET['goods_id']) ? 0 : intval($_GET['goods_id']);
@@ -1494,7 +1496,7 @@ elseif ($_REQUEST['act'] == 'get_attr') {
 /*------------------------------------------------------ */
 //-- 删除图片
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'drop_image') {
+if ($_REQUEST['act'] == 'drop_image') {
     check_authz_json('goods_manage');
 
     $img_id = empty($_REQUEST['img_id']) ? 0 : intval($_REQUEST['img_id']);
@@ -1526,7 +1528,7 @@ elseif ($_REQUEST['act'] == 'drop_image') {
 /*------------------------------------------------------ */
 //-- 搜索商品，仅返回名称及ID
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'get_goods_list') {
+if ($_REQUEST['act'] == 'get_goods_list') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -1547,7 +1549,7 @@ elseif ($_REQUEST['act'] == 'get_goods_list') {
 /*------------------------------------------------------ */
 //-- 把商品加入关联
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add_link_goods') {
+if ($_REQUEST['act'] == 'add_link_goods') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -1587,7 +1589,7 @@ elseif ($_REQUEST['act'] == 'add_link_goods') {
 /*------------------------------------------------------ */
 //-- 删除关联商品
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'drop_link_goods') {
+if ($_REQUEST['act'] == 'drop_link_goods') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -1636,7 +1638,7 @@ elseif ($_REQUEST['act'] == 'drop_link_goods') {
 //-- 增加一个配件
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add_group_goods') {
+if ($_REQUEST['act'] == 'add_group_goods') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -1670,7 +1672,7 @@ elseif ($_REQUEST['act'] == 'add_group_goods') {
 //-- 删除一个配件
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'drop_group_goods') {
+if ($_REQUEST['act'] == 'drop_group_goods') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -1705,7 +1707,7 @@ elseif ($_REQUEST['act'] == 'drop_group_goods') {
 //-- 搜索文章
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'get_article_list') {
+if ($_REQUEST['act'] == 'get_article_list') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -1733,7 +1735,7 @@ elseif ($_REQUEST['act'] == 'get_article_list') {
 //-- 添加关联文章
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add_goods_article') {
+if ($_REQUEST['act'] == 'add_goods_article') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -1765,7 +1767,7 @@ elseif ($_REQUEST['act'] == 'add_goods_article') {
 /*------------------------------------------------------ */
 //-- 删除关联文章
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'drop_goods_article') {
+if ($_REQUEST['act'] == 'drop_goods_article') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -1794,7 +1796,7 @@ elseif ($_REQUEST['act'] == 'drop_goods_article') {
 /*------------------------------------------------------ */
 //-- 货品列表
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'product_list') {
+if ($_REQUEST['act'] == 'product_list') {
     admin_priv('goods_manage');
 
     /* 是否存在商品id */
@@ -1830,17 +1832,38 @@ elseif ($_REQUEST['act'] == 'product_list') {
         $_attribute[$attribute_value['attr_id']]['attr_id'] = $attribute_value['attr_id'];
         $_attribute[$attribute_value['attr_id']]['attr_name'] = $attribute_value['attr_name'];
     }
+
     $attribute_count = count($_attribute);
 
     $smarty->assign('attribute_count', $attribute_count);
     $smarty->assign('attribute_count_3', ($attribute_count + 3));
-    $smarty->assign('attribute', $_attribute);
     $smarty->assign('product_sn', $goods['goods_sn'] . '_');
     $smarty->assign('product_number', $_CFG['default_storage']);
 
     /* 取商品的货品 */
     $product = product_list($goods_id, '');
 
+    //保证属性排序正确
+    $attr_list = array();
+    foreach ($product['product'] as $item) {
+        foreach ($item['goods_attr'] as $k => $attr) {
+            $attr_list[$k][] = $attr;
+        }
+    }
+    $new_attribute = array();
+    foreach ($attr_list as $v) {
+        foreach ($_attribute as $val) {
+            $diff = array_diff($v, $val['attr_values']);
+            if (empty($diff)) {
+                $new_attribute[] = $val;
+            }
+        }
+    }
+    if (empty($new_attribute)) {
+        $new_attribute = $_attribute;
+    }
+
+    $smarty->assign('attribute', $new_attribute);
     $smarty->assign('ur_here', $_LANG['18_product_list']);
     $smarty->assign('action_link', array('href' => 'goods.php?act=list', 'text' => $_LANG['01_goods_list']));
     $smarty->assign('product_list', $product['product']);
@@ -1859,7 +1882,7 @@ elseif ($_REQUEST['act'] == 'product_list') {
 /*------------------------------------------------------ */
 //-- 货品排序、分页、查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'product_query') {
+if ($_REQUEST['act'] == 'product_query') {
     /* 是否存在商品id */
     if (empty($_REQUEST['goods_id'])) {
         make_json_error($_LANG['sys']['wrong'] . $_LANG['cannot_found_goods']);
@@ -1922,7 +1945,7 @@ elseif ($_REQUEST['act'] == 'product_query') {
 /*------------------------------------------------------ */
 //-- 货品删除
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'product_remove') {
+if ($_REQUEST['act'] == 'product_remove') {
     /* 检查权限 */
     check_authz_json('remove_back');
 
@@ -1959,7 +1982,7 @@ elseif ($_REQUEST['act'] == 'product_remove') {
 /*------------------------------------------------------ */
 //-- 修改货品价格
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_product_sn') {
+if ($_REQUEST['act'] == 'edit_product_sn') {
     check_authz_json('goods_manage');
 
     $product_id = intval($_POST['id']);
@@ -1982,7 +2005,7 @@ elseif ($_REQUEST['act'] == 'edit_product_sn') {
 /*------------------------------------------------------ */
 //-- 修改货品库存
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_product_number') {
+if ($_REQUEST['act'] == 'edit_product_number') {
     check_authz_json('goods_manage');
 
     $product_id = intval($_POST['id']);
@@ -2006,7 +2029,7 @@ elseif ($_REQUEST['act'] == 'edit_product_number') {
 /*------------------------------------------------------ */
 //-- 货品添加 执行
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'product_add_execute') {
+if ($_REQUEST['act'] == 'product_add_execute') {
     admin_priv('goods_manage');
 
     $product['goods_id'] = intval($_POST['goods_id']);
@@ -2113,7 +2136,7 @@ elseif ($_REQUEST['act'] == 'product_add_execute') {
 /*------------------------------------------------------ */
 //-- 货品批量操作
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'batch_product') {
+if ($_REQUEST['act'] == 'batch_product') {
     /* 定义返回 */
     $link[] = array('href' => 'goods.php?act=product_list&goods_id=' . $_POST['goods_id'], 'text' => $_LANG['item_list']);
 

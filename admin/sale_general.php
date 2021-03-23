@@ -102,7 +102,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 下载EXCEL报表
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'download') {
+if ($_REQUEST['act'] == 'download') {
     /* 文件名 */
     $filename = !empty($_REQUEST['filename']) ? trim($_REQUEST['filename']) : '';
 

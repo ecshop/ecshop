@@ -5,18 +5,6 @@ define('IN_ECS', true);
 /* 代码 */
 require(dirname(__FILE__) . '/includes/init.php');
 
-if ($GLOBALS['_CFG']['certificate_id'] == '') {
-    $certi_id = 'error';
-} else {
-    $certi_id = $GLOBALS['_CFG']['certificate_id'];
-}
-
-$sess_id = $GLOBALS['sess']->get_session_id();
-
-$auth = mktime();
-$ac = md5($certi_id . 'SHOPEX_SMS' . $auth);
-$url = 'http://service.shopex.cn/sms/index.php?certificate_id=' . $certi_id . '&sess_id=' . $sess_id . '&auth=' . $auth . '&ac=' . $ac;
-
 /*------------------------------------------------------ */
 //-- 列表编辑 ?act=list_edit
 /*------------------------------------------------------ */
@@ -25,10 +13,10 @@ if ($_REQUEST['act'] == 'list_edit') {
     admin_priv('shop_config');
 
     /* 可选语言 */
-    $dir = opendir('../languages');
+    $dir = opendir(ROOT_PATH . 'languages');
     $lang_list = array();
     while (@$file = readdir($dir)) {
-        if ($file != '.' && $file != '..' && $file != '.svn' && $file != '_svn' && is_dir('../languages/' . $file)) {
+        if ($file != '.' && $file != '..' && $file != '.svn' && $file != '_svn' && is_dir(ROOT_PATH . 'languages/' . $file)) {
             $lang_list[] = $file;
         }
     }
@@ -61,7 +49,7 @@ if ($_REQUEST['act'] == 'list_edit') {
 /*------------------------------------------------------ */
 //-- 邮件服务器设置
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'mail_settings') {
+if ($_REQUEST['act'] == 'mail_settings') {
     /* 检查权限 */
     admin_priv('shop_config');
 
@@ -77,7 +65,7 @@ elseif ($_REQUEST['act'] == 'mail_settings') {
 /*------------------------------------------------------ */
 //-- 提交   ?act=post
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'post') {
+if ($_REQUEST['act'] == 'post') {
     $type = empty($_POST['type']) ? '' : $_POST['type'];
 
     /* 检查权限 */
@@ -123,13 +111,15 @@ elseif ($_REQUEST['act'] == 'post') {
 
                     $file_name = str_replace('{$template}', $_CFG['template'], $file_var_list[$code]['store_dir']) . $info['logo'];
                 } elseif ($code == 'watermark') {
-                    $ext = array_pop(explode('.', $file['name']));
+                    $file_name_arr = explode('.', $file['name']);
+                    $ext = array_pop($file_name_arr);
                     $file_name = $file_var_list[$code]['store_dir'] . 'watermark.' . $ext;
                     if (file_exists($file_var_list[$code]['value'])) {
                         @unlink($file_var_list[$code]['value']);
                     }
                 } elseif ($code == 'wap_logo') {
-                    $ext = array_pop(explode('.', $file['name']));
+                    $file_name_arr = explode('.', $file['name']);
+                    $ext = array_pop($file_name_arr);
                     $file_name = $file_var_list[$code]['store_dir'] . 'wap_logo.' . $ext;
                     if (file_exists($file_var_list[$code]['value'])) {
                         @unlink($file_var_list[$code]['value']);
@@ -178,33 +168,19 @@ elseif ($_REQUEST['act'] == 'post') {
     $shop_province = $db->getOne("SELECT region_name FROM " . $ecs->table('region') . " WHERE region_id='$_CFG[shop_province]'");
     $shop_city = $db->getOne("SELECT region_name FROM " . $ecs->table('region') . " WHERE region_id='$_CFG[shop_city]'");
 
-    $spt = '<script type="text/javascript" src="http://api.ecshop.com/record.php?';
-    $spt .= "url=" . urlencode($ecs->url());
-    $spt .= "&shop_name=" . urlencode($_CFG['shop_name']);
-    $spt .= "&shop_title=" . urlencode($_CFG['shop_title']);
-    $spt .= "&shop_desc=" . urlencode($_CFG['shop_desc']);
-    $spt .= "&shop_keywords=" . urlencode($_CFG['shop_keywords']);
-    $spt .= "&country=" . urlencode($shop_country) . "&province=" . urlencode($shop_province) . "&city=" . urlencode($shop_city);
-    $spt .= "&address=" . urlencode($_CFG['shop_address']);
-    $spt .= "&qq=$_CFG[qq]&ww=$_CFG[ww]&ym=$_CFG[ym]&msn=$_CFG[msn]";
-    $spt .= "&email=$_CFG[service_email]&phone=$_CFG[service_phone]&icp=" . urlencode($_CFG['icp_number']);
-    $spt .= "&version=" . VERSION . "&language=$_CFG[lang]&php_ver=" . PHP_VERSION . "&mysql_ver=" . $db->version();
-    $spt .= "&charset=" . EC_CHARSET;
-    $spt .= '"></script>';
-
     if ($type == 'mail_setting') {
         $links[] = array('text' => $_LANG['back_mail_settings'], 'href' => 'shop_config.php?act=mail_settings');
-        sys_msg($_LANG['mail_save_success'] . $spt, 0, $links);
+        sys_msg($_LANG['mail_save_success'], 0, $links);
     } else {
         $links[] = array('text' => $_LANG['back_shop_config'], 'href' => 'shop_config.php?act=list_edit');
-        sys_msg($_LANG['save_success'] . $spt, 0, $links);
+        sys_msg($_LANG['save_success'], 0, $links);
     }
 }
 
 /*------------------------------------------------------ */
 //-- 发送测试邮件
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'send_test_email') {
+if ($_REQUEST['act'] == 'send_test_email') {
     /* 检查权限 */
     check_authz_json('shop_config');
 
@@ -230,7 +206,7 @@ elseif ($_REQUEST['act'] == 'send_test_email') {
 /*------------------------------------------------------ */
 //-- 删除上传文件
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'del') {
+if ($_REQUEST['act'] == 'del') {
     /* 检查权限 */
     check_authz_json('shop_config');
 

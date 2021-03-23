@@ -113,7 +113,7 @@ if ($_REQUEST['act'] == 'list_all') {
 /*------------------------------------------------------ */
 //-- ajax显示留言列表
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $msg_list = msg_list();
 
     $smarty->assign('msg_list', $msg_list['msg_list']);
@@ -129,7 +129,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- ajax 删除留言
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     $msg_id = intval($_REQUEST['id']);
 
     /* 检查权限 */
@@ -197,7 +197,7 @@ if ($_REQUEST['act'] == 'batch') {
 /*------------------------------------------------------ */
 //-- 回复留言
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'view') {
+if ($_REQUEST['act'] == 'view') {
     $smarty->assign('send_fail', !empty($_REQUEST['send_ok']));
     $smarty->assign('msg', get_feedback_detail(intval($_REQUEST['id'])));
     $smarty->assign('ur_here', $_LANG['reply']);
@@ -205,7 +205,8 @@ elseif ($_REQUEST['act'] == 'view') {
 
     assign_query_info();
     $smarty->display('msg_info.htm');
-} elseif ($_REQUEST['act'] == 'action') {
+}
+if ($_REQUEST['act'] == 'action') {
     if (empty($_REQUEST['parent_id'])) {
         $sql = "INSERT INTO " . $ecs->table('feedback') . " (msg_title, msg_time, user_id, user_name , " .
             "user_email, parent_id, msg_content) " .
@@ -253,7 +254,7 @@ elseif ($_REQUEST['act'] == 'view') {
 /*------------------------------------------------------ */
 //-- 删除会员上传的文件
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'drop_file') {
+if ($_REQUEST['act'] == 'drop_file') {
     /* 删除上传的文件 */
     $file = $_GET['file'];
     $file = str_replace('/', '', $file);
@@ -339,7 +340,7 @@ function get_feedback_detail($id)
         "LEFT JOIN " . $ecs->table('admin_user') . " AS u ON u.user_id='" . $_SESSION['admin_id'] . "' " .
         "LEFT JOIN " . $ecs->table('feedback') . " AS T2 ON T2.parent_id=T1.msg_id " .
         "WHERE T1.msg_id = '$id'";
-    $msg = $db->GetRow($sql);
+    $msg = $db->getRow($sql);
 
     if ($msg) {
         $msg['msg_time'] = local_date($_CFG['time_format'], $msg['msg_time']);

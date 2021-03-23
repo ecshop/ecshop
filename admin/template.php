@@ -124,7 +124,7 @@ if ($_REQUEST['act'] == 'setup') {
 
     $rc = $db->query($sql);
     $db_dyna_libs = array();
-    while ($row = $db->FetchRow($rc)) {
+    while ($row = $db->fetchRow($rc)) {
         if ($row['type'] > 0) {
             /* 动态内容 */
             $db_dyna_libs[$row['region']][$row['library']][] = array('id' => $row['id'], 'number' => $row['number'], 'type' => $row['type']);
@@ -374,8 +374,7 @@ if ($_REQUEST['act'] == 'setting') {
     }
 
     if (file_put_contents($template_file, $template_content)) {
-        //clear_tpl_files(false, '.dwt.php'); // 清除对应的编译文件
-        clear_cache_files();
+        clear_cache_files();// 清除对应的编译文件
         $lnk[] = array('text' => $_LANG['go_back'], 'href' => 'template.php?act=setup&template_file=' . $_POST['template_file']);
         sys_msg($_LANG['setup_success'], 0, $lnk);
     } else {
@@ -390,15 +389,6 @@ if ($_REQUEST['act'] == 'setting') {
 if ($_REQUEST['act'] == 'library') {
     admin_priv('library_manage');
 
-    /* 包含插件语言项 */
-    $sql = "SELECT code FROM " . $ecs->table('plugins');
-    $rs = $db->query($sql);
-    while ($row = $db->FetchRow($rs)) {
-        /* 取得语言项 */
-        if (file_exists(ROOT_PATH . 'plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php')) {
-            include_once(ROOT_PATH . 'plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php');
-        }
-    }
     $curr_template = $_CFG['template'];
     $arr_library = array();
     $library_path = '../themes/' . $curr_template . '/library';
@@ -449,12 +439,7 @@ if ($_REQUEST['act'] == 'install') {
     if ($step_one && $step_two) {
         clear_all_files(); //清除模板编译文件
 
-        $error_msg = '';
-        if (move_plugin_library($tpl_name, $error_msg)) {
-            make_json_error($error_msg);
-        } else {
-            make_json_result(read_style_and_tpl($tpl_name, $tpl_fg), $_LANG['install_template_success']);
-        }
+        make_json_result(read_style_and_tpl($tpl_name, $tpl_fg), $_LANG['install_template_success']);
     } else {
         make_json_error($db->error());
     }
@@ -621,11 +606,13 @@ if ($_REQUEST['act'] == 'restore_backup') {
             }
 
             foreach ($data as $file => $regions) {
-                $pattern = '/(?:<!--\\s*TemplateBeginEditable\\sname="(' . implode('|', array_keys($regions)) . ')"\\s*-->)(?:.*?)(?:<!--\\s*TemplateEndEditable\\s*-->)/se';
+                $pattern = '/(?:<!--\\s*TemplateBeginEditable\\sname="(' . implode('|', array_keys($regions)) . ')"\\s*-->)(?:.*?)(?:<!--\\s*TemplateEndEditable\\s*-->)/s';
                 $temple_file = ROOT_PATH . 'themes/' . $_CFG['template'] . '/' . $file . '.dwt';
                 $template_content = file_get_contents($temple_file);
                 $match = array();
-                $template_content = preg_replace($pattern, "'<!-- TemplateBeginEditable name=\"\\1\" -->\r\n' . \$regions['\\1'] . '\r\n<!-- TemplateEndEditable -->';", $template_content);
+                $template_content = preg_replace_callback($pattern, function ($r) use ($regions) {
+                    return "<!-- TemplateBeginEditable name=\"" . $r[1] . "\" -->\r\n" . $regions[$r[1]] . "\r\n<!-- TemplateEndEditable -->";
+                }, $template_content);
                 file_put_contents($temple_file, $template_content);
             }
 

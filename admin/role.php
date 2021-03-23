@@ -47,7 +47,7 @@ if ($_REQUEST['act'] == 'login') {
 /*------------------------------------------------------ */
 //-- 角色列表页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'list') {
+if ($_REQUEST['act'] == 'list') {
     /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['admin_role']);
     $smarty->assign('action_link', array('href' => 'role.php?act=add', 'text' => $_LANG['admin_add_role']));
@@ -62,7 +62,7 @@ elseif ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $smarty->assign('admin_list', get_role_list());
 
     make_json_result($smarty->fetch('role_list.htm'));
@@ -71,7 +71,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加角色页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     /* 检查权限 */
     admin_priv('admin_manage');
     include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/priv_action.php');
@@ -82,7 +82,7 @@ elseif ($_REQUEST['act'] == 'add') {
     $sql_query = "SELECT action_id, parent_id, action_code, relevance FROM " . $ecs->table('admin_action') .
         " WHERE parent_id = 0";
     $res = $db->query($sql_query);
-    while ($rows = $db->FetchRow($res)) {
+    while ($rows = $db->fetchRow($res)) {
         $priv_arr[$rows['action_id']] = $rows;
     }
 
@@ -91,7 +91,7 @@ elseif ($_REQUEST['act'] == 'add') {
     $sql = "SELECT action_id, parent_id, action_code, relevance FROM " . $ecs->table('admin_action') .
         " WHERE parent_id " . db_create_in(array_keys($priv_arr));
     $result = $db->query($sql);
-    while ($priv = $db->FetchRow($result)) {
+    while ($priv = $db->fetchRow($result)) {
         $priv_arr[$priv["parent_id"]]["priv"][$priv["action_code"]] = $priv;
     }
 
@@ -120,7 +120,7 @@ elseif ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 添加角色的处理
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'insert') {
+if ($_REQUEST['act'] == 'insert') {
     admin_priv('admin_manage');
     $act_list = @join(",", $_POST['action_code']);
     $sql = "INSERT INTO " . $ecs->table('role') . " (role_name, action_list, role_describe) " .
@@ -144,7 +144,7 @@ elseif ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 编辑角色信息
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/priv_action.php');
     $_REQUEST['id'] = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
     /* 获得该管理员的权限 */
@@ -164,7 +164,7 @@ elseif ($_REQUEST['act'] == 'edit') {
     $sql_query = "SELECT action_id, parent_id, action_code,relevance FROM " . $ecs->table('admin_action') .
         " WHERE parent_id = 0";
     $res = $db->query($sql_query);
-    while ($rows = $db->FetchRow($res)) {
+    while ($rows = $db->fetchRow($res)) {
         $priv_arr[$rows['action_id']] = $rows;
     }
 
@@ -172,7 +172,7 @@ elseif ($_REQUEST['act'] == 'edit') {
     $sql = "SELECT action_id, parent_id, action_code,relevance FROM " . $ecs->table('admin_action') .
         " WHERE parent_id " . db_create_in(array_keys($priv_arr));
     $result = $db->query($sql);
-    while ($priv = $db->FetchRow($result)) {
+    while ($priv = $db->fetchRow($result)) {
         $priv_arr[$priv["parent_id"]]["priv"][$priv["action_code"]] = $priv;
     }
 
@@ -204,7 +204,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 更新角色信息
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'update') {
     /* 更新管理员的权限 */
     $act_list = @join(",", $_POST['action_code']);
     $sql = "UPDATE " . $ecs->table('role') . " SET action_list = '$act_list', role_name = '" . $_POST['user_name'] . "', role_describe = '" . $_POST['role_describe'] . " ' " .
@@ -221,7 +221,7 @@ elseif ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 删除一个角色
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('admin_drop');
 
     $id = intval($_GET['id']);

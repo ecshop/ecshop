@@ -46,7 +46,7 @@ if ($_REQUEST['act'] == 'view') {
     } else {
         $tmp_time = local_strtotime(local_date('Y-m-d'));
         $start_date_arr[] = local_strtotime(local_date('Y-m') . '-1');
-        $end_date_arr[] = local_strtotime(local_date('Y-m') . '-31');;
+        $end_date_arr[] = local_strtotime(local_date('Y-m') . '-31');
     }
 
     /* ------------------------------------- */
@@ -66,7 +66,7 @@ if ($_REQUEST['act'] == 'view') {
         $key = 0;
 
         while ($val = $db->fetchRow($res)) {
-            $val['access_date'] = gmdate('m-d', $val['access_time'] + $timezone * 3600);
+            $val['access_date'] = gmdate('m-d', $val['access_time'] + intval($timezone) * 3600);
             $general_xml .= "<set name='$val[access_date]' value='$val[access_count]' color='" . chart_color($key) . "' />";
             if ($val['access_count'] > $max) {
                 $max = $val['access_count'];
@@ -271,8 +271,8 @@ if ($_REQUEST['act'] == 'view') {
     $smarty->assign('start_date_arr', $start_date_arr);
 
     if (!$is_multi) {
-        $filename = gmdate($_CFG['date_format'], $start_date + $timezone * 3600) . '_' .
-            gmdate($_CFG['date_format'], $end_date + $timezone * 3600);
+        $filename = gmdate($_CFG['date_format'], intval($start_date) + intval($timezone) * 3600) . '_' .
+            gmdate($_CFG['date_format'], intval($end_date) + intval($timezone) * 3600);
 
         $smarty->assign('action_link', array('text' => $_LANG['down_flow_stats'],
             'href' => 'flow_stats.php?act=download&filename=' . $filename .
@@ -283,7 +283,7 @@ if ($_REQUEST['act'] == 'view') {
     assign_query_info();
     $smarty->display('flow_stats.htm');
 } /* 报表下载 */
-elseif ($act = 'download') {
+if ($_REQUEST['act'] = 'download') {
     $filename = !empty($_REQUEST['filename']) ? trim($_REQUEST['filename']) : '';
 
     header("Content-type: application/vnd.ms-excel; charset=utf-8");

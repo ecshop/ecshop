@@ -37,7 +37,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 分页、排序、查询
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $list = favourable_list();
 
     $smarty->assign('favourable_list', $list['item']);
@@ -58,7 +58,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 删除
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('favourable');
 
     $id = intval($_GET['id']);
@@ -84,7 +84,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 批量操作
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'batch') {
+if ($_REQUEST['act'] == 'batch') {
     /* 取得要操作的记录编号 */
     if (empty($_POST['checkboxes'])) {
         sys_msg($_LANG['no_record_selected']);
@@ -115,7 +115,7 @@ elseif ($_REQUEST['act'] == 'batch') {
 /*------------------------------------------------------ */
 //-- 修改排序
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_sort_order') {
+if ($_REQUEST['act'] == 'edit_sort_order') {
     check_authz_json('favourable');
 
     $id = intval($_POST['id']);
@@ -133,7 +133,7 @@ elseif ($_REQUEST['act'] == 'edit_sort_order') {
 //-- 添加、编辑
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     /* 检查权限 */
     admin_priv('favourable');
 
@@ -223,7 +223,7 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 //-- 添加、编辑后提交
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     /* 检查权限 */
     admin_priv('favourable');
 
@@ -317,7 +317,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 //-- 搜索商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'search') {
+if ($_REQUEST['act'] == 'search') {
     /* 检查权限 */
     check_authz_json('favourable');
 

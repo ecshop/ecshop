@@ -28,7 +28,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 翻页，排序
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $fields = array();
     $fields = $db->getAll("SELECT * FROM " . $ecs->table('reg_fields') . "ORDER BY id");
 
@@ -40,7 +40,7 @@ elseif ($_REQUEST['act'] == 'query') {
 //-- 添加会员注册项
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     admin_priv('reg_fields');
 
     $form_action = 'insert';
@@ -62,7 +62,7 @@ elseif ($_REQUEST['act'] == 'add') {
 //-- 增加会员注册项到数据库
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'insert') {
+if ($_REQUEST['act'] == 'insert') {
     admin_priv('reg_fields');
 
     /* 检查是否存在重名的会员注册项 */
@@ -89,14 +89,14 @@ elseif ($_REQUEST['act'] == 'insert') {
 //-- 编辑会员注册项
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     admin_priv('reg_fields');
 
     $form_action = 'update';
 
     $sql = "SELECT id AS reg_field_id, reg_field_name, dis_order AS reg_field_order, display AS reg_field_display, is_need AS reg_field_need FROM " .
         $ecs->table('reg_fields') . " WHERE id='$_REQUEST[id]'";
-    $reg_field = $db->GetRow($sql);
+    $reg_field = $db->getRow($sql);
 
     $smarty->assign('reg_field', $reg_field);
     $smarty->assign('ur_here', $_LANG['add_reg_field']);
@@ -111,7 +111,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 //-- 更新会员注册项
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'update') {
     admin_priv('reg_fields');
 
     /* 检查是否存在重名的会员注册项 */
@@ -133,7 +133,7 @@ elseif ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 删除会员注册项
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('reg_fields');
 
     $field_id = intval($_GET['id']);
@@ -155,7 +155,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 } /*
  *  编辑会员注册项名称
  */
-elseif ($_REQUEST['act'] == 'edit_name') {
+if ($_REQUEST['act'] == 'edit_name') {
     $id = intval($_REQUEST['id']);
     $val = empty($_REQUEST['val']) ? '' : json_str_iconv(trim($_REQUEST['val']));
     check_authz_json('reg_fields');
@@ -174,7 +174,7 @@ elseif ($_REQUEST['act'] == 'edit_name') {
 } /*
  *  编辑会员注册项排序权值
  */
-elseif ($_REQUEST['act'] == 'edit_order') {
+if ($_REQUEST['act'] == 'edit_order') {
     $id = intval($_REQUEST['id']);
     $val = isset($_REQUEST['val']) ? json_str_iconv(trim($_REQUEST['val'])) : '';
     check_authz_json('reg_fields');
@@ -195,7 +195,7 @@ elseif ($_REQUEST['act'] == 'edit_order') {
 /*------------------------------------------------------ */
 //-- 修改会员注册项显示状态
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'toggle_dis') {
+if ($_REQUEST['act'] == 'toggle_dis') {
     check_authz_json('reg_fields');
 
     $id = intval($_POST['id']);
@@ -210,7 +210,7 @@ elseif ($_REQUEST['act'] == 'toggle_dis') {
 /*------------------------------------------------------ */
 //-- 修改会员注册项必填状态
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'toggle_need') {
+if ($_REQUEST['act'] == 'toggle_need') {
     check_authz_json('reg_fields');
 
     $id = intval($_POST['id']);

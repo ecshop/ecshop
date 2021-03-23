@@ -35,7 +35,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 翻页、排序
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $list = get_message_list();
 
     $smarty->assign('message_list', $list['item']);
@@ -56,7 +56,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 留言发送页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'send') {
+if ($_REQUEST['act'] == 'send') {
     /* 获取管理员列表 */
     $admin_list = $db->getAll('SELECT user_id, user_name FROM ' . $ecs->table('admin_user'));
 
@@ -73,14 +73,14 @@ elseif ($_REQUEST['act'] == 'send') {
 /*------------------------------------------------------ */
 //-- 处理留言的发送
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'insert') {
+if ($_REQUEST['act'] == 'insert') {
     $rec_arr = $_POST['receiver_id'];
 
     /* 向所有管理员发送留言 */
     if ($rec_arr[0] == 0) {
         /* 获取管理员信息 */
         $result = $db->query('SELECT user_id FROM ' . $ecs->table('admin_user') . 'WHERE user_id !=' . $_SESSION['admin_id']);
-        while ($rows = $db->FetchRow($result)) {
+        while ($rows = $db->fetchRow($result)) {
             $sql = "INSERT INTO " . $ecs->table('admin_message') . " (sender_id, receiver_id, sent_time, " .
                 "read_time, readed, deleted, title, message) " .
                 "VALUES ('" . $_SESSION['admin_id'] . "', '" . $rows['user_id'] . "', '" . gmtime() . "', " .
@@ -121,7 +121,7 @@ elseif ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 留言编辑页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     $id = intval($_REQUEST['id']);
 
     /* 获取管理员列表 */
@@ -140,7 +140,8 @@ elseif ($_REQUEST['act'] == 'edit') {
 
     assign_query_info();
     $smarty->display('message_info.htm');
-} elseif ($_REQUEST['act'] == 'update') {
+}
+if ($_REQUEST['act'] == 'update') {
     /* 获得留言数据*/
     $msg_arr = array();
     $msg_arr = $db->getRow('SELECT * FROM ' . $ecs->table('admin_message') . " WHERE message_id='$_POST[id]'");
@@ -163,7 +164,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 留言查看页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'view') {
+if ($_REQUEST['act'] == 'view') {
     $msg_id = intval($_REQUEST['id']);
 
     /* 获得管理员留言数据 */
@@ -201,7 +202,7 @@ elseif ($_REQUEST['act'] == 'view') {
 /*------------------------------------------------------ */
 //--留言回复页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'reply') {
+if ($_REQUEST['act'] == 'reply') {
     $msg_id = intval($_REQUEST['id']);
 
     /* 获得留言数据 */
@@ -226,7 +227,7 @@ elseif ($_REQUEST['act'] == 'reply') {
 /*------------------------------------------------------ */
 //--留言回复的处理
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 're_msg') {
+if ($_REQUEST['act'] == 're_msg') {
     $sql = "INSERT INTO " . $ecs->table('admin_message') . " (sender_id, receiver_id, sent_time, " .
         "read_time, readed, deleted, title, message) " .
         "VALUES ('" . $_SESSION['admin_id'] . "', '$_POST[receiver_id]', '" . gmtime() . "', " .
@@ -245,7 +246,7 @@ elseif ($_REQUEST['act'] == 're_msg') {
 /*------------------------------------------------------ */
 //-- 批量删除留言记录
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'drop_msg') {
+if ($_REQUEST['act'] == 'drop_msg') {
     if (isset($_POST['checkboxes'])) {
         $count = 0;
         foreach ($_POST['checkboxes'] as $key => $id) {
@@ -268,7 +269,7 @@ elseif ($_REQUEST['act'] == 'drop_msg') {
 /*------------------------------------------------------ */
 //-- 删除留言
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     $id = intval($_GET['id']);
 
     $sql = "UPDATE " . $ecs->table('admin_message') . " SET deleted=1 " .

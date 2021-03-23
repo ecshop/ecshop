@@ -28,7 +28,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 新建配送区域
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add' && !empty($_REQUEST['shipping'])) {
+if ($_REQUEST['act'] == 'add' && !empty($_REQUEST['shipping'])) {
     admin_priv('shiparea_manage');
 
     $shipping = $db->getRow("SELECT shipping_name, shipping_code FROM " . $ecs->table('shipping') . " WHERE shipping_id='$_REQUEST[shipping]'");
@@ -66,7 +66,8 @@ elseif ($_REQUEST['act'] == 'add' && !empty($_REQUEST['shipping'])) {
     $smarty->assign('default_country', $_CFG['shop_country']);
     assign_query_info();
     $smarty->display('shipping_area_info.htm');
-} elseif ($_REQUEST['act'] == 'insert') {
+}
+if ($_REQUEST['act'] == 'insert') {
     admin_priv('shiparea_manage');
 
     /* 检查同类型的配送方式下有没有重名的配送区域 */
@@ -124,7 +125,6 @@ elseif ($_REQUEST['act'] == 'add' && !empty($_REQUEST['shipping'])) {
 
         admin_log($_POST['shipping_area_name'], 'add', 'shipping_area');
 
-        //$lnk[] = array('text' => $_LANG['add_area_region'], 'href'=>'shipping_area.php?act=region&id='.$new_id);
         $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'shipping_area.php?act=list&shipping=' . $_POST['shipping']);
         $lnk[] = array('text' => $_LANG['add_continue'], 'href' => 'shipping_area.php?act=add&shipping=' . $_POST['shipping']);
         sys_msg($_LANG['add_area_success'], 0, $lnk);
@@ -135,7 +135,7 @@ elseif ($_REQUEST['act'] == 'add' && !empty($_REQUEST['shipping'])) {
 //-- 编辑配送区域
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     admin_priv('shiparea_manage');
 
     $sql = "SELECT a.shipping_name, a.shipping_code, a.support_cod, b.* " .
@@ -157,15 +157,6 @@ elseif ($_REQUEST['act'] == 'edit') {
         if ($val['name'] == 'basic_fee') {
             $val['name'] = 'base_fee';
         }
-//       if ($val['name'] == 'step_fee1')
-//       {
-//            $val['name'] = 'step_fee';
-//       }
-//       if ($val['name'] == 'step_fee2')
-//       {
-//            $val['name'] = 'step_fee1';
-//       }
-
         if ($val['name'] == 'item_fee') {
             $item_fee = 1;
         }
@@ -204,7 +195,8 @@ elseif ($_REQUEST['act'] == 'edit') {
     $smarty->assign('countries', get_regions());
     $smarty->assign('default_country', 1);
     $smarty->display('shipping_area_info.htm');
-} elseif ($_REQUEST['act'] == 'update') {
+}
+if ($_REQUEST['act'] == 'update') {
     admin_priv('shiparea_manage');
 
     /* 检查同类型的配送方式下有没有重名的配送区域 */
@@ -297,7 +289,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 批量删除配送区域
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'multi_remove') {
+if ($_REQUEST['act'] == 'multi_remove') {
     admin_priv('shiparea_manage');
 
     if (isset($_POST['areas']) && count($_POST['areas']) > 0) {
@@ -319,7 +311,7 @@ elseif ($_REQUEST['act'] == 'multi_remove') {
 //-- 编辑配送区域名称
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_area') {
+if ($_REQUEST['act'] == 'edit_area') {
     /* 检查权限 */
     check_authz_json('shiparea_manage');
 
@@ -349,7 +341,7 @@ elseif ($_REQUEST['act'] == 'edit_area') {
 //-- 删除配送区域
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'remove_area') {
+if ($_REQUEST['act'] == 'remove_area') {
     check_authz_json('shiparea_manage');
 
     $id = intval($_GET['id']);

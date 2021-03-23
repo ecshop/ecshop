@@ -21,7 +21,7 @@ if ($_REQUEST['act'] == 'list') {
     admin_priv('client_flow_stats');
 
     /* 取得会员总数 */
-    $users =& init_users();
+    $users = init_users();
     $sql = "SELECT COUNT(*) FROM " . $ecs->table("users");
     $res = $db->getCol($sql);
     $user_num = $res[0];

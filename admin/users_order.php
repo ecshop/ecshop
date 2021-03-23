@@ -42,7 +42,9 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result($smarty->fetch('users_order.htm'), '', array('filter' => $user_orderinfo['filter'], 'page_count' => $user_orderinfo['page_count']));
-} else {
+}
+
+if ($_REQUEST['act'] == 'list') {
     /* 权限判断 */
     admin_priv('client_flow_stats');
     /* 时间参数 */
@@ -58,8 +60,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
 
     /* 赋值到模板 */
     $smarty->assign('ur_here', $_LANG['report_users']);
-    $smarty->assign('action_link', array('text' => $_LANG['download_amount_sort'],
-        'href' => "#download"));
+    $smarty->assign('action_link', array('text' => $_LANG['download_amount_sort'], 'href' => "#download"));
     $smarty->assign('filter', $user_orderinfo['filter']);
     $smarty->assign('record_count', $user_orderinfo['record_count']);
     $smarty->assign('page_count', $user_orderinfo['page_count']);

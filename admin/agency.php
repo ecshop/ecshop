@@ -31,7 +31,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $agency_list = get_agencylist();
     $smarty->assign('agency_list', $agency_list['agency']);
     $smarty->assign('filter', $agency_list['filter']);
@@ -52,7 +52,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 列表页编辑名称
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_agency_name') {
+if ($_REQUEST['act'] == 'edit_agency_name') {
     check_authz_json('agency_manage');
 
     $id = intval($_POST['id']);
@@ -75,7 +75,7 @@ elseif ($_REQUEST['act'] == 'edit_agency_name') {
 /*------------------------------------------------------ */
 //-- 删除办事处
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('agency_manage');
 
     $id = intval($_GET['id']);
@@ -104,7 +104,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 批量操作
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'batch') {
+if ($_REQUEST['act'] == 'batch') {
     /* 取得要操作的记录编号 */
     if (empty($_POST['checkboxes'])) {
         sys_msg($_LANG['no_record_selected']);
@@ -141,7 +141,7 @@ elseif ($_REQUEST['act'] == 'batch') {
 /*------------------------------------------------------ */
 //-- 添加、编辑办事处
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     /* 检查权限 */
     admin_priv('agency_manage');
 
@@ -209,7 +209,7 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 提交添加、编辑办事处
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     /* 检查权限 */
     admin_priv('agency_manage');
 

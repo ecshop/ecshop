@@ -18,7 +18,8 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('end_date', local_date('Y-m-d'));
     assign_query_info();
     $smarty->display('search_log_list.htm');
-} elseif ($_REQUEST['act'] == 'query') {
+}
+if ($_REQUEST['act'] == 'query') {
     $logdb = get_search_log();
     $smarty->assign('full_page', 0);
     $smarty->assign('logdb', $logdb['logdb']);

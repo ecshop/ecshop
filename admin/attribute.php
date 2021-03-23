@@ -42,7 +42,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 排序、翻页
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $list = get_attrlist();
 
     $smarty->assign('attr_list', $list['item']);
@@ -63,7 +63,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加/编辑属性
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     /* 检查权限 */
     admin_priv('attr_manage');
 
@@ -108,7 +108,7 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 //-- 插入/更新属性
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     /* 检查权限 */
     admin_priv('attr_manage');
 
@@ -157,7 +157,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 删除属性(一个或多个)
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'batch') {
+if ($_REQUEST['act'] == 'batch') {
     /* 检查权限 */
     admin_priv('attr_manage');
 
@@ -188,7 +188,7 @@ elseif ($_REQUEST['act'] == 'batch') {
 //-- 编辑属性名称
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_attr_name') {
+if ($_REQUEST['act'] == 'edit_attr_name') {
     check_authz_json('attr_manage');
 
     $id = intval($_POST['id']);
@@ -213,7 +213,7 @@ elseif ($_REQUEST['act'] == 'edit_attr_name') {
 //-- 编辑排序序号
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_sort_order') {
+if ($_REQUEST['act'] == 'edit_sort_order') {
     check_authz_json('attr_manage');
 
     $id = intval($_POST['id']);
@@ -229,7 +229,7 @@ elseif ($_REQUEST['act'] == 'edit_sort_order') {
 /*------------------------------------------------------ */
 //-- 删除商品属性
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('attr_manage');
 
     $id = intval($_GET['id']);
@@ -246,7 +246,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 获取某属性商品数量
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'get_attr_num') {
+if ($_REQUEST['act'] == 'get_attr_num') {
     check_authz_json('attr_manage');
 
     $id = intval($_GET['attr_id']);
@@ -271,7 +271,7 @@ elseif ($_REQUEST['act'] == 'get_attr_num') {
 //-- 获得指定商品类型下的所有属性分组
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'get_attr_groups') {
+if ($_REQUEST['act'] == 'get_attr_groups') {
     check_authz_json('attr_manage');
 
     $cat_id = intval($_GET['cat_id']);
@@ -279,10 +279,6 @@ elseif ($_REQUEST['act'] == 'get_attr_groups') {
 
     make_json_result($groups);
 }
-
-/*------------------------------------------------------ */
-//-- PRIVATE FUNCTIONS
-/*------------------------------------------------------ */
 
 /**
  * 获取属性列表

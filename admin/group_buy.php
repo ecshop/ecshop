@@ -38,7 +38,8 @@ if ($_REQUEST['act'] == 'list') {
     /* 显示商品列表页面 */
     assign_query_info();
     $smarty->display('group_buy_list.htm');
-} elseif ($_REQUEST['act'] == 'query') {
+}
+if ($_REQUEST['act'] == 'query') {
     $list = group_buy_list();
 
     $smarty->assign('group_buy_list', $list['item']);
@@ -60,7 +61,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 添加/编辑团购活动
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     /* 初始化/取得团购活动信息 */
     if ($_REQUEST['act'] == 'add') {
         $group_buy = array(
@@ -93,7 +94,7 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 //-- 添加/编辑团购活动的提交
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'insert_update') {
+if ($_REQUEST['act'] == 'insert_update') {
     /* 取得团购活动id */
     $group_buy_id = intval($_POST['act_id']);
     if (isset($_POST['finish']) || isset($_POST['succeed']) || isset($_POST['fail']) || isset($_POST['mail'])) {
@@ -477,7 +478,7 @@ elseif ($_REQUEST['act'] == 'insert_update') {
 /*------------------------------------------------------ */
 //-- 批量删除团购活动
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'batch_drop') {
+if ($_REQUEST['act'] == 'batch_drop') {
     if (isset($_POST['checkboxes'])) {
         $del_count = 0; //初始化删除数量
         foreach ($_POST['checkboxes'] as $key => $id) {
@@ -513,7 +514,7 @@ elseif ($_REQUEST['act'] == 'batch_drop') {
 //-- 搜索商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'search_goods') {
+if ($_REQUEST['act'] == 'search_goods') {
     check_authz_json('group_by');
 
     include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -529,7 +530,7 @@ elseif ($_REQUEST['act'] == 'search_goods') {
 //-- 编辑保证金
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_deposit') {
+if ($_REQUEST['act'] == 'edit_deposit') {
     check_authz_json('group_by');
 
     $id = intval($_POST['id']);
@@ -554,7 +555,7 @@ elseif ($_REQUEST['act'] == 'edit_deposit') {
 //-- 编辑保证金
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_restrict_amount') {
+if ($_REQUEST['act'] == 'edit_restrict_amount') {
     check_authz_json('group_by');
 
     $id = intval($_POST['id']);
@@ -579,7 +580,7 @@ elseif ($_REQUEST['act'] == 'edit_restrict_amount') {
 //-- 删除团购活动
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('group_by');
 
     $id = intval($_GET['id']);

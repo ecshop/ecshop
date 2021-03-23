@@ -29,7 +29,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- ajax 列表
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $packs_list = packs_list();
     $smarty->assign('packs_list', $packs_list['packs_list']);
     $smarty->assign('filter', $packs_list['filter']);
@@ -103,7 +103,7 @@ if ($_REQUEST['act'] == 'edit') {
     admin_priv('pack');
 
     $sql = "SELECT pack_id, pack_name, pack_fee, free_money, pack_desc, pack_img FROM " . $ecs->table('pack') . " WHERE pack_id='$_REQUEST[id]'";
-    $pack = $db->GetRow($sql);
+    $pack = $db->getRow($sql);
     $smarty->assign('ur_here', $_LANG['pack_edit']);
     $smarty->assign('action_link', array('text' => $_LANG['06_pack_list'], 'href' => 'pack.php?act=list&' . list_link_postfix()));
     $smarty->assign('pack', $pack);

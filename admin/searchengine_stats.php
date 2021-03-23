@@ -102,7 +102,8 @@ if ($_REQUEST['act'] == 'view') {
     /* 显示页面 */
     assign_query_info();
     $smarty->display('searchengine_stats.htm');
-} elseif ($_REQUEST['act'] == 'download') {
+}
+if ($_REQUEST['act'] == 'download') {
     $start_date = empty($_REQUEST['start_date']) ? strtotime('-20 day') : intval($_REQUEST['start_date']);
     $end_date = empty($_REQUEST['end_date']) ? time() : intval($_REQUEST['end_date']);
 

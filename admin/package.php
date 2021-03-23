@@ -33,7 +33,8 @@ if ($_REQUEST['act'] == 'add') {
 
     assign_query_info();
     $smarty->display('package_info.htm');
-} elseif ($_REQUEST['act'] == 'insert') {
+}
+if ($_REQUEST['act'] == 'insert') {
     /* 权限判断 */
     admin_priv('package_manage');
 
@@ -61,7 +62,7 @@ if ($_REQUEST['act'] == 'add') {
         'act_type' => GAT_PACKAGE, 'start_time' => $_POST['start_time'],
         'end_time' => $_POST['end_time'], 'is_finished' => 0, 'ext_info' => serialize($info));
 
-    $db->AutoExecute($ecs->table('goods_activity'), $record, 'INSERT');
+    $db->autoExecute($ecs->table('goods_activity'), $record, 'INSERT');
 
     /* 礼包编号 */
     $package_id = $db->insert_id();
@@ -77,7 +78,7 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 编辑活动
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     /* 权限判断 */
     admin_priv('package_manage');
 
@@ -94,7 +95,8 @@ elseif ($_REQUEST['act'] == 'edit') {
 
     assign_query_info();
     $smarty->display('package_info.htm');
-} elseif ($_REQUEST['act'] == 'update') {
+}
+if ($_REQUEST['act'] == 'update') {
     /* 权限判断 */
     admin_priv('package_manage');
 
@@ -132,7 +134,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 //-- 删除指定的活动
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('package_manage');
 
     $id = intval($_GET['id']);
@@ -152,7 +154,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 活动列表
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'list') {
+if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['14_package_list']);
     $smarty->assign('action_link', array('text' => $_LANG['package_add'], 'href' => 'package.php?act=add'));
 
@@ -175,7 +177,7 @@ elseif ($_REQUEST['act'] == 'list') {
 //-- 查询、翻页、排序
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $packages = get_packagelist();
 
     $smarty->assign('package_list', $packages['packages']);
@@ -197,7 +199,7 @@ elseif ($_REQUEST['act'] == 'query') {
 //-- 编辑活动名称
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_package_name') {
+if ($_REQUEST['act'] == 'edit_package_name') {
     check_authz_json('package_manage');
 
     $id = intval($_POST['id']);
@@ -219,7 +221,7 @@ elseif ($_REQUEST['act'] == 'edit_package_name') {
 //-- 搜索商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'search_goods') {
+if ($_REQUEST['act'] == 'search_goods') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -240,36 +242,10 @@ elseif ($_REQUEST['act'] == 'search_goods') {
 }
 
 /*------------------------------------------------------ */
-//-- 搜索商品，仅返回名称及ID
-/*------------------------------------------------------ */
-
-//elseif ($_REQUEST['act'] == 'get_goods_list')
-//{
-//    include_once(ROOT_PATH . 'includes/cls_json.php');
-//    $json = new JSON;
-//
-//    $filters = $json->decode($_GET['JSON']);
-//
-//    $arr = get_goods_list($filters);
-//
-//    $opt = array();
-//    foreach ($arr AS $key => $val)
-//    {
-//        $opt[$key] = array('value' => $val['goods_id'],
-//                        'text' => $val['goods_name'],
-//                        'data' => $val['shop_price']);
-//
-//        $opt[$key]['products'] = get_good_products($val['goods_id']);
-//    }
-//
-//    make_json_result($opt);
-//}
-
-/*------------------------------------------------------ */
 //-- 增加一个商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add_package_goods') {
+if ($_REQUEST['act'] == 'add_package_goods') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -308,7 +284,7 @@ elseif ($_REQUEST['act'] == 'add_package_goods') {
 //-- 删除一个商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'drop_package_goods') {
+if ($_REQUEST['act'] == 'drop_package_goods') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 

@@ -39,7 +39,8 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['07_cron_schcron']);
     $smarty->assign('modules', $modules);
     $smarty->display('cron_list.htm');
-} elseif ($_REQUEST['act'] == 'install') {
+}
+if ($_REQUEST['act'] == 'install') {
     if (empty($_POST['step'])) {
         /* 取相应插件信息 */
         $set_modules = true;
@@ -93,7 +94,7 @@ if ($_REQUEST['act'] == 'list') {
         }
         $sql = "SELECT COUNT(*) FROM " . $ecs->table('crons') .
             " WHERE  cron_code = '$_POST[cron_code]'";
-        if ($db->GetOne($sql) > 0) {
+        if ($db->getOne($sql) > 0) {
             sys_msg($_LANG['cron_code'] . $_LANG['repeat'], 1);
         }
 
@@ -134,7 +135,8 @@ if ($_REQUEST['act'] == 'list') {
         $db->query($sql);
         sys_msg($_LANG['install_ok'], 0, $links);
     }
-} elseif ($_REQUEST['act'] == 'edit') {
+}
+if ($_REQUEST['act'] == 'edit') {
     if (empty($_POST['step'])) {
         if (isset($_REQUEST['code'])) {
             $_REQUEST['code'] = trim($_REQUEST['code']);
@@ -244,13 +246,15 @@ if ($_REQUEST['act'] == 'list') {
         $db->query($sql);
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
-} elseif ($_REQUEST['act'] == 'uninstall') {
+}
+if ($_REQUEST['act'] == 'uninstall') {
     $sql = "DELETE FROM " . $ecs->table('crons') .
         "WHERE cron_code = '$_REQUEST[code]' LIMIT 1";
     $db->query($sql);
     $links[] = array('text' => $_LANG['back_list'], 'href' => 'cron.php?act=list');
     sys_msg($_LANG['uninstall_ok'], 0, $links);
-} elseif ($_REQUEST['act'] == 'toggle_show') {
+}
+if ($_REQUEST['act'] == 'toggle_show') {
     $id = trim($_POST['id']);
     $val = intval($_POST['val']);
 
@@ -259,7 +263,8 @@ if ($_REQUEST['act'] == 'list') {
         "WHERE cron_code = '$id' LIMIT 1";
     $db->query($sql);
     make_json_result($val);
-} elseif ($_REQUEST['act'] == 'do') {
+}
+if ($_REQUEST['act'] == 'do') {
     if (isset($set_modules)) {
         $set_modules = false;
         unset($set_modules);
@@ -309,7 +314,6 @@ function get_next_time($cron)
         $sh = $cron['hour'];
     }
     $next = local_strtotime("$sy-$smo-$sd $sh:$sm:0");
-    //$next = gmmktime($sh,$sm,0,$smo,$sd,$sy);
 
     return $next;
 }

@@ -547,7 +547,7 @@ function get_attr_list($cat_id, $goods_id = 0)
         "WHERE a.cat_id = " . intval($cat_id) . " OR a.cat_id = 0 " .
         "ORDER BY a.sort_order, a.attr_type, a.attr_id, v.attr_price, v.goods_attr_id";
 
-    $row = $GLOBALS['db']->GetAll($sql);
+    $row = $GLOBALS['db']->getAll($sql);
 
     return $row;
 }
@@ -564,7 +564,7 @@ function get_goods_type_specifications()
     $sql = "SELECT DISTINCT cat_id
             FROM " . $GLOBALS['ecs']->table('attribute') . "
             WHERE attr_type = 1";
-    $row = $GLOBALS['db']->GetAll($sql);
+    $row = $GLOBALS['db']->getAll($sql);
 
     $return_arr = array();
     if (!empty($row)) {
@@ -975,7 +975,7 @@ function product_list($goods_id, $conditions = '')
                 ORDER BY $filter[sort_by] $filter[sort_order]";
 
         $filter['keyword'] = stripslashes($filter['keyword']);
-        //set_filter($filter, $sql, $param_str);
+    //set_filter($filter, $sql, $param_str);
     } else {
         $sql = $result['sql'];
         $filter = $result['filter'];

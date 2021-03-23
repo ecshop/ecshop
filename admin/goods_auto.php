@@ -17,7 +17,8 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('page_count', $goodsdb['page_count']);
     assign_query_info();
     $smarty->display('goods_auto.htm');
-} elseif ($_REQUEST['act'] == 'query') {
+}
+if ($_REQUEST['act'] == 'query') {
     $goodsdb = get_auto_goods();
     $smarty->assign('goodsdb', $goodsdb['goodsdb']);
     $smarty->assign('filter', $goodsdb['filter']);
@@ -29,13 +30,15 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result($smarty->fetch('goods_auto.htm'), '', array('filter' => $goodsdb['filter'], 'page_count' => $goodsdb['page_count']));
-} elseif ($_REQUEST['act'] == 'del') {
+}
+if ($_REQUEST['act'] == 'del') {
     $goods_id = (int)$_REQUEST['goods_id'];
     $sql = "DELETE FROM " . $ecs->table('auto_manage') . " WHERE item_id = '$goods_id' AND type = 'goods'";
     $db->query($sql);
     $links[] = array('text' => $_LANG['goods_auto'], 'href' => 'goods_auto.php?act=list');
     sys_msg($_LANG['edit_ok'], 0, $links);
-} elseif ($_REQUEST['act'] == 'edit_starttime') {
+}
+if ($_REQUEST['act'] == 'edit_starttime') {
     check_authz_json('goods_auto');
 
     if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
@@ -53,7 +56,8 @@ if ($_REQUEST['act'] == 'list') {
 
     clear_cache_files();
     make_json_result(stripslashes($_POST['val']), '', array('act' => 'goods_auto', 'id' => $id));
-} elseif ($_REQUEST['act'] == 'edit_endtime') {
+}
+if ($_REQUEST['act'] == 'edit_endtime') {
     check_authz_json('goods_auto');
 
     if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
@@ -72,7 +76,7 @@ if ($_REQUEST['act'] == 'list') {
     clear_cache_files();
     make_json_result(stripslashes($_POST['val']), '', array('act' => 'goods_auto', 'id' => $id));
 } //批量上架
-elseif ($_REQUEST['act'] == 'batch_start') {
+if ($_REQUEST['act'] == 'batch_start') {
     admin_priv('goods_auto');
 
     if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
@@ -93,7 +97,7 @@ elseif ($_REQUEST['act'] == 'batch_start') {
     $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'goods_auto.php?act=list');
     sys_msg($_LANG['batch_start_succeed'], 0, $lnk);
 } //批量下架
-elseif ($_REQUEST['act'] == 'batch_end') {
+if ($_REQUEST['act'] == 'batch_end') {
     admin_priv('goods_auto');
 
     if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {

@@ -65,7 +65,8 @@ if ($_REQUEST['act'] == 'list') {
     /* 显示页面 */
     assign_query_info();
     $smarty->display('user_account_manage.htm');
-} elseif ($_REQUEST['act'] == 'surplus') {
+}
+if ($_REQUEST['act'] == 'surplus') {
     $order_list = order_list();
 
     /* 赋值到模板 */
@@ -85,7 +86,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- ajax返回用户列表
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $order_list = order_list();
 
     $smarty->assign('order_list', $order_list['order_list']);

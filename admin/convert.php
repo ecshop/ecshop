@@ -12,7 +12,7 @@ if ($_REQUEST['act'] == 'main') {
     admin_priv('convert');
 
     /* 取得插件文件中的转换程序 */
-    $modules = read_modules('../includes/modules/convert');
+    $modules = read_modules(ROOT_PATH . 'includes/modules/convert');
     for ($i = 0; $i < count($modules); $i++) {
         $code = $modules[$i]['code'];
         $lang_file = ROOT_PATH . 'languages/' . $_CFG['lang'] . '/convert/' . $code . '.php';
@@ -47,7 +47,7 @@ if ($_REQUEST['act'] == 'main') {
 //-- 转换前检查
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'check') {
+if ($_REQUEST['act'] == 'check') {
     /* 检查权限 */
     check_authz_json('convert');
 
@@ -135,7 +135,7 @@ elseif ($_REQUEST['act'] == 'check') {
 //-- 转换操作
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'process') {
+if ($_REQUEST['act'] == 'process') {
     /* 设置执行时间 */
     set_time_limit(0);
 

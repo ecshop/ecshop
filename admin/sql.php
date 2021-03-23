@@ -89,7 +89,7 @@ function assign_sql($sql)
             $smarty->assign('error', $db->error());
         }
     } else {
-        $data = $db->GetAll($sql);
+        $data = $db->getAll($sql);
         if ($data === false) {
             $smarty->assign('type', 0);
             $smarty->assign('error', $db->error());

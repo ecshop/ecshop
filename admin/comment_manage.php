@@ -221,7 +221,7 @@ if ($_REQUEST['act'] == 'check') {
 /*------------------------------------------------------ */
 //-- 删除某一条评论
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('comment_priv');
 
     $id = intval($_GET['id']);
@@ -291,8 +291,10 @@ function get_comment_list()
     if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1) {
         $filter['keywords'] = json_str_iconv($filter['keywords']);
     }
-    $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'add_time' : trim($_REQUEST['sort_by']);
-    $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
+
+    $sort = array('comment_id', 'user_name', 'comment_type', 'id_value', 'ip_address', 'add_time');
+    $filter['sort_by'] = in_array($_REQUEST['sort_by'], $sort) ? $_REQUEST['sort_by'] : 'add_time';
+    $filter['sort_order'] = in_array($_REQUEST['sort_order'], ['ASC', 'DESC']) ? $_REQUEST['sort_order'] : 'DESC';
 
     $where = (!empty($filter['keywords'])) ? " AND content LIKE '%" . mysql_like_quote($filter['keywords']) . "%' " : '';
 
@@ -305,8 +307,8 @@ function get_comment_list()
     /* 获取评论数据 */
     $arr = array();
     $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('comment') . " WHERE parent_id = 0 $where " .
-        " ORDER BY $filter[sort_by] $filter[sort_order] " .
-        " LIMIT " . $filter['start'] . ", $filter[page_size]";
+        " ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'] .
+        " LIMIT " . $filter['start'] . "," . $filter['page_size'];
     $res = $GLOBALS['db']->query($sql);
 
     while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -314,11 +316,6 @@ function get_comment_list()
             "SELECT goods_name FROM " . $GLOBALS['ecs']->table('goods') . " WHERE goods_id='$row[id_value]'" :
             "SELECT title FROM " . $GLOBALS['ecs']->table('article') . " WHERE article_id='$row[id_value]'";
         $row['title'] = $GLOBALS['db']->getOne($sql);
-
-        /* 标记是否回复过 */
-//        $sql = "SELECT COUNT(*) FROM " .$GLOBALS['ecs']->table('comment'). " WHERE parent_id = '$row[comment_id]'";
-//        $row['is_reply'] =  ($GLOBALS['db']->getOne($sql) > 0) ?
-//            $GLOBALS['_LANG']['yes_reply'] : $GLOBALS['_LANG']['no_reply'];
 
         $row['add_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['add_time']);
 

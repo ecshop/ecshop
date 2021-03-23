@@ -18,6 +18,7 @@ if (empty($_REQUEST['act'])) {
 //-- 广告列表页面
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
+    admin_priv('ad_manage');
     $pid = !empty($_REQUEST['pid']) ? intval($_REQUEST['pid']) : 0;
 
     $smarty->assign('ur_here', $_LANG['ad_list']);
@@ -42,7 +43,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $ads_list = get_adslist();
 
     $smarty->assign('ads_list', $ads_list['ads']);
@@ -63,7 +64,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加新广告页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     admin_priv('ad_manage');
 
     $ad_link = empty($_GET['ad_link']) ? '' : trim($_GET['ad_link']);
@@ -93,7 +94,7 @@ elseif ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 新广告的处理
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'insert') {
+if ($_REQUEST['act'] == 'insert') {
     admin_priv('ad_manage');
 
     /* 初始化变量 */
@@ -222,7 +223,7 @@ elseif ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 广告编辑页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     admin_priv('ad_manage');
 
     /* 获取广告数据 */
@@ -277,7 +278,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 广告编辑的处理
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'update') {
     admin_priv('ad_manage');
 
     /* 初始化变量 */
@@ -377,7 +378,7 @@ elseif ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //--生成广告的JS代码
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add_js') {
+if ($_REQUEST['act'] == 'add_js') {
     admin_priv('ad_manage');
 
     /* 编码 */
@@ -405,7 +406,7 @@ elseif ($_REQUEST['act'] == 'add_js') {
 /*------------------------------------------------------ */
 //-- 编辑广告名称
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_ad_name') {
+if ($_REQUEST['act'] == 'edit_ad_name') {
     check_authz_json('ad_manage');
 
     $id = intval($_POST['id']);
@@ -427,7 +428,7 @@ elseif ($_REQUEST['act'] == 'edit_ad_name') {
 /*------------------------------------------------------ */
 //-- 删除广告位置
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('ad_manage');
 
     $id = intval($_GET['id']);

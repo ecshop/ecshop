@@ -38,7 +38,7 @@ if ($_REQUEST['act'] == 'manage') {
 //-- 获得列表
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $good_type_list = get_goodstype();
 
     $smarty->assign('goods_type_arr', $good_type_list['type']);
@@ -56,7 +56,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 修改商品类型名称
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_type_name') {
+if ($_REQUEST['act'] == 'edit_type_name') {
     check_authz_json('goods_type');
 
     $type_id = !empty($_POST['id']) ? intval($_POST['id']) : 0;
@@ -80,7 +80,7 @@ elseif ($_REQUEST['act'] == 'edit_type_name') {
 //-- 切换启用状态
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'toggle_enabled') {
+if ($_REQUEST['act'] == 'toggle_enabled') {
     check_authz_json('goods_type');
 
     $id = intval($_POST['id']);
@@ -95,7 +95,7 @@ elseif ($_REQUEST['act'] == 'toggle_enabled') {
 //-- 添加商品类型
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     admin_priv('goods_type');
 
     $smarty->assign('ur_here', $_LANG['new_goods_type']);
@@ -106,9 +106,8 @@ elseif ($_REQUEST['act'] == 'add') {
 
     assign_query_info();
     $smarty->display('goods_type_info.htm');
-} elseif ($_REQUEST['act'] == 'insert') {
-    //$goods_type['cat_name']   = trim_right(sub_str($_POST['cat_name'], 60));
-    //$goods_type['attr_group'] = trim_right(sub_str($_POST['attr_group'], 255));
+}
+if ($_REQUEST['act'] == 'insert') {
     $goods_type['cat_name'] = sub_str($_POST['cat_name'], 60);
     $goods_type['attr_group'] = sub_str($_POST['attr_group'], 255);
     $goods_type['enabled'] = intval($_POST['enabled']);
@@ -125,7 +124,7 @@ elseif ($_REQUEST['act'] == 'add') {
 //-- 编辑商品类型
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     $goods_type = get_goodstype_info(intval($_GET['cat_id']));
 
     if (empty($goods_type)) {
@@ -142,7 +141,8 @@ elseif ($_REQUEST['act'] == 'edit') {
 
     assign_query_info();
     $smarty->display('goods_type_info.htm');
-} elseif ($_REQUEST['act'] == 'update') {
+}
+if ($_REQUEST['act'] == 'update') {
     $goods_type['cat_name'] = sub_str($_POST['cat_name'], 60);
     $goods_type['attr_group'] = sub_str($_POST['attr_group'], 255);
     $goods_type['enabled'] = intval($_POST['enabled']);
@@ -178,7 +178,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 //-- 删除商品类型
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('goods_type');
 
     $id = intval($_GET['id']);

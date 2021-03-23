@@ -256,17 +256,6 @@ $dyna_libs = array(
     'ad_position',
 );
 
-///* 插件的 library */
-//$sql = 'SELECT code, library FROM ' . $ecs->table('plugins') . " WHERE assign = 1 AND library > ''";
-//$res = $db->query($sql);
-//
-//while ($row = $db->fetchRow($res))
-//{
-//    include_once('../plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php');
-//
-//    $page_libs['index'][] = $row['library'];
-//}
-
 /**
  * 获得模版的信息
  *
@@ -409,32 +398,6 @@ function get_template_region($tmp_name, $tmp_file, $lib = true)
     }
 
     return $libs;
-}
-
-/**
- * 将插件library从默认模板中移动到指定模板中
- *
- * @access  public
- * @param string $tmp_name 模版名称
- * @param string $msg 如果出错，保存错误信息，否则为空
- * @return  Boolen
- */
-function move_plugin_library($tmp_name, &$msg)
-{
-    $sql = 'SELECT code, library FROM ' . $GLOBALS['ecs']->table('plugins') . " WHERE library > ''";
-    $rec = $GLOBALS['db']->query($sql);
-    $return_value = true;
-    $target_dir = ROOT_PATH . 'themes/' . $tmp_name;
-    $source_dir = ROOT_PATH . 'themes/' . $GLOBALS['_CFG']['template'];
-    while ($row = $GLOBALS['db']->fetchRow($rec)) {
-        //先移动，移动失败试则拷贝
-        if (!@rename($source_dir . $row['library'], $target_dir . $row['library'])) {
-            if (!@copy(ROOT_PATH . 'plugins/' . $row['code'] . '/temp' . $row['library'], $target_dir . $row['library'])) {
-                $return_value = false;
-                $msg .= "\n moving " . $row['library'] . ' failed';
-            }
-        }
-    }
 }
 
 /**

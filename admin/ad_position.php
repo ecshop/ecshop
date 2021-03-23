@@ -37,7 +37,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 添加广告位页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     admin_priv('ad_manage');
 
     /* 模板赋值 */
@@ -49,7 +49,8 @@ elseif ($_REQUEST['act'] == 'add') {
 
     assign_query_info();
     $smarty->display('ad_position_info.htm');
-} elseif ($_REQUEST['act'] == 'insert') {
+}
+if ($_REQUEST['act'] == 'insert') {
     admin_priv('ad_manage');
 
     /* 对POST上来的值进行处理并去除空格 */
@@ -88,7 +89,7 @@ elseif ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 广告位编辑页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     admin_priv('ad_manage');
 
     $id = !empty($_GET['id']) ? intval($_GET['id']) : 0;
@@ -104,7 +105,8 @@ elseif ($_REQUEST['act'] == 'edit') {
 
     assign_query_info();
     $smarty->display('ad_position_info.htm');
-} elseif ($_REQUEST['act'] == 'update') {
+}
+if ($_REQUEST['act'] == 'update') {
     admin_priv('ad_manage');
 
     /* 对POST上来的值进行处理并去除空格 */
@@ -144,7 +146,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $position_list = ad_position_list();
 
     $smarty->assign('position_list', $position_list['position']);
@@ -162,7 +164,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 编辑广告位置名称
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_position_name') {
+if ($_REQUEST['act'] == 'edit_position_name') {
     check_authz_json('ad_manage');
 
     $id = intval($_POST['id']);
@@ -184,7 +186,7 @@ elseif ($_REQUEST['act'] == 'edit_position_name') {
 /*------------------------------------------------------ */
 //-- 编辑广告位宽高
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_ad_width') {
+if ($_REQUEST['act'] == 'edit_ad_width') {
     check_authz_json('ad_manage');
 
     $id = intval($_POST['id']);
@@ -212,7 +214,7 @@ elseif ($_REQUEST['act'] == 'edit_ad_width') {
 /*------------------------------------------------------ */
 //-- 编辑广告位宽高
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_ad_height') {
+if ($_REQUEST['act'] == 'edit_ad_height') {
     check_authz_json('ad_manage');
 
     $id = intval($_POST['id']);
@@ -240,7 +242,7 @@ elseif ($_REQUEST['act'] == 'edit_ad_height') {
 /*------------------------------------------------------ */
 //-- 删除广告位置
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('ad_manage');
 
     $id = intval($_GET['id']);

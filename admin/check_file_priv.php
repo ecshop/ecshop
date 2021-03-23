@@ -22,11 +22,6 @@ if ($_REQUEST['act'] == 'check') {
     $dir[] = 'cert';
 
     $dir_subdir['images'][] = IMAGE_DIR;
-    $dir_subdir['images'][] = IMAGE_DIR . '/upload';
-    $dir_subdir['images'][] = IMAGE_DIR . '/upload/Image';
-    $dir_subdir['images'][] = IMAGE_DIR . '/upload/File';
-    $dir_subdir['images'][] = IMAGE_DIR . '/upload/Flash';
-    $dir_subdir['images'][] = IMAGE_DIR . '/upload/Media';
     $dir_subdir['data'][] = DATA_DIR;
     $dir_subdir['data'][] = DATA_DIR . '/afficheimg';
     $dir_subdir['data'][] = DATA_DIR . '/brandlogo';

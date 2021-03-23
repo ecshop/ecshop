@@ -23,7 +23,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $smarty->assign('list', shopinfo_article_list());
 
     make_json_result($smarty->fetch('shopinfo_list.htm'));
@@ -35,6 +35,7 @@ elseif ($_REQUEST['act'] == 'query') {
 if ($_REQUEST['act'] == 'add') {
     /* 权限判断 */
     admin_priv('shopinfo_manage');
+    $_REQUEST['id'] = intval($_REQUEST['id']);
 
     /* 创建 html editor */
     create_html_editor('FCKeditor1');
@@ -52,6 +53,7 @@ if ($_REQUEST['act'] == 'add') {
 if ($_REQUEST['act'] == 'insert') {
     /* 权限判断 */
     admin_priv('shopinfo_manage');
+    $_REQUEST['id'] = intval($_REQUEST['id']);
 
     /* 判断是否重名 */
     $is_only = $exc->is_only('title', $_POST['title']);
@@ -84,10 +86,11 @@ if ($_REQUEST['act'] == 'insert') {
 if ($_REQUEST['act'] == 'edit') {
     /* 权限判断 */
     admin_priv('shopinfo_manage');
+    $_REQUEST['id'] = intval($_REQUEST['id']);
 
     /* 取得文章数据 */
     $sql = "SELECT article_id, title, content FROM " . $ecs->table('article') . "WHERE article_id =" . $_REQUEST['id'];
-    $article = $db->GetRow($sql);
+    $article = $db->getRow($sql);
 
     /* 创建 html editor */
     create_html_editor('FCKeditor1', $article['content']);
@@ -101,6 +104,7 @@ if ($_REQUEST['act'] == 'edit') {
 if ($_REQUEST['act'] == 'update') {
     /* 权限判断 */
     admin_priv('shopinfo_manage');
+    $_REQUEST['id'] = intval($_REQUEST['id']);
 
     /* 检查重名 */
     if ($_POST['title'] != $_POST['old_title']) {
@@ -128,7 +132,7 @@ if ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 编辑文章主题
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_title') {
+if ($_REQUEST['act'] == 'edit_title') {
     check_authz_json('shopinfo_manage');
 
     $id = intval($_POST['id']);
@@ -149,7 +153,7 @@ elseif ($_REQUEST['act'] == 'edit_title') {
 /*------------------------------------------------------ */
 //-- 删除文章
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('shopinfo_manage');
 
     $id = intval($_GET['id']);

@@ -26,13 +26,14 @@ if ($_REQUEST['act'] == 'add') {
 
     assign_query_info();
     $smarty->display('snatch_info.htm');
-} elseif ($_REQUEST['act'] == 'insert') {
+}
+if ($_REQUEST['act'] == 'insert') {
     /* 权限判断 */
     admin_priv('snatch_manage');
 
     /* 检查商品是否存在 */
     $sql = "SELECT goods_name FROM " . $ecs->table('goods') . " WHERE goods_id = '$_POST[goods_id]'";
-    $_POST['goods_name'] = $db->GetOne($sql);
+    $_POST['goods_name'] = $db->getOne($sql);
     if (empty($_POST['goods_name'])) {
         sys_msg($_LANG['no_goods'], 1);
         exit;
@@ -75,7 +76,7 @@ if ($_REQUEST['act'] == 'add') {
         'product_id' => $_POST['product_id'],
         'is_finished' => 0, 'ext_info' => serialize($info));
 
-    $db->AutoExecute($ecs->table('goods_activity'), $record, 'INSERT');
+    $db->autoExecute($ecs->table('goods_activity'), $record, 'INSERT');
 
     admin_log($_POST['snatch_name'], 'add', 'snatch');
     $link[] = array('text' => $_LANG['back_list'], 'href' => 'snatch.php?act=list');
@@ -86,7 +87,7 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 活动列表
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'list') {
+if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['02_snatch_list']);
     $smarty->assign('action_link', array('text' => $_LANG['snatch_add'], 'href' => 'snatch.php?act=add'));
 
@@ -109,7 +110,7 @@ elseif ($_REQUEST['act'] == 'list') {
 //-- 查询、翻页、排序
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $snatchs = get_snatchlist();
 
     $smarty->assign('snatch_list', $snatchs['snatchs']);
@@ -131,7 +132,7 @@ elseif ($_REQUEST['act'] == 'query') {
 //-- 编辑活动名称
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_snatch_name') {
+if ($_REQUEST['act'] == 'edit_snatch_name') {
     check_authz_json('snatch_manage');
 
     $id = intval($_POST['id']);
@@ -153,7 +154,7 @@ elseif ($_REQUEST['act'] == 'edit_snatch_name') {
 //-- 删除指定的活动
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('attr_manage');
 
     $id = intval($_GET['id']);
@@ -169,7 +170,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 编辑活动
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     /* 权限判断 */
     admin_priv('snatch_manage');
 
@@ -186,7 +187,8 @@ elseif ($_REQUEST['act'] == 'edit') {
 
     assign_query_info();
     $smarty->display('snatch_info.htm');
-} elseif ($_REQUEST['act'] == 'update') {
+}
+if ($_REQUEST['act'] == 'update') {
     /* 权限判断 */
     admin_priv('snatch_manage');
 
@@ -245,7 +247,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 查看活动详情
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'view') {
+if ($_REQUEST['act'] == 'view') {
     /* 权限判断 */
     admin_priv('snatch_manage');
 
@@ -273,7 +275,7 @@ elseif ($_REQUEST['act'] == 'view') {
 //-- 排序、翻页活动详情
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'query_bid') {
+if ($_REQUEST['act'] == 'query_bid') {
     $bid_list = get_snatch_detail();
 
     $smarty->assign('bid_list', $bid_list['bid']);
@@ -295,7 +297,7 @@ elseif ($_REQUEST['act'] == 'query_bid') {
 //-- 搜索商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'search_goods') {
+if ($_REQUEST['act'] == 'search_goods') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -314,7 +316,7 @@ elseif ($_REQUEST['act'] == 'search_goods') {
 //-- 搜索货品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'search_products') {
+if ($_REQUEST['act'] == 'search_products') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
 
@@ -402,7 +404,7 @@ function get_snatch_info($id)
         " FROM " . $GLOBALS['ecs']->table('goods_activity') .
         " WHERE act_id='$id' AND act_type = " . GAT_SNATCH;
 
-    $snatch = $db->GetRow($sql);
+    $snatch = $db->getRow($sql);
 
     /* 将时间转成可阅读格式 */
     $snatch['start_time'] = local_date('Y-m-d H:i', $snatch['start_time']);

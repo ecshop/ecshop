@@ -14,6 +14,7 @@ $separate_on = $affiliate['on'];
 //-- 分成页
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
+    isset($_GET['auid']) && $_GET['auid'] = intval($_GET['auid']);
     $logdb = get_affiliate_ck();
     $smarty->assign('full_page', 1);
     $smarty->assign('ur_here', $_LANG['affiliate_ck']);
@@ -23,7 +24,8 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('record_count', $logdb['record_count']);
     $smarty->assign('page_count', $logdb['page_count']);
     if (!empty($_GET['auid'])) {
-        $smarty->assign('action_link', array('text' => $_LANG['back_note'], 'href' => "users.php?act=edit&id=$_GET[auid]"));
+        settype($_GET['auid'], "integer");
+        $smarty->assign('action_link', array('text' => $_LANG['back_note'], 'href' => "users.php?act=edit&id=" . intval($_GET['auid'])));
     }
     assign_query_info();
     $smarty->display('affiliate_ck_list.htm');
@@ -31,7 +33,8 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 分页
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
+    isset($_GET['auid']) && $_GET['auid'] = intval($_GET['auid']);
     $logdb = get_affiliate_ck();
     $smarty->assign('logdb', $logdb['logdb']);
     $smarty->assign('on', $separate_on);
@@ -46,7 +49,7 @@ elseif ($_REQUEST['act'] == 'query') {
 } /*
     取消分成，不再能对该订单进行分成
 */
-elseif ($_REQUEST['act'] == 'del') {
+if ($_REQUEST['act'] == 'del') {
     $oid = (int)$_REQUEST['oid'];
     $stat = $db->getOne("SELECT is_separate FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_id = '$oid'");
     if (empty($stat)) {
@@ -60,7 +63,7 @@ elseif ($_REQUEST['act'] == 'del') {
 } /*
     撤销某次分成，将已分成的收回来
 */
-elseif ($_REQUEST['act'] == 'rollback') {
+if ($_REQUEST['act'] == 'rollback') {
     $logid = (int)$_REQUEST['logid'];
     $stat = $db->getRow("SELECT * FROM " . $GLOBALS['ecs']->table('affiliate_log') . " WHERE log_id = '$logid'");
     if (!empty($stat)) {
@@ -82,7 +85,7 @@ elseif ($_REQUEST['act'] == 'rollback') {
 } /*
     分成
 */
-elseif ($_REQUEST['act'] == 'separate') {
+if ($_REQUEST['act'] == 'separate') {
     include_once(ROOT_PATH . 'includes/lib_order.php');
     $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
     empty($affiliate) && $affiliate = array();
@@ -178,8 +181,9 @@ function get_affiliate_ck()
         $sqladd = ' AND o.order_sn LIKE \'%' . trim($_REQUEST['order_sn']) . '%\'';
         $filter['order_sn'] = $_REQUEST['order_sn'];
     }
-    if (isset($_GET['auid'])) {
-        $sqladd = ' AND a.user_id=' . $_GET['auid'];
+    if (isset($_GET['auid']) && $_GET['auid'] > 0) {
+        $_GET['auid'] = intval($_GET['auid']);
+        $sqladd = ' AND a.user_id=' . intval($_GET['auid']);
     }
 
     if (!empty($affiliate['on'])) {
@@ -219,16 +223,16 @@ function get_affiliate_ck()
                 " ORDER BY order_id DESC" .
                 " LIMIT " . $filter['start'] . ",$filter[page_size]";
 
-            /*
-                SQL解释：
+        /*
+            SQL解释：
 
-                列出同时满足以下条件的订单分成情况：
-                1、有效订单o.user_id > 0
-                2、满足以下情况之一：
-                    a.有用户注册上线的未分成订单 u.parent_id > 0 AND o.is_separate = 0
-                    b.已分成订单 o.is_separate > 0
+            列出同时满足以下条件的订单分成情况：
+            1、有效订单o.user_id > 0
+            2、满足以下情况之一：
+                a.有用户注册上线的未分成订单 u.parent_id > 0 AND o.is_separate = 0
+                b.已分成订单 o.is_separate > 0
 
-            */
+        */
         } else {
             //推荐订单分成
             $sql = "SELECT o.*, a.log_id,a.user_id as suid, a.user_name as auser, a.money, a.point, a.separate_type,u.parent_id as up FROM " . $GLOBALS['ecs']->table('order_info') . " o" .

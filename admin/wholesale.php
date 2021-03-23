@@ -36,7 +36,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 分页、排序、查询
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $list = wholesale_list();
 
     $smarty->assign('wholesale_list', $list['item']);
@@ -57,7 +57,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 删除
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('whole_sale');
 
     $id = intval($_GET['id']);
@@ -87,7 +87,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 批量操作
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'batch') {
+if ($_REQUEST['act'] == 'batch') {
     /* 取得要操作的记录编号 */
     if (empty($_POST['checkboxes'])) {
         sys_msg($_LANG['no_record_selected']);
@@ -118,7 +118,7 @@ elseif ($_REQUEST['act'] == 'batch') {
 /*------------------------------------------------------ */
 //-- 修改排序
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'toggle_enabled') {
+if ($_REQUEST['act'] == 'toggle_enabled') {
     check_authz_json('whole_sale');
 
     $id = intval($_POST['id']);
@@ -136,7 +136,7 @@ elseif ($_REQUEST['act'] == 'toggle_enabled') {
 //-- 批量添加
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'batch_add') {
+if ($_REQUEST['act'] == 'batch_add') {
     /* 检查权限 */
     admin_priv('whole_sale');
     $smarty->assign('form_action', 'batch_add_insert');
@@ -190,7 +190,7 @@ elseif ($_REQUEST['act'] == 'batch_add') {
 //-- 批量添加入库
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'batch_add_insert') {
+if ($_REQUEST['act'] == 'batch_add_insert') {
     /* 检查权限 */
     admin_priv('whole_sale');
 
@@ -289,7 +289,7 @@ elseif ($_REQUEST['act'] == 'batch_add_insert') {
 //-- 添加、编辑
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     /* 检查权限 */
     admin_priv('whole_sale');
 
@@ -366,7 +366,7 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 //-- 添加、编辑后提交
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     /* 检查权限 */
     admin_priv('whole_sale');
 
@@ -518,7 +518,7 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 //-- 搜索商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'search_goods') {
+if ($_REQUEST['act'] == 'search_goods') {
     check_authz_json('whole_sale');
 
     include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -540,7 +540,7 @@ elseif ($_REQUEST['act'] == 'search_goods') {
 //-- 取得商品信息
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'get_goods_info') {
+if ($_REQUEST['act'] == 'get_goods_info') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON();
 

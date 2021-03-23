@@ -33,16 +33,6 @@ if ($step == 1 || $step == 2) {
     checkfiles('includes/', '\.php|\.html|\.js', 1, 'fckeditor');
     checkfiles('js/', '\.js|\.css');
     checkfiles('languages/', '\.php');
-    checkfiles('plugins/', '\.php');
-    checkfiles('wap/', '\.php|\.wml');
-    checkfiles('mobile/', '\.php');
-    /*
-    checkfiles('themes/default/', '\.dwt|\.lbi|\.css');
-    checkfiles('uc_client/', '\.php', 0);
-    checkfiles('uc_client/control/', '\.php');
-    checkfiles('uc_client/model/', '\.php');
-    checkfiles('uc_client/lib/', '\.php');
-    */
 
     foreach ($ecshopfiles as $line) {
         $file = trim(substr($line, 34));

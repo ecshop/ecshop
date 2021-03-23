@@ -12,22 +12,12 @@ admin_priv('mail_template');
 if ($_REQUEST['act'] == 'list') {
     include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
 
-    /* 包含插件语言项 */
-    $sql = "SELECT code FROM " . $ecs->table('plugins');
-    $rs = $db->query($sql);
-    while ($row = $db->FetchRow($rs)) {
-        /* 取得语言项 */
-        if (file_exists('../plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php')) {
-            include_once(ROOT_PATH . 'plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php');
-        }
-    }
-
     /* 获得所有邮件模板 */
     $sql = "SELECT template_id, template_code FROM " . $ecs->table('mail_templates') . " WHERE  type = 'template'";
     $res = $db->query($sql);
     $cur = null;
 
-    while ($row = $db->FetchRow($res)) {
+    while ($row = $db->fetchRow($res)) {
         if ($cur == null) {
             $cur = $row['template_id'];
         }
@@ -63,27 +53,17 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 载入指定模版
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'loat_template') {
+if ($_REQUEST['act'] == 'loat_template') {
     include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
 
     $tpl = intval($_GET['tpl']);
     $mail_type = isset($_GET['mail_type']) ? $_GET['mail_type'] : -1;
 
-    /* 包含插件语言项 */
-    $sql = "SELECT code FROM " . $ecs->table('plugins');
-    $rs = $db->query($sql);
-    while ($row = $db->FetchRow($rs)) {
-        /* 取得语言项 */
-        if (file_exists('../plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php')) {
-            include_once(ROOT_PATH . 'plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php');
-        }
-    }
-
     /* 获得所有邮件模板 */
     $sql = "SELECT template_id, template_code FROM " . $ecs->table('mail_templates') . " WHERE  type = 'template'";
     $res = $db->query($sql);
 
-    while ($row = $db->FetchRow($res)) {
+    while ($row = $db->fetchRow($res)) {
         $len = strlen($_LANG[$row['template_code']]);
         $templates[$row['template_id']] = $len < 18 ?
             $_LANG[$row['template_code']] . str_repeat('&nbsp;', (18 - $len) / 2) . " [$row[template_code]]" :
@@ -120,7 +100,7 @@ elseif ($_REQUEST['act'] == 'loat_template') {
 //-- 保存模板内容
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'save_template') {
+if ($_REQUEST['act'] == 'save_template') {
     if (empty($_POST['subject'])) {
         sys_msg($_LANG['subject_empty'], 1, array(), false);
     } else {
@@ -133,7 +113,7 @@ elseif ($_REQUEST['act'] == 'save_template') {
         $content = trim($_POST['content']);
     }
 
-    $type = intval($_POST['is_html']);
+    $type = intval($_POST['mail_type']);
     $tpl_id = intval($_POST['tpl']);
 
 
@@ -163,7 +143,7 @@ function load_template($temp_id)
 {
     $sql = "SELECT template_subject, template_content, is_html " .
         "FROM " . $GLOBALS['ecs']->table('mail_templates') . " WHERE template_id='$temp_id'";
-    $row = $GLOBALS['db']->GetRow($sql);
+    $row = $GLOBALS['db']->getRow($sql);
 
     return $row;
 }

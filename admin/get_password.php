@@ -65,14 +65,14 @@ else {
         }
 
         /* 管理员用户名和邮件地址是否匹配，并取得原密码 */
-        $sql = 'SELECT user_id, password FROM ' . $ecs->table('admin_user') .
+        $sql = 'SELECT user_id, password, add_time FROM ' . $ecs->table('admin_user') .
             " WHERE user_name = '$admin_username' AND email = '$admin_email'";
         $admin_info = $db->getRow($sql);
 
         if (!empty($admin_info)) {
             /* 生成验证的code */
             $admin_id = $admin_info['user_id'];
-            $code = md5($admin_id . $admin_info['password']);
+            $code = md5($admin_id . $admin_info['password'] . $admin_info['add_time']);
 
             /* 设置重置邮件模板所需要的内容信息 */
             $template = get_mail_template('send_password');
@@ -118,10 +118,10 @@ else {
         }
 
         /* 以用户的原密码，与code的值匹配 */
-        $sql = 'SELECT password FROM ' . $ecs->table('admin_user') . " WHERE user_id = '$adminid'";
-        $password = $db->getOne($sql);
+        $sql = 'SELECT password, add_time FROM ' . $ecs->table('admin_user') . " WHERE user_id = '$adminid'";
+        $au = $db->getRow($sql);
 
-        if (md5($adminid . $password) <> $code) {
+        if (md5($adminid . $au['password'] . $au['add_time']) <> $code) {
             //此链接不合法
             $link[0]['text'] = $_LANG['back'];
             $link[0]['href'] = 'privilege.php?act=login';

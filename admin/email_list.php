@@ -14,7 +14,8 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('page_count', $emaildb['page_count']);
     assign_query_info();
     $smarty->display('email_list.htm');
-} elseif ($_REQUEST['act'] == 'export') {
+}
+if ($_REQUEST['act'] == 'export') {
     $sql = "SELECT email FROM " . $ecs->table('email_list') . "WHERE stat = 1";
     $emails = $db->getAll($sql);
     $out = '';
@@ -31,7 +32,8 @@ if ($_REQUEST['act'] == 'list') {
     header('Content-Disposition: attachment; filename="email_list.txt"');
     echo $out;
     exit;
-} elseif ($_REQUEST['act'] == 'query') {
+}
+if ($_REQUEST['act'] == 'query') {
     $emaildb = get_email_list();
     $smarty->assign('emaildb', $emaildb['emaildb']);
     $smarty->assign('filter', $emaildb['filter']);
@@ -51,7 +53,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 批量删除
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'batch_remove') {
+if ($_REQUEST['act'] == 'batch_remove') {
     if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
         sys_msg($_LANG['no_select_email'], 1);
     }
@@ -67,7 +69,7 @@ elseif ($_REQUEST['act'] == 'batch_remove') {
 /*------------------------------------------------------ */
 //-- 批量恢复
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'batch_unremove') {
+if ($_REQUEST['act'] == 'batch_unremove') {
     if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
         sys_msg($_LANG['no_select_email'], 1);
     }
@@ -83,7 +85,7 @@ elseif ($_REQUEST['act'] == 'batch_unremove') {
 /*------------------------------------------------------ */
 //-- 批量退订
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'batch_exit') {
+if ($_REQUEST['act'] == 'batch_exit') {
     if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
         sys_msg($_LANG['no_select_email'], 1);
     }

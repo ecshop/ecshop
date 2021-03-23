@@ -38,7 +38,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $vote_list = get_votelist();
 
     $smarty->assign('list', $vote_list['list']);
@@ -56,7 +56,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加新的投票页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     /* 权限检查 */
     admin_priv('vote_priv');
 
@@ -75,7 +75,8 @@ elseif ($_REQUEST['act'] == 'add') {
     /* 显示页面 */
     assign_query_info();
     $smarty->display('vote_info.htm');
-} elseif ($_REQUEST['act'] == 'insert') {
+}
+if ($_REQUEST['act'] == 'insert') {
     admin_priv('vote_priv');
 
     /* 获得广告的开始时期与结束日期 */
@@ -117,11 +118,11 @@ elseif ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 在线调查编辑页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     admin_priv('vote_priv');
 
     /* 获取数据 */
-    $vote_arr = $db->GetRow("SELECT * FROM " . $ecs->table('vote') . " WHERE vote_id='$_REQUEST[id]'");
+    $vote_arr = $db->getRow("SELECT * FROM " . $ecs->table('vote') . " WHERE vote_id='$_REQUEST[id]'");
     $vote_arr['start_time'] = local_date('Y-m-d', $vote_arr['start_time']);
     $vote_arr['end_time'] = local_date('Y-m-d', $vote_arr['end_time']);
 
@@ -133,7 +134,8 @@ elseif ($_REQUEST['act'] == 'edit') {
 
     assign_query_info();
     $smarty->display('vote_info.htm');
-} elseif ($_REQUEST['act'] == 'update') {
+}
+if ($_REQUEST['act'] == 'update') {
     /* 获得广告的开始时期与结束日期 */
     $start_time = local_strtotime($_POST['start_time']);
     $end_time = local_strtotime($_POST['end_time']);
@@ -160,7 +162,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 调查选项列表页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'option') {
+if ($_REQUEST['act'] == 'option') {
     $id = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
     /* 模板赋值 */
@@ -179,7 +181,7 @@ elseif ($_REQUEST['act'] == 'option') {
 /*------------------------------------------------------ */
 //-- 调查选项查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query_option') {
+if ($_REQUEST['act'] == 'query_option') {
     $id = intval($_GET['vid']);
 
     $smarty->assign('id', $id);
@@ -191,7 +193,7 @@ elseif ($_REQUEST['act'] == 'query_option') {
 /*------------------------------------------------------ */
 //-- 添加新调查选项
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'new_option') {
+if ($_REQUEST['act'] == 'new_option') {
     check_authz_json('vote_priv');
 
     $option_name = json_str_iconv(trim($_POST['option_name']));
@@ -224,7 +226,7 @@ elseif ($_REQUEST['act'] == 'new_option') {
 /*------------------------------------------------------ */
 //-- 编辑调查主题
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_vote_name') {
+if ($_REQUEST['act'] == 'edit_vote_name') {
     check_authz_json('vote_priv');
 
     $id = intval($_POST['id']);
@@ -244,7 +246,7 @@ elseif ($_REQUEST['act'] == 'edit_vote_name') {
 /*------------------------------------------------------ */
 //-- 编辑调查选项
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_option_name') {
+if ($_REQUEST['act'] == 'edit_option_name') {
     check_authz_json('vote_priv');
 
     $id = intval($_POST['id']);
@@ -269,7 +271,7 @@ elseif ($_REQUEST['act'] == 'edit_option_name') {
 /*------------------------------------------------------ */
 //-- 编辑调查选项排序值
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_option_order') {
+if ($_REQUEST['act'] == 'edit_option_order') {
     check_authz_json('vote_priv');
 
     $id = intval($_POST['id']);
@@ -285,7 +287,7 @@ elseif ($_REQUEST['act'] == 'edit_option_order') {
 /*------------------------------------------------------ */
 //-- 删除在线调查主题
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('vote_priv');
 
     $id = intval($_GET['id']);
@@ -306,7 +308,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 删除在线调查选项
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove_option') {
+if ($_REQUEST['act'] == 'remove_option') {
     check_authz_json('vote_priv');
 
     $id = intval($_GET['id']);

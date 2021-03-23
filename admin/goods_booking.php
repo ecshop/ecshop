@@ -190,7 +190,7 @@ function get_booking_info($id)
         "LEFT JOIN " . $ecs->table('users') . " AS u ON u.user_id=bg.user_id " .
         "WHERE bg.rec_id ='$id'";
 
-    $res = $db->GetRow($sql);
+    $res = $db->getRow($sql);
 
     /* 格式化时间 */
     $res['booking_time'] = local_date($_CFG['time_format'], $res['booking_time']);

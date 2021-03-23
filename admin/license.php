@@ -31,7 +31,7 @@ if ($_REQUEST['act'] == 'list_edit') {
 //-- 证书下载
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'download') {
+if ($_REQUEST['act'] == 'download') {
     /* 检查权限 */
     admin_priv('shop_authorized');
 
@@ -55,7 +55,7 @@ elseif ($_REQUEST['act'] == 'download') {
 //-- 证书上传
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'upload') {
+if ($_REQUEST['act'] == 'upload') {
     /* 检查权限 */
     admin_priv('shop_authorized');
 
@@ -111,7 +111,7 @@ elseif ($_REQUEST['act'] == 'upload') {
 //-- 证书删除
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'del') {
+if ($_REQUEST['act'] == 'del') {
     /* 检查权限 */
     admin_priv('shop_authorized');
 

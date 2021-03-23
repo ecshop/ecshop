@@ -50,7 +50,8 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result($smarty->fetch('sale_order.htm'), '', array('filter' => $goods_order_data['filter'], 'page_count' => $goods_order_data['page_count']));
-} else {
+}
+if ($_REQUEST['act'] == 'list') {
     /* 权限检查 */
     admin_priv('sale_order_stats');
 

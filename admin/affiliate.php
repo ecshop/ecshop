@@ -17,7 +17,8 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['affiliate']);
     $smarty->assign('config', $config);
     $smarty->display('affiliate.htm');
-} elseif ($_REQUEST['act'] == 'query') {
+}
+if ($_REQUEST['act'] == 'query') {
     $smarty->assign('ur_here', $_LANG['affiliate']);
     $smarty->assign('config', $config);
     make_json_result($smarty->fetch('affiliate.htm'), '', null);
@@ -25,7 +26,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 增加下线分配方案
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     if (count($config['item']) < 5) {
         //下线不能超过5层
         $_POST['level_point'] = (float)$_POST['level_point'];
@@ -60,7 +61,7 @@ elseif ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 修改配置
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'updata') {
+if ($_REQUEST['act'] == 'updata') {
     $separate_by = (intval($_POST['separate_by']) == 1) ? 1 : 0;
 
     $_POST['expire'] = (float)$_POST['expire'];
@@ -95,7 +96,7 @@ elseif ($_REQUEST['act'] == 'updata') {
 /*------------------------------------------------------ */
 //-- 推荐开关
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'on') {
+if ($_REQUEST['act'] == 'on') {
     $on = (intval($_POST['on']) == 1) ? 1 : 0;
 
     $config['on'] = $on;
@@ -106,7 +107,7 @@ elseif ($_REQUEST['act'] == 'on') {
 /*------------------------------------------------------ */
 //-- Ajax修改设置
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_point') {
+if ($_REQUEST['act'] == 'edit_point') {
 
     /* 取得参数 */
     $key = trim($_POST['id']) - 1;
@@ -129,7 +130,7 @@ elseif ($_REQUEST['act'] == 'edit_point') {
 /*------------------------------------------------------ */
 //-- Ajax修改设置
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_money') {
+if ($_REQUEST['act'] == 'edit_money') {
     $key = trim($_POST['id']) - 1;
     $val = (float)trim($_POST['val']);
     $maxmoney = 100;
@@ -150,7 +151,7 @@ elseif ($_REQUEST['act'] == 'edit_money') {
 /*------------------------------------------------------ */
 //-- 删除下线分成
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'del') {
+if ($_REQUEST['act'] == 'del') {
     $key = trim($_GET['id']) - 1;
     unset($config['item'][$key]);
     $temp = array();

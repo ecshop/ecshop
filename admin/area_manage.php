@@ -67,7 +67,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 添加新的地区
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'add_area') {
+if ($_REQUEST['act'] == 'add_area') {
     check_authz_json('area_manage');
 
     $parent_id = intval($_POST['parent_id']);
@@ -104,7 +104,7 @@ elseif ($_REQUEST['act'] == 'add_area') {
 //-- 编辑区域名称
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_area_name') {
+if ($_REQUEST['act'] == 'edit_area_name') {
     check_authz_json('area_manage');
 
     $id = intval($_POST['id']);
@@ -133,7 +133,7 @@ elseif ($_REQUEST['act'] == 'edit_area_name') {
 /*------------------------------------------------------ */
 //-- 删除区域
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'drop_area') {
+if ($_REQUEST['act'] == 'drop_area') {
     check_authz_json('area_manage');
 
     $id = intval($_REQUEST['id']);
@@ -175,7 +175,6 @@ elseif ($_REQUEST['act'] == 'drop_area') {
         make_json_error($db->error());
     }
 }
-
 
 function new_region_id($region_id)
 {

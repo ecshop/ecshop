@@ -10,7 +10,7 @@ $exc = new exchange($ecs->table('shipping'), $db, 'shipping_code', 'shipping_nam
 /*------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'list') {
-    $modules = read_modules('../includes/modules/shipping');
+    $modules = read_modules(ROOT_PATH . 'includes/modules/shipping');
 
     for ($i = 0; $i < count($modules); $i++) {
         $lang_file = ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shipping/' . $modules[$i]['code'] . '.php';
@@ -21,7 +21,7 @@ if ($_REQUEST['act'] == 'list') {
 
         /* 检查该插件是否已经安装 */
         $sql = "SELECT shipping_id, shipping_name, shipping_desc, insure, support_cod,shipping_order FROM " . $ecs->table('shipping') . " WHERE shipping_code='" . $modules[$i]['code'] . "' ORDER BY shipping_order";
-        $row = $db->GetRow($sql);
+        $row = $db->getRow($sql);
 
         if ($row) {
             /* 插件已经安装了，获得名称以及描述 */
@@ -57,7 +57,7 @@ if ($_REQUEST['act'] == 'list') {
 //-- 安装配送方式
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'install') {
+if ($_REQUEST['act'] == 'install') {
     admin_priv('ship_manage');
 
     $set_modules = true;
@@ -65,7 +65,7 @@ elseif ($_REQUEST['act'] == 'install') {
 
     /* 检查该配送方式是否已经安装 */
     $sql = "SELECT shipping_id FROM " . $ecs->table('shipping') . " WHERE shipping_code = '$_GET[code]'";
-    $id = $db->GetOne($sql);
+    $id = $db->getOne($sql);
 
     if ($id > 0) {
         /* 该配送方式已经安装过, 将该配送方式的状态设置为 enable */
@@ -95,13 +95,13 @@ elseif ($_REQUEST['act'] == 'install') {
 //-- 卸载配送方式
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'uninstall') {
+if ($_REQUEST['act'] == 'uninstall') {
     global $ecs, $_LANG;
 
     admin_priv('ship_manage');
 
     /* 获得该配送方式的ID */
-    $row = $db->GetRow("SELECT shipping_id, shipping_name, print_bg FROM " . $ecs->table('shipping') . " WHERE shipping_code='$_GET[code]'");
+    $row = $db->getRow("SELECT shipping_id, shipping_name, print_bg FROM " . $ecs->table('shipping') . " WHERE shipping_code='$_GET[code]'");
     $shipping_id = $row['shipping_id'];
     $shipping_name = $row['shipping_name'];
 
@@ -131,7 +131,7 @@ elseif ($_REQUEST['act'] == 'uninstall') {
 //-- 模板Flash编辑器
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'print_index') {
+if ($_REQUEST['act'] == 'print_index') {
     //检查登录权限
     admin_priv('ship_manage');
 
@@ -139,7 +139,7 @@ elseif ($_REQUEST['act'] == 'print_index') {
 
     /* 检查该插件是否已经安装 取值 */
     $sql = "SELECT * FROM " . $ecs->table('shipping') . " WHERE shipping_id = '$shipping_id' LIMIT 0,1";
-    $row = $db->GetRow($sql);
+    $row = $db->getRow($sql);
     if ($row) {
         include_once(ROOT_PATH . 'includes/modules/shipping/' . $row['shipping_code'] . '.php');
         $row['shipping_print'] = !empty($row['shipping_print']) ? $row['shipping_print'] : '';
@@ -155,7 +155,7 @@ elseif ($_REQUEST['act'] == 'print_index') {
 //-- 模板Flash编辑器
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'recovery_default_template') {
+if ($_REQUEST['act'] == 'recovery_default_template') {
     /* 检查登录权限 */
     admin_priv('ship_manage');
 
@@ -163,7 +163,7 @@ elseif ($_REQUEST['act'] == 'recovery_default_template') {
 
     /* 取配送代码 */
     $sql = "SELECT shipping_code FROM " . $ecs->table('shipping') . " WHERE shipping_id = '$shipping_id'";
-    $code = $db->GetOne($sql);
+    $code = $db->getOne($sql);
 
     $set_modules = true;
     include_once(ROOT_PATH . 'includes/modules/shipping/' . $code . '.php');
@@ -179,7 +179,7 @@ elseif ($_REQUEST['act'] == 'recovery_default_template') {
 //-- 模板Flash编辑器 上传图片
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'print_upload') {
+if ($_REQUEST['act'] == 'print_upload') {
     //检查登录权限
     admin_priv('ship_manage');
 
@@ -201,7 +201,8 @@ elseif ($_REQUEST['act'] == 'print_upload') {
         for ($i = 0; $i < 6; $i++) {
             $name .= chr(mt_rand(97, 122));
         }
-        $name .= '.' . end(explode('.', $_FILES['bg']['name']));
+        $bg_name_arr = explode('.', $_FILES['bg']['name']);
+        $name .= '.' . end($bg_name_arr);
         $target = ROOT_PATH . '/images/receipt/' . $name;
 
         if (move_upload_file($_FILES['bg']['tmp_name'], $target)) {
@@ -223,7 +224,7 @@ elseif ($_REQUEST['act'] == 'print_upload') {
 //-- 模板Flash编辑器 删除图片
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'print_del') {
+if ($_REQUEST['act'] == 'print_del') {
     /* 检查权限 */
     check_authz_json('ship_manage');
 
@@ -232,7 +233,7 @@ elseif ($_REQUEST['act'] == 'print_del') {
 
     /* 检查该插件是否已经安装 取值 */
     $sql = "SELECT print_bg FROM " . $ecs->table('shipping') . " WHERE shipping_id = '$shipping_id' LIMIT 0,1";
-    $row = $db->GetRow($sql);
+    $row = $db->getRow($sql);
     if ($row) {
         if (($row['print_bg'] != '') && (!is_print_bg_default($row['print_bg']))) {
             @unlink(ROOT_PATH . $row['print_bg']);
@@ -251,14 +252,14 @@ elseif ($_REQUEST['act'] == 'print_del') {
 //-- 编辑打印模板
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_print_template') {
+if ($_REQUEST['act'] == 'edit_print_template') {
     admin_priv('ship_manage');
 
     $shipping_id = !empty($_GET['shipping']) ? intval($_GET['shipping']) : 0;
 
     /* 检查该插件是否已经安装 */
     $sql = "SELECT * FROM " . $ecs->table('shipping') . " WHERE shipping_id=$shipping_id";
-    $row = $db->GetRow($sql);
+    $row = $db->getRow($sql);
     if ($row) {
         include_once(ROOT_PATH . 'includes/modules/shipping/' . $row['shipping_code'] . '.php');
         $row['shipping_print'] = !empty($row['shipping_print']) ? $row['shipping_print'] : '';
@@ -283,7 +284,7 @@ elseif ($_REQUEST['act'] == 'edit_print_template') {
 //-- 编辑打印模板
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'do_edit_print_template') {
+if ($_REQUEST['act'] == 'do_edit_print_template') {
     /* 检查权限 */
     admin_priv('ship_manage');
 
@@ -313,7 +314,7 @@ elseif ($_REQUEST['act'] == 'do_edit_print_template') {
 //-- 编辑配送方式名称
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_name') {
+if ($_REQUEST['act'] == 'edit_name') {
     /* 检查权限 */
     check_authz_json('ship_manage');
 
@@ -340,7 +341,7 @@ elseif ($_REQUEST['act'] == 'edit_name') {
 //-- 编辑配送方式描述
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_desc') {
+if ($_REQUEST['act'] == 'edit_desc') {
     /* 检查权限 */
     check_authz_json('ship_manage');
 
@@ -357,7 +358,7 @@ elseif ($_REQUEST['act'] == 'edit_desc') {
 //-- 修改配送方式保价费
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_insure') {
+if ($_REQUEST['act'] == 'edit_insure') {
     /* 检查权限 */
     check_authz_json('ship_manage');
 
@@ -385,7 +386,8 @@ elseif ($_REQUEST['act'] == 'edit_insure') {
     /* 更新保价费用 */
     $exc->edit("insure = '$val'", $id);
     make_json_result(stripcslashes($val));
-} elseif ($_REQUEST['act'] == 'shipping_priv') {
+}
+if ($_REQUEST['act'] == 'shipping_priv') {
     check_authz_json('ship_manage');
 
     make_json_result('');
@@ -394,7 +396,7 @@ elseif ($_REQUEST['act'] == 'edit_insure') {
 //-- 修改配送方式排序
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit_order') {
+if ($_REQUEST['act'] == 'edit_order') {
     /* 检查权限 */
     check_authz_json('ship_manage');
 

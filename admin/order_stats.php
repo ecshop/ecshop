@@ -78,7 +78,7 @@ if ($_REQUEST['act'] == 'list') {
     } else {
         $tmp_time = local_strtotime(local_date('Y-m-d'));
         $start_date_arr[] = local_strtotime(local_date('Y-m') . '-1');
-        $end_date_arr[] = local_strtotime(local_date('Y-m') . '-31');;
+        $end_date_arr[] = local_strtotime(local_date('Y-m') . '-31');
     }
 
     /* 按月份交叉查询 */
@@ -115,7 +115,7 @@ if ($_REQUEST['act'] == 'list') {
                 "AND i.add_time >= '$start_date_arr[$k]' AND i.add_time <= '$end_date_arr[$k]'" .
                 "GROUP BY i.pay_id ORDER BY order_num DESC";
             $pay_res = $db->query($sql);
-            while ($pay_item = $db->FetchRow($pay_res)) {
+            while ($pay_item = $db->fetchRow($pay_res)) {
                 $payment[$pay_item['pay_name']] = null;
 
                 $paydate = local_date('Y-m', $pay_item['pay_time']);
@@ -159,7 +159,7 @@ if ($_REQUEST['act'] == 'list') {
                 "GROUP BY i.shipping_id ORDER BY order_num DESC";
 
             $ship_res = $db->query($sql);
-            while ($ship_item = $db->FetchRow($ship_res)) {
+            while ($ship_item = $db->fetchRow($ship_res)) {
                 $ship[$ship_item['ship_name']] = null;
 
                 $shipdate = local_date('Y-m', $ship_item['shipping_time']);
@@ -214,7 +214,7 @@ if ($_REQUEST['act'] == 'list') {
             "GROUP BY i.pay_id ORDER BY order_num DESC";
         $pay_res = $db->query($sql);
 
-        while ($pay_item = $db->FetchRow($pay_res)) {
+        while ($pay_item = $db->fetchRow($pay_res)) {
             $pay_xml .= "<set value='" . $pay_item['order_num'] . "' name='" . $pay_item['pay_name'] . "' color='" . $color_array[mt_rand(0, 7)] . "'/>";
         }
         $pay_xml .= "</graph>";
@@ -268,7 +268,8 @@ if ($_REQUEST['act'] == 'list') {
 
     assign_query_info();
     $smarty->display('order_stats.htm');
-} elseif ($act = 'download') {
+}
+if ($_REQUEST['act'] = 'download') {
     $filename = !empty($_REQUEST['filename']) ? trim($_REQUEST['filename']) : '';
 
     header("Content-type: application/vnd.ms-excel; charset=utf-8");

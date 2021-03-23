@@ -17,7 +17,7 @@ if ($_REQUEST['act'] == 'add') {
     $smarty->assign('cat_list', cat_list());
 
     /* 取得可选语言 */
-    $dir = opendir('../languages');
+    $dir = opendir(ROOT_PATH . 'languages');
     $lang_list = array(
         'UTF8' => $_LANG['charset']['utf8'],
         'GB2312' => $_LANG['charset']['zh_cn'],
@@ -25,7 +25,7 @@ if ($_REQUEST['act'] == 'add') {
     );
     $download_list = array();
     while (@$file = readdir($dir)) {
-        if ($file != '.' && $file != '..' && $file != ".svn" && $file != "_svn" && is_dir('../languages/' . $file) == true) {
+        if ($file != '.' && $file != '..' && $file != ".svn" && $file != "_svn" && is_dir(ROOT_PATH . 'languages/' . $file) == true) {
             $download_list[$file] = sprintf($_LANG['download_file'], isset($_LANG['charset'][$file]) ? $_LANG['charset'][$file] : $file);
         }
     }
@@ -54,7 +54,7 @@ if ($_REQUEST['act'] == 'add') {
 //-- 批量上传：处理
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'upload') {
+if ($_REQUEST['act'] == 'upload') {
     /* 检查权限 */
     admin_priv('goods_batch');
 
@@ -96,7 +96,7 @@ elseif ($_REQUEST['act'] == 'upload') {
                         case '\'':
                             $buff .= '\'';
                             break;
-                        case ',';
+                        case ',':
                             $buff .= ',';
                             break;
                         default:
@@ -310,7 +310,7 @@ elseif ($_REQUEST['act'] == 'upload') {
 //-- 批量上传：入库
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'insert') {
+if ($_REQUEST['act'] == 'insert') {
     /* 检查权限 */
     admin_priv('goods_batch');
 
@@ -500,7 +500,7 @@ elseif ($_REQUEST['act'] == 'insert') {
 //-- 批量修改：选择商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'select') {
+if ($_REQUEST['act'] == 'select') {
     /* 检查权限 */
     admin_priv('goods_batch');
 
@@ -523,7 +523,7 @@ elseif ($_REQUEST['act'] == 'select') {
 //-- 批量修改：修改
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     /* 检查权限 */
     admin_priv('goods_batch');
 
@@ -552,8 +552,11 @@ elseif ($_REQUEST['act'] == 'edit') {
             $goods_attr = product_goods_attr_list($value['goods_id']);
             $_goods_attr_array = explode('|', $value['goods_attr']);
             if (is_array($_goods_attr_array)) {
-                $_temp = '';
+                $_temp = [];
                 foreach ($_goods_attr_array as $_goods_attr_value) {
+                    if (!$_goods_attr_value) {
+                        continue;
+                    }
                     $_temp[] = $goods_attr[$_goods_attr_value];
                 }
                 $value['goods_attr'] = implode('，', $_temp);
@@ -603,7 +606,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 //-- 批量修改：提交
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'update') {
     /* 检查权限 */
     admin_priv('goods_batch');
 
@@ -653,7 +656,6 @@ elseif ($_REQUEST['act'] == 'update') {
                             } else {
                                 $db->autoExecute($ecs->table('member_price'), $rank, 'UPDATE', "goods_id = '$goods_id' AND user_rank = '$rank_id'");
                             }
-
                         } else {
                             if ($rank['user_price'] >= 0) {
                                 $db->autoExecute($ecs->table('member_price'), $rank, 'INSERT');
@@ -708,7 +710,6 @@ elseif ($_REQUEST['act'] == 'update') {
                                 } else {
                                     $db->autoExecute($ecs->table('member_price'), $rank, 'UPDATE', "goods_id = '$goods_id' AND user_rank = '$rank_id'");
                                 }
-
                             } else {
                                 if ($rank['user_price'] >= 0) {
                                     $db->autoExecute($ecs->table('member_price'), $rank, 'INSERT');
@@ -733,18 +734,17 @@ elseif ($_REQUEST['act'] == 'update') {
 //-- 下载文件
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'download') {
+if ($_REQUEST['act'] == 'download') {
     /* 检查权限 */
     admin_priv('goods_batch');
 
     // 文件标签
-    // Header("Content-type: application/octet-stream");
     header("Content-type: application/vnd.ms-excel; charset=utf-8");
     Header("Content-Disposition: attachment; filename=goods_list.csv");
 
     // 下载
     if ($_GET['charset'] != $_CFG['lang']) {
-        $lang_file = '../languages/' . $_GET['charset'] . '/admin/goods_batch.php';
+        $lang_file = ROOT_PATH . 'languages/' . $_GET['charset'] . '/admin/goods_batch.php';
         if (file_exists($lang_file)) {
             unset($_LANG['upload_goods']);
             require($lang_file);
@@ -767,8 +767,8 @@ elseif ($_REQUEST['act'] == 'download') {
 //-- 取得商品
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act'] == 'get_goods') {
-    $filter = &new stdclass;
+if ($_REQUEST['act'] == 'get_goods') {
+    $filter = new stdclass;
 
     $filter->cat_id = intval($_GET['cat_id']);
     $filter->brand_id = intval($_GET['brand_id']);
@@ -777,5 +777,3 @@ elseif ($_REQUEST['act'] == 'get_goods') {
 
     make_json_result($arr);
 }
-
-?>

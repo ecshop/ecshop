@@ -17,7 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $smarty->assign('ur_here', $_LANG['sitemap']);
     $smarty->assign('arr_changefreq', array(1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1));
     $smarty->display('sitemap.htm');
-} else {
+}
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     /*------------------------------------------------------ */
     //-- 生成站点地图
     /*------------------------------------------------------ */
@@ -27,8 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $domain = $ecs->url();
     $today = local_date('Y-m-d');
 
-    $sm =& new google_sitemap();
-    $smi =& new google_sitemap_item($domain, $today, $_POST['homepage_changefreq'], $_POST['homepage_priority']);
+    $sm = new google_sitemap();
+    $smi = new google_sitemap_item($domain, $today, $_POST['homepage_changefreq'], $_POST['homepage_priority']);
     $sm->add_item($smi);
 
     $config = array(
@@ -48,8 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $res = $db->query($sql);
 
     while ($row = $db->fetchRow($res)) {
-        $smi =& new google_sitemap_item($domain . build_uri('category', array('cid' => $row['cat_id']), $row['cat_name']), $today,
-            $_POST['category_changefreq'], $_POST['category_priority']);
+        $smi = new google_sitemap_item(
+            $domain . build_uri('category', array('cid' => $row['cat_id']), $row['cat_name']),
+            $today,
+            $_POST['category_changefreq'],
+            $_POST['category_priority']
+        );
         $sm->add_item($smi);
     }
 
@@ -58,8 +63,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $res = $db->query($sql);
 
     while ($row = $db->fetchRow($res)) {
-        $smi =& new google_sitemap_item($domain . build_uri('article_cat', array('acid' => $row['cat_id']), $row['cat_name']), $today,
-            $_POST['category_changefreq'], $_POST['category_priority']);
+        $smi = new google_sitemap_item(
+            $domain . build_uri('article_cat', array('acid' => $row['cat_id']), $row['cat_name']),
+            $today,
+            $_POST['category_changefreq'],
+            $_POST['category_priority']
+        );
         $sm->add_item($smi);
     }
 
@@ -68,8 +77,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $res = $db->query($sql);
 
     while ($row = $db->fetchRow($res)) {
-        $smi =& new google_sitemap_item($domain . build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']), $today,
-            $_POST['content_changefreq'], $_POST['content_priority']);
+        $smi = new google_sitemap_item(
+            $domain . build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']),
+            $today,
+            $_POST['content_changefreq'],
+            $_POST['content_priority']
+        );
         $sm->add_item($smi);
     }
 
@@ -79,8 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     while ($row = $db->fetchRow($res)) {
         $article_url = $row['open_type'] != 1 ? build_uri('article', array('aid' => $row['article_id']), $row['title']) : trim($row['file_url']);
-        $smi =& new google_sitemap_item($domain . $article_url,
-            $today, $_POST['content_changefreq'], $_POST['content_priority']);
+        $smi = new google_sitemap_item(
+            $domain . $article_url,
+            $today,
+            $_POST['content_changefreq'],
+            $_POST['content_priority']
+        );
         $sm->add_item($smi);
     }
 
@@ -98,5 +115,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     }
 }
-
-?>

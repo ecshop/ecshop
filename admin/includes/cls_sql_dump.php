@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * 数据库导出类
+ */
+
 if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
@@ -14,7 +18,9 @@ if (!defined('IN_ECS')) {
  */
 function dump_escape_string($str)
 {
-    return cls_mysql::escape_string($str);
+    global $db;
+    /* 取得参数 */
+    return cls_mysql::escape_string($str, $db);
 }
 
 /**

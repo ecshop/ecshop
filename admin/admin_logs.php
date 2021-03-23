@@ -24,7 +24,7 @@ if ($_REQUEST['act'] == 'list') {
     /* 查询IP地址列表 */
     $ip_list = array();
     $res = $db->query("SELECT DISTINCT ip_address FROM " . $ecs->table('admin_log'));
-    while ($row = $db->FetchRow($res)) {
+    while ($row = $db->fetchRow($res)) {
         $ip_list[$row['ip_address']] = $row['ip_address'];
     }
 
@@ -49,7 +49,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     $log_list = get_admin_logs();
 
     $smarty->assign('log_list', $log_list['list']);

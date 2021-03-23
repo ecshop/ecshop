@@ -42,7 +42,7 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 //-- 排序、分页、查询
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'query') {
+if ($_REQUEST['act'] == 'query') {
     /* 获取友情链接数据 */
     $links_list = get_links_list();
 
@@ -64,7 +64,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 //-- 添加新链接页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'add') {
+if ($_REQUEST['act'] == 'add') {
     admin_priv('friendlink');
 
     $smarty->assign('ur_here', $_LANG['add_link']);
@@ -79,7 +79,7 @@ elseif ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 //-- 处理添加的链接
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'insert') {
+if ($_REQUEST['act'] == 'insert') {
     /* 变量初始化 */
     $link_logo = '';
     $show_order = (!empty($_POST['show_order'])) ? intval($_POST['show_order']) : 0;
@@ -142,7 +142,7 @@ elseif ($_REQUEST['act'] == 'insert') {
 /*------------------------------------------------------ */
 //-- 友情链接编辑页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit') {
+if ($_REQUEST['act'] == 'edit') {
     admin_priv('friendlink');
 
     /* 取得友情链接数据 */
@@ -178,7 +178,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 编辑链接的处理页面
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'update') {
+if ($_REQUEST['act'] == 'update') {
     /* 变量初始化 */
     $id = (!empty($_REQUEST['id'])) ? intval($_REQUEST['id']) : 0;
     $show_order = (!empty($_POST['show_order'])) ? intval($_POST['show_order']) : 0;
@@ -237,7 +237,7 @@ elseif ($_REQUEST['act'] == 'update') {
 /*------------------------------------------------------ */
 //-- 编辑链接名称
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_link_name') {
+if ($_REQUEST['act'] == 'edit_link_name') {
     check_authz_json('friendlink');
 
     $id = intval($_POST['id']);
@@ -260,7 +260,7 @@ elseif ($_REQUEST['act'] == 'edit_link_name') {
 /*------------------------------------------------------ */
 //-- 删除友情链接
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'remove') {
+if ($_REQUEST['act'] == 'remove') {
     check_authz_json('friendlink');
 
     $id = intval($_GET['id']);
@@ -286,7 +286,7 @@ elseif ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 //-- 编辑排序
 /*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_show_order') {
+if ($_REQUEST['act'] == 'edit_show_order') {
     check_authz_json('friendlink');
 
     $id = intval($_POST['id']);

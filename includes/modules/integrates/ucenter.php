@@ -92,7 +92,7 @@ class ucenter extends integrate
      *
      * @return void
      */
-    public function login($username, $password)
+    public function login($username, $password, $remember = null)
     {
         list($uid, $uname, $pwd, $email, $repeat) = uc_call("uc_user_login", array($username, $password));
         $uname = addslashes($uname);
@@ -156,8 +156,7 @@ class ucenter extends integrate
         return true;
     }
 
-    /*添加用户*/
-    public function add_user($username, $password, $email)
+    public function add_user($username, $password, $email, $gender = -1, $bday = 0, $reg_date = 0, $md5password = '')
     {
         /* 检测用户名 */
         if ($this->check_user($username)) {
@@ -360,7 +359,7 @@ class ucenter extends integrate
      *
      * @return void
      */
-    public function set_cookie($username = '')
+    public function set_cookie($username = '', $remember = null)
     {
         if (empty($username)) {
             /* 摧毁cookie */

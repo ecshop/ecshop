@@ -86,7 +86,7 @@ class integrate
         if (empty($cfg['db_host'])) {
             $this->db_name = $GLOBALS['ecs']->db_name;
             $this->prefix = $GLOBALS['ecs']->prefix;
-            $this->db = &$GLOBALS['db'];
+            $this->db = $GLOBALS['db'];
         } else {
             if (empty($cfg['is_latin1'])) {
                 $this->db = new cls_mysql($cfg['db_host'], $cfg['db_user'], $cfg['db_pass'], $cfg['db_name'], $this->charset, null, $quiet);
@@ -105,7 +105,6 @@ class integrate
     /**
      *  用户登录函数
      *
-     * @access  public
      * @param string $username
      * @param string $password
      *
@@ -127,9 +126,6 @@ class integrate
     }
 
     /**
-     *
-     *
-     * @access  public
      * @param
      *
      * @return void
@@ -143,7 +139,6 @@ class integrate
     /**
      *  添加一个新用户
      *
-     * @access  public
      * @param
      *
      * @return int
@@ -206,7 +201,6 @@ class integrate
     /**
      *  编辑用户信息($password, $email, $gender, $bday)
      *
-     * @access  public
      * @param
      *
      * @return void
@@ -280,7 +274,6 @@ class integrate
     /**
      * 删除用户
      *
-     * @access  public
      * @param
      *
      * @return void
@@ -348,7 +341,6 @@ class integrate
     /**
      *  获取指定用户的信息
      *
-     * @access  public
      * @param
      *
      * @return void
@@ -371,7 +363,6 @@ class integrate
     /**
      *  获取指定用户的信息
      *
-     * @access  public
      * @param
      *
      * @return void
@@ -392,7 +383,6 @@ class integrate
     /**
      *  根据登录状态设置cookie
      *
-     * @access  public
      * @param
      *
      * @return void
@@ -415,7 +405,6 @@ class integrate
     /**
      *  检查指定用户是否存在及密码是否正确
      *
-     * @access  public
      * @param string $username 用户名
      *
      * @return  int
@@ -443,7 +432,6 @@ class integrate
     /**
      *  检查指定邮箱是否存在
      *
-     * @access  public
      * @param string $email 用户邮箱
      *
      * @return  boolean
@@ -569,7 +557,7 @@ class integrate
                     return $cfg['md5password'];
                 }
 
-            // no break
+                // no break
             case PWD_PRE_SALT:
                 if (empty($cfg['salt'])) {
                     $cfg['salt'] = '';

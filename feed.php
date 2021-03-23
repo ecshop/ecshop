@@ -32,7 +32,7 @@ $brd = isset($_REQUEST['brand']) ? ' AND g.brand_id=' . intval($_REQUEST['brand'
 
 $uri = $ecs->url();
 
-$rss = new RSSBuilder(EC_CHARSET, $uri, htmlspecialchars($_CFG['shop_name']), htmlspecialchars($_CFG['shop_desc']), $uri . 'animated_favicon.gif');
+$rss = new RSSBuilder(EC_CHARSET, $uri, htmlspecialchars($_CFG['shop_name']), htmlspecialchars($_CFG['shop_desc']), $uri . 'favicon.ico');
 $rss->addDCdata('', 'http://www.ecshop.com', date('r'));
 
 if (isset($_REQUEST['type']))

@@ -3,7 +3,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>{$gallery.goods_name} - {$shop_name}</title>
 <link rel="shortcut icon" href="favicon.ico" >
-<link rel="icon" href="animated_favicon.gif" type="image/gif" >
 <link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
 <style>
 body{margin:0;}

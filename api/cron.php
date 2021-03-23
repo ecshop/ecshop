@@ -136,11 +136,7 @@ function write_error_arr($err_arr)
 
 function check_method()
 {
-    if (PHP_VERSION >= '4.2') {
-        $if_cron = PHP_SAPI == 'cli' ? true : false;
-    } else {
-        $if_cron = php_sapi_name() == 'cgi' ? true : false;
-    }
+    $if_cron = PHP_SAPI == 'cli' ? true : false;
     if (!empty($GLOBALS['_CFG']['cron_method'])) {
         if (!$if_cron) {
             die('Hacking attempt');

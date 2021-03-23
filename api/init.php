@@ -6,40 +6,26 @@ if (!defined('IN_ECS')) {
 
 error_reporting(E_ALL);
 
-if (__FILE__ == '') {
-    die('Fatal error code: 0');
-}
-
 /* 取得当前ecshop所在的根目录 */
-define('ROOT_PATH', str_replace('api', '', str_replace('\\', '/', dirname(__FILE__))));
+define('ROOT_PATH', dirname(__DIR__) . '/');
 
 /* 初始化设置 */
-@ini_set('memory_limit', '16M');
+@ini_set('memory_limit', '1G');
 @ini_set('session.cache_expire', 180);
 @ini_set('session.use_trans_sid', 0);
 @ini_set('session.use_cookies', 1);
 @ini_set('session.auto_start', 0);
-@ini_set('display_errors', 1);
-
-if (DIRECTORY_SEPARATOR == '\\') {
-    @ini_set('include_path', '.;' . ROOT_PATH);
-} else {
-    @ini_set('include_path', '.:' . ROOT_PATH);
-}
+@ini_set('display_errors', 0);
 
 if (file_exists(ROOT_PATH . 'data/config.php')) {
     include(ROOT_PATH . 'data/config.php');
-} else {
-    include(ROOT_PATH . 'includes/config.php');
 }
 
 if (defined('DEBUG_MODE') == false) {
     define('DEBUG_MODE', 0);
 }
 
-if (PHP_VERSION >= '5.1' && !empty($timezone)) {
-    date_default_timezone_set($timezone);
-}
+date_default_timezone_set($timezone);
 
 $php_self = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
 if ('/' == substr($php_self, -1)) {
@@ -84,7 +70,7 @@ $sess = new cls_session($db, $ecs->table('sessions'), $ecs->table('sessions_data
 $_CFG = load_config();
 
 /* 初始化用户插件 */
-$user =& init_users();
+$user = init_users();
 
 if ((DEBUG_MODE & 1) == 1) {
     error_reporting(E_ALL);

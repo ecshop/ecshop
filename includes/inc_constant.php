@@ -4,6 +4,10 @@ if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
+define('APPNAME', 'ECSHOP');
+define('VERSION', 'v2.8.0-dev');
+define('RELEASE', '20210323');
+
 /* 图片处理相关常数 */
 define('ERR_INVALID_IMAGE', 1);
 define('ERR_NO_GD', 2);
@@ -204,10 +208,6 @@ define('TO_P', 0); //兑换到商城消费积分
 define('FROM_P', 1); //用商城消费积分兑换
 define('TO_R', 2); //兑换到商城等级积分
 define('FROM_R', 3); //用商城等级积分兑换
-
-/* 支付宝商家账户 */
-define('ALIPAY_AUTH', 'gh0bis45h89m5mwcoe85us4qrwispes0');
-define('ALIPAY_ID', '2088002052150939');
 
 /* 添加feed事件到UC的TYPE*/
 define('BUY_GOODS', 1); //购买商品

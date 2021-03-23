@@ -7,43 +7,6 @@ require(dirname(__FILE__) . '/includes/init.php');
 if ((DEBUG_MODE & 2) != 2) {
     $smarty->caching = true;
 }
-$ua = strtolower($_SERVER['HTTP_USER_AGENT']);
-
-$uachar = "/(nokia|sony|ericsson|mot|samsung|sgh|lg|philips|panasonic|alcatel|lenovo|cldc|midp|mobile)/i";
-
-if (($ua == '' || preg_match($uachar, $ua)) && !strpos(strtolower($_SERVER['REQUEST_URI']), 'wap')) {
-    $Loaction = 'mobile/';
-
-    if (!empty($Loaction)) {
-        ecs_header("Location: $Loaction\n");
-
-        exit;
-    }
-}
-/*------------------------------------------------------ */
-//-- Shopex系统地址转换
-/*------------------------------------------------------ */
-if (!empty($_GET['gOo'])) {
-    if (!empty($_GET['gcat'])) {
-        /* 商品分类。*/
-        $Loaction = 'category.php?id=' . $_GET['gcat'];
-    } elseif (!empty($_GET['acat'])) {
-        /* 文章分类。*/
-        $Loaction = 'article_cat.php?id=' . $_GET['acat'];
-    } elseif (!empty($_GET['goodsid'])) {
-        /* 商品详情。*/
-        $Loaction = 'goods.php?id=' . $_GET['goodsid'];
-    } elseif (!empty($_GET['articleid'])) {
-        /* 文章详情。*/
-        $Loaction = 'article.php?id=' . $_GET['articleid'];
-    }
-
-    if (!empty($Loaction)) {
-        ecs_header("Location: $Loaction\n");
-
-        exit;
-    }
-}
 
 //判断是否有ajax请求
 $act = !empty($_GET['act']) ? $_GET['act'] : '';

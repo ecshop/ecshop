@@ -4,8 +4,8 @@
  * 通过判断is_feed 向UCenter提交Feed
  *
  * @access public
- * @param  integer $value_id  $order_id or $comment_id
- * @param  interger $feed_type BUY_GOODS or COMMENT_GOODS
+ * @param integer $value_id $order_id or $comment_id
+ * @param interger $feed_type BUY_GOODS or COMMENT_GOODS
  *
  * @return void
  */
@@ -28,11 +28,11 @@ function add_feed($id, $feed_type)
 
             $feed['icon'] = "goods";
             $feed['title_template'] = '<b>{username} ' . $GLOBALS['_LANG']['feed_user_buy'] . ' {goods_name}</b>';
-            $feed['title_data'] = array('username'=> $_SESSION['user_name'], 'goods_name'=> $goods_data['goods_name']);
+            $feed['title_data'] = array('username' => $_SESSION['user_name'], 'goods_name' => $goods_data['goods_name']);
             $feed['body_template'] = '{goods_name}  ' . $GLOBALS['_LANG']['feed_goods_price'] . ':{goods_price}  ' . $GLOBALS['_LANG']['feed_goods_desc'] . ':{goods_desc}';
-            $feed['body_data'] = array('goods_name'=>$goods_data['goods_name'], 'goods_price'=>$goods_data['goods_price'], 'goods_desc'=>sub_str(strip_tags($goods_data['goods_desc']), 150, true));
-            $feed['images'][] = array('url'=> $url,
-                                      'link'=> $link);
+            $feed['body_data'] = array('goods_name' => $goods_data['goods_name'], 'goods_price' => $goods_data['goods_price'], 'goods_desc' => sub_str(strip_tags($goods_data['goods_desc']), 150, true));
+            $feed['images'][] = array('url' => $url,
+                'link' => $link);
             uc_call("uc_feed_add", array($feed['icon'], $_SESSION['user_id'], $_SESSION['user_name'], $feed['title_template'], $feed['title_data'], $feed ['body_template'], $feed['body_data'], '', '', $feed['images']));
         }
     }
@@ -42,7 +42,7 @@ function add_feed($id, $feed_type)
 /**
  * 获得商品tag所关联的其他应用的列表
  *
- * @param   array       $attr
+ * @param array $attr
  *
  * @return  void
  */
@@ -86,11 +86,11 @@ function get_linked_tags($tag_data)
 /**
  * 兑换积分
  *
- * @param  integer $uid 用户ID
- * @param  integer $fromcredits 原积分
- * @param  integer $tocredits 目标积分
- * @param  integer $toappid 目标应用ID
- * @param  integer $netamount 积分数额
+ * @param integer $uid 用户ID
+ * @param integer $fromcredits 原积分
+ * @param integer $tocredits 目标积分
+ * @param integer $toappid 目标应用ID
+ * @param integer $netamount 积分数额
  *
  * @return boolean
  */

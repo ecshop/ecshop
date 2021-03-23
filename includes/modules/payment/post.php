@@ -4,7 +4,7 @@ if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
-$payment_lang = ROOT_PATH . 'languages/' .$GLOBALS['_CFG']['lang']. '/payment/post.php';
+$payment_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/payment/post.php';
 
 if (file_exists($payment_lang)) {
     global $_LANG;
@@ -17,19 +17,19 @@ if (isset($set_modules) && $set_modules == true) {
     $i = isset($modules) ? count($modules) : 0;
 
     /* 代码 */
-    $modules[$i]['code']    = basename(__FILE__, '.php');
+    $modules[$i]['code'] = basename(__FILE__, '.php');
 
     /* 描述对应的语言项 */
-    $modules[$i]['desc']    = 'post_desc';
+    $modules[$i]['desc'] = 'post_desc';
 
     /* 是否支持货到付款 */
-    $modules[$i]['is_cod']  = '0';
+    $modules[$i]['is_cod'] = '0';
 
     /* 是否支持在线支付 */
-    $modules[$i]['is_online']  = '0';
+    $modules[$i]['is_online'] = '0';
 
     /* 作者 */
-    $modules[$i]['author']  = 'ECSHOP TEAM';
+    $modules[$i]['author'] = 'ECSHOP TEAM';
 
     /* 网址 */
     $modules[$i]['website'] = 'http://www.ecshop.com';
@@ -38,7 +38,7 @@ if (isset($set_modules) && $set_modules == true) {
     $modules[$i]['version'] = '1.0.0';
 
     /* 配置信息 */
-    $modules[$i]['config']  = array();
+    $modules[$i]['config'] = array();
 
     return;
 }

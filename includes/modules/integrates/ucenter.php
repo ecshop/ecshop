@@ -9,16 +9,16 @@ if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 会员数据整合插件的代码必须和文件名保持一致 */
-    $modules[$i]['code']    = 'ucenter';
+    $modules[$i]['code'] = 'ucenter';
 
     /* 被整合的第三方程序的名称 */
-    $modules[$i]['name']    = 'UCenter';
+    $modules[$i]['name'] = 'UCenter';
 
     /* 被整合的第三方程序的版本 */
     $modules[$i]['version'] = '1.x';
 
     /* 插件的作者 */
-    $modules[$i]['author']  = 'ECSHOP R&D TEAM';
+    $modules[$i]['author'] = 'ECSHOP R&D TEAM';
 
     /* 插件作者的官方网站 */
     $modules[$i]['website'] = 'http://www.ecshop.com';
@@ -33,6 +33,7 @@ if (isset($set_modules) && $set_modules == true) {
 }
 
 require_once(ROOT_PATH . 'includes/modules/integrates/integrate.php');
+
 class ucenter extends integrate
 {
     /**
@@ -79,19 +80,19 @@ class ucenter extends integrate
                 $db_pre = '`' . $cfg['db_name'] . '`.' . $cfg['db_pre'];
             }
 
-            define('UC_CONNECT', isset($cfg['uc_connect'])?$cfg['uc_connect']:'');
-            define('UC_DBHOST', isset($cfg['db_host'])?$cfg['db_host']:'');
-            define('UC_DBUSER', isset($cfg['db_user'])?$cfg['db_user']:'');
-            define('UC_DBPW', isset($cfg['db_pass'])?$cfg['db_pass']:'');
-            define('UC_DBNAME', isset($cfg['db_name'])?$cfg['db_name']:'');
-            define('UC_DBCHARSET', isset($cfg['db_charset'])?$cfg['db_charset']:'');
+            define('UC_CONNECT', isset($cfg['uc_connect']) ? $cfg['uc_connect'] : '');
+            define('UC_DBHOST', isset($cfg['db_host']) ? $cfg['db_host'] : '');
+            define('UC_DBUSER', isset($cfg['db_user']) ? $cfg['db_user'] : '');
+            define('UC_DBPW', isset($cfg['db_pass']) ? $cfg['db_pass'] : '');
+            define('UC_DBNAME', isset($cfg['db_name']) ? $cfg['db_name'] : '');
+            define('UC_DBCHARSET', isset($cfg['db_charset']) ? $cfg['db_charset'] : '');
             define('UC_DBTABLEPRE', $db_pre);
             define('UC_DBCONNECT', '0');
-            define('UC_KEY', isset($cfg['uc_key'])?$cfg['uc_key']:'');
-            define('UC_API', isset($cfg['uc_url'])?$cfg['uc_url']:'');
-            define('UC_CHARSET', isset($cfg['uc_charset'])?$cfg['uc_charset']:'');
-            define('UC_IP', isset($cfg['uc_ip'])?$cfg['uc_ip']:'');
-            define('UC_APPID', isset($cfg['uc_id'])?$cfg['uc_id']:'');
+            define('UC_KEY', isset($cfg['uc_key']) ? $cfg['uc_key'] : '');
+            define('UC_API', isset($cfg['uc_url']) ? $cfg['uc_url'] : '');
+            define('UC_CHARSET', isset($cfg['uc_charset']) ? $cfg['uc_charset'] : '');
+            define('UC_IP', isset($cfg['uc_ip']) ? $cfg['uc_ip'] : '');
+            define('UC_APPID', isset($cfg['uc_id']) ? $cfg['uc_id'] : '');
             define('UC_PPP', '20');
         }
     }
@@ -100,8 +101,8 @@ class ucenter extends integrate
      *  用户登录函数
      *
      * @access  public
-     * @param   string  $username
-     * @param   string  $password
+     * @param string $username
+     * @param string $password
      *
      * @return void
      */
@@ -113,30 +114,29 @@ class ucenter extends integrate
         if ($uid > 0) {
             //检查用户是否存在,不存在直接放入用户表
             $result = $this->db->getRow("SELECT user_id,ec_salt FROM " . $GLOBALS['ecs']->table("users") . " WHERE user_name='$username'");
-            $name_exist =$result['user_id'];
+            $name_exist = $result['user_id'];
             if (empty($result['ec_salt'])) {
-                $user_exist = $this->db->getOne("SELECT user_id FROM " . $GLOBALS['ecs']->table("users") . " WHERE user_name='$username' AND password = '" . MD5($password) ."'");
+                $user_exist = $this->db->getOne("SELECT user_id FROM " . $GLOBALS['ecs']->table("users") . " WHERE user_name='$username' AND password = '" . MD5($password) . "'");
                 if (!empty($user_exist)) {
-                    $ec_salt=rand(1, 9999);
-                    $this->db->query('UPDATE ' . $GLOBALS['ecs']->table("users") . "SET `password`='".MD5(MD5($password). $ec_salt)."',`ec_salt`='". $ec_salt."' WHERE user_id = '" . $uid . "'");
+                    $ec_salt = rand(1, 9999);
+                    $this->db->query('UPDATE ' . $GLOBALS['ecs']->table("users") . "SET `password`='" . MD5(MD5($password) . $ec_salt) . "',`ec_salt`='" . $ec_salt . "' WHERE user_id = '" . $uid . "'");
                 }
             } else {
-                $user_exist = $this->db->getOne("SELECT user_id FROM " . $GLOBALS['ecs']->table("users") . " WHERE user_name='$username' AND password = '" . MD5(MD5($password). $result['ec_salt'])."'");
+                $user_exist = $this->db->getOne("SELECT user_id FROM " . $GLOBALS['ecs']->table("users") . " WHERE user_name='$username' AND password = '" . MD5(MD5($password) . $result['ec_salt']) . "'");
             }
-
 
 
             if (empty($user_exist)) {
                 if (empty($name_exist)) {
                     $reg_date = time();
                     $ip = real_ip();
-                    $password = $this->compile_password(array('password'=>$password));
+                    $password = $this->compile_password(array('password' => $password));
                     $this->db->query('INSERT INTO ' . $GLOBALS['ecs']->table("users") . "(`user_id`, `email`, `user_name`, `password`, `reg_time`, `last_login`, `last_ip`) VALUES ('$uid', '$email', '$uname', '$password', '$reg_date', '$reg_date', '$ip')");
                 } else {
                     if (empty($result['ec_salt'])) {
-                        $result['ec_salt']=0;
+                        $result['ec_salt'] = 0;
                     }
-                    $this->db->query('UPDATE ' . $GLOBALS['ecs']->table("users") . "SET `password`='".MD5(MD5($password). $result['ec_salt'])."',`ec_salt`='". $result['ec_salt']."' WHERE user_id = '" . $uid . "'");
+                    $this->db->query('UPDATE ' . $GLOBALS['ecs']->table("users") . "SET `password`='" . MD5(MD5($password) . $result['ec_salt']) . "',`ec_salt`='" . $result['ec_salt'] . "' WHERE user_id = '" . $uid . "'");
                 }
             }
             $this->set_session($uname);
@@ -206,7 +206,7 @@ class ucenter extends integrate
             //注册成功，插入用户表
             $reg_date = time();
             $ip = real_ip();
-            $password = $this->compile_password(array('password'=>$password));
+            $password = $this->compile_password(array('password' => $password));
             $this->db->query('INSERT INTO ' . $GLOBALS['ecs']->table("users") . "(`user_id`, `email`, `user_name`, `password`, `reg_time`, `last_login`, `last_ip`) VALUES ('$uid', '$email', '$username', '$password', '$reg_date', '$reg_date', '$ip')");
             return true;
         }
@@ -216,7 +216,7 @@ class ucenter extends integrate
      *  检查指定用户是否存在及密码是否正确
      *
      * @access  public
-     * @param   string  $username   用户名
+     * @param string $username 用户名
      *
      * @return  int
      */
@@ -226,7 +226,7 @@ class ucenter extends integrate
         if ($userdata == 1) {
             return false;
         } else {
-            return  true;
+            return true;
         }
     }
 
@@ -234,7 +234,7 @@ class ucenter extends integrate
      * 检测Email是否合法
      *
      * @access  public
-     * @param   string  $email   邮箱
+     * @param string $email 邮箱
      *
      * @return  blob
      */
@@ -258,7 +258,7 @@ class ucenter extends integrate
         $real_username = $cfg['username'];
         $cfg['username'] = addslashes($cfg['username']);
         $set_str = '';
-        $valarr =array('email'=>'email', 'gender'=>'sex', 'bday'=>'birthday');
+        $valarr = array('email' => 'email', 'gender' => 'sex', 'bday' => 'birthday');
         foreach ($cfg as $key => $val) {
             if ($key == 'username' || $key == 'password' || $key == 'old_password') {
                 continue;
@@ -269,7 +269,7 @@ class ucenter extends integrate
         if (!empty($set_str)) {
             $sql = "UPDATE " . $GLOBALS['ecs']->table('users') . " SET $set_str  WHERE user_name = '$cfg[username]'";
             $GLOBALS['db']->query($sql);
-            $flag  = true;
+            $flag = true;
         }
 
         if (!empty($cfg['email'])) {
@@ -374,7 +374,7 @@ class ucenter extends integrate
      *
      * @return void
      */
-    public function set_cookie($username='')
+    public function set_cookie($username = '')
     {
         if (empty($username)) {
             /* 摧毁cookie */
@@ -403,7 +403,7 @@ class ucenter extends integrate
      *
      * @return void
      */
-    public function set_session($username='')
+    public function set_session($username = '')
     {
         if (empty($username)) {
             $GLOBALS['sess']->destroy_session();
@@ -412,9 +412,9 @@ class ucenter extends integrate
             $row = $GLOBALS['db']->getRow($sql);
 
             if ($row) {
-                $_SESSION['user_id']   = $row['user_id'];
+                $_SESSION['user_id'] = $row['user_id'];
                 $_SESSION['user_name'] = $username;
-                $_SESSION['email']     = $row['email'];
+                $_SESSION['email'] = $row['email'];
             }
         }
     }
@@ -460,8 +460,8 @@ class ucenter extends integrate
         }
 
         /* 如果需要同步或是ecshop插件执行这部分代码 */
-        $sql = "SELECT user_id FROM "  . $GLOBALS['ecs']->table('users') . " WHERE ";
-        $sql .= (is_array($post_id)) ? db_create_in($post_id, 'user_name') : "user_name='". $post_id . "' LIMIT 1";
+        $sql = "SELECT user_id FROM " . $GLOBALS['ecs']->table('users') . " WHERE ";
+        $sql .= (is_array($post_id)) ? db_create_in($post_id, 'user_name') : "user_name='" . $post_id . "' LIMIT 1";
         $col = $GLOBALS['db']->getCol($sql);
 
         if ($col) {

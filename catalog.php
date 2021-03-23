@@ -12,7 +12,7 @@ if (!$smarty->is_cached('catalog.dwt')) {
     /* 取出所有分类 */
     $cat_list = cat_list(0, 0, false);
 
-    foreach ($cat_list as $key=>$val) {
+    foreach ($cat_list as $key => $val) {
         if ($val['is_show'] == 0) {
             unset($cat_list[$key]);
         }
@@ -37,7 +37,7 @@ $smarty->display('catalog.dwt');
  * 计算指定分类的商品数量
  *
  * @access public
- * @param   integer     $cat_id
+ * @param integer $cat_id
  *
  * @return void
  */

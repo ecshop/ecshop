@@ -4,7 +4,7 @@ define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 
-if ($_REQUEST['act']== 'check') {
+if ($_REQUEST['act'] == 'check') {
     /* 检查权限 */
     admin_priv('file_priv');
 
@@ -18,22 +18,22 @@ if ($_REQUEST['act']== 'check') {
     }
     closedir($folder);
 
-    $dir[]                     = ADMIN_PATH;
-    $dir[]                     = 'cert';
+    $dir[] = ADMIN_PATH;
+    $dir[] = 'cert';
 
-    $dir_subdir['images'][]    = IMAGE_DIR;
-    $dir_subdir['images'][]    = IMAGE_DIR . '/upload';
-    $dir_subdir['images'][]    = IMAGE_DIR . '/upload/Image';
-    $dir_subdir['images'][]    = IMAGE_DIR . '/upload/File';
-    $dir_subdir['images'][]    = IMAGE_DIR . '/upload/Flash';
-    $dir_subdir['images'][]    = IMAGE_DIR . '/upload/Media';
-    $dir_subdir['data'][]      = DATA_DIR;
-    $dir_subdir['data'][]      = DATA_DIR . '/afficheimg';
-    $dir_subdir['data'][]      = DATA_DIR . '/brandlogo';
-    $dir_subdir['data'][]      = DATA_DIR . '/cardimg';
-    $dir_subdir['data'][]      = DATA_DIR . '/feedbackimg';
-    $dir_subdir['data'][]      = DATA_DIR . '/packimg';
-    $dir_subdir['data'][]      = DATA_DIR . '/sqldata';
+    $dir_subdir['images'][] = IMAGE_DIR;
+    $dir_subdir['images'][] = IMAGE_DIR . '/upload';
+    $dir_subdir['images'][] = IMAGE_DIR . '/upload/Image';
+    $dir_subdir['images'][] = IMAGE_DIR . '/upload/File';
+    $dir_subdir['images'][] = IMAGE_DIR . '/upload/Flash';
+    $dir_subdir['images'][] = IMAGE_DIR . '/upload/Media';
+    $dir_subdir['data'][] = DATA_DIR;
+    $dir_subdir['data'][] = DATA_DIR . '/afficheimg';
+    $dir_subdir['data'][] = DATA_DIR . '/brandlogo';
+    $dir_subdir['data'][] = DATA_DIR . '/cardimg';
+    $dir_subdir['data'][] = DATA_DIR . '/feedbackimg';
+    $dir_subdir['data'][] = DATA_DIR . '/packimg';
+    $dir_subdir['data'][] = DATA_DIR . '/sqldata';
     $dir_subdir['temp'][] = 'temp';
     $dir_subdir['temp'][] = 'temp/backup';
     $dir_subdir['temp'][] = 'temp/caches';
@@ -47,16 +47,15 @@ if ($_REQUEST['act']== 'check') {
         $dir_subdir['images'][] = $val;
     }
 
-    $tpl = 'themes/'.$_CFG['template'].'/';
-
+    $tpl = 'themes/' . $_CFG['template'] . '/';
 
 
     $list = array();
 
     /* 检查目录 */
     foreach ($dir as $val) {
-        $mark = file_mode_info(ROOT_PATH .$val);
-        $list[] = array('item' => $val.$_LANG['dir'], 'r' => $mark&1, 'w' => $mark&2, 'm' => $mark&4);
+        $mark = file_mode_info(ROOT_PATH . $val);
+        $list[] = array('item' => $val . $_LANG['dir'], 'r' => $mark & 1, 'w' => $mark & 2, 'm' => $mark & 4);
     }
 
     /* 检查目录及子目录 */
@@ -64,21 +63,21 @@ if ($_REQUEST['act']== 'check') {
     foreach ($keys as $key) {
         $err_msg = array();
         $mark = check_file_in_array($dir_subdir[$key], $err_msg);
-        $list[] = array('item' => $key.$_LANG['dir_subdir'], 'r' => $mark&1, 'w' => $mark&2, 'm' => $mark&4, 'err_msg' => $err_msg);
+        $list[] = array('item' => $key . $_LANG['dir_subdir'], 'r' => $mark & 1, 'w' => $mark & 2, 'm' => $mark & 4, 'err_msg' => $err_msg);
     }
 
     /* 检查当前模板可写性 */
-    $dwt = @opendir(ROOT_PATH .$tpl);
+    $dwt = @opendir(ROOT_PATH . $tpl);
     $tpl_file = array(); //获取要检查的文件
     while ($file = readdir($dwt)) {
-        if (is_file(ROOT_PATH .$tpl .$file) && strrpos($file, '.dwt') > 0) {
-            $tpl_file[] = $tpl .$file;
+        if (is_file(ROOT_PATH . $tpl . $file) && strrpos($file, '.dwt') > 0) {
+            $tpl_file[] = $tpl . $file;
         }
     }
     @closedir($dwt);
-    $lib = @opendir(ROOT_PATH .$tpl.'library/');
+    $lib = @opendir(ROOT_PATH . $tpl . 'library/');
     while ($file = readdir($lib)) {
-        if (is_file(ROOT_PATH .$tpl.'library/'.$file) && strrpos($file, '.lbi') > 0) {
+        if (is_file(ROOT_PATH . $tpl . 'library/' . $file) && strrpos($file, '.lbi') > 0) {
             $tpl_file[] = $tpl . 'library/' . $file;
         }
     }
@@ -87,10 +86,10 @@ if ($_REQUEST['act']== 'check') {
     /* 开始检查 */
     $err_msg = array();
     $mark = check_file_in_array($tpl_file, $err_msg);
-    $list[] = array('item' => $tpl.$_LANG['tpl_file'], 'r' => $mark&1, 'w' => $mark & 2, 'm' => $mark & 4, 'err_msg' => $err_msg);
+    $list[] = array('item' => $tpl . $_LANG['tpl_file'], 'r' => $mark & 1, 'w' => $mark & 2, 'm' => $mark & 4, 'err_msg' => $err_msg);
 
     /* 检查smarty的缓存目录和编译目录及image目录是否有执行rename()函数的权限 */
-    $tpl_list   = array();
+    $tpl_list = array();
     $tpl_dirs[] = 'temp/caches';
     $tpl_dirs[] = 'temp/compiled';
     $tpl_dirs[] = 'temp/compiled/admin';
@@ -101,7 +100,7 @@ if ($_REQUEST['act']== 'check') {
     }
 
     foreach ($tpl_dirs as $dir) {
-        $mask = file_mode_info(ROOT_PATH .$dir);
+        $mask = file_mode_info(ROOT_PATH . $dir);
 
         if (($mask & 4) > 0) {
             /* 之前已经检查过修改权限，只有有修改权限才检查rename权限 */
@@ -121,14 +120,14 @@ if ($_REQUEST['act']== 'check') {
  *  检查数组中目录权限
  *
  * @access  public
- * @param   array    $arr           要检查的文件列表数组
- * @param   array    $err_msg       错误信息回馈数组
+ * @param array $arr 要检查的文件列表数组
+ * @param array $err_msg 错误信息回馈数组
  *
  * @return int       $mark          文件权限掩码
  */
 function check_file_in_array($arr, &$err_msg)
 {
-    $read   = true;
+    $read = true;
     $writen = true;
     $modify = true;
     foreach ($arr as $val) {
@@ -137,11 +136,11 @@ function check_file_in_array($arr, &$err_msg)
             $read = false;
             $err_msg['r'][] = $val;
         }
-        if (($mark & 2) <1) {
+        if (($mark & 2) < 1) {
             $writen = false;
             $err_msg['w'][] = $val;
         }
-        if (($mark & 4) <1) {
+        if (($mark & 4) < 1) {
             $modify = false;
             $err_msg['m'][] = $val;
         }

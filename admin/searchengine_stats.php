@@ -3,7 +3,7 @@
 define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'languages/' .$_CFG['lang']. '/admin/statistic.php');
+require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -19,21 +19,21 @@ if ($_REQUEST['act'] == 'view') {
     /* TODO: 时间需要改 */
     if (isset($_POST) && !empty($_POST)) {
         $start_date = $_POST['start_date'];
-        $end_date   = $_POST['end_date'];
+        $end_date = $_POST['end_date'];
     } else {
         $start_date = local_date('Y-m-d', strtotime('-1 week'));
-        $end_date   = local_date('Y-m-d');
+        $end_date = local_date('Y-m-d');
     }
     /* ------------------------------------- */
     /* --综合流量
     /* ------------------------------------- */
     $max = 0;
     $general_xml = "<chart caption='$_LANG[tab_keywords]' shownames='1' showvalues='0' decimals='0' numberPrefix='' outCnvBaseFontSize='12' baseFontSize='12'>";
-    $sql = "SELECT keyword, count, searchengine ".
-            " FROM " .$ecs->table('keywords').
-            " WHERE date >= '$start_date' AND date <= '" .$end_date. "'";
+    $sql = "SELECT keyword, count, searchengine " .
+        " FROM " . $ecs->table('keywords') .
+        " WHERE date >= '$start_date' AND date <= '" . $end_date . "'";
     if (isset($_POST['filter'])) {
-        $sql .= ' AND '. db_create_in($_POST['filter'], 'searchengine');
+        $sql .= ' AND ' . db_create_in($_POST['filter'], 'searchengine');
     }
     $res = $db->query($sql);
     $search = array();
@@ -50,8 +50,8 @@ if ($_REQUEST['act'] == 'view') {
         $key = str_replace('&', '＆', $key);
         $key = str_replace('>', '＞', $key);
         $key = str_replace('<', '＜', $key);
-        $key =htmlspecialchars($key);
-        $general_xml .= "<category label='".str_replace('\'', '', $key)."' />";
+        $key = htmlspecialchars($key);
+        $general_xml .= "<category label='" . str_replace('\'', '', $key) . "' />";
     }
     $general_xml .= "</categories>\n";
 
@@ -76,13 +76,13 @@ if ($_REQUEST['act'] == 'view') {
     $smarty->assign('ur_here', $_LANG['searchengine_stats']);
     $smarty->assign('general_data', $general_xml);
 
-    $searchengines = array('ecshop'  => false,
-                            'MSLIVE'  => false,
-                            'BAIDU'  => false,
-                            'GOOGLE' => false,
-                            'GOOGLE CHINA' => false,
-                            'CT114' => false,
-                            'SOSO'  => false);
+    $searchengines = array('ecshop' => false,
+        'MSLIVE' => false,
+        'BAIDU' => false,
+        'GOOGLE' => false,
+        'GOOGLE CHINA' => false,
+        'CT114' => false,
+        'SOSO' => false);
 
     if (isset($_POST['filter'])) {
         foreach ($_POST['filter'] as $v) {
@@ -104,12 +104,12 @@ if ($_REQUEST['act'] == 'view') {
     $smarty->display('searchengine_stats.htm');
 } elseif ($_REQUEST['act'] == 'download') {
     $start_date = empty($_REQUEST['start_date']) ? strtotime('-20 day') : intval($_REQUEST['start_date']);
-    $end_date   = empty($_REQUEST['end_date']) ? time() : intval($_REQUEST['end_date']);
+    $end_date = empty($_REQUEST['end_date']) ? time() : intval($_REQUEST['end_date']);
 
     $filename = $start_date . '_' . $end_date;
-    $sql = "SELECT keyword, count,searchengine ".
-            " FROM " .$ecs->table('keywords').
-            " WHERE date >= '$start_date' AND date <= '$end_date'";
+    $sql = "SELECT keyword, count,searchengine " .
+        " FROM " . $ecs->table('keywords') .
+        " WHERE date >= '$start_date' AND date <= '$end_date'";
     $res = $db->query($sql);
 
     $searchengine = array();

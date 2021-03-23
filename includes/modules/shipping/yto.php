@@ -4,7 +4,7 @@ if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
-$shipping_lang = ROOT_PATH.'languages/' .$GLOBALS['_CFG']['lang']. '/shipping/yto.php';
+$shipping_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/shipping/yto.php';
 if (file_exists($shipping_lang)) {
     global $_LANG;
     include_once($shipping_lang);
@@ -18,31 +18,31 @@ if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 配送方式插件的代码必须和文件名保持一致 */
-    $modules[$i]['code']    = 'yto';
+    $modules[$i]['code'] = 'yto';
 
     $modules[$i]['version'] = '1.0.0';
 
     /* 配送方式的描述 */
-    $modules[$i]['desc']    = 'yto_desc';
+    $modules[$i]['desc'] = 'yto_desc';
 
     /* 不支持保价 */
-    $modules[$i]['insure']  = false;
+    $modules[$i]['insure'] = false;
 
     /* 配送方式是否支持货到付款 */
-    $modules[$i]['cod']     = true;
+    $modules[$i]['cod'] = true;
 
     /* 插件的作者 */
-    $modules[$i]['author']  = 'ECSHOP TEAM';
+    $modules[$i]['author'] = 'ECSHOP TEAM';
 
     /* 插件作者的官方网站 */
     $modules[$i]['website'] = 'http://www.ecshop.com';
 
     /* 配送接口需要的参数 */
     $modules[$i]['configure'] = array(
-                                    array('name' => 'item_fee',     'value'=>10),   /* 单件商品的配送价格 */
-                                    array('name' => 'base_fee',    'value'=>5),    /* 1000克以内的价格 */
-                                    array('name' => 'step_fee',     'value'=>5),    /* 续重每1000克增加的价格 */
-                                );
+        array('name' => 'item_fee', 'value' => 10),   /* 单件商品的配送价格 */
+        array('name' => 'base_fee', 'value' => 5),    /* 1000克以内的价格 */
+        array('name' => 'step_fee', 'value' => 5),    /* 续重每1000克增加的价格 */
+    );
 
     /* 模式编辑器 */
     $modules[$i]['print_model'] = 2;
@@ -80,7 +80,7 @@ class yto
      */
     public function yto($cfg = array())
     {
-        foreach ($cfg as $key=>$val) {
+        foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];
         }
     }
@@ -88,9 +88,9 @@ class yto
     /**
      * 计算订单的配送费用的函数
      *
-     * @param   float   $goods_weight   商品重量
-     * @param   float   $goods_amount   商品金额
-     * @param   float   $goods_number   商品件数
+     * @param float $goods_weight 商品重量
+     * @param float $goods_amount 商品金额
+     * @param float $goods_number 商品件数
      * @return  decimal
      */
     public function calculate($goods_weight, $goods_amount, $goods_number)
@@ -118,16 +118,16 @@ class yto
      * 查询发货状态
      *
      * @access  public
-     * @param   string  $invoice_sn     发货单号
+     * @param string $invoice_sn 发货单号
      * @return  string
      */
     public function query($invoice_sn)
     {
         //圆通快递查询会判断链接来源，目前的查询无法生效。
-        $str = '<form style="margin:0px" methods="post" '.
-            'action="http://www.yto.net.cn/service/sql.aspx" name="queryForm_' .$invoice_sn. '" target="_blank">'.
-            '<input type="hidden" name="NumberText" value="' .$invoice_sn. '" />'.
-            '<a href="javascript:document.forms[\'queryForm_' .$invoice_sn. '\'].submit();">' .$invoice_sn. '</a>'.
+        $str = '<form style="margin:0px" methods="post" ' .
+            'action="http://www.yto.net.cn/service/sql.aspx" name="queryForm_' . $invoice_sn . '" target="_blank">' .
+            '<input type="hidden" name="NumberText" value="' . $invoice_sn . '" />' .
+            '<a href="javascript:document.forms[\'queryForm_' . $invoice_sn . '\'].submit();">' . $invoice_sn . '</a>' .
             '</form>';
 
         return $str;

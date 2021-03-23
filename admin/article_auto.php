@@ -23,7 +23,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('record_count', $goodsdb['record_count']);
     $smarty->assign('page_count', $goodsdb['page_count']);
 
-    $sort_flag  = sort_flag($goodsdb['filter']);
+    $sort_flag = sort_flag($goodsdb['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result($smarty->fetch('goods_auto.htm'), '', array('filter' => $goodsdb['filter'], 'page_count' => $goodsdb['page_count']));
@@ -36,42 +36,40 @@ if ($_REQUEST['act'] == 'list') {
 } elseif ($_REQUEST['act'] == 'edit_starttime') {
     check_authz_json('goods_auto');
 
-    if (! preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
         make_json_error('');
     }
 
-    $id    = intval($_POST['id']);
+    $id = intval($_POST['id']);
     $time = local_strtotime(trim($_POST['val']));
     if ($id <= 0 || $_POST['val'] == '0000-00-00' || $time <= 0) {
         make_json_error('');
     }
 
-    $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id,'type' => 'article',
-            'starttime' => $time), array('starttime' =>(string)$time));
+    $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'article',
+        'starttime' => $time), array('starttime' => (string)$time));
 
     clear_cache_files();
     make_json_result(stripslashes($_POST['val']), '', array('act' => 'article_auto', 'id' => $id));
 } elseif ($_REQUEST['act'] == 'edit_endtime') {
     check_authz_json('goods_auto');
 
-    if (! preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
         make_json_error('');
     }
 
-    $id    = intval($_POST['id']);
+    $id = intval($_POST['id']);
     $time = local_strtotime(trim($_POST['val']));
     if ($id <= 0 || $_POST['val'] == '0000-00-00' || $time <= 0) {
         make_json_error('');
     }
 
-    $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id,'type' => 'article',
-            'endtime' => $time), array('endtime' =>(string)$time));
+    $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'article',
+        'endtime' => $time), array('endtime' => (string)$time));
 
     clear_cache_files();
     make_json_result(stripslashes($_POST['val']), '', array('act' => 'article_auto', 'id' => $id));
-}
-
-//批量发布
+} //批量发布
 elseif ($_REQUEST['act'] == 'batch_start') {
     admin_priv('goods_auto');
 
@@ -86,15 +84,13 @@ elseif ($_REQUEST['act'] == 'batch_start') {
     }
 
     foreach ($_POST['checkboxes'] as $id) {
-        $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id,'type' => 'article',
-            'starttime' => $_POST['date']), array('starttime' =>(string)$_POST['date']));
+        $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'article',
+            'starttime' => $_POST['date']), array('starttime' => (string)$_POST['date']));
     }
 
     $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'article_auto.php?act=list');
     sys_msg($_LANG['batch_start_succeed'], 0, $lnk);
-}
-
-//批量取消发布
+} //批量取消发布
 elseif ($_REQUEST['act'] == 'batch_end') {
     admin_priv('goods_auto');
 
@@ -109,8 +105,8 @@ elseif ($_REQUEST['act'] == 'batch_end') {
     }
 
     foreach ($_POST['checkboxes'] as $id) {
-        $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id,'type' => 'article',
-            'endtime' => $_POST['date']), array('endtime' =>(string)$_POST['date']));
+        $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'article',
+            'endtime' => $_POST['date']), array('endtime' => (string)$_POST['date']));
     }
 
     $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'article_auto.php?act=list');
@@ -130,8 +126,8 @@ function get_auto_goods()
     $goodsdb = array();
     $filter = page_and_size($filter);
     $sql = "SELECT g.*,a.starttime,a.endtime FROM " . $GLOBALS['ecs']->table('article') . " g LEFT JOIN " . $GLOBALS['ecs']->table('auto_manage') . " a ON g.article_id = a.item_id AND a.type='article'" . $where .
-           " ORDER BY g. add_time DESC" .
-           " LIMIT " . $filter['start'] . ",$filter[page_size]";
+        " ORDER BY g. add_time DESC" .
+        " LIMIT " . $filter['start'] . ",$filter[page_size]";
     $query = $GLOBALS['db']->query($sql);
     while ($rt = $GLOBALS['db']->fetch_array($query)) {
         if (!empty($rt['starttime'])) {

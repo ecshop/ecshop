@@ -43,15 +43,15 @@ if ($_REQUEST['act'] == 'list') {
     if (empty($_POST['step'])) {
         /* 取相应插件信息 */
         $set_modules = true;
-        include_once(ROOT_PATH.'includes/modules/cron/' . $_REQUEST['code'] . '.php');
+        include_once(ROOT_PATH . 'includes/modules/cron/' . $_REQUEST['code'] . '.php');
 
         $data = $modules[0];
 
-        $cron['cron_code']    = $data['code'];
-        $cron['cron_act']    = 'install';
-        $cron['cron_name']    = $_LANG[$data['code']];
-        $cron['cron_desc']    = $_LANG[$data['desc']];
-        $cron['cron_config']  = array();
+        $cron['cron_code'] = $data['code'];
+        $cron['cron_act'] = 'install';
+        $cron['cron_name'] = $_LANG[$data['code']];
+        $cron['cron_desc'] = $_LANG[$data['desc']];
+        $cron['cron_config'] = array();
 
         if (!empty($data['config'])) {
             foreach ($data['config'] as $key => $value) {
@@ -64,21 +64,21 @@ if ($_REQUEST['act'] == 'list') {
         list($day, $week, $hours) = get_dwh();
         assign_query_info();
 
-        $page_list = array( 'index' => 0,
-                            'user' => 0,
-                            'pick_out' => 0,
-                            'flow' => 0,
-                            'group_buy' => 0,
-                            'snatch' => 0,
-                            'tag_cloud' => 0,
+        $page_list = array('index' => 0,
+            'user' => 0,
+            'pick_out' => 0,
+            'flow' => 0,
+            'group_buy' => 0,
+            'snatch' => 0,
+            'tag_cloud' => 0,
 
-                            'category' => 0,
-                            'goods' => 0,
-                            'article_cat' => 0,
-                            'article' => 0,
-                            'brand' => 0,
-                            'search' => 0,
-                                );
+            'category' => 0,
+            'goods' => 0,
+            'article_cat' => 0,
+            'article' => 0,
+            'brand' => 0,
+            'search' => 0,
+        );
 
         $smarty->assign('days', $day);
         $smarty->assign('page_list', $page_list);
@@ -92,7 +92,7 @@ if ($_REQUEST['act'] == 'list') {
             sys_msg($_LANG['cron_name'] . $_LANG['empty']);
         }
         $sql = "SELECT COUNT(*) FROM " . $ecs->table('crons') .
-                " WHERE  cron_code = '$_POST[cron_code]'";
+            " WHERE  cron_code = '$_POST[cron_code]'";
         if ($db->GetOne($sql) > 0) {
             sys_msg($_LANG['cron_code'] . $_LANG['repeat'], 1);
         }
@@ -102,9 +102,9 @@ if ($_REQUEST['act'] == 'list') {
         if (isset($_POST['cfg_value']) && is_array($_POST['cfg_value'])) {
             $temp = count($_POST['cfg_value']);
             for ($i = 0; $i < $temp; $i++) {
-                $cron_config[] = array('name'  => trim($_POST['cfg_name'][$i]),
-                                      'type'  => trim($_POST['cfg_type'][$i]),
-                                      'value' => trim($_POST['cfg_value'][$i])
+                $cron_config[] = array('name' => trim($_POST['cfg_name'][$i]),
+                    'type' => trim($_POST['cfg_type'][$i]),
+                    'value' => trim($_POST['cfg_value'][$i])
                 );
             }
         }
@@ -127,10 +127,10 @@ if ($_REQUEST['act'] == 'list') {
 
         !isset($_POST['cron_run_once']) && $_POST['cron_run_once'] = 0;
         $cron_hour = $_POST['cron_hour'];
-        $cron = array('day'=>$cron_day,'week'=>$cron_week,'m'=>$cron_minute,'hour'=>$cron_hour);
+        $cron = array('day' => $cron_day, 'week' => $cron_week, 'm' => $cron_minute, 'hour' => $cron_hour);
         $next = get_next_time($cron);
         $sql = "INSERT INTO " . $ecs->table('crons') . " (cron_code, cron_name, cron_desc, cron_config, nextime, day, week, hour, minute, run_once, allow_ip, alow_files)" .
-               "VALUES ('$_POST[cron_code]', '$_POST[cron_name]', '$_POST[cron_desc]', '$cron_config', '$next', '$cron_day', '$cron_week', '$cron_hour', '$cron_minute', '$_POST[cron_run_once]', '$_POST[allow_ip]', '$_POST[alow_files]')";
+            "VALUES ('$_POST[cron_code]', '$_POST[cron_name]', '$_POST[cron_desc]', '$cron_config', '$next', '$cron_day', '$cron_week', '$cron_hour', '$cron_minute', '$_POST[cron_run_once]', '$_POST[allow_ip]', '$_POST[alow_files]')";
         $db->query($sql);
         sys_msg($_LANG['install_ok'], 0, $links);
     }
@@ -163,30 +163,30 @@ if ($_REQUEST['act'] == 'list') {
                 }
             }
         }
-        $cron['cron_act']   = 'edit';
-        $cron['cronweek']   = $cron['week'] == '0' ? 7 : $cron['week'];
-        $cron['cronday']    = $cron['day'];
-        $cron['cronhour']   = $cron['hour'];
+        $cron['cron_act'] = 'edit';
+        $cron['cronweek'] = $cron['week'] == '0' ? 7 : $cron['week'];
+        $cron['cronday'] = $cron['day'];
+        $cron['cronhour'] = $cron['hour'];
         $cron['cronminute'] = $cron['minute'];
         $cron['run_once'] && $cron['autoclose'] = 'checked';
         list($day, $week, $hours) = get_dwh();
-        $page_list = array( 'index' => 0,
-                            'user' => 0,
-                            'pick_out' => 0,
-                            'flow' => 0,
-                            'group_buy' => 0,
-                            'snatch' => 0,
-                            'tag_cloud' => 0,
+        $page_list = array('index' => 0,
+            'user' => 0,
+            'pick_out' => 0,
+            'flow' => 0,
+            'group_buy' => 0,
+            'snatch' => 0,
+            'tag_cloud' => 0,
 
-                            'category' => 0,
-                            'goods' => 0,
-                            'article_cat' => 0,
-                            'article' => 0,
-                            'brand' => 0,
-                            'search' => 0,
-                                );
+            'category' => 0,
+            'goods' => 0,
+            'article_cat' => 0,
+            'article' => 0,
+            'brand' => 0,
+            'search' => 0,
+        );
         $cron['alow_files'] .= " ";
-        foreach (explode(' ', $cron['alow_files']) as $k=>$v) {
+        foreach (explode(' ', $cron['alow_files']) as $k => $v) {
             $v = str_replace('.php', '', $v);
             if (!empty($v)) {
                 $page_list[$v] = 1;
@@ -210,9 +210,9 @@ if ($_REQUEST['act'] == 'list') {
         if (isset($_POST['cfg_value']) && is_array($_POST['cfg_value'])) {
             $temp = count($_POST['cfg_value']);
             for ($i = 0; $i < $temp; $i++) {
-                $cron_config[] = array('name'  => trim($_POST['cfg_name'][$i]),
-                                      'type'  => trim($_POST['cfg_type'][$i]),
-                                      'value' => trim($_POST['cfg_value'][$i])
+                $cron_config[] = array('name' => trim($_POST['cfg_name'][$i]),
+                    'type' => trim($_POST['cfg_type'][$i]),
+                    'value' => trim($_POST['cfg_value'][$i])
                 );
             }
         }
@@ -236,27 +236,27 @@ if ($_REQUEST['act'] == 'list') {
         !isset($_POST['cron_run_once']) && $_POST['cron_run_once'] = 0;
         //$_POST['cron_run_once'] = (int)$_POST['cron_run_once'];
         $cron_hour = $_POST['cron_hour'];
-        $cron = array('day'=>$cron_day,'week'=>$cron_week,'m'=>$cron_minute,'hour'=>$cron_hour);
+        $cron = array('day' => $cron_day, 'week' => $cron_week, 'm' => $cron_minute, 'hour' => $cron_hour);
         $next = get_next_time($cron);
         $sql = "UPDATE " . $ecs->table('crons') .
-               "SET cron_name = '$_POST[cron_name]', cron_desc = '$_POST[cron_desc]', cron_config = '$cron_config', nextime='$next', day = '$cron_day', week = '$cron_week', hour = '$cron_hour', minute = '$cron_minute', run_once = '$_POST[cron_run_once]', allow_ip = '$_POST[allow_ip]', alow_files = '$_POST[alow_files]'" .
-               "WHERE cron_id = '$_POST[cron_id]' LIMIT 1";
+            "SET cron_name = '$_POST[cron_name]', cron_desc = '$_POST[cron_desc]', cron_config = '$cron_config', nextime='$next', day = '$cron_day', week = '$cron_week', hour = '$cron_hour', minute = '$cron_minute', run_once = '$_POST[cron_run_once]', allow_ip = '$_POST[allow_ip]', alow_files = '$_POST[alow_files]'" .
+            "WHERE cron_id = '$_POST[cron_id]' LIMIT 1";
         $db->query($sql);
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
 } elseif ($_REQUEST['act'] == 'uninstall') {
     $sql = "DELETE FROM " . $ecs->table('crons') .
-           "WHERE cron_code = '$_REQUEST[code]' LIMIT 1";
+        "WHERE cron_code = '$_REQUEST[code]' LIMIT 1";
     $db->query($sql);
     $links[] = array('text' => $_LANG['back_list'], 'href' => 'cron.php?act=list');
     sys_msg($_LANG['uninstall_ok'], 0, $links);
 } elseif ($_REQUEST['act'] == 'toggle_show') {
-    $id     = trim($_POST['id']);
-    $val    = intval($_POST['val']);
+    $id = trim($_POST['id']);
+    $val = intval($_POST['val']);
 
     $sql = "UPDATE " . $ecs->table('crons') .
-           "SET enable = '$val' " .
-           "WHERE cron_code = '$id' LIMIT 1";
+        "SET enable = '$val' " .
+        "WHERE cron_code = '$id' LIMIT 1";
     $db->query($sql);
     make_json_result($val);
 } elseif ($_REQUEST['act'] == 'do') {
@@ -264,7 +264,7 @@ if ($_REQUEST['act'] == 'list') {
         $set_modules = false;
         unset($set_modules);
     }
-    if (file_exists(ROOT_PATH.'includes/modules/cron/' . $_REQUEST['code'] . '.php')) {
+    if (file_exists(ROOT_PATH . 'includes/modules/cron/' . $_REQUEST['code'] . '.php')) {
         $cron = array();
         $sql = "SELECT cron_config FROM " . $ecs->table('crons') . " WHERE cron_code = '$_REQUEST[code]'";
         $temp = $db->getRow($sql);
@@ -274,11 +274,11 @@ if ($_REQUEST['act'] == 'list') {
                 $cron[$val['name']] = $val['value'];
             }
         }
-        include_once(ROOT_PATH.'includes/modules/cron/' . $_REQUEST['code'] . '.php');
+        include_once(ROOT_PATH . 'includes/modules/cron/' . $_REQUEST['code'] . '.php');
         $timestamp = gmtime();
         $sql = "UPDATE " . $ecs->table('crons') .
-               "SET thistime = '$timestamp' " .
-               "WHERE cron_code = '$_REQUEST[code]' LIMIT 1";
+            "SET thistime = '$timestamp' " .
+            "WHERE cron_code = '$_REQUEST[code]' LIMIT 1";
         $db->query($sql);
     }
 
@@ -288,11 +288,11 @@ if ($_REQUEST['act'] == 'list') {
 function get_next_time($cron)
 {
     $timestamp = gmtime();
-    $y  = local_date('Y', $timestamp);
+    $y = local_date('Y', $timestamp);
     $mo = local_date('n', $timestamp);
-    $d  = local_date('j', $timestamp);
-    $w  = local_date('w', $timestamp);
-    $h  = local_date('G', $timestamp);
+    $d = local_date('j', $timestamp);
+    $w = local_date('w', $timestamp);
+    $h = local_date('G', $timestamp);
     $sh = $sm = 0;
     $sy = $y;
     if ($cron['day']) {
@@ -313,6 +313,7 @@ function get_next_time($cron)
 
     return $next;
 }
+
 function get_minute($cron_minute)
 {
     $cron_minute = explode(',', $cron_minute);
@@ -327,18 +328,19 @@ function get_minute($cron_minute)
     }
     return trim(implode(',', $cron_minute));
 }
+
 function get_dwh()
 {
     $days = $week = $hours = array();
-    for ($i = 1 ; $i<=31 ; $i++) {
+    for ($i = 1; $i <= 31; $i++) {
         $days[$i] = str_pad($i, 2, '0', STR_PAD_LEFT);
     }
-    for ($i = 1 ; $i<8 ; $i++) {
+    for ($i = 1; $i < 8; $i++) {
         $week[$i] = $GLOBALS['_LANG']['week'][$i];
     }
-    for ($i = 0 ; $i<24 ; $i++) {
+    for ($i = 0; $i < 24; $i++) {
         $hours[$i] = str_pad($i, 2, '0', STR_PAD_LEFT);
     }
 
-    return array($days,$week,$hours);
+    return array($days, $week, $hours);
 }

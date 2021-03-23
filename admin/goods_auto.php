@@ -25,7 +25,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('record_count', $goodsdb['record_count']);
     $smarty->assign('page_count', $goodsdb['page_count']);
 
-    $sort_flag  = sort_flag($goodsdb['filter']);
+    $sort_flag = sort_flag($goodsdb['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result($smarty->fetch('goods_auto.htm'), '', array('filter' => $goodsdb['filter'], 'page_count' => $goodsdb['page_count']));
@@ -38,42 +38,40 @@ if ($_REQUEST['act'] == 'list') {
 } elseif ($_REQUEST['act'] == 'edit_starttime') {
     check_authz_json('goods_auto');
 
-    if (! preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
         make_json_error('');
     }
 
-    $id    = intval($_POST['id']);
+    $id = intval($_POST['id']);
     $time = local_strtotime(trim($_POST['val']));
     if ($id <= 0 || $_POST['val'] == '0000-00-00' || $time <= 0) {
         make_json_error('');
     }
 
-    $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id,'type' => 'goods',
-            'starttime' => $time), array('starttime' =>(string)$time));
+    $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'goods',
+        'starttime' => $time), array('starttime' => (string)$time));
 
     clear_cache_files();
     make_json_result(stripslashes($_POST['val']), '', array('act' => 'goods_auto', 'id' => $id));
 } elseif ($_REQUEST['act'] == 'edit_endtime') {
     check_authz_json('goods_auto');
 
-    if (! preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
         make_json_error('');
     }
 
-    $id    = intval($_POST['id']);
+    $id = intval($_POST['id']);
     $time = local_strtotime(trim($_POST['val']));
     if ($id <= 0 || $_POST['val'] == '0000-00-00' || $time <= 0) {
         make_json_error('');
     }
 
-    $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id,'type' => 'goods',
-            'endtime' => $time), array('endtime' =>(string)$time));
+    $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'goods',
+        'endtime' => $time), array('endtime' => (string)$time));
 
     clear_cache_files();
     make_json_result(stripslashes($_POST['val']), '', array('act' => 'goods_auto', 'id' => $id));
-}
-
-//批量上架
+} //批量上架
 elseif ($_REQUEST['act'] == 'batch_start') {
     admin_priv('goods_auto');
 
@@ -88,15 +86,13 @@ elseif ($_REQUEST['act'] == 'batch_start') {
     }
 
     foreach ($_POST['checkboxes'] as $id) {
-        $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id,'type' => 'goods',
-            'starttime' => $_POST['date']), array('starttime' =>(string)$_POST['date']));
+        $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'goods',
+            'starttime' => $_POST['date']), array('starttime' => (string)$_POST['date']));
     }
 
     $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'goods_auto.php?act=list');
     sys_msg($_LANG['batch_start_succeed'], 0, $lnk);
-}
-
-//批量下架
+} //批量下架
 elseif ($_REQUEST['act'] == 'batch_end') {
     admin_priv('goods_auto');
 
@@ -111,8 +107,8 @@ elseif ($_REQUEST['act'] == 'batch_end') {
     }
 
     foreach ($_POST['checkboxes'] as $id) {
-        $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id,'type' => 'goods',
-            'endtime' => $_POST['date']), array('endtime' =>(string)$_POST['date']));
+        $db->autoReplace($ecs->table('auto_manage'), array('item_id' => $id, 'type' => 'goods',
+            'endtime' => $_POST['date']), array('endtime' => (string)$_POST['date']));
     }
 
     $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'goods_auto.php?act=list');
@@ -131,8 +127,8 @@ function get_auto_goods()
     $result = get_filter();
 
     if ($result === false) {
-        $filter['sort_by']      = empty($_REQUEST['sort_by']) ? 'last_update' : trim($_REQUEST['sort_by']);
-        $filter['sort_order']   = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
+        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'last_update' : trim($_REQUEST['sort_by']);
+        $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
         $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods') . " g" . $where;
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
@@ -142,12 +138,12 @@ function get_auto_goods()
 
         /* 查询 */
         $sql = "SELECT g.*,a.starttime,a.endtime FROM " . $GLOBALS['ecs']->table('goods') . " g LEFT JOIN " . $GLOBALS['ecs']->table('auto_manage') . " a ON g.goods_id = a.item_id AND a.type='goods'" . $where .
-               " ORDER by goods_id, " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
-           " LIMIT " . $filter['start'] . ",$filter[page_size]";
+            " ORDER by goods_id, " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
+            " LIMIT " . $filter['start'] . ",$filter[page_size]";
 
         set_filter($filter, $sql);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
 

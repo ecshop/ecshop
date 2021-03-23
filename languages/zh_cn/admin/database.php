@@ -21,15 +21,15 @@ $_LANG['chip_count'] = '总碎片数';
 $_LANG['charset'] = '字符集';
 $_LANG['status'] = '状态';
 
-$_LANG['backup_type'] ='备份类型';
-$_LANG['full_backup'] ='全部备份';
-$_LANG['full_backup_note'] ='备份数据库所有表';
-$_LANG['stand_backup'] ='标准备份(推荐)';
-$_LANG['stand_backup_note'] ='备份常用的数据表';
-$_LANG['min_backup'] ='最小备份';
-$_LANG['min_backup_note'] ='仅包括商品表，订单表，用户表';
-$_LANG['custom_backup'] ='自定义备份';
-$_LANG['custom_backup_note'] ='根据自行选择备份数据表';
+$_LANG['backup_type'] = '备份类型';
+$_LANG['full_backup'] = '全部备份';
+$_LANG['full_backup_note'] = '备份数据库所有表';
+$_LANG['stand_backup'] = '标准备份(推荐)';
+$_LANG['stand_backup_note'] = '备份常用的数据表';
+$_LANG['min_backup'] = '最小备份';
+$_LANG['min_backup_note'] = '仅包括商品表，订单表，用户表';
+$_LANG['custom_backup'] = '自定义备份';
+$_LANG['custom_backup_note'] = '根据自行选择备份数据表';
 
 $_LANG['option'] = '其他选项';
 $_LANG['ext_insert'] = '使用扩展插入(Extended Insert)方式';
@@ -44,7 +44,8 @@ $_LANG['update_table_pre'] = '更改表前缀';
 $_LANG['old_table_pre'] = '原表前缀';
 $_LANG['new_table_pre'] = '新表前缀';
 $_LANG['use_new_pre'] = '使用新表前缀';
-$_LANG['notice_use_new_pre'] = '只有在恢复全部备份时才可以选择“是”，否则没有备份的表将无法使用。<br />您也可以手动修改 data/config.php 中的 $prefix 变量来决定使用哪个表前缀';$_LANG['upload_and_exe'] = '上传并执行sql文件';
+$_LANG['notice_use_new_pre'] = '只有在恢复全部备份时才可以选择“是”，否则没有备份的表将无法使用。<br />您也可以手动修改 data/config.php 中的 $prefix 变量来决定使用哪个表前缀';
+$_LANG['upload_and_exe'] = '上传并执行sql文件';
 
 /* 提示信息 */
 $_LANG['fail_get_tables'] = '获取备份数据表失败';

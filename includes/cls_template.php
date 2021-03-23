@@ -2,28 +2,28 @@
 
 class cls_template
 {
-    public $template_dir   = '';
-    public $cache_dir      = '';
-    public $compile_dir    = '';
+    public $template_dir = '';
+    public $cache_dir = '';
+    public $compile_dir = '';
     public $cache_lifetime = 3600; // 缓存更新时间, 默认 3600 秒
-    public $direct_output  = false;
-    public $caching        = false;
-    public $template       = array();
-    public $force_compile  = false;
+    public $direct_output = false;
+    public $caching = false;
+    public $template = array();
+    public $force_compile = false;
 
-    public $_var           = array();
-    public $_echash        = '554fcae493e564ee0dc75bdf2ebf94ca';
-    public $_foreach       = array();
-    public $_current_file  = '';
-    public $_expires       = 0;
-    public $_errorlevel    = 0;
-    public $_nowtime       = null;
-    public $_checkfile     = true;
-    public $_foreachmark   = '';
-    public $_seterror      = 0;
+    public $_var = array();
+    public $_echash = '554fcae493e564ee0dc75bdf2ebf94ca';
+    public $_foreach = array();
+    public $_current_file = '';
+    public $_expires = 0;
+    public $_errorlevel = 0;
+    public $_nowtime = null;
+    public $_checkfile = true;
+    public $_foreachmark = '';
+    public $_seterror = 0;
 
-    public $_temp_key      = array();  // 临时存放 foreach 里 key 的数组
-    public $_temp_val      = array();  // 临时存放 foreach 里 item 的数组
+    public $_temp_key = array();  // 临时存放 foreach 里 key 的数组
+    public $_temp_val = array();  // 临时存放 foreach 里 item 的数组
 
     public function __construct()
     {
@@ -33,21 +33,21 @@ class cls_template
     public function cls_template()
     {
         $this->_errorlevel = error_reporting();
-        $this->_nowtime    = time();
+        $this->_nowtime = time();
         if (defined('EC_CHARSET')) {
             $charset = EC_CHARSET;
         } else {
             $charset = 'utf-8';
         }
-        header('Content-type: text/html; charset='.$charset);
+        header('Content-type: text/html; charset=' . $charset);
     }
 
     /**
      * 注册变量
      *
      * @access  public
-     * @param   mix      $tpl_var
-     * @param   mix      $value
+     * @param mix $tpl_var
+     * @param mix $value
      *
      * @return  void
      */
@@ -70,8 +70,8 @@ class cls_template
      * 显示页面函数
      *
      * @access  public
-     * @param   string      $filename
-     * @param   sting      $cache_id
+     * @param string $filename
+     * @param sting $cache_id
      *
      * @return  void
      */
@@ -102,8 +102,8 @@ class cls_template
      * 处理模板文件
      *
      * @access  public
-     * @param   string      $filename
-     * @param   sting      $cache_id
+     * @param string $filename
+     * @param sting $cache_id
      *
      * @return  sring
      */
@@ -173,7 +173,7 @@ class cls_template
      * 编译模板函数
      *
      * @access  public
-     * @param   string      $filename
+     * @param string $filename
      *
      * @return  sring        编译后文件地址
      */
@@ -184,7 +184,7 @@ class cls_template
             $expires = $this->_expires - $this->cache_lifetime;
         } else {
             $filestat = @stat($name);
-            $expires  = $filestat['mtime'];
+            $expires = $filestat['mtime'];
         }
 
         $filestat = @stat($filename);
@@ -219,7 +219,7 @@ class cls_template
      * 处理字符串函数
      *
      * @access  public
-     * @param   string     $source
+     * @param string $source
      *
      * @return  sring
      */
@@ -228,14 +228,14 @@ class cls_template
         if (!defined('ECS_ADMIN')) {
             $source = $this->smarty_prefilter_preCompile($source);
         }
-        $source=preg_replace("/([^a-zA-Z0-9_]{1,1})+(copy|fputs|fopen|file_put_contents|fwrite|eval|phpinfo)+( |\()/is", "", $source);
+        $source = preg_replace("/([^a-zA-Z0-9_]{1,1})+(copy|fputs|fopen|file_put_contents|fwrite|eval|phpinfo)+( |\()/is", "", $source);
         if (preg_match_all('~(<\?(?:\w+|=)?|\?>|language\s*=\s*[\"\']?php[\"\']?)~is', $source, $sp_match)) {
             $sp_match[1] = array_unique($sp_match[1]);
             for ($curr_sp = 0, $for_max2 = count($sp_match[1]); $curr_sp < $for_max2; $curr_sp++) {
-                $source = str_replace($sp_match[1][$curr_sp], '%%%SMARTYSP'.$curr_sp.'%%%', $source);
+                $source = str_replace($sp_match[1][$curr_sp], '%%%SMARTYSP' . $curr_sp . '%%%', $source);
             }
             for ($curr_sp = 0, $for_max2 = count($sp_match[1]); $curr_sp < $for_max2; $curr_sp++) {
-                $source= str_replace('%%%SMARTYSP'.$curr_sp.'%%%', '<?php echo \''.str_replace("'", "\'", $sp_match[1][$curr_sp]).'\'; ?>'."\n", $source);
+                $source = str_replace('%%%SMARTYSP' . $curr_sp . '%%%', '<?php echo \'' . str_replace("'", "\'", $sp_match[1][$curr_sp]) . '\'; ?>' . "\n", $source);
             }
         }
         return preg_replace("/{([^\}\{\n]*)}/e", "\$this->select('\\1');", $source);
@@ -245,8 +245,8 @@ class cls_template
      * 判断是否缓存
      *
      * @access  public
-     * @param   string     $filename
-     * @param   sting      $cache_id
+     * @param string $filename
+     * @param sting $cache_id
      *
      * @return  bool
      */
@@ -257,9 +257,9 @@ class cls_template
             $hash_dir = $this->cache_dir . '/' . substr(md5($cachename), 0, 1);
             if ($data = @file_get_contents($hash_dir . '/' . $cachename . '.php')) {
                 $data = substr($data, 13);
-                $pos  = strpos($data, '<');
+                $pos = strpos($data, '<');
                 $paradata = substr($data, 0, $pos);
-                $para     = @unserialize($paradata);
+                $para = @unserialize($paradata);
                 if ($para === false || $this->_nowtime > $para['expires']) {
                     $this->caching = false;
 
@@ -293,7 +293,7 @@ class cls_template
      * 处理{}标签
      *
      * @access  public
-     * @param   string      $tag
+     * @param string $tag
      *
      * @return  sring
      */
@@ -334,7 +334,7 @@ class cls_template
                     break;
 
                 default:
-                    return '{'. $tag .'}';
+                    return '{' . $tag . '}';
                     break;
             }
         } else {
@@ -455,7 +455,7 @@ class cls_template
      * 处理smarty标签中的变量标签
      *
      * @access  public
-     * @param   string     $val
+     * @param string $val
      *
      * @return  bool
      */
@@ -478,7 +478,7 @@ class cls_template
             $all = explode('.$', $val);
 
             foreach ($all as $key => $val) {
-                $all[$key] = $key == 0 ? $this->make_var($val) : '['. $this->make_var($val) . ']';
+                $all[$key] = $key == 0 ? $this->make_var($val) : '[' . $this->make_var($val) . ']';
             }
             $p = implode('', $all);
         } else {
@@ -515,7 +515,7 @@ class cls_template
                         break;
 
                     case 'default':
-                        $s[1] = $s[1]{0} == '$' ?  $this->get_val(substr($s[1], 1)) : "'$s[1]'";
+                        $s[1] = $s[1]{0} == '$' ? $this->get_val(substr($s[1], 1)) : "'$s[1]'";
                         $p = 'empty(' . $p . ') ? ' . $s[1] . ' : ' . $p;
                         break;
 
@@ -541,7 +541,7 @@ class cls_template
      * 处理去掉$的字符串
      *
      * @access  public
-     * @param   string     $val
+     * @param string $val
      *
      * @return  bool
      */
@@ -564,7 +564,7 @@ class cls_template
                 $p = '$this->_var[\'' . $_var_name . '\']';
             }
             foreach ($t as $val) {
-                $p.= '[\'' . $val . '\']';
+                $p .= '[\'' . $val . '\']';
             }
         }
 
@@ -575,8 +575,8 @@ class cls_template
      * 处理insert外部函数/需要include运行的函数的调用数据
      *
      * @access  public
-     * @param   string     $val
-     * @param   int         $type
+     * @param string $val
+     * @param int $type
      *
      * @return  array
      */
@@ -605,7 +605,7 @@ class cls_template
      * 判断变量是否被注册并返回值
      *
      * @access  public
-     * @param   string     $name
+     * @param string $name
      *
      * @return  mix
      */
@@ -626,8 +626,8 @@ class cls_template
      * 处理if标签
      *
      * @access  public
-     * @param   string     $tag_args
-     * @param   bool       $elseif
+     * @param string $tag_args
+     * @param bool $elseif
      *
      * @return  string
      */
@@ -707,7 +707,7 @@ class cls_template
      * 处理foreach标签
      *
      * @access  public
-     * @param   string     $tag_args
+     * @param string $tag_args
      *
      * @return  string
      */
@@ -726,7 +726,7 @@ class cls_template
 
         if (!empty($attrs['key'])) {
             $key = $attrs['key'];
-            $key_part = $this->get_val($key).' => ';
+            $key_part = $this->get_val($key) . ' => ';
         } else {
             $key = null;
             $key_part = '';
@@ -757,18 +757,18 @@ class cls_template
     /**
      * 将 foreach 的 key, item 放入临时数组
      *
-     * @param  mixed    $key
-     * @param  mixed    $val
+     * @param mixed $key
+     * @param mixed $val
      *
      * @return  void
      */
     public function push_vars($key, $val)
     {
         if (!empty($key)) {
-            array_push($this->_temp_key, "\$this->_vars['$key']='" .$this->_vars[$key] . "';");
+            array_push($this->_temp_key, "\$this->_vars['$key']='" . $this->_vars[$key] . "';");
         }
         if (!empty($val)) {
-            array_push($this->_temp_val, "\$this->_vars['$val']='" .$this->_vars[$val] ."';");
+            array_push($this->_temp_val, "\$this->_vars['$val']='" . $this->_vars[$val] . "';");
         }
     }
 
@@ -791,7 +791,7 @@ class cls_template
      * 处理smarty开头的预定义变量
      *
      * @access  public
-     * @param   array   $indexes
+     * @param array $indexes
      *
      * @return  string
      */
@@ -897,22 +897,22 @@ class cls_template
     public function smarty_prefilter_preCompile($source)
     {
         $file_type = strtolower(strrchr($this->_current_file, '.'));
-        $tmp_dir   = 'themes/' . $GLOBALS['_CFG']['template'] . '/'; // 模板所在路径
+        $tmp_dir = 'themes/' . $GLOBALS['_CFG']['template'] . '/'; // 模板所在路径
 
         /**
          * 处理模板文件
          */
         if ($file_type == '.dwt') {
             /* 将模板中所有library替换为链接 */
-            $pattern     = '/<!--\s#BeginLibraryItem\s\"\/(.*?)\"\s-->.*?<!--\s#EndLibraryItem\s-->/se';
+            $pattern = '/<!--\s#BeginLibraryItem\s\"\/(.*?)\"\s-->.*?<!--\s#EndLibraryItem\s-->/se';
             $replacement = "'{include file='.strtolower('\\1'). '}'";
-            $source      = preg_replace($pattern, $replacement, $source);
+            $source = preg_replace($pattern, $replacement, $source);
 
             /* 检查有无动态库文件，如果有为其赋值 */
             $dyna_libs = get_dyna_libs($GLOBALS['_CFG']['template'], $this->_current_file);
             if ($dyna_libs) {
                 foreach ($dyna_libs as $region => $libs) {
-                    $pattern = '/<!--\\s*TemplateBeginEditable\\sname="'. $region .'"\\s*-->(.*?)<!--\\s*TemplateEndEditable\\s*-->/s';
+                    $pattern = '/<!--\\s*TemplateBeginEditable\\sname="' . $region . '"\\s*-->(.*?)<!--\\s*TemplateEndEditable\\s*-->/s';
 
                     if (preg_match($pattern, $source, $reg_match)) {
                         $reg_content = $reg_match[1];
@@ -934,7 +934,7 @@ class cls_template
             }
 
             /* 在头部加入版本信息 */
-            $source = preg_replace('/<head>/i', "<head>\r\n<meta name=\"Generator\" content=\"" . APPNAME .' ' . VERSION . "\" />", $source);
+            $source = preg_replace('/<head>/i', "<head>\r\n<meta name=\"Generator\" content=\"" . APPNAME . ' ' . VERSION . "\" />", $source);
 
             /* 修正css路径 */
             $source = preg_replace('/(<link\shref=["|\'])(?:\.\/|\.\.\/)?(css\/)?([a-z0-9A-Z_]+\.css["|\']\srel=["|\']stylesheet["|\']\stype=["|\']text\/css["|\'])/i', '\1' . $tmp_dir . '\2\3', $source);
@@ -944,9 +944,7 @@ class cls_template
 
             /* 更换编译模板的编码类型 */
             $source = preg_replace('/<meta\shttp-equiv=["|\']Content-Type["|\']\scontent=["|\']text\/html;\scharset=(?:.*?)["|\'][^>]*?>\r?\n?/i', '<meta http-equiv="Content-Type" content="text/html; charset=' . EC_CHARSET . '" />' . "\n", $source);
-        }
-
-        /**
+        } /**
          * 处理库文件
          */
         elseif ($file_type == '.lbi') {
@@ -966,7 +964,7 @@ class cls_template
             '/((?:background|src)\s*=\s*["|\'])(?:\.\/|\.\.\/)?(images\/.*?["|\'])/is', // 在images前加上 $tmp_dir
             '/((?:background|background-image):\s*?url\()(?:\.\/|\.\.\/)?(images\/)/is', // 在images前加上 $tmp_dir
             '/([\'|"])\.\.\//is', // 以../开头的路径全部修正为空
-            );
+        );
         $replace = array(
             '\1',
             '',
@@ -974,7 +972,7 @@ class cls_template
             '\1' . $tmp_dir . '\2',
             '\1' . $tmp_dir . '\2',
             '\1'
-            );
+        );
         return preg_replace($pattern, $replace, $source);
     }
 
@@ -1049,12 +1047,12 @@ class cls_template
         $pre = $arr['prefix'];
         if (isset($arr['time'])) {
             if (intval($arr['time']) > 10000) {
-                $arr['time'] = gmdate('Y-m-d', $arr['time'] + 8*3600);
+                $arr['time'] = gmdate('Y-m-d', $arr['time'] + 8 * 3600);
             }
-            $t     = explode('-', $arr['time']);
-            $year  = strval($t[0]);
+            $t = explode('-', $arr['time']);
+            $year = strval($t[0]);
             $month = strval($t[1]);
-            $day   = strval($t[2]);
+            $day = strval($t[2]);
         }
         $now = gmdate('Y', $this->_nowtime);
         if (isset($arr['start_year'])) {
@@ -1099,7 +1097,7 @@ class cls_template
 
     public function html_radios($arr)
     {
-        $name    = $arr['name'];
+        $name = $arr['name'];
         $checked = $arr['checked'];
         $options = $arr['options'];
 
@@ -1116,11 +1114,11 @@ class cls_template
     {
         $pre = $arr['prefix'];
         if (isset($arr['time'])) {
-            $arr['time'] = gmdate('H-i-s', $arr['time'] + 8*3600);
-            $t     = explode('-', $arr['time']);
-            $hour  = strval($t[0]);
+            $arr['time'] = gmdate('H-i-s', $arr['time'] + 8 * 3600);
+            $t = explode('-', $arr['time']);
+            $hour = strval($t[0]);
             $minute = strval($t[1]);
-            $second   = strval($t[2]);
+            $second = strval($t[2]);
         }
         $out = '';
         if (!isset($arr['display_hours'])) {
@@ -1150,6 +1148,7 @@ class cls_template
 
         return $out;
     }
+
     public function cycle($arr)
     {
         static $k, $old;
@@ -1193,7 +1192,7 @@ class cls_template
         if (!empty($count)) {
             $str = "<option value='1'>1</option>";
             $min = min($count - 1, $page + 3);
-            for ($i = $page - 3 ; $i <= $min ; $i++) {
+            for ($i = $page - 3; $i <= $min; $i++) {
                 if ($i < 2) {
                     continue;
                 }

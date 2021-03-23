@@ -4,10 +4,10 @@ define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 require_once(ROOT_PATH . 'includes/lib_order.php');
-require_once(ROOT_PATH . 'languages/' .$_CFG['lang']. '/admin/statistic.php');
+require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
 $smarty->assign('lang', $_LANG);
 
-if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' ||  $_REQUEST['act'] == 'download')) {
+if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] == 'download')) {
     /* 检查权限 */
     check_authz_json('client_flow_stats');
     if (strstr($_REQUEST['start_date'], '-') === false) {
@@ -38,7 +38,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' ||  $_REQUEST['act']
     $smarty->assign('page_count', $user_orderinfo['page_count']);
     $smarty->assign('user_orderinfo', $user_orderinfo['user_orderinfo']);
 
-    $sort_flag  = sort_flag($user_orderinfo['filter']);
+    $sort_flag = sort_flag($user_orderinfo['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result($smarty->fetch('users_order.htm'), '', array('filter' => $user_orderinfo['filter'], 'page_count' => $user_orderinfo['page_count']));
@@ -59,7 +59,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' ||  $_REQUEST['act']
     /* 赋值到模板 */
     $smarty->assign('ur_here', $_LANG['report_users']);
     $smarty->assign('action_link', array('text' => $_LANG['download_amount_sort'],
-    'href'=>"#download"));
+        'href' => "#download"));
     $smarty->assign('filter', $user_orderinfo['filter']);
     $smarty->assign('record_count', $user_orderinfo['record_count']);
     $smarty->assign('page_count', $user_orderinfo['page_count']);
@@ -82,45 +82,45 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' ||  $_REQUEST['act']
  * @param   bool  $is_pagination  是否分页
  * @return  array   取得会员订单量/购物额排名统计数据
  */
- function get_user_orderinfo($is_pagination = true)
- {
-     global $db, $ecs, $start_date, $end_date;
+function get_user_orderinfo($is_pagination = true)
+{
+    global $db, $ecs, $start_date, $end_date;
 
-     $filter['start_date'] = empty($_REQUEST['start_date']) ? $start_date : local_strtotime($_REQUEST['start_date']);
-     $filter['end_date'] = empty($_REQUEST['end_date']) ? $end_date : local_strtotime($_REQUEST['end_date']);
-     $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'order_num' : trim($_REQUEST['sort_by']);
-     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
-    
-     $where = "WHERE u.user_id = o.user_id ".
-             "AND u.user_id > 0 " . order_query_sql('finished', 'o.');
-     if ($filter['start_date']) {
-         $where .= " AND o.add_time >= '" . $filter['start_date'] . "'";
-     }
-     if ($filter['end_date']) {
-         $where .= " AND o.add_time <= '" . $filter['end_date'] . "'";
-     }
+    $filter['start_date'] = empty($_REQUEST['start_date']) ? $start_date : local_strtotime($_REQUEST['start_date']);
+    $filter['end_date'] = empty($_REQUEST['end_date']) ? $end_date : local_strtotime($_REQUEST['end_date']);
+    $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'order_num' : trim($_REQUEST['sort_by']);
+    $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-     $sql = "SELECT count(distinct(u.user_id)) FROM " .$ecs->table('users')." AS u, ".$ecs->table('order_info')." AS o " .$where;
-     $filter['record_count'] = $GLOBALS['db']->getOne($sql);
-     /* 分页大小 */
-     $filter = page_and_size($filter);
-    
-     /* 计算订单各种费用之和的语句 */
-     $total_fee = " SUM(" . order_amount_field() . ") AS turnover ";
+    $where = "WHERE u.user_id = o.user_id " .
+        "AND u.user_id > 0 " . order_query_sql('finished', 'o.');
+    if ($filter['start_date']) {
+        $where .= " AND o.add_time >= '" . $filter['start_date'] . "'";
+    }
+    if ($filter['end_date']) {
+        $where .= " AND o.add_time <= '" . $filter['end_date'] . "'";
+    }
 
-     $sql = "SELECT u.user_id, u.user_name, COUNT(*) AS order_num, " .$total_fee.
-               "FROM ".$ecs->table('users')." AS u, ".$ecs->table('order_info')." AS o " .$where .
-               " GROUP BY u.user_id"." ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'];
-     if ($is_pagination) {
-         $sql .= " LIMIT " . $filter['start'] . ', ' . $filter['page_size'];
-     }
-     $user_orderinfo = array();
-     $res = $db->query($sql);
+    $sql = "SELECT count(distinct(u.user_id)) FROM " . $ecs->table('users') . " AS u, " . $ecs->table('order_info') . " AS o " . $where;
+    $filter['record_count'] = $GLOBALS['db']->getOne($sql);
+    /* 分页大小 */
+    $filter = page_and_size($filter);
 
-     while ($items = $db->fetchRow($res)) {
-         $items['turnover'] = price_format($items['turnover']);
-         $user_orderinfo[] = $items;
-     }
-     $arr = array('user_orderinfo' => $user_orderinfo, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
-     return $arr;
- }
+    /* 计算订单各种费用之和的语句 */
+    $total_fee = " SUM(" . order_amount_field() . ") AS turnover ";
+
+    $sql = "SELECT u.user_id, u.user_name, COUNT(*) AS order_num, " . $total_fee .
+        "FROM " . $ecs->table('users') . " AS u, " . $ecs->table('order_info') . " AS o " . $where .
+        " GROUP BY u.user_id" . " ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'];
+    if ($is_pagination) {
+        $sql .= " LIMIT " . $filter['start'] . ', ' . $filter['page_size'];
+    }
+    $user_orderinfo = array();
+    $res = $db->query($sql);
+
+    while ($items = $db->fetchRow($res)) {
+        $items['turnover'] = price_format($items['turnover']);
+        $user_orderinfo[] = $items;
+    }
+    $arr = array('user_orderinfo' => $user_orderinfo, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+    return $arr;
+}

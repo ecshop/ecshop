@@ -83,23 +83,23 @@ if ($_REQUEST['act'] == 'advanced_search') {
 //-- 搜索结果
 /*------------------------------------------------------ */
 else {
-    $_REQUEST['keywords']   = !empty($_REQUEST['keywords'])   ? htmlspecialchars(trim($_REQUEST['keywords']))     : '';
-    $_REQUEST['brand']      = !empty($_REQUEST['brand'])      ? intval($_REQUEST['brand'])      : 0;
-    $_REQUEST['category']   = !empty($_REQUEST['category'])   ? intval($_REQUEST['category'])   : 0;
-    $_REQUEST['min_price']  = !empty($_REQUEST['min_price'])  ? intval($_REQUEST['min_price'])  : 0;
-    $_REQUEST['max_price']  = !empty($_REQUEST['max_price'])  ? intval($_REQUEST['max_price'])  : 0;
+    $_REQUEST['keywords'] = !empty($_REQUEST['keywords']) ? htmlspecialchars(trim($_REQUEST['keywords'])) : '';
+    $_REQUEST['brand'] = !empty($_REQUEST['brand']) ? intval($_REQUEST['brand']) : 0;
+    $_REQUEST['category'] = !empty($_REQUEST['category']) ? intval($_REQUEST['category']) : 0;
+    $_REQUEST['min_price'] = !empty($_REQUEST['min_price']) ? intval($_REQUEST['min_price']) : 0;
+    $_REQUEST['max_price'] = !empty($_REQUEST['max_price']) ? intval($_REQUEST['max_price']) : 0;
     $_REQUEST['goods_type'] = !empty($_REQUEST['goods_type']) ? intval($_REQUEST['goods_type']) : 0;
-    $_REQUEST['sc_ds']      = !empty($_REQUEST['sc_ds']) ? intval($_REQUEST['sc_ds']) : 0;
-    $_REQUEST['outstock']   = !empty($_REQUEST['outstock']) ? 1 : 0;
+    $_REQUEST['sc_ds'] = !empty($_REQUEST['sc_ds']) ? intval($_REQUEST['sc_ds']) : 0;
+    $_REQUEST['outstock'] = !empty($_REQUEST['outstock']) ? 1 : 0;
 
     $action = '';
     if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'form') {
         /* 要显示高级搜索栏 */
-        $adv_value['keywords']  = htmlspecialchars(stripcslashes($_REQUEST['keywords']));
-        $adv_value['brand']     = $_REQUEST['brand'];
+        $adv_value['keywords'] = htmlspecialchars(stripcslashes($_REQUEST['keywords']));
+        $adv_value['brand'] = $_REQUEST['brand'];
         $adv_value['min_price'] = $_REQUEST['min_price'];
         $adv_value['max_price'] = $_REQUEST['max_price'];
-        $adv_value['category']  = $_REQUEST['category'];
+        $adv_value['category'] = $_REQUEST['category'];
 
         $attributes = get_seachable_attributes($_REQUEST['goods_type']);
 
@@ -108,7 +108,7 @@ else {
             if (!empty($_REQUEST['attr'][$val['id']])) {
                 if ($val['type'] == 2) {
                     $attributes['attr'][$key]['value']['from'] = !empty($_REQUEST['attr'][$val['id']]['from']) ? htmlspecialchars(stripcslashes(trim($_REQUEST['attr'][$val['id']]['from']))) : '';
-                    $attributes['attr'][$key]['value']['to']   = !empty($_REQUEST['attr'][$val['id']]['to'])   ? htmlspecialchars(stripcslashes(trim($_REQUEST['attr'][$val['id']]['to'])))   : '';
+                    $attributes['attr'][$key]['value']['to'] = !empty($_REQUEST['attr'][$val['id']]['to']) ? htmlspecialchars(stripcslashes(trim($_REQUEST['attr'][$val['id']]['to']))) : '';
                 } else {
                     $attributes['attr'][$key]['value'] = !empty($_REQUEST['attr'][$val['id']]) ? htmlspecialchars(stripcslashes(trim($_REQUEST['attr'][$val['id']]))) : '';
                 }
@@ -130,26 +130,26 @@ else {
     }
 
     /* 初始化搜索条件 */
-    $keywords  = '';
+    $keywords = '';
     $tag_where = '';
     if (!empty($_REQUEST['keywords'])) {
         $arr = array();
         if (stristr($_REQUEST['keywords'], ' AND ') !== false) {
             /* 检查关键字中是否有AND，如果存在就是并 */
-            $arr        = explode('AND', $_REQUEST['keywords']);
-            $operator   = " AND ";
+            $arr = explode('AND', $_REQUEST['keywords']);
+            $operator = " AND ";
         } elseif (stristr($_REQUEST['keywords'], ' OR ') !== false) {
             /* 检查关键字中是否有OR，如果存在就是或 */
-            $arr        = explode('OR', $_REQUEST['keywords']);
-            $operator   = " OR ";
+            $arr = explode('OR', $_REQUEST['keywords']);
+            $operator = " OR ";
         } elseif (stristr($_REQUEST['keywords'], ' + ') !== false) {
             /* 检查关键字中是否有加号，如果存在就是或 */
-            $arr        = explode('+', $_REQUEST['keywords']);
-            $operator   = " OR ";
+            $arr = explode('+', $_REQUEST['keywords']);
+            $operator = " OR ";
         } else {
             /* 检查关键字中是否有空格，如果存在就是并 */
-            $arr        = explode(' ', $_REQUEST['keywords']);
-            $operator   = " AND ";
+            $arr = explode(' ', $_REQUEST['keywords']);
+            $operator = " AND ";
         }
 
         $keywords = 'AND (';
@@ -158,9 +158,9 @@ else {
             if ($key > 0 && $key < count($arr) && count($arr) > 1) {
                 $keywords .= $operator;
             }
-            $val        = mysql_like_quote(trim($val));
-            $sc_dsad    = $_REQUEST['sc_ds'] ? " OR goods_desc LIKE '%$val%'" : '';
-            $keywords  .= "(goods_name LIKE '%$val%' OR goods_sn LIKE '%$val%' OR keywords LIKE '%$val%' $sc_dsad)";
+            $val = mysql_like_quote(trim($val));
+            $sc_dsad = $_REQUEST['sc_ds'] ? " OR goods_desc LIKE '%$val%'" : '';
+            $keywords .= "(goods_name LIKE '%$val%' OR goods_sn LIKE '%$val%' OR keywords LIKE '%$val%' $sc_dsad)";
 
             $sql = 'SELECT DISTINCT goods_id FROM ' . $ecs->table('tag') . " WHERE tag_words LIKE '%$val%' ";
             $res = $db->query($sql);
@@ -180,55 +180,55 @@ else {
         }
     }
 
-    $category   = !empty($_REQUEST['category']) ? intval($_REQUEST['category'])        : 0;
-    $categories = ($category > 0)               ? ' AND ' . get_children($category)    : '';
-    $brand      = $_REQUEST['brand']            ? " AND brand_id = '$_REQUEST[brand]'" : '';
-    $outstock   = !empty($_REQUEST['outstock']) ? " AND g.goods_number > 0 "           : '';
+    $category = !empty($_REQUEST['category']) ? intval($_REQUEST['category']) : 0;
+    $categories = ($category > 0) ? ' AND ' . get_children($category) : '';
+    $brand = $_REQUEST['brand'] ? " AND brand_id = '$_REQUEST[brand]'" : '';
+    $outstock = !empty($_REQUEST['outstock']) ? " AND g.goods_number > 0 " : '';
 
-    $min_price  = $_REQUEST['min_price'] != 0                               ? " AND g.shop_price >= '$_REQUEST[min_price]'" : '';
-    $max_price  = $_REQUEST['max_price'] != 0 || $_REQUEST['min_price'] < 0 ? " AND g.shop_price <= '$_REQUEST[max_price]'" : '';
+    $min_price = $_REQUEST['min_price'] != 0 ? " AND g.shop_price >= '$_REQUEST[min_price]'" : '';
+    $max_price = $_REQUEST['max_price'] != 0 || $_REQUEST['min_price'] < 0 ? " AND g.shop_price <= '$_REQUEST[max_price]'" : '';
 
     /* 排序、显示方式以及类型 */
     $default_display_type = $_CFG['show_order_type'] == '0' ? 'list' : ($_CFG['show_order_type'] == '1' ? 'grid' : 'text');
     $default_sort_order_method = $_CFG['sort_order_method'] == '0' ? 'DESC' : 'ASC';
-    $default_sort_order_type   = $_CFG['sort_order_type'] == '0' ? 'goods_id' : ($_CFG['sort_order_type'] == '1' ? 'shop_price' : 'last_update');
+    $default_sort_order_type = $_CFG['sort_order_type'] == '0' ? 'goods_id' : ($_CFG['sort_order_type'] == '1' ? 'shop_price' : 'last_update');
 
-    $sort = (isset($_REQUEST['sort'])  && in_array(trim(strtolower($_REQUEST['sort'])), array('goods_id', 'shop_price', 'last_update'))) ? trim($_REQUEST['sort'])  : $default_sort_order_type;
+    $sort = (isset($_REQUEST['sort']) && in_array(trim(strtolower($_REQUEST['sort'])), array('goods_id', 'shop_price', 'last_update'))) ? trim($_REQUEST['sort']) : $default_sort_order_type;
     $order = (isset($_REQUEST['order']) && in_array(trim(strtoupper($_REQUEST['order'])), array('ASC', 'DESC'))) ? trim($_REQUEST['order']) : $default_sort_order_method;
-    $display  = (isset($_REQUEST['display']) && in_array(trim(strtolower($_REQUEST['display'])), array('list', 'grid', 'text'))) ? trim($_REQUEST['display'])  : (isset($_SESSION['display_search']) ? $_SESSION['display_search'] : $default_display_type);
+    $display = (isset($_REQUEST['display']) && in_array(trim(strtolower($_REQUEST['display'])), array('list', 'grid', 'text'))) ? trim($_REQUEST['display']) : (isset($_SESSION['display_search']) ? $_SESSION['display_search'] : $default_display_type);
 
     $_SESSION['display_search'] = $display;
 
-    $page       = !empty($_REQUEST['page'])  && intval($_REQUEST['page'])  > 0 ? intval($_REQUEST['page'])  : 1;
-    $size       = !empty($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
+    $page = !empty($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
+    $size = !empty($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
 
     $intromode = '';    //方式，用于决定搜索结果页标题图片
 
     if (!empty($_REQUEST['intro'])) {
         switch ($_REQUEST['intro']) {
             case 'best':
-                $intro   = ' AND g.is_best = 1';
+                $intro = ' AND g.is_best = 1';
                 $intromode = 'best';
                 $ur_here = $_LANG['best_goods'];
                 break;
             case 'new':
-                $intro   = ' AND g.is_new = 1';
-                $intromode ='new';
+                $intro = ' AND g.is_new = 1';
+                $intromode = 'new';
                 $ur_here = $_LANG['new_goods'];
                 break;
             case 'hot':
-                $intro   = ' AND g.is_hot = 1';
+                $intro = ' AND g.is_hot = 1';
                 $intromode = 'hot';
                 $ur_here = $_LANG['hot_goods'];
                 break;
             case 'promotion':
-                $time    = gmtime();
-                $intro   = " AND g.promote_price > 0 AND g.promote_start_date <= '$time' AND g.promote_end_date >= '$time'";
+                $time = gmtime();
+                $intro = " AND g.promote_price > 0 AND g.promote_start_date <= '$time' AND g.promote_end_date >= '$time'";
                 $intromode = 'promotion';
                 $ur_here = $_LANG['promotion_goods'];
                 break;
             default:
-                $intro   = '';
+                $intro = '';
         }
     } else {
         $intro = '';
@@ -241,7 +241,7 @@ else {
     /*------------------------------------------------------ */
     //-- 属性检索
     /*------------------------------------------------------ */
-    $attr_in  = '';
+    $attr_in = '';
     $attr_num = 0;
     $attr_url = '';
     $attr_arg = array();
@@ -257,7 +257,7 @@ else {
                     $sql .= " AND attr_id = '$key'";
 
                     if (!empty($val['from'])) {
-                        $sql .= is_numeric($val['from']) ? " AND attr_value >= " . floatval($val['from'])  : " AND attr_value >= '$val[from]'";
+                        $sql .= is_numeric($val['from']) ? " AND attr_value >= " . floatval($val['from']) : " AND attr_value >= '$val[from]'";
                         $attr_arg["attr[$key][from]"] = $val['from'];
                         $attr_url .= "&amp;attr[$key][from]=$val[from]";
                     }
@@ -300,26 +300,26 @@ else {
     }
 
     /* 获得符合条件的商品总数 */
-    $sql   = "SELECT COUNT(*) FROM " .$ecs->table('goods'). " AS g ".
-        "WHERE g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 $attr_in ".
-        "AND (( 1 " . $categories . $keywords . $brand . $min_price . $max_price . $intro . $outstock ." ) ".$tag_where." )";
+    $sql = "SELECT COUNT(*) FROM " . $ecs->table('goods') . " AS g " .
+        "WHERE g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 $attr_in " .
+        "AND (( 1 " . $categories . $keywords . $brand . $min_price . $max_price . $intro . $outstock . " ) " . $tag_where . " )";
     $count = $db->getOne($sql);
 
-    $max_page = ($count> 0) ? ceil($count / $size) : 1;
+    $max_page = ($count > 0) ? ceil($count / $size) : 1;
     if ($page > $max_page) {
         $page = $max_page;
     }
 
     /* 查询商品 */
-    $sql = "SELECT g.goods_id, g.goods_name, g.market_price, g.is_new, g.is_best, g.is_hot, g.shop_price AS org_price, ".
-                "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, ".
-                "g.promote_price, g.promote_start_date, g.promote_end_date, g.goods_thumb, g.goods_img, g.goods_brief, g.goods_type ".
-            "FROM " .$ecs->table('goods'). " AS g ".
-            "LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp ".
-                    "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' ".
-            "WHERE g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 $attr_in ".
-                "AND (( 1 " . $categories . $keywords . $brand . $min_price . $max_price . $intro . $outstock . " ) ".$tag_where." ) " .
-            "ORDER BY $sort $order";
+    $sql = "SELECT g.goods_id, g.goods_name, g.market_price, g.is_new, g.is_best, g.is_hot, g.shop_price AS org_price, " .
+        "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " .
+        "g.promote_price, g.promote_start_date, g.promote_end_date, g.goods_thumb, g.goods_img, g.goods_brief, g.goods_type " .
+        "FROM " . $ecs->table('goods') . " AS g " .
+        "LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp " .
+        "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
+        "WHERE g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 $attr_in " .
+        "AND (( 1 " . $categories . $keywords . $brand . $min_price . $max_price . $intro . $outstock . " ) " . $tag_where . " ) " .
+        "ORDER BY $sort $order";
     $res = $db->SelectLimit($sql, $size, ($page - 1) * $size);
 
     $arr = array();
@@ -345,23 +345,23 @@ else {
         }
 
         if ($watermark_img != '') {
-            $arr[$row['goods_id']]['watermark_img'] =  $watermark_img;
+            $arr[$row['goods_id']]['watermark_img'] = $watermark_img;
         }
 
-        $arr[$row['goods_id']]['goods_id']      = $row['goods_id'];
+        $arr[$row['goods_id']]['goods_id'] = $row['goods_id'];
         if ($display == 'grid') {
-            $arr[$row['goods_id']]['goods_name']    = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
+            $arr[$row['goods_id']]['goods_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
         } else {
             $arr[$row['goods_id']]['goods_name'] = $row['goods_name'];
         }
-        $arr[$row['goods_id']]['type']          = $row['goods_type'];
-        $arr[$row['goods_id']]['market_price']  = price_format($row['market_price']);
-        $arr[$row['goods_id']]['shop_price']    = price_format($row['shop_price']);
+        $arr[$row['goods_id']]['type'] = $row['goods_type'];
+        $arr[$row['goods_id']]['market_price'] = price_format($row['market_price']);
+        $arr[$row['goods_id']]['shop_price'] = price_format($row['shop_price']);
         $arr[$row['goods_id']]['promote_price'] = ($promote_price > 0) ? price_format($promote_price) : '';
-        $arr[$row['goods_id']]['goods_brief']   = $row['goods_brief'];
-        $arr[$row['goods_id']]['goods_thumb']   = get_image_path($row['goods_id'], $row['goods_thumb'], true);
-        $arr[$row['goods_id']]['goods_img']     = get_image_path($row['goods_id'], $row['goods_img']);
-        $arr[$row['goods_id']]['url']           = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
+        $arr[$row['goods_id']]['goods_brief'] = $row['goods_brief'];
+        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
+        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+        $arr[$row['goods_id']]['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
     }
 
     if ($display == 'grid') {
@@ -379,30 +379,30 @@ else {
     $smarty->assign('outstock', $_REQUEST['outstock']);
 
     /* 分页 */
-    $url_format = "search.php?category=$category&amp;keywords=" . urlencode(stripslashes($_REQUEST['keywords'])) . "&amp;brand=" . $_REQUEST['brand']."&amp;action=".$action."&amp;goods_type=" . $_REQUEST['goods_type'] . "&amp;sc_ds=" . $_REQUEST['sc_ds'];
+    $url_format = "search.php?category=$category&amp;keywords=" . urlencode(stripslashes($_REQUEST['keywords'])) . "&amp;brand=" . $_REQUEST['brand'] . "&amp;action=" . $action . "&amp;goods_type=" . $_REQUEST['goods_type'] . "&amp;sc_ds=" . $_REQUEST['sc_ds'];
     if (!empty($intromode)) {
         $url_format .= "&amp;intro=" . $intromode;
     }
     if (isset($_REQUEST['pickout'])) {
         $url_format .= '&amp;pickout=1';
     }
-    $url_format .= "&amp;min_price=" . $_REQUEST['min_price'] ."&amp;max_price=" . $_REQUEST['max_price'] . "&amp;sort=$sort";
+    $url_format .= "&amp;min_price=" . $_REQUEST['min_price'] . "&amp;max_price=" . $_REQUEST['max_price'] . "&amp;sort=$sort";
 
     $url_format .= "$attr_url&amp;order=$order&amp;page=";
 
     $pager['search'] = array(
-        'keywords'   => stripslashes(urlencode($_REQUEST['keywords'])),
-        'category'   => $category,
-        'brand'      => $_REQUEST['brand'],
-        'sort'       => $sort,
-        'order'      => $order,
-        'min_price'  => $_REQUEST['min_price'],
-        'max_price'  => $_REQUEST['max_price'],
-        'action'     => $action,
-        'intro'      => empty($intromode) ? '' : trim($intromode),
+        'keywords' => stripslashes(urlencode($_REQUEST['keywords'])),
+        'category' => $category,
+        'brand' => $_REQUEST['brand'],
+        'sort' => $sort,
+        'order' => $order,
+        'min_price' => $_REQUEST['min_price'],
+        'max_price' => $_REQUEST['max_price'],
+        'action' => $action,
+        'intro' => empty($intromode) ? '' : trim($intromode),
         'goods_type' => $_REQUEST['goods_type'],
-        'sc_ds'      => $_REQUEST['sc_ds'],
-        'outstock'   => $_REQUEST['outstock']
+        'sc_ds' => $_REQUEST['sc_ds'],
+        'outstock' => $_REQUEST['outstock']
     );
     $pager['search'] = array_merge($pager['search'], $attr_arg);
 
@@ -461,9 +461,9 @@ function get_seachable_attributes($cat_id = 0)
     );
 
     /* 获得可用的商品类型 */
-    $sql = "SELECT t.cat_id, cat_name FROM " .$GLOBALS['ecs']->table('goods_type'). " AS t, ".
-           $GLOBALS['ecs']->table('attribute') ." AS a".
-           " WHERE t.cat_id = a.cat_id AND t.enabled = 1 AND a.attr_index > 0 ";
+    $sql = "SELECT t.cat_id, cat_name FROM " . $GLOBALS['ecs']->table('goods_type') . " AS t, " .
+        $GLOBALS['ecs']->table('attribute') . " AS a" .
+        " WHERE t.cat_id = a.cat_id AND t.enabled = 1 AND a.attr_index > 0 ";
     $cat = $GLOBALS['db']->getAll($sql);
 
     /* 获取可以检索的属性 */
@@ -474,9 +474,9 @@ function get_seachable_attributes($cat_id = 0)
         $where = $cat_id > 0 ? ' AND a.cat_id = ' . $cat_id : " AND a.cat_id = " . $cat[0]['cat_id'];
 
         $sql = 'SELECT attr_id, attr_name, attr_input_type, attr_type, attr_values, attr_index, sort_order ' .
-               ' FROM ' . $GLOBALS['ecs']->table('attribute') . ' AS a ' .
-               ' WHERE a.attr_index > 0 ' .$where.
-               ' ORDER BY cat_id, sort_order ASC';
+            ' FROM ' . $GLOBALS['ecs']->table('attribute') . ' AS a ' .
+            ' WHERE a.attr_index > 0 ' . $where .
+            ' ORDER BY cat_id, sort_order ASC';
         $res = $GLOBALS['db']->query($sql);
 
         while ($row = $GLOBALS['db']->FetchRow($res)) {
@@ -489,14 +489,14 @@ function get_seachable_attributes($cat_id = 0)
                     $attr_value[$opt] = $opt;
                 }
                 $attributes['attr'][] = array(
-                    'id'      => $row['attr_id'],
-                    'attr'    => $row['attr_name'],
+                    'id' => $row['attr_id'],
+                    'attr' => $row['attr_name'],
                     'options' => $attr_value,
-                    'type'    => 3
+                    'type' => 3
                 );
             } else {
                 $attributes['attr'][] = array(
-                    'id'   => $row['attr_id'],
+                    'id' => $row['attr_id'],
                     'attr' => $row['attr_name'],
                     'type' => $row['attr_index']
                 );

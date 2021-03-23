@@ -56,14 +56,14 @@ require(ROOT_PATH . 'includes/lib_time.php');
 /* 对用户传入的变量进行转义操作。*/
 if (!get_magic_quotes_gpc()) {
     if (!empty($_GET)) {
-        $_GET  = addslashes_deep($_GET);
+        $_GET = addslashes_deep($_GET);
     }
     if (!empty($_POST)) {
         $_POST = addslashes_deep($_POST);
     }
 
-    $_COOKIE   = addslashes_deep($_COOKIE);
-    $_REQUEST  = addslashes_deep($_REQUEST);
+    $_COOKIE = addslashes_deep($_COOKIE);
+    $_REQUEST = addslashes_deep($_REQUEST);
 }
 
 /* 创建 ECSHOP 对象 */
@@ -77,8 +77,8 @@ $db_host = $db_user = $db_pass = $db_name = null;
 
 /* 初始化session */
 require(ROOT_PATH . 'includes/cls_session.php');
-$sess_name  = defined("SESS_NAME") ? SESS_NAME : 'ECS_ID';
-$sess       = new cls_session($db, $ecs->table('sessions'), $ecs->table('sessions_data'), $sess_name);
+$sess_name = defined("SESS_NAME") ? SESS_NAME : 'ECS_ID';
+$sess = new cls_session($db, $ecs->table('sessions'), $ecs->table('sessions_data'), $sess_name);
 
 /* 载入系统参数 */
 $_CFG = load_config();

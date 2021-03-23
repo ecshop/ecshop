@@ -13,8 +13,8 @@ class google_sitemap
 
     /**
      * 增加一个新的子项
-     *@access   public
-     *@param    google_sitemap  item    $new_item
+     * @access   public
+     * @param google_sitemap  item    $new_item
      */
     public function add_item($new_item)
     {
@@ -23,9 +23,9 @@ class google_sitemap
 
     /**
      * 生成XML文档
-     *@access    public
-     *@param     string  $file_name  如果提供了文件名则生成文件，否则返回字符串.
-     *@return [void|string]
+     * @access    public
+     * @param string $file_name 如果提供了文件名则生成文件，否则返回字符串.
+     * @return [void|string]
      */
     public function build($file_name = null)
     {
@@ -66,11 +66,11 @@ class google_sitemap
 class google_sitemap_item
 {
     /**
-     *@access   public
-     *@param    string  $loc        位置
-     *@param    string  $lastmod    日期格式 YYYY-MM-DD
-     *@param    string  $changefreq 更新频率的单位 (always, hourly, daily, weekly, monthly, yearly, never)
-     *@param    string  $priority   更新频率 0-1
+     * @access   public
+     * @param string $loc 位置
+     * @param string $lastmod 日期格式 YYYY-MM-DD
+     * @param string $changefreq 更新频率的单位 (always, hourly, daily, weekly, monthly, yearly, never)
+     * @param string $priority 更新频率 0-1
      */
     public function google_sitemap_item($loc, $lastmod = '', $changefreq = '', $priority = '')
     {

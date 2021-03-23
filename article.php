@@ -13,9 +13,9 @@ if ((DEBUG_MODE & 2) != 2) {
 /*------------------------------------------------------ */
 
 $_REQUEST['id'] = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
-$article_id     = $_REQUEST['id'];
+$article_id = $_REQUEST['id'];
 if (isset($_REQUEST['cat_id']) && $_REQUEST['cat_id'] < 0) {
-    $article_id = $db->getOne("SELECT article_id FROM " . $ecs->table('article') . " WHERE cat_id = '".intval($_REQUEST['cat_id'])."' ");
+    $article_id = $db->getOne("SELECT article_id FROM " . $ecs->table('article') . " WHERE cat_id = '" . intval($_REQUEST['cat_id']) . "' ");
 }
 
 /*------------------------------------------------------ */
@@ -64,7 +64,7 @@ if (!$smarty->is_cached('article.dwt', $cache_id)) {
     $smarty->assign('description', htmlspecialchars($article['description']));
 
     $catlist = array();
-    foreach (get_article_parent_cats($article['cat_id']) as $k=>$v) {
+    foreach (get_article_parent_cats($article['cat_id']) as $k => $v) {
         $catlist[] = $v['cat_id'];
     }
 
@@ -77,22 +77,22 @@ if (!$smarty->is_cached('article.dwt', $cache_id)) {
 
     /* 相关商品 */
     $sql = "SELECT a.goods_id, g.goods_name " .
-            "FROM " . $ecs->table('goods_article') . " AS a, " . $ecs->table('goods') . " AS g " .
-            "WHERE a.goods_id = g.goods_id " .
-            "AND a.article_id = '$_REQUEST[id]' ";
+        "FROM " . $ecs->table('goods_article') . " AS a, " . $ecs->table('goods') . " AS g " .
+        "WHERE a.goods_id = g.goods_id " .
+        "AND a.article_id = '$_REQUEST[id]' ";
     $smarty->assign('goods_list', $db->getAll($sql));
 
     /* 上一篇下一篇文章 */
-    $next_article = $db->getRow("SELECT article_id, title FROM " .$ecs->table('article'). " WHERE article_id > $article_id AND cat_id=$article[cat_id] AND is_open=1 LIMIT 1");
+    $next_article = $db->getRow("SELECT article_id, title FROM " . $ecs->table('article') . " WHERE article_id > $article_id AND cat_id=$article[cat_id] AND is_open=1 LIMIT 1");
     if (!empty($next_article)) {
-        $next_article['url'] = build_uri('article', array('aid'=>$next_article['article_id']), $next_article['title']);
+        $next_article['url'] = build_uri('article', array('aid' => $next_article['article_id']), $next_article['title']);
         $smarty->assign('next_article', $next_article);
     }
 
     $prev_aid = $db->getOne("SELECT max(article_id) FROM " . $ecs->table('article') . " WHERE article_id < $article_id AND cat_id=$article[cat_id] AND is_open=1");
     if (!empty($prev_aid)) {
-        $prev_article = $db->getRow("SELECT article_id, title FROM " .$ecs->table('article'). " WHERE article_id = $prev_aid");
-        $prev_article['url'] = build_uri('article', array('aid'=>$prev_article['article_id']), $prev_article['title']);
+        $prev_article = $db->getRow("SELECT article_id, title FROM " . $ecs->table('article') . " WHERE article_id = $prev_aid");
+        $prev_article['url'] = build_uri('article', array('aid' => $prev_article['article_id']), $prev_article['title']);
         $smarty->assign('prev_article', $prev_article);
     }
 
@@ -112,21 +112,21 @@ if (isset($article) && $article['cat_id'] > 2) {
  * 获得指定的文章的详细信息
  *
  * @access  private
- * @param   integer     $article_id
+ * @param integer $article_id
  * @return  array
  */
 function get_article_info($article_id)
 {
     /* 获得文章的信息 */
-    $sql = "SELECT a.*, IFNULL(AVG(r.comment_rank), 0) AS comment_rank ".
-            "FROM " .$GLOBALS['ecs']->table('article'). " AS a ".
-            "LEFT JOIN " .$GLOBALS['ecs']->table('comment'). " AS r ON r.id_value = a.article_id AND comment_type = 1 ".
-            "WHERE a.is_open = 1 AND a.article_id = '$article_id' GROUP BY a.article_id";
+    $sql = "SELECT a.*, IFNULL(AVG(r.comment_rank), 0) AS comment_rank " .
+        "FROM " . $GLOBALS['ecs']->table('article') . " AS a " .
+        "LEFT JOIN " . $GLOBALS['ecs']->table('comment') . " AS r ON r.id_value = a.article_id AND comment_type = 1 " .
+        "WHERE a.is_open = 1 AND a.article_id = '$article_id' GROUP BY a.article_id";
     $row = $GLOBALS['db']->getRow($sql);
 
     if ($row !== false) {
         $row['comment_rank'] = ceil($row['comment_rank']);                              // 用户评论级别取整
-        $row['add_time']     = local_date($GLOBALS['_CFG']['date_format'], $row['add_time']); // 修正添加时间显示
+        $row['add_time'] = local_date($GLOBALS['_CFG']['date_format'], $row['add_time']); // 修正添加时间显示
 
         /* 作者信息如果为空，则用网站名称替换 */
         if (empty($row['author']) || $row['author'] == '_SHOPHELP') {
@@ -141,32 +141,32 @@ function get_article_info($article_id)
  * 获得文章关联的商品
  *
  * @access  public
- * @param   integer $id
+ * @param integer $id
  * @return  array
  */
 function article_related_goods($id)
 {
     $sql = 'SELECT g.goods_id, g.goods_name, g.goods_thumb, g.goods_img, g.shop_price AS org_price, ' .
-                "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, ".
-                'g.market_price, g.promote_price, g.promote_start_date, g.promote_end_date ' .
-            'FROM ' . $GLOBALS['ecs']->table('goods_article') . ' ga ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = ga.goods_id ' .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp ".
-                    "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' ".
-            "WHERE ga.article_id = '$id' AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0";
+        "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " .
+        'g.market_price, g.promote_price, g.promote_start_date, g.promote_end_date ' .
+        'FROM ' . $GLOBALS['ecs']->table('goods_article') . ' ga ' .
+        'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = ga.goods_id ' .
+        "LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp " .
+        "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
+        "WHERE ga.article_id = '$id' AND g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0";
     $res = $GLOBALS['db']->query($sql);
 
     $arr = array();
     while ($row = $GLOBALS['db']->fetchRow($res)) {
-        $arr[$row['goods_id']]['goods_id']      = $row['goods_id'];
-        $arr[$row['goods_id']]['goods_name']    = $row['goods_name'];
-        $arr[$row['goods_id']]['short_name']   = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
+        $arr[$row['goods_id']]['goods_id'] = $row['goods_id'];
+        $arr[$row['goods_id']]['goods_name'] = $row['goods_name'];
+        $arr[$row['goods_id']]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
             sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
-        $arr[$row['goods_id']]['goods_thumb']   = get_image_path($row['goods_id'], $row['goods_thumb'], true);
-        $arr[$row['goods_id']]['goods_img']     = get_image_path($row['goods_id'], $row['goods_img']);
-        $arr[$row['goods_id']]['market_price']  = price_format($row['market_price']);
-        $arr[$row['goods_id']]['shop_price']    = price_format($row['shop_price']);
-        $arr[$row['goods_id']]['url']           = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
+        $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
+        $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+        $arr[$row['goods_id']]['market_price'] = price_format($row['market_price']);
+        $arr[$row['goods_id']]['shop_price'] = price_format($row['shop_price']);
+        $arr[$row['goods_id']]['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
 
         if ($row['promote_price'] > 0) {
             $arr[$row['goods_id']]['promote_price'] = bargain_price($row['promote_price'], $row['promote_start_date'], $row['promote_end_date']);

@@ -41,4 +41,4 @@ $_LANG['visibility_notes'] = '当品牌下还没有商品的时候，首页及�
 
 /*JS 语言项*/
 $_LANG['js_languages']['no_brandname'] = '您必须输入品牌名称！';
-$_LANG['js_languages']['require_num'] =  '排序序号必须是一个数字';
+$_LANG['js_languages']['require_num'] = '排序序号必须是一个数字';

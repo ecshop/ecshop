@@ -21,7 +21,7 @@ if ($_REQUEST['act'] == 'backup') {
         $smarty->assign('warning', $warning);
     } elseif ($mask != 15) {
         $warning = sprintf($_LANG['dir_priv'], $path) . '<br/>';
-        if (($mask&1) < 1) {
+        if (($mask & 1) < 1) {
             $warning .= $_LANG['cannot_read'] . '&nbsp;&nbsp;';
         }
         if (($mask & 2) < 1) {
@@ -37,7 +37,7 @@ if ($_REQUEST['act'] == 'backup') {
     }
 
     assign_query_info();
-    $smarty->assign('action_link', array('text' => $_LANG['restore'], 'href'=>'database.php?act=restore'));
+    $smarty->assign('action_link', array('text' => $_LANG['restore'], 'href' => 'database.php?act=restore'));
     $smarty->assign('tables', $tables);
     $smarty->assign('vol_size', $allow_max_size);
     $smarty->assign('sql_name', cls_sql_dump::get_random_name() . '.sql');
@@ -91,7 +91,7 @@ if ($_REQUEST['act'] == 'restore') {
     }
 
     assign_query_info();
-    $smarty->assign('action_link', array('text'=>$_LANG['02_db_manage'], 'href'=>'database.php?act=backup'));
+    $smarty->assign('action_link', array('text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup'));
     $smarty->assign('ur_here', $_LANG['restore']);
     $smarty->assign('list', $list);
     $smarty->display('db_restore.htm');
@@ -99,8 +99,8 @@ if ($_REQUEST['act'] == 'restore') {
 
 if ($_REQUEST['act'] == 'dumpsql') {
     /* 权限判断 */
-    $token=trim($_REQUEST['token']);
-    if ($token!=$_CFG['token']) {
+    $token = trim($_REQUEST['token']);
+    if ($token != $_CFG['token']) {
         sys_msg($_LANG['backup_failure'], 1);
     }
     admin_priv('db_backup');
@@ -113,7 +113,7 @@ if ($_REQUEST['act'] == 'dumpsql') {
         sys_msg($warning, 1);
     } elseif ($mask != 15) {
         $warning = sprintf($_LANG['dir_priv'], $path);
-        if (($mask&1) < 1) {
+        if (($mask & 1) < 1) {
             $warning .= $_LANG['cannot_read'];
         }
         if (($mask & 2) < 1) {
@@ -168,7 +168,7 @@ if ($_REQUEST['act'] == 'dumpsql') {
 
     switch ($type) {
         case 'full':
-            $except = array($ecs->prefix.'sessions', $ecs->prefix.'sessions_data');
+            $except = array($ecs->prefix . 'sessions', $ecs->prefix . 'sessions_data');
             $temp = $db->GetCol("SHOW TABLES LIKE '" . mysql_like_quote($ecs->prefix) . "%'");
             foreach ($temp as $table) {
                 if (in_array($table, $except)) {
@@ -181,7 +181,7 @@ if ($_REQUEST['act'] == 'dumpsql') {
             break;
 
         case 'stand':
-            $temp = array('admin_user','area_region','article','article_cat','attribute','brand','cart','category','comment','goods','goods_attr','goods_cat','goods_gallery','goods_type','group_goods','link_goods','member_price','order_action','order_goods','order_info','payment','region','shipping','shipping_area','shop_config','user_address','user_bonus','user_rank','users','virtual_card');
+            $temp = array('admin_user', 'area_region', 'article', 'article_cat', 'attribute', 'brand', 'cart', 'category', 'comment', 'goods', 'goods_attr', 'goods_cat', 'goods_gallery', 'goods_type', 'group_goods', 'link_goods', 'member_price', 'order_action', 'order_goods', 'order_info', 'payment', 'region', 'shipping', 'shipping_area', 'shop_config', 'user_address', 'user_bonus', 'user_rank', 'users', 'virtual_card');
             foreach ($temp as $table) {
                 $tables[$ecs->prefix . $table] = -1;
             }
@@ -189,7 +189,7 @@ if ($_REQUEST['act'] == 'dumpsql') {
             break;
 
         case 'min':
-            $temp = array('attribute','brand','cart','category','goods','goods_attr','goods_cat','goods_gallery','goods_type','group_goods','link_goods','member_price','order_action','order_goods','order_info','shop_config','user_address','user_bonus','user_rank','users','virtual_card');
+            $temp = array('attribute', 'brand', 'cart', 'category', 'goods', 'goods_attr', 'goods_cat', 'goods_gallery', 'goods_type', 'group_goods', 'link_goods', 'member_price', 'order_action', 'order_goods', 'order_info', 'shop_config', 'user_address', 'user_bonus', 'user_rank', 'users', 'virtual_card');
             foreach ($temp as $table) {
                 $tables[$ecs->prefix . $table] = -1;
             }
@@ -215,11 +215,11 @@ if ($_REQUEST['act'] == 'dumpsql') {
         if ($vol > 1) {
             /* 有多个文件 */
             if (!@file_put_contents(ROOT_PATH . DATA_DIR . '/sqldata/' . $sql_file_name . '_' . $vol . '.sql', $dump->dump_sql)) {
-                sys_msg(sprintf($_LANG['fail_write_file'], $sql_file_name . '_' . $vol . '.sql'), 1, array(array('text'=>$_LANG['02_db_manage'], 'href'=>'database.php?act=backup')), false);
+                sys_msg(sprintf($_LANG['fail_write_file'], $sql_file_name . '_' . $vol . '.sql'), 1, array(array('text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup')), false);
             }
             $list = array();
             for ($i = 1; $i <= $vol; $i++) {
-                $list[] = array('name'=>$sql_file_name . '_' . $i . '.sql', 'href'=>'../' . DATA_DIR . '/sqldata/' . $sql_file_name . '_' . $i . '.sql');
+                $list[] = array('name' => $sql_file_name . '_' . $i . '.sql', 'href' => '../' . DATA_DIR . '/sqldata/' . $sql_file_name . '_' . $i . '.sql');
             }
 
             $smarty->assign('list', $list);
@@ -228,7 +228,7 @@ if ($_REQUEST['act'] == 'dumpsql') {
         } else {
             /* 只有一个文件 */
             if (!@file_put_contents(ROOT_PATH . DATA_DIR . '/sqldata/' . $sql_file_name . '.sql', $dump->dump_sql)) {
-                sys_msg(sprintf($_LANG['fail_write_file'], $sql_file_name . '_' . $vol . '.sql'), 1, array(array('text'=>$_LANG['02_db_manage'], 'href'=>'database.php?act=backup')), false);
+                sys_msg(sprintf($_LANG['fail_write_file'], $sql_file_name . '_' . $vol . '.sql'), 1, array(array('text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup')), false);
             };
 
             $smarty->assign('list', array(array('name' => $sql_file_name . '.sql', 'href' => '../' . DATA_DIR . '/sqldata/' . $sql_file_name . '.sql')));
@@ -238,10 +238,10 @@ if ($_REQUEST['act'] == 'dumpsql') {
     } else {
         /* 下一个页面处理 */
         if (!@file_put_contents(ROOT_PATH . DATA_DIR . '/sqldata/' . $sql_file_name . '_' . $vol . '.sql', $dump->dump_sql)) {
-            sys_msg(sprintf($_LANG['fail_write_file'], $sql_file_name . '_' . $vol . '.sql'), 1, array(array('text'=>$_LANG['02_db_manage'], 'href'=>'database.php?act=backup')), false);
+            sys_msg(sprintf($_LANG['fail_write_file'], $sql_file_name . '_' . $vol . '.sql'), 1, array(array('text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup')), false);
         }
 
-        $lnk = 'database.php?act=dumpsql&token='.$_CFG['token'].'&sql_file_name=' . $sql_file_name . '&vol_size=' . $max_size . '&vol=' . ($vol+1);
+        $lnk = 'database.php?act=dumpsql&token=' . $_CFG['token'] . '&sql_file_name=' . $sql_file_name . '&vol_size=' . $max_size . '&vol=' . ($vol + 1);
         $smarty->assign('title', sprintf($_LANG['backup_title'], '#' . $vol));
         $smarty->assign('auto_redirect', 1);
         $smarty->assign('auto_link', $lnk);
@@ -296,7 +296,7 @@ if ($_REQUEST['act'] == 'remove') {
         }
     }
 
-    sys_msg($_LANG['remove_success'], 0, array(array('text'=>$_LANG['restore'], 'href'=>'database.php?act=restore')));
+    sys_msg($_LANG['remove_success'], 0, array(array('text' => $_LANG['restore'], 'href' => 'database.php?act=restore')));
 }
 
 /* 从服务器上导入数据 */
@@ -305,7 +305,7 @@ if ($_REQUEST['act'] == 'import') {
     admin_priv('db_renew');
 
     $is_confirm = empty($_GET['confirm']) ? false : true;
-    $file_name = empty($_GET['file_name']) ? '': trim($_GET['file_name']);
+    $file_name = empty($_GET['file_name']) ? '' : trim($_GET['file_name']);
     $path = ROOT_PATH . DATA_DIR . '/sqldata/';
 
     /* 设置最长执行时间为5分钟 */
@@ -315,7 +315,7 @@ if ($_REQUEST['act'] == 'import') {
         /* 多卷处理 */
         if ($is_confirm == false) {
             /* 提示用户要求确认 */
-            sys_msg($_LANG['confirm_import'], 1, array(array('text'=>$_LANG['also_continue'], 'href'=>'database.php?act=import&confirm=1&file_name=' . $file_name)), false);
+            sys_msg($_LANG['confirm_import'], 1, array(array('text' => $_LANG['also_continue'], 'href' => 'database.php?act=import&confirm=1&file_name=' . $file_name)), false);
         }
 
         $short_name = substr($file_name, 0, strrpos($file_name, '_'));
@@ -353,7 +353,7 @@ if ($_REQUEST['act'] == 'import') {
 
         clear_cache_files();
 
-        sys_msg($_LANG['restore_success'], 0, array(array('text'=>$_LANG['restore'], 'href'=>'database.php?act=restore')));
+        sys_msg($_LANG['restore_success'], 0, array(array('text' => $_LANG['restore'], 'href' => 'database.php?act=restore')));
     } else {
         /* 单卷 */
         $info = cls_sql_dump::get_head($path . $file_name);
@@ -363,7 +363,7 @@ if ($_REQUEST['act'] == 'import') {
         if (sql_import($path . $file_name)) {
             clear_cache_files();
             admin_log($_LANG['backup_time'] . $info['date'], 'restore', 'db_backup');
-            sys_msg($_LANG['restore_success'], 0, array(array('text'=>$_LANG['restore'], 'href'=>'database.php?act=restore')));
+            sys_msg($_LANG['restore_success'], 0, array(array('text' => $_LANG['restore'], 'href' => 'database.php?act=restore')));
         } else {
             sys_msg($_LANG['sqlfile_error'], 1);
         }
@@ -387,7 +387,7 @@ if ($_REQUEST['act'] == 'upload_sql') {
         $file = $_FILES['sqlfile'];
 
         /* 检查上传是否成功 */
-        if ((isset($file['error']) && $file['error'] > 0) || (!isset($file['error']) && $file['tmp_name'] =='none')) {
+        if ((isset($file['error']) && $file['error'] > 0) || (!isset($file['error']) && $file['tmp_name'] == 'none')) {
             sys_msg($_LANG['fail_upload'], 1);
         }
 
@@ -414,7 +414,7 @@ if ($_REQUEST['act'] == 'upload_sql') {
     if (empty($sql_info['ecs_ver'])) {
         sys_msg($_LANG['unrecognize_version'], 1);
     } else {
-        if ($sql_info['ecs_ver']!= VERSION) {
+        if ($sql_info['ecs_ver'] != VERSION) {
             sys_msg(sprintf($_LANG['version_error'], VERSION, $sql_info['ecs_ver']));
         }
     }
@@ -428,7 +428,7 @@ if ($_REQUEST['act'] == 'upload_sql') {
             if ($sql_info['mysql_ver'] != $mysql_ver_arr) {
                 $lnk = array();
                 $lnk[] = array('text' => $_LANG['confirm_ver'], 'href' => 'database.php?act=upload_sql&mysql_ver_confirm=1');
-                $lnk[] = array('text' => $_LANG['unconfirm_ver'], 'href'=> 'database.php?act=restore');
+                $lnk[] = array('text' => $_LANG['unconfirm_ver'], 'href' => 'database.php?act=restore');
                 sys_msg(sprintf($_LANG['mysql_version_error'], $mysql_ver_arr, $sql_info['mysql_ver']), 0, $lnk, false);
             }
         }
@@ -455,10 +455,10 @@ if ($_REQUEST['act'] == 'optimize') {
     admin_priv('db_backup');
     $db_ver_arr = $db->version();
     $db_ver = $db_ver_arr;
-    $ret = $db ->query("SHOW TABLE STATUS LIKE '" . mysql_like_quote($ecs->prefix) . "%'");
+    $ret = $db->query("SHOW TABLE STATUS LIKE '" . mysql_like_quote($ecs->prefix) . "%'");
 
     $num = 0;
-    $list= array();
+    $list = array();
     while ($row = $db->fetchRow($ret)) {
         if (strpos($row['Name'], '_session') !== false) {
             $res['Msg_text'] = 'Ignore';
@@ -469,7 +469,7 @@ if ($_REQUEST['act'] == 'optimize') {
         }
         $type = $db_ver >= '4.1' ? $row['Engine'] : $row['Type'];
         $charset = $db_ver >= '4.1' ? $row['Collation'] : 'N/A';
-        $list[] = array('table' => $row['Name'], 'type' => $type, 'rec_num' => $row['Rows'], 'rec_size' => sprintf(" %.2f KB", $row['Data_length'] / 1024), 'rec_index' => $row['Index_length'],  'rec_chip' => $row['Data_free'], 'status' => $res['Msg_text'], 'charset' => $charset);
+        $list[] = array('table' => $row['Name'], 'type' => $type, 'rec_num' => $row['Rows'], 'rec_size' => sprintf(" %.2f KB", $row['Data_length'] / 1024), 'rec_index' => $row['Index_length'], 'rec_chip' => $row['Data_free'], 'status' => $res['Msg_text'], 'charset' => $charset);
     }
     unset($ret);
     /* 赋值 */
@@ -486,13 +486,13 @@ if ($_REQUEST['act'] == 'run_optimize') {
     foreach ($tables as $table) {
         if ($row = $db->getRow('OPTIMIZE TABLE ' . $table)) {
             /* 优化出错，尝试修复 */
-            if ($row['Msg_type'] =='error' && strpos($row['Msg_text'], 'repair') !== false) {
+            if ($row['Msg_type'] == 'error' && strpos($row['Msg_text'], 'repair') !== false) {
                 $db->query('REPAIR TABLE ' . $table);
             }
         }
     }
 
-    sys_msg(sprintf($_LANG['optimize_ok'], $_POST['num']), 0, array(array('text'=>$_LANG['go_back'], 'href'=>'database.php?act=optimize')));
+    sys_msg(sprintf($_LANG['optimize_ok'], $_POST['num']), 0, array(array('text' => $_LANG['go_back'], 'href' => 'database.php?act=optimize')));
 }
 
 /**
@@ -505,7 +505,7 @@ if ($_REQUEST['act'] == 'run_optimize') {
  */
 function sql_import($sql_file)
 {
-    $db_ver  = $GLOBALS['db']->version();
+    $db_ver = $GLOBALS['db']->version();
 
     $sql_str = array_filter(file($sql_file), 'remove_comment');
     $sql_str = str_replace("\r", '', implode('', $sql_str));
@@ -518,9 +518,9 @@ function sql_import($sql_file)
         for ($i = 0; $i < $ret_count; $i++) {
             $ret[$i] = trim($ret[$i], " \r\n;"); //剔除多余信息
             if (!empty($ret[$i])) {
-                if ((strpos($ret[$i], 'CREATE TABLE') !== false) && (strpos($ret[$i], 'DEFAULT CHARSET='. str_replace('-', '', EC_CHARSET))=== false)) {
+                if ((strpos($ret[$i], 'CREATE TABLE') !== false) && (strpos($ret[$i], 'DEFAULT CHARSET=' . str_replace('-', '', EC_CHARSET)) === false)) {
                     /* 建表时缺 DEFAULT CHARSET=utf8 */
-                    $ret[$i] = $ret[$i] . 'DEFAULT CHARSET='. str_replace('-', '', EC_CHARSET);
+                    $ret[$i] = $ret[$i] . 'DEFAULT CHARSET=' . str_replace('-', '', EC_CHARSET);
                 }
                 $GLOBALS['db']->query($ret[$i]);
             }
@@ -528,8 +528,8 @@ function sql_import($sql_file)
     } else {
         for ($i = 0; $i < $ret_count; $i++) {
             $ret[$i] = trim($ret[$i], " \r\n;"); //剔除多余信息
-            if ((strpos($ret[$i], 'CREATE TABLE') !== false) && (strpos($ret[$i], 'DEFAULT CHARSET='. str_replace('-', '', EC_CHARSET))!== false)) {
-                $ret[$i] = str_replace('DEFAULT CHARSET='. str_replace('-', '', EC_CHARSET), '', $ret[$i]);
+            if ((strpos($ret[$i], 'CREATE TABLE') !== false) && (strpos($ret[$i], 'DEFAULT CHARSET=' . str_replace('-', '', EC_CHARSET)) !== false)) {
+                $ret[$i] = str_replace('DEFAULT CHARSET=' . str_replace('-', '', EC_CHARSET), '', $ret[$i]);
             }
             if (!empty($ret[$i])) {
                 $GLOBALS['db']->query($ret[$i]);
@@ -550,7 +550,7 @@ function sql_import($sql_file)
  */
 function num_bitunit($num)
 {
-    $bitunit = array(' B',' KB',' MB',' GB');
+    $bitunit = array(' B', ' KB', ' MB', ' GB');
     for ($key = 0, $count = count($bitunit); $key < $count; $key++) {
         if ($num >= pow(2, 10 * $key) - 1) { // 1024B 会显示为 1KB
             $num_bitunit_str = (ceil($num / pow(2, 10 * $key) * 100) / 100) . " $bitunit[$key]";

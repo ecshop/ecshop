@@ -57,11 +57,11 @@ if (empty($_GET['is_ajax'])) {
             $goods_where .= " AND g.`brand_id` = '$brand_id'";
         }
     } else {
-        $goods_where .=  ' AND g.`goods_id` ' . db_create_in($goods_id);
+        $goods_where .= ' AND g.`goods_id` ' . db_create_in($goods_id);
     }
 
     if (!empty($goods_where)) {
-        $album_where = ', ' . $ecs->table('goods'). " AS g WHERE album.img_original > '' AND album.goods_id = g.goods_id " . $goods_where;
+        $album_where = ', ' . $ecs->table('goods') . " AS g WHERE album.img_original > '' AND album.goods_id = g.goods_id " . $goods_where;
     } else {
         $album_where = " WHERE album.img_original > ''";
     }
@@ -89,34 +89,34 @@ if (empty($_GET['is_ajax'])) {
         $title = '';
 
         if (isset($_GET['total_icon'])) {
-            $count = $db->GetOne("SELECT COUNT(*) FROM ".$ecs->table('goods'). " AS g WHERE g.original_img <> ''" . $goods_where);
+            $count = $db->GetOne("SELECT COUNT(*) FROM " . $ecs->table('goods') . " AS g WHERE g.original_img <> ''" . $goods_where);
             $title = sprintf($_LANG['goods_format'], $count, $page_size);
         }
 
         if (isset($_GET['total_album'])) {
-            $count = $GLOBALS['db']->GetOne("SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('goods_gallery'). ' AS album ' . $album_where);
+            $count = $GLOBALS['db']->GetOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_gallery') . ' AS album ' . $album_where);
             $title = sprintf('&nbsp;' . $_LANG['gallery_format'], $count, $page_size);
             $module_no = 1;
         }
         $result = array('error' => 0, 'message' => '', 'content' => '', 'module_no' => $module_no, 'done' => 1, 'title' => $title, 'page_size' => $page_size,
-            'page' => 1, 'thumb'=> $thumb, 'watermark' => $watermark, 'total' => 1, 'change' => $change, 'silent' => $silent,
-            'do_album' => $do_album, 'do_icon'=> $do_icon, 'goods_id'=> $goods_id, 'brand_id'=> $brand_id, 'cat_id'=> $cat_id,
-            'row' => array('new_page'  => sprintf($_LANG['page_format'], 1),
-                           'new_total' => sprintf($_LANG['total_format'], ceil($count/$page_size)),
-                           'new_time'  => $_LANG['wait'],
-                           'cur_id'    => 'time_1'));
+            'page' => 1, 'thumb' => $thumb, 'watermark' => $watermark, 'total' => 1, 'change' => $change, 'silent' => $silent,
+            'do_album' => $do_album, 'do_icon' => $do_icon, 'goods_id' => $goods_id, 'brand_id' => $brand_id, 'cat_id' => $cat_id,
+            'row' => array('new_page' => sprintf($_LANG['page_format'], 1),
+                'new_total' => sprintf($_LANG['total_format'], ceil($count / $page_size)),
+                'new_time' => $_LANG['wait'],
+                'cur_id' => 'time_1'));
 
         die($json->encode($result));
     } else {
-        $result = array('error' => 0, 'message' => '', 'content' => '', 'done' => 2, 'do_album' => $do_album, 'do_icon'=> $do_icon, 'goods_id'=> $goods_id, 'brand_id'=> $brand_id, 'cat_id'=> $cat_id);
-        $result['thumb']     = empty($_GET['thumb'])     ? 0 : 1;
+        $result = array('error' => 0, 'message' => '', 'content' => '', 'done' => 2, 'do_album' => $do_album, 'do_icon' => $do_icon, 'goods_id' => $goods_id, 'brand_id' => $brand_id, 'cat_id' => $cat_id);
+        $result['thumb'] = empty($_GET['thumb']) ? 0 : 1;
         $result['watermark'] = empty($_GET['watermark']) ? 0 : 1;
-        $result['change']    = empty($_GET['change'])    ? 0 : 1;
+        $result['change'] = empty($_GET['change']) ? 0 : 1;
         $result['page_size'] = empty($_GET['page_size']) ? 100 : intval($_GET['page_size']);
         $result['module_no'] = empty($_GET['module_no']) ? 0 : intval($_GET['module_no']);
-        $result['page']      = isset($_GET['page'])      ? intval($_GET['page']) : 1;
-        $result['total']     = isset($_GET['total'])     ? intval($_GET['total']) : 1;
-        $result['silent']    = empty($_GET['silent'])    ? 0 : 1;
+        $result['page'] = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $result['total'] = isset($_GET['total']) ? intval($_GET['total']) : 1;
+        $result['silent'] = empty($_GET['silent']) ? 0 : 1;
 
         if ($result['silent']) {
             $err_msg = array();
@@ -126,7 +126,7 @@ if (empty($_GET['is_ajax'])) {
         //-- 商品图片
         /*------------------------------------------------------ */
         if ($result['module_no'] == 0) {
-            $count = $GLOBALS['db']->GetOne("SELECT COUNT(*) FROM ".$ecs->table('goods'). " AS g WHERE g.original_img > ''" . $goods_where);
+            $count = $GLOBALS['db']->GetOne("SELECT COUNT(*) FROM " . $ecs->table('goods') . " AS g WHERE g.original_img > ''" . $goods_where);
             /* 页数在许可范围内 */
             if ($result['page'] <= ceil($count / $result['page_size'])) {
                 $start_time = gmtime(); //开始执行时间
@@ -144,7 +144,7 @@ if (empty($_GET['is_ajax'])) {
                 $result['row']['cur_id'] = 'time_' . ($result['total'] + 1);
                 $result['page']++; // 新行
                 $result['row']['new_page'] = sprintf($_LANG['page_format'], $result['page']);
-                $result['row']['new_total'] = sprintf($_LANG['total_format'], ceil($count/$result['page_size']));
+                $result['row']['new_total'] = sprintf($_LANG['total_format'], ceil($count / $result['page_size']));
                 $result['row']['new_time'] = $_LANG['wait'];
                 $result['total']++;
             } else {
@@ -158,7 +158,7 @@ if (empty($_GET['is_ajax'])) {
             }
         } elseif ($result['module_no'] == 1 && $result['do_album'] == 1) {
             //商品相册
-            $count = $GLOBALS['db']->GetOne("SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('goods_gallery'). ' AS album ' . $album_where);
+            $count = $GLOBALS['db']->GetOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_gallery') . ' AS album ' . $album_where);
 
             if ($result['page'] <= ceil($count / $result['page_size'])) {
                 $start_time = gmtime(); // 开始执行时间
@@ -176,7 +176,7 @@ if (empty($_GET['is_ajax'])) {
                 $result['row']['cur_id'] = 'time_' . ($result['total'] + 1);
                 $result['page']++;
                 $result['row']['new_page'] = sprintf($_LANG['page_format'], $result['page']);
-                $result['row']['new_total'] = sprintf($_LANG['total_format'], ceil($count/$result['page_size']));
+                $result['row']['new_total'] = sprintf($_LANG['total_format'], ceil($count / $result['page_size']));
                 $result['row']['new_time'] = $_LANG['wait'];
 
                 $result['total']++;
@@ -184,7 +184,7 @@ if (empty($_GET['is_ajax'])) {
                 $result['row']['pre_id'] = 'time_' . $result['total'];
                 $result['row']['cur_id'] = 'time_' . ($result['total'] + 1);
                 $result['row']['new_page'] = sprintf($_LANG['page_format'], $result['page']);
-                $result['row']['new_total'] = sprintf($_LANG['total_format'], ceil($count/$result['page_size']));
+                $result['row']['new_total'] = sprintf($_LANG['total_format'], ceil($count / $result['page_size']));
                 $result['row']['new_time'] = $_LANG['wait'];
 
                 /* 执行结束 */
@@ -207,21 +207,21 @@ if (empty($_GET['is_ajax'])) {
  * 图片处理函数
  *
  * @access  public
- * @param   integer $page
- * @param   integer $page_size
- * @param   integer $type
- * @param   boolen  $thumb      是否生成缩略图
- * @param   boolen  $watermark  是否生成水印图
- * @param   boolen  $change     true 生成新图，删除旧图 false 用新图覆盖旧图
- * @param   boolen  $silent     是否执行能忽略错误
+ * @param integer $page
+ * @param integer $page_size
+ * @param integer $type
+ * @param boolen $thumb 是否生成缩略图
+ * @param boolen $watermark 是否生成水印图
+ * @param boolen $change true 生成新图，删除旧图 false 用新图覆盖旧图
+ * @param boolen $silent 是否执行能忽略错误
  *
  * @return void
  */
-function process_image($page = 1, $page_size = 100, $type = 0, $thumb= true, $watermark = true, $change = false, $silent = true)
+function process_image($page = 1, $page_size = 100, $type = 0, $thumb = true, $watermark = true, $change = false, $silent = true)
 {
     if ($type == 0) {
-        $sql = "SELECT g.goods_id, g.original_img, g.goods_img, g.goods_thumb FROM ".$GLOBALS['ecs']->table('goods'). " AS g WHERE g.original_img > ''" . $GLOBALS['goods_where'];
-        $res = $GLOBALS['db']->SelectLimit($sql, $page_size, ($page-1)*$page_size);
+        $sql = "SELECT g.goods_id, g.original_img, g.goods_img, g.goods_thumb FROM " . $GLOBALS['ecs']->table('goods') . " AS g WHERE g.original_img > ''" . $GLOBALS['goods_where'];
+        $res = $GLOBALS['db']->SelectLimit($sql, $page_size, ($page - 1) * $page_size);
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             $goods_thumb = '';
             $image = '';
@@ -266,7 +266,7 @@ function process_image($page = 1, $page_size = 100, $type = 0, $thumb= true, $wa
                 if ($change || empty($row['goods_img'])) {
                     /* 要生成新链接的处理过程 */
                     if ($image != $row['goods_img']) {
-                        $sql = "UPDATE " .$GLOBALS['ecs']->table('goods'). " SET goods_img = '$image' WHERE goods_id = '" . $row['goods_id'] . "'";
+                        $sql = "UPDATE " . $GLOBALS['ecs']->table('goods') . " SET goods_img = '$image' WHERE goods_id = '" . $row['goods_id'] . "'";
                         $GLOBALS['db']->query($sql);
                         /* 防止原图被删除 */
                         if ($row['goods_img'] != $row['original_img']) {
@@ -286,7 +286,7 @@ function process_image($page = 1, $page_size = 100, $type = 0, $thumb= true, $wa
                     $dir = dirname(ROOT_PATH . $row['goods_thumb']) . '/';
                 }
 
-                $goods_thumb = $GLOBALS['image']->make_thumb(ROOT_PATH.$row['original_img'], $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height'], $dir);
+                $goods_thumb = $GLOBALS['image']->make_thumb(ROOT_PATH . $row['original_img'], $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height'], $dir);
 
                 /* 出错处理 */
                 if (!$goods_thumb) {
@@ -302,7 +302,7 @@ function process_image($page = 1, $page_size = 100, $type = 0, $thumb= true, $wa
                 $goods_thumb = reformat_image_name('goods_thumb', $row['goods_id'], $goods_thumb, 'thumb');
                 if ($change || empty($row['goods_thumb'])) {
                     if ($row['goods_thumb'] != $goods_thumb) {
-                        $sql = "UPDATE " .$GLOBALS['ecs']->table('goods'). " SET goods_thumb = '$goods_thumb' WHERE goods_id = '" . $row['goods_id'] . "'";
+                        $sql = "UPDATE " . $GLOBALS['ecs']->table('goods') . " SET goods_thumb = '$goods_thumb' WHERE goods_id = '" . $row['goods_id'] . "'";
                         $GLOBALS['db']->query($sql);
                         /* 防止原图被删除 */
                         if ($row['goods_thumb'] != $row['original_img']) {
@@ -316,12 +316,12 @@ function process_image($page = 1, $page_size = 100, $type = 0, $thumb= true, $wa
         }
     } else {
         /* 遍历商品相册 */
-        $sql = "SELECT album.goods_id, album.img_id, album.img_url, album.thumb_url, album.img_original FROM ".$GLOBALS['ecs']->table('goods_gallery'). " AS album " . $GLOBALS['album_where'];
+        $sql = "SELECT album.goods_id, album.img_id, album.img_url, album.thumb_url, album.img_original FROM " . $GLOBALS['ecs']->table('goods_gallery') . " AS album " . $GLOBALS['album_where'];
         $res = $GLOBALS['db']->SelectLimit($sql, $page_size, ($page - 1) * $page_size);
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             $thumb_url = '';
-            $image     = '';
+            $image = '';
 
             /* 水印 */
             if ($watermark && file_exists(ROOT_PATH . $row['img_original'])) {
@@ -331,8 +331,8 @@ function process_image($page = 1, $page_size = 100, $type = 0, $thumb= true, $wa
                     $dir = dirname(ROOT_PATH . $row['img_url']) . '/';
                 }
 
-                $file_name  = cls_image::unique_name($dir);
-                $file_name .= cls_image::get_filetype(empty($row['img_url']) ? $row['img_original']: $row['img_url']);
+                $file_name = cls_image::unique_name($dir);
+                $file_name .= cls_image::get_filetype(empty($row['img_url']) ? $row['img_original'] : $row['img_url']);
 
                 copy(ROOT_PATH . $row['img_original'], $dir . $file_name);
                 $image = $GLOBALS['image']->add_watermark($dir . $file_name, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']);
@@ -350,7 +350,7 @@ function process_image($page = 1, $page_size = 100, $type = 0, $thumb= true, $wa
                 $image = reformat_image_name('gallery', $row['goods_id'], $image, 'goods');
                 if ($change || empty($row['img_url']) || $row['img_original'] == $row['img_url']) {
                     if ($image != $row['img_url']) {
-                        $sql = "UPDATE " .$GLOBALS['ecs']->table('goods_gallery'). " SET img_url='$image' WHERE img_id='$row[img_id]'";
+                        $sql = "UPDATE " . $GLOBALS['ecs']->table('goods_gallery') . " SET img_url='$image' WHERE img_id='$row[img_id]'";
                         $GLOBALS['db']->query($sql);
                         if ($row['img_original'] != $row['img_url']) {
                             @unlink(ROOT_PATH . $row['img_url']);
@@ -384,7 +384,7 @@ function process_image($page = 1, $page_size = 100, $type = 0, $thumb= true, $wa
                 $thumb_url = reformat_image_name('gallery_thumb', $row['goods_id'], $thumb_url, 'thumb');
                 if ($change || empty($row['thumb_url'])) {
                     if ($thumb_url != $row['thumb_url']) {
-                        $sql = "UPDATE " .$GLOBALS['ecs']->table('goods_gallery'). " SET thumb_url='$thumb_url' WHERE img_id='$row[img_id]'";
+                        $sql = "UPDATE " . $GLOBALS['ecs']->table('goods_gallery') . " SET thumb_url='$thumb_url' WHERE img_id='$row[img_id]'";
                         $GLOBALS['db']->query($sql);
                         @unlink(ROOT_PATH . $row['thumb_url']);
                     }
@@ -400,21 +400,21 @@ function process_image($page = 1, $page_size = 100, $type = 0, $thumb= true, $wa
  * 图片处理函数
  *
  * @access  public
- * @param   integer $page
- * @param   integer $page_size
- * @param   integer $type
- * @param   boolen  $thumb      是否生成缩略图
- * @param   boolen  $watermark  是否生成水印图
- * @param   boolen  $change     true 生成新图，删除旧图 false 用新图覆盖旧图
- * @param   boolen  $silent     是否执行能忽略错误
+ * @param integer $page
+ * @param integer $page_size
+ * @param integer $type
+ * @param boolen $thumb 是否生成缩略图
+ * @param boolen $watermark 是否生成水印图
+ * @param boolen $change true 生成新图，删除旧图 false 用新图覆盖旧图
+ * @param boolen $silent 是否执行能忽略错误
  *
  * @return void
  */
-function process_image_ex($page = 1, $page_size = 100, $type = 0, $thumb= true, $watermark = true, $change = false, $silent = true)
+function process_image_ex($page = 1, $page_size = 100, $type = 0, $thumb = true, $watermark = true, $change = false, $silent = true)
 {
     if ($type == 0) {
-        $sql = "SELECT g.goods_id, g.original_img, g.goods_img, g.goods_thumb FROM ".$GLOBALS['ecs']->table('goods'). " AS g WHERE g.original_img > ''" . $goods_where;
-        $res = $GLOBALS['db']->SelectLimit($sql, $page_size, ($page-1)*$page_size);
+        $sql = "SELECT g.goods_id, g.original_img, g.goods_img, g.goods_thumb FROM " . $GLOBALS['ecs']->table('goods') . " AS g WHERE g.original_img > ''" . $goods_where;
+        $res = $GLOBALS['db']->SelectLimit($sql, $page_size, ($page - 1) * $page_size);
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
             if ($thumb) {
@@ -425,7 +425,7 @@ function process_image_ex($page = 1, $page_size = 100, $type = 0, $thumb= true, 
             }
         }
     } else {
-        $sql = "SELECT album.goods_id, album.img_id, album.img_url, album.thumb_url, album.img_original FROM ".$GLOBALS['ecs']->table('goods_gallery'). " AS album " . $GLOBALS['album_where'];
+        $sql = "SELECT album.goods_id, album.img_id, album.img_url, album.thumb_url, album.img_original FROM " . $GLOBALS['ecs']->table('goods_gallery') . " AS album " . $GLOBALS['album_where'];
         $res = $GLOBALS['db']->SelectLimit($sql, $page_size, ($page - 1) * $page_size);
 
         while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -443,10 +443,10 @@ function process_image_ex($page = 1, $page_size = 100, $type = 0, $thumb= true, 
  *  用新图片替换指定图片
  *
  * @access  public
- * @param   string      $new_image      新图片
- * @param   string      $old_image      旧图片
- * @param   string      $goods_id       商品图片
- * @param   boolen      $silent         是否使用静态函数
+ * @param string $new_image 新图片
+ * @param string $old_image 旧图片
+ * @param string $goods_id 商品图片
+ * @param boolen $silent 是否使用静态函数
  *
  * @return void
  */

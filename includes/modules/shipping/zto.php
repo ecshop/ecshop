@@ -1,6 +1,6 @@
 <?php
 
-$shipping_lang = ROOT_PATH.'languages/' .$GLOBALS['_CFG']['lang']. '/shipping/zto.php';
+$shipping_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/shipping/zto.php';
 if (file_exists($shipping_lang)) {
     global $_LANG;
     include_once($shipping_lang);
@@ -14,31 +14,31 @@ if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 配送方式插件的代码必须和文件名保持一致 */
-    $modules[$i]['code']    = 'zto';
+    $modules[$i]['code'] = 'zto';
 
     $modules[$i]['version'] = '1.0.0';
 
     /* 配送方式的描述 */
-    $modules[$i]['desc']    = 'zto_desc';
+    $modules[$i]['desc'] = 'zto_desc';
 
     /* 是否支持保价 */
-    $modules[$i]['insure']  = '2%';
+    $modules[$i]['insure'] = '2%';
 
     /* 配送方式是否支持货到付款 */
-    $modules[$i]['cod']     = false;
+    $modules[$i]['cod'] = false;
 
     /* 插件的作者 */
-    $modules[$i]['author']  = '蓝色黯然';
+    $modules[$i]['author'] = '蓝色黯然';
 
     /* 插件作者的官方网站 */
     $modules[$i]['website'] = 'http://www.ecshop.com';
 
     /* 配送接口需要的参数 */
     $modules[$i]['configure'] = array(
-                                    array('name' => 'item_fee',     'value'=>15),    /* 单件商品配送的价格 */
-                                    array('name' => 'base_fee',    'value'=>10),    /* 1000克以内的价格 */
-                                    array('name' => 'step_fee',     'value'=>5),    /* 续重每1000克增加的价格 */
-                                );
+        array('name' => 'item_fee', 'value' => 15),    /* 单件商品配送的价格 */
+        array('name' => 'base_fee', 'value' => 10),    /* 1000克以内的价格 */
+        array('name' => 'step_fee', 'value' => 5),    /* 续重每1000克增加的价格 */
+    );
 
     /* 模式编辑器 */
     $modules[$i]['print_model'] = 2;
@@ -76,7 +76,7 @@ class zto
      */
     public function zto($cfg = array())
     {
-        foreach ($cfg as $key=>$val) {
+        foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];
         }
     }
@@ -84,9 +84,9 @@ class zto
     /**
      * 计算订单的配送费用的函数
      *
-     * @param   float   $goods_weight   商品重量
-     * @param   float   $goods_amount   商品金额
-     * @param   float   $goods_number   商品件数
+     * @param float $goods_weight 商品重量
+     * @param float $goods_amount 商品金额
+     * @param float $goods_number 商品件数
      * @return  decimal
      */
     public function calculate($goods_weight, $goods_amount, $goods_number)
@@ -113,17 +113,17 @@ class zto
      * 查询发货状态
      *
      * @access  public
-     * @param   string  $invoice_sn     发货单号
+     * @param string $invoice_sn 发货单号
      * @return  string
      */
     public function query($invoice_sn)
     {
-        $str = '<form style="margin:0px" methods="post" '.
-            'action="http://www.zto.cn/bill.asp" name="queryForm_' .$invoice_sn. '" target="_blank">'.
-            '<input type="hidden" name="ID" value="' .str_replace("<br>", "\n", $invoice_sn). '" />'.
-            '<a href="javascript:document.forms[\'queryForm_' .$invoice_sn. '\'].submit();">' .$invoice_sn. '</a>'.
-            '<input type="hidden" name="imageField.x" value="26" />'.
-            '<input type="hidden" name="imageField.x" value="43" />'.
+        $str = '<form style="margin:0px" methods="post" ' .
+            'action="http://www.zto.cn/bill.asp" name="queryForm_' . $invoice_sn . '" target="_blank">' .
+            '<input type="hidden" name="ID" value="' . str_replace("<br>", "\n", $invoice_sn) . '" />' .
+            '<a href="javascript:document.forms[\'queryForm_' . $invoice_sn . '\'].submit();">' . $invoice_sn . '</a>' .
+            '<input type="hidden" name="imageField.x" value="26" />' .
+            '<input type="hidden" name="imageField.x" value="43" />' .
             '</form>';
 
         return $str;
@@ -133,8 +133,8 @@ class zto
      * 计算保价费用
      * 保价费不低于100元，保价金额不得高于10000元，保价金额超过10000元的，超过的部分无效
      * @access  public
-     * @param   int     $goods_amount       保价费用
-     * @param   int     $insure             保价比例
+     * @param int $goods_amount 保价费用
+     * @param int $insure 保价比例
      *
      * @return void
      */

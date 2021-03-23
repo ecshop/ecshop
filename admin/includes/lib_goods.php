@@ -11,9 +11,9 @@ if (!defined('IN_ECS')) {
 function get_intro_list()
 {
     return array(
-        'is_best'    => $GLOBALS['_LANG']['is_best'],
-        'is_new'     => $GLOBALS['_LANG']['is_new'],
-        'is_hot'     => $GLOBALS['_LANG']['is_hot'],
+        'is_best' => $GLOBALS['_LANG']['is_best'],
+        'is_new' => $GLOBALS['_LANG']['is_new'],
+        'is_hot' => $GLOBALS['_LANG']['is_hot'],
         'is_promote' => $GLOBALS['_LANG']['is_promote'],
         'all_type' => $GLOBALS['_LANG']['all_type'],
     );
@@ -26,7 +26,7 @@ function get_intro_list()
 function get_unit_list()
 {
     return array(
-        '1'     => $GLOBALS['_LANG']['unit_kg'],
+        '1' => $GLOBALS['_LANG']['unit_kg'],
         '0.001' => $GLOBALS['_LANG']['unit_g'],
     );
 }
@@ -38,14 +38,14 @@ function get_unit_list()
 function get_user_rank_list()
 {
     $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('user_rank') .
-           " ORDER BY min_points";
+        " ORDER BY min_points";
 
     return $GLOBALS['db']->getAll($sql);
 }
 
 /**
  * 取得某商品的会员价格列表
- * @param   int     $goods_id   商品编号
+ * @param int $goods_id 商品编号
  * @return  array   会员价格列表 user_rank => user_price
  */
 function get_member_price_list($goods_id)
@@ -53,8 +53,8 @@ function get_member_price_list($goods_id)
     /* 取得会员价格 */
     $price_list = array();
     $sql = "SELECT user_rank, user_price FROM " .
-           $GLOBALS['ecs']->table('member_price') .
-           " WHERE goods_id = '$goods_id'";
+        $GLOBALS['ecs']->table('member_price') .
+        " WHERE goods_id = '$goods_id'";
     $res = $GLOBALS['db']->query($sql);
     while ($row = $GLOBALS['db']->fetchRow($res)) {
         $price_list[$row['user_rank']] = $row['user_price'];
@@ -66,10 +66,10 @@ function get_member_price_list($goods_id)
 /**
  * 插入或更新商品属性
  *
- * @param   int     $goods_id           商品编号
- * @param   array   $id_list            属性编号数组
- * @param   array   $is_spec_list       是否规格数组 'true' | 'false'
- * @param   array   $value_price_list   属性值数组
+ * @param int $goods_id 商品编号
+ * @param array $id_list 属性编号数组
+ * @param array $is_spec_list 是否规格数组 'true' | 'false'
+ * @param array $value_price_list 属性值数组
  * @return  array                       返回受到影响的goods_attr_id数组
  */
 function handle_goods_attr($goods_id, $id_list, $is_spec_list, $value_price_list)
@@ -110,7 +110,7 @@ function handle_goods_attr($goods_id, $id_list, $is_spec_list, $value_price_list
             $goods_attr_id[$id] = $result_id;
         } else {
             $sql = "INSERT INTO " . $GLOBALS['ecs']->table('goods_attr') . " (goods_id, attr_id, attr_value, attr_price) " .
-                    "VALUES ('$goods_id', '$id', '$value', '$price')";
+                "VALUES ('$goods_id', '$id', '$value', '$price')";
         }
 
         $GLOBALS['db']->query($sql);
@@ -125,9 +125,9 @@ function handle_goods_attr($goods_id, $id_list, $is_spec_list, $value_price_list
 
 /**
  * 保存某商品的会员价格
- * @param   int     $goods_id   商品编号
- * @param   array   $rank_list  等级列表
- * @param   array   $price_list 价格列表
+ * @param int $goods_id 商品编号
+ * @param array $rank_list 等级列表
+ * @param array $price_list 价格列表
  * @return  void
  */
 function handle_member_price($goods_id, $rank_list, $price_list)
@@ -139,24 +139,24 @@ function handle_member_price($goods_id, $rank_list, $price_list)
 
         // 插入或更新记录
         $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('member_price') .
-               " WHERE goods_id = '$goods_id' AND user_rank = '$rank'";
+            " WHERE goods_id = '$goods_id' AND user_rank = '$rank'";
         if ($GLOBALS['db']->getOne($sql) > 0) {
             /* 如果会员价格是小于0则删除原来价格，不是则更新为新的价格 */
             if ($price < 0) {
                 $sql = "DELETE FROM " . $GLOBALS['ecs']->table('member_price') .
-                       " WHERE goods_id = '$goods_id' AND user_rank = '$rank' LIMIT 1";
+                    " WHERE goods_id = '$goods_id' AND user_rank = '$rank' LIMIT 1";
             } else {
                 $sql = "UPDATE " . $GLOBALS['ecs']->table('member_price') .
-                       " SET user_price = '$price' " .
-                       "WHERE goods_id = '$goods_id' " .
-                       "AND user_rank = '$rank' LIMIT 1";
+                    " SET user_price = '$price' " .
+                    "WHERE goods_id = '$goods_id' " .
+                    "AND user_rank = '$rank' LIMIT 1";
             }
         } else {
             if ($price == -1) {
                 $sql = '';
             } else {
                 $sql = "INSERT INTO " . $GLOBALS['ecs']->table('member_price') . " (goods_id, user_rank, user_price) " .
-                       "VALUES ('$goods_id', '$rank', '$price')";
+                    "VALUES ('$goods_id', '$rank', '$price')";
             }
         }
 
@@ -168,23 +168,23 @@ function handle_member_price($goods_id, $rank_list, $price_list)
 
 /**
  * 保存某商品的扩展分类
- * @param   int     $goods_id   商品编号
- * @param   array   $cat_list   分类编号数组
+ * @param int $goods_id 商品编号
+ * @param array $cat_list 分类编号数组
  * @return  void
  */
 function handle_other_cat($goods_id, $cat_list)
 {
     /* 查询现有的扩展分类 */
     $sql = "SELECT cat_id FROM " . $GLOBALS['ecs']->table('goods_cat') .
-            " WHERE goods_id = '$goods_id'";
+        " WHERE goods_id = '$goods_id'";
     $exist_list = $GLOBALS['db']->getCol($sql);
 
     /* 删除不再有的分类 */
     $delete_list = array_diff($exist_list, $cat_list);
     if ($delete_list) {
         $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods_cat') .
-                " WHERE goods_id = '$goods_id' " .
-                "AND cat_id " . db_create_in($delete_list);
+            " WHERE goods_id = '$goods_id' " .
+            "AND cat_id " . db_create_in($delete_list);
         $GLOBALS['db']->query($sql);
     }
 
@@ -193,71 +193,71 @@ function handle_other_cat($goods_id, $cat_list)
     foreach ($add_list as $cat_id) {
         // 插入记录
         $sql = "INSERT INTO " . $GLOBALS['ecs']->table('goods_cat') .
-                " (goods_id, cat_id) " .
-                "VALUES ('$goods_id', '$cat_id')";
+            " (goods_id, cat_id) " .
+            "VALUES ('$goods_id', '$cat_id')";
         $GLOBALS['db']->query($sql);
     }
 }
 
 /**
  * 保存某商品的关联商品
- * @param   int     $goods_id
+ * @param int $goods_id
  * @return  void
  */
 function handle_link_goods($goods_id)
 {
     $sql = "UPDATE " . $GLOBALS['ecs']->table('link_goods') . " SET " .
-            " goods_id = '$goods_id' " .
-            " WHERE goods_id = '0'" .
-            " AND admin_id = '$_SESSION[admin_id]'";
+        " goods_id = '$goods_id' " .
+        " WHERE goods_id = '0'" .
+        " AND admin_id = '$_SESSION[admin_id]'";
     $GLOBALS['db']->query($sql);
 
     $sql = "UPDATE " . $GLOBALS['ecs']->table('link_goods') . " SET " .
-            " link_goods_id = '$goods_id' " .
-            " WHERE link_goods_id = '0'" .
-            " AND admin_id = '$_SESSION[admin_id]'";
+        " link_goods_id = '$goods_id' " .
+        " WHERE link_goods_id = '0'" .
+        " AND admin_id = '$_SESSION[admin_id]'";
     $GLOBALS['db']->query($sql);
 }
 
 /**
  * 保存某商品的配件
- * @param   int     $goods_id
+ * @param int $goods_id
  * @return  void
  */
 function handle_group_goods($goods_id)
 {
     $sql = "UPDATE " . $GLOBALS['ecs']->table('group_goods') . " SET " .
-            " parent_id = '$goods_id' " .
-            " WHERE parent_id = '0'" .
-            " AND admin_id = '$_SESSION[admin_id]'";
+        " parent_id = '$goods_id' " .
+        " WHERE parent_id = '0'" .
+        " AND admin_id = '$_SESSION[admin_id]'";
     $GLOBALS['db']->query($sql);
 }
 
 /**
  * 保存某商品的关联文章
- * @param   int     $goods_id
+ * @param int $goods_id
  * @return  void
  */
 function handle_goods_article($goods_id)
 {
     $sql = "UPDATE " . $GLOBALS['ecs']->table('goods_article') . " SET " .
-            " goods_id = '$goods_id' " .
-            " WHERE goods_id = '0'" .
-            " AND admin_id = '$_SESSION[admin_id]'";
+        " goods_id = '$goods_id' " .
+        " WHERE goods_id = '0'" .
+        " AND admin_id = '$_SESSION[admin_id]'";
     $GLOBALS['db']->query($sql);
 }
 
 /**
  * 保存某商品的相册图片
- * @param   int     $goods_id
- * @param   array   $image_files
- * @param   array   $image_descs
+ * @param int $goods_id
+ * @param array $image_files
+ * @param array $image_descs
  * @return  void
  */
 function handle_gallery_image($goods_id, $image_files, $image_descs, $image_urls)
 {
     /* 是否处理缩略图 */
-    $proc_thumb = (isset($GLOBALS['shop_id']) && $GLOBALS['shop_id'] > 0)? false : true;
+    $proc_thumb = (isset($GLOBALS['shop_id']) && $GLOBALS['shop_id'] > 0) ? false : true;
     foreach ($image_descs as $key => $img_desc) {
         /* 是否成功上传 */
         $flag = false;
@@ -298,12 +298,12 @@ function handle_gallery_image($goods_id, $image_files, $image_descs, $image_urls
             }
             // 如果服务器支持GD 则添加水印
             if ($proc_thumb && gd_version() > 0) {
-                $pos        = strpos(basename($img_original), '.');
-                $newname    = dirname($img_original) . '/' . $GLOBALS['image']->random_filename() . substr(basename($img_original), $pos);
+                $pos = strpos(basename($img_original), '.');
+                $newname = dirname($img_original) . '/' . $GLOBALS['image']->random_filename() . substr(basename($img_original), $pos);
                 copy('../' . $img_original, '../' . $newname);
-                $img_url    = $newname;
+                $img_url = $newname;
 
-                $GLOBALS['image']->add_watermark('../'.$img_url, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']);
+                $GLOBALS['image']->add_watermark('../' . $img_url, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']);
             }
 
             /* 重新格式化图片名称 */
@@ -311,7 +311,7 @@ function handle_gallery_image($goods_id, $image_files, $image_descs, $image_urls
             $img_url = reformat_image_name('gallery', $goods_id, $img_url, 'goods');
             $thumb_url = reformat_image_name('gallery_thumb', $goods_id, $thumb_url, 'thumb');
             $sql = "INSERT INTO " . $GLOBALS['ecs']->table('goods_gallery') . " (goods_id, img_url, img_desc, thumb_url, img_original) " .
-                    "VALUES ('$goods_id', '$img_url', '$img_desc', '$thumb_url', '$img_original')";
+                "VALUES ('$goods_id', '$img_url', '$img_desc', '$thumb_url', '$img_original')";
             $GLOBALS['db']->query($sql);
             /* 不保留商品原图的时候删除原图 */
             if ($proc_thumb && !$GLOBALS['_CFG']['retain_original_img'] && !empty($img_original)) {
@@ -338,7 +338,7 @@ function handle_gallery_image($goods_id, $image_files, $image_descs, $image_urls
             /* 重新格式化图片名称 */
             $img_url = $img_original = htmlspecialchars($image_url);
             $sql = "INSERT INTO " . $GLOBALS['ecs']->table('goods_gallery') . " (goods_id, img_url, img_desc, thumb_url, img_original) " .
-                    "VALUES ('$goods_id', '$img_url', '$img_desc', '$thumb_url', '$img_original')";
+                "VALUES ('$goods_id', '$img_url', '$img_desc', '$thumb_url', '$img_original')";
             $GLOBALS['db']->query($sql);
 
             @unlink($down_img);
@@ -348,9 +348,9 @@ function handle_gallery_image($goods_id, $image_files, $image_descs, $image_urls
 
 /**
  * 修改商品某字段值
- * @param   string  $goods_id   商品编号，可以为多个，用 ',' 隔开
- * @param   string  $field      字段名
- * @param   string  $value      字段值
+ * @param string $goods_id 商品编号，可以为多个，用 ',' 隔开
+ * @param string $field 字段名
+ * @param string $value 字段值
  * @return  bool
  */
 function update_goods($goods_id, $field, $value)
@@ -360,8 +360,8 @@ function update_goods($goods_id, $field, $value)
         clear_cache_files();
 
         $sql = "UPDATE " . $GLOBALS['ecs']->table('goods') .
-                " SET $field = '$value' , last_update = '". gmtime() ."' " .
-                "WHERE goods_id " . db_create_in($goods_id);
+            " SET $field = '$value' , last_update = '" . gmtime() . "' " .
+            "WHERE goods_id " . db_create_in($goods_id);
         return $GLOBALS['db']->query($sql);
     } else {
         return false;
@@ -370,7 +370,7 @@ function update_goods($goods_id, $field, $value)
 
 /**
  * 从回收站删除多个商品
- * @param   mix     $goods_id   商品id列表：可以逗号格开，也可以是数组
+ * @param mix $goods_id 商品id列表：可以逗号格开，也可以是数组
  * @return  void
  */
 function delete_goods($goods_id)
@@ -381,7 +381,7 @@ function delete_goods($goods_id)
 
     /* 取得有效商品id */
     $sql = "SELECT DISTINCT goods_id FROM " . $GLOBALS['ecs']->table('goods') .
-            " WHERE goods_id " . db_create_in($goods_id) . " AND is_delete = 1";
+        " WHERE goods_id " . db_create_in($goods_id) . " AND is_delete = 1";
     $goods_id = $GLOBALS['db']->getCol($sql);
     if (empty($goods_id)) {
         return;
@@ -389,8 +389,8 @@ function delete_goods($goods_id)
 
     /* 删除商品图片和轮播图片文件 */
     $sql = "SELECT goods_thumb, goods_img, original_img " .
-            "FROM " . $GLOBALS['ecs']->table('goods') .
-            " WHERE goods_id " . db_create_in($goods_id);
+        "FROM " . $GLOBALS['ecs']->table('goods') .
+        " WHERE goods_id " . db_create_in($goods_id);
     $res = $GLOBALS['db']->query($sql);
     while ($goods = $GLOBALS['db']->fetchRow($res)) {
         if (!empty($goods['goods_thumb'])) {
@@ -406,18 +406,18 @@ function delete_goods($goods_id)
 
     /* 删除商品 */
     $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods') .
-            " WHERE goods_id " . db_create_in($goods_id);
+        " WHERE goods_id " . db_create_in($goods_id);
     $GLOBALS['db']->query($sql);
 
     /* 删除商品的货品记录 */
     $sql = "DELETE FROM " . $GLOBALS['ecs']->table('products') .
-            " WHERE goods_id " . db_create_in($goods_id);
+        " WHERE goods_id " . db_create_in($goods_id);
     $GLOBALS['db']->query($sql);
 
     /* 删除商品相册的图片文件 */
     $sql = "SELECT img_url, thumb_url, img_original " .
-            "FROM " . $GLOBALS['ecs']->table('goods_gallery') .
-            " WHERE goods_id " . db_create_in($goods_id);
+        "FROM " . $GLOBALS['ecs']->table('goods_gallery') .
+        " WHERE goods_id " . db_create_in($goods_id);
     $res = $GLOBALS['db']->query($sql);
     while ($row = $GLOBALS['db']->fetchRow($res)) {
         if (!empty($row['img_url'])) {
@@ -471,7 +471,7 @@ function delete_goods($goods_id)
 
 /**
  * 为某商品生成唯一的货号
- * @param   int     $goods_id   商品编号
+ * @param int $goods_id 商品编号
  * @return  string  唯一的货号
  */
 function generate_goods_sn($goods_id)
@@ -479,8 +479,8 @@ function generate_goods_sn($goods_id)
     $goods_sn = $GLOBALS['_CFG']['sn_prefix'] . str_repeat('0', 6 - strlen($goods_id)) . $goods_id;
 
     $sql = "SELECT goods_sn FROM " . $GLOBALS['ecs']->table('goods') .
-            " WHERE goods_sn LIKE '" . mysql_like_quote($goods_sn) . "%' AND goods_id <> '$goods_id' " .
-            " ORDER BY LENGTH(goods_sn) DESC";
+        " WHERE goods_sn LIKE '" . mysql_like_quote($goods_sn) . "%' AND goods_id <> '$goods_id' " .
+        " ORDER BY LENGTH(goods_sn) DESC";
     $sn_list = $GLOBALS['db']->getCol($sql);
     if (in_array($goods_sn, $sn_list)) {
         $max = pow(10, strlen($sn_list[0]) - strlen($goods_sn) + 1) - 1;
@@ -497,8 +497,8 @@ function generate_goods_sn($goods_id)
 /**
  * 商品货号是否重复
  *
- * @param   string     $goods_sn        商品货号；请在传入本参数前对本参数进行SQl脚本过滤
- * @param   int        $goods_id        商品id；默认值为：0，没有商品id
+ * @param string $goods_sn 商品货号；请在传入本参数前对本参数进行SQl脚本过滤
+ * @param int $goods_id 商品id；默认值为：0，没有商品id
  * @return  bool                        true，重复；false，不重复
  */
 function check_goods_sn_exist($goods_sn, $goods_id = 0)
@@ -510,10 +510,10 @@ function check_goods_sn_exist($goods_sn, $goods_id = 0)
     }
 
     if (empty($goods_id)) {
-        $sql = "SELECT goods_id FROM " . $GLOBALS['ecs']->table('goods') ."
+        $sql = "SELECT goods_id FROM " . $GLOBALS['ecs']->table('goods') . "
                 WHERE goods_sn = '$goods_sn'";
     } else {
-        $sql = "SELECT goods_id FROM " . $GLOBALS['ecs']->table('goods') ."
+        $sql = "SELECT goods_id FROM " . $GLOBALS['ecs']->table('goods') . "
                 WHERE goods_sn = '$goods_sn'
                 AND goods_id <> '$goods_id'";
     }
@@ -529,8 +529,8 @@ function check_goods_sn_exist($goods_sn, $goods_id = 0)
 
 /**
  * 取得通用属性和某分类的属性，以及某商品的属性值
- * @param   int     $cat_id     分类编号
- * @param   int     $goods_id   商品编号
+ * @param int $cat_id 分类编号
+ * @param int $goods_id 商品编号
  * @return  array   规格与属性列表
  */
 function get_attr_list($cat_id, $goods_id = 0)
@@ -540,12 +540,12 @@ function get_attr_list($cat_id, $goods_id = 0)
     }
 
     // 查询属性值及商品的属性值
-    $sql = "SELECT a.attr_id, a.attr_name, a.attr_input_type, a.attr_type, a.attr_values, v.attr_value, v.attr_price ".
-            "FROM " .$GLOBALS['ecs']->table('attribute'). " AS a ".
-            "LEFT JOIN " .$GLOBALS['ecs']->table('goods_attr'). " AS v ".
-            "ON v.attr_id = a.attr_id AND v.goods_id = '$goods_id' ".
-            "WHERE a.cat_id = " . intval($cat_id) ." OR a.cat_id = 0 ".
-            "ORDER BY a.sort_order, a.attr_type, a.attr_id, v.attr_price, v.goods_attr_id";
+    $sql = "SELECT a.attr_id, a.attr_name, a.attr_input_type, a.attr_type, a.attr_values, v.attr_value, v.attr_price " .
+        "FROM " . $GLOBALS['ecs']->table('attribute') . " AS a " .
+        "LEFT JOIN " . $GLOBALS['ecs']->table('goods_attr') . " AS v " .
+        "ON v.attr_id = a.attr_id AND v.goods_id = '$goods_id' " .
+        "WHERE a.cat_id = " . intval($cat_id) . " OR a.cat_id = 0 " .
+        "ORDER BY a.sort_order, a.attr_type, a.attr_id, v.attr_price, v.goods_attr_id";
 
     $row = $GLOBALS['db']->GetAll($sql);
 
@@ -562,7 +562,7 @@ function get_goods_type_specifications()
 {
     // 查询
     $sql = "SELECT DISTINCT cat_id
-            FROM " .$GLOBALS['ecs']->table('attribute'). "
+            FROM " . $GLOBALS['ecs']->table('attribute') . "
             WHERE attr_type = 1";
     $row = $GLOBALS['db']->GetAll($sql);
 
@@ -579,8 +579,8 @@ function get_goods_type_specifications()
  * 根据属性数组创建属性的表单
  *
  * @access  public
- * @param   int     $cat_id     分类编号
- * @param   int     $goods_id   商品编号
+ * @param int $cat_id 分类编号
+ * @param int $goods_id 商品编号
  * @return  string
  */
 function build_attr_html($cat_id, $goods_id = 0)
@@ -601,19 +601,19 @@ function build_attr_html($cat_id, $goods_id = 0)
         $html .= "$val[attr_name]</td><td><input type='hidden' name='attr_id_list[]' value='$val[attr_id]' />";
 
         if ($val['attr_input_type'] == 0) {
-            $html .= '<input name="attr_value_list[]" type="text" value="' .htmlspecialchars($val['attr_value']). '" size="40" /> ';
+            $html .= '<input name="attr_value_list[]" type="text" value="' . htmlspecialchars($val['attr_value']) . '" size="40" /> ';
         } elseif ($val['attr_input_type'] == 2) {
-            $html .= '<textarea name="attr_value_list[]" rows="3" cols="40">' .htmlspecialchars($val['attr_value']). '</textarea>';
+            $html .= '<textarea name="attr_value_list[]" rows="3" cols="40">' . htmlspecialchars($val['attr_value']) . '</textarea>';
         } else {
             $html .= '<select name="attr_value_list[]">';
-            $html .= '<option value="">' .$GLOBALS['_LANG']['select_please']. '</option>';
+            $html .= '<option value="">' . $GLOBALS['_LANG']['select_please'] . '</option>';
 
             $attr_values = explode("\n", $val['attr_values']);
 
             foreach ($attr_values as $opt) {
-                $opt    = trim(htmlspecialchars($opt));
+                $opt = trim(htmlspecialchars($opt));
 
-                $html   .= ($val['attr_value'] != $opt) ?
+                $html .= ($val['attr_value'] != $opt) ?
                     '<option value="' . $opt . '">' . $opt . '</option>' :
                     '<option value="' . $opt . '" selected="selected">' . $opt . '</option>';
             }
@@ -621,7 +621,7 @@ function build_attr_html($cat_id, $goods_id = 0)
         }
 
         $html .= ($val['attr_type'] == 1 || $val['attr_type'] == 2) ?
-            $GLOBALS['_LANG']['spec_price'].' <input type="text" name="attr_price_list[]" value="' . $val['attr_price'] . '" size="5" maxlength="10" />' :
+            $GLOBALS['_LANG']['spec_price'] . ' <input type="text" name="attr_price_list[]" value="' . $val['attr_price'] . '" size="5" maxlength="10" />' :
             ' <input type="hidden" name="attr_price_list[]" value="0" />';
 
         $html .= '</td></tr>';
@@ -636,16 +636,16 @@ function build_attr_html($cat_id, $goods_id = 0)
  * 获得指定商品相关的商品
  *
  * @access  public
- * @param   integer $goods_id
+ * @param integer $goods_id
  * @return  array
  */
 function get_linked_goods($goods_id)
 {
     $sql = "SELECT lg.link_goods_id AS goods_id, g.goods_name, lg.is_double " .
-            "FROM " . $GLOBALS['ecs']->table('link_goods') . " AS lg, " .
-                $GLOBALS['ecs']->table('goods') . " AS g " .
-            "WHERE lg.goods_id = '$goods_id' " .
-            "AND lg.link_goods_id = g.goods_id ";
+        "FROM " . $GLOBALS['ecs']->table('link_goods') . " AS lg, " .
+        $GLOBALS['ecs']->table('goods') . " AS g " .
+        "WHERE lg.goods_id = '$goods_id' " .
+        "AND lg.link_goods_id = g.goods_id ";
     if ($goods_id == 0) {
         $sql .= " AND lg.admin_id = '$_SESSION[admin_id]'";
     }
@@ -666,16 +666,16 @@ function get_linked_goods($goods_id)
  * 获得指定商品的配件
  *
  * @access  public
- * @param   integer $goods_id
+ * @param integer $goods_id
  * @return  array
  */
 function get_group_goods($goods_id)
 {
     $sql = "SELECT gg.goods_id, CONCAT(g.goods_name, ' -- [', gg.goods_price, ']') AS goods_name " .
-            "FROM " . $GLOBALS['ecs']->table('group_goods') . " AS gg, " .
-                $GLOBALS['ecs']->table('goods') . " AS g " .
-            "WHERE gg.parent_id = '$goods_id' " .
-            "AND gg.goods_id = g.goods_id ";
+        "FROM " . $GLOBALS['ecs']->table('group_goods') . " AS gg, " .
+        $GLOBALS['ecs']->table('goods') . " AS g " .
+        "WHERE gg.parent_id = '$goods_id' " .
+        "AND gg.goods_id = g.goods_id ";
     if ($goods_id == 0) {
         $sql .= " AND gg.admin_id = '$_SESSION[admin_id]'";
     }
@@ -688,16 +688,16 @@ function get_group_goods($goods_id)
  * 获得商品的关联文章
  *
  * @access  public
- * @param   integer $goods_id
+ * @param integer $goods_id
  * @return  array
  */
 function get_goods_articles($goods_id)
 {
     $sql = "SELECT g.article_id, a.title " .
-            "FROM " .$GLOBALS['ecs']->table('goods_article') . " AS g, " .
-                $GLOBALS['ecs']->table('article') . " AS a " .
-            "WHERE g.goods_id = '$goods_id' " .
-            "AND g.article_id = a.article_id ";
+        "FROM " . $GLOBALS['ecs']->table('goods_article') . " AS g, " .
+        $GLOBALS['ecs']->table('article') . " AS a " .
+        "WHERE g.goods_id = '$goods_id' " .
+        "AND g.article_id = a.article_id ";
     if ($goods_id == 0) {
         $sql .= " AND g.admin_id = '$_SESSION[admin_id]'";
     }
@@ -715,7 +715,7 @@ function get_goods_articles($goods_id)
  * @params  integer $conditions
  * @return  array
  */
-function goods_list($is_delete, $real_goods=1, $conditions = '')
+function goods_list($is_delete, $real_goods = 1, $conditions = '')
 {
     /* 过滤条件 */
     $param_str = '-' . $is_delete . '-' . $real_goods;
@@ -724,22 +724,22 @@ function goods_list($is_delete, $real_goods=1, $conditions = '')
         $day = getdate();
         $today = local_mktime(23, 59, 59, $day['mon'], $day['mday'], $day['year']);
 
-        $filter['cat_id']           = empty($_REQUEST['cat_id']) ? 0 : intval($_REQUEST['cat_id']);
-        $filter['intro_type']       = empty($_REQUEST['intro_type']) ? '' : trim($_REQUEST['intro_type']);
-        $filter['is_promote']       = empty($_REQUEST['is_promote']) ? 0 : intval($_REQUEST['is_promote']);
-        $filter['stock_warning']    = empty($_REQUEST['stock_warning']) ? 0 : intval($_REQUEST['stock_warning']);
-        $filter['brand_id']         = empty($_REQUEST['brand_id']) ? 0 : intval($_REQUEST['brand_id']);
-        $filter['keyword']          = empty($_REQUEST['keyword']) ? '' : trim($_REQUEST['keyword']);
+        $filter['cat_id'] = empty($_REQUEST['cat_id']) ? 0 : intval($_REQUEST['cat_id']);
+        $filter['intro_type'] = empty($_REQUEST['intro_type']) ? '' : trim($_REQUEST['intro_type']);
+        $filter['is_promote'] = empty($_REQUEST['is_promote']) ? 0 : intval($_REQUEST['is_promote']);
+        $filter['stock_warning'] = empty($_REQUEST['stock_warning']) ? 0 : intval($_REQUEST['stock_warning']);
+        $filter['brand_id'] = empty($_REQUEST['brand_id']) ? 0 : intval($_REQUEST['brand_id']);
+        $filter['keyword'] = empty($_REQUEST['keyword']) ? '' : trim($_REQUEST['keyword']);
         $filter['suppliers_id'] = isset($_REQUEST['suppliers_id']) ? (empty($_REQUEST['suppliers_id']) ? '' : trim($_REQUEST['suppliers_id'])) : '';
         $filter['is_on_sale'] = isset($_REQUEST['is_on_sale']) ? ((empty($_REQUEST['is_on_sale']) && $_REQUEST['is_on_sale'] === 0) ? '' : trim($_REQUEST['is_on_sale'])) : '';
         if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1) {
             $filter['keyword'] = json_str_iconv($filter['keyword']);
         }
-        $filter['sort_by']          = empty($_REQUEST['sort_by']) ? 'goods_id' : trim($_REQUEST['sort_by']);
-        $filter['sort_order']       = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
-        $filter['extension_code']   = empty($_REQUEST['extension_code']) ? '' : trim($_REQUEST['extension_code']);
-        $filter['is_delete']        = $is_delete;
-        $filter['real_goods']       = $real_goods;
+        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'goods_id' : trim($_REQUEST['sort_by']);
+        $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
+        $filter['extension_code'] = empty($_REQUEST['extension_code']) ? '' : trim($_REQUEST['extension_code']);
+        $filter['is_delete'] = $is_delete;
+        $filter['real_goods'] = $real_goods;
 
         $where = $filter['cat_id'] > 0 ? " AND " . get_children($filter['cat_id']) : '';
 
@@ -798,22 +798,22 @@ function goods_list($is_delete, $real_goods=1, $conditions = '')
         $where .= $conditions;
 
         /* 记录总数 */
-        $sql = "SELECT COUNT(*) FROM " .$GLOBALS['ecs']->table('goods'). " AS g WHERE is_delete='$is_delete' $where";
+        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods') . " AS g WHERE is_delete='$is_delete' $where";
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         /* 分页大小 */
         $filter = page_and_size($filter);
 
         $sql = "SELECT goods_id, goods_name, goods_type, goods_sn, shop_price, is_on_sale, is_best, is_new, is_hot, sort_order, goods_number, integral, " .
-                    " (promote_price > 0 AND promote_start_date <= '$today' AND promote_end_date >= '$today') AS is_promote ".
-                    " FROM " . $GLOBALS['ecs']->table('goods') . " AS g WHERE is_delete='$is_delete' $where" .
-                    " ORDER BY $filter[sort_by] $filter[sort_order] ".
-                    " LIMIT " . $filter['start'] . ",$filter[page_size]";
+            " (promote_price > 0 AND promote_start_date <= '$today' AND promote_end_date >= '$today') AS is_promote " .
+            " FROM " . $GLOBALS['ecs']->table('goods') . " AS g WHERE is_delete='$is_delete' $where" .
+            " ORDER BY $filter[sort_by] $filter[sort_order] " .
+            " LIMIT " . $filter['start'] . ",$filter[page_size]";
 
         $filter['keyword'] = stripslashes($filter['keyword']);
         set_filter($filter, $sql, $param_str);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
     $row = $GLOBALS['db']->getAll($sql);
@@ -939,16 +939,16 @@ function product_list($goods_id, $conditions = '')
         $day = getdate();
         $today = local_mktime(23, 59, 59, $day['mon'], $day['mday'], $day['year']);
 
-        $filter['goods_id']         = $goods_id;
-        $filter['keyword']          = empty($_REQUEST['keyword']) ? '' : trim($_REQUEST['keyword']);
-        $filter['stock_warning']    = empty($_REQUEST['stock_warning']) ? 0 : intval($_REQUEST['stock_warning']);
+        $filter['goods_id'] = $goods_id;
+        $filter['keyword'] = empty($_REQUEST['keyword']) ? '' : trim($_REQUEST['keyword']);
+        $filter['stock_warning'] = empty($_REQUEST['stock_warning']) ? 0 : intval($_REQUEST['stock_warning']);
 
         if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1) {
             $filter['keyword'] = json_str_iconv($filter['keyword']);
         }
-        $filter['sort_by']          = empty($_REQUEST['sort_by']) ? 'product_id' : trim($_REQUEST['sort_by']);
-        $filter['sort_order']       = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
-        $filter['extension_code']   = empty($_REQUEST['extension_code']) ? '' : trim($_REQUEST['extension_code']);
+        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'product_id' : trim($_REQUEST['sort_by']);
+        $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
+        $filter['extension_code'] = empty($_REQUEST['extension_code']) ? '' : trim($_REQUEST['extension_code']);
         $filter['page_count'] = isset($filter['page_count']) ? $filter['page_count'] : 1;
 
         $where = '';
@@ -966,7 +966,7 @@ function product_list($goods_id, $conditions = '')
         $where .= $conditions;
 
         /* 记录总数 */
-        $sql = "SELECT COUNT(*) FROM " .$GLOBALS['ecs']->table('products'). " AS p WHERE goods_id = $goods_id $where";
+        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('products') . " AS p WHERE goods_id = $goods_id $where";
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         $sql = "SELECT product_id, goods_id, goods_attr, product_sn, product_number
@@ -975,9 +975,9 @@ function product_list($goods_id, $conditions = '')
                 ORDER BY $filter[sort_by] $filter[sort_order]";
 
         $filter['keyword'] = stripslashes($filter['keyword']);
-    //set_filter($filter, $sql, $param_str);
+        //set_filter($filter, $sql, $param_str);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
     $row = $GLOBALS['db']->getAll($sql);
@@ -1002,8 +1002,8 @@ function product_list($goods_id, $conditions = '')
  * 取货品信息
  *
  * @access  public
- * @param   int         $product_id     货品id
- * @param   int         $filed          字段
+ * @param int $product_id 货品id
+ * @param int $filed 字段
  * @return  array
  */
 function get_product_info($product_id, $filed = '')
@@ -1028,7 +1028,7 @@ function get_product_info($product_id, $filed = '')
 /**
  * 检查单个商品是否存在规格
  *
- * @param   int        $goods_id          商品id
+ * @param int $goods_id 商品id
  * @return  bool                          true，存在；false，不存在
  */
 function check_goods_specifications_exist($goods_id)
@@ -1036,7 +1036,7 @@ function check_goods_specifications_exist($goods_id)
     $goods_id = intval($goods_id);
 
     $sql = "SELECT COUNT(a.attr_id)
-            FROM " .$GLOBALS['ecs']->table('attribute'). " AS a, " .$GLOBALS['ecs']->table('goods'). " AS g
+            FROM " . $GLOBALS['ecs']->table('attribute') . " AS a, " . $GLOBALS['ecs']->table('goods') . " AS g
             WHERE a.cat_id = g.goods_type
             AND g.goods_id = '$goods_id'";
 
@@ -1052,9 +1052,9 @@ function check_goods_specifications_exist($goods_id)
 /**
  * 商品的货品规格是否存在
  *
- * @param   string     $goods_attr        商品的货品规格
- * @param   string     $goods_id          商品id
- * @param   int        $product_id        商品的货品id；默认值为：0，没有货品id
+ * @param string $goods_attr 商品的货品规格
+ * @param string $goods_id 商品id
+ * @param int $product_id 商品的货品id；默认值为：0，没有货品id
  * @return  bool                          true，重复；false，不重复
  */
 function check_goods_attr_exist($goods_attr, $goods_id, $product_id = 0)
@@ -1065,11 +1065,11 @@ function check_goods_attr_exist($goods_attr, $goods_id, $product_id = 0)
     }
 
     if (empty($product_id)) {
-        $sql = "SELECT product_id FROM " . $GLOBALS['ecs']->table('products') ."
+        $sql = "SELECT product_id FROM " . $GLOBALS['ecs']->table('products') . "
                 WHERE goods_attr = '$goods_attr'
                 AND goods_id = '$goods_id'";
     } else {
-        $sql = "SELECT product_id FROM " . $GLOBALS['ecs']->table('products') ."
+        $sql = "SELECT product_id FROM " . $GLOBALS['ecs']->table('products') . "
                 WHERE goods_attr = '$goods_attr'
                 AND goods_id = '$goods_id'
                 AND product_id <> '$product_id'";
@@ -1087,8 +1087,8 @@ function check_goods_attr_exist($goods_attr, $goods_id, $product_id = 0)
 /**
  * 商品的货品货号是否重复
  *
- * @param   string     $product_sn        商品的货品货号；请在传入本参数前对本参数进行SQl脚本过滤
- * @param   int        $product_id        商品的货品id；默认值为：0，没有货品id
+ * @param string $product_sn 商品的货品货号；请在传入本参数前对本参数进行SQl脚本过滤
+ * @param int $product_id 商品的货品id；默认值为：0，没有货品id
  * @return  bool                          true，重复；false，不重复
  */
 function check_product_sn_exist($product_sn, $product_id = 0)
@@ -1098,17 +1098,17 @@ function check_product_sn_exist($product_sn, $product_id = 0)
     if (strlen($product_sn) == 0) {
         return true;    //重复
     }
-    $sql="SELECT goods_id FROM ". $GLOBALS['ecs']->table('goods')."WHERE goods_sn='$product_sn'";
+    $sql = "SELECT goods_id FROM " . $GLOBALS['ecs']->table('goods') . "WHERE goods_sn='$product_sn'";
     if ($GLOBALS['db']->getOne($sql)) {
         return true;    //重复
     }
 
 
     if (empty($product_id)) {
-        $sql = "SELECT product_id FROM " . $GLOBALS['ecs']->table('products') ."
+        $sql = "SELECT product_id FROM " . $GLOBALS['ecs']->table('products') . "
                 WHERE product_sn = '$product_sn'";
     } else {
-        $sql = "SELECT product_id FROM " . $GLOBALS['ecs']->table('products') ."
+        $sql = "SELECT product_id FROM " . $GLOBALS['ecs']->table('products') . "
                 WHERE product_sn = '$product_sn'
                 AND product_id <> '$product_id'";
     }
@@ -1126,7 +1126,7 @@ function check_product_sn_exist($product_sn, $product_id = 0)
  * 格式化商品图片名称（按目录存储）
  *
  */
-function reformat_image_name($type, $goods_id, $source_img, $position='')
+function reformat_image_name($type, $goods_id, $source_img, $position = '')
 {
     $rand_name = gmtime() . sprintf("%03d", mt_rand(1, 999));
     $img_ext = substr($source_img, strrpos($source_img, '.'));
@@ -1135,16 +1135,16 @@ function reformat_image_name($type, $goods_id, $source_img, $position='')
         $dir = IMAGE_DIR;
     }
     $sub_dir = date('Ym', gmtime());
-    if (!make_dir(ROOT_PATH.$dir.'/'.$sub_dir)) {
+    if (!make_dir(ROOT_PATH . $dir . '/' . $sub_dir)) {
         return false;
     }
-    if (!make_dir(ROOT_PATH.$dir.'/'.$sub_dir.'/source_img')) {
+    if (!make_dir(ROOT_PATH . $dir . '/' . $sub_dir . '/source_img')) {
         return false;
     }
-    if (!make_dir(ROOT_PATH.$dir.'/'.$sub_dir.'/goods_img')) {
+    if (!make_dir(ROOT_PATH . $dir . '/' . $sub_dir . '/goods_img')) {
         return false;
     }
-    if (!make_dir(ROOT_PATH.$dir.'/'.$sub_dir.'/thumb_img')) {
+    if (!make_dir(ROOT_PATH . $dir . '/' . $sub_dir . '/thumb_img')) {
         return false;
     }
     switch ($type) {
@@ -1162,16 +1162,16 @@ function reformat_image_name($type, $goods_id, $source_img, $position='')
             break;
     }
     if ($position == 'source') {
-        if (move_image_file(ROOT_PATH.$source_img, ROOT_PATH.$dir.'/'.$sub_dir.'/source_img/'.$img_name.$img_ext)) {
-            return $dir.'/'.$sub_dir.'/source_img/'.$img_name.$img_ext;
+        if (move_image_file(ROOT_PATH . $source_img, ROOT_PATH . $dir . '/' . $sub_dir . '/source_img/' . $img_name . $img_ext)) {
+            return $dir . '/' . $sub_dir . '/source_img/' . $img_name . $img_ext;
         }
     } elseif ($position == 'thumb') {
-        if (move_image_file(ROOT_PATH.$source_img, ROOT_PATH.$dir.'/'.$sub_dir.'/thumb_img/'.$img_name.$img_ext)) {
-            return $dir.'/'.$sub_dir.'/thumb_img/'.$img_name.$img_ext;
+        if (move_image_file(ROOT_PATH . $source_img, ROOT_PATH . $dir . '/' . $sub_dir . '/thumb_img/' . $img_name . $img_ext)) {
+            return $dir . '/' . $sub_dir . '/thumb_img/' . $img_name . $img_ext;
         }
     } else {
-        if (move_image_file(ROOT_PATH.$source_img, ROOT_PATH.$dir.'/'.$sub_dir.'/goods_img/'.$img_name.$img_ext)) {
-            return $dir.'/'.$sub_dir.'/goods_img/'.$img_name.$img_ext;
+        if (move_image_file(ROOT_PATH . $source_img, ROOT_PATH . $dir . '/' . $sub_dir . '/goods_img/' . $img_name . $img_ext)) {
+            return $dir . '/' . $sub_dir . '/goods_img/' . $img_name . $img_ext;
         }
     }
     return false;

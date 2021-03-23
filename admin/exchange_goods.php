@@ -5,7 +5,7 @@ define('IN_ECS', true);
 require(dirname(__FILE__) . '/includes/init.php');
 
 /*初始化数据交换对象 */
-$exc   = new exchange($ecs->table("exchange_goods"), $db, 'goods_id', 'exchange_integral');
+$exc = new exchange($ecs->table("exchange_goods"), $db, 'goods_id', 'exchange_integral');
 //$image = new cls_image();
 
 /*------------------------------------------------------ */
@@ -29,7 +29,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('record_count', $goods_list['record_count']);
     $smarty->assign('page_count', $goods_list['page_count']);
 
-    $sort_flag  = sort_flag($goods_list['filter']);
+    $sort_flag = sort_flag($goods_list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     assign_query_info();
@@ -49,7 +49,7 @@ elseif ($_REQUEST['act'] == 'query') {
     $smarty->assign('record_count', $goods_list['record_count']);
     $smarty->assign('page_count', $goods_list['page_count']);
 
-    $sort_flag  = sort_flag($goods_list['filter']);
+    $sort_flag = sort_flag($goods_list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
@@ -69,8 +69,8 @@ if ($_REQUEST['act'] == 'add') {
     /*初始化*/
     $goods = array();
     $goods['is_exchange'] = 1;
-    $goods['is_hot']      = 0;
-    $goods['option']      = '<option value="0">'.$_LANG['make_option'].'</option>';
+    $goods['is_hot'] = 0;
+    $goods['option'] = '<option value="0">' . $_LANG['make_option'] . '</option>';
 
     $smarty->assign('goods', $goods);
     $smarty->assign('ur_here', $_LANG['exchange_goods_add']);
@@ -100,8 +100,8 @@ if ($_REQUEST['act'] == 'insert') {
     if (empty($_POST['goods_id'])) {
         $_POST['goods_id'] = 0;
     }
-    $sql = "INSERT INTO ".$ecs->table('exchange_goods')."(goods_id, exchange_integral, is_exchange, is_hot) ".
-            "VALUES ('$_POST[goods_id]', '$_POST[exchange_integral]', '$_POST[is_exchange]', '$_POST[is_hot]')";
+    $sql = "INSERT INTO " . $ecs->table('exchange_goods') . "(goods_id, exchange_integral, is_exchange, is_hot) " .
+        "VALUES ('$_POST[goods_id]', '$_POST[exchange_integral]', '$_POST[is_exchange]', '$_POST[is_hot]')";
     $db->query($sql);
 
     $link[0]['text'] = $_LANG['continue_add'];
@@ -125,12 +125,12 @@ if ($_REQUEST['act'] == 'edit') {
     admin_priv('exchange_goods');
 
     /* 取商品数据 */
-    $sql = "SELECT eg.goods_id, eg.exchange_integral,eg.is_exchange, eg.is_hot, g.goods_name ".
-           " FROM " . $ecs->table('exchange_goods') . " AS eg ".
-           "  LEFT JOIN " . $ecs->table('goods') . " AS g ON g.goods_id = eg.goods_id ".
-           " WHERE eg.goods_id='$_REQUEST[id]'";
+    $sql = "SELECT eg.goods_id, eg.exchange_integral,eg.is_exchange, eg.is_hot, g.goods_name " .
+        " FROM " . $ecs->table('exchange_goods') . " AS eg " .
+        "  LEFT JOIN " . $ecs->table('goods') . " AS g ON g.goods_id = eg.goods_id " .
+        " WHERE eg.goods_id='$_REQUEST[id]'";
     $goods = $db->GetRow($sql);
-    $goods['option']  = '<option value="'.$goods['goods_id'].'">'.$goods['goods_name'].'</option>';
+    $goods['option'] = '<option value="' . $goods['goods_id'] . '">' . $goods['goods_name'] . '</option>';
 
     $smarty->assign('goods', $goods);
     $smarty->assign('ur_here', $_LANG['exchange_goods_add']);
@@ -144,7 +144,7 @@ if ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 //-- 编辑
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] =='update') {
+if ($_REQUEST['act'] == 'update') {
     /* 权限判断 */
     admin_priv('exchange_goods');
 
@@ -171,7 +171,7 @@ if ($_REQUEST['act'] =='update') {
 elseif ($_REQUEST['act'] == 'edit_exchange_integral') {
     check_authz_json('exchange_goods');
 
-    $id                = intval($_POST['id']);
+    $id = intval($_POST['id']);
     $exchange_integral = floatval($_POST['val']);
 
     /* 检查文章标题是否重复 */
@@ -194,8 +194,8 @@ elseif ($_REQUEST['act'] == 'edit_exchange_integral') {
 elseif ($_REQUEST['act'] == 'toggle_exchange') {
     check_authz_json('exchange_goods');
 
-    $id     = intval($_POST['id']);
-    $val    = intval($_POST['val']);
+    $id = intval($_POST['id']);
+    $val = intval($_POST['val']);
 
     $exc->edit("is_exchange = '$val'", $id);
     clear_cache_files();
@@ -209,8 +209,8 @@ elseif ($_REQUEST['act'] == 'toggle_exchange') {
 elseif ($_REQUEST['act'] == 'toggle_hot') {
     check_authz_json('exchange_goods');
 
-    $id     = intval($_POST['id']);
-    $val    = intval($_POST['val']);
+    $id = intval($_POST['id']);
+    $val = intval($_POST['val']);
 
     $exc->edit("is_hot = '$val'", $id);
     clear_cache_files();
@@ -279,11 +279,11 @@ function get_exchange_goodslist()
     $result = get_filter();
     if ($result === false) {
         $filter = array();
-        $filter['keyword']    = empty($_REQUEST['keyword']) ? '' : trim($_REQUEST['keyword']);
+        $filter['keyword'] = empty($_REQUEST['keyword']) ? '' : trim($_REQUEST['keyword']);
         if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1) {
             $filter['keyword'] = json_str_iconv($filter['keyword']);
         }
-        $filter['sort_by']    = empty($_REQUEST['sort_by']) ? 'eg.goods_id' : trim($_REQUEST['sort_by']);
+        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'eg.goods_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
         $where = '';
@@ -292,23 +292,23 @@ function get_exchange_goodslist()
         }
 
         /* 文章总数 */
-        $sql = 'SELECT COUNT(*) FROM ' .$GLOBALS['ecs']->table('exchange_goods'). ' AS eg '.
-               'LEFT JOIN ' .$GLOBALS['ecs']->table('goods'). ' AS g ON g.goods_id = eg.goods_id '.
-               'WHERE 1 ' .$where;
+        $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg ' .
+            'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = eg.goods_id ' .
+            'WHERE 1 ' . $where;
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         $filter = page_and_size($filter);
 
         /* 获取文章数据 */
-        $sql = 'SELECT eg.* , g.goods_name '.
-               'FROM ' .$GLOBALS['ecs']->table('exchange_goods'). ' AS eg '.
-               'LEFT JOIN ' .$GLOBALS['ecs']->table('goods'). ' AS g ON g.goods_id = eg.goods_id '.
-               'WHERE 1 ' .$where. ' ORDER by '.$filter['sort_by'].' '.$filter['sort_order'];
+        $sql = 'SELECT eg.* , g.goods_name ' .
+            'FROM ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg ' .
+            'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = eg.goods_id ' .
+            'WHERE 1 ' . $where . ' ORDER by ' . $filter['sort_by'] . ' ' . $filter['sort_order'];
 
         $filter['keyword'] = stripslashes($filter['keyword']);
         set_filter($filter, $sql);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
     $arr = array();

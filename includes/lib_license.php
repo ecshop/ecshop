@@ -8,7 +8,7 @@ if (!defined('IN_ECS')) {
  * 获得网店 license 信息
  *
  * @access  public
- * @param   integer     $size
+ * @param integer $size
  *
  * @return  array
  */
@@ -31,8 +31,8 @@ function get_shop_license()
 
 /**
  * 功能：生成certi_ac验证字段
- * @param   string     POST传递参数
- * @param   string     证书token
+ * @param string     POST传递参数
+ * @param string     证书token
  * @return  string
  */
 function make_shopex_ac($post_params, $token)
@@ -44,7 +44,7 @@ function make_shopex_ac($post_params, $token)
     // core
     ksort($post_params);
     $str = '';
-    foreach ($post_params as $key=>$value) {
+    foreach ($post_params as $key => $value) {
         if ($key != 'certi_ac') {
             $str .= $value;
         }
@@ -56,9 +56,9 @@ function make_shopex_ac($post_params, $token)
 /**
  * 功能：与 ECShop 交换数据
  *
- * @param   array     $certi    登录参数
- * @param   array     $license  网店license信息
- * @param   bool      $use_lib  使用哪一个json库，0为ec，1为shopex
+ * @param array $certi 登录参数
+ * @param array $license 网店license信息
+ * @param bool $use_lib 使用哪一个json库，0为ec，1为shopex
  * @return  array
  */
 function exchange_shop_license($certi, $license, $use_lib = 0)
@@ -90,7 +90,7 @@ function exchange_shop_license($certi, $license, $use_lib = 0)
 /**
  * 功能：处理登录返回结果
  *
- * @param   array     $cert_auth    登录返回的用户信息
+ * @param array $cert_auth 登录返回的用户信息
  * @return  array
  */
 function process_login_license($cert_auth)
@@ -115,7 +115,7 @@ function process_login_license($cert_auth)
 /**
  * 功能：license 登录
  *
- * @param   array     $certi_added    配置信息补充数组 array_key 登录信息的key；array_key => array_value；
+ * @param array $certi_added 配置信息补充数组 array_key 登录信息的key；array_key => array_value；
  * @return  array     $return_array['flag'] = login_succ、login_fail、login_ping_fail、login_param_fail；
  *                    $return_array['request']；
  */
@@ -126,15 +126,15 @@ function license_login($certi_added = '')
     $certi['app_id'] = 'ecshop_b2c'; // 说明客户端来源
     $certi['app_instance_id'] = ''; // 应用服务ID
     $certi['version'] = LICENSE_VERSION; // license接口版本号
-    $certi['shop_version'] = VERSION . '#' .  RELEASE; // 网店软件版本号
+    $certi['shop_version'] = VERSION . '#' . RELEASE; // 网店软件版本号
     $certi['certi_url'] = sprintf($GLOBALS['ecs']->url()); // 网店URL
     $certi['certi_session'] = $GLOBALS['sess']->get_session_id(); // 网店SESSION标识
     $certi['certi_validate_url'] = sprintf($GLOBALS['ecs']->url() . 'certi.php'); // 网店提供于官方反查接口
     $certi['format'] = 'json'; // 官方返回数据格式
     $certi['certificate_id'] = ''; // 网店证书ID
     // 标识
-    $certi_back['succ']   = 'succ';
-    $certi_back['fail']   = 'fail';
+    $certi_back['succ'] = 'succ';
+    $certi_back['fail'] = 'fail';
     // return 返回数组
     $return_array = array();
 
@@ -177,7 +177,7 @@ function license_login($certi_added = '')
 /**
  * 功能：license 注册
  *
- * @param   array     $certi_added    配置信息补充数组 array_key 登录信息的key；array_key => array_value；
+ * @param array $certi_added 配置信息补充数组 array_key 登录信息的key；array_key => array_value；
  * @return  array     $return_array['flag'] = reg_succ、reg_fail、reg_ping_fail；
  *                    $return_array['request']；
  */
@@ -188,15 +188,15 @@ function license_reg($certi_added = '')
     $certi['app_id'] = 'ecshop_b2c'; // 说明客户端来源
     $certi['app_instance_id'] = ''; // 应用服务ID
     $certi['version'] = LICENSE_VERSION; // license接口版本号
-    $certi['shop_version'] = VERSION . '#' .  RELEASE; // 网店软件版本号
+    $certi['shop_version'] = VERSION . '#' . RELEASE; // 网店软件版本号
     $certi['certi_url'] = sprintf($GLOBALS['ecs']->url()); // 网店URL
     $certi['certi_session'] = $GLOBALS['sess']->get_session_id(); // 网店SESSION标识
     $certi['certi_validate_url'] = sprintf($GLOBALS['ecs']->url() . 'certi.php'); // 网店提供于官方反查接口
     $certi['format'] = 'json'; // 官方返回数据格式
     $certi['certificate_id'] = ''; // 网店证书ID
     // 标识
-    $certi_back['succ']   = 'succ';
-    $certi_back['fail']   = 'fail';
+    $certi_back['succ'] = 'succ';
+    $certi_back['fail'] = 'fail';
     // return 返回数组
     $return_array = array();
 

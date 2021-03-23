@@ -157,10 +157,10 @@ $_LANG['category_manage'] = '分类管理';
 $_LANG['brand_manage'] = '品牌管理';
 $_LANG['hide'] = '隐藏';
 
-$_LANG['lab_volume_price']         = '商品优惠价格：';
-$_LANG['volume_number']            = '优惠数量';
-$_LANG['volume_price']             = '优惠价格';
-$_LANG['notice_volume_price']      = '购买数量达到优惠数量时享受的优惠价格';
+$_LANG['lab_volume_price'] = '商品优惠价格：';
+$_LANG['volume_number'] = '优惠数量';
+$_LANG['volume_price'] = '优惠价格';
+$_LANG['notice_volume_price'] = '购买数量达到优惠数量时享受的优惠价格';
 $_LANG['volume_number_continuous'] = '优惠数量重复！';
 
 /*------------------------------------------------------ */

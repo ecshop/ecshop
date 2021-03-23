@@ -3,7 +3,7 @@
 define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'languages/' .$_CFG['lang']. '/admin/ads.php');
+require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/ads.php');
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -45,7 +45,7 @@ elseif ($_REQUEST['act'] == 'add') {
     $smarty->assign('form_act', 'insert');
 
     $smarty->assign('action_link', array('href' => 'ad_position.php?act=list', 'text' => $_LANG['ad_position']));
-    $smarty->assign('posit_arr', array('position_style' => '<table cellpadding="0" cellspacing="0">' ."\n". '{foreach from=$ads item=ad}' ."\n". '<tr><td>{$ad}</td></tr>' ."\n". '{/foreach}' ."\n". '</table>'));
+    $smarty->assign('posit_arr', array('position_style' => '<table cellpadding="0" cellspacing="0">' . "\n" . '{foreach from=$ads item=ad}' . "\n" . '<tr><td>{$ad}</td></tr>' . "\n" . '{/foreach}' . "\n" . '</table>'));
 
     assign_query_info();
     $smarty->display('ad_position_info.htm');
@@ -55,14 +55,14 @@ elseif ($_REQUEST['act'] == 'add') {
     /* 对POST上来的值进行处理并去除空格 */
     $position_name = !empty($_POST['position_name']) ? trim($_POST['position_name']) : '';
     $position_desc = !empty($_POST['position_desc']) ? nl2br(htmlspecialchars($_POST['position_desc'])) : '';
-    $ad_width      = !empty($_POST['ad_width'])      ? intval($_POST['ad_width'])  : 0;
-    $ad_height     = !empty($_POST['ad_height'])     ? intval($_POST['ad_height']) : 0;
+    $ad_width = !empty($_POST['ad_width']) ? intval($_POST['ad_width']) : 0;
+    $ad_height = !empty($_POST['ad_height']) ? intval($_POST['ad_height']) : 0;
 
     /* 查看广告位是否有重复 */
     if ($exc->num("position_name", $position_name) == 0) {
         /* 将广告位置的信息插入数据表 */
-        $sql = 'INSERT INTO '.$ecs->table('ad_position').' (position_name, ad_width, ad_height, position_desc, position_style) '.
-               "VALUES ('$position_name', '$ad_width', '$ad_height', '$position_desc', '$_POST[position_style]')";
+        $sql = 'INSERT INTO ' . $ecs->table('ad_position') . ' (position_name, ad_width, ad_height, position_desc, position_style) ' .
+            "VALUES ('$position_name', '$ad_width', '$ad_height', '$position_desc', '$_POST[position_style]')";
 
         $db->query($sql);
         /* 记录管理员操作 */
@@ -94,7 +94,7 @@ elseif ($_REQUEST['act'] == 'edit') {
     $id = !empty($_GET['id']) ? intval($_GET['id']) : 0;
 
     /* 获取广告位数据 */
-    $sql = 'SELECT * FROM ' .$ecs->table('ad_position'). " WHERE position_id='$id'";
+    $sql = 'SELECT * FROM ' . $ecs->table('ad_position') . " WHERE position_id='$id'";
     $posit_arr = $db->getRow($sql);
 
     $smarty->assign('ur_here', $_LANG['position_edit']);
@@ -110,20 +110,20 @@ elseif ($_REQUEST['act'] == 'edit') {
     /* 对POST上来的值进行处理并去除空格 */
     $position_name = !empty($_POST['position_name']) ? trim($_POST['position_name']) : '';
     $position_desc = !empty($_POST['position_desc']) ? nl2br(htmlspecialchars($_POST['position_desc'])) : '';
-    $ad_width      = !empty($_POST['ad_width'])      ? intval($_POST['ad_width'])  : 0;
-    $ad_height     = !empty($_POST['ad_height'])     ? intval($_POST['ad_height']) : 0;
-    $position_id   = !empty($_POST['id'])            ? intval($_POST['id'])        : 0;
+    $ad_width = !empty($_POST['ad_width']) ? intval($_POST['ad_width']) : 0;
+    $ad_height = !empty($_POST['ad_height']) ? intval($_POST['ad_height']) : 0;
+    $position_id = !empty($_POST['id']) ? intval($_POST['id']) : 0;
     /* 查看广告位是否与其它有重复 */
-    $sql = 'SELECT COUNT(*) FROM ' .$ecs->table('ad_position').
-           " WHERE position_name = '$position_name' AND position_id <> '$position_id'";
+    $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('ad_position') .
+        " WHERE position_name = '$position_name' AND position_id <> '$position_id'";
     if ($db->getOne($sql) == 0) {
-        $sql = "UPDATE " .$ecs->table('ad_position'). " SET ".
-               "position_name    = '$position_name', ".
-               "ad_width         = '$ad_width', ".
-               "ad_height        = '$ad_height', ".
-               "position_desc    = '$position_desc', ".
-               "position_style   = '$_POST[position_style]' ".
-               "WHERE position_id = '$position_id'";
+        $sql = "UPDATE " . $ecs->table('ad_position') . " SET " .
+            "position_name    = '$position_name', " .
+            "ad_width         = '$ad_width', " .
+            "ad_height        = '$ad_height', " .
+            "position_desc    = '$position_desc', " .
+            "position_style   = '$_POST[position_style]' " .
+            "WHERE position_id = '$position_id'";
         if ($db->query($sql)) {
             /* 记录管理员操作 */
             admin_log($position_name, 'edit', 'ads_position');
@@ -133,7 +133,7 @@ elseif ($_REQUEST['act'] == 'edit') {
 
             /* 提示信息 */
             $link[] = array('text' => $_LANG['back_position_list'], 'href' => 'ad_position.php?act=list');
-            sys_msg($_LANG['edit'] . ' ' .stripslashes($position_name).' '. $_LANG['attradd_succed'], 0, $link);
+            sys_msg($_LANG['edit'] . ' ' . stripslashes($position_name) . ' ' . $_LANG['attradd_succed'], 0, $link);
         }
     } else {
         $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
@@ -165,8 +165,8 @@ elseif ($_REQUEST['act'] == 'query') {
 elseif ($_REQUEST['act'] == 'edit_position_name') {
     check_authz_json('ad_manage');
 
-    $id     = intval($_POST['id']);
-    $position_name   = json_str_iconv(trim($_POST['val']));
+    $id = intval($_POST['id']);
+    $position_name = json_str_iconv(trim($_POST['val']));
 
     /* 检查名称是否重复 */
     if ($exc->num("position_name", $position_name, $id) != 0) {
@@ -187,8 +187,8 @@ elseif ($_REQUEST['act'] == 'edit_position_name') {
 elseif ($_REQUEST['act'] == 'edit_ad_width') {
     check_authz_json('ad_manage');
 
-    $id         = intval($_POST['id']);
-    $ad_width   = json_str_iconv(trim($_POST['val']));
+    $id = intval($_POST['id']);
+    $ad_width = json_str_iconv(trim($_POST['val']));
 
     /* 宽度值必须是数字 */
     if (!preg_match("/^[\.0-9]+$/", $ad_width)) {
@@ -215,8 +215,8 @@ elseif ($_REQUEST['act'] == 'edit_ad_width') {
 elseif ($_REQUEST['act'] == 'edit_ad_height') {
     check_authz_json('ad_manage');
 
-    $id         = intval($_POST['id']);
-    $ad_height  = json_str_iconv(trim($_POST['val']));
+    $id = intval($_POST['id']);
+    $ad_height = json_str_iconv(trim($_POST['val']));
 
     /* 高度值必须是数字 */
     if (!preg_match("/^[\.0-9]+$/", $ad_height)) {
@@ -246,7 +246,7 @@ elseif ($_REQUEST['act'] == 'remove') {
     $id = intval($_GET['id']);
 
     /* 查询广告位下是否有广告存在 */
-    $sql = "SELECT COUNT(*) FROM " .$GLOBALS['ecs']->table('ad'). " WHERE position_id = '$id'";
+    $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('ad') . " WHERE position_id = '$id'";
 
     if ($db->getOne($sql) > 0) {
         make_json_error($_LANG['not_del_adposit']);
@@ -274,7 +274,7 @@ function ad_position_list()
 
     /* 查询数据 */
     $arr = array();
-    $sql = 'SELECT * FROM ' .$GLOBALS['ecs']->table('ad_position'). ' ORDER BY position_id DESC';
+    $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('ad_position') . ' ORDER BY position_id DESC';
     $res = $GLOBALS['db']->selectLimit($sql, $filter['page_size'], $filter['start']);
     while ($rows = $GLOBALS['db']->fetchRow($res)) {
         $position_desc = !empty($rows['position_desc']) ? sub_str($rows['position_desc'], 50, true) : '';

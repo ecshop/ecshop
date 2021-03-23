@@ -9,7 +9,7 @@ $allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp');
 /*------------------------------------------------------ */
 //-- 系统
 /*------------------------------------------------------ */
-if ($_REQUEST['act']== 'list') {
+if ($_REQUEST['act'] == 'list') {
     /* 判断系统当前设置 如果为用户自定义 则跳转到自定义 */
     if ($_CFG['index_ad'] == 'cus') {
         ecs_header("Location: flashplay.php?act=custom_list\n");
@@ -27,7 +27,7 @@ if ($_REQUEST['act']== 'list') {
     $group_list = array(
         'sys' => array('text' => $_LANG['system_set'], 'url' => ''),
         'cus' => array('text' => $_LANG['custom_set'], 'url' => 'flashplay.php?act=custom_list')
-                       );
+    );
 
     assign_query_info();
     $flash_dir = ROOT_PATH . 'data/flashdata/';
@@ -42,7 +42,7 @@ if ($_REQUEST['act']== 'list') {
     $smarty->assign('current_flashtpl', $_CFG['flash_theme']);
     $smarty->assign('playerdb', $playerdb);
     $smarty->display('flashplay_list.htm');
-} elseif ($_REQUEST['act']== 'del') {
+} elseif ($_REQUEST['act'] == 'del') {
     admin_priv('flash_manage');
 
     $id = (int)$_GET['id'];
@@ -74,10 +74,10 @@ if ($_REQUEST['act']== 'list') {
         $url = isset($_GET['url']) ? $_GET['url'] : 'http://';
         $src = isset($_GET['src']) ? $_GET['src'] : '';
         $sort = 0;
-        $rt = array('act'=>'add','img_url'=>$url,'img_src'=>$src, 'img_sort'=>$sort);
+        $rt = array('act' => 'add', 'img_url' => $url, 'img_src' => $src, 'img_sort' => $sort);
         $width_height = get_width_height();
         assign_query_info();
-        if (isset($width_height['width'])|| isset($width_height['height'])) {
+        if (isset($width_height['width']) || isset($width_height['height'])) {
             $smarty->assign('width_height', sprintf($_LANG['width_height'], $width_height['width'], $width_height['height']));
         }
 
@@ -121,11 +121,11 @@ if ($_REQUEST['act']== 'list') {
         $flashdb = get_flash_xml();
 
         // 插入新数据
-        array_unshift($flashdb, array('src'=>$src, 'url'=>$_POST['img_url'], 'text'=>$_POST['img_text'] ,'sort'=>$_POST['img_sort']));
+        array_unshift($flashdb, array('src' => $src, 'url' => $_POST['img_url'], 'text' => $_POST['img_text'], 'sort' => $_POST['img_sort']));
 
         // 实现排序
-        $flashdb_sort   = array();
-        $_flashdb       = array();
+        $flashdb_sort = array();
+        $_flashdb = array();
         foreach ($flashdb as $key => $value) {
             $flashdb_sort[$key] = $value['sort'];
         }
@@ -186,7 +186,7 @@ if ($_REQUEST['act']== 'list') {
                 $src = DATA_DIR . '/afficheimg/' . $name;
             }
         } elseif (!empty($_POST['img_src'])) {
-            $src =$_POST['img_src'];
+            $src = $_POST['img_src'];
             if (!get_file_suffix($_POST['img_src'], $allow_suffix)) {
                 sys_msg($_LANG['invalid_type']);
             }
@@ -201,11 +201,11 @@ if ($_REQUEST['act']== 'list') {
         if (strpos($rt['src'], 'http') === false && $rt['src'] != $src) {
             @unlink(ROOT_PATH . $rt['src']);
         }
-        $flashdb[$id] = array('src'=>$src,'url'=>$_POST['img_url'],'text'=>$_POST['img_text'],'sort'=>$_POST['img_sort']);
+        $flashdb[$id] = array('src' => $src, 'url' => $_POST['img_url'], 'text' => $_POST['img_text'], 'sort' => $_POST['img_sort']);
 
         // 实现排序
-        $flashdb_sort   = array();
-        $_flashdb       = array();
+        $flashdb_sort = array();
+        $_flashdb = array();
         foreach ($flashdb as $key => $value) {
             $flashdb_sort[$key] = $value['sort'];
         }
@@ -224,7 +224,7 @@ if ($_REQUEST['act']== 'list') {
     check_authz_json('flash_manage');
     $flash_theme = trim($_GET['flashtpl']);
     if ($_CFG['flash_theme'] != $flash_theme) {
-        $sql = "UPDATE " .$GLOBALS['ecs']->table('shop_config'). " SET value = '$flash_theme' WHERE code = 'flash_theme'";
+        $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') . " SET value = '$flash_theme' WHERE code = 'flash_theme'";
         if ($db->query($sql, 'SILENT')) {
             clear_all_files(); //清除模板编译文件
 
@@ -246,12 +246,12 @@ if ($_REQUEST['act']== 'list') {
 //-- 用户自定义
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act']== 'custom_list') {
+elseif ($_REQUEST['act'] == 'custom_list') {
     /* 标签初始化 */
     $group_list = array(
         'sys' => array('text' => $_LANG['system_set'], 'url' => ($_CFG['index_ad'] == 'cus') ? 'javascript:system_set();void(0);' : 'flashplay.php?act=list'),
         'cus' => array('text' => $_LANG['custom_set'], 'url' => '')
-                       );
+    );
 
     /* 列表 */
     $ad_list = ad_list();
@@ -273,7 +273,7 @@ elseif ($_REQUEST['act']== 'custom_list') {
 
     /* 添加 */
     $ad = array('ad_name' => '', 'ad_type' => 0, 'ad_url' => 'http://', 'htmls' => '',
-                'ad_status' =>'1', 'ad_id' => '0', 'url' => 'http://');
+        'ad_status' => '1', 'ad_id' => '0', 'url' => 'http://');
     $smarty->assign('ad', $ad);
     $smarty->assign('form_act', 'custom_insert');
 
@@ -284,12 +284,12 @@ elseif ($_REQUEST['act']== 'custom_list') {
 //-- 用户自定义添加
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act']== 'custom_add') {
+elseif ($_REQUEST['act'] == 'custom_add') {
     /* 标签初始化 */
     $group_list = array(
         'sys' => array('text' => $_LANG['system_set'], 'url' => ($_CFG['index_ad'] == 'cus') ? 'javascript:system_set();void(0);' : 'flashplay.php?act=list'),
         'cus' => array('text' => $_LANG['custom_set'], 'url' => '')
-                       );
+    );
 
     /* 列表 */
     $ad_list = ad_list();
@@ -311,7 +311,7 @@ elseif ($_REQUEST['act']== 'custom_add') {
     $smarty->assign('action_link', array('text' => $_LANG['ad_play_url'], 'href' => 'flashplay.php?act=custom_list'));
     /* 添加 */
     $ad = array('ad_name' => '', 'ad_type' => 0, 'ad_url' => 'http://', 'htmls' => '',
-                'ad_status' =>'1', 'ad_id' => '0', 'url' => 'http://');
+        'ad_status' => '1', 'ad_id' => '0', 'url' => 'http://');
     $smarty->assign('ad', $ad);
     $smarty->assign('form_act', 'custom_insert');
 
@@ -343,11 +343,11 @@ elseif ($_REQUEST['act'] == 'custom_insert') {
     /* 配置接收文件类型 */
     switch ($filter['ad']['ad_type']) {
         case '0':
-        break;
+            break;
 
         case '1':
             $allow_suffix[] = 'swf';
-        break;
+            break;
     }
 
     /* 接收文件 */
@@ -384,21 +384,21 @@ elseif ($_REQUEST['act'] == 'custom_insert') {
 
         case '1':
             $filter['content'] = $src;
-        break;
+            break;
 
         case '2':
 
         case '3':
             $filter['content'] = $filter['content']['htmls'];
-        break;
+            break;
     }
     $ad = array('ad_type' => $filter['ad']['ad_type'],
-                'ad_name' => $filter['ad']['ad_name'],
-                'add_time' => GMTIME_UTC,
-                'content' => $filter['content'],
-                'url' => $filter['ad']['url'],
-                'ad_status' => $filter['ad']['ad_status']
-               );
+        'ad_name' => $filter['ad']['ad_name'],
+        'add_time' => GMTIME_UTC,
+        'content' => $filter['content'],
+        'url' => $filter['ad']['url'],
+        'ad_status' => $filter['ad']['ad_status']
+    );
     $db->autoExecute($ecs->table('ad_custom'), $ad, 'INSERT', '', 'SILENT');
     $ad_id = $db->insert_id();
 
@@ -418,7 +418,7 @@ elseif ($_REQUEST['act'] == 'custom_insert') {
 //-- 用户自定义 删除广告
 /*------------------------------------------------------ */
 
-elseif ($_REQUEST['act']== 'custom_del') {
+elseif ($_REQUEST['act'] == 'custom_del') {
     admin_priv('flash_manage');
 
     $id = empty($_GET['id']) ? 0 : intval(trim($_GET['id']));
@@ -469,7 +469,7 @@ elseif ($_REQUEST['act'] == 'custom_status') {
         $group_list = array(
             'sys' => array('text' => $_LANG['system_set'], 'url' => ($shop_config['value'] == 'cus') ? 'javascript:system_set();void(0);' : 'flashplay.php?act=list'),
             'cus' => array('text' => $_LANG['custom_set'], 'url' => '')
-                           );
+        );
 
         /* 列表 */
         $ad_list = ad_list();
@@ -482,7 +482,7 @@ elseif ($_REQUEST['act'] == 'custom_status') {
         $smarty->assign('action_link_special', array('text' => $_LANG['add_flash'], 'href' => 'flashplay.php?act=custom_add'));
         /* 添加 */
         $ad = array('ad_name' => '', 'ad_type' => 0, 'ad_url' => 'http://', 'htmls' => '',
-                    'ad_status' =>'1', 'ad_id' => '0', 'url' => 'http://');
+            'ad_status' => '1', 'ad_id' => '0', 'url' => 'http://');
         $smarty->assign('ad', $ad);
         $smarty->assign('form_act', 'custom_insert');
 
@@ -538,17 +538,17 @@ elseif ($_REQUEST['act'] == 'custom_update') {
     $ad_img = $_FILES;
 
     /* 查询自定义广告信息 */
-    $sql = "SELECT ad_id, ad_type, content, url, ad_status, ad_name FROM " . $GLOBALS['ecs']->table("ad_custom") . " WHERE ad_id = " . $filter['ad']['id'] ." LIMIT 0, 1";
+    $sql = "SELECT ad_id, ad_type, content, url, ad_status, ad_name FROM " . $GLOBALS['ecs']->table("ad_custom") . " WHERE ad_id = " . $filter['ad']['id'] . " LIMIT 0, 1";
     $ad_info = $GLOBALS['db']->getRow($sql);
 
     /* 配置接收文件类型 */
     switch ($filter['ad']['ad_type']) {
         case '0':
-        break;
+            break;
 
         case '1':
             $allow_suffix[] = 'swf';
-        break;
+            break;
     }
 
     /* 接收文件 */
@@ -585,20 +585,20 @@ elseif ($_REQUEST['act'] == 'custom_update') {
 
         case '1':
             $filter['content'] = !is_file(ROOT_PATH . $src) && (trim($src) == '') ? $ad_info['content'] : $src;
-        break;
+            break;
 
         case '2':
 
         case '3':
             $filter['content'] = $filter['content']['htmls'];
-        break;
+            break;
     }
     $ad = array('ad_type' => $filter['ad']['ad_type'],
-                'ad_name' => $filter['ad']['ad_name'],
-                'content' => $filter['content'],
-                'url' => $filter['ad']['url'],
-                'ad_status' => $filter['ad']['ad_status']
-               );
+        'ad_name' => $filter['ad']['ad_name'],
+        'content' => $filter['content'],
+        'url' => $filter['ad']['url'],
+        'ad_status' => $filter['ad']['ad_status']
+    );
     $db->autoExecute($ecs->table('ad_custom'), $ad, 'UPDATE', 'ad_id = ' . $ad_info['ad_id'], 'SILENT');
 
     /* 修改状态 */
@@ -626,7 +626,7 @@ function get_flash_xml()
         if (!empty($t)) {
             foreach ($t as $key => $val) {
                 $val[4] = isset($val[4]) ? $val[4] : 0;
-                $flashdb[] = array('src'=>$val[1],'url'=>$val[2],'text'=>$val[3],'sort'=>$val[4]);
+                $flashdb[] = array('src' => $val[1], 'url' => $val[2], 'text' => $val[3], 'sort' => $val[4]);
             }
         }
     }
@@ -703,7 +703,7 @@ function get_width_height()
 function get_flash_templates($dir)
 {
     $flashtpls = array();
-    $template_dir        = @opendir($dir);
+    $template_dir = @opendir($dir);
     while ($file = readdir($template_dir)) {
         if ($file != '.' && $file != '..' && is_dir($dir . $file) && $file != '.svn' && $file != 'index.htm') {
             $flashtpls[] = get_flash_tpl_info($dir, $file);
@@ -722,8 +722,8 @@ function get_flash_tpl_info($dir, $file)
         $arr = array_slice(file($dir . $file . '/cycle_image.js'), 1, 2);
         $info_name = explode(':', $arr[0]);
         $info_desc = explode(':', $arr[1]);
-        $info['name'] = isset($info_name[1])?trim($info_name[1]):'';
-        $info['desc'] = isset($info_desc[1])?trim($info_desc[1]):'';
+        $info['name'] = isset($info_name[1]) ? trim($info_name[1]) : '';
+        $info['desc'] = isset($info_desc[1]) ? trim($info_desc[1]) : '';
     }
     return $info;
 }
@@ -733,20 +733,20 @@ function set_flash_data($tplname, &$msg)
     $flashdata = get_flash_xml();
     if (empty($flashdata)) {
         $flashdata[] = array(
-                                'src' => 'data/afficheimg/20081027angsif.jpg',
-                                'text' => 'ECShop',
-                                'url' =>'http://www.ecshop.com'
-                            );
+            'src' => 'data/afficheimg/20081027angsif.jpg',
+            'text' => 'ECShop',
+            'url' => 'http://www.ecshop.com'
+        );
         $flashdata[] = array(
-                                'src' => 'data/afficheimg/20081027wdwd.jpg',
-                                'text' => 'wdwd',
-                                'url' =>'http://www.wdwd.com'
-                            );
+            'src' => 'data/afficheimg/20081027wdwd.jpg',
+            'text' => 'wdwd',
+            'url' => 'http://www.wdwd.com'
+        );
         $flashdata[] = array(
-                                'src' => 'data/afficheimg/20081027xuorxj.jpg',
-                                'text' => 'ECShop',
-                                'url' =>'http://help.ecshop.com/index.php?doc-view-108.htm'
-                            );
+            'src' => 'data/afficheimg/20081027xuorxj.jpg',
+            'text' => 'ECShop',
+            'url' => 'http://help.ecshop.com/index.php?doc-view-108.htm'
+        );
     }
     switch ($tplname) {
         case 'uproll':
@@ -840,11 +840,11 @@ function ad_list()
                                    ELSE '' END AS type_name, ad_name, add_time, CASE WHEN ad_status = 1 THEN '启用' ELSE '关闭' END AS status_name, ad_type, ad_status
                 FROM " . $GLOBALS['ecs']->table("ad_custom") . "
                 $where
-                ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order']. " ";
+                ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'] . " ";
 
         set_filter($filter, $sql);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
 
@@ -863,60 +863,60 @@ function ad_list()
 /**
  * 修改自定义相状态
  *
- * @param   int     $ad_id       自定义广告 id
- * @param   int     $ad_status   自定义广告 状态 0，关闭；1，开启。
+ * @param int $ad_id 自定义广告 id
+ * @param int $ad_status 自定义广告 状态 0，关闭；1，开启。
  * @access  private
  * @return  Bool
  */
- function modfiy_ad_status($ad_id, $ad_status = 0)
- {
-     $return = false;
+function modfiy_ad_status($ad_id, $ad_status = 0)
+{
+    $return = false;
 
-     if (empty($ad_id)) {
-         return $return;
-     }
+    if (empty($ad_id)) {
+        return $return;
+    }
 
-     /* 查询自定义广告信息 */
-     $sql = "SELECT ad_type, content, url, ad_status FROM " . $GLOBALS['ecs']->table("ad_custom") . " WHERE ad_id = $ad_id LIMIT 0, 1";
-     $ad = $GLOBALS['db']->getRow($sql);
+    /* 查询自定义广告信息 */
+    $sql = "SELECT ad_type, content, url, ad_status FROM " . $GLOBALS['ecs']->table("ad_custom") . " WHERE ad_id = $ad_id LIMIT 0, 1";
+    $ad = $GLOBALS['db']->getRow($sql);
 
-     if ($ad_status == 1) {
-         /* 如果当前自定义广告是关闭状态 则修改其状态为启用 */
-         if ($ad['ad_status'] == 0) {
-             $sql = "UPDATE " . $GLOBALS['ecs']->table("ad_custom") . " SET ad_status = 1 WHERE ad_id = $ad_id";
-             $GLOBALS['db']->query($sql);
-         }
+    if ($ad_status == 1) {
+        /* 如果当前自定义广告是关闭状态 则修改其状态为启用 */
+        if ($ad['ad_status'] == 0) {
+            $sql = "UPDATE " . $GLOBALS['ecs']->table("ad_custom") . " SET ad_status = 1 WHERE ad_id = $ad_id";
+            $GLOBALS['db']->query($sql);
+        }
 
-         /* 关闭 其它自定义广告 */
-         $sql = "UPDATE " . $GLOBALS['ecs']->table("ad_custom") . " SET ad_status = 0 WHERE ad_id <> $ad_id";
-         $GLOBALS['db']->query($sql);
+        /* 关闭 其它自定义广告 */
+        $sql = "UPDATE " . $GLOBALS['ecs']->table("ad_custom") . " SET ad_status = 0 WHERE ad_id <> $ad_id";
+        $GLOBALS['db']->query($sql);
 
-         /* 用户自定义广告开启 */
-         $sql = "UPDATE " . $GLOBALS['ecs']->table("shop_config") . " SET value = 'cus' WHERE id =337";
-         $GLOBALS['db']->query($sql);
-     } else {
-         /* 如果当前自定义广告是关闭状态 则检查是否存在启用的自定义广告 */
-         /* 如果无 则启用系统默认广告播放器 */
-         if ($ad['ad_status'] == 0) {
-             $sql = "SELECT COUNT(ad_id) FROM " . $GLOBALS['ecs']->table("ad_custom") . " WHERE ad_status = 1";
-             $ad_status_1 = $GLOBALS['db']->getOne($sql);
-             if (empty($ad_status_1)) {
-                 $sql = "UPDATE " . $GLOBALS['ecs']->table("shop_config") . " SET value = 'sys' WHERE id =337";
-                 $GLOBALS['db']->query($sql);
-             } else {
-                 $sql = "UPDATE " . $GLOBALS['ecs']->table("shop_config") . " SET value = 'cus' WHERE id =337";
-                 $GLOBALS['db']->query($sql);
-             }
-         } else {
-             /* 当前自定义广告是开启状态 关闭之 */
-             /* 如果无 则启用系统默认广告播放器 */
-             $sql = "UPDATE " . $GLOBALS['ecs']->table("ad_custom") . " SET ad_status = 0 WHERE ad_id = $ad_id";
-             $GLOBALS['db']->query($sql);
+        /* 用户自定义广告开启 */
+        $sql = "UPDATE " . $GLOBALS['ecs']->table("shop_config") . " SET value = 'cus' WHERE id =337";
+        $GLOBALS['db']->query($sql);
+    } else {
+        /* 如果当前自定义广告是关闭状态 则检查是否存在启用的自定义广告 */
+        /* 如果无 则启用系统默认广告播放器 */
+        if ($ad['ad_status'] == 0) {
+            $sql = "SELECT COUNT(ad_id) FROM " . $GLOBALS['ecs']->table("ad_custom") . " WHERE ad_status = 1";
+            $ad_status_1 = $GLOBALS['db']->getOne($sql);
+            if (empty($ad_status_1)) {
+                $sql = "UPDATE " . $GLOBALS['ecs']->table("shop_config") . " SET value = 'sys' WHERE id =337";
+                $GLOBALS['db']->query($sql);
+            } else {
+                $sql = "UPDATE " . $GLOBALS['ecs']->table("shop_config") . " SET value = 'cus' WHERE id =337";
+                $GLOBALS['db']->query($sql);
+            }
+        } else {
+            /* 当前自定义广告是开启状态 关闭之 */
+            /* 如果无 则启用系统默认广告播放器 */
+            $sql = "UPDATE " . $GLOBALS['ecs']->table("ad_custom") . " SET ad_status = 0 WHERE ad_id = $ad_id";
+            $GLOBALS['db']->query($sql);
 
-             $sql = "UPDATE " . $GLOBALS['ecs']->table("shop_config") . " SET value = 'sys' WHERE id =337";
-             $GLOBALS['db']->query($sql);
-         }
-     }
+            $sql = "UPDATE " . $GLOBALS['ecs']->table("shop_config") . " SET value = 'sys' WHERE id =337";
+            $GLOBALS['db']->query($sql);
+        }
+    }
 
-     return $return = true;
- }
+    return $return = true;
+}

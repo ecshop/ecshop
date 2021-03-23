@@ -37,7 +37,7 @@ if ($_REQUEST['act'] == 'list') {
     /* 当前的地区名称 */
     if ($region_id > 0) {
         $area_name = $exc->get_name($region_id);
-        $area = '[ '. $area_name . ' ] ';
+        $area = '[ ' . $area_name . ' ] ';
         if ($region_arr) {
             $area .= $region_arr[0]['type'];
         }
@@ -70,9 +70,9 @@ if ($_REQUEST['act'] == 'list') {
 elseif ($_REQUEST['act'] == 'add_area') {
     check_authz_json('area_manage');
 
-    $parent_id      = intval($_POST['parent_id']);
-    $region_name    = json_str_iconv(trim($_POST['region_name']));
-    $region_type    = intval($_POST['region_type']);
+    $parent_id = intval($_POST['parent_id']);
+    $region_name = json_str_iconv(trim($_POST['region_name']));
+    $region_type = intval($_POST['region_type']);
 
     if (empty($region_name)) {
         make_json_error($_LANG['region_name_empty']);
@@ -83,8 +83,8 @@ elseif ($_REQUEST['act'] == 'add_area') {
         make_json_error($_LANG['region_name_exist']);
     }
 
-    $sql = "INSERT INTO " . $ecs->table('region') . " (parent_id, region_name, region_type) ".
-           "VALUES ('$parent_id', '$region_name', '$region_type')";
+    $sql = "INSERT INTO " . $ecs->table('region') . " (parent_id, region_name, region_type) " .
+        "VALUES ('$parent_id', '$region_name', '$region_type')";
     if ($GLOBALS['db']->query($sql, 'SILENT')) {
         admin_log($region_name, 'add', 'area');
 
@@ -147,20 +147,20 @@ elseif ($_REQUEST['act'] == 'drop_area') {
 //    {
 //        make_json_error($_LANG['parent_id_exist']);
 //    }
-    $region_type=$region['region_type'];
-    $delete_region[]=$id;
-    $new_region_id  =$id;
-    if ($region_type<6) {
-        for ($i=1;$i<6-$region_type;$i++) {
-            $new_region_id=new_region_id($new_region_id);
+    $region_type = $region['region_type'];
+    $delete_region[] = $id;
+    $new_region_id = $id;
+    if ($region_type < 6) {
+        for ($i = 1; $i < 6 - $region_type; $i++) {
+            $new_region_id = new_region_id($new_region_id);
             if (count($new_region_id)) {
-                $delete_region=array_merge($delete_region, $new_region_id);
+                $delete_region = array_merge($delete_region, $new_region_id);
             } else {
                 continue;
             }
         }
     }
-    $sql="DELETE FROM ". $ecs->table("region")."WHERE region_id".db_create_in($delete_region);
+    $sql = "DELETE FROM " . $ecs->table("region") . "WHERE region_id" . db_create_in($delete_region);
     $db->query($sql);
     if ($exc->drop($id)) {
         admin_log(addslashes($region['region_name']), 'remove', 'area');
@@ -179,14 +179,14 @@ elseif ($_REQUEST['act'] == 'drop_area') {
 
 function new_region_id($region_id)
 {
-    $regions_id=array();
+    $regions_id = array();
     if (empty($region_id)) {
         return $regions_id;
     }
-    $sql="SELECT region_id FROM ". $GLOBALS['ecs']->table("region")."WHERE parent_id ".db_create_in($region_id);
-    $result=$GLOBALS['db']->getAll($sql);
+    $sql = "SELECT region_id FROM " . $GLOBALS['ecs']->table("region") . "WHERE parent_id " . db_create_in($region_id);
+    $result = $GLOBALS['db']->getAll($sql);
     foreach ($result as $val) {
-        $regions_id[]=$val['region_id'];
+        $regions_id[] = $val['region_id'];
     }
     return $regions_id;
 }

@@ -8,7 +8,7 @@ if (!defined('IN_ECS')) {
  * 对mysql敏感字符串转义
  *
  * @access  public
- * @param   string      $str
+ * @param string $str
  *
  * @return string
  */
@@ -21,7 +21,7 @@ function dump_escape_string($str)
  * 对mysql记录中的null值进行处理
  *
  * @access  public
- * @param   string      $str
+ * @param string $str
  *
  * @return string
  */
@@ -37,11 +37,11 @@ function dump_null_string($str)
 
 class cls_sql_dump
 {
-    public $max_size  = 2097152; // 2M
-    public $is_short  = false;
-    public $offset    = 300;
-    public $dump_sql  = '';
-    public $sql_num   = 0;
+    public $max_size = 2097152; // 2M
+    public $is_short = false;
+    public $offset = 300;
+    public $dump_sql = '';
+    public $sql_num = 0;
     public $error_msg = '';
 
     public $db;
@@ -54,7 +54,7 @@ class cls_sql_dump
      *
      * @return void
      */
-    public function cls_sql_dump(&$db, $max_size=0)
+    public function cls_sql_dump(&$db, $max_size = 0)
     {
         $this->db = &$db;
         if ($max_size > 0) {
@@ -70,7 +70,7 @@ class cls_sql_dump
      *
      * @return void
      */
-    public function __construct(&$db, $max_size =0)
+    public function __construct(&$db, $max_size = 0)
     {
         $this->cls_sql_dump($db, $max_size);
     }
@@ -79,8 +79,8 @@ class cls_sql_dump
      *  获取指定表的定义
      *
      * @access  public
-     * @param   string      $table      数据表名
-     * @param   boolen      $add_drop   是否加入drop table
+     * @param string $table 数据表名
+     * @param boolen $add_drop 是否加入drop table
      *
      * @return  string      $sql
      */
@@ -109,8 +109,8 @@ class cls_sql_dump
      *  获取指定表的数据定义
      *
      * @access  public
-     * @param   string      $table      表名
-     * @param   int         $pos        备份开始位置
+     * @param string $table 表名
+     * @param int $pos 备份开始位置
      *
      * @return  int         $post_pos   记录位置
      */
@@ -127,10 +127,10 @@ class cls_sql_dump
         }
 
         /* 确定循环次数 */
-        $cycle_time = ceil(($total-$pos) / $this->offset); //每次取offset条数。需要取的次数
+        $cycle_time = ceil(($total - $pos) / $this->offset); //每次取offset条数。需要取的次数
 
         /* 循环查数据表 */
-        for ($i = 0; $i<$cycle_time; $i++) {
+        for ($i = 0; $i < $cycle_time; $i++) {
             /* 获取数据库数据 */
             $data = $this->db->getAll("SELECT * FROM $table LIMIT " . ($this->offset * $i + $pos) . ', ' . $this->offset);
             $data_count = count($data);
@@ -139,13 +139,13 @@ class cls_sql_dump
             $start_sql = "INSERT INTO `$table` ( `" . implode("`, `", $fields) . "` ) VALUES ";
 
             /* 循环将数据写入 */
-            for ($j=0; $j< $data_count; $j++) {
+            for ($j = 0; $j < $data_count; $j++) {
                 $record = array_map("dump_escape_string", $data[$j]);   //过滤非法字符
                 $record = array_map("dump_null_string", $record);     //处理null值
 
                 /* 检查是否能写入，能则写入 */
                 if ($this->is_short) {
-                    if ($post_pos == $total-1) {
+                    if ($post_pos == $total - 1) {
                         $tmp_dump_sql = " ( '" . implode("', '", $record) . "' );\r\n";
                     } else {
                         if ($j == $data_count - 1) {
@@ -198,8 +198,8 @@ class cls_sql_dump
      *  备份一个数据表
      *
      * @access  public
-     * @param   string      $path       保存路径表名的文件
-     * @param   int         $vol        卷标
+     * @param string $path 保存路径表名的文件
+     * @param int $vol 卷标
      *
      * @return  array       $tables     未备份完的表列表
      */
@@ -225,7 +225,7 @@ class cls_sql_dump
                     if ($this->sql_num == 0) {
                         /* 第一条记录，强制写入 */
                         $this->dump_sql .= $table_df;
-                        $this->sql_num +=2;
+                        $this->sql_num += 2;
                         $tables[$table] = 0;
                     }
                     /* 已经达到上限 */
@@ -233,7 +233,7 @@ class cls_sql_dump
                     break;
                 } else {
                     $this->dump_sql .= $table_df;
-                    $this->sql_num +=2;
+                    $this->sql_num += 2;
                     $pos = 0;
                 }
             }
@@ -261,27 +261,27 @@ class cls_sql_dump
      *  生成备份文件头部
      *
      * @access  public
-     * @param   int     文件卷数
+     * @param int     文件卷数
      *
      * @return  string  $str    备份文件头部
      */
     public function make_head($vol)
     {
         /* 系统信息 */
-        $sys_info['os']         = PHP_OS;
+        $sys_info['os'] = PHP_OS;
         $sys_info['web_server'] = $GLOBALS['ecs']->get_domain();
-        $sys_info['php_ver']    = PHP_VERSION;
-        $sys_info['mysql_ver']  = $this->db->version();
-        $sys_info['date']       = date('Y-m-d H:i:s');
+        $sys_info['php_ver'] = PHP_VERSION;
+        $sys_info['mysql_ver'] = $this->db->version();
+        $sys_info['date'] = date('Y-m-d H:i:s');
 
-        $head = "-- ecshop v2.x SQL Dump Program\r\n".
-                 "-- " . $sys_info['web_server'] . "\r\n".
-                 "-- \r\n".
-                 "-- DATE : ".$sys_info["date"]."\r\n".
-                 "-- MYSQL SERVER VERSION : ".$sys_info['mysql_ver']."\r\n".
-                 "-- PHP VERSION : ".$sys_info['php_ver']."\r\n".
-                 "-- ECShop VERSION : ".VERSION."\r\n".
-                 "-- Vol : " . $vol . "\r\n";
+        $head = "-- ecshop v2.x SQL Dump Program\r\n" .
+            "-- " . $sys_info['web_server'] . "\r\n" .
+            "-- \r\n" .
+            "-- DATE : " . $sys_info["date"] . "\r\n" .
+            "-- MYSQL SERVER VERSION : " . $sys_info['mysql_ver'] . "\r\n" .
+            "-- PHP VERSION : " . $sys_info['php_ver'] . "\r\n" .
+            "-- ECShop VERSION : " . VERSION . "\r\n" .
+            "-- Vol : " . $vol . "\r\n";
 
         return $head;
     }
@@ -290,14 +290,14 @@ class cls_sql_dump
      *  获取备份文件信息
      *
      * @access  public
-     * @param   string      $path       备份文件路径
+     * @param string $path 备份文件路径
      *
      * @return  array       $arr        信息数组
      */
     public function get_head($path)
     {
         /* 获取sql文件头部信息 */
-        $sql_info = array('date'=>'', 'mysql_ver'=> '', 'php_ver'=>0, 'ecs_ver'=>'', 'vol'=>0);
+        $sql_info = array('date' => '', 'mysql_ver' => '', 'php_ver' => 0, 'ecs_ver' => '', 'vol' => 0);
         $fp = fopen($path, 'rb');
         $str = fread($fp, 250);
         fclose($fp);
@@ -307,7 +307,7 @@ class cls_sql_dump
             $pos = strpos($val, ':');
             if ($pos > 0) {
                 $type = trim(substr($val, 0, $pos), "-\n\r\t ");
-                $value = trim(substr($val, $pos+1), "/\n\r\t ");
+                $value = trim(substr($val, $pos + 1), "/\n\r\t ");
                 if ($type == 'DATE') {
                     $sql_info['date'] = $value;
                 } elseif ($type == 'MYSQL SERVER VERSION') {
@@ -329,7 +329,7 @@ class cls_sql_dump
      *  将文件中数据表列表取出
      *
      * @access  public
-     * @param   string      $path    文件路径
+     * @param string $path 文件路径
      *
      * @return  array       $arr    数据表列表
      */
@@ -362,8 +362,8 @@ class cls_sql_dump
      *  将数据表数组写入指定文件
      *
      * @access  public
-     * @param   string      $path    文件路径
-     * @param   array       $arr    要写入的数据
+     * @param string $path 文件路径
+     * @param array $arr 要写入的数据
      *
      * @return  boolen
      */

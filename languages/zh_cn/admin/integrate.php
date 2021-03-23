@@ -39,8 +39,8 @@ $_LANG['lable_db_pass'] = '数据库密码：';
 $_LANG['lable_prefix'] = '数据表前缀：';
 $_LANG['lable_url'] = '被整合系统的完整 URL：';
 /* 表单相关语言项(discus5x) */
-$_LANG['cookie_prefix']          = 'COOKIE前缀：';
-$_LANG['cookie_salt']          = 'COOKIE加密串：';
+$_LANG['cookie_prefix'] = 'COOKIE前缀：';
+$_LANG['cookie_salt'] = 'COOKIE加密串：';
 $_LANG['button_next'] = '下一步';
 $_LANG['button_force_save_config'] = '直接保存配置信息';
 $_LANG['save_confirm'] = '您确定要直接保存配置信息吗？';

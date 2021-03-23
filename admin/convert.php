@@ -15,7 +15,7 @@ if ($_REQUEST['act'] == 'main') {
     $modules = read_modules('../includes/modules/convert');
     for ($i = 0; $i < count($modules); $i++) {
         $code = $modules[$i]['code'];
-        $lang_file = ROOT_PATH.'languages/' . $_CFG['lang'] . '/convert/' . $code . '.php';
+        $lang_file = ROOT_PATH . 'languages/' . $_CFG['lang'] . '/convert/' . $code . '.php';
         if (file_exists($lang_file)) {
             include_once($lang_file);
         }
@@ -25,12 +25,12 @@ if ($_REQUEST['act'] == 'main') {
 
     /* 设置默认值 */
     $def_val = array(
-        'host'      => $db_host,
-        'db'        => '',
-        'user'      => $db_user,
-        'pass'      => $db_pass,
-        'prefix'    => 'sdb_',
-        'path'      => ''
+        'host' => $db_host,
+        'db' => '',
+        'user' => $db_user,
+        'pass' => $db_pass,
+        'prefix' => 'sdb_',
+        'path' => ''
     );
     $smarty->assign('def_val', $def_val);
 
@@ -175,7 +175,7 @@ elseif ($_REQUEST['act'] == 'process') {
  * 检查某个目录的文件是否可读（不包括子目录）
  * 前提：$dirname 是目录且存在且可读
  *
- * @param   string  $dirname    目录名：以 / 结尾，以 / 分隔
+ * @param string $dirname 目录名：以 / 结尾，以 / 分隔
  * @return  mix     如果所有文件可读，返回true；否则，返回第一个不可读的文件名
  */
 function check_files_readable($dirname)
@@ -200,9 +200,9 @@ function check_files_readable($dirname)
  * 把一个目录的文件复制到另一个目录（不包括子目录）
  * 前提：$from_dir 是目录且存在且可读，$to_dir 是目录且存在且可写
  *
- * @param   string  $from_dir   源目录
- * @param   string  $to_dir     目标目录
- * @param   string  $file_prefix    文件名前缀
+ * @param string $from_dir 源目录
+ * @param string $to_dir 目标目录
+ * @param string $file_prefix 文件名前缀
  * @return  mix     成功返回true，否则返回第一个失败的文件名
  */
 function copy_files($from_dir, $to_dir, $file_prefix = '')
@@ -227,19 +227,19 @@ function copy_files($from_dir, $to_dir, $file_prefix = '')
  * 把一个目录的文件复制到另一个目录（包括子目录）
  * 前提：$from_dir 是目录且存在且可读，$to_dir 是目录且存在且可写
  *
- * @param   string  $from_dir   源目录
- * @param   string  $to_dir     目标目录
- * @param   string  $file_prefix 文件前缀
+ * @param string $from_dir 源目录
+ * @param string $to_dir 目标目录
+ * @param string $file_prefix 文件前缀
  * @return  mix     成功返回true，否则返回第一个失败的文件名
  */
 function copy_dirs($from_dir, $to_dir, $file_prefix = '')
 {
     $result = true;
-    if (! is_dir($from_dir)) {
+    if (!is_dir($from_dir)) {
         die("It's not a dir");
     }
-    if (! is_dir($to_dir)) {
-        if (! mkdir($to_dir, 0700)) {
+    if (!is_dir($to_dir)) {
+        if (!mkdir($to_dir, 0700)) {
             die("can't mkdir");
         }
     }
@@ -251,7 +251,7 @@ function copy_dirs($from_dir, $to_dir, $file_prefix = '')
             if (is_dir($src)) {
                 copy_dirs($src, $dtn);
             } else {
-                if (! copy($src, $dtn)) {
+                if (!copy($src, $dtn)) {
                     $result = false;
                     break;
                 }

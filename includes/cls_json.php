@@ -10,8 +10,8 @@ if (!defined('EC_CHARSET')) {
 
 class JSON
 {
-    public $at   = 0;
-    public $ch   = '';
+    public $at = 0;
+    public $ch = '';
     public $text = '';
 
     public function encode($arg, $force = true)
@@ -26,12 +26,12 @@ class JSON
         }
 
         $returnValue = '';
-        $c           = '';
-        $i           = '';
-        $l           = '';
-        $s           = '';
-        $v           = '';
-        $numeric     = true;
+        $c = '';
+        $i = '';
+        $l = '';
+        $s = '';
+        $v = '';
+        $numeric = true;
 
         switch (gettype($arg)) {
             case 'array':
@@ -78,26 +78,26 @@ class JSON
 
             case 'integer':
             case 'double':
-                $returnValue = is_numeric($arg) ? (string) $arg : 'null';
+                $returnValue = is_numeric($arg) ? (string)$arg : 'null';
                 break;
 
             case 'string':
                 $returnValue = '"' . strtr($arg, array(
-                    "\r"   => '\\r',    "\n"   => '\\n',    "\t"   => '\\t',     "\b"   => '\\b',
-                    "\f"   => '\\f',    '\\'   => '\\\\',   '"'    => '\"',
-                    "\x00" => '\u0000', "\x01" => '\u0001', "\x02" => '\u0002', "\x03" => '\u0003',
-                    "\x04" => '\u0004', "\x05" => '\u0005', "\x06" => '\u0006', "\x07" => '\u0007',
-                    "\x08" => '\b',     "\x0b" => '\u000b', "\x0c" => '\f',     "\x0e" => '\u000e',
-                    "\x0f" => '\u000f', "\x10" => '\u0010', "\x11" => '\u0011', "\x12" => '\u0012',
-                    "\x13" => '\u0013', "\x14" => '\u0014', "\x15" => '\u0015', "\x16" => '\u0016',
-                    "\x17" => '\u0017', "\x18" => '\u0018', "\x19" => '\u0019', "\x1a" => '\u001a',
-                    "\x1b" => '\u001b', "\x1c" => '\u001c', "\x1d" => '\u001d', "\x1e" => '\u001e',
-                    "\x1f" => '\u001f'
-                )) . '"';
+                        "\r" => '\\r', "\n" => '\\n', "\t" => '\\t', "\b" => '\\b',
+                        "\f" => '\\f', '\\' => '\\\\', '"' => '\"',
+                        "\x00" => '\u0000', "\x01" => '\u0001', "\x02" => '\u0002', "\x03" => '\u0003',
+                        "\x04" => '\u0004', "\x05" => '\u0005', "\x06" => '\u0006', "\x07" => '\u0007',
+                        "\x08" => '\b', "\x0b" => '\u000b', "\x0c" => '\f', "\x0e" => '\u000e',
+                        "\x0f" => '\u000f', "\x10" => '\u0010', "\x11" => '\u0011', "\x12" => '\u0012',
+                        "\x13" => '\u0013', "\x14" => '\u0014', "\x15" => '\u0015', "\x16" => '\u0016',
+                        "\x17" => '\u0017', "\x18" => '\u0018', "\x19" => '\u0019', "\x1a" => '\u001a',
+                        "\x1b" => '\u001b', "\x1c" => '\u001c', "\x1d" => '\u001d', "\x1e" => '\u001e',
+                        "\x1f" => '\u001f'
+                    )) . '"';
                 break;
 
             case 'boolean':
-                $returnValue = $arg?'true':'false';
+                $returnValue = $arg ? 'true' : 'false';
                 break;
 
             default:
@@ -107,7 +107,7 @@ class JSON
         return $returnValue;
     }
 
-    public function decode($text, $type=0) // 榛樿?type=0杩斿洖obj,type=1杩斿洖array
+    public function decode($text, $type = 0) // 榛樿?type=0杩斿洖obj,type=1杩斿洖array
     {
         if (empty($text)) {
             return '';
@@ -119,18 +119,18 @@ class JSON
             return addslashes_deep_obj(json_decode(stripslashes($text), $type));
         }
 
-        $this->at   = 0;
-        $this->ch   = '';
+        $this->at = 0;
+        $this->ch = '';
         $this->text = strtr(stripslashes($text), array(
-                "\r"   => '', "\n"   => '', "\t"   => '', "\b"   => '',
-                "\x00" => '', "\x01" => '', "\x02" => '', "\x03" => '',
-                "\x04" => '', "\x05" => '', "\x06" => '', "\x07" => '',
-                "\x08" => '', "\x0b" => '', "\x0c" => '', "\x0e" => '',
-                "\x0f" => '', "\x10" => '', "\x11" => '', "\x12" => '',
-                "\x13" => '', "\x14" => '', "\x15" => '', "\x16" => '',
-                "\x17" => '', "\x18" => '', "\x19" => '', "\x1a" => '',
-                "\x1b" => '', "\x1c" => '', "\x1d" => '', "\x1e" => '',
-                "\x1f" => ''
+            "\r" => '', "\n" => '', "\t" => '', "\b" => '',
+            "\x00" => '', "\x01" => '', "\x02" => '', "\x03" => '',
+            "\x04" => '', "\x05" => '', "\x06" => '', "\x07" => '',
+            "\x08" => '', "\x0b" => '', "\x0c" => '', "\x0e" => '',
+            "\x0f" => '', "\x10" => '', "\x11" => '', "\x12" => '',
+            "\x13" => '', "\x14" => '', "\x15" => '', "\x16" => '',
+            "\x17" => '', "\x18" => '', "\x19" => '', "\x1a" => '',
+            "\x1b" => '', "\x1c" => '', "\x1d" => '', "\x1e" => '',
+            "\x1f" => ''
         ));
 
         $this->next();
@@ -145,7 +145,7 @@ class JSON
      * triggers a PHP_ERROR
      *
      * @access   private
-     * @param    string    $m    error message
+     * @param string $m error message
      *
      * @return   void
      */
@@ -215,7 +215,7 @@ class JSON
                             $u = 0;
 
                             for ($i = 0; $i < 4; $i++) {
-                                $t = (integer) sprintf('%01c', hexdec($this->next()));
+                                $t = (integer)sprintf('%01c', hexdec($this->next()));
 
                                 if (!is_numeric($t)) {
                                     break 2;

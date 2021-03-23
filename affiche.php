@@ -27,10 +27,10 @@ if ($_GET['act'] == 'js') {
     $str = "";
 
     /* 取得广告的信息 */
-    $sql = 'SELECT ad.ad_id, ad.ad_name, ad.ad_link, ad.ad_code '.
-           'FROM ' . $ecs->table('ad') . ' AS ad ' .
-           'LEFT JOIN ' . $ecs->table('ad_position') . ' AS p ON ad.position_id = p.position_id '.
-           "WHERE ad.ad_id = '$ad_id' and " . gmtime() . " >= ad.start_time and " . gmtime() . "<= ad.end_time";
+    $sql = 'SELECT ad.ad_id, ad.ad_name, ad.ad_link, ad.ad_code ' .
+        'FROM ' . $ecs->table('ad') . ' AS ad ' .
+        'LEFT JOIN ' . $ecs->table('ad_position') . ' AS p ON ad.position_id = p.position_id ' .
+        "WHERE ad.ad_id = '$ad_id' and " . gmtime() . " >= ad.start_time and " . gmtime() . "<= ad.end_time";
 
     $ad_info = $db->getRow($sql);
 
@@ -42,7 +42,7 @@ if ($_GET['act'] == 'js') {
         }
 
         /* 初始化广告的类型和来源 */
-        $_GET['type'] = !empty($_GET['type']) ? intval($_GET['type'])    : 0;
+        $_GET['type'] = !empty($_GET['type']) ? intval($_GET['type']) : 0;
         $_GET['from'] = !empty($_GET['from']) ? urlencode($_GET['from']) : '';
 
         $str = '';
@@ -50,14 +50,14 @@ if ($_GET['act'] == 'js') {
             case '0':
                 /* 图片广告 */
                 $src = (strpos($ad_info['ad_code'], 'http://') === false && strpos($ad_info['ad_code'], 'https://') === false) ? $url . DATA_DIR . "/afficheimg/$ad_info[ad_code]" : $ad_info['ad_code'];
-                $str = '<a href="' .$url. 'affiche.php?ad_id=' .$ad_info['ad_id']. '&from=' .$_GET['from']. '&uri=' .urlencode($ad_info['ad_link']). '" target="_blank">' .
-                        '<img src="' . $src . '" border="0" alt="' . $ad_info['ad_name'] . '" /></a>';
+                $str = '<a href="' . $url . 'affiche.php?ad_id=' . $ad_info['ad_id'] . '&from=' . $_GET['from'] . '&uri=' . urlencode($ad_info['ad_link']) . '" target="_blank">' .
+                    '<img src="' . $src . '" border="0" alt="' . $ad_info['ad_name'] . '" /></a>';
                 break;
 
             case '1':
                 /* Falsh广告 */
                 $src = (strpos($ad_info['ad_code'], 'http://') === false && strpos($ad_info['ad_code'], 'https://') === false) ? $url . DATA_DIR . '/afficheimg/' . $ad_info['ad_code'] : $ad_info['ad_code'];
-                $str = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0"> <param name="movie" value="'.$src.'"><param name="quality" value="high"><embed src="'.$src.'" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"></embed></object>';
+                $str = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0"> <param name="movie" value="' . $src . '"><param name="quality" value="high"><embed src="' . $src . '" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"></embed></object>';
                 break;
 
             case '2':
@@ -67,7 +67,7 @@ if ($_GET['act'] == 'js') {
 
             case 3:
                 /* 文字广告 */
-                $str = '<a href="' .$url. 'affiche.php?ad_id=' .$ad_info['ad_id']. '&from=' .$_GET['from']. '&uri=' .urlencode($ad_info['ad_link']). '" target="_blank">' . nl2br(htmlspecialchars(addslashes($ad_info['ad_code']))). '</a>';
+                $str = '<a href="' . $url . 'affiche.php?ad_id=' . $ad_info['ad_id'] . '&from=' . $_GET['from'] . '&uri=' . urlencode($ad_info['ad_link']) . '" target="_blank">' . nl2br(htmlspecialchars(addslashes($ad_info['ad_code']))) . '</a>';
                 break;
         }
     }
@@ -75,7 +75,7 @@ if ($_GET['act'] == 'js') {
 } else {
     /* 获取投放站点的名称 */
 
-    $site_name = !empty($_GET['from']) ?htmlspecialchars($_GET['from'])  : addslashes($_LANG['self_site']);
+    $site_name = !empty($_GET['from']) ? htmlspecialchars($_GET['from']) : addslashes($_LANG['self_site']);
 
     /* 商品的ID */
     $goods_id = !empty($_GET['goods_id']) ? intval($_GET['goods_id']) : 0;
@@ -94,7 +94,7 @@ if ($_GET['act'] == 'js') {
         }
         $db->query($sql);
         //$db->autoReplace($ecs->table('adsense'), array('from_ad' => -1, 'referer' => $site_name, 'clicks' => 1), array('clicks' => 1));
-        $sql = "SELECT goods_name FROM " .$ecs->table('goods'). " WHERE goods_id = $goods_id";
+        $sql = "SELECT goods_name FROM " . $ecs->table('goods') . " WHERE goods_id = $goods_id";
         $res = $db->query($sql);
 
         $row = $db->fetchRow($res);
@@ -116,8 +116,8 @@ if ($_GET['act'] == 'js') {
         }
         $db->query($sql);
 
-        $sql="SELECT * FROM ". $ecs->table('ad') ." WHERE ad_id = '$ad_id'";
-        $ad_info=$db->getRow($sql);
+        $sql = "SELECT * FROM " . $ecs->table('ad') . " WHERE ad_id = '$ad_id'";
+        $ad_info = $db->getRow($sql);
         /* 跳转到广告的链接页面 */
         if (!empty($ad_info['ad_link'])) {
             $uri = (strpos($ad_info['ad_link'], 'http://') === false && strpos($ad_info['ad_link'], 'https://') === false) ? $ecs->http() . urldecode($ad_info['ad_link']) : urldecode($ad_info['ad_link']);

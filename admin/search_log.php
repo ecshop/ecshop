@@ -37,16 +37,16 @@ function get_search_log()
 {
     $where = '';
     if (isset($_REQUEST['start_dateYear']) && isset($_REQUEST['end_dateYear'])) {
-        $start_date = $_POST['start_dateYear']. '-' .$_POST['start_dateMonth']. '-' .$_POST['start_dateDay'];
-        $end_date   = $_POST['end_dateYear']. '-' .$_POST['end_dateMonth']. '-' .$_POST['end_dateDay'];
+        $start_date = $_POST['start_dateYear'] . '-' . $_POST['start_dateMonth'] . '-' . $_POST['start_dateDay'];
+        $end_date = $_POST['end_dateYear'] . '-' . $_POST['end_dateMonth'] . '-' . $_POST['end_dateDay'];
         $where .= " AND date <= '$end_date' AND date >= '$start_date'";
-        $filter['start_dateYear']  = $_REQUEST['start_dateYear'];
+        $filter['start_dateYear'] = $_REQUEST['start_dateYear'];
         $filter['start_dateMonth'] = $_REQUEST['start_dateMonth'];
-        $filter['start_dateDay']   = $_REQUEST['start_dateDay'];
+        $filter['start_dateDay'] = $_REQUEST['start_dateDay'];
 
-        $filter['end_dateYear']  = $_REQUEST['end_dateYear'];
+        $filter['end_dateYear'] = $_REQUEST['end_dateYear'];
         $filter['end_dateMonth'] = $_REQUEST['end_dateMonth'];
-        $filter['end_dateDay']   = $_REQUEST['end_dateDay'];
+        $filter['end_dateDay'] = $_REQUEST['end_dateDay'];
     }
 
     $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('keywords') . " WHERE  searchengine='ecshop' $where";
@@ -54,9 +54,9 @@ function get_search_log()
     $logdb = array();
     $filter = page_and_size($filter);
     $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('keywords') .
-           " WHERE  searchengine='ecshop' $where" .
-           " ORDER BY date DESC, count DESC" .
-           "  LIMIT $filter[start],$filter[page_size]";
+        " WHERE  searchengine='ecshop' $where" .
+        " ORDER BY date DESC, count DESC" .
+        "  LIMIT $filter[start],$filter[page_size]";
     $query = $GLOBALS['db']->query($sql);
 
     while ($rt = $GLOBALS['db']->fetch_array($query)) {

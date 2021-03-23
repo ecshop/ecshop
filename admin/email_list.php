@@ -23,7 +23,7 @@ if ($_REQUEST['act'] == 'list') {
     }
     $contentType = 'text/plain';
     $len = strlen($out);
-    header('Last-Modified: ' . gmdate('D, d M Y H:i:s', time()+31536000) .' GMT');
+    header('Last-Modified: ' . gmdate('D, d M Y H:i:s', time() + 31536000) . ' GMT');
     header('Pragma: no-cache');
     header('Content-Encoding: none');
     header('Content-type: ' . $contentType);
@@ -38,7 +38,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('record_count', $emaildb['record_count']);
     $smarty->assign('page_count', $emaildb['page_count']);
 
-    $sort_flag  = sort_flag($emaildb['filter']);
+    $sort_flag = sort_flag($emaildb['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
@@ -57,7 +57,7 @@ elseif ($_REQUEST['act'] == 'batch_remove') {
     }
 
     $sql = "DELETE FROM " . $ecs->table('email_list') .
-            " WHERE id " . db_create_in(join(',', $_POST['checkboxes']));
+        " WHERE id " . db_create_in(join(',', $_POST['checkboxes']));
     $db->query($sql);
 
     $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list');
@@ -73,7 +73,7 @@ elseif ($_REQUEST['act'] == 'batch_unremove') {
     }
 
     $sql = "UPDATE " . $ecs->table('email_list') .
-            " SET stat = 1 WHERE stat <> 1 AND id " . db_create_in(join(',', $_POST['checkboxes']));
+        " SET stat = 1 WHERE stat <> 1 AND id " . db_create_in(join(',', $_POST['checkboxes']));
     $db->query($sql);
 
     $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list');
@@ -89,7 +89,7 @@ elseif ($_REQUEST['act'] == 'batch_exit') {
     }
 
     $sql = "UPDATE " . $ecs->table('email_list') .
-            " SET stat = 2 WHERE stat <> 2 AND id " . db_create_in(join(',', $_POST['checkboxes']));
+        " SET stat = 2 WHERE stat <> 2 AND id " . db_create_in(join(',', $_POST['checkboxes']));
     $db->query($sql);
 
     $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list');
@@ -100,8 +100,8 @@ function get_email_list()
 {
     $result = get_filter();
     if ($result === false) {
-        $filter['sort_by']      = empty($_REQUEST['sort_by']) ? 'stat' : trim($_REQUEST['sort_by']);
-        $filter['sort_order']   = empty($_REQUEST['sort_order']) ? 'ASC' : trim($_REQUEST['sort_order']);
+        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'stat' : trim($_REQUEST['sort_by']);
+        $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'ASC' : trim($_REQUEST['sort_order']);
 
         $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('email_list');
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
@@ -117,7 +117,7 @@ function get_email_list()
 
         set_filter($filter, $sql);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
 

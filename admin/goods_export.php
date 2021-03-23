@@ -14,14 +14,14 @@ if ($_REQUEST['act'] == 'goods_export') {
     $smarty->assign('goods_type_list', goods_type_list(0));
     $goods_fields = my_array_merge($_LANG['custom'], get_attributes());
     $data_format_array = array(
-                                'ecshop'    => $_LANG['export_ecshop'],
-                                'taobao V4.3'    => $_LANG['export_taobao_v43'],
-                                'taobao V4.6'    => $_LANG['export_taobao_v46'],
-                                'taobao'    => $_LANG['export_taobao'],
-                                'paipai'    => $_LANG['export_paipai'],
-                                'paipai4'   => $_LANG['export_paipai4'],
-                                'custom'    => $_LANG['export_custom'],
-                               );
+        'ecshop' => $_LANG['export_ecshop'],
+        'taobao V4.3' => $_LANG['export_taobao_v43'],
+        'taobao V4.6' => $_LANG['export_taobao_v46'],
+        'taobao' => $_LANG['export_taobao'],
+        'paipai' => $_LANG['export_paipai'],
+        'paipai4' => $_LANG['export_paipai4'],
+        'custom' => $_LANG['export_custom'],
+    );
     $smarty->assign('data_format', $data_format_array);
     $smarty->assign('goods_fields', $goods_fields);
     assign_query_info();
@@ -34,7 +34,7 @@ if ($_REQUEST['act'] == 'goods_export') {
 
     $where = get_export_where_sql($_POST);
 
-    $goods_class =  intval($_POST['goods_class']);
+    $goods_class = intval($_POST['goods_class']);
     $post_express = floatval($_POST['post_express']);
     $express = floatval($_POST['express']);
     $ems = floatval($_POST['ems']);
@@ -48,29 +48,29 @@ if ($_REQUEST['act'] == 'goods_export') {
         if ($arr) {
             if (count($arr) == 1) {
                 if ($arr[0]['region_id'] == $_CFG['shop_province']) {
-                    $shop_province = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[0]['region_name'] . '"';
                 } else {
-                    $shop_city = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_city = '"' . $arr[0]['region_name'] . '"';
                 }
             } else {
                 if ($arr[0]['region_id'] == $_CFG['shop_province']) {
-                    $shop_province = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[0]['region_name'] . '"';
                     $shop_city = '"' . $arr[1]['region_name'] . '"';
                 } else {
-                    $shop_province = '"' . $arr[1]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[1]['region_name'] . '"';
                     $shop_city = '"' . $arr[0]['region_name'] . '"';
                 }
             }
         }
     }
 
-    $sql = "SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, g.goods_desc, g.goods_img ".
-    " FROM " . $ecs->table('goods') . " AS g ". $where;
+    $sql = "SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, g.goods_desc, g.goods_img " .
+        " FROM " . $ecs->table('goods') . " AS g " . $where;
 
     $res = $db->query($sql);
 
     /* csv文件数组 */
-    $goods_value = array('goods_name'=>'""', 'goods_class'=>$goods_class, 'shop_class'=>0, 'new_level'=>5, 'province'=>$shop_province, 'city'=>$shop_city, 'sell_type'=>'"b"', 'shop_price'=>0, 'add_price'=>0, 'goods_number'=>0, 'die_day'=>14, 'load_type'=>1, 'post_express'=>$post_express, 'ems'=>$ems, 'express'=>$express, 'pay_type'=>2, 'allow_alipay'=>1, 'invoice'=>0, 'repair'=>0, 'resend'=>1, 'is_store'=>0, 'window'=>0, 'add_time'=>'"1980-1-1  0:00:00"', 'story'=>'""', 'goods_desc'=>'""', 'goods_img'=>'""', 'goods_attr'=>'""', 'group_buy'=>0, 'group_buy_num'=>0, 'template'=>0, 'discount'=>0, 'modify_time'=>'""', 'upload_status'=>100, 'img_status'=>1);
+    $goods_value = array('goods_name' => '""', 'goods_class' => $goods_class, 'shop_class' => 0, 'new_level' => 5, 'province' => $shop_province, 'city' => $shop_city, 'sell_type' => '"b"', 'shop_price' => 0, 'add_price' => 0, 'goods_number' => 0, 'die_day' => 14, 'load_type' => 1, 'post_express' => $post_express, 'ems' => $ems, 'express' => $express, 'pay_type' => 2, 'allow_alipay' => 1, 'invoice' => 0, 'repair' => 0, 'resend' => 1, 'is_store' => 0, 'window' => 0, 'add_time' => '"1980-1-1  0:00:00"', 'story' => '""', 'goods_desc' => '""', 'goods_img' => '""', 'goods_attr' => '""', 'group_buy' => 0, 'group_buy_num' => 0, 'template' => 0, 'discount' => 0, 'modify_time' => '""', 'upload_status' => 100, 'img_status' => 1);
 
     $content = implode(",", $_LANG['taobao']) . "\n";
 
@@ -105,7 +105,7 @@ if ($_REQUEST['act'] == 'goods_export') {
 
     $where = get_export_where_sql($_POST);
 
-    $goods_class =  intval($_POST['goods_class']);
+    $goods_class = intval($_POST['goods_class']);
     $post_express = floatval($_POST['post_express']);
     $express = floatval($_POST['express']);
     $ems = floatval($_POST['ems']);
@@ -119,29 +119,29 @@ if ($_REQUEST['act'] == 'goods_export') {
         if ($arr) {
             if (count($arr) == 1) {
                 if ($arr[0]['region_id'] == $_CFG['shop_province']) {
-                    $shop_province = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[0]['region_name'] . '"';
                 } else {
-                    $shop_city = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_city = '"' . $arr[0]['region_name'] . '"';
                 }
             } else {
                 if ($arr[0]['region_id'] == $_CFG['shop_province']) {
-                    $shop_province = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[0]['region_name'] . '"';
                     $shop_city = '"' . $arr[1]['region_name'] . '"';
                 } else {
-                    $shop_province = '"' . $arr[1]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[1]['region_name'] . '"';
                     $shop_city = '"' . $arr[0]['region_name'] . '"';
                 }
             }
         }
     }
 
-    $sql = "SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, g.goods_desc, g.goods_img ".
-    " FROM " . $ecs->table('goods') . " AS g ". $where;
+    $sql = "SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, g.goods_desc, g.goods_img " .
+        " FROM " . $ecs->table('goods') . " AS g " . $where;
 
     $res = $db->query($sql);
 
     /* csv文件数组 */
-    $goods_value = array('goods_name'=>'""', 'goods_class'=>$goods_class, 'shop_class'=>0, 'new_level'=>5, 'province'=>$shop_province, 'city'=>$shop_city, 'sell_type'=>'"b"', 'shop_price'=>0, 'add_price'=>0, 'goods_number'=>0, 'die_day'=>14, 'load_type'=>1, 'post_express'=>$post_express, 'ems'=>$ems, 'express'=>$express, 'pay_type'=>2, 'allow_alipay'=>1, 'invoice'=>0, 'repair'=>0, 'resend'=>1, 'is_store'=>0, 'window'=>0, 'add_time'=>'"1980-1-1  0:00:00"', 'story'=>'""', 'goods_desc'=>'""', 'goods_img'=>'""', 'goods_attr'=>'""', 'group_buy'=>0, 'group_buy_num'=>0, 'template'=>0, 'discount'=>0, 'modify_time'=>'""', 'upload_status'=>100, 'img_status'=>1);
+    $goods_value = array('goods_name' => '""', 'goods_class' => $goods_class, 'shop_class' => 0, 'new_level' => 5, 'province' => $shop_province, 'city' => $shop_city, 'sell_type' => '"b"', 'shop_price' => 0, 'add_price' => 0, 'goods_number' => 0, 'die_day' => 14, 'load_type' => 1, 'post_express' => $post_express, 'ems' => $ems, 'express' => $express, 'pay_type' => 2, 'allow_alipay' => 1, 'invoice' => 0, 'repair' => 0, 'resend' => 1, 'is_store' => 0, 'window' => 0, 'add_time' => '"1980-1-1  0:00:00"', 'story' => '""', 'goods_desc' => '""', 'goods_img' => '""', 'goods_attr' => '""', 'group_buy' => 0, 'group_buy_num' => 0, 'template' => 0, 'discount' => 0, 'modify_time' => '""', 'upload_status' => 100, 'img_status' => 1);
 
     $content = implode("\t", $_LANG['taobao']) . "\n";
 
@@ -167,8 +167,7 @@ if ($_REQUEST['act'] == 'goods_export') {
     header("Content-Disposition: attachment; filename=goods_list.zip");
     header("Content-Type: application/unknown");
     die($zip->file());
-}
-/* 从淘宝导入数据 */
+} /* 从淘宝导入数据 */
 elseif ($_REQUEST['act'] == 'import_taobao') {
     $smarty->display('import_taobao.htm');
 } elseif ($_REQUEST['act'] == 'act_export_ecshop') {
@@ -181,8 +180,8 @@ elseif ($_REQUEST['act'] == 'import_taobao') {
     $where = get_export_where_sql($_POST);
 
     $sql = "SELECT g.*, b.brand_name as brandname " .
-           " FROM " . $ecs->table('goods') . " AS g LEFT JOIN " . $ecs->table('brand') . " AS b " .
-           "ON g.brand_id = b.brand_id" . $where;
+        " FROM " . $ecs->table('goods') . " AS g LEFT JOIN " . $ecs->table('brand') . " AS b " .
+        "ON g.brand_id = b.brand_id" . $where;
 
     $res = $db->query($sql);
 
@@ -281,24 +280,24 @@ elseif ($_REQUEST['act'] == 'import_taobao') {
         if ($arr) {
             if (count($arr) == 1) {
                 if ($arr[0]['region_id'] == $_CFG['shop_province']) {
-                    $shop_province = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[0]['region_name'] . '"';
                 } else {
-                    $shop_city = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_city = '"' . $arr[0]['region_name'] . '"';
                 }
             } else {
                 if ($arr[0]['region_id'] == $_CFG['shop_province']) {
-                    $shop_province = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[0]['region_name'] . '"';
                     $shop_city = '"' . $arr[1]['region_name'] . '"';
                 } else {
-                    $shop_province = '"' . $arr[1]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[1]['region_name'] . '"';
                     $shop_city = '"' . $arr[0]['region_name'] . '"';
                 }
             }
         }
     }
 
-    $sql = "SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, g.goods_desc, g.goods_img ".
-    " FROM " . $ecs->table('goods') . " AS g ". $where;
+    $sql = "SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, g.goods_desc, g.goods_img " .
+        " FROM " . $ecs->table('goods') . " AS g " . $where;
 
     $res = $db->query($sql);
 
@@ -396,24 +395,24 @@ elseif ($_REQUEST['act'] == 'import_taobao') {
         if ($arr) {
             if (count($arr) == 1) {
                 if ($arr[0]['region_id'] == $_CFG['shop_province']) {
-                    $shop_province = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[0]['region_name'] . '"';
                 } else {
-                    $shop_city = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_city = '"' . $arr[0]['region_name'] . '"';
                 }
             } else {
                 if ($arr[0]['region_id'] == $_CFG['shop_province']) {
-                    $shop_province = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[0]['region_name'] . '"';
                     $shop_city = '"' . $arr[1]['region_name'] . '"';
                 } else {
-                    $shop_province = '"' . $arr[1]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[1]['region_name'] . '"';
                     $shop_city = '"' . $arr[0]['region_name'] . '"';
                 }
             }
         }
     }
 
-    $sql = "SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, g.goods_desc, g.goods_img ".
-    " FROM " . $ecs->table('goods') . " AS g ". $where;
+    $sql = "SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, g.goods_desc, g.goods_img " .
+        " FROM " . $ecs->table('goods') . " AS g " . $where;
 
     $res = $db->query($sql);
 
@@ -476,14 +475,12 @@ elseif ($_REQUEST['act'] == 'import_taobao') {
     header("Content-Disposition: attachment; filename=goods_list.zip");
     header("Content-Type: application/unknown");
     die($zip->file());
-}
-/* 从拍拍网导入数据 */
+} /* 从拍拍网导入数据 */
 elseif ($_REQUEST['act'] == 'import_paipai') {
     $smarty->display('import_paipai.htm');
-}
-/* 处理Ajax调用 */
+} /* 处理Ajax调用 */
 elseif ($_REQUEST['act'] == 'get_goods_fields') {
-    $cat_id = isset($_REQUEST['cat_id'])?intval($_REQUEST['cat_id']):0;
+    $cat_id = isset($_REQUEST['cat_id']) ? intval($_REQUEST['cat_id']) : 0;
     $goods_fields = my_array_merge($_LANG['custom'], get_attributes($cat_id));
     make_json_result($goods_fields);
 } elseif ($_REQUEST['act'] == 'act_export_custom') {
@@ -501,8 +498,8 @@ elseif ($_REQUEST['act'] == 'get_goods_fields') {
     $where = get_export_where_sql($_POST);
 
     $sql = "SELECT g.*, b.brand_name as brandname " .
-           " FROM " . $ecs->table('goods') . " AS g LEFT JOIN " . $ecs->table('brand') . " AS b " .
-           "ON g.brand_id = b.brand_id" . $where;
+        " FROM " . $ecs->table('goods') . " AS g LEFT JOIN " . $ecs->table('brand') . " AS b " .
+        "ON g.brand_id = b.brand_id" . $where;
 
     $res = $db->query($sql);
 
@@ -574,8 +571,8 @@ elseif ($_REQUEST['act'] == 'get_goods_fields') {
 
     foreach ($arr as $key => $val) {
         $opt[] = array('goods_id' => $val['goods_id'],
-                        'goods_name' => $val['goods_name']
-                      );
+            'goods_name' => $val['goods_name']
+        );
     }
     make_json_result($opt);
 } elseif ($_REQUEST['act'] == 'act_export_taobao V4.6') {
@@ -586,7 +583,7 @@ elseif ($_REQUEST['act'] == 'get_goods_fields') {
 
     $where = get_export_where_sql($_POST);
 
-    $goods_class =  intval($_POST['goods_class']);
+    $goods_class = intval($_POST['goods_class']);
     $post_express = floatval($_POST['post_express']);
     $express = floatval($_POST['express']);
     $ems = floatval($_POST['ems']);
@@ -600,41 +597,41 @@ elseif ($_REQUEST['act'] == 'get_goods_fields') {
         if ($arr) {
             if (count($arr) == 1) {
                 if ($arr[0]['region_id'] == $_CFG['shop_province']) {
-                    $shop_province = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[0]['region_name'] . '"';
                 } else {
-                    $shop_city = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_city = '"' . $arr[0]['region_name'] . '"';
                 }
             } else {
                 if ($arr[0]['region_id'] == $_CFG['shop_province']) {
-                    $shop_province = '"' . $arr[0]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[0]['region_name'] . '"';
                     $shop_city = '"' . $arr[1]['region_name'] . '"';
                 } else {
-                    $shop_province = '"' . $arr[1]['region_name'] . '"' ;
+                    $shop_province = '"' . $arr[1]['region_name'] . '"';
                     $shop_city = '"' . $arr[0]['region_name'] . '"';
                 }
             }
         }
     }
 
-    $sql = "SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, g.goods_desc, g.goods_img ".
-    " FROM " . $ecs->table('goods') . " AS g ". $where;
+    $sql = "SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, g.goods_desc, g.goods_img " .
+        " FROM " . $ecs->table('goods') . " AS g " . $where;
 
     $res = $db->query($sql);
 
     /* csv文件数组 */
-    $goods_value = array('goods_name'=>'', 'goods_class'=>$goods_class, 'shop_class'=>0, 'new_level'=>0, 'province'=>$shop_province, 'city'=>$shop_city, 'sell_type'=>'"b"', 'shop_price'=>0, 'add_price'=>0, 'goods_number'=>0, 'die_day'=>14, 'load_type'=>1, 'post_express'=>$post_express, 'ems'=>$ems, 'express'=>$express, 'pay_type'=>'', 'allow_alipay'=>'', 'invoice'=>0, 'repair'=>0, 'resend'=>1, 'is_store'=>0, 'window'=>0, 'add_time'=>'"1980-1-1  0:00:00"', 'story'=>'', 'goods_desc'=>'', 'goods_img'=>'', 'goods_attr'=>'', 'group_buy'=>'', 'group_buy_num'=>'', 'template'=>0, 'discount'=>0, 'modify_time'=>'"2011-5-1  0:00:00"', 'upload_status'=>100, 'img_status'=>1,'img_status'=>'','rebate_proportion'=>0,'new_goods_img'=>'','video'=>'','marketing_property_mix'=>'','user_input_ID_numbers'=>'','input_user_name_value'=>'','sellers_code'=>'','another_of_marketing_property'=>'','charge_type'=>'0','treasure_number'=>'','ID_number'=>'',);
+    $goods_value = array('goods_name' => '', 'goods_class' => $goods_class, 'shop_class' => 0, 'new_level' => 0, 'province' => $shop_province, 'city' => $shop_city, 'sell_type' => '"b"', 'shop_price' => 0, 'add_price' => 0, 'goods_number' => 0, 'die_day' => 14, 'load_type' => 1, 'post_express' => $post_express, 'ems' => $ems, 'express' => $express, 'pay_type' => '', 'allow_alipay' => '', 'invoice' => 0, 'repair' => 0, 'resend' => 1, 'is_store' => 0, 'window' => 0, 'add_time' => '"1980-1-1  0:00:00"', 'story' => '', 'goods_desc' => '', 'goods_img' => '', 'goods_attr' => '', 'group_buy' => '', 'group_buy_num' => '', 'template' => 0, 'discount' => 0, 'modify_time' => '"2011-5-1  0:00:00"', 'upload_status' => 100, 'img_status' => 1, 'img_status' => '', 'rebate_proportion' => 0, 'new_goods_img' => '', 'video' => '', 'marketing_property_mix' => '', 'user_input_ID_numbers' => '', 'input_user_name_value' => '', 'sellers_code' => '', 'another_of_marketing_property' => '', 'charge_type' => '0', 'treasure_number' => '', 'ID_number' => '',);
 
     $content = implode("\t", $_LANG['taobao46']) . "\n";
 
     while ($row = $db->fetchRow($res)) {
-        
+
         /* 压缩图片 */
         if (!empty($row['goods_img']) && is_file(ROOT_PATH . $row['goods_img'])) {
-            $row['new_goods_img']=preg_replace("/(^images\/)+(.*)(.gif|.jpg|.jpeg|.png)$/", "\${2}.tbi", $row['goods_img']);
-            @copy(ROOT_PATH .$row['goods_img'], ROOT_PATH ."images\/".$row['new_goods_img']);
-            if (is_file(ROOT_PATH ."images\/". $row['new_goods_img'])) {
-                $zip->add_file(file_get_contents(ROOT_PATH ."images\/". $row['new_goods_img']), $row['new_goods_img']);
-                unlink(ROOT_PATH ."images\/".$row['new_goods_img']);
+            $row['new_goods_img'] = preg_replace("/(^images\/)+(.*)(.gif|.jpg|.jpeg|.png)$/", "\${2}.tbi", $row['goods_img']);
+            @copy(ROOT_PATH . $row['goods_img'], ROOT_PATH . "images\/" . $row['new_goods_img']);
+            if (is_file(ROOT_PATH . "images\/" . $row['new_goods_img'])) {
+                $zip->add_file(file_get_contents(ROOT_PATH . "images\/" . $row['new_goods_img']), $row['new_goods_img']);
+                unlink(ROOT_PATH . "images\/" . $row['new_goods_img']);
             }
         }
         $goods_value['goods_name'] = '"' . $row['goods_name'] . '"';
@@ -642,9 +639,9 @@ elseif ($_REQUEST['act'] == 'get_goods_fields') {
         $goods_value['goods_number'] = $row['goods_number'];
         $goods_value['goods_desc'] = replace_special_char($row['goods_desc']);
         if (!empty($row['new_goods_img'])) {
-            $row['new_goods_img']=str_ireplace('/', '\\', $row['new_goods_img'], $row['new_goods_img']);
-            $row['new_goods_img']=str_ireplace('.tbi', '', $row['new_goods_img'], $row['new_goods_img']);
-            $goods_value['new_goods_img'] = '"' . $row['new_goods_img'] . ':0:0:|;'.'"';
+            $row['new_goods_img'] = str_ireplace('/', '\\', $row['new_goods_img'], $row['new_goods_img']);
+            $row['new_goods_img'] = str_ireplace('.tbi', '', $row['new_goods_img'], $row['new_goods_img']);
+            $goods_value['new_goods_img'] = '"' . $row['new_goods_img'] . ':0:0:|;' . '"';
         }
 
         $content .= implode("\t", $goods_value) . "\n";
@@ -685,39 +682,39 @@ function utf82u2($str)
         } else {
             if ($num < 192) {
                 /* 无效字节 */
-                $start ++;
+                $start++;
             } elseif ($num < 224) {
-                if ($start + 1 <  $len) {
+                if ($start + 1 < $len) {
                     $num = (ord($str{$start}) & 0x3f) << 6;
-                    $num += ord($str{$start+1}) & 0x3f;
-                    $result .=   chr($num & 0xff) . chr($num >> 8) ;
+                    $num += ord($str{$start + 1}) & 0x3f;
+                    $result .= chr($num & 0xff) . chr($num >> 8);
                 }
                 $start += 2;
             } elseif ($num < 240) {
-                if ($start + 2 <  $len) {
+                if ($start + 2 < $len) {
                     $num = (ord($str{$start}) & 0x1f) << 12;
-                    $num += (ord($str{$start+1}) & 0x3f) << 6;
-                    $num += ord($str{$start+2}) & 0x3f;
+                    $num += (ord($str{$start + 1}) & 0x3f) << 6;
+                    $num += ord($str{$start + 2}) & 0x3f;
 
-                    $result .=   chr($num & 0xff) . chr($num >> 8) ;
+                    $result .= chr($num & 0xff) . chr($num >> 8);
                 }
                 $start += 3;
             } elseif ($num < 248) {
-                if ($start + 3 <  $len) {
+                if ($start + 3 < $len) {
                     $num = (ord($str{$start}) & 0x0f) << 18;
-                    $num += (ord($str{$start+1}) & 0x3f) << 12;
-                    $num += (ord($str{$start+2}) & 0x3f) << 6;
-                    $num += ord($str{$start+3}) & 0x3f;
-                    $result .= chr($num & 0xff) . chr($num >> 8) . chr($num >>16);
+                    $num += (ord($str{$start + 1}) & 0x3f) << 12;
+                    $num += (ord($str{$start + 2}) & 0x3f) << 6;
+                    $num += ord($str{$start + 3}) & 0x3f;
+                    $result .= chr($num & 0xff) . chr($num >> 8) . chr($num >> 16);
                 }
                 $start += 4;
             } elseif ($num < 252) {
-                if ($start + 4 <  $len) {
+                if ($start + 4 < $len) {
                     /* 不做处理 */
                 }
                 $start += 5;
             } else {
-                if ($start + 5 <  $len) {
+                if ($start + 5 < $len) {
                     /* 不做处理 */
                 }
                 $start += 6;

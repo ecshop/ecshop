@@ -4,7 +4,7 @@ define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 require_once(ROOT_PATH . 'includes/lib_order.php');
-require_once(ROOT_PATH . 'languages/' .$_CFG['lang']. '/admin/ads.php');
+require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/ads.php');
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -21,20 +21,20 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'download') {
 
     /* 获取广告数据 */
     $ads_stats = array();
-    $sql = "SELECT a.ad_id, a.ad_name, b.* ".
-           "FROM " .$ecs->table('ad'). " AS a, " .$ecs->table('adsense'). " AS b ".
-           "WHERE b.from_ad = a.ad_id ORDER by a.ad_name DESC";
+    $sql = "SELECT a.ad_id, a.ad_name, b.* " .
+        "FROM " . $ecs->table('ad') . " AS a, " . $ecs->table('adsense') . " AS b " .
+        "WHERE b.from_ad = a.ad_id ORDER by a.ad_name DESC";
     $res = $db->query($sql);
     while ($rows = $db->fetchRow($res)) {
         /* 获取当前广告所产生的订单总数 */
-        $rows['referer']=addslashes($rows['referer']);
-        $sql2 = 'SELECT COUNT(order_id) FROM ' .$ecs->table('order_info'). " WHERE from_ad='$rows[ad_id]' AND referer='$rows[referer]'";
+        $rows['referer'] = addslashes($rows['referer']);
+        $sql2 = 'SELECT COUNT(order_id) FROM ' . $ecs->table('order_info') . " WHERE from_ad='$rows[ad_id]' AND referer='$rows[referer]'";
         $rows['order_num'] = $db->getOne($sql2);
 
         /* 当前广告所产生的已完成的有效订单 */
-        $sql3 = "SELECT COUNT(order_id) FROM " .$ecs->table('order_info').
-               " WHERE from_ad    = '$rows[ad_id]'" .
-               " AND referer = '$rows[referer]' ". order_query_sql('finished');
+        $sql3 = "SELECT COUNT(order_id) FROM " . $ecs->table('order_info') .
+            " WHERE from_ad    = '$rows[ad_id]'" .
+            " AND referer = '$rows[referer]' " . order_query_sql('finished');
         $rows['order_confirm'] = $db->getOne($sql3);
 
         $ads_stats[] = $rows;
@@ -42,23 +42,23 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'download') {
     $smarty->assign('ads_stats', $ads_stats);
 
     /* 站外JS投放商品的统计数据 */
-    $goods_stats    = array();
-    $goods_sql      = "SELECT from_ad, referer, clicks FROM " .$ecs->table('adsense').
-              " WHERE from_ad = '-1' ORDER by referer DESC";
+    $goods_stats = array();
+    $goods_sql = "SELECT from_ad, referer, clicks FROM " . $ecs->table('adsense') .
+        " WHERE from_ad = '-1' ORDER by referer DESC";
     $goods_res = $db->query($goods_sql);
     while ($rows2 = $db->fetchRow($goods_res)) {
         /* 获取当前广告所产生的订单总数 */
-        $rows2['referer']=addslashes($rows2['referer']);
-        $rows2['order_num'] = $db->getOne("SELECT COUNT(order_id) FROM " .$ecs->table('order_info'). " WHERE referer='$rows2[referer]'");
+        $rows2['referer'] = addslashes($rows2['referer']);
+        $rows2['order_num'] = $db->getOne("SELECT COUNT(order_id) FROM " . $ecs->table('order_info') . " WHERE referer='$rows2[referer]'");
 
         /* 当前广告所产生的已完成的有效订单 */
 
-        $sql = "SELECT COUNT(order_id) FROM " .$ecs->table('order_info').
-               " WHERE referer='$rows2[referer]'" . order_query_sql('finished');
+        $sql = "SELECT COUNT(order_id) FROM " . $ecs->table('order_info') .
+            " WHERE referer='$rows2[referer]'" . order_query_sql('finished');
         $rows2['order_confirm'] = $db->getOne($sql);
 
-        $rows2['ad_name']  = $_LANG['adsense_js_goods'];
-        $goods_stats[]  = $rows2;
+        $rows2['ad_name'] = $_LANG['adsense_js_goods'];
+        $goods_stats[] = $rows2;
     }
     if ($_REQUEST['act'] == 'download') {
         header("Content-type: application/vnd.ms-excel; charset=utf-8");

@@ -4,9 +4,9 @@ $_LANG['cat_name'] = '文章分类名称';
 $_LANG['type'] = '分类类型';
 $_LANG['type_name'][COMMON_CAT] = '普通分类';
 $_LANG['type_name'][SYSTEM_CAT] = '系统分类';
-$_LANG['type_name'][INFO_CAT]   = '网店信息';
+$_LANG['type_name'][INFO_CAT] = '网店信息';
 $_LANG['type_name'][UPHELP_CAT] = '帮助分类';
-$_LANG['type_name'][HELP_CAT]   = '网店帮助';
+$_LANG['type_name'][HELP_CAT] = '网店帮助';
 
 $_LANG['cat_keywords'] = '关键字';
 $_LANG['cat_desc'] = '描述';
@@ -39,8 +39,8 @@ $_LANG['enter_int'] = '请输入一个整数';
 $_LANG['not_emptycat'] = '分类下还有文章，不允许删除非空分类';
 
 /*帮助信息*/
-$_LANG['notice_keywords'] ='关键字为选填项，其目的在于方便外部搜索引擎搜索';
-$_LANG['notice_isopen'] ='该文章分类是否显示在前台的主导航栏中。';
+$_LANG['notice_keywords'] = '关键字为选填项，其目的在于方便外部搜索引擎搜索';
+$_LANG['notice_isopen'] = '该文章分类是否显示在前台的主导航栏中。';
 
 /*JS 语言项*/
 $_LANG['js_languages']['no_catname'] = '没有输入分类的名称';

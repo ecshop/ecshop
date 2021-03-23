@@ -13,14 +13,14 @@ if (empty($_REQUEST['act'])) {
 
 /* 配置风格颜色选项 */
 $topic_style_color = array(
-                        '0'         => '008080',
-                        '1'         => '008000',
-                        '2'         => 'ffa500',
-                        '3'         => 'ff0000',
-                        '4'         => 'ffff00',
-                        '5'         => '9acd32',
-                        '6'         => 'ffd700'
-                          );
+    '0' => '008080',
+    '1' => '008000',
+    '2' => 'ffa500',
+    '3' => 'ff0000',
+    '4' => 'ffff00',
+    '5' => '9acd32',
+    '6' => 'ffd700'
+);
 $allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp', 'swf');
 
 /*------------------------------------------------------ */
@@ -39,7 +39,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('record_count', $list['record_count']);
     $smarty->assign('page_count', $list['page_count']);
 
-    $sort_flag  = sort_flag($list['filter']);
+    $sort_flag = sort_flag($list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     assign_query_info();
@@ -50,11 +50,11 @@ if ($_REQUEST['act'] == 'list') {
 if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     admin_priv('topic_manage');
 
-    $isadd     = $_REQUEST['act'] == 'add';
+    $isadd = $_REQUEST['act'] == 'add';
     $smarty->assign('isadd', $isadd);
-    $topic_id  = empty($_REQUEST['topic_id']) ? 0 : intval($_REQUEST['topic_id']);
+    $topic_id = empty($_REQUEST['topic_id']) ? 0 : intval($_REQUEST['topic_id']);
 
-    include_once(ROOT_PATH.'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
+    include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
 
     $smarty->assign('ur_here', $_LANG['09_topic']);
     $smarty->assign('action_link', list_link($isadd));
@@ -76,13 +76,13 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
         $sql = "SELECT * FROM " . $ecs->table('topic') . " WHERE topic_id = '$topic_id'";
         $topic = $db->getRow($sql);
         $topic['start_time'] = local_date('Y-m-d', $topic['start_time']);
-        $topic['end_time']   = local_date('Y-m-d', $topic['end_time']);
+        $topic['end_time'] = local_date('Y-m-d', $topic['end_time']);
 
         create_html_editor('topic_intro', $topic['intro']);
 
         require(ROOT_PATH . 'includes/cls_json.php');
 
-        $json          = new JSON;
+        $json = new JSON;
         $topic['data'] = addcslashes($topic['data'], "'");
         $topic['data'] = $json->encode(@unserialize($topic['data']));
         $topic['data'] = addcslashes($topic['data'], "'");
@@ -111,8 +111,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     admin_priv('topic_manage');
 
     $is_insert = $_REQUEST['act'] == 'insert';
-    $topic_id  = empty($_POST['topic_id']) ? 0 : intval($_POST['topic_id']);
-    $topic_type= empty($_POST['topic_type']) ? 0 : intval($_POST['topic_type']);
+    $topic_id = empty($_POST['topic_id']) ? 0 : intval($_POST['topic_id']);
+    $topic_type = empty($_POST['topic_type']) ? 0 : intval($_POST['topic_type']);
 
     switch ($topic_type) {
         case '0':
@@ -150,15 +150,15 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
             $topic_img = empty($topic_img) ? $_POST['img_url'] : $topic_img;
             $htmls = '';
 
-        break;
+            break;
 
         case '2':
 
-            $htmls     = $_POST['htmls'];
+            $htmls = $_POST['htmls'];
 
             $topic_img = '';
 
-        break;
+            break;
     }
 
     // 标题图上传
@@ -195,29 +195,29 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     require(ROOT_PATH . 'includes/cls_json.php');
 
     $start_time = local_strtotime($_POST['start_time']);
-    $end_time   = local_strtotime($_POST['end_time']);
+    $end_time = local_strtotime($_POST['end_time']);
 
-    $json       = new JSON;
-    $tmp_data   = $json->decode($_POST['topic_data']);
-    $data       = serialize($tmp_data);
+    $json = new JSON;
+    $tmp_data = $json->decode($_POST['topic_data']);
+    $data = serialize($tmp_data);
     $base_style = $_POST['base_style'];
-    $keywords   = $_POST['keywords'];
-    $description= $_POST['description'];
+    $keywords = $_POST['keywords'];
+    $description = $_POST['description'];
 
     if ($is_insert) {
         $sql = "INSERT INTO " . $ecs->table('topic') . " (title,start_time,end_time,data,intro,template,css,topic_img,title_pic,base_style, htmls,keywords,description)" .
-                "VALUES ('$_POST[topic_name]','$start_time','$end_time','$data','$_POST[topic_intro]','$_POST[topic_template_file]','$_POST[topic_css]', '$topic_img', '$title_pic', '$base_style', '$htmls','$keywords','$description')";
+            "VALUES ('$_POST[topic_name]','$start_time','$end_time','$data','$_POST[topic_intro]','$_POST[topic_template_file]','$_POST[topic_css]', '$topic_img', '$title_pic', '$base_style', '$htmls','$keywords','$description')";
     } else {
         $sql = "UPDATE " . $ecs->table('topic') .
-                "SET title='$_POST[topic_name]',start_time='$start_time',end_time='$end_time',data='$data',intro='$_POST[topic_intro]',template='$_POST[topic_template_file]',css='$_POST[topic_css]', topic_img='$topic_img', title_pic='$title_pic', base_style='$base_style', htmls='$htmls', keywords='$keywords', description='$description'" .
-               " WHERE topic_id='$topic_id' LIMIT 1";
+            "SET title='$_POST[topic_name]',start_time='$start_time',end_time='$end_time',data='$data',intro='$_POST[topic_intro]',template='$_POST[topic_template_file]',css='$_POST[topic_css]', topic_img='$topic_img', title_pic='$title_pic', base_style='$base_style', htmls='$htmls', keywords='$keywords', description='$description'" .
+            " WHERE topic_id='$topic_id' LIMIT 1";
     }
 
     $db->query($sql);
 
     clear_cache_files();
 
-    $links[] = array('href' => 'topic.php', 'text' =>  $_LANG['back_list']);
+    $links[] = array('href' => 'topic.php', 'text' => $_LANG['back_list']);
     sys_msg($_LANG['succed'], 0, $links);
 } elseif ($_REQUEST['act'] == 'get_goods_list') {
     include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -230,7 +230,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 
     foreach ($arr as $key => $val) {
         $opt[] = array('value' => $val['goods_id'],
-                       'text'  => $val['goods_name']);
+            'text' => $val['goods_name']);
     }
 
     make_json_result($opt);
@@ -258,7 +258,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
         exit;
     }
 
-    $links[] = array('href' => 'topic.php', 'text' =>  $_LANG['back_list']);
+    $links[] = array('href' => 'topic.php', 'text' => $_LANG['back_list']);
     sys_msg($_LANG['succed'], 0, $links);
 } elseif ($_REQUEST["act"] == "query") {
     $topic_list = get_topic_list();
@@ -269,7 +269,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     $smarty->assign('use_storage', empty($_CFG['use_storage']) ? 0 : 1);
 
     /* 排序标记 */
-    $sort_flag  = sort_flag($topic_list['filter']);
+    $sort_flag = sort_flag($topic_list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     $tpl = 'topic_list.htm';
@@ -286,20 +286,20 @@ function get_topic_list()
     $result = get_filter();
     if ($result === false) {
         /* 查询条件 */
-        $filter['sort_by']    = empty($_REQUEST['sort_by']) ? 'topic_id' : trim($_REQUEST['sort_by']);
+        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'topic_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-        $sql = "SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('topic');
+        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('topic');
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         /* 分页大小 */
         $filter = page_and_size($filter);
 
-        $sql = "SELECT * FROM " .$GLOBALS['ecs']->table('topic'). " ORDER BY $filter[sort_by] $filter[sort_order]";
+        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('topic') . " ORDER BY $filter[sort_by] $filter[sort_order]";
 
         set_filter($filter, $sql);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
 
@@ -309,8 +309,8 @@ function get_topic_list()
 
     while ($topic = $GLOBALS['db']->fetch_array($query)) {
         $topic['start_time'] = local_date('Y-m-d', $topic['start_time']);
-        $topic['end_time']   = local_date('Y-m-d', $topic['end_time']);
-        $topic['url']        = $GLOBALS['ecs']->url() . 'topic.php?topic_id=' . $topic['topic_id'];
+        $topic['end_time'] = local_date('Y-m-d', $topic['end_time']);
+        $topic['url'] = $GLOBALS['ecs']->url() . 'topic.php?topic_id=' . $topic['topic_id'];
         $res[] = $topic;
     }
 
@@ -321,8 +321,8 @@ function get_topic_list()
 
 /**
  * 列表链接
- * @param   bool    $is_add     是否添加（插入）
- * @param   string  $text       文字
+ * @param bool $is_add 是否添加（插入）
+ * @param string $text 文字
  * @return  array('href' => $href, 'text' => $text)
  */
 function list_link($is_add = true, $text = '')

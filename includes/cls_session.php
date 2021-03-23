@@ -6,22 +6,22 @@ if (!defined('IN_ECS')) {
 
 class cls_session
 {
-    public $db             = null;
-    public $session_table  = '';
+    public $db = null;
+    public $session_table = '';
 
-    public $max_life_time  = 1800; // SESSION 杩囨湡鏃堕棿
+    public $max_life_time = 1800; // SESSION 杩囨湡鏃堕棿
 
-    public $session_name   = '';
-    public $session_id     = '';
+    public $session_name = '';
+    public $session_id = '';
 
     public $session_expiry = '';
-    public $session_md5    = '';
+    public $session_md5 = '';
 
-    public $session_cookie_path   = '/';
+    public $session_cookie_path = '/';
     public $session_cookie_domain = '';
     public $session_cookie_secure = false;
 
-    public $_ip   = '';
+    public $_ip = '';
     public $_time = 0;
 
     public function __construct(&$db, $session_table, $session_data_table, $session_name = 'ECS_ID', $session_id = '')
@@ -51,11 +51,11 @@ class cls_session
             $this->session_cookie_secure = false;
         }
 
-        $this->session_name       = $session_name;
-        $this->session_table      = $session_table;
+        $this->session_name = $session_name;
+        $this->session_table = $session_table;
         $this->session_data_table = $session_data_table;
 
-        $this->db  = &$db;
+        $this->db = &$db;
         $this->_ip = real_ip();
 
         if ($session_id == '' && !empty($_COOKIE[$this->session_name])) {
@@ -106,7 +106,7 @@ class cls_session
 
     public function insert_session()
     {
-        return $this->db->query('INSERT INTO ' . $this->session_table . " (sesskey, expiry, ip, data) VALUES ('" . $this->session_id . "', '". $this->_time ."', '". $this->_ip ."', 'a:0:{}')");
+        return $this->db->query('INSERT INTO ' . $this->session_table . " (sesskey, expiry, ip, data) VALUES ('" . $this->session_id . "', '" . $this->_time . "', '" . $this->_ip . "', 'a:0:{}')");
     }
 
     public function load_session()
@@ -116,13 +116,13 @@ class cls_session
             $this->insert_session();
 
             $this->session_expiry = 0;
-            $this->session_md5    = '40cd750bba9870f18aada2478b24840a';
-            $GLOBALS['_SESSION']  = array();
+            $this->session_md5 = '40cd750bba9870f18aada2478b24840a';
+            $GLOBALS['_SESSION'] = array();
         } else {
             if (!empty($session['data']) && $this->_time - $session['expiry'] <= $this->max_life_time) {
                 $this->session_expiry = $session['expiry'];
-                $this->session_md5    = md5($session['data']);
-                $GLOBALS['_SESSION']  = unserialize($session['data']);
+                $this->session_md5 = md5($session['data']);
+                $GLOBALS['_SESSION'] = unserialize($session['data']);
                 $GLOBALS['_SESSION']['user_id'] = $session['userid'];
                 $GLOBALS['_SESSION']['admin_id'] = $session['adminid'];
                 $GLOBALS['_SESSION']['user_name'] = $session['user_name'];
@@ -133,8 +133,8 @@ class cls_session
                 $session_data = $this->db->getRow('SELECT data, expiry FROM ' . $this->session_data_table . " WHERE sesskey = '" . $this->session_id . "'");
                 if (!empty($session_data['data']) && $this->_time - $session_data['expiry'] <= $this->max_life_time) {
                     $this->session_expiry = $session_data['expiry'];
-                    $this->session_md5    = md5($session_data['data']);
-                    $GLOBALS['_SESSION']  = unserialize($session_data['data']);
+                    $this->session_md5 = md5($session_data['data']);
+                    $GLOBALS['_SESSION'] = unserialize($session_data['data']);
                     $GLOBALS['_SESSION']['user_id'] = $session['userid'];
                     $GLOBALS['_SESSION']['admin_id'] = $session['adminid'];
                     $GLOBALS['_SESSION']['user_name'] = $session['user_name'];
@@ -143,8 +143,8 @@ class cls_session
                     $GLOBALS['_SESSION']['email'] = $session['email'];
                 } else {
                     $this->session_expiry = 0;
-                    $this->session_md5    = '40cd750bba9870f18aada2478b24840a';
-                    $GLOBALS['_SESSION']  = array();
+                    $this->session_md5 = '40cd750bba9870f18aada2478b24840a';
+                    $GLOBALS['_SESSION'] = array();
                 }
             }
         }
@@ -153,11 +153,11 @@ class cls_session
     public function update_session()
     {
         $adminid = !empty($GLOBALS['_SESSION']['admin_id']) ? intval($GLOBALS['_SESSION']['admin_id']) : 0;
-        $userid  = !empty($GLOBALS['_SESSION']['user_id'])  ? intval($GLOBALS['_SESSION']['user_id'])  : 0;
-        $user_name  = !empty($GLOBALS['_SESSION']['user_name'])  ? trim($GLOBALS['_SESSION']['user_name'])  : 0;
-        $user_rank  = !empty($GLOBALS['_SESSION']['user_rank'])  ? intval($GLOBALS['_SESSION']['user_rank'])  : 0;
-        $discount  = !empty($GLOBALS['_SESSION']['discount'])  ? round($GLOBALS['_SESSION']['discount'], 2)  : 0;
-        $email  = !empty($GLOBALS['_SESSION']['email'])  ? trim($GLOBALS['_SESSION']['email'])  : 0;
+        $userid = !empty($GLOBALS['_SESSION']['user_id']) ? intval($GLOBALS['_SESSION']['user_id']) : 0;
+        $user_name = !empty($GLOBALS['_SESSION']['user_name']) ? trim($GLOBALS['_SESSION']['user_name']) : 0;
+        $user_rank = !empty($GLOBALS['_SESSION']['user_rank']) ? intval($GLOBALS['_SESSION']['user_rank']) : 0;
+        $discount = !empty($GLOBALS['_SESSION']['discount']) ? round($GLOBALS['_SESSION']['discount'], 2) : 0;
+        $email = !empty($GLOBALS['_SESSION']['email']) ? trim($GLOBALS['_SESSION']['email']) : 0;
         unset($GLOBALS['_SESSION']['admin_id']);
         unset($GLOBALS['_SESSION']['user_id']);
         unset($GLOBALS['_SESSION']['user_name']);
@@ -165,7 +165,7 @@ class cls_session
         unset($GLOBALS['_SESSION']['discount']);
         unset($GLOBALS['_SESSION']['email']);
 
-        $data        = serialize($GLOBALS['_SESSION']);
+        $data = serialize($GLOBALS['_SESSION']);
         $this->_time = time();
 
         if ($this->session_md5 == md5($data) && $this->_time < $this->session_expiry + 10) {
@@ -175,7 +175,7 @@ class cls_session
         $data = addslashes($data);
 
         if (isset($data{255})) {
-            $this->db->autoReplace($this->session_data_table, array('sesskey' => $this->session_id, 'expiry' => $this->_time, 'data' => $data), array('expiry' => $this->_time,'data' => $data));
+            $this->db->autoReplace($this->session_data_table, array('sesskey' => $this->session_id, 'expiry' => $this->_time, 'data' => $data), array('expiry' => $this->_time, 'data' => $data));
 
             $data = '';
         }

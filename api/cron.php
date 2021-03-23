@@ -50,8 +50,8 @@ foreach ($crondb as $key => $cron_val) {
     $close = $cron_val['run_once'] ? 0 : 1;
     $next_time = get_next_time($cron_val['cron']);
     $sql = "UPDATE " . $ecs->table('crons') .
-           "SET thistime = '$timestamp', nextime = '$next_time', enable = $close " .
-           "WHERE cron_id = '$cron_val[cron_id]' LIMIT 1";
+        "SET thistime = '$timestamp', nextime = '$next_time', enable = $close " .
+        "WHERE cron_id = '$cron_val[cron_id]' LIMIT 1";
 
     $db->query($sql);
 }
@@ -59,11 +59,11 @@ write_error_arr($error_log);
 
 function get_next_time($cron)
 {
-    $y  = local_date('Y', $GLOBALS['timestamp']);
+    $y = local_date('Y', $GLOBALS['timestamp']);
     $mo = local_date('n', $GLOBALS['timestamp']);
-    $d  = local_date('j', $GLOBALS['timestamp']);
-    $w  = local_date('w', $GLOBALS['timestamp']);
-    $h  = local_date('G', $GLOBALS['timestamp']);
+    $d = local_date('j', $GLOBALS['timestamp']);
+    $w = local_date('w', $GLOBALS['timestamp']);
+    $h = local_date('G', $GLOBALS['timestamp']);
     $sh = $sm = 0;
     $sy = $y;
     if ($cron['day']) {
@@ -78,7 +78,7 @@ function get_next_time($cron)
     }
     if ($cron['hour']) {
         $sh = $cron['hour'];
-        if (empty($cron['day']) && $cron['week']=='') {
+        if (empty($cron['day']) && $cron['week'] == '') {
             $sd++;
         }
     }
@@ -99,11 +99,11 @@ function get_cron_info()
 {
     $crondb = array();
 
-    $sql   = "SELECT * FROM " . $GLOBALS['ecs']->table('crons') . " WHERE enable = 1 AND nextime < $GLOBALS[timestamp]";
+    $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('crons') . " WHERE enable = 1 AND nextime < $GLOBALS[timestamp]";
     $query = $GLOBALS['db']->query($sql);
 
     while ($rt = $GLOBALS['db']->fetch_array($query)) {
-        $rt['cron'] = array('day'=>$rt['day'],'week'=>$rt['week'],'m'=>$rt['minute'],'hour'=>$rt['hour']);
+        $rt['cron'] = array('day' => $rt['day'], 'week' => $rt['week'], 'm' => $rt['minute'], 'hour' => $rt['hour']);
         $rt['cron_config'] = unserialize($rt['cron_config']);
         $rt['minute'] = trim($rt['minute']);
         $rt['allow_ip'] = trim($rt['allow_ip']);

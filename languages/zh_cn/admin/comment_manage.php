@@ -21,7 +21,7 @@ $_LANG['no_reply'] = '未回复';
 $_LANG['yes_reply'] = '已回复';
 $_LANG['admin_user_name'] = '管理员';
 
-$_LANG['type'] = array('商品','文章');
+$_LANG['type'] = array('商品', '文章');
 
 $_LANG['ip_address'] = 'IP地址';
 $_LANG['comment_rank'] = '评论等级';

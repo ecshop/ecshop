@@ -114,7 +114,7 @@ elseif ($_REQUEST['act'] == 'view') {
                 $products_info .= ' ' . $goods_specifications[$value]['attr_name'] . '：' . $goods_specifications[$value]['attr_value'];
             }
             $smarty->assign('products_info', $products_info);
-            unset($goods_specifications, $good_products, $_good_products,  $products_info);
+            unset($goods_specifications, $good_products, $_good_products, $products_info);
         }
 
         $auction['gmt_end_time'] = local_strtotime($auction['end_time']);
@@ -150,8 +150,8 @@ elseif ($_REQUEST['act'] == 'view') {
     }
 
     //更新商品点击次数
-    $sql = 'UPDATE ' . $ecs->table('goods') . ' SET click_count = click_count + 1 '.
-           "WHERE goods_id = '" . $auction['goods_id'] . "'";
+    $sql = 'UPDATE ' . $ecs->table('goods') . ' SET click_count = click_count + 1 ' .
+        "WHERE goods_id = '" . $auction['goods_id'] . "'";
     $db->query($sql);
 
     $smarty->assign('now_time', gmtime());           // 当前系统时间
@@ -260,10 +260,10 @@ elseif ($_REQUEST['act'] == 'bid') {
 
     /* 插入出价记录 */
     $auction_log = array(
-        'act_id'    => $id,
-        'bid_user'  => $user_id,
+        'act_id' => $id,
+        'bid_user' => $user_id,
         'bid_price' => $bid_price,
-        'bid_time'  => gmtime()
+        'bid_time' => gmtime()
     );
     $db->autoExecute($ecs->table('auction_log'), $auction_log, 'INSERT');
 
@@ -336,10 +336,10 @@ elseif ($_REQUEST['act'] == 'buy') {
 
         $attr_list = array();
         $sql = "SELECT a.attr_name, g.attr_value " .
-                "FROM " . $ecs->table('goods_attr') . " AS g, " .
-                    $ecs->table('attribute') . " AS a " .
-                "WHERE g.attr_id = a.attr_id " .
-                "AND g.goods_attr_id " . db_create_in($goods_attr_id);
+            "FROM " . $ecs->table('goods_attr') . " AS g, " .
+            $ecs->table('attribute') . " AS a " .
+            "WHERE g.attr_id = a.attr_id " .
+            "AND g.goods_attr_id " . db_create_in($goods_attr_id);
         $res = $db->query($sql);
         while ($row = $db->fetchRow($res)) {
             $attr_list[] = $row['attr_name'] . ': ' . $row['attr_value'];
@@ -355,21 +355,21 @@ elseif ($_REQUEST['act'] == 'buy') {
 
     /* 加入购物车 */
     $cart = array(
-        'user_id'        => $user_id,
-        'session_id'     => SESS_ID,
-        'goods_id'       => $auction['goods_id'],
-        'goods_sn'       => addslashes($goods['goods_sn']),
-        'goods_name'     => addslashes($goods['goods_name']),
-        'market_price'   => $goods['market_price'],
-        'goods_price'    => $auction['last_bid']['bid_price'],
-        'goods_number'   => 1,
-        'goods_attr'     => $goods_attr,
-        'goods_attr_id'  => $goods_attr_id,
-        'is_real'        => $goods['is_real'],
+        'user_id' => $user_id,
+        'session_id' => SESS_ID,
+        'goods_id' => $auction['goods_id'],
+        'goods_sn' => addslashes($goods['goods_sn']),
+        'goods_name' => addslashes($goods['goods_name']),
+        'market_price' => $goods['market_price'],
+        'goods_price' => $auction['last_bid']['bid_price'],
+        'goods_number' => 1,
+        'goods_attr' => $goods_attr,
+        'goods_attr_id' => $goods_attr_id,
+        'is_real' => $goods['is_real'],
         'extension_code' => addslashes($goods['extension_code']),
-        'parent_id'      => 0,
-        'rec_type'       => CART_AUCTION_GOODS,
-        'is_gift'        => 0
+        'parent_id' => 0,
+        'rec_type' => CART_AUCTION_GOODS,
+        'is_gift' => 0
     );
     $db->autoExecute($ecs->table('cart'), $cart, 'INSERT');
 
@@ -391,17 +391,17 @@ function auction_count()
 {
     $now = gmtime();
     $sql = "SELECT COUNT(*) " .
-            "FROM " . $GLOBALS['ecs']->table('goods_activity') .
-            "WHERE act_type = '" . GAT_AUCTION . "' " .
-            "AND start_time <= '$now' AND end_time >= '$now' AND is_finished < 2";
+        "FROM " . $GLOBALS['ecs']->table('goods_activity') .
+        "WHERE act_type = '" . GAT_AUCTION . "' " .
+        "AND start_time <= '$now' AND end_time >= '$now' AND is_finished < 2";
 
     return $GLOBALS['db']->getOne($sql);
 }
 
 /**
  * 取得某页的拍卖活动
- * @param   int     $size   每页记录数
- * @param   int     $page   当前页
+ * @param int $size 每页记录数
+ * @param int $page 当前页
  * @return  array
  */
 function auction_list($size, $page)
@@ -411,10 +411,10 @@ function auction_list($size, $page)
 
     $now = gmtime();
     $sql = "SELECT a.*, IFNULL(g.goods_thumb, '') AS goods_thumb " .
-            "FROM " . $GLOBALS['ecs']->table('goods_activity') . " AS a " .
-                "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g ON a.goods_id = g.goods_id " .
-            "WHERE a.act_type = '" . GAT_AUCTION . "' " .
-            "AND a.start_time <= '$now' AND a.end_time >= '$now' AND a.is_finished < 2 ORDER BY a.act_id DESC";
+        "FROM " . $GLOBALS['ecs']->table('goods_activity') . " AS a " .
+        "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g ON a.goods_id = g.goods_id " .
+        "WHERE a.act_type = '" . GAT_AUCTION . "' " .
+        "AND a.start_time <= '$now' AND a.end_time >= '$now' AND a.is_finished < 2 ORDER BY a.act_id DESC";
     $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);
     while ($row = $GLOBALS['db']->fetchRow($res)) {
         $ext_info = unserialize($row['ext_info']);
@@ -422,12 +422,12 @@ function auction_list($size, $page)
         $auction['status_no'] = auction_status($auction);
 
         $auction['start_time'] = local_date($GLOBALS['_CFG']['time_format'], $auction['start_time']);
-        $auction['end_time']   = local_date($GLOBALS['_CFG']['time_format'], $auction['end_time']);
+        $auction['end_time'] = local_date($GLOBALS['_CFG']['time_format'], $auction['end_time']);
         $auction['formated_start_price'] = price_format($auction['start_price']);
         $auction['formated_end_price'] = price_format($auction['end_price']);
         $auction['formated_deposit'] = price_format($auction['deposit']);
         $auction['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
-        $auction['url'] = build_uri('auction', array('auid'=>$auction['act_id']));
+        $auction['url'] = build_uri('auction', array('auid' => $auction['act_id']));
 
         if ($auction['status_no'] < 2) {
             $auction_list['under_way'][] = $auction;

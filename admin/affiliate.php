@@ -43,7 +43,7 @@ elseif ($_REQUEST['act'] == 'add') {
         if (!empty($_POST['level_money']) && strpos($_POST['level_money'], '%') === false) {
             $_POST['level_money'] .= '%';
         }
-        $items = array('level_point'=>$_POST['level_point'],'level_money'=>$_POST['level_money']);
+        $items = array('level_point' => $_POST['level_point'], 'level_money' => $_POST['level_money']);
         $links[] = array('text' => $_LANG['affiliate'], 'href' => 'affiliate.php?act=list');
         $config['item'][] = $items;
         $config['on'] = 1;
@@ -63,7 +63,7 @@ elseif ($_REQUEST['act'] == 'add') {
 elseif ($_REQUEST['act'] == 'updata') {
     $separate_by = (intval($_POST['separate_by']) == 1) ? 1 : 0;
 
-    $_POST['expire'] = (float) $_POST['expire'];
+    $_POST['expire'] = (float)$_POST['expire'];
     $_POST['level_point_all'] = (float)$_POST['level_point_all'];
     $_POST['level_money_all'] = (float)$_POST['level_money_all'];
     $_POST['level_money_all'] > 100 && $_POST['level_money_all'] = 100;
@@ -78,14 +78,14 @@ elseif ($_REQUEST['act'] == 'updata') {
     $_POST['level_register_all'] = intval($_POST['level_register_all']);
     $_POST['level_register_up'] = intval($_POST['level_register_up']);
     $temp = array();
-    $temp['config'] = array('expire'                => $_POST['expire'],        //COOKIE过期数字
-                            'expire_unit'           => $_POST['expire_unit'],   //单位：小时、天、周
-                            'separate_by'           => $separate_by,            //分成模式：0、注册 1、订单
-                            'level_point_all'       =>$_POST['level_point_all'],    //积分分成比
-                            'level_money_all'       =>$_POST['level_money_all'],    //金钱分成比
-                            'level_register_all'    =>$_POST['level_register_all'], //推荐注册奖励积分
-                            'level_register_up'     =>$_POST['level_register_up']   //推荐注册奖励积分上限
-          );
+    $temp['config'] = array('expire' => $_POST['expire'],        //COOKIE过期数字
+        'expire_unit' => $_POST['expire_unit'],   //单位：小时、天、周
+        'separate_by' => $separate_by,            //分成模式：0、注册 1、订单
+        'level_point_all' => $_POST['level_point_all'],    //积分分成比
+        'level_money_all' => $_POST['level_money_all'],    //金钱分成比
+        'level_register_all' => $_POST['level_register_all'], //推荐注册奖励积分
+        'level_register_up' => $_POST['level_register_up']   //推荐注册奖励积分上限
+    );
     $temp['item'] = $config['item'];
     $temp['on'] = 1;
     put_affiliate($temp);
@@ -177,8 +177,8 @@ function put_affiliate($config)
 {
     $temp = serialize($config);
     $sql = "UPDATE " . $GLOBALS['ecs']->table('shop_config') .
-           "SET  value = '$temp'" .
-           "WHERE code = 'affiliate'";
+        "SET  value = '$temp'" .
+        "WHERE code = 'affiliate'";
     $GLOBALS['db']->query($sql);
     clear_all_files();
 }

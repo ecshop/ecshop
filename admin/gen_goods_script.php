@@ -14,9 +14,9 @@ if ($_REQUEST['act'] == 'setup') {
 
     /* 编码 */
     $lang_list = array(
-        'UTF8'   => $_LANG['charset']['utf8'],
+        'UTF8' => $_LANG['charset']['utf8'],
         'GB2312' => $_LANG['charset']['zh_cn'],
-        'BIG5'   => $_LANG['charset']['zh_tw'],
+        'BIG5' => $_LANG['charset']['zh_tw'],
     );
 
     /* 参数赋值 */

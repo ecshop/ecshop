@@ -41,8 +41,8 @@ $_LANG['period'] = '时间段';
 $_LANG['order_amount_trend'] = '营业额(单位:元)';
 $_LANG['order_status'] = '订单走势';
 $_LANG['turnover_status'] = '销售额走势';
-$_LANG['sales_statistics']= '销售统计';
-$_LANG['down_sales_stats']= '销售概况报表下载';
+$_LANG['sales_statistics'] = '销售统计';
+$_LANG['down_sales_stats'] = '销售概况报表下载';
 
 /* 订单统计 */
 $_LANG['overall_sum'] = '有效订单总金额';
@@ -92,8 +92,8 @@ $_LANG['member_sum'] = '会员购物总额';
 $_LANG['order_all_amount'] = '订单总数';
 $_LANG['order_all_turnover'] = '总购物额';
 
-$_LANG['down_guest_stats']= '客户统计报表下载';
-$_LANG['guest_statistics']= '客户统计报表';
+$_LANG['down_guest_stats'] = '客户统计报表下载';
+$_LANG['guest_statistics'] = '客户统计报表';
 
 /* 会员排行 */
 $_LANG['show_num'] = '显示数量';

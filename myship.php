@@ -7,8 +7,8 @@ require_once(ROOT_PATH . 'includes/lib_order.php');
 include_once(ROOT_PATH . 'includes/lib_transaction.php');
 
 /* 载入语言文件 */
-require_once(ROOT_PATH . 'languages/' .$_CFG['lang']. '/shopping_flow.php');
-require_once(ROOT_PATH . 'languages/' .$_CFG['lang']. '/user.php');
+require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
+require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');
 
 /*------------------------------------------------------ */
 //-- INPUT
@@ -44,7 +44,7 @@ $smarty->assign('lang', $_LANG);
 $smarty->assign('choose', $choose);
 
 $province_list[null] = get_regions(1, $choose['country']);
-$city_list[null]     = get_regions(2, $choose['province']);
+$city_list[null] = get_regions(2, $choose['province']);
 $district_list[null] = get_regions(3, $choose['city']);
 
 $smarty->assign('province_list', $province_list);
@@ -55,11 +55,11 @@ $smarty->assign('district_list', $district_list);
 $smarty->assign('country_list', get_regions());
 
 /* 取得配送列表 */
-$region            = array($choose['country'], $choose['province'], $choose['city'], $choose['district']);
-$shipping_list     = available_shipping_list($region);
+$region = array($choose['country'], $choose['province'], $choose['city'], $choose['district']);
+$shipping_list = available_shipping_list($region);
 $cart_weight_price = 0;
-$insure_disabled   = true;
-$cod_disabled      = true;
+$insure_disabled = true;
+$cod_disabled = true;
 
 foreach ($shipping_list as $key => $val) {
     $shipping_cfg = unserialize_config($val['configure']);
@@ -71,10 +71,10 @@ foreach ($shipping_list as $key => $val) {
     );
 
     $shipping_list[$key]['format_shipping_fee'] = price_format($shipping_fee, false);
-    $shipping_list[$key]['fee']        = $shipping_fee;
-    $shipping_list[$key]['free_money']          = price_format($shipping_cfg['free_money'], false);
-    $shipping_list[$key]['insure_formated']     = strpos($val['insure'], '%') === false ?
-    price_format($val['insure'], false) : $val['insure'];
+    $shipping_list[$key]['fee'] = $shipping_fee;
+    $shipping_list[$key]['free_money'] = price_format($shipping_cfg['free_money'], false);
+    $shipping_list[$key]['insure_formated'] = strpos($val['insure'], '%') === false ?
+        price_format($val['insure'], false) : $val['insure'];
 }
 
 $smarty->assign('shipping_list', $shipping_list);

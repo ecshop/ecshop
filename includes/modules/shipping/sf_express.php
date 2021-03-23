@@ -4,7 +4,7 @@ if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
-$shipping_lang = ROOT_PATH.'languages/' .$GLOBALS['_CFG']['lang']. '/shipping/sf_express.php';
+$shipping_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/shipping/sf_express.php';
 
 if (file_exists($shipping_lang)) {
     global $_LANG;
@@ -19,28 +19,28 @@ if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 配送方式插件的代码必须和文件名保持一致 */
-    $modules[$i]['code']    = basename(__FILE__, '.php');
+    $modules[$i]['code'] = basename(__FILE__, '.php');
 
     $modules[$i]['version'] = '1.0.0';
 
     /* 配送方式的描述 */
-    $modules[$i]['desc']    = 'sf_express_desc';
+    $modules[$i]['desc'] = 'sf_express_desc';
 
     /* 配送方式是否支持货到付款 */
-    $modules[$i]['cod']     = false;
+    $modules[$i]['cod'] = false;
 
     /* 插件的作者 */
-    $modules[$i]['author']  = 'ECSHOP TEAM';
+    $modules[$i]['author'] = 'ECSHOP TEAM';
 
     /* 插件作者的官方网站 */
     $modules[$i]['website'] = 'http://www.ecshop.com';
 
     /* 配送接口需要的参数 */
     $modules[$i]['configure'] = array(
-                                    array('name' => 'item_fee',     'value'=>20),/* 单件商品的配送费用 */
-                                    array('name' => 'base_fee',    'value'=>15), /* 1000克以内的价格   */
-                                    array('name' => 'step_fee',     'value'=>2),  /* 续重每1000克增加的价格 */
-                                );
+        array('name' => 'item_fee', 'value' => 20),/* 单件商品的配送费用 */
+        array('name' => 'base_fee', 'value' => 15), /* 1000克以内的价格   */
+        array('name' => 'step_fee', 'value' => 2),  /* 续重每1000克增加的价格 */
+    );
 
     /* 模式编辑器 */
     $modules[$i]['print_model'] = 2;
@@ -62,7 +62,6 @@ if (isset($set_modules) && $set_modules == true) {
  *
  * -------------------------------------------------------------------------------------
  */
-
 class sf_express
 {
     /*------------------------------------------------------ */
@@ -85,9 +84,9 @@ class sf_express
      *
      * @return null
      */
-    public function sf_express($cfg=array())
+    public function sf_express($cfg = array())
     {
-        foreach ($cfg as $key=>$val) {
+        foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];
         }
     }
@@ -95,9 +94,9 @@ class sf_express
     /**
      * 计算订单的配送费用的函数
      *
-     * @param   float   $goods_weight   商品重量
-     * @param   float   $goods_amount   商品金额
-     * @param   float   $goods_number   商品数量
+     * @param float $goods_weight 商品重量
+     * @param float $goods_amount 商品金额
+     * @param float $goods_number 商品数量
      * @return  decimal
      */
     public function calculate($goods_weight, $goods_amount, $goods_number)
@@ -128,7 +127,7 @@ class sf_express
      */
     public function query($invoice_sn)
     {
-        $form_str = '<a href="http://www.sf-express.com/tabid/68/Default.aspx" target="_blank">' .$invoice_sn. '</a>';
+        $form_str = '<a href="http://www.sf-express.com/tabid/68/Default.aspx" target="_blank">' . $invoice_sn . '</a>';
         return $form_str;
     }
 }

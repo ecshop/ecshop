@@ -4,7 +4,7 @@ if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
-$shipping_lang = ROOT_PATH.'languages/' .$GLOBALS['_CFG']['lang']. '/shipping/post_express.php';
+$shipping_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/shipping/post_express.php';
 if (file_exists($shipping_lang)) {
     global $_LANG;
     include_once($shipping_lang);
@@ -15,32 +15,32 @@ if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 配送方式插件的代码必须和文件名保持一致 */
-    $modules[$i]['code']    = basename(__FILE__, '.php');
+    $modules[$i]['code'] = basename(__FILE__, '.php');
 
     $modules[$i]['version'] = '1.0.0';
 
     /* 配送方式的描述 */
-    $modules[$i]['desc']    = 'post_express_desc';
+    $modules[$i]['desc'] = 'post_express_desc';
 
     /* 保价比例,如果不支持保价则填入false,支持则还需加入calculate_insure()函数。固定价格直接填入固定数字，按商品总价则在数值后加上%  */
-    $modules[$i]['insure']  = '1%';
+    $modules[$i]['insure'] = '1%';
 
     /* 配送方式是否支持货到付款 */
-    $modules[$i]['cod']     = false;
+    $modules[$i]['cod'] = false;
 
     /* 插件的作者 */
-    $modules[$i]['author']  = 'ECSHOP TEAM';
+    $modules[$i]['author'] = 'ECSHOP TEAM';
 
     /* 插件作者的官方网站 */
     $modules[$i]['website'] = 'http://www.ecshop.com';
 
     /* 配送接口需要的参数 */
     $modules[$i]['configure'] = array(
-                                    array('name' => 'item_fee',     'value'=>5),
-                                    array('name' => 'base_fee',     'value'=>5),
-                                    array('name' => 'step_fee',    'value'=>2),
-                                    array('name' => 'step_fee1',    'value'=>1),
-                                );
+        array('name' => 'item_fee', 'value' => 5),
+        array('name' => 'base_fee', 'value' => 5),
+        array('name' => 'step_fee', 'value' => 2),
+        array('name' => 'step_fee1', 'value' => 1),
+    );
 
     /* 模式编辑器 */
     $modules[$i]['print_model'] = 2;
@@ -94,9 +94,9 @@ class post_express
      *
      * @return null
      */
-    public function post_express($cfg=array())
+    public function post_express($cfg = array())
     {
-        foreach ($cfg as $key=>$val) {
+        foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];
         }
     }
@@ -104,9 +104,9 @@ class post_express
     /**
      * 计算订单的配送费用的函数
      *
-     * @param   float   $goods_weight   商品重量
-     * @param   float   $goods_amount   商品金额
-     * @param   float   $goods_number   商品数量
+     * @param float $goods_weight 商品重量
+     * @param float $goods_amount 商品金额
+     * @param float $goods_number 商品数量
      * @return  decimal
      */
     public function calculate($goods_weight, $goods_amount, $goods_number)
@@ -114,7 +114,7 @@ class post_express
         if ($this->configure['free_money'] > 0 && $goods_amount >= $this->configure['free_money']) {
             return 0;
         } else {
-            $fee    = $this->configure['base_fee'];
+            $fee = $this->configure['base_fee'];
             $this->configure['fee_compute_mode'] = !empty($this->configure['fee_compute_mode']) ? $this->configure['fee_compute_mode'] : 'by_weight';
 
             if ($this->configure['fee_compute_mode'] == 'by_number') {
@@ -140,7 +140,7 @@ class post_express
      * 该配送方式不支持查询发货状态
      *
      * @access  public
-     * @param   string  $invoice_sn     发货单号
+     * @param string $invoice_sn 发货单号
      * @return  string
      */
     public function query($invoice_sn)
@@ -152,8 +152,8 @@ class post_express
      *  当保价比例以%出现时，计算保价费用
      *
      * @access  public
-     * @param   decimal $tatal_price  需要保价的商品总价
-     * @param   decimal $insure_rate  保价计算比例
+     * @param decimal $tatal_price 需要保价的商品总价
+     * @param decimal $insure_rate 保价计算比例
      *
      * @return  decimal $price        保价费用
      */

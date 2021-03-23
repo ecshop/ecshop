@@ -6,19 +6,19 @@ if (!defined('IN_ECS')) {
 
 class cls_image
 {
-    public $error_no    = 0;
-    public $error_msg   = '';
-    public $images_dir  = IMAGE_DIR;
-    public $data_dir    = DATA_DIR;
-    public $bgcolor     = '';
+    public $error_no = 0;
+    public $error_msg = '';
+    public $images_dir = IMAGE_DIR;
+    public $data_dir = DATA_DIR;
+    public $bgcolor = '';
     public $type_maping = array(1 => 'image/gif', 2 => 'image/jpeg', 3 => 'image/png');
 
-    public function __construct($bgcolor='')
+    public function __construct($bgcolor = '')
     {
         $this->cls_image($bgcolor);
     }
 
-    public function cls_image($bgcolor='')
+    public function cls_image($bgcolor = '')
     {
         if ($bgcolor) {
             $this->bgcolor = $bgcolor;
@@ -31,9 +31,9 @@ class cls_image
      * 图片上传的处理函数
      *
      * @access      public
-     * @param       array       upload       包含上传的图片文件信息的数组
-     * @param       array       dir          文件要上传在$this->data_dir下的目录名。如果为空图片放在则在$this->images_dir下以当月命名的目录下
-     * @param       array       img_name     上传图片名称，为空则随机生成
+     * @param array       upload       包含上传的图片文件信息的数组
+     * @param array       dir          文件要上传在$this->data_dir下的目录名。如果为空图片放在则在$this->images_dir下以当月命名的目录下
+     * @param array       img_name     上传图片名称，为空则随机生成
      * @return      mix         如果成功则返回文件名，否则返回false
      */
     public function upload_image($upload, $dir = '', $img_name = '')
@@ -56,7 +56,7 @@ class cls_image
             if (!make_dir($dir)) {
                 /* 创建目录失败 */
                 $this->error_msg = sprintf($GLOBALS['_LANG']['directory_readonly'], $dir);
-                $this->error_no  = ERR_DIRECTORY_READONLY;
+                $this->error_no = ERR_DIRECTORY_READONLY;
 
                 return false;
             }
@@ -69,7 +69,7 @@ class cls_image
 
         if (!$this->check_img_type($upload['type'])) {
             $this->error_msg = $GLOBALS['_LANG']['invalid_upload_image_type'];
-            $this->error_no  =  ERR_INVALID_IMAGE_TYPE;
+            $this->error_no = ERR_INVALID_IMAGE_TYPE;
             return false;
         }
 
@@ -77,7 +77,7 @@ class cls_image
         $allow_file_types = '|GIF|JPG|JEPG|PNG|BMP|SWF|';
         if (!check_file_type($upload['tmp_name'], $img_name, $allow_file_types)) {
             $this->error_msg = $GLOBALS['_LANG']['invalid_upload_image_type'];
-            $this->error_no  =  ERR_INVALID_IMAGE_TYPE;
+            $this->error_no = ERR_INVALID_IMAGE_TYPE;
             return false;
         }
 
@@ -85,7 +85,7 @@ class cls_image
             return str_replace(ROOT_PATH, '', $img_name);
         } else {
             $this->error_msg = sprintf($GLOBALS['_LANG']['upload_failure'], $upload['name']);
-            $this->error_no  = ERR_UPLOAD_FAILURE;
+            $this->error_no = ERR_UPLOAD_FAILURE;
 
             return false;
         }
@@ -95,13 +95,13 @@ class cls_image
      * 创建图片的缩略图
      *
      * @access  public
-     * @param   string      $img    原始图片的路径
-     * @param   int         $thumb_width  缩略图宽度
-     * @param   int         $thumb_height 缩略图高度
-     * @param   strint      $path         指定生成图片的目录名
+     * @param string $img 原始图片的路径
+     * @param int $thumb_width 缩略图宽度
+     * @param int $thumb_height 缩略图高度
+     * @param strint $path 指定生成图片的目录名
      * @return  mix         如果成功返回缩略图的路径，失败则返回false
      */
-    public function make_thumb($img, $thumb_width = 0, $thumb_height = 0, $path = '', $bgcolor='')
+    public function make_thumb($img, $thumb_width = 0, $thumb_height = 0, $path = '', $bgcolor = '')
     {
         $gd = $this->gd_version(); //获取 GD 版本。0 表示没有 GD 库，1 表示 GD 1.x，2 表示 GD 2.x
         if ($gd == 0) {
@@ -118,14 +118,14 @@ class cls_image
         $org_info = @getimagesize($img);
         if (!$org_info) {
             $this->error_msg = sprintf($GLOBALS['_LANG']['missing_orgin_image'], $img);
-            $this->error_no  = ERR_IMAGE_NOT_EXISTS;
+            $this->error_no = ERR_IMAGE_NOT_EXISTS;
 
             return false;
         }
 
         if (!$this->check_img_function($org_info[2])) {
             $this->error_msg = sprintf($GLOBALS['_LANG']['nonsupport_type'], $this->type_maping[$org_info[2]]);
-            $this->error_no  =  ERR_NO_GD;
+            $this->error_no = ERR_NO_GD;
 
             return false;
         }
@@ -133,7 +133,7 @@ class cls_image
         $img_org = $this->img_resource($img, $org_info[2]);
 
         /* 原始图片以及缩略图的尺寸比例 */
-        $scale_org      = $org_info[0] / $org_info[1];
+        $scale_org = $org_info[0] / $org_info[1];
         /* 处理只有缩略图宽和高有一个为0的情况，这时背景和缩略图一样大 */
         if ($thumb_width == 0) {
             $thumb_width = $thumb_height * $scale_org;
@@ -144,9 +144,9 @@ class cls_image
 
         /* 创建缩略图的标志符 */
         if ($gd == 2) {
-            $img_thumb  = imagecreatetruecolor($thumb_width, $thumb_height);
+            $img_thumb = imagecreatetruecolor($thumb_width, $thumb_height);
         } else {
-            $img_thumb  = imagecreate($thumb_width, $thumb_height);
+            $img_thumb = imagecreate($thumb_width, $thumb_height);
         }
 
         /* 背景颜色 */
@@ -159,15 +159,15 @@ class cls_image
         imagefilledrectangle($img_thumb, 0, 0, $thumb_width, $thumb_height, $clr);
 
         if ($org_info[0] / $thumb_width > $org_info[1] / $thumb_height) {
-            $lessen_width  = $thumb_width;
-            $lessen_height  = $thumb_width / $scale_org;
+            $lessen_width = $thumb_width;
+            $lessen_height = $thumb_width / $scale_org;
         } else {
             /* 原始图片比较高，则以高度为准 */
-            $lessen_width  = $thumb_height * $scale_org;
+            $lessen_width = $thumb_height * $scale_org;
             $lessen_height = $thumb_height;
         }
 
-        $dst_x = ($thumb_width  - $lessen_width)  / 2;
+        $dst_x = ($thumb_width - $lessen_width) / 2;
         $dst_y = ($thumb_height - $lessen_height) / 2;
 
         /* 将原始图片进行缩放处理 */
@@ -179,7 +179,7 @@ class cls_image
 
         /* 创建当月目录 */
         if (empty($path)) {
-            $dir = ROOT_PATH . $this->images_dir . '/' . date('Ym').'/';
+            $dir = ROOT_PATH . $this->images_dir . '/' . date('Ym') . '/';
         } else {
             $dir = $path;
         }
@@ -189,8 +189,8 @@ class cls_image
         if (!file_exists($dir)) {
             if (!make_dir($dir)) {
                 /* 创建目录失败 */
-                $this->error_msg  = sprintf($GLOBALS['_LANG']['directory_readonly'], $dir);
-                $this->error_no   = ERR_DIRECTORY_READONLY;
+                $this->error_msg = sprintf($GLOBALS['_LANG']['directory_readonly'], $dir);
+                $this->error_no = ERR_DIRECTORY_READONLY;
                 return false;
             }
         }
@@ -210,7 +210,7 @@ class cls_image
             imagepng($img_thumb, $dir . $filename);
         } else {
             $this->error_msg = $GLOBALS['_LANG']['creating_failure'];
-            $this->error_no  =  ERR_NO_GD;
+            $this->error_no = ERR_NO_GD;
 
             return false;
         }
@@ -223,7 +223,7 @@ class cls_image
             return str_replace(ROOT_PATH, '', $dir) . $filename;
         } else {
             $this->error_msg = $GLOBALS['_LANG']['writting_failure'];
-            $this->error_no   = ERR_DIRECTORY_READONLY;
+            $this->error_no = ERR_DIRECTORY_READONLY;
 
             return false;
         }
@@ -233,27 +233,27 @@ class cls_image
      * 为图片增加水印
      *
      * @access      public
-     * @param       string      filename            原始图片文件名，包含完整路径
-     * @param       string      target_file         需要加水印的图片文件名，包含完整路径。如果为空则覆盖源文件
-     * @param       string      $watermark          水印完整路径
-     * @param       int         $watermark_place    水印位置代码
+     * @param string      filename            原始图片文件名，包含完整路径
+     * @param string      target_file         需要加水印的图片文件名，包含完整路径。如果为空则覆盖源文件
+     * @param string $watermark 水印完整路径
+     * @param int $watermark_place 水印位置代码
      * @return      mix         如果成功则返回文件路径，否则返回false
      */
-    public function add_watermark($filename, $target_file='', $watermark='', $watermark_place='', $watermark_alpha = 0.65)
+    public function add_watermark($filename, $target_file = '', $watermark = '', $watermark_place = '', $watermark_alpha = 0.65)
     {
         // 是否安装了GD
         $gd = $this->gd_version();
         if ($gd == 0) {
             $this->error_msg = $GLOBALS['_LANG']['missing_gd'];
-            $this->error_no  = ERR_NO_GD;
+            $this->error_no = ERR_NO_GD;
 
             return false;
         }
 
         // 文件是否存在
         if ((!file_exists($filename)) || (!is_file($filename))) {
-            $this->error_msg  = sprintf($GLOBALS['_LANG']['missing_orgin_image'], $filename);
-            $this->error_no   = ERR_IMAGE_NOT_EXISTS;
+            $this->error_msg = sprintf($GLOBALS['_LANG']['missing_orgin_image'], $filename);
+            $this->error_no = ERR_IMAGE_NOT_EXISTS;
 
             return false;
         }
@@ -269,19 +269,19 @@ class cls_image
         }
 
         // 获得水印文件以及源文件的信息
-        $watermark_info     = @getimagesize($watermark);
-        $watermark_handle   = $this->img_resource($watermark, $watermark_info[2]);
+        $watermark_info = @getimagesize($watermark);
+        $watermark_handle = $this->img_resource($watermark, $watermark_info[2]);
 
         if (!$watermark_handle) {
             $this->error_msg = sprintf($GLOBALS['_LANG']['create_watermark_res'], $this->type_maping[$watermark_info[2]]);
-            $this->error_no  = ERR_INVALID_IMAGE;
+            $this->error_no = ERR_INVALID_IMAGE;
 
             return false;
         }
 
         // 根据文件类型获得原始图片的操作句柄
-        $source_info    = @getimagesize($filename);
-        $source_handle  = $this->img_resource($filename, $source_info[2]);
+        $source_info = @getimagesize($filename);
+        $source_handle = $this->img_resource($filename, $source_info[2]);
         if (!$source_handle) {
             $this->error_msg = sprintf($GLOBALS['_LANG']['create_origin_image_res'], $this->type_maping[$source_info[2]]);
             $this->error_no = ERR_INVALID_IMAGE;
@@ -308,8 +308,8 @@ class cls_image
                 $y = $source_info[1] - $watermark_info[1];
                 break;
             default:
-                $x = $source_info[0]/2 - $watermark_info[0]/2;
-                $y = $source_info[1]/2 - $watermark_info[1]/2;
+                $x = $source_info[0] / 2 - $watermark_info[0] / 2;
+                $y = $source_info[1] / 2 - $watermark_info[1] / 2;
         }
 
         if (strpos(strtolower($watermark_info['mime']), 'png') !== false) {
@@ -352,7 +352,7 @@ class cls_image
             return str_replace(ROOT_PATH, '', str_replace('\\', '/', $path));
         } else {
             $this->error_msg = $GLOBALS['_LANG']['writting_failure'];
-            $this->error_no  = ERR_DIRECTORY_READONLY;
+            $this->error_no = ERR_DIRECTORY_READONLY;
 
             return false;
         }
@@ -362,7 +362,7 @@ class cls_image
      *  检查水印图片是否合法
      *
      * @access  public
-     * @param   string      $path       图片路径
+     * @param string $path 图片路径
      *
      * @return boolen
      */
@@ -370,7 +370,7 @@ class cls_image
     {
         if (empty($path)) {
             $this->error_msg = $GLOBALS['_LANG']['empty_watermark'];
-            $this->error_no  = ERR_INVALID_PARAM;
+            $this->error_no = ERR_INVALID_PARAM;
 
             return false;
         }
@@ -383,7 +383,7 @@ class cls_image
         }
 
         // 获得文件以及源文件的信息
-        $image_info     = @getimagesize($path);
+        $image_info = @getimagesize($path);
 
         if (!$image_info) {
             $this->error_msg = sprintf($GLOBALS['_LANG']['invalid_image_type'], $path);
@@ -394,7 +394,7 @@ class cls_image
         /* 检查处理函数是否存在 */
         if (!$this->check_img_function($image_info[2])) {
             $this->error_msg = sprintf($GLOBALS['_LANG']['nonsupport_type'], $this->type_maping[$image_info[2]]);
-            $this->error_no  =  ERR_NO_GD;
+            $this->error_no = ERR_NO_GD;
             return false;
         }
 
@@ -417,23 +417,23 @@ class cls_image
 
     /**
      * 检查图片类型
-     * @param   string  $img_type   图片类型
+     * @param string $img_type 图片类型
      * @return  bool
      */
     public function check_img_type($img_type)
     {
         return $img_type == 'image/pjpeg' ||
-               $img_type == 'image/x-png' ||
-               $img_type == 'image/png'   ||
-               $img_type == 'image/gif'   ||
-               $img_type == 'image/jpeg';
+            $img_type == 'image/x-png' ||
+            $img_type == 'image/png' ||
+            $img_type == 'image/gif' ||
+            $img_type == 'image/jpeg';
     }
 
     /**
      * 检查图片处理能力
      *
      * @access  public
-     * @param   string  $img_type   图片类型
+     * @param string $img_type 图片类型
      * @return  void
      */
     public function check_img_function($img_type)
@@ -447,7 +447,7 @@ class cls_image
                 } else {
                     return (imagetypes() & IMG_GIF) > 0;
                 }
-            break;
+                break;
 
             case 'image/pjpeg':
             case 'image/jpeg':
@@ -457,7 +457,7 @@ class cls_image
                 } else {
                     return (imagetypes() & IMG_JPG) > 0;
                 }
-            break;
+                break;
 
             case 'image/x-png':
             case 'image/png':
@@ -467,7 +467,7 @@ class cls_image
                 } else {
                     return (imagetypes() & IMG_PNG) > 0;
                 }
-            break;
+                break;
 
             default:
                 return false;
@@ -477,8 +477,8 @@ class cls_image
     /**
      * 生成随机的数字串
      *
-     * @author: weber liu
      * @return string
+     * @author: weber liu
      */
     public function random_filename()
     {
@@ -494,7 +494,7 @@ class cls_image
      *  生成指定目录不重名的文件名
      *
      * @access  public
-     * @param   string      $dir        要检查是否有同名文件的目录
+     * @param string $dir 要检查是否有同名文件的目录
      *
      * @return  string      文件名
      */
@@ -530,13 +530,13 @@ class cls_image
     }
 
     /**
-    * 根据来源文件的文件类型创建一个图像操作的标识符
-    *
-    * @access  public
-    * @param   string      $img_file   图片文件的路径
-    * @param   string      $mime_type  图片文件的文件类型
-    * @return  resource    如果成功则返回图像操作标志符，反之则返回错误代码
-    */
+     * 根据来源文件的文件类型创建一个图像操作的标识符
+     *
+     * @access  public
+     * @param string $img_file 图片文件的路径
+     * @param string $mime_type 图片文件的文件类型
+     * @return  resource    如果成功则返回图像操作标志符，反之则返回错误代码
+     */
     public function img_resource($img_file, $mime_type)
     {
         switch ($mime_type) {

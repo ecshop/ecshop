@@ -64,14 +64,14 @@ require(ROOT_PATH . ADMIN_PATH . '/includes/cls_exchange.php');
 /* 对用户传入的变量进行转义操作。*/
 if (!get_magic_quotes_gpc()) {
     if (!empty($_GET)) {
-        $_GET  = addslashes_deep($_GET);
+        $_GET = addslashes_deep($_GET);
     }
     if (!empty($_POST)) {
         $_POST = addslashes_deep($_POST);
     }
 
-    $_COOKIE   = addslashes_deep($_COOKIE);
-    $_REQUEST  = addslashes_deep($_REQUEST);
+    $_COOKIE = addslashes_deep($_COOKIE);
+    $_REQUEST = addslashes_deep($_REQUEST);
 }
 
 /* 对路径进行安全处理 */
@@ -122,8 +122,8 @@ if ($_REQUEST['act'] == 'captcha') {
     exit;
 }
 
-require(ROOT_PATH . 'languages/' .$_CFG['lang']. '/admin/common.php');
-require(ROOT_PATH . 'languages/' .$_CFG['lang']. '/admin/log_action.php');
+require(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/common.php');
+require(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/log_action.php');
 
 if (file_exists(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/' . basename(PHP_SELF))) {
     include(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/' . basename(PHP_SELF));
@@ -147,7 +147,7 @@ if (!isset($_CFG['ecs_version'])) {
 }
 
 if (preg_replace('/(?:\.|\s+)[a-z]*$/i', '', $_CFG['ecs_version']) != preg_replace('/(?:\.|\s+)[a-z]*$/i', '', VERSION)
-        && file_exists('../upgrade/index.php')) {
+    && file_exists('../upgrade/index.php')) {
     // 转到升级文件
     ecs_header("Location: ../upgrade/index.php\n");
 
@@ -158,8 +158,8 @@ if (preg_replace('/(?:\.|\s+)[a-z]*$/i', '', $_CFG['ecs_version']) != preg_repla
 require(ROOT_PATH . 'includes/cls_template.php');
 $smarty = new cls_template;
 
-$smarty->template_dir  = ROOT_PATH . ADMIN_PATH . '/templates';
-$smarty->compile_dir   = ROOT_PATH . 'temp/compiled/admin';
+$smarty->template_dir = ROOT_PATH . ADMIN_PATH . '/templates';
+$smarty->compile_dir = ROOT_PATH . 'temp/compiled/admin';
 if ((DEBUG_MODE & 2) == 2) {
     $smarty->force_compile = true;
 }
@@ -175,24 +175,24 @@ if (isset($_CFG['enable_order_check'])) {  // 为了从旧版本顺利升级到2
 }
 
 /* 验证通行证信息 */
-if (isset($_GET['ent_id']) && isset($_GET['ent_ac']) &&  isset($_GET['ent_sign']) && isset($_GET['ent_email'])) {
+if (isset($_GET['ent_id']) && isset($_GET['ent_ac']) && isset($_GET['ent_sign']) && isset($_GET['ent_email'])) {
     $ent_id = trim($_GET['ent_id']);
     $ent_ac = trim($_GET['ent_ac']);
     $ent_sign = trim($_GET['ent_sign']);
     $ent_email = trim($_GET['ent_email']);
     $certificate_id = trim($_CFG['certificate_id']);
     $domain_url = $ecs->url();
-    $token=$_GET['token'];
-    if ($token==md5(md5($_CFG['token']).$domain_url.ADMIN_PATH)) {
+    $token = $_GET['token'];
+    if ($token == md5(md5($_CFG['token']) . $domain_url . ADMIN_PATH)) {
         require(ROOT_PATH . 'includes/cls_transport.php');
         $t = new transport('-1', 5);
         $apiget = "act=ent_sign&ent_id= $ent_id & certificate_id=$certificate_id";
 
         $t->request('http://cloud.ecshop.com/api.php', $apiget);
-        $db->query('UPDATE '.$ecs->table('shop_config') . ' SET value = "'. $ent_id .'" WHERE code = "ent_id"');
-        $db->query('UPDATE '.$ecs->table('shop_config') . ' SET value = "'. $ent_ac .'" WHERE code = "ent_ac"');
-        $db->query('UPDATE '.$ecs->table('shop_config') . ' SET value = "'. $ent_sign .'" WHERE code = "ent_sign"');
-        $db->query('UPDATE '.$ecs->table('shop_config') . ' SET value = "'. $ent_email .'" WHERE code = "ent_email"');
+        $db->query('UPDATE ' . $ecs->table('shop_config') . ' SET value = "' . $ent_id . '" WHERE code = "ent_id"');
+        $db->query('UPDATE ' . $ecs->table('shop_config') . ' SET value = "' . $ent_ac . '" WHERE code = "ent_ac"');
+        $db->query('UPDATE ' . $ecs->table('shop_config') . ' SET value = "' . $ent_sign . '" WHERE code = "ent_sign"');
+        $db->query('UPDATE ' . $ecs->table('shop_config') . ' SET value = "' . $ent_email . '" WHERE code = "ent_email"');
         clear_cache_files();
         ecs_header("Location: ./index.php\n");
     }
@@ -206,8 +206,8 @@ if ((!isset($_SESSION['admin_id']) || intval($_SESSION['admin_id']) <= 0) &&
     if (!empty($_COOKIE['ECSCP']['admin_id']) && !empty($_COOKIE['ECSCP']['admin_pass'])) {
         // 找到了cookie, 验证cookie信息
         $sql = 'SELECT user_id, user_name, password, action_list, last_login ' .
-                ' FROM ' .$ecs->table('admin_user') .
-                " WHERE user_id = '" . intval($_COOKIE['ECSCP']['admin_id']) . "'";
+            ' FROM ' . $ecs->table('admin_user') .
+            " WHERE user_id = '" . intval($_COOKIE['ECSCP']['admin_id']) . "'";
         $row = $db->GetRow($sql);
 
         if (!$row) {
@@ -230,8 +230,8 @@ if ((!isset($_SESSION['admin_id']) || intval($_SESSION['admin_id']) <= 0) &&
 
                 // 更新最后登录时间和IP
                 $db->query('UPDATE ' . $ecs->table('admin_user') .
-                            " SET last_login = '" . gmtime() . "', last_ip = '" . real_ip() . "'" .
-                            " WHERE user_id = '" . $_SESSION['admin_id'] . "'");
+                    " SET last_login = '" . gmtime() . "', last_ip = '" . real_ip() . "'" .
+                    " WHERE user_id = '" . $_SESSION['admin_id'] . "'");
             } else {
                 setcookie($_COOKIE['ECSCP']['admin_id'], '', 1);
                 setcookie($_COOKIE['ECSCP']['admin_pass'], '', 1);

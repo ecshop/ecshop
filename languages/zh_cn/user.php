@@ -301,7 +301,7 @@ $_LANG['confirm_received'] = '你确认已经收到货物了吗？';
 
 /* 合并订单及订单详情 */
 $_LANG['merge_order_success'] = '合并的订单的操作已成功！';
-$_LANG['merge_order_failed']  = '合并的订单的操作失败！请返回重试！';
+$_LANG['merge_order_failed'] = '合并的订单的操作失败！请返回重试！';
 $_LANG['order_sn_not_null'] = '请填写要合并的订单号';
 $_LANG['two_order_sn_same'] = '要合并的两个订单号不能相同';
 $_LANG['order_not_exist'] = "订单 %s 不存在";
@@ -659,11 +659,11 @@ $_LANG['add_bonus'] = '添加红包';
 
 /* 密码找回问题 */
 $_LANG['passwd_questions']['friend_birthday'] = '我最好朋友的生日？';
-$_LANG['passwd_questions']['old_address']     = '我儿时居住地的地址？';
-$_LANG['passwd_questions']['motto']           = '我的座右铭是？';
-$_LANG['passwd_questions']['favorite_movie']  = '我最喜爱的电影？';
-$_LANG['passwd_questions']['favorite_song']   = '我最喜爱的歌曲？';
-$_LANG['passwd_questions']['favorite_food']   = '我最喜爱的食物？';
-$_LANG['passwd_questions']['interest']        = '我最大的爱好？';
-$_LANG['passwd_questions']['favorite_novel']  = '我最喜欢的小说？';
+$_LANG['passwd_questions']['old_address'] = '我儿时居住地的地址？';
+$_LANG['passwd_questions']['motto'] = '我的座右铭是？';
+$_LANG['passwd_questions']['favorite_movie'] = '我最喜爱的电影？';
+$_LANG['passwd_questions']['favorite_song'] = '我最喜爱的歌曲？';
+$_LANG['passwd_questions']['favorite_food'] = '我最喜爱的食物？';
+$_LANG['passwd_questions']['interest'] = '我最大的爱好？';
+$_LANG['passwd_questions']['favorite_novel'] = '我最喜欢的小说？';
 $_LANG['passwd_questions']['favorite_equipe'] = '我最喜欢的运动队？';

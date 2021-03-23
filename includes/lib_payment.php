@@ -6,7 +6,7 @@ if (!defined('IN_ECS')) {
 
 /**
  * 取得返回信息地址
- * @param   string  $code   支付方式代码
+ * @param string $code 支付方式代码
  */
 function return_url($code)
 {
@@ -15,12 +15,12 @@ function return_url($code)
 
 /**
  *  取得某支付方式信息
- *  @param  string  $code   支付方式代码
+ * @param string $code 支付方式代码
  */
 function get_payment($code)
 {
-    $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('payment').
-           " WHERE pay_code = '$code' AND enabled = '1'";
+    $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('payment') .
+        " WHERE pay_code = '$code' AND enabled = '1'";
     $payment = $GLOBALS['db']->getRow($sql);
 
     if ($payment) {
@@ -36,8 +36,8 @@ function get_payment($code)
 
 /**
  *  通过订单sn取得订单ID
- *  @param  string  $order_sn   订单sn
- *  @param  blob    $voucher    是否为会员充值
+ * @param string $order_sn 订单sn
+ * @param blob $voucher 是否为会员充值
  */
 function get_order_id_by_sn($order_sn, $voucher = 'false')
 {
@@ -49,7 +49,7 @@ function get_order_id_by_sn($order_sn, $voucher = 'false')
         }
     } else {
         if (is_numeric($order_sn)) {
-            $sql = 'SELECT order_id FROM ' . $GLOBALS['ecs']->table('order_info'). " WHERE order_sn = '$order_sn'";
+            $sql = 'SELECT order_id FROM ' . $GLOBALS['ecs']->table('order_info') . " WHERE order_sn = '$order_sn'";
             $order_id = $GLOBALS['db']->getOne($sql);
         }
         if (!empty($order_id)) {
@@ -63,11 +63,11 @@ function get_order_id_by_sn($order_sn, $voucher = 'false')
 
 /**
  *  通过订单ID取得订单商品名称
- *  @param  string  $order_id   订单ID
+ * @param string $order_id 订单ID
  */
 function get_goods_name_by_id($order_id)
 {
-    $sql = 'SELECT goods_name FROM ' . $GLOBALS['ecs']->table('order_goods'). " WHERE order_id = '$order_id'";
+    $sql = 'SELECT goods_name FROM ' . $GLOBALS['ecs']->table('order_goods') . " WHERE order_id = '$order_id'";
     $goods_name = $GLOBALS['db']->getCol($sql);
     return implode(',', $goods_name);
 }
@@ -76,15 +76,15 @@ function get_goods_name_by_id($order_id)
  * 检查支付的金额是否与订单相符
  *
  * @access  public
- * @param   string   $log_id      支付编号
- * @param   float    $money       支付接口返回的金额
+ * @param string $log_id 支付编号
+ * @param float $money 支付接口返回的金额
  * @return  true
  */
 function check_money($log_id, $money)
 {
     if (is_numeric($log_id)) {
         $sql = 'SELECT order_amount FROM ' . $GLOBALS['ecs']->table('pay_log') .
-              " WHERE log_id = '$log_id'";
+            " WHERE log_id = '$log_id'";
         $amount = $GLOBALS['db']->getOne($sql);
     } else {
         return false;
@@ -100,9 +100,9 @@ function check_money($log_id, $money)
  * 修改订单的支付状态
  *
  * @access  public
- * @param   string  $log_id     支付编号
- * @param   integer $pay_status 状态
- * @param   string  $note       备注
+ * @param string $log_id 支付编号
+ * @param integer $pay_status 状态
+ * @param string $note 备注
  * @return  void
  */
 function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
@@ -112,33 +112,33 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
     if ($log_id > 0) {
         /* 取得要修改的支付记录信息 */
         $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('pay_log') .
-                " WHERE log_id = '$log_id'";
+            " WHERE log_id = '$log_id'";
         $pay_log = $GLOBALS['db']->getRow($sql);
         if ($pay_log && $pay_log['is_paid'] == 0) {
             /* 修改此次支付操作的状态为已付款 */
             $sql = 'UPDATE ' . $GLOBALS['ecs']->table('pay_log') .
-                    " SET is_paid = '1' WHERE log_id = '$log_id'";
+                " SET is_paid = '1' WHERE log_id = '$log_id'";
             $GLOBALS['db']->query($sql);
 
             /* 根据记录类型做相应处理 */
             if ($pay_log['order_type'] == PAY_ORDER) {
                 /* 取得订单信息 */
                 $sql = 'SELECT order_id, user_id, order_sn, consignee, address, tel, shipping_id, extension_code, extension_id, goods_amount ' .
-                        'FROM ' . $GLOBALS['ecs']->table('order_info') .
-                       " WHERE order_id = '$pay_log[order_id]'";
-                $order    = $GLOBALS['db']->getRow($sql);
+                    'FROM ' . $GLOBALS['ecs']->table('order_info') .
+                    " WHERE order_id = '$pay_log[order_id]'";
+                $order = $GLOBALS['db']->getRow($sql);
                 $order_id = $order['order_id'];
                 $order_sn = $order['order_sn'];
 
                 /* 修改订单状态为已付款 */
                 $sql = 'UPDATE ' . $GLOBALS['ecs']->table('order_info') .
-                            " SET order_status = '" . OS_CONFIRMED . "', " .
-                                " confirm_time = '" . gmtime() . "', " .
-                                " pay_status = '$pay_status', " .
-                                " pay_time = '".gmtime()."', " .
-                                " money_paid = order_amount," .
-                                " order_amount = 0 ".
-                       "WHERE order_id = '$order_id'";
+                    " SET order_status = '" . OS_CONFIRMED . "', " .
+                    " confirm_time = '" . gmtime() . "', " .
+                    " pay_status = '$pay_status', " .
+                    " pay_time = '" . gmtime() . "', " .
+                    " money_paid = order_amount," .
+                    " order_amount = 0 " .
+                    "WHERE order_id = '$order_id'";
                 $GLOBALS['db']->query($sql);
 
                 /* 记录订单操作记录 */
@@ -146,7 +146,7 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
 
                 /* 如果需要，发短信 */
                 if ($GLOBALS['_CFG']['sms_order_payed'] == '1' && $GLOBALS['_CFG']['sms_shop_mobile'] != '') {
-                    include_once(ROOT_PATH.'includes/cls_sms.php');
+                    include_once(ROOT_PATH . 'includes/cls_sms.php');
                     $sms = new sms();
                     $sms->send(
                         $GLOBALS['_CFG']['sms_shop_mobile'],
@@ -162,15 +162,15 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
                 if (!empty($virtual_goods)) {
                     $msg = '';
                     if (!virtual_goods_ship($virtual_goods, $msg, $order_sn, true)) {
-                        $GLOBALS['_LANG']['pay_success'] .= '<div style="color:red;">'.$msg.'</div>'.$GLOBALS['_LANG']['virtual_goods_ship_fail'];
+                        $GLOBALS['_LANG']['pay_success'] .= '<div style="color:red;">' . $msg . '</div>' . $GLOBALS['_LANG']['virtual_goods_ship_fail'];
                     }
 
                     /* 如果订单没有配送方式，自动完成发货操作 */
                     if ($order['shipping_id'] == -1) {
                         /* 将订单标识为已发货状态，并记录发货记录 */
                         $sql = 'UPDATE ' . $GLOBALS['ecs']->table('order_info') .
-                               " SET shipping_status = '" . SS_SHIPPED . "', shipping_time = '" . gmtime() . "'" .
-                               " WHERE order_id = '$order_id'";
+                            " SET shipping_status = '" . SS_SHIPPED . "', shipping_time = '" . gmtime() . "'" .
+                            " WHERE order_id = '$order_id'";
                         $GLOBALS['db']->query($sql);
 
                         /* 记录订单操作记录 */
@@ -180,18 +180,18 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
                     }
                 }
             } elseif ($pay_log['order_type'] == PAY_SURPLUS) {
-                $sql = 'SELECT `id` FROM ' . $GLOBALS['ecs']->table('user_account') .  " WHERE `id` = '$pay_log[order_id]' AND `is_paid` = 1  LIMIT 1";
-                $res_id=$GLOBALS['db']->getOne($sql);
+                $sql = 'SELECT `id` FROM ' . $GLOBALS['ecs']->table('user_account') . " WHERE `id` = '$pay_log[order_id]' AND `is_paid` = 1  LIMIT 1";
+                $res_id = $GLOBALS['db']->getOne($sql);
                 if (empty($res_id)) {
                     /* 更新会员预付款的到款状态 */
                     $sql = 'UPDATE ' . $GLOBALS['ecs']->table('user_account') .
-                           " SET paid_time = '" .gmtime(). "', is_paid = 1" .
-                           " WHERE id = '$pay_log[order_id]' LIMIT 1";
+                        " SET paid_time = '" . gmtime() . "', is_paid = 1" .
+                        " WHERE id = '$pay_log[order_id]' LIMIT 1";
                     $GLOBALS['db']->query($sql);
 
                     /* 取得添加预付款的用户以及金额 */
                     $sql = "SELECT user_id, amount FROM " . $GLOBALS['ecs']->table('user_account') .
-                            " WHERE id = '$pay_log[order_id]'";
+                        " WHERE id = '$pay_log[order_id]'";
                     $arr = $GLOBALS['db']->getRow($sql);
 
                     /* 修改会员帐户金额 */
@@ -218,7 +218,7 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
                         if ($code == 'virtual_card') {
                             foreach ($goods_list as $goods) {
                                 if ($info = virtual_card_result($row['order_sn'], $goods)) {
-                                    $virtual_card[] = array('goods_id'=>$goods['goods_id'], 'goods_name'=>$goods['goods_name'], 'info'=>$info);
+                                    $virtual_card[] = array('goods_id' => $goods['goods_id'], 'goods_name' => $goods['goods_name'], 'info' => $info);
                                 }
                             }
 
@@ -226,7 +226,7 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
                         }
                     }
                 } else {
-                    $msg = '<div>' .  $GLOBALS['_LANG']['please_view_order_detail'] . '</div>';
+                    $msg = '<div>' . $GLOBALS['_LANG']['please_view_order_detail'] . '</div>';
                 }
 
                 $GLOBALS['_LANG']['pay_success'] .= $msg;

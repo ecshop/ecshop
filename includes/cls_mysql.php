@@ -6,26 +6,26 @@ if (!defined('IN_ECS')) {
 
 class cls_mysql
 {
-    public $link_id    = null;
+    public $link_id = null;
 
-    public $settings   = array();
+    public $settings = array();
 
     public $queryCount = 0;
-    public $queryTime  = '';
-    public $queryLog   = array();
+    public $queryTime = '';
+    public $queryLog = array();
 
     public $max_cache_time = 300; // 最大的缓存时间，以秒为单位
 
     public $cache_data_dir = 'temp/query_caches/';
-    public $root_path      = '';
+    public $root_path = '';
 
-    public $error_message  = array();
-    public $platform       = '';
-    public $version        = '';
-    public $dbhash         = '';
-    public $starttime      = 0;
-    public $timeline       = 0;
-    public $timezone       = 0;
+    public $error_message = array();
+    public $platform = '';
+    public $version = '';
+    public $dbhash = '';
+    public $starttime = 0;
+    public $timeline = 0;
+    public $timezone = 0;
 
     public $mysql_config_cache_file_time = 0;
 
@@ -50,13 +50,13 @@ class cls_mysql
             $this->connect($dbhost, $dbuser, $dbpw, $dbname, $charset, $pconnect, $quiet);
         } else {
             $this->settings = array(
-                                    'dbhost'   => $dbhost,
-                                    'dbuser'   => $dbuser,
-                                    'dbpw'     => $dbpw,
-                                    'dbname'   => $dbname,
-                                    'charset'  => $charset,
-                                    'pconnect' => $pconnect
-                                    );
+                'dbhost' => $dbhost,
+                'dbuser' => $dbuser,
+                'dbpw' => $dbpw,
+                'dbname' => $dbname,
+                'charset' => $charset,
+                'pconnect' => $pconnect
+            );
         }
     }
 
@@ -87,7 +87,7 @@ class cls_mysql
             }
         }
 
-        $this->dbhash  = md5($this->root_path . $dbhost . $dbuser . $dbpw . $dbname);
+        $this->dbhash = md5($this->root_path . $dbhost . $dbuser . $dbpw . $dbname);
         $this->version = mysql_get_server_info($this->link_id);
 
         /* 如果mysql 版本是 4.1+ 以上，需要对字符集进行初始化 */
@@ -109,7 +109,7 @@ class cls_mysql
         if ($this->max_cache_time && $this->starttime > $this->mysql_config_cache_file_time + $this->max_cache_time) {
             if ($dbhost != '.') {
                 $result = mysql_query("SHOW VARIABLES LIKE 'basedir'", $this->link_id);
-                $row    = mysql_fetch_assoc($result);
+                $row = mysql_fetch_assoc($result);
                 if (!empty($row['Value']{1}) && $row['Value']{1} == ':' && !empty($row['Value']{2}) && $row['Value']{2} == "\\") {
                     $this->platform = 'WINDOWS';
                 } else {
@@ -123,7 +123,7 @@ class cls_mysql
                 ($dbhost != '.' && strtolower($dbhost) != 'localhost:3306' && $dbhost != '127.0.0.1:3306') ||
                 (PHP_VERSION >= '5.1' && date_default_timezone_get() == 'UTC')) {
                 $result = mysql_query("SELECT UNIX_TIMESTAMP() AS timeline, UNIX_TIMESTAMP('" . date('Y-m-d H:i:s', $this->starttime) . "') AS timezone", $this->link_id);
-                $row    = mysql_fetch_assoc($result);
+                $row = mysql_fetch_assoc($result);
 
                 if ($dbhost != '.' && strtolower($dbhost) != 'localhost:3306' && $dbhost != '127.0.0.1:3306') {
                     $this->timeline = $this->starttime - $row['timeline'];
@@ -135,10 +135,10 @@ class cls_mysql
             }
 
             $content = '<' . "?php\r\n" .
-                       '$this->mysql_config_cache_file_time = ' . $this->starttime . ";\r\n" .
-                       '$this->timeline = ' . $this->timeline . ";\r\n" .
-                       '$this->timezone = ' . $this->timezone . ";\r\n" .
-                       '$this->platform = ' . "'" . $this->platform . "';\r\n?" . '>';
+                '$this->mysql_config_cache_file_time = ' . $this->starttime . ";\r\n" .
+                '$this->timeline = ' . $this->timeline . ";\r\n" .
+                '$this->timezone = ' . $this->timezone . ";\r\n" .
+                '$this->platform = ' . "'" . $this->platform . "';\r\n?" . '>';
 
             @file_put_contents($sqlcache_config_file, $content);
         }
@@ -316,7 +316,7 @@ class cls_mysql
     {
         if ($message) {
             echo "<b>ECSHOP info</b>: $message\n\n<br /><br />";
-        //print('<a href="http://faq.comsenz.com/?type=mysql&dberrno=2003&dberror=Can%27t%20connect%20to%20MySQL%20server%20on" target="_blank">http://faq.comsenz.com/</a>');
+            //print('<a href="http://faq.comsenz.com/?type=mysql&dberrno=2003&dberror=Can%27t%20connect%20to%20MySQL%20server%20on" target="_blank">http://faq.comsenz.com/</a>');
         } else {
             echo "<b>MySQL server error report:";
             print_r($this->error_message);
@@ -568,7 +568,7 @@ class cls_mysql
                 if (!empty($fields)) {
                     $sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $fields) . ') VALUES (' . implode(', ', $values) . ')';
                     if (!empty($sets)) {
-                        $sql .=  'ON DUPLICATE KEY UPDATE ' . implode(', ', $sets);
+                        $sql .= 'ON DUPLICATE KEY UPDATE ' . implode(', ', $sets);
                     }
                 }
             } else {
@@ -625,7 +625,7 @@ class cls_mysql
         $data = @file_get_contents($result['filename']);
         if (isset($data{23})) {
             $filetime = substr($data, 13, 10);
-            $data     = substr($data, 23);
+            $data = substr($data, 23);
 
             if (($cached == 'FILEFIRST' && time() > $filetime + $this->max_cache_time) || ($cached == 'MYSQLFIRST' && $this->table_lastupdate($this->get_table_name($sql)) > $filetime)) {
                 $result['storecache'] = true;

@@ -162,16 +162,16 @@ $_LANG['category_manage'] = '分类管理';
 $_LANG['brand_manage'] = '品牌管理';
 $_LANG['hide'] = '隐藏';
 
-$_LANG['lab_volume_price']         = '商品优惠价格：';
-$_LANG['volume_number']            = '优惠数量';
-$_LANG['volume_price']             = '优惠价格';
-$_LANG['notice_volume_price']      = '购买数量达到优惠数量时享受的优惠价格';
+$_LANG['lab_volume_price'] = '商品优惠价格：';
+$_LANG['volume_number'] = '优惠数量';
+$_LANG['volume_price'] = '优惠价格';
+$_LANG['notice_volume_price'] = '购买数量达到优惠数量时享受的优惠价格';
 $_LANG['volume_number_continuous'] = '优惠数量重复！';
 
-$_LANG['label_suppliers']          = '选择供货商：';
-$_LANG['suppliers_no']             = '不指定供货商属于本店商品';
-$_LANG['suppliers_move_to']        = '转移到供货商';
-$_LANG['lab_to_shopex']         = '转移到网店';
+$_LANG['label_suppliers'] = '选择供货商：';
+$_LANG['suppliers_no'] = '不指定供货商属于本店商品';
+$_LANG['suppliers_move_to'] = '转移到供货商';
+$_LANG['lab_to_shopex'] = '转移到网店';
 
 /*------------------------------------------------------ */
 //-- 关联商品

@@ -21,7 +21,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('page_count', $agency_list['page_count']);
 
     /* 排序标记 */
-    $sort_flag  = sort_flag($agency_list['filter']);
+    $sort_flag = sort_flag($agency_list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     assign_query_info();
@@ -39,7 +39,7 @@ elseif ($_REQUEST['act'] == 'query') {
     $smarty->assign('page_count', $agency_list['page_count']);
 
     /* 排序标记 */
-    $sort_flag  = sort_flag($agency_list['filter']);
+    $sort_flag = sort_flag($agency_list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
@@ -55,8 +55,8 @@ elseif ($_REQUEST['act'] == 'query') {
 elseif ($_REQUEST['act'] == 'edit_agency_name') {
     check_authz_json('agency_manage');
 
-    $id     = intval($_POST['id']);
-    $name   = json_str_iconv(trim($_POST['val']));
+    $id = intval($_POST['id']);
+    $name = json_str_iconv(trim($_POST['val']));
 
     /* 检查名称是否重复 */
     if ($exc->num("agency_name", $name, $id) != 0) {
@@ -117,7 +117,7 @@ elseif ($_REQUEST['act'] == 'batch') {
         if (isset($_POST['remove'])) {
             /* 删除记录 */
             $sql = "DELETE FROM " . $ecs->table('agency') .
-                    " WHERE agency_id " . db_create_in($ids);
+                " WHERE agency_id " . db_create_in($ids);
             $db->query($sql);
 
             /* 更新管理员、配送地区、发货单、退货单和订单关联的办事处 */
@@ -152,10 +152,10 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     /* 初始化、取得办事处信息 */
     if ($is_add) {
         $agency = array(
-            'agency_id'     => 0,
-            'agency_name'   => '',
-            'agency_desc'   => '',
-            'region_list'   => array()
+            'agency_id' => 0,
+            'agency_name' => '',
+            'agency_desc' => '',
+            'region_list' => array()
         );
     } else {
         if (empty($_GET['id'])) {
@@ -171,17 +171,17 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 
         /* 关联的地区 */
         $sql = "SELECT region_id, region_name FROM " . $ecs->table('region') .
-                " WHERE agency_id = '$id'";
+            " WHERE agency_id = '$id'";
         $agency['region_list'] = $db->getAll($sql);
     }
 
     /* 取得所有管理员，标注哪些是该办事处的('this')，哪些是空闲的('free')，哪些是别的办事处的('other') */
     $sql = "SELECT user_id, user_name, CASE " .
-            "WHEN agency_id = 0 THEN 'free' " .
-            "WHEN agency_id = '$agency[agency_id]' THEN 'this' " .
-            "ELSE 'other' END " .
-            "AS type " .
-            "FROM " . $ecs->table('admin_user');
+        "WHEN agency_id = 0 THEN 'free' " .
+        "WHEN agency_id = '$agency[agency_id]' THEN 'this' " .
+        "ELSE 'other' END " .
+        "AS type " .
+        "FROM " . $ecs->table('admin_user');
     $agency['admin_list'] = $db->getAll($sql);
 
     $smarty->assign('agency', $agency);
@@ -218,9 +218,9 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
     /* 提交值 */
     $agency = array(
-        'agency_id'     => intval($_POST['id']),
-        'agency_name'   => sub_str($_POST['agency_name'], 255, false),
-        'agency_desc'   => $_POST['agency_desc']
+        'agency_id' => intval($_POST['id']),
+        'agency_name' => sub_str($_POST['agency_name'], 255, false),
+        'agency_desc' => $_POST['agency_desc']
     );
 
     /* 判断名称是否重复 */
@@ -295,7 +295,7 @@ function get_agencylist()
     if ($result === false) {
         /* 初始化分页参数 */
         $filter = array();
-        $filter['sort_by']    = empty($_REQUEST['sort_by']) ? 'agency_id' : trim($_REQUEST['sort_by']);
+        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'agency_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
         /* 查询记录总数，计算分页数 */
@@ -308,7 +308,7 @@ function get_agencylist()
 
         set_filter($filter, $sql);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
     $res = $GLOBALS['db']->selectLimit($sql, $filter['page_size'], $filter['start']);

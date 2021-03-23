@@ -25,7 +25,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('record_count', $list['record_count']);
     $smarty->assign('page_count', $list['page_count']);
 
-    $sort_flag  = sort_flag($list['filter']);
+    $sort_flag = sort_flag($list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     /* 显示商品列表页面 */
@@ -45,7 +45,7 @@ elseif ($_REQUEST['act'] == 'query') {
     $smarty->assign('record_count', $list['record_count']);
     $smarty->assign('page_count', $list['page_count']);
 
-    $sort_flag  = sort_flag($list['filter']);
+    $sort_flag = sort_flag($list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
@@ -97,7 +97,7 @@ elseif ($_REQUEST['act'] == 'batch') {
         if (isset($_POST['drop'])) {
             /* 删除记录 */
             $sql = "DELETE FROM " . $ecs->table('favourable_activity') .
-                    " WHERE act_id " . db_create_in($ids);
+                " WHERE act_id " . db_create_in($ids);
             $db->query($sql);
 
             /* 记日志 */
@@ -118,12 +118,12 @@ elseif ($_REQUEST['act'] == 'batch') {
 elseif ($_REQUEST['act'] == 'edit_sort_order') {
     check_authz_json('favourable');
 
-    $id  = intval($_POST['id']);
+    $id = intval($_POST['id']);
     $val = intval($_POST['val']);
 
     $sql = "UPDATE " . $ecs->table('favourable_activity') .
-            " SET sort_order = '$val'" .
-            " WHERE act_id = '$id' LIMIT 1";
+        " SET sort_order = '$val'" .
+        " WHERE act_id = '$id' LIMIT 1";
     $db->query($sql);
 
     make_json_result($val);
@@ -144,18 +144,18 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     /* 初始化、取得优惠活动信息 */
     if ($is_add) {
         $favourable = array(
-            'act_id'        => 0,
-            'act_name'      => '',
-            'start_time'    => date('Y-m-d', time() + 86400),
-            'end_time'      => date('Y-m-d', time() + 4 * 86400),
-            'user_rank'     => '',
-            'act_range'     => FAR_ALL,
+            'act_id' => 0,
+            'act_name' => '',
+            'start_time' => date('Y-m-d', time() + 86400),
+            'end_time' => date('Y-m-d', time() + 4 * 86400),
+            'user_rank' => '',
+            'act_range' => FAR_ALL,
             'act_range_ext' => '',
-            'min_amount'    => 0,
-            'max_amount'    => 0,
-            'act_type'      => FAT_GOODS,
-            'act_type_ext'  => 0,
-            'gift'          => array()
+            'min_amount' => 0,
+            'max_amount' => 0,
+            'act_type' => FAT_GOODS,
+            'act_type_ext' => 0,
+            'gift' => array()
         );
     } else {
         if (empty($_GET['id'])) {
@@ -172,14 +172,14 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     /* 取得用户等级 */
     $user_rank_list = array();
     $user_rank_list[] = array(
-        'rank_id'   => 0,
+        'rank_id' => 0,
         'rank_name' => $_LANG['not_user'],
-        'checked'   => strpos(',' . $favourable['user_rank'] . ',', ',0,') !== false
+        'checked' => strpos(',' . $favourable['user_rank'] . ',', ',0,') !== false
     );
     $sql = "SELECT rank_id, rank_name FROM " . $ecs->table('user_rank');
     $res = $db->query($sql);
     while ($row = $db->fetchRow($res)) {
-        $row['checked'] = strpos(',' . $favourable['user_rank'] . ',', ',' . $row['rank_id']. ',') !== false;
+        $row['checked'] = strpos(',' . $favourable['user_rank'] . ',', ',' . $row['rank_id'] . ',') !== false;
         $user_rank_list[] = $row;
     }
     $smarty->assign('user_rank_list', $user_rank_list);
@@ -263,18 +263,18 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
     /* 提交值 */
     $favourable = array(
-        'act_id'        => intval($_POST['id']),
-        'act_name'      => $act_name,
-        'start_time'    => local_strtotime($_POST['start_time']),
-        'end_time'      => local_strtotime($_POST['end_time']),
-        'user_rank'     => isset($_POST['user_rank']) ? join(',', $_POST['user_rank']) : '0',
-        'act_range'     => intval($_POST['act_range']),
+        'act_id' => intval($_POST['id']),
+        'act_name' => $act_name,
+        'start_time' => local_strtotime($_POST['start_time']),
+        'end_time' => local_strtotime($_POST['end_time']),
+        'user_rank' => isset($_POST['user_rank']) ? join(',', $_POST['user_rank']) : '0',
+        'act_range' => intval($_POST['act_range']),
         'act_range_ext' => intval($_POST['act_range']) == 0 ? '' : join(',', $_POST['act_range_ext']),
-        'min_amount'    => floatval($_POST['min_amount']),
-        'max_amount'    => floatval($_POST['max_amount']),
-        'act_type'      => intval($_POST['act_type']),
-        'act_type_ext'  => floatval($_POST['act_type_ext']),
-        'gift'          => serialize($gift)
+        'min_amount' => floatval($_POST['min_amount']),
+        'max_amount' => floatval($_POST['max_amount']),
+        'act_type' => intval($_POST['act_type']),
+        'act_type_ext' => floatval($_POST['act_type_ext']),
+        'gift' => serialize($gift)
     );
     if ($favourable['act_type'] == FAT_GOODS) {
         $favourable['act_type_ext'] = round($favourable['act_type_ext']);
@@ -323,12 +323,12 @@ elseif ($_REQUEST['act'] == 'search') {
 
     include_once(ROOT_PATH . 'includes/cls_json.php');
 
-    $json   = new JSON;
+    $json = new JSON;
     $filter = $json->decode($_GET['JSON']);
     $filter->keyword = json_str_iconv($filter->keyword);
     if ($filter->act_range == FAR_ALL) {
         $arr[0] = array(
-            'id'   => 0,
+            'id' => 0,
             'name' => $_LANG['js_languages']['all_need_not_search']
         );
     } elseif ($filter->act_range == FAR_CATEGORY) {
@@ -347,7 +347,7 @@ elseif ($_REQUEST['act'] == 'search') {
     }
     if (empty($arr)) {
         $arr = array(0 => array(
-            'id'   => 0,
+            'id' => 0,
             'name' => $_LANG['search_result_empty']
         ));
     }
@@ -364,12 +364,12 @@ function favourable_list()
     $result = get_filter();
     if ($result === false) {
         /* 过滤条件 */
-        $filter['keyword']    = empty($_REQUEST['keyword']) ? '' : trim($_REQUEST['keyword']);
+        $filter['keyword'] = empty($_REQUEST['keyword']) ? '' : trim($_REQUEST['keyword']);
         if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1) {
             $filter['keyword'] = json_str_iconv($filter['keyword']);
         }
-        $filter['is_going']   = empty($_REQUEST['is_going']) ? 0 : 1;
-        $filter['sort_by']    = empty($_REQUEST['sort_by']) ? 'act_id' : trim($_REQUEST['sort_by']);
+        $filter['is_going'] = empty($_REQUEST['is_going']) ? 0 : 1;
+        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'act_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
         $where = "";
@@ -382,31 +382,31 @@ function favourable_list()
         }
 
         $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('favourable_activity') .
-                " WHERE 1 $where";
+            " WHERE 1 $where";
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         /* 分页大小 */
         $filter = page_and_size($filter);
 
         /* 查询 */
-        $sql = "SELECT * ".
-                "FROM " . $GLOBALS['ecs']->table('favourable_activity') .
-                " WHERE 1 $where ".
-                " ORDER BY $filter[sort_by] $filter[sort_order] ".
-                " LIMIT ". $filter['start'] .", $filter[page_size]";
+        $sql = "SELECT * " .
+            "FROM " . $GLOBALS['ecs']->table('favourable_activity') .
+            " WHERE 1 $where " .
+            " ORDER BY $filter[sort_by] $filter[sort_order] " .
+            " LIMIT " . $filter['start'] . ", $filter[page_size]";
 
         $filter['keyword'] = stripslashes($filter['keyword']);
         set_filter($filter, $sql);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
     $res = $GLOBALS['db']->query($sql);
 
     $list = array();
     while ($row = $GLOBALS['db']->fetchRow($res)) {
-        $row['start_time']  = local_date('Y-m-d H:i', $row['start_time']);
-        $row['end_time']    = local_date('Y-m-d H:i', $row['end_time']);
+        $row['start_time'] = local_date('Y-m-d H:i', $row['start_time']);
+        $row['end_time'] = local_date('Y-m-d H:i', $row['end_time']);
 
         $list[] = $row;
     }

@@ -9,16 +9,16 @@ if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 会员数据整合插件的代码必须和文件名保持一致 */
-    $modules[$i]['code']    = 'ecshop';
+    $modules[$i]['code'] = 'ecshop';
 
     /* 被整合的第三方程序的名称 */
-    $modules[$i]['name']    = 'ECSHOP';
+    $modules[$i]['name'] = 'ECSHOP';
 
     /* 被整合的第三方程序的版本 */
     $modules[$i]['version'] = '2.0';
 
     /* 插件的作者 */
-    $modules[$i]['author']  = 'ECSHOP R&D TEAM';
+    $modules[$i]['author'] = 'ECSHOP R&D TEAM';
 
     /* 插件作者的官方网站 */
     $modules[$i]['website'] = 'http://www.ecshop.com';
@@ -27,6 +27,7 @@ if (isset($set_modules) && $set_modules == true) {
 }
 
 require_once(ROOT_PATH . 'includes/modules/integrates/integrate.php');
+
 class ecshop extends integrate
 {
     public $is_ecshop = 1;
@@ -65,7 +66,7 @@ class ecshop extends integrate
      *  检查指定用户是否存在及密码是否正确(重载基类check_user函数，支持zc加密方法)
      *
      * @access  public
-     * @param   string  $username   用户名
+     * @param string $username 用户名
      *
      * @return  int
      */
@@ -79,29 +80,29 @@ class ecshop extends integrate
 
         if ($password === null) {
             $sql = "SELECT " . $this->field_id .
-                   " FROM " . $this->table($this->user_table).
-                   " WHERE " . $this->field_name . "='" . $post_username . "'";
+                " FROM " . $this->table($this->user_table) .
+                " WHERE " . $this->field_name . "='" . $post_username . "'";
 
             return $this->db->getOne($sql);
         } else {
             $sql = "SELECT user_id, password, salt,ec_salt " .
-                   " FROM " . $this->table($this->user_table).
-                   " WHERE user_name='$post_username'";
+                " FROM " . $this->table($this->user_table) .
+                " WHERE user_name='$post_username'";
             $row = $this->db->getRow($sql);
-            $ec_salt=$row['ec_salt'];
+            $ec_salt = $row['ec_salt'];
             if (empty($row)) {
                 return 0;
             }
 
             if (empty($row['salt'])) {
-                if ($row['password'] != $this->compile_password(array('password'=>$password,'ec_salt'=>$ec_salt))) {
+                if ($row['password'] != $this->compile_password(array('password' => $password, 'ec_salt' => $ec_salt))) {
                     return 0;
                 } else {
                     if (empty($ec_salt)) {
-                        $ec_salt=rand(1, 9999);
-                        $new_password=md5(md5($password).$ec_salt);
-                        $sql = "UPDATE ".$this->table($this->user_table)."SET password= '" .$new_password."',ec_salt='".$ec_salt."'".
-                   " WHERE user_name='$post_username'";
+                        $ec_salt = rand(1, 9999);
+                        $new_password = md5(md5($password) . $ec_salt);
+                        $sql = "UPDATE " . $this->table($this->user_table) . "SET password= '" . $new_password . "',ec_salt='" . $ec_salt . "'" .
+                            " WHERE user_name='$post_username'";
                         $this->db->query($sql);
                     }
                     return $row['user_id'];
@@ -115,14 +116,14 @@ class ecshop extends integrate
                 $encrypt_password = '';
                 switch ($encrypt_type) {
                     case ENCRYPT_ZC:
-                        $encrypt_password = md5($encrypt_salt.$password);
+                        $encrypt_password = md5($encrypt_salt . $password);
                         break;
                     /* 如果还有其他加密方式添加到这里  */
                     //case other :
                     //  ----------------------------------
                     //  break;
                     case ENCRYPT_UC:
-                        $encrypt_password = md5(md5($password).$encrypt_salt);
+                        $encrypt_password = md5(md5($password) . $encrypt_salt);
                         break;
 
                     default:
@@ -135,8 +136,8 @@ class ecshop extends integrate
                 }
 
                 $sql = "UPDATE " . $this->table($this->user_table) .
-                       " SET password = '".  $this->compile_password(array('password'=>$password)) . "', salt=''".
-                       " WHERE user_id = '$row[user_id]'";
+                    " SET password = '" . $this->compile_password(array('password' => $password)) . "', salt=''" .
+                    " WHERE user_id = '$row[user_id]'";
                 $this->db->query($sql);
 
                 return $row['user_id'];

@@ -46,7 +46,7 @@ elseif ($_REQUEST['act'] == 'query') {
     $smarty->assign('page_count', $result['page_count']);
 
     /* 排序标记 */
-    $sort_flag  = sort_flag($result['filter']);
+    $sort_flag = sort_flag($result['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
@@ -62,8 +62,8 @@ elseif ($_REQUEST['act'] == 'query') {
 elseif ($_REQUEST['act'] == 'edit_suppliers_name') {
     check_authz_json('suppliers_manage');
 
-    $id     = intval($_POST['id']);
-    $name   = json_str_iconv(trim($_POST['val']));
+    $id = intval($_POST['id']);
+    $name = json_str_iconv(trim($_POST['val']));
 
     /* 判断名称是否重复 */
     $sql = "SELECT suppliers_id
@@ -318,10 +318,10 @@ elseif (in_array($_REQUEST['act'], array('insert', 'update'))) {
 
     if ($_REQUEST['act'] == 'insert') {
         /* 提交值 */
-        $suppliers = array('suppliers_name'   => trim($_POST['suppliers_name']),
-                           'suppliers_desc'   => trim($_POST['suppliers_desc']),
-                           'parent_id'        => 0
-                           );
+        $suppliers = array('suppliers_name' => trim($_POST['suppliers_name']),
+            'suppliers_desc' => trim($_POST['suppliers_desc']),
+            'parent_id' => 0
+        );
 
         /* 判断名称是否重复 */
         $sql = "SELECT suppliers_id
@@ -346,19 +346,19 @@ elseif (in_array($_REQUEST['act'], array('insert', 'update'))) {
         clear_cache_files();
 
         /* 提示信息 */
-        $links = array(array('href' => 'suppliers.php?act=add',  'text' => $_LANG['continue_add_suppliers']),
-                       array('href' => 'suppliers.php?act=list', 'text' => $_LANG['back_suppliers_list'])
-                       );
+        $links = array(array('href' => 'suppliers.php?act=add', 'text' => $_LANG['continue_add_suppliers']),
+            array('href' => 'suppliers.php?act=list', 'text' => $_LANG['back_suppliers_list'])
+        );
         sys_msg($_LANG['add_suppliers_ok'], 0, $links);
     }
 
     if ($_REQUEST['act'] == 'update') {
         /* 提交值 */
-        $suppliers = array('id'   => trim($_POST['id']));
+        $suppliers = array('id' => trim($_POST['id']));
 
-        $suppliers['new'] = array('suppliers_name'   => trim($_POST['suppliers_name']),
-                           'suppliers_desc'   => trim($_POST['suppliers_desc'])
-                           );
+        $suppliers['new'] = array('suppliers_name' => trim($_POST['suppliers_name']),
+            'suppliers_desc' => trim($_POST['suppliers_desc'])
+        );
 
         /* 取得供货商信息 */
         $sql = "SELECT * FROM " . $ecs->table('suppliers') . " WHERE suppliers_id = '" . $suppliers['id'] . "'";
@@ -434,19 +434,19 @@ function suppliers_list()
 
         /* 记录总数 */
         $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('suppliers') . $where;
-        $filter['record_count']   = $GLOBALS['db']->getOne($sql);
-        $filter['page_count']     = $filter['record_count'] > 0 ? ceil($filter['record_count'] / $filter['page_size']) : 1;
+        $filter['record_count'] = $GLOBALS['db']->getOne($sql);
+        $filter['page_count'] = $filter['record_count'] > 0 ? ceil($filter['record_count'] / $filter['page_size']) : 1;
 
         /* 查询 */
         $sql = "SELECT suppliers_id, suppliers_name, suppliers_desc, is_check
                 FROM " . $GLOBALS['ecs']->table("suppliers") . "
                 $where
-                ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order']. "
+                ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'] . "
                 LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ", " . $filter['page_size'] . " ";
 
         set_filter($filter, $sql);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
 

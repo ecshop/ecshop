@@ -13,17 +13,17 @@ if ($_REQUEST['act'] == 'list') {
     include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
 
     /* 包含插件语言项 */
-    $sql = "SELECT code FROM ".$ecs->table('plugins');
+    $sql = "SELECT code FROM " . $ecs->table('plugins');
     $rs = $db->query($sql);
     while ($row = $db->FetchRow($rs)) {
         /* 取得语言项 */
-        if (file_exists('../plugins/'.$row['code'].'/languages/common_'.$_CFG['lang'].'.php')) {
-            include_once(ROOT_PATH.'plugins/'.$row['code'].'/languages/common_'.$_CFG['lang'].'.php');
+        if (file_exists('../plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php')) {
+            include_once(ROOT_PATH . 'plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php');
         }
     }
 
     /* 获得所有邮件模板 */
-    $sql = "SELECT template_id, template_code FROM " .$ecs->table('mail_templates') . " WHERE  type = 'template'";
+    $sql = "SELECT template_id, template_code FROM " . $ecs->table('mail_templates') . " WHERE  type = 'template'";
     $res = $db->query($sql);
     $cur = null;
 
@@ -34,7 +34,7 @@ if ($_REQUEST['act'] == 'list') {
 
         $len = strlen($_LANG[$row['template_code']]);
         $templates[$row['template_id']] = $len < 18 ?
-            $_LANG[$row['template_code']].str_repeat('&nbsp;', (18-$len)/2) ." [$row[template_code]]" :
+            $_LANG[$row['template_code']] . str_repeat('&nbsp;', (18 - $len) / 2) . " [$row[template_code]]" :
             $_LANG[$row['template_code']] . " [$row[template_code]]";
     }
 
@@ -44,11 +44,11 @@ if ($_REQUEST['act'] == 'list') {
 
     /* 创建 html editor */
     $editor = new FCKeditor('content');
-    $editor->BasePath   = '../includes/fckeditor/';
+    $editor->BasePath = '../includes/fckeditor/';
     $editor->ToolbarSet = 'Normal';
-    $editor->Width      = '100%';
-    $editor->Height     = '320';
-    $editor->Value      = $content['template_content'];
+    $editor->Width = '100%';
+    $editor->Height = '320';
+    $editor->Value = $content['template_content'];
     $FCKeditor = $editor->CreateHtml();
     $smarty->assign('FCKeditor', $FCKeditor);
     $smarty->assign('tpl', $cur);
@@ -70,23 +70,23 @@ elseif ($_REQUEST['act'] == 'loat_template') {
     $mail_type = isset($_GET['mail_type']) ? $_GET['mail_type'] : -1;
 
     /* 包含插件语言项 */
-    $sql = "SELECT code FROM ".$ecs->table('plugins');
+    $sql = "SELECT code FROM " . $ecs->table('plugins');
     $rs = $db->query($sql);
     while ($row = $db->FetchRow($rs)) {
         /* 取得语言项 */
-        if (file_exists('../plugins/'.$row['code'].'/languages/common_'.$_CFG['lang'].'.php')) {
-            include_once(ROOT_PATH.'plugins/'.$row['code'].'/languages/common_'.$_CFG['lang'].'.php');
+        if (file_exists('../plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php')) {
+            include_once(ROOT_PATH . 'plugins/' . $row['code'] . '/languages/common_' . $_CFG['lang'] . '.php');
         }
     }
 
     /* 获得所有邮件模板 */
-    $sql = "SELECT template_id, template_code FROM " .$ecs->table('mail_templates') . " WHERE  type = 'template'";
+    $sql = "SELECT template_id, template_code FROM " . $ecs->table('mail_templates') . " WHERE  type = 'template'";
     $res = $db->query($sql);
 
     while ($row = $db->FetchRow($res)) {
         $len = strlen($_LANG[$row['template_code']]);
         $templates[$row['template_id']] = $len < 18 ?
-            $_LANG[$row['template_code']].str_repeat('&nbsp;', (18-$len)/2) ." [$row[template_code]]" :
+            $_LANG[$row['template_code']] . str_repeat('&nbsp;', (18 - $len) / 2) . " [$row[template_code]]" :
             $_LANG[$row['template_code']] . " [$row[template_code]]";
     }
 
@@ -95,11 +95,11 @@ elseif ($_REQUEST['act'] == 'loat_template') {
     if (($mail_type == -1 && $content['is_html'] == 1) || $mail_type == 1) {
         /* 创建 html editor */
         $editor = new FCKeditor('content');
-        $editor->BasePath   = '../includes/fckeditor/';
+        $editor->BasePath = '../includes/fckeditor/';
         $editor->ToolbarSet = 'Normal';
-        $editor->Width      = '100%';
-        $editor->Height     = '320';
-        $editor->Value      = $content['template_content'];
+        $editor->Width = '100%';
+        $editor->Height = '320';
+        $editor->Value = $content['template_content'];
         $FCKeditor = $editor->CreateHtml();
         $smarty->assign('FCKeditor', $FCKeditor);
 
@@ -133,19 +133,19 @@ elseif ($_REQUEST['act'] == 'save_template') {
         $content = trim($_POST['content']);
     }
 
-    $type   = intval($_POST['is_html']);
+    $type = intval($_POST['is_html']);
     $tpl_id = intval($_POST['tpl']);
 
 
-    $sql = "UPDATE " .$ecs->table('mail_templates'). " SET ".
-                "template_subject = '" .str_replace('\\\'\\\'', '\\\'', $subject). "', ".
-                "template_content = '" .str_replace('\\\'\\\'', '\\\'', $content).  "', ".
-                "is_html = '$type', ".
-                "last_modify = '" .gmtime(). "' ".
-            "WHERE template_id='$tpl_id'";
+    $sql = "UPDATE " . $ecs->table('mail_templates') . " SET " .
+        "template_subject = '" . str_replace('\\\'\\\'', '\\\'', $subject) . "', " .
+        "template_content = '" . str_replace('\\\'\\\'', '\\\'', $content) . "', " .
+        "is_html = '$type', " .
+        "last_modify = '" . gmtime() . "' " .
+        "WHERE template_id='$tpl_id'";
 
     if ($db->query($sql, "SILENT")) {
-        $link[0]=array('href' => 'mail_template.php?act=list', 'text' => $_LANG['update_success']);
+        $link[0] = array('href' => 'mail_template.php?act=list', 'text' => $_LANG['update_success']);
         sys_msg($_LANG['update_success'], 0, $link);
     } else {
         sys_msg($_LANG['update_failed'], 1, array(), false);
@@ -156,13 +156,13 @@ elseif ($_REQUEST['act'] == 'save_template') {
  * 加载指定的模板内容
  *
  * @access  public
- * @param   string  $temp   邮件模板的ID
+ * @param string $temp 邮件模板的ID
  * @return  array
  */
 function load_template($temp_id)
 {
-    $sql = "SELECT template_subject, template_content, is_html ".
-            "FROM " .$GLOBALS['ecs']->table('mail_templates'). " WHERE template_id='$temp_id'";
+    $sql = "SELECT template_subject, template_content, is_html " .
+        "FROM " . $GLOBALS['ecs']->table('mail_templates') . " WHERE template_id='$temp_id'";
     $row = $GLOBALS['db']->GetRow($sql);
 
     return $row;

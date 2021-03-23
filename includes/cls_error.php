@@ -6,15 +6,15 @@ if (!defined('IN_ECS')) {
 
 class ecs_error
 {
-    public $_message   = array();
-    public $_template  = '';
-    public $error_no   = 0;
+    public $_message = array();
+    public $_template = '';
+    public $error_no = 0;
 
     /**
      * 构造函数
      *
      * @access  public
-     * @param   string  $tpl
+     * @param string $tpl
      * @return  void
      */
     public function __construct($tpl)
@@ -26,7 +26,7 @@ class ecs_error
      * 构造函数
      *
      * @access  public
-     * @param   string  $tpl
+     * @param string $tpl
      * @return  void
      */
     public function ecs_error($tpl)
@@ -38,11 +38,11 @@ class ecs_error
      * 添加一条错误信息
      *
      * @access  public
-     * @param   string  $msg
-     * @param   integer $errno
+     * @param string $msg
+     * @param integer $errno
      * @return  void
      */
-    public function add($msg, $errno=1)
+    public function add($msg, $errno = 1)
     {
         if (is_array($msg)) {
             $this->_message = array_merge($this->_message, $msg);
@@ -50,7 +50,7 @@ class ecs_error
             $this->_message[] = $msg;
         }
 
-        $this->error_no     = $errno;
+        $this->error_no = $errno;
     }
 
     /**
@@ -91,8 +91,8 @@ class ecs_error
      * 显示错误信息
      *
      * @access  public
-     * @param   string  $link
-     * @param   string  $href
+     * @param string $link
+     * @param string $href
      * @return  void
      */
     public function show($link = '', $href = '')

@@ -4,7 +4,7 @@ if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
-$shipping_lang = ROOT_PATH.'languages/' .$GLOBALS['_CFG']['lang']. '/shipping/ems.php';
+$shipping_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/shipping/ems.php';
 if (file_exists($shipping_lang)) {
     global $_LANG;
     include_once($shipping_lang);
@@ -17,28 +17,28 @@ if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 配送方式插件的代码必须和文件名保持一致 */
-    $modules[$i]['code']    = basename(__FILE__, '.php');
+    $modules[$i]['code'] = basename(__FILE__, '.php');
 
     $modules[$i]['version'] = '1.0.0';
 
     /* 配送方式的描述 */
-    $modules[$i]['desc']    = 'ems_express_desc';
+    $modules[$i]['desc'] = 'ems_express_desc';
 
     /* 配送方式是否支持货到付款 */
-    $modules[$i]['cod']     = false;
+    $modules[$i]['cod'] = false;
 
     /* 插件的作者 */
-    $modules[$i]['author']  = 'ECSHOP TEAM';
+    $modules[$i]['author'] = 'ECSHOP TEAM';
 
     /* 插件作者的官方网站 */
     $modules[$i]['website'] = 'http://www.ecshop.com';
 
     /* 配送接口需要的参数 */
     $modules[$i]['configure'] = array(
-                                    array('name' => 'item_fee',     'value'=>20),
-                                    array('name' => 'base_fee',     'value'=>20),
-                                    array('name' => 'step_fee',     'value'=>15),
-                                );
+        array('name' => 'item_fee', 'value' => 20),
+        array('name' => 'base_fee', 'value' => 20),
+        array('name' => 'step_fee', 'value' => 15),
+    );
 
     /* 模式编辑器 */
     $modules[$i]['print_model'] = 2;
@@ -83,9 +83,9 @@ class ems
      *
      * @return null
      */
-    public function ems($cfg=array())
+    public function ems($cfg = array())
     {
-        foreach ($cfg as $key=>$val) {
+        foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];
         }
     }
@@ -93,9 +93,9 @@ class ems
     /**
      * 计算订单的配送费用的函数
      *
-     * @param   float   $goods_weight   商品重量
-     * @param   float   $goods_amount   商品金额
-     * @param   float   $goods_number   商品件数
+     * @param float $goods_weight 商品重量
+     * @param float $goods_amount 商品金额
+     * @param float $goods_number 商品件数
      * @return  decimal
      */
     public function calculate($goods_weight, $goods_amount, $goods_number)
@@ -121,17 +121,17 @@ class ems
      * 查询发货状态
      *
      * @access  public
-     * @param   string  $invoice_sn     发货单号
+     * @param string $invoice_sn 发货单号
      * @return  string
      */
     public function query($invoice_sn)
     {
-        $str = '<form style="margin:0px" method="post" '.
-            'action="http://www.ems.com.cn/qcgzOutQueryAction.do" name="queryForm_' .$invoice_sn. '" target="_blank">'.
-            '<input type="hidden" name="mailNum" value="' .$invoice_sn. '" />'.
-            '<a href="javascript:document.forms[\'queryForm_' .$invoice_sn. '\'].submit();">' .$invoice_sn. '</a>'.
-            '<input type="hidden" name="reqCode" value="browseBASE" />'.
-            '<input type="hidden" name="checknum" value="0568792906411" />'.
+        $str = '<form style="margin:0px" method="post" ' .
+            'action="http://www.ems.com.cn/qcgzOutQueryAction.do" name="queryForm_' . $invoice_sn . '" target="_blank">' .
+            '<input type="hidden" name="mailNum" value="' . $invoice_sn . '" />' .
+            '<a href="javascript:document.forms[\'queryForm_' . $invoice_sn . '\'].submit();">' . $invoice_sn . '</a>' .
+            '<input type="hidden" name="reqCode" value="browseBASE" />' .
+            '<input type="hidden" name="checknum" value="0568792906411" />' .
             '</form>';
 
         return $str;

@@ -7,9 +7,9 @@ if (!defined('IN_ECS')) {
 /**
  * 截取UTF-8编码下字符串的函数
  *
- * @param   string      $str        被截取的字符串
- * @param   int         $length     截取的长度
- * @param   bool        $append     是否附加省略号
+ * @param string $str 被截取的字符串
+ * @param int $length 截取的长度
+ * @param bool $append 是否附加省略号
  *
  * @return  string
  */
@@ -99,7 +99,7 @@ function real_ip()
 /**
  * 计算字符串的长度（汉字按照两个字符计算）
  *
- * @param   string      $str        字符串
+ * @param string $str 字符串
  *
  * @return  int
  */
@@ -146,16 +146,16 @@ function get_crlf()
  *
  * @return boolean
  */
-function send_mail($name, $email, $subject, $content, $type = 0, $notification=false)
+function send_mail($name, $email, $subject, $content, $type = 0, $notification = false)
 {
     /* 如果邮件编码不是EC_CHARSET，创建字符集转换对象，转换编码 */
     if ($GLOBALS['_CFG']['mail_charset'] != EC_CHARSET) {
-        $name      = ecs_iconv(EC_CHARSET, $GLOBALS['_CFG']['mail_charset'], $name);
-        $subject   = ecs_iconv(EC_CHARSET, $GLOBALS['_CFG']['mail_charset'], $subject);
-        $content   = ecs_iconv(EC_CHARSET, $GLOBALS['_CFG']['mail_charset'], $content);
+        $name = ecs_iconv(EC_CHARSET, $GLOBALS['_CFG']['mail_charset'], $name);
+        $subject = ecs_iconv(EC_CHARSET, $GLOBALS['_CFG']['mail_charset'], $subject);
+        $content = ecs_iconv(EC_CHARSET, $GLOBALS['_CFG']['mail_charset'], $content);
         $shop_name = ecs_iconv(EC_CHARSET, $GLOBALS['_CFG']['mail_charset'], $GLOBALS['_CFG']['shop_name']);
     }
-    $charset   = $GLOBALS['_CFG']['mail_charset'];
+    $charset = $GLOBALS['_CFG']['mail_charset'];
     /**
      * 使用mail函数发送邮件
      */
@@ -163,41 +163,40 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification=f
         /* 邮件的头部信息 */
         $content_type = ($type == 0) ? 'Content-Type: text/plain; charset=' . $charset : 'Content-Type: text/html; charset=' . $charset;
         $headers = array();
-        $headers[] = 'From: "' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?='.'" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
+        $headers[] = 'From: "' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
         $headers[] = $content_type . '; format=flowed';
         if ($notification) {
-            $headers[] = 'Disposition-Notification-To: ' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?='.'" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
+            $headers[] = 'Disposition-Notification-To: ' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
         }
 
         $res = @mail($email, '=?' . $charset . '?B?' . base64_encode($subject) . '?=', $content, implode("\r\n", $headers));
 
         if (!$res) {
-            $GLOBALS['err'] ->add($GLOBALS['_LANG']['sendemail_false']);
+            $GLOBALS['err']->add($GLOBALS['_LANG']['sendemail_false']);
 
             return false;
         } else {
             return true;
         }
-    }
-    /**
+    } /**
      * 使用smtp服务发送邮件
      */
     else {
         /* 邮件的头部信息 */
         $content_type = ($type == 0) ?
             'Content-Type: text/plain; charset=' . $charset : 'Content-Type: text/html; charset=' . $charset;
-        $content   =  base64_encode($content);
+        $content = base64_encode($content);
 
         $headers = array();
         $headers[] = 'Date: ' . gmdate('D, j M Y H:i:s') . ' +0000';
-        $headers[] = 'To: "' . '=?' . $charset . '?B?' . base64_encode($name) . '?=' . '" <' . $email. '>';
-        $headers[] = 'From: "' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?='.'" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
+        $headers[] = 'To: "' . '=?' . $charset . '?B?' . base64_encode($name) . '?=' . '" <' . $email . '>';
+        $headers[] = 'From: "' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
         $headers[] = 'Subject: ' . '=?' . $charset . '?B?' . base64_encode($subject) . '?=';
         $headers[] = $content_type . '; format=flowed';
         $headers[] = 'Content-Transfer-Encoding: base64';
         $headers[] = 'Content-Disposition: inline';
         if ($notification) {
-            $headers[] = 'Disposition-Notification-To: ' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?='.'" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
+            $headers[] = 'Disposition-Notification-To: ' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
         }
 
         /* 获得邮件服务器的参数设置 */
@@ -208,7 +207,7 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification=f
 
         if (empty($params['host']) || empty($params['port'])) {
             // 如果没有设置主机和端口直接返回 false
-            $GLOBALS['err'] ->add($GLOBALS['_LANG']['smtp_setting_error']);
+            $GLOBALS['err']->add($GLOBALS['_LANG']['smtp_setting_error']);
 
             return false;
         } else {
@@ -224,9 +223,9 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification=f
             static $smtp;
 
             $send_params['recipients'] = $email;
-            $send_params['headers']    = $headers;
-            $send_params['from']       = $GLOBALS['_CFG']['smtp_mail'];
-            $send_params['body']       = $content;
+            $send_params['headers'] = $headers;
+            $send_params['from'] = $GLOBALS['_CFG']['smtp_mail'];
+            $send_params['body'] = $content;
 
             if (!isset($smtp)) {
                 $smtp = new smtp($params);
@@ -274,7 +273,7 @@ if (!function_exists('file_get_contents')) {
      * 如果系统不存在file_get_contents函数则声明该函数
      *
      * @access  public
-     * @param   string  $file
+     * @param string $file
      * @return  mix
      */
     function file_get_contents($file)
@@ -302,8 +301,8 @@ if (!function_exists('file_put_contents')) {
      * 如果系统不存在file_put_contents函数则声明该函数
      *
      * @access  public
-     * @param   string  $file
-     * @param   mix     $data
+     * @param string $file
+     * @param mix $data
      * @return  int
      */
     function file_put_contents($file, $data, $flags = '')
@@ -332,12 +331,12 @@ if (!function_exists('floatval')) {
      * 如果系统不存在 floatval 函数则声明该函数
      *
      * @access  public
-     * @param   mix     $n
+     * @param mix $n
      * @return  float
      */
     function floatval($n)
     {
-        return (float) $n;
+        return (float)$n;
     }
 }
 
@@ -345,8 +344,8 @@ if (!function_exists('floatval')) {
  * 文件或目录权限检查函数
  *
  * @access          public
- * @param           string  $file_path   文件路径
- * @param           bool    $rename_prv  是否在检查修改权限时检查执行rename()函数的权限
+ * @param string $file_path 文件路径
+ * @param bool $rename_prv 是否在检查修改权限时检查执行rename()函数的权限
  *
  * @return          int     返回值的取值范围为{0 <= x <= 15}，每个值表示的含义可由四位二进制数组合推出。
  *                          返回值在二进制计数法中，四位由高到低分别代表
@@ -404,8 +403,7 @@ function file_mode_info($file_path)
                 $mark ^= 8;
             }
             @unlink($test_file);
-        }
-        /* 如果是文件 */
+        } /* 如果是文件 */
         elseif (is_file($file_path)) {
             /* 以读方式打开 */
             $fp = @fopen($file_path, 'rb');
@@ -445,7 +443,7 @@ function log_write($arg, $file = '', $line = '')
         return;
     }
 
-    $str = "\r\n-- ". date('Y-m-d H:i:s'). " --------------------------------------------------------------\r\n";
+    $str = "\r\n-- " . date('Y-m-d H:i:s') . " --------------------------------------------------------------\r\n";
     $str .= "FILE: $file\r\nLINE: $line\r\n";
 
     if (is_array($arg)) {
@@ -467,7 +465,7 @@ function log_write($arg, $file = '', $line = '')
  * 检查目标文件夹是否存在，如果不存在则自动创建该目录
  *
  * @access      public
- * @param       string      folder     目录路径。不能使用相对于网站根目录的URL
+ * @param string      folder     目录路径。不能使用相对于网站根目录的URL
  *
  * @return      bool
  */
@@ -542,7 +540,7 @@ function gzip_enabled()
  * 递归方式的对变量中的特殊字符进行转义
  *
  * @access  public
- * @param   mix     $value
+ * @param mix $value
  *
  * @return  mix
  */
@@ -559,10 +557,10 @@ function addslashes_deep($value)
  * 将对象成员变量或者数组的特殊字符进行转义
  *
  * @access   public
- * @param    mix        $obj      对象或者数组
+ * @param mix $obj 对象或者数组
+ * @return   mix                  对象或者数组
  * @author   Xuan Yan
  *
- * @return   mix                  对象或者数组
  */
 function addslashes_deep_obj($obj)
 {
@@ -581,7 +579,7 @@ function addslashes_deep_obj($obj)
  * 递归方式的对变量中的特殊字符去除转义
  *
  * @access  public
- * @param   mix     $value
+ * @param mix $value
  *
  * @return  mix
  */
@@ -598,34 +596,34 @@ function stripslashes_deep($value)
  *  将一个字串中含有全角的数字字符、字母、空格或'%+-()'字符转换为相应半角字符
  *
  * @access  public
- * @param   string       $str         待转换字串
+ * @param string $str 待转换字串
  *
  * @return  string       $str         处理后字串
  */
 function make_semiangle($str)
 {
     $arr = array('０' => '0', '１' => '1', '２' => '2', '３' => '3', '４' => '4',
-                 '５' => '5', '６' => '6', '７' => '7', '８' => '8', '９' => '9',
-                 'Ａ' => 'A', 'Ｂ' => 'B', 'Ｃ' => 'C', 'Ｄ' => 'D', 'Ｅ' => 'E',
-                 'Ｆ' => 'F', 'Ｇ' => 'G', 'Ｈ' => 'H', 'Ｉ' => 'I', 'Ｊ' => 'J',
-                 'Ｋ' => 'K', 'Ｌ' => 'L', 'Ｍ' => 'M', 'Ｎ' => 'N', 'Ｏ' => 'O',
-                 'Ｐ' => 'P', 'Ｑ' => 'Q', 'Ｒ' => 'R', 'Ｓ' => 'S', 'Ｔ' => 'T',
-                 'Ｕ' => 'U', 'Ｖ' => 'V', 'Ｗ' => 'W', 'Ｘ' => 'X', 'Ｙ' => 'Y',
-                 'Ｚ' => 'Z', 'ａ' => 'a', 'ｂ' => 'b', 'ｃ' => 'c', 'ｄ' => 'd',
-                 'ｅ' => 'e', 'ｆ' => 'f', 'ｇ' => 'g', 'ｈ' => 'h', 'ｉ' => 'i',
-                 'ｊ' => 'j', 'ｋ' => 'k', 'ｌ' => 'l', 'ｍ' => 'm', 'ｎ' => 'n',
-                 'ｏ' => 'o', 'ｐ' => 'p', 'ｑ' => 'q', 'ｒ' => 'r', 'ｓ' => 's',
-                 'ｔ' => 't', 'ｕ' => 'u', 'ｖ' => 'v', 'ｗ' => 'w', 'ｘ' => 'x',
-                 'ｙ' => 'y', 'ｚ' => 'z',
-                 '（' => '(', '）' => ')', '〔' => '[', '〕' => ']', '【' => '[',
-                 '】' => ']', '〖' => '[', '〗' => ']', '“' => '[', '”' => ']',
-                 '‘' => '[', '’' => ']', '｛' => '{', '｝' => '}', '《' => '<',
-                 '》' => '>',
-                 '％' => '%', '＋' => '+', '—' => '-', '－' => '-', '～' => '-',
-                 '：' => ':', '。' => '.', '、' => ',', '，' => '.', '、' => '.',
-                 '；' => ',', '？' => '?', '！' => '!', '…' => '-', '‖' => '|',
-                 '”' => '"', '’' => '`', '‘' => '`', '｜' => '|', '〃' => '"',
-                 '　' => ' ');
+        '５' => '5', '６' => '6', '７' => '7', '８' => '8', '９' => '9',
+        'Ａ' => 'A', 'Ｂ' => 'B', 'Ｃ' => 'C', 'Ｄ' => 'D', 'Ｅ' => 'E',
+        'Ｆ' => 'F', 'Ｇ' => 'G', 'Ｈ' => 'H', 'Ｉ' => 'I', 'Ｊ' => 'J',
+        'Ｋ' => 'K', 'Ｌ' => 'L', 'Ｍ' => 'M', 'Ｎ' => 'N', 'Ｏ' => 'O',
+        'Ｐ' => 'P', 'Ｑ' => 'Q', 'Ｒ' => 'R', 'Ｓ' => 'S', 'Ｔ' => 'T',
+        'Ｕ' => 'U', 'Ｖ' => 'V', 'Ｗ' => 'W', 'Ｘ' => 'X', 'Ｙ' => 'Y',
+        'Ｚ' => 'Z', 'ａ' => 'a', 'ｂ' => 'b', 'ｃ' => 'c', 'ｄ' => 'd',
+        'ｅ' => 'e', 'ｆ' => 'f', 'ｇ' => 'g', 'ｈ' => 'h', 'ｉ' => 'i',
+        'ｊ' => 'j', 'ｋ' => 'k', 'ｌ' => 'l', 'ｍ' => 'm', 'ｎ' => 'n',
+        'ｏ' => 'o', 'ｐ' => 'p', 'ｑ' => 'q', 'ｒ' => 'r', 'ｓ' => 's',
+        'ｔ' => 't', 'ｕ' => 'u', 'ｖ' => 'v', 'ｗ' => 'w', 'ｘ' => 'x',
+        'ｙ' => 'y', 'ｚ' => 'z',
+        '（' => '(', '）' => ')', '〔' => '[', '〕' => ']', '【' => '[',
+        '】' => ']', '〖' => '[', '〗' => ']', '“' => '[', '”' => ']',
+        '‘' => '[', '’' => ']', '｛' => '{', '｝' => '}', '《' => '<',
+        '》' => '>',
+        '％' => '%', '＋' => '+', '—' => '-', '－' => '-', '～' => '-',
+        '：' => ':', '。' => '.', '、' => ',', '，' => '.', '、' => '.',
+        '；' => ',', '？' => '?', '！' => '!', '…' => '-', '‖' => '|',
+        '”' => '"', '’' => '`', '‘' => '`', '｜' => '|', '〃' => '"',
+        '　' => ' ');
 
     return strtr($str, $arr);
 }
@@ -638,7 +636,7 @@ function make_semiangle($str)
  */
 function compile_str($str)
 {
-    $arr = array('<' => '＜', '>' => '＞','"'=>'”',"'"=>'’');
+    $arr = array('<' => '＜', '>' => '＞', '"' => '”', "'" => '’');
 
     return strtr($str, $arr);
 }
@@ -647,9 +645,9 @@ function compile_str($str)
  * 检查文件类型
  *
  * @access      public
- * @param       string      filename            文件名
- * @param       string      realname            真实文件名
- * @param       string      limit_ext_types     允许的文件类型
+ * @param string      filename            文件名
+ * @param string      realname            真实文件名
+ * @param string      limit_ext_types     允许的文件类型
  * @return      string
  */
 function check_file_type($filename, $realname = '', $limit_ext_types = '')
@@ -673,9 +671,9 @@ function check_file_type($filename, $realname = '', $limit_ext_types = '')
     } else {
         if (stristr($filename, ROOT_PATH) === false) {
             if ($extname == 'jpg' || $extname == 'jpeg' || $extname == 'gif' || $extname == 'png' || $extname == 'doc' ||
-                $extname == 'xls' || $extname == 'txt'  || $extname == 'zip' || $extname == 'rar' || $extname == 'ppt' ||
-                $extname == 'pdf' || $extname == 'rm'   || $extname == 'mid' || $extname == 'wav' || $extname == 'bmp' ||
-                $extname == 'swf' || $extname == 'chm'  || $extname == 'sql' || $extname == 'cert'|| $extname == 'pptx' ||
+                $extname == 'xls' || $extname == 'txt' || $extname == 'zip' || $extname == 'rar' || $extname == 'ppt' ||
+                $extname == 'pdf' || $extname == 'rm' || $extname == 'mid' || $extname == 'wav' || $extname == 'bmp' ||
+                $extname == 'swf' || $extname == 'chm' || $extname == 'sql' || $extname == 'cert' || $extname == 'pptx' ||
                 $extname == 'xlsx' || $extname == 'docx') {
                 $format = $extname;
             }
@@ -745,7 +743,7 @@ function check_file_type($filename, $realname = '', $limit_ext_types = '')
  * 对 MYSQL LIKE 的内容进行转义
  *
  * @access      public
- * @param       string      string  内容
+ * @param string      string  内容
  * @return      string
  */
 function mysql_like_quote($str)
@@ -784,7 +782,7 @@ function real_server_ip()
 /**
  * 自定义 header 函数，用于过滤可能出现的安全隐患
  *
- * @param   string  string  内容
+ * @param string  string  内容
  *
  * @return  void
  **/
@@ -829,9 +827,9 @@ function ecs_geoip($ip)
 {
     static $fp = null, $offset = array(), $index = null;
 
-    $ip    = gethostbyname($ip);
+    $ip = gethostbyname($ip);
     $ipdot = explode('.', $ip);
-    $ip    = pack('N', ip2long($ip));
+    $ip = pack('N', ip2long($ip));
 
     $ipdot[0] = (int)$ipdot[0];
     $ipdot[1] = (int)$ipdot[1];
@@ -848,11 +846,11 @@ function ecs_geoip($ip)
         if ($offset['len'] < 4) {
             return 'Invalid IP data file';
         }
-        $index  = fread($fp, $offset['len'] - 4);
+        $index = fread($fp, $offset['len'] - 4);
     }
 
     $length = $offset['len'] - 1028;
-    $start  = unpack('Vlen', $index[$ipdot[0] * 4] . $index[$ipdot[0] * 4 + 1] . $index[$ipdot[0] * 4 + 2] . $index[$ipdot[0] * 4 + 3]);
+    $start = unpack('Vlen', $index[$ipdot[0] * 4] . $index[$ipdot[0] * 4 + 1] . $index[$ipdot[0] * 4 + 2] . $index[$ipdot[0] * 4 + 3]);
     for ($start = $start['len'] * 8 + 1024; $start < $length; $start += 8) {
         if ($index{$start} . $index{$start + 1} . $index{$start + 2} . $index{$start + 3} >= $ip) {
             $index_offset = unpack('Vlen', $index{$start + 4} . $index{$start + 5} . $index{$start + 6} . "\x0");
@@ -873,7 +871,7 @@ function ecs_geoip($ip)
 /**
  * 去除字符串右侧可能出现的乱码
  *
- * @param   string      $str        字符串
+ * @param string $str 字符串
  *
  * @return  string
  */
@@ -881,24 +879,24 @@ function trim_right($str)
 {
     $len = strlen($str);
     /* 为空或单个字符直接返回 */
-    if ($len == 0 || ord($str{$len-1}) < 127) {
+    if ($len == 0 || ord($str{$len - 1}) < 127) {
         return $str;
     }
     /* 有前导字符的直接把前导字符去掉 */
-    if (ord($str{$len-1}) >= 192) {
-        return substr($str, 0, $len-1);
+    if (ord($str{$len - 1}) >= 192) {
+        return substr($str, 0, $len - 1);
     }
     /* 有非独立的字符，先把非独立字符去掉，再验证非独立的字符是不是一个完整的字，不是连原来前导字符也截取掉 */
     $r_len = strlen(rtrim($str, "\x80..\xBF"));
-    if ($r_len == 0 || ord($str{$r_len-1}) < 127) {
+    if ($r_len == 0 || ord($str{$r_len - 1}) < 127) {
         return sub_str($str, 0, $r_len);
     }
 
-    $as_num = ord(~$str{$r_len -1});
-    if ($as_num > (1<<(6 + $r_len - $len))) {
+    $as_num = ord(~$str{$r_len - 1});
+    if ($as_num > (1 << (6 + $r_len - $len))) {
         return $str;
     } else {
-        return substr($str, 0, $r_len-1);
+        return substr($str, 0, $r_len - 1);
     }
 }
 

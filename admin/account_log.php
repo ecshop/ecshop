@@ -21,9 +21,9 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('user', $user);
 
     if (empty($_REQUEST['account_type']) || !in_array(
-        $_REQUEST['account_type'],
-        array('user_money', 'frozen_money', 'rank_points', 'pay_points')
-    )) {
+            $_REQUEST['account_type'],
+            array('user_money', 'frozen_money', 'rank_points', 'pay_points')
+        )) {
         $account_type = '';
     } else {
         $account_type = $_REQUEST['account_type'];
@@ -60,9 +60,9 @@ elseif ($_REQUEST['act'] == 'query') {
     $smarty->assign('user', $user);
 
     if (empty($_REQUEST['account_type']) || !in_array(
-        $_REQUEST['account_type'],
-        array('user_money', 'frozen_money', 'rank_points', 'pay_points')
-    )) {
+            $_REQUEST['account_type'],
+            array('user_money', 'frozen_money', 'rank_points', 'pay_points')
+        )) {
         $account_type = '';
     } else {
         $account_type = $_REQUEST['account_type'];
@@ -112,11 +112,10 @@ elseif ($_REQUEST['act'] == 'add') {
 elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     /* 检查权限 */
     admin_priv('account_manage');
-    $token=trim($_POST['token']);
-    if ($token!=$_CFG['token']) {
+    $token = trim($_POST['token']);
+    if ($token != $_CFG['token']) {
         sys_msg($_LANG['no_account_change'], 1);
     }
-
 
 
     /* 检查参数 */
@@ -130,11 +129,11 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     }
 
     /* 提交值 */
-    $change_desc    = sub_str($_POST['change_desc'], 255, false);
-    $user_money     = floatval($_POST['add_sub_user_money']) * abs(floatval($_POST['user_money']));
-    $frozen_money   = floatval($_POST['add_sub_frozen_money']) * abs(floatval($_POST['frozen_money']));
-    $rank_points    = floatval($_POST['add_sub_rank_points']) * abs(floatval($_POST['rank_points']));
-    $pay_points     = floatval($_POST['add_sub_pay_points']) * abs(floatval($_POST['pay_points']));
+    $change_desc = sub_str($_POST['change_desc'], 255, false);
+    $user_money = floatval($_POST['add_sub_user_money']) * abs(floatval($_POST['user_money']));
+    $frozen_money = floatval($_POST['add_sub_frozen_money']) * abs(floatval($_POST['frozen_money']));
+    $rank_points = floatval($_POST['add_sub_rank_points']) * abs(floatval($_POST['rank_points']));
+    $pay_points = floatval($_POST['add_sub_pay_points']) * abs(floatval($_POST['pay_points']));
 
     if ($user_money == 0 && $frozen_money == 0 && $rank_points == 0 && $pay_points == 0) {
         sys_msg($_LANG['no_account_change']);
@@ -152,8 +151,8 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
 /**
  * 取得帐户明细
- * @param   int     $user_id    用户id
- * @param   string  $account_type   帐户类型：空表示所有帐户，user_money表示可用资金，
+ * @param int $user_id 用户id
+ * @param string $account_type 帐户类型：空表示所有帐户，user_money表示可用资金，
  *                  frozen_money表示冻结资金，rank_points表示等级积分，pay_points表示消费积分
  * @return  array
  */
@@ -167,8 +166,8 @@ function get_accountlist($user_id, $account_type = '')
 
     /* 初始化分页参数 */
     $filter = array(
-        'user_id'       => $user_id,
-        'account_type'  => $account_type
+        'user_id' => $user_id,
+        'account_type' => $account_type
     );
 
     /* 查询记录总数，计算分页数 */
@@ -178,7 +177,7 @@ function get_accountlist($user_id, $account_type = '')
 
     /* 查询记录 */
     $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('account_log') . $where .
-            " ORDER BY log_id DESC";
+        " ORDER BY log_id DESC";
     $res = $GLOBALS['db']->selectLimit($sql, $filter['page_size'], $filter['start']);
 
     $arr = array();

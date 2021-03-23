@@ -35,7 +35,7 @@ elseif ($_REQUEST['act'] == 'query') {
     $smarty->assign('record_count', $navdb['record_count']);
     $smarty->assign('page_count', $navdb['page_count']);
 
-    $sort_flag  = sort_flag($navdb['filter']);
+    $sort_flag = sort_flag($navdb['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result($smarty->fetch('navigator.htm'), '', array('filter' => $navdb['filter'], 'page_count' => $navdb['page_count']));
@@ -45,7 +45,7 @@ elseif ($_REQUEST['act'] == 'query') {
 /*------------------------------------------------------ */
 elseif ($_REQUEST['act'] == 'add') {
     if (empty($_REQUEST['step'])) {
-        $rt = array('act'=>'add');
+        $rt = array('act' => 'add');
 
         $sysmain = get_sysnav();
 
@@ -62,9 +62,9 @@ elseif ($_REQUEST['act'] == 'add') {
         $item_opennew = $_REQUEST['item_opennew'];
         $item_type = $_REQUEST['item_type'];
 
-        $vieworder = $db->getOne("SELECT max(vieworder) FROM ". $ecs->table('nav') . " WHERE type = '". $item_type ."'");
+        $vieworder = $db->getOne("SELECT max(vieworder) FROM " . $ecs->table('nav') . " WHERE type = '" . $item_type . "'");
 
-        $item_vieworder = empty($_REQUEST['item_vieworder']) ? $vieworder+1 : $_REQUEST['item_vieworder'];
+        $item_vieworder = empty($_REQUEST['item_vieworder']) ? $vieworder + 1 : $_REQUEST['item_vieworder'];
 
         if ($item_ifshow == 1 && $item_type == 'middle') {
             //如果设置为在中部显示
@@ -73,7 +73,7 @@ elseif ($_REQUEST['act'] == 'add') {
             if ($arr) {
                 //如果为分类
                 set_show_in_nav($arr['type'], $arr['id'], 1);   //设置显示
-                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('$item_name','".$arr['type']."','".$arr['id']."','$item_ifshow','$item_vieworder','$item_opennew','$item_url','$item_type')";
+                $sql = "INSERT INTO " . $GLOBALS['ecs']->table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('$item_name','" . $arr['type'] . "','" . $arr['id'] . "','$item_ifshow','$item_vieworder','$item_opennew','$item_url','$item_type')";
             }
         }
 
@@ -93,14 +93,14 @@ elseif ($_REQUEST['act'] == 'add') {
 elseif ($_REQUEST['act'] == 'edit') {
     $id = $_REQUEST['id'];
     if (empty($_REQUEST['step'])) {
-        $rt = array('act'=>'edit','id'=>$id);
+        $rt = array('act' => 'edit', 'id' => $id);
         $row = $db->getRow("SELECT * FROM " . $GLOBALS['ecs']->table('nav') . " WHERE id='$id'");
         $rt['item_name'] = $row['name'];
         $rt['item_url'] = $row['url'];
         $rt['item_vieworder'] = $row['vieworder'];
-        $rt['item_ifshow_'.$row['ifshow']] = 'selected';
-        $rt['item_opennew_'.$row['opennew']] = 'selected';
-        $rt['item_type_'.$row['type']] = 'selected';
+        $rt['item_ifshow_' . $row['ifshow']] = 'selected';
+        $rt['item_opennew_' . $row['opennew']] = 'selected';
+        $rt['item_type_' . $row['type']] = 'selected';
 
         $sysmain = get_sysnav();
 
@@ -187,7 +187,7 @@ elseif ($_REQUEST['act'] == 'del') {
 elseif ($_REQUEST['act'] == 'edit_sort_order') {
     check_authz_json('nav');
 
-    $id    = intval($_POST['id']);
+    $id = intval($_POST['id']);
     $order = json_str_iconv(trim($_POST['val']));
 
     /* 检查输入的值是否合法 */
@@ -242,29 +242,28 @@ if ($_REQUEST['act'] == 'toggle_opennew') {
 }
 
 
-
 function get_nav()
 {
     $result = get_filter();
     if ($result === false) {
-        $filter['sort_by']      = empty($_REQUEST['sort_by']) ? 'type DESC, vieworder' : 'type DESC, '.trim($_REQUEST['sort_by']);
-        $filter['sort_order']   = empty($_REQUEST['sort_order']) ? 'ASC' : trim($_REQUEST['sort_order']);
+        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'type DESC, vieworder' : 'type DESC, ' . trim($_REQUEST['sort_by']);
+        $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'ASC' : trim($_REQUEST['sort_order']);
 
-        $sql = "SELECT count(*) FROM " .$GLOBALS['ecs']->table('nav');
+        $sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('nav');
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         /* 分页大小 */
         $filter = page_and_size($filter);
 
         /* 查询 */
-        $sql = "SELECT id, name, ifshow, vieworder, opennew, url, type".
-               " FROM ".$GLOBALS['ecs']->table('nav').
-               " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
-               " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
+        $sql = "SELECT id, name, ifshow, vieworder, opennew, url, type" .
+            " FROM " . $GLOBALS['ecs']->table('nav') .
+            " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
+            " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
 
         set_filter($filter, $sql);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
 
@@ -272,7 +271,7 @@ function get_nav()
 
     $type = "";
     $navdb2 = array();
-    foreach ($navdb as $k=>$v) {
+    foreach ($navdb as $k => $v) {
         if (!empty($type) && $type != $v['type']) {
             $navdb2[] = array();
         }
@@ -290,7 +289,7 @@ function get_nav()
 /*------------------------------------------------------ */
 function sort_nav($a, $b)
 {
-    return  $a['vieworder'] > $b['vieworder'] ? 1 : -1;
+    return $a['vieworder'] > $b['vieworder'] ? 1 : -1;
 }
 
 /*------------------------------------------------------ */
@@ -300,25 +299,25 @@ function get_sysnav()
 {
     global $_LANG;
     $sysmain = array(
-        array($_LANG['view_cart'],'flow.php'),
-        array($_LANG['pick_out'],'pick_out.php'),
-        array($_LANG['group_buy_goods'],'group_buy.php'),
-        array($_LANG['snatch'],'snatch.php'),
-        array($_LANG['tag_cloud'],'tag_cloud.php'),
-        array($_LANG['user_center'],'user.php'),
+        array($_LANG['view_cart'], 'flow.php'),
+        array($_LANG['pick_out'], 'pick_out.php'),
+        array($_LANG['group_buy_goods'], 'group_buy.php'),
+        array($_LANG['snatch'], 'snatch.php'),
+        array($_LANG['tag_cloud'], 'tag_cloud.php'),
+        array($_LANG['user_center'], 'user.php'),
         array($_LANG['wholesale'], 'wholesale.php'),
         array($_LANG['activity'], 'activity.php'),
         array($_LANG['myship'], 'myship.php'),
         array($_LANG['message_board'], 'message.php'),
         array($_LANG['quotation'], 'quotation.php'),
-        );
+    );
 
-    $sysmain[] = array('-','-');
+    $sysmain[] = array('-', '-');
 
     $catlist = array_merge(cat_list(0, 0, false), array('-'), article_cat_list(0, 0, false));
     foreach ($catlist as $key => $val) {
         $val['view_name'] = $val['cat_name'];
-        for ($i=0;$i<$val['level'];$i++) {
+        for ($i = 0; $i < $val['level']; $i++) {
             $val['view_name'] = '&nbsp;&nbsp;&nbsp;&nbsp;' . $val['view_name'];
         }
         $val['url'] = str_replace('&amp;', '&', $val['url']);
@@ -350,13 +349,13 @@ function analyse_uri($uri)
     switch ($arr[0]) {
         case 'category':
             return array('type' => 'c', 'id' => $arr[1]);
-        break;
+            break;
         case 'article_cat':
             return array('type' => 'a', 'id' => $arr[1]);
-        break;
+            break;
         default:
 
-        break;
+            break;
     }
 
     list($fn, $pm) = explode('?', $uri);
@@ -372,23 +371,23 @@ function analyse_uri($uri)
             foreach ($arr as $k => $v) {
                 list($key, $val) = explode('=', $v);
                 if ($key == 'id') {
-                    return array('type' => 'c', 'id'=> $val);
+                    return array('type' => 'c', 'id' => $val);
                 }
             }
-        break;
+            break;
         case 'article_cat.php':
             //文章分类
             foreach ($arr as $k => $v) {
                 list($key, $val) = explode('=', $v);
                 if ($key == 'id') {
-                    return array('type' => 'a', 'id'=> $val);
+                    return array('type' => 'a', 'id' => $val);
                 }
             }
-        break;
+            break;
         default:
             //未知
             return false;
-        break;
+            break;
     }
 }
 

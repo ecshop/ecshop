@@ -7,7 +7,7 @@ require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
 require_once(ROOT_PATH . 'includes/cls_image.php');
 
 /*初始化数据交换对象 */
-$exc   = new exchange($ecs->table("article"), $db, 'article_id', 'title');
+$exc = new exchange($ecs->table("article"), $db, 'article_id', 'title');
 //$image = new cls_image();
 
 /* 允许上传的文件类型 */
@@ -32,7 +32,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('record_count', $article_list['record_count']);
     $smarty->assign('page_count', $article_list['page_count']);
 
-    $sort_flag  = sort_flag($article_list['filter']);
+    $sort_flag = sort_flag($article_list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     assign_query_info();
@@ -52,7 +52,7 @@ elseif ($_REQUEST['act'] == 'query') {
     $smarty->assign('record_count', $article_list['record_count']);
     $smarty->assign('page_count', $article_list['page_count']);
 
-    $sort_flag  = sort_flag($article_list['filter']);
+    $sort_flag = sort_flag($article_list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
@@ -142,11 +142,11 @@ if ($_REQUEST['act'] == 'insert') {
     if (empty($_POST['cat_id'])) {
         $_POST['cat_id'] = 0;
     }
-    $sql = "INSERT INTO ".$ecs->table('article')."(title, cat_id, article_type, is_open, author, ".
-                "author_email, keywords, content, add_time, file_url, open_type, link, description) ".
-            "VALUES ('$_POST[title]', '$_POST[article_cat]', '$_POST[article_type]', '$_POST[is_open]', ".
-                "'$_POST[author]', '$_POST[author_email]', '$_POST[keywords]', '$_POST[FCKeditor1]', ".
-                "'$add_time', '$file_url', '$open_type', '$_POST[link_url]', '$_POST[description]')";
+    $sql = "INSERT INTO " . $ecs->table('article') . "(title, cat_id, article_type, is_open, author, " .
+        "author_email, keywords, content, add_time, file_url, open_type, link, description) " .
+        "VALUES ('$_POST[title]', '$_POST[article_cat]', '$_POST[article_type]', '$_POST[is_open]', " .
+        "'$_POST[author]', '$_POST[author_email]', '$_POST[keywords]', '$_POST[FCKeditor1]', " .
+        "'$add_time', '$file_url', '$open_type', '$_POST[link_url]', '$_POST[description]')";
     $db->query($sql);
 
     /* 处理关联商品 */
@@ -175,7 +175,7 @@ if ($_REQUEST['act'] == 'edit') {
     admin_priv('article_manage');
 
     /* 取文章数据 */
-    $sql = "SELECT * FROM " .$ecs->table('article'). " WHERE article_id='$_REQUEST[id]'";
+    $sql = "SELECT * FROM " . $ecs->table('article') . " WHERE article_id='$_REQUEST[id]'";
     $article = $db->GetRow($sql);
 
     /* 创建 html editor */
@@ -199,7 +199,7 @@ if ($_REQUEST['act'] == 'edit') {
     $smarty->display('article_info.htm');
 }
 
-if ($_REQUEST['act'] =='update') {
+if ($_REQUEST['act'] == 'update') {
     /* 权限判断 */
     admin_priv('article_manage');
 
@@ -269,7 +269,7 @@ if ($_REQUEST['act'] =='update') {
 elseif ($_REQUEST['act'] == 'edit_title') {
     check_authz_json('article_manage');
 
-    $id    = intval($_POST['id']);
+    $id = intval($_POST['id']);
     $title = json_str_iconv(trim($_POST['val']));
 
     /* 检查文章标题是否重复 */
@@ -292,8 +292,8 @@ elseif ($_REQUEST['act'] == 'edit_title') {
 elseif ($_REQUEST['act'] == 'toggle_show') {
     check_authz_json('article_manage');
 
-    $id     = intval($_POST['id']);
-    $val    = intval($_POST['val']);
+    $id = intval($_POST['id']);
+    $val = intval($_POST['val']);
 
     $exc->edit("is_open = '$val'", $id);
     clear_cache_files();
@@ -307,8 +307,8 @@ elseif ($_REQUEST['act'] == 'toggle_show') {
 elseif ($_REQUEST['act'] == 'toggle_type') {
     check_authz_json('article_manage');
 
-    $id     = intval($_POST['id']);
-    $val    = intval($_POST['val']);
+    $id = intval($_POST['id']);
+    $val = intval($_POST['val']);
 
     $exc->edit("article_type = '$val'", $id);
     clear_cache_files();
@@ -336,7 +336,7 @@ elseif ($_REQUEST['act'] == 'remove') {
     $name = $exc->get_name($id);
     if ($exc->drop($id)) {
         $db->query("DELETE FROM " . $ecs->table('comment') . " WHERE " . "comment_type = 1 AND id_value = $id");
-        
+
         admin_log(addslashes($name), 'remove', 'article');
         clear_cache_files();
     }
@@ -361,12 +361,12 @@ elseif ($_REQUEST['act'] == 'add_link_goods') {
     $article_id = $args[0];
 
     if ($article_id == 0) {
-        $article_id = $db->getOne('SELECT MAX(article_id)+1 AS article_id FROM ' .$ecs->table('article'));
+        $article_id = $db->getOne('SELECT MAX(article_id)+1 AS article_id FROM ' . $ecs->table('article'));
     }
 
     foreach ($add_ids as $key => $val) {
-        $sql = 'INSERT INTO ' . $ecs->table('goods_article') . ' (goods_id, article_id) '.
-               "VALUES ('$val', '$article_id')";
+        $sql = 'INSERT INTO ' . $ecs->table('goods_article') . ' (goods_id, article_id) ' .
+            "VALUES ('$val', '$article_id')";
         $db->query($sql, 'SILENT') or make_json_error($db->error());
     }
 
@@ -375,9 +375,9 @@ elseif ($_REQUEST['act'] == 'add_link_goods') {
     $opt = array();
 
     foreach ($arr as $key => $val) {
-        $opt[] = array('value'  => $val['goods_id'],
-                        'text'  => $val['goods_name'],
-                        'data'  => '');
+        $opt[] = array('value' => $val['goods_id'],
+            'text' => $val['goods_name'],
+            'data' => '');
     }
 
     make_json_result($opt);
@@ -392,16 +392,16 @@ elseif ($_REQUEST['act'] == 'drop_link_goods') {
 
     check_authz_json('article_manage');
 
-    $drop_goods     = $json->decode($_GET['drop_ids']);
-    $arguments      = $json->decode($_GET['JSON']);
-    $article_id     = $arguments[0];
+    $drop_goods = $json->decode($_GET['drop_ids']);
+    $arguments = $json->decode($_GET['JSON']);
+    $article_id = $arguments[0];
 
     if ($article_id == 0) {
-        $article_id = $db->getOne('SELECT MAX(article_id)+1 AS article_id FROM ' .$ecs->table('article'));
+        $article_id = $db->getOne('SELECT MAX(article_id)+1 AS article_id FROM ' . $ecs->table('article'));
     }
 
-    $sql = "DELETE FROM " . $ecs->table('goods_article').
-            " WHERE article_id = '$article_id' AND goods_id " .db_create_in($drop_goods);
+    $sql = "DELETE FROM " . $ecs->table('goods_article') .
+        " WHERE article_id = '$article_id' AND goods_id " . db_create_in($drop_goods);
     $db->query($sql, 'SILENT') or make_json_error($db->error());
 
     /* 重新载入 */
@@ -409,9 +409,9 @@ elseif ($_REQUEST['act'] == 'drop_link_goods') {
     $opt = array();
 
     foreach ($arr as $key => $val) {
-        $opt[] = array('value'  => $val['goods_id'],
-                        'text'  => $val['goods_name'],
-                        'data'  => '');
+        $opt[] = array('value' => $val['goods_id'],
+            'text' => $val['goods_name'],
+            'data' => '');
     }
 
     make_json_result($opt);
@@ -431,8 +431,8 @@ if ($_REQUEST['act'] == 'get_goods_list') {
 
     foreach ($arr as $key => $val) {
         $opt[] = array('value' => $val['goods_id'],
-                        'text' => $val['goods_name'],
-                        'data' => $val['shop_price']);
+            'text' => $val['goods_name'],
+            'data' => $val['shop_price']);
     }
 
     make_json_result($opt);
@@ -453,8 +453,8 @@ elseif ($_REQUEST['act'] == 'batch') {
 
             /* 删除原来的文件 */
             $sql = "SELECT file_url FROM " . $ecs->table('article') .
-                    " WHERE article_id " . db_create_in(join(',', $_POST['checkboxes'])) .
-                    " AND file_url <> ''";
+                " WHERE article_id " . db_create_in(join(',', $_POST['checkboxes'])) .
+                " AND file_url <> ''";
 
             $res = $db->query($sql);
             while ($row = $db->fetchRow($res)) {
@@ -506,9 +506,9 @@ elseif ($_REQUEST['act'] == 'batch') {
             if (!$_POST['target_cat']) {
                 sys_msg($_LANG['no_select_act'], 1);
             }
-            
+
             foreach ($_POST['checkboxes'] as $key => $id) {
-                $exc->edit("cat_id = '".$_POST['target_cat']."'", $id);
+                $exc->edit("cat_id = '" . $_POST['target_cat'] . "'", $id);
             }
         }
     }
@@ -523,7 +523,7 @@ elseif ($_REQUEST['act'] == 'batch') {
 function drop_link_goods($goods_id, $article_id)
 {
     $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods_article') .
-            " WHERE goods_id = '$goods_id' AND article_id = '$article_id' LIMIT 1";
+        " WHERE goods_id = '$goods_id' AND article_id = '$article_id' LIMIT 1";
     $GLOBALS['db']->query($sql);
     create_result(true, '', $goods_id);
 }
@@ -532,10 +532,10 @@ function drop_link_goods($goods_id, $article_id)
 function get_article_goods($article_id)
 {
     $list = array();
-    $sql  = 'SELECT g.goods_id, g.goods_name'.
-            ' FROM ' . $GLOBALS['ecs']->table('goods_article') . ' AS ga'.
-            ' LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = ga.goods_id'.
-            " WHERE ga.article_id = '$article_id'";
+    $sql = 'SELECT g.goods_id, g.goods_name' .
+        ' FROM ' . $GLOBALS['ecs']->table('goods_article') . ' AS ga' .
+        ' LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = ga.goods_id' .
+        " WHERE ga.article_id = '$article_id'";
     $list = $GLOBALS['db']->getAll($sql);
 
     return $list;
@@ -547,12 +547,12 @@ function get_articleslist()
     $result = get_filter();
     if ($result === false) {
         $filter = array();
-        $filter['keyword']    = empty($_REQUEST['keyword']) ? '' : trim($_REQUEST['keyword']);
+        $filter['keyword'] = empty($_REQUEST['keyword']) ? '' : trim($_REQUEST['keyword']);
         if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1) {
             $filter['keyword'] = json_str_iconv($filter['keyword']);
         }
         $filter['cat_id'] = empty($_REQUEST['cat_id']) ? 0 : intval($_REQUEST['cat_id']);
-        $filter['sort_by']    = empty($_REQUEST['sort_by']) ? 'a.article_id' : trim($_REQUEST['sort_by']);
+        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'a.article_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
         $where = '';
@@ -564,23 +564,23 @@ function get_articleslist()
         }
 
         /* 文章总数 */
-        $sql = 'SELECT COUNT(*) FROM ' .$GLOBALS['ecs']->table('article'). ' AS a '.
-               'LEFT JOIN ' .$GLOBALS['ecs']->table('article_cat'). ' AS ac ON ac.cat_id = a.cat_id '.
-               'WHERE 1 ' .$where;
+        $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('article') . ' AS a ' .
+            'LEFT JOIN ' . $GLOBALS['ecs']->table('article_cat') . ' AS ac ON ac.cat_id = a.cat_id ' .
+            'WHERE 1 ' . $where;
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         $filter = page_and_size($filter);
 
         /* 获取文章数据 */
-        $sql = 'SELECT a.* , ac.cat_name '.
-               'FROM ' .$GLOBALS['ecs']->table('article'). ' AS a '.
-               'LEFT JOIN ' .$GLOBALS['ecs']->table('article_cat'). ' AS ac ON ac.cat_id = a.cat_id '.
-               'WHERE 1 ' .$where. ' ORDER by '.$filter['sort_by'].' '.$filter['sort_order'];
+        $sql = 'SELECT a.* , ac.cat_name ' .
+            'FROM ' . $GLOBALS['ecs']->table('article') . ' AS a ' .
+            'LEFT JOIN ' . $GLOBALS['ecs']->table('article_cat') . ' AS ac ON ac.cat_id = a.cat_id ' .
+            'WHERE 1 ' . $where . ' ORDER by ' . $filter['sort_by'] . ' ' . $filter['sort_order'];
 
         $filter['keyword'] = stripslashes($filter['keyword']);
         set_filter($filter, $sql);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
     $arr = array();
@@ -603,7 +603,7 @@ function upload_article_file($upload)
     }
 
     $filename = cls_image::random_filename() . substr($upload['name'], strpos($upload['name'], '.'));
-    $path     = ROOT_PATH. DATA_DIR . "/article/" . $filename;
+    $path = ROOT_PATH . DATA_DIR . "/article/" . $filename;
 
     if (move_upload_file($upload['tmp_name'], $path)) {
         return DATA_DIR . "/article/" . $filename;

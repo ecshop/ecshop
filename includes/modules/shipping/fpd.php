@@ -4,7 +4,7 @@ if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
-$shipping_lang = ROOT_PATH.'languages/' .$GLOBALS['_CFG']['lang']. '/shipping/fpd.php';
+$shipping_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/shipping/fpd.php';
 if (file_exists($shipping_lang)) {
     global $_LANG;
     include_once($shipping_lang);
@@ -15,18 +15,18 @@ if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 配送方式插件的代码必须和文件名保持一致 */
-    $modules[$i]['code']    = 'fpd';
+    $modules[$i]['code'] = 'fpd';
 
     $modules[$i]['version'] = '1.0.0';
 
     /* 配送方式的描述 */
-    $modules[$i]['desc']    = 'fpd_desc';
+    $modules[$i]['desc'] = 'fpd_desc';
 
     /* 配送方式是否支持货到付款 */
-    $modules[$i]['cod']     = false;
+    $modules[$i]['cod'] = false;
 
     /* 插件的作者 */
-    $modules[$i]['author']  = 'ECSHOP TEAM';
+    $modules[$i]['author'] = 'ECSHOP TEAM';
 
     /* 插件作者的官方网站 */
     $modules[$i]['website'] = 'http://www.ecshop.com';
@@ -68,15 +68,15 @@ class fpd
      *
      * @return null
      */
-    public function fpd($cfg=array())
+    public function fpd($cfg = array())
     {
     }
 
     /**
      * 计算订单的配送费用的函数
      *
-     * @param   float   $goods_weight   商品重量
-     * @param   float   $goods_amount   商品金额
+     * @param float $goods_weight 商品重量
+     * @param float $goods_amount 商品金额
      * @return  decimal
      */
     public function calculate($goods_weight, $goods_amount)
@@ -89,7 +89,7 @@ class fpd
      * 该配送方式不支持查询发货状态
      *
      * @access  public
-     * @param   string  $invoice_sn     发货单号
+     * @param string $invoice_sn 发货单号
      * @return  string
      */
     public function query($invoice_sn)

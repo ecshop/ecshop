@@ -32,7 +32,7 @@ class smtp
      *  user        SMTP 服务器的用户名     默认：空值
      *  pass        SMTP 服务器的登陆密码   默认：空值
      *  timeout     连接超时的时间          默认：5
-     *  @return  bool
+     * @return  bool
      */
     public function smtp($params = array())
     {
@@ -40,20 +40,20 @@ class smtp
             define('CRLF', "\r\n", true);
         }
 
-        $this->timeout  = 10;
-        $this->status   = SMTP_STATUS_NOT_CONNECTED;
-        $this->host     = 'localhost';
-        $this->port     = 25;
-        $this->auth     = false;
-        $this->user     = '';
-        $this->pass     = '';
-        $this->errors   = array();
+        $this->timeout = 10;
+        $this->status = SMTP_STATUS_NOT_CONNECTED;
+        $this->host = 'localhost';
+        $this->port = 25;
+        $this->auth = false;
+        $this->user = '';
+        $this->pass = '';
+        $this->errors = array();
 
         foreach ($params as $key => $value) {
             $this->$key = $value;
         }
 
-        $this->helo     = $this->host;
+        $this->helo = $this->host;
 
         //  如果没有设置用户名则不验证
         $this->auth = ('' == $this->user) ? false : true;
@@ -135,8 +135,8 @@ class smtp
             }
 
             $headers = str_replace(CRLF . '.', CRLF . '..', trim(implode(CRLF, $this->headers)));
-            $body    = str_replace(CRLF . '.', CRLF . '..', $this->body);
-            $body    = substr($body, 0, 1) == '.' ? '.' . $body : $body;
+            $body = str_replace(CRLF . '.', CRLF . '..', $this->body);
+            $body = substr($body, 0, 1) == '.' ? '.' . $body : $body;
 
             $this->send_data($headers);
             $this->send_data('');
@@ -154,8 +154,8 @@ class smtp
     public function helo()
     {
         if (is_resource($this->connection)
-                and $this->send_data('HELO ' . $this->helo)
-                and substr($error = $this->get_data(), 0, 3) === '250') {
+            and $this->send_data('HELO ' . $this->helo)
+            and substr($error = $this->get_data(), 0, 3) === '250') {
             return true;
         } else {
             $this->errors[] = 'HELO command failed, output: ' . trim(substr($error, 3));
@@ -167,8 +167,8 @@ class smtp
     public function ehlo()
     {
         if (is_resource($this->connection)
-                and $this->send_data('EHLO ' . $this->helo)
-                and substr($error = $this->get_data(), 0, 3) === '250') {
+            and $this->send_data('EHLO ' . $this->helo)
+            and substr($error = $this->get_data(), 0, 3) === '250') {
             return true;
         } else {
             $this->errors[] = 'EHLO command failed, output: ' . trim(substr($error, 3));
@@ -180,12 +180,12 @@ class smtp
     public function auth()
     {
         if (is_resource($this->connection)
-                and $this->send_data('AUTH LOGIN')
-                and substr($error = $this->get_data(), 0, 3) === '334'
-                and $this->send_data(base64_encode($this->user))            // Send username
-                and substr($error = $this->get_data(), 0, 3) === '334'
-                and $this->send_data(base64_encode($this->pass))            // Send password
-                and substr($error = $this->get_data(), 0, 3) === '235') {
+            and $this->send_data('AUTH LOGIN')
+            and substr($error = $this->get_data(), 0, 3) === '334'
+            and $this->send_data(base64_encode($this->user))            // Send username
+            and substr($error = $this->get_data(), 0, 3) === '334'
+            and $this->send_data(base64_encode($this->pass))            // Send password
+            and substr($error = $this->get_data(), 0, 3) === '235') {
             return true;
         } else {
             $this->errors[] = 'AUTH command failed: ' . trim(substr($error, 3));
@@ -248,11 +248,11 @@ class smtp
     public function get_data()
     {
         $return = '';
-        $line   = '';
+        $line = '';
 
         if (is_resource($this->connection)) {
             while (strpos($return, CRLF) === false or $line{3} !== ' ') {
-                $line    = fgets($this->connection, 512);
+                $line = fgets($this->connection, 512);
                 $return .= $line;
             }
 

@@ -7,8 +7,8 @@ if (!defined('IN_ECS')) {
 
 /**
  * 加密函数
- * @param   string  $str    加密前的字符串
- * @param   string  $key    密钥
+ * @param string $str 加密前的字符串
+ * @param string $key 密钥
  * @return  string  加密后的字符串
  */
 function encrypt($str, $key = AUTH_KEY)
@@ -25,8 +25,8 @@ function encrypt($str, $key = AUTH_KEY)
 
 /**
  * 解密函数
- * @param   string  $str    加密后的字符串
- * @param   string  $key    密钥
+ * @param string $str 加密后的字符串
+ * @param string $key 密钥
  * @return  string  加密前的字符串
  */
 function decrypt($str, $key = AUTH_KEY)

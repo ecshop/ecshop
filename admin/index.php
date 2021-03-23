@@ -77,7 +77,7 @@ elseif ($_REQUEST['act'] == 'menu') {
                             continue;
                         }
                     } else {
-                        if (! admin_priv($purview[$k], '', false)) {
+                        if (!admin_priv($purview[$k], '', false)) {
                             continue;
                         }
                     }
@@ -85,7 +85,7 @@ elseif ($_REQUEST['act'] == 'menu') {
                 if ($k == 'ucenter_setup' && $_CFG['integrate_code'] != 'ucenter') {
                     continue;
                 }
-                $menus[$key]['children'][$k]['label']  = $_LANG[$k];
+                $menus[$key]['children'][$k]['label'] = $_LANG[$k];
                 $menus[$key]['children'][$k]['action'] = $v;
             }
         } else {
@@ -147,7 +147,7 @@ elseif ($_REQUEST['act'] == 'main') {
     if (file_exists('../upgrade')) {
         $warning[] = $_LANG['remove_upgrade'];
     }
-    
+
     if (file_exists('../demo')) {
         $warning[] = $_LANG['remove_demo'];
     }
@@ -233,13 +233,13 @@ elseif ($_REQUEST['act'] == 'main') {
     clearstatcache();
 
     $smarty->assign('warning_arr', $warning);
-    
+
 
     /* 绠＄悊鍛樼暀瑷€淇℃伅 */
     $sql = 'SELECT message_id, sender_id, receiver_id, sent_time, readed, deleted, title, message, user_name ' .
-    'FROM ' . $ecs->table('admin_message') . ' AS a, ' . $ecs->table('admin_user') . ' AS b ' .
-    "WHERE a.sender_id = b.user_id AND a.receiver_id = '$_SESSION[admin_id]' AND ".
-    "a.readed = 0 AND deleted = 0 ORDER BY a.sent_time DESC";
+        'FROM ' . $ecs->table('admin_message') . ' AS a, ' . $ecs->table('admin_user') . ' AS b ' .
+        "WHERE a.sender_id = b.user_id AND a.receiver_id = '$_SESSION[admin_id]' AND " .
+        "a.readed = 0 AND deleted = 0 ORDER BY a.sent_time DESC";
     $admin_msg = $db->GetAll($sql);
 
     $smarty->assign('admin_msg', $admin_msg);
@@ -248,73 +248,73 @@ elseif ($_REQUEST['act'] == 'main') {
     $ids = get_pay_ids();
 
     /* 宸插畬鎴愮殑璁㈠崟 */
-    $order['finished']     = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('order_info').
-    " WHERE 1 " . order_query_sql('finished'));
-    $status['finished']    = CS_FINISHED;
+    $order['finished'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
+        " WHERE 1 " . order_query_sql('finished'));
+    $status['finished'] = CS_FINISHED;
 
     /* 寰呭彂璐х殑璁㈠崟锛 */
-    $order['await_ship']   = $db->GetOne('SELECT COUNT(*)'.
-    ' FROM ' .$ecs->table('order_info') .
-    " WHERE 1 " . order_query_sql('await_ship'));
-    $status['await_ship']  = CS_AWAIT_SHIP;
-    
+    $order['await_ship'] = $db->GetOne('SELECT COUNT(*)' .
+        ' FROM ' . $ecs->table('order_info') .
+        " WHERE 1 " . order_query_sql('await_ship'));
+    $status['await_ship'] = CS_AWAIT_SHIP;
+
     /* 寰呬粯娆剧殑璁㈠崟锛 */
-    $order['await_pay']    = $db->GetOne('SELECT COUNT(*)'.
-    ' FROM ' .$ecs->table('order_info') .
-    " WHERE 1 " . order_query_sql('await_pay'));
-    $status['await_pay']   = CS_AWAIT_PAY;
+    $order['await_pay'] = $db->GetOne('SELECT COUNT(*)' .
+        ' FROM ' . $ecs->table('order_info') .
+        " WHERE 1 " . order_query_sql('await_pay'));
+    $status['await_pay'] = CS_AWAIT_PAY;
 
     /* 鈥滄湭纭??鈥濈殑璁㈠崟 */
-    $order['unconfirmed']  = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('order_info').
-    " WHERE 1 " . order_query_sql('unconfirmed'));
+    $order['unconfirmed'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
+        " WHERE 1 " . order_query_sql('unconfirmed'));
     $status['unconfirmed'] = OS_UNCONFIRMED;
 
     /* 鈥滈儴鍒嗗彂璐р€濈殑璁㈠崟 */
-    $order['shipped_part']  = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('order_info').
-    " WHERE  shipping_status=" .SS_SHIPPED_PART);
+    $order['shipped_part'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
+        " WHERE  shipping_status=" . SS_SHIPPED_PART);
     $status['shipped_part'] = OS_SHIPPED_PART;
 
 //    $today_start = mktime(0,0,0,date('m'),date('d'),date('Y'));
-    $order['stats']        = $db->getRow('SELECT COUNT(*) AS oCount, IFNULL(SUM(order_amount), 0) AS oAmount' .
-    ' FROM ' .$ecs->table('order_info'));
+    $order['stats'] = $db->getRow('SELECT COUNT(*) AS oCount, IFNULL(SUM(order_amount), 0) AS oAmount' .
+        ' FROM ' . $ecs->table('order_info'));
 
     $smarty->assign('order', $order);
     $smarty->assign('status', $status);
 
     /* 鍟嗗搧淇℃伅 */
-    $goods['total']   = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('goods').
-    ' WHERE is_delete = 0 AND is_alone_sale = 1 AND is_real = 1');
-    $virtual_card['total'] = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('goods').
-    ' WHERE is_delete = 0 AND is_alone_sale = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
+    $goods['total'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        ' WHERE is_delete = 0 AND is_alone_sale = 1 AND is_real = 1');
+    $virtual_card['total'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        ' WHERE is_delete = 0 AND is_alone_sale = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
 
-    $goods['new']     = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('goods').
-    ' WHERE is_delete = 0 AND is_new = 1 AND is_real = 1');
-    $virtual_card['new']     = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('goods').
-    ' WHERE is_delete = 0 AND is_new = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
+    $goods['new'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        ' WHERE is_delete = 0 AND is_new = 1 AND is_real = 1');
+    $virtual_card['new'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        ' WHERE is_delete = 0 AND is_new = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
 
-    $goods['best']    = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('goods').
-    ' WHERE is_delete = 0 AND is_best = 1 AND is_real = 1');
-    $virtual_card['best']    = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('goods').
-    ' WHERE is_delete = 0 AND is_best = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
+    $goods['best'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        ' WHERE is_delete = 0 AND is_best = 1 AND is_real = 1');
+    $virtual_card['best'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        ' WHERE is_delete = 0 AND is_best = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
 
-    $goods['hot']     = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('goods').
-    ' WHERE is_delete = 0 AND is_hot = 1 AND is_real = 1');
-    $virtual_card['hot']     = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('goods').
-    ' WHERE is_delete = 0 AND is_hot = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
+    $goods['hot'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        ' WHERE is_delete = 0 AND is_hot = 1 AND is_real = 1');
+    $virtual_card['hot'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        ' WHERE is_delete = 0 AND is_hot = 1 AND is_real=0 AND extension_code=\'virtual_card\'');
 
-    $time             = gmtime();
-    $goods['promote'] = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('goods').
-    ' WHERE is_delete = 0 AND promote_price>0' .
-    " AND promote_start_date <= '$time' AND promote_end_date >= '$time' AND is_real = 1");
-    $virtual_card['promote'] = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('goods').
-    ' WHERE is_delete = 0 AND promote_price>0' .
-    " AND promote_start_date <= '$time' AND promote_end_date >= '$time' AND is_real=0 AND extension_code='virtual_card'");
+    $time = gmtime();
+    $goods['promote'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        ' WHERE is_delete = 0 AND promote_price>0' .
+        " AND promote_start_date <= '$time' AND promote_end_date >= '$time' AND is_real = 1");
+    $virtual_card['promote'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+        ' WHERE is_delete = 0 AND promote_price>0' .
+        " AND promote_start_date <= '$time' AND promote_end_date >= '$time' AND is_real=0 AND extension_code='virtual_card'");
 
     /* 缂鸿揣鍟嗗搧 */
     if ($_CFG['use_storage']) {
-        $sql = 'SELECT COUNT(*) FROM ' .$ecs->table('goods'). ' WHERE is_delete = 0 AND goods_number <= warn_number AND is_real = 1';
+        $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('goods') . ' WHERE is_delete = 0 AND goods_number <= warn_number AND is_real = 1';
         $goods['warn'] = $db->GetOne($sql);
-        $sql = 'SELECT COUNT(*) FROM ' .$ecs->table('goods'). ' WHERE is_delete = 0 AND goods_number <= warn_number AND is_real=0 AND extension_code=\'virtual_card\'';
+        $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('goods') . ' WHERE is_delete = 0 AND goods_number <= warn_number AND is_real=0 AND extension_code=\'virtual_card\'';
         $virtual_card['warn'] = $db->GetOne($sql);
     } else {
         $goods['warn'] = 0;
@@ -324,9 +324,9 @@ elseif ($_REQUEST['act'] == 'main') {
     $smarty->assign('virtual_card', $virtual_card);
 
     /* 璁块棶缁熻?淇℃伅 */
-    $today  = local_getdate();
-    $sql    = 'SELECT COUNT(*) FROM ' .$ecs->table('stats').
-    ' WHERE access_time > ' . (mktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']) - date('Z'));
+    $today = local_getdate();
+    $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('stats') .
+        ' WHERE access_time > ' . (mktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']) - date('Z'));
 
     $today_visit = $db->GetOne($sql);
     $smarty->assign('today_visit', $today_visit);
@@ -335,29 +335,29 @@ elseif ($_REQUEST['act'] == 'main') {
     $smarty->assign('online_users', $online_users);
 
     /* 鏈€杩戝弽棣 */
-    $sql = "SELECT COUNT(f.msg_id) ".
-    "FROM " . $ecs->table('feedback') . " AS f ".
-    "LEFT JOIN " . $ecs->table('feedback') . " AS r ON r.parent_id=f.msg_id " .
-    'WHERE f.parent_id=0 AND ISNULL(r.msg_id) ' ;
+    $sql = "SELECT COUNT(f.msg_id) " .
+        "FROM " . $ecs->table('feedback') . " AS f " .
+        "LEFT JOIN " . $ecs->table('feedback') . " AS r ON r.parent_id=f.msg_id " .
+        'WHERE f.parent_id=0 AND ISNULL(r.msg_id) ';
     $smarty->assign('feedback_number', $db->GetOne($sql));
 
     /* 鏈??鏍歌瘎璁 */
     $smarty->assign('comment_number', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('comment') .
-    ' WHERE status = 0 AND parent_id = 0'));
+        ' WHERE status = 0 AND parent_id = 0'));
 
     $mysql_ver = $db->version();   // 鑾峰緱 MySQL 鐗堟湰
 
     /* 绯荤粺淇℃伅 */
-    $sys_info['os']            = PHP_OS;
-    $sys_info['ip']            = $_SERVER['SERVER_ADDR'];
-    $sys_info['web_server']    = $_SERVER['SERVER_SOFTWARE'];
-    $sys_info['php_ver']       = PHP_VERSION;
-    $sys_info['mysql_ver']     = $mysql_ver;
-    $sys_info['zlib']          = function_exists('gzclose') ? $_LANG['yes']:$_LANG['no'];
-    $sys_info['safe_mode']     = (boolean) ini_get('safe_mode') ?  $_LANG['yes']:$_LANG['no'];
-    $sys_info['safe_mode_gid'] = (boolean) ini_get('safe_mode_gid') ? $_LANG['yes'] : $_LANG['no'];
-    $sys_info['timezone']      = function_exists("date_default_timezone_get") ? date_default_timezone_get() : $_LANG['no_timezone'];
-    $sys_info['socket']        = function_exists('fsockopen') ? $_LANG['yes'] : $_LANG['no'];
+    $sys_info['os'] = PHP_OS;
+    $sys_info['ip'] = $_SERVER['SERVER_ADDR'];
+    $sys_info['web_server'] = $_SERVER['SERVER_SOFTWARE'];
+    $sys_info['php_ver'] = PHP_VERSION;
+    $sys_info['mysql_ver'] = $mysql_ver;
+    $sys_info['zlib'] = function_exists('gzclose') ? $_LANG['yes'] : $_LANG['no'];
+    $sys_info['safe_mode'] = (boolean)ini_get('safe_mode') ? $_LANG['yes'] : $_LANG['no'];
+    $sys_info['safe_mode_gid'] = (boolean)ini_get('safe_mode_gid') ? $_LANG['yes'] : $_LANG['no'];
+    $sys_info['timezone'] = function_exists("date_default_timezone_get") ? date_default_timezone_get() : $_LANG['no_timezone'];
+    $sys_info['socket'] = function_exists('fsockopen') ? $_LANG['yes'] : $_LANG['no'];
 
     if ($gd == 0) {
         $sys_info['gd'] = 'N/A';
@@ -401,7 +401,6 @@ elseif ($_REQUEST['act'] == 'main') {
     $smarty->assign('new_repay', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('user_account') . ' WHERE process_type = ' . SURPLUS_RETURN . ' AND is_paid = 0 '));
 
 
-
     assign_query_info();
     $smarty->assign('ecs_version', VERSION);
     $smarty->assign('ecs_release', RELEASE);
@@ -413,7 +412,7 @@ elseif ($_REQUEST['act'] == 'main') {
     require_once(ROOT_PATH . '/includes/lib_base.php');
     $data = read_static_cache('api_str');
 
-    if ($data === false || API_TIME < date('Y-m-d H:i:s', time()-43200)) {
+    if ($data === false || API_TIME < date('Y-m-d H:i:s', time() - 43200)) {
         include_once(ROOT_PATH . 'includes/cls_transport.php');
         $ecs_version = VERSION;
         $ecs_lang = $_CFG['lang'];
@@ -421,11 +420,11 @@ elseif ($_REQUEST['act'] == 'main') {
         $php_ver = PHP_VERSION;
         $mysql_ver = $db->version();
         $order['stats'] = $db->getRow('SELECT COUNT(*) AS oCount, IFNULL(SUM(order_amount), 0) AS oAmount' .
-    ' FROM ' .$ecs->table('order_info'));
+            ' FROM ' . $ecs->table('order_info'));
         $ocount = $order['stats']['oCount'];
         $oamount = $order['stats']['oAmount'];
-        $goods['total']   = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('goods').
-    ' WHERE is_delete = 0 AND is_alone_sale = 1 AND is_real = 1');
+        $goods['total'] = $db->GetOne('SELECT COUNT(*) FROM ' . $ecs->table('goods') .
+            ' WHERE is_delete = 0 AND is_alone_sale = 1 AND is_real = 1');
         $gcount = $goods['total'];
         $ecs_charset = strtoupper(EC_CHARSET);
         $ecs_user = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('users'));
@@ -437,7 +436,7 @@ elseif ($_REQUEST['act'] == 'main') {
         $ecs_style = $style;
         $shop_url = urlencode($ecs->url());
 
-        $patch_file = file_get_contents(ROOT_PATH."temp/patch_num");
+        $patch_file = file_get_contents(ROOT_PATH . "temp/patch_num");
 
         $apiget = "ver= $ecs_version &lang= $ecs_lang &release= $ecs_release &php_ver= $php_ver &mysql_ver= $mysql_ver &ocount= $ocount &oamount= $oamount &gcount= $gcount &charset= $ecs_charset &usecount= $ecs_user &template= $ecs_template &style= $ecs_style &url= $shop_url &patch= $patch_file ";
 
@@ -445,10 +444,10 @@ elseif ($_REQUEST['act'] == 'main') {
         $api_comment = $t->request('http://api.ecshop.com/checkver.php', $apiget);
         $api_str = $api_comment["body"];
         echo $api_str;
-        
-        $f=ROOT_PATH . 'data/config.php';
-        file_put_contents($f, str_replace("'API_TIME', '".API_TIME."'", "'API_TIME', '".date('Y-m-d H:i:s', time())."'", file_get_contents($f)));
-        
+
+        $f = ROOT_PATH . 'data/config.php';
+        file_put_contents($f, str_replace("'API_TIME', '" . API_TIME . "'", "'API_TIME', '" . date('Y-m-d H:i:s', time()) . "'", file_get_contents($f)));
+
         write_static_cache('api_str', $api_str);
     } else {
         echo $data;
@@ -478,14 +477,14 @@ elseif ($_REQUEST['act'] == 'first') {
     //鑾峰彇閰嶉€佹柟寮
 //    $modules = read_modules('../includes/modules/shipping');
     $directory = ROOT_PATH . 'includes/modules/shipping';
-    $dir         = @opendir($directory);
+    $dir = @opendir($directory);
     $set_modules = true;
-    $modules     = array();
+    $modules = array();
 
     while (false !== ($file = @readdir($dir))) {
         if (preg_match("/^.*?\.php$/", $file)) {
             if ($file != 'express.php') {
-                include_once($directory. '/' .$file);
+                include_once($directory . '/' . $file);
             }
         }
     }
@@ -498,16 +497,16 @@ elseif ($_REQUEST['act'] == 'first') {
     ksort($modules);
 
     for ($i = 0; $i < count($modules); $i++) {
-        $lang_file = ROOT_PATH.'languages/' .$_CFG['lang']. '/shipping/' .$modules[$i]['code']. '.php';
+        $lang_file = ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shipping/' . $modules[$i]['code'] . '.php';
 
         if (file_exists($lang_file)) {
             include_once($lang_file);
         }
 
-        $modules[$i]['name']    = $_LANG[$modules[$i]['code']];
-        $modules[$i]['desc']    = $_LANG[$modules[$i]['desc']];
-        $modules[$i]['insure_fee']  = empty($modules[$i]['insure'])? 0 : $modules[$i]['insure'];
-        $modules[$i]['cod']     = $modules[$i]['cod'];
+        $modules[$i]['name'] = $_LANG[$modules[$i]['code']];
+        $modules[$i]['desc'] = $_LANG[$modules[$i]['desc']];
+        $modules[$i]['insure_fee'] = empty($modules[$i]['insure']) ? 0 : $modules[$i]['insure'];
+        $modules[$i]['cod'] = $modules[$i]['cod'];
         $modules[$i]['install'] = 0;
     }
     $smarty->assign('modules', $modules);
@@ -541,12 +540,12 @@ elseif ($_REQUEST['act'] == 'first') {
 elseif ($_REQUEST['act'] == 'second') {
     admin_priv('shop_config');
 
-    $shop_name = empty($_POST['shop_name']) ? '' : $_POST['shop_name'] ;
-    $shop_title = empty($_POST['shop_title']) ? '' : $_POST['shop_title'] ;
+    $shop_name = empty($_POST['shop_name']) ? '' : $_POST['shop_name'];
+    $shop_title = empty($_POST['shop_title']) ? '' : $_POST['shop_title'];
     $shop_country = empty($_POST['shop_country']) ? '' : intval($_POST['shop_country']);
     $shop_province = empty($_POST['shop_province']) ? '' : intval($_POST['shop_province']);
     $shop_city = empty($_POST['shop_city']) ? '' : intval($_POST['shop_city']);
-    $shop_address = empty($_POST['shop_address']) ? '' : $_POST['shop_address'] ;
+    $shop_address = empty($_POST['shop_address']) ? '' : $_POST['shop_address'];
     $shipping = empty($_POST['shipping']) ? '' : $_POST['shipping'];
     $payment = empty($_POST['payment']) ? '' : preg_replace('/[\'|\/|\\\]/', '', $_POST['payment']);
 
@@ -583,7 +582,7 @@ elseif ($_REQUEST['act'] == 'second') {
     //璁剧疆閰嶉€佹柟寮
     if (!empty($shipping)) {
         $shop_add = read_modules('../includes/modules/shipping');
-        
+
         foreach ($shop_add as $val) {
             $mod_shop[] = $val['code'];
         }
@@ -595,16 +594,16 @@ elseif ($_REQUEST['act'] == 'second') {
         } else {
             include_once(ROOT_PATH . 'includes/modules/shipping/' . $shipping . '.php');
         }
-        $sql = "SELECT shipping_id FROM " .$ecs->table('shipping'). " WHERE shipping_code = '$shipping'";
+        $sql = "SELECT shipping_id FROM " . $ecs->table('shipping') . " WHERE shipping_code = '$shipping'";
         $shipping_id = $db->GetOne($sql);
 
         if ($shipping_id <= 0) {
             $insure = empty($modules[0]['insure']) ? 0 : $modules[0]['insure'];
             $sql = "INSERT INTO " . $ecs->table('shipping') . " (" .
-            "shipping_code, shipping_name, shipping_desc, insure, support_cod, enabled" .
-            ") VALUES (" .
-            "'" . addslashes($modules[0]['code']). "', '" . addslashes($_LANG[$modules[0]['code']]) . "', '" .
-            addslashes($_LANG[$modules[0]['desc']]) . "', '$insure', '" . intval($modules[0]['cod']) . "', 1)";
+                "shipping_code, shipping_name, shipping_desc, insure, support_cod, enabled" .
+                ") VALUES (" .
+                "'" . addslashes($modules[0]['code']) . "', '" . addslashes($_LANG[$modules[0]['code']]) . "', '" .
+                addslashes($_LANG[$modules[0]['desc']]) . "', '$insure', '" . intval($modules[0]['cod']) . "', 1)";
             $db->query($sql);
             $shipping_id = $db->insert_Id();
         }
@@ -612,31 +611,31 @@ elseif ($_REQUEST['act'] == 'second') {
         //璁剧疆閰嶉€佸尯鍩
         $area_name = empty($_POST['area_name']) ? '' : $_POST['area_name'];
         if (!empty($area_name)) {
-            $sql = "SELECT shipping_area_id FROM " .$ecs->table("shipping_area").
-            " WHERE shipping_id='$shipping_id' AND shipping_area_name='$area_name'";
+            $sql = "SELECT shipping_area_id FROM " . $ecs->table("shipping_area") .
+                " WHERE shipping_id='$shipping_id' AND shipping_area_name='$area_name'";
             $area_id = $db->getOne($sql);
 
             if ($area_id <= 0) {
                 $config = array();
                 foreach ($modules[0]['configure'] as $key => $val) {
-                    $config[$key]['name']   = $val['name'];
-                    $config[$key]['value']  = $val['value'];
+                    $config[$key]['name'] = $val['name'];
+                    $config[$key]['value'] = $val['value'];
                 }
 
                 $count = count($config);
-                $config[$count]['name']     = 'free_money';
-                $config[$count]['value']    = 0;
+                $config[$count]['name'] = 'free_money';
+                $config[$count]['value'] = 0;
 
                 /* 濡傛灉鏀?寔璐у埌浠樻?锛屽垯鍏佽?璁剧疆璐у埌浠樻?鏀?粯璐圭敤 */
                 if ($modules[0]['cod']) {
                     $count++;
-                    $config[$count]['name']     = 'pay_fee';
-                    $config[$count]['value']    = make_semiangle(0);
+                    $config[$count]['name'] = 'pay_fee';
+                    $config[$count]['value'] = make_semiangle(0);
                 }
 
-                $sql = "INSERT INTO " .$ecs->table('shipping_area').
-                " (shipping_area_name, shipping_id, configure) ".
-                "VALUES" . " ('$area_name', '$shipping_id', '" .serialize($config). "')";
+                $sql = "INSERT INTO " . $ecs->table('shipping_area') .
+                    " (shipping_area_name, shipping_id, configure) " .
+                    "VALUES" . " ('$area_name', '$shipping_id', '" . serialize($config) . "')";
                 $db->query($sql);
                 $area_id = $db->insert_Id();
             }
@@ -647,7 +646,7 @@ elseif ($_REQUEST['act'] == 'second') {
             $region_id = empty($_POST['shipping_district']) ? $region_id : intval($_POST['shipping_district']);
 
             /* 娣诲姞閫夊畾鐨勫煄甯傚拰鍦板尯 */
-            $sql = "REPLACE INTO ".$ecs->table('area_region')." (shipping_area_id, region_id) VALUES ('$area_id', '$region_id')";
+            $sql = "REPLACE INTO " . $ecs->table('area_region') . " (shipping_area_id, region_id) VALUES ('$area_id', '$region_id')";
             $db->query($sql);
         }
     }
@@ -657,14 +656,14 @@ elseif ($_REQUEST['act'] == 'second') {
     if (!empty($payment)) {
         /* 鍙栫浉搴旀彃浠朵俊鎭 */
         $set_modules = true;
-        include_once(ROOT_PATH.'includes/modules/payment/' . $payment . '.php');
+        include_once(ROOT_PATH . 'includes/modules/payment/' . $payment . '.php');
 
         $pay_config = array();
         if (isset($_REQUEST['cfg_value']) && is_array($_REQUEST['cfg_value'])) {
             for ($i = 0; $i < count($_POST['cfg_value']); $i++) {
-                $pay_config[] = array('name'  => trim($_POST['cfg_name'][$i]),
-                                  'type'  => trim($_POST['cfg_type'][$i]),
-                                  'value' => trim($_POST['cfg_value'][$i])
+                $pay_config[] = array('name' => trim($_POST['cfg_name'][$i]),
+                    'type' => trim($_POST['cfg_type'][$i]),
+                    'value' => trim($_POST['cfg_value'][$i])
                 );
             }
         }
@@ -674,9 +673,9 @@ elseif ($_REQUEST['act'] == 'second') {
         $sql = "SELECT COUNT(*) FROM " . $ecs->table('payment') . " WHERE pay_code = '$payment'";
         if ($db->GetOne($sql) > 0) {
             $sql = "UPDATE " . $ecs->table('payment') .
-                   " SET pay_config = '$pay_config'," .
-                   " enabled = '1' " .
-                   "WHERE pay_code = '$payment' LIMIT 1";
+                " SET pay_config = '$pay_config'," .
+                " enabled = '1' " .
+                "WHERE pay_code = '$payment' LIMIT 1";
             $db->query($sql);
         } else {
 //            $modules = read_modules('../includes/modules/payment');
@@ -687,7 +686,7 @@ elseif ($_REQUEST['act'] == 'second') {
             $payment_info['desc'] = $_LANG[$modules[0]['desc']];
 
             $sql = "INSERT INTO " . $ecs->table('payment') . " (pay_code, pay_name, pay_desc, pay_config, is_cod, pay_fee, enabled, is_online)" .
-            "VALUES ('$payment', '$payment_info[name]', '$payment_info[desc]', '$pay_config', '0', '$payment_info[pay_fee]', '1', '1')";
+                "VALUES ('$payment', '$payment_info[name]', '$payment_info[desc]', '$pay_config', '0', '$payment_info[pay_fee]', '1', '1')";
             $db->query($sql);
         }
     }
@@ -715,7 +714,7 @@ elseif ($_REQUEST['act'] == 'third') {
     $good_name = empty($_POST['good_name']) ? '' : $_POST['good_name'];
     $is_best = empty($_POST['is_best']) ? 0 : 1;
     $is_new = empty($_POST['is_new']) ? 0 : 1;
-    $is_hot = empty($_POST['is_hot']) ? 0 :1;
+    $is_hot = empty($_POST['is_hot']) ? 0 : 1;
     $good_brief = empty($_POST['good_brief']) ? '' : $_POST['good_brief'];
     $market_price = $good_price * 1.2;
 
@@ -738,7 +737,7 @@ elseif ($_REQUEST['act'] == 'third') {
     $brand_id = 0;
     if (!empty($good_brand)) {
         $sql = 'INSERT INTO ' . $ecs->table('brand') . " (brand_name, is_show)" .
-        " values('" . $good_brand . "', '1')";
+            " values('" . $good_brand . "', '1')";
         $db->query($sql);
 
         $brand_id = $db->insert_Id();
@@ -746,15 +745,15 @@ elseif ($_REQUEST['act'] == 'third') {
 
     if (!empty($good_category)) {
         $sql = 'INSERT INTO ' . $ecs->table('category') . " (cat_name, parent_id, is_show)" .
-        " values('" . $good_category . "', '0', '1')";
+            " values('" . $good_category . "', '0', '1')";
         $db->query($sql);
 
         $cat_id = $db->insert_Id();
 
         //璐у彿
         require_once(ROOT_PATH . ADMIN_PATH . '/includes/lib_goods.php');
-        $max_id     = $db->getOne("SELECT MAX(goods_id) + 1 FROM ".$ecs->table('goods'));
-        $goods_sn   = generate_goods_sn($max_id);
+        $max_id = $db->getOne("SELECT MAX(goods_id) + 1 FROM " . $ecs->table('goods'));
+        $goods_sn = generate_goods_sn($max_id);
 
         include_once(ROOT_PATH . 'includes/cls_image.php');
         $image = new cls_image($_CFG['bgcolor']);
@@ -776,8 +775,7 @@ elseif ($_REQUEST['act'] == 'third') {
                 } elseif ($_FILES['goods_img']['error'] == 2) {
                     sys_msg(sprintf($_LANG['goods_img_too_big'], $htm_maxsize), 1, array(), false);
                 }
-            }
-            /* 4銆?鐗堟湰 */
+            } /* 4銆?鐗堟湰 */
             else {
                 // 鍟嗗搧鍥剧墖
                 if ($_FILES['goods_img']['tmp_name'] != 'none') {
@@ -786,53 +784,53 @@ elseif ($_REQUEST['act'] == 'third') {
                     }
                 }
             }
-            $goods_img        = '';  // 鍒濆?鍖栧晢鍝佸浘鐗
-            $goods_thumb      = '';  // 鍒濆?鍖栧晢鍝佺缉鐣ュ浘
-            $original_img     = '';  // 鍒濆?鍖栧師濮嬪浘鐗
+            $goods_img = '';  // 鍒濆?鍖栧晢鍝佸浘鐗
+            $goods_thumb = '';  // 鍒濆?鍖栧晢鍝佺缉鐣ュ浘
+            $original_img = '';  // 鍒濆?鍖栧師濮嬪浘鐗
             $old_original_img = '';  // 鍒濆?鍖栧師濮嬪浘鐗囨棫鍥
             // 濡傛灉涓婁紶浜嗗晢鍝佸浘鐗囷紝鐩稿簲澶勭悊
             if ($_FILES['goods_img']['tmp_name'] != '' && $_FILES['goods_img']['tmp_name'] != 'none') {
-                $original_img   = $image->upload_image($_FILES['goods_img']); // 鍘熷?鍥剧墖
+                $original_img = $image->upload_image($_FILES['goods_img']); // 鍘熷?鍥剧墖
                 if ($original_img === false) {
                     sys_msg($image->error_msg(), 1, array(), false);
                 }
-                $goods_img      = $original_img;   // 鍟嗗搧鍥剧墖
+                $goods_img = $original_img;   // 鍟嗗搧鍥剧墖
 
                 /* 澶嶅埗涓€浠界浉鍐屽浘鐗 */
-                $img        = $original_img;   // 鐩稿唽鍥剧墖
-                $pos        = strpos(basename($img), '.');
-                $newname    = dirname($img) . '/' . $image->random_filename() . substr(basename($img), $pos);
+                $img = $original_img;   // 鐩稿唽鍥剧墖
+                $pos = strpos(basename($img), '.');
+                $newname = dirname($img) . '/' . $image->random_filename() . substr(basename($img), $pos);
                 if (!copy('../' . $img, '../' . $newname)) {
                     sys_msg('fail to copy file: ' . realpath('../' . $img), 1, array(), false);
                 }
-                $img        = $newname;
+                $img = $newname;
 
-                $gallery_img    = $img;
-                $gallery_thumb  = $img;
+                $gallery_img = $img;
+                $gallery_thumb = $img;
 
                 // 濡傛灉绯荤粺鏀?寔GD锛岀缉鏀惧晢鍝佸浘鐗囷紝涓旂粰鍟嗗搧鍥剧墖鍜岀浉鍐屽浘鐗囧姞姘村嵃
                 if ($image->gd_version() > 0 && $image->check_img_function($_FILES['goods_img']['type'])) {
                     // 濡傛灉璁剧疆澶у皬涓嶄负0锛岀缉鏀惧浘鐗
                     if ($_CFG['image_width'] != 0 || $_CFG['image_height'] != 0) {
-                        $goods_img = $image->make_thumb('../'. $goods_img, $GLOBALS['_CFG']['image_width'], $GLOBALS['_CFG']['image_height']);
+                        $goods_img = $image->make_thumb('../' . $goods_img, $GLOBALS['_CFG']['image_width'], $GLOBALS['_CFG']['image_height']);
                         if ($goods_img === false) {
                             sys_msg($image->error_msg(), 1, array(), false);
                         }
                     }
 
-                    $newname    = dirname($img) . '/' . $image->random_filename() . substr(basename($img), $pos);
+                    $newname = dirname($img) . '/' . $image->random_filename() . substr(basename($img), $pos);
                     if (!copy('../' . $img, '../' . $newname)) {
                         sys_msg('fail to copy file: ' . realpath('../' . $img), 1, array(), false);
                     }
-                    $gallery_img        = $newname;
+                    $gallery_img = $newname;
 
                     // 鍔犳按鍗
                     if (intval($_CFG['watermark_place']) > 0 && !empty($GLOBALS['_CFG']['watermark'])) {
-                        if ($image->add_watermark('../'.$goods_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
+                        if ($image->add_watermark('../' . $goods_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
                             sys_msg($image->error_msg(), 1, array(), false);
                         }
 
-                        if ($image->add_watermark('../'. $gallery_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
+                        if ($image->add_watermark('../' . $gallery_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
                             sys_msg($image->error_msg(), 1, array(), false);
                         }
                     }
@@ -846,7 +844,7 @@ elseif ($_REQUEST['act'] == 'third') {
                     }
                 } else {
                     /* 澶嶅埗涓€浠藉師鍥 */
-                    $pos        = strpos(basename($img), '.');
+                    $pos = strpos(basename($img), '.');
                     $gallery_img = dirname($img) . '/' . $image->random_filename() . substr(basename($img), $pos);
                     if (!copy('../' . $img, '../' . $gallery_img)) {
                         sys_msg('fail to copy file: ' . realpath('../' . $img), 1, array(), false);
@@ -870,15 +868,15 @@ elseif ($_REQUEST['act'] == 'third') {
 
             $sql = 'INSERT INTO ' . $ecs->table('goods') . "(goods_name, goods_sn, goods_number, cat_id, brand_id, goods_brief, shop_price, market_price, goods_img, goods_thumb, original_img,add_time, last_update,
                    is_best, is_new, is_hot)" .
-                   "VALUES('$good_name', '$goods_sn', '$good_number', '$cat_id', '$brand_id', '$good_brief', '$good_price'," .
-                   " '$market_price', '$goods_img', '$goods_thumb', '$original_img','" . gmtime() . "', '". gmtime() . "', '$is_best', '$is_new', '$is_hot')";
+                "VALUES('$good_name', '$goods_sn', '$good_number', '$cat_id', '$brand_id', '$good_brief', '$good_price'," .
+                " '$market_price', '$goods_img', '$goods_thumb', '$original_img','" . gmtime() . "', '" . gmtime() . "', '$is_best', '$is_new', '$is_hot')";
 
             $db->query($sql);
             $good_id = $db->insert_id();
             /* 濡傛灉鏈夊浘鐗囷紝鎶婂晢鍝佸浘鐗囧姞鍏ュ浘鐗囩浉鍐 */
             if (isset($img)) {
                 $sql = "INSERT INTO " . $ecs->table('goods_gallery') . " (goods_id, img_url, img_desc, thumb_url, img_original) " .
-                       "VALUES ('$good_id', '$gallery_img', '', '$gallery_thumb', '$img')";
+                    "VALUES ('$good_id', '$gallery_img', '', '$gallery_thumb', '$img')";
                 $db->query($sql);
             }
         }
@@ -903,8 +901,7 @@ elseif ($_REQUEST['act'] == 'about_us') {
 /*------------------------------------------------------ */
 
 elseif ($_REQUEST['act'] == 'drag') {
-    $smarty->display('drag.htm');
-    ;
+    $smarty->display('drag.htm');;
 }
 
 /*------------------------------------------------------ */
@@ -918,13 +915,13 @@ elseif ($_REQUEST['act'] == 'check_order') {
     }
 
     /* 鏂拌?鍗 */
-    $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('order_info').
-    " WHERE add_time >= '$_SESSION[last_check]'";
+    $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
+        " WHERE add_time >= '$_SESSION[last_check]'";
     $arr['new_orders'] = $db->getOne($sql);
 
     /* 鏂颁粯娆剧殑璁㈠崟 */
-    $sql = 'SELECT COUNT(*) FROM '.$ecs->table('order_info').
-    ' WHERE pay_time >= ' . $_SESSION['last_check'];
+    $sql = 'SELECT COUNT(*) FROM ' . $ecs->table('order_info') .
+        ' WHERE pay_time >= ' . $_SESSION['last_check'];
     $arr['new_paid'] = $db->getOne($sql);
 
     $_SESSION['last_check'] = gmtime();
@@ -941,14 +938,13 @@ elseif ($_REQUEST['act'] == 'check_order') {
 /*------------------------------------------------------ */
 elseif ($_REQUEST['act'] == 'save_todolist') {
     $content = json_str_iconv($_POST["content"]);
-    $sql = "UPDATE" .$GLOBALS['ecs']->table('admin_user'). " SET todolist='" . $content . "' WHERE user_id = " . $_SESSION['admin_id'];
+    $sql = "UPDATE" . $GLOBALS['ecs']->table('admin_user') . " SET todolist='" . $content . "' WHERE user_id = " . $_SESSION['admin_id'];
     $GLOBALS['db']->query($sql);
 } elseif ($_REQUEST['act'] == 'get_todolist') {
-    $sql     = "SELECT todolist FROM " .$GLOBALS['ecs']->table('admin_user'). " WHERE user_id = " . $_SESSION['admin_id'];
+    $sql = "SELECT todolist FROM " . $GLOBALS['ecs']->table('admin_user') . " WHERE user_id = " . $_SESSION['admin_id'];
     $content = $GLOBALS['db']->getOne($sql);
     echo $content;
-}
-// 閭?欢缇ゅ彂澶勭悊
+} // 閭?欢缇ゅ彂澶勭悊
 elseif ($_REQUEST['act'] == 'send_mail') {
     if ($_CFG['send_mail_on'] == 'off') {
         make_json_result('', $_LANG['send_mail_off'], 0);
@@ -1042,12 +1038,12 @@ elseif ($_REQUEST['act'] == 'license') {
                 } else {
                     make_json_error(0);
                 }
-            break;
+                break;
 
             case 'login_fail':
             case 'login_ping_fail':
                 make_json_error(0);
-            break;
+                break;
 
             case 'reg_succ':
                 $_license = license_check();
@@ -1058,19 +1054,19 @@ elseif ($_REQUEST['act'] == 'license') {
                         } else {
                             make_json_error(0);
                         }
-                    break;
+                        break;
 
                     case 'login_fail':
                     case 'login_ping_fail':
                         make_json_error(0);
-                    break;
+                        break;
                 }
-            break;
+                break;
 
             case 'reg_fail':
             case 'reg_ping_fail':
                 make_json_error(0);
-            break;
+                break;
         }
     } else {
         make_json_error(0);

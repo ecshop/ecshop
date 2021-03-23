@@ -13,7 +13,7 @@ $exc = new exchange($ecs->table("pack"), $db, 'pack_id', 'pack_name');
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['06_pack_list']);
-    $smarty->assign('action_link', array('text' => $_LANG['pack_add'], 'href'=>'pack.php?act=add'));
+    $smarty->assign('action_link', array('text' => $_LANG['pack_add'], 'href' => 'pack.php?act=add'));
     $smarty->assign('full_page', 1);
 
     $packs_list = packs_list();
@@ -36,7 +36,7 @@ elseif ($_REQUEST['act'] == 'query') {
     $smarty->assign('record_count', $packs_list['record_count']);
     $smarty->assign('page_count', $packs_list['page_count']);
 
-    $sort_flag  = sort_flag($packs_list['filter']);
+    $sort_flag = sort_flag($packs_list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result($smarty->fetch('pack_list.htm'), '', array('filter' => $packs_list['filter'], 'page_count' => $packs_list['page_count']));
@@ -54,7 +54,7 @@ if ($_REQUEST['act'] == 'add') {
     $smarty->assign('pack', $pack);
     $smarty->assign('ur_here', $_LANG['pack_add']);
     $smarty->assign('form_action', 'insert');
-    $smarty->assign('action_link', array('text' => $_LANG['06_pack_list'], 'href'=>'pack.php?act=list'));
+    $smarty->assign('action_link', array('text' => $_LANG['06_pack_list'], 'href' => 'pack.php?act=list'));
 
     assign_query_info();
     $smarty->display('pack_info.htm');
@@ -82,7 +82,7 @@ if ($_REQUEST['act'] == 'insert') {
     }
 
     /*插入数据*/
-    $sql = "INSERT INTO ".$ecs->table('pack')."(pack_name, pack_fee, free_money, pack_desc, pack_img)
+    $sql = "INSERT INTO " . $ecs->table('pack') . "(pack_name, pack_fee, free_money, pack_desc, pack_img)
             VALUES ('$_POST[pack_name]', '$_POST[pack_fee]', '$_POST[free_money]', '$_POST[pack_desc]', '$img_name')";
     $db->query($sql);
 
@@ -91,7 +91,7 @@ if ($_REQUEST['act'] == 'insert') {
     $link[0]['href'] = 'pack.php?act=list';
     $link[1]['text'] = $_LANG['continue_add'];
     $link[1]['href'] = 'pack.php?act=add';
-    sys_msg($_POST['pack_name'].$_LANG['packadd_succed'], 0, $link);
+    sys_msg($_POST['pack_name'] . $_LANG['packadd_succed'], 0, $link);
     admin_log($_POST['pack_name'], 'add', 'pack');
 }
 
@@ -102,10 +102,10 @@ if ($_REQUEST['act'] == 'edit') {
     /* 权限判断 */
     admin_priv('pack');
 
-    $sql = "SELECT pack_id, pack_name, pack_fee, free_money, pack_desc, pack_img FROM " .$ecs->table('pack'). " WHERE pack_id='$_REQUEST[id]'";
+    $sql = "SELECT pack_id, pack_name, pack_fee, free_money, pack_desc, pack_img FROM " . $ecs->table('pack') . " WHERE pack_id='$_REQUEST[id]'";
     $pack = $db->GetRow($sql);
     $smarty->assign('ur_here', $_LANG['pack_edit']);
-    $smarty->assign('action_link', array('text' => $_LANG['06_pack_list'], 'href'=>'pack.php?act=list&' . list_link_postfix()));
+    $smarty->assign('action_link', array('text' => $_LANG['06_pack_list'], 'href' => 'pack.php?act=list&' . list_link_postfix()));
     $smarty->assign('pack', $pack);
     $smarty->assign('form_action', 'update');
     $smarty->display('pack_info.htm');
@@ -156,15 +156,15 @@ if ($_REQUEST['act'] == 'drop_pack_img') {
     $pack_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
     /* 取得logo名称 */
-    $sql = "SELECT pack_img FROM " .$ecs->table('pack'). " WHERE pack_id = '$pack_id'";
+    $sql = "SELECT pack_img FROM " . $ecs->table('pack') . " WHERE pack_id = '$pack_id'";
     $img_name = $db->getOne($sql);
 
     if (!empty($img_name)) {
-        @unlink(ROOT_PATH . DATA_DIR . '/packimg/' .$img_name);
-        $sql = "UPDATE " .$ecs->table('pack'). " SET pack_img = '' WHERE pack_id = '$pack_id'";
+        @unlink(ROOT_PATH . DATA_DIR . '/packimg/' . $img_name);
+        $sql = "UPDATE " . $ecs->table('pack') . " SET pack_img = '' WHERE pack_id = '$pack_id'";
         $db->query($sql);
     }
-    $link= array(array('text' => $_LANG['pack_edit_lnk'], 'href'=>'pack.php?act=edit&id=' .$pack_id), array('text' => $_LANG['pack_list_lnk'], 'href'=>'pack.php?act=list'));
+    $link = array(array('text' => $_LANG['pack_edit_lnk'], 'href' => 'pack.php?act=edit&id=' . $pack_id), array('text' => $_LANG['pack_list_lnk'], 'href' => 'pack.php?act=list'));
     sys_msg($_LANG['drop_pack_img_success'], 0, $link);
 }
 
@@ -234,14 +234,14 @@ if ($_REQUEST['act'] == 'edit_free_money') {
 if ($_REQUEST['act'] == 'remove') {
     check_authz_json('pack');
 
-    $id     = intval($_GET['id']);
-    $name   = $exc->get_name($id);
-    $img    = $exc->get_name($id, 'pack_img');
+    $id = intval($_GET['id']);
+    $name = $exc->get_name($id);
+    $img = $exc->get_name($id, 'pack_img');
 
     if ($exc->drop($id)) {
         /* 删除图片 */
         if (!empty($img)) {
-            @unlink('../' . DATA_DIR . '/packimg/'.$img);
+            @unlink('../' . DATA_DIR . '/packimg/' . $img);
         }
         admin_log(addslashes($name), 'remove', 'pack');
 
@@ -259,24 +259,24 @@ function packs_list()
 {
     $result = get_filter();
     if ($result === false) {
-        $filter['sort_by']      = empty($_REQUEST['sort_by']) ? 'pack_id' : trim($_REQUEST['sort_by']);
-        $filter['sort_order']   = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
+        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'pack_id' : trim($_REQUEST['sort_by']);
+        $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-        $sql = "SELECT count(*) FROM " .$GLOBALS['ecs']->table('pack');
+        $sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('pack');
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         /* 分页大小 */
         $filter = page_and_size($filter);
 
         /* 查询 */
-        $sql = "SELECT pack_id, pack_name, pack_img, pack_fee, free_money, pack_desc".
-               " FROM ".$GLOBALS['ecs']->table('pack').
-               " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
-               " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
+        $sql = "SELECT pack_id, pack_name, pack_img, pack_fee, free_money, pack_desc" .
+            " FROM " . $GLOBALS['ecs']->table('pack') .
+            " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
+            " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
 
         set_filter($filter, $sql);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
 

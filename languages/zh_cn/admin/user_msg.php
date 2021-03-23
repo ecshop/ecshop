@@ -19,7 +19,7 @@ $_LANG['delete'] = '删除留言';
 
 $_LANG['from'] = '于';
 
-$_LANG['type'] = array('留言','投诉','询问','售后','求购','商家留言');
+$_LANG['type'] = array('留言', '投诉', '询问', '售后', '求购', '商家留言');
 
 $_LANG['reply'] = '回复';
 $_LANG['replyed'] = '已回复';

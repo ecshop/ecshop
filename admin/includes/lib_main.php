@@ -8,20 +8,20 @@ if (!defined('IN_ECS')) {
  * 获得所有模块的名称以及链接地址
  *
  * @access      public
- * @param       string      $directory      插件存放的目录
+ * @param string $directory 插件存放的目录
  * @return      array
  */
 function read_modules($directory = '.')
 {
     global $_LANG;
 
-    $dir         = @opendir($directory);
+    $dir = @opendir($directory);
     $set_modules = true;
-    $modules     = array();
+    $modules = array();
 
     while (false !== ($file = @readdir($dir))) {
         if (preg_match("/^.*?\.php$/", $file)) {
-            include_once($directory. '/' .$file);
+            include_once($directory . '/' . $file);
         }
     }
     @closedir($dir);
@@ -39,10 +39,10 @@ function read_modules($directory = '.')
  * 系统提示信息
  *
  * @access      public
- * @param       string      msg_detail      消息内容
- * @param       int         msg_type        消息类型， 0消息，1错误，2询问
- * @param       array       links           可选的链接
- * @param       boolen      $auto_redirect  是否需要自动跳转
+ * @param string      msg_detail      消息内容
+ * @param int         msg_type        消息类型， 0消息，1错误，2询问
+ * @param array       links           可选的链接
+ * @param boolen $auto_redirect 是否需要自动跳转
  * @return      void
  */
 function sys_msg($msg_detail, $msg_type = 0, $links = array(), $auto_redirect = true)
@@ -70,17 +70,17 @@ function sys_msg($msg_detail, $msg_type = 0, $links = array(), $auto_redirect = 
  * 记录管理员的操作内容
  *
  * @access  public
- * @param   string      $sn         数据的唯一值
- * @param   string      $action     操作的类型
- * @param   string      $content    操作的内容
+ * @param string $sn 数据的唯一值
+ * @param string $action 操作的类型
+ * @param string $content 操作的内容
  * @return  void
  */
 function admin_log($sn = '', $action, $content)
 {
-    $log_info = $GLOBALS['_LANG']['log_action'][$action] . $GLOBALS['_LANG']['log_action'][$content] .': '. addslashes($sn);
+    $log_info = $GLOBALS['_LANG']['log_action'][$action] . $GLOBALS['_LANG']['log_action'][$content] . ': ' . addslashes($sn);
 
     $sql = 'INSERT INTO ' . $GLOBALS['ecs']->table('admin_log') . ' (log_time, user_id, log_info, ip_address) ' .
-            " VALUES ('" . gmtime() . "', $_SESSION[admin_id], '" . stripslashes($log_info) . "', '" . real_ip() . "')";
+        " VALUES ('" . gmtime() . "', $_SESSION[admin_id], '" . stripslashes($log_info) . "', '" . real_ip() . "')";
     $GLOBALS['db']->query($sql);
 }
 
@@ -89,15 +89,15 @@ function admin_log($sn = '', $action, $content)
  *
  * 此函数适用于通过smarty函数html_select_date生成的下拉日期。
  *
- * @param  string $prefix      年月日变量的共同的前缀。
+ * @param string $prefix 年月日变量的共同的前缀。
  * @return date                日期变量。
  */
 function sys_joindate($prefix)
 {
     /* 返回年-月-日的日期格式 */
-    $year  = empty($_POST[$prefix . 'Year']) ? '0' :  $_POST[$prefix . 'Year'];
+    $year = empty($_POST[$prefix . 'Year']) ? '0' : $_POST[$prefix . 'Year'];
     $month = empty($_POST[$prefix . 'Month']) ? '0' : $_POST[$prefix . 'Month'];
-    $day   = empty($_POST[$prefix . 'Day']) ? '0' : $_POST[$prefix . 'Day'];
+    $day = empty($_POST[$prefix . 'Day']) ? '0' : $_POST[$prefix . 'Day'];
 
     return $year . '-' . $month . '-' . $day;
 }
@@ -106,27 +106,27 @@ function sys_joindate($prefix)
  * 设置管理员的session内容
  *
  * @access  public
- * @param   integer $user_id        管理员编号
- * @param   string  $username       管理员姓名
- * @param   string  $action_list    权限列表
- * @param   string  $last_time      最后登录时间
+ * @param integer $user_id 管理员编号
+ * @param string $username 管理员姓名
+ * @param string $action_list 权限列表
+ * @param string $last_time 最后登录时间
  * @return  void
  */
 function set_admin_session($user_id, $username, $action_list, $last_time)
 {
-    $_SESSION['admin_id']    = $user_id;
-    $_SESSION['admin_name']  = $username;
+    $_SESSION['admin_id'] = $user_id;
+    $_SESSION['admin_name'] = $username;
     $_SESSION['action_list'] = $action_list;
-    $_SESSION['last_check']  = $last_time; // 用于保存最后一次检查订单的时间
+    $_SESSION['last_check'] = $last_time; // 用于保存最后一次检查订单的时间
 }
 
 /**
  * 插入一个配置信息
  *
  * @access  public
- * @param   string      $parent     分组的code
- * @param   string      $code       该配置信息的唯一标识
- * @param   string      $value      该配置信息值
+ * @param string $parent 分组的code
+ * @param string $code 该配置信息的唯一标识
+ * @param string $value 该配置信息值
  * @return  void
  */
 function insert_config($parent, $code, $value)
@@ -137,7 +137,7 @@ function insert_config($parent, $code, $value)
     $parent_id = $db->getOne($sql);
 
     $sql = 'INSERT INTO ' . $ecs->table('shop_config') . ' (parent_id, code, value) ' .
-            "VALUES('$parent_id', '$code', '$value')";
+        "VALUES('$parent_id', '$code', '$value')";
     $db->query($sql);
 }
 
@@ -145,8 +145,8 @@ function insert_config($parent, $code, $value)
  * 判断管理员对某一个操作是否有权限。
  *
  * 根据当前对应的action_code，然后再和用户session里面的action_list做匹配，以此来决定是否可以继续执行。
- * @param     string    $priv_str    操作对应的priv_str
- * @param     string    $msg_type       返回的类型
+ * @param string $priv_str 操作对应的priv_str
+ * @param string $msg_type 返回的类型
  * @return true/false
  */
 function admin_priv($priv_str, $msg_type = '', $msg_output = true)
@@ -172,19 +172,19 @@ function admin_priv($priv_str, $msg_type = '', $msg_output = true)
  * 检查管理员权限
  *
  * @access  public
- * @param   string  $authz
+ * @param string $authz
  * @return  boolean
  */
 function check_authz($authz)
 {
-    return (preg_match('/,*'.$authz.',*/', $_SESSION['action_list']) || $_SESSION['action_list'] == 'all');
+    return (preg_match('/,*' . $authz . ',*/', $_SESSION['action_list']) || $_SESSION['action_list'] == 'all');
 }
 
 /**
  * 检查管理员权限，返回JSON格式数剧
  *
  * @access  public
- * @param   string  $authz
+ * @param string $authz
  * @return  void
  */
 function check_authz_json($authz)
@@ -203,11 +203,11 @@ function get_bonus_type()
 {
     $bonus = array();
     $sql = 'SELECT type_id, type_name, type_money FROM ' . $GLOBALS['ecs']->table('bonus_type') .
-           ' WHERE send_type = 3';
+        ' WHERE send_type = 3';
     $res = $GLOBALS['db']->query($sql);
 
     while ($row = $GLOBALS['db']->fetchRow($res)) {
-        $bonus[$row['type_id']] = $row['type_name'].' [' .sprintf($GLOBALS['_CFG']['currency_format'], $row['type_money']).']';
+        $bonus[$row['type_id']] = $row['type_name'] . ' [' . sprintf($GLOBALS['_CFG']['currency_format'], $row['type_money']) . ']';
     }
 
     return $bonus;
@@ -215,7 +215,7 @@ function get_bonus_type()
 
 /**
  * 取得用户等级数组,按用户级别排序
- * @param   bool      $is_special      是否只显示特殊会员组
+ * @param bool $is_special 是否只显示特殊会员组
  * @return  array     rank_id=>rank_name
  */
 function get_rank_list($is_special = false)
@@ -244,8 +244,8 @@ function get_rank_list($is_special = false)
 function get_user_rank($rankid, $where)
 {
     $user_list = array();
-    $sql = 'SELECT user_id, user_name FROM ' . $GLOBALS['ecs']->table('users') . $where.
-           ' ORDER BY user_id DESC';
+    $sql = 'SELECT user_id, user_name FROM ' . $GLOBALS['ecs']->table('users') . $where .
+        ' ORDER BY user_id DESC';
     $res = $GLOBALS['db']->query($sql);
 
     while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -263,12 +263,12 @@ function get_user_rank($rankid, $where)
 function get_position_list()
 {
     $position_list = array();
-    $sql = 'SELECT position_id, position_name, ad_width, ad_height '.
-           'FROM ' . $GLOBALS['ecs']->table('ad_position');
+    $sql = 'SELECT position_id, position_name, ad_width, ad_height ' .
+        'FROM ' . $GLOBALS['ecs']->table('ad_position');
     $res = $GLOBALS['db']->query($sql);
 
     while ($row = $GLOBALS['db']->fetchRow($res)) {
-        $position_list[$row['position_id']] = addslashes($row['position_name']). ' [' .$row['ad_width']. 'x' .$row['ad_height']. ']';
+        $position_list[$row['position_id']] = addslashes($row['position_name']) . ' [' . $row['ad_width'] . 'x' . $row['ad_height'] . ']';
     }
 
     return $position_list;
@@ -276,26 +276,26 @@ function get_position_list()
 
 /**
  * 生成编辑器
- * @param   string  input_name  输入框名称
- * @param   string  input_value 输入框值
+ * @param string  input_name  输入框名称
+ * @param string  input_value 输入框值
  */
 function create_html_editor($input_name, $input_value = '')
 {
     global $smarty;
 
     $editor = new FCKeditor($input_name);
-    $editor->BasePath   = '../includes/fckeditor/';
+    $editor->BasePath = '../includes/fckeditor/';
     $editor->ToolbarSet = 'Normal';
-    $editor->Width      = '100%';
-    $editor->Height     = '320';
-    $editor->Value      = $input_value;
+    $editor->Width = '100%';
+    $editor->Height = '320';
+    $editor->Value = $input_value;
     $FCKeditor = $editor->CreateHtml();
     $smarty->assign('FCKeditor', $FCKeditor);
 }
 
 /**
  * 取得商品列表：用于把商品添加到组合、关联类、赠品类
- * @param   object  $filters    过滤条件
+ * @param object $filters 过滤条件
  */
 function get_goods_list($filter)
 {
@@ -303,9 +303,9 @@ function get_goods_list($filter)
     $where = get_where_sql($filter); // 取得过滤条件
 
     /* 取得数据 */
-    $sql = 'SELECT goods_id, goods_name, shop_price '.
-           'FROM ' . $GLOBALS['ecs']->table('goods') . ' AS g ' . $where .
-           'LIMIT 50';
+    $sql = 'SELECT goods_id, goods_name, shop_price ' .
+        'FROM ' . $GLOBALS['ecs']->table('goods') . ' AS g ' . $where .
+        'LIMIT 50';
     $row = $GLOBALS['db']->getAll($sql);
 
     return $row;
@@ -313,7 +313,7 @@ function get_goods_list($filter)
 
 /**
  * 取得文章列表：用于商品关联文章
- * @param   object  $filters    过滤条件
+ * @param object $filters 过滤条件
  */
 function get_article_list($filter)
 {
@@ -325,8 +325,8 @@ function get_article_list($filter)
     $where .= isset($filter->title) ? " AND a.title LIKE '%" . mysql_like_quote($filter->title) . "%'" : '';
 
     /* 取得数据 */
-    $sql = 'SELECT a.article_id, a.title '.
-           'FROM ' .$GLOBALS['ecs']->table('article'). ' AS a, ' .$GLOBALS['ecs']->table('article_cat'). ' AS c ' . $where;
+    $sql = 'SELECT a.article_id, a.title ' .
+        'FROM ' . $GLOBALS['ecs']->table('article') . ' AS a, ' . $GLOBALS['ecs']->table('article_cat') . ' AS c ' . $where;
     $res = $GLOBALS['db']->query($sql);
 
     while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -339,7 +339,7 @@ function get_article_list($filter)
 
 /**
  * 返回是否
- * @param   int     $var    变量 1, 0
+ * @param int $var 变量 1, 0
  */
 function get_yes_no($var)
 {
@@ -348,14 +348,14 @@ function get_yes_no($var)
 
 /**
  * 生成过滤条件：用于 get_goodslist 和 get_goods_list
- * @param   object  $filter
+ * @param object $filter
  * @return  string
  */
 function get_where_sql($filter)
 {
     $time = date('Y-m-d');
 
-    $where  = isset($filter->is_delete) && $filter->is_delete == '1' ?
+    $where = isset($filter->is_delete) && $filter->is_delete == '1' ?
         ' WHERE is_delete = 1 ' : ' WHERE is_delete = 0 ';
     $where .= (isset($filter->real_goods) && ($filter->real_goods > -1)) ? ' AND is_real = ' . intval($filter->real_goods) : '';
     $where .= isset($filter->cat_id) && $filter->cat_id > 0 ? ' AND ' . get_children($filter->cat_id) : '';
@@ -379,20 +379,20 @@ function get_where_sql($filter)
  * 获取地区列表的函数。
  *
  * @access  public
- * @param   int     $region_id  上级地区id
+ * @param int $region_id 上级地区id
  * @return  void
  */
 function area_list($region_id)
 {
     $area_arr = array();
 
-    $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('region').
-           " WHERE parent_id = '$region_id' ORDER BY region_id";
+    $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('region') .
+        " WHERE parent_id = '$region_id' ORDER BY region_id";
     $res = $GLOBALS['db']->query($sql);
     while ($row = $GLOBALS['db']->fetchRow($res)) {
-        $row['type']  = ($row['region_type'] == 0) ? $GLOBALS['_LANG']['country']  : '';
+        $row['type'] = ($row['region_type'] == 0) ? $GLOBALS['_LANG']['country'] : '';
         $row['type'] .= ($row['region_type'] == 1) ? $GLOBALS['_LANG']['province'] : '';
-        $row['type'] .= ($row['region_type'] == 2) ? $GLOBALS['_LANG']['city']     : '';
+        $row['type'] .= ($row['region_type'] == 2) ? $GLOBALS['_LANG']['city'] : '';
         $row['type'] .= ($row['region_type'] == 3) ? $GLOBALS['_LANG']['cantonal'] : '';
 
         $area_arr[] = $row;
@@ -405,7 +405,7 @@ function area_list($region_id)
  * 取得图表颜色
  *
  * @access  public
- * @param   integer $n  颜色顺序
+ * @param integer $n 颜色顺序
  * @return  void
  */
 function chart_color($n)
@@ -424,7 +424,7 @@ function chart_color($n)
  * 获得商品类型的列表
  *
  * @access  public
- * @param   integer     $selected   选定的类型编号
+ * @param integer $selected 选定的类型编号
  * @return  string
  */
 function goods_type_list($selected)
@@ -436,7 +436,7 @@ function goods_type_list($selected)
     while ($row = $GLOBALS['db']->fetchRow($res)) {
         $lst .= "<option value='$row[cat_id]'";
         $lst .= ($selected == $row['cat_id']) ? ' selected="true"' : '';
-        $lst .= '>' . htmlspecialchars($row['cat_name']). '</option>';
+        $lst .= '>' . htmlspecialchars($row['cat_name']) . '</option>';
     }
 
     return $lst;
@@ -449,7 +449,7 @@ function goods_type_list($selected)
 function get_pay_ids()
 {
     $ids = array('is_cod' => '0', 'is_not_cod' => '0');
-    $sql = 'SELECT pay_id, is_cod FROM ' .$GLOBALS['ecs']->table('payment'). ' WHERE enabled = 1';
+    $sql = 'SELECT pay_id, is_cod FROM ' . $GLOBALS['ecs']->table('payment') . ' WHERE enabled = 1';
     $res = $GLOBALS['db']->query($sql);
 
     while ($row = $GLOBALS['db']->fetchRow($res)) {
@@ -465,11 +465,11 @@ function get_pay_ids()
 
 /**
  * 清空表数据
- * @param   string  $table_name 表名称
+ * @param string $table_name 表名称
  */
 function truncate_table($table_name)
 {
-    $sql = 'TRUNCATE TABLE ' .$GLOBALS['ecs']->table($table_name);
+    $sql = 'TRUNCATE TABLE ' . $GLOBALS['ecs']->table($table_name);
 
     return $GLOBALS['db']->query($sql);
 }
@@ -485,9 +485,9 @@ function truncate_table($table_name)
 function get_charset_list()
 {
     return array(
-        'UTF8'   => 'UTF-8',
+        'UTF8' => 'UTF-8',
         'GB2312' => 'GB2312/GBK',
-        'BIG5'   => 'BIG5',
+        'BIG5' => 'BIG5',
     );
 }
 
@@ -496,13 +496,13 @@ function get_charset_list()
  * 创建一个JSON格式的数据
  *
  * @access  public
- * @param   string      $content
- * @param   integer     $error
- * @param   string      $message
- * @param   array       $append
+ * @param string $content
+ * @param integer $error
+ * @param string $message
+ * @param array $append
  * @return  void
  */
-function make_json_response($content='', $error="0", $message='', $append=array())
+function make_json_response($content = '', $error = "0", $message = '', $append = array())
 {
     include_once(ROOT_PATH . 'includes/cls_json.php');
 
@@ -528,7 +528,7 @@ function make_json_response($content='', $error="0", $message='', $append=array(
  * @param
  * @return  void
  */
-function make_json_result($content, $message='', $append=array())
+function make_json_result($content, $message = '', $append = array())
 {
     make_json_response($content, 0, $message, $append);
 }
@@ -537,7 +537,7 @@ function make_json_result($content, $message='', $append=array())
  * 创建一个JSON格式的错误信息
  *
  * @access  public
- * @param   string  $msg
+ * @param string $msg
  * @return  void
  */
 function make_json_error($msg)
@@ -549,13 +549,13 @@ function make_json_error($msg)
  * 根据过滤条件获得排序的标记
  *
  * @access  public
- * @param   array   $filter
+ * @param array $filter
  * @return  array
  */
 function sort_flag($filter)
 {
-    $flag['tag']    = 'sort_' . preg_replace('/^.*\./', '', $filter['sort_by']);
-    $flag['img']    = '<img src="images/' . ($filter['sort_order'] == "DESC" ? 'sort_desc.gif' : 'sort_asc.gif') . '"/>';
+    $flag['tag'] = 'sort_' . preg_replace('/^.*\./', '', $filter['sort_by']);
+    $flag['img'] = '<img src="images/' . ($filter['sort_order'] == "DESC" ? 'sort_desc.gif' : 'sort_asc.gif') . '"/>';
 
     return $flag;
 }
@@ -596,21 +596,21 @@ function page_and_size($filter)
  *  将含有单位的数字转成字节
  *
  * @access  public
- * @param   string      $val        带单位的数字
+ * @param string $val 带单位的数字
  *
  * @return  int         $val
  */
 function return_bytes($val)
 {
     $val = trim($val);
-    $last = strtolower($val{strlen($val)-1});
+    $last = strtolower($val{strlen($val) - 1});
     switch ($last) {
         case 'g':
             $val *= 1024;
-            // no break
+        // no break
         case 'm':
             $val *= 1024;
-            // no break
+        // no break
         case 'k':
             $val *= 1024;
     }
@@ -621,7 +621,7 @@ function return_bytes($val)
 /**
  * 获得指定的商品类型下所有的属性分组
  *
- * @param   integer     $cat_id     商品类型ID
+ * @param integer $cat_id 商品类型ID
  *
  * @return  array
  */
@@ -647,9 +647,9 @@ function list_link_postfix()
 
 /**
  * 保存过滤条件
- * @param   array   $filter     过滤条件
- * @param   string  $sql        查询语句
- * @param   string  $param_str  参数字符串，由list函数的参数组成
+ * @param array $filter 过滤条件
+ * @param string $sql 查询语句
+ * @param string $param_str 参数字符串，由list函数的参数组成
  */
 function set_filter($filter, $sql, $param_str = '')
 {
@@ -664,7 +664,7 @@ function set_filter($filter, $sql, $param_str = '')
 
 /**
  * 取得上次的过滤条件
- * @param   string  $param_str  参数字符串，由list函数的参数组成
+ * @param string $param_str 参数字符串，由list函数的参数组成
  * @return  如果有，返回array('filter' => $filter, 'sql' => $sql)；否则返回false
  */
 function get_filter($param_str = '')
@@ -677,7 +677,7 @@ function get_filter($param_str = '')
         && $_COOKIE['ECSCP']['lastfilterfile'] == sprintf('%X', crc32($filterfile))) {
         return array(
             'filter' => unserialize(urldecode($_COOKIE['ECSCP']['lastfilter'])),
-            'sql'    => base64_decode($_COOKIE['ECSCP']['lastfiltersql'])
+            'sql' => base64_decode($_COOKIE['ECSCP']['lastfiltersql'])
         );
     } else {
         return false;
@@ -686,7 +686,7 @@ function get_filter($param_str = '')
 
 /**
  * URL过滤
- * @param   string  $url  参数字符串，一个urld地址,对url地址进行校正
+ * @param string $url 参数字符串，一个urld地址,对url地址进行校正
  * @return  返回校正过的url;
  */
 function sanitize_url($url, $check = 'http://')
@@ -700,23 +700,23 @@ function sanitize_url($url, $check = 'http://')
 /**
  * 检查分类是否已经存在
  *
- * @param   string      $cat_name       分类名称
- * @param   integer     $parent_cat     上级分类
- * @param   integer     $exclude        排除的分类ID
+ * @param string $cat_name 分类名称
+ * @param integer $parent_cat 上级分类
+ * @param integer $exclude 排除的分类ID
  *
  * @return  boolean
  */
 function cat_exists($cat_name, $parent_cat, $exclude = 0)
 {
-    $sql = "SELECT COUNT(*) FROM " .$GLOBALS['ecs']->table('category').
-    " WHERE parent_id = '$parent_cat' AND cat_name = '$cat_name' AND cat_id<>'$exclude'";
+    $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') .
+        " WHERE parent_id = '$parent_cat' AND cat_name = '$cat_name' AND cat_id<>'$exclude'";
     return ($GLOBALS['db']->getOne($sql) > 0) ? true : false;
 }
 
 function brand_exists($brand_name)
 {
-    $sql = "SELECT COUNT(*) FROM " .$GLOBALS['ecs']->table('brand').
-    " WHERE brand_name = '" . $brand_name . "'";
+    $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('brand') .
+        " WHERE brand_name = '" . $brand_name . "'";
     return ($GLOBALS['db']->getOne($sql) > 0) ? true : false;
 }
 
@@ -730,7 +730,7 @@ function brand_exists($brand_name)
  */
 function admin_info()
 {
-    $sql = "SELECT * FROM ". $GLOBALS['ecs']->table('admin_user')."
+    $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('admin_user') . "
             WHERE user_id = '$_SESSION[admin_id]'
             LIMIT 0, 1";
     $admin_info = $GLOBALS['db']->getRow($sql);
@@ -745,7 +745,7 @@ function admin_info()
 /**
  * 供货商列表信息
  *
- * @param       string      $conditions
+ * @param string $conditions
  * @return      array
  */
 function suppliers_list_info($conditions = '')

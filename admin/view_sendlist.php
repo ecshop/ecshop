@@ -22,7 +22,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('record_count', $listdb['record_count']);
     $smarty->assign('page_count', $listdb['page_count']);
 
-    $sort_flag  = sort_flag($listdb['filter']);
+    $sort_flag = sort_flag($listdb['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result($smarty->fetch('view_sendlist.htm'), '', array('filter' => $listdb['filter'], 'page_count' => $listdb['page_count']));
@@ -190,8 +190,8 @@ function get_sendlist()
 {
     $result = get_filter();
     if ($result === false) {
-        $filter['sort_by']      = empty($_REQUEST['sort_by']) ? 'pri' : trim($_REQUEST['sort_by']);
-        $filter['sort_order']   = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
+        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'pri' : trim($_REQUEST['sort_by']);
+        $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
         $sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('email_sendlist') . " e LEFT JOIN " . $GLOBALS['ecs']->table('mail_templates') . " m ON e.template_id = m.template_id";
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
@@ -202,10 +202,10 @@ function get_sendlist()
         /* 查询 */
         $sql = "SELECT e.id, e.email, e.pri, e.error, FROM_UNIXTIME(e.last_send) AS last_send, m.template_subject, m.type FROM " . $GLOBALS['ecs']->table('email_sendlist') . " e LEFT JOIN " . $GLOBALS['ecs']->table('mail_templates') . " m ON e.template_id = m.template_id" .
             " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
-           " LIMIT " . $filter['start'] . ",$filter[page_size]";
+            " LIMIT " . $filter['start'] . ",$filter[page_size]";
         set_filter($filter, $sql);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
 

@@ -31,17 +31,17 @@ if ($_REQUEST['act'] == 'list') {
     $start = empty($_GET['start']) ? 0 : (int)$_GET['start'];
 
     $sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('goods') . " g"
-        ." LEFT JOIN " . $GLOBALS['ecs']->table('collect_goods') . " c"
-            . " ON g.goods_id = c.goods_id"
-        ." LEFT JOIN " . $GLOBALS['ecs']->table('users') . " u"
-            . " ON c.user_id = u.user_id" .
-         " WHERE c.is_attention = 1 AND g.is_delete = 0 AND c.goods_id = '$id'";
+        . " LEFT JOIN " . $GLOBALS['ecs']->table('collect_goods') . " c"
+        . " ON g.goods_id = c.goods_id"
+        . " LEFT JOIN " . $GLOBALS['ecs']->table('users') . " u"
+        . " ON c.user_id = u.user_id" .
+        " WHERE c.is_attention = 1 AND g.is_delete = 0 AND c.goods_id = '$id'";
 
     $count = $db->getOne($sql);
 
     if ($count > $start) {
         $sql = "SELECT u.user_name, u.email, g.goods_name, g.goods_id FROM " . $GLOBALS['ecs']->table('goods') . " g LEFT JOIN " . $GLOBALS['ecs']->table('collect_goods') . " c ON g.goods_id = c.goods_id LEFT JOIN " . $GLOBALS['ecs']->table('users') . " u ON c.user_id = u.user_id" .
-               " WHERE c.is_attention = 1 AND g.is_delete = 0 AND c.goods_id = '$id' LIMIT $start,100";
+            " WHERE c.is_attention = 1 AND g.is_delete = 0 AND c.goods_id = '$id' LIMIT $start,100";
         $query = $db->query($sql);
         $add = '';
         $template = $db->getRow("SELECT * FROM " . $ecs->table('mail_templates') . " WHERE  template_code = 'attention_list' AND type = 'template'");
@@ -50,13 +50,13 @@ if ($_REQUEST['act'] == 'list') {
         while ($rt = $db->fetch_array($query)) {
             $time = time();
             $goods_url = $ecs->url() . build_uri('goods', array('gid' => $id), $rt['goods_name']);
-            $smarty->assign(array('user_name'=>$rt['user_name'],'goods_name'=>$rt['goods_name'],'goods_url'=>$goods_url,'shop_name'=>$_CFG['shop_title'], 'send_date'=>local_date($_CFG['date_format'])));
+            $smarty->assign(array('user_name' => $rt['user_name'], 'goods_name' => $rt['goods_name'], 'goods_url' => $goods_url, 'shop_name' => $_CFG['shop_title'], 'send_date' => local_date($_CFG['date_format'])));
             $content = $smarty->fetch("str:$template[template_content]");
             $add .= $add ? ",('$rt[email]','$template[template_id]','$content','$pri','$time')" : "('$rt[email]','$template[template_id]','$content','$pri','$time')";
             $i++;
         }
         if ($add) {
-            $sql = "INSERT INTO "  . $ecs->table('email_sendlist') . " (email,template_id,email_content,pri,last_send) VALUES " . $add;
+            $sql = "INSERT INTO " . $ecs->table('email_sendlist') . " (email,template_id,email_content,pri,last_send) VALUES " . $add;
             $db->query($sql);
         }
         if ($i == 100) {
@@ -77,17 +77,17 @@ if ($_REQUEST['act'] == 'list') {
     $start = empty($_GET['start']) ? 0 : (int)$_GET['start'];
 
     $sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('goods') . " g"
-        ." LEFT JOIN " . $GLOBALS['ecs']->table('collect_goods') . " c"
-            . " ON g.goods_id = c.goods_id"
-        ." LEFT JOIN " . $GLOBALS['ecs']->table('users') . " u"
-            . " ON c.user_id = u.user_id" .
-         " WHERE c.is_attention = 1 AND g.is_delete = 0 AND g.last_update >= '$date'";
+        . " LEFT JOIN " . $GLOBALS['ecs']->table('collect_goods') . " c"
+        . " ON g.goods_id = c.goods_id"
+        . " LEFT JOIN " . $GLOBALS['ecs']->table('users') . " u"
+        . " ON c.user_id = u.user_id" .
+        " WHERE c.is_attention = 1 AND g.is_delete = 0 AND g.last_update >= '$date'";
 
     $count = $db->getOne($sql);
 
     if ($count > $start) {
         $sql = "SELECT u.user_name, u.email, g.goods_name, g.goods_id FROM " . $GLOBALS['ecs']->table('goods') . " g LEFT JOIN " . $GLOBALS['ecs']->table('collect_goods') . " c ON g.goods_id = c.goods_id LEFT JOIN " . $GLOBALS['ecs']->table('users') . " u ON c.user_id = u.user_id" .
-               " WHERE c.is_attention = 1 AND g.is_delete = 0 AND g.last_update >= '$date' LIMIT $start,100";
+            " WHERE c.is_attention = 1 AND g.is_delete = 0 AND g.last_update >= '$date' LIMIT $start,100";
         $query = $db->query($sql);
         $add = '';
 
@@ -99,13 +99,13 @@ if ($_REQUEST['act'] == 'list') {
 
             $goods_url = $ecs->url() . build_uri('goods', array('gid' => $rt['goods_id']), $rt['user_name']);
 
-            $smarty->assign(array('user_name'=>$rt['user_name'],'goods_name'=>$rt['goods_name'],'goods_url'=>$goods_url));
+            $smarty->assign(array('user_name' => $rt['user_name'], 'goods_name' => $rt['goods_name'], 'goods_url' => $goods_url));
             $content = $smarty->fetch("str:$template[template_content]");
             $add .= $add ? ",('$rt[email]','$template[template_id]','$content','$pri','$time')" : "('$rt[email]','$template[template_id]','$content','$pri','$time')";
             $i++;
         }
         if ($add) {
-            $sql = "INSERT INTO "  . $ecs->table('email_sendlist') . " (email,template_id,email_content,pri,last_send) VALUES " . $add;
+            $sql = "INSERT INTO " . $ecs->table('email_sendlist') . " (email,template_id,email_content,pri,last_send) VALUES " . $add;
             $db->query($sql);
         }
         if ($i == 100) {
@@ -132,12 +132,12 @@ function get_attention()
             $filter['goods_name'] = $goods_name;
         }
 
-        $filter['sort_by']      = empty($_REQUEST['sort_by']) ? 'last_update' : trim($_REQUEST['sort_by']);
-        $filter['sort_order']   = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
+        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'last_update' : trim($_REQUEST['sort_by']);
+        $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
         $sql = "SELECT COUNT(DISTINCT c.goods_id) FROM " . $GLOBALS['ecs']->table('collect_goods') . " c " .
-                "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " g ON c.goods_id = g.goods_id " .
-                    $where;
+            "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " g ON c.goods_id = g.goods_id " .
+            $where;
 
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -146,18 +146,18 @@ function get_attention()
 
         /* 查询 */
         $sql = "SELECT DISTINCT c.goods_id, g.goods_name, g.last_update FROM " . $GLOBALS['ecs']->table('collect_goods') . " c " .
-                "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " g ON c.goods_id = g.goods_id " .
-                    $where .
-               " ORDER BY " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
-               " LIMIT " . $filter['start'] . ",$filter[page_size]";
+            "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " g ON c.goods_id = g.goods_id " .
+            $where .
+            " ORDER BY " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
+            " LIMIT " . $filter['start'] . ",$filter[page_size]";
         set_filter($filter, $sql);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
 
     $goodsdb = $GLOBALS['db']->getAll($sql);
-    foreach ($goodsdb as $k=>$v) {
+    foreach ($goodsdb as $k => $v) {
         $goodsdb[$k]['last_update'] = local_date('Y-m-d', $v['last_update']);
     }
 

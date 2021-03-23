@@ -26,7 +26,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('record_count', $list['record_count']);
     $smarty->assign('page_count', $list['page_count']);
 
-    $sort_flag  = sort_flag($list['filter']);
+    $sort_flag = sort_flag($list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     /* 显示商品列表页面 */
@@ -46,7 +46,7 @@ elseif ($_REQUEST['act'] == 'query') {
     $smarty->assign('record_count', $list['record_count']);
     $smarty->assign('page_count', $list['page_count']);
 
-    $sort_flag  = sort_flag($list['filter']);
+    $sort_flag = sort_flag($list['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
@@ -101,13 +101,13 @@ elseif ($_REQUEST['act'] == 'batch') {
         if (isset($_POST['drop'])) {
             /* 查询哪些拍卖活动已经有人出价 */
             $sql = "SELECT DISTINCT act_id FROM " . $ecs->table('auction_log') .
-                    " WHERE act_id " . db_create_in($ids);
+                " WHERE act_id " . db_create_in($ids);
             $ids = array_diff($ids, $db->getCol($sql));
             if (!empty($ids)) {
                 /* 删除记录 */
                 $sql = "DELETE FROM " . $ecs->table('goods_activity') .
-                        " WHERE act_id " . db_create_in($ids) .
-                        " AND act_type = '" . GAT_AUCTION . "'";
+                    " WHERE act_id " . db_create_in($ids) .
+                    " AND act_type = '" . GAT_AUCTION . "'";
                 $db->query($sql);
 
                 /* 记日志 */
@@ -166,18 +166,18 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     /* 初始化、取得拍卖活动信息 */
     if ($is_add) {
         $auction = array(
-            'act_id'        => 0,
-            'act_name'      => '',
-            'act_desc'      => '',
-            'goods_id'      => 0,
-            'product_id'    => 0,
-            'goods_name'    => $_LANG['pls_search_goods'],
-            'start_time'    => date('Y-m-d', time() + 86400),
-            'end_time'      => date('Y-m-d', time() + 4 * 86400),
-            'deposit'       => 0,
-            'start_price'   => 0,
-            'end_price'     => 0,
-            'amplitude'     => 0
+            'act_id' => 0,
+            'act_name' => '',
+            'act_desc' => '',
+            'goods_id' => 0,
+            'product_id' => 0,
+            'goods_name' => $_LANG['pls_search_goods'],
+            'start_time' => date('Y-m-d', time() + 86400),
+            'end_time' => date('Y-m-d', time() + 4 * 86400),
+            'deposit' => 0,
+            'start_price' => 0,
+            'end_price' => 0,
+            'amplitude' => 0
         );
     } else {
         if (empty($_GET['id'])) {
@@ -235,22 +235,22 @@ elseif ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
     /* 提交值 */
     $auction = array(
-        'act_id'        => intval($_POST['id']),
-        'act_name'      => empty($_POST['act_name']) ? $goods_name : sub_str($_POST['act_name'], 255, false),
-        'act_desc'      => $_POST['act_desc'],
-        'act_type'      => GAT_AUCTION,
-        'goods_id'      => $goods_id,
-        'product_id'    => empty($_POST['product_id']) ? 0 : $_POST['product_id'],
-        'goods_name'    => $goods_name,
-        'start_time'    => local_strtotime($_POST['start_time']),
-        'end_time'      => local_strtotime($_POST['end_time']),
-        'ext_info'      => serialize(array(
-                    'deposit'       => round(floatval($_POST['deposit']), 2),
-                    'start_price'   => round(floatval($_POST['start_price']), 2),
-                    'end_price'     => empty($_POST['no_top']) ? round(floatval($_POST['end_price']), 2) : 0,
-                    'amplitude'     => round(floatval($_POST['amplitude']), 2),
-                    'no_top'     => !empty($_POST['no_top']) ? intval($_POST['no_top']) : 0
-                ))
+        'act_id' => intval($_POST['id']),
+        'act_name' => empty($_POST['act_name']) ? $goods_name : sub_str($_POST['act_name'], 255, false),
+        'act_desc' => $_POST['act_desc'],
+        'act_type' => GAT_AUCTION,
+        'goods_id' => $goods_id,
+        'product_id' => empty($_POST['product_id']) ? 0 : $_POST['product_id'],
+        'goods_name' => $goods_name,
+        'start_time' => local_strtotime($_POST['start_time']),
+        'end_time' => local_strtotime($_POST['end_time']),
+        'ext_info' => serialize(array(
+            'deposit' => round(floatval($_POST['deposit']), 2),
+            'start_price' => round(floatval($_POST['start_price']), 2),
+            'end_price' => empty($_POST['no_top']) ? round(floatval($_POST['end_price']), 2) : 0,
+            'amplitude' => round(floatval($_POST['amplitude']), 2),
+            'no_top' => !empty($_POST['no_top']) ? intval($_POST['no_top']) : 0
+        ))
     );
 
     /* 保存数据 */
@@ -354,9 +354,9 @@ elseif ($_REQUEST['act'] == 'search_goods') {
 
     include_once(ROOT_PATH . 'includes/cls_json.php');
 
-    $json   = new JSON;
+    $json = new JSON;
     $filter = $json->decode($_GET['JSON']);
-    $arr['goods']    = get_goods_list($filter);
+    $arr['goods'] = get_goods_list($filter);
 
     if (!empty($arr['goods'][0]['goods_id'])) {
         $arr['products'] = get_good_products($arr['goods'][0]['goods_id']);
@@ -391,12 +391,12 @@ function auction_list()
     $result = get_filter();
     if ($result === false) {
         /* 过滤条件 */
-        $filter['keyword']    = empty($_REQUEST['keyword']) ? '' : trim($_REQUEST['keyword']);
+        $filter['keyword'] = empty($_REQUEST['keyword']) ? '' : trim($_REQUEST['keyword']);
         if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1) {
             $filter['keyword'] = json_str_iconv($filter['keyword']);
         }
-        $filter['is_going']   = empty($_REQUEST['is_going']) ? 0 : 1;
-        $filter['sort_by']    = empty($_REQUEST['sort_by']) ? 'act_id' : trim($_REQUEST['sort_by']);
+        $filter['is_going'] = empty($_REQUEST['is_going']) ? 0 : 1;
+        $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'act_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
         $where = "";
@@ -409,23 +409,23 @@ function auction_list()
         }
 
         $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_activity') .
-                " WHERE act_type = '" . GAT_AUCTION . "' $where";
+            " WHERE act_type = '" . GAT_AUCTION . "' $where";
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         /* 分页大小 */
         $filter = page_and_size($filter);
 
         /* 查询 */
-        $sql = "SELECT * ".
-                "FROM " . $GLOBALS['ecs']->table('goods_activity') .
-                " WHERE act_type = '" . GAT_AUCTION . "' $where ".
-                " ORDER BY $filter[sort_by] $filter[sort_order] ".
-                " LIMIT ". $filter['start'] .", $filter[page_size]";
+        $sql = "SELECT * " .
+            "FROM " . $GLOBALS['ecs']->table('goods_activity') .
+            " WHERE act_type = '" . GAT_AUCTION . "' $where " .
+            " ORDER BY $filter[sort_by] $filter[sort_order] " .
+            " LIMIT " . $filter['start'] . ", $filter[page_size]";
 
         $filter['keyword'] = stripslashes($filter['keyword']);
         set_filter($filter, $sql);
     } else {
-        $sql    = $result['sql'];
+        $sql = $result['sql'];
         $filter = $result['filter'];
     }
     $res = $GLOBALS['db']->query($sql);
@@ -435,8 +435,8 @@ function auction_list()
         $ext_info = unserialize($row['ext_info']);
         $arr = array_merge($row, $ext_info);
 
-        $arr['start_time']  = local_date('Y-m-d H:i', $arr['start_time']);
-        $arr['end_time']    = local_date('Y-m-d H:i', $arr['end_time']);
+        $arr['start_time'] = local_date('Y-m-d H:i', $arr['start_time']);
+        $arr['end_time'] = local_date('Y-m-d H:i', $arr['end_time']);
 
         $list[] = $arr;
     }
@@ -447,8 +447,8 @@ function auction_list()
 
 /**
  * 列表链接
- * @param   bool    $is_add     是否添加（插入）
- * @param   string  $text       文字
+ * @param bool $is_add 是否添加（插入）
+ * @param string $text 文字
  * @return  array('href' => $href, 'text' => $text)
  */
 function list_link($is_add = true, $text = '')

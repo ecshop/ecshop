@@ -39,12 +39,9 @@ global $Config ;
 define('IN_ECS', true);
 define('ROOT_PATH', preg_replace('/includes(.*)/i', '', str_replace('\\', '/', __FILE__)));
 
-if (isset($_SERVER['PHP_SELF']))
-{
+if (isset($_SERVER['PHP_SELF'])) {
     define('PHP_SELF', $_SERVER['PHP_SELF']);
-}
-else
-{
+} else {
     define('PHP_SELF', $_SERVER['SCRIPT_NAME']);
 }
 
@@ -67,27 +64,18 @@ $db = new cls_mysql($db_host, $db_user, $db_pass, $db_name);
 /* init session */
 $sess = new cls_session($db, $ecs->table('sessions'), $ecs->table('sessions_data'), 'ECSCP_ID');
 
-if (!empty($_SESSION['admin_id']))
-{
-    if ($_SESSION['action_list'] == 'all')
-    {
+if (!empty($_SESSION['admin_id'])) {
+    if ($_SESSION['action_list'] == 'all') {
         $enable = true;
-    }
-    else
-    {
+    } else {
         if (strpos(',' . $_SESSION['action_list'] . ',', ',goods_manage,') === false && strpos(',' . $_SESSION['action_list'] . ',', ',virualcard,') === false && strpos(',' .
-        $_SESSION['action_list'] . ',', ',article_manage,') === false)
-        {
+        $_SESSION['action_list'] . ',', ',article_manage,') === false) {
             $enable = false;
-        }
-        else
-        {
+        } else {
             $enable = true;
         }
     }
-}
-else
-{
+} else {
     $enable = false;
 }
 
@@ -221,5 +209,3 @@ $Config['FileTypesPath']['Media']       = $Config['UserFilesPath'] . 'Media/' ;
 $Config['FileTypesAbsolutePath']['Media']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Media/' ;
 $Config['QuickUploadPath']['Media']     = $Config['UserFilesPath'] . 'Media/' ;
 $Config['QuickUploadAbsolutePath']['Media']= $Config['UserFilesAbsolutePath'] . 'Media/' ;
-
-?>

@@ -123,7 +123,7 @@ function assign_ur_here($cat = 0, $str = '')
     }
 
     /* 初始化“页面标题”和“当前位置” */
-    $page_title = $GLOBALS['_CFG']['shop_title'] . ' - ' . 'Powered by ECShop';
+    $page_title = $GLOBALS['_CFG']['shop_title'];
     $ur_here = '<a href=".">' . $GLOBALS['_LANG']['home'] . '</a>';
 
     /* 根据文件名分别处理中间的部分 */
@@ -221,7 +221,7 @@ function get_parent_cats($cat)
         return array();
     }
 
-    $arr = $GLOBALS['db']->GetAll('SELECT cat_id, cat_name, parent_id FROM ' . $GLOBALS['ecs']->table('category'));
+    $arr = $GLOBALS['db']->getAll('SELECT cat_id, cat_name, parent_id FROM ' . $GLOBALS['ecs']->table('category'));
 
     if (empty($arr)) {
         return array();
@@ -953,7 +953,7 @@ function visit_stats()
         'referer_domain, referer_path, access_url, access_time' .
         ') VALUES (' .
         "'$ip', '$visit_times', '$browser', '$os', '$lang', '$area', " .
-        "'" . htmlspecialchars(addslashes($domain)) . "', '" . htmlspecialchars(addslashes($path)) . "', '" . htmlspecialchars(addslashes(PHP_SELF)) . "', '" . $time . "')";
+        "'" . addslashes($domain) . "', '" . addslashes($path) . "', '" . htmlspecialchars(addslashes(PHP_SELF)) . "', '" . $time . "')";
     $GLOBALS['db']->query($sql);
 }
 
@@ -1552,7 +1552,7 @@ function get_article_parent_cats($cat)
         return array();
     }
 
-    $arr = $GLOBALS['db']->GetAll('SELECT cat_id, cat_name, parent_id FROM ' . $GLOBALS['ecs']->table('article_cat'));
+    $arr = $GLOBALS['db']->getAll('SELECT cat_id, cat_name, parent_id FROM ' . $GLOBALS['ecs']->table('article_cat'));
 
     if (empty($arr)) {
         return array();
@@ -1737,4 +1737,69 @@ function url_domain()
     }
 
     return $root;
+}
+
+//更新离线购物车
+function update_cart_offline()
+{
+    if (!$_SESSION['user_id']) {
+        return false;
+    }
+    $user_id = intval($_SESSION['user_id']);
+
+    //获取离线购物车
+    $sql = "SELECT * " .
+        " FROM " . $GLOBALS['ecs']->table('cart') .
+        " WHERE session_id = '" . SESS_ID . "' AND user_id=0";
+    $offline_carts = $GLOBALS['db']->getAll($sql);
+
+    if (!$offline_carts) { //无需合并
+        return true;
+    }
+
+    //获取会员购物车数据
+    $sql = "SELECT * " .
+        " FROM " . $GLOBALS['ecs']->table('cart') .
+        " WHERE user_id = '" . $user_id . "'";
+    $online_carts = $GLOBALS['db']->getAll($sql);
+
+    if (!$online_carts) { //离线转在线
+        $sql = "UPDATE " . $GLOBALS['ecs']->table('cart') . " SET user_id = '$user_id' WHERE session_id = '" . SESS_ID . "'";
+        $GLOBALS['db']->query($sql);
+    }
+
+    //合并购物车相同的商品
+    $offcart = array();
+    foreach ($offline_carts as $offkey => $offval) {
+        if (!$offval['goods_id'] || !$offval['goods_number']) {
+            continue;
+        }
+        $key = $offval['goods_id'] . '_' . $offval['product_id'];
+        $offcart[$key] = $offval;
+    }
+
+    foreach ($online_carts as $onkey => $onval) {
+        if (!$onval['goods_id'] || !$onval['goods_number']) {
+            continue;
+        }
+        $key = $onval['goods_id'] . '_' . $onval['product_id'];
+        if ($offcart[$key]) {
+            $sql = "UPDATE " . $GLOBALS['ecs']->table('cart') . " SET goods_number=goods_number+" . $offcart[$key]['goods_number'] . " WHERE rec_id='" . $onval['rec_id'] . "'";
+            $GLOBALS['db']->query($sql);
+            $sql = "DELETE FROM " . $GLOBALS['ecs']->table('cart') . " WHERE rec_id = '" . $offcart[$key]['rec_id'] . "'";
+            $GLOBALS['db']->query($sql);
+            unset($offcart[$key]);
+        }
+    }
+    //不重复的商品转成在线购物车
+    if (count($offcart) > 0) {
+        $offcart = array_values($offcart); //初始化数组的key
+        $rec_id = array();
+        for ($i = count($offcart); $i >= 0; $rec_id[] = $offcart[$i]['rec_id'], $i--) ;
+        $rec_id = array_unique(array_filter($rec_id));
+        $sql = "UPDATE " . $GLOBALS['ecs']->table('cart') . " SET user_id = '$user_id' WHERE rec_id IN (" . implode(',', $rec_id) . ")";
+        $GLOBALS['db']->query($sql);
+    }
+
+    return true;
 }

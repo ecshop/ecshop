@@ -764,10 +764,11 @@ function get_order_sn()
  */
 function cart_goods($type = CART_GENERAL_GOODS)
 {
-    $sql = "SELECT rec_id, user_id, goods_id, goods_name, goods_sn, goods_number, " .
-        "market_price, goods_price, goods_attr, is_real, extension_code, parent_id, is_gift, is_shipping, " .
-        "goods_price * goods_number AS subtotal " .
-        "FROM " . $GLOBALS['ecs']->table('cart') .
+    $sql = "SELECT c.rec_id, c.user_id, c.goods_id, c.goods_name, c.goods_sn, c.goods_number, " .
+        "c.market_price, c.goods_price, c.goods_attr, c.is_real, c.extension_code, c.parent_id, c.is_gift, c.is_shipping, " .
+        "c.goods_price * c.goods_number AS subtotal, g.goods_thumb " .
+        "FROM " . $GLOBALS['ecs']->table('cart') . 'AS c ' .
+        'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = c.goods_id ' .
         " WHERE session_id = '" . SESS_ID . "' " .
         "AND rec_type = '$type'";
 
@@ -907,7 +908,7 @@ function cart_weight_price($type = CART_GENERAL_GOODS)
  * @param integer $parent 基本件
  * @return  boolean
  */
-function addto_cart($goods_id, $num = 1, $spec = array(), $parent = 0)
+function addto_cart($goods_id, $num = 1, $spec = array(), $parent = 0, $rec_type = CART_GENERAL_GOODS)
 {
     $GLOBALS['err']->clean();
     $_parent_id = $parent;
@@ -1011,7 +1012,7 @@ function addto_cart($goods_id, $num = 1, $spec = array(), $parent = 0)
         'extension_code' => $goods['extension_code'],
         'is_gift' => 0,
         'is_shipping' => $goods['is_shipping'],
-        'rec_type' => CART_GENERAL_GOODS
+        'rec_type' => $rec_type
     );
 
     /* 如果该配件在添加为基本件的配件时，所设置的“配件价格”比原价低，即此配件在价格上提供了优惠， */
@@ -1434,7 +1435,7 @@ function order_refund($order, $refund_type, $refund_note, $refund_amount = 0)
  * @access  public
  * @return  array
  */
-function get_cart_goods()
+function get_cart_goods($rec_type = CART_GENERAL_GOODS)
 {
     /* 初始化 */
     $goods_list = array();
@@ -1447,9 +1448,14 @@ function get_cart_goods()
     );
 
     /* 循环、统计 */
+    if ($_SESSION['user_id'] > 0) {
+        $where = " user_id = '" . $_SESSION['user_id'] . "'";
+    } else {
+        $where = " session_id = '" . SESS_ID . "'";
+    }
     $sql = "SELECT *, IF(parent_id, parent_id, goods_id) AS pid " .
         " FROM " . $GLOBALS['ecs']->table('cart') . " " .
-        " WHERE session_id = '" . SESS_ID . "' AND rec_type = '" . CART_GENERAL_GOODS . "'" .
+        " WHERE " . $where . " AND rec_type = '" . $rec_type . "'" .
         " ORDER BY pid, parent_id";
     $res = $GLOBALS['db']->query($sql);
 

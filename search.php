@@ -158,7 +158,7 @@ else {
 
             $sql = 'SELECT DISTINCT goods_id FROM ' . $ecs->table('tag') . " WHERE tag_words LIKE '%$val%' ";
             $res = $db->query($sql);
-            while ($row = $db->FetchRow($res)) {
+            while ($row = $db->fetchRow($res)) {
                 $goods_ids[] = $row['goods_id'];
             }
 
@@ -314,10 +314,10 @@ else {
         "WHERE g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 $attr_in " .
         "AND (( 1 " . $categories . $keywords . $brand . $min_price . $max_price . $intro . $outstock . " ) " . $tag_where . " ) " .
         "ORDER BY $sort $order";
-    $res = $db->SelectLimit($sql, $size, ($page - 1) * $size);
+    $res = $db->selectLimit($sql, $size, ($page - 1) * $size);
 
     $arr = array();
-    while ($row = $db->FetchRow($res)) {
+    while ($row = $db->fetchRow($res)) {
         if ($row['promote_price'] > 0) {
             $promote_price = bargain_price($row['promote_price'], $row['promote_start_date'], $row['promote_end_date']);
         } else {
@@ -466,7 +466,7 @@ function get_seachable_attributes($cat_id = 0)
             ' ORDER BY cat_id, sort_order ASC';
         $res = $GLOBALS['db']->query($sql);
 
-        while ($row = $GLOBALS['db']->FetchRow($res)) {
+        while ($row = $GLOBALS['db']->fetchRow($res)) {
             if ($row['attr_index'] == 1 && $row['attr_input_type'] == 1) {
                 $row['attr_values'] = str_replace("\r", '', $row['attr_values']);
                 $options = explode("\n", $row['attr_values']);

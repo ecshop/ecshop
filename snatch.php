@@ -278,12 +278,12 @@ function get_myprice($id)
     if (!empty($_SESSION['user_id'])) {
         /* 取得用户所有价格 */
         $sql = 'SELECT bid_price FROM ' . $GLOBALS['ecs']->table('snatch_log') . " WHERE snatch_id = '$id' AND user_id = '$_SESSION[user_id]' ORDER BY bid_time DESC";
-        $my_price = $GLOBALS['db']->GetCol($sql);
+        $my_price = $GLOBALS['db']->getCol($sql);
 
         if ($my_price) {
             /* 取得用户唯一价格 */
             $sql = 'SELECT bid_price , count(*) AS num FROM ' . $GLOBALS['ecs']->table('snatch_log') . "  WHERE snatch_id ='$id' AND bid_price " . db_create_in(join(',', $my_price)) . ' GROUP BY bid_price HAVING num = 1';
-            $my_only_price = $GLOBALS['db']->GetCol($sql);
+            $my_only_price = $GLOBALS['db']->getCol($sql);
         }
 
         for ($i = 0, $count = count($my_price); $i < $count; $i++) {
@@ -293,7 +293,7 @@ function get_myprice($id)
         }
 
         $sql = 'SELECT pay_points FROM ' . $GLOBALS['ecs']->table('users') . " WHERE user_id = '$_SESSION[user_id]'";
-        $pay_points = $GLOBALS['db']->GetOne($sql);
+        $pay_points = $GLOBALS['db']->getOne($sql);
         $pay_points = $pay_points . $GLOBALS['_CFG']['integral_name'];
     }
 
@@ -323,7 +323,7 @@ function get_price_list($id, $num = 5)
     $sql = 'SELECT t1.log_id, t1.bid_price, t2.user_name FROM ' . $GLOBALS['ecs']->table('snatch_log') . ' AS t1, ' . $GLOBALS['ecs']->table('users') . " AS t2 WHERE snatch_id = '$id' AND t1.user_id = t2.user_id ORDER BY t1.log_id DESC LIMIT $num";
     $res = $GLOBALS['db']->query($sql);
     $price_list = array();
-    while ($row = $GLOBALS['db']->FetchRow($res)) {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
         $price_list[] = array('bid_price' => price_format($row['bid_price'], false), 'user_name' => $row['user_name']);
     }
     return $price_list;
@@ -347,7 +347,7 @@ function get_snatch_list($num = 10)
     $snatch_list = array();
     $overtime = 0;
     $res = $GLOBALS['db']->query($sql);
-    while ($row = $GLOBALS['db']->FetchRow($res)) {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
         $overtime = $row['end_time'] > $now ? 0 : 1;
         $snatch_list[] = array(
             'snatch_id' => $row['snatch_id'],
@@ -379,7 +379,7 @@ function get_snatch($id)
         "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
         "WHERE ga.act_id = '$id' AND g.is_delete = 0";
 
-    $goods = $GLOBALS['db']->GetRow($sql);
+    $goods = $GLOBALS['db']->getRow($sql);
 
     if ($goods) {
         $promote_price = bargain_price($goods['promote_price'], $goods['promote_start_date'], $goods['promote_end_date']);
@@ -425,5 +425,5 @@ function get_last_snatch()
     $sql = 'SELECT act_id FROM ' . $GLOBALS['ecs']->table('goods_activity') .
         " WHERE  start_time < '$now' AND end_time > '$now' AND act_type = " . GAT_SNATCH .
         " ORDER BY end_time ASC LIMIT 1";
-    return $GLOBALS['db']->GetOne($sql);
+    return $GLOBALS['db']->getOne($sql);
 }

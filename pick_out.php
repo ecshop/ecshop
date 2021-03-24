@@ -60,17 +60,17 @@ if (empty($cat_id)) {
     }
 
     /* 获取商品总数 */
-    $goods_count = $db->GetOne("SELECT COUNT(DISTINCT(goods_id)) FROM " . $ecs->table('goods_attr'));
+    $goods_count = $db->getOne("SELECT COUNT(DISTINCT(goods_id)) FROM " . $ecs->table('goods_attr'));
     /* 获取符合条件的商品id */
     //$sql = "SELECT DISTINCT goods_id FROM " .$ecs->table('goods_attr'). " LIMIT 100";
     $sql = "SELECT DISTINCT goods_id FROM " . $ecs->table('goods_attr');
-    $in_goods = $db->GetCol($sql);
+    $in_goods = $db->getCol($sql);
     $in_goods = 'AND g.goods_id ' . db_create_in(implode(',', $in_goods));
     $url = "search.php?pickout=1";
 } else {
     /* 取得商品类型名称 */
     $sql = "SELECT cat_name FROM " . $ecs->table('goods_type') . " WHERE cat_id = '$cat_id'";
-    $cat_name = $db->GetOne($sql);
+    $cat_name = $db->getOne($sql);
     $condition[0]['name'] = $cat_name;
 
     $picks[] = array('name' => '<strong>' . $_LANG['goods_type'] . ':</strong><br />' . $cat_name, 'url' => 'pick_out.php');
@@ -114,12 +114,12 @@ if (empty($cat_id)) {
         /* 仅选择了商品类型的情况 */
 
         /* 查出数量 */
-        $goods_count = $db->GetOne("SELECT COUNT(distinct(g.goods_id)) FROM " . $ecs->table('goods_attr') . " AS g, " . $ecs->table('attribute') . " AS a WHERE g.attr_id = a.attr_id AND a.cat_id = '$cat_id' ");
+        $goods_count = $db->getOne("SELECT COUNT(distinct(g.goods_id)) FROM " . $ecs->table('goods_attr') . " AS g, " . $ecs->table('attribute') . " AS a WHERE g.attr_id = a.attr_id AND a.cat_id = '$cat_id' ");
 
         /* 防止结果过大，最多只查出前100个goods_id */
 
         $sql = "SELECT DISTINCT g.goods_id FROM " . $ecs->table('goods_attr') . " AS g, " . $ecs->table('attribute') . " AS a WHERE g.attr_id = a.attr_id AND a.cat_id = '$cat_id' LIMIT 100";
-        $in_goods = $db->GetCol($sql);
+        $in_goods = $db->getCol($sql);
         $in_goods = 'AND g.goods_id ' . db_create_in(implode(',', $in_goods));
     }
 
@@ -127,7 +127,7 @@ if (empty($cat_id)) {
     $sql = "SELECT DISTINCT a.attr_id FROM " . $ecs->table('goods_attr') . " AS g, " . $ecs->table('attribute') . " AS a " .
         "WHERE a.attr_id = g.attr_id " . $in_goods;
 
-    $in_attr = $db->GetCol($sql); // 符合条件attr_id;
+    $in_attr = $db->getCol($sql); // 符合条件attr_id;
     $in_attr = array_diff($in_attr, $attr_picks); // 除去已经选择过的attr_id
     $in_attr = 'AND g.attr_id ' . db_create_in(implode(',', $in_attr));
 
@@ -156,7 +156,7 @@ $sql = "SELECT g.goods_id, g.goods_name, g.market_price, g.shop_price AS org_pri
     "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
     "WHERE g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 " . $in_goods .
     "ORDER BY g.sort_order, g.last_update DESC";
-$res = $db->SelectLimit($sql, 4);
+$res = $db->selectLimit($sql, 4);
 
 /* 获取品牌 */
 $sql = "SELECT b.brand_id, b.brand_name, b.brand_logo, COUNT(g.goods_id) AS goods_num " .

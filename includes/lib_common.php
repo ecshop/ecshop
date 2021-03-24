@@ -136,7 +136,7 @@ function get_regions($type = 0, $parent = 0)
     $sql = 'SELECT region_id, region_name FROM ' . $GLOBALS['ecs']->table('region') .
         " WHERE region_type = '$type' AND parent_id = '$parent'";
 
-    return $GLOBALS['db']->GetAll($sql);
+    return $GLOBALS['db']->getAll($sql);
 }
 
 /**
@@ -151,7 +151,7 @@ function get_shipping_config($area_id)
 {
     /* 获得配置信息 */
     $sql = 'SELECT configure FROM ' . $GLOBALS['ecs']->table('shipping_area') . " WHERE shipping_area_id = '$area_id'";
-    $cfg = $GLOBALS['db']->GetOne($sql);
+    $cfg = $GLOBALS['db']->getOne($sql);
 
     if ($cfg) {
         /* 拆分成配置信息的数组 */
@@ -739,7 +739,7 @@ function get_mail_template($tpl_name)
 {
     $sql = 'SELECT template_subject, is_html, template_content FROM ' . $GLOBALS['ecs']->table('mail_templates') . " WHERE template_code = '$tpl_name'";
 
-    return $GLOBALS['db']->GetRow($sql);
+    return $GLOBALS['db']->getRow($sql);
 }
 
 /**
@@ -893,7 +893,7 @@ function virtual_card_shipping($goods, $order_sn, &$msg, $process = 'other')
 
     /* 检查有没有缺货 */
     $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('virtual_card') . " WHERE goods_id = '$goods[goods_id]' AND is_saled = 0 ";
-    $num = $GLOBALS['db']->GetOne($sql);
+    $num = $GLOBALS['db']->getOne($sql);
 
     if ($num < $goods['num']) {
         $msg .= sprintf($GLOBALS['_LANG']['virtual_card_oos'], $goods['goods_name']);
@@ -946,7 +946,7 @@ function virtual_card_shipping($goods, $order_sn, &$msg, $process = 'other')
     if (true) {
         /* 获取订单信息 */
         $sql = "SELECT order_id, order_sn, consignee, email FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_sn = '$order_sn'";
-        $order = $GLOBALS['db']->GetRow($sql);
+        $order = $GLOBALS['db']->getRow($sql);
 
         /* 更新订单信息 */
         if ($process == 'split') {
@@ -1004,7 +1004,7 @@ function virtual_card_result($order_sn, $goods)
 
     $cards = array();
 
-    while ($row = $GLOBALS['db']->FetchRow($res)) {
+    while ($row = $GLOBALS['db']->fetchRow($res)) {
         /* 卡号和密码解密 */
         if ($row['crc32'] == 0 || $row['crc32'] == crc32(AUTH_KEY)) {
             $row['card_sn'] = decrypt($row['card_sn']);
@@ -1040,7 +1040,7 @@ function get_snatch_result($id)
         " WHERE lg.snatch_id = '$id'" .
         ' GROUP BY lg.bid_price' .
         ' ORDER BY num ASC, lg.bid_price ASC, lg.bid_time ASC LIMIT 1';
-    $rec = $GLOBALS['db']->GetRow($sql);
+    $rec = $GLOBALS['db']->getRow($sql);
 
     if ($rec) {
         $rec['bid_time'] = local_date($GLOBALS['_CFG']['time_format'], $rec['bid_time']);
@@ -1116,7 +1116,7 @@ function clear_tpl_files($is_cache = true, $ext = '')
         }
 
         while ($file = readdir($folder)) {
-            if ($file == '.' || $file == '..' || $file == 'index.htm' || $file == 'index.html') {
+            if ($file == '.' || $file == '..' || $file == 'index.htm' || $file == 'index.html' || $file == '.gitignore') {
                 continue;
             }
             if (is_file($dir . $file)) {
@@ -1982,7 +1982,7 @@ function sort_goods_attr_id_array($goods_attr_id_array, $sort = 'asc')
                 AND a.attr_type = 1
             WHERE v.goods_attr_id " . db_create_in($goods_attr_id_array) . "
             ORDER BY a.attr_id $sort";
-    $row = $GLOBALS['db']->GetAll($sql);
+    $row = $GLOBALS['db']->getAll($sql);
 
     $return_arr = array();
     foreach ($row as $value) {
@@ -2017,7 +2017,7 @@ function is_spec($goods_attr_id_array, $sort = 'asc')
                 AND a.attr_type = 1
             WHERE v.goods_attr_id " . db_create_in($goods_attr_id_array) . "
             ORDER BY a.attr_id $sort";
-    $row = $GLOBALS['db']->GetAll($sql);
+    $row = $GLOBALS['db']->getAll($sql);
 
     $return_arr = array();
     foreach ($row as $value) {
@@ -2051,7 +2051,7 @@ function get_package_info($id)
         " FROM " . $GLOBALS['ecs']->table('goods_activity') .
         " WHERE act_id='$id' AND act_type = " . GAT_PACKAGE;
 
-    $package = $db->GetRow($sql);
+    $package = $db->getRow($sql);
 
     /* 将时间转成可阅读格式 */
     if ($package['start_time'] <= $now && $package['end_time'] >= $now) {

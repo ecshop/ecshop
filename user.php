@@ -1361,7 +1361,7 @@ elseif ($action == 'collect') {
         /* 检查是否已经存在于用户的收藏夹 */
         $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('collect_goods') .
             " WHERE user_id='$_SESSION[user_id]' AND goods_id = '$goods_id'";
-        if ($GLOBALS['db']->GetOne($sql) > 0) {
+        if ($GLOBALS['db']->getOne($sql) > 0) {
             $result['error'] = 1;
             $result['message'] = $GLOBALS['_LANG']['collect_existed'];
             die($json->encode($result));
@@ -1773,7 +1773,7 @@ elseif ($action == 'affiliate') {
             $page = $max_page;
         }
 
-        $res = $db->SelectLimit($sql, $size, ($page - 1) * $size);
+        $res = $db->selectLimit($sql, $size, ($page - 1) * $size);
         $logdb = array();
         while ($rt = $GLOBALS['db']->fetchRow($res)) {
             if (!empty($rt['suid'])) {
@@ -2170,21 +2170,21 @@ elseif ($action == 'send_hash_mail') {
             log_account_change($row['user_id'], 0, 0, 0, $result_points, $_LANG['transform_points'], ACT_OTHER);
             show_message(sprintf($_LANG['to_pay_points'], $num, $points_name[$bbs_key]['title'], $result_points), $_LANG['transform_points'], 'user.php?act=transform_points');
 
-        // no break
+            // no break
         case TO_R:
             $result_points = floor($num * $to / $from);
             $user->set_points($row['user_name'], array($bbs_key => 0 - $num)); //调整论坛积分
             log_account_change($row['user_id'], 0, 0, $result_points, 0, $_LANG['transform_points'], ACT_OTHER);
             show_message(sprintf($_LANG['to_rank_points'], $num, $points_name[$bbs_key]['title'], $result_points), $_LANG['transform_points'], 'user.php?act=transform_points');
 
-        // no break
+            // no break
         case FROM_P:
             $result_points = floor($num * $to / $from);
             log_account_change($row['user_id'], 0, 0, 0, 0 - $num, $_LANG['transform_points'], ACT_OTHER); //调整商城积分
             $user->set_points($row['user_name'], array($bbs_key => $result_points)); //调整论坛积分
             show_message(sprintf($_LANG['from_pay_points'], $num, $result_points, $points_name[$bbs_key]['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
 
-        // no break
+            // no break
         case FROM_R:
             $result_points = floor($num * $to / $from);
             log_account_change($row['user_id'], 0, 0, 0 - $num, 0, $_LANG['transform_points'], ACT_OTHER); //调整商城积分

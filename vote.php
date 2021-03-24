@@ -55,7 +55,7 @@ function vote_already_submited($vote_id, $ip_address)
     $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('vote_log') . " " .
         "WHERE ip_address = '$ip_address' AND vote_id = '$vote_id' ";
 
-    return ($GLOBALS['db']->GetOne($sql) > 0);
+    return ($GLOBALS['db']->getOne($sql) > 0);
 }
 
 /**

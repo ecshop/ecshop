@@ -88,7 +88,7 @@ function get_message_list($user_id, $user_name, $num, $start, $order_id = 0)
         $sql .= " WHERE parent_id = 0 AND user_id = '$user_id' AND user_name = '" . $_SESSION['user_name'] . "' AND order_id=0 ORDER BY msg_time DESC";
     }
 
-    $res = $GLOBALS['db']->SelectLimit($sql, $num, $start);
+    $res = $GLOBALS['db']->selectLimit($sql, $num, $start);
 
     while ($rows = $GLOBALS['db']->fetchRow($res)) {
         /* 取得留言的回复 */
@@ -230,7 +230,7 @@ function get_booking_list($user_id, $num, $start)
     $booking = array();
     $sql = "SELECT bg.rec_id, bg.goods_id, bg.goods_number, bg.booking_time, bg.dispose_note, g.goods_name " .
         "FROM " . $GLOBALS['ecs']->table('booking_goods') . " AS bg , " . $GLOBALS['ecs']->table('goods') . " AS g" . " WHERE bg.goods_id = g.goods_id AND bg.user_id = '$user_id' ORDER BY bg.booking_time DESC";
-    $res = $GLOBALS['db']->SelectLimit($sql, $num, $start);
+    $res = $GLOBALS['db']->selectLimit($sql, $num, $start);
 
     while ($row = $GLOBALS['db']->fetchRow($res)) {
         if (empty($row['dispose_note'])) {
@@ -763,7 +763,7 @@ function get_comment_list($user_id, $page_size, $start)
         " LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g " .
         " ON c.comment_type=0 AND c.id_value = g.goods_id " .
         " WHERE c.user_id='$user_id'";
-    $res = $GLOBALS['db']->SelectLimit($sql, $page_size, $start);
+    $res = $GLOBALS['db']->selectLimit($sql, $page_size, $start);
 
     $comments = array();
     $to_article = array();

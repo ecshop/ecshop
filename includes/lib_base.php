@@ -701,28 +701,12 @@ function ecs_header($string, $replace = true, $http_response_code = 0)
         exit();
     }
 
-    if (empty($http_response_code) || PHP_VERSION < '4.3') {
-        @header($string, $replace);
-    } else {
-        @header($string, $replace, $http_response_code);
-    }
+    @header($string, $replace);
 }
 
 function ecs_iconv($source_lang, $target_lang, $source_string = '')
 {
-    static $chs = null;
-
-    /* 如果字符串为空或者字符串不需要转换，直接返回 */
-    if ($source_lang == $target_lang || $source_string == '' || preg_match("/[\x80-\xFF]+/", $source_string) == 0) {
-        return $source_string;
-    }
-
-    if ($chs === null) {
-        require_once(ROOT_PATH . 'includes/cls_iconv.php');
-        $chs = new Chinese(ROOT_PATH);
-    }
-
-    return $chs->Convert($source_lang, $target_lang, $source_string);
+    return $source_string;
 }
 
 function ecs_geoip($ip)

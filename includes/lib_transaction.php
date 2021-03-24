@@ -239,7 +239,7 @@ function get_user_orders($user_id, $num = 10, $start = 0)
         "(goods_amount + shipping_fee + insure_fee + pay_fee + pack_fee + card_fee + tax - discount) AS total_fee " .
         " FROM " . $GLOBALS['ecs']->table('order_info') .
         " WHERE user_id = '$user_id' ORDER BY add_time DESC";
-    $res = $GLOBALS['db']->SelectLimit($sql, $num, $start);
+    $res = $GLOBALS['db']->selectLimit($sql, $num, $start);
 
     while ($row = $GLOBALS['db']->fetchRow($res)) {
         if ($row['order_status'] == OS_UNCONFIRMED) {
@@ -288,7 +288,7 @@ function cancel_order($order_id, $user_id = 0)
 {
     /* 查询订单信息，检查状态 */
     $sql = "SELECT user_id, order_id, order_sn , surplus , integral , bonus_id, order_status, shipping_status, pay_status FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_id = '$order_id'";
-    $order = $GLOBALS['db']->GetRow($sql);
+    $order = $GLOBALS['db']->getRow($sql);
 
     if (empty($order)) {
         $GLOBALS['err']->add($GLOBALS['_LANG']['order_exist']);
@@ -383,7 +383,7 @@ function affirm_received($order_id, $user_id = 0)
     /* 查询订单信息，检查状态 */
     $sql = "SELECT user_id, order_sn , order_status, shipping_status, pay_status FROM " . $GLOBALS['ecs']->table('order_info') . " WHERE order_id = '$order_id'";
 
-    $order = $GLOBALS['db']->GetRow($sql);
+    $order = $GLOBALS['db']->getRow($sql);
 
     // 如果用户ID大于 0 。检查订单是否属于该用户
     if ($user_id > 0 && $order['user_id'] != $user_id) {
@@ -527,7 +527,7 @@ function get_order_detail($order_id, $user_id = 0)
 
     /* 对发货号处理 */
     if (!empty($order['invoice_no'])) {
-        $shipping_code = $GLOBALS['db']->GetOne("SELECT shipping_code FROM " . $GLOBALS['ecs']->table('shipping') . " WHERE shipping_id = '$order[shipping_id]'");
+        $shipping_code = $GLOBALS['db']->getOne("SELECT shipping_code FROM " . $GLOBALS['ecs']->table('shipping') . " WHERE shipping_id = '$order[shipping_id]'");
         $plugin = ROOT_PATH . 'includes/modules/shipping/' . $shipping_code . '.php';
         if (file_exists($plugin)) {
             include_once($plugin);
@@ -655,7 +655,7 @@ function get_user_merge($user_id)
         " WHERE user_id  = '$user_id' " . order_query_sql('unprocessed') .
         "AND extension_code = '' " .
         " ORDER BY add_time DESC";
-    $list = $GLOBALS['db']->GetCol($sql);
+    $list = $GLOBALS['db']->getCol($sql);
 
     $merge = array();
     foreach ($list as $val) {

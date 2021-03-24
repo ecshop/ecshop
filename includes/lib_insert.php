@@ -76,7 +76,7 @@ function insert_cart_info()
     $sql = 'SELECT SUM(goods_number) AS number, SUM(goods_price * goods_number) AS amount' .
         ' FROM ' . $GLOBALS['ecs']->table('cart') .
         " WHERE session_id = '" . SESS_ID . "' AND rec_type = '" . CART_GENERAL_GOODS . "'";
-    $row = $GLOBALS['db']->GetRow($sql);
+    $row = $GLOBALS['db']->getRow($sql);
 
     if ($row) {
         $number = intval($row['number']);
@@ -114,7 +114,7 @@ function insert_ads($arr)
             "WHERE enabled = 1 AND start_time <= '" . $time . "' AND end_time >= '" . $time . "' " .
             "AND a.position_id = '" . $arr['id'] . "' " .
             'ORDER BY rnd LIMIT ' . $arr['num'];
-        $res = $GLOBALS['db']->GetAll($sql);
+        $res = $GLOBALS['db']->getAll($sql);
     } else {
         if ($static_res[$arr['id']] === null) {
             $sql = 'SELECT a.ad_id, a.position_id, a.media_type, a.ad_link, a.ad_code, a.ad_name, p.ad_width, ' .
@@ -124,7 +124,7 @@ function insert_ads($arr)
                 "WHERE enabled = 1 AND a.position_id = '" . $arr['id'] .
                 "' AND start_time <= '" . $time . "' AND end_time >= '" . $time . "' " .
                 'ORDER BY rnd LIMIT 1';
-            $static_res[$arr['id']] = $GLOBALS['db']->GetAll($sql);
+            $static_res[$arr['id']] = $GLOBALS['db']->getAll($sql);
         }
         $res = $static_res[$arr['id']];
     }
@@ -285,7 +285,7 @@ function insert_bought_notes($arr)
     $pager['page'] = $page = 1;
     $pager['size'] = $size = 5;
     $pager['record_count'] = $count;
-    $pager['page_count'] = $page_count = ($count > 0) ? intval(ceil($count / $size)) : 1;;
+    $pager['page_count'] = $page_count = ($count > 0) ? intval(ceil($count / $size)) : 1;
     $pager['page_first'] = "javascript:gotoBuyPage(1,$arr[id])";
     $pager['page_prev'] = $page > 1 ? "javascript:gotoBuyPage(" . ($page - 1) . ",$arr[id])" : 'javascript:;';
     $pager['page_next'] = $page < $page_count ? 'javascript:gotoBuyPage(' . ($page + 1) . ",$arr[id])" : 'javascript:;';

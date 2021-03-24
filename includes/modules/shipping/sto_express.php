@@ -106,6 +106,7 @@ class sto_express
             return 0;
         } else {
             @$fee = $this->configure['base_fee'];
+
             $this->configure['fee_compute_mode'] = !empty($this->configure['fee_compute_mode']) ? $this->configure['fee_compute_mode'] : 'by_weight';
 
             if ($this->configure['fee_compute_mode'] == 'by_number') {

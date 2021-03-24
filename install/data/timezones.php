@@ -21,5 +21,3 @@ $timezones = array(
     'Europe/Dublin' => '欧洲，德国，都柏林',
     'Europe/Paris' => '欧洲，法国，巴黎'
 );
-
-?>

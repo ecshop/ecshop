@@ -6,7 +6,7 @@ if (!file_exists('../languages/' . $lang . '/calendar.php') || strrchr($lang, '.
     $lang = 'zh_cn';
 }
 
-require(dirname(dirname(__FILE__)) . '/data/config.php');
+require(dirname(__DIR__) . '/data/config.php');
 header('Content-type: application/x-javascript; charset=' . EC_CHARSET);
 
 include_once('../languages/' . $lang . '/calendar.php');

@@ -86,13 +86,7 @@ function assign_query_info()
     if ($GLOBALS['db']->queryTime == '') {
         $query_time = 0;
     } else {
-        if (PHP_VERSION >= '5.0.0') {
-            $query_time = number_format(microtime(true) - $GLOBALS['db']->queryTime, 6);
-        } else {
-            list($now_usec, $now_sec) = explode(' ', microtime());
-            list($start_usec, $start_sec) = explode(' ', $GLOBALS['db']->queryTime);
-            $query_time = number_format(($now_sec - $start_sec) + ($now_usec - $start_usec), 6);
-        }
+        $query_time = number_format(microtime(true) - $GLOBALS['db']->queryTime, 6);
     }
     $GLOBALS['smarty']->assign('query_info', sprintf($GLOBALS['_LANG']['query_info'], $GLOBALS['db']->queryCount, $query_time));
 
@@ -175,7 +169,7 @@ function get_shipping_config($area_id)
  * @access  public
  * @return  object
  */
-function &init_users()
+function init_users()
 {
     $set_modules = false;
     static $cls = null;
@@ -1203,7 +1197,7 @@ function smarty_insert_scripts($args)
     foreach ($arr as $val) {
         if (in_array($val, $scripts) == false) {
             $scripts[] = $val;
-            if ($val{0} == '.') {
+            if ($val[0] == '.') {
                 $str .= '<script type="text/javascript" src="' . $val . '"></script>';
             } else {
                 $str .= '<script type="text/javascript" src="js/' . $val . '"></script>';
@@ -2306,49 +2300,3 @@ function get_specifications_list($goods_id, $conditions = '')
     return $return_array;
 }
 
-/**
- * 调用array_combine函数
- *
- * @param array $keys
- * @param array $values
- *
- * @return  $combined
- */
-if (!function_exists('array_combine')) {
-    function array_combine($keys, $values)
-    {
-        if (!is_array($keys)) {
-            user_error('array_combine() expects parameter 1 to be array, ' .
-                gettype($keys) . ' given', E_USER_WARNING);
-            return;
-        }
-
-        if (!is_array($values)) {
-            user_error('array_combine() expects parameter 2 to be array, ' .
-                gettype($values) . ' given', E_USER_WARNING);
-            return;
-        }
-
-        $key_count = count($keys);
-        $value_count = count($values);
-        if ($key_count !== $value_count) {
-            user_error('array_combine() Both parameters should have equal number of elements', E_USER_WARNING);
-            return false;
-        }
-
-        if ($key_count === 0 || $value_count === 0) {
-            user_error('array_combine() Both parameters should have number of elements at least 0', E_USER_WARNING);
-            return false;
-        }
-
-        $keys = array_values($keys);
-        $values = array_values($values);
-
-        $combined = array();
-        for ($i = 0; $i < $key_count; $i++) {
-            $combined[$keys[$i]] = $values[$i];
-        }
-
-        return $combined;
-    }
-}

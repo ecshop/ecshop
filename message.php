@@ -111,37 +111,16 @@ function get_msg_list($num, $start)
     /* 获取留言数据 */
     $msg = array();
 
-    $mysql_ver = $GLOBALS['db']->version();
+    $sql = "(SELECT 'comment' AS tablename,   comment_id AS ID, content AS msg_content, null AS msg_title, add_time AS msg_time, id_value AS id_value, comment_rank AS comment_rank, null AS message_img, user_name AS user_name, '6' AS msg_type ";
+    $sql .= " FROM " . $GLOBALS['ecs']->table('comment');
+    $sql .= "WHERE STATUS =1 AND comment_type =0) ";
+    $sql .= " UNION ";
+    $sql .= "(SELECT 'feedback' AS tablename, msg_id AS ID, msg_content AS msg_content, msg_title AS msg_title, msg_time AS msg_time, null AS id_value, null AS comment_rank, message_img AS message_img, user_name AS user_name, msg_type AS msg_type ";
+    $sql .= " FROM " . $GLOBALS['ecs']->table('feedback');
+    $sql .= " WHERE `msg_area`='1' AND `msg_status` = '1') ";
+    $sql .= " ORDER BY msg_time DESC ";
 
-    if ($mysql_ver > '3.2.3') {
-        $sql = "(SELECT 'comment' AS tablename,   comment_id AS ID, content AS msg_content, null AS msg_title, add_time AS msg_time, id_value AS id_value, comment_rank AS comment_rank, null AS message_img, user_name AS user_name, '6' AS msg_type ";
-        $sql .= " FROM " . $GLOBALS['ecs']->table('comment');
-        $sql .= "WHERE STATUS =1 AND comment_type =0) ";
-        $sql .= " UNION ";
-        $sql .= "(SELECT 'feedback' AS tablename, msg_id AS ID, msg_content AS msg_content, msg_title AS msg_title, msg_time AS msg_time, null AS id_value, null AS comment_rank, message_img AS message_img, user_name AS user_name, msg_type AS msg_type ";
-        $sql .= " FROM " . $GLOBALS['ecs']->table('feedback');
-        $sql .= " WHERE `msg_area`='1' AND `msg_status` = '1') ";
-        $sql .= " ORDER BY msg_time DESC ";
-    } else {
-        $con_sql = "SELECT 'comment' AS tablename,   comment_id AS ID, content AS msg_content, null AS msg_title, add_time AS msg_time, id_value AS id_value, comment_rank AS comment_rank, null AS message_img, user_name AS user_name, '6' AS msg_type ";
-        $con_sql .= " FROM " . $GLOBALS['ecs']->table('comment');
-        $con_sql .= "WHERE STATUS =1 AND comment_type =0 ";
-
-        $fee_sql = "SELECT 'feedback' AS tablename, msg_id AS ID, msg_content AS msg_content, msg_title AS msg_title, msg_time AS msg_time, null AS id_value, null AS comment_rank, message_img AS message_img, user_name AS user_name, msg_type AS msg_type ";
-        $fee_sql .= " FROM " . $GLOBALS['ecs']->table('feedback');
-        $fee_sql .= " WHERE `msg_area`='1' AND `msg_status` = '1' ";
-
-
-        $cre_con = "CREATE TEMPORARY TABLE tmp_table " . $con_sql;
-        $GLOBALS['db']->query($cre_con);
-
-        $cre_con = "INSERT INTO tmp_table " . $fee_sql;
-        $GLOBALS['db']->query($cre_con);
-
-        $sql = "SELECT * FROM  " . $GLOBALS['ecs']->table('tmp_table') . " ORDER BY msg_time DESC ";
-    }
-
-    $res = $GLOBALS['db']->SelectLimit($sql, $num, $start);
+    $res = $GLOBALS['db']->selectLimit($sql, $num, $start);
 
     while ($rows = $GLOBALS['db']->fetchRow($res)) {
         for ($i = 0; $i < count($rows); $i++) {

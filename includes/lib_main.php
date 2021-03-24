@@ -1087,7 +1087,8 @@ function get_tags($goods_id = 0, $user_id = 0)
  */
 function get_dyna_libs($theme, $tmp)
 {
-    $ext = end(explode('.', $tmp));
+    $tmp_arr = explode('.', $tmp);
+    $ext = end($tmp_arr);
     $tmp = basename($tmp, ".$ext");
     $sql = 'SELECT region, library, sort_order, id, number, type' .
         ' FROM ' . $GLOBALS['ecs']->table('template') .
@@ -1440,8 +1441,7 @@ function get_user_bonus($user_id = 0)
  * @param void
  *
  * @return void
- * @author xuanyan
- **/
+ */
 function set_affiliate()
 {
     $config = unserialize($GLOBALS['_CFG']['affiliate']);
@@ -1470,8 +1470,7 @@ function set_affiliate()
  * @param void
  *
  * @return int
- * @author xuanyan
- **/
+ */
 function get_affiliate()
 {
     if (!empty($_COOKIE['ecshop_affiliate_uid'])) {

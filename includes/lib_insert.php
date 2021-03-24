@@ -15,13 +15,7 @@ function insert_query_info()
     if ($GLOBALS['db']->queryTime == '') {
         $query_time = 0;
     } else {
-        if (PHP_VERSION >= '5.0.0') {
-            $query_time = number_format(microtime(true) - $GLOBALS['db']->queryTime, 6);
-        } else {
-            list($now_usec, $now_sec) = explode(' ', microtime());
-            list($start_usec, $start_sec) = explode(' ', $GLOBALS['db']->queryTime);
-            $query_time = number_format(($now_sec - $start_sec) + ($now_usec - $start_usec), 6);
-        }
+        $query_time = number_format(microtime(true) - $GLOBALS['db']->queryTime, 6);
     }
 
     /* 内存占用情况 */
@@ -109,6 +103,8 @@ function insert_ads($arr)
 {
     static $static_res = null;
 
+    $arr['num'] = intval($arr['num']);
+    $arr['id'] = intval($arr['id']);
     $time = gmtime();
     if (!empty($arr['num']) && $arr['num'] != 1) {
         $sql = 'SELECT a.ad_id, a.position_id, a.media_type, a.ad_link, a.ad_code, a.ad_name, p.ad_width, ' .
@@ -227,6 +223,8 @@ function insert_comments($arr)
 
     $GLOBALS['smarty']->caching = false;
     $GLOBALS['smarty']->force_compile = true;
+    $arr['id'] = intval($arr['id']);
+    $arr['type'] = addslashes($arr['type']);
 
     /* 验证码相关设置 */
     if ((intval($GLOBALS['_CFG']['captcha']) & CAPTCHA_COMMENT) && gd_version() > 0) {
@@ -264,6 +262,7 @@ function insert_bought_notes($arr)
 
     $GLOBALS['smarty']->caching = false;
     $GLOBALS['smarty']->force_compile = true;
+    $arr['id'] = intval($arr['id']);
 
     /* 商品购买记录 */
     $sql = 'SELECT u.user_name, og.goods_number, oi.add_time, IF(oi.order_status IN (2, 3, 4), 0, 1) AS order_status ' .

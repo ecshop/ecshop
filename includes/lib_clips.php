@@ -418,9 +418,7 @@ function get_online_payment_list($include_balance = true)
         $sql .= " AND pay_code <> 'balance' ";
     }
 
-    $modules = $GLOBALS['db']->getAll($sql);
-
-    return $modules;
+    return $GLOBALS['db']->getAll($sql);
 }
 
 /**
@@ -589,8 +587,6 @@ function add_tag($id, $tag)
  * @access   public
  * @param array
  * @return   none
- * @author   Xuan Yan
- *
  */
 function color_tag(&$tags)
 {
@@ -650,8 +646,6 @@ function color_tag(&$tags)
  * 取得用户等级信息
  * @access   public
  * @return array
- * @author   Xuan Yan
- *
  */
 function get_rank_info()
 {
@@ -734,7 +728,13 @@ function get_user_prompt($user_id)
     }
 
     /* 排序 */
-    $cmp = create_function('$a, $b', 'if($a["add_time"] == $b["add_time"]){return 0;};return $a["add_time"] < $b["add_time"] ? 1 : -1;');
+    $cmp = function ($a, $b) {
+        if ($a["add_time"] == $b["add_time"]) {
+            return 0;
+        }
+        return $a["add_time"] < $b["add_time"] ? 1 : -1;
+    };
+
     usort($prompt, $cmp);
 
     /* 格式化时间 */

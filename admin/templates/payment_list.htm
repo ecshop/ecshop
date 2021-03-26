@@ -13,7 +13,6 @@
     <th>{$lang.handler}</th>
   </tr>
   {foreach from=$modules item=module}
-  {if $module.code neq "tenpayc2c"}
   <tr>
     <td class="first-cell" valign="top">
       {if $module.install == 1}
@@ -68,7 +67,7 @@
 
       {/if}
     </td>
-  </tr>{/if}
+  </tr>
   {/foreach}
 </table>
 </div>

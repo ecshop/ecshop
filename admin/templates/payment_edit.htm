@@ -33,14 +33,6 @@
       {if $config.desc}
       <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="notice{$config.name}">{$config.desc}</span>
       {/if}
-      <!--the tenpay code -->
-      {if $key eq "0"}
-      {if $smarty.get.code eq "tenpay"}<input align=""type="button" value="{$lang.ctenpay}" onclick="javascript:window.open('{$lang.ctenpay_url}')"/>
-      {elseif $smarty.get.code eq "tenpayc2c"} <input align=""type="button" value="{$lang.ctenpay}" onclick="javascript:window.open('{$lang.ctenpayc2c_url}')"/>
-      {/if}
-      
-      {/if}
-      <!--the tenpay code -->
     </td>
   </tr>
   {/foreach}

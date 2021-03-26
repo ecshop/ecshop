@@ -40,16 +40,12 @@ if ($_REQUEST['act'] == 'list') {
             $modules[$i]['desc'] = $_LANG[$modules[$i]['desc']];
             $modules[$i]['install'] = '0';
         }
-        if ($modules[$i]['pay_code'] == 'tenpayc2c') {
-            $tenpayc2c = $modules[$i];
-        }
     }
 
     assign_query_info();
 
     $smarty->assign('ur_here', $_LANG['02_payment_list']);
     $smarty->assign('modules', $modules);
-    $smarty->assign('tenpayc2c', $tenpayc2c);
     $smarty->display('payment_list.htm');
 }
 

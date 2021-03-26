@@ -360,15 +360,14 @@ class sql_executor
 
         /* 从表属性声明串中查找表的类型 */
         $pattern = '/.*(?:ENGINE|TYPE)\s*=\s*([a-z]+).*$/is';
-        $type = preg_match($pattern, $postfix, $matches) ? $matches[1] : 'MYISAM';
+        $type = preg_match($pattern, $postfix, $matches) ? $matches[1] : 'InnoDB';
 
         /* 从表属性声明串中查找自增语句 */
         $pattern = '/.*(AUTO_INCREMENT\s*=\s*\d+).*$/is';
         $auto_incr = preg_match($pattern, $postfix, $matches) ? $matches[1] : '';
 
         /* 重新设置表属性声明串 */
-        $postfix = $this->db->version() > '4.1' ? " ENGINE=$type DEFAULT CHARACTER SET " . $this->db_charset
-            : " TYPE=$type";
+        $postfix = " ENGINE=$type DEFAULT CHARACTER SET utf8mb4";
         $postfix .= ' ' . $auto_incr;
 
         /* 重新构造建表语句 */
@@ -730,13 +729,11 @@ class sql_executor
      */
     public function insert_charset($sql_string)
     {
-        if ($this->db->version() > '4.1') {
-            $sql_string = preg_replace(
-                '/(TEXT|CHAR\(.*?\)|VARCHAR\(.*?\))\s+/i',
-                '\1 CHARACTER SET ' . $this->db_charset . ' ',
-                $sql_string
-            );
-        }
+        $sql_string = preg_replace(
+            '/(TEXT|CHAR\(.*?\)|VARCHAR\(.*?\))\s+/i',
+            '\1 CHARACTER SET ' . $this->db_charset . ' ',
+            $sql_string
+        );
 
         return $sql_string;
     }

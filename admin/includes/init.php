@@ -20,10 +20,6 @@ define('ROOT_PATH', str_replace('\\', '/', dirname(__DIR__, 2)) . '/');
 
 require ROOT_PATH . '/data/config.php';
 
-if (defined('DEBUG_MODE') == false) {
-    define('DEBUG_MODE', 0);
-}
-
 date_default_timezone_set($timezone);
 
 if (isset($_SERVER['PHP_SELF'])) {
@@ -133,7 +129,8 @@ $smarty = new cls_template;
 
 $smarty->template_dir = ROOT_PATH . ADMIN_PATH . '/templates';
 $smarty->compile_dir = ROOT_PATH . 'temp/compiled/admin';
-if ((DEBUG_MODE & 2) == 2) {
+
+if (DEBUG_MODE) {
     $smarty->force_compile = true;
 }
 
@@ -221,14 +218,13 @@ if ($_REQUEST['act'] != 'login' && $_REQUEST['act'] != 'signin' &&
     }
 }
 
-//header('Cache-control: private');
 header('content-type: text/html; charset=' . EC_CHARSET);
 header('Expires: Fri, 14 Mar 1980 20:53:00 GMT');
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 header('Cache-Control: no-cache, must-revalidate');
 header('Pragma: no-cache');
 
-if ((DEBUG_MODE & 1) == 1) {
+if (DEBUG_MODE) {
     error_reporting(E_ALL);
 } else {
     error_reporting(E_ALL ^ E_NOTICE);

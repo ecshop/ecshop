@@ -191,13 +191,6 @@ class cls_mysql
             return false;
         }
 
-        if (defined('DEBUG_MODE') && (DEBUG_MODE & 8) == 8) {
-            $logfilename = $this->root_path . DATA_DIR . '/mysqli_query_' . $this->dbhash . '_' . date('Y_m_d') . '.log';
-            $str = $sql . "\n\n";
-
-            file_put_contents($logfilename, $str, FILE_APPEND);
-        }
-
         return $query;
     }
 

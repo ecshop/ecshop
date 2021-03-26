@@ -21,10 +21,6 @@ if (file_exists(ROOT_PATH . 'data/config.php')) {
     include(ROOT_PATH . 'data/config.php');
 }
 
-if (defined('DEBUG_MODE') == false) {
-    define('DEBUG_MODE', 0);
-}
-
 date_default_timezone_set($timezone);
 
 $php_self = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
@@ -72,7 +68,7 @@ $_CFG = load_config();
 /* 初始化用户插件 */
 $user = init_users();
 
-if ((DEBUG_MODE & 1) == 1) {
+if (DEBUG_MODE) {
     error_reporting(E_ALL);
 } else {
     error_reporting(E_ALL ^ E_NOTICE);

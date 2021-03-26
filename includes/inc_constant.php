@@ -4,9 +4,21 @@ if (!defined('IN_ECS')) {
     die('Hacking attempt');
 }
 
+if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+    die('Require a PHP version ">= 8.0". You are running ' . PHP_VERSION . '.');
+}
+
+if (in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])) {
+    defined('DEBUG_MODE') or define('DEBUG_MODE', true);
+} else {
+    defined('DEBUG_MODE') or define('DEBUG_MODE', false);
+}
+
 define('APPNAME', 'ECSHOP');
 define('VERSION', 'v2.8.0-dev');
 define('RELEASE', '20210323');
+define('ADMIN_PATH', 'admin');
+define('EC_CHARSET', 'utf-8');
 
 /* 图片处理相关常数 */
 define('ERR_INVALID_IMAGE', 1);

@@ -1,21 +1,17 @@
 <?php
 
-
 define('IN_ECS', true);
 
-if (empty($_GET['encode'])) {
-    $string = array_merge($_GET, $_POST);
-    if (get_magic_quotes_gpc()) {
-        require(dirname(__FILE__) . '/includes/lib_base.php');
-        //require(dirname(__FILE__) . '/includes/lib_common.php');
+require(dirname(__FILE__) . '/includes/init.php');
 
-        $string = stripslashes_deep($string);
-    }
+if (empty($_GET['encode'])) {
+    require(ROOT_PATH . '/includes/lib_base.php');
+    $string = array_merge($_GET, $_POST);
+    $string = stripslashes_deep($string);
     $string['search_encode_time'] = time();
     $string = str_replace('+', '%2b', base64_encode(serialize($string)));
 
     header("Location: search.php?encode=$string\n");
-
     exit;
 } else {
     $string = base64_decode(trim($_GET['encode']));
@@ -37,8 +33,6 @@ if (empty($_GET['encode'])) {
         $string = array();
     }
 }
-
-require(dirname(__FILE__) . '/includes/init.php');
 
 $_REQUEST = array_merge($_REQUEST, addslashes_deep($string));
 

@@ -32,10 +32,6 @@ if (DIRECTORY_SEPARATOR == '\\') {
 
 require(ROOT_PATH . 'data/config.php');
 
-if (defined('DEBUG_MODE') == false) {
-    define('DEBUG_MODE', 0);
-}
-
 date_default_timezone_set($timezone);
 
 $php_self = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
@@ -134,7 +130,7 @@ if (!defined('INIT_NO_SMARTY')) {
     $smarty->cache_dir = ROOT_PATH . 'temp/caches';
     $smarty->compile_dir = ROOT_PATH . 'temp/compiled';
 
-    if ((DEBUG_MODE & 2) == 2) {
+    if (DEBUG_MODE) {
         $smarty->direct_output = true;
         $smarty->force_compile = true;
     } else {
@@ -219,7 +215,7 @@ if (!defined('INIT_NO_USERS')) {
     }
 }
 
-if ((DEBUG_MODE & 1) == 1) {
+if (DEBUG_MODE) {
     error_reporting(E_ALL);
 } else {
     error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));

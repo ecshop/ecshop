@@ -7,7 +7,7 @@ require(dirname(__FILE__) . '/includes/init.php');
 /* 检查权限 */
 admin_priv('file_check');
 
-if (!$ecshopfiles = @file(ROOT_PATH . 'temp/ecshopfiles.md5')) {
+if (!$files = @file(ROOT_PATH . 'temp/files.md5')) {
     sys_msg($_LANG['filecheck_nofound_md5file'], 1);
 }
 
@@ -34,7 +34,7 @@ if ($step == 1 || $step == 2) {
     checkfiles('js/', '\.js|\.css');
     checkfiles('languages/', '\.php');
 
-    foreach ($ecshopfiles as $line) {
+    foreach ($files as $line) {
         $file = trim(substr($line, 34));
         $md5datanew[$file] = substr($line, 0, 32);
         if ($md5datanew[$file] != $md5data[$file]) {

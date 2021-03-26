@@ -711,47 +711,14 @@ function ecs_iconv($source_lang, $target_lang, $source_string = '')
 
 function ecs_geoip($ip)
 {
-    static $fp = null, $offset = array(), $index = null;
+    static $ipObj = null;
 
-    $ip = gethostbyname($ip);
-    $ipdot = explode('.', $ip);
-    $ip = pack('N', ip2long($ip));
-
-    $ipdot[0] = (int)$ipdot[0];
-    $ipdot[1] = (int)$ipdot[1];
-    if ($ipdot[0] == 10 || $ipdot[0] == 127 || ($ipdot[0] == 192 && $ipdot[1] == 168) || ($ipdot[0] == 172 && ($ipdot[1] >= 16 && $ipdot[1] <= 31))) {
-        return 'LAN';
+    if (is_null($ipObj)) {
+        include_once(ROOT_PATH . 'includes/cls_ip.php');
+        $ipObj = new IpLocation();
     }
 
-    if ($fp === null) {
-        $fp = fopen(ROOT_PATH . 'includes/codetable/ipdata.dat', 'rb');
-        if ($fp === false) {
-            return 'Invalid IP data file';
-        }
-        $offset = unpack('Nlen', fread($fp, 4));
-        if ($offset['len'] < 4) {
-            return 'Invalid IP data file';
-        }
-        $index = fread($fp, $offset['len'] - 4);
-    }
-
-    $length = $offset['len'] - 1028;
-    $start = unpack('Vlen', $index[$ipdot[0] * 4] . $index[$ipdot[0] * 4 + 1] . $index[$ipdot[0] * 4 + 2] . $index[$ipdot[0] * 4 + 3]);
-    for ($start = $start['len'] * 8 + 1024; $start < $length; $start += 8) {
-        if ($index[$start] . $index[$start + 1] . $index[$start + 2] . $index[$start + 3] >= $ip) {
-            $index_offset = unpack('Vlen', $index[$start + 4] . $index[$start + 5] . $index[$start + 6] . "\x0");
-            $index_length = unpack('Clen', $index[$start + 7]);
-            break;
-        }
-    }
-
-    fseek($fp, $offset['len'] + $index_offset['len'] - 1024);
-    $area = fread($fp, $index_length['len']);
-
-    fclose($fp);
-    $fp = null;
-
-    return $area;
+    return $ipObj->getLocation($ip)['country'];
 }
 
 /**
@@ -897,7 +864,7 @@ function get_file_suffix($file_name, $allow_type = array())
  */
 function read_static_cache($cache_name)
 {
-    if ((DEBUG_MODE & 2) == 2) {
+    if (DEBUG_MODE) {
         return false;
     }
     static $result = array();
@@ -924,7 +891,7 @@ function read_static_cache($cache_name)
  */
 function write_static_cache($cache_name, $caches)
 {
-    if ((DEBUG_MODE & 2) == 2) {
+    if (DEBUG_MODE) {
         return false;
     }
     $cache_file_path = ROOT_PATH . '/temp/static_caches/' . $cache_name . '.php';

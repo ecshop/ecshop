@@ -76,15 +76,12 @@ function install() {
  */
 function createConfigFile() {
     var f = $("js-setting"),
-        tzs = f["js-timezones"],
-        tz = tzs ? "timezone=" + tzs[tzs.selectedIndex].value : "",
         params="db_host=" + f["js-db-host"].value + "&"
             + "db_port=" + f["js-db-port"].value + "&"
             + "db_user=" + encodeURIComponent(f["js-db-user"].value) + "&"
             + "db_pass=" + encodeURIComponent(f["js-db-pass"].value) + "&"
             + "db_name=" + encodeURIComponent(f["js-db-name"].value) + "&"
             + "db_prefix=" + f["js-db-prefix"].value + "&"
-            + tz + "&"
             + "IS_AJAX_REQUEST=yes";
 
     notice.innerHTML = $_LANG["create_config_file"];
@@ -167,8 +164,7 @@ function createAdminPassport() {
  */
 function doOthers() {
     var f = $("js-setting"),
-        disableCaptcha = f["js-disable-captcha"].checked ? 0 : 1,
-        params = "disable_captcha=" + disableCaptcha;
+        params = '';
 
     notice.innerHTML += $_LANG["do_others"];
 

@@ -17,7 +17,6 @@ if (isset($_SERVER['PHP_SELF'])) {
 }
 
 /* 定义版本的编码 */
-define('EC_CHARSET', 'utf-8');
 define('EC_DB_CHARSET', 'utf8mb4');
 
 require(ROOT_PATH . 'includes/lib_base.php');
@@ -33,8 +32,5 @@ require(ROOT_PATH . 'install/includes/cls_template.php');
 $smarty = new template(ROOT_PATH . 'install/templates/');
 
 require(ROOT_PATH . 'install/includes/lib_installer.php');
-
-/* 发送HTTP头部，保证浏览器识别UTF8编码 */
-header('Content-type: text/html; charset=' . EC_CHARSET);
 
 @set_time_limit(360);

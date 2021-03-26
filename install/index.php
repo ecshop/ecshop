@@ -1,9 +1,10 @@
 <?php
 
+session_start();
+
 define('IN_ECS', true);
 
-session_start();
-require(dirname(__FILE__) . '/includes/init.php');
+require(__DIR__ . '/includes/init.php');
 require(ROOT_PATH . 'includes/inc_constant.php');
 
 /* 加载安装程序所使用的语言包 */
@@ -59,7 +60,6 @@ switch ($step) {
             $has_unwritable_tpl = 'no';
         }
 
-        $ui = (!empty($_POST['user_interface'])) ? $_POST['user_interface'] : $_GET['ui'];
         $_SESSION['check']['system_info'] = get_system_info();
         $_SESSION['check']['dir_checking'] = $dir_checking['detail'];
         $_SESSION['check']['has_unwritable_tpl'] = $has_unwritable_tpl;
@@ -77,31 +77,6 @@ switch ($step) {
         break;
 
     case 'setting_ui':
-        $prefix = 'ecs_';
-        $goods_types = array();
-
-        if (!has_supported_gd()) {
-            $checked = 'checked="checked"';
-            $disabled = 'disabled="true"';
-        } else {
-            $checked = '';
-            $disabled = '';
-        }
-
-        $show_timezone = 'yes';
-        $timezones = get_timezone_list();
-        $_SESSION['setting_ui']['checked'] = $checked;
-        $_SESSION['setting_ui']['disabled'] = $disabled;
-        $_SESSION['setting_ui']['goods_types'] = $goods_types;
-        $_SESSION['setting_ui']['show_timezone'] = $show_timezone;
-        $_SESSION['setting_ui']['local_timezone'] = get_local_timezone();
-        $_SESSION['setting_ui']['timezones'] = $timezones;
-        $smarty->assign('checked', $checked);
-        $smarty->assign('disabled', $disabled);
-        $smarty->assign('goods_types', $goods_types);
-        $smarty->assign('show_timezone', $show_timezone);
-        $smarty->assign('local_timezone', get_local_timezone());
-        $smarty->assign('timezones', $timezones);
         $smarty->display('setting.php');
 
         break;
@@ -196,10 +171,7 @@ switch ($step) {
         break;
 
     case 'do_others':
-        $system_lang = 'zh_cn';
-        $captcha = isset($_POST['disable_captcha']) ? intval($_POST['disable_captcha']) : '0';
-
-        $result = do_others($system_lang, $captcha);
+        $result = do_others();
         if ($result === false) {
             echo implode(',', $err->get_all());
         } else {

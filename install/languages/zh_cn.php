@@ -64,15 +64,6 @@ $_LANG['admin_name'] = '管理员姓名：';
 $_LANG['admin_password'] = '登录密码：';
 $_LANG['admin_password2'] = '密码确认：';
 $_LANG['admin_email'] = '电子邮箱：';
-$_LANG['mix_options'] = '杂项';
-$_LANG['select_lang_package'] = '选择语言包：';
-$_LANG['set_timezone'] = '设置时区：';
-$_LANG['timezone_list'] = '时区列表';
-$_LANG['disable_captcha'] = '禁用验证码：';
-$_LANG['captcha_notice'] = '选择此项，进入后台、发表评论无需验证';
-$_LANG['pre_goods_types'] = '预选商品类型：';
-$_LANG['install_demo'] = '安装测试数据：';
-$_LANG['demo_notice'] = '选择此项，将默认全选预选商品类型';
 
 $_LANG['install_at_once'] = '立即安装';
 $_LANG['monitor_title'] = '安装程序监视器';

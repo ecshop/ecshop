@@ -18,17 +18,6 @@ function get_gd_version()
 }
 
 /**
- * 是否支持GD
- *
- * @access  public
- * @return  boolean     成功返回true，失败返回false
- */
-function has_supported_gd()
-{
-    return get_gd_version() === 0 ? false : true;
-}
-
-/**
  * 检测服务器上是否存在指定的文件类型
  *
  * @access  public
@@ -120,7 +109,7 @@ function get_db_list($db_host, $db_port, $db_user, $db_pass)
 {
     global $err, $_LANG;
     $databases = array();
-    $filter_dbs = array('information_schema', 'mysql');
+    $filter_dbs = array('information_schema', 'mysql', 'performance_schema', 'sys');
     $db_host = construct_db_host($db_host, $db_port);
     $conn = @mysqli_connect($db_host, $db_user, $db_pass);
 
@@ -145,30 +134,6 @@ function get_db_list($db_host, $db_port, $db_user, $db_pass)
     @mysqli_close($conn);
 
     return $databases;
-}
-
-/**
- * 获得时区列表，如有重复值，只保留第一个
- *
- * @access  public
- * @return  array
- */
-function get_timezone_list()
-{
-    include_once(ROOT_PATH . 'install/data/timezones.php');
-
-    return array_unique($timezones);
-}
-
-/**
- * 获得服务器所在时区
- *
- * @access  public
- * @return  string     返回时区串，形如Asia/Shanghai
- */
-function get_local_timezone()
-{
-    return date_default_timezone_get();
 }
 
 /**
@@ -253,13 +218,9 @@ function create_config_file($db_host, $db_port, $db_user, $db_pass, $db_name, $p
     $content .= "\$cookie_path    = \"/\";\n\n";
     $content .= "\$cookie_domain    = \"\";\n\n";
     $content .= "\$session = \"1440\";\n\n";
-    $content .= "define('EC_CHARSET','" . EC_CHARSET . "');\n\n";
-    $content .= "define('ADMIN_PATH','admin');\n\n";
     $content .= "define('AUTH_KEY', 'this is a key');\n\n";
     $content .= "define('OLD_AUTH_KEY', '');\n\n";
-    $content .= "define('API_TIME', '');\n\n";
-    $content .= '?>';
-
+    $content .= "define('API_TIME', '');";
 
     $fp = @fopen(ROOT_PATH . 'data/config.php', 'wb+');
     if (!$fp) {
@@ -368,51 +329,15 @@ function create_admin_passport($admin_name, $admin_password, $admin_password2, $
 }
 
 /**
- * 把一个文件从一个目录复制到另一个目录
- *
- * @access  public
- * @param string $source 源目录
- * @param string $target 目标目录
- * @return  boolean     成功返回true，失败返回false
- */
-function copy_files($source, $target)
-{
-    global $err, $_LANG;
-
-    if (!file_exists($target)) {
-        if (!mkdir($target, 0777)) {
-            $err->add($_LANG['cannt_mk_dir']);
-            return false;
-        }
-        @chmod($target, 0777);
-    }
-
-    $dir = opendir($source);
-    while (($file = @readdir($dir)) !== false) {
-        if (is_file($source . $file)) {
-            if (!copy($source . $file, $target . $file)) {
-                $err->add($_LANG['cannt_copy_file']);
-                return false;
-            }
-            @chmod($target . $file, 0777);
-        }
-    }
-    closedir($dir);
-
-    return true;
-}
-
-/**
  * 其它设置
  *
  * @access  public
  * @param string $system_lang 系统语言
  * @param string $disable_captcha 是否开启验证码
- * @param array $goods_types 预选商品类型
  * @param string $integrate_code 用户接口
  * @return  boolean     成功返回true，失败返回false
  */
-function do_others($system_lang, $captcha, $goods_types = array(), $integrate_code = 'ecshop')
+function do_others($system_lang = 'zh_cn', $captcha = 1, $integrate_code = 'ecshop')
 {
     global $err, $_LANG;
 

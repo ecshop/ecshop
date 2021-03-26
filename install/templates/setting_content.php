@@ -96,34 +96,6 @@
                         </tr>
                     </table>
 
-                    <h3><?php echo $lang['mix_options']; ?></h3>
-                    <table width="450" class="list">
-                        <?php if ($show_timezone == "yes"): ?>
-                            <tr>
-                                <td width="90" align="left"><?php echo $lang['set_timezone']; ?></td>
-                                <td align="left">
-                                    <select name="js-timezones">
-                                        <?php foreach ($timezones as $key => $item): ?>
-                                            <option value="<?php echo $key; ?>"
-                                                    <?php if ($key == $local_timezone): ?>selected="true"<?php $found = true;
-                                            endif; ?>><?php echo $item; ?></option>
-                                        <?php endforeach; ?>
-                                        <?php if (!$found) : ?>
-                                            <option value="<?php echo $local_timezone; ?>"
-                                                    selected="true"><?php echo $local_timezone; ?></option>
-                                        <?php endif; ?>
-                                    </select>
-                                </td>
-                            </tr>
-                        <?php endif; ?>
-                        <tr>
-                            <td width="90" align="left"><?php echo $lang['disable_captcha']; ?></td>
-                            <td align="left"><input type="checkbox" class="p"
-                                                    name="js-disable-captcha" <?php echo $checked . $disabled; ?> />
-                                <span class="comment"> (<?php echo $lang['captcha_notice']; ?>)</span></td>
-                        </tr>
-                    </table>
-
                 </div>
             </td>
             <td width="227" valign="top" background="images/install-step3.gif">&nbsp;

@@ -5,6 +5,7 @@ if (!defined('IN_ECS')) {
 }
 define('SOURCE_TOKEN', 'b11983d30cb6821158744d5d065d0f70');
 define('SOURCE_ID', '620386');
+require_once(ROOT_PATH . 'includes/cls_JSON.php');
 require_once(ROOT_PATH . 'includes/cls_transport.php');
 
 /* 短信模块主类 */
@@ -72,7 +73,7 @@ class sms
 
         /* 此处最好不要从$GLOBALS数组里引用，防止出错 */
         $this->t = new transport(-1, -1, -1, false);
-        $this->json = new Services_JSON;
+        $this->json = new JSON;
     }
 
     /* 发送短消息

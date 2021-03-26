@@ -293,8 +293,8 @@ function get_comment_list()
     }
 
     $sort = array('comment_id', 'user_name', 'comment_type', 'id_value', 'ip_address', 'add_time');
-    $filter['sort_by'] = in_array($_REQUEST['sort_by'], $sort) ? $_REQUEST['sort_by'] : 'add_time';
-    $filter['sort_order'] = in_array($_REQUEST['sort_order'], ['ASC', 'DESC']) ? $_REQUEST['sort_order'] : 'DESC';
+    $filter['sort_by'] = isset($_REQUEST['sort_by']) && in_array($_REQUEST['sort_by'], $sort) ? $_REQUEST['sort_by'] : 'add_time';
+    $filter['sort_order'] = isset($_REQUEST['sort_order']) && in_array($_REQUEST['sort_order'], ['ASC', 'DESC']) ? $_REQUEST['sort_order'] : 'DESC';
 
     $where = (!empty($filter['keywords'])) ? " AND content LIKE '%" . mysql_like_quote($filter['keywords']) . "%' " : '';
 

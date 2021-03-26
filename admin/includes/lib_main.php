@@ -75,7 +75,7 @@ function sys_msg($msg_detail, $msg_type = 0, $links = array(), $auto_redirect = 
  * @param string $content 操作的内容
  * @return  void
  */
-function admin_log($sn = '', $action, $content)
+function admin_log($sn = '', $action = '', $content = '')
 {
     $log_info = $GLOBALS['_LANG']['log_action'][$action] . $GLOBALS['_LANG']['log_action'][$content] . ': ' . addslashes($sn);
 
@@ -603,19 +603,17 @@ function page_and_size($filter)
 function return_bytes($val)
 {
     $val = trim($val);
+    $v = (int) mb_substr($val, 0, strlen($val) - 1);
     $last = strtolower($val[strlen($val) - 1]);
     switch ($last) {
         case 'g':
-            $val *= 1024;
-        // no break
+            $v *= 1024;
         case 'm':
-            $val *= 1024;
-        // no break
+            $v *= 1024;
         case 'k':
-            $val *= 1024;
+            $v *= 1024;
     }
-
-    return $val;
+    return $v;
 }
 
 /**

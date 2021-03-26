@@ -28,15 +28,12 @@ require './init.php';
 if (!defined('IN_UC')) {
     error_reporting(0);
     set_magic_quotes_runtime(0);
-    defined('MAGIC_QUOTES_GPC') || define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
 
     $_DCACHE = $get = $post = array();
 
     $code = @$_GET['code'];
     parse_str(_authcode($code, 'DECODE', UC_KEY), $get);
-    if (MAGIC_QUOTES_GPC) {
-        $get = _stripslashes($get);
-    }
+    $get = _stripslashes($get);
 
     $timestamp = time();
     if ($timestamp - $get['time'] > 3600) {

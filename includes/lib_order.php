@@ -2173,7 +2173,7 @@ function compute_discount()
         " AND act_type " . db_create_in(array(FAT_DISCOUNT, FAT_PRICE));
     $favourable_list = $GLOBALS['db']->getAll($sql);
     if (!$favourable_list) {
-        return 0;
+        return array('discount' => 0, 'name' => '');
     }
 
     /* 查询购物车商品 */
@@ -2186,7 +2186,7 @@ function compute_discount()
         "AND rec_type = '" . CART_GENERAL_GOODS . "'";
     $goods_list = $GLOBALS['db']->getAll($sql);
     if (!$goods_list) {
-        return 0;
+        return array('discount' => 0, 'name' => '');
     }
 
     /* 初始化折扣 */

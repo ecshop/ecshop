@@ -392,7 +392,7 @@ class cls_sql_dump
      *
      * @return      string      $str    随机名称
      */
-    public function get_random_name()
+    public static function get_random_name()
     {
         $str = date('Ymd');
 

@@ -15,10 +15,8 @@ $tempfiledir    = "./";
 
 $spellercss        = '../spellerStyle.css';                        // by FredCK
 $word_win_src    = '../wordWindow.js';                            // by FredCK
-if (!get_magic_quotes_gpc()) {
-    $_POST['textinputs']=addslashes_d($_POST['textinputs']);
-}
-$textinputs        = $_POST['textinputs']; # array
+
+$textinputs        = addslashes_d($_POST['textinputs']); # array
 $input_separator = "A";
 
 # set the JavaScript variable to the submitted text.

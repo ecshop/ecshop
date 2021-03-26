@@ -44,7 +44,7 @@ function server_timezone()
  */
 function local_mktime($hour = null, $minute = null, $second = null, $month = null, $day = null, $year = null)
 {
-    $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : $GLOBALS['_CFG']['timezone'];
+    $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : intval($GLOBALS['_CFG']['timezone']);
 
     /**
      * $time = mktime($hour, $minute, $second, $month, $day, $year) - date('Z') + (date('Z') - $timezone * 3600)
@@ -67,9 +67,9 @@ function local_mktime($hour = null, $minute = null, $second = null, $month = nul
 
 function local_date($format, $time = null)
 {
-    $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : $GLOBALS['_CFG']['timezone'];
+    $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : intval($GLOBALS['_CFG']['timezone']);
 
-    if ($time === null) {
+    if (is_null($time)) {
         $time = gmtime();
     } elseif ($time <= 0) {
         return '';
@@ -109,7 +109,7 @@ function gmstr2time($str)
  */
 function local_strtotime($str)
 {
-    $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : $GLOBALS['_CFG']['timezone'];
+    $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : intval($GLOBALS['_CFG']['timezone']);
 
     /**
      * $time = mktime($hour, $minute, $second, $month, $day, $year) - date('Z') + (date('Z') - $timezone * 3600)
@@ -142,7 +142,7 @@ function local_gettime($timestamp = null)
  */
 function local_getdate($timestamp = null)
 {
-    $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : $GLOBALS['_CFG']['timezone'];
+    $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : intval($GLOBALS['_CFG']['timezone']);
 
     /* 如果时间戳为空，则获得服务器的当前时间 */
     if ($timestamp === null) {

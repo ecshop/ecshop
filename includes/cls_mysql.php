@@ -298,7 +298,7 @@ class cls_mysql
             $row = mysqli_fetch_row($res);
 
             if ($row !== false) {
-                return $row[0];
+                return is_null($row) ? '' : $row[0];
             } else {
                 return '';
             }

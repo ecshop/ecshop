@@ -82,7 +82,7 @@ function get_system_info()
     $file_types = array(
         'dwt' => ROOT_PATH . 'themes/default/index.dwt',
         'lbi' => ROOT_PATH . 'themes/default/library/member.lbi',
-        'dat' => ROOT_PATH . 'includes/codetable/ipdata.dat'
+        'dat' => ROOT_PATH . 'includes/ipdata/ipdata.dat'
     );
     $exists_info = file_types_exists($file_types);
     $exists_info = empty($exists_info) ? $_LANG['support_dld'] : $exists_info;

@@ -22,7 +22,7 @@ if (!file_exists(ROOT_PATH . 'data/install.lock') && !file_exists(ROOT_PATH . 'i
 @ini_set('session.use_trans_sid', 0);
 @ini_set('session.use_cookies', 1);
 @ini_set('session.auto_start', 0);
-@ini_set('display_errors', 0);
+@ini_set('display_errors', DEBUG_MODE ? 1 : 0);
 
 if (DIRECTORY_SEPARATOR == '\\') {
     @ini_set('include_path', '.;' . ROOT_PATH);

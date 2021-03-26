@@ -15,7 +15,7 @@ define('ROOT_PATH', dirname(__DIR__) . '/');
 @ini_set('session.use_trans_sid', 0);
 @ini_set('session.use_cookies', 1);
 @ini_set('session.auto_start', 0);
-@ini_set('display_errors', 0);
+@ini_set('display_errors', DEBUG_MODE ? 1 : 0);
 
 if (file_exists(ROOT_PATH . 'data/config.php')) {
     include(ROOT_PATH . 'data/config.php');

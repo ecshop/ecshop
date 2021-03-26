@@ -14,7 +14,7 @@ error_reporting(E_ALL);
 @ini_set('session.use_trans_sid', 0);
 @ini_set('session.use_cookies', 1);
 @ini_set('session.auto_start', 0);
-@ini_set('display_errors', 0);
+@ini_set('display_errors', DEBUG_MODE ? 1 : 0);
 
 define('ROOT_PATH', str_replace('\\', '/', dirname(__DIR__, 2)) . '/');
 

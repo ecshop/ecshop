@@ -9,6 +9,8 @@ error_reporting(E_ALL);
 /* 取得当前ecshop所在的根目录 */
 define('ROOT_PATH', dirname(__DIR__) . '/');
 
+require(ROOT_PATH . 'includes/inc_constant.php');
+
 /* 初始化设置 */
 @ini_set('memory_limit', '1G');
 @ini_set('session.cache_expire', 180);
@@ -29,7 +31,6 @@ if ('/' == substr($php_self, -1)) {
 }
 define('PHP_SELF', $php_self);
 
-require(ROOT_PATH . 'includes/inc_constant.php');
 require(ROOT_PATH . 'includes/cls_ecshop.php');
 require(ROOT_PATH . 'includes/lib_base.php');
 require(ROOT_PATH . 'includes/lib_common.php');

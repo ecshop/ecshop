@@ -9,12 +9,12 @@ error_reporting(E_ALL);
 /* 取得当前ecshop所在的根目录 */
 define('ROOT_PATH', str_replace('\\', '/', dirname(__DIR__) . '/'));
 
-if (!file_exists(ROOT_PATH . 'data/install.lock') && !file_exists(ROOT_PATH . 'includes/install.lock')
-    && !defined('NO_CHECK_INSTALL')) {
+if (!file_exists(ROOT_PATH . 'data/install.lock')) {
     header("Location: ./install/index.php\n");
-
     exit;
 }
+
+require(ROOT_PATH . 'includes/inc_constant.php');
 
 /* 初始化设置 */
 @ini_set('memory_limit', '1G');
@@ -40,7 +40,6 @@ if ('/' == substr($php_self, -1)) {
 }
 define('PHP_SELF', $php_self);
 
-require(ROOT_PATH . 'includes/inc_constant.php');
 require(ROOT_PATH . 'includes/cls_ecshop.php');
 require(ROOT_PATH . 'includes/cls_error.php');
 require(ROOT_PATH . 'includes/lib_time.php');

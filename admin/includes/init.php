@@ -8,6 +8,10 @@ define('ECS_ADMIN', true);
 
 error_reporting(E_ALL);
 
+define('ROOT_PATH', str_replace('\\', '/', dirname(__DIR__, 2)) . '/');
+
+require(ROOT_PATH . 'includes/inc_constant.php');
+
 /* 初始化设置 */
 @ini_set('memory_limit', '1G');
 @ini_set('session.cache_expire', 180);
@@ -15,8 +19,6 @@ error_reporting(E_ALL);
 @ini_set('session.use_cookies', 1);
 @ini_set('session.auto_start', 0);
 @ini_set('display_errors', DEBUG_MODE ? 1 : 0);
-
-define('ROOT_PATH', str_replace('\\', '/', dirname(__DIR__, 2)) . '/');
 
 require ROOT_PATH . '/data/config.php';
 
@@ -28,7 +30,6 @@ if (isset($_SERVER['PHP_SELF'])) {
     define('PHP_SELF', $_SERVER['SCRIPT_NAME']);
 }
 
-require(ROOT_PATH . 'includes/inc_constant.php');
 require(ROOT_PATH . 'includes/cls_ecshop.php');
 require(ROOT_PATH . 'includes/cls_error.php');
 require(ROOT_PATH . 'includes/lib_time.php');

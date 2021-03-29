@@ -92,7 +92,7 @@ if ($action == 'sms_sign_add') {
                 $content_t = iconv('gb2312', 'utf-8', $content_y);
             }
 
-            $url = 'https://openapi.shopex.cn';
+            $url = 'https://openapi.cn';
             $key = 'qufoxtpr';
             $secret = 't66moqjixb2nntiy2io2';
             $c = new prism_client($url, $key, $secret);
@@ -156,7 +156,7 @@ if ($action == 'sms_sign_update') {
                 $content_t = iconv('gb2312', 'utf-8', $content_y);
                 $new_content_t = iconv('gb2312', 'utf-8', $new_content_y);
             }
-            $url = 'https://openapi.shopex.cn';
+            $url = 'https://openapi.cn';
             $key = 'qufoxtpr';
             $secret = 't66moqjixb2nntiy2io2';
             $c = new prism_client($url, $key, $secret);

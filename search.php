@@ -5,7 +5,6 @@ define('IN_ECS', true);
 require(dirname(__FILE__) . '/includes/init.php');
 
 if (empty($_GET['encode'])) {
-    require(ROOT_PATH . '/includes/lib_base.php');
     $string = array_merge($_GET, $_POST);
     $string = stripslashes_deep($string);
     $string['search_encode_time'] = time();

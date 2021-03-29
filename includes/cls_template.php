@@ -12,6 +12,7 @@ class cls_template
     public $force_compile = false;
 
     public $_var = array();
+    public $_vars = array();
     public $_echash = '554fcae493e564ee0dc75bdf2ebf94ca';
     public $_foreach = array();
     public $_current_file = '';
@@ -463,7 +464,7 @@ class cls_template
                 $s = explode(':', $mod);
                 switch ($s[0]) {
                     case 'escape':
-                        $s[1] = trim($s[1], '"');
+                        $s[1] = isset($s[1]) ? trim($s[1], '"') : '';
                         if ($s[1] == 'html') {
                             $p = 'htmlspecialchars(' . $p . ')';
                         } elseif ($s[1] == 'url') {
@@ -692,10 +693,11 @@ class cls_template
         }
         $item = $this->get_val($attrs['item']);
 
-        if (!empty($attrs['key'])) {
+        if (isset($attrs['key'])) {
             $key = $attrs['key'];
             $key_part = $this->get_val($key) . ' => ';
         } else {
+            $attrs['key'] = '';
             $key = null;
             $key_part = '';
         }
@@ -732,10 +734,10 @@ class cls_template
      */
     public function push_vars($key, $val)
     {
-        if (!empty($key)) {
+        if (!empty($key) && isset($this->_vars[$key])) {
             array_push($this->_temp_key, "\$this->_vars['$key']='" . $this->_vars[$key] . "';");
         }
-        if (!empty($val)) {
+        if (!empty($val) && isset($this->_vars[$val])) {
             array_push($this->_temp_val, "\$this->_vars['$val']='" . $this->_vars[$val] . "';");
         }
     }

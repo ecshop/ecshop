@@ -583,16 +583,14 @@ class cls_template
      *
      * @return  mix
      */
-    public function &get_template_vars($name = null)
+    public function get_template_vars($name = null)
     {
-        if (empty($name)) {
+        if (is_null($name)) {
             return $this->_var;
         } elseif (!empty($this->_var[$name])) {
             return $this->_var[$name];
         } else {
-            $_tmp = null;
-
-            return $_tmp;
+            return null;
         }
     }
 

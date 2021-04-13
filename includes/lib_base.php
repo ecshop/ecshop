@@ -706,7 +706,21 @@ function ecs_header($string, $replace = true, $http_response_code = 0)
 
 function ecs_iconv($source_lang, $target_lang, $source_string = '')
 {
-    return $source_string;
+    static $chs = null;
+
+    /* 如果字符串为空或者字符串不需要转换，直接返回 */
+    if ($source_lang == $target_lang || $source_string == '' || preg_match("/[\x80-\xFF]+/", $source_string) == 0)
+    {
+        return $source_string;
+    }
+
+    if (is_null($chs))
+    {
+        require_once(ROOT_PATH . 'includes/cls_iconv.php');
+        $chs = new Chinese(ROOT_PATH);
+    }
+
+    return $chs->Convert($source_lang, $target_lang, $source_string);
 }
 
 function ecs_geoip($ip)

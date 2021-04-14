@@ -74,7 +74,7 @@ class cls_template
     public function display($filename, $cache_id = '')
     {
         $this->_seterror++;
-        error_reporting(E_ALL ^ E_NOTICE);
+        error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 
         $this->_checkfile = false;
         $out = $this->fetch($filename, $cache_id);
@@ -106,7 +106,7 @@ class cls_template
     public function fetch($filename, $cache_id = '')
     {
         if (!$this->_seterror) {
-            error_reporting(E_ALL ^ E_NOTICE);
+            error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
         }
         $this->_seterror++;
 

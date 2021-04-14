@@ -1,12 +1,124 @@
 # Release Notes
 
-## [Unreleased](https://github.com/ecshop/ecshop/compare/v2.7.3...main)
+## [Unreleased](https://github.com/ecshop/ecshop/compare/v2.8.0...main)
+
+
+
+## [v2.8.0 (2021-04-14)](https://github.com/ecshop/ecshop/compare/v2.7.3...v2.8.0)
+
+### Feature
+
+- 系统继承自经典的 ECSHOP v2.7.3 版本 ([ECShop V2.7.3 官方下载地址](http://download.ecshop.com/2.7.3/ECShop_V2.7.3_UTF8_release1106.rar))
+- 提升 PHP 运行时到 8.0 版本 ([PHP版本支持情况](https://www.php.net/supported-versions.php))
+- 修复已知所有的安全问题 (重要：建议所有v2.7.3版本升级)
+- 优化低版本 PHP 不兼容语法
+- 移除历史遗留的废弃代码
+- 保持代码100%开源 ([商业授权](https://www.ecshop.com/auth?utm_source=github))
+- 开放社区 pull requests [欢迎 Issue](https://github.com/ecshop/ecshop/issues)
+
+### Add
+
+- 增加 README 说明文件 ([47b3845](https://github.com/ecshop/ecshop/commit/47b3845638596affb6b0dd6463082bc465f8a674))
+- 增加 CHANGELOG 日志文件 ([14bc29c](https://github.com/ecshop/ecshop/commit/14bc29c6c4fc5e04ec16dc637b80b12b7847198d))
+- 增加 LICENSE 项目许可证说明 ([761457c](https://github.com/ecshop/ecshop/commit/761457cafbd555fe24894572470ed1a230a38377))
+- 增加 git 版本库支持 ([8aef11a](https://github.com/ecshop/ecshop/commit/8aef11a80f691764765ac30a5540cf3e375e93a9))
+- 增加 setcookie 安全配置 ([e7d5bfc](https://github.com/ecshop/ecshop/commit/e7d5bfcedd025de5e4596be87dd111a6395bec1c))
+- 增加离线购物车 ([27ec779](https://github.com/ecshop/ecshop/commit/27ec77915bd77dd68b9f8ffe01048e71bb4444b0))
+- 增加机设备判断 ([fc9d155](https://github.com/ecshop/ecshop/commit/fc9d155724f04368e0e349eb828e20ad7cbf6f60))
 
 ### Changed
-- 
+
+- 使用 [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) 格式化 PHP 代码 ([f9b3d01](https://github.com/ecshop/ecshop/commit/f9b3d01fee17d78274fa61a9b5922b77b117426b)、[2165e69](https://github.com/ecshop/ecshop/commit/2165e695e9ba383d05626f85feada4544900cfe0)、[0582adf](https://github.com/ecshop/ecshop/commit/0582adfa56e17de08cab4a7f32ad784f12c8f5c6)、[718fd3d](https://github.com/ecshop/ecshop/commit/718fd3d02751ff66dec138bbc96a82a06522ccdc)、[7acb3d7](https://github.com/ecshop/ecshop/commit/7acb3d7b3baa79a78a516a9cf04eed7e12a9fd6d))
+- 优化模板引擎 ([ccc9ff5](https://github.com/ecshop/ecshop/commit/ccc9ff5a031d2a67778cb210d1f2a68da86241ae))
+- 更新PHP运行时版本 ([1da197d](https://github.com/ecshop/ecshop/commit/1da197dc751f902fd38fbb0f3809c62e2652995b))
+- 更新模板引擎错误级别 ([bf6b24f](https://github.com/ecshop/ecshop/commit/bf6b24ff8d43b58ee75dd65fc2889fa6c035a467))
+- 更新PHP语法 ([86b7ddd](https://github.com/ecshop/ecshop/commit/86b7ddd3cad3e6559460fd7345026703e5647bee))
+- 更新云服务API地址 ([b32d0cb](https://github.com/ecshop/ecshop/commit/b32d0cb3c32c26523845bf67f69a4a46c50a277c))
+- 简化首页模板 ([0fcfaf3](https://github.com/ecshop/ecshop/commit/0fcfaf30badac868ff9a10dfe34e71413036c0b9))
+- 优化模板引擎 ([d0f26de](https://github.com/ecshop/ecshop/commit/d0f26de44b028a0622131b8262d625f7afca1a4e))
+- 更新文件加载顺序 ([b2d9624](https://github.com/ecshop/ecshop/commit/b2d962433c53a2c0ed9c00b9ba079bd870185ca7))
+- 更新校验文件 ([39ca83b](https://github.com/ecshop/ecshop/commit/39ca83b343e7904ec83c4591363ce1689a4556b7))
+- 更新版本补丁 ([236eae5](https://github.com/ecshop/ecshop/commit/236eae5228a5c8a8ae3f437fa7d689d4ebe409e2))
+- 更新默认图片 ([aa7ccbe](https://github.com/ecshop/ecshop/commit/aa7ccbe95d1f7c59a34ff9306d348b5038b88ffe))
+- 更新DEBUG设置 ([7d541b1](https://github.com/ecshop/ecshop/commit/7d541b1b81f9769d806e52d3d2738044572dd9b1))
+- 优化时区参数 ([a1fbab5](https://github.com/ecshop/ecshop/commit/a1fbab52d61effc13a43742357468d35cc6e300c))
+- 优化PHP版本约束 ([4d02858](https://github.com/ecshop/ecshop/commit/4d028586cb47ff1177847c726a3788590833c527))
+- 更新安装模块 ([0ab6ee7](https://github.com/ecshop/ecshop/commit/0ab6ee7181f4ea7e1e5fad26b500c876714f25bd))
+- 更新IP获取 ([11b6b61](https://github.com/ecshop/ecshop/commit/11b6b612393c40577d876adbea2f48c6c9019e06))
+- 优化PHP语法 ([907f4ce](https://github.com/ecshop/ecshop/commit/907f4ce63fb7ae6471306ead8a1f33d039cfa6f6))
+- 更新DEBUG常量 ([177bed2](https://github.com/ecshop/ecshop/commit/177bed2826b3c7e5b9583538efd859115b89e5bd))
+- 更新IP类 ([9de212c](https://github.com/ecshop/ecshop/commit/9de212ce0e79b06b4ec5e088b05ad7dfebe2d79f))
+- 移除索引文件 ([16cffb1](https://github.com/ecshop/ecshop/commit/16cffb1ce73d0f4bbb8a0c48cecac262a76a239b))
+- 更新robots协议文件 ([8b80c8f](https://github.com/ecshop/ecshop/commit/8b80c8fb5557c6d9d305cd4cd86cf0bd1d1b6132))
+- 优化PHP语法 ([91f8793](https://github.com/ecshop/ecshop/commit/91f87935bdd3221a37f42200bfa394faf62fabeb))
+- 更新api文件 ([88ae092](https://github.com/ecshop/ecshop/commit/88ae092efe95dbb1be3135dfb68c04687380baef))
+- 更新全局常量 ([a6adc59](https://github.com/ecshop/ecshop/commit/a6adc59c0da8568f36ec7aaa5133f04726d8ac5a))
+- 更新核心类 ([02083c2](https://github.com/ecshop/ecshop/commit/02083c2544b79466158088a4dd12f02694437f45))
+- 优化支付宝插件 ([8fe1fdb](https://github.com/ecshop/ecshop/commit/8fe1fdbc42f3fdfe038ca737e8655f0ddca9c2e0))
+- 更新用户整合类 ([a76324f](https://github.com/ecshop/ecshop/commit/a76324fa48f9172fb9519d8af08384fda5757a16))
+- 更新管理后台 ([fdefbef](https://github.com/ecshop/ecshop/commit/fdefbef6594749837e32103ad7c2556b957a4598))
+- 更新后台模板 ([fe14ad9](https://github.com/ecshop/ecshop/commit/fe14ad90b5ec636151307a2592bc2e637474663a))
+- 优化日历样式 ([71ce210](https://github.com/ecshop/ecshop/commit/71ce2102d90b8b9f70500fa0959efb8dd9682097))
+- 开启全局的Cookie的HttpOnly属性 ([6cca0cf](https://github.com/ecshop/ecshop/commit/6cca0cf2a4def8f59ae054eabe6b661bced630eb))
+- 更新构造函数 ([4f415c4](https://github.com/ecshop/ecshop/commit/4f415c4e9bb35e6f78cd7485b4d4e2f10a14f2b1))
+- 优化图片路径生成 ([3f9410d](https://github.com/ecshop/ecshop/commit/3f9410dc145ba93581a4a14f889c07190dd2b2a9))
+- 更新安装模块 ([eb22ecb](https://github.com/ecshop/ecshop/commit/eb22ecbb853ac46c9fdc8aa7256141e708fc2bf1))
+- 更新数据填充 ([f7e34dd](https://github.com/ecshop/ecshop/commit/f7e34dd364d151aee5bd45f0c728d85f9c25037d))
+- 更新数据表结构 ([2be618b](https://github.com/ecshop/ecshop/commit/2be618b7da52cc8323195a8c7be39adc84712133))
+- 更新 ecshopfiles.md5 文件目录 ([33abe1b](https://github.com/ecshop/ecshop/commit/33abe1bad2ca3f133446a196831833c8b7929c90))
+- 更新 patch_num 文件目录 ([aafad91](https://github.com/ecshop/ecshop/commit/aafad919500f66a2945150429c3f8f7acb788343))
+- 更新最新纯真ip库 ([cea515f](https://github.com/ecshop/ecshop/commit/cea515fe6c730c1c335dcab7b8abb3c387c306ee))
 
 ### Fixed
-- 
+
+- 更新授权协议时间 ([1f16432](https://github.com/ecshop/ecshop/commit/1f1643248caf686e1bc53325f416b39ba69cefb1))
 
 ### Removed
-- 
+
+- 移除重复加载的文件 ([c7fe952](https://github.com/ecshop/ecshop/commit/c7fe952a73efc547056feedde4ede54b688afdf3))
+- 移除flashdata ([803cc59](https://github.com/ecshop/ecshop/commit/803cc591a593a6a60dc808ae3d973af1c6966cdb))
+- 移除MySQL低版本代码 ([22549b8](https://github.com/ecshop/ecshop/commit/22549b819060b296206c3359c41f107c265542e5))
+- 移除财付通插件代码 ([7631af0](https://github.com/ecshop/ecshop/commit/7631af06431dbe0ca00a99b299b2185db0117124))
+- 移除转换程序 ([d1a8280](https://github.com/ecshop/ecshop/commit/d1a8280f82f7df3307474cbfd38b7f8540909473))
+- 移除JS浮动版权 ([77ee850](https://github.com/ecshop/ecshop/commit/77ee8505b6c6aa40d2d8fc194534d4aa2f779530))
+- 移除废弃的支付方式 ([23ff30a](https://github.com/ecshop/ecshop/commit/23ff30ad374e2c648cd96473f56db90cb5e8a85e))
+- 移除shopex系统地址转换 ([5146821](https://github.com/ecshop/ecshop/commit/5146821780fd306deab3a0fe5282adc53d4e5da6))
+- 移除短信云服务注册URL ([a0124cc](https://github.com/ecshop/ecshop/commit/a0124ccf6b4c1c33a66959e4503a3fd14ec0ca6d))
+- 移除支付宝配置文件 ([b717509](https://github.com/ecshop/ecshop/commit/b717509d1a4d21b8084b27911b1bc2fd98eb41ab))
+- 移除ucenter服务回调 ([c4c072e](https://github.com/ecshop/ecshop/commit/c4c072e06a79fbd25b5f0cebde1a8712dca4bac1))
+- 移除debug库 ([7296c34](https://github.com/ecshop/ecshop/commit/7296c343d3dc92e0252ca8d673ac4a0eb74e40a8))
+- 移除云服务接口请求 ([e6d077a](https://github.com/ecshop/ecshop/commit/e6d077a3698c22cf51cb54fe65081f84089d2976))
+- 移除安装器uc整合 ([4f9bdc0](https://github.com/ecshop/ecshop/commit/4f9bdc0874f1a9caa9c0fc81cd888de4b522f29b))
+- 移除网罗天下语言包 ([b7b1807](https://github.com/ecshop/ecshop/commit/b7b1807f53b12b72271a9b22038195795e3c6d99))
+- 移除易宝模块模板及语言包 ([8b308fc](https://github.com/ecshop/ecshop/commit/8b308fc8072f44059ea6140c431641fc20034ff8))
+- 移除sql文件注释 ([75178c2](https://github.com/ecshop/ecshop/commit/75178c2c3daa6126578ba376327403c985b15f23))
+- 移除SVN注释 ([137abd2](https://github.com/ecshop/ecshop/commit/137abd2c6ce8fd23d1a5af99c7dd2713b08b8fb3))
+- 移除文件注释 ([2013dd9](https://github.com/ecshop/ecshop/commit/2013dd97ab16662f4d3ee570f72e2e76c6fdde3a))
+- 移除 shopex_json 类文件 ([80f14b5](https://github.com/ecshop/ecshop/commit/80f14b5521a5489beedab9b3b4b6700f8a43ddb8))
+- 移除安装器多语言 ([0cc4495](https://github.com/ecshop/ecshop/commit/0cc449501695d480aba6599a657494843b399aaf))
+- 移除自动安装 ([7d32e22](https://github.com/ecshop/ecshop/commit/7d32e22fbb05612c0c96b0a52d5a0e19d598f48a))
+- 移除支付插件排序 ([41c6f89](https://github.com/ecshop/ecshop/commit/41c6f8906a187fe76bc3f10bb27cb1a1c7315237))
+- 移除联合注册返回验证程序 ([3b4044b](https://github.com/ecshop/ecshop/commit/3b4044b6e5f881ba15f70e275623952f2022e4b1))
+- 移除商品生成程序 ([c046e4b](https://github.com/ecshop/ecshop/commit/c046e4ba4e591dd79000931da3fd6e8f4bdd00b3))
+- 移除快钱联合注册接口 ([278c433](https://github.com/ecshop/ecshop/commit/278c4335556b67080c90645ff877935e14f97bc8))
+- 移除轮播图片程序 ([b563d3c](https://github.com/ecshop/ecshop/commit/b563d3c638129adba2081d2e99219224c20acaea))
+- 移除网银在线自动对账接口 ([00ec33f](https://github.com/ecshop/ecshop/commit/00ec33fc483a094df5e98d94650fe506cdcd346a))
+- 移除SVN注释 ([815521a](https://github.com/ecshop/ecshop/commit/815521abdc2c130f30c0ff8234ec43a050f7eff0))
+- 移除编辑器碎片文件 ([d4c6c6d](https://github.com/ecshop/ecshop/commit/d4c6c6da3d46d0b14a5d574f2f06a8df3959ec89))
+- 移除favicon图标 ([643f415](https://github.com/ecshop/ecshop/commit/643f4152c4fafca0a77d66d23f05b8528ec783c2))
+- 移除证书反查文件 ([6681dde](https://github.com/ecshop/ecshop/commit/6681dde9becfae87de177f55ffd98ab672a46ef2))
+- 移除演示数据 ([eca6460](https://github.com/ecshop/ecshop/commit/eca646070c945d36913f65dc8a4aa7a258e066d3))
+- 移除演示数据 ([48223a4](https://github.com/ecshop/ecshop/commit/48223a44d8fc0ddbfc9444c480cdda882dbb2b7b))
+- 移除API接口文件 ([790cb19](https://github.com/ecshop/ecshop/commit/790cb19c4da0f18d5aa314061d89c29de02fa31e))
+- 移除帮助文件 ([fa8be26](https://github.com/ecshop/ecshop/commit/fa8be265e2d3173cf3461a4765d0022d8877986e))
+- 移除演示数据 ([9a4f806](https://github.com/ecshop/ecshop/commit/9a4f8062b221a53532d1461d952895dfac942c32))
+- 移除演示语言包 ([acd58e2](https://github.com/ecshop/ecshop/commit/acd58e289ff9874de5953791cce39f55b93e9d8e))
+- 移除支付方式 ([5306b29](https://github.com/ecshop/ecshop/commit/5306b296cb36cd80bdfe47d94df1c40ee9e3656f))
+- 移除会员整合插件 ([e401958](https://github.com/ecshop/ecshop/commit/e401958a0be874dbc0fd8d3ef69341bc57bd8313))
+- 移除 prism 接口 ([d757b4a](https://github.com/ecshop/ecshop/commit/d757b4aa563d3d6a56e9ae59ee117725389f3f1d))
+- 移除英文语言包 ([9a5c6e6](https://github.com/ecshop/ecshop/commit/9a5c6e64ee0e3e13fd9b5089f34704f8eacd8ea7))
+- 移除繁体语言包 ([4bf928c](https://github.com/ecshop/ecshop/commit/4bf928c88f95fc4a8b61008feef09f1ca2f3cd7a))
+- 移除 default_old 主题目录 ([ac3eed2](https://github.com/ecshop/ecshop/commit/ac3eed229b5a1b2b65b81e1e38d12d9c38333cf7))
+- 移除 mobile 目录 ([c83ee87](https://github.com/ecshop/ecshop/commit/c83ee871dc45987c6001b625d24aca26c287377d))
+- 移除 wap 目录 ([dd3f930](https://github.com/ecshop/ecshop/commit/dd3f93032a24e3e987ee82959211c22481935157))
+- 移除 widget 目录 ([654adfd](https://github.com/ecshop/ecshop/commit/654adfdc9a80f8befc23099e94633b1e6ca4c56e))

@@ -587,7 +587,7 @@ class cls_template
     {
         if (is_null($name)) {
             return $this->_var;
-        } elseif (!empty($this->_var[$name])) {
+        } elseif (isset($this->_var[$name])) {
             return $this->_var[$name];
         } else {
             return null;
@@ -700,7 +700,7 @@ class cls_template
             $key_part = '';
         }
 
-        if (!empty($attrs['name'])) {
+        if (isset($attrs['name'])) {
             $name = $attrs['name'];
         } else {
             $name = null;

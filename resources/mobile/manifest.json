@@ -68,5 +68,19 @@
     "uniStatistics" : {
         "enable" : false
     },
-    "vueVersion" : "2"
+    "vueVersion" : "2",
+    "h5" : {
+        "title" : "Ecshop",
+        "router" : {
+            "mode" : "hash",
+            "base" : "/mobile/"
+        },
+        "sdkConfigs" : {
+            "maps" : {
+                "qqmap" : {
+                    "key" : "123456"
+                }
+            }
+        }
+    }
 }

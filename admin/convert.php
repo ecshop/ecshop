@@ -104,7 +104,6 @@ if ($_REQUEST['act'] == 'check') {
         ROOT_PATH . IMAGE_DIR . '/upload/',
         $img_dir,
         ROOT_PATH . DATA_DIR . '/afficheimg/',
-        ROOT_PATH . 'cert/'
     );
 
     /* 检查目的目录是否存在，是否可写 */

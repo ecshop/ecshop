@@ -1,18 +1,28 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+define('IN_ECS', true);
+
+require __DIR__ . '/../includes/inc_constant.php';
+
+if (!file_exists(__DIR__ . '/../data/config.php')) {
+    header("Location: ../install/");
+    exit;
+}
+
+require __DIR__ . '/../data/config.php';
 
 $_ENV = [
-    'APP_NAME' => 'Ecshop',
-    'APP_ENV' => 'local',
+    'APP_NAME' => APPNAME,
+    'APP_ENV' => DEBUG_MODE ? 'local' : 'production',
     'APP_KEY' => '',
-    'APP_DEBUG' => true,
+    'APP_DEBUG' => DEBUG_MODE,
 
-    'DB_HOST' => '127.0.0.1',
-    'DB_PORT' => '3306',
-    'DB_DATABASE' => 'homestead',
-    'DB_USERNAME' => 'homestead',
-    'DB_PASSWORD' => 'secret',
+    'DB_HOST' => $db_host,
+    'DB_PORT' => 3306,
+    'DB_DATABASE' => $db_name,
+    'DB_USERNAME' => $db_user,
+    'DB_PASSWORD' => $db_pass,
+    'DB_PREFIX' => $prefix,
 ];
 
 date_default_timezone_set('UTC');

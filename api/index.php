@@ -11,14 +11,16 @@ if (!file_exists(__DIR__ . '/../data/config.php')) {
 
 require __DIR__ . '/../data/config.php';
 
+list($host, $port) = explode(':', $db_host);
+
 $_ENV = [
     'APP_NAME' => APPNAME,
     'APP_ENV' => DEBUG_MODE ? 'local' : 'production',
     'APP_KEY' => '',
     'APP_DEBUG' => DEBUG_MODE,
 
-    'DB_HOST' => $db_host,
-    'DB_PORT' => 3306,
+    'DB_HOST' => $host,
+    'DB_PORT' => $port,
     'DB_DATABASE' => $db_name,
     'DB_USERNAME' => $db_user,
     'DB_PASSWORD' => $db_pass,

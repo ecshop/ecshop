@@ -5,7 +5,6 @@ if (!defined('IN_ECS')) {
 }
 
 $checking_dirs = array(
-    'cert',
     'images',
     'data',
     'data/afficheimg',

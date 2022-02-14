@@ -3,7 +3,7 @@
 /* 通用语言项 */
 $_LANG['prev_step'] = '上一步：';
 $_LANG['next_step'] = '下一步：';
-$_LANG['copyright'] = '&copy; 2005-2021 <a href="http://www.ecshop.com" target="_blank">上海商派网络科技有限公司</a>。保留所有权利。';
+$_LANG['copyright'] = '&copy; 2005-2022 <a href="http://www.ecshop.com" target="_blank">上海商派网络科技有限公司</a>。保留所有权利。';
 
 /* 欢迎页 */
 $_LANG['welcome_title'] = '欢迎您选用ECShop网上商店管理系统！';

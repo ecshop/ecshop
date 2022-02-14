@@ -1,6 +1,3 @@
-ALTER TABLE `ecs_goods_gallery`
-ADD COLUMN `sort_order` int(11) UNSIGNED NOT NULL DEFAULT 0 AFTER `img_original`;
-
 ALTER TABLE `ecs_adsense`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 ADD PRIMARY KEY (`id`);
@@ -22,6 +19,12 @@ ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`cat_id`,`recommend_type`);
+
+ALTER TABLE `ecs_exchange_goods`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`),
+ADD UNIQUE INDEX (`goods_id`);
 
 ALTER TABLE `ecs_goods_article`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
@@ -59,6 +62,12 @@ DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`package_id`,`goods_id`,`admin_id`,`product_id`);
 
+ALTER TABLE `ecs_plugins`
+ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`),
+ADD UNIQUE INDEX (`code`);
+
 ALTER TABLE `ecs_reg_extend_info`
 CHANGE COLUMN `Id` `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST;
 
@@ -84,3 +93,6 @@ ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`price_type`,`goods_id`,`volume_number`);
+
+ALTER TABLE `ecs_goods_gallery`
+ADD COLUMN `sort_order` int(11) UNSIGNED NOT NULL DEFAULT 0 AFTER `img_original`;

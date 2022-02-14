@@ -14,12 +14,59 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     use Authenticatable, Authorizable, HasFactory;
 
     /**
+     * @var string
+     */
+    protected $table = 'users';
+
+    /**
+     * @var string
+     */
+    protected $primaryKey = 'user_id';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email',
+        'user_id',
+        'email',
+        'email_validated',
+        'user_name',
+        'password',
+        'name',
+        'avatar',
+        'question',
+        'answer',
+        'sex',
+        'birthday',
+        'user_money',
+        'frozen_money',
+        'pay_points',
+        'rank_points',
+        'address_id',
+        'reg_time',
+        'last_login',
+        'last_time',
+        'last_ip',
+        'visit_count',
+        'user_rank',
+        'is_special',
+        'ec_salt',
+        'salt',
+        'parent_id',
+        'flag',
+        'alias',
+        'msn',
+        'qq',
+        'office_phone',
+        'home_phone',
+        'mobile_phone',
+        'mobile_validated',
+        'is_validated',
+        'credit_line',
+        'passwd_question',
+        'passwd_answer'
     ];
 
     /**
@@ -29,5 +76,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $hidden = [
         'password',
+        'ec_salt',
+        'salt',
     ];
 }

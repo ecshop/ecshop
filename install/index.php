@@ -137,7 +137,6 @@ switch ($step) {
     case 'install_base_data':
         $sql_files = array(
             ROOT_PATH . 'install/data/structure.sql',
-            ROOT_PATH . 'install/data/patch_v2.7.3_to_v2.8.0.sql',
             ROOT_PATH . 'install/data/data.sql',
         );
 

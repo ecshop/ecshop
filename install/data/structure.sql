@@ -1022,6 +1022,7 @@ CREATE TABLE `ecs_goods_gallery` (
   `img_desc` varchar(255) NOT NULL DEFAULT '',
   `thumb_url` varchar(255) NOT NULL DEFAULT '',
   `img_original` varchar(255) NOT NULL DEFAULT '',
+  `sort_order` int(11) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`img_id`),
   KEY `goods_id` (`goods_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

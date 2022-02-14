@@ -31,7 +31,6 @@ if (DIRECTORY_SEPARATOR == '\\') {
 }
 
 require(ROOT_PATH . 'data/config.php');
-require(ROOT_PATH . 'data/database.php');
 
 date_default_timezone_set($timezone);
 

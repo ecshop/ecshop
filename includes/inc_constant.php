@@ -15,8 +15,8 @@ if (in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])) {
 }
 
 define('APPNAME', 'Ecshop');
-define('VERSION', 'v2.9.0-dev');
-define('RELEASE', '20220211');
+define('VERSION', 'v2.8.1');
+define('RELEASE', '20220215');
 define('ADMIN_PATH', 'admin');
 define('EC_CHARSET', 'utf-8');
 

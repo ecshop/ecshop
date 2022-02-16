@@ -1,8 +1,14 @@
 # Release Notes
 
-## [Unreleased](https://github.com/ecshop/ecshop/compare/v2.8.0...main)
+## [Unreleased](https://github.com/ecshop/ecshop/compare/v2.8.1...main)
 
 
+## [v2.8.1 (2022-02-15](https://github.com/ecshop/ecshop/compare/v2.8.0...v2.8.1)
+
+- 移除 cert 备案证书存储目录 ([136fa3b](https://github.com/ecshop/ecshop/commit/136fa3b460175aac56b2ab29e8ba3de2ee62a2ba))
+- 移除 API 接口入口目录 ([38f22bc](https://github.com/ecshop/ecshop/commit/38f22bcfb7af90a8d75ae9fd012accf6ebef3607))
+- 优化 install 安装器模块 ([2c40a48](https://github.com/ecshop/ecshop/commit/2c40a48e279f1561753bcb25020e92eff6530951))
+- 优化 Readme 项目说明文档 ([31587f8](https://github.com/ecshop/ecshop/commit/31587f80d4cfbcec03e55f8d0c97f84dd3d0325d))
 
 ## [v2.8.0 (2021-04-14)](https://github.com/ecshop/ecshop/compare/v2.7.3...v2.8.0)
 

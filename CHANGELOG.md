@@ -1,6 +1,6 @@
 # Release Notes
 
-## [Unreleased](https://github.com/ecshop/ecshop/compare/v2.8.1...main)
+## [Unreleased](https://github.com/ecshop/ecshop/compare/v2.8.1...master)
 
 
 ## [v2.8.1 (2022-02-15](https://github.com/ecshop/ecshop/compare/v2.8.0...v2.8.1)

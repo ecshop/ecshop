@@ -1,7 +1,7 @@
 <?php
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 admin_priv('view_sendlist');
 if ($_REQUEST['act'] == 'list') {
     $listdb = get_sendlist();

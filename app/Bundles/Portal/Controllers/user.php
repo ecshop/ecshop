@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 
 /* 载入语言文件 */
 require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');

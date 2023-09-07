@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 
 admin_priv('mail_template');
 

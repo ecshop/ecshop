@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 
 if (!DEBUG_MODE) {
     $smarty->caching = true;

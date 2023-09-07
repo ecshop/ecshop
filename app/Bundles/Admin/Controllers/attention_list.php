@@ -1,7 +1,7 @@
 <?php
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 admin_priv('attention_list');
 if ($_REQUEST['act'] == 'list') {
     $goodsdb = get_attention();

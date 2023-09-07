@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 include_once(ROOT_PATH . 'includes/cls_image.php');
 include_once(ROOT_PATH . '/' . ADMIN_PATH . '/includes/lib_goods.php');
 $image = new cls_image($_CFG['bgcolor']);

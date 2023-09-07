@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 $exc = new exchange($ecs->table("article_cat"), $db, 'cat_id', 'cat_name');
 /* act操作项的初始化 */
 $_REQUEST['act'] = trim($_REQUEST['act']);

@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 require(ROOT_PATH . 'includes/lib_order.php');
 
 /* 载入语言文件 */

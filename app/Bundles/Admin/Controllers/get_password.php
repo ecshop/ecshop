@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 
 /* 操作项的初始化 */
 if (empty($_SERVER['REQUEST_METHOD'])) {

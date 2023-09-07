@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 
 if (empty($_CFG['message_board'])) {
     show_message($_LANG['message_board_close']);

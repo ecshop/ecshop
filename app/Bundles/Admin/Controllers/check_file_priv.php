@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 
 if ($_REQUEST['act'] == 'check') {
     /* 检查权限 */

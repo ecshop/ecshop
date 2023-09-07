@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 $uri = $ecs->url();
 $allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp');
 

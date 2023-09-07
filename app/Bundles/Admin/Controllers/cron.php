@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 
 $_REQUEST['act'] = trim($_REQUEST['act']);
 admin_priv('cron');

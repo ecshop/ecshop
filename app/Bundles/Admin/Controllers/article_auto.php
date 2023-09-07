@@ -1,7 +1,7 @@
 <?php
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 admin_priv('article_auto');
 $smarty->assign('thisfile', 'article_auto.php');
 if ($_REQUEST['act'] == 'list') {

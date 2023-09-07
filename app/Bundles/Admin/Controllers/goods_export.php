@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 
 if ($_REQUEST['act'] == 'goods_export') {
     /* 检查权限 */

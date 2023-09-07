@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 require(ROOT_PATH . 'includes/cls_transport.php');
 require(ROOT_PATH . 'includes/cls_json.php');
 

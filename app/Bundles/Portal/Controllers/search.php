@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 
 if (empty($_GET['encode'])) {
     $string = array_merge($_GET, $_POST);

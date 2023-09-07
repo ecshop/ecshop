@@ -1,7 +1,7 @@
 <?php
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 admin_priv('affiliate');
 $config = get_affiliate();
 

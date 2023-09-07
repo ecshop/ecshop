@@ -6,7 +6,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 require_once(ROOT_PATH . ADMIN_PATH . '/includes/cls_sql_dump.php');
 
 @ini_set('memory_limit', '1G');

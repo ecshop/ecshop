@@ -1,7 +1,7 @@
 <?php
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 require(ROOT_PATH . 'includes/lib_goods.php');
 
 $exc = new exchange($ecs->table('favourable_activity'), $db, 'act_id', 'act_name');

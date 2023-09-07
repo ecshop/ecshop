@@ -1,7 +1,7 @@
 <?php
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 admin_priv('magazine_list');
 if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['magazine_list']);

@@ -1,7 +1,7 @@
 <?php
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 include_once('../includes/lib_goods.php');
 
 /*------------------------------------------------------ */

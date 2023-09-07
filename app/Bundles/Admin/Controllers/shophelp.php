@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
 
 /*初始化数据交换对象 */

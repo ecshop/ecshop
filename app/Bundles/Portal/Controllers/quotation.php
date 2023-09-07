@@ -2,7 +2,7 @@
 
 
 
-require(dirname(__FILE__) . '/includes/init.php');
+
 
 $action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
 if ($action == 'print_quotation') {

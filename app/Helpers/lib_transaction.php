@@ -1,8 +1,6 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
+
 
 /**
  * 修改个人资料（Email, 性别，生日)

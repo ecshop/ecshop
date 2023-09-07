@@ -1,8 +1,6 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
+
 
 /**
  * 用户注册，登录函数

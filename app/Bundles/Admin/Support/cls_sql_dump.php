@@ -4,9 +4,7 @@
  * 数据库导出类
  */
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
+
 
 /**
  * 对mysql敏感字符串转义

@@ -1,8 +1,6 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
+
 
 /* 模块的基本信息 */
 if (isset($set_modules) && $set_modules == true) {

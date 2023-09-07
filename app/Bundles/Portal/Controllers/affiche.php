@@ -1,6 +1,6 @@
 <?php
 
-define('IN_ECS', true);
+
 define('INIT_NO_SMARTY', true);
 require(dirname(__FILE__) . '/includes/init.php');
 

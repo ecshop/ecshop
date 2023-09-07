@@ -1,8 +1,6 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
-}
+
 define('SOURCE_TOKEN', 'b11983d30cb6821158744d5d065d0f70');
 define('SOURCE_ID', '620386');
 require_once(ROOT_PATH . 'includes/cls_JSON.php');

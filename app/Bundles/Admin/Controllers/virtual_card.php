@@ -1,6 +1,6 @@
 <?php
 
-define('IN_ECS', true);
+
 
 /* 包含文件 */
 require(dirname(__FILE__) . '/includes/init.php');

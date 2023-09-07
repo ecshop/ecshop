@@ -1,6 +1,6 @@
 <?php
 
-define('IN_ECS', true);
+
 define('INIT_NO_USERS', true);
 define('INIT_NO_SMARTY', true);
 

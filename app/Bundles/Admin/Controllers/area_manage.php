@@ -1,6 +1,6 @@
 <?php
 
-define('IN_ECS', true);
+
 
 require(dirname(__FILE__) . '/includes/init.php');
 $exc = new exchange($ecs->table('region'), $db, 'region_id', 'region_name');

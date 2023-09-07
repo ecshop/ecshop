@@ -1,6 +1,6 @@
 <?php
 
-define('IN_ECS', true);
+
 require(dirname(__FILE__) . '/includes/init.php');
 admin_priv('goods_auto');
 $smarty->assign('thisfile', 'goods_auto.php');

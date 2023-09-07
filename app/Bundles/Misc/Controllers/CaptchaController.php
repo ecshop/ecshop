@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Bundles\Portal\Controllers;
+namespace App\Bundles\Misc\Controllers;
 
 class CaptchaController extends BaseController
 {

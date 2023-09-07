@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Bundles\Seller\Controllers;
+namespace App\Bundles\Supplier\Controllers;
 
 class SuppliersGoodsController extends BaseController
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Bundles\Portal\Controllers;
+namespace App\Bundles\Search\Controllers;
 
 class SearchController extends BaseController
 {

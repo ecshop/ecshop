@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Bundles\Portal\Controllers;
+namespace App\Bundles\User\Controllers;
 
 class UserController extends BaseController
 {

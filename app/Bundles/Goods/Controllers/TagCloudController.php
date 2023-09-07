@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Bundles\Portal\Controllers;
+namespace App\Bundles\Goods\Controllers;
 
 class TagCloudController extends BaseController
 {

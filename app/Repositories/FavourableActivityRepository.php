@@ -7,7 +7,6 @@ namespace App\Repositories;
 use App\Contracts\RepositoryInterface;
 use App\Models\FavourableActivityModel;
 use App\Models\Entity\FavourableActivity;
-use App\Repositories\CurdRepository;
 
 class FavourableActivityRepository extends CurdRepository implements RepositoryInterface
 {
@@ -28,7 +27,7 @@ class FavourableActivityRepository extends CurdRepository implements RepositoryI
     /**
      * 添加
      */
-    public function saveFavourableActivity(FavourableActivity $entity): int
+    public function save(FavourableActivity $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -36,7 +35,7 @@ class FavourableActivityRepository extends CurdRepository implements RepositoryI
     /**
      * 按照ID查询返回对象
      */
-    public function findOneByIdReturnFavourableActivity(int $id): ?FavourableActivity
+    public function findOneById(int $id): ?FavourableActivity
     {
         $data = $this->findById($id);
         if (empty($data)) {
@@ -52,7 +51,7 @@ class FavourableActivityRepository extends CurdRepository implements RepositoryI
     /**
      * 按照条件查询返回对象
      */
-    public function findOneByWhereReturnFavourableActivity(array $condition): ?FavourableActivity
+    public function findOne(array $condition = []): ?FavourableActivity
     {
         $data = $this->findByWhere($condition);
         if (empty($data)) {
@@ -68,7 +67,7 @@ class FavourableActivityRepository extends CurdRepository implements RepositoryI
     /**
      * 查询列表
      */
-    public function findAllReturnFavourableActivity(array $condition = [], string $order = 'id', string $sort = 'asc'): array
+    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
     {
         $result = $this->findAll($condition, $order, $sort);
         if (empty($result)) {
@@ -87,7 +86,7 @@ class FavourableActivityRepository extends CurdRepository implements RepositoryI
     /**
      * 分页查询
      */
-    public function pageReturnFavourableActivity(array $condition, int $page, int $pageSize): array
+    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
     {
         $result = $this->page($condition, $page, $pageSize);
 

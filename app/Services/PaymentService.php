@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\PaymentRepository;
-use App\Services\CommonService;
-use App\Services\Input\PaymentInput;
-use App\Services\Output\PaymentOutput;
 
 class PaymentService extends CommonService implements ServiceInterface
 {

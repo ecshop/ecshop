@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\CartRepository;
-use App\Services\CommonService;
-use App\Services\Input\CartInput;
-use App\Services\Output\CartOutput;
 
 class CartService extends CommonService implements ServiceInterface
 {

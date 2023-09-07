@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\UserAddressRepository;
-use App\Services\CommonService;
-use App\Services\Input\UserAddressInput;
-use App\Services\Output\UserAddressOutput;
 
 class UserAddressService extends CommonService implements ServiceInterface
 {

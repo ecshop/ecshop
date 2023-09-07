@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\SessionsDatumRepository;
-use App\Services\CommonService;
-use App\Services\Input\SessionsDatumInput;
-use App\Services\Output\SessionsDatumOutput;
 
 class SessionsDatumService extends CommonService implements ServiceInterface
 {

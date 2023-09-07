@@ -7,7 +7,6 @@ namespace App\Repositories;
 use App\Contracts\RepositoryInterface;
 use App\Models\AccountLogModel;
 use App\Models\Entity\AccountLog;
-use App\Repositories\CurdRepository;
 
 class AccountLogRepository extends CurdRepository implements RepositoryInterface
 {
@@ -28,7 +27,7 @@ class AccountLogRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function saveAccountLog(AccountLog $entity): int
+    public function save(AccountLog $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -36,7 +35,7 @@ class AccountLogRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照ID查询返回对象
      */
-    public function findOneByIdReturnAccountLog(int $id): ?AccountLog
+    public function findOneById(int $id): ?AccountLog
     {
         $data = $this->findById($id);
         if (empty($data)) {
@@ -52,7 +51,7 @@ class AccountLogRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照条件查询返回对象
      */
-    public function findOneByWhereReturnAccountLog(array $condition): ?AccountLog
+    public function findOne(array $condition = []): ?AccountLog
     {
         $data = $this->findByWhere($condition);
         if (empty($data)) {
@@ -68,7 +67,7 @@ class AccountLogRepository extends CurdRepository implements RepositoryInterface
     /**
      * 查询列表
      */
-    public function findAllReturnAccountLog(array $condition = [], string $order = 'id', string $sort = 'asc'): array
+    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
     {
         $result = $this->findAll($condition, $order, $sort);
         if (empty($result)) {
@@ -87,7 +86,7 @@ class AccountLogRepository extends CurdRepository implements RepositoryInterface
     /**
      * 分页查询
      */
-    public function pageReturnAccountLog(array $condition, int $page, int $pageSize): array
+    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
     {
         $result = $this->page($condition, $page, $pageSize);
 

@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\CronRepository;
-use App\Services\CommonService;
-use App\Services\Input\CronInput;
-use App\Services\Output\CronOutput;
 
 class CronService extends CommonService implements ServiceInterface
 {

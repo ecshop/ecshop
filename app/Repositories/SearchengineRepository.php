@@ -7,7 +7,6 @@ namespace App\Repositories;
 use App\Contracts\RepositoryInterface;
 use App\Models\SearchengineModel;
 use App\Models\Entity\Searchengine;
-use App\Repositories\CurdRepository;
 
 class SearchengineRepository extends CurdRepository implements RepositoryInterface
 {
@@ -28,7 +27,7 @@ class SearchengineRepository extends CurdRepository implements RepositoryInterfa
     /**
      * 添加
      */
-    public function saveSearchengine(Searchengine $entity): int
+    public function save(Searchengine $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -36,7 +35,7 @@ class SearchengineRepository extends CurdRepository implements RepositoryInterfa
     /**
      * 按照ID查询返回对象
      */
-    public function findOneByIdReturnSearchengine(int $id): ?Searchengine
+    public function findOneById(int $id): ?Searchengine
     {
         $data = $this->findById($id);
         if (empty($data)) {
@@ -52,7 +51,7 @@ class SearchengineRepository extends CurdRepository implements RepositoryInterfa
     /**
      * 按照条件查询返回对象
      */
-    public function findOneByWhereReturnSearchengine(array $condition): ?Searchengine
+    public function findOne(array $condition = []): ?Searchengine
     {
         $data = $this->findByWhere($condition);
         if (empty($data)) {
@@ -68,7 +67,7 @@ class SearchengineRepository extends CurdRepository implements RepositoryInterfa
     /**
      * 查询列表
      */
-    public function findAllReturnSearchengine(array $condition = [], string $order = 'id', string $sort = 'asc'): array
+    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
     {
         $result = $this->findAll($condition, $order, $sort);
         if (empty($result)) {
@@ -87,7 +86,7 @@ class SearchengineRepository extends CurdRepository implements RepositoryInterfa
     /**
      * 分页查询
      */
-    public function pageReturnSearchengine(array $condition, int $page, int $pageSize): array
+    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
     {
         $result = $this->page($condition, $page, $pageSize);
 

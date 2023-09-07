@@ -7,7 +7,6 @@ namespace App\Repositories;
 use App\Contracts\RepositoryInterface;
 use App\Models\CategoryModel;
 use App\Models\Entity\Category;
-use App\Repositories\CurdRepository;
 
 class CategoryRepository extends CurdRepository implements RepositoryInterface
 {
@@ -28,7 +27,7 @@ class CategoryRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function saveCategory(Category $entity): int
+    public function save(Category $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -36,7 +35,7 @@ class CategoryRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照ID查询返回对象
      */
-    public function findOneByIdReturnCategory(int $id): ?Category
+    public function findOneById(int $id): ?Category
     {
         $data = $this->findById($id);
         if (empty($data)) {
@@ -52,7 +51,7 @@ class CategoryRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照条件查询返回对象
      */
-    public function findOneByWhereReturnCategory(array $condition): ?Category
+    public function findOne(array $condition = []): ?Category
     {
         $data = $this->findByWhere($condition);
         if (empty($data)) {
@@ -68,7 +67,7 @@ class CategoryRepository extends CurdRepository implements RepositoryInterface
     /**
      * 查询列表
      */
-    public function findAllReturnCategory(array $condition = [], string $order = 'id', string $sort = 'asc'): array
+    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
     {
         $result = $this->findAll($condition, $order, $sort);
         if (empty($result)) {
@@ -87,7 +86,7 @@ class CategoryRepository extends CurdRepository implements RepositoryInterface
     /**
      * 分页查询
      */
-    public function pageReturnCategory(array $condition, int $page, int $pageSize): array
+    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
     {
         $result = $this->page($condition, $page, $pageSize);
 

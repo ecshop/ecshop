@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\RegFieldRepository;
-use App\Services\CommonService;
-use App\Services\Input\RegFieldInput;
-use App\Services\Output\RegFieldOutput;
 
 class RegFieldService extends CommonService implements ServiceInterface
 {

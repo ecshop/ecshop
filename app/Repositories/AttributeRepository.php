@@ -7,7 +7,6 @@ namespace App\Repositories;
 use App\Contracts\RepositoryInterface;
 use App\Models\AttributeModel;
 use App\Models\Entity\Attribute;
-use App\Repositories\CurdRepository;
 
 class AttributeRepository extends CurdRepository implements RepositoryInterface
 {
@@ -28,7 +27,7 @@ class AttributeRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function saveAttribute(Attribute $entity): int
+    public function save(Attribute $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -36,7 +35,7 @@ class AttributeRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照ID查询返回对象
      */
-    public function findOneByIdReturnAttribute(int $id): ?Attribute
+    public function findOneById(int $id): ?Attribute
     {
         $data = $this->findById($id);
         if (empty($data)) {
@@ -52,7 +51,7 @@ class AttributeRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照条件查询返回对象
      */
-    public function findOneByWhereReturnAttribute(array $condition): ?Attribute
+    public function findOne(array $condition = []): ?Attribute
     {
         $data = $this->findByWhere($condition);
         if (empty($data)) {
@@ -68,7 +67,7 @@ class AttributeRepository extends CurdRepository implements RepositoryInterface
     /**
      * 查询列表
      */
-    public function findAllReturnAttribute(array $condition = [], string $order = 'id', string $sort = 'asc'): array
+    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
     {
         $result = $this->findAll($condition, $order, $sort);
         if (empty($result)) {
@@ -87,7 +86,7 @@ class AttributeRepository extends CurdRepository implements RepositoryInterface
     /**
      * 分页查询
      */
-    public function pageReturnAttribute(array $condition, int $page, int $pageSize): array
+    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
     {
         $result = $this->page($condition, $page, $pageSize);
 

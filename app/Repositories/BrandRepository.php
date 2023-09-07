@@ -7,7 +7,6 @@ namespace App\Repositories;
 use App\Contracts\RepositoryInterface;
 use App\Models\BrandModel;
 use App\Models\Entity\Brand;
-use App\Repositories\CurdRepository;
 
 class BrandRepository extends CurdRepository implements RepositoryInterface
 {
@@ -28,7 +27,7 @@ class BrandRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function saveBrand(Brand $entity): int
+    public function save(Brand $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -36,7 +35,7 @@ class BrandRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照ID查询返回对象
      */
-    public function findOneByIdReturnBrand(int $id): ?Brand
+    public function findOneById(int $id): ?Brand
     {
         $data = $this->findById($id);
         if (empty($data)) {
@@ -52,7 +51,7 @@ class BrandRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照条件查询返回对象
      */
-    public function findOneByWhereReturnBrand(array $condition): ?Brand
+    public function findOne(array $condition = []): ?Brand
     {
         $data = $this->findByWhere($condition);
         if (empty($data)) {
@@ -68,7 +67,7 @@ class BrandRepository extends CurdRepository implements RepositoryInterface
     /**
      * 查询列表
      */
-    public function findAllReturnBrand(array $condition = [], string $order = 'id', string $sort = 'asc'): array
+    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
     {
         $result = $this->findAll($condition, $order, $sort);
         if (empty($result)) {
@@ -87,7 +86,7 @@ class BrandRepository extends CurdRepository implements RepositoryInterface
     /**
      * 分页查询
      */
-    public function pageReturnBrand(array $condition, int $page, int $pageSize): array
+    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
     {
         $result = $this->page($condition, $page, $pageSize);
 

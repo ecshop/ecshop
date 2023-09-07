@@ -7,7 +7,6 @@ namespace App\Repositories;
 use App\Contracts\RepositoryInterface;
 use App\Models\GoodsGalleryModel;
 use App\Models\Entity\GoodsGallery;
-use App\Repositories\CurdRepository;
 
 class GoodsGalleryRepository extends CurdRepository implements RepositoryInterface
 {
@@ -28,7 +27,7 @@ class GoodsGalleryRepository extends CurdRepository implements RepositoryInterfa
     /**
      * 添加
      */
-    public function saveGoodsGallery(GoodsGallery $entity): int
+    public function save(GoodsGallery $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -36,7 +35,7 @@ class GoodsGalleryRepository extends CurdRepository implements RepositoryInterfa
     /**
      * 按照ID查询返回对象
      */
-    public function findOneByIdReturnGoodsGallery(int $id): ?GoodsGallery
+    public function findOneById(int $id): ?GoodsGallery
     {
         $data = $this->findById($id);
         if (empty($data)) {
@@ -52,7 +51,7 @@ class GoodsGalleryRepository extends CurdRepository implements RepositoryInterfa
     /**
      * 按照条件查询返回对象
      */
-    public function findOneByWhereReturnGoodsGallery(array $condition): ?GoodsGallery
+    public function findOne(array $condition = []): ?GoodsGallery
     {
         $data = $this->findByWhere($condition);
         if (empty($data)) {
@@ -68,7 +67,7 @@ class GoodsGalleryRepository extends CurdRepository implements RepositoryInterfa
     /**
      * 查询列表
      */
-    public function findAllReturnGoodsGallery(array $condition = [], string $order = 'id', string $sort = 'asc'): array
+    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
     {
         $result = $this->findAll($condition, $order, $sort);
         if (empty($result)) {
@@ -87,7 +86,7 @@ class GoodsGalleryRepository extends CurdRepository implements RepositoryInterfa
     /**
      * 分页查询
      */
-    public function pageReturnGoodsGallery(array $condition, int $page, int $pageSize): array
+    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
     {
         $result = $this->page($condition, $page, $pageSize);
 

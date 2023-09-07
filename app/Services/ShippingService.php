@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\ShippingRepository;
-use App\Services\CommonService;
-use App\Services\Input\ShippingInput;
-use App\Services\Output\ShippingOutput;
 
 class ShippingService extends CommonService implements ServiceInterface
 {

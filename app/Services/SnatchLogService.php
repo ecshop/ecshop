@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\SnatchLogRepository;
-use App\Services\CommonService;
-use App\Services\Input\SnatchLogInput;
-use App\Services\Output\SnatchLogOutput;
 
 class SnatchLogService extends CommonService implements ServiceInterface
 {

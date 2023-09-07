@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\UserRankRepository;
-use App\Services\CommonService;
-use App\Services\Input\UserRankInput;
-use App\Services\Output\UserRankOutput;
 
 class UserRankService extends CommonService implements ServiceInterface
 {

@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\RegionRepository;
-use App\Services\CommonService;
-use App\Services\Input\RegionInput;
-use App\Services\Output\RegionOutput;
 
 class RegionService extends CommonService implements ServiceInterface
 {

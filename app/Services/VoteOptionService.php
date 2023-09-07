@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\VoteOptionRepository;
-use App\Services\CommonService;
-use App\Services\Input\VoteOptionInput;
-use App\Services\Output\VoteOptionOutput;
 
 class VoteOptionService extends CommonService implements ServiceInterface
 {

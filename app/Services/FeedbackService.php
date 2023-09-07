@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\FeedbackRepository;
-use App\Services\CommonService;
-use App\Services\Input\FeedbackInput;
-use App\Services\Output\FeedbackOutput;
 
 class FeedbackService extends CommonService implements ServiceInterface
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Gateways\User\Controllers;
+namespace App\Bundles\User\Controllers;
 
 use App\Http\Controllers\User\Request;
 use Illuminate\Contracts\Support\Renderable;

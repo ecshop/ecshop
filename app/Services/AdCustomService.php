@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\AdCustomRepository;
-use App\Services\CommonService;
-use App\Services\Input\AdCustomInput;
-use App\Services\Output\AdCustomOutput;
 
 class AdCustomService extends CommonService implements ServiceInterface
 {

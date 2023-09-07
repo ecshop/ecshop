@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\StatRepository;
-use App\Services\CommonService;
-use App\Services\Input\StatInput;
-use App\Services\Output\StatOutput;
 
 class StatService extends CommonService implements ServiceInterface
 {

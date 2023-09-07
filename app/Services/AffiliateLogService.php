@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\AffiliateLogRepository;
-use App\Services\CommonService;
-use App\Services\Input\AffiliateLogInput;
-use App\Services\Output\AffiliateLogOutput;
 
 class AffiliateLogService extends CommonService implements ServiceInterface
 {

@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\ProductRepository;
-use App\Services\CommonService;
-use App\Services\Input\ProductInput;
-use App\Services\Output\ProductOutput;
 
 class ProductService extends CommonService implements ServiceInterface
 {

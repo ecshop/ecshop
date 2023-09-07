@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\DeliveryOrderRepository;
-use App\Services\CommonService;
-use App\Services\Input\DeliveryOrderInput;
-use App\Services\Output\DeliveryOrderOutput;
 
 class DeliveryOrderService extends CommonService implements ServiceInterface
 {

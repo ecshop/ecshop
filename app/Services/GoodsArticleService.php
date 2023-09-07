@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\GoodsArticleRepository;
-use App\Services\CommonService;
-use App\Services\Input\GoodsArticleInput;
-use App\Services\Output\GoodsArticleOutput;
 
 class GoodsArticleService extends CommonService implements ServiceInterface
 {

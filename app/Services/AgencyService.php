@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\AgencyRepository;
-use App\Services\CommonService;
-use App\Services\Input\AgencyInput;
-use App\Services\Output\AgencyOutput;
 
 class AgencyService extends CommonService implements ServiceInterface
 {

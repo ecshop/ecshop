@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\AutoManageRepository;
-use App\Services\CommonService;
-use App\Services\Input\AutoManageInput;
-use App\Services\Output\AutoManageOutput;
 
 class AutoManageService extends CommonService implements ServiceInterface
 {

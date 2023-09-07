@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\EmailListRepository;
-use App\Services\CommonService;
-use App\Services\Input\EmailListInput;
-use App\Services\Output\EmailListOutput;
 
 class EmailListService extends CommonService implements ServiceInterface
 {

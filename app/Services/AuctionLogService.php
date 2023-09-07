@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\AuctionLogRepository;
-use App\Services\CommonService;
-use App\Services\Input\AuctionLogInput;
-use App\Services\Output\AuctionLogOutput;
 
 class AuctionLogService extends CommonService implements ServiceInterface
 {

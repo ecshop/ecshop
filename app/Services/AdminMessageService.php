@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Contracts\ServiceInterface;
 use App\Repositories\AdminMessageRepository;
-use App\Services\CommonService;
-use App\Services\Input\AdminMessageInput;
-use App\Services\Output\AdminMessageOutput;
 
 class AdminMessageService extends CommonService implements ServiceInterface
 {

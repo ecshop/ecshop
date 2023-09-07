@@ -7,7 +7,6 @@ namespace App\Repositories;
 use App\Contracts\RepositoryInterface;
 use App\Models\PluginModel;
 use App\Models\Entity\Plugin;
-use App\Repositories\CurdRepository;
 
 class PluginRepository extends CurdRepository implements RepositoryInterface
 {
@@ -28,7 +27,7 @@ class PluginRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function savePlugin(Plugin $entity): int
+    public function save(Plugin $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -36,7 +35,7 @@ class PluginRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照ID查询返回对象
      */
-    public function findOneByIdReturnPlugin(int $id): ?Plugin
+    public function findOneById(int $id): ?Plugin
     {
         $data = $this->findById($id);
         if (empty($data)) {
@@ -52,7 +51,7 @@ class PluginRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照条件查询返回对象
      */
-    public function findOneByWhereReturnPlugin(array $condition): ?Plugin
+    public function findOne(array $condition = []): ?Plugin
     {
         $data = $this->findByWhere($condition);
         if (empty($data)) {
@@ -68,7 +67,7 @@ class PluginRepository extends CurdRepository implements RepositoryInterface
     /**
      * 查询列表
      */
-    public function findAllReturnPlugin(array $condition = [], string $order = 'id', string $sort = 'asc'): array
+    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
     {
         $result = $this->findAll($condition, $order, $sort);
         if (empty($result)) {
@@ -87,7 +86,7 @@ class PluginRepository extends CurdRepository implements RepositoryInterface
     /**
      * 分页查询
      */
-    public function pageReturnPlugin(array $condition, int $page, int $pageSize): array
+    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
     {
         $result = $this->page($condition, $page, $pageSize);
 

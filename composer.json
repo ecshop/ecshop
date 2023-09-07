@@ -1,0 +1,9 @@
+{
+    "name": "ecshop/ecshop",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}

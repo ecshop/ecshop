@@ -1,98 +1,98 @@
-ALTER TABLE `ecs_adsense`
+ALTER TABLE `adsense`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `ecs_area_region`
+ALTER TABLE `area_region`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`shipping_area_id`, `region_id`);
 
-ALTER TABLE `ecs_auto_manage`
+ALTER TABLE `auto_manage`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`item_id`,`type`);
 
-ALTER TABLE `ecs_cat_recommend`
+ALTER TABLE `cat_recommend`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`cat_id`,`recommend_type`);
 
-ALTER TABLE `ecs_exchange_goods`
+ALTER TABLE `exchange_goods`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`goods_id`);
 
-ALTER TABLE `ecs_goods_article`
+ALTER TABLE `goods_article`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`goods_id`,`article_id`,`admin_id`);
 
-ALTER TABLE `ecs_goods_cat`
+ALTER TABLE `goods_cat`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`goods_id`,`cat_id`);
 
-ALTER TABLE `ecs_group_goods`
+ALTER TABLE `group_goods`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`parent_id`,`goods_id`,`admin_id`);
 
-ALTER TABLE `ecs_keywords`
+ALTER TABLE `keywords`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`date`,`searchengine`,`keyword`);
 
-ALTER TABLE `ecs_link_goods`
+ALTER TABLE `link_goods`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`goods_id`,`link_goods_id`,`admin_id`);
 
-ALTER TABLE `ecs_package_goods`
+ALTER TABLE `package_goods`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`package_id`,`goods_id`,`admin_id`,`product_id`);
 
-ALTER TABLE `ecs_plugins`
+ALTER TABLE `plugins`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`code`);
 
-ALTER TABLE `ecs_reg_extend_info`
+ALTER TABLE `reg_extend_info`
 CHANGE COLUMN `Id` `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST;
 
-ALTER TABLE `ecs_searchengine`
+ALTER TABLE `searchengine`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`date`,`searchengine`);
 
-ALTER TABLE `ecs_stats`
+ALTER TABLE `stats`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `ecs_template`
+ALTER TABLE `template`
 ADD COLUMN `template_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 ADD PRIMARY KEY (`template_id`);
 
-ALTER TABLE `ecs_topic`
+ALTER TABLE `topic`
 ADD PRIMARY KEY (`topic_id`);
 
-ALTER TABLE `ecs_volume_price`
+ALTER TABLE `volume_price`
 ADD COLUMN `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`),
 ADD UNIQUE INDEX (`price_type`,`goods_id`,`volume_number`);
 
-ALTER TABLE `ecs_goods_gallery`
+ALTER TABLE `goods_gallery`
 ADD COLUMN `sort_order` int(11) UNSIGNED NOT NULL DEFAULT 0 AFTER `img_original`;

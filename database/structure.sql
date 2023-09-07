@@ -1,10 +1,10 @@
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for ecs_account_log
+-- Table structure for account_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_account_log`;
-CREATE TABLE `ecs_account_log` (
+DROP TABLE IF EXISTS `account_log`;
+CREATE TABLE `account_log` (
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
   `user_money` decimal(10,2) NOT NULL,
@@ -19,14 +19,14 @@ CREATE TABLE `ecs_account_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_account_log
+-- Records of account_log
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_ad
+-- Table structure for ad
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_ad`;
-CREATE TABLE `ecs_ad` (
+DROP TABLE IF EXISTS `ad`;
+CREATE TABLE `ad` (
   `ad_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `position_id` int(11) unsigned NOT NULL DEFAULT '0',
   `media_type` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -46,14 +46,14 @@ CREATE TABLE `ecs_ad` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_ad
+-- Records of ad
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_admin_action
+-- Table structure for admin_action
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_admin_action`;
-CREATE TABLE `ecs_admin_action` (
+DROP TABLE IF EXISTS `admin_action`;
+CREATE TABLE `admin_action` (
   `action_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `action_code` varchar(20) NOT NULL DEFAULT '',
@@ -63,14 +63,14 @@ CREATE TABLE `ecs_admin_action` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_admin_action
+-- Records of admin_action
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_admin_log
+-- Table structure for admin_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_admin_log`;
-CREATE TABLE `ecs_admin_log` (
+DROP TABLE IF EXISTS `admin_log`;
+CREATE TABLE `admin_log` (
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `log_time` int(11) unsigned NOT NULL DEFAULT '0',
   `user_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -82,14 +82,14 @@ CREATE TABLE `ecs_admin_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_admin_log
+-- Records of admin_log
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_admin_message
+-- Table structure for admin_message
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_admin_message`;
-CREATE TABLE `ecs_admin_message` (
+DROP TABLE IF EXISTS `admin_message`;
+CREATE TABLE `admin_message` (
   `message_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `sender_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `receiver_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -105,14 +105,14 @@ CREATE TABLE `ecs_admin_message` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_admin_message
+-- Records of admin_message
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_admin_user
+-- Table structure for admin_user
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_admin_user`;
-CREATE TABLE `ecs_admin_user` (
+DROP TABLE IF EXISTS `admin_user`;
+CREATE TABLE `admin_user` (
   `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_name` varchar(60) NOT NULL DEFAULT '',
   `email` varchar(60) NOT NULL DEFAULT '',
@@ -134,14 +134,14 @@ CREATE TABLE `ecs_admin_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_admin_user
+-- Records of admin_user
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_adsense
+-- Table structure for adsense
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_adsense`;
-CREATE TABLE `ecs_adsense` (
+DROP TABLE IF EXISTS `adsense`;
+CREATE TABLE `adsense` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `from_ad` int(11) NOT NULL DEFAULT '0',
   `referer` varchar(255) NOT NULL DEFAULT '',
@@ -151,14 +151,14 @@ CREATE TABLE `ecs_adsense` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_adsense
+-- Records of adsense
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_ad_custom
+-- Table structure for ad_custom
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_ad_custom`;
-CREATE TABLE `ecs_ad_custom` (
+DROP TABLE IF EXISTS `ad_custom`;
+CREATE TABLE `ad_custom` (
   `ad_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `ad_type` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `ad_name` varchar(60) DEFAULT NULL,
@@ -170,14 +170,14 @@ CREATE TABLE `ecs_ad_custom` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_ad_custom
+-- Records of ad_custom
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_ad_position
+-- Table structure for ad_position
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_ad_position`;
-CREATE TABLE `ecs_ad_position` (
+DROP TABLE IF EXISTS `ad_position`;
+CREATE TABLE `ad_position` (
   `position_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `position_name` varchar(60) NOT NULL DEFAULT '',
   `ad_width` int(11) unsigned NOT NULL DEFAULT '0',
@@ -188,14 +188,14 @@ CREATE TABLE `ecs_ad_position` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_ad_position
+-- Records of ad_position
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_affiliate_log
+-- Table structure for affiliate_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_affiliate_log`;
-CREATE TABLE `ecs_affiliate_log` (
+DROP TABLE IF EXISTS `affiliate_log`;
+CREATE TABLE `affiliate_log` (
   `log_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
   `time` int(11) NOT NULL,
@@ -208,14 +208,14 @@ CREATE TABLE `ecs_affiliate_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_affiliate_log
+-- Records of affiliate_log
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_agency
+-- Table structure for agency
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_agency`;
-CREATE TABLE `ecs_agency` (
+DROP TABLE IF EXISTS `agency`;
+CREATE TABLE `agency` (
   `agency_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `agency_name` varchar(255) NOT NULL,
   `agency_desc` text NOT NULL,
@@ -224,14 +224,14 @@ CREATE TABLE `ecs_agency` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_agency
+-- Records of agency
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_area_region
+-- Table structure for area_region
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_area_region`;
-CREATE TABLE `ecs_area_region` (
+DROP TABLE IF EXISTS `area_region`;
+CREATE TABLE `area_region` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `shipping_area_id` int(11) unsigned NOT NULL DEFAULT '0',
   `region_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -240,14 +240,14 @@ CREATE TABLE `ecs_area_region` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_area_region
+-- Records of area_region
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_article
+-- Table structure for article
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_article`;
-CREATE TABLE `ecs_article` (
+DROP TABLE IF EXISTS `article`;
+CREATE TABLE `article` (
   `article_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cat_id` int(11) NOT NULL DEFAULT '0',
   `title` varchar(150) NOT NULL DEFAULT '',
@@ -267,14 +267,14 @@ CREATE TABLE `ecs_article` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_article
+-- Records of article
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_article_cat
+-- Table structure for article_cat
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_article_cat`;
-CREATE TABLE `ecs_article_cat` (
+DROP TABLE IF EXISTS `article_cat`;
+CREATE TABLE `article_cat` (
   `cat_id` int(11) NOT NULL AUTO_INCREMENT,
   `cat_name` varchar(255) NOT NULL DEFAULT '',
   `cat_type` tinyint(1) unsigned NOT NULL DEFAULT '1',
@@ -290,14 +290,14 @@ CREATE TABLE `ecs_article_cat` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_article_cat
+-- Records of article_cat
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_attribute
+-- Table structure for attribute
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_attribute`;
-CREATE TABLE `ecs_attribute` (
+DROP TABLE IF EXISTS `attribute`;
+CREATE TABLE `attribute` (
   `attr_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cat_id` int(11) unsigned NOT NULL DEFAULT '0',
   `attr_name` varchar(60) NOT NULL DEFAULT '',
@@ -313,14 +313,14 @@ CREATE TABLE `ecs_attribute` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_attribute
+-- Records of attribute
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_auction_log
+-- Table structure for auction_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_auction_log`;
-CREATE TABLE `ecs_auction_log` (
+DROP TABLE IF EXISTS `auction_log`;
+CREATE TABLE `auction_log` (
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `act_id` int(11) unsigned NOT NULL,
   `bid_user` int(11) unsigned NOT NULL,
@@ -331,14 +331,14 @@ CREATE TABLE `ecs_auction_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_auction_log
+-- Records of auction_log
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_auto_manage
+-- Table structure for auto_manage
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_auto_manage`;
-CREATE TABLE `ecs_auto_manage` (
+DROP TABLE IF EXISTS `auto_manage`;
+CREATE TABLE `auto_manage` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `item_id` int(11) NOT NULL,
   `type` varchar(10) NOT NULL,
@@ -349,14 +349,14 @@ CREATE TABLE `ecs_auto_manage` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_auto_manage
+-- Records of auto_manage
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_back_goods
+-- Table structure for back_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_back_goods`;
-CREATE TABLE `ecs_back_goods` (
+DROP TABLE IF EXISTS `back_goods`;
+CREATE TABLE `back_goods` (
   `rec_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `back_id` int(11) unsigned DEFAULT '0',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -374,14 +374,14 @@ CREATE TABLE `ecs_back_goods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_back_goods
+-- Records of back_goods
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_back_order
+-- Table structure for back_order
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_back_order`;
-CREATE TABLE `ecs_back_order` (
+DROP TABLE IF EXISTS `back_order`;
+CREATE TABLE `back_order` (
   `back_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `delivery_sn` varchar(20) NOT NULL,
   `order_sn` varchar(20) NOT NULL,
@@ -419,14 +419,14 @@ CREATE TABLE `ecs_back_order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_back_order
+-- Records of back_order
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_bonus_type
+-- Table structure for bonus_type
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_bonus_type`;
-CREATE TABLE `ecs_bonus_type` (
+DROP TABLE IF EXISTS `bonus_type`;
+CREATE TABLE `bonus_type` (
   `type_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `type_name` varchar(60) NOT NULL DEFAULT '',
   `type_money` decimal(10,2) NOT NULL DEFAULT '0.00',
@@ -442,14 +442,14 @@ CREATE TABLE `ecs_bonus_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_bonus_type
+-- Records of bonus_type
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_booking_goods
+-- Table structure for booking_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_booking_goods`;
-CREATE TABLE `ecs_booking_goods` (
+DROP TABLE IF EXISTS `booking_goods`;
+CREATE TABLE `booking_goods` (
   `rec_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `email` varchar(60) NOT NULL DEFAULT '',
@@ -468,14 +468,14 @@ CREATE TABLE `ecs_booking_goods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_booking_goods
+-- Records of booking_goods
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_brand
+-- Table structure for brand
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_brand`;
-CREATE TABLE `ecs_brand` (
+DROP TABLE IF EXISTS `brand`;
+CREATE TABLE `brand` (
   `brand_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `brand_name` varchar(60) NOT NULL DEFAULT '',
   `brand_logo` varchar(80) NOT NULL DEFAULT '',
@@ -488,14 +488,14 @@ CREATE TABLE `ecs_brand` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_brand
+-- Records of brand
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_card
+-- Table structure for card
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_card`;
-CREATE TABLE `ecs_card` (
+DROP TABLE IF EXISTS `card`;
+CREATE TABLE `card` (
   `card_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `card_name` varchar(120) NOT NULL DEFAULT '',
   `card_img` varchar(255) NOT NULL DEFAULT '',
@@ -506,14 +506,14 @@ CREATE TABLE `ecs_card` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_card
+-- Records of card
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_cart
+-- Table structure for cart
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_cart`;
-CREATE TABLE `ecs_cart` (
+DROP TABLE IF EXISTS `cart`;
+CREATE TABLE `cart` (
   `rec_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `session_id` char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
@@ -538,14 +538,14 @@ CREATE TABLE `ecs_cart` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_cart
+-- Records of cart
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_category
+-- Table structure for category
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_category`;
-CREATE TABLE `ecs_category` (
+DROP TABLE IF EXISTS `category`;
+CREATE TABLE `category` (
   `cat_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cat_name` varchar(90) NOT NULL DEFAULT '',
   `keywords` varchar(255) NOT NULL DEFAULT '',
@@ -564,14 +564,14 @@ CREATE TABLE `ecs_category` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_category
+-- Records of category
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_cat_recommend
+-- Table structure for cat_recommend
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_cat_recommend`;
-CREATE TABLE `ecs_cat_recommend` (
+DROP TABLE IF EXISTS `cat_recommend`;
+CREATE TABLE `cat_recommend` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cat_id` int(11) NOT NULL,
   `recommend_type` tinyint(1) NOT NULL,
@@ -580,14 +580,14 @@ CREATE TABLE `ecs_cat_recommend` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_cat_recommend
+-- Records of cat_recommend
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_collect_goods
+-- Table structure for collect_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_collect_goods`;
-CREATE TABLE `ecs_collect_goods` (
+DROP TABLE IF EXISTS `collect_goods`;
+CREATE TABLE `collect_goods` (
   `rec_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -600,14 +600,14 @@ CREATE TABLE `ecs_collect_goods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_collect_goods
+-- Records of collect_goods
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_comment
+-- Table structure for comment
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_comment`;
-CREATE TABLE `ecs_comment` (
+DROP TABLE IF EXISTS `comment`;
+CREATE TABLE `comment` (
   `comment_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `comment_type` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `id_value` int(11) unsigned NOT NULL DEFAULT '0',
@@ -626,14 +626,14 @@ CREATE TABLE `ecs_comment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_comment
+-- Records of comment
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_crons
+-- Table structure for crons
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_crons`;
-CREATE TABLE `ecs_crons` (
+DROP TABLE IF EXISTS `crons`;
+CREATE TABLE `crons` (
   `cron_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `cron_code` varchar(20) NOT NULL,
   `cron_name` varchar(120) NOT NULL,
@@ -657,14 +657,14 @@ CREATE TABLE `ecs_crons` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_crons
+-- Records of crons
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_delivery_goods
+-- Table structure for delivery_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_delivery_goods`;
-CREATE TABLE `ecs_delivery_goods` (
+DROP TABLE IF EXISTS `delivery_goods`;
+CREATE TABLE `delivery_goods` (
   `rec_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `delivery_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -684,14 +684,14 @@ CREATE TABLE `ecs_delivery_goods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_delivery_goods
+-- Records of delivery_goods
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_delivery_order
+-- Table structure for delivery_order
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_delivery_order`;
-CREATE TABLE `ecs_delivery_order` (
+DROP TABLE IF EXISTS `delivery_order`;
+CREATE TABLE `delivery_order` (
   `delivery_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `delivery_sn` varchar(20) NOT NULL,
   `order_sn` varchar(20) NOT NULL,
@@ -728,14 +728,14 @@ CREATE TABLE `ecs_delivery_order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_delivery_order
+-- Records of delivery_order
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_email_list
+-- Table structure for email_list
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_email_list`;
-CREATE TABLE `ecs_email_list` (
+DROP TABLE IF EXISTS `email_list`;
+CREATE TABLE `email_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(60) NOT NULL,
   `stat` tinyint(1) NOT NULL DEFAULT '0',
@@ -744,14 +744,14 @@ CREATE TABLE `ecs_email_list` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_email_list
+-- Records of email_list
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_email_sendlist
+-- Table structure for email_sendlist
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_email_sendlist`;
-CREATE TABLE `ecs_email_sendlist` (
+DROP TABLE IF EXISTS `email_sendlist`;
+CREATE TABLE `email_sendlist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(100) NOT NULL,
   `template_id` int(11) NOT NULL,
@@ -763,14 +763,14 @@ CREATE TABLE `ecs_email_sendlist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_email_sendlist
+-- Records of email_sendlist
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_error_log
+-- Table structure for error_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_error_log`;
-CREATE TABLE `ecs_error_log` (
+DROP TABLE IF EXISTS `error_log`;
+CREATE TABLE `error_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `info` varchar(255) NOT NULL,
   `file` varchar(100) NOT NULL,
@@ -780,14 +780,14 @@ CREATE TABLE `ecs_error_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_error_log
+-- Records of error_log
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_exchange_goods
+-- Table structure for exchange_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_exchange_goods`;
-CREATE TABLE `ecs_exchange_goods` (
+DROP TABLE IF EXISTS `exchange_goods`;
+CREATE TABLE `exchange_goods` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `exchange_integral` int(11) unsigned NOT NULL DEFAULT '0',
@@ -798,14 +798,14 @@ CREATE TABLE `ecs_exchange_goods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_exchange_goods
+-- Records of exchange_goods
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_favourable_activity
+-- Table structure for favourable_activity
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_favourable_activity`;
-CREATE TABLE `ecs_favourable_activity` (
+DROP TABLE IF EXISTS `favourable_activity`;
+CREATE TABLE `favourable_activity` (
   `act_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `act_name` varchar(255) NOT NULL,
   `start_time` int(11) unsigned NOT NULL,
@@ -824,14 +824,14 @@ CREATE TABLE `ecs_favourable_activity` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_favourable_activity
+-- Records of favourable_activity
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_feedback
+-- Table structure for feedback
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_feedback`;
-CREATE TABLE `ecs_feedback` (
+DROP TABLE IF EXISTS `feedback`;
+CREATE TABLE `feedback` (
   `msg_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) unsigned NOT NULL DEFAULT '0',
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -850,14 +850,14 @@ CREATE TABLE `ecs_feedback` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_feedback
+-- Records of feedback
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_friend_link
+-- Table structure for friend_link
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_friend_link`;
-CREATE TABLE `ecs_friend_link` (
+DROP TABLE IF EXISTS `friend_link`;
+CREATE TABLE `friend_link` (
   `link_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `link_name` varchar(255) NOT NULL DEFAULT '',
   `link_url` varchar(255) NOT NULL DEFAULT '',
@@ -868,14 +868,14 @@ CREATE TABLE `ecs_friend_link` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_friend_link
+-- Records of friend_link
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_goods
+-- Table structure for goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_goods`;
-CREATE TABLE `ecs_goods` (
+DROP TABLE IF EXISTS `goods`;
+CREATE TABLE `goods` (
   `goods_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cat_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_sn` varchar(60) NOT NULL DEFAULT '',
@@ -932,14 +932,14 @@ CREATE TABLE `ecs_goods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_goods
+-- Records of goods
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_goods_activity
+-- Table structure for goods_activity
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_goods_activity`;
-CREATE TABLE `ecs_goods_activity` (
+DROP TABLE IF EXISTS `goods_activity`;
+CREATE TABLE `goods_activity` (
   `act_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `act_name` varchar(255) NOT NULL,
   `act_desc` text NOT NULL,
@@ -956,14 +956,14 @@ CREATE TABLE `ecs_goods_activity` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_goods_activity
+-- Records of goods_activity
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_goods_article
+-- Table structure for goods_article
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_goods_article`;
-CREATE TABLE `ecs_goods_article` (
+DROP TABLE IF EXISTS `goods_article`;
+CREATE TABLE `goods_article` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `article_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -973,14 +973,14 @@ CREATE TABLE `ecs_goods_article` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_goods_article
+-- Records of goods_article
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_goods_attr
+-- Table structure for goods_attr
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_goods_attr`;
-CREATE TABLE `ecs_goods_attr` (
+DROP TABLE IF EXISTS `goods_attr`;
+CREATE TABLE `goods_attr` (
   `goods_attr_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `attr_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -992,14 +992,14 @@ CREATE TABLE `ecs_goods_attr` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_goods_attr
+-- Records of goods_attr
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_goods_cat
+-- Table structure for goods_cat
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_goods_cat`;
-CREATE TABLE `ecs_goods_cat` (
+DROP TABLE IF EXISTS `goods_cat`;
+CREATE TABLE `goods_cat` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `cat_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1008,14 +1008,14 @@ CREATE TABLE `ecs_goods_cat` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_goods_cat
+-- Records of goods_cat
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_goods_gallery
+-- Table structure for goods_gallery
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_goods_gallery`;
-CREATE TABLE `ecs_goods_gallery` (
+DROP TABLE IF EXISTS `goods_gallery`;
+CREATE TABLE `goods_gallery` (
   `img_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `img_url` varchar(255) NOT NULL DEFAULT '',
@@ -1028,14 +1028,14 @@ CREATE TABLE `ecs_goods_gallery` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_goods_gallery
+-- Records of goods_gallery
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_goods_type
+-- Table structure for goods_type
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_goods_type`;
-CREATE TABLE `ecs_goods_type` (
+DROP TABLE IF EXISTS `goods_type`;
+CREATE TABLE `goods_type` (
   `cat_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cat_name` varchar(60) NOT NULL DEFAULT '',
   `enabled` tinyint(1) unsigned NOT NULL DEFAULT '1',
@@ -1044,14 +1044,14 @@ CREATE TABLE `ecs_goods_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_goods_type
+-- Records of goods_type
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_group_goods
+-- Table structure for group_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_group_goods`;
-CREATE TABLE `ecs_group_goods` (
+DROP TABLE IF EXISTS `group_goods`;
+CREATE TABLE `group_goods` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1062,14 +1062,14 @@ CREATE TABLE `ecs_group_goods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_group_goods
+-- Records of group_goods
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_keywords
+-- Table structure for keywords
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_keywords`;
-CREATE TABLE `ecs_keywords` (
+DROP TABLE IF EXISTS `keywords`;
+CREATE TABLE `keywords` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL DEFAULT '2000-01-01',
   `searchengine` varchar(20) NOT NULL DEFAULT '',
@@ -1080,14 +1080,14 @@ CREATE TABLE `ecs_keywords` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_keywords
+-- Records of keywords
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_link_goods
+-- Table structure for link_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_link_goods`;
-CREATE TABLE `ecs_link_goods` (
+DROP TABLE IF EXISTS `link_goods`;
+CREATE TABLE `link_goods` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `link_goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1098,14 +1098,14 @@ CREATE TABLE `ecs_link_goods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_link_goods
+-- Records of link_goods
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_mail_templates
+-- Table structure for mail_templates
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_mail_templates`;
-CREATE TABLE `ecs_mail_templates` (
+DROP TABLE IF EXISTS `mail_templates`;
+CREATE TABLE `mail_templates` (
   `template_id` tinyint(1) unsigned NOT NULL AUTO_INCREMENT,
   `template_code` varchar(30) NOT NULL DEFAULT '',
   `is_html` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -1120,14 +1120,14 @@ CREATE TABLE `ecs_mail_templates` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_mail_templates
+-- Records of mail_templates
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_member_price
+-- Table structure for member_price
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_member_price`;
-CREATE TABLE `ecs_member_price` (
+DROP TABLE IF EXISTS `member_price`;
+CREATE TABLE `member_price` (
   `price_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `user_rank` tinyint(3) NOT NULL DEFAULT '0',
@@ -1137,14 +1137,14 @@ CREATE TABLE `ecs_member_price` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_member_price
+-- Records of member_price
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_nav
+-- Table structure for nav
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_nav`;
-CREATE TABLE `ecs_nav` (
+DROP TABLE IF EXISTS `nav`;
+CREATE TABLE `nav` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ctype` varchar(10) DEFAULT NULL,
   `cid` int(11) unsigned DEFAULT NULL,
@@ -1160,14 +1160,14 @@ CREATE TABLE `ecs_nav` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_nav
+-- Records of nav
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_order_action
+-- Table structure for order_action
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_order_action`;
-CREATE TABLE `ecs_order_action` (
+DROP TABLE IF EXISTS `order_action`;
+CREATE TABLE `order_action` (
   `action_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` int(11) unsigned NOT NULL DEFAULT '0',
   `action_user` varchar(30) NOT NULL DEFAULT '',
@@ -1182,14 +1182,14 @@ CREATE TABLE `ecs_order_action` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_order_action
+-- Records of order_action
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_order_goods
+-- Table structure for order_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_order_goods`;
-CREATE TABLE `ecs_order_goods` (
+DROP TABLE IF EXISTS `order_goods`;
+CREATE TABLE `order_goods` (
   `rec_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1212,14 +1212,14 @@ CREATE TABLE `ecs_order_goods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_order_goods
+-- Records of order_goods
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_order_info
+-- Table structure for order_info
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_order_info`;
-CREATE TABLE `ecs_order_info` (
+DROP TABLE IF EXISTS `order_info`;
+CREATE TABLE `order_info` (
   `order_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `order_sn` varchar(20) NOT NULL DEFAULT '',
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1295,14 +1295,14 @@ CREATE TABLE `ecs_order_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_order_info
+-- Records of order_info
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_pack
+-- Table structure for pack
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_pack`;
-CREATE TABLE `ecs_pack` (
+DROP TABLE IF EXISTS `pack`;
+CREATE TABLE `pack` (
   `pack_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `pack_name` varchar(120) NOT NULL DEFAULT '',
   `pack_img` varchar(255) NOT NULL DEFAULT '',
@@ -1313,14 +1313,14 @@ CREATE TABLE `ecs_pack` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_pack
+-- Records of pack
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_package_goods
+-- Table structure for package_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_package_goods`;
-CREATE TABLE `ecs_package_goods` (
+DROP TABLE IF EXISTS `package_goods`;
+CREATE TABLE `package_goods` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `package_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1332,14 +1332,14 @@ CREATE TABLE `ecs_package_goods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_package_goods
+-- Records of package_goods
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_payment
+-- Table structure for payment
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_payment`;
-CREATE TABLE `ecs_payment` (
+DROP TABLE IF EXISTS `payment`;
+CREATE TABLE `payment` (
   `pay_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `pay_code` varchar(20) NOT NULL DEFAULT '',
   `pay_name` varchar(120) NOT NULL DEFAULT '',
@@ -1355,14 +1355,14 @@ CREATE TABLE `ecs_payment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_payment
+-- Records of payment
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_pay_log
+-- Table structure for pay_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_pay_log`;
-CREATE TABLE `ecs_pay_log` (
+DROP TABLE IF EXISTS `pay_log`;
+CREATE TABLE `pay_log` (
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` int(11) unsigned NOT NULL DEFAULT '0',
   `order_amount` decimal(10,2) unsigned NOT NULL,
@@ -1372,14 +1372,14 @@ CREATE TABLE `ecs_pay_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_pay_log
+-- Records of pay_log
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_plugins
+-- Table structure for plugins
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_plugins`;
-CREATE TABLE `ecs_plugins` (
+DROP TABLE IF EXISTS `plugins`;
+CREATE TABLE `plugins` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(30) NOT NULL DEFAULT '',
   `version` varchar(10) NOT NULL DEFAULT '',
@@ -1391,14 +1391,14 @@ CREATE TABLE `ecs_plugins` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_plugins
+-- Records of plugins
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_products
+-- Table structure for products
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_products`;
-CREATE TABLE `ecs_products` (
+DROP TABLE IF EXISTS `products`;
+CREATE TABLE `products` (
   `product_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_attr` varchar(50) DEFAULT NULL,
@@ -1408,14 +1408,14 @@ CREATE TABLE `ecs_products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_products
+-- Records of products
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_region
+-- Table structure for region
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_region`;
-CREATE TABLE `ecs_region` (
+DROP TABLE IF EXISTS `region`;
+CREATE TABLE `region` (
   `region_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) unsigned NOT NULL DEFAULT '0',
   `region_name` varchar(120) NOT NULL DEFAULT '',
@@ -1428,30 +1428,30 @@ CREATE TABLE `ecs_region` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_region
+-- Records of region
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_reg_extend_info
+-- Table structure for reg_extend_info
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_reg_extend_info`;
-CREATE TABLE `ecs_reg_extend_info` (
-  `Id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `reg_extend_info`;
+CREATE TABLE `reg_extend_info` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
   `reg_field_id` int(11) unsigned NOT NULL,
   `content` text NOT NULL,
-  PRIMARY KEY (`Id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_reg_extend_info
+-- Records of reg_extend_info
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_reg_fields
+-- Table structure for reg_fields
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_reg_fields`;
-CREATE TABLE `ecs_reg_fields` (
+DROP TABLE IF EXISTS `reg_fields`;
+CREATE TABLE `reg_fields` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `reg_field_name` varchar(60) NOT NULL,
   `dis_order` tinyint(3) unsigned NOT NULL DEFAULT '100',
@@ -1462,14 +1462,14 @@ CREATE TABLE `ecs_reg_fields` (
 ) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_reg_fields
+-- Records of reg_fields
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_role
+-- Table structure for role
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_role`;
-CREATE TABLE `ecs_role` (
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE `role` (
   `role_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `role_name` varchar(60) NOT NULL DEFAULT '',
   `action_list` text NOT NULL,
@@ -1479,14 +1479,14 @@ CREATE TABLE `ecs_role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_role
+-- Records of role
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_searchengine
+-- Table structure for searchengine
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_searchengine`;
-CREATE TABLE `ecs_searchengine` (
+DROP TABLE IF EXISTS `searchengine`;
+CREATE TABLE `searchengine` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL DEFAULT '2000-01-01',
   `searchengine` varchar(20) NOT NULL DEFAULT '',
@@ -1496,14 +1496,14 @@ CREATE TABLE `ecs_searchengine` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_searchengine
+-- Records of searchengine
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_sessions
+-- Table structure for sessions
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_sessions`;
-CREATE TABLE `ecs_sessions` (
+DROP TABLE IF EXISTS `sessions`;
+CREATE TABLE `sessions` (
   `sesskey` char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
   `expiry` int(11) unsigned NOT NULL DEFAULT '0',
   `userid` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1519,14 +1519,14 @@ CREATE TABLE `ecs_sessions` (
 ) ENGINE=MEMORY DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_sessions
+-- Records of sessions
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_sessions_data
+-- Table structure for sessions_data
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_sessions_data`;
-CREATE TABLE `ecs_sessions_data` (
+DROP TABLE IF EXISTS `sessions_data`;
+CREATE TABLE `sessions_data` (
   `sesskey` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
   `expiry` int(11) unsigned NOT NULL DEFAULT '0',
   `data` text NOT NULL,
@@ -1535,14 +1535,14 @@ CREATE TABLE `ecs_sessions_data` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_sessions_data
+-- Records of sessions_data
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_shipping
+-- Table structure for shipping
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_shipping`;
-CREATE TABLE `ecs_shipping` (
+DROP TABLE IF EXISTS `shipping`;
+CREATE TABLE `shipping` (
   `shipping_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `shipping_code` varchar(20) NOT NULL DEFAULT '',
   `shipping_name` varchar(120) NOT NULL DEFAULT '',
@@ -1560,14 +1560,14 @@ CREATE TABLE `ecs_shipping` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_shipping
+-- Records of shipping
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_shipping_area
+-- Table structure for shipping_area
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_shipping_area`;
-CREATE TABLE `ecs_shipping_area` (
+DROP TABLE IF EXISTS `shipping_area`;
+CREATE TABLE `shipping_area` (
   `shipping_area_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `shipping_area_name` varchar(150) NOT NULL DEFAULT '',
   `shipping_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1577,14 +1577,14 @@ CREATE TABLE `ecs_shipping_area` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_shipping_area
+-- Records of shipping_area
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_shop_config
+-- Table structure for shop_config
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_shop_config`;
-CREATE TABLE `ecs_shop_config` (
+DROP TABLE IF EXISTS `shop_config`;
+CREATE TABLE `shop_config` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) unsigned NOT NULL DEFAULT '0',
   `code` varchar(30) NOT NULL DEFAULT '',
@@ -1599,14 +1599,14 @@ CREATE TABLE `ecs_shop_config` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_shop_config
+-- Records of shop_config
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_snatch_log
+-- Table structure for snatch_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_snatch_log`;
-CREATE TABLE `ecs_snatch_log` (
+DROP TABLE IF EXISTS `snatch_log`;
+CREATE TABLE `snatch_log` (
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `snatch_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1617,14 +1617,14 @@ CREATE TABLE `ecs_snatch_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_snatch_log
+-- Records of snatch_log
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_stats
+-- Table structure for stats
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_stats`;
-CREATE TABLE `ecs_stats` (
+DROP TABLE IF EXISTS `stats`;
+CREATE TABLE `stats` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `access_time` int(11) unsigned NOT NULL DEFAULT '0',
   `ip_address` varchar(15) NOT NULL DEFAULT '',
@@ -1641,14 +1641,14 @@ CREATE TABLE `ecs_stats` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_stats
+-- Records of stats
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_suppliers
+-- Table structure for suppliers
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_suppliers`;
-CREATE TABLE `ecs_suppliers` (
+DROP TABLE IF EXISTS `suppliers`;
+CREATE TABLE `suppliers` (
   `suppliers_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `suppliers_name` varchar(255) DEFAULT NULL,
   `suppliers_desc` text,
@@ -1657,14 +1657,14 @@ CREATE TABLE `ecs_suppliers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_suppliers
+-- Records of suppliers
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_tag
+-- Table structure for tag
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_tag`;
-CREATE TABLE `ecs_tag` (
+DROP TABLE IF EXISTS `tag`;
+CREATE TABLE `tag` (
   `tag_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1675,14 +1675,14 @@ CREATE TABLE `ecs_tag` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_tag
+-- Records of tag
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_template
+-- Table structure for template
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_template`;
-CREATE TABLE `ecs_template` (
+DROP TABLE IF EXISTS `template`;
+CREATE TABLE `template` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `filename` varchar(30) NOT NULL DEFAULT '',
   `region` varchar(40) NOT NULL DEFAULT '',
@@ -1700,14 +1700,14 @@ CREATE TABLE `ecs_template` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_template
+-- Records of template
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_topic
+-- Table structure for topic
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_topic`;
-CREATE TABLE `ecs_topic` (
+DROP TABLE IF EXISTS `topic`;
+CREATE TABLE `topic` (
   `topic_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL DEFAULT '''''',
   `intro` text NOT NULL,
@@ -1726,14 +1726,14 @@ CREATE TABLE `ecs_topic` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_topic
+-- Records of topic
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_users
+-- Table structure for users
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_users`;
-CREATE TABLE `ecs_users` (
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
   `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(60) NOT NULL DEFAULT '',
   `user_name` varchar(60) NOT NULL DEFAULT '',
@@ -1776,14 +1776,14 @@ CREATE TABLE `ecs_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_users
+-- Records of users
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_user_account
+-- Table structure for user_account
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_user_account`;
-CREATE TABLE `ecs_user_account` (
+DROP TABLE IF EXISTS `user_account`;
+CREATE TABLE `user_account` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `admin_user` varchar(255) NOT NULL,
@@ -1801,14 +1801,14 @@ CREATE TABLE `ecs_user_account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_user_account
+-- Records of user_account
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_user_address
+-- Table structure for user_address
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_user_address`;
-CREATE TABLE `ecs_user_address` (
+DROP TABLE IF EXISTS `user_address`;
+CREATE TABLE `user_address` (
   `address_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `address_name` varchar(50) NOT NULL DEFAULT '',
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1829,14 +1829,14 @@ CREATE TABLE `ecs_user_address` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_user_address
+-- Records of user_address
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_user_bonus
+-- Table structure for user_bonus
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_user_bonus`;
-CREATE TABLE `ecs_user_bonus` (
+DROP TABLE IF EXISTS `user_bonus`;
+CREATE TABLE `user_bonus` (
   `bonus_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `bonus_type_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `bonus_sn` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -1849,14 +1849,14 @@ CREATE TABLE `ecs_user_bonus` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_user_bonus
+-- Records of user_bonus
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_user_feed
+-- Table structure for user_feed
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_user_feed`;
-CREATE TABLE `ecs_user_feed` (
+DROP TABLE IF EXISTS `user_feed`;
+CREATE TABLE `user_feed` (
   `feed_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `value_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1867,14 +1867,14 @@ CREATE TABLE `ecs_user_feed` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_user_feed
+-- Records of user_feed
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_user_rank
+-- Table structure for user_rank
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_user_rank`;
-CREATE TABLE `ecs_user_rank` (
+DROP TABLE IF EXISTS `user_rank`;
+CREATE TABLE `user_rank` (
   `rank_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `rank_name` varchar(30) NOT NULL DEFAULT '',
   `min_points` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1886,14 +1886,14 @@ CREATE TABLE `ecs_user_rank` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_user_rank
+-- Records of user_rank
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_virtual_card
+-- Table structure for virtual_card
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_virtual_card`;
-CREATE TABLE `ecs_virtual_card` (
+DROP TABLE IF EXISTS `virtual_card`;
+CREATE TABLE `virtual_card` (
   `card_id` int(11) NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `card_sn` varchar(60) NOT NULL DEFAULT '',
@@ -1910,14 +1910,14 @@ CREATE TABLE `ecs_virtual_card` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_virtual_card
+-- Records of virtual_card
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_volume_price
+-- Table structure for volume_price
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_volume_price`;
-CREATE TABLE `ecs_volume_price` (
+DROP TABLE IF EXISTS `volume_price`;
+CREATE TABLE `volume_price` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `price_type` tinyint(1) unsigned NOT NULL,
   `goods_id` int(11) unsigned NOT NULL,
@@ -1928,14 +1928,14 @@ CREATE TABLE `ecs_volume_price` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_volume_price
+-- Records of volume_price
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_vote
+-- Table structure for vote
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_vote`;
-CREATE TABLE `ecs_vote` (
+DROP TABLE IF EXISTS `vote`;
+CREATE TABLE `vote` (
   `vote_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `vote_name` varchar(250) NOT NULL DEFAULT '',
   `start_time` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1946,14 +1946,14 @@ CREATE TABLE `ecs_vote` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_vote
+-- Records of vote
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_vote_log
+-- Table structure for vote_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_vote_log`;
-CREATE TABLE `ecs_vote_log` (
+DROP TABLE IF EXISTS `vote_log`;
+CREATE TABLE `vote_log` (
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `vote_id` int(11) unsigned NOT NULL DEFAULT '0',
   `ip_address` varchar(15) NOT NULL DEFAULT '',
@@ -1963,14 +1963,14 @@ CREATE TABLE `ecs_vote_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_vote_log
+-- Records of vote_log
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_vote_option
+-- Table structure for vote_option
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_vote_option`;
-CREATE TABLE `ecs_vote_option` (
+DROP TABLE IF EXISTS `vote_option`;
+CREATE TABLE `vote_option` (
   `option_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `vote_id` int(11) unsigned NOT NULL DEFAULT '0',
   `option_name` varchar(250) NOT NULL DEFAULT '',
@@ -1981,14 +1981,14 @@ CREATE TABLE `ecs_vote_option` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_vote_option
+-- Records of vote_option
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ecs_wholesale
+-- Table structure for wholesale
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_wholesale`;
-CREATE TABLE `ecs_wholesale` (
+DROP TABLE IF EXISTS `wholesale`;
+CREATE TABLE `wholesale` (
   `act_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL,
   `goods_name` varchar(255) NOT NULL,
@@ -2000,5 +2000,5 @@ CREATE TABLE `ecs_wholesale` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of ecs_wholesale
+-- Records of wholesale
 -- ----------------------------

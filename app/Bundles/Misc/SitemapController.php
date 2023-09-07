@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Bundles\Portal\Controllers;
 
-class SitemapsController extends BaseController
+class SitemapController extends BaseController
 {
     public function index()
     {

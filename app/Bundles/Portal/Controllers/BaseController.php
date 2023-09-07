@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Bundles\Portal\Controllers;
 
-class InitController extends BaseController
+class BaseController
 {
     public function index()
     {

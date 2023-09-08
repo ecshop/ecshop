@@ -1,20 +1,17 @@
 <?php
 
+declare(strict_types=1);
 
+namespace App\Support;
 
-class ecs_error
+class Error
 {
-    public $_message = array();
-    public $_template = '';
-    public $error_no = 0;
+    public array $_message = [];
 
-    /**
-     * 构造函数
-     *
-     * @access  public
-     * @param string $tpl
-     * @return  void
-     */
+    public string $_template = '';
+
+    public int $error_no = 0;
+
     public function __construct($tpl)
     {
         $this->_template = $tpl;
@@ -22,13 +19,8 @@ class ecs_error
 
     /**
      * 添加一条错误信息
-     *
-     * @access  public
-     * @param string $msg
-     * @param integer $errno
-     * @return  void
      */
-    public function add($msg, $errno = 1)
+    public function add($msg, $errno = 1): void
     {
         if (is_array($msg)) {
             $this->_message = array_merge($this->_message, $msg);
@@ -41,45 +33,32 @@ class ecs_error
 
     /**
      * 清空错误信息
-     *
-     * @access  public
-     * @return  void
      */
-    public function clean()
+    public function clean(): void
     {
         $this->_message = array();
+
         $this->error_no = 0;
     }
 
     /**
      * 返回所有的错误信息的数组
-     *
-     * @access  public
-     * @return  array
      */
-    public function get_all()
+    public function get_all(): array
     {
         return $this->_message;
     }
 
     /**
      * 返回最后一条错误信息
-     *
-     * @access  public
-     * @return  void
      */
-    public function last_message()
+    public function last_message(): array
     {
         return array_slice($this->_message, -1);
     }
 
     /**
      * 显示错误信息
-     *
-     * @access  public
-     * @param string $link
-     * @param string $href
-     * @return  void
      */
     public function show($link = '', $href = '')
     {
@@ -95,16 +74,12 @@ class ecs_error
                 $message['content'] = '<div>' . htmlspecialchars($msg) . '</div>';
             }
 
-            if (isset($GLOBALS['smarty'])) {
-                assign_template();
-                $GLOBALS['smarty']->assign('auto_redirect', true);
-                $GLOBALS['smarty']->assign('message', $message);
-                $GLOBALS['smarty']->display($this->_template);
-            } else {
-                die($message['content']);
-            }
+            assign_template();
 
-            exit;
+            return view('portal::'.$this->_template, [
+                'auto_redirect' => true,
+                'message' => $message,
+            ]);
         }
     }
 }

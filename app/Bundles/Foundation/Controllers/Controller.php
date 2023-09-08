@@ -7,6 +7,7 @@ namespace App\Bundles\Foundation\Controllers;
 use App\Http\Controllers\Controller as BaseController;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class Controller extends BaseController
 {
@@ -14,6 +15,22 @@ abstract class Controller extends BaseController
      * 模板变量
      */
     protected array $vars = [];
+
+    /**
+     * Execute an action on the controller.
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return Response
+     */
+    public function callAction($method, $parameters): Response
+    {
+        if (method_exists($this, 'init')) {
+            call_user_func_array([$this, 'init'], []);
+        }
+
+        return $this->{$method}(...array_values($parameters));
+    }
 
     /**
      * 响应内容自动协商

@@ -20,12 +20,12 @@ class IntegrateController extends BaseController
 
             $allow_set_points = $_CFG['integrate_code'] == 'ecshop' ? 0 : 1;
 
-            $smarty->assign('allow_set_points', $allow_set_points);
-            $smarty->assign('ur_here', $_LANG['06_list_integrate']);
-            $smarty->assign('modules', $modules);
+            $this->assign('allow_set_points', $allow_set_points);
+            $this->assign('ur_here', $_LANG['06_list_integrate']);
+            $this->assign('modules', $modules);
 
             assign_query_info();
-            $smarty->display('integrates_list.htm');
+            $this->display('integrates_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -38,10 +38,10 @@ class IntegrateController extends BaseController
             if ($_GET['code'] == 'ucenter') {
                 $uc_client_dir = file_mode_info(ROOT_PATH.'uc_client/data');
                 if ($uc_client_dir === false) {
-                    sys_msg($_LANG['uc_client_not_exists'], 0);
+                    return sys_msg($_LANG['uc_client_not_exists'], 0);
                 }
                 if ($uc_client_dir < 7) {
-                    sys_msg($_LANG['uc_client_not_write'], 0);
+                    return sys_msg($_LANG['uc_client_not_write'], 0);
                 }
             }
             if ($_GET['code'] == 'ecshop') {
@@ -55,7 +55,7 @@ class IntegrateController extends BaseController
 
                 $links[0]['text'] = $_LANG['go_back'];
                 $links[0]['href'] = 'integrate.php?act=list';
-                sys_msg($_LANG['update_success'], 0, $links);
+                return sys_msg($_LANG['update_success'], 0, $links);
             } else {
                 $sql = 'UPDATE '.$GLOBALS['ecs']->table('users').
                     " SET flag = 0, alias=''".
@@ -72,19 +72,19 @@ class IntegrateController extends BaseController
 
                 assign_query_info();
 
-                $smarty->assign('cfg', $cfg);
-                $smarty->assign('save', 0);
-                $smarty->assign('set_list', get_charset_list());
-                $smarty->assign('ur_here', $_LANG['integrate_setup']);
-                $smarty->assign('code', $_GET['code']);
-                $smarty->display('integrates_setup.htm');
+                $this->assign('cfg', $cfg);
+                $this->assign('save', 0);
+                $this->assign('set_list', get_charset_list());
+                $this->assign('ur_here', $_LANG['integrate_setup']);
+                $this->assign('code', $_GET['code']);
+                $this->display('integrates_setup.htm');
             }
         }
 
         if ($_REQUEST['act'] == 'view_install_log') {
             $code = empty($_GET['code']) ? '' : trim(addslashes($_GET['code']));
             if (empty($code) || file_exists(ROOT_PATH.DATA_DIR.'/integrate_'.$code.'_log.php')) {
-                sys_msg($_LANG['lost_intall_log'], 1);
+                return sys_msg($_LANG['lost_intall_log'], 1);
             }
 
             include ROOT_PATH.DATA_DIR.'/integrate_'.$code.'_log.php';
@@ -99,7 +99,7 @@ class IntegrateController extends BaseController
                     var_dump($ignore_list);
                 }
             } else {
-                sys_msg($_LANG['empty_intall_log'], 1);
+                return sys_msg($_LANG['empty_intall_log'], 1);
             }
         }
 
@@ -111,17 +111,17 @@ class IntegrateController extends BaseController
             admin_priv('integrate_users', '');
 
             if ($_GET['code'] == 'ecshop') {
-                sys_msg($_LANG['need_not_setup']);
+                return sys_msg($_LANG['need_not_setup']);
             } else {
                 $cfg = unserialize($_CFG['integrate_config']);
                 assign_query_info();
 
-                $smarty->assign('save', 1);
-                $smarty->assign('set_list', get_charset_list());
-                $smarty->assign('ur_here', $_LANG['integrate_setup']);
-                $smarty->assign('code', $_GET['code']);
-                $smarty->assign('cfg', $cfg);
-                $smarty->display('integrates_setup.htm');
+                $this->assign('save', 1);
+                $this->assign('set_list', get_charset_list());
+                $this->assign('ur_here', $_LANG['integrate_setup']);
+                $this->assign('code', $_GET['code']);
+                $this->assign('cfg', $cfg);
+                $this->display('integrates_setup.htm');
             }
         }
 
@@ -138,13 +138,13 @@ class IntegrateController extends BaseController
             if ($cls_user->error) {
                 /* 出错提示 */
                 if ($cls_user->error == 1) {
-                    sys_msg($_LANG['error_db_msg']);
+                    return sys_msg($_LANG['error_db_msg']);
                 } elseif ($cls_user->error == 2) {
-                    sys_msg($_LANG['error_table_exist']);
+                    return sys_msg($_LANG['error_table_exist']);
                 } elseif ($cls_user->error == 1049) {
-                    sys_msg($_LANG['error_db_exist']);
+                    return sys_msg($_LANG['error_db_exist']);
                 } else {
-                    sys_msg($cls_user->db->error());
+                    return sys_msg($cls_user->db->error());
                 }
             }
 
@@ -156,15 +156,15 @@ class IntegrateController extends BaseController
 
                 if ($db_charset == 'latin1') {
                     if (empty($_POST['cfg']['is_latin1'])) {
-                        sys_msg($_LANG['error_is_latin1'], null, null, false);
+                        return sys_msg($_LANG['error_is_latin1'], null, null, false);
                     }
                 } else {
                     $user_db_charset = $_POST['cfg']['db_charset'] == 'GB2312' ? 'GBK' : $_POST['cfg']['db_charset'];
                     if (! empty($_POST['cfg']['is_latin1'])) {
-                        sys_msg($_LANG['error_not_latin1'], null, null, false);
+                        return sys_msg($_LANG['error_not_latin1'], null, null, false);
                     }
                     if ($user_db_charset != strtoupper($db_charset)) {
-                        sys_msg(sprintf($_LANG['invalid_db_charset'], strtoupper($db_charset), $user_db_charset), null, null, false);
+                        return sys_msg(sprintf($_LANG['invalid_db_charset'], strtoupper($db_charset), $user_db_charset), null, null, false);
                     }
                 }
             }
@@ -180,15 +180,15 @@ class IntegrateController extends BaseController
             $test = $cls_user->db->query($sql, 'SILENT');
 
             if (! $test) {
-                sys_msg($_LANG['error_latin1'], null, null, false);
+                return sys_msg($_LANG['error_latin1'], null, null, false);
             }
 
             if (! empty($_POST['save'])) {
                 /* 直接保存修改 */
                 if (save_integrate_config($code, $_POST['cfg'])) {
-                    sys_msg($_LANG['save_ok'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
+                    return sys_msg($_LANG['save_ok'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
                 } else {
-                    sys_msg($_LANG['save_error'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
+                    return sys_msg($_LANG['save_error'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
                 }
             }
 
@@ -208,11 +208,11 @@ class IntegrateController extends BaseController
 
             $size = 100;
 
-            $smarty->assign('ur_here', $_LANG['conflict_username_check']);
-            $smarty->assign('domain', '@ecshop');
-            $smarty->assign('lang_total', sprintf($_LANG['shop_user_total'], $total));
-            $smarty->assign('size', $size);
-            $smarty->display('integrates_check.htm');
+            $this->assign('ur_here', $_LANG['conflict_username_check']);
+            $this->assign('domain', '@ecshop');
+            $this->assign('lang_total', sprintf($_LANG['shop_user_total'], $total));
+            $this->assign('size', $size);
+            $this->display('integrates_check.htm');
         }
 
         /*------------------------------------------------------ */
@@ -230,13 +230,13 @@ class IntegrateController extends BaseController
             if ($cls_user->error) {
                 /* 出错提示 */
                 if ($cls_user->error == 1) {
-                    sys_msg($_LANG['error_db_msg']);
+                    return sys_msg($_LANG['error_db_msg']);
                 } elseif ($cls_user->error == 2) {
-                    sys_msg($_LANG['error_table_exist']);
+                    return sys_msg($_LANG['error_table_exist']);
                 } elseif ($cls_user->error == 1049) {
-                    sys_msg($_LANG['error_db_exist']);
+                    return sys_msg($_LANG['error_db_exist']);
                 } else {
-                    sys_msg($cls_user->db->error());
+                    return sys_msg($cls_user->db->error());
                 }
             }
 
@@ -245,9 +245,9 @@ class IntegrateController extends BaseController
 
             /* 直接保存修改 */
             if (save_integrate_config($code, $cfg)) {
-                sys_msg($_LANG['save_ok'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
+                return sys_msg($_LANG['save_ok'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
             } else {
-                sys_msg($_LANG['save_error'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
+                return sys_msg($_LANG['save_error'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
             }
         }
 
@@ -264,13 +264,13 @@ class IntegrateController extends BaseController
             if ($cls_user->error) {
                 /* 出错提示 */
                 if ($cls_user->error == 1) {
-                    sys_msg($_LANG['error_db_msg']);
+                    return sys_msg($_LANG['error_db_msg']);
                 } elseif ($cls_user->error == 2) {
-                    sys_msg($_LANG['error_table_exist']);
+                    return sys_msg($_LANG['error_table_exist']);
                 } elseif ($cls_user->error == 1049) {
-                    sys_msg($_LANG['error_db_exist']);
+                    return sys_msg($_LANG['error_db_exist']);
                 } else {
-                    sys_msg($cls_user->db->error());
+                    return sys_msg($cls_user->db->error());
                 }
             }
             [$appauthkey, $appid, $ucdbhost, $ucdbname, $ucdbuser, $ucdbpw, $ucdbcharset, $uctablepre, $uccharset, $ucapi, $ucip] = explode('|', $_POST['ucconfig']);
@@ -300,9 +300,9 @@ class IntegrateController extends BaseController
             /* 直接保存修改 */
             if (! empty($_POST['save'])) {
                 if (save_integrate_config($code, $cfg)) {
-                    sys_msg($_LANG['save_ok'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
+                    return sys_msg($_LANG['save_ok'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
                 } else {
-                    sys_msg($_LANG['save_error'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
+                    return sys_msg($_LANG['save_error'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
                 }
             }
 
@@ -317,9 +317,9 @@ class IntegrateController extends BaseController
             /* 保存完成整合 */
             save_integrate_config($code, $cfg);
 
-            $smarty->assign('ur_here', $_LANG['ucenter_import_username']);
-            $smarty->assign('user_startid_intro', sprintf($_LANG['user_startid_intro'], $maxuid, $maxuid));
-            $smarty->display('integrates_uc_import.htm');
+            $this->assign('ur_here', $_LANG['ucenter_import_username']);
+            $this->assign('user_startid_intro', sprintf($_LANG['user_startid_intro'], $maxuid, $maxuid));
+            $this->display('integrates_uc_import.htm');
         }
 
         /*------------------------------------------------------ */
@@ -495,27 +495,27 @@ class IntegrateController extends BaseController
             $sql = 'SELECT COUNT(*) FROM '.$ecs->table('users').' WHERE flag = 1';
             if ($db->getOne($sql) > 0) {
                 $_REQUEST['flag'] = 1;
-                $smarty->assign('default_flag', 1);
+                $this->assign('default_flag', 1);
             } else {
                 $_REQUEST['flag'] = 0;
-                $smarty->assign('default_flag', 0);
+                $this->assign('default_flag', 0);
             }
 
             /* 显示重名用户及处理方法 */
             $flags = [0 => $_LANG['all_user'], 1 => $_LANG['error_user'], 2 => $_LANG['rename_user'], 3 => $_LANG['delete_user'], 4 => $_LANG['ignore_user']];
-            $smarty->assign('flags', $flags);
+            $this->assign('flags', $flags);
 
             $arr = conflict_userlist();
 
-            $smarty->assign('ur_here', $_LANG['conflict_username_modify']);
-            $smarty->assign('domain', '@ecshop');
-            $smarty->assign('list', $arr['list']);
-            $smarty->assign('filter', $arr['filter']);
-            $smarty->assign('record_count', $arr['record_count']);
-            $smarty->assign('page_count', $arr['page_count']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['conflict_username_modify']);
+            $this->assign('domain', '@ecshop');
+            $this->assign('list', $arr['list']);
+            $this->assign('filter', $arr['filter']);
+            $this->assign('record_count', $arr['record_count']);
+            $this->assign('page_count', $arr['page_count']);
+            $this->assign('full_page', 1);
 
-            $smarty->display('integrates_modify.htm');
+            $this->display('integrates_modify.htm');
         }
 
         /*------------------------------------------------------ */
@@ -523,12 +523,12 @@ class IntegrateController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'query') {
             $arr = conflict_userlist();
-            $smarty->assign('list', $arr['list']);
-            $smarty->assign('filter', $arr['filter']);
-            $smarty->assign('record_count', $arr['record_count']);
-            $smarty->assign('page_count', $arr['page_count']);
-            $smarty->assign('full_page', 0);
-            make_json_result($smarty->fetch('integrates_modify.htm'), '', ['filter' => $arr['filter'], 'page_count' => $arr['page_count']]);
+            $this->assign('list', $arr['list']);
+            $this->assign('filter', $arr['filter']);
+            $this->assign('record_count', $arr['record_count']);
+            $this->assign('page_count', $arr['page_count']);
+            $this->assign('full_page', 0);
+            return make_json_result($this->fetch('integrates_modify.htm'), '', ['filter' => $arr['filter'], 'page_count' => $arr['page_count']]);
         }
 
         /*------------------------------------------------------ */
@@ -652,10 +652,10 @@ class IntegrateController extends BaseController
             fwrite($fp, $log);
             fclose($fp);
 
-            $smarty->assign('tasks', $tasks);
-            $smarty->assign('ur_here', $_LANG['user_sync']);
-            $smarty->assign('size', $size);
-            $smarty->display('integrates_sync.htm');
+            $this->assign('tasks', $tasks);
+            $this->assign('ur_here', $_LANG['user_sync']);
+            $this->assign('size', $size);
+            $this->display('integrates_sync.htm');
         }
 
         /*------------------------------------------------------ */
@@ -830,7 +830,7 @@ class IntegrateController extends BaseController
 
         /* 显示整合成功信息 */
         if ($_REQUEST['act'] == 'complete') {
-            sys_msg($_LANG['sync_ok'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
+            return sys_msg($_LANG['sync_ok'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
         }
 
         if ($_REQUEST['act'] == 'points_set') {
@@ -840,9 +840,9 @@ class IntegrateController extends BaseController
             $points = $user->get_points_name(); //获取商城可用积分
 
             if (empty($points)) {
-                sys_msg($_LANG['no_points'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
+                return sys_msg($_LANG['no_points'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
             } elseif ($points == 'ucenter') {
-                sys_msg($_LANG['uc_points'], 0, [['text' => $_LANG['uc_set_credits'], 'href' => UC_API, 'target' => '_blank']], false);
+                return sys_msg($_LANG['uc_points'], 0, [['text' => $_LANG['uc_set_credits'], 'href' => UC_API, 'target' => '_blank']], false);
             }
 
             $rule = []; //取得一样规则
@@ -895,19 +895,19 @@ class IntegrateController extends BaseController
                 [$from_val, $to_val] = explode(':', $rule[$rule_index]);
 
                 $select_rule[$rule_index] = $exist_rule[$rule_index];
-                $smarty->assign('from_val', $from_val);
-                $smarty->assign('to_val', $to_val);
+                $this->assign('from_val', $from_val);
+                $this->assign('to_val', $to_val);
             }
 
-            $smarty->assign('rule_index', $rule_index);
-            $smarty->assign('allow_add', $allow_add);
-            $smarty->assign('select_rule', $select_rule);
-            $smarty->assign('exist_rule', $exist_rule);
-            $smarty->assign('rule_list', $rule);
-            $smarty->assign('integral_name', $_CFG['integral_name']);
-            $smarty->assign('full_page', 1);
-            $smarty->assign('points', $points);
-            $smarty->display('integrates_points.htm');
+            $this->assign('rule_index', $rule_index);
+            $this->assign('allow_add', $allow_add);
+            $this->assign('select_rule', $select_rule);
+            $this->assign('exist_rule', $exist_rule);
+            $this->assign('rule_list', $rule);
+            $this->assign('integral_name', $_CFG['integral_name']);
+            $this->assign('full_page', 1);
+            $this->assign('points', $points);
+            $this->display('integrates_points.htm');
         }
 
         if ($_REQUEST['act'] == 'edit_points') {
@@ -973,7 +973,7 @@ class IntegrateController extends BaseController
             }
             $db->query($sql);
             clear_cache_files();
-            sys_msg($_LANG['save_ok'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
+            return sys_msg($_LANG['save_ok'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
         }
     }
 

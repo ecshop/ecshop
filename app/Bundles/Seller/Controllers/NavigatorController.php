@@ -17,34 +17,34 @@ class NavigatorController extends BaseController
         //-- 自定义导航栏列表
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'list') {
-            $smarty->assign('ur_here', $_LANG['navigator']);
-            $smarty->assign('action_link', ['text' => $_LANG['add_new'], 'href' => 'navigator.php?act=add']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['navigator']);
+            $this->assign('action_link', ['text' => $_LANG['add_new'], 'href' => 'navigator.php?act=add']);
+            $this->assign('full_page', 1);
 
             $navdb = get_nav();
 
-            $smarty->assign('navdb', $navdb['navdb']);
-            $smarty->assign('filter', $navdb['filter']);
-            $smarty->assign('record_count', $navdb['record_count']);
-            $smarty->assign('page_count', $navdb['page_count']);
+            $this->assign('navdb', $navdb['navdb']);
+            $this->assign('filter', $navdb['filter']);
+            $this->assign('record_count', $navdb['record_count']);
+            $this->assign('page_count', $navdb['page_count']);
 
             assign_query_info();
-            $smarty->display('navigator.htm');
+            $this->display('navigator.htm');
         }
         /*------------------------------------------------------ */
         //-- 自定义导航栏列表Ajax
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'query') {
             $navdb = get_nav();
-            $smarty->assign('navdb', $navdb['navdb']);
-            $smarty->assign('filter', $navdb['filter']);
-            $smarty->assign('record_count', $navdb['record_count']);
-            $smarty->assign('page_count', $navdb['page_count']);
+            $this->assign('navdb', $navdb['navdb']);
+            $this->assign('filter', $navdb['filter']);
+            $this->assign('record_count', $navdb['record_count']);
+            $this->assign('page_count', $navdb['page_count']);
 
             $sort_flag = sort_flag($navdb['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result($smarty->fetch('navigator.htm'), '', ['filter' => $navdb['filter'], 'page_count' => $navdb['page_count']]);
+            return make_json_result($this->fetch('navigator.htm'), '', ['filter' => $navdb['filter'], 'page_count' => $navdb['page_count']]);
         }
         /*------------------------------------------------------ */
         //-- 自定义导航栏增加
@@ -55,12 +55,12 @@ class NavigatorController extends BaseController
 
                 $sysmain = get_sysnav();
 
-                $smarty->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'navigator.php?act=list']);
-                $smarty->assign('ur_here', $_LANG['navigator']);
+                $this->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'navigator.php?act=list']);
+                $this->assign('ur_here', $_LANG['navigator']);
                 assign_query_info();
-                $smarty->assign('sysmain', $sysmain);
-                $smarty->assign('rt', $rt);
-                $smarty->display('navigator_add.htm');
+                $this->assign('sysmain', $sysmain);
+                $this->assign('rt', $rt);
+                $this->display('navigator_add.htm');
             } elseif ($_REQUEST['step'] == 2) {
                 $item_name = $_REQUEST['item_name'];
                 $item_url = $_REQUEST['item_url'];
@@ -90,7 +90,7 @@ class NavigatorController extends BaseController
                 clear_cache_files();
                 $links[] = ['text' => $_LANG['navigator'], 'href' => 'navigator.php?act=list'];
                 $links[] = ['text' => $_LANG['add_new'], 'href' => 'navigator.php?act=add'];
-                sys_msg($_LANG['edit_ok'], 0, $links);
+                return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
         /*------------------------------------------------------ */
@@ -110,12 +110,12 @@ class NavigatorController extends BaseController
 
                 $sysmain = get_sysnav();
 
-                $smarty->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'navigator.php?act=list']);
-                $smarty->assign('ur_here', $_LANG['navigator']);
+                $this->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'navigator.php?act=list']);
+                $this->assign('ur_here', $_LANG['navigator']);
                 assign_query_info();
-                $smarty->assign('sysmain', $sysmain);
-                $smarty->assign('rt', $rt);
-                $smarty->display('navigator_add.htm');
+                $this->assign('sysmain', $sysmain);
+                $this->assign('rt', $rt);
+                $this->display('navigator_add.htm');
             } elseif ($_REQUEST['step'] == 2) {
                 $item_name = $_REQUEST['item_name'];
                 $item_url = $_REQUEST['item_url'];
@@ -165,7 +165,7 @@ class NavigatorController extends BaseController
                 $db->query($sql);
                 clear_cache_files();
                 $links[] = ['text' => $_LANG['navigator'], 'href' => 'navigator.php?act=list'];
-                sys_msg($_LANG['edit_ok'], 0, $links);
+                return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
         /*------------------------------------------------------ */
@@ -197,13 +197,13 @@ class NavigatorController extends BaseController
 
             /* 检查输入的值是否合法 */
             if (! preg_match('/^[0-9]+$/', $order)) {
-                make_json_error(sprintf($_LANG['enter_int'], $order));
+                return make_json_error(sprintf($_LANG['enter_int'], $order));
             } else {
                 if ($exc->edit("vieworder = '$order'", $id)) {
                     clear_cache_files();
-                    make_json_result(stripslashes($order));
+                    return make_json_result(stripslashes($order));
                 } else {
-                    make_json_error($db->error());
+                    return make_json_error($db->error());
                 }
             }
         }
@@ -224,9 +224,9 @@ class NavigatorController extends BaseController
 
             if (nav_update($id, ['ifshow' => $val]) != false) {
                 clear_cache_files();
-                make_json_result($val);
+                return make_json_result($val);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
 
@@ -240,9 +240,9 @@ class NavigatorController extends BaseController
 
             if (nav_update($id, ['opennew' => $val]) != false) {
                 clear_cache_files();
-                make_json_result($val);
+                return make_json_result($val);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
     }

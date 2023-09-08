@@ -28,37 +28,37 @@ class GroupBuyController extends BaseController
 
         if ($_REQUEST['act'] == 'list') {
             /* 模板赋值 */
-            $smarty->assign('full_page', 1);
-            $smarty->assign('ur_here', $_LANG['group_buy_list']);
-            $smarty->assign('action_link', ['href' => 'group_buy.php?act=add', 'text' => $_LANG['add_group_buy']]);
+            $this->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['group_buy_list']);
+            $this->assign('action_link', ['href' => 'group_buy.php?act=add', 'text' => $_LANG['add_group_buy']]);
 
             $list = group_buy_list();
 
-            $smarty->assign('group_buy_list', $list['item']);
-            $smarty->assign('filter', $list['filter']);
-            $smarty->assign('record_count', $list['record_count']);
-            $smarty->assign('page_count', $list['page_count']);
+            $this->assign('group_buy_list', $list['item']);
+            $this->assign('filter', $list['filter']);
+            $this->assign('record_count', $list['record_count']);
+            $this->assign('page_count', $list['page_count']);
 
             $sort_flag = sort_flag($list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             /* 显示商品列表页面 */
             assign_query_info();
-            $smarty->display('group_buy_list.htm');
+            $this->display('group_buy_list.htm');
         }
         if ($_REQUEST['act'] == 'query') {
             $list = group_buy_list();
 
-            $smarty->assign('group_buy_list', $list['item']);
-            $smarty->assign('filter', $list['filter']);
-            $smarty->assign('record_count', $list['record_count']);
-            $smarty->assign('page_count', $list['page_count']);
+            $this->assign('group_buy_list', $list['item']);
+            $this->assign('filter', $list['filter']);
+            $this->assign('record_count', $list['record_count']);
+            $this->assign('page_count', $list['page_count']);
 
             $sort_flag = sort_flag($list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('group_buy_list.htm'),
+            return make_json_result(
+                $this->fetch('group_buy_list.htm'),
                 '',
                 ['filter' => $list['filter'], 'page_count' => $list['page_count']]
             );
@@ -84,17 +84,17 @@ class GroupBuyController extends BaseController
                 }
                 $group_buy = group_buy_info($group_buy_id);
             }
-            $smarty->assign('group_buy', $group_buy);
+            $this->assign('group_buy', $group_buy);
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['add_group_buy']);
-            $smarty->assign('action_link', list_link($_REQUEST['act'] == 'add'));
-            $smarty->assign('cat_list', cat_list());
-            $smarty->assign('brand_list', get_brand_list());
+            $this->assign('ur_here', $_LANG['add_group_buy']);
+            $this->assign('action_link', list_link($_REQUEST['act'] == 'add'));
+            $this->assign('cat_list', cat_list());
+            $this->assign('brand_list', get_brand_list());
 
             /* 显示模板 */
             assign_query_info();
-            $smarty->display('group_buy_info.htm');
+            $this->display('group_buy_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -106,18 +106,18 @@ class GroupBuyController extends BaseController
             $group_buy_id = intval($_POST['act_id']);
             if (isset($_POST['finish']) || isset($_POST['succeed']) || isset($_POST['fail']) || isset($_POST['mail'])) {
                 if ($group_buy_id <= 0) {
-                    sys_msg($_LANG['error_group_buy'], 1);
+                    return sys_msg($_LANG['error_group_buy'], 1);
                 }
                 $group_buy = group_buy_info($group_buy_id);
                 if (empty($group_buy)) {
-                    sys_msg($_LANG['error_group_buy'], 1);
+                    return sys_msg($_LANG['error_group_buy'], 1);
                 }
             }
 
             if (isset($_POST['finish'])) {
                 /* 判断订单状态 */
                 if ($group_buy['status'] != GBS_UNDER_WAY) {
-                    sys_msg($_LANG['error_status'], 1);
+                    return sys_msg($_LANG['error_status'], 1);
                 }
 
                 /* 结束团购活动，修改结束时间为当前时间 */
@@ -133,13 +133,13 @@ class GroupBuyController extends BaseController
                 $links = [
                     ['href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list']],
                 ];
-                sys_msg($_LANG['edit_success'], 0, $links);
+                return sys_msg($_LANG['edit_success'], 0, $links);
             } elseif (isset($_POST['succeed'])) {
                 /* 设置活动成功 */
 
                 /* 判断订单状态 */
                 if ($group_buy['status'] != GBS_FINISHED) {
-                    sys_msg($_LANG['error_status'], 1);
+                    return sys_msg($_LANG['error_status'], 1);
                 }
 
                 /* 如果有订单，更新订单信息 */
@@ -259,13 +259,13 @@ class GroupBuyController extends BaseController
                 $links = [
                     ['href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list']],
                 ];
-                sys_msg($_LANG['edit_success'], 0, $links);
+                return sys_msg($_LANG['edit_success'], 0, $links);
             } elseif (isset($_POST['fail'])) {
                 /* 设置活动失败 */
 
                 /* 判断订单状态 */
                 if ($group_buy['status'] != GBS_FINISHED) {
-                    sys_msg($_LANG['error_status'], 1);
+                    return sys_msg($_LANG['error_status'], 1);
                 }
 
                 /* 如果有有效订单，取消订单 */
@@ -315,13 +315,13 @@ class GroupBuyController extends BaseController
                 $links = [
                     ['href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list']],
                 ];
-                sys_msg($_LANG['edit_success'], 0, $links);
+                return sys_msg($_LANG['edit_success'], 0, $links);
             } elseif (isset($_POST['mail'])) {
                 /* 发送通知邮件 */
 
                 /* 判断订单状态 */
                 if ($group_buy['status'] != GBS_SUCCEED) {
-                    sys_msg($_LANG['error_status'], 1);
+                    return sys_msg($_LANG['error_status'], 1);
                 }
 
                 /* 取得邮件模板 */
@@ -343,18 +343,18 @@ class GroupBuyController extends BaseController
                 $res = $db->query($sql);
                 while ($order = $db->fetchRow($res)) {
                     /* 邮件模板赋值 */
-                    $smarty->assign('consignee', $order['consignee']);
-                    $smarty->assign('add_time', local_date($_CFG['time_format'], $order['add_time']));
-                    $smarty->assign('goods_name', $group_buy['goods_name']);
-                    $smarty->assign('goods_number', $order['goods_number']);
-                    $smarty->assign('order_sn', $order['order_sn']);
-                    $smarty->assign('order_amount', price_format($order['order_amount']));
-                    $smarty->assign('shop_url', $ecs->url().'user.php?act=order_detail&order_id='.$order['order_id']);
-                    $smarty->assign('shop_name', $_CFG['shop_name']);
-                    $smarty->assign('send_date', local_date($_CFG['date_format']));
+                    $this->assign('consignee', $order['consignee']);
+                    $this->assign('add_time', local_date($_CFG['time_format'], $order['add_time']));
+                    $this->assign('goods_name', $group_buy['goods_name']);
+                    $this->assign('goods_number', $order['goods_number']);
+                    $this->assign('order_sn', $order['order_sn']);
+                    $this->assign('order_amount', price_format($order['order_amount']));
+                    $this->assign('shop_url', $ecs->url().'user.php?act=order_detail&order_id='.$order['order_id']);
+                    $this->assign('shop_name', $_CFG['shop_name']);
+                    $this->assign('send_date', local_date($_CFG['date_format']));
 
                     /* 取得模板内容，发邮件 */
-                    $content = $smarty->fetch('str:'.$tpl['template_content']);
+                    $content = $this->fetch('str:'.$tpl['template_content']);
                     if (send_mail($order['consignee'], $order['email'], $tpl['template_subject'], $content, $tpl['is_html'])) {
                         $send_count++;
                     }
@@ -362,16 +362,16 @@ class GroupBuyController extends BaseController
                 }
 
                 /* 提示信息 */
-                sys_msg(sprintf($_LANG['mail_result'], $count, $send_count));
+                return sys_msg(sprintf($_LANG['mail_result'], $count, $send_count));
             } else {
                 /* 保存团购信息 */
                 $goods_id = intval($_POST['goods_id']);
                 if ($goods_id <= 0) {
-                    sys_msg($_LANG['error_goods_null']);
+                    return sys_msg($_LANG['error_goods_null']);
                 }
                 $info = goods_group_buy($goods_id);
                 if ($info && $info['act_id'] != $group_buy_id) {
-                    sys_msg($_LANG['error_goods_exist']);
+                    return sys_msg($_LANG['error_goods_exist']);
                 }
 
                 $goods_name = $db->getOne('SELECT goods_name FROM '.$ecs->table('goods')." WHERE goods_id = '$goods_id'");
@@ -412,13 +412,13 @@ class GroupBuyController extends BaseController
                     $price_ladder[$amount] = ['amount' => $amount, 'price' => $price];
                 }
                 if (count($price_ladder) < 1) {
-                    sys_msg($_LANG['error_price_ladder']);
+                    return sys_msg($_LANG['error_price_ladder']);
                 }
 
                 /* 限购数量不能小于价格阶梯中的最大数量 */
                 $amount_list = array_keys($price_ladder);
                 if ($restrict_amount > 0 && max($amount_list) > $restrict_amount) {
-                    sys_msg($_LANG['error_restrict_amount']);
+                    return sys_msg($_LANG['error_restrict_amount']);
                 }
 
                 ksort($price_ladder);
@@ -428,7 +428,7 @@ class GroupBuyController extends BaseController
                 $start_time = local_strtotime($_POST['start_time']);
                 $end_time = local_strtotime($_POST['end_time']);
                 if ($start_time >= $end_time) {
-                    sys_msg($_LANG['invalid_time']);
+                    return sys_msg($_LANG['invalid_time']);
                 }
 
                 $group_buy = [
@@ -464,7 +464,7 @@ class GroupBuyController extends BaseController
                     $links = [
                         ['href' => 'group_buy.php?act=list&'.list_link_postfix(), 'text' => $_LANG['back_list']],
                     ];
-                    sys_msg($_LANG['edit_success'], 0, $links);
+                    return sys_msg($_LANG['edit_success'], 0, $links);
                 } else {
                     /* insert */
                     $db->autoExecute($ecs->table('goods_activity'), $group_buy, 'INSERT');
@@ -477,7 +477,7 @@ class GroupBuyController extends BaseController
                         ['href' => 'group_buy.php?act=add', 'text' => $_LANG['continue_add']],
                         ['href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list']],
                     ];
-                    sys_msg($_LANG['add_success'], 0, $links);
+                    return sys_msg($_LANG['add_success'], 0, $links);
                 }
             }
         }
@@ -510,10 +510,10 @@ class GroupBuyController extends BaseController
                 }
 
                 $links[] = ['text' => $_LANG['back_list'], 'href' => 'group_buy.php?act=list'];
-                sys_msg(sprintf($_LANG['batch_drop_success'], $del_count), 0, $links);
+                return sys_msg(sprintf($_LANG['batch_drop_success'], $del_count), 0, $links);
             } else {
                 $links[] = ['text' => $_LANG['back_list'], 'href' => 'group_buy.php?act=list'];
-                sys_msg($_LANG['no_select_group_buy'], 0, $links);
+                return sys_msg($_LANG['no_select_group_buy'], 0, $links);
             }
         }
 
@@ -530,7 +530,7 @@ class GroupBuyController extends BaseController
             $filter = $json->decode($_GET['JSON']);
             $arr = get_goods_list($filter);
 
-            make_json_result($arr);
+            return make_json_result($arr);
         }
 
         /*------------------------------------------------------ */
@@ -555,7 +555,7 @@ class GroupBuyController extends BaseController
 
             clear_cache_files();
 
-            make_json_result(number_format($val, 2));
+            return make_json_result(number_format($val, 2));
         }
 
         /*------------------------------------------------------ */
@@ -580,7 +580,7 @@ class GroupBuyController extends BaseController
 
             clear_cache_files();
 
-            make_json_result($val);
+            return make_json_result($val);
         }
 
         /*------------------------------------------------------ */
@@ -597,7 +597,7 @@ class GroupBuyController extends BaseController
 
             /* 如果团购活动已经有订单，不能删除 */
             if ($group_buy['valid_order'] > 0) {
-                make_json_error($_LANG['error_exist_order']);
+                return make_json_error($_LANG['error_exist_order']);
             }
 
             /* 删除团购活动 */

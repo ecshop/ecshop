@@ -11,16 +11,16 @@ class MagazineListController extends BaseController
 
         admin_priv('magazine_list');
         if ($_REQUEST['act'] == 'list') {
-            $smarty->assign('ur_here', $_LANG['magazine_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['add_new'], 'href' => 'magazine_list.php?act=add']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['magazine_list']);
+            $this->assign('action_link', ['text' => $_LANG['add_new'], 'href' => 'magazine_list.php?act=add']);
+            $this->assign('full_page', 1);
 
             $magazinedb = get_magazine();
 
-            $smarty->assign('magazinedb', $magazinedb['magazinedb']);
-            $smarty->assign('filter', $magazinedb['filter']);
-            $smarty->assign('record_count', $magazinedb['record_count']);
-            $smarty->assign('page_count', $magazinedb['page_count']);
+            $this->assign('magazinedb', $magazinedb['magazinedb']);
+            $this->assign('filter', $magazinedb['filter']);
+            $this->assign('record_count', $magazinedb['record_count']);
+            $this->assign('page_count', $magazinedb['page_count']);
 
             $special_ranks = get_rank_list();
             $send_rank[SEND_LIST.'_0'] = $_LANG['email_user'];
@@ -28,31 +28,31 @@ class MagazineListController extends BaseController
             foreach ($special_ranks as $rank_key => $rank_value) {
                 $send_rank[SEND_RANK.'_'.$rank_key] = $rank_value;
             }
-            $smarty->assign('send_rank', $send_rank);
+            $this->assign('send_rank', $send_rank);
 
             assign_query_info();
-            $smarty->display('magazine_list.htm');
+            $this->display('magazine_list.htm');
         }
         if ($_REQUEST['act'] == 'query') {
             $magazinedb = get_magazine();
-            $smarty->assign('magazinedb', $magazinedb['magazinedb']);
-            $smarty->assign('filter', $magazinedb['filter']);
-            $smarty->assign('record_count', $magazinedb['record_count']);
-            $smarty->assign('page_count', $magazinedb['page_count']);
+            $this->assign('magazinedb', $magazinedb['magazinedb']);
+            $this->assign('filter', $magazinedb['filter']);
+            $this->assign('record_count', $magazinedb['record_count']);
+            $this->assign('page_count', $magazinedb['page_count']);
 
             $sort_flag = sort_flag($magazinedb['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result($smarty->fetch('magazine_list.htm'), '', ['filter' => $magazinedb['filter'], 'page_count' => $magazinedb['page_count']]);
+            return make_json_result($this->fetch('magazine_list.htm'), '', ['filter' => $magazinedb['filter'], 'page_count' => $magazinedb['page_count']]);
         }
         if ($_REQUEST['act'] == 'add') {
             if (empty($_POST['step'])) {
                 include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
-                $smarty->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'magazine_list.php?act=list']);
-                $smarty->assign(['ur_here' => $_LANG['magazine_list'], 'act' => 'add']);
+                $this->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'magazine_list.php?act=list']);
+                $this->assign(['ur_here' => $_LANG['magazine_list'], 'act' => 'add']);
                 create_html_editor('magazine_content');
                 assign_query_info();
-                $smarty->display('magazine_list_add.htm');
+                $this->display('magazine_list_add.htm');
             } elseif ($_POST['step'] == 2) {
                 $magazine_name = trim($_POST['magazine_name']);
                 $magazine_content = trim($_POST['magazine_content']);
@@ -62,7 +62,7 @@ class MagazineListController extends BaseController
                 $db->query($sql);
                 $links[] = ['text' => $_LANG['magazine_list'], 'href' => 'magazine_list.php?act=list'];
                 $links[] = ['text' => $_LANG['add_new'], 'href' => 'magazine_list.php?act=add'];
-                sys_msg($_LANG['edit_ok'], 0, $links);
+                return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
         if ($_REQUEST['act'] == 'edit') {
@@ -70,12 +70,12 @@ class MagazineListController extends BaseController
             $id = intval($_REQUEST['id']);
             if (empty($_POST['step'])) {
                 $rt = $db->getRow('SELECT * FROM '.$ecs->table('mail_templates')." WHERE type = 'magazine' AND template_id = '$id'");
-                $smarty->assign(['id' => $id, 'act' => 'edit', 'magazine_name' => $rt['template_subject'], 'magazine_content' => $rt['template_content']]);
-                $smarty->assign(['ur_here' => $_LANG['magazine_list'], 'act' => 'edit']);
-                $smarty->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'magazine_list.php?act=list']);
+                $this->assign(['id' => $id, 'act' => 'edit', 'magazine_name' => $rt['template_subject'], 'magazine_content' => $rt['template_content']]);
+                $this->assign(['ur_here' => $_LANG['magazine_list'], 'act' => 'edit']);
+                $this->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'magazine_list.php?act=list']);
                 create_html_editor('magazine_content', $rt['template_content']);
                 assign_query_info();
-                $smarty->display('magazine_list_add.htm');
+                $this->display('magazine_list_add.htm');
             } elseif ($_POST['step'] == 2) {
                 $magazine_name = trim($_POST['magazine_name']);
                 $magazine_content = trim($_POST['magazine_content']);
@@ -83,14 +83,14 @@ class MagazineListController extends BaseController
                 $time = gmtime();
                 $db->query('UPDATE '.$ecs->table('mail_templates')." SET is_html = 1, template_subject = '$magazine_name', template_content = '$magazine_content', last_modify = '$time' WHERE type = 'magazine' AND template_id = '$id'");
                 $links[] = ['text' => $_LANG['magazine_list'], 'href' => 'magazine_list.php?act=list'];
-                sys_msg($_LANG['edit_ok'], 0, $links);
+                return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
         if ($_REQUEST['act'] == 'del') {
             $id = intval($_REQUEST['id']);
             $db->query('DELETE  FROM '.$ecs->table('mail_templates')." WHERE type = 'magazine' AND template_id = '$id' LIMIT 1");
             $links[] = ['text' => $_LANG['magazine_list'], 'href' => 'magazine_list.php?act=list'];
-            sys_msg($_LANG['edit_ok'], 0, $links);
+            return sys_msg($_LANG['edit_ok'], 0, $links);
         }
         if ($_REQUEST['act'] == 'addtolist') {
             $id = intval($_REQUEST['id']);
@@ -123,11 +123,11 @@ class MagazineListController extends BaseController
                             $start = $start + $i;
                         }
                         $links[] = ['text' => sprintf($_LANG['finish_list'], $start), 'href' => "magazine_list.php?act=addtolist&id=$id&pri=$pri&start=$start&send_rank=$send_rank"];
-                        sys_msg($_LANG['finishing'], 0, $links);
+                        return sys_msg($_LANG['finishing'], 0, $links);
                     } else {
                         $db->query('UPDATE '.$ecs->table('mail_templates').' SET last_send = '.time()." WHERE type = 'magazine' AND template_id = '$id'");
                         $links[] = ['text' => $_LANG['magazine_list'], 'href' => 'magazine_list.php?act=list'];
-                        sys_msg($_LANG['edit_ok'], 0, $links);
+                        return sys_msg($_LANG['edit_ok'], 0, $links);
                     }
                 } else {
                     $sql = 'SELECT special_rank FROM '.$ecs->table('user_rank')." WHERE rank_id = '".$rank_array['1']."'";
@@ -170,16 +170,16 @@ class MagazineListController extends BaseController
                             $start = $start + $i;
                         }
                         $links[] = ['text' => sprintf($_LANG['finish_list'], $start), 'href' => "magazine_list.php?act=addtolist&id=$id&pri=$pri&start=$start&send_rank=$send_rank"];
-                        sys_msg($_LANG['finishing'], 0, $links);
+                        return sys_msg($_LANG['finishing'], 0, $links);
                     } else {
                         $db->query('UPDATE '.$ecs->table('mail_templates').' SET last_send = '.time()." WHERE type = 'magazine' AND template_id = '$id'");
                         $links[] = ['text' => $_LANG['magazine_list'], 'href' => 'magazine_list.php?act=list'];
-                        sys_msg($_LANG['edit_ok'], 0, $links);
+                        return sys_msg($_LANG['edit_ok'], 0, $links);
                     }
                 }
             } else {
                 $links[] = ['text' => $_LANG['magazine_list'], 'href' => 'magazine_list.php?act=list'];
-                sys_msg($_LANG['edit_ok'], 0, $links);
+                return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
     }

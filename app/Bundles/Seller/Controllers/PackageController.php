@@ -30,15 +30,15 @@ class PackageController extends BaseController
             $end_time = local_date('Y-m-d H:i', strtotime('+1 month'));
             $package = ['package_price' => '', 'start_time' => $start_time, 'end_time' => $end_time];
 
-            $smarty->assign('package', $package);
-            $smarty->assign('ur_here', $_LANG['package_add']);
-            $smarty->assign('action_link', ['text' => $_LANG['14_package_list'], 'href' => 'package.php?act=list']);
-            $smarty->assign('cat_list', cat_list());
-            $smarty->assign('brand_list', get_brand_list());
-            $smarty->assign('form_action', 'insert');
+            $this->assign('package', $package);
+            $this->assign('ur_here', $_LANG['package_add']);
+            $this->assign('action_link', ['text' => $_LANG['14_package_list'], 'href' => 'package.php?act=list']);
+            $this->assign('cat_list', cat_list());
+            $this->assign('brand_list', get_brand_list());
+            $this->assign('form_action', 'insert');
 
             assign_query_info();
-            $smarty->display('package_info.htm');
+            $this->display('package_info.htm');
         }
         if ($_REQUEST['act'] == 'insert') {
             /* 权限判断 */
@@ -48,7 +48,7 @@ class PackageController extends BaseController
                 ' FROM '.$ecs->table('goods_activity').
                 " WHERE act_type='".GAT_PACKAGE."' AND act_name='".$_POST['package_name']."'";
             if ($db->getOne($sql)) {
-                sys_msg(sprintf($_LANG['package_exist'], $_POST['package_name']), 1);
+                return sys_msg(sprintf($_LANG['package_exist'], $_POST['package_name']), 1);
             }
 
             /* 将时间转换成整数 */
@@ -77,7 +77,7 @@ class PackageController extends BaseController
             admin_log($_POST['package_name'], 'add', 'package');
             $link[] = ['text' => $_LANG['back_list'], 'href' => 'package.php?act=list'];
             $link[] = ['text' => $_LANG['continue_add'], 'href' => 'package.php?act=add'];
-            sys_msg($_LANG['add_succeed'], 0, $link);
+            return sys_msg($_LANG['add_succeed'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -90,16 +90,16 @@ class PackageController extends BaseController
             $package = get_package_info($_REQUEST['id']);
             $package_goods_list = get_package_goods($_REQUEST['id']); // 礼包商品
 
-            $smarty->assign('package', $package);
-            $smarty->assign('ur_here', $_LANG['package_edit']);
-            $smarty->assign('action_link', ['text' => $_LANG['14_package_list'], 'href' => 'package.php?act=list&'.list_link_postfix()]);
-            $smarty->assign('cat_list', cat_list());
-            $smarty->assign('brand_list', get_brand_list());
-            $smarty->assign('form_action', 'update');
-            $smarty->assign('package_goods_list', $package_goods_list);
+            $this->assign('package', $package);
+            $this->assign('ur_here', $_LANG['package_edit']);
+            $this->assign('action_link', ['text' => $_LANG['14_package_list'], 'href' => 'package.php?act=list&'.list_link_postfix()]);
+            $this->assign('cat_list', cat_list());
+            $this->assign('brand_list', get_brand_list());
+            $this->assign('form_action', 'update');
+            $this->assign('package_goods_list', $package_goods_list);
 
             assign_query_info();
-            $smarty->display('package_info.htm');
+            $this->display('package_info.htm');
         }
         if ($_REQUEST['act'] == 'update') {
             /* 权限判断 */
@@ -119,7 +119,7 @@ class PackageController extends BaseController
                 ' FROM '.$ecs->table('goods_activity').
                 " WHERE act_type='".GAT_PACKAGE."' AND act_name='".$_POST['package_name']."' AND act_id <> '".$_POST['id']."'";
             if ($db->getOne($sql)) {
-                sys_msg(sprintf($_LANG['package_exist'], $_POST['package_name']), 1);
+                return sys_msg(sprintf($_LANG['package_exist'], $_POST['package_name']), 1);
             }
 
             $info = ['package_price' => $_POST['package_price']];
@@ -131,7 +131,7 @@ class PackageController extends BaseController
 
             admin_log($_POST['package_name'], 'edit', 'package');
             $link[] = ['text' => $_LANG['back_list'], 'href' => 'package.php?act=list&'.list_link_postfix()];
-            sys_msg($_LANG['edit_succeed'], 0, $link);
+            return sys_msg($_LANG['edit_succeed'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -159,22 +159,22 @@ class PackageController extends BaseController
         //-- 活动列表
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'list') {
-            $smarty->assign('ur_here', $_LANG['14_package_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['package_add'], 'href' => 'package.php?act=add']);
+            $this->assign('ur_here', $_LANG['14_package_list']);
+            $this->assign('action_link', ['text' => $_LANG['package_add'], 'href' => 'package.php?act=add']);
 
             $packages = get_packagelist();
 
-            $smarty->assign('package_list', $packages['packages']);
-            $smarty->assign('filter', $packages['filter']);
-            $smarty->assign('record_count', $packages['record_count']);
-            $smarty->assign('page_count', $packages['page_count']);
+            $this->assign('package_list', $packages['packages']);
+            $this->assign('filter', $packages['filter']);
+            $this->assign('record_count', $packages['record_count']);
+            $this->assign('page_count', $packages['page_count']);
 
             $sort_flag = sort_flag($packages['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            $smarty->assign('full_page', 1);
+            $this->assign('full_page', 1);
             assign_query_info();
-            $smarty->display('package_list.htm');
+            $this->display('package_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -184,16 +184,16 @@ class PackageController extends BaseController
         if ($_REQUEST['act'] == 'query') {
             $packages = get_packagelist();
 
-            $smarty->assign('package_list', $packages['packages']);
-            $smarty->assign('filter', $packages['filter']);
-            $smarty->assign('record_count', $packages['record_count']);
-            $smarty->assign('page_count', $packages['page_count']);
+            $this->assign('package_list', $packages['packages']);
+            $this->assign('filter', $packages['filter']);
+            $this->assign('record_count', $packages['record_count']);
+            $this->assign('page_count', $packages['page_count']);
 
             $sort_flag = sort_flag($packages['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('package_list.htm'),
+            return make_json_result(
+                $this->fetch('package_list.htm'),
                 '',
                 ['filter' => $packages['filter'], 'page_count' => $packages['page_count']]
             );
@@ -214,11 +214,11 @@ class PackageController extends BaseController
                 ' FROM '.$ecs->table('goods_activity').
                 " WHERE act_type='".GAT_PACKAGE."' AND act_name='$val' AND act_id <> '$id'";
             if ($db->getOne($sql)) {
-                make_json_error(sprintf($_LANG['package_exist'], $val));
+                return make_json_error(sprintf($_LANG['package_exist'], $val));
             }
 
             $exc->edit("act_name='$val'", $id);
-            make_json_result(stripslashes($val));
+            return make_json_result(stripslashes($val));
         }
 
         /*------------------------------------------------------ */
@@ -242,7 +242,7 @@ class PackageController extends BaseController
                 $opt[$key]['products'] = get_good_products($val['goods_id']);
             }
 
-            make_json_result($opt);
+            return make_json_result($opt);
         }
 
         /*------------------------------------------------------ */
@@ -281,7 +281,7 @@ class PackageController extends BaseController
             }
 
             clear_cache_files();
-            make_json_result($opt);
+            return make_json_result($opt);
         }
 
         /*------------------------------------------------------ */
@@ -338,7 +338,7 @@ class PackageController extends BaseController
             }
 
             clear_cache_files();
-            make_json_result($opt);
+            return make_json_result($opt);
         }
 
     }

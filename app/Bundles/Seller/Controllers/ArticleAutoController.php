@@ -10,82 +10,82 @@ class ArticleAutoController extends BaseController
     {
 
         admin_priv('article_auto');
-        $smarty->assign('thisfile', 'article_auto.php');
+        $this->assign('thisfile', 'article_auto.php');
         if ($_REQUEST['act'] == 'list') {
             $goodsdb = get_auto_goods();
             $crons_enable = $db->getOne('SELECT enable FROM '.$GLOBALS['ecs']->table('crons')." WHERE cron_code='ipdel'");
-            $smarty->assign('crons_enable', $crons_enable);
-            $smarty->assign('full_page', 1);
-            $smarty->assign('ur_here', $_LANG['article_auto']);
-            $smarty->assign('goodsdb', $goodsdb['goodsdb']);
-            $smarty->assign('filter', $goodsdb['filter']);
-            $smarty->assign('record_count', $goodsdb['record_count']);
-            $smarty->assign('page_count', $goodsdb['page_count']);
+            $this->assign('crons_enable', $crons_enable);
+            $this->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['article_auto']);
+            $this->assign('goodsdb', $goodsdb['goodsdb']);
+            $this->assign('filter', $goodsdb['filter']);
+            $this->assign('record_count', $goodsdb['record_count']);
+            $this->assign('page_count', $goodsdb['page_count']);
             assign_query_info();
-            $smarty->display('goods_auto.htm');
+            $this->display('goods_auto.htm');
         }
         if ($_REQUEST['act'] == 'query') {
             $goodsdb = get_auto_goods();
-            $smarty->assign('goodsdb', $goodsdb['goodsdb']);
-            $smarty->assign('filter', $goodsdb['filter']);
-            $smarty->assign('record_count', $goodsdb['record_count']);
-            $smarty->assign('page_count', $goodsdb['page_count']);
+            $this->assign('goodsdb', $goodsdb['goodsdb']);
+            $this->assign('filter', $goodsdb['filter']);
+            $this->assign('record_count', $goodsdb['record_count']);
+            $this->assign('page_count', $goodsdb['page_count']);
 
             $sort_flag = sort_flag($goodsdb['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result($smarty->fetch('goods_auto.htm'), '', ['filter' => $goodsdb['filter'], 'page_count' => $goodsdb['page_count']]);
+            return make_json_result($this->fetch('goods_auto.htm'), '', ['filter' => $goodsdb['filter'], 'page_count' => $goodsdb['page_count']]);
         }
         if ($_REQUEST['act'] == 'del') {
             $goods_id = (int) $_REQUEST['goods_id'];
             $sql = 'DELETE FROM '.$ecs->table('auto_manage')." WHERE item_id = '$goods_id' AND type = 'article'";
             $db->query($sql);
             $links[] = ['text' => $_LANG['article_auto'], 'href' => 'article_auto.php?act=list'];
-            sys_msg($_LANG['edit_ok'], 0, $links);
+            return sys_msg($_LANG['edit_ok'], 0, $links);
         }
         if ($_REQUEST['act'] == 'edit_starttime') {
             check_authz_json('goods_auto');
 
             if (! preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
-                make_json_error('');
+                return make_json_error('');
             }
 
             $id = intval($_POST['id']);
             $time = local_strtotime(trim($_POST['val']));
             if ($id <= 0 || $_POST['val'] == '0000-00-00' || $time <= 0) {
-                make_json_error('');
+                return make_json_error('');
             }
 
             $db->autoReplace($ecs->table('auto_manage'), ['item_id' => $id, 'type' => 'article',
                 'starttime' => $time], ['starttime' => (string) $time]);
 
             clear_cache_files();
-            make_json_result(stripslashes($_POST['val']), '', ['act' => 'article_auto', 'id' => $id]);
+            return make_json_result(stripslashes($_POST['val']), '', ['act' => 'article_auto', 'id' => $id]);
         }
         if ($_REQUEST['act'] == 'edit_endtime') {
             check_authz_json('goods_auto');
 
             if (! preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($_POST['val']))) {
-                make_json_error('');
+                return make_json_error('');
             }
 
             $id = intval($_POST['id']);
             $time = local_strtotime(trim($_POST['val']));
             if ($id <= 0 || $_POST['val'] == '0000-00-00' || $time <= 0) {
-                make_json_error('');
+                return make_json_error('');
             }
 
             $db->autoReplace($ecs->table('auto_manage'), ['item_id' => $id, 'type' => 'article',
                 'endtime' => $time], ['endtime' => (string) $time]);
 
             clear_cache_files();
-            make_json_result(stripslashes($_POST['val']), '', ['act' => 'article_auto', 'id' => $id]);
+            return make_json_result(stripslashes($_POST['val']), '', ['act' => 'article_auto', 'id' => $id]);
         } //批量发布
         if ($_REQUEST['act'] == 'batch_start') {
             admin_priv('goods_auto');
 
             if (! isset($_POST['checkboxes']) || ! is_array($_POST['checkboxes'])) {
-                sys_msg($_LANG['no_select_goods'], 1);
+                return sys_msg($_LANG['no_select_goods'], 1);
             }
 
             if ($_POST['date'] == '0000-00-00') {
@@ -100,13 +100,13 @@ class ArticleAutoController extends BaseController
             }
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'article_auto.php?act=list'];
-            sys_msg($_LANG['batch_start_succeed'], 0, $lnk);
+            return sys_msg($_LANG['batch_start_succeed'], 0, $lnk);
         } //批量取消发布
         if ($_REQUEST['act'] == 'batch_end') {
             admin_priv('goods_auto');
 
             if (! isset($_POST['checkboxes']) || ! is_array($_POST['checkboxes'])) {
-                sys_msg($_LANG['no_select_goods'], 1);
+                return sys_msg($_LANG['no_select_goods'], 1);
             }
 
             if ($_POST['date'] == '0000-00-00') {
@@ -121,7 +121,7 @@ class ArticleAutoController extends BaseController
             }
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'article_auto.php?act=list'];
-            sys_msg($_LANG['batch_end_succeed'], 0, $lnk);
+            return sys_msg($_LANG['batch_end_succeed'], 0, $lnk);
         }
     }
 

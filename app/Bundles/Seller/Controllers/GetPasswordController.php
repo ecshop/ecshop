@@ -39,20 +39,20 @@ class GetPasswordController extends BaseController
                     $link[0]['text'] = $_LANG['back'];
                     $link[0]['href'] = 'privilege.php?act=login';
 
-                    sys_msg($_LANG['code_param_error'], 0, $link);
+                    return sys_msg($_LANG['code_param_error'], 0, $link);
                 } else {
-                    $smarty->assign('adminid', $adminid);
-                    $smarty->assign('code', $code);
-                    $smarty->assign('form_act', 'reset_pwd');
+                    $this->assign('adminid', $adminid);
+                    $this->assign('code', $code);
+                    $this->assign('form_act', 'reset_pwd');
                 }
             } elseif (! empty($_GET['act']) && $_GET['act'] == 'forget_pwd') {
-                $smarty->assign('form_act', 'forget_pwd');
+                $this->assign('form_act', 'forget_pwd');
             }
 
-            $smarty->assign('ur_here', $_LANG['get_newpassword']);
+            $this->assign('ur_here', $_LANG['get_newpassword']);
 
             assign_query_info();
-            $smarty->display('get_pwd.htm');
+            $this->display('get_pwd.htm');
         }
 
         /*------------------------------------------------------ */
@@ -83,13 +83,13 @@ class GetPasswordController extends BaseController
                     $template = get_mail_template('send_password');
                     $reset_email = $ecs->url().ADMIN_PATH.'/get_password.php?act=reset_pwd&uid='.$admin_id.'&code='.$code;
 
-                    $smarty->assign('user_name', $admin_username);
-                    $smarty->assign('reset_email', $reset_email);
-                    $smarty->assign('shop_name', $_CFG['shop_name']);
-                    $smarty->assign('send_date', local_date($_CFG['date_format']));
-                    $smarty->assign('sent_date', local_date($_CFG['date_format']));
+                    $this->assign('user_name', $admin_username);
+                    $this->assign('reset_email', $reset_email);
+                    $this->assign('shop_name', $_CFG['shop_name']);
+                    $this->assign('send_date', local_date($_CFG['date_format']));
+                    $this->assign('sent_date', local_date($_CFG['date_format']));
 
-                    $content = $smarty->fetch('str:'.$template['template_content']);
+                    $content = $this->fetch('str:'.$template['template_content']);
 
                     /* 发送确认重置密码的确认邮件 */
                     if (send_mail(
@@ -103,13 +103,13 @@ class GetPasswordController extends BaseController
                         $link[0]['text'] = $_LANG['back'];
                         $link[0]['href'] = 'privilege.php?act=login';
 
-                        sys_msg($_LANG['send_success'].$admin_email, 0, $link);
+                        return sys_msg($_LANG['send_success'].$admin_email, 0, $link);
                     } else {
-                        sys_msg($_LANG['send_mail_error'], 1);
+                        return sys_msg($_LANG['send_mail_error'], 1);
                     }
                 } else {
                     /* 提示信息 */
-                    sys_msg($_LANG['email_username_error'], 1);
+                    return sys_msg($_LANG['email_username_error'], 1);
                 }
             } /* 验证新密码，更新管理员密码 */
             elseif (! empty($_POST['action']) && $_POST['action'] == 'reset_pwd') {
@@ -131,7 +131,7 @@ class GetPasswordController extends BaseController
                     $link[0]['text'] = $_LANG['back'];
                     $link[0]['href'] = 'privilege.php?act=login';
 
-                    sys_msg($_LANG['code_param_error'], 0, $link);
+                    return sys_msg($_LANG['code_param_error'], 0, $link);
                 }
 
                 //更新管理员的密码
@@ -143,9 +143,9 @@ class GetPasswordController extends BaseController
                     $link[0]['text'] = $_LANG['login_now'];
                     $link[0]['href'] = 'privilege.php?act=login';
 
-                    sys_msg($_LANG['update_pwd_success'], 0, $link);
+                    return sys_msg($_LANG['update_pwd_success'], 0, $link);
                 } else {
-                    sys_msg($_LANG['update_pwd_failed'], 1);
+                    return sys_msg($_LANG['update_pwd_failed'], 1);
                 }
             }
         }

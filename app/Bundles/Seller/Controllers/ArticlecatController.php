@@ -24,13 +24,13 @@ class ArticlecatController extends BaseController
             foreach ($articlecat as $key => $cat) {
                 $articlecat[$key]['type_name'] = $_LANG['type_name'][$cat['cat_type']];
             }
-            $smarty->assign('ur_here', $_LANG['02_articlecat_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['articlecat_add'], 'href' => 'articlecat.php?act=add']);
-            $smarty->assign('full_page', 1);
-            $smarty->assign('articlecat', $articlecat);
+            $this->assign('ur_here', $_LANG['02_articlecat_list']);
+            $this->assign('action_link', ['text' => $_LANG['articlecat_add'], 'href' => 'articlecat.php?act=add']);
+            $this->assign('full_page', 1);
+            $this->assign('articlecat', $articlecat);
 
             assign_query_info();
-            $smarty->display('articlecat_list.htm');
+            $this->display('articlecat_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -41,9 +41,9 @@ class ArticlecatController extends BaseController
             foreach ($articlecat as $key => $cat) {
                 $articlecat[$key]['type_name'] = $_LANG['type_name'][$cat['cat_type']];
             }
-            $smarty->assign('articlecat', $articlecat);
+            $this->assign('articlecat', $articlecat);
 
-            make_json_result($smarty->fetch('articlecat_list.htm'));
+            return make_json_result($this->fetch('articlecat_list.htm'));
         }
 
         /*------------------------------------------------------ */
@@ -53,13 +53,13 @@ class ArticlecatController extends BaseController
             /* 权限判断 */
             admin_priv('article_cat');
 
-            $smarty->assign('cat_select', article_cat_list(0));
-            $smarty->assign('ur_here', $_LANG['articlecat_add']);
-            $smarty->assign('action_link', ['text' => $_LANG['02_articlecat_list'], 'href' => 'articlecat.php?act=list']);
-            $smarty->assign('form_action', 'insert');
+            $this->assign('cat_select', article_cat_list(0));
+            $this->assign('ur_here', $_LANG['articlecat_add']);
+            $this->assign('action_link', ['text' => $_LANG['02_articlecat_list'], 'href' => 'articlecat.php?act=list']);
+            $this->assign('form_action', 'insert');
 
             assign_query_info();
-            $smarty->display('articlecat_info.htm');
+            $this->display('articlecat_info.htm');
         }
         if ($_REQUEST['act'] == 'insert') {
             /* 权限判断 */
@@ -69,7 +69,7 @@ class ArticlecatController extends BaseController
             $is_only = $exc->is_only('cat_name', $_POST['cat_name']);
 
             if (! $is_only) {
-                sys_msg(sprintf($_LANG['catname_exist'], stripslashes($_POST['cat_name'])), 1);
+                return sys_msg(sprintf($_LANG['catname_exist'], stripslashes($_POST['cat_name'])), 1);
             }
 
             $cat_type = 1;
@@ -77,7 +77,7 @@ class ArticlecatController extends BaseController
                 $sql = 'SELECT cat_type FROM '.$ecs->table('article_cat')." WHERE cat_id = '$_POST[parent_id]'";
                 $p_cat_type = $db->getOne($sql);
                 if ($p_cat_type == 2 || $p_cat_type == 3 || $p_cat_type == 5) {
-                    sys_msg($_LANG['not_allow_add'], 0);
+                    return sys_msg($_LANG['not_allow_add'], 0);
                 } elseif ($p_cat_type == 4) {
                     $cat_type = 5;
                 }
@@ -103,7 +103,7 @@ class ArticlecatController extends BaseController
             $link[1]['text'] = $_LANG['back_list'];
             $link[1]['href'] = 'articlecat.php?act=list';
             clear_cache_files();
-            sys_msg($_POST['cat_name'].$_LANG['catadd_succed'], 0, $link);
+            return sys_msg($_POST['cat_name'].$_LANG['catadd_succed'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -118,7 +118,7 @@ class ArticlecatController extends BaseController
             $cat = $db->getRow($sql);
 
             if ($cat['cat_type'] == 2 || $cat['cat_type'] == 3 || $cat['cat_type'] == 4) {
-                $smarty->assign('disabled', 1);
+                $this->assign('disabled', 1);
             }
             $options = article_cat_list(0, $cat['parent_id'], false);
             $select = '';
@@ -137,14 +137,14 @@ class ArticlecatController extends BaseController
                 $select .= htmlspecialchars($var['cat_name']).'</option>';
             }
             unset($options);
-            $smarty->assign('cat', $cat);
-            $smarty->assign('cat_select', $select);
-            $smarty->assign('ur_here', $_LANG['articlecat_edit']);
-            $smarty->assign('action_link', ['text' => $_LANG['02_articlecat_list'], 'href' => 'articlecat.php?act=list']);
-            $smarty->assign('form_action', 'update');
+            $this->assign('cat', $cat);
+            $this->assign('cat_select', $select);
+            $this->assign('ur_here', $_LANG['articlecat_edit']);
+            $this->assign('action_link', ['text' => $_LANG['02_articlecat_list'], 'href' => 'articlecat.php?act=list']);
+            $this->assign('form_action', 'update');
 
             assign_query_info();
-            $smarty->display('articlecat_info.htm');
+            $this->display('articlecat_info.htm');
         }
         if ($_REQUEST['act'] == 'update') {
             /* 权限判断 */
@@ -155,7 +155,7 @@ class ArticlecatController extends BaseController
                 $is_only = $exc->is_only('cat_name', $_POST['cat_name'], $_POST['id']);
 
                 if (! $is_only) {
-                    sys_msg(sprintf($_LANG['catname_exist'], stripslashes($_POST['cat_name'])), 1);
+                    return sys_msg(sprintf($_LANG['catname_exist'], stripslashes($_POST['cat_name'])), 1);
                 }
             }
 
@@ -177,7 +177,7 @@ class ArticlecatController extends BaseController
                 }
             }
             if (in_array($_POST['parent_id'], $catid_array)) {
-                sys_msg(sprintf($_LANG['parent_id_err'], stripslashes($_POST['cat_name'])), 1);
+                return sys_msg(sprintf($_LANG['parent_id_err'], stripslashes($_POST['cat_name'])), 1);
             }
 
             if ($cat_type == 1 || $cat_type == 5) {
@@ -227,7 +227,7 @@ class ArticlecatController extends BaseController
                 $note = sprintf($_LANG['catedit_succed'], $_POST['cat_name']);
                 admin_log($_POST['cat_name'], 'edit', 'articlecat');
                 clear_cache_files();
-                sys_msg($note, 0, $link);
+                return sys_msg($note, 0, $link);
             } else {
                 exit($db->error());
             }
@@ -244,13 +244,13 @@ class ArticlecatController extends BaseController
 
             /* 检查输入的值是否合法 */
             if (! preg_match('/^[0-9]+$/', $order)) {
-                make_json_error(sprintf($_LANG['enter_int'], $order));
+                return make_json_error(sprintf($_LANG['enter_int'], $order));
             } else {
                 if ($exc->edit("sort_order = '$order'", $id)) {
                     clear_cache_files();
-                    make_json_result(stripslashes($order));
+                    return make_json_result(stripslashes($order));
                 } else {
-                    make_json_error($db->error());
+                    return make_json_error($db->error());
                 }
             }
         }
@@ -267,19 +267,19 @@ class ArticlecatController extends BaseController
             $cat_type = $db->getOne($sql);
             if ($cat_type == 2 || $cat_type == 3 || $cat_type == 4) {
                 /* 系统保留分类，不能删除 */
-                make_json_error($_LANG['not_allow_remove']);
+                return make_json_error($_LANG['not_allow_remove']);
             }
 
             $sql = 'SELECT COUNT(*) FROM '.$ecs->table('article_cat')." WHERE parent_id = '$id'";
             if ($db->getOne($sql) > 0) {
                 /* 还有子分类，不能删除 */
-                make_json_error($_LANG['is_fullcat']);
+                return make_json_error($_LANG['is_fullcat']);
             }
 
             /* 非空的分类不允许删除 */
             $sql = 'SELECT COUNT(*) FROM '.$ecs->table('article')." WHERE cat_id = '$id'";
             if ($db->getOne($sql) > 0) {
-                make_json_error(sprintf($_LANG['not_emptycat']));
+                return make_json_error(sprintf($_LANG['not_emptycat']));
             } else {
                 $exc->drop($id);
                 $db->query('DELETE FROM '.$ecs->table('nav')."WHERE  ctype = 'a' AND cid = '$id' AND type = 'middle'");
@@ -324,9 +324,9 @@ class ArticlecatController extends BaseController
                     $db->query('UPDATE '.$ecs->table('nav')." SET ifshow = 0 WHERE ctype='a' AND cid='$id' AND type = 'middle'");
                 }
                 clear_cache_files();
-                make_json_result($val);
+                return make_json_result($val);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
     }

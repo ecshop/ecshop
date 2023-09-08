@@ -79,8 +79,8 @@ class SearchengineStatsController extends BaseController
             $general_xml .= '</chart>';
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['searchengine_stats']);
-            $smarty->assign('general_data', $general_xml);
+            $this->assign('ur_here', $_LANG['searchengine_stats']);
+            $this->assign('general_data', $general_xml);
 
             $searchengines = ['ecshop' => false,
                 'MSLIVE' => false,
@@ -95,19 +95,19 @@ class SearchengineStatsController extends BaseController
                     $searchengines[$v] = true;
                 }
             }
-            $smarty->assign('searchengines', $searchengines);
+            $this->assign('searchengines', $searchengines);
 
             /* 显示日期 */
-            $smarty->assign('start_date', $start_date);
-            $smarty->assign('end_date', $end_date);
+            $this->assign('start_date', $start_date);
+            $this->assign('end_date', $end_date);
 
             $filename = str_replace('-', '', $start_date.'_'.$end_date);
-            $smarty->assign('action_link', ['text' => $_LANG['down_search_stats'], 'href' => 'searchengine_stats.php?act=download&start_date='.$start_date.'&end_date='.$end_date.'&filename='.$filename]);
+            $this->assign('action_link', ['text' => $_LANG['down_search_stats'], 'href' => 'searchengine_stats.php?act=download&start_date='.$start_date.'&end_date='.$end_date.'&filename='.$filename]);
 
-            $smarty->assign('lang', $_LANG);
+            $this->assign('lang', $_LANG);
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('searchengine_stats.htm');
+            $this->display('searchengine_stats.htm');
         }
         if ($_REQUEST['act'] == 'download') {
             $start_date = empty($_REQUEST['start_date']) ? strtotime('-20 day') : intval($_REQUEST['start_date']);

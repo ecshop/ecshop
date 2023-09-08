@@ -295,7 +295,7 @@ function handle_gallery_image($goods_id, $image_files, $image_descs, $image_urls
             }
             $img_original = $GLOBALS['image']->upload_image($upload);
             if ($img_original === false) {
-                sys_msg($GLOBALS['image']->error_msg(), 1, [], false);
+                return sys_msg($GLOBALS['image']->error_msg(), 1, [], false);
             }
             $img_url = $img_original;
 

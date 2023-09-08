@@ -28,7 +28,7 @@ class DatabaseController extends BaseController
             $mask = file_mode_info($path);
             if ($mask === false) {
                 $warning = sprintf($_LANG['dir_not_exist'], $path);
-                $smarty->assign('warning', $warning);
+                $this->assign('warning', $warning);
             } elseif ($mask != 15) {
                 $warning = sprintf($_LANG['dir_priv'], $path).'<br/>';
                 if (($mask & 1) < 1) {
@@ -43,16 +43,16 @@ class DatabaseController extends BaseController
                 if (($mask & 8) < 1) {
                     $warning .= $_LANG['cannot_modify'];
                 }
-                $smarty->assign('warning', $warning);
+                $this->assign('warning', $warning);
             }
 
             assign_query_info();
-            $smarty->assign('action_link', ['text' => $_LANG['restore'], 'href' => 'database.php?act=restore']);
-            $smarty->assign('tables', $tables);
-            $smarty->assign('vol_size', $allow_max_size);
-            $smarty->assign('sql_name', cls_sql_dump::get_random_name().'.sql');
-            $smarty->assign('ur_here', $_LANG['02_db_manage']);
-            $smarty->display('db_backup.htm');
+            $this->assign('action_link', ['text' => $_LANG['restore'], 'href' => 'database.php?act=restore']);
+            $this->assign('tables', $tables);
+            $this->assign('vol_size', $allow_max_size);
+            $this->assign('sql_name', cls_sql_dump::get_random_name().'.sql');
+            $this->assign('ur_here', $_LANG['02_db_manage']);
+            $this->display('db_backup.htm');
         }
 
         /* 备份恢复页面 */
@@ -67,10 +67,10 @@ class DatabaseController extends BaseController
             $mask = file_mode_info($path);
             if ($mask === false) {
                 $warning = sprintf($_LANG['dir_not_exist'], $path);
-                $smarty->assign('warning', $warning);
+                $this->assign('warning', $warning);
             } elseif (($mask & 1) < 1) {
                 $warning = $path.'&nbsp;&nbsp;'.$_LANG['cannot_read'];
-                $smarty->assign('warning', $warning);
+                $this->assign('warning', $warning);
             } else {
                 /* 获取文件列表 */
                 $real_list = [];
@@ -101,17 +101,17 @@ class DatabaseController extends BaseController
             }
 
             assign_query_info();
-            $smarty->assign('action_link', ['text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup']);
-            $smarty->assign('ur_here', $_LANG['restore']);
-            $smarty->assign('list', $list);
-            $smarty->display('db_restore.htm');
+            $this->assign('action_link', ['text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup']);
+            $this->assign('ur_here', $_LANG['restore']);
+            $this->assign('list', $list);
+            $this->display('db_restore.htm');
         }
 
         if ($_REQUEST['act'] == 'dumpsql') {
             /* 权限判断 */
             $token = trim($_REQUEST['token']);
             if ($token != $_CFG['token']) {
-                sys_msg($_LANG['backup_failure'], 1);
+                return sys_msg($_LANG['backup_failure'], 1);
             }
             admin_priv('db_backup');
 
@@ -120,7 +120,7 @@ class DatabaseController extends BaseController
             $mask = file_mode_info($path);
             if ($mask === false) {
                 $warning = sprintf($_LANG['dir_not_exist'], $path);
-                sys_msg($warning, 1);
+                return sys_msg($warning, 1);
             } elseif ($mask != 15) {
                 $warning = sprintf($_LANG['dir_priv'], $path);
                 if (($mask & 1) < 1) {
@@ -135,7 +135,7 @@ class DatabaseController extends BaseController
                 if (($mask & 8) < 1) {
                     $warning .= $_LANG['cannot_modify'];
                 }
-                sys_msg($warning, 1);
+                return sys_msg($warning, 1);
             }
 
             /* 设置最长执行时间为5分钟 */
@@ -225,37 +225,37 @@ class DatabaseController extends BaseController
                 if ($vol > 1) {
                     /* 有多个文件 */
                     if (! @file_put_contents(ROOT_PATH.DATA_DIR.'/sqldata/'.$sql_file_name.'_'.$vol.'.sql', $dump->dump_sql)) {
-                        sys_msg(sprintf($_LANG['fail_write_file'], $sql_file_name.'_'.$vol.'.sql'), 1, [['text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup']], false);
+                        return sys_msg(sprintf($_LANG['fail_write_file'], $sql_file_name.'_'.$vol.'.sql'), 1, [['text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup']], false);
                     }
                     $list = [];
                     for ($i = 1; $i <= $vol; $i++) {
                         $list[] = ['name' => $sql_file_name.'_'.$i.'.sql', 'href' => '../'.DATA_DIR.'/sqldata/'.$sql_file_name.'_'.$i.'.sql'];
                     }
 
-                    $smarty->assign('list', $list);
-                    $smarty->assign('title', $_LANG['backup_success']);
-                    $smarty->display('sql_dump_msg.htm');
+                    $this->assign('list', $list);
+                    $this->assign('title', $_LANG['backup_success']);
+                    $this->display('sql_dump_msg.htm');
                 } else {
                     /* 只有一个文件 */
                     if (! @file_put_contents(ROOT_PATH.DATA_DIR.'/sqldata/'.$sql_file_name.'.sql', $dump->dump_sql)) {
-                        sys_msg(sprintf($_LANG['fail_write_file'], $sql_file_name.'_'.$vol.'.sql'), 1, [['text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup']], false);
+                        return sys_msg(sprintf($_LANG['fail_write_file'], $sql_file_name.'_'.$vol.'.sql'), 1, [['text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup']], false);
                     }
 
-                    $smarty->assign('list', [['name' => $sql_file_name.'.sql', 'href' => '../'.DATA_DIR.'/sqldata/'.$sql_file_name.'.sql']]);
-                    $smarty->assign('title', $_LANG['backup_success']);
-                    $smarty->display('sql_dump_msg.htm');
+                    $this->assign('list', [['name' => $sql_file_name.'.sql', 'href' => '../'.DATA_DIR.'/sqldata/'.$sql_file_name.'.sql']]);
+                    $this->assign('title', $_LANG['backup_success']);
+                    $this->display('sql_dump_msg.htm');
                 }
             } else {
                 /* 下一个页面处理 */
                 if (! @file_put_contents(ROOT_PATH.DATA_DIR.'/sqldata/'.$sql_file_name.'_'.$vol.'.sql', $dump->dump_sql)) {
-                    sys_msg(sprintf($_LANG['fail_write_file'], $sql_file_name.'_'.$vol.'.sql'), 1, [['text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup']], false);
+                    return sys_msg(sprintf($_LANG['fail_write_file'], $sql_file_name.'_'.$vol.'.sql'), 1, [['text' => $_LANG['02_db_manage'], 'href' => 'database.php?act=backup']], false);
                 }
 
                 $lnk = 'database.php?act=dumpsql&token='.$_CFG['token'].'&sql_file_name='.$sql_file_name.'&vol_size='.$max_size.'&vol='.($vol + 1);
-                $smarty->assign('title', sprintf($_LANG['backup_title'], '#'.$vol));
-                $smarty->assign('auto_redirect', 1);
-                $smarty->assign('auto_link', $lnk);
-                $smarty->display('sql_dump_msg.htm');
+                $this->assign('title', sprintf($_LANG['backup_title'], '#'.$vol));
+                $this->assign('auto_redirect', 1);
+                $this->assign('auto_link', $lnk);
+                $this->display('sql_dump_msg.htm');
             }
         }
 
@@ -306,7 +306,7 @@ class DatabaseController extends BaseController
                 }
             }
 
-            sys_msg($_LANG['remove_success'], 0, [['text' => $_LANG['restore'], 'href' => 'database.php?act=restore']]);
+            return sys_msg($_LANG['remove_success'], 0, [['text' => $_LANG['restore'], 'href' => 'database.php?act=restore']]);
         }
 
         /* 从服务器上导入数据 */
@@ -325,7 +325,7 @@ class DatabaseController extends BaseController
                 /* 多卷处理 */
                 if ($is_confirm == false) {
                     /* 提示用户要求确认 */
-                    sys_msg($_LANG['confirm_import'], 1, [['text' => $_LANG['also_continue'], 'href' => 'database.php?act=import&confirm=1&file_name='.$file_name]], false);
+                    return sys_msg($_LANG['confirm_import'], 1, [['text' => $_LANG['also_continue'], 'href' => 'database.php?act=import&confirm=1&file_name='.$file_name]], false);
                 }
 
                 $short_name = substr($file_name, 0, strrpos($file_name, '_'));
@@ -354,28 +354,28 @@ class DatabaseController extends BaseController
                 foreach ($post_list as $file) {
                     $info = cls_sql_dump::get_head($path.$file);
                     if ($info['ecs_ver'] != VERSION) {
-                        sys_msg(sprintf($_LANG['version_error'], VERSION, $sql_info['ecs_ver']));
+                        return sys_msg(sprintf($_LANG['version_error'], VERSION, $sql_info['ecs_ver']));
                     }
                     if (! sql_import($path.$file)) {
-                        sys_msg($_LANG['sqlfile_error'], 1);
+                        return sys_msg($_LANG['sqlfile_error'], 1);
                     }
                 }
 
                 clear_cache_files();
 
-                sys_msg($_LANG['restore_success'], 0, [['text' => $_LANG['restore'], 'href' => 'database.php?act=restore']]);
+                return sys_msg($_LANG['restore_success'], 0, [['text' => $_LANG['restore'], 'href' => 'database.php?act=restore']]);
             } else {
                 /* 单卷 */
                 $info = cls_sql_dump::get_head($path.$file_name);
                 if ($info['ecs_ver'] != VERSION) {
-                    sys_msg(sprintf($_LANG['version_error'], VERSION, $sql_info['ecs_ver']));
+                    return sys_msg(sprintf($_LANG['version_error'], VERSION, $sql_info['ecs_ver']));
                 }
                 if (sql_import($path.$file_name)) {
                     clear_cache_files();
                     admin_log($_LANG['backup_time'].$info['date'], 'restore', 'db_backup');
-                    sys_msg($_LANG['restore_success'], 0, [['text' => $_LANG['restore'], 'href' => 'database.php?act=restore']]);
+                    return sys_msg($_LANG['restore_success'], 0, [['text' => $_LANG['restore'], 'href' => 'database.php?act=restore']]);
                 } else {
-                    sys_msg($_LANG['sqlfile_error'], 1);
+                    return sys_msg($_LANG['sqlfile_error'], 1);
                 }
             }
         }
@@ -391,29 +391,29 @@ class DatabaseController extends BaseController
 
             if (empty($_GET['mysql_ver_confirm'])) {
                 if (empty($_FILES['sqlfile'])) {
-                    sys_msg($_LANG['empty_upload'], 1);
+                    return sys_msg($_LANG['empty_upload'], 1);
                 }
 
                 $file = $_FILES['sqlfile'];
 
                 /* 检查上传是否成功 */
                 if ((isset($file['error']) && $file['error'] > 0) || (! isset($file['error']) && $file['tmp_name'] == 'none')) {
-                    sys_msg($_LANG['fail_upload'], 1);
+                    return sys_msg($_LANG['fail_upload'], 1);
                 }
 
                 /* 检查文件格式 */
                 if ($file['type'] == 'application/x-zip-compressed') {
-                    sys_msg($_LANG['not_support_zip_format'], 1);
+                    return sys_msg($_LANG['not_support_zip_format'], 1);
                 }
 
                 if (! preg_match("/\.sql$/i", $file['name'])) {
-                    sys_msg($_LANG['not_sql_file'], 1);
+                    return sys_msg($_LANG['not_sql_file'], 1);
                 }
 
                 /* 将文件移动到临时目录，避免权限问题 */
                 @unlink($sql_file);
                 if (! move_upload_file($file['tmp_name'], $sql_file)) {
-                    sys_msg($_LANG['fail_upload_move'], 1);
+                    return sys_msg($_LANG['fail_upload_move'], 1);
                 }
             }
 
@@ -422,24 +422,24 @@ class DatabaseController extends BaseController
 
             /* 如果备份文件的商场系统与现有商城系统版本不同则拒绝执行 */
             if (empty($sql_info['ecs_ver'])) {
-                sys_msg($_LANG['unrecognize_version'], 1);
+                return sys_msg($_LANG['unrecognize_version'], 1);
             } else {
                 if ($sql_info['ecs_ver'] != VERSION) {
-                    sys_msg(sprintf($_LANG['version_error'], VERSION, $sql_info['ecs_ver']));
+                    return sys_msg(sprintf($_LANG['version_error'], VERSION, $sql_info['ecs_ver']));
                 }
             }
 
             /* 检查数据库版本是否正确 */
             if (empty($_GET['mysql_ver_confirm'])) {
                 if (empty($sql_info['mysql_ver'])) {
-                    sys_msg($_LANG['unrecognize_mysql_version']);
+                    return sys_msg($_LANG['unrecognize_mysql_version']);
                 } else {
                     $mysql_ver_arr = $db->version();
                     if ($sql_info['mysql_ver'] != $mysql_ver_arr) {
                         $lnk = [];
                         $lnk[] = ['text' => $_LANG['confirm_ver'], 'href' => 'database.php?act=upload_sql&mysql_ver_confirm=1'];
                         $lnk[] = ['text' => $_LANG['unconfirm_ver'], 'href' => 'database.php?act=restore'];
-                        sys_msg(sprintf($_LANG['mysql_version_error'], $mysql_ver_arr, $sql_info['mysql_ver']), 0, $lnk, false);
+                        return sys_msg(sprintf($_LANG['mysql_version_error'], $mysql_ver_arr, $sql_info['mysql_ver']), 0, $lnk, false);
                     }
                 }
             }
@@ -450,10 +450,10 @@ class DatabaseController extends BaseController
             if (sql_import($sql_file)) {
                 clear_all_files();
                 @unlink($sql_file);
-                sys_msg($_LANG['restore_success'], 0, []);
+                return sys_msg($_LANG['restore_success'], 0, []);
             } else {
                 @unlink($sql_file);
-                sys_msg($_LANG['sqlfile_error'], 1);
+                return sys_msg($_LANG['sqlfile_error'], 1);
             }
         }
 
@@ -482,10 +482,10 @@ class DatabaseController extends BaseController
             unset($ret);
             /* 赋值 */
             assign_query_info();
-            $smarty->assign('list', $list);
-            $smarty->assign('num', $num);
-            $smarty->assign('ur_here', $_LANG['03_db_optimize']);
-            $smarty->display('optimize.htm');
+            $this->assign('list', $list);
+            $this->assign('num', $num);
+            $this->assign('ur_here', $_LANG['03_db_optimize']);
+            $this->display('optimize.htm');
         }
 
         if ($_REQUEST['act'] == 'run_optimize') {
@@ -500,7 +500,7 @@ class DatabaseController extends BaseController
                 }
             }
 
-            sys_msg(sprintf($_LANG['optimize_ok'], $_POST['num']), 0, [['text' => $_LANG['go_back'], 'href' => 'database.php?act=optimize']]);
+            return sys_msg(sprintf($_LANG['optimize_ok'], $_POST['num']), 0, [['text' => $_LANG['go_back'], 'href' => 'database.php?act=optimize']]);
         }
     }
 

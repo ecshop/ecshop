@@ -34,22 +34,22 @@ class AdminLogsController extends BaseController
                 $ip_list[$row['ip_address']] = $row['ip_address'];
             }
 
-            $smarty->assign('ur_here', $_LANG['admin_logs']);
-            $smarty->assign('ip_list', $ip_list);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['admin_logs']);
+            $this->assign('ip_list', $ip_list);
+            $this->assign('full_page', 1);
 
             $log_list = get_admin_logs();
 
-            $smarty->assign('log_list', $log_list['list']);
-            $smarty->assign('filter', $log_list['filter']);
-            $smarty->assign('record_count', $log_list['record_count']);
-            $smarty->assign('page_count', $log_list['page_count']);
+            $this->assign('log_list', $log_list['list']);
+            $this->assign('filter', $log_list['filter']);
+            $this->assign('record_count', $log_list['record_count']);
+            $this->assign('page_count', $log_list['page_count']);
 
             $sort_flag = sort_flag($log_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             assign_query_info();
-            $smarty->display('admin_logs.htm');
+            $this->display('admin_logs.htm');
         }
 
         /*------------------------------------------------------ */
@@ -58,16 +58,16 @@ class AdminLogsController extends BaseController
         if ($_REQUEST['act'] == 'query') {
             $log_list = get_admin_logs();
 
-            $smarty->assign('log_list', $log_list['list']);
-            $smarty->assign('filter', $log_list['filter']);
-            $smarty->assign('record_count', $log_list['record_count']);
-            $smarty->assign('page_count', $log_list['page_count']);
+            $this->assign('log_list', $log_list['list']);
+            $this->assign('filter', $log_list['filter']);
+            $this->assign('record_count', $log_list['record_count']);
+            $this->assign('page_count', $log_list['page_count']);
 
             $sort_flag = sort_flag($log_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('admin_logs.htm'),
+            return make_json_result(
+                $this->fetch('admin_logs.htm'),
                 '',
                 ['filter' => $log_list['filter'], 'page_count' => $log_list['page_count']]
             );
@@ -116,7 +116,7 @@ class AdminLogsController extends BaseController
                         admin_log('', 'remove', 'adminlog');
 
                         $link[] = ['text' => $_LANG['back_list'], 'href' => 'admin_logs.php?act=list'];
-                        sys_msg($_LANG['drop_sueeccud'], 1, $link);
+                        return sys_msg($_LANG['drop_sueeccud'], 1, $link);
                     }
                 }
             } /* 如果不是按日期来删除, 就按ID删除日志 */
@@ -132,7 +132,7 @@ class AdminLogsController extends BaseController
                     admin_log('', 'remove', 'adminlog');
 
                     $link[] = ['text' => $_LANG['back_list'], 'href' => 'admin_logs.php?act=list'];
-                    sys_msg(sprintf($_LANG['batch_drop_success'], $count), 0, $link);
+                    return sys_msg(sprintf($_LANG['batch_drop_success'], $count), 0, $link);
                 }
             }
         }

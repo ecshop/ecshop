@@ -18,17 +18,17 @@ class AffiliateController extends BaseController
         if ($_REQUEST['act'] == 'list') {
             assign_query_info();
             if (empty($_REQUEST['is_ajax'])) {
-                $smarty->assign('full_page', 1);
+                $this->assign('full_page', 1);
             }
 
-            $smarty->assign('ur_here', $_LANG['affiliate']);
-            $smarty->assign('config', $config);
-            $smarty->display('affiliate.htm');
+            $this->assign('ur_here', $_LANG['affiliate']);
+            $this->assign('config', $config);
+            $this->display('affiliate.htm');
         }
         if ($_REQUEST['act'] == 'query') {
-            $smarty->assign('ur_here', $_LANG['affiliate']);
-            $smarty->assign('config', $config);
-            make_json_result($smarty->fetch('affiliate.htm'), '', null);
+            $this->assign('ur_here', $_LANG['affiliate']);
+            $this->assign('config', $config);
+            return make_json_result($this->fetch('affiliate.htm'), '', null);
         }
         /*------------------------------------------------------ */
         //-- 增加下线分配方案
@@ -59,7 +59,7 @@ class AffiliateController extends BaseController
 
                 put_affiliate($config);
             } else {
-                make_json_error($_LANG['level_error']);
+                return make_json_error($_LANG['level_error']);
             }
 
             ecs_header("Location: affiliate.php?act=query\n");
@@ -98,7 +98,7 @@ class AffiliateController extends BaseController
             $temp['on'] = 1;
             put_affiliate($temp);
             $links[] = ['text' => $_LANG['affiliate'], 'href' => 'affiliate.php?act=list'];
-            sys_msg($_LANG['edit_ok'], 0, $links);
+            return sys_msg($_LANG['edit_ok'], 0, $links);
         }
         /*------------------------------------------------------ */
         //-- 推荐开关
@@ -109,7 +109,7 @@ class AffiliateController extends BaseController
             $config['on'] = $on;
             put_affiliate($config);
             $links[] = ['text' => $_LANG['affiliate'], 'href' => 'affiliate.php?act=list'];
-            sys_msg($_LANG['edit_ok'], 0, $links);
+            return sys_msg($_LANG['edit_ok'], 0, $links);
         }
         /*------------------------------------------------------ */
         //-- Ajax修改设置
@@ -132,7 +132,7 @@ class AffiliateController extends BaseController
             $config['item'][$key]['level_point'] = $val;
             $config['on'] = 1;
             put_affiliate($config);
-            make_json_result(stripcslashes($val));
+            return make_json_result(stripcslashes($val));
         }
         /*------------------------------------------------------ */
         //-- Ajax修改设置
@@ -153,7 +153,7 @@ class AffiliateController extends BaseController
             $config['item'][$key]['level_money'] = $val;
             $config['on'] = 1;
             put_affiliate($config);
-            make_json_result(stripcslashes($val));
+            return make_json_result(stripcslashes($val));
         }
         /*------------------------------------------------------ */
         //-- 删除下线分成

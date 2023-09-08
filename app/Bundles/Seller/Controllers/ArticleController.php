@@ -25,24 +25,24 @@ class ArticleController extends BaseController
         if ($_REQUEST['act'] == 'list') {
             /* 取得过滤条件 */
             $filter = [];
-            $smarty->assign('cat_select', article_cat_list(0));
-            $smarty->assign('ur_here', $_LANG['03_article_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['article_add'], 'href' => 'article.php?act=add']);
-            $smarty->assign('full_page', 1);
-            $smarty->assign('filter', $filter);
+            $this->assign('cat_select', article_cat_list(0));
+            $this->assign('ur_here', $_LANG['03_article_list']);
+            $this->assign('action_link', ['text' => $_LANG['article_add'], 'href' => 'article.php?act=add']);
+            $this->assign('full_page', 1);
+            $this->assign('filter', $filter);
 
             $article_list = get_articleslist();
 
-            $smarty->assign('article_list', $article_list['arr']);
-            $smarty->assign('filter', $article_list['filter']);
-            $smarty->assign('record_count', $article_list['record_count']);
-            $smarty->assign('page_count', $article_list['page_count']);
+            $this->assign('article_list', $article_list['arr']);
+            $this->assign('filter', $article_list['filter']);
+            $this->assign('record_count', $article_list['record_count']);
+            $this->assign('page_count', $article_list['page_count']);
 
             $sort_flag = sort_flag($article_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             assign_query_info();
-            $smarty->display('article_list.htm');
+            $this->display('article_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -53,16 +53,16 @@ class ArticleController extends BaseController
 
             $article_list = get_articleslist();
 
-            $smarty->assign('article_list', $article_list['arr']);
-            $smarty->assign('filter', $article_list['filter']);
-            $smarty->assign('record_count', $article_list['record_count']);
-            $smarty->assign('page_count', $article_list['page_count']);
+            $this->assign('article_list', $article_list['arr']);
+            $this->assign('filter', $article_list['filter']);
+            $this->assign('record_count', $article_list['record_count']);
+            $this->assign('page_count', $article_list['page_count']);
 
             $sort_flag = sort_flag($article_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('article_list.htm'),
+            return make_json_result(
+                $this->fetch('article_list.htm'),
                 '',
                 ['filter' => $article_list['filter'], 'page_count' => $article_list['page_count']]
             );
@@ -83,24 +83,24 @@ class ArticleController extends BaseController
             $article['is_open'] = 1;
 
             /* 取得分类、品牌 */
-            $smarty->assign('goods_cat_list', cat_list());
-            $smarty->assign('brand_list', get_brand_list());
+            $this->assign('goods_cat_list', cat_list());
+            $this->assign('brand_list', get_brand_list());
 
             /* 清理关联商品 */
             $sql = 'DELETE FROM '.$ecs->table('goods_article').' WHERE article_id = 0';
             $db->query($sql);
 
             if (isset($_GET['id'])) {
-                $smarty->assign('cur_id', $_GET['id']);
+                $this->assign('cur_id', $_GET['id']);
             }
-            $smarty->assign('article', $article);
-            $smarty->assign('cat_select', article_cat_list(0));
-            $smarty->assign('ur_here', $_LANG['article_add']);
-            $smarty->assign('action_link', ['text' => $_LANG['03_article_list'], 'href' => 'article.php?act=list']);
-            $smarty->assign('form_action', 'insert');
+            $this->assign('article', $article);
+            $this->assign('cat_select', article_cat_list(0));
+            $this->assign('ur_here', $_LANG['article_add']);
+            $this->assign('action_link', ['text' => $_LANG['03_article_list'], 'href' => 'article.php?act=list']);
+            $this->assign('form_action', 'insert');
 
             assign_query_info();
-            $smarty->display('article_info.htm');
+            $this->display('article_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -114,7 +114,7 @@ class ArticleController extends BaseController
             $is_only = $exc->is_only('title', $_POST['title'], 0, " cat_id ='$_POST[article_cat]'");
 
             if (! $is_only) {
-                sys_msg(sprintf($_LANG['title_exist'], stripslashes($_POST['title'])), 1);
+                return sys_msg(sprintf($_LANG['title_exist'], stripslashes($_POST['title'])), 1);
             }
 
             /* 取得文件地址 */
@@ -122,7 +122,7 @@ class ArticleController extends BaseController
             if ((isset($_FILES['file']['error']) && $_FILES['file']['error'] == 0) || (! isset($_FILES['file']['error']) && isset($_FILES['file']['tmp_name']) && $_FILES['file']['tmp_name'] != 'none')) {
                 // 检查文件格式
                 if (! check_file_type($_FILES['file']['tmp_name'], $_FILES['file']['name'], $allow_file_types)) {
-                    sys_msg($_LANG['invalid_file']);
+                    return sys_msg($_LANG['invalid_file']);
                 }
 
                 // 复制文件
@@ -170,7 +170,7 @@ class ArticleController extends BaseController
 
             clear_cache_files(); // 清除相关的缓存文件
 
-            sys_msg($_LANG['articleadd_succeed'], 0, $link);
+            return sys_msg($_LANG['articleadd_succeed'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -188,21 +188,21 @@ class ArticleController extends BaseController
             create_html_editor('FCKeditor1', $article['content']);
 
             /* 取得分类、品牌 */
-            $smarty->assign('goods_cat_list', cat_list());
-            $smarty->assign('brand_list', get_brand_list());
+            $this->assign('goods_cat_list', cat_list());
+            $this->assign('brand_list', get_brand_list());
 
             /* 取得关联商品 */
             $goods_list = get_article_goods($_REQUEST['id']);
-            $smarty->assign('goods_list', $goods_list);
+            $this->assign('goods_list', $goods_list);
 
-            $smarty->assign('article', $article);
-            $smarty->assign('cat_select', article_cat_list(0, $article['cat_id']));
-            $smarty->assign('ur_here', $_LANG['article_edit']);
-            $smarty->assign('action_link', ['text' => $_LANG['03_article_list'], 'href' => 'article.php?act=list&'.list_link_postfix()]);
-            $smarty->assign('form_action', 'update');
+            $this->assign('article', $article);
+            $this->assign('cat_select', article_cat_list(0, $article['cat_id']));
+            $this->assign('ur_here', $_LANG['article_edit']);
+            $this->assign('action_link', ['text' => $_LANG['03_article_list'], 'href' => 'article.php?act=list&'.list_link_postfix()]);
+            $this->assign('form_action', 'update');
 
             assign_query_info();
-            $smarty->display('article_info.htm');
+            $this->display('article_info.htm');
         }
 
         if ($_REQUEST['act'] == 'update') {
@@ -213,7 +213,7 @@ class ArticleController extends BaseController
             $is_only = $exc->is_only('title', $_POST['title'], $_POST['id'], "cat_id = '$_POST[article_cat]'");
 
             if (! $is_only) {
-                sys_msg(sprintf($_LANG['title_exist'], stripslashes($_POST['title'])), 1);
+                return sys_msg(sprintf($_LANG['title_exist'], stripslashes($_POST['title'])), 1);
             }
 
             if (empty($_POST['cat_id'])) {
@@ -225,7 +225,7 @@ class ArticleController extends BaseController
             if (empty($_FILES['file']['error']) || (! isset($_FILES['file']['error']) && isset($_FILES['file']['tmp_name']) && $_FILES['file']['tmp_name'] != 'none')) {
                 // 检查文件格式
                 if (! check_file_type($_FILES['file']['tmp_name'], $_FILES['file']['name'], $allow_file_types)) {
-                    sys_msg($_LANG['invalid_file']);
+                    return sys_msg($_LANG['invalid_file']);
                 }
 
                 // 复制文件
@@ -262,7 +262,7 @@ class ArticleController extends BaseController
 
                 clear_cache_files();
 
-                sys_msg($note, 0, $link);
+                return sys_msg($note, 0, $link);
             } else {
                 exit($db->error());
             }
@@ -279,14 +279,14 @@ class ArticleController extends BaseController
 
             /* 检查文章标题是否重复 */
             if ($exc->num('title', $title, $id) != 0) {
-                make_json_error(sprintf($_LANG['title_exist'], $title));
+                return make_json_error(sprintf($_LANG['title_exist'], $title));
             } else {
                 if ($exc->edit("title = '$title'", $id)) {
                     clear_cache_files();
                     admin_log($title, 'edit', 'article');
-                    make_json_result(stripslashes($title));
+                    return make_json_result(stripslashes($title));
                 } else {
-                    make_json_error($db->error());
+                    return make_json_error($db->error());
                 }
             }
         }
@@ -303,7 +303,7 @@ class ArticleController extends BaseController
             $exc->edit("is_open = '$val'", $id);
             clear_cache_files();
 
-            make_json_result($val);
+            return make_json_result($val);
         }
 
         /*------------------------------------------------------ */
@@ -318,7 +318,7 @@ class ArticleController extends BaseController
             $exc->edit("article_type = '$val'", $id);
             clear_cache_files();
 
-            make_json_result($val);
+            return make_json_result($val);
         }
 
         /*------------------------------------------------------ */
@@ -383,7 +383,7 @@ class ArticleController extends BaseController
                     'data' => ''];
             }
 
-            make_json_result($opt);
+            return make_json_result($opt);
         }
 
         /*------------------------------------------------------ */
@@ -417,7 +417,7 @@ class ArticleController extends BaseController
                     'data' => ''];
             }
 
-            make_json_result($opt);
+            return make_json_result($opt);
         }
 
         /*------------------------------------------------------ */
@@ -438,7 +438,7 @@ class ArticleController extends BaseController
                     'data' => $val['shop_price']];
             }
 
-            make_json_result($opt);
+            return make_json_result($opt);
         }
         /*------------------------------------------------------ */
         //-- 批量操作
@@ -451,7 +451,7 @@ class ArticleController extends BaseController
                     admin_priv('article_manage');
 
                     if (! isset($_POST['checkboxes']) || ! is_array($_POST['checkboxes'])) {
-                        sys_msg($_LANG['no_select_article'], 1);
+                        return sys_msg($_LANG['no_select_article'], 1);
                     }
 
                     /* 删除原来的文件 */
@@ -479,7 +479,7 @@ class ArticleController extends BaseController
                 if ($_POST['type'] == 'button_hide') {
                     check_authz_json('article_manage');
                     if (! isset($_POST['checkboxes']) || ! is_array($_POST['checkboxes'])) {
-                        sys_msg($_LANG['no_select_article'], 1);
+                        return sys_msg($_LANG['no_select_article'], 1);
                     }
 
                     foreach ($_POST['checkboxes'] as $key => $id) {
@@ -491,7 +491,7 @@ class ArticleController extends BaseController
                 if ($_POST['type'] == 'button_show') {
                     check_authz_json('article_manage');
                     if (! isset($_POST['checkboxes']) || ! is_array($_POST['checkboxes'])) {
-                        sys_msg($_LANG['no_select_article'], 1);
+                        return sys_msg($_LANG['no_select_article'], 1);
                     }
 
                     foreach ($_POST['checkboxes'] as $key => $id) {
@@ -503,11 +503,11 @@ class ArticleController extends BaseController
                 if ($_POST['type'] == 'move_to') {
                     check_authz_json('article_manage');
                     if (! isset($_POST['checkboxes']) || ! is_array($_POST['checkboxes'])) {
-                        sys_msg($_LANG['no_select_article'], 1);
+                        return sys_msg($_LANG['no_select_article'], 1);
                     }
 
                     if (! $_POST['target_cat']) {
-                        sys_msg($_LANG['no_select_act'], 1);
+                        return sys_msg($_LANG['no_select_act'], 1);
                     }
 
                     foreach ($_POST['checkboxes'] as $key => $id) {
@@ -519,7 +519,7 @@ class ArticleController extends BaseController
             /* 清除缓存 */
             clear_cache_files();
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'article.php?act=list'];
-            sys_msg($_LANG['batch_handle_ok'], 0, $lnk);
+            return sys_msg($_LANG['batch_handle_ok'], 0, $lnk);
         }
     }
 

@@ -58,33 +58,33 @@ class ExchangeController extends BaseController
                 $cat = get_cat_info($cat_id);   // 获得分类的相关信息
 
                 if (! empty($cat)) {
-                    $smarty->assign('keywords', htmlspecialchars($cat['keywords']));
-                    $smarty->assign('description', htmlspecialchars($cat['cat_desc']));
+                    $this->assign('keywords', htmlspecialchars($cat['keywords']));
+                    $this->assign('description', htmlspecialchars($cat['cat_desc']));
                 }
 
                 assign_template();
 
                 $position = assign_ur_here('exchange');
-                $smarty->assign('page_title', $position['title']);    // 页面标题
-                $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+                $this->assign('page_title', $position['title']);    // 页面标题
+                $this->assign('ur_here', $position['ur_here']);  // 当前位置
 
-                $smarty->assign('categories', get_categories_tree());        // 分类树
-                $smarty->assign('helps', get_shop_help());              // 网店帮助
-                $smarty->assign('top_goods', get_top10());                  // 销售排行
-                $smarty->assign('promotion_info', get_promotion_info());         // 促销活动信息
+                $this->assign('categories', get_categories_tree());        // 分类树
+                $this->assign('helps', get_shop_help());              // 网店帮助
+                $this->assign('top_goods', get_top10());                  // 销售排行
+                $this->assign('promotion_info', get_promotion_info());         // 促销活动信息
 
                 /* 调查 */
                 $vote = get_vote();
                 if (! empty($vote)) {
-                    $smarty->assign('vote_id', $vote['id']);
-                    $smarty->assign('vote', $vote['content']);
+                    $this->assign('vote_id', $vote['id']);
+                    $this->assign('vote', $vote['content']);
                 }
 
                 $ext = ''; //商品查询条件扩展
 
-                //$smarty->assign('best_goods',      get_exchange_recommend_goods('best', $children, $integral_min, $integral_max));
-                //$smarty->assign('new_goods',       get_exchange_recommend_goods('new',  $children, $integral_min, $integral_max));
-                $smarty->assign('hot_goods', get_exchange_recommend_goods('hot', $children, $integral_min, $integral_max));
+                //$this->assign('best_goods',      get_exchange_recommend_goods('best', $children, $integral_min, $integral_max));
+                //$this->assign('new_goods',       get_exchange_recommend_goods('new',  $children, $integral_min, $integral_max));
+                $this->assign('hot_goods', get_exchange_recommend_goods('hot', $children, $integral_min, $integral_max));
 
                 $count = get_exchange_goods_count($children, $integral_min, $integral_max);
                 $max_page = ($count > 0) ? ceil($count / $size) : 1;
@@ -97,17 +97,17 @@ class ExchangeController extends BaseController
                         $goodslist[] = [];
                     }
                 }
-                $smarty->assign('goods_list', $goodslist);
-                $smarty->assign('category', $cat_id);
-                $smarty->assign('integral_max', $integral_max);
-                $smarty->assign('integral_min', $integral_min);
+                $this->assign('goods_list', $goodslist);
+                $this->assign('category', $cat_id);
+                $this->assign('integral_max', $integral_max);
+                $this->assign('integral_min', $integral_min);
 
                 assign_pager('exchange', $cat_id, $count, $size, $sort, $order, $page, '', '', $integral_min, $integral_max, $display); // 分页
                 assign_dynamic('exchange_list'); // 动态内容
             }
 
-            $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typeexchange.xml' : 'feed.php?type=exchange'); // RSS URL
-            $smarty->display('exchange_list.dwt', $cache_id);
+            $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typeexchange.xml' : 'feed.php?type=exchange'); // RSS URL
+            $this->display('exchange_list.dwt', $cache_id);
         }
 
         /*------------------------------------------------------ */
@@ -120,12 +120,12 @@ class ExchangeController extends BaseController
             $cache_id = sprintf('%X', crc32($cache_id));
 
             if (! $smarty->is_cached('exchange_goods.dwt', $cache_id)) {
-                $smarty->assign('image_width', $_CFG['image_width']);
-                $smarty->assign('image_height', $_CFG['image_height']);
-                $smarty->assign('helps', get_shop_help()); // 网店帮助
-                $smarty->assign('id', $goods_id);
-                $smarty->assign('type', 0);
-                $smarty->assign('cfg', $_CFG);
+                $this->assign('image_width', $_CFG['image_width']);
+                $this->assign('image_height', $_CFG['image_height']);
+                $this->assign('helps', get_shop_help()); // 网店帮助
+                $this->assign('id', $goods_id);
+                $this->assign('type', 0);
+                $this->assign('cfg', $_CFG);
 
                 /* 获得商品的信息 */
                 $goods = get_exchange_goods_info($goods_id);
@@ -141,13 +141,13 @@ class ExchangeController extends BaseController
 
                     $goods['goods_style_name'] = add_style($goods['goods_name'], $goods['goods_name_style']);
 
-                    $smarty->assign('goods', $goods);
-                    $smarty->assign('goods_id', $goods['goods_id']);
-                    $smarty->assign('categories', get_categories_tree());  // 分类树
+                    $this->assign('goods', $goods);
+                    $this->assign('goods_id', $goods['goods_id']);
+                    $this->assign('categories', get_categories_tree());  // 分类树
 
                     /* meta */
-                    $smarty->assign('keywords', htmlspecialchars($goods['keywords']));
-                    $smarty->assign('description', htmlspecialchars($goods['goods_brief']));
+                    $this->assign('keywords', htmlspecialchars($goods['keywords']));
+                    $this->assign('description', htmlspecialchars($goods['goods_brief']));
 
                     assign_template();
 
@@ -156,32 +156,32 @@ class ExchangeController extends BaseController
                     $prev_gid = $db->getOne($sql);
                     if (! empty($prev_gid)) {
                         $prev_good['url'] = build_uri('exchange_goods', ['gid' => $prev_gid], $goods['goods_name']);
-                        $smarty->assign('prev_good', $prev_good); //上一个商品
+                        $this->assign('prev_good', $prev_good); //上一个商品
                     }
 
                     $sql = 'SELECT max(eg.goods_id) FROM '.$ecs->table('exchange_goods').' AS eg,'.$GLOBALS['ecs']->table('goods').' AS g WHERE eg.goods_id = g.goods_id AND eg.goods_id < '.$goods['goods_id'].' AND eg.is_exchange = 1 AND g.is_delete = 0';
                     $next_gid = $db->getOne($sql);
                     if (! empty($next_gid)) {
                         $next_good['url'] = build_uri('exchange_goods', ['gid' => $next_gid], $goods['goods_name']);
-                        $smarty->assign('next_good', $next_good); //下一个商品
+                        $this->assign('next_good', $next_good); //下一个商品
                     }
 
                     /* current position */
                     $position = assign_ur_here('exchange', $goods['goods_name']);
-                    $smarty->assign('page_title', $position['title']);                    // 页面标题
-                    $smarty->assign('ur_here', $position['ur_here']);                  // 当前位置
+                    $this->assign('page_title', $position['title']);                    // 页面标题
+                    $this->assign('ur_here', $position['ur_here']);                  // 当前位置
 
                     $properties = get_goods_properties($goods_id);  // 获得商品的规格和属性
-                    $smarty->assign('properties', $properties['pro']);                              // 商品属性
-                    $smarty->assign('specification', $properties['spe']);                              // 商品规格
+                    $this->assign('properties', $properties['pro']);                              // 商品属性
+                    $this->assign('specification', $properties['spe']);                              // 商品规格
 
-                    $smarty->assign('pictures', get_goods_gallery($goods_id));                    // 商品相册
+                    $this->assign('pictures', get_goods_gallery($goods_id));                    // 商品相册
 
                     assign_dynamic('exchange_goods');
                 }
             }
 
-            $smarty->display('exchange_goods.dwt', $cache_id);
+            $this->display('exchange_goods.dwt', $cache_id);
         }
 
         /*------------------------------------------------------ */
@@ -196,7 +196,7 @@ class ExchangeController extends BaseController
 
             /* 查询：判断是否登录 */
             if ($_SESSION['user_id'] <= 0) {
-                show_message($_LANG['eg_error_login'], [$_LANG['back_up_page']], [$back_act], 'error');
+                return show_message($_LANG['eg_error_login'], [$_LANG['back_up_page']], [$back_act], 'error');
             }
 
             /* 查询：取得参数：商品id */
@@ -214,17 +214,17 @@ class ExchangeController extends BaseController
             }
             /* 查询：检查兑换商品是否有库存 */
             if ($goods['goods_number'] == 0 && $_CFG['use_storage'] == 1) {
-                show_message($_LANG['eg_error_number'], [$_LANG['back_up_page']], [$back_act], 'error');
+                return show_message($_LANG['eg_error_number'], [$_LANG['back_up_page']], [$back_act], 'error');
             }
             /* 查询：检查兑换商品是否是取消 */
             if ($goods['is_exchange'] == 0) {
-                show_message($_LANG['eg_error_status'], [$_LANG['back_up_page']], [$back_act], 'error');
+                return show_message($_LANG['eg_error_status'], [$_LANG['back_up_page']], [$back_act], 'error');
             }
 
             $user_info = get_user_info($_SESSION['user_id']);
             $user_points = $user_info['pay_points']; // 用户的积分总数
             if ($goods['exchange_integral'] > $user_points) {
-                show_message($_LANG['eg_error_integral'], [$_LANG['back_up_page']], [$back_act], 'error');
+                return show_message($_LANG['eg_error_integral'], [$_LANG['back_up_page']], [$back_act], 'error');
             }
 
             /* 查询：取得规格 */
@@ -248,7 +248,7 @@ class ExchangeController extends BaseController
 
             //查询：商品存在规格 是货品 检查该货品库存
             if ((! empty($specs)) && ($product_info['product_number'] == 0) && ($_CFG['use_storage'] == 1)) {
-                show_message($_LANG['eg_error_number'], [$_LANG['back_up_page']], [$back_act], 'error');
+                return show_message($_LANG['eg_error_number'], [$_LANG['back_up_page']], [$back_act], 'error');
             }
 
             /* 查询：查询规格名称和值，不考虑价格 */

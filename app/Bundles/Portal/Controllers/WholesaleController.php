@@ -11,7 +11,7 @@ class WholesaleController extends BaseController
 
         /* 如果没登录，提示登录 */
         if ($_SESSION['user_rank'] <= 0) {
-            show_message($_LANG['ws_user_rank'], $_LANG['ws_return_home'], 'index.php');
+            return show_message($_LANG['ws_user_rank'], $_LANG['ws_return_home'], 'index.php');
         }
 
         /*------------------------------------------------------ */
@@ -39,14 +39,14 @@ class WholesaleController extends BaseController
             if ($search_category) {
                 $where .= " AND g.cat_id = '$search_category' ";
                 $param['search_category'] = $search_category;
-                $smarty->assign('search_category', $search_category);
+                $this->assign('search_category', $search_category);
             }
             /* 搜索商品名称和关键字 */
             if ($search_keywords) {
                 $where .= " AND (g.keywords LIKE '%$search_keywords%'
                     OR g.goods_name LIKE '%$search_keywords%') ";
                 $param['search_keywords'] = $search_keywords;
-                $smarty->assign('search_keywords', $search_keywords);
+                $this->assign('search_keywords', $search_keywords);
             }
 
             /* 取得批发商品总数 */
@@ -71,30 +71,30 @@ class WholesaleController extends BaseController
 
                 /* 取得当前页的批发商品 */
                 $wholesale_list = wholesale_list($size, $page, $where);
-                $smarty->assign('wholesale_list', $wholesale_list);
+                $this->assign('wholesale_list', $wholesale_list);
 
                 $param['act'] = 'list';
                 $pager = get_pager('wholesale.php', array_reverse($param, true), $count, $page, $size);
                 $pager['display'] = $display;
-                $smarty->assign('pager', $pager);
+                $this->assign('pager', $pager);
 
                 /* 批发商品购物车 */
-                $smarty->assign('cart_goods', isset($_SESSION['wholesale_goods']) ? $_SESSION['wholesale_goods'] : []);
+                $this->assign('cart_goods', isset($_SESSION['wholesale_goods']) ? $_SESSION['wholesale_goods'] : []);
             }
 
             /* 模板赋值 */
             assign_template();
             $position = assign_ur_here();
-            $smarty->assign('page_title', $position['title']);    // 页面标题
-            $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
-            $smarty->assign('categories', get_categories_tree()); // 分类树
-            $smarty->assign('helps', get_shop_help());       // 网店帮助
-            $smarty->assign('top_goods', get_top10());           // 销售排行
+            $this->assign('page_title', $position['title']);    // 页面标题
+            $this->assign('ur_here', $position['ur_here']);  // 当前位置
+            $this->assign('categories', get_categories_tree()); // 分类树
+            $this->assign('helps', get_shop_help());       // 网店帮助
+            $this->assign('top_goods', get_top10());           // 销售排行
 
             assign_dynamic('wholesale');
 
             /* 显示模板 */
-            $smarty->display('wholesale_list.dwt');
+            $this->display('wholesale_list.dwt');
         }
 
         /*------------------------------------------------------ */
@@ -146,7 +146,7 @@ class WholesaleController extends BaseController
 
             /* 检查数量 */
             if (empty($goods_number) || (is_array($goods_number) && array_sum($goods_number) <= 0)) {
-                show_message($_LANG['ws_invalid_goods_number']);
+                return show_message($_LANG['ws_invalid_goods_number']);
             }
 
             /* 确定购买商品列表 */
@@ -173,9 +173,9 @@ class WholesaleController extends BaseController
                 foreach ($_SESSION['wholesale_goods'] as $goods) {
                     if ($goods['goods_id'] == $wholesale['goods_id']) {
                         if (empty($goods_attr)) {
-                            show_message($_LANG['ws_goods_attr_exists']);
+                            return show_message($_LANG['ws_goods_attr_exists']);
                         } elseif (in_array($goods['goods_attr_id'], $goods_attr)) {
-                            show_message($_LANG['ws_goods_attr_exists']);
+                            return show_message($_LANG['ws_goods_attr_exists']);
                         }
                     }
                 }
@@ -196,13 +196,13 @@ class WholesaleController extends BaseController
                 }
             }
             if (! $attr_matching) {
-                show_message($_LANG['ws_attr_not_matching']);
+                return show_message($_LANG['ws_attr_not_matching']);
             }
 
             /* 检查数量是否达到最低要求 */
             foreach ($goods_list as $goods_key => $goods) {
                 if ($goods['number'] < $goods['qp_list'][0]['quantity']) {
-                    show_message($_LANG['ws_goods_number_not_enough']);
+                    return show_message($_LANG['ws_goods_number_not_enough']);
                 } else {
                     $goods_price = 0;
                     foreach ($goods['qp_list'] as $qp) {
@@ -275,12 +275,12 @@ class WholesaleController extends BaseController
 
             /* 检查购物车中是否有商品 */
             if (count($_SESSION['wholesale_goods']) == 0) {
-                show_message($_LANG['no_goods_in_cart']);
+                return show_message($_LANG['no_goods_in_cart']);
             }
 
             /* 检查备注信息 */
             if (empty($_POST['remark'])) {
-                show_message($_LANG['ws_remark']);
+                return show_message($_LANG['ws_remark']);
             }
 
             /* 计算商品总额 */
@@ -346,10 +346,10 @@ class WholesaleController extends BaseController
             /* 给商家发邮件 */
             if ($_CFG['service_email'] != '') {
                 $tpl = get_mail_template('remind_of_new_order');
-                $smarty->assign('order', $order);
-                $smarty->assign('shop_name', $_CFG['shop_name']);
-                $smarty->assign('send_date', date($_CFG['time_format']));
-                $content = $smarty->fetch('str:'.$tpl['template_content']);
+                $this->assign('order', $order);
+                $this->assign('shop_name', $_CFG['shop_name']);
+                $this->assign('send_date', date($_CFG['time_format']));
+                $content = $this->fetch('str:'.$tpl['template_content']);
                 send_mail($_CFG['shop_name'], $_CFG['service_email'], $tpl['template_subject'], $content, $tpl['is_html']);
             }
 
@@ -365,7 +365,7 @@ class WholesaleController extends BaseController
             unset($_SESSION['wholesale_goods']);
 
             /* 提示 */
-            show_message(sprintf($_LANG['ws_order_submitted'], $order['order_sn']), $_LANG['ws_return_home'], 'index.php');
+            return show_message(sprintf($_LANG['ws_order_submitted'], $order['order_sn']), $_LANG['ws_return_home'], 'index.php');
         }
     }
 

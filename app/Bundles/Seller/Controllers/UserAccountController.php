@@ -38,25 +38,25 @@ class UserAccountController extends BaseController
 
             /* 模板赋值 */
             if (isset($_REQUEST['process_type'])) {
-                $smarty->assign('process_type_'.intval($_REQUEST['process_type']), 'selected="selected"');
+                $this->assign('process_type_'.intval($_REQUEST['process_type']), 'selected="selected"');
             }
             if (isset($_REQUEST['is_paid'])) {
-                $smarty->assign('is_paid_'.intval($_REQUEST['is_paid']), 'selected="selected"');
+                $this->assign('is_paid_'.intval($_REQUEST['is_paid']), 'selected="selected"');
             }
-            $smarty->assign('ur_here', $_LANG['09_user_account']);
-            $smarty->assign('id', $user_id);
-            $smarty->assign('payment_list', $payment);
-            $smarty->assign('action_link', ['text' => $_LANG['surplus_add'], 'href' => 'user_account.php?act=add']);
+            $this->assign('ur_here', $_LANG['09_user_account']);
+            $this->assign('id', $user_id);
+            $this->assign('payment_list', $payment);
+            $this->assign('action_link', ['text' => $_LANG['surplus_add'], 'href' => 'user_account.php?act=add']);
 
             $list = account_list();
-            $smarty->assign('list', $list['list']);
-            $smarty->assign('filter', $list['filter']);
-            $smarty->assign('record_count', $list['record_count']);
-            $smarty->assign('page_count', $list['page_count']);
-            $smarty->assign('full_page', 1);
+            $this->assign('list', $list['list']);
+            $this->assign('filter', $list['filter']);
+            $this->assign('record_count', $list['record_count']);
+            $this->assign('page_count', $list['page_count']);
+            $this->assign('full_page', 1);
 
             assign_query_info();
-            $smarty->display('user_account_list.htm');
+            $this->display('user_account_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -96,21 +96,21 @@ class UserAccountController extends BaseController
             }
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $ur_here);
-            $smarty->assign('form_act', $form_act);
-            $smarty->assign('payment_list', $payment);
-            $smarty->assign('action', $_REQUEST['act']);
-            $smarty->assign('user_surplus', $user_account);
-            $smarty->assign('user_name', $user_name);
+            $this->assign('ur_here', $ur_here);
+            $this->assign('form_act', $form_act);
+            $this->assign('payment_list', $payment);
+            $this->assign('action', $_REQUEST['act']);
+            $this->assign('user_surplus', $user_account);
+            $this->assign('user_name', $user_name);
             if ($_REQUEST['act'] == 'add') {
                 $href = 'user_account.php?act=list';
             } else {
                 $href = 'user_account.php?act=list&'.list_link_postfix();
             }
-            $smarty->assign('action_link', ['href' => $href, 'text' => $_LANG['09_user_account']]);
+            $this->assign('action_link', ['href' => $href, 'text' => $_LANG['09_user_account']]);
 
             assign_query_info();
-            $smarty->display('user_account_info.htm');
+            $this->display('user_account_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -135,7 +135,7 @@ class UserAccountController extends BaseController
             /* 此会员是否存在 */
             if ($user_id == 0) {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                sys_msg($_LANG['username_not_exist'], 0, $link);
+                return sys_msg($_LANG['username_not_exist'], 0, $link);
             }
 
             /* 退款，检查余额是否足够 */
@@ -145,7 +145,7 @@ class UserAccountController extends BaseController
                 /* 如果扣除的余额多于此会员拥有的余额，提示 */
                 if ($amount > $user_account) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                    sys_msg($_LANG['surplus_amount_error'], 0, $link);
+                    return sys_msg($_LANG['surplus_amount_error'], 0, $link);
                 }
             }
 
@@ -212,7 +212,7 @@ class UserAccountController extends BaseController
             $link[1]['text'] = $_LANG['continue_add'];
             $link[1]['href'] = 'user_account.php?act=add';
 
-            sys_msg($_LANG['attradd_succed'], 0, $link);
+            return sys_msg($_LANG['attradd_succed'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -251,18 +251,18 @@ class UserAccountController extends BaseController
             $user_name = $db->getOne($sql);
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['check']);
+            $this->assign('ur_here', $_LANG['check']);
             $account['user_note'] = htmlspecialchars($account['user_note']);
-            $smarty->assign('surplus', $account);
-            $smarty->assign('process_type', $process_type);
-            $smarty->assign('user_name', $user_name);
-            $smarty->assign('id', $id);
-            $smarty->assign('action_link', ['text' => $_LANG['09_user_account'],
+            $this->assign('surplus', $account);
+            $this->assign('process_type', $process_type);
+            $this->assign('user_name', $user_name);
+            $this->assign('id', $id);
+            $this->assign('action_link', ['text' => $_LANG['09_user_account'],
                 'href' => 'user_account.php?act=list&'.list_link_postfix()]);
 
             /* 页面显示 */
             assign_query_info();
-            $smarty->display('user_account_check.htm');
+            $this->display('user_account_check.htm');
         }
 
         /*------------------------------------------------------ */
@@ -298,7 +298,7 @@ class UserAccountController extends BaseController
                     //如果扣除的余额多于此会员拥有的余额，提示
                     if ($fmt_amount > $user_account) {
                         $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                        sys_msg($_LANG['surplus_amount_error'], 0, $link);
+                        return sys_msg($_LANG['surplus_amount_error'], 0, $link);
                     }
 
                     update_user_account($id, $amount, $admin_note, $is_paid);
@@ -327,7 +327,7 @@ class UserAccountController extends BaseController
                 $link[0]['text'] = $_LANG['back_list'];
                 $link[0]['href'] = 'user_account.php?act=list&'.list_link_postfix();
 
-                sys_msg($_LANG['attradd_succed'], 0, $link);
+                return sys_msg($_LANG['attradd_succed'], 0, $link);
             }
         }
 
@@ -336,15 +336,15 @@ class UserAccountController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'query') {
             $list = account_list();
-            $smarty->assign('list', $list['list']);
-            $smarty->assign('filter', $list['filter']);
-            $smarty->assign('record_count', $list['record_count']);
-            $smarty->assign('page_count', $list['page_count']);
+            $this->assign('list', $list['list']);
+            $this->assign('filter', $list['filter']);
+            $this->assign('record_count', $list['record_count']);
+            $this->assign('page_count', $list['page_count']);
 
             $sort_flag = sort_flag($list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result($smarty->fetch('user_account_list.htm'), '', ['filter' => $list['filter'], 'page_count' => $list['page_count']]);
+            return make_json_result($this->fetch('user_account_list.htm'), '', ['filter' => $list['filter'], 'page_count' => $list['page_count']]);
         }
         /*------------------------------------------------------ */
         //-- ajax删除一条信息
@@ -364,7 +364,7 @@ class UserAccountController extends BaseController
                 ecs_header("Location: $url\n");
                 exit;
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
     }

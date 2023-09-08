@@ -24,21 +24,21 @@ class VirtualCardController extends BaseController
             /* 验证goods_id是否合法 */
             if (empty($_REQUEST['goods_id'])) {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list'];
-                sys_msg($_LANG['replenish_no_goods_id'], 1, $link);
+                return sys_msg($_LANG['replenish_no_goods_id'], 1, $link);
             } else {
                 $goods_name = $db->getOne('SELECT goods_name From '.$ecs->table('goods')." WHERE goods_id='".$_REQUEST['goods_id']."' AND is_real = 0 AND extension_code='virtual_card' ");
                 if (empty($goods_name)) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list'];
-                    sys_msg($_LANG['replenish_no_get_goods_name'], 1, $link);
+                    return sys_msg($_LANG['replenish_no_get_goods_name'], 1, $link);
                 }
             }
 
             $card = ['goods_id' => $_REQUEST['goods_id'], 'goods_name' => $goods_name, 'end_date' => date('Y-m-d', strtotime('+1 year'))];
-            $smarty->assign('card', $card);
+            $this->assign('card', $card);
 
-            $smarty->assign('ur_here', $_LANG['replenish']);
-            $smarty->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id='.$card['goods_id']]);
-            $smarty->display('replenish_info.htm');
+            $this->assign('ur_here', $_LANG['replenish']);
+            $this->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id='.$card['goods_id']]);
+            $this->display('replenish_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -63,10 +63,10 @@ class VirtualCardController extends BaseController
                 $card['card_password'] = '***';
             }
 
-            $smarty->assign('ur_here', $_LANG['replenish']);
-            $smarty->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id='.$card['goods_id']]);
-            $smarty->assign('card', $card);
-            $smarty->display('replenish_info.htm');
+            $this->assign('ur_here', $_LANG['replenish']);
+            $this->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id='.$card['goods_id']]);
+            $this->assign('card', $card);
+            $this->display('replenish_info.htm');
         }
         if ($_REQUEST['act'] == 'action') {
             /* 检查权限 */
@@ -85,7 +85,7 @@ class VirtualCardController extends BaseController
 
                 if ($db->getOne($sql) > 0) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=replenish&goods_id='.$_POST['goods_id']];
-                    sys_msg(sprintf($_LANG['card_sn_exist'], $_POST['card_sn']), 1, $link);
+                    return sys_msg(sprintf($_LANG['card_sn_exist'], $_POST['card_sn']), 1, $link);
                 }
             }
 
@@ -106,7 +106,7 @@ class VirtualCardController extends BaseController
 
                 $link[] = ['text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id='.$_POST['goods_id']];
                 $link[] = ['text' => $_LANG['continue_add'], 'href' => 'virtual_card.php?act=replenish&goods_id='.$_POST['goods_id']];
-                sys_msg($_LANG['action_success'], 0, $link);
+                return sys_msg($_LANG['action_success'], 0, $link);
             } else {
                 /* 更新数据 */
                 $end_date = strtotime($_POST['end_dateYear'].'-'.$_POST['end_dateMonth'].'-'.$_POST['end_dateDay']);
@@ -116,7 +116,7 @@ class VirtualCardController extends BaseController
 
                 $link[] = ['text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id='.$_POST['goods_id']];
                 $link[] = ['text' => $_LANG['continue_add'], 'href' => 'virtual_card.php?act=replenish&goods_id='.$_POST['goods_id']];
-                sys_msg($_LANG['action_success'], 0, $link);
+                return sys_msg($_LANG['action_success'], 0, $link);
             }
         }
         /*------------------------------------------------------ */
@@ -129,12 +129,12 @@ class VirtualCardController extends BaseController
             /* 验证goods_id是否合法 */
             if (empty($_REQUEST['goods_id'])) {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list'];
-                sys_msg($_LANG['replenish_no_goods_id'], 1, $link);
+                return sys_msg($_LANG['replenish_no_goods_id'], 1, $link);
             } else {
                 $goods_name = $db->getOne('SELECT goods_name From '.$ecs->table('goods')." WHERE goods_id='".$_REQUEST['goods_id']."' AND is_real = 0 AND extension_code='virtual_card' ");
                 if (empty($goods_name)) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list'];
-                    sys_msg($_LANG['replenish_no_get_goods_name'], 1, $link);
+                    return sys_msg($_LANG['replenish_no_get_goods_name'], 1, $link);
                 }
             }
 
@@ -142,26 +142,26 @@ class VirtualCardController extends BaseController
                 $_REQUEST['order_sn'] = '';
             }
 
-            $smarty->assign('goods_id', $_REQUEST['goods_id']);
-            $smarty->assign('full_page', 1);
-            $smarty->assign('lang', $_LANG);
-            $smarty->assign('ur_here', $goods_name);
-            $smarty->assign('action_link', ['text' => $_LANG['replenish'],
+            $this->assign('goods_id', $_REQUEST['goods_id']);
+            $this->assign('full_page', 1);
+            $this->assign('lang', $_LANG);
+            $this->assign('ur_here', $goods_name);
+            $this->assign('action_link', ['text' => $_LANG['replenish'],
                 'href' => 'virtual_card.php?act=replenish&goods_id='.$_REQUEST['goods_id']]);
-            $smarty->assign('goods_id', $_REQUEST['goods_id']);
+            $this->assign('goods_id', $_REQUEST['goods_id']);
 
             $list = get_replenish_list();
 
-            $smarty->assign('card_list', $list['item']);
-            $smarty->assign('filter', $list['filter']);
-            $smarty->assign('record_count', $list['record_count']);
-            $smarty->assign('page_count', $list['page_count']);
+            $this->assign('card_list', $list['item']);
+            $this->assign('filter', $list['filter']);
+            $this->assign('record_count', $list['record_count']);
+            $this->assign('page_count', $list['page_count']);
 
             $sort_flag = sort_flag($list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             assign_query_info();
-            $smarty->display('replenish_list.htm');
+            $this->display('replenish_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -171,16 +171,16 @@ class VirtualCardController extends BaseController
         if ($_REQUEST['act'] == 'query_card') {
             $list = get_replenish_list();
 
-            $smarty->assign('card_list', $list['item']);
-            $smarty->assign('filter', $list['filter']);
-            $smarty->assign('record_count', $list['record_count']);
-            $smarty->assign('page_count', $list['page_count']);
+            $this->assign('card_list', $list['item']);
+            $this->assign('filter', $list['filter']);
+            $this->assign('record_count', $list['record_count']);
+            $this->assign('page_count', $list['page_count']);
 
             $sort_flag = sort_flag($list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('replenish_list.htm'),
+            return make_json_result(
+                $this->fetch('replenish_list.htm'),
                 '',
                 ['filter' => $list['filter'], 'page_count' => $list['page_count']]
             );
@@ -195,7 +195,7 @@ class VirtualCardController extends BaseController
                 /* 商品数量减$num */
                 update_goods_number(intval($_REQUEST['goods_id']));
                 $link[] = ['text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id='.$_REQUEST['goods_id']];
-                sys_msg($_LANG['action_success'], 0, $link);
+                return sys_msg($_LANG['action_success'], 0, $link);
             }
         } /* 批量上传页面 */
 
@@ -203,15 +203,15 @@ class VirtualCardController extends BaseController
             /* 检查权限 */
             admin_priv('virualcard');
 
-            $smarty->assign('ur_here', $_LANG['batch_card_add']);
-            $smarty->assign('action_link', ['text' => $_LANG['virtual_card_list'], 'href' => 'goods.php?act=list&extension_code=virtual_card']);
-            $smarty->assign('goods_id', $_REQUEST['goods_id']);
-            $smarty->display('batch_card_info.htm');
+            $this->assign('ur_here', $_LANG['batch_card_add']);
+            $this->assign('action_link', ['text' => $_LANG['virtual_card_list'], 'href' => 'goods.php?act=list&extension_code=virtual_card']);
+            $this->assign('goods_id', $_REQUEST['goods_id']);
+            $this->display('batch_card_info.htm');
         }
         if ($_REQUEST['act'] == 'batch_confirm') {
             /* 检查上传是否成功 */
             if ($_FILES['uploadfile']['tmp_name'] == '' || $_FILES['uploadfile']['tmp_name'] == 'none') {
-                sys_msg($_LANG['uploadfile_fail'], 1);
+                return sys_msg($_LANG['uploadfile_fail'], 1);
             }
 
             $data = file($_FILES['uploadfile']['tmp_name']);
@@ -239,10 +239,10 @@ class VirtualCardController extends BaseController
                 $i++;
             }
 
-            $smarty->assign('ur_here', $_LANG['batch_card_add']);
-            $smarty->assign('action_link', ['text' => $_LANG['batch_card_add'], 'href' => 'virtual_card.php?act=batch_card_add&goods_id='.$_REQUEST['goods_id']]);
-            $smarty->assign('list', $rec);
-            $smarty->display('batch_card_confirm.htm');
+            $this->assign('ur_here', $_LANG['batch_card_add']);
+            $this->assign('action_link', ['text' => $_LANG['batch_card_add'], 'href' => 'virtual_card.php?act=batch_card_add&goods_id='.$_REQUEST['goods_id']]);
+            $this->assign('list', $rec);
+            $this->display('batch_card_confirm.htm');
         } /* 批量上传处理 */
         if ($_REQUEST['act'] == 'batch_insert') {
             /* 检查权限 */
@@ -264,7 +264,7 @@ class VirtualCardController extends BaseController
             /* 更新商品库存 */
             update_goods_number(intval($_REQUEST['goods_id']));
             $link[] = ['text' => $_LANG['card'], 'href' => 'virtual_card.php?act=card&goods_id='.$_POST['goods_id']];
-            sys_msg(sprintf($_LANG['batch_card_add_ok'], $i), 0, $link);
+            return sys_msg(sprintf($_LANG['batch_card_add_ok'], $i), 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -275,10 +275,10 @@ class VirtualCardController extends BaseController
             /* 检查权限 */
             admin_priv('virualcard');
 
-            $smarty->assign('ur_here', $_LANG['virtual_card_change']);
+            $this->assign('ur_here', $_LANG['virtual_card_change']);
 
             assign_query_info();
-            $smarty->display('virtual_card_change.htm');
+            $this->display('virtual_card_change.htm');
         }
 
         /*------------------------------------------------------ */
@@ -292,17 +292,17 @@ class VirtualCardController extends BaseController
             if (isset($_POST['old_string']) && isset($_POST['new_string'])) {
                 // 检查原加密串是否正确
                 if ($_POST['old_string'] != OLD_AUTH_KEY) {
-                    sys_msg($_LANG['invalid_old_string'], 1);
+                    return sys_msg($_LANG['invalid_old_string'], 1);
                 }
 
                 // 检查新加密串是否正确
                 if ($_POST['new_string'] != AUTH_KEY) {
-                    sys_msg($_LANG['invalid_new_string'], 1);
+                    return sys_msg($_LANG['invalid_new_string'], 1);
                 }
 
                 // 检查原加密串和新加密串是否相同
                 if ($_POST['old_string'] == $_POST['new_string'] || crc32($_POST['old_string']) == crc32($_POST['new_string'])) {
-                    sys_msg($_LANG['same_string'], 1);
+                    return sys_msg($_LANG['same_string'], 1);
                 }
 
                 // 重新加密卡号和密码
@@ -321,7 +321,7 @@ class VirtualCardController extends BaseController
                 //admin_log();
 
                 // 返回
-                sys_msg($_LANG['change_key_ok'], 0, [['href' => 'virtual_card.php?act=list', 'text' => $_LANG['virtual_card_list']]]);
+                return sys_msg($_LANG['change_key_ok'], 0, [['href' => 'virtual_card.php?act=list', 'text' => $_LANG['virtual_card_list']]]);
             }
         }
 
@@ -343,9 +343,9 @@ class VirtualCardController extends BaseController
                 $goods_id = $db->getOne($sql);
 
                 update_goods_number($goods_id);
-                make_json_result($val);
+                return make_json_result($val);
             } else {
-                make_json_error($_LANG['action_fail']."\n".$db->error());
+                return make_json_error($_LANG['action_fail']."\n".$db->error());
             }
         }
 
@@ -369,7 +369,7 @@ class VirtualCardController extends BaseController
                 ecs_header("Location: $url\n");
                 exit;
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
 
@@ -382,10 +382,10 @@ class VirtualCardController extends BaseController
             $new_key = json_str_iconv(trim($_GET['new_key']));
             // 检查原加密串和新加密串是否相同
             if ($old_key == $new_key || crc32($old_key) == crc32($new_key)) {
-                make_json_error($GLOBALS['_LANG']['same_string']);
+                return make_json_error($GLOBALS['_LANG']['same_string']);
             }
             if ($old_key != AUTH_KEY) {
-                make_json_error($GLOBALS['_LANG']['invalid_old_string']);
+                return make_json_error($GLOBALS['_LANG']['invalid_old_string']);
             } else {
                 $f = ROOT_PATH.'data/config.php';
                 file_put_contents($f, str_replace("'AUTH_KEY', '".AUTH_KEY."'", "'AUTH_KEY', '".$new_key."'", file_get_contents($f)));
@@ -408,7 +408,7 @@ class VirtualCardController extends BaseController
                 }
             }
 
-            make_json_result(sprintf($GLOBALS['_LANG']['old_stat'], $stat['all'], $stat['new'], $stat['old'], $stat['unknown']));
+            return make_json_result(sprintf($GLOBALS['_LANG']['old_stat'], $stat['all'], $stat['new'], $stat['old'], $stat['unknown']));
         }
 
         /*------------------------------------------------------ */
@@ -433,7 +433,7 @@ class VirtualCardController extends BaseController
                 $row['crc32'] = $new_crc32;
 
                 if (! $db->autoExecute($ecs->table('virtual_card'), $row, 'UPDATE', 'card_id = '.$row['card_id'])) {
-                    make_json_error($updated, 0, $_LANG['update_error']."\n".$db->error());
+                    return make_json_error($updated, 0, $_LANG['update_error']."\n".$db->error());
                 }
 
                 $updated++;
@@ -444,7 +444,7 @@ class VirtualCardController extends BaseController
             $left_num = $db->getOne($sql);
 
             if ($left_num > 0) {
-                make_json_result($updated);
+                return make_json_result($updated);
             } else {
                 // 查询统计信息
                 $stat = ['new' => 0, 'unknown' => 0];
@@ -458,7 +458,7 @@ class VirtualCardController extends BaseController
                     }
                 }
 
-                make_json_result($updated, sprintf($_LANG['new_stat'], $stat['new'], $stat['unknown']));
+                return make_json_result($updated, sprintf($_LANG['new_stat'], $stat['new'], $stat['unknown']));
             }
         }
     }

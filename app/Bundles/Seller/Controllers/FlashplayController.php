@@ -38,16 +38,16 @@ class FlashplayController extends BaseController
             assign_query_info();
             $flash_dir = ROOT_PATH.'data/flashdata/';
 
-            $smarty->assign('current', 'sys');
-            $smarty->assign('group_list', $group_list);
-            $smarty->assign('group_selected', $_CFG['index_ad']);
-            $smarty->assign('uri', $uri);
-            $smarty->assign('ur_here', $_LANG['flashplay']);
-            $smarty->assign('action_link_special', ['text' => $_LANG['add_new'], 'href' => 'flashplay.php?act=add']);
-            $smarty->assign('flashtpls', get_flash_templates($flash_dir));
-            $smarty->assign('current_flashtpl', $_CFG['flash_theme']);
-            $smarty->assign('playerdb', $playerdb);
-            $smarty->display('flashplay_list.htm');
+            $this->assign('current', 'sys');
+            $this->assign('group_list', $group_list);
+            $this->assign('group_selected', $_CFG['index_ad']);
+            $this->assign('uri', $uri);
+            $this->assign('ur_here', $_LANG['flashplay']);
+            $this->assign('action_link_special', ['text' => $_LANG['add_new'], 'href' => 'flashplay.php?act=add']);
+            $this->assign('flashtpls', get_flash_templates($flash_dir));
+            $this->assign('current_flashtpl', $_CFG['flash_theme']);
+            $this->assign('playerdb', $playerdb);
+            $this->display('flashplay_list.htm');
         }
         if ($_REQUEST['act'] == 'del') {
             admin_priv('flash_manage');
@@ -58,7 +58,7 @@ class FlashplayController extends BaseController
                 $rt = $flashdb[$id];
             } else {
                 $links[] = ['text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list'];
-                sys_msg($_LANG['id_error'], 0, $links);
+                return sys_msg($_LANG['id_error'], 0, $links);
             }
 
             if (strpos($rt['src'], 'http') === false) {
@@ -87,17 +87,17 @@ class FlashplayController extends BaseController
                 $width_height = get_width_height();
                 assign_query_info();
                 if (isset($width_height['width']) || isset($width_height['height'])) {
-                    $smarty->assign('width_height', sprintf($_LANG['width_height'], $width_height['width'], $width_height['height']));
+                    $this->assign('width_height', sprintf($_LANG['width_height'], $width_height['width'], $width_height['height']));
                 }
 
-                $smarty->assign('action_link', ['text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list']);
-                $smarty->assign('rt', $rt);
-                $smarty->assign('ur_here', $_LANG['add_picad']);
-                $smarty->display('flashplay_add.htm');
+                $this->assign('action_link', ['text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list']);
+                $this->assign('rt', $rt);
+                $this->assign('ur_here', $_LANG['add_picad']);
+                $this->display('flashplay_add.htm');
             } elseif ($_POST['step'] == 2) {
                 if (! empty($_FILES['img_file_src']['name'])) {
                     if (! get_file_suffix($_FILES['img_file_src']['name'], $allow_suffix)) {
-                        sys_msg($_LANG['invalid_type']);
+                        return sys_msg($_LANG['invalid_type']);
                     }
                     $name = date('Ymd');
                     for ($i = 0; $i < 6; $i++) {
@@ -111,7 +111,7 @@ class FlashplayController extends BaseController
                     }
                 } elseif (! empty($_POST['img_src'])) {
                     if (! get_file_suffix($_POST['img_src'], $allow_suffix)) {
-                        sys_msg($_LANG['invalid_type']);
+                        return sys_msg($_LANG['invalid_type']);
                     }
                     $src = $_POST['img_src'];
                     if (strstr($src, 'http') && ! strstr($src, $_SERVER['SERVER_NAME'])) {
@@ -119,12 +119,12 @@ class FlashplayController extends BaseController
                     }
                 } else {
                     $links[] = ['text' => $_LANG['add_new'], 'href' => 'flashplay.php?act=add'];
-                    sys_msg($_LANG['src_empty'], 0, $links);
+                    return sys_msg($_LANG['src_empty'], 0, $links);
                 }
 
                 if (empty($_POST['img_url'])) {
                     $links[] = ['text' => $_LANG['add_new'], 'href' => 'flashplay.php?act=add'];
-                    sys_msg($_LANG['link_empty'], 0, $links);
+                    return sys_msg($_LANG['link_empty'], 0, $links);
                 }
 
                 // 获取flash播放器数据
@@ -149,7 +149,7 @@ class FlashplayController extends BaseController
                 $error_msg = '';
                 set_flash_data($_CFG['flash_theme'], $error_msg);
                 $links[] = ['text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list'];
-                sys_msg($_LANG['edit_ok'], 0, $links);
+                return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
         if ($_REQUEST['act'] == 'edit') {
@@ -161,7 +161,7 @@ class FlashplayController extends BaseController
                 $rt = $flashdb[$id];
             } else {
                 $links[] = ['text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list'];
-                sys_msg($_LANG['id_error'], 0, $links);
+                return sys_msg($_LANG['id_error'], 0, $links);
             }
             if (empty($_POST['step'])) {
                 $rt['act'] = 'edit';
@@ -171,20 +171,20 @@ class FlashplayController extends BaseController
                 $rt['img_sort'] = empty($rt['sort']) ? 0 : $rt['sort'];
 
                 $rt['id'] = $id;
-                $smarty->assign('action_link', ['text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list']);
-                $smarty->assign('rt', $rt);
-                $smarty->assign('ur_here', $_LANG['edit_picad']);
-                $smarty->display('flashplay_add.htm');
+                $this->assign('action_link', ['text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list']);
+                $this->assign('rt', $rt);
+                $this->assign('ur_here', $_LANG['edit_picad']);
+                $this->display('flashplay_add.htm');
             } elseif ($_POST['step'] == 2) {
                 if (empty($_POST['img_url'])) {
                     //若链接地址为空
                     $links[] = ['text' => $_LANG['return_edit'], 'href' => 'flashplay.php?act=edit&id='.$id];
-                    sys_msg($_LANG['link_empty'], 0, $links);
+                    return sys_msg($_LANG['link_empty'], 0, $links);
                 }
 
                 if (! empty($_FILES['img_file_src']['name'])) {
                     if (! get_file_suffix($_FILES['img_file_src']['name'], $allow_suffix)) {
-                        sys_msg($_LANG['invalid_type']);
+                        return sys_msg($_LANG['invalid_type']);
                     }
                     //有上传
                     $name = date('Ymd');
@@ -201,14 +201,14 @@ class FlashplayController extends BaseController
                 } elseif (! empty($_POST['img_src'])) {
                     $src = $_POST['img_src'];
                     if (! get_file_suffix($_POST['img_src'], $allow_suffix)) {
-                        sys_msg($_LANG['invalid_type']);
+                        return sys_msg($_LANG['invalid_type']);
                     }
                     if (strstr($src, 'http') && ! strstr($src, $_SERVER['SERVER_NAME'])) {
                         $src = get_url_image($src);
                     }
                 } else {
                     $links[] = ['text' => $_LANG['return_edit'], 'href' => 'flashplay.php?act=edit&id='.$id];
-                    sys_msg($_LANG['src_empty'], 0, $links);
+                    return sys_msg($_LANG['src_empty'], 0, $links);
                 }
 
                 if (strpos($rt['src'], 'http') === false && $rt['src'] != $src) {
@@ -232,7 +232,7 @@ class FlashplayController extends BaseController
                 $error_msg = '';
                 set_flash_data($_CFG['flash_theme'], $error_msg);
                 $links[] = ['text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list'];
-                sys_msg($_LANG['edit_ok'], 0, $links);
+                return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
         if ($_REQUEST['act'] == 'install') {
@@ -245,15 +245,15 @@ class FlashplayController extends BaseController
 
                     $error_msg = '';
                     if (set_flash_data($flash_theme, $error_msg)) {
-                        make_json_error($error_msg);
+                        return make_json_error($error_msg);
                     } else {
-                        make_json_result($flash_theme, $_LANG['install_success']);
+                        return make_json_result($flash_theme, $_LANG['install_success']);
                     }
                 } else {
-                    make_json_error($db->error());
+                    return make_json_error($db->error());
                 }
             } else {
-                make_json_result($flash_theme, $_LANG['install_success']);
+                return make_json_result($flash_theme, $_LANG['install_success']);
             }
         }
 
@@ -270,29 +270,29 @@ class FlashplayController extends BaseController
 
             /* 列表 */
             $ad_list = ad_list();
-            $smarty->assign('ad_list', $ad_list['ad']);
+            $this->assign('ad_list', $ad_list['ad']);
 
             assign_query_info();
             $width_height = get_width_height();
             //        if(isset($width_height['width'])|| isset($width_height['height']))
             //        {
-            $smarty->assign('width_height', sprintf($_LANG['width_height'], $width_height['width'], $width_height['height']));
+            $this->assign('width_height', sprintf($_LANG['width_height'], $width_height['width'], $width_height['height']));
             //        }
-            $smarty->assign('full_page', 1);
-            $smarty->assign('current', 'cus');
-            $smarty->assign('group_list', $group_list);
-            $smarty->assign('group_selected', $_CFG['index_ad']);
-            $smarty->assign('uri', $uri);
-            $smarty->assign('ur_here', $_LANG['flashplay']);
-            $smarty->assign('action_link_special', ['text' => $_LANG['add_flash'], 'href' => 'flashplay.php?act=custom_add']);
+            $this->assign('full_page', 1);
+            $this->assign('current', 'cus');
+            $this->assign('group_list', $group_list);
+            $this->assign('group_selected', $_CFG['index_ad']);
+            $this->assign('uri', $uri);
+            $this->assign('ur_here', $_LANG['flashplay']);
+            $this->assign('action_link_special', ['text' => $_LANG['add_flash'], 'href' => 'flashplay.php?act=custom_add']);
 
             /* 添加 */
             $ad = ['ad_name' => '', 'ad_type' => 0, 'ad_url' => 'http://', 'htmls' => '',
                 'ad_status' => '1', 'ad_id' => '0', 'url' => 'http://'];
-            $smarty->assign('ad', $ad);
-            $smarty->assign('form_act', 'custom_insert');
+            $this->assign('ad', $ad);
+            $this->assign('form_act', 'custom_insert');
 
-            $smarty->display('flashplay_custom.htm');
+            $this->display('flashplay_custom.htm');
         }
 
         /*------------------------------------------------------ */
@@ -308,29 +308,29 @@ class FlashplayController extends BaseController
 
             /* 列表 */
             $ad_list = ad_list();
-            $smarty->assign('ad_list', $ad_list['ad']);
+            $this->assign('ad_list', $ad_list['ad']);
 
             assign_query_info();
             $width_height = get_width_height();
             //        if(isset($width_height['width'])|| isset($width_height['height']))
             //        {
-            $smarty->assign('width_height', sprintf($_LANG['width_height'], $width_height['width'], $width_height['height']));
+            $this->assign('width_height', sprintf($_LANG['width_height'], $width_height['width'], $width_height['height']));
             //        }
-            $smarty->assign('full_page', 1);
-            $smarty->assign('current', 'cus');
-            $smarty->assign('group_list', $group_list);
-            $smarty->assign('group_selected', $_CFG['index_ad']);
-            $smarty->assign('uri', $uri);
-            $smarty->assign('ur_here', $_LANG['add_ad']);
-            $smarty->assign('action_link_special', ['text' => $_LANG['add_flash'], 'href' => 'flashplay.php?act=custom_add']);
-            $smarty->assign('action_link', ['text' => $_LANG['ad_play_url'], 'href' => 'flashplay.php?act=custom_list']);
+            $this->assign('full_page', 1);
+            $this->assign('current', 'cus');
+            $this->assign('group_list', $group_list);
+            $this->assign('group_selected', $_CFG['index_ad']);
+            $this->assign('uri', $uri);
+            $this->assign('ur_here', $_LANG['add_ad']);
+            $this->assign('action_link_special', ['text' => $_LANG['add_flash'], 'href' => 'flashplay.php?act=custom_add']);
+            $this->assign('action_link', ['text' => $_LANG['ad_play_url'], 'href' => 'flashplay.php?act=custom_list']);
             /* 添加 */
             $ad = ['ad_name' => '', 'ad_type' => 0, 'ad_url' => 'http://', 'htmls' => '',
                 'ad_status' => '1', 'ad_id' => '0', 'url' => 'http://'];
-            $smarty->assign('ad', $ad);
-            $smarty->assign('form_act', 'custom_insert');
+            $this->assign('ad', $ad);
+            $this->assign('form_act', 'custom_insert');
 
-            $smarty->display('flashplay_custom_add.htm');
+            $this->display('flashplay_custom_add.htm');
         }
 
         /*------------------------------------------------------ */
@@ -345,7 +345,7 @@ class FlashplayController extends BaseController
 
             if (empty($_POST['ad']) || empty($_POST['content']) || empty($_POST['ad']['ad_name'])) {
                 $links[] = ['text' => $_LANG['back'], 'href' => 'flashplay.php?act=custom_list'];
-                sys_msg($_LANG['form_none'], 0, $links);
+                return sys_msg($_LANG['form_none'], 0, $links);
             }
 
             $filter = [];
@@ -367,7 +367,7 @@ class FlashplayController extends BaseController
             if ($ad_img['ad_img']['name'] && $ad_img['ad_img']['size'] > 0) {
                 /* 检查文件合法性 */
                 if (! get_file_suffix($ad_img['ad_img']['name'], $allow_suffix)) {
-                    sys_msg($_LANG['invalid_type']);
+                    return sys_msg($_LANG['invalid_type']);
                 }
 
                 /* 处理 */
@@ -388,7 +388,7 @@ class FlashplayController extends BaseController
                     /* 取互联网图片至本地 */
                     $src = get_url_image($filter['content']['url']);
                 } else {
-                    sys_msg($_LANG['web_url_no']);
+                    return sys_msg($_LANG['web_url_no']);
                 }
             }
 
@@ -425,7 +425,7 @@ class FlashplayController extends BaseController
             }
 
             $links[] = ['text' => $_LANG['back_custom_set'], 'href' => 'flashplay.php?act=custom_list'];
-            sys_msg($_LANG['edit_ok'], 0, $links);
+            return sys_msg($_LANG['edit_ok'], 0, $links);
         }
 
         /*------------------------------------------------------ */
@@ -438,7 +438,7 @@ class FlashplayController extends BaseController
             $id = empty($_GET['id']) ? 0 : intval(trim($_GET['id']));
             if (! $id) {
                 $links[] = ['text' => $_LANG['back_custom_set'], 'href' => 'flashplay.php?act=custom_list'];
-                sys_msg($_LANG['form_none'], 0, $links);
+                return sys_msg($_LANG['form_none'], 0, $links);
             }
 
             /* 修改状态 */
@@ -451,9 +451,9 @@ class FlashplayController extends BaseController
 
             $links[] = ['text' => $_LANG['back_custom_set'], 'href' => 'flashplay.php?act=custom_list'];
             if ($query) {
-                sys_msg($_LANG['edit_ok'], 0, $links);
+                return sys_msg($_LANG['edit_ok'], 0, $links);
             } else {
-                sys_msg($_LANG['edit_no'], 0, $links);
+                return sys_msg($_LANG['edit_no'], 0, $links);
             }
         }
 
@@ -468,7 +468,7 @@ class FlashplayController extends BaseController
             $id = empty($_GET['id']) ? 0 : intval(trim($_GET['id']));
             $is_ajax = $_GET['is_ajax'];
             if (! $id || $is_ajax != '1') {
-                make_json_error($_LANG['edit_no']);
+                return make_json_error($_LANG['edit_no']);
             }
 
             /* 修改状态 */
@@ -487,24 +487,24 @@ class FlashplayController extends BaseController
 
                 /* 列表 */
                 $ad_list = ad_list();
-                $smarty->assign('ad_list', $ad_list['ad']);
-                $smarty->assign('current', 'cus');
-                $smarty->assign('group_list', $group_list);
-                $smarty->assign('group_selected', $_CFG['index_ad']);
-                $smarty->assign('uri', $uri);
-                $smarty->assign('ur_here', $_LANG['flashplay']);
-                $smarty->assign('action_link_special', ['text' => $_LANG['add_flash'], 'href' => 'flashplay.php?act=custom_add']);
+                $this->assign('ad_list', $ad_list['ad']);
+                $this->assign('current', 'cus');
+                $this->assign('group_list', $group_list);
+                $this->assign('group_selected', $_CFG['index_ad']);
+                $this->assign('uri', $uri);
+                $this->assign('ur_here', $_LANG['flashplay']);
+                $this->assign('action_link_special', ['text' => $_LANG['add_flash'], 'href' => 'flashplay.php?act=custom_add']);
                 /* 添加 */
                 $ad = ['ad_name' => '', 'ad_type' => 0, 'ad_url' => 'http://', 'htmls' => '',
                     'ad_status' => '1', 'ad_id' => '0', 'url' => 'http://'];
-                $smarty->assign('ad', $ad);
-                $smarty->assign('form_act', 'custom_insert');
+                $this->assign('ad', $ad);
+                $this->assign('form_act', 'custom_insert');
 
-                $smarty->fetch('flashplay_custom.htm');
+                $this->fetch('flashplay_custom.htm');
 
-                make_json_result($smarty->fetch('flashplay_custom.htm'));
+                return make_json_result($this->fetch('flashplay_custom.htm'));
             } else {
-                make_json_error($_LANG['edit_no']);
+                return make_json_error($_LANG['edit_no']);
             }
         }
 
@@ -521,17 +521,17 @@ class FlashplayController extends BaseController
 
             assign_query_info();
             $width_height = get_width_height();
-            $smarty->assign('width_height', sprintf($_LANG['width_height'], $width_height['width'], $width_height['height']));
+            $this->assign('width_height', sprintf($_LANG['width_height'], $width_height['width'], $width_height['height']));
 
-            $smarty->assign('group_selected', $_CFG['index_ad']);
-            $smarty->assign('uri', $uri);
-            $smarty->assign('ur_here', $_LANG['flashplay']);
-            $smarty->assign('action_link', ['text' => $_LANG['ad_play_url'], 'href' => 'flashplay.php?act=custom_list']);
-            $smarty->assign('ur_here', $_LANG['edit_ad']);
+            $this->assign('group_selected', $_CFG['index_ad']);
+            $this->assign('uri', $uri);
+            $this->assign('ur_here', $_LANG['flashplay']);
+            $this->assign('action_link', ['text' => $_LANG['ad_play_url'], 'href' => 'flashplay.php?act=custom_list']);
+            $this->assign('ur_here', $_LANG['edit_ad']);
 
             /* 添加 */
-            $smarty->assign('ad', $ad);
-            $smarty->display('flashplay_ccustom_edit.htm');
+            $this->assign('ad', $ad);
+            $this->display('flashplay_ccustom_edit.htm');
         }
 
         /*------------------------------------------------------ */
@@ -543,7 +543,7 @@ class FlashplayController extends BaseController
 
             if (empty($_POST['ad']) || empty($_POST['content']) || empty($_POST['ad']['ad_name']) || empty($_POST['ad']['id'])) {
                 $links[] = ['text' => $_LANG['back'], 'href' => 'flashplay.php?act=custom_list'];
-                sys_msg($_LANG['form_none'], 0, $links);
+                return sys_msg($_LANG['form_none'], 0, $links);
             }
 
             $filter = [];
@@ -569,7 +569,7 @@ class FlashplayController extends BaseController
             if ($ad_img['ad_img']['name'] && $ad_img['ad_img']['size'] > 0) {
                 /* 检查文件合法性 */
                 if (! get_file_suffix($ad_img['ad_img']['name'], $allow_suffix)) {
-                    sys_msg($_LANG['invalid_type']);
+                    return sys_msg($_LANG['invalid_type']);
                 }
 
                 /* 处理 */
@@ -590,7 +590,7 @@ class FlashplayController extends BaseController
                     /* 取互联网图片至本地 */
                     $src = get_url_image($filter['content']['url']);
                 } else {
-                    sys_msg($_LANG['web_url_no']);
+                    return sys_msg($_LANG['web_url_no']);
                 }
             }
 
@@ -625,7 +625,7 @@ class FlashplayController extends BaseController
             }
 
             $links[] = ['text' => $_LANG['back_custom_set'], 'href' => 'flashplay.php?act=custom_list'];
-            sys_msg($_LANG['edit_ok'], 0, $links);
+            return sys_msg($_LANG['edit_ok'], 0, $links);
         }
     }
 

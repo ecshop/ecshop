@@ -26,7 +26,7 @@ class AreaManageController extends BaseController
 
             /* 取得参数：上级地区id */
             $region_id = empty($_REQUEST['pid']) ? 0 : intval($_REQUEST['pid']);
-            $smarty->assign('parent_id', $region_id);
+            $this->assign('parent_id', $region_id);
 
             /* 取得列表显示的地区的类型 */
             if ($region_id == 0) {
@@ -34,11 +34,11 @@ class AreaManageController extends BaseController
             } else {
                 $region_type = $exc->get_name($region_id, 'region_type') + 1;
             }
-            $smarty->assign('region_type', $region_type);
+            $this->assign('region_type', $region_type);
 
             /* 获取地区列表 */
             $region_arr = area_list($region_id);
-            $smarty->assign('region_arr', $region_arr);
+            $this->assign('region_arr', $region_arr);
 
             /* 当前的地区名称 */
             if ($region_id > 0) {
@@ -50,7 +50,7 @@ class AreaManageController extends BaseController
             } else {
                 $area = $_LANG['country'];
             }
-            $smarty->assign('area_here', $area);
+            $this->assign('area_here', $area);
 
             /* 返回上一级的链接 */
             if ($region_id > 0) {
@@ -59,14 +59,14 @@ class AreaManageController extends BaseController
             } else {
                 $action_link = '';
             }
-            $smarty->assign('action_link', $action_link);
+            $this->assign('action_link', $action_link);
 
             /* 赋值模板显示 */
-            $smarty->assign('ur_here', $_LANG['05_area_list']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['05_area_list']);
+            $this->assign('full_page', 1);
 
             assign_query_info();
-            $smarty->display('area_list.htm');
+            $this->display('area_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -81,12 +81,12 @@ class AreaManageController extends BaseController
             $region_type = intval($_POST['region_type']);
 
             if (empty($region_name)) {
-                make_json_error($_LANG['region_name_empty']);
+                return make_json_error($_LANG['region_name_empty']);
             }
 
             /* 查看区域是否重复 */
             if (! $exc->is_only('region_name', $region_name, 0, "parent_id = '$parent_id'")) {
-                make_json_error($_LANG['region_name_exist']);
+                return make_json_error($_LANG['region_name_exist']);
             }
 
             $sql = 'INSERT INTO '.$ecs->table('region').' (parent_id, region_name, region_type) '.
@@ -96,13 +96,13 @@ class AreaManageController extends BaseController
 
                 /* 获取地区列表 */
                 $region_arr = area_list($parent_id);
-                $smarty->assign('region_arr', $region_arr);
+                $this->assign('region_arr', $region_arr);
 
-                $smarty->assign('region_type', $region_type);
+                $this->assign('region_type', $region_type);
 
-                make_json_result($smarty->fetch('area_list.htm'));
+                return make_json_result($this->fetch('area_list.htm'));
             } else {
-                make_json_error($_LANG['add_area_error']);
+                return make_json_error($_LANG['add_area_error']);
             }
         }
 
@@ -117,7 +117,7 @@ class AreaManageController extends BaseController
             $region_name = json_str_iconv(trim($_POST['val']));
 
             if (empty($region_name)) {
-                make_json_error($_LANG['region_name_empty']);
+                return make_json_error($_LANG['region_name_empty']);
             }
 
             $msg = '';
@@ -125,14 +125,14 @@ class AreaManageController extends BaseController
             /* 查看区域是否重复 */
             $parent_id = $exc->get_name($id, 'parent_id');
             if (! $exc->is_only('region_name', $region_name, $id, "parent_id = '$parent_id'")) {
-                make_json_error($_LANG['region_name_exist']);
+                return make_json_error($_LANG['region_name_exist']);
             }
 
             if ($exc->edit("region_name = '$region_name'", $id)) {
                 admin_log($region_name, 'edit', 'area');
-                make_json_result(stripslashes($region_name));
+                return make_json_result(stripslashes($region_name));
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
 
@@ -151,7 +151,7 @@ class AreaManageController extends BaseController
             //    $sql = "SELECT COUNT(*) FROM " . $ecs->table('region') . " WHERE parent_id = '$id'";
             //    if ($db->getOne($sql) > 0)
             //    {
-            //        make_json_error($_LANG['parent_id_exist']);
+            //        return make_json_error($_LANG['parent_id_exist']);
             //    }
             $region_type = $region['region_type'];
             $delete_region[] = $id;
@@ -173,12 +173,12 @@ class AreaManageController extends BaseController
 
                 /* 获取地区列表 */
                 $region_arr = area_list($region['parent_id']);
-                $smarty->assign('region_arr', $region_arr);
-                $smarty->assign('region_type', $region['region_type']);
+                $this->assign('region_arr', $region_arr);
+                $this->assign('region_type', $region['region_type']);
 
-                make_json_result($smarty->fetch('area_list.htm'));
+                return make_json_result($this->fetch('area_list.htm'));
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
     }

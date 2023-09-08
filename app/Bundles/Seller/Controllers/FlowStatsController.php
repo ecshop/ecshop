@@ -10,7 +10,7 @@ class FlowStatsController extends BaseController
     {
 
         require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/statistic.php';
-        $smarty->assign('lang', $_LANG);
+        $this->assign('lang', $_LANG);
 
         /* act操作项的初始化 */
         if (empty($_REQUEST['act'])) {
@@ -21,7 +21,7 @@ class FlowStatsController extends BaseController
 
         if ($_REQUEST['act'] == 'view') {
             if ($_CFG['visit_stats'] == 'off') {
-                sys_msg($_LANG['stats_off']);
+                return sys_msg($_LANG['stats_off']);
                 exit();
             }
             admin_priv('client_flow_stats');
@@ -257,15 +257,15 @@ class FlowStatsController extends BaseController
             }
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['flow_stats']);
-            $smarty->assign('general_data', $general_xml);
-            $smarty->assign('area_data', $area_xml);
-            $smarty->assign('is_multi', $is_multi);
-            $smarty->assign('from_data', $from_xml);
+            $this->assign('ur_here', $_LANG['flow_stats']);
+            $this->assign('general_data', $general_xml);
+            $this->assign('area_data', $area_xml);
+            $this->assign('is_multi', $is_multi);
+            $this->assign('from_data', $from_xml);
             /* 显示日期 */
 
-            $smarty->assign('start_date', local_date('Y-m-d', $start_date));
-            $smarty->assign('end_date', local_date('Y-m-d', $end_date));
+            $this->assign('start_date', local_date('Y-m-d', $start_date));
+            $this->assign('end_date', local_date('Y-m-d', $end_date));
 
             for ($i = 0; $i < 5; $i++) {
                 if (isset($start_date_arr[$i])) {
@@ -274,20 +274,20 @@ class FlowStatsController extends BaseController
                     $start_date_arr[$i] = null;
                 }
             }
-            $smarty->assign('start_date_arr', $start_date_arr);
+            $this->assign('start_date_arr', $start_date_arr);
 
             if (! $is_multi) {
                 $filename = gmdate($_CFG['date_format'], intval($start_date) + intval($timezone) * 3600).'_'.
                     gmdate($_CFG['date_format'], intval($end_date) + intval($timezone) * 3600);
 
-                $smarty->assign('action_link', ['text' => $_LANG['down_flow_stats'],
+                $this->assign('action_link', ['text' => $_LANG['down_flow_stats'],
                     'href' => 'flow_stats.php?act=download&filename='.$filename.
                         '&start_date='.$start_date.'&end_date='.$end_date]);
             }
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('flow_stats.htm');
+            $this->display('flow_stats.htm');
         } /* 报表下载 */
         if ($_REQUEST['act'] = 'download') {
             $filename = ! empty($_REQUEST['filename']) ? trim($_REQUEST['filename']) : '';

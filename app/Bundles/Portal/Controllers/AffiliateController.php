@@ -51,14 +51,14 @@ class AffiliateController extends BaseController
                 $goods['shop_price'] = ecs_iconv('UTF8', $charset, $goods['shop_price']);
             }*/
 
-            $smarty->assign('goods', $goods);
-            $smarty->assign('userid', $userid);
-            $smarty->assign('type', $type);
+            $this->assign('goods', $goods);
+            $this->assign('userid', $userid);
+            $this->assign('type', $type);
 
-            $smarty->assign('url', $ecs->url());
-            $smarty->assign('goods_url', $goods_url);
+            $this->assign('url', $ecs->url());
+            $this->assign('goods_url', $goods_url);
         }
-        $output = $smarty->fetch($tpl, $cache_id);
+        $output = $this->fetch($tpl, $cache_id);
         $output = str_replace("\r", '', $output);
         $output = str_replace("\n", '', $output);
 

@@ -41,11 +41,11 @@ class PrivilegeController extends BaseController
             header('Pragma: no-cache');
 
             if ((intval($_CFG['captcha']) & CAPTCHA_ADMIN) && gd_version() > 0) {
-                $smarty->assign('gd_version', gd_version());
-                $smarty->assign('random', mt_rand());
+                $this->assign('gd_version', gd_version());
+                $this->assign('random', mt_rand());
             }
 
-            $smarty->display('login.htm');
+            $this->display('login.htm');
         }
 
         /*------------------------------------------------------ */
@@ -58,7 +58,7 @@ class PrivilegeController extends BaseController
                 /* 检查验证码是否正确 */
                 $validator = new captcha();
                 if (! empty($_POST['captcha']) && ! $validator->check_word($_POST['captcha'])) {
-                    sys_msg($_LANG['captcha_error'], 1);
+                    return sys_msg($_LANG['captcha_error'], 1);
                 }
             }
 
@@ -85,7 +85,7 @@ class PrivilegeController extends BaseController
                 if (! empty($row['suppliers_id'])) {
                     $supplier_is_check = suppliers_list_info(' is_check = 1 AND suppliers_id = '.$row['suppliers_id']);
                     if (empty($supplier_is_check)) {
-                        sys_msg($_LANG['login_disable'], 1);
+                        return sys_msg($_LANG['login_disable'], 1);
                     }
                 }
 
@@ -122,7 +122,7 @@ class PrivilegeController extends BaseController
 
                 exit;
             } else {
-                sys_msg($_LANG['login_faild'], 1);
+                return sys_msg($_LANG['login_faild'], 1);
             }
         }
 
@@ -131,23 +131,23 @@ class PrivilegeController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'list') {
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['admin_list']);
-            $smarty->assign('action_link', ['href' => 'privilege.php?act=add', 'text' => $_LANG['admin_add']]);
-            $smarty->assign('full_page', 1);
-            $smarty->assign('admin_list', get_admin_userlist());
+            $this->assign('ur_here', $_LANG['admin_list']);
+            $this->assign('action_link', ['href' => 'privilege.php?act=add', 'text' => $_LANG['admin_add']]);
+            $this->assign('full_page', 1);
+            $this->assign('admin_list', get_admin_userlist());
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('privilege_list.htm');
+            $this->display('privilege_list.htm');
         }
 
         /*------------------------------------------------------ */
         //-- 查询
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'query') {
-            $smarty->assign('admin_list', get_admin_userlist());
+            $this->assign('admin_list', get_admin_userlist());
 
-            make_json_result($smarty->fetch('privilege_list.htm'));
+            return make_json_result($this->fetch('privilege_list.htm'));
         }
 
         /*------------------------------------------------------ */
@@ -158,15 +158,15 @@ class PrivilegeController extends BaseController
             admin_priv('admin_manage');
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['admin_add']);
-            $smarty->assign('action_link', ['href' => 'privilege.php?act=list', 'text' => $_LANG['admin_list']]);
-            $smarty->assign('form_act', 'insert');
-            $smarty->assign('action', 'add');
-            $smarty->assign('select_role', get_role_list());
+            $this->assign('ur_here', $_LANG['admin_add']);
+            $this->assign('action_link', ['href' => 'privilege.php?act=list', 'text' => $_LANG['admin_list']]);
+            $this->assign('form_act', 'insert');
+            $this->assign('action', 'add');
+            $this->assign('select_role', get_role_list());
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('privilege_info.htm');
+            $this->display('privilege_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -175,14 +175,14 @@ class PrivilegeController extends BaseController
         if ($_REQUEST['act'] == 'insert') {
             admin_priv('admin_manage');
             if ($_POST['token'] != $_CFG['token']) {
-                sys_msg('add_error', 1);
+                return sys_msg('add_error', 1);
             }
             /* 判断管理员是否已经存在 */
             if (! empty($_POST['user_name'])) {
                 $is_only = $exc->is_only('user_name', stripslashes($_POST['user_name']));
 
                 if (! $is_only) {
-                    sys_msg(sprintf($_LANG['user_name_exist'], stripslashes($_POST['user_name'])), 1);
+                    return sys_msg(sprintf($_LANG['user_name_exist'], stripslashes($_POST['user_name'])), 1);
                 }
             }
 
@@ -191,7 +191,7 @@ class PrivilegeController extends BaseController
                 $is_only = $exc->is_only('email', stripslashes($_POST['email']));
 
                 if (! $is_only) {
-                    sys_msg(sprintf($_LANG['email_exist'], stripslashes($_POST['email'])), 1);
+                    return sys_msg(sprintf($_LANG['email_exist'], stripslashes($_POST['email'])), 1);
                 }
             }
 
@@ -225,7 +225,7 @@ class PrivilegeController extends BaseController
             $link[1]['text'] = $_LANG['continue_add'];
             $link[1]['href'] = 'privilege.php?act=add';
 
-            sys_msg($_LANG['add'].'&nbsp;'.$_POST['user_name'].'&nbsp;'.$_LANG['action_succeed'], 0, $link);
+            return sys_msg($_LANG['add'].'&nbsp;'.$_POST['user_name'].'&nbsp;'.$_LANG['action_succeed'], 0, $link);
 
             /* 记录管理员操作 */
             admin_log($_POST['user_name'], 'add', 'privilege');
@@ -238,7 +238,7 @@ class PrivilegeController extends BaseController
             /* 不能编辑demo这个管理员 */
             if ($_SESSION['admin_name'] == 'demo') {
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'privilege.php?act=list'];
-                sys_msg($_LANG['edit_admininfo_cannot'], 0, $link);
+                return sys_msg($_LANG['edit_admininfo_cannot'], 0, $link);
             }
 
             $_REQUEST['id'] = ! empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
@@ -260,22 +260,22 @@ class PrivilegeController extends BaseController
             }
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['admin_edit']);
-            $smarty->assign('action_link', ['text' => $_LANG['admin_list'], 'href' => 'privilege.php?act=list']);
-            $smarty->assign('user', $user_info);
+            $this->assign('ur_here', $_LANG['admin_edit']);
+            $this->assign('action_link', ['text' => $_LANG['admin_list'], 'href' => 'privilege.php?act=list']);
+            $this->assign('user', $user_info);
 
             /* 获得该管理员的权限 */
             $priv_str = $db->getOne('SELECT action_list FROM '.$ecs->table('admin_user')." WHERE user_id = '$_GET[id]'");
 
             /* 如果被编辑的管理员拥有了all这个权限，将不能编辑 */
             if ($priv_str != 'all') {
-                $smarty->assign('select_role', get_role_list());
+                $this->assign('select_role', get_role_list());
             }
-            $smarty->assign('form_act', 'update');
-            $smarty->assign('action', 'edit');
+            $this->assign('form_act', 'update');
+            $this->assign('action', 'edit');
 
             assign_query_info();
-            $smarty->display('privilege_info.htm');
+            $this->display('privilege_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -290,7 +290,7 @@ class PrivilegeController extends BaseController
             $ec_salt = rand(1, 9999);
             $password = ! empty($_POST['new_password']) ? ", password = '".md5(md5($_POST['new_password']).$ec_salt)."'" : '';
             if ($_POST['token'] != $_CFG['token']) {
-                sys_msg('update_error', 1);
+                return sys_msg('update_error', 1);
             }
             if ($_REQUEST['act'] == 'update') {
                 /* 查看是否有权限编辑其他管理员的信息 */
@@ -308,7 +308,7 @@ class PrivilegeController extends BaseController
             if (! empty($admin_name)) {
                 $is_only = $exc->num('user_name', $admin_name, $admin_id);
                 if ($is_only == 1) {
-                    sys_msg(sprintf($_LANG['user_name_exist'], stripslashes($admin_name)), 1);
+                    return sys_msg(sprintf($_LANG['user_name_exist'], stripslashes($admin_name)), 1);
                 }
             }
 
@@ -317,7 +317,7 @@ class PrivilegeController extends BaseController
                 $is_only = $exc->num('email', $admin_email, $admin_id);
 
                 if ($is_only == 1) {
-                    sys_msg(sprintf($_LANG['email_exist'], stripslashes($admin_email)), 1);
+                    return sys_msg(sprintf($_LANG['email_exist'], stripslashes($admin_email)), 1);
                 }
             }
 
@@ -337,13 +337,13 @@ class PrivilegeController extends BaseController
                 }
                 if ($old_password != $old_ec_password) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                    sys_msg($_LANG['pwd_error'], 0, $link);
+                    return sys_msg($_LANG['pwd_error'], 0, $link);
                 }
 
                 /* 比较新密码和确认密码是否相同 */
                 if ($_POST['new_password'] != $_POST['pwd_confirm']) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                    sys_msg($_LANG['js_languages']['password_error'], 0, $link);
+                    return sys_msg($_LANG['js_languages']['password_error'], 0, $link);
                 } else {
                     $pwd_modified = true;
                 }
@@ -392,7 +392,7 @@ class PrivilegeController extends BaseController
 
             /* 提示信息 */
             $link[] = ['text' => strpos($g_link, 'list') ? $_LANG['back_admin_list'] : $_LANG['modif_info'], 'href' => $g_link];
-            sys_msg("$msg<script>parent.document.getElementById('header-frame').contentWindow.document.location.reload();</script>", 0, $link);
+            return sys_msg("$msg<script>parent.document.getElementById('header-frame').contentWindow.document.location.reload();</script>", 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -402,7 +402,7 @@ class PrivilegeController extends BaseController
             /* 不能编辑demo这个管理员 */
             if ($_SESSION['admin_name'] == 'demo') {
                 $link[] = ['text' => $_LANG['back_admin_list'], 'href' => 'privilege.php?act=list'];
-                sys_msg($_LANG['edit_admininfo_cannot'], 0, $link);
+                return sys_msg($_LANG['edit_admininfo_cannot'], 0, $link);
             }
 
             include_once 'includes/inc_menu.php';
@@ -445,19 +445,19 @@ class PrivilegeController extends BaseController
             }
 
             /* 模板赋值 */
-            $smarty->assign('lang', $_LANG);
-            $smarty->assign('ur_here', $_LANG['modif_info']);
-            $smarty->assign('action_link', ['text' => $_LANG['admin_list'], 'href' => 'privilege.php?act=list']);
-            $smarty->assign('user', $user_info);
-            $smarty->assign('menus', $modules);
-            $smarty->assign('nav_arr', $nav_lst);
+            $this->assign('lang', $_LANG);
+            $this->assign('ur_here', $_LANG['modif_info']);
+            $this->assign('action_link', ['text' => $_LANG['admin_list'], 'href' => 'privilege.php?act=list']);
+            $this->assign('user', $user_info);
+            $this->assign('menus', $modules);
+            $this->assign('nav_arr', $nav_lst);
 
-            $smarty->assign('form_act', 'update_self');
-            $smarty->assign('action', 'modif');
+            $this->assign('form_act', 'update_self');
+            $this->assign('action', 'modif');
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('privilege_info.htm');
+            $this->display('privilege_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -477,7 +477,7 @@ class PrivilegeController extends BaseController
             /* 如果被编辑的管理员拥有了all这个权限，将不能编辑 */
             if ($priv_str == 'all') {
                 $link[] = ['text' => $_LANG['back_admin_list'], 'href' => 'privilege.php?act=list'];
-                sys_msg($_LANG['edit_admininfo_cannot'], 0, $link);
+                return sys_msg($_LANG['edit_admininfo_cannot'], 0, $link);
             }
 
             /* 获取权限的分组数据 */
@@ -506,16 +506,16 @@ class PrivilegeController extends BaseController
             }
 
             /* 赋值 */
-            $smarty->assign('lang', $_LANG);
-            $smarty->assign('ur_here', $_LANG['allot_priv'].' [ '.$_GET['user'].' ] ');
-            $smarty->assign('action_link', ['href' => 'privilege.php?act=list', 'text' => $_LANG['admin_list']]);
-            $smarty->assign('priv_arr', $priv_arr);
-            $smarty->assign('form_act', 'update_allot');
-            $smarty->assign('user_id', $_GET['id']);
+            $this->assign('lang', $_LANG);
+            $this->assign('ur_here', $_LANG['allot_priv'].' [ '.$_GET['user'].' ] ');
+            $this->assign('action_link', ['href' => 'privilege.php?act=list', 'text' => $_LANG['admin_list']]);
+            $this->assign('priv_arr', $priv_arr);
+            $this->assign('form_act', 'update_allot');
+            $this->assign('user_id', $_GET['id']);
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('privilege_allot.htm');
+            $this->display('privilege_allot.htm');
         }
 
         /*------------------------------------------------------ */
@@ -524,7 +524,7 @@ class PrivilegeController extends BaseController
         if ($_REQUEST['act'] == 'update_allot') {
             admin_priv('admin_manage');
             if ($_POST['token'] != $_CFG['token']) {
-                sys_msg('update_allot_error', 1);
+                return sys_msg('update_allot_error', 1);
             }
             /* 取得当前管理员用户名 */
             $admin_name = $db->getOne('SELECT user_name FROM '.$ecs->table('admin_user')." WHERE user_id = '$_POST[id]'");
@@ -545,7 +545,7 @@ class PrivilegeController extends BaseController
 
             /* 提示信息 */
             $link[] = ['text' => $_LANG['back_admin_list'], 'href' => 'privilege.php?act=list'];
-            sys_msg($_LANG['edit'].'&nbsp;'.$admin_name.'&nbsp;'.$_LANG['action_succeed'], 0, $link);
+            return sys_msg($_LANG['edit'].'&nbsp;'.$admin_name.'&nbsp;'.$_LANG['action_succeed'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -561,17 +561,17 @@ class PrivilegeController extends BaseController
 
             /* demo这个管理员不允许删除 */
             if ($admin_name == 'demo') {
-                make_json_error($_LANG['edit_remove_cannot']);
+                return make_json_error($_LANG['edit_remove_cannot']);
             }
 
             /* ID为1的不允许删除 */
             if ($id == 1) {
-                make_json_error($_LANG['remove_cannot']);
+                return make_json_error($_LANG['remove_cannot']);
             }
 
             /* 管理员不能删除自己 */
             if ($id == $_SESSION['admin_id']) {
-                make_json_error($_LANG['remove_self_cannot']);
+                return make_json_error($_LANG['remove_self_cannot']);
             }
 
             if ($exc->drop($id)) {

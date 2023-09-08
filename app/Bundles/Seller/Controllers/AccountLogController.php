@@ -8,7 +8,6 @@ class AccountLogController extends BaseController
 {
     public function index()
     {
-
         include_once ROOT_PATH.'includes/lib_order.php';
 
         /*------------------------------------------------------ */
@@ -18,33 +17,33 @@ class AccountLogController extends BaseController
             /* 检查参数 */
             $user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
             if ($user_id <= 0) {
-                sys_msg('invalid param');
+                return sys_msg('invalid param');
             }
             $user = user_info($user_id);
             if (empty($user)) {
-                sys_msg($_LANG['user_not_exist']);
+                return sys_msg($_LANG['user_not_exist']);
             }
-            $smarty->assign('user', $user);
+            $this->assign('user', $user);
 
             if (empty($_REQUEST['account_type']) || ! in_array($_REQUEST['account_type'], ['user_money', 'frozen_money', 'rank_points', 'pay_points'])) {
                 $account_type = '';
             } else {
                 $account_type = $_REQUEST['account_type'];
             }
-            $smarty->assign('account_type', $account_type);
+            $this->assign('account_type', $account_type);
 
-            $smarty->assign('ur_here', $_LANG['account_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['add_account'], 'href' => 'account_log.php?act=add&user_id='.$user_id]);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['account_list']);
+            $this->assign('action_link', ['text' => $_LANG['add_account'], 'href' => 'account_log.php?act=add&user_id='.$user_id]);
+            $this->assign('full_page', 1);
 
             $account_list = get_accountlist($user_id, $account_type);
-            $smarty->assign('account_list', $account_list['account']);
-            $smarty->assign('filter', $account_list['filter']);
-            $smarty->assign('record_count', $account_list['record_count']);
-            $smarty->assign('page_count', $account_list['page_count']);
+            $this->assign('account_list', $account_list['account']);
+            $this->assign('filter', $account_list['filter']);
+            $this->assign('record_count', $account_list['record_count']);
+            $this->assign('page_count', $account_list['page_count']);
 
             assign_query_info();
-            $smarty->display('account_list.htm');
+            $this->display('account_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -54,29 +53,29 @@ class AccountLogController extends BaseController
             /* 检查参数 */
             $user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
             if ($user_id <= 0) {
-                sys_msg('invalid param');
+                return sys_msg('invalid param');
             }
             $user = user_info($user_id);
             if (empty($user)) {
-                sys_msg($_LANG['user_not_exist']);
+                return sys_msg($_LANG['user_not_exist']);
             }
-            $smarty->assign('user', $user);
+            $this->assign('user', $user);
 
             if (empty($_REQUEST['account_type']) || ! in_array($_REQUEST['account_type'], ['user_money', 'frozen_money', 'rank_points', 'pay_points'])) {
                 $account_type = '';
             } else {
                 $account_type = $_REQUEST['account_type'];
             }
-            $smarty->assign('account_type', $account_type);
+            $this->assign('account_type', $account_type);
 
             $account_list = get_accountlist($user_id, $account_type);
-            $smarty->assign('account_list', $account_list['account']);
-            $smarty->assign('filter', $account_list['filter']);
-            $smarty->assign('record_count', $account_list['record_count']);
-            $smarty->assign('page_count', $account_list['page_count']);
+            $this->assign('account_list', $account_list['account']);
+            $this->assign('filter', $account_list['filter']);
+            $this->assign('record_count', $account_list['record_count']);
+            $this->assign('page_count', $account_list['page_count']);
 
-            make_json_result(
-                $smarty->fetch('account_list.htm'),
+            return make_json_result(
+                $this->fetch('account_list.htm'),
                 '',
                 ['filter' => $account_list['filter'], 'page_count' => $account_list['page_count']]
             );
@@ -91,19 +90,19 @@ class AccountLogController extends BaseController
             /* 检查参数 */
             $user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
             if ($user_id <= 0) {
-                sys_msg('invalid param');
+                return sys_msg('invalid param');
             }
             $user = user_info($user_id);
             if (empty($user)) {
-                sys_msg($_LANG['user_not_exist']);
+                return sys_msg($_LANG['user_not_exist']);
             }
-            $smarty->assign('user', $user);
+            $this->assign('user', $user);
 
             /* 显示模板 */
-            $smarty->assign('ur_here', $_LANG['add_account']);
-            $smarty->assign('action_link', ['href' => 'account_log.php?act=list&user_id='.$user_id, 'text' => $_LANG['account_list']]);
+            $this->assign('ur_here', $_LANG['add_account']);
+            $this->assign('action_link', ['href' => 'account_log.php?act=list&user_id='.$user_id, 'text' => $_LANG['account_list']]);
             assign_query_info();
-            $smarty->display('account_info.htm');
+            $this->display('account_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -114,17 +113,17 @@ class AccountLogController extends BaseController
             admin_priv('account_manage');
             $token = trim($_POST['token']);
             if ($token != $_CFG['token']) {
-                sys_msg($_LANG['no_account_change'], 1);
+                return sys_msg($_LANG['no_account_change'], 1);
             }
 
             /* 检查参数 */
             $user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
             if ($user_id <= 0) {
-                sys_msg('invalid param');
+                return sys_msg('invalid param');
             }
             $user = user_info($user_id);
             if (empty($user)) {
-                sys_msg($_LANG['user_not_exist']);
+                return sys_msg($_LANG['user_not_exist']);
             }
 
             /* 提交值 */
@@ -135,7 +134,7 @@ class AccountLogController extends BaseController
             $pay_points = floatval($_POST['add_sub_pay_points']) * abs(floatval($_POST['pay_points']));
 
             if ($user_money == 0 && $frozen_money == 0 && $rank_points == 0 && $pay_points == 0) {
-                sys_msg($_LANG['no_account_change']);
+                return sys_msg($_LANG['no_account_change']);
             }
 
             /* 保存 */
@@ -145,7 +144,7 @@ class AccountLogController extends BaseController
             $links = [
                 ['href' => 'account_log.php?act=list&user_id='.$user_id, 'text' => $_LANG['account_list']],
             ];
-            sys_msg($_LANG['log_account_change_ok'], 0, $links);
+            return sys_msg($_LANG['log_account_change_ok'], 0, $links);
         }
     }
 

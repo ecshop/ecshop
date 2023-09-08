@@ -49,9 +49,9 @@ class PaymentController extends BaseController
 
             assign_query_info();
 
-            $smarty->assign('ur_here', $_LANG['02_payment_list']);
-            $smarty->assign('modules', $modules);
-            $smarty->display('payment_list.htm');
+            $this->assign('ur_here', $_LANG['02_payment_list']);
+            $this->assign('modules', $modules);
+            $this->display('payment_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -94,9 +94,9 @@ class PaymentController extends BaseController
 
             assign_query_info();
 
-            $smarty->assign('action_link', ['text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list']);
-            $smarty->assign('pay', $pay);
-            $smarty->display('payment_edit.htm');
+            $this->assign('action_link', ['text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list']);
+            $this->assign('pay', $pay);
+            $this->display('payment_edit.htm');
         }
         if ($_REQUEST['act'] == 'get_config') {
             check_authz_json('payment');
@@ -137,7 +137,7 @@ class PaymentController extends BaseController
             }
             $config .= '</table>';
 
-            make_json_result($config);
+            return make_json_result($config);
         }
 
         /*------------------------------------------------------ */
@@ -157,7 +157,7 @@ class PaymentController extends BaseController
             $pay = $db->getRow($sql);
             if (empty($pay)) {
                 $links[] = ['text' => $_LANG['back_list'], 'href' => 'payment.php?act=list'];
-                sys_msg($_LANG['payment_not_available'], 0, $links);
+                return sys_msg($_LANG['payment_not_available'], 0, $links);
             }
 
             /* 取相应插件信息 */
@@ -209,10 +209,10 @@ class PaymentController extends BaseController
 
             assign_query_info();
 
-            $smarty->assign('action_link', ['text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list']);
-            $smarty->assign('ur_here', $_LANG['edit'].$_LANG['payment']);
-            $smarty->assign('pay', $pay);
-            $smarty->display('payment_edit.htm');
+            $this->assign('action_link', ['text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list']);
+            $this->assign('ur_here', $_LANG['edit'].$_LANG['payment']);
+            $this->assign('pay', $pay);
+            $this->display('payment_edit.htm');
         }
 
         /*------------------------------------------------------ */
@@ -223,13 +223,13 @@ class PaymentController extends BaseController
 
             /* 检查输入 */
             if (empty($_POST['pay_name'])) {
-                sys_msg($_LANG['payment_name'].$_LANG['empty']);
+                return sys_msg($_LANG['payment_name'].$_LANG['empty']);
             }
 
             $sql = 'SELECT COUNT(*) FROM '.$ecs->table('payment').
                 " WHERE pay_name = '$_POST[pay_name]' AND pay_code <> '$_POST[pay_code]'";
             if ($db->getOne($sql) > 0) {
-                sys_msg($_LANG['payment_name'].$_LANG['repeat'], 1);
+                return sys_msg($_LANG['payment_name'].$_LANG['repeat'], 1);
             }
 
             /* 取得配置信息 */
@@ -261,7 +261,7 @@ class PaymentController extends BaseController
                 /* 记录日志 */
                 admin_log($_POST['pay_name'], 'edit', 'payment');
 
-                sys_msg($_LANG['edit_ok'], 0, $link);
+                return sys_msg($_LANG['edit_ok'], 0, $link);
             } else {
                 /* 安装，检查该支付方式是否曾经安装过 */
                 $sql = 'SELECT COUNT(*) FROM '.$ecs->table('payment')." WHERE pay_code = '$_REQUEST[pay_code]'";
@@ -285,7 +285,7 @@ class PaymentController extends BaseController
                 /* 记录日志 */
                 admin_log($_POST['pay_name'], 'install', 'payment');
 
-                sys_msg($_LANG['install_ok'], 0, $link);
+                return sys_msg($_LANG['install_ok'], 0, $link);
             }
         }
 
@@ -305,7 +305,7 @@ class PaymentController extends BaseController
             admin_log($_REQUEST['code'], 'uninstall', 'payment');
 
             $link[] = ['text' => $_LANG['back_list'], 'href' => 'payment.php?act=list'];
-            sys_msg($_LANG['uninstall_ok'], 0, $link);
+            return sys_msg($_LANG['uninstall_ok'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -322,17 +322,17 @@ class PaymentController extends BaseController
 
             /* 检查名称是否为空 */
             if (empty($name)) {
-                make_json_error($_LANG['name_is_null']);
+                return make_json_error($_LANG['name_is_null']);
             }
 
             /* 检查名称是否重复 */
             if (! $exc->is_only('pay_name', $name, $code)) {
-                make_json_error($_LANG['name_exists']);
+                return make_json_error($_LANG['name_exists']);
             }
 
             /* 更新支付方式名称 */
             $exc->edit("pay_name = '$name'", $code);
-            make_json_result(stripcslashes($name));
+            return make_json_result(stripcslashes($name));
         }
 
         /*------------------------------------------------------ */
@@ -349,7 +349,7 @@ class PaymentController extends BaseController
 
             /* 更新描述 */
             $exc->edit("pay_desc = '$desc'", $code);
-            make_json_result(stripcslashes($desc));
+            return make_json_result(stripcslashes($desc));
         }
 
         /*------------------------------------------------------ */
@@ -366,7 +366,7 @@ class PaymentController extends BaseController
 
             /* 更新排序 */
             $exc->edit("pay_order = '$order'", $code);
-            make_json_result(stripcslashes($order));
+            return make_json_result(stripcslashes($order));
         }
 
         /*------------------------------------------------------ */
@@ -393,7 +393,7 @@ class PaymentController extends BaseController
 
             /* 更新支付费用 */
             $exc->edit("pay_fee = '$pay_fee'", $code);
-            make_json_result(stripcslashes($pay_fee));
+            return make_json_result(stripcslashes($pay_fee));
         }
 
     }

@@ -17,26 +17,26 @@ class GoodsTypeController extends BaseController
         if ($_REQUEST['act'] == 'manage') {
             assign_query_info();
 
-            $smarty->assign('ur_here', $_LANG['08_goods_type']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['08_goods_type']);
+            $this->assign('full_page', 1);
 
             $good_type_list = get_goodstype();
             $good_in_type = '';
 
-            $smarty->assign('goods_type_arr', $good_type_list['type']);
-            $smarty->assign('filter', $good_type_list['filter']);
-            $smarty->assign('record_count', $good_type_list['record_count']);
-            $smarty->assign('page_count', $good_type_list['page_count']);
+            $this->assign('goods_type_arr', $good_type_list['type']);
+            $this->assign('filter', $good_type_list['filter']);
+            $this->assign('record_count', $good_type_list['record_count']);
+            $this->assign('page_count', $good_type_list['page_count']);
 
             $query = $db->query('SELECT a.cat_id FROM '.$ecs->table('attribute').' AS a RIGHT JOIN '.$ecs->table('goods_attr').' AS g ON g.attr_id = a.attr_id GROUP BY a.cat_id');
             while ($row = $db->fetchRow($query)) {
                 $good_in_type[$row['cat_id']] = 1;
             }
-            $smarty->assign('good_in_type', $good_in_type);
+            $this->assign('good_in_type', $good_in_type);
 
-            $smarty->assign('action_link', ['text' => $_LANG['new_goods_type'], 'href' => 'goods_type.php?act=add']);
+            $this->assign('action_link', ['text' => $_LANG['new_goods_type'], 'href' => 'goods_type.php?act=add']);
 
-            $smarty->display('goods_type.htm');
+            $this->display('goods_type.htm');
         }
 
         /*------------------------------------------------------ */
@@ -46,13 +46,13 @@ class GoodsTypeController extends BaseController
         if ($_REQUEST['act'] == 'query') {
             $good_type_list = get_goodstype();
 
-            $smarty->assign('goods_type_arr', $good_type_list['type']);
-            $smarty->assign('filter', $good_type_list['filter']);
-            $smarty->assign('record_count', $good_type_list['record_count']);
-            $smarty->assign('page_count', $good_type_list['page_count']);
+            $this->assign('goods_type_arr', $good_type_list['type']);
+            $this->assign('filter', $good_type_list['filter']);
+            $this->assign('record_count', $good_type_list['record_count']);
+            $this->assign('page_count', $good_type_list['page_count']);
 
-            make_json_result(
-                $smarty->fetch('goods_type.htm'),
+            return make_json_result(
+                $this->fetch('goods_type.htm'),
                 '',
                 ['filter' => $good_type_list['filter'], 'page_count' => $good_type_list['page_count']]
             );
@@ -75,9 +75,9 @@ class GoodsTypeController extends BaseController
 
                 admin_log($type_name, 'edit', 'goods_type');
 
-                make_json_result(stripslashes($type_name));
+                return make_json_result(stripslashes($type_name));
             } else {
-                make_json_error($_LANG['repeat_type_name']);
+                return make_json_error($_LANG['repeat_type_name']);
             }
         }
 
@@ -93,7 +93,7 @@ class GoodsTypeController extends BaseController
 
             $exc->edit("enabled='$val'", $id);
 
-            make_json_result($val);
+            return make_json_result($val);
         }
 
         /*------------------------------------------------------ */
@@ -103,14 +103,14 @@ class GoodsTypeController extends BaseController
         if ($_REQUEST['act'] == 'add') {
             admin_priv('goods_type');
 
-            $smarty->assign('ur_here', $_LANG['new_goods_type']);
-            $smarty->assign('action_link', ['href' => 'goods_type.php?act=manage', 'text' => $_LANG['goods_type_list']]);
-            $smarty->assign('action', 'add');
-            $smarty->assign('form_act', 'insert');
-            $smarty->assign('goods_type', ['enabled' => 1]);
+            $this->assign('ur_here', $_LANG['new_goods_type']);
+            $this->assign('action_link', ['href' => 'goods_type.php?act=manage', 'text' => $_LANG['goods_type_list']]);
+            $this->assign('action', 'add');
+            $this->assign('form_act', 'insert');
+            $this->assign('goods_type', ['enabled' => 1]);
 
             assign_query_info();
-            $smarty->display('goods_type_info.htm');
+            $this->display('goods_type_info.htm');
         }
         if ($_REQUEST['act'] == 'insert') {
             $goods_type['cat_name'] = sub_str($_POST['cat_name'], 60);
@@ -119,9 +119,9 @@ class GoodsTypeController extends BaseController
 
             if ($db->autoExecute($ecs->table('goods_type'), $goods_type) !== false) {
                 $links = [['href' => 'goods_type.php?act=manage', 'text' => $_LANG['back_list']]];
-                sys_msg($_LANG['add_goodstype_success'], 0, $links);
+                return sys_msg($_LANG['add_goodstype_success'], 0, $links);
             } else {
-                sys_msg($_LANG['add_goodstype_failed'], 1);
+                return sys_msg($_LANG['add_goodstype_failed'], 1);
             }
         }
 
@@ -133,19 +133,19 @@ class GoodsTypeController extends BaseController
             $goods_type = get_goodstype_info(intval($_GET['cat_id']));
 
             if (empty($goods_type)) {
-                sys_msg($_LANG['cannot_found_goodstype'], 1);
+                return sys_msg($_LANG['cannot_found_goodstype'], 1);
             }
 
             admin_priv('goods_type');
 
-            $smarty->assign('ur_here', $_LANG['edit_goods_type']);
-            $smarty->assign('action_link', ['href' => 'goods_type.php?act=manage', 'text' => $_LANG['goods_type_list']]);
-            $smarty->assign('action', 'add');
-            $smarty->assign('form_act', 'update');
-            $smarty->assign('goods_type', $goods_type);
+            $this->assign('ur_here', $_LANG['edit_goods_type']);
+            $this->assign('action_link', ['href' => 'goods_type.php?act=manage', 'text' => $_LANG['goods_type_list']]);
+            $this->assign('action', 'add');
+            $this->assign('form_act', 'update');
+            $this->assign('goods_type', $goods_type);
 
             assign_query_info();
-            $smarty->display('goods_type_info.htm');
+            $this->display('goods_type_info.htm');
         }
         if ($_REQUEST['act'] == 'update') {
             $goods_type['cat_name'] = sub_str($_POST['cat_name'], 60);
@@ -173,9 +173,9 @@ class GoodsTypeController extends BaseController
                 }
 
                 $links = [['href' => 'goods_type.php?act=manage', 'text' => $_LANG['back_list']]];
-                sys_msg($_LANG['edit_goodstype_success'], 0, $links);
+                return sys_msg($_LANG['edit_goodstype_success'], 0, $links);
             } else {
-                sys_msg($_LANG['edit_goodstype_failed'], 1);
+                return sys_msg($_LANG['edit_goodstype_failed'], 1);
             }
         }
 
@@ -205,7 +205,7 @@ class GoodsTypeController extends BaseController
                 ecs_header("Location: $url\n");
                 exit;
             } else {
-                make_json_error($_LANG['remove_failed']);
+                return make_json_error($_LANG['remove_failed']);
             }
         }
     }

@@ -24,20 +24,20 @@ class VoteController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'list') {
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['list_vote']);
-            $smarty->assign('action_link', ['text' => $_LANG['add_vote'], 'href' => 'vote.php?act=add']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['list_vote']);
+            $this->assign('action_link', ['text' => $_LANG['add_vote'], 'href' => 'vote.php?act=add']);
+            $this->assign('full_page', 1);
 
             $vote_list = get_votelist();
 
-            $smarty->assign('list', $vote_list['list']);
-            $smarty->assign('filter', $vote_list['filter']);
-            $smarty->assign('record_count', $vote_list['record_count']);
-            $smarty->assign('page_count', $vote_list['page_count']);
+            $this->assign('list', $vote_list['list']);
+            $this->assign('filter', $vote_list['filter']);
+            $this->assign('record_count', $vote_list['record_count']);
+            $this->assign('page_count', $vote_list['page_count']);
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('vote_list.htm');
+            $this->display('vote_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -46,13 +46,13 @@ class VoteController extends BaseController
         if ($_REQUEST['act'] == 'query') {
             $vote_list = get_votelist();
 
-            $smarty->assign('list', $vote_list['list']);
-            $smarty->assign('filter', $vote_list['filter']);
-            $smarty->assign('record_count', $vote_list['record_count']);
-            $smarty->assign('page_count', $vote_list['page_count']);
+            $this->assign('list', $vote_list['list']);
+            $this->assign('filter', $vote_list['filter']);
+            $this->assign('record_count', $vote_list['record_count']);
+            $this->assign('page_count', $vote_list['page_count']);
 
-            make_json_result(
-                $smarty->fetch('vote_list.htm'),
+            return make_json_result(
+                $this->fetch('vote_list.htm'),
                 '',
                 ['filter' => $vote_list['filter'], 'page_count' => $vote_list['page_count']]
             );
@@ -69,17 +69,17 @@ class VoteController extends BaseController
             $vote = ['start_time' => local_date('Y-m-d'), 'end_time' => local_date('Y-m-d', local_strtotime('+2 weeks'))];
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['add_vote']);
-            $smarty->assign('action_link', ['href' => 'vote.php?act=list', 'text' => $_LANG['list_vote']]);
+            $this->assign('ur_here', $_LANG['add_vote']);
+            $this->assign('action_link', ['href' => 'vote.php?act=list', 'text' => $_LANG['list_vote']]);
 
-            $smarty->assign('action', 'add');
-            $smarty->assign('form_act', 'insert');
-            $smarty->assign('vote_arr', $vote);
-            $smarty->assign('cfg_lang', $_CFG['lang']);
+            $this->assign('action', 'add');
+            $this->assign('form_act', 'insert');
+            $this->assign('vote_arr', $vote);
+            $this->assign('cfg_lang', $_CFG['lang']);
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('vote_info.htm');
+            $this->display('vote_info.htm');
         }
         if ($_REQUEST['act'] == 'insert') {
             admin_priv('vote_priv');
@@ -114,10 +114,10 @@ class VoteController extends BaseController
                 $link[2]['text'] = $_LANG['back_list'];
                 $link[2]['href'] = 'vote.php?act=list';
 
-                sys_msg($_LANG['add'].'&nbsp;'.$_POST['vote_name'].'&nbsp;'.$_LANG['attradd_succed'], 0, $link);
+                return sys_msg($_LANG['add'].'&nbsp;'.$_POST['vote_name'].'&nbsp;'.$_LANG['attradd_succed'], 0, $link);
             } else {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                sys_msg($_LANG['vote_name_exist'], 0, $link);
+                return sys_msg($_LANG['vote_name_exist'], 0, $link);
             }
         }
         /*------------------------------------------------------ */
@@ -132,13 +132,13 @@ class VoteController extends BaseController
             $vote_arr['end_time'] = local_date('Y-m-d', $vote_arr['end_time']);
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['edit_vote']);
-            $smarty->assign('action_link', ['href' => 'vote.php?act=list', 'text' => $_LANG['list_vote']]);
-            $smarty->assign('form_act', 'update');
-            $smarty->assign('vote_arr', $vote_arr);
+            $this->assign('ur_here', $_LANG['edit_vote']);
+            $this->assign('action_link', ['href' => 'vote.php?act=list', 'text' => $_LANG['list_vote']]);
+            $this->assign('form_act', 'update');
+            $this->assign('vote_arr', $vote_arr);
 
             assign_query_info();
-            $smarty->display('vote_info.htm');
+            $this->display('vote_info.htm');
         }
         if ($_REQUEST['act'] == 'update') {
             /* 获得广告的开始时期与结束日期 */
@@ -162,7 +162,7 @@ class VoteController extends BaseController
 
             /* 提示信息 */
             $link[] = ['text' => $_LANG['back_list'], 'href' => 'vote.php?act=list'];
-            sys_msg($_LANG['edit'].' '.$_POST['vote_name'].' '.$_LANG['attradd_succed'], 0, $link);
+            return sys_msg($_LANG['edit'].' '.$_POST['vote_name'].' '.$_LANG['attradd_succed'], 0, $link);
         }
         /*------------------------------------------------------ */
         //-- 调查选项列表页面
@@ -171,16 +171,16 @@ class VoteController extends BaseController
             $id = ! empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['list_vote_option']);
-            $smarty->assign('action_link', ['href' => 'vote.php?act=list', 'text' => $_LANG['list_vote']]);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['list_vote_option']);
+            $this->assign('action_link', ['href' => 'vote.php?act=list', 'text' => $_LANG['list_vote']]);
+            $this->assign('full_page', 1);
 
-            $smarty->assign('id', $id);
-            $smarty->assign('option_arr', get_optionlist($id));
+            $this->assign('id', $id);
+            $this->assign('option_arr', get_optionlist($id));
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('vote_option.htm');
+            $this->display('vote_option.htm');
         }
 
         /*------------------------------------------------------ */
@@ -189,10 +189,10 @@ class VoteController extends BaseController
         if ($_REQUEST['act'] == 'query_option') {
             $id = intval($_GET['vid']);
 
-            $smarty->assign('id', $id);
-            $smarty->assign('option_arr', get_optionlist($id));
+            $this->assign('id', $id);
+            $this->assign('option_arr', get_optionlist($id));
 
-            make_json_result($smarty->fetch('vote_option.htm'));
+            return make_json_result($this->fetch('vote_option.htm'));
         }
 
         /*------------------------------------------------------ */
@@ -209,7 +209,7 @@ class VoteController extends BaseController
                 $sql = 'SELECT COUNT(*) FROM '.$ecs->table('vote_option').
                     " WHERE option_name = '$option_name' AND vote_id = '$vote_id'";
                 if ($db->getOne($sql) != 0) {
-                    make_json_error($_LANG['vote_option_exist']);
+                    return make_json_error($_LANG['vote_option_exist']);
                 } else {
                     $sql = 'INSERT INTO '.$ecs->table('vote_option').' (vote_id, option_name, option_count) '.
                         "VALUES ('$vote_id', '$option_name', 0)";
@@ -224,7 +224,7 @@ class VoteController extends BaseController
                     exit;
                 }
             } else {
-                make_json_error($_LANG['js_languages']['option_name_empty']);
+                return make_json_error($_LANG['js_languages']['option_name_empty']);
             }
         }
 
@@ -239,11 +239,11 @@ class VoteController extends BaseController
 
             /* 检查名称是否重复 */
             if ($exc->num('vote_name', $vote_name, $id) != 0) {
-                make_json_error(sprintf($_LANG['vote_name_exist'], $vote_name));
+                return make_json_error(sprintf($_LANG['vote_name_exist'], $vote_name));
             } else {
                 if ($exc->edit("vote_name = '$vote_name'", $id)) {
                     admin_log($vote_name, 'edit', 'vote');
-                    make_json_result(stripslashes($vote_name));
+                    return make_json_result(stripslashes($vote_name));
                 }
             }
         }
@@ -263,11 +263,11 @@ class VoteController extends BaseController
             $sql = 'SELECT COUNT(*) FROM '.$ecs->table('vote_option').
                 " WHERE option_name = '$option_name' AND vote_id = '$vote_id' AND option_id <> $id";
             if ($db->getOne($sql) != 0) {
-                make_json_error(sprintf($_LANG['vote_option_exist'], $option_name));
+                return make_json_error(sprintf($_LANG['vote_option_exist'], $option_name));
             } else {
                 if ($exc_opn->edit("option_name = '$option_name'", $id)) {
                     admin_log($option_name, 'edit', 'vote');
-                    make_json_result(stripslashes($option_name));
+                    return make_json_result(stripslashes($option_name));
                 }
             }
         }
@@ -283,7 +283,7 @@ class VoteController extends BaseController
 
             if ($exc_opn->edit("option_order = '$option_order'", $id)) {
                 admin_log($_LANG['edit_option_order'], 'edit', 'vote');
-                make_json_result(stripslashes($option_order));
+                return make_json_result(stripslashes($option_order));
             }
         }
 

@@ -18,10 +18,10 @@ class SitemapController extends BaseController
             /*------------------------------------------------------ */
             assign_query_info();
             $config = unserialize($_CFG['sitemap']);
-            $smarty->assign('config', $config);
-            $smarty->assign('ur_here', $_LANG['sitemap']);
-            $smarty->assign('arr_changefreq', [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]);
-            $smarty->display('sitemap.htm');
+            $this->assign('config', $config);
+            $this->assign('ur_here', $_LANG['sitemap']);
+            $this->assign('arr_changefreq', [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]);
+            $this->display('sitemap.htm');
         }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             /*------------------------------------------------------ */
@@ -110,13 +110,13 @@ class SitemapController extends BaseController
 
             $sm_file = '../sitemaps.xml';
             if ($sm->build($sm_file)) {
-                sys_msg(sprintf($_LANG['generate_success'], $ecs->url().'sitemaps.xml'));
+                return sys_msg(sprintf($_LANG['generate_success'], $ecs->url().'sitemaps.xml'));
             } else {
                 $sm_file = '../'.DATA_DIR.'/sitemaps.xml';
                 if ($sm->build($sm_file)) {
-                    sys_msg(sprintf($_LANG['generate_success'], $ecs->url().DATA_DIR.'/sitemaps.xml'));
+                    return sys_msg(sprintf($_LANG['generate_success'], $ecs->url().DATA_DIR.'/sitemaps.xml'));
                 } else {
-                    sys_msg(sprintf($_LANG['generate_failed']));
+                    return sys_msg(sprintf($_LANG['generate_failed']));
                 }
             }
         }

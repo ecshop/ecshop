@@ -18,19 +18,19 @@ class BrandController extends BaseController
         //-- 品牌列表
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'list') {
-            $smarty->assign('ur_here', $_LANG['06_goods_brand_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['07_brand_add'], 'href' => 'brand.php?act=add']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['06_goods_brand_list']);
+            $this->assign('action_link', ['text' => $_LANG['07_brand_add'], 'href' => 'brand.php?act=add']);
+            $this->assign('full_page', 1);
 
             $brand_list = get_brandlist();
 
-            $smarty->assign('brand_list', $brand_list['brand']);
-            $smarty->assign('filter', $brand_list['filter']);
-            $smarty->assign('record_count', $brand_list['record_count']);
-            $smarty->assign('page_count', $brand_list['page_count']);
+            $this->assign('brand_list', $brand_list['brand']);
+            $this->assign('filter', $brand_list['filter']);
+            $this->assign('record_count', $brand_list['record_count']);
+            $this->assign('page_count', $brand_list['page_count']);
 
             assign_query_info();
-            $smarty->display('brand_list.htm');
+            $this->display('brand_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -40,13 +40,13 @@ class BrandController extends BaseController
             /* 权限判断 */
             admin_priv('brand_manage');
 
-            $smarty->assign('ur_here', $_LANG['07_brand_add']);
-            $smarty->assign('action_link', ['text' => $_LANG['06_goods_brand_list'], 'href' => 'brand.php?act=list']);
-            $smarty->assign('form_action', 'insert');
+            $this->assign('ur_here', $_LANG['07_brand_add']);
+            $this->assign('action_link', ['text' => $_LANG['06_goods_brand_list'], 'href' => 'brand.php?act=list']);
+            $this->assign('form_action', 'insert');
 
             assign_query_info();
-            $smarty->assign('brand', ['sort_order' => 50, 'is_show' => 1]);
-            $smarty->display('brand_info.htm');
+            $this->assign('brand', ['sort_order' => 50, 'is_show' => 1]);
+            $this->display('brand_info.htm');
         }
         if ($_REQUEST['act'] == 'insert') {
             /*检查品牌名是否重复*/
@@ -57,7 +57,7 @@ class BrandController extends BaseController
             $is_only = $exc->is_only('brand_name', $_POST['brand_name']);
 
             if (! $is_only) {
-                sys_msg(sprintf($_LANG['brandname_exist'], stripslashes($_POST['brand_name'])), 1);
+                return sys_msg(sprintf($_LANG['brandname_exist'], stripslashes($_POST['brand_name'])), 1);
             }
 
             /*对描述处理*/
@@ -88,7 +88,7 @@ class BrandController extends BaseController
             $link[1]['text'] = $_LANG['back_list'];
             $link[1]['href'] = 'brand.php?act=list';
 
-            sys_msg($_LANG['brandadd_succed'], 0, $link);
+            return sys_msg($_LANG['brandadd_succed'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -101,13 +101,13 @@ class BrandController extends BaseController
                 'FROM '.$ecs->table('brand')." WHERE brand_id='$_REQUEST[id]'";
             $brand = $db->getRow($sql);
 
-            $smarty->assign('ur_here', $_LANG['brand_edit']);
-            $smarty->assign('action_link', ['text' => $_LANG['06_goods_brand_list'], 'href' => 'brand.php?act=list&'.list_link_postfix()]);
-            $smarty->assign('brand', $brand);
-            $smarty->assign('form_action', 'updata');
+            $this->assign('ur_here', $_LANG['brand_edit']);
+            $this->assign('action_link', ['text' => $_LANG['06_goods_brand_list'], 'href' => 'brand.php?act=list&'.list_link_postfix()]);
+            $this->assign('brand', $brand);
+            $this->assign('form_action', 'updata');
 
             assign_query_info();
-            $smarty->display('brand_info.htm');
+            $this->display('brand_info.htm');
         }
         if ($_REQUEST['act'] == 'updata') {
             admin_priv('brand_manage');
@@ -116,7 +116,7 @@ class BrandController extends BaseController
                 $is_only = $exc->is_only('brand_name', $_POST['brand_name'], $_POST['id']);
 
                 if (! $is_only) {
-                    sys_msg(sprintf($_LANG['brandname_exist'], stripslashes($_POST['brand_name'])), 1);
+                    return sys_msg(sprintf($_LANG['brandname_exist'], stripslashes($_POST['brand_name'])), 1);
                 }
             }
 
@@ -146,7 +146,7 @@ class BrandController extends BaseController
                 $link[0]['text'] = $_LANG['back_list'];
                 $link[0]['href'] = 'brand.php?act=list&'.list_link_postfix();
                 $note = vsprintf($_LANG['brandedit_succed'], $_POST['brand_name']);
-                sys_msg($note, 0, $link);
+                return sys_msg($note, 0, $link);
             } else {
                 exit($db->error());
             }
@@ -163,13 +163,13 @@ class BrandController extends BaseController
 
             /* 检查名称是否重复 */
             if ($exc->num('brand_name', $name, $id) != 0) {
-                make_json_error(sprintf($_LANG['brandname_exist'], $name));
+                return make_json_error(sprintf($_LANG['brandname_exist'], $name));
             } else {
                 if ($exc->edit("brand_name = '$name'", $id)) {
                     admin_log($name, 'edit', 'brand');
-                    make_json_result(stripslashes($name));
+                    return make_json_result(stripslashes($name));
                 } else {
-                    make_json_result(sprintf($_LANG['brandedit_fail'], $name));
+                    return make_json_result(sprintf($_LANG['brandedit_fail'], $name));
                 }
             }
         }
@@ -177,7 +177,7 @@ class BrandController extends BaseController
             $brand = empty($_REQUEST['brand']) ? '' : json_str_iconv(trim($_REQUEST['brand']));
 
             if (brand_exists($brand)) {
-                make_json_error($_LANG['brand_name_exist']);
+                return make_json_error($_LANG['brand_name_exist']);
             } else {
                 $sql = 'INSERT INTO '.$ecs->table('brand').'(brand_name)'.
                     "VALUES ( '$brand')";
@@ -187,7 +187,7 @@ class BrandController extends BaseController
 
                 $arr = ['id' => $brand_id, 'brand' => $brand];
 
-                make_json_result($arr);
+                return make_json_result($arr);
             }
         }
         /*------------------------------------------------------ */
@@ -203,9 +203,9 @@ class BrandController extends BaseController
             if ($exc->edit("sort_order = '$order'", $id)) {
                 admin_log(addslashes($name), 'edit', 'brand');
 
-                make_json_result($order);
+                return make_json_result($order);
             } else {
-                make_json_error(sprintf($_LANG['brandedit_fail'], $name));
+                return make_json_error(sprintf($_LANG['brandedit_fail'], $name));
             }
         }
 
@@ -220,7 +220,7 @@ class BrandController extends BaseController
 
             $exc->edit("is_show='$val'", $id);
 
-            make_json_result($val);
+            return make_json_result($val);
         }
 
         /*------------------------------------------------------ */
@@ -268,7 +268,7 @@ class BrandController extends BaseController
                 $db->query($sql);
             }
             $link = [['text' => $_LANG['brand_edit_lnk'], 'href' => 'brand.php?act=edit&id='.$brand_id], ['text' => $_LANG['brand_list_lnk'], 'href' => 'brand.php?act=list']];
-            sys_msg($_LANG['drop_brand_logo_success'], 0, $link);
+            return sys_msg($_LANG['drop_brand_logo_success'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -276,13 +276,13 @@ class BrandController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'query') {
             $brand_list = get_brandlist();
-            $smarty->assign('brand_list', $brand_list['brand']);
-            $smarty->assign('filter', $brand_list['filter']);
-            $smarty->assign('record_count', $brand_list['record_count']);
-            $smarty->assign('page_count', $brand_list['page_count']);
+            $this->assign('brand_list', $brand_list['brand']);
+            $this->assign('filter', $brand_list['filter']);
+            $this->assign('record_count', $brand_list['record_count']);
+            $this->assign('page_count', $brand_list['page_count']);
 
-            make_json_result(
-                $smarty->fetch('brand_list.htm'),
+            return make_json_result(
+                $this->fetch('brand_list.htm'),
                 '',
                 ['filter' => $brand_list['filter'], 'page_count' => $brand_list['page_count']]
             );

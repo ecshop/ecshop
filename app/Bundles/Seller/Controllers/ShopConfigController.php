@@ -28,28 +28,28 @@ class ShopConfigController extends BaseController
             }
             @closedir($dir);
 
-            $smarty->assign('lang_list', $lang_list);
-            $smarty->assign('ur_here', $_LANG['01_shop_config']);
-            $smarty->assign('group_list', get_settings(null, ['5']));
-            $smarty->assign('countries', get_regions());
+            $this->assign('lang_list', $lang_list);
+            $this->assign('ur_here', $_LANG['01_shop_config']);
+            $this->assign('group_list', get_settings(null, ['5']));
+            $this->assign('countries', get_regions());
 
             if (strpos(strtolower($_SERVER['SERVER_SOFTWARE']), 'iis') !== false) {
                 $rewrite_confirm = $_LANG['rewrite_confirm_iis'];
             } else {
                 $rewrite_confirm = $_LANG['rewrite_confirm_apache'];
             }
-            $smarty->assign('rewrite_confirm', $rewrite_confirm);
+            $this->assign('rewrite_confirm', $rewrite_confirm);
 
             if ($_CFG['shop_country'] > 0) {
-                $smarty->assign('provinces', get_regions(1, $_CFG['shop_country']));
+                $this->assign('provinces', get_regions(1, $_CFG['shop_country']));
                 if ($_CFG['shop_province']) {
-                    $smarty->assign('cities', get_regions(2, $_CFG['shop_province']));
+                    $this->assign('cities', get_regions(2, $_CFG['shop_province']));
                 }
             }
-            $smarty->assign('cfg', $_CFG);
+            $this->assign('cfg', $_CFG);
 
             assign_query_info();
-            $smarty->display('shop_config.htm');
+            $this->display('shop_config.htm');
         }
 
         /*------------------------------------------------------ */
@@ -63,9 +63,9 @@ class ShopConfigController extends BaseController
 
             assign_query_info();
 
-            $smarty->assign('ur_here', $_LANG['mail_settings']);
-            $smarty->assign('cfg', $arr[5]['vars']);
-            $smarty->display('shop_config_mail_settings.htm');
+            $this->assign('ur_here', $_LANG['mail_settings']);
+            $this->assign('cfg', $arr[5]['vars']);
+            $this->display('shop_config_mail_settings.htm');
         }
 
         /*------------------------------------------------------ */
@@ -109,7 +109,7 @@ class ShopConfigController extends BaseController
                 if ((isset($file['error']) && $file['error'] == 0) || (! isset($file['error']) && $file['tmp_name'] != 'none')) {
                     /* 检查上传的文件类型是否合法 */
                     if (! check_file_type($file['tmp_name'], $file['name'], $allow_file_types)) {
-                        sys_msg(sprintf($_LANG['msg_invalid_file'], $file['name']));
+                        return sys_msg(sprintf($_LANG['msg_invalid_file'], $file['name']));
                     } else {
                         if ($code == 'shop_logo') {
                             include_once 'includes/lib_template.php';
@@ -139,7 +139,7 @@ class ShopConfigController extends BaseController
                             $sql = 'UPDATE '.$ecs->table('shop_config')." SET value = '$file_name' WHERE code = '$code'";
                             $db->query($sql);
                         } else {
-                            sys_msg(sprintf($_LANG['msg_upload_failed'], $file['name'], $file_var_list[$code]['store_dir']));
+                            return sys_msg(sprintf($_LANG['msg_upload_failed'], $file['name'], $file_var_list[$code]['store_dir']));
                         }
                     }
                 }
@@ -176,10 +176,10 @@ class ShopConfigController extends BaseController
 
             if ($type == 'mail_setting') {
                 $links[] = ['text' => $_LANG['back_mail_settings'], 'href' => 'shop_config.php?act=mail_settings'];
-                sys_msg($_LANG['mail_save_success'], 0, $links);
+                return sys_msg($_LANG['mail_save_success'], 0, $links);
             } else {
                 $links[] = ['text' => $_LANG['back_shop_config'], 'href' => 'shop_config.php?act=list_edit'];
-                sys_msg($_LANG['save_success'], 0, $links);
+                return sys_msg($_LANG['save_success'], 0, $links);
             }
         }
 
@@ -203,9 +203,9 @@ class ShopConfigController extends BaseController
             $_CFG['mail_charset'] = trim($_POST['mail_charset']);
 
             if (send_mail('', $email, $_LANG['test_mail_title'], $_LANG['cfg_name']['email_content'], 0)) {
-                make_json_result('', $_LANG['sendemail_success'].$email);
+                return make_json_result('', $_LANG['sendemail_success'].$email);
             } else {
-                make_json_error(implode("\n", $err->_message));
+                return make_json_error(implode("\n", $err->_message));
             }
         }
 
@@ -233,7 +233,7 @@ class ShopConfigController extends BaseController
             /* 清除缓存 */
             clear_all_files();
 
-            sys_msg($_LANG['save_success'], 0);
+            return sys_msg($_LANG['save_success'], 0);
         }
     }
 

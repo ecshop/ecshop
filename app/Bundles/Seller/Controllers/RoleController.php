@@ -41,11 +41,11 @@ class RoleController extends BaseController
             header('Pragma: no-cache');
 
             if ((intval($_CFG['captcha']) & CAPTCHA_ADMIN) && gd_version() > 0) {
-                $smarty->assign('gd_version', gd_version());
-                $smarty->assign('random', mt_rand());
+                $this->assign('gd_version', gd_version());
+                $this->assign('random', mt_rand());
             }
 
-            $smarty->display('login.htm');
+            $this->display('login.htm');
         }
 
         /*------------------------------------------------------ */
@@ -53,23 +53,23 @@ class RoleController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'list') {
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['admin_role']);
-            $smarty->assign('action_link', ['href' => 'role.php?act=add', 'text' => $_LANG['admin_add_role']]);
-            $smarty->assign('full_page', 1);
-            $smarty->assign('admin_list', get_role_list());
+            $this->assign('ur_here', $_LANG['admin_role']);
+            $this->assign('action_link', ['href' => 'role.php?act=add', 'text' => $_LANG['admin_add_role']]);
+            $this->assign('full_page', 1);
+            $this->assign('admin_list', get_role_list());
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('role_list.htm');
+            $this->display('role_list.htm');
         }
 
         /*------------------------------------------------------ */
         //-- 查询
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'query') {
-            $smarty->assign('admin_list', get_role_list());
+            $this->assign('admin_list', get_role_list());
 
-            make_json_result($smarty->fetch('role_list.htm'));
+            return make_json_result($this->fetch('role_list.htm'));
         }
 
         /*------------------------------------------------------ */
@@ -108,16 +108,16 @@ class RoleController extends BaseController
             }
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['admin_add_role']);
-            $smarty->assign('action_link', ['href' => 'role.php?act=list', 'text' => $_LANG['admin_list_role']]);
-            $smarty->assign('form_act', 'insert');
-            $smarty->assign('action', 'add');
-            $smarty->assign('lang', $_LANG);
-            $smarty->assign('priv_arr', $priv_arr);
+            $this->assign('ur_here', $_LANG['admin_add_role']);
+            $this->assign('action_link', ['href' => 'role.php?act=list', 'text' => $_LANG['admin_list_role']]);
+            $this->assign('form_act', 'insert');
+            $this->assign('action', 'add');
+            $this->assign('lang', $_LANG);
+            $this->assign('priv_arr', $priv_arr);
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('role_info.htm');
+            $this->display('role_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -138,7 +138,7 @@ class RoleController extends BaseController
             $link[0]['text'] = $_LANG['admin_list_role'];
             $link[0]['href'] = 'role.php?act=list';
 
-            sys_msg($_LANG['add'].'&nbsp;'.$_POST['user_name'].'&nbsp;'.$_LANG['action_succeed'], 0, $link);
+            return sys_msg($_LANG['add'].'&nbsp;'.$_POST['user_name'].'&nbsp;'.$_LANG['action_succeed'], 0, $link);
 
             /* 记录管理员操作 */
             admin_log($_POST['user_name'], 'add', 'role');
@@ -190,17 +190,17 @@ class RoleController extends BaseController
 
             /* 模板赋值 */
 
-            $smarty->assign('user', $user_info);
-            $smarty->assign('form_act', 'update');
-            $smarty->assign('action', 'edit');
-            $smarty->assign('ur_here', $_LANG['admin_edit_role']);
-            $smarty->assign('action_link', ['href' => 'role.php?act=list', 'text' => $_LANG['admin_list_role']]);
-            $smarty->assign('lang', $_LANG);
-            $smarty->assign('priv_arr', $priv_arr);
-            $smarty->assign('user_id', $_GET['id']);
+            $this->assign('user', $user_info);
+            $this->assign('form_act', 'update');
+            $this->assign('action', 'edit');
+            $this->assign('ur_here', $_LANG['admin_edit_role']);
+            $this->assign('action_link', ['href' => 'role.php?act=list', 'text' => $_LANG['admin_list_role']]);
+            $this->assign('lang', $_LANG);
+            $this->assign('priv_arr', $priv_arr);
+            $this->assign('user_id', $_GET['id']);
 
             assign_query_info();
-            $smarty->display('role_info.htm');
+            $this->display('role_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -217,7 +217,7 @@ class RoleController extends BaseController
             $db->query($user_sql);
             /* 提示信息 */
             $link[] = ['text' => $_LANG['back_admin_list'], 'href' => 'role.php?act=list'];
-            sys_msg($_LANG['edit'].'&nbsp;'.$_POST['user_name'].'&nbsp;'.$_LANG['action_succeed'], 0, $link);
+            return sys_msg($_LANG['edit'].'&nbsp;'.$_POST['user_name'].'&nbsp;'.$_LANG['action_succeed'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -230,7 +230,7 @@ class RoleController extends BaseController
             $num_sql = 'SELECT count(*) FROM '.$ecs->table('admin_user')." WHERE role_id = '$_GET[id]'";
             $remove_num = $db->getOne($num_sql);
             if ($remove_num > 0) {
-                make_json_error($_LANG['remove_cannot_user']);
+                return make_json_error($_LANG['remove_cannot_user']);
             } else {
                 $exc->drop($id);
                 $url = 'role.php?act=query&'.str_replace('act=remove', '', $_SERVER['QUERY_STRING']);

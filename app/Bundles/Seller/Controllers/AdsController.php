@@ -27,23 +27,23 @@ class AdsController extends BaseController
             admin_priv('ad_manage');
             $pid = ! empty($_REQUEST['pid']) ? intval($_REQUEST['pid']) : 0;
 
-            $smarty->assign('ur_here', $_LANG['ad_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['ads_add'], 'href' => 'ads.php?act=add']);
-            $smarty->assign('pid', $pid);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['ad_list']);
+            $this->assign('action_link', ['text' => $_LANG['ads_add'], 'href' => 'ads.php?act=add']);
+            $this->assign('pid', $pid);
+            $this->assign('full_page', 1);
 
             $ads_list = get_adslist();
 
-            $smarty->assign('ads_list', $ads_list['ads']);
-            $smarty->assign('filter', $ads_list['filter']);
-            $smarty->assign('record_count', $ads_list['record_count']);
-            $smarty->assign('page_count', $ads_list['page_count']);
+            $this->assign('ads_list', $ads_list['ads']);
+            $this->assign('filter', $ads_list['filter']);
+            $this->assign('record_count', $ads_list['record_count']);
+            $this->assign('page_count', $ads_list['page_count']);
 
             $sort_flag = sort_flag($ads_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             assign_query_info();
-            $smarty->display('ads_list.htm');
+            $this->display('ads_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -52,16 +52,16 @@ class AdsController extends BaseController
         if ($_REQUEST['act'] == 'query') {
             $ads_list = get_adslist();
 
-            $smarty->assign('ads_list', $ads_list['ads']);
-            $smarty->assign('filter', $ads_list['filter']);
-            $smarty->assign('record_count', $ads_list['record_count']);
-            $smarty->assign('page_count', $ads_list['page_count']);
+            $this->assign('ads_list', $ads_list['ads']);
+            $this->assign('filter', $ads_list['filter']);
+            $this->assign('record_count', $ads_list['record_count']);
+            $this->assign('page_count', $ads_list['page_count']);
 
             $sort_flag = sort_flag($ads_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('ads_list.htm'),
+            return make_json_result(
+                $this->fetch('ads_list.htm'),
                 '',
                 ['filter' => $ads_list['filter'], 'page_count' => $ads_list['page_count']]
             );
@@ -79,22 +79,22 @@ class AdsController extends BaseController
             $start_time = local_date('Y-m-d');
             $end_time = local_date('Y-m-d', gmtime() + 3600 * 24 * 30);  // 默认结束时间为1个月以后
 
-            $smarty->assign(
+            $this->assign(
                 'ads',
                 ['ad_link' => $ad_link, 'ad_name' => $ad_name, 'start_time' => $start_time,
                     'end_time' => $end_time, 'enabled' => 1]
             );
 
-            $smarty->assign('ur_here', $_LANG['ads_add']);
-            $smarty->assign('action_link', ['href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']]);
-            $smarty->assign('position_list', get_position_list());
+            $this->assign('ur_here', $_LANG['ads_add']);
+            $this->assign('action_link', ['href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']]);
+            $this->assign('position_list', get_position_list());
 
-            $smarty->assign('form_act', 'insert');
-            $smarty->assign('action', 'add');
-            $smarty->assign('cfg_lang', $_CFG['lang']);
+            $this->assign('form_act', 'insert');
+            $this->assign('action', 'add');
+            $this->assign('cfg_lang', $_CFG['lang']);
 
             assign_query_info();
-            $smarty->display('ads_info.htm');
+            $this->display('ads_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -122,7 +122,7 @@ class AdsController extends BaseController
             $sql = 'SELECT COUNT(*) FROM '.$ecs->table('ad')." WHERE ad_name = '$ad_name'";
             if ($db->getOne($sql) > 0) {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                sys_msg($_LANG['ad_name_exist'], 0, $link);
+                return sys_msg($_LANG['ad_name_exist'], 0, $link);
             }
 
             /* 添加图片类型的广告 */
@@ -135,7 +135,7 @@ class AdsController extends BaseController
                 }
                 if (((isset($_FILES['ad_img']['error']) && $_FILES['ad_img']['error'] > 0) || (! isset($_FILES['ad_img']['error']) && isset($_FILES['ad_img']['tmp_name']) && $_FILES['ad_img']['tmp_name'] == 'none')) && empty($_POST['img_url'])) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                    sys_msg($_LANG['js_languages']['ad_photo_empty'], 0, $link);
+                    return sys_msg($_LANG['js_languages']['ad_photo_empty'], 0, $link);
                 }
             } /* 如果添加的广告是Flash广告 */
             elseif ($_POST['media_type'] == '1') {
@@ -143,7 +143,7 @@ class AdsController extends BaseController
                     /* 检查文件类型 */
                     if ($_FILES['upfile_flash']['type'] != 'application/x-shockwave-flash') {
                         $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                        sys_msg($_LANG['upfile_flash_type'], 0, $link);
+                        return sys_msg($_LANG['upfile_flash_type'], 0, $link);
                     }
 
                     /* 生成文件名 */
@@ -158,21 +158,21 @@ class AdsController extends BaseController
 
                     if (! move_upload_file($source_file, $target.$file_name)) {
                         $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                        sys_msg($_LANG['upfile_error'], 0, $link);
+                        return sys_msg($_LANG['upfile_error'], 0, $link);
                     } else {
                         $ad_code = $file_name;
                     }
                 } elseif (! empty($_POST['flash_url'])) {
                     if (substr(strtolower($_POST['flash_url']), strlen($_POST['flash_url']) - 4) != '.swf') {
                         $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                        sys_msg($_LANG['upfile_flash_type'], 0, $link);
+                        return sys_msg($_LANG['upfile_flash_type'], 0, $link);
                     }
                     $ad_code = $_POST['flash_url'];
                 }
 
                 if (((isset($_FILES['upfile_flash']['error']) && $_FILES['upfile_flash']['error'] > 0) || (! isset($_FILES['upfile_flash']['error']) && isset($_FILES['upfile_flash']['tmp_name']) && $_FILES['upfile_flash']['tmp_name'] == 'none')) && empty($_POST['flash_url'])) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                    sys_msg($_LANG['js_languages']['ad_flash_empty'], 0, $link);
+                    return sys_msg($_LANG['js_languages']['ad_flash_empty'], 0, $link);
                 }
             } /* 如果广告类型为代码广告 */
             elseif ($_POST['media_type'] == '2') {
@@ -180,7 +180,7 @@ class AdsController extends BaseController
                     $ad_code = $_POST['ad_code'];
                 } else {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                    sys_msg($_LANG['js_languages']['ad_code_empty'], 0, $link);
+                    return sys_msg($_LANG['js_languages']['ad_code_empty'], 0, $link);
                 }
             } /* 广告类型为文本广告 */
             elseif ($_POST['media_type'] == '3') {
@@ -188,7 +188,7 @@ class AdsController extends BaseController
                     $ad_code = $_POST['ad_text'];
                 } else {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                    sys_msg($_LANG['js_languages']['ad_text_empty'], 0, $link);
+                    return sys_msg($_LANG['js_languages']['ad_text_empty'], 0, $link);
                 }
             }
 
@@ -223,7 +223,7 @@ class AdsController extends BaseController
 
             $link[2]['text'] = $_LANG['continue_add_ad'];
             $link[2]['href'] = 'ads.php?act=add';
-            sys_msg($_LANG['add'].'&nbsp;'.$_POST['ad_name'].'&nbsp;'.$_LANG['attradd_succed'], 0, $link);
+            return sys_msg($_LANG['add'].'&nbsp;'.$_POST['ad_name'].'&nbsp;'.$_LANG['attradd_succed'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -244,41 +244,41 @@ class AdsController extends BaseController
             if ($ads_arr['media_type'] == '0') {
                 if (strpos($ads_arr['ad_code'], 'http://') === false && strpos($ads_arr['ad_code'], 'https://') === false) {
                     $src = '../'.DATA_DIR.'/afficheimg/'.$ads_arr['ad_code'];
-                    $smarty->assign('img_src', $src);
+                    $this->assign('img_src', $src);
                 } else {
                     $src = $ads_arr['ad_code'];
-                    $smarty->assign('url_src', $src);
+                    $this->assign('url_src', $src);
                 }
             }
             if ($ads_arr['media_type'] == '1') {
                 if (strpos($ads_arr['ad_code'], 'http://') === false && strpos($ads_arr['ad_code'], 'https://') === false) {
                     $src = '../'.DATA_DIR.'/afficheimg/'.$ads_arr['ad_code'];
-                    $smarty->assign('flash_url', $src);
+                    $this->assign('flash_url', $src);
                 } else {
                     $src = $ads_arr['ad_code'];
-                    $smarty->assign('flash_url', $src);
+                    $this->assign('flash_url', $src);
                 }
-                $smarty->assign('src', $src);
+                $this->assign('src', $src);
             }
             if ($ads_arr['media_type'] == 0) {
-                $smarty->assign('media_type', $_LANG['ad_img']);
+                $this->assign('media_type', $_LANG['ad_img']);
             } elseif ($ads_arr['media_type'] == 1) {
-                $smarty->assign('media_type', $_LANG['ad_flash']);
+                $this->assign('media_type', $_LANG['ad_flash']);
             } elseif ($ads_arr['media_type'] == 2) {
-                $smarty->assign('media_type', $_LANG['ad_html']);
+                $this->assign('media_type', $_LANG['ad_html']);
             } elseif ($ads_arr['media_type'] == 3) {
-                $smarty->assign('media_type', $_LANG['ad_text']);
+                $this->assign('media_type', $_LANG['ad_text']);
             }
 
-            $smarty->assign('ur_here', $_LANG['ads_edit']);
-            $smarty->assign('action_link', ['href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']]);
-            $smarty->assign('form_act', 'update');
-            $smarty->assign('action', 'edit');
-            $smarty->assign('position_list', get_position_list());
-            $smarty->assign('ads', $ads_arr);
+            $this->assign('ur_here', $_LANG['ads_edit']);
+            $this->assign('action_link', ['href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']]);
+            $this->assign('form_act', 'update');
+            $this->assign('action', 'edit');
+            $this->assign('position_list', get_position_list());
+            $this->assign('ads', $ads_arr);
 
             assign_query_info();
-            $smarty->display('ads_info.htm');
+            $this->display('ads_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -318,7 +318,7 @@ class AdsController extends BaseController
                     /* 检查文件类型 */
                     if ($_FILES['upfile_flash']['type'] != 'application/x-shockwave-flash') {
                         $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                        sys_msg($_LANG['upfile_flash_type'], 0, $link);
+                        return sys_msg($_LANG['upfile_flash_type'], 0, $link);
                     }
                     /* 生成文件名 */
                     $urlstr = date('Ymd');
@@ -332,14 +332,14 @@ class AdsController extends BaseController
 
                     if (! move_upload_file($source_file, $target.$file_name)) {
                         $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                        sys_msg($_LANG['upfile_error'], 0, $link);
+                        return sys_msg($_LANG['upfile_error'], 0, $link);
                     } else {
                         $ad_code = "ad_code = '$file_name', ";
                     }
                 } elseif (! empty($_POST['flash_url'])) {
                     if (substr(strtolower($_POST['flash_url']), strlen($_POST['flash_url']) - 4) != '.swf') {
                         $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                        sys_msg($_LANG['upfile_flash_type'], 0, $link);
+                        return sys_msg($_LANG['upfile_flash_type'], 0, $link);
                     }
                     $ad_code = "ad_code = '".$_POST['flash_url']."', ";
                 } else {
@@ -378,7 +378,7 @@ class AdsController extends BaseController
 
             /* 提示信息 */
             $href[] = ['text' => $_LANG['back_ads_list'], 'href' => 'ads.php?act=list'];
-            sys_msg($_LANG['edit'].' '.$_POST['ad_name'].' '.$_LANG['attradd_succed'], 0, $href);
+            return sys_msg($_LANG['edit'].' '.$_POST['ad_name'].' '.$_LANG['attradd_succed'], 0, $href);
         }
 
         /*------------------------------------------------------ */
@@ -399,14 +399,14 @@ class AdsController extends BaseController
 
             $site_url = $ecs->url().'affiche.php?act=js&type='.$_REQUEST['type'].'&ad_id='.intval($_REQUEST['id']);
 
-            $smarty->assign('ur_here', $_LANG['add_js_code']);
-            $smarty->assign('action_link', ['href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']]);
-            $smarty->assign('url', $site_url);
-            $smarty->assign('js_code', $js_code);
-            $smarty->assign('lang_list', $lang_list);
+            $this->assign('ur_here', $_LANG['add_js_code']);
+            $this->assign('action_link', ['href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']]);
+            $this->assign('url', $site_url);
+            $this->assign('js_code', $js_code);
+            $this->assign('lang_list', $lang_list);
 
             assign_query_info();
-            $smarty->display('ads_js.htm');
+            $this->display('ads_js.htm');
         }
 
         /*------------------------------------------------------ */
@@ -420,13 +420,13 @@ class AdsController extends BaseController
 
             /* 检查广告名称是否重复 */
             if ($exc->num('ad_name', $ad_name, $id) != 0) {
-                make_json_error(sprintf($_LANG['ad_name_exist'], $ad_name));
+                return make_json_error(sprintf($_LANG['ad_name_exist'], $ad_name));
             } else {
                 if ($exc->edit("ad_name = '$ad_name'", $id)) {
                     admin_log($ad_name, 'edit', 'ads');
-                    make_json_result(stripslashes($ad_name));
+                    return make_json_result(stripslashes($ad_name));
                 } else {
-                    make_json_error($db->error());
+                    return make_json_error($db->error());
                 }
             }
         }

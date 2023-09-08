@@ -45,14 +45,14 @@ class MailTemplateController extends BaseController
             $editor->Height = '320';
             $editor->Value = $content['template_content'];
             $FCKeditor = $editor->CreateHtml();
-            $smarty->assign('FCKeditor', $FCKeditor);
-            $smarty->assign('tpl', $cur);
-            $smarty->assign('cur', $cur);
-            $smarty->assign('ur_here', $_LANG['mail_template_manage']);
-            $smarty->assign('templates', $templates);
-            $smarty->assign('template', $content);
-            $smarty->assign('full_page', 1);
-            $smarty->display('mail_template.htm');
+            $this->assign('FCKeditor', $FCKeditor);
+            $this->assign('tpl', $cur);
+            $this->assign('cur', $cur);
+            $this->assign('ur_here', $_LANG['mail_template_manage']);
+            $this->assign('templates', $templates);
+            $this->assign('template', $content);
+            $this->assign('full_page', 1);
+            $this->display('mail_template.htm');
         }
 
         /*------------------------------------------------------ */
@@ -86,19 +86,19 @@ class MailTemplateController extends BaseController
                 $editor->Height = '320';
                 $editor->Value = $content['template_content'];
                 $FCKeditor = $editor->CreateHtml();
-                $smarty->assign('FCKeditor', $FCKeditor);
+                $this->assign('FCKeditor', $FCKeditor);
 
                 $content['is_html'] = 1;
             } elseif ($mail_type == 0) {
                 $content['is_html'] = 0;
             }
 
-            $smarty->assign('tpl', $tpl);
-            $smarty->assign('cur', $tpl);
-            $smarty->assign('templates', $templates);
-            $smarty->assign('template', $content);
+            $this->assign('tpl', $tpl);
+            $this->assign('cur', $tpl);
+            $this->assign('templates', $templates);
+            $this->assign('template', $content);
 
-            make_json_result($smarty->fetch('mail_template.htm'));
+            return make_json_result($this->fetch('mail_template.htm'));
         }
 
         /*------------------------------------------------------ */
@@ -107,13 +107,13 @@ class MailTemplateController extends BaseController
 
         if ($_REQUEST['act'] == 'save_template') {
             if (empty($_POST['subject'])) {
-                sys_msg($_LANG['subject_empty'], 1, [], false);
+                return sys_msg($_LANG['subject_empty'], 1, [], false);
             } else {
                 $subject = trim($_POST['subject']);
             }
 
             if (empty($_POST['content'])) {
-                sys_msg($_LANG['content_empty'], 1, [], false);
+                return sys_msg($_LANG['content_empty'], 1, [], false);
             } else {
                 $content = trim($_POST['content']);
             }
@@ -130,9 +130,9 @@ class MailTemplateController extends BaseController
 
             if ($db->query($sql, 'SILENT')) {
                 $link[0] = ['href' => 'mail_template.php?act=list', 'text' => $_LANG['update_success']];
-                sys_msg($_LANG['update_success'], 0, $link);
+                return sys_msg($_LANG['update_success'], 0, $link);
             } else {
-                sys_msg($_LANG['update_failed'], 1, [], false);
+                return sys_msg($_LANG['update_failed'], 1, [], false);
             }
         }
     }

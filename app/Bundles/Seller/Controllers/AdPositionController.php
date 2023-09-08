@@ -18,26 +18,26 @@ class AdPositionController extends BaseController
             $_REQUEST['act'] = trim($_REQUEST['act']);
         }
 
-        $smarty->assign('lang', $_LANG);
+        $this->assign('lang', $_LANG);
         $exc = new exchange($ecs->table('ad_position'), $db, 'position_id', 'position_name');
 
         /*------------------------------------------------------ */
         //-- 广告位置列表
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'list') {
-            $smarty->assign('ur_here', $_LANG['ad_position']);
-            $smarty->assign('action_link', ['text' => $_LANG['position_add'], 'href' => 'ad_position.php?act=add']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['ad_position']);
+            $this->assign('action_link', ['text' => $_LANG['position_add'], 'href' => 'ad_position.php?act=add']);
+            $this->assign('full_page', 1);
 
             $position_list = ad_position_list();
 
-            $smarty->assign('position_list', $position_list['position']);
-            $smarty->assign('filter', $position_list['filter']);
-            $smarty->assign('record_count', $position_list['record_count']);
-            $smarty->assign('page_count', $position_list['page_count']);
+            $this->assign('position_list', $position_list['position']);
+            $this->assign('filter', $position_list['filter']);
+            $this->assign('record_count', $position_list['record_count']);
+            $this->assign('page_count', $position_list['page_count']);
 
             assign_query_info();
-            $smarty->display('ad_position_list.htm');
+            $this->display('ad_position_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -47,14 +47,14 @@ class AdPositionController extends BaseController
             admin_priv('ad_manage');
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['position_add']);
-            $smarty->assign('form_act', 'insert');
+            $this->assign('ur_here', $_LANG['position_add']);
+            $this->assign('form_act', 'insert');
 
-            $smarty->assign('action_link', ['href' => 'ad_position.php?act=list', 'text' => $_LANG['ad_position']]);
-            $smarty->assign('posit_arr', ['position_style' => '<table cellpadding="0" cellspacing="0">'."\n".'{foreach from=$ads item=ad}'."\n".'<tr><td>{$ad}</td></tr>'."\n".'{/foreach}'."\n".'</table>']);
+            $this->assign('action_link', ['href' => 'ad_position.php?act=list', 'text' => $_LANG['ad_position']]);
+            $this->assign('posit_arr', ['position_style' => '<table cellpadding="0" cellspacing="0">'."\n".'{foreach from=$ads item=ad}'."\n".'<tr><td>{$ad}</td></tr>'."\n".'{/foreach}'."\n".'</table>']);
 
             assign_query_info();
-            $smarty->display('ad_position_info.htm');
+            $this->display('ad_position_info.htm');
         }
         if ($_REQUEST['act'] == 'insert') {
             admin_priv('ad_manage');
@@ -85,10 +85,10 @@ class AdPositionController extends BaseController
                 $link[2]['text'] = $_LANG['back_position_list'];
                 $link[2]['href'] = 'ad_position.php?act=list';
 
-                sys_msg($_LANG['add'].'&nbsp;'.stripslashes($position_name).'&nbsp;'.$_LANG['attradd_succed'], 0, $link);
+                return sys_msg($_LANG['add'].'&nbsp;'.stripslashes($position_name).'&nbsp;'.$_LANG['attradd_succed'], 0, $link);
             } else {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                sys_msg($_LANG['posit_name_exist'], 0, $link);
+                return sys_msg($_LANG['posit_name_exist'], 0, $link);
             }
         }
 
@@ -104,13 +104,13 @@ class AdPositionController extends BaseController
             $sql = 'SELECT * FROM '.$ecs->table('ad_position')." WHERE position_id='$id'";
             $posit_arr = $db->getRow($sql);
 
-            $smarty->assign('ur_here', $_LANG['position_edit']);
-            $smarty->assign('action_link', ['href' => 'ad_position.php?act=list', 'text' => $_LANG['ad_position']]);
-            $smarty->assign('posit_arr', $posit_arr);
-            $smarty->assign('form_act', 'update');
+            $this->assign('ur_here', $_LANG['position_edit']);
+            $this->assign('action_link', ['href' => 'ad_position.php?act=list', 'text' => $_LANG['ad_position']]);
+            $this->assign('posit_arr', $posit_arr);
+            $this->assign('form_act', 'update');
 
             assign_query_info();
-            $smarty->display('ad_position_info.htm');
+            $this->display('ad_position_info.htm');
         }
         if ($_REQUEST['act'] == 'update') {
             admin_priv('ad_manage');
@@ -141,11 +141,11 @@ class AdPositionController extends BaseController
 
                     /* 提示信息 */
                     $link[] = ['text' => $_LANG['back_position_list'], 'href' => 'ad_position.php?act=list'];
-                    sys_msg($_LANG['edit'].' '.stripslashes($position_name).' '.$_LANG['attradd_succed'], 0, $link);
+                    return sys_msg($_LANG['edit'].' '.stripslashes($position_name).' '.$_LANG['attradd_succed'], 0, $link);
                 }
             } else {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                sys_msg($_LANG['posit_name_exist'], 0, $link);
+                return sys_msg($_LANG['posit_name_exist'], 0, $link);
             }
         }
 
@@ -155,13 +155,13 @@ class AdPositionController extends BaseController
         if ($_REQUEST['act'] == 'query') {
             $position_list = ad_position_list();
 
-            $smarty->assign('position_list', $position_list['position']);
-            $smarty->assign('filter', $position_list['filter']);
-            $smarty->assign('record_count', $position_list['record_count']);
-            $smarty->assign('page_count', $position_list['page_count']);
+            $this->assign('position_list', $position_list['position']);
+            $this->assign('filter', $position_list['filter']);
+            $this->assign('record_count', $position_list['record_count']);
+            $this->assign('page_count', $position_list['page_count']);
 
-            make_json_result(
-                $smarty->fetch('ad_position_list.htm'),
+            return make_json_result(
+                $this->fetch('ad_position_list.htm'),
                 '',
                 ['filter' => $position_list['filter'], 'page_count' => $position_list['page_count']]
             );
@@ -178,13 +178,13 @@ class AdPositionController extends BaseController
 
             /* 检查名称是否重复 */
             if ($exc->num('position_name', $position_name, $id) != 0) {
-                make_json_error(sprintf($_LANG['posit_name_exist'], $position_name));
+                return make_json_error(sprintf($_LANG['posit_name_exist'], $position_name));
             } else {
                 if ($exc->edit("position_name = '$position_name'", $id)) {
                     admin_log($position_name, 'edit', 'ads_position');
-                    make_json_result(stripslashes($position_name));
+                    return make_json_result(stripslashes($position_name));
                 } else {
-                    make_json_result(sprintf($_LANG['brandedit_fail'], $position_name));
+                    return make_json_result(sprintf($_LANG['brandedit_fail'], $position_name));
                 }
             }
         }
@@ -200,20 +200,20 @@ class AdPositionController extends BaseController
 
             /* 宽度值必须是数字 */
             if (! preg_match("/^[\.0-9]+$/", $ad_width)) {
-                make_json_error($_LANG['width_number']);
+                return make_json_error($_LANG['width_number']);
             }
 
             /* 广告位宽度应在1-1024之间 */
             if ($ad_width > 1024 || $ad_width < 1) {
-                make_json_error($_LANG['width_value']);
+                return make_json_error($_LANG['width_value']);
             }
 
             if ($exc->edit("ad_width = '$ad_width'", $id)) {
                 clear_cache_files(); // 清除模版缓存
                 admin_log($ad_width, 'edit', 'ads_position');
-                make_json_result(stripslashes($ad_width));
+                return make_json_result(stripslashes($ad_width));
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
 
@@ -228,20 +228,20 @@ class AdPositionController extends BaseController
 
             /* 高度值必须是数字 */
             if (! preg_match("/^[\.0-9]+$/", $ad_height)) {
-                make_json_error($_LANG['height_number']);
+                return make_json_error($_LANG['height_number']);
             }
 
             /* 广告位宽度应在1-1024之间 */
             if ($ad_height > 1024 || $ad_height < 1) {
-                make_json_error($_LANG['height_value']);
+                return make_json_error($_LANG['height_value']);
             }
 
             if ($exc->edit("ad_height = '$ad_height'", $id)) {
                 clear_cache_files(); // 清除模版缓存
                 admin_log($ad_height, 'edit', 'ads_position');
-                make_json_result(stripslashes($ad_height));
+                return make_json_result(stripslashes($ad_height));
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
 
@@ -257,7 +257,7 @@ class AdPositionController extends BaseController
             $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('ad')." WHERE position_id = '$id'";
 
             if ($db->getOne($sql) > 0) {
-                make_json_error($_LANG['not_del_adposit']);
+                return make_json_error($_LANG['not_del_adposit']);
             } else {
                 $exc->drop($id);
                 admin_log('', 'remove', 'ads_position');

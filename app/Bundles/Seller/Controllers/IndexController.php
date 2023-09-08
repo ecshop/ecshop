@@ -13,8 +13,8 @@ class IndexController extends BaseController
         //-- 框架
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == '') {
-            $smarty->assign('shop_url', urlencode($ecs->url()));
-            $smarty->display('index.htm');
+            $this->assign('shop_url', urlencode($ecs->url()));
+            $this->display('index.htm');
         }
 
         /*------------------------------------------------------ */
@@ -37,12 +37,12 @@ class IndexController extends BaseController
             // 获得管理员设置的菜单
 
             // 获得管理员ID
-            $smarty->assign('send_mail_on', $_CFG['send_mail_on']);
-            $smarty->assign('nav_list', $lst);
-            $smarty->assign('admin_id', $_SESSION['admin_id']);
-            $smarty->assign('certi', $_CFG['certi']);
+            $this->assign('send_mail_on', $_CFG['send_mail_on']);
+            $this->assign('nav_list', $lst);
+            $this->assign('admin_id', $_SESSION['admin_id']);
+            $this->assign('certi', $_CFG['certi']);
 
-            $smarty->display('top.htm');
+            $this->display('top.htm');
         }
 
         /*------------------------------------------------------ */
@@ -50,7 +50,7 @@ class IndexController extends BaseController
         /*------------------------------------------------------ */
 
         if ($_REQUEST['act'] == 'calculator') {
-            $smarty->display('calculator.htm');
+            $this->display('calculator.htm');
         }
 
         /*------------------------------------------------------ */
@@ -102,12 +102,12 @@ class IndexController extends BaseController
                 }
             }
 
-            $smarty->assign('menus', $menus);
-            $smarty->assign('no_help', $_LANG['no_help']);
-            $smarty->assign('help_lang', $_CFG['lang']);
-            $smarty->assign('charset', EC_CHARSET);
-            $smarty->assign('admin_id', $_SESSION['admin_id']);
-            $smarty->display('menu.htm');
+            $this->assign('menus', $menus);
+            $this->assign('no_help', $_LANG['no_help']);
+            $this->assign('help_lang', $_CFG['lang']);
+            $this->assign('charset', EC_CHARSET);
+            $this->assign('admin_id', $_SESSION['admin_id']);
+            $this->display('menu.htm');
         }
 
         /*------------------------------------------------------ */
@@ -117,7 +117,7 @@ class IndexController extends BaseController
         if ($_REQUEST['act'] == 'clear_cache') {
             clear_all_files();
 
-            sys_msg($_LANG['caches_cleared']);
+            return sys_msg($_LANG['caches_cleared']);
         }
 
         /*------------------------------------------------------ */
@@ -229,7 +229,7 @@ class IndexController extends BaseController
             }
             clearstatcache();
 
-            $smarty->assign('warning_arr', $warning);
+            $this->assign('warning_arr', $warning);
 
             /* 管理员留言信息 */
             $sql = 'SELECT message_id, sender_id, receiver_id, sent_time, readed, deleted, title, message, user_name '.
@@ -238,7 +238,7 @@ class IndexController extends BaseController
                 'a.readed = 0 AND deleted = 0 ORDER BY a.sent_time DESC';
             $admin_msg = $db->getAll($sql);
 
-            $smarty->assign('admin_msg', $admin_msg);
+            $this->assign('admin_msg', $admin_msg);
 
             /* 取得支持货到付款和不支持货到付款的支付方式 */
             $ids = get_pay_ids();
@@ -273,8 +273,8 @@ class IndexController extends BaseController
             $order['stats'] = $db->getRow('SELECT COUNT(*) AS oCount, IFNULL(SUM(order_amount), 0) AS oAmount'.
                 ' FROM '.$ecs->table('order_info'));
 
-            $smarty->assign('order', $order);
-            $smarty->assign('status', $status);
+            $this->assign('order', $order);
+            $this->assign('status', $status);
 
             /* 商品信息 */
             $goods['total'] = $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('goods').
@@ -315,8 +315,8 @@ class IndexController extends BaseController
                 $goods['warn'] = 0;
                 $virtual_card['warn'] = 0;
             }
-            $smarty->assign('goods', $goods);
-            $smarty->assign('virtual_card', $virtual_card);
+            $this->assign('goods', $goods);
+            $this->assign('virtual_card', $virtual_card);
 
             /* 访问统计信息 */
             $today = local_getdate();
@@ -324,20 +324,20 @@ class IndexController extends BaseController
                 ' WHERE access_time > '.(mktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']) - date('Z'));
 
             $today_visit = $db->getOne($sql);
-            $smarty->assign('today_visit', $today_visit);
+            $this->assign('today_visit', $today_visit);
 
             $online_users = $sess->get_users_count();
-            $smarty->assign('online_users', $online_users);
+            $this->assign('online_users', $online_users);
 
             /* 最近反馈 */
             $sql = 'SELECT COUNT(f.msg_id) '.
                 'FROM '.$ecs->table('feedback').' AS f '.
                 'LEFT JOIN '.$ecs->table('feedback').' AS r ON r.parent_id=f.msg_id '.
                 'WHERE f.parent_id=0 AND ISNULL(r.msg_id) ';
-            $smarty->assign('feedback_number', $db->getOne($sql));
+            $this->assign('feedback_number', $db->getOne($sql));
 
             /* 未审核评论 */
-            $smarty->assign('comment_number', $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('comment').
+            $this->assign('comment_number', $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('comment').
                 ' WHERE status = 0 AND parent_id = 0'));
 
             $mysql_ver = $db->version();   // 获得 MySQL 版本
@@ -387,21 +387,21 @@ class IndexController extends BaseController
             /* 允许上传的最大文件大小 */
             $sys_info['max_filesize'] = ini_get('upload_max_filesize');
 
-            $smarty->assign('sys_info', $sys_info);
+            $this->assign('sys_info', $sys_info);
 
             /* 缺货登记 */
-            $smarty->assign('booking_goods', $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('booking_goods').' WHERE is_dispose = 0'));
+            $this->assign('booking_goods', $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('booking_goods').' WHERE is_dispose = 0'));
 
             /* 退款申请 */
-            $smarty->assign('new_repay', $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('user_account').' WHERE process_type = '.SURPLUS_RETURN.' AND is_paid = 0 '));
+            $this->assign('new_repay', $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('user_account').' WHERE process_type = '.SURPLUS_RETURN.' AND is_paid = 0 '));
 
             assign_query_info();
-            $smarty->assign('ecs_version', VERSION);
-            $smarty->assign('ecs_release', RELEASE);
-            $smarty->assign('ecs_lang', $_CFG['lang']);
-            $smarty->assign('ecs_charset', strtoupper(EC_CHARSET));
-            $smarty->assign('install_date', local_date($_CFG['date_format'], $_CFG['install_date']));
-            $smarty->display('start.htm');
+            $this->assign('ecs_version', VERSION);
+            $this->assign('ecs_release', RELEASE);
+            $this->assign('ecs_lang', $_CFG['lang']);
+            $this->assign('ecs_charset', strtoupper(EC_CHARSET));
+            $this->assign('install_date', local_date($_CFG['date_format'], $_CFG['install_date']));
+            $this->display('start.htm');
         }
         if ($_REQUEST['act'] == 'main_api') {
             require_once ROOT_PATH.'/includes/lib_base.php';
@@ -434,19 +434,19 @@ class IndexController extends BaseController
         /*------------------------------------------------------ */
 
         if ($_REQUEST['act'] == 'first') {
-            $smarty->assign('countries', get_regions());
-            $smarty->assign('provinces', get_regions(1, 1));
-            $smarty->assign('cities', get_regions(2, 2));
+            $this->assign('countries', get_regions());
+            $this->assign('provinces', get_regions(1, 1));
+            $this->assign('cities', get_regions(2, 2));
 
             $sql = 'SELECT value from '.$ecs->table('shop_config')." WHERE code='shop_name'";
             $shop_name = $db->getOne($sql);
 
-            $smarty->assign('shop_name', $shop_name);
+            $this->assign('shop_name', $shop_name);
 
             $sql = 'SELECT value from '.$ecs->table('shop_config')." WHERE code='shop_title'";
             $shop_title = $db->getOne($sql);
 
-            $smarty->assign('shop_title', $shop_title);
+            $this->assign('shop_title', $shop_title);
 
             //获取配送方式
             $directory = ROOT_PATH.'includes/modules/shipping';
@@ -482,7 +482,7 @@ class IndexController extends BaseController
                 $modules[$i]['cod'] = $modules[$i]['cod'];
                 $modules[$i]['install'] = 0;
             }
-            $smarty->assign('modules', $modules);
+            $this->assign('modules', $modules);
 
             unset($modules);
 
@@ -497,12 +497,12 @@ class IndexController extends BaseController
                 }
                 $modules[$i]['desc'] = $_LANG[$modules[$i]['desc']];
             }
-            $smarty->assign('modules_payment', $modules);
+            $this->assign('modules_payment', $modules);
 
             assign_query_info();
 
-            $smarty->assign('ur_here', $_LANG['ur_config']);
-            $smarty->display('setting_first.htm');
+            $this->assign('ur_here', $_LANG['ur_config']);
+            $this->display('setting_first.htm');
         }
 
         /*------------------------------------------------------ */
@@ -665,8 +665,8 @@ class IndexController extends BaseController
 
             assign_query_info();
 
-            $smarty->assign('ur_here', $_LANG['ur_add']);
-            $smarty->display('setting_second.htm');
+            $this->assign('ur_here', $_LANG['ur_add']);
+            $this->display('setting_second.htm');
         }
 
         /*------------------------------------------------------ */
@@ -692,7 +692,7 @@ class IndexController extends BaseController
                 if (cat_exists($good_category, 0)) {
                     /* 同级别下不能有重复的分类名称 */
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                    sys_msg($_LANG['catname_exist'], 0, $link);
+                    return sys_msg($_LANG['catname_exist'], 0, $link);
                 }
             }
 
@@ -700,7 +700,7 @@ class IndexController extends BaseController
                 if (brand_exists($good_brand)) {
                     /* 同级别下不能有重复的品牌名称 */
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                    sys_msg($_LANG['brand_name_exist'], 0, $link);
+                    return sys_msg($_LANG['brand_name_exist'], 0, $link);
                 }
             }
 
@@ -738,19 +738,19 @@ class IndexController extends BaseController
                         // 商品图片
                         if ($_FILES['goods_img']['error'] == 0) {
                             if (! $image->check_img_type($_FILES['goods_img']['type'])) {
-                                sys_msg($_LANG['invalid_goods_img'], 1, [], false);
+                                return sys_msg($_LANG['invalid_goods_img'], 1, [], false);
                             }
                         } elseif ($_FILES['goods_img']['error'] == 1) {
-                            sys_msg(sprintf($_LANG['goods_img_too_big'], $php_maxsize), 1, [], false);
+                            return sys_msg(sprintf($_LANG['goods_img_too_big'], $php_maxsize), 1, [], false);
                         } elseif ($_FILES['goods_img']['error'] == 2) {
-                            sys_msg(sprintf($_LANG['goods_img_too_big'], $htm_maxsize), 1, [], false);
+                            return sys_msg(sprintf($_LANG['goods_img_too_big'], $htm_maxsize), 1, [], false);
                         }
                     } /* 4。1版本 */
                     else {
                         // 商品图片
                         if ($_FILES['goods_img']['tmp_name'] != 'none') {
                             if (! $image->check_img_type($_FILES['goods_img']['type'])) {
-                                sys_msg($_LANG['invalid_goods_img'], 1, [], false);
+                                return sys_msg($_LANG['invalid_goods_img'], 1, [], false);
                             }
                         }
                     }
@@ -762,7 +762,7 @@ class IndexController extends BaseController
                     if ($_FILES['goods_img']['tmp_name'] != '' && $_FILES['goods_img']['tmp_name'] != 'none') {
                         $original_img = $image->upload_image($_FILES['goods_img']); // 原始图片
                         if ($original_img === false) {
-                            sys_msg($image->error_msg(), 1, [], false);
+                            return sys_msg($image->error_msg(), 1, [], false);
                         }
                         $goods_img = $original_img;   // 商品图片
 
@@ -771,7 +771,7 @@ class IndexController extends BaseController
                         $pos = strpos(basename($img), '.');
                         $newname = dirname($img).'/'.$image->random_filename().substr(basename($img), $pos);
                         if (! copy('../'.$img, '../'.$newname)) {
-                            sys_msg('fail to copy file: '.realpath('../'.$img), 1, [], false);
+                            return sys_msg('fail to copy file: '.realpath('../'.$img), 1, [], false);
                         }
                         $img = $newname;
 
@@ -784,24 +784,24 @@ class IndexController extends BaseController
                             if ($_CFG['image_width'] != 0 || $_CFG['image_height'] != 0) {
                                 $goods_img = $image->make_thumb('../'.$goods_img, $GLOBALS['_CFG']['image_width'], $GLOBALS['_CFG']['image_height']);
                                 if ($goods_img === false) {
-                                    sys_msg($image->error_msg(), 1, [], false);
+                                    return sys_msg($image->error_msg(), 1, [], false);
                                 }
                             }
 
                             $newname = dirname($img).'/'.$image->random_filename().substr(basename($img), $pos);
                             if (! copy('../'.$img, '../'.$newname)) {
-                                sys_msg('fail to copy file: '.realpath('../'.$img), 1, [], false);
+                                return sys_msg('fail to copy file: '.realpath('../'.$img), 1, [], false);
                             }
                             $gallery_img = $newname;
 
                             // 加水印
                             if (intval($_CFG['watermark_place']) > 0 && ! empty($GLOBALS['_CFG']['watermark'])) {
                                 if ($image->add_watermark('../'.$goods_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
-                                    sys_msg($image->error_msg(), 1, [], false);
+                                    return sys_msg($image->error_msg(), 1, [], false);
                                 }
 
                                 if ($image->add_watermark('../'.$gallery_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
-                                    sys_msg($image->error_msg(), 1, [], false);
+                                    return sys_msg($image->error_msg(), 1, [], false);
                                 }
                             }
 
@@ -809,7 +809,7 @@ class IndexController extends BaseController
                             if ($_CFG['thumb_width'] != 0 || $_CFG['thumb_height'] != 0) {
                                 $gallery_thumb = $image->make_thumb('../'.$img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
                                 if ($gallery_thumb === false) {
-                                    sys_msg($image->error_msg(), 1, [], false);
+                                    return sys_msg($image->error_msg(), 1, [], false);
                                 }
                             }
                         } else {
@@ -817,7 +817,7 @@ class IndexController extends BaseController
                             $pos = strpos(basename($img), '.');
                             $gallery_img = dirname($img).'/'.$image->random_filename().substr(basename($img), $pos);
                             if (! copy('../'.$img, '../'.$gallery_img)) {
-                                sys_msg('fail to copy file: '.realpath('../'.$img), 1, [], false);
+                                return sys_msg('fail to copy file: '.realpath('../'.$img), 1, [], false);
                             }
                             $gallery_thumb = '';
                         }
@@ -828,7 +828,7 @@ class IndexController extends BaseController
                         if ($_CFG['thumb_width'] != 0 || $_CFG['thumb_height'] != 0) {
                             $goods_thumb = $image->make_thumb('../'.$original_img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
                             if ($goods_thumb === false) {
-                                sys_msg($image->error_msg(), 1, [], false);
+                                return sys_msg($image->error_msg(), 1, [], false);
                             }
                         } else {
                             $goods_thumb = $original_img;
@@ -852,7 +852,7 @@ class IndexController extends BaseController
             }
 
             assign_query_info();
-            $smarty->display('setting_third.htm');
+            $this->display('setting_third.htm');
         }
 
         /*------------------------------------------------------ */
@@ -861,7 +861,7 @@ class IndexController extends BaseController
 
         if ($_REQUEST['act'] == 'about_us') {
             assign_query_info();
-            $smarty->display('about_us.htm');
+            $this->display('about_us.htm');
         }
 
         /*------------------------------------------------------ */
@@ -869,7 +869,7 @@ class IndexController extends BaseController
         /*------------------------------------------------------ */
 
         if ($_REQUEST['act'] == 'drag') {
-            $smarty->display('drag.htm');
+            $this->display('drag.htm');
         }
 
         /*------------------------------------------------------ */
@@ -879,7 +879,7 @@ class IndexController extends BaseController
             if (empty($_SESSION['last_check'])) {
                 $_SESSION['last_check'] = gmtime();
 
-                make_json_result('', '', ['new_orders' => 0, 'new_paid' => 0]);
+                return make_json_result('', '', ['new_orders' => 0, 'new_paid' => 0]);
             }
 
             /* 新订单 */
@@ -895,9 +895,9 @@ class IndexController extends BaseController
             $_SESSION['last_check'] = gmtime();
 
             if (! (is_numeric($arr['new_orders']) && is_numeric($arr['new_paid']))) {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             } else {
-                make_json_result('', '', $arr);
+                return make_json_result('', '', $arr);
             }
         }
 
@@ -916,7 +916,7 @@ class IndexController extends BaseController
         } // 邮件群发处理
         if ($_REQUEST['act'] == 'send_mail') {
             if ($_CFG['send_mail_on'] == 'off') {
-                make_json_result('', $_LANG['send_mail_off'], 0);
+                return make_json_result('', $_LANG['send_mail_off'], 0);
                 exit();
             }
             $sql = 'SELECT * FROM '.$ecs->table('email_sendlist').' ORDER BY pri DESC, last_send ASC LIMIT 1';
@@ -924,7 +924,7 @@ class IndexController extends BaseController
 
             //发送列表为空
             if (empty($row['id'])) {
-                make_json_result('', $_LANG['mailsend_null'], 0);
+                return make_json_result('', $_LANG['mailsend_null'], 0);
             }
 
             //发送列表不为空，邮件地址为空
@@ -932,7 +932,7 @@ class IndexController extends BaseController
                 $sql = 'DELETE FROM '.$ecs->table('email_sendlist')." WHERE id = '$row[id]'";
                 $db->query($sql);
                 $count = $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('email_sendlist'));
-                make_json_result('', $_LANG['mailsend_skip'], ['count' => $count, 'goon' => 1]);
+                return make_json_result('', $_LANG['mailsend_skip'], ['count' => $count, 'goon' => 1]);
             }
 
             //查询相关模板
@@ -961,7 +961,7 @@ class IndexController extends BaseController
                     } else {
                         $msg = sprintf($_LANG['mailsend_finished'], $row['email']);
                     }
-                    make_json_result('', $msg, ['count' => $count]);
+                    return make_json_result('', $msg, ['count' => $count]);
                 } else {
                     //发送出错
 
@@ -975,14 +975,14 @@ class IndexController extends BaseController
                     $db->query($sql);
 
                     $count = $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('email_sendlist'));
-                    make_json_result('', sprintf($_LANG['mailsend_fail'], $row['email']), ['count' => $count]);
+                    return make_json_result('', sprintf($_LANG['mailsend_fail'], $row['email']), ['count' => $count]);
                 }
             } else {
                 //无效的邮件队列
                 $sql = 'DELETE FROM '.$ecs->table('email_sendlist')." WHERE id = '$row[id]'";
                 $db->query($sql);
                 $count = $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('email_sendlist'));
-                make_json_result('', sprintf($_LANG['mailsend_fail'], $row['email']), ['count' => $count]);
+                return make_json_result('', sprintf($_LANG['mailsend_fail'], $row['email']), ['count' => $count]);
             }
         }
 
@@ -1003,15 +1003,15 @@ class IndexController extends BaseController
                 switch ($license['flag']) {
                     case 'login_succ':
                         if (isset($license['request']['info']['service']['ecshop_b2c']['cert_auth']['auth_str'])) {
-                            make_json_result(process_login_license($license['request']['info']['service']['ecshop_b2c']['cert_auth']));
+                            return make_json_result(process_login_license($license['request']['info']['service']['ecshop_b2c']['cert_auth']));
                         } else {
-                            make_json_error(0);
+                            return make_json_error(0);
                         }
                         break;
 
                     case 'login_fail':
                     case 'login_ping_fail':
-                        make_json_error(0);
+                        return make_json_error(0);
                         break;
 
                     case 'reg_succ':
@@ -1019,26 +1019,26 @@ class IndexController extends BaseController
                         switch ($_license['flag']) {
                             case 'login_succ':
                                 if (isset($_license['request']['info']['service']['ecshop_b2c']['cert_auth']['auth_str']) && $_license['request']['info']['service']['ecshop_b2c']['cert_auth']['auth_str'] != '') {
-                                    make_json_result(process_login_license($license['request']['info']['service']['ecshop_b2c']['cert_auth']));
+                                    return make_json_result(process_login_license($license['request']['info']['service']['ecshop_b2c']['cert_auth']));
                                 } else {
-                                    make_json_error(0);
+                                    return make_json_error(0);
                                 }
                                 break;
 
                             case 'login_fail':
                             case 'login_ping_fail':
-                                make_json_error(0);
+                                return make_json_error(0);
                                 break;
                         }
                         break;
 
                     case 'reg_fail':
                     case 'reg_ping_fail':
-                        make_json_error(0);
+                        return make_json_error(0);
                         break;
                 }
             } else {
-                make_json_error(0);
+                return make_json_error(0);
             }
         }
 

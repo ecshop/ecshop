@@ -31,11 +31,11 @@ class VoteController extends BaseController
 
             $vote = get_vote($vote_id);
             if (! empty($vote)) {
-                $smarty->assign('vote_id', $vote['id']);
-                $smarty->assign('vote', $vote['content']);
+                $this->assign('vote_id', $vote['id']);
+                $this->assign('vote', $vote['content']);
             }
 
-            $str = $smarty->fetch('library/vote.lbi');
+            $str = $this->fetch('library/vote.lbi');
 
             $pattern = '/(?:<(\w+)[^>]*> .*?)?<div\s+id="ECS_VOTE">(.*)<\/div>(?:.*?<\/\1>)?/is';
 

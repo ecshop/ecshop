@@ -51,30 +51,30 @@ class GroupBuyController extends BaseController
                 if ($count > 0) {
                     /* 取得当前页的团购活动 */
                     $gb_list = group_buy_list($size, $page);
-                    $smarty->assign('gb_list', $gb_list);
+                    $this->assign('gb_list', $gb_list);
 
                     /* 设置分页链接 */
                     $pager = get_pager('group_buy.php', ['act' => 'list'], $count, $page, $size);
-                    $smarty->assign('pager', $pager);
+                    $this->assign('pager', $pager);
                 }
 
                 /* 模板赋值 */
-                $smarty->assign('cfg', $_CFG);
+                $this->assign('cfg', $_CFG);
                 assign_template();
                 $position = assign_ur_here();
-                $smarty->assign('page_title', $position['title']);    // 页面标题
-                $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
-                $smarty->assign('categories', get_categories_tree()); // 分类树
-                $smarty->assign('helps', get_shop_help());       // 网店帮助
-                $smarty->assign('top_goods', get_top10());           // 销售排行
-                $smarty->assign('promotion_info', get_promotion_info());
-                $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typegroup_buy.xml' : 'feed.php?type=group_buy'); // RSS URL
+                $this->assign('page_title', $position['title']);    // 页面标题
+                $this->assign('ur_here', $position['ur_here']);  // 当前位置
+                $this->assign('categories', get_categories_tree()); // 分类树
+                $this->assign('helps', get_shop_help());       // 网店帮助
+                $this->assign('top_goods', get_top10());           // 销售排行
+                $this->assign('promotion_info', get_promotion_info());
+                $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typegroup_buy.xml' : 'feed.php?type=group_buy'); // RSS URL
 
                 assign_dynamic('group_buy_list');
             }
 
             /* 显示模板 */
-            $smarty->display('group_buy_list.dwt', $cache_id);
+            $this->display('group_buy_list.dwt', $cache_id);
         }
 
         /*------------------------------------------------------ */
@@ -111,7 +111,7 @@ class GroupBuyController extends BaseController
             /* 如果没有缓存，生成缓存 */
             if (! $smarty->is_cached('group_buy_goods.dwt', $cache_id)) {
                 $group_buy['gmt_end_date'] = $group_buy['end_date'];
-                $smarty->assign('group_buy', $group_buy);
+                $this->assign('group_buy', $group_buy);
 
                 /* 取得团购商品信息 */
                 $goods_id = $group_buy['goods_id'];
@@ -121,24 +121,24 @@ class GroupBuyController extends BaseController
                     exit;
                 }
                 $goods['url'] = build_uri('goods', ['gid' => $goods_id], $goods['goods_name']);
-                $smarty->assign('gb_goods', $goods);
+                $this->assign('gb_goods', $goods);
 
                 /* 取得商品的规格 */
                 $properties = get_goods_properties($goods_id);
-                $smarty->assign('specification', $properties['spe']); // 商品规格
+                $this->assign('specification', $properties['spe']); // 商品规格
 
                 //模板赋值
-                $smarty->assign('cfg', $_CFG);
+                $this->assign('cfg', $_CFG);
                 assign_template();
 
                 $position = assign_ur_here(0, $goods['goods_name']);
-                $smarty->assign('page_title', $position['title']);    // 页面标题
-                $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+                $this->assign('page_title', $position['title']);    // 页面标题
+                $this->assign('ur_here', $position['ur_here']);  // 当前位置
 
-                $smarty->assign('categories', get_categories_tree()); // 分类树
-                $smarty->assign('helps', get_shop_help());       // 网店帮助
-                $smarty->assign('top_goods', get_top10());           // 销售排行
-                $smarty->assign('promotion_info', get_promotion_info());
+                $this->assign('categories', get_categories_tree()); // 分类树
+                $this->assign('helps', get_shop_help());       // 网店帮助
+                $this->assign('top_goods', get_top10());           // 销售排行
+                $this->assign('promotion_info', get_promotion_info());
                 assign_dynamic('group_buy_goods');
             }
 
@@ -147,8 +147,8 @@ class GroupBuyController extends BaseController
                 "WHERE goods_id = '".$group_buy['goods_id']."'";
             $db->query($sql);
 
-            $smarty->assign('now_time', gmtime());           // 当前系统时间
-            $smarty->display('group_buy_goods.dwt', $cache_id);
+            $this->assign('now_time', gmtime());           // 当前系统时间
+            $this->display('group_buy_goods.dwt', $cache_id);
         }
 
         /*------------------------------------------------------ */
@@ -158,7 +158,7 @@ class GroupBuyController extends BaseController
         if ($_REQUEST['act'] == 'buy') {
             /* 查询：判断是否登录 */
             if ($_SESSION['user_id'] <= 0) {
-                show_message($_LANG['gb_error_login'], '', '', 'error');
+                return show_message($_LANG['gb_error_login'], '', '', 'error');
             }
 
             /* 查询：取得参数：团购活动id */
@@ -181,7 +181,7 @@ class GroupBuyController extends BaseController
 
             /* 查询：检查团购活动是否是进行中 */
             if ($group_buy['status'] != GBS_UNDER_WAY) {
-                show_message($_LANG['gb_error_status'], '', '', 'error');
+                return show_message($_LANG['gb_error_status'], '', '', 'error');
             }
 
             /* 查询：取得团购商品信息 */
@@ -193,7 +193,7 @@ class GroupBuyController extends BaseController
 
             /* 查询：判断数量是否足够 */
             if (($group_buy['restrict_amount'] > 0 && $number > ($group_buy['restrict_amount'] - $group_buy['valid_goods'])) || $number > $goods['goods_number']) {
-                show_message($_LANG['gb_error_goods_lacking'], '', '', 'error');
+                return show_message($_LANG['gb_error_goods_lacking'], '', '', 'error');
             }
 
             /* 查询：取得规格 */
@@ -215,7 +215,7 @@ class GroupBuyController extends BaseController
 
             /* 查询：判断指定规格的货品数量是否足够 */
             if ($specs && $number > $product_info['product_number']) {
-                show_message($_LANG['gb_error_goods_lacking'], '', '', 'error');
+                return show_message($_LANG['gb_error_goods_lacking'], '', '', 'error');
             }
 
             /* 查询：查询规格名称和值，不考虑价格 */

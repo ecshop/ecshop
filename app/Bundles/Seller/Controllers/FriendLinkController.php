@@ -26,23 +26,23 @@ class FriendLinkController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'list') {
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['list_link']);
-            $smarty->assign('action_link', ['text' => $_LANG['add_link'], 'href' => 'friend_link.php?act=add']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['list_link']);
+            $this->assign('action_link', ['text' => $_LANG['add_link'], 'href' => 'friend_link.php?act=add']);
+            $this->assign('full_page', 1);
 
             /* 获取友情链接数据 */
             $links_list = get_links_list();
 
-            $smarty->assign('links_list', $links_list['list']);
-            $smarty->assign('filter', $links_list['filter']);
-            $smarty->assign('record_count', $links_list['record_count']);
-            $smarty->assign('page_count', $links_list['page_count']);
+            $this->assign('links_list', $links_list['list']);
+            $this->assign('filter', $links_list['filter']);
+            $this->assign('record_count', $links_list['record_count']);
+            $this->assign('page_count', $links_list['page_count']);
 
             $sort_flag = sort_flag($links_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             assign_query_info();
-            $smarty->display('link_list.htm');
+            $this->display('link_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -52,16 +52,16 @@ class FriendLinkController extends BaseController
             /* 获取友情链接数据 */
             $links_list = get_links_list();
 
-            $smarty->assign('links_list', $links_list['list']);
-            $smarty->assign('filter', $links_list['filter']);
-            $smarty->assign('record_count', $links_list['record_count']);
-            $smarty->assign('page_count', $links_list['page_count']);
+            $this->assign('links_list', $links_list['list']);
+            $this->assign('filter', $links_list['filter']);
+            $this->assign('record_count', $links_list['record_count']);
+            $this->assign('page_count', $links_list['page_count']);
 
             $sort_flag = sort_flag($links_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('link_list.htm'),
+            return make_json_result(
+                $this->fetch('link_list.htm'),
                 '',
                 ['filter' => $links_list['filter'], 'page_count' => $links_list['page_count']]
             );
@@ -73,13 +73,13 @@ class FriendLinkController extends BaseController
         if ($_REQUEST['act'] == 'add') {
             admin_priv('friendlink');
 
-            $smarty->assign('ur_here', $_LANG['add_link']);
-            $smarty->assign('action_link', ['href' => 'friend_link.php?act=list', 'text' => $_LANG['list_link']]);
-            $smarty->assign('action', 'add');
-            $smarty->assign('form_act', 'insert');
+            $this->assign('ur_here', $_LANG['add_link']);
+            $this->assign('action_link', ['href' => 'friend_link.php?act=list', 'text' => $_LANG['list_link']]);
+            $this->assign('action', 'add');
+            $this->assign('form_act', 'insert');
 
             assign_query_info();
-            $smarty->display('link_info.htm');
+            $this->display('link_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -138,10 +138,10 @@ class FriendLinkController extends BaseController
                 $link[1]['text'] = $_LANG['back_list'];
                 $link[1]['href'] = 'friend_link.php?act=list';
 
-                sys_msg($_LANG['add'].'&nbsp;'.stripcslashes($_POST['link_name']).' '.$_LANG['attradd_succed'], 0, $link);
+                return sys_msg($_LANG['add'].'&nbsp;'.stripcslashes($_POST['link_name']).' '.$_LANG['attradd_succed'], 0, $link);
             } else {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                sys_msg($_LANG['link_name_exist'], 0, $link);
+                return sys_msg($_LANG['link_name_exist'], 0, $link);
             }
         }
 
@@ -168,17 +168,17 @@ class FriendLinkController extends BaseController
             $link_arr['link_name'] = sub_str($link_arr['link_name'], 250, false); // 截取字符串为250个字符避免出现非法字符的情况
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['edit_link']);
-            $smarty->assign('action_link', ['href' => 'friend_link.php?act=list&'.list_link_postfix(), 'text' => $_LANG['list_link']]);
-            $smarty->assign('form_act', 'update');
-            $smarty->assign('action', 'edit');
+            $this->assign('ur_here', $_LANG['edit_link']);
+            $this->assign('action_link', ['href' => 'friend_link.php?act=list&'.list_link_postfix(), 'text' => $_LANG['list_link']]);
+            $this->assign('form_act', 'update');
+            $this->assign('action', 'edit');
 
-            $smarty->assign('type', $type);
-            $smarty->assign('link_logo', $link_logo);
-            $smarty->assign('link_arr', $link_arr);
+            $this->assign('type', $type);
+            $this->assign('link_logo', $link_logo);
+            $this->assign('link_arr', $link_arr);
 
             assign_query_info();
-            $smarty->display('link_info.htm');
+            $this->display('link_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -237,7 +237,7 @@ class FriendLinkController extends BaseController
             $link[0]['text'] = $_LANG['back_list'];
             $link[0]['href'] = 'friend_link.php?act=list&'.list_link_postfix();
 
-            sys_msg($_LANG['edit'].'&nbsp;'.stripcslashes($_POST['link_name']).'&nbsp;'.$_LANG['attradd_succed'], 0, $link);
+            return sys_msg($_LANG['edit'].'&nbsp;'.stripcslashes($_POST['link_name']).'&nbsp;'.$_LANG['attradd_succed'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -251,14 +251,14 @@ class FriendLinkController extends BaseController
 
             /* 检查链接名称是否重复 */
             if ($exc->num('link_name', $link_name, $id) != 0) {
-                make_json_error(sprintf($_LANG['link_name_exist'], $link_name));
+                return make_json_error(sprintf($_LANG['link_name_exist'], $link_name));
             } else {
                 if ($exc->edit("link_name = '$link_name'", $id)) {
                     admin_log($link_name, 'edit', 'friendlink');
                     clear_cache_files();
-                    make_json_result(stripslashes($link_name));
+                    return make_json_result(stripslashes($link_name));
                 } else {
-                    make_json_error($db->error());
+                    return make_json_error($db->error());
                 }
             }
         }
@@ -300,11 +300,11 @@ class FriendLinkController extends BaseController
 
             /* 检查输入的值是否合法 */
             if (! preg_match('/^[0-9]+$/', $order)) {
-                make_json_error(sprintf($_LANG['enter_int'], $order));
+                return make_json_error(sprintf($_LANG['enter_int'], $order));
             } else {
                 if ($exc->edit("show_order = '$order'", $id)) {
                     clear_cache_files();
-                    make_json_result(stripslashes($order));
+                    return make_json_result(stripslashes($order));
                 }
             }
         }

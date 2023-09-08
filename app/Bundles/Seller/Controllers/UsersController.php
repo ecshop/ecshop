@@ -24,21 +24,21 @@ class UsersController extends BaseController
                 $ranks[$row['rank_id']] = $row['rank_name'];
             }
 
-            $smarty->assign('user_ranks', $ranks);
-            $smarty->assign('ur_here', $_LANG['03_users_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['04_users_add'], 'href' => 'users.php?act=add']);
+            $this->assign('user_ranks', $ranks);
+            $this->assign('ur_here', $_LANG['03_users_list']);
+            $this->assign('action_link', ['text' => $_LANG['04_users_add'], 'href' => 'users.php?act=add']);
 
             $user_list = user_list();
 
-            $smarty->assign('user_list', $user_list['user_list']);
-            $smarty->assign('filter', $user_list['filter']);
-            $smarty->assign('record_count', $user_list['record_count']);
-            $smarty->assign('page_count', $user_list['page_count']);
-            $smarty->assign('full_page', 1);
-            $smarty->assign('sort_user_id', '<img src="images/sort_desc.gif">');
+            $this->assign('user_list', $user_list['user_list']);
+            $this->assign('filter', $user_list['filter']);
+            $this->assign('record_count', $user_list['record_count']);
+            $this->assign('page_count', $user_list['page_count']);
+            $this->assign('full_page', 1);
+            $this->assign('sort_user_id', '<img src="images/sort_desc.gif">');
 
             assign_query_info();
-            $smarty->display('users_list.htm');
+            $this->display('users_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -47,15 +47,15 @@ class UsersController extends BaseController
         if ($_REQUEST['act'] == 'query') {
             $user_list = user_list();
 
-            $smarty->assign('user_list', $user_list['user_list']);
-            $smarty->assign('filter', $user_list['filter']);
-            $smarty->assign('record_count', $user_list['record_count']);
-            $smarty->assign('page_count', $user_list['page_count']);
+            $this->assign('user_list', $user_list['user_list']);
+            $this->assign('filter', $user_list['filter']);
+            $this->assign('record_count', $user_list['record_count']);
+            $this->assign('page_count', $user_list['page_count']);
 
             $sort_flag = sort_flag($user_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result($smarty->fetch('users_list.htm'), '', ['filter' => $user_list['filter'], 'page_count' => $user_list['page_count']]);
+            return make_json_result($this->fetch('users_list.htm'), '', ['filter' => $user_list['filter'], 'page_count' => $user_list['page_count']]);
         }
 
         /*------------------------------------------------------ */
@@ -73,16 +73,16 @@ class UsersController extends BaseController
             /* 取出注册扩展字段 */
             $sql = 'SELECT * FROM '.$ecs->table('reg_fields').' WHERE type < 2 AND display = 1 AND id != 6 ORDER BY dis_order, id';
             $extend_info_list = $db->getAll($sql);
-            $smarty->assign('extend_info_list', $extend_info_list);
+            $this->assign('extend_info_list', $extend_info_list);
 
-            $smarty->assign('ur_here', $_LANG['04_users_add']);
-            $smarty->assign('action_link', ['text' => $_LANG['03_users_list'], 'href' => 'users.php?act=list']);
-            $smarty->assign('form_action', 'insert');
-            $smarty->assign('user', $user);
-            $smarty->assign('special_ranks', get_rank_list(true));
+            $this->assign('ur_here', $_LANG['04_users_add']);
+            $this->assign('action_link', ['text' => $_LANG['03_users_list'], 'href' => 'users.php?act=list']);
+            $this->assign('form_action', 'insert');
+            $this->assign('user', $user);
+            $this->assign('special_ranks', get_rank_list(true));
 
             assign_query_info();
-            $smarty->display('user_info.htm');
+            $this->display('user_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -119,7 +119,7 @@ class UsersController extends BaseController
                 } else {
                     //die('Error:'.$users->error_msg());
                 }
-                sys_msg($msg, 1);
+                return sys_msg($msg, 1);
             }
 
             /* 注册送积分 */
@@ -168,7 +168,7 @@ class UsersController extends BaseController
 
             /* 提示信息 */
             $link[] = ['text' => $_LANG['go_back'], 'href' => 'users.php?act=list'];
-            sys_msg(sprintf($_LANG['add_success'], htmlspecialchars(stripslashes($_POST['username']))), 0, $link);
+            return sys_msg(sprintf($_LANG['add_success'], htmlspecialchars(stripslashes($_POST['username']))), 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -214,7 +214,7 @@ class UsersController extends BaseController
                 $user['mobile_phone'] = $row['mobile_phone'];
             } else {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'users.php?act=list'];
-                sys_msg($_LANG['username_invalid'], 0, $links);
+                return sys_msg($_LANG['username_invalid'], 0, $links);
             }
 
             /* 取出注册扩展字段 */
@@ -253,11 +253,11 @@ class UsersController extends BaseController
                 }
             }
 
-            $smarty->assign('extend_info_list', $extend_info_list);
+            $this->assign('extend_info_list', $extend_info_list);
 
             /* 当前会员推荐信息 */
             $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
-            $smarty->assign('affiliate', $affiliate);
+            $this->assign('affiliate', $affiliate);
 
             empty($affiliate) && $affiliate = [];
 
@@ -280,17 +280,17 @@ class UsersController extends BaseController
                     $affdb[$i]['num'] = $count;
                 }
                 if ($affdb[1]['num'] > 0) {
-                    $smarty->assign('affdb', $affdb);
+                    $this->assign('affdb', $affdb);
                 }
             }
 
             assign_query_info();
-            $smarty->assign('ur_here', $_LANG['users_edit']);
-            $smarty->assign('action_link', ['text' => $_LANG['03_users_list'], 'href' => 'users.php?act=list&'.list_link_postfix()]);
-            $smarty->assign('user', $user);
-            $smarty->assign('form_action', 'update');
-            $smarty->assign('special_ranks', get_rank_list(true));
-            $smarty->display('user_info.htm');
+            $this->assign('ur_here', $_LANG['users_edit']);
+            $this->assign('action_link', ['text' => $_LANG['03_users_list'], 'href' => 'users.php?act=list&'.list_link_postfix()]);
+            $this->assign('user', $user);
+            $this->assign('form_action', 'update');
+            $this->assign('special_ranks', get_rank_list(true));
+            $this->display('user_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -317,7 +317,7 @@ class UsersController extends BaseController
                 } else {
                     $msg = $_LANG['edit_user_failed'];
                 }
-                sys_msg($msg, 1);
+                return sys_msg($msg, 1);
             }
             if (! empty($password)) {
                 $sql = 'UPDATE '.$ecs->table('users')."SET `ec_salt`='0' WHERE user_name= '".$username."'";
@@ -366,7 +366,7 @@ class UsersController extends BaseController
             $links[1]['text'] = $_LANG['go_back'];
             $links[1]['href'] = 'javascript:history.back()';
 
-            sys_msg($_LANG['update_success'], 0, $links);
+            return sys_msg($_LANG['update_success'], 0, $links);
         }
 
         /*------------------------------------------------------ */
@@ -389,10 +389,10 @@ class UsersController extends BaseController
                 admin_log($usernames, 'batch_remove', 'users');
 
                 $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'users.php?act=list'];
-                sys_msg(sprintf($_LANG['batch_remove_success'], $count), 0, $lnk);
+                return sys_msg(sprintf($_LANG['batch_remove_success'], $count), 0, $lnk);
             } else {
                 $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'users.php?act=list'];
-                sys_msg($_LANG['no_select_user'], 0, $lnk);
+                return sys_msg($_LANG['no_select_user'], 0, $lnk);
             }
         } /* 编辑用户名 */
         if ($_REQUEST['act'] == 'edit_username') {
@@ -403,13 +403,13 @@ class UsersController extends BaseController
             $id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 
             if ($id == 0) {
-                make_json_error('NO USER ID');
+                return make_json_error('NO USER ID');
 
                 return;
             }
 
             if ($username == '') {
-                make_json_error($GLOBALS['_LANG']['username_empty']);
+                return make_json_error($GLOBALS['_LANG']['username_empty']);
 
                 return;
             }
@@ -423,10 +423,10 @@ class UsersController extends BaseController
                 }
 
                 admin_log(addslashes($username), 'edit', 'users');
-                make_json_result(stripcslashes($username));
+                return make_json_result(stripcslashes($username));
             } else {
                 $msg = ($users->error == ERR_USERNAME_EXISTS) ? $GLOBALS['_LANG']['username_exists'] : $GLOBALS['_LANG']['edit_user_failed'];
-                make_json_error($msg);
+                return make_json_error($msg);
             }
         }
 
@@ -449,13 +449,13 @@ class UsersController extends BaseController
                 if ($users->edit_user(['username' => $username, 'email' => $email])) {
                     admin_log(addslashes($username), 'edit', 'users');
 
-                    make_json_result(stripcslashes($email));
+                    return make_json_result(stripcslashes($email));
                 } else {
                     $msg = ($users->error == ERR_EMAIL_EXISTS) ? $GLOBALS['_LANG']['email_exists'] : $GLOBALS['_LANG']['edit_user_failed'];
-                    make_json_error($msg);
+                    return make_json_error($msg);
                 }
             } else {
-                make_json_error($GLOBALS['_LANG']['invalid_email']);
+                return make_json_error($GLOBALS['_LANG']['invalid_email']);
             }
         }
 
@@ -478,7 +478,7 @@ class UsersController extends BaseController
 
             /* 提示信息 */
             $link[] = ['text' => $_LANG['go_back'], 'href' => 'users.php?act=list'];
-            sys_msg(sprintf($_LANG['remove_success'], $username), 0, $link);
+            return sys_msg(sprintf($_LANG['remove_success'], $username), 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -494,11 +494,11 @@ class UsersController extends BaseController
                 ' LEFT JOIN '.$ecs->table('region').' AS d ON d.region_id = a.district '.
                 " WHERE user_id='$id'";
             $address = $db->getAll($sql);
-            $smarty->assign('address', $address);
+            $this->assign('address', $address);
             assign_query_info();
-            $smarty->assign('ur_here', $_LANG['address_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['03_users_list'], 'href' => 'users.php?act=list&'.list_link_postfix()]);
-            $smarty->display('user_address_list.htm');
+            $this->assign('ur_here', $_LANG['address_list']);
+            $this->assign('action_link', ['text' => $_LANG['03_users_list'], 'href' => 'users.php?act=list&'.list_link_postfix()]);
+            $this->display('user_address_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -519,7 +519,7 @@ class UsersController extends BaseController
 
             /* 提示信息 */
             $link[] = ['text' => $_LANG['go_back'], 'href' => 'users.php?act=list'];
-            sys_msg(sprintf($_LANG['update_success'], $username), 0, $link);
+            return sys_msg(sprintf($_LANG['update_success'], $username), 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -529,13 +529,13 @@ class UsersController extends BaseController
         if ($_REQUEST['act'] == 'aff_list') {
             /* 检查权限 */
             admin_priv('users_manage');
-            $smarty->assign('ur_here', $_LANG['03_users_list']);
+            $this->assign('ur_here', $_LANG['03_users_list']);
 
             $auid = $_GET['auid'];
             $user_list['user_list'] = [];
 
             $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
-            $smarty->assign('affiliate', $affiliate);
+            $this->assign('affiliate', $affiliate);
 
             empty($affiliate) && $affiliate = [];
 
@@ -570,13 +570,13 @@ class UsersController extends BaseController
 
             $user_list['record_count'] = $all_count;
 
-            $smarty->assign('user_list', $user_list['user_list']);
-            $smarty->assign('record_count', $user_list['record_count']);
-            $smarty->assign('full_page', 1);
-            $smarty->assign('action_link', ['text' => $_LANG['back_note'], 'href' => "users.php?act=edit&id=$auid"]);
+            $this->assign('user_list', $user_list['user_list']);
+            $this->assign('record_count', $user_list['record_count']);
+            $this->assign('full_page', 1);
+            $this->assign('action_link', ['text' => $_LANG['back_note'], 'href' => "users.php?act=edit&id=$auid"]);
 
             assign_query_info();
-            $smarty->display('affiliate_list.htm');
+            $this->display('affiliate_list.htm');
         }
     }
 

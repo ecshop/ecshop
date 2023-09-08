@@ -23,21 +23,21 @@ class CommentManageController extends BaseController
             /* 检查权限 */
             admin_priv('comment_priv');
 
-            $smarty->assign('ur_here', $_LANG['05_comment_manage']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['05_comment_manage']);
+            $this->assign('full_page', 1);
 
             $list = get_comment_list();
 
-            $smarty->assign('comment_list', $list['item']);
-            $smarty->assign('filter', $list['filter']);
-            $smarty->assign('record_count', $list['record_count']);
-            $smarty->assign('page_count', $list['page_count']);
+            $this->assign('comment_list', $list['item']);
+            $this->assign('filter', $list['filter']);
+            $this->assign('record_count', $list['record_count']);
+            $this->assign('page_count', $list['page_count']);
 
             $sort_flag = sort_flag($list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             assign_query_info();
-            $smarty->display('comment_list.htm');
+            $this->display('comment_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -46,16 +46,16 @@ class CommentManageController extends BaseController
         if ($_REQUEST['act'] == 'query') {
             $list = get_comment_list();
 
-            $smarty->assign('comment_list', $list['item']);
-            $smarty->assign('filter', $list['filter']);
-            $smarty->assign('record_count', $list['record_count']);
-            $smarty->assign('page_count', $list['page_count']);
+            $this->assign('comment_list', $list['item']);
+            $this->assign('filter', $list['filter']);
+            $this->assign('record_count', $list['record_count']);
+            $this->assign('page_count', $list['page_count']);
 
             $sort_flag = sort_flag($list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('comment_list.htm'),
+            return make_json_result(
+                $this->fetch('comment_list.htm'),
                 '',
                 ['filter' => $list['filter'], 'page_count' => $list['page_count']]
             );
@@ -107,19 +107,19 @@ class CommentManageController extends BaseController
             }
 
             /* 模板赋值 */
-            $smarty->assign('msg', $comment_info); //评论信息
-            $smarty->assign('admin_info', $admin_info);   //管理员信息
-            $smarty->assign('reply_info', $reply_info);   //回复的内容
-            $smarty->assign('id_value', $id_value);  //评论的对象
-            $smarty->assign('send_fail', ! empty($_REQUEST['send_ok']));
+            $this->assign('msg', $comment_info); //评论信息
+            $this->assign('admin_info', $admin_info);   //管理员信息
+            $this->assign('reply_info', $reply_info);   //回复的内容
+            $this->assign('id_value', $id_value);  //评论的对象
+            $this->assign('send_fail', ! empty($_REQUEST['send_ok']));
 
-            $smarty->assign('ur_here', $_LANG['comment_info']);
-            $smarty->assign('action_link', ['text' => $_LANG['05_comment_manage'],
+            $this->assign('ur_here', $_LANG['comment_info']);
+            $this->assign('action_link', ['text' => $_LANG['05_comment_manage'],
                 'href' => 'comment_manage.php?act=list']);
 
             /* 页面显示 */
             assign_query_info();
-            $smarty->display('comment_info.htm');
+            $this->display('comment_info.htm');
         }
         /*------------------------------------------------------ */
         //-- 处理 回复用户评论
@@ -169,13 +169,13 @@ class CommentManageController extends BaseController
                 /* 设置留言回复模板所需要的内容信息 */
                 $template = get_mail_template('recomment');
 
-                $smarty->assign('user_name', $comment_info['user_name']);
-                $smarty->assign('recomment', $_POST['content']);
-                $smarty->assign('comment', $comment_info['content']);
-                $smarty->assign('shop_name', "<a href='".$ecs->url()."'>".$_CFG['shop_name'].'</a>');
-                $smarty->assign('send_date', date('Y-m-d'));
+                $this->assign('user_name', $comment_info['user_name']);
+                $this->assign('recomment', $_POST['content']);
+                $this->assign('comment', $comment_info['content']);
+                $this->assign('shop_name', "<a href='".$ecs->url()."'>".$_CFG['shop_name'].'</a>');
+                $this->assign('send_date', date('Y-m-d'));
 
-                $content = $smarty->fetch('str:'.$template['template_content']);
+                $content = $this->fetch('str:'.$template['template_content']);
 
                 /* 发送邮件 */
                 if (send_mail($comment_info['user_name'], $comment_info['email'], $template['template_subject'], $content, $template['is_html'])) {
@@ -276,11 +276,11 @@ class CommentManageController extends BaseController
                 admin_log('', $action, 'adminlog');
 
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'comment_manage.php?act=list'];
-                sys_msg(sprintf($_LANG['batch_drop_success'], count($_POST['checkboxes'])), 0, $link);
+                return sys_msg(sprintf($_LANG['batch_drop_success'], count($_POST['checkboxes'])), 0, $link);
             } else {
                 /* 提示信息 */
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'comment_manage.php?act=list'];
-                sys_msg($_LANG['no_select_comment'], 0, $link);
+                return sys_msg($_LANG['no_select_comment'], 0, $link);
             }
         }
     }

@@ -10,7 +10,7 @@ class MessageController extends BaseController
     {
 
         if (empty($_CFG['message_board'])) {
-            show_message($_LANG['message_board_close']);
+            return show_message($_LANG['message_board_close']);
         }
         $action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
         if ($action == 'act_add_message') {
@@ -21,7 +21,7 @@ class MessageController extends BaseController
                 include_once 'includes/cls_captcha.php';
                 $validator = new captcha();
                 if (! $validator->check_word($_POST['captcha'])) {
-                    show_message($_LANG['invalid_captcha']);
+                    return show_message($_LANG['invalid_captcha']);
                 }
             } else {
                 /* 没有验证码时，用时间来限制机器人发帖或恶意发评论 */
@@ -31,7 +31,7 @@ class MessageController extends BaseController
 
                 $cur_time = gmtime();
                 if (($cur_time - $_SESSION['send_time']) < 30) { // 小于30秒禁止发评论
-                    show_message($_LANG['cmt_spam_warning']);
+                    return show_message($_LANG['cmt_spam_warning']);
                 }
             }
             $user_name = '';
@@ -65,7 +65,7 @@ class MessageController extends BaseController
                     $_SESSION['send_time'] = $cur_time;
                 }
                 $msg_info = $_CFG['message_check'] ? $_LANG['message_submit_wait'] : $_LANG['message_submit_done'];
-                show_message($msg_info, $_LANG['message_list_lnk'], 'message.php');
+                return show_message($msg_info, $_LANG['message_list_lnk'], 'message.php');
             } else {
                 $err->show($_LANG['message_list_lnk'], 'message.php');
             }
@@ -74,17 +74,17 @@ class MessageController extends BaseController
         if ($action == 'default') {
             assign_template();
             $position = assign_ur_here(0, $_LANG['message_board']);
-            $smarty->assign('page_title', $position['title']);    // 页面标题
-            $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
-            $smarty->assign('helps', get_shop_help());       // 网店帮助
+            $this->assign('page_title', $position['title']);    // 页面标题
+            $this->assign('ur_here', $position['ur_here']);  // 当前位置
+            $this->assign('helps', get_shop_help());       // 网店帮助
 
-            $smarty->assign('categories', get_categories_tree()); // 分类树
-            $smarty->assign('top_goods', get_top10());           // 销售排行
-            $smarty->assign('cat_list', cat_list(0, 0, true, 2, false));
-            $smarty->assign('brand_list', get_brand_list());
-            $smarty->assign('promotion_info', get_promotion_info());
+            $this->assign('categories', get_categories_tree()); // 分类树
+            $this->assign('top_goods', get_top10());           // 销售排行
+            $this->assign('cat_list', cat_list(0, 0, true, 2, false));
+            $this->assign('brand_list', get_brand_list());
+            $this->assign('promotion_info', get_promotion_info());
 
-            $smarty->assign('enabled_mes_captcha', (intval($_CFG['captcha']) & CAPTCHA_MESSAGE));
+            $this->assign('enabled_mes_captcha', (intval($_CFG['captcha']) & CAPTCHA_MESSAGE));
 
             $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('comment').' WHERE STATUS =1 AND comment_type =0 ';
             $record_count = $db->getOne($sql);
@@ -97,10 +97,10 @@ class MessageController extends BaseController
             $pager = get_pager('message.php', [], $record_count, $page, $pagesize);
             $msg_lists = get_msg_list($pagesize, $pager['start']);
             assign_dynamic('message_board');
-            $smarty->assign('rand', mt_rand());
-            $smarty->assign('msg_lists', $msg_lists);
-            $smarty->assign('pager', $pager);
-            $smarty->display('message_board.dwt');
+            $this->assign('rand', mt_rand());
+            $this->assign('msg_lists', $msg_lists);
+            $this->assign('pager', $pager);
+            $this->display('message_board.dwt');
         }
     }
 

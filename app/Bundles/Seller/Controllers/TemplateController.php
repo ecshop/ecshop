@@ -60,12 +60,12 @@ class TemplateController extends BaseController
 
             assign_query_info();
 
-            $smarty->assign('ur_here', $_LANG['template_manage']);
-            $smarty->assign('curr_tpl_style', $curr_style);
-            $smarty->assign('template_style', $templates_style);
-            $smarty->assign('curr_template', get_template_info($curr_template, $curr_style));
-            $smarty->assign('available_templates', $available_templates);
-            $smarty->display('templates_list.htm');
+            $this->assign('ur_here', $_LANG['template_manage']);
+            $this->assign('curr_tpl_style', $curr_style);
+            $this->assign('template_style', $templates_style);
+            $this->assign('curr_template', get_template_info($curr_template, $curr_style));
+            $this->assign('available_templates', $available_templates);
+            $this->display('templates_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -177,19 +177,19 @@ class TemplateController extends BaseController
             }
 
             assign_query_info();
-            $smarty->assign('ur_here', $_LANG['03_template_setup']);
-            $smarty->assign('curr_template_file', $curr_template);
-            $smarty->assign('temp_options', $temp_options);
-            $smarty->assign('temp_regions', $temp_regions);
-            $smarty->assign('cate_goods', $cate_goods);
-            $smarty->assign('brand_goods', $brand_goods);
-            $smarty->assign('cat_articles', $cat_articles);
-            $smarty->assign('ad_positions', $ad_positions);
-            $smarty->assign('arr_cates', cat_list(0, 0, true));
-            $smarty->assign('arr_brands', get_brand_list());
-            $smarty->assign('arr_article_cats', article_cat_list(0, 0, true));
-            $smarty->assign('arr_ad_positions', get_position_list());
-            $smarty->display('template_setup.htm');
+            $this->assign('ur_here', $_LANG['03_template_setup']);
+            $this->assign('curr_template_file', $curr_template);
+            $this->assign('temp_options', $temp_options);
+            $this->assign('temp_regions', $temp_regions);
+            $this->assign('cate_goods', $cate_goods);
+            $this->assign('brand_goods', $brand_goods);
+            $this->assign('cat_articles', $cat_articles);
+            $this->assign('ad_positions', $ad_positions);
+            $this->assign('arr_cates', cat_list(0, 0, true));
+            $this->assign('arr_brands', get_brand_list());
+            $this->assign('arr_article_cats', article_cat_list(0, 0, true));
+            $this->assign('arr_ad_positions', get_position_list());
+            $this->display('template_setup.htm');
         }
 
         /*------------------------------------------------------ */
@@ -382,9 +382,9 @@ class TemplateController extends BaseController
             if (file_put_contents($template_file, $template_content)) {
                 clear_cache_files(); // 清除对应的编译文件
                 $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'template.php?act=setup&template_file='.$_POST['template_file']];
-                sys_msg($_LANG['setup_success'], 0, $lnk);
+                return sys_msg($_LANG['setup_success'], 0, $lnk);
             } else {
-                sys_msg(sprintf($_LANG['modify_dwt_failed'], 'themes/'.$curr_template.'/'.$_POST['template_file'].'.dwt'), 1, null, false);
+                return sys_msg(sprintf($_LANG['modify_dwt_failed'], 'themes/'.$curr_template.'/'.$_POST['template_file'].'.dwt'), 1, null, false);
             }
         }
 
@@ -419,11 +419,11 @@ class TemplateController extends BaseController
             $lib = load_library($curr_template, $curr_library);
 
             assign_query_info();
-            $smarty->assign('ur_here', $_LANG['04_template_library']);
-            $smarty->assign('curr_library', $curr_library);
-            $smarty->assign('libraries', $arr_library);
-            $smarty->assign('library_html', $lib['html']);
-            $smarty->display('template_library.htm');
+            $this->assign('ur_here', $_LANG['04_template_library']);
+            $this->assign('curr_library', $curr_library);
+            $this->assign('libraries', $arr_library);
+            $this->assign('library_html', $lib['html']);
+            $this->display('template_library.htm');
         }
 
         /*------------------------------------------------------ */
@@ -445,9 +445,9 @@ class TemplateController extends BaseController
             if ($step_one && $step_two) {
                 clear_all_files(); //清除模板编译文件
 
-                make_json_result(read_style_and_tpl($tpl_name, $tpl_fg), $_LANG['install_template_success']);
+                return make_json_result(read_style_and_tpl($tpl_name, $tpl_fg), $_LANG['install_template_success']);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
 
@@ -467,9 +467,9 @@ class TemplateController extends BaseController
             $done = $zip->zip('../themes/'.$tpl.'/', $filename);
 
             if ($done) {
-                make_json_result($filename);
+                return make_json_result($filename);
             } else {
-                make_json_error($_LANG['backup_failed']);
+                return make_json_error($_LANG['backup_failed']);
             }
         }
 
@@ -481,7 +481,7 @@ class TemplateController extends BaseController
             $library = load_library($_CFG['template'], trim($_GET['lib']));
             $message = ($library['mark'] & 7) ? '' : $_LANG['library_not_written'];
 
-            make_json_result($library['html'], $message);
+            return make_json_result($library['html'], $message);
         }
 
         /*------------------------------------------------------ */
@@ -500,9 +500,9 @@ class TemplateController extends BaseController
             if (@file_exists($lib_file) === true && @file_put_contents($lib_file, $html)) {
                 @file_put_contents('../temp/backup/library/'.$_CFG['template'].'-'.$_POST['lib'].'.lbi', $org_html);
 
-                make_json_result('', $_LANG['update_lib_success']);
+                return make_json_result('', $_LANG['update_lib_success']);
             } else {
-                make_json_error(sprintf($_LANG['update_lib_failed'], 'themes/'.$_CFG['template'].'/library'));
+                return make_json_error(sprintf($_LANG['update_lib_failed'], 'themes/'.$_CFG['template'].'/library'));
             }
         }
 
@@ -518,9 +518,9 @@ class TemplateController extends BaseController
             $lib_backup = str_replace('0xa', '', $lib_backup); // 过滤 0xa 非法字符
 
             if (file_exists($lib_backup) && filemtime($lib_backup) >= filemtime($lib_file)) {
-                make_json_result(str_replace("\xEF\xBB\xBF", '', file_get_contents($lib_backup)));
+                return make_json_result(str_replace("\xEF\xBB\xBF", '', file_get_contents($lib_backup)));
             } else {
-                make_json_result(str_replace("\xEF\xBB\xBF", '', file_get_contents($lib_file)));
+                return make_json_result(str_replace("\xEF\xBB\xBF", '', file_get_contents($lib_file)));
             }
         }
 
@@ -545,10 +545,10 @@ class TemplateController extends BaseController
             }
 
             assign_query_info();
-            $smarty->assign('ur_here', $_LANG['backup_setting']);
-            $smarty->assign('list', $remarks);
-            $smarty->assign('files', $files);
-            $smarty->display('templates_backup.htm');
+            $this->assign('ur_here', $_LANG['backup_setting']);
+            $this->assign('list', $remarks);
+            $this->assign('files', $files);
+            $this->display('templates_backup.htm');
         }
 
         if ($_REQUEST['act'] == 'act_backup_setting') {
@@ -562,7 +562,7 @@ class TemplateController extends BaseController
 
             $sql = 'SELECT COUNT(*) FROM '.$ecs->table('template')." WHERE remarks='$remarks' AND theme = '".$_CFG['template']."'";
             if ($db->getOne($sql) > 0) {
-                sys_msg(sprintf($_LANG['remarks_exist'], $remarks), 1);
+                return sys_msg(sprintf($_LANG['remarks_exist'], $remarks), 1);
             }
 
             $sql = 'INSERT INTO '.$ecs->table('template').
@@ -573,7 +573,7 @@ class TemplateController extends BaseController
                 ' AND '.db_create_in($files, 'filename');
 
             $db->query($sql);
-            sys_msg($_LANG['backup_template_ok'], 0, [['text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting']]);
+            return sys_msg($_LANG['backup_template_ok'], 0, [['text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting']]);
         }
 
         if ($_REQUEST['act'] == 'del_backup') {
@@ -582,7 +582,7 @@ class TemplateController extends BaseController
                 $sql = 'DELETE FROM '.$ecs->table('template')." WHERE remarks='$remarks' AND theme = '".$_CFG['template']."'";
                 $db->query($sql);
             }
-            sys_msg($_LANG['del_backup_ok'], 0, [['text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting']]);
+            return sys_msg($_LANG['del_backup_ok'], 0, [['text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting']]);
         }
 
         if ($_REQUEST['act'] == 'restore_backup') {
@@ -634,7 +634,7 @@ class TemplateController extends BaseController
                     $db->query($sql);
                 }
             }
-            sys_msg($_LANG['restore_backup_ok'], 0, [['text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting']]);
+            return sys_msg($_LANG['restore_backup_ok'], 0, [['text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting']]);
         }
     }
 

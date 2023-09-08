@@ -193,21 +193,21 @@ class CommentController extends BaseController
         if ($result['error'] == 0) {
             $comments = assign_comment($cmt->id, $cmt->type, $cmt->page);
 
-            $smarty->assign('comment_type', $cmt->type);
-            $smarty->assign('id', $cmt->id);
-            $smarty->assign('username', $_SESSION['user_name']);
-            $smarty->assign('email', $_SESSION['email']);
-            $smarty->assign('comments', $comments['comments']);
-            $smarty->assign('pager', $comments['pager']);
+            $this->assign('comment_type', $cmt->type);
+            $this->assign('id', $cmt->id);
+            $this->assign('username', $_SESSION['user_name']);
+            $this->assign('email', $_SESSION['email']);
+            $this->assign('comments', $comments['comments']);
+            $this->assign('pager', $comments['pager']);
 
             /* 验证码相关设置 */
             if ((intval($_CFG['captcha']) & CAPTCHA_COMMENT) && gd_version() > 0) {
-                $smarty->assign('enabled_captcha', 1);
-                $smarty->assign('rand', mt_rand());
+                $this->assign('enabled_captcha', 1);
+                $this->assign('rand', mt_rand());
             }
 
             $result['message'] = $_CFG['comment_check'] ? $_LANG['cmt_submit_wait'] : $_LANG['cmt_submit_done'];
-            $result['content'] = $smarty->fetch('library/comments_list.lbi');
+            $result['content'] = $this->fetch('library/comments_list.lbi');
         }
 
         echo $json->encode($result);

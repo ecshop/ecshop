@@ -19,24 +19,24 @@ class WholesaleController extends BaseController
             admin_priv('whole_sale');
 
             /* 模板赋值 */
-            $smarty->assign('full_page', 1);
-            $smarty->assign('ur_here', $_LANG['wholesale_list']);
-            $smarty->assign('action_link', ['href' => 'wholesale.php?act=add', 'text' => $_LANG['add_wholesale']]);
-            $smarty->assign('action_link2', ['href' => 'wholesale.php?act=batch_add', 'text' => $_LANG['add_batch_wholesale']]);
+            $this->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['wholesale_list']);
+            $this->assign('action_link', ['href' => 'wholesale.php?act=add', 'text' => $_LANG['add_wholesale']]);
+            $this->assign('action_link2', ['href' => 'wholesale.php?act=batch_add', 'text' => $_LANG['add_batch_wholesale']]);
 
             $list = wholesale_list();
 
-            $smarty->assign('wholesale_list', $list['item']);
-            $smarty->assign('filter', $list['filter']);
-            $smarty->assign('record_count', $list['record_count']);
-            $smarty->assign('page_count', $list['page_count']);
+            $this->assign('wholesale_list', $list['item']);
+            $this->assign('filter', $list['filter']);
+            $this->assign('record_count', $list['record_count']);
+            $this->assign('page_count', $list['page_count']);
 
             $sort_flag = sort_flag($list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             /* 显示商品列表页面 */
             assign_query_info();
-            $smarty->display('wholesale_list.htm');
+            $this->display('wholesale_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -46,16 +46,16 @@ class WholesaleController extends BaseController
         if ($_REQUEST['act'] == 'query') {
             $list = wholesale_list();
 
-            $smarty->assign('wholesale_list', $list['item']);
-            $smarty->assign('filter', $list['filter']);
-            $smarty->assign('record_count', $list['record_count']);
-            $smarty->assign('page_count', $list['page_count']);
+            $this->assign('wholesale_list', $list['item']);
+            $this->assign('filter', $list['filter']);
+            $this->assign('record_count', $list['record_count']);
+            $this->assign('page_count', $list['page_count']);
 
             $sort_flag = sort_flag($list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('wholesale_list.htm'),
+            return make_json_result(
+                $this->fetch('wholesale_list.htm'),
                 '',
                 ['filter' => $list['filter'], 'page_count' => $list['page_count']]
             );
@@ -70,7 +70,7 @@ class WholesaleController extends BaseController
             $id = intval($_GET['id']);
             $wholesale = wholesale_info($id);
             if (empty($wholesale)) {
-                make_json_error($_LANG['wholesale_not_exist']);
+                return make_json_error($_LANG['wholesale_not_exist']);
             }
             $name = $wholesale['goods_name'];
 
@@ -97,7 +97,7 @@ class WholesaleController extends BaseController
         if ($_REQUEST['act'] == 'batch') {
             /* 取得要操作的记录编号 */
             if (empty($_POST['checkboxes'])) {
-                sys_msg($_LANG['no_record_selected']);
+                return sys_msg($_LANG['no_record_selected']);
             } else {
                 /* 检查权限 */
                 admin_priv('whole_sale');
@@ -117,7 +117,7 @@ class WholesaleController extends BaseController
                     clear_cache_files();
 
                     $links[] = ['text' => $_LANG['back_wholesale_list'], 'href' => 'wholesale.php?act=list&'.list_link_postfix()];
-                    sys_msg($_LANG['batch_drop_ok'], 0, $links);
+                    return sys_msg($_LANG['batch_drop_ok'], 0, $links);
                 }
             }
         }
@@ -136,7 +136,7 @@ class WholesaleController extends BaseController
                 " WHERE act_id = '$id' LIMIT 1";
             $db->query($sql);
 
-            make_json_result($val);
+            return make_json_result($val);
         }
 
         /*------------------------------------------------------ */
@@ -146,7 +146,7 @@ class WholesaleController extends BaseController
         if ($_REQUEST['act'] == 'batch_add') {
             /* 检查权限 */
             admin_priv('whole_sale');
-            $smarty->assign('form_action', 'batch_add_insert');
+            $this->assign('form_action', 'batch_add_insert');
 
             /* 初始化、取得批发活动信息 */
             $wholesale = [
@@ -165,7 +165,7 @@ class WholesaleController extends BaseController
                     ],
                 ],
             ];
-            $smarty->assign('wholesale', $wholesale);
+            $this->assign('wholesale', $wholesale);
 
             /* 取得用户等级 */
             $user_rank_list = [];
@@ -178,19 +178,19 @@ class WholesaleController extends BaseController
                 }
                 $user_rank_list[] = $rank;
             }
-            $smarty->assign('user_rank_list', $user_rank_list);
+            $this->assign('user_rank_list', $user_rank_list);
 
-            $smarty->assign('cat_list', cat_list());
-            $smarty->assign('brand_list', get_brand_list());
+            $this->assign('cat_list', cat_list());
+            $this->assign('brand_list', get_brand_list());
 
             /* 显示模板 */
-            $smarty->assign('ur_here', $_LANG['add_wholesale']);
+            $this->assign('ur_here', $_LANG['add_wholesale']);
 
             $href = 'wholesale.php?act=list';
-            $smarty->assign('action_link', ['href' => $href, 'text' => $_LANG['wholesale_list']]);
+            $this->assign('action_link', ['href' => $href, 'text' => $_LANG['wholesale_list']]);
             assign_query_info();
 
-            $smarty->display('wholesale_batch_info.htm');
+            $this->display('wholesale_batch_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -216,7 +216,7 @@ class WholesaleController extends BaseController
             } elseif (! empty($_POST['dst_goods_lists'])) {
                 $_POST['dst_goods_lists'] = [intval($_POST['dst_goods_lists'])];
             } else {
-                sys_msg($_LANG['pls_search_goods']);
+                return sys_msg($_LANG['pls_search_goods']);
             }
             $dst_goods = implode(',', $_POST['dst_goods_lists']);
 
@@ -230,12 +230,12 @@ class WholesaleController extends BaseController
                 }
             }
             if (empty($goods_rebulid)) {
-                sys_msg('invalid goods id: All');
+                return sys_msg('invalid goods id: All');
             }
 
             /* 会员等级 */
             if (! isset($_POST['rank_id'])) {
-                sys_msg($_LANG['pls_set_user_rank']);
+                return sys_msg($_LANG['pls_set_user_rank']);
             }
 
             /* 同一个商品，会员等级不能重叠 */
@@ -258,7 +258,7 @@ class WholesaleController extends BaseController
                 }
             }
             if (empty($_POST['dst_goods_lists'])) {
-                sys_msg($_LANG['pls_search_goods']);
+                return sys_msg($_LANG['pls_search_goods']);
             }
 
             /* 提交值 */
@@ -288,7 +288,7 @@ class WholesaleController extends BaseController
                 ['href' => 'wholesale.php?act=list', 'text' => $_LANG['back_wholesale_list']],
                 ['href' => 'wholesale.php?act=add', 'text' => $_LANG['continue_add_wholesale']],
             ];
-            sys_msg($_LANG['add_wholesale_ok'], 0, $links);
+            return sys_msg($_LANG['add_wholesale_ok'], 0, $links);
         }
 
         /*------------------------------------------------------ */
@@ -301,7 +301,7 @@ class WholesaleController extends BaseController
 
             /* 是否添加 */
             $is_add = $_REQUEST['act'] == 'add';
-            $smarty->assign('form_action', $is_add ? 'insert' : 'update');
+            $this->assign('form_action', $is_add ? 'insert' : 'update');
 
             /* 初始化、取得批发活动信息 */
             if ($is_add) {
@@ -314,16 +314,16 @@ class WholesaleController extends BaseController
                 ];
             } else {
                 if (empty($_GET['id'])) {
-                    sys_msg('invalid param');
+                    return sys_msg('invalid param');
                 }
                 $id = intval($_GET['id']);
                 $wholesale = wholesale_info($id);
                 if (empty($wholesale)) {
-                    sys_msg($_LANG['wholesale_not_exist']);
+                    return sys_msg($_LANG['wholesale_not_exist']);
                 }
 
                 /* 取得商品属性 */
-                $smarty->assign('attr_list', get_goods_attr($wholesale['goods_id']));
+                $this->assign('attr_list', get_goods_attr($wholesale['goods_id']));
             }
             if (empty($wholesale['price_list'])) {
                 $wholesale['price_list'] = [
@@ -335,7 +335,7 @@ class WholesaleController extends BaseController
                     ],
                 ];
             }
-            $smarty->assign('wholesale', $wholesale);
+            $this->assign('wholesale', $wholesale);
 
             /* 取得用户等级 */
             $user_rank_list = [];
@@ -348,24 +348,24 @@ class WholesaleController extends BaseController
                 }
                 $user_rank_list[] = $rank;
             }
-            $smarty->assign('user_rank_list', $user_rank_list);
+            $this->assign('user_rank_list', $user_rank_list);
 
-            $smarty->assign('cat_list', cat_list());
-            $smarty->assign('brand_list', get_brand_list());
+            $this->assign('cat_list', cat_list());
+            $this->assign('brand_list', get_brand_list());
 
             /* 显示模板 */
             if ($is_add) {
-                $smarty->assign('ur_here', $_LANG['add_wholesale']);
+                $this->assign('ur_here', $_LANG['add_wholesale']);
             } else {
-                $smarty->assign('ur_here', $_LANG['edit_wholesale']);
+                $this->assign('ur_here', $_LANG['edit_wholesale']);
             }
             $href = 'wholesale.php?act=list';
             if (! $is_add) {
                 $href .= '&'.list_link_postfix();
             }
-            $smarty->assign('action_link', ['href' => $href, 'text' => $_LANG['wholesale_list']]);
+            $this->assign('action_link', ['href' => $href, 'text' => $_LANG['wholesale_list']]);
             assign_query_info();
-            $smarty->display('wholesale_info.htm');
+            $this->display('wholesale_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -382,19 +382,19 @@ class WholesaleController extends BaseController
             /* 取得goods */
             $goods_id = intval($_POST['goods_id']);
             if ($goods_id <= 0) {
-                sys_msg($_LANG['pls_search_goods']);
+                return sys_msg($_LANG['pls_search_goods']);
             }
             $sql = 'SELECT goods_name FROM '.$ecs->table('goods').
                 " WHERE goods_id = '$goods_id'";
             $goods_name = $db->getOne($sql);
             $goods_name = addslashes($goods_name);
             if (is_null($goods_name)) {
-                sys_msg('invalid goods id: '.$goods_id);
+                return sys_msg('invalid goods id: '.$goods_id);
             }
 
             /* 会员等级 */
             if (! isset($_POST['rank_id'])) {
-                sys_msg($_LANG['pls_set_user_rank']);
+                return sys_msg($_LANG['pls_set_user_rank']);
             }
 
             /* 同一个商品，会员等级不能重叠 */
@@ -407,7 +407,7 @@ class WholesaleController extends BaseController
                         $sql .= " AND act_id <> '$_POST[id]'";
                     }
                     if ($db->getOne($sql) > 0) {
-                        sys_msg($_LANG['user_rank_exist']);
+                        return sys_msg($_LANG['user_rank_exist']);
                     }
                 }
             }
@@ -504,7 +504,7 @@ class WholesaleController extends BaseController
                 $links = [
                     ['href' => 'wholesale.php?act=list', 'text' => $_LANG['back_wholesale_list']],
                 ];
-                sys_msg(sprintf($_LANG['save_wholesale_falid'], $wholesale['goods_name']), 1, $links);
+                return sys_msg(sprintf($_LANG['save_wholesale_falid'], $wholesale['goods_name']), 1, $links);
             }
 
             if ($is_add) {
@@ -512,12 +512,12 @@ class WholesaleController extends BaseController
                     ['href' => 'wholesale.php?act=add', 'text' => $_LANG['continue_add_wholesale']],
                     ['href' => 'wholesale.php?act=list', 'text' => $_LANG['back_wholesale_list']],
                 ];
-                sys_msg($_LANG['add_wholesale_ok'], 0, $links);
+                return sys_msg($_LANG['add_wholesale_ok'], 0, $links);
             } else {
                 $links = [
                     ['href' => 'wholesale.php?act=list&'.list_link_postfix(), 'text' => $_LANG['back_wholesale_list']],
                 ];
-                sys_msg($_LANG['edit_wholesale_ok'], 0, $links);
+                return sys_msg($_LANG['edit_wholesale_ok'], 0, $links);
             }
         }
 
@@ -540,7 +540,7 @@ class WholesaleController extends BaseController
                 ];
             }
 
-            make_json_result($arr);
+            return make_json_result($arr);
         }
 
         /*------------------------------------------------------ */

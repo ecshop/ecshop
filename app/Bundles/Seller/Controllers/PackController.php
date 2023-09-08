@@ -18,34 +18,34 @@ class PackController extends BaseController
         //-- 包装列表
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'list') {
-            $smarty->assign('ur_here', $_LANG['06_pack_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['pack_add'], 'href' => 'pack.php?act=add']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['06_pack_list']);
+            $this->assign('action_link', ['text' => $_LANG['pack_add'], 'href' => 'pack.php?act=add']);
+            $this->assign('full_page', 1);
 
             $packs_list = packs_list();
 
-            $smarty->assign('packs_list', $packs_list['packs_list']);
-            $smarty->assign('filter', $packs_list['filter']);
-            $smarty->assign('record_count', $packs_list['record_count']);
-            $smarty->assign('page_count', $packs_list['page_count']);
+            $this->assign('packs_list', $packs_list['packs_list']);
+            $this->assign('filter', $packs_list['filter']);
+            $this->assign('record_count', $packs_list['record_count']);
+            $this->assign('page_count', $packs_list['page_count']);
 
             assign_query_info();
-            $smarty->display('pack_list.htm');
+            $this->display('pack_list.htm');
         }
         /*------------------------------------------------------ */
         //-- ajax 列表
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'query') {
             $packs_list = packs_list();
-            $smarty->assign('packs_list', $packs_list['packs_list']);
-            $smarty->assign('filter', $packs_list['filter']);
-            $smarty->assign('record_count', $packs_list['record_count']);
-            $smarty->assign('page_count', $packs_list['page_count']);
+            $this->assign('packs_list', $packs_list['packs_list']);
+            $this->assign('filter', $packs_list['filter']);
+            $this->assign('record_count', $packs_list['record_count']);
+            $this->assign('page_count', $packs_list['page_count']);
 
             $sort_flag = sort_flag($packs_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result($smarty->fetch('pack_list.htm'), '', ['filter' => $packs_list['filter'], 'page_count' => $packs_list['page_count']]);
+            return make_json_result($this->fetch('pack_list.htm'), '', ['filter' => $packs_list['filter'], 'page_count' => $packs_list['page_count']]);
         }
         /*------------------------------------------------------ */
         //-- 添加新包装
@@ -57,13 +57,13 @@ class PackController extends BaseController
             $pack['pack_fee'] = 0;
             $pack['free_money'] = 0;
 
-            $smarty->assign('pack', $pack);
-            $smarty->assign('ur_here', $_LANG['pack_add']);
-            $smarty->assign('form_action', 'insert');
-            $smarty->assign('action_link', ['text' => $_LANG['06_pack_list'], 'href' => 'pack.php?act=list']);
+            $this->assign('pack', $pack);
+            $this->assign('ur_here', $_LANG['pack_add']);
+            $this->assign('form_action', 'insert');
+            $this->assign('action_link', ['text' => $_LANG['06_pack_list'], 'href' => 'pack.php?act=list']);
 
             assign_query_info();
-            $smarty->display('pack_info.htm');
+            $this->display('pack_info.htm');
         }
         if ($_REQUEST['act'] == 'insert') {
             /* 权限判断 */
@@ -73,14 +73,14 @@ class PackController extends BaseController
             $is_only = $exc->is_only('pack_name', $_POST['pack_name']);
 
             if (! $is_only) {
-                sys_msg(sprintf($_LANG['packname_exist'], stripslashes($_POST['pack_name'])), 1);
+                return sys_msg(sprintf($_LANG['packname_exist'], stripslashes($_POST['pack_name'])), 1);
             }
 
             /* 处理图片 */
             if (! empty($_FILES['pack_img'])) {
                 $upload_img = $image->upload_image($_FILES['pack_img'], 'packimg', $_POST['old_packimg']);
                 if ($upload_img == false) {
-                    sys_msg($image->error_msg);
+                    return sys_msg($image->error_msg);
                 }
                 $img_name = basename($upload_img);
             } else {
@@ -97,7 +97,7 @@ class PackController extends BaseController
             $link[0]['href'] = 'pack.php?act=list';
             $link[1]['text'] = $_LANG['continue_add'];
             $link[1]['href'] = 'pack.php?act=add';
-            sys_msg($_POST['pack_name'].$_LANG['packadd_succed'], 0, $link);
+            return sys_msg($_POST['pack_name'].$_LANG['packadd_succed'], 0, $link);
             admin_log($_POST['pack_name'], 'add', 'pack');
         }
 
@@ -110,11 +110,11 @@ class PackController extends BaseController
 
             $sql = 'SELECT pack_id, pack_name, pack_fee, free_money, pack_desc, pack_img FROM '.$ecs->table('pack')." WHERE pack_id='$_REQUEST[id]'";
             $pack = $db->getRow($sql);
-            $smarty->assign('ur_here', $_LANG['pack_edit']);
-            $smarty->assign('action_link', ['text' => $_LANG['06_pack_list'], 'href' => 'pack.php?act=list&'.list_link_postfix()]);
-            $smarty->assign('pack', $pack);
-            $smarty->assign('form_action', 'update');
-            $smarty->display('pack_info.htm');
+            $this->assign('ur_here', $_LANG['pack_edit']);
+            $this->assign('action_link', ['text' => $_LANG['06_pack_list'], 'href' => 'pack.php?act=list&'.list_link_postfix()]);
+            $this->assign('pack', $pack);
+            $this->assign('form_action', 'update');
+            $this->display('pack_info.htm');
         }
         if ($_REQUEST['act'] == 'update') {
             /* 权限判断 */
@@ -124,7 +124,7 @@ class PackController extends BaseController
                 $is_only = $exc->is_only('pack_name', $_POST['pack_name'], $_POST['id']);
 
                 if (! $is_only) {
-                    sys_msg(sprintf($_LANG['packname_exist'], stripslashes($_POST['pack_name'])), 1);
+                    return sys_msg(sprintf($_LANG['packname_exist'], stripslashes($_POST['pack_name'])), 1);
                 }
             }
 
@@ -133,7 +133,7 @@ class PackController extends BaseController
             if (! empty($_FILES['pack_img']['name'])) {
                 $upload_img = $image->upload_image($_FILES['pack_img'], 'packimg', $_POST['old_packimg']);
                 if ($upload_img == false) {
-                    sys_msg($image->error_msg);
+                    return sys_msg($image->error_msg);
                 }
                 $img_name = basename($upload_img);
             } else {
@@ -148,7 +148,7 @@ class PackController extends BaseController
                 $link[0]['text'] = $_LANG['back_list'];
                 $link[0]['href'] = 'pack.php?act=list&'.list_link_postfix();
                 $note = sprintf($_LANG['packedit_succed'], $_POST['pack_name']);
-                sys_msg($note, 0, $link);
+                return sys_msg($note, 0, $link);
                 admin_log($_POST['pack_name'], 'edit', 'pack');
             } else {
                 exit($db->error());
@@ -171,7 +171,7 @@ class PackController extends BaseController
                 $db->query($sql);
             }
             $link = [['text' => $_LANG['pack_edit_lnk'], 'href' => 'pack.php?act=edit&id='.$pack_id], ['text' => $_LANG['pack_list_lnk'], 'href' => 'pack.php?act=list']];
-            sys_msg($_LANG['drop_pack_img_success'], 0, $link);
+            return sys_msg($_LANG['drop_pack_img_success'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -188,12 +188,12 @@ class PackController extends BaseController
             $pack_name = $exc->get_name($id);
 
             if (! $exc->is_only('pack_name', $val, $id)) {
-                make_json_error(sprintf($_LANG['packname_exist'], $pack_name));
+                return make_json_error(sprintf($_LANG['packname_exist'], $pack_name));
             } else {
                 $exc->edit("pack_name='$val'", $id);
 
                 admin_log($val, 'edit', 'pack');
-                make_json_result(stripslashes($val));
+                return make_json_result(stripslashes($val));
             }
         }
 
@@ -212,7 +212,7 @@ class PackController extends BaseController
 
             $exc->edit("pack_fee='$val'", $id);
             admin_log(addslashes($pack_name), 'edit', 'pack');
-            make_json_result(number_format($val, 2));
+            return make_json_result(number_format($val, 2));
         }
 
         /*------------------------------------------------------ */
@@ -230,7 +230,7 @@ class PackController extends BaseController
 
             $exc->edit("free_money='$val'", $id);
             admin_log(addslashes($pack_name), 'edit', 'pack');
-            make_json_result(number_format($val, 2));
+            return make_json_result(number_format($val, 2));
         }
 
         /*------------------------------------------------------ */
@@ -256,7 +256,7 @@ class PackController extends BaseController
                 ecs_header("Location: $url\n");
                 exit;
             } else {
-                make_json_error($_LANG['packremove_falure']);
+                return make_json_error($_LANG['packremove_falure']);
 
                 return false;
             }

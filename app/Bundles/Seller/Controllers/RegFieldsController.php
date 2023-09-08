@@ -19,14 +19,14 @@ class RegFieldsController extends BaseController
             $fields = [];
             $fields = $db->getAll('SELECT * FROM '.$ecs->table('reg_fields').' ORDER BY dis_order, id');
 
-            $smarty->assign('ur_here', $_LANG['021_reg_fields']);
-            $smarty->assign('action_link', ['text' => $_LANG['add_reg_field'], 'href' => 'reg_fields.php?act=add']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['021_reg_fields']);
+            $this->assign('action_link', ['text' => $_LANG['add_reg_field'], 'href' => 'reg_fields.php?act=add']);
+            $this->assign('full_page', 1);
 
-            $smarty->assign('reg_fields', $fields);
+            $this->assign('reg_fields', $fields);
 
             assign_query_info();
-            $smarty->display('reg_fields.htm');
+            $this->display('reg_fields.htm');
         }
 
         /*------------------------------------------------------ */
@@ -36,8 +36,8 @@ class RegFieldsController extends BaseController
             $fields = [];
             $fields = $db->getAll('SELECT * FROM '.$ecs->table('reg_fields').'ORDER BY id');
 
-            $smarty->assign('reg_fields', $fields);
-            make_json_result($smarty->fetch('reg_fields.htm'));
+            $this->assign('reg_fields', $fields);
+            return make_json_result($this->fetch('reg_fields.htm'));
         }
 
         /*------------------------------------------------------ */
@@ -53,13 +53,13 @@ class RegFieldsController extends BaseController
             $reg_field['reg_field_display'] = 1;
             $reg_field['reg_field_need'] = 1;
 
-            $smarty->assign('reg_field', $reg_field);
-            $smarty->assign('ur_here', $_LANG['add_reg_field']);
-            $smarty->assign('action_link', ['text' => $_LANG['021_reg_fields'], 'href' => 'reg_fields.php?act=list']);
-            $smarty->assign('form_action', $form_action);
+            $this->assign('reg_field', $reg_field);
+            $this->assign('ur_here', $_LANG['add_reg_field']);
+            $this->assign('action_link', ['text' => $_LANG['021_reg_fields'], 'href' => 'reg_fields.php?act=list']);
+            $this->assign('form_action', $form_action);
 
             assign_query_info();
-            $smarty->display('reg_field_info.htm');
+            $this->display('reg_field_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -71,7 +71,7 @@ class RegFieldsController extends BaseController
 
             /* 检查是否存在重名的会员注册项 */
             if (! $exc->is_only('reg_field_name', trim($_POST['reg_field_name']))) {
-                sys_msg(sprintf($_LANG['field_name_exist'], trim($_POST['reg_field_name'])), 1);
+                return sys_msg(sprintf($_LANG['field_name_exist'], trim($_POST['reg_field_name'])), 1);
             }
 
             $sql = 'INSERT INTO '.$ecs->table('reg_fields').'( '.
@@ -86,7 +86,7 @@ class RegFieldsController extends BaseController
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'reg_fields.php?act=list'];
             $lnk[] = ['text' => $_LANG['add_continue'], 'href' => 'reg_fields.php?act=add'];
-            sys_msg($_LANG['add_field_success'], 0, $lnk);
+            return sys_msg($_LANG['add_field_success'], 0, $lnk);
         }
 
         /*------------------------------------------------------ */
@@ -102,13 +102,13 @@ class RegFieldsController extends BaseController
                 $ecs->table('reg_fields')." WHERE id='$_REQUEST[id]'";
             $reg_field = $db->getRow($sql);
 
-            $smarty->assign('reg_field', $reg_field);
-            $smarty->assign('ur_here', $_LANG['add_reg_field']);
-            $smarty->assign('action_link', ['text' => $_LANG['021_reg_fields'], 'href' => 'reg_fields.php?act=list']);
-            $smarty->assign('form_action', $form_action);
+            $this->assign('reg_field', $reg_field);
+            $this->assign('ur_here', $_LANG['add_reg_field']);
+            $this->assign('action_link', ['text' => $_LANG['021_reg_fields'], 'href' => 'reg_fields.php?act=list']);
+            $this->assign('form_action', $form_action);
 
             assign_query_info();
-            $smarty->display('reg_field_info.htm');
+            $this->display('reg_field_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -120,7 +120,7 @@ class RegFieldsController extends BaseController
 
             /* 检查是否存在重名的会员注册项 */
             if ($_POST['reg_field_name'] != $_POST['old_field_name'] && ! $exc->is_only('reg_field_name', trim($_POST['reg_field_name']))) {
-                sys_msg(sprintf($_LANG['field_name_exist'], trim($_POST['reg_field_name'])), 1);
+                return sys_msg(sprintf($_LANG['field_name_exist'], trim($_POST['reg_field_name'])), 1);
             }
 
             $sql = 'UPDATE '.$ecs->table('reg_fields')." SET `reg_field_name` = '$_POST[reg_field_name]', `dis_order` = '$_POST[reg_field_order]', `display` = '$_POST[reg_field_display]', `is_need` = '$_POST[reg_field_need]' WHERE `id` = '$_POST[id]'";
@@ -131,7 +131,7 @@ class RegFieldsController extends BaseController
             clear_cache_files();
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'reg_fields.php?act=list'];
-            sys_msg($_LANG['update_field_success'], 0, $lnk);
+            return sys_msg($_LANG['update_field_success'], 0, $lnk);
         }
 
         /*------------------------------------------------------ */
@@ -168,12 +168,12 @@ class RegFieldsController extends BaseController
                     /* 管理员日志 */
                     admin_log($val, 'edit', 'reg_fields');
                     clear_cache_files();
-                    make_json_result(stripcslashes($val));
+                    return make_json_result(stripcslashes($val));
                 } else {
-                    make_json_error($db->error());
+                    return make_json_error($db->error());
                 }
             } else {
-                make_json_error(sprintf($_LANG['field_name_exist'], htmlspecialchars($val)));
+                return make_json_error(sprintf($_LANG['field_name_exist'], htmlspecialchars($val)));
             }
         } /*
  *  编辑会员注册项排序权值
@@ -187,12 +187,12 @@ class RegFieldsController extends BaseController
                     /* 管理员日志 */
                     admin_log($val, 'edit', 'reg_fields');
                     clear_cache_files();
-                    make_json_result(stripcslashes($val));
+                    return make_json_result(stripcslashes($val));
                 } else {
-                    make_json_error($db->error());
+                    return make_json_error($db->error());
                 }
             } else {
-                make_json_error($_LANG['order_not_num']);
+                return make_json_error($_LANG['order_not_num']);
             }
         }
 
@@ -207,7 +207,7 @@ class RegFieldsController extends BaseController
 
             if ($exc->edit("display = '$is_dis'", $id)) {
                 clear_cache_files();
-                make_json_result($is_dis);
+                return make_json_result($is_dis);
             }
         }
 
@@ -222,7 +222,7 @@ class RegFieldsController extends BaseController
 
             if ($exc->edit("is_need = '$is_need'", $id)) {
                 clear_cache_files();
-                make_json_result($is_need);
+                return make_json_result($is_need);
             }
         }
 

@@ -12,35 +12,35 @@ class ViewSendlistController extends BaseController
         admin_priv('view_sendlist');
         if ($_REQUEST['act'] == 'list') {
             $listdb = get_sendlist();
-            $smarty->assign('ur_here', $_LANG['view_sendlist']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['view_sendlist']);
+            $this->assign('full_page', 1);
 
-            $smarty->assign('listdb', $listdb['listdb']);
-            $smarty->assign('filter', $listdb['filter']);
-            $smarty->assign('record_count', $listdb['record_count']);
-            $smarty->assign('page_count', $listdb['page_count']);
+            $this->assign('listdb', $listdb['listdb']);
+            $this->assign('filter', $listdb['filter']);
+            $this->assign('record_count', $listdb['record_count']);
+            $this->assign('page_count', $listdb['page_count']);
 
             assign_query_info();
-            $smarty->display('view_sendlist.htm');
+            $this->display('view_sendlist.htm');
         }
         if ($_REQUEST['act'] == 'query') {
             $listdb = get_sendlist();
-            $smarty->assign('listdb', $listdb['listdb']);
-            $smarty->assign('filter', $listdb['filter']);
-            $smarty->assign('record_count', $listdb['record_count']);
-            $smarty->assign('page_count', $listdb['page_count']);
+            $this->assign('listdb', $listdb['listdb']);
+            $this->assign('filter', $listdb['filter']);
+            $this->assign('record_count', $listdb['record_count']);
+            $this->assign('page_count', $listdb['page_count']);
 
             $sort_flag = sort_flag($listdb['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result($smarty->fetch('view_sendlist.htm'), '', ['filter' => $listdb['filter'], 'page_count' => $listdb['page_count']]);
+            return make_json_result($this->fetch('view_sendlist.htm'), '', ['filter' => $listdb['filter'], 'page_count' => $listdb['page_count']]);
         }
         if ($_REQUEST['act'] == 'del') {
             $id = (int) $_REQUEST['id'];
             $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('email_sendlist')." WHERE id = '$id' LIMIT 1";
             $db->query($sql);
             $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
-            sys_msg($_LANG['del_ok'], 0, $links);
+            return sys_msg($_LANG['del_ok'], 0, $links);
         }
 
         /*------------------------------------------------------ */
@@ -54,10 +54,10 @@ class ViewSendlistController extends BaseController
                 $db->query($sql);
 
                 $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
-                sys_msg($_LANG['del_ok'], 0, $links);
+                return sys_msg($_LANG['del_ok'], 0, $links);
             } else {
                 $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
-                sys_msg($_LANG['no_select'], 0, $links);
+                return sys_msg($_LANG['no_select'], 0, $links);
             }
         }
 
@@ -74,7 +74,7 @@ class ViewSendlistController extends BaseController
                 //发送列表为空
                 if (empty($row['id'])) {
                     $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
-                    sys_msg($_LANG['mailsend_null'], 0, $links);
+                    return sys_msg($_LANG['mailsend_null'], 0, $links);
                 }
 
                 $sql = 'SELECT * FROM '.$ecs->table('email_sendlist').'WHERE id '.db_create_in($_POST['checkboxes']).' ORDER BY pri DESC, last_send ASC';
@@ -125,10 +125,10 @@ class ViewSendlistController extends BaseController
                 }
 
                 $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
-                sys_msg($_LANG['mailsend_finished'], 0, $links);
+                return sys_msg($_LANG['mailsend_finished'], 0, $links);
             } else {
                 $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
-                sys_msg($_LANG['no_select'], 0, $links);
+                return sys_msg($_LANG['no_select'], 0, $links);
             }
         }
 
@@ -143,7 +143,7 @@ class ViewSendlistController extends BaseController
             //发送列表为空
             if (empty($row['id'])) {
                 $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
-                sys_msg($_LANG['mailsend_null'], 0, $links);
+                return sys_msg($_LANG['mailsend_null'], 0, $links);
             }
 
             $sql = 'SELECT * FROM '.$ecs->table('email_sendlist').' ORDER BY pri DESC, last_send ASC';
@@ -194,7 +194,7 @@ class ViewSendlistController extends BaseController
             }
 
             $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
-            sys_msg($_LANG['mailsend_finished'], 0, $links);
+            return sys_msg($_LANG['mailsend_finished'], 0, $links);
         }
     }
 

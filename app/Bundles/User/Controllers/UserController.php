@@ -16,7 +16,7 @@ class UserController extends BaseController
         $action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
 
         $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
-        $smarty->assign('affiliate', $affiliate);
+        $this->assign('affiliate', $affiliate);
         $back_act = '';
 
         // 不需要登录的操作或自己验证是否登录（如ajax处理）的act
@@ -57,35 +57,35 @@ class UserController extends BaseController
         if (in_array($action, $ui_arr)) {
             assign_template();
             $position = assign_ur_here(0, $_LANG['user_center']);
-            $smarty->assign('page_title', $position['title']); // 页面标题
-            $smarty->assign('ur_here', $position['ur_here']);
+            $this->assign('page_title', $position['title']); // 页面标题
+            $this->assign('ur_here', $position['ur_here']);
             $sql = 'SELECT value FROM '.$ecs->table('shop_config').' WHERE id = 419';
             $row = $db->getRow($sql);
             $car_off = $row['value'];
-            $smarty->assign('car_off', $car_off);
+            $this->assign('car_off', $car_off);
             /* 是否显示积分兑换 */
             if (! empty($_CFG['points_rule']) && unserialize($_CFG['points_rule'])) {
-                $smarty->assign('show_transform_points', 1);
+                $this->assign('show_transform_points', 1);
             }
-            $smarty->assign('helps', get_shop_help());        // 网店帮助
-            $smarty->assign('data_dir', DATA_DIR);   // 数据目录
-            $smarty->assign('action', $action);
-            $smarty->assign('lang', $_LANG);
+            $this->assign('helps', get_shop_help());        // 网店帮助
+            $this->assign('data_dir', DATA_DIR);   // 数据目录
+            $this->assign('action', $action);
+            $this->assign('lang', $_LANG);
         }
 
         //用户中心欢迎页
         if ($action == 'default') {
             include_once ROOT_PATH.'includes/lib_clips.php';
             if ($rank = get_rank_info()) {
-                $smarty->assign('rank_name', sprintf($_LANG['your_level'], $rank['rank_name']));
+                $this->assign('rank_name', sprintf($_LANG['your_level'], $rank['rank_name']));
                 if (! empty($rank['next_rank_name'])) {
-                    $smarty->assign('next_rank_name', sprintf($_LANG['next_level'], $rank['next_rank'], $rank['next_rank_name']));
+                    $this->assign('next_rank_name', sprintf($_LANG['next_level'], $rank['next_rank'], $rank['next_rank_name']));
                 }
             }
-            $smarty->assign('info', get_user_default($user_id));
-            $smarty->assign('user_notice', $_CFG['user_notice']);
-            $smarty->assign('prompt', get_user_prompt($user_id));
-            $smarty->display('user_clips.dwt');
+            $this->assign('info', get_user_default($user_id));
+            $this->assign('user_notice', $_CFG['user_notice']);
+            $this->assign('prompt', get_user_prompt($user_id));
+            $this->display('user_clips.dwt');
         }
 
         /* 显示会员注册界面 */
@@ -97,28 +97,28 @@ class UserController extends BaseController
             /* 取出注册扩展字段 */
             $sql = 'SELECT * FROM '.$ecs->table('reg_fields').' WHERE type < 2 AND display = 1 ORDER BY dis_order, id';
             $extend_info_list = $db->getAll($sql);
-            $smarty->assign('extend_info_list', $extend_info_list);
+            $this->assign('extend_info_list', $extend_info_list);
 
             /* 验证码相关设置 */
             if ((intval($_CFG['captcha']) & CAPTCHA_REGISTER) && gd_version() > 0) {
-                $smarty->assign('enabled_captcha', 1);
-                $smarty->assign('rand', mt_rand());
+                $this->assign('enabled_captcha', 1);
+                $this->assign('rand', mt_rand());
             }
 
             /* 密码提示问题 */
-            $smarty->assign('passwd_questions', $_LANG['passwd_questions']);
+            $this->assign('passwd_questions', $_LANG['passwd_questions']);
 
             /* 增加是否关闭注册 */
-            $smarty->assign('shop_reg_closed', $_CFG['shop_reg_closed']);
-            //    $smarty->assign('back_act', $back_act);
-            $smarty->display('user_passport.dwt');
+            $this->assign('shop_reg_closed', $_CFG['shop_reg_closed']);
+            //    $this->assign('back_act', $back_act);
+            $this->display('user_passport.dwt');
         } /* 注册会员的处理 */
         elseif ($action == 'act_register') {
             /* 增加是否关闭注册 */
             if ($_CFG['shop_reg_closed']) {
-                $smarty->assign('action', 'register');
-                $smarty->assign('shop_reg_closed', $_CFG['shop_reg_closed']);
-                $smarty->display('user_passport.dwt');
+                $this->assign('action', 'register');
+                $this->assign('shop_reg_closed', $_CFG['shop_reg_closed']);
+                $this->display('user_passport.dwt');
             } else {
                 include_once ROOT_PATH.'includes/lib_passport.php';
 
@@ -136,24 +136,24 @@ class UserController extends BaseController
                 $back_act = isset($_POST['back_act']) ? trim($_POST['back_act']) : '';
 
                 if (empty($_POST['agreement'])) {
-                    show_message($_LANG['passport_js']['agreement']);
+                    return show_message($_LANG['passport_js']['agreement']);
                 }
                 if (strlen($username) < 3) {
-                    show_message($_LANG['passport_js']['username_shorter']);
+                    return show_message($_LANG['passport_js']['username_shorter']);
                 }
 
                 if (strlen($password) < 6) {
-                    show_message($_LANG['passport_js']['password_shorter']);
+                    return show_message($_LANG['passport_js']['password_shorter']);
                 }
 
                 if (strpos($password, ' ') > 0) {
-                    show_message($_LANG['passwd_balnk']);
+                    return show_message($_LANG['passwd_balnk']);
                 }
 
                 /* 验证码检查 */
                 if ((intval($_CFG['captcha']) & CAPTCHA_REGISTER) && gd_version() > 0) {
                     if (empty($_POST['captcha'])) {
-                        show_message($_LANG['invalid_captcha'], $_LANG['sign_up'], 'user.php?act=register', 'error');
+                        return show_message($_LANG['invalid_captcha'], $_LANG['sign_up'], 'user.php?act=register', 'error');
                     }
 
                     /* 检查验证码 */
@@ -161,7 +161,7 @@ class UserController extends BaseController
 
                     $validator = new captcha();
                     if (! $validator->check_word($_POST['captcha'])) {
-                        show_message($_LANG['invalid_captcha'], $_LANG['sign_up'], 'user.php?act=register', 'error');
+                        return show_message($_LANG['invalid_captcha'], $_LANG['sign_up'], 'user.php?act=register', 'error');
                     }
                 }
 
@@ -195,7 +195,7 @@ class UserController extends BaseController
                         send_regiter_hash($_SESSION['user_id']);
                     }
                     $ucdata = empty($user->ucdata) ? '' : $user->ucdata;
-                    show_message(sprintf($_LANG['register_success'], $username.$ucdata), [$_LANG['back_up_page'], $_LANG['profile_lnk']], [$back_act, 'user.php'], 'info');
+                    return show_message(sprintf($_LANG['register_success'], $username.$ucdata), [$_LANG['back_up_page'], $_LANG['profile_lnk']], [$back_act, 'user.php'], 'info');
                 } else {
                     $err->show($_LANG['sign_up'], 'user.php?act=register');
                 }
@@ -211,10 +211,10 @@ class UserController extends BaseController
                     $db->query($sql);
                     $sql = 'SELECT user_name, email FROM '.$ecs->table('users')." WHERE user_id = '$id'";
                     $row = $db->getRow($sql);
-                    show_message(sprintf($_LANG['validate_ok'], $row['user_name'], $row['email']), $_LANG['profile_lnk'], 'user.php');
+                    return show_message(sprintf($_LANG['validate_ok'], $row['user_name'], $row['email']), $_LANG['profile_lnk'], 'user.php');
                 }
             }
-            show_message($_LANG['validate_fail']);
+            return show_message($_LANG['validate_fail']);
         } /* 验证用户注册用户名是否可以注册 */
         elseif ($action == 'is_registered') {
             include_once ROOT_PATH.'includes/lib_passport.php';
@@ -251,8 +251,8 @@ class UserController extends BaseController
                 $GLOBALS['smarty']->assign('rand', mt_rand());
             }
 
-            $smarty->assign('back_act', $back_act);
-            $smarty->display('user_passport.dwt');
+            $this->assign('back_act', $back_act);
+            $this->display('user_passport.dwt');
         } /* 处理会员的登录 */
         elseif ($action == 'act_login') {
             $username = isset($_POST['username']) ? trim($_POST['username']) : '';
@@ -262,7 +262,7 @@ class UserController extends BaseController
             $captcha = intval($_CFG['captcha']);
             if (($captcha & CAPTCHA_LOGIN) && (! ($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
                 if (empty($_POST['captcha'])) {
-                    show_message($_LANG['invalid_captcha'], $_LANG['relogin_lnk'], 'user.php', 'error');
+                    return show_message($_LANG['invalid_captcha'], $_LANG['relogin_lnk'], 'user.php', 'error');
                 }
 
                 /* 检查验证码 */
@@ -271,7 +271,7 @@ class UserController extends BaseController
                 $validator = new captcha();
                 $validator->session_word = 'captcha_login';
                 if (! $validator->check_word($_POST['captcha'])) {
-                    show_message($_LANG['invalid_captcha'], $_LANG['relogin_lnk'], 'user.php', 'error');
+                    return show_message($_LANG['invalid_captcha'], $_LANG['relogin_lnk'], 'user.php', 'error');
                 }
             }
 
@@ -280,10 +280,10 @@ class UserController extends BaseController
                 recalculate_price();
 
                 $ucdata = isset($user->ucdata) ? $user->ucdata : '';
-                show_message($_LANG['login_success'].$ucdata, [$_LANG['back_up_page'], $_LANG['profile_lnk']], [$back_act, 'user.php'], 'info');
+                return show_message($_LANG['login_success'].$ucdata, [$_LANG['back_up_page'], $_LANG['profile_lnk']], [$back_act, 'user.php'], 'info');
             } else {
                 $_SESSION['login_fail']++;
-                show_message($_LANG['login_failure'], $_LANG['relogin_lnk'], 'user.php', 'error');
+                return show_message($_LANG['login_failure'], $_LANG['relogin_lnk'], 'user.php', 'error');
             }
         } /* 处理 ajax 的登录请求 */
         elseif ($action == 'signin') {
@@ -318,15 +318,15 @@ class UserController extends BaseController
             if ($user->login($username, $password)) {
                 update_user_info();  //更新用户信息
                 recalculate_price(); // 重新计算购物车中的商品价格
-                $smarty->assign('user_info', get_user_info());
+                $this->assign('user_info', get_user_info());
                 $ucdata = empty($user->ucdata) ? '' : $user->ucdata;
                 $result['ucdata'] = $ucdata;
-                $result['content'] = $smarty->fetch('library/member_info.lbi');
+                $result['content'] = $this->fetch('library/member_info.lbi');
             } else {
                 $_SESSION['login_fail']++;
                 if ($_SESSION['login_fail'] > 2) {
-                    $smarty->assign('enabled_captcha', 1);
-                    $result['html'] = $smarty->fetch('library/member_info.lbi');
+                    $this->assign('enabled_captcha', 1);
+                    $result['html'] = $this->fetch('library/member_info.lbi');
                 }
                 $result['error'] = 1;
                 $result['content'] = $_LANG['login_failure'];
@@ -340,7 +340,7 @@ class UserController extends BaseController
 
             $user->logout();
             $ucdata = empty($user->ucdata) ? '' : $user->ucdata;
-            show_message($_LANG['logout'].$ucdata, [$_LANG['back_up_page'], $_LANG['back_home_lnk']], [$back_act, 'index.php'], 'info');
+            return show_message($_LANG['logout'].$ucdata, [$_LANG['back_up_page'], $_LANG['back_home_lnk']], [$back_act, 'index.php'], 'info');
         } /* 个人资料页面 */
         elseif ($action == 'profile') {
             include_once ROOT_PATH.'includes/lib_transaction.php';
@@ -383,13 +383,13 @@ class UserController extends BaseController
                 }
             }
 
-            $smarty->assign('extend_info_list', $extend_info_list);
+            $this->assign('extend_info_list', $extend_info_list);
 
             /* 密码提示问题 */
-            $smarty->assign('passwd_questions', $_LANG['passwd_questions']);
+            $this->assign('passwd_questions', $_LANG['passwd_questions']);
 
-            $smarty->assign('profile', $user_info);
-            $smarty->display('user_transaction.dwt');
+            $this->assign('profile', $user_info);
+            $this->display('user_transaction.dwt');
         } /* 修改个人资料的处理 */
         elseif ($action == 'act_edit_profile') {
             include_once ROOT_PATH.'includes/lib_transaction.php';
@@ -430,22 +430,22 @@ class UserController extends BaseController
             }
 
             if (! empty($office_phone) && ! preg_match('/^[\d|\_|\-|\s]+$/', $office_phone)) {
-                show_message($_LANG['passport_js']['office_phone_invalid']);
+                return show_message($_LANG['passport_js']['office_phone_invalid']);
             }
             if (! empty($home_phone) && ! preg_match('/^[\d|\_|\-|\s]+$/', $home_phone)) {
-                show_message($_LANG['passport_js']['home_phone_invalid']);
+                return show_message($_LANG['passport_js']['home_phone_invalid']);
             }
             if (! is_email($email)) {
-                show_message($_LANG['msg_email_format']);
+                return show_message($_LANG['msg_email_format']);
             }
             if (! empty($msn) && ! is_email($msn)) {
-                show_message($_LANG['passport_js']['msn_invalid']);
+                return show_message($_LANG['passport_js']['msn_invalid']);
             }
             if (! empty($qq) && ! preg_match('/^\d+$/', $qq)) {
-                show_message($_LANG['passport_js']['qq_invalid']);
+                return show_message($_LANG['passport_js']['qq_invalid']);
             }
             if (! empty($mobile_phone) && ! preg_match('/^[\d-\s]+$/', $mobile_phone)) {
-                show_message($_LANG['passport_js']['mobile_phone_invalid']);
+                return show_message($_LANG['passport_js']['mobile_phone_invalid']);
             }
 
             $profile = [
@@ -457,14 +457,14 @@ class UserController extends BaseController
             ];
 
             if (edit_profile($profile)) {
-                show_message($_LANG['edit_profile_success'], $_LANG['profile_lnk'], 'user.php?act=profile', 'info');
+                return show_message($_LANG['edit_profile_success'], $_LANG['profile_lnk'], 'user.php?act=profile', 'info');
             } else {
                 if ($user->error == ERR_EMAIL_EXISTS) {
                     $msg = sprintf($_LANG['email_exist'], $profile['email']);
                 } else {
                     $msg = $_LANG['edit_profile_failed'];
                 }
-                show_message($msg, '', '', 'info');
+                return show_message($msg, '', '', 'info');
             }
         } /* 密码找回-->修改密码界面 */
         elseif ($action == 'get_password') {
@@ -477,25 +477,25 @@ class UserController extends BaseController
                 /* 判断链接的合法性 */
                 $user_info = $user->get_profile_by_id($uid);
                 if (empty($user_info) || ($user_info && md5($user_info['user_id'].$_CFG['hash_code'].$user_info['reg_time']) != $code)) {
-                    show_message($_LANG['parm_error'], $_LANG['back_home_lnk'], './', 'info');
+                    return show_message($_LANG['parm_error'], $_LANG['back_home_lnk'], './', 'info');
                 }
 
-                $smarty->assign('uid', $uid);
-                $smarty->assign('code', $code);
-                $smarty->assign('action', 'reset_password');
-                $smarty->display('user_passport.dwt');
+                $this->assign('uid', $uid);
+                $this->assign('code', $code);
+                $this->assign('action', 'reset_password');
+                $this->display('user_passport.dwt');
             } else {
                 //显示用户名和email表单
-                $smarty->display('user_passport.dwt');
+                $this->display('user_passport.dwt');
             }
         } /* 密码找回-->输入用户名界面 */
         elseif ($action == 'qpassword_name') {
             //显示输入要找回密码的账号表单
-            $smarty->display('user_passport.dwt');
+            $this->display('user_passport.dwt');
         } /* 密码找回-->根据注册用户名取得密码提示问题界面 */
         elseif ($action == 'get_passwd_question') {
             if (empty($_POST['user_name'])) {
-                show_message($_LANG['no_passwd_question'], $_LANG['back_home_lnk'], './', 'info');
+                return show_message($_LANG['no_passwd_question'], $_LANG['back_home_lnk'], './', 'info');
             } else {
                 $user_name = trim($_POST['user_name']);
             }
@@ -506,7 +506,7 @@ class UserController extends BaseController
 
             //如果没有设置密码问题，给出错误提示
             if (empty($user_question_arr['passwd_answer'])) {
-                show_message($_LANG['no_passwd_question'], $_LANG['back_home_lnk'], './', 'info');
+                return show_message($_LANG['no_passwd_question'], $_LANG['back_home_lnk'], './', 'info');
             }
 
             $_SESSION['temp_user'] = $user_question_arr['user_id'];  //设置临时用户，不具有有效身份
@@ -519,14 +519,14 @@ class UserController extends BaseController
                 $GLOBALS['smarty']->assign('rand', mt_rand());
             }
 
-            $smarty->assign('passwd_question', $_LANG['passwd_questions'][$user_question_arr['passwd_question']]);
-            $smarty->display('user_passport.dwt');
+            $this->assign('passwd_question', $_LANG['passwd_questions'][$user_question_arr['passwd_question']]);
+            $this->display('user_passport.dwt');
         } /* 密码找回-->根据提交的密码答案进行相应处理 */
         elseif ($action == 'check_answer') {
             $captcha = intval($_CFG['captcha']);
             if (($captcha & CAPTCHA_LOGIN) && (! ($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
                 if (empty($_POST['captcha'])) {
-                    show_message($_LANG['invalid_captcha'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'error');
+                    return show_message($_LANG['invalid_captcha'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'error');
                 }
 
                 /* 检查验证码 */
@@ -535,20 +535,20 @@ class UserController extends BaseController
                 $validator = new captcha();
                 $validator->session_word = 'captcha_login';
                 if (! $validator->check_word($_POST['captcha'])) {
-                    show_message($_LANG['invalid_captcha'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'error');
+                    return show_message($_LANG['invalid_captcha'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'error');
                 }
             }
 
             if (empty($_POST['passwd_answer']) || $_POST['passwd_answer'] != $_SESSION['passwd_answer']) {
-                show_message($_LANG['wrong_passwd_answer'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'info');
+                return show_message($_LANG['wrong_passwd_answer'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'info');
             } else {
                 $_SESSION['user_id'] = $_SESSION['temp_user'];
                 $_SESSION['user_name'] = $_SESSION['temp_user_name'];
                 unset($_SESSION['temp_user']);
                 unset($_SESSION['temp_user_name']);
-                $smarty->assign('uid', $_SESSION['user_id']);
-                $smarty->assign('action', 'reset_password');
-                $smarty->display('user_passport.dwt');
+                $this->assign('uid', $_SESSION['user_id']);
+                $this->assign('action', 'reset_password');
+                $this->display('user_passport.dwt');
             }
         } /* 发送密码修改确认邮件 */
         elseif ($action == 'send_pwd_email') {
@@ -568,19 +568,19 @@ class UserController extends BaseController
                 $code = md5($user_info['user_id'].$_CFG['hash_code'].$user_info['reg_time']);
                 //发送邮件的函数
                 if (send_pwd_email($user_info['user_id'], $user_name, $email, $code)) {
-                    show_message($_LANG['send_success'].$email, $_LANG['back_home_lnk'], './', 'info');
+                    return show_message($_LANG['send_success'].$email, $_LANG['back_home_lnk'], './', 'info');
                 } else {
                     //发送邮件出错
-                    show_message($_LANG['fail_send_password'], $_LANG['back_page_up'], './', 'info');
+                    return show_message($_LANG['fail_send_password'], $_LANG['back_page_up'], './', 'info');
                 }
             } else {
                 //用户名与邮件地址不匹配
-                show_message($_LANG['username_no_email'], $_LANG['back_page_up'], '', 'info');
+                return show_message($_LANG['username_no_email'], $_LANG['back_page_up'], '', 'info');
             }
         } /* 重置新密码 */
         elseif ($action == 'reset_password') {
             //显示重置密码的表单
-            $smarty->display('user_passport.dwt');
+            $this->display('user_passport.dwt');
         } /* 修改会员密码 */
         elseif ($action == 'act_edit_password') {
             include_once ROOT_PATH.'includes/lib_passport.php';
@@ -591,7 +591,7 @@ class UserController extends BaseController
             $code = isset($_POST['code']) ? trim($_POST['code']) : '';
 
             if (strlen($new_password) < 6) {
-                show_message($_LANG['passport_js']['password_shorter']);
+                return show_message($_LANG['passport_js']['password_shorter']);
             }
 
             $user_info = $user->get_profile_by_id($user_id); //论坛记录
@@ -601,12 +601,12 @@ class UserController extends BaseController
                     $sql = 'UPDATE '.$ecs->table('users')."SET `ec_salt`='0' WHERE user_id= '".$user_id."'";
                     $db->query($sql);
                     $user->logout();
-                    show_message($_LANG['edit_password_success'], $_LANG['relogin_lnk'], 'user.php?act=login', 'info');
+                    return show_message($_LANG['edit_password_success'], $_LANG['relogin_lnk'], 'user.php?act=login', 'info');
                 } else {
-                    show_message($_LANG['edit_password_failure'], $_LANG['back_page_up'], '', 'info');
+                    return show_message($_LANG['edit_password_failure'], $_LANG['back_page_up'], '', 'info');
                 }
             } else {
-                show_message($_LANG['edit_password_failure'], $_LANG['back_page_up'], '', 'info');
+                return show_message($_LANG['edit_password_failure'], $_LANG['back_page_up'], '', 'info');
             }
         } /* 添加一个红包 */
         elseif ($action == 'act_add_bonus') {
@@ -615,7 +615,7 @@ class UserController extends BaseController
             $bouns_sn = isset($_POST['bonus_sn']) ? intval($_POST['bonus_sn']) : '';
 
             if (add_bonus($user_id, $bouns_sn)) {
-                show_message($_LANG['add_bonus_sucess'], $_LANG['back_up_page'], 'user.php?act=bonus', 'info');
+                return show_message($_LANG['add_bonus_sucess'], $_LANG['back_up_page'], 'user.php?act=bonus', 'info');
             } else {
                 $err->show($_LANG['back_up_page'], 'user.php?act=bonus');
             }
@@ -632,10 +632,10 @@ class UserController extends BaseController
             $orders = get_user_orders($user_id, $pager['size'], $pager['start']);
             $merge = get_user_merge($user_id);
 
-            $smarty->assign('merge', $merge);
-            $smarty->assign('pager', $pager);
-            $smarty->assign('orders', $orders);
-            $smarty->display('user_transaction.dwt');
+            $this->assign('merge', $merge);
+            $this->assign('pager', $pager);
+            $this->assign('orders', $orders);
+            $this->display('user_transaction.dwt');
         } /* 查看订单详情 */
         elseif ($action == 'order_detail') {
             include_once ROOT_PATH.'includes/lib_transaction.php';
@@ -656,7 +656,7 @@ class UserController extends BaseController
 
             /* 是否显示添加到购物车 */
             if ($order['extension_code'] != 'group_buy' && $order['extension_code'] != 'exchange_goods') {
-                $smarty->assign('allow_to_cart', 1);
+                $this->assign('allow_to_cart', 1);
             }
 
             /* 订单商品 */
@@ -672,8 +672,8 @@ class UserController extends BaseController
                 if ($order['order_status'] == OS_UNCONFIRMED || $order['order_status'] == OS_CONFIRMED) {
                     $user = user_info($order['user_id']);
                     if ($user['user_money'] + $user['credit_line'] > 0) {
-                        $smarty->assign('allow_edit_surplus', 1);
-                        $smarty->assign('max_surplus', sprintf($_LANG['max_surplus'], $user['user_money']));
+                        $this->assign('allow_edit_surplus', 1);
+                        $this->assign('max_surplus', sprintf($_LANG['max_surplus'], $user['user_money']));
                     }
                 }
             }
@@ -690,7 +690,7 @@ class UserController extends BaseController
                         }
                     }
                 }
-                $smarty->assign('payment_list', $payment_list);
+                $this->assign('payment_list', $payment_list);
             }
 
             /* 订单 支付 配送 状态语言项 */
@@ -698,9 +698,9 @@ class UserController extends BaseController
             $order['pay_status'] = $_LANG['ps'][$order['pay_status']];
             $order['shipping_status'] = $_LANG['ss'][$order['shipping_status']];
 
-            $smarty->assign('order', $order);
-            $smarty->assign('goods_list', $goods_list);
-            $smarty->display('user_transaction.dwt');
+            $this->assign('order', $order);
+            $this->assign('goods_list', $goods_list);
+            $this->display('user_transaction.dwt');
         } /* 取消订单 */
         elseif ($action == 'cancel_order') {
             include_once ROOT_PATH.'includes/lib_transaction.php';
@@ -718,11 +718,11 @@ class UserController extends BaseController
         elseif ($action == 'address_list') {
             include_once ROOT_PATH.'includes/lib_transaction.php';
             include_once ROOT_PATH.'languages/'.$_CFG['lang'].'/shopping_flow.php';
-            $smarty->assign('lang', $_LANG);
+            $this->assign('lang', $_LANG);
 
             /* 取得国家列表、商店所在国家、商店所在国家的省列表 */
-            $smarty->assign('country_list', get_regions());
-            $smarty->assign('shop_province_list', get_regions(1, $_CFG['shop_country']));
+            $this->assign('country_list', get_regions());
+            $this->assign('shop_province_list', get_regions(1, $_CFG['shop_country']));
 
             /* 获得用户所有的收货人信息 */
             $consignee_list = get_consignee_list($_SESSION['user_id']);
@@ -732,7 +732,7 @@ class UserController extends BaseController
                 $consignee_list[] = ['country' => $_CFG['shop_country'], 'email' => isset($_SESSION['email']) ? $_SESSION['email'] : ''];
             }
 
-            $smarty->assign('consignee_list', $consignee_list);
+            $this->assign('consignee_list', $consignee_list);
 
             //取得国家列表，如果有收货人列表，取得省市区列表
             foreach ($consignee_list as $region_id => $consignee) {
@@ -749,23 +749,23 @@ class UserController extends BaseController
             $address_id = $db->getOne('SELECT address_id FROM '.$ecs->table('users')." WHERE user_id='$user_id'");
 
             //赋值于模板
-            $smarty->assign('real_goods_count', 1);
-            $smarty->assign('shop_country', $_CFG['shop_country']);
-            $smarty->assign('shop_province', get_regions(1, $_CFG['shop_country']));
-            $smarty->assign('province_list', $province_list);
-            $smarty->assign('address', $address_id);
-            $smarty->assign('city_list', $city_list);
-            $smarty->assign('district_list', $district_list);
-            $smarty->assign('currency_format', $_CFG['currency_format']);
-            $smarty->assign('integral_scale', $_CFG['integral_scale']);
-            $smarty->assign('name_of_region', [$_CFG['name_of_region_1'], $_CFG['name_of_region_2'], $_CFG['name_of_region_3'], $_CFG['name_of_region_4']]);
+            $this->assign('real_goods_count', 1);
+            $this->assign('shop_country', $_CFG['shop_country']);
+            $this->assign('shop_province', get_regions(1, $_CFG['shop_country']));
+            $this->assign('province_list', $province_list);
+            $this->assign('address', $address_id);
+            $this->assign('city_list', $city_list);
+            $this->assign('district_list', $district_list);
+            $this->assign('currency_format', $_CFG['currency_format']);
+            $this->assign('integral_scale', $_CFG['integral_scale']);
+            $this->assign('name_of_region', [$_CFG['name_of_region_1'], $_CFG['name_of_region_2'], $_CFG['name_of_region_3'], $_CFG['name_of_region_4']]);
 
-            $smarty->display('user_transaction.dwt');
+            $this->display('user_transaction.dwt');
         } /* 添加/编辑收货地址的处理 */
         elseif ($action == 'act_edit_address') {
             include_once ROOT_PATH.'includes/lib_transaction.php';
             include_once ROOT_PATH.'languages/'.$_CFG['lang'].'/shopping_flow.php';
-            $smarty->assign('lang', $_LANG);
+            $this->assign('lang', $_LANG);
 
             $address = [
                 'user_id' => $user_id,
@@ -785,7 +785,7 @@ class UserController extends BaseController
             ];
 
             if (update_address($address)) {
-                show_message($_LANG['edit_address_success'], $_LANG['address_list_lnk'], 'user.php?act=address_list');
+                return show_message($_LANG['edit_address_success'], $_LANG['address_list_lnk'], 'user.php?act=address_list');
             }
         } /* 删除收货地址 */
         elseif ($action == 'drop_consignee') {
@@ -797,7 +797,7 @@ class UserController extends BaseController
                 ecs_header("Location: user.php?act=address_list\n");
                 exit;
             } else {
-                show_message($_LANG['del_address_false']);
+                return show_message($_LANG['del_address_false']);
             }
         } /* 显示收藏商品列表 */
         elseif ($action == 'collection_list') {
@@ -809,17 +809,17 @@ class UserController extends BaseController
                 " WHERE user_id='$user_id' ORDER BY add_time DESC");
 
             $pager = get_pager('user.php', ['act' => $action], $record_count, $page);
-            $smarty->assign('pager', $pager);
-            $smarty->assign('goods_list', get_collection_goods($user_id, $pager['size'], $pager['start']));
-            $smarty->assign('url', $ecs->url());
+            $this->assign('pager', $pager);
+            $this->assign('goods_list', get_collection_goods($user_id, $pager['size'], $pager['start']));
+            $this->assign('url', $ecs->url());
             $lang_list = [
                 'UTF8' => $_LANG['charset']['utf8'],
                 'GB2312' => $_LANG['charset']['zh_cn'],
                 'BIG5' => $_LANG['charset']['zh_tw'],
             ];
-            $smarty->assign('lang_list', $lang_list);
-            $smarty->assign('user_id', $user_id);
-            $smarty->display('user_clips.dwt');
+            $this->assign('lang_list', $lang_list);
+            $this->assign('user_id', $user_id);
+            $this->display('user_clips.dwt');
         } /* 删除收藏的商品 */
         elseif ($action == 'delete_collection') {
             include_once ROOT_PATH.'includes/lib_clips.php';
@@ -877,10 +877,10 @@ class UserController extends BaseController
 
             $pager = get_pager('user.php', $act, $record_count, $page, 5);
 
-            $smarty->assign('message_list', get_message_list($user_id, $_SESSION['user_name'], $pager['size'], $pager['start'], $order_id));
-            $smarty->assign('pager', $pager);
-            $smarty->assign('order_info', $order_info);
-            $smarty->display('user_clips.dwt');
+            $this->assign('message_list', get_message_list($user_id, $_SESSION['user_name'], $pager['size'], $pager['start'], $order_id));
+            $this->assign('pager', $pager);
+            $this->assign('order_info', $order_info);
+            $this->display('user_clips.dwt');
         } /* 显示评论列表 */
         elseif ($action == 'comment_list') {
             include_once ROOT_PATH.'includes/lib_clips.php';
@@ -893,9 +893,9 @@ class UserController extends BaseController
             $record_count = $db->getOne($sql);
             $pager = get_pager('user.php', ['act' => $action], $record_count, $page, 5);
 
-            $smarty->assign('comment_list', get_comment_list($user_id, $pager['size'], $pager['start']));
-            $smarty->assign('pager', $pager);
-            $smarty->display('user_clips.dwt');
+            $this->assign('comment_list', get_comment_list($user_id, $pager['size'], $pager['start']));
+            $this->assign('pager', $pager);
+            $this->display('user_clips.dwt');
         } /* 添加我的留言 */
         elseif ($action == 'act_add_message') {
             include_once ROOT_PATH.'includes/lib_clips.php';
@@ -913,7 +913,7 @@ class UserController extends BaseController
             ];
 
             if (add_message($message)) {
-                show_message($_LANG['add_message_success'], $_LANG['message_list_lnk'], 'user.php?act=message_list&order_id='.$message['order_id'], 'info');
+                return show_message($_LANG['add_message_success'], $_LANG['message_list_lnk'], 'user.php?act=message_list&order_id='.$message['order_id'], 'info');
             } else {
                 $err->show($_LANG['message_list_lnk'], 'user.php?act=message_list');
             }
@@ -923,9 +923,9 @@ class UserController extends BaseController
 
             $good_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-            $smarty->assign('tags', get_user_tags($user_id));
-            $smarty->assign('tags_from', 'user');
-            $smarty->display('user_clips.dwt');
+            $this->assign('tags', get_user_tags($user_id));
+            $this->assign('tags_from', 'user');
+            $this->display('user_clips.dwt');
         } /* 删除标签云的处理 */
         elseif ($action == 'act_del_tag') {
             include_once ROOT_PATH.'includes/lib_clips.php';
@@ -949,16 +949,16 @@ class UserController extends BaseController
             $record_count = $db->getOne($sql);
             $pager = get_pager('user.php', ['act' => $action], $record_count, $page);
 
-            $smarty->assign('booking_list', get_booking_list($user_id, $pager['size'], $pager['start']));
-            $smarty->assign('pager', $pager);
-            $smarty->display('user_clips.dwt');
+            $this->assign('booking_list', get_booking_list($user_id, $pager['size'], $pager['start']));
+            $this->assign('pager', $pager);
+            $this->display('user_clips.dwt');
         } /* 添加缺货登记页面 */
         elseif ($action == 'add_booking') {
             include_once ROOT_PATH.'includes/lib_clips.php';
 
             $goods_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
             if ($goods_id == 0) {
-                show_message($_LANG['no_goods_id'], $_LANG['back_page_up'], '', 'error');
+                return show_message($_LANG['no_goods_id'], $_LANG['back_page_up'], '', 'error');
             }
 
             /* 根据规格属性获取货品规格信息 */
@@ -978,10 +978,10 @@ class UserController extends BaseController
                 }
                 $goods_attr = implode(chr(13).chr(10), $attr_list);
             }
-            $smarty->assign('goods_attr', $goods_attr);
+            $this->assign('goods_attr', $goods_attr);
 
-            $smarty->assign('info', get_goodsinfo($goods_id));
-            $smarty->display('user_clips.dwt');
+            $this->assign('info', get_goodsinfo($goods_id));
+            $this->display('user_clips.dwt');
         } /* 添加缺货登记的处理 */
         elseif ($action == 'act_add_booking') {
             include_once ROOT_PATH.'includes/lib_clips.php';
@@ -999,11 +999,11 @@ class UserController extends BaseController
             // 查看此商品是否已经登记过
             $rec_id = get_booking_rec($user_id, $booking['goods_id']);
             if ($rec_id > 0) {
-                show_message($_LANG['booking_rec_exist'], $_LANG['back_page_up'], '', 'error');
+                return show_message($_LANG['booking_rec_exist'], $_LANG['back_page_up'], '', 'error');
             }
 
             if (add_booking($booking)) {
-                show_message(
+                return show_message(
                     $_LANG['booking_success'],
                     $_LANG['back_booking_list'],
                     'user.php?act=booking_list',
@@ -1041,7 +1041,7 @@ class UserController extends BaseController
             }
         } /* 会员退款申请界面 */
         elseif ($action == 'account_raply') {
-            $smarty->display('user_transaction.dwt');
+            $this->display('user_transaction.dwt');
         } /* 会员预付款界面 */
         elseif ($action == 'account_deposit') {
             include_once ROOT_PATH.'includes/lib_clips.php';
@@ -1049,9 +1049,9 @@ class UserController extends BaseController
             $surplus_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
             $account = get_surplus_info($surplus_id);
 
-            $smarty->assign('payment', get_online_payment_list(false));
-            $smarty->assign('order', $account);
-            $smarty->display('user_transaction.dwt');
+            $this->assign('payment', get_online_payment_list(false));
+            $this->assign('order', $account);
+            $this->display('user_transaction.dwt');
         } /* 会员账目明细界面 */
         elseif ($action == 'account_detail') {
             include_once ROOT_PATH.'includes/lib_clips.php';
@@ -1095,10 +1095,10 @@ class UserController extends BaseController
             }
 
             //模板赋值
-            $smarty->assign('surplus_amount', price_format($surplus_amount, false));
-            $smarty->assign('account_log', $account_log);
-            $smarty->assign('pager', $pager);
-            $smarty->display('user_transaction.dwt');
+            $this->assign('surplus_amount', price_format($surplus_amount, false));
+            $this->assign('account_log', $account_log);
+            $this->assign('pager', $pager);
+            $this->display('user_transaction.dwt');
         } /* 会员充值和提现申请记录 */
         elseif ($action == 'account_log') {
             include_once ROOT_PATH.'includes/lib_clips.php';
@@ -1124,17 +1124,17 @@ class UserController extends BaseController
             $account_log = get_account_log($user_id, $pager['size'], $pager['start']);
 
             //模板赋值
-            $smarty->assign('surplus_amount', price_format($surplus_amount, false));
-            $smarty->assign('account_log', $account_log);
-            $smarty->assign('pager', $pager);
-            $smarty->display('user_transaction.dwt');
+            $this->assign('surplus_amount', price_format($surplus_amount, false));
+            $this->assign('account_log', $account_log);
+            $this->assign('pager', $pager);
+            $this->display('user_transaction.dwt');
         } /* 对会员余额申请的处理 */
         elseif ($action == 'act_account') {
             include_once ROOT_PATH.'includes/lib_clips.php';
             include_once ROOT_PATH.'includes/lib_order.php';
             $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : 0;
             if ($amount <= 0) {
-                show_message($_LANG['amount_gt_zero']);
+                return show_message($_LANG['amount_gt_zero']);
             }
 
             /* 变量初始化 */
@@ -1153,7 +1153,7 @@ class UserController extends BaseController
                 $sur_amount = get_user_surplus($user_id);
                 if ($amount > $sur_amount) {
                     $content = $_LANG['surplus_amount_error'];
-                    show_message($content, $_LANG['back_page_up'], '', 'info');
+                    return show_message($content, $_LANG['back_page_up'], '', 'info');
                 }
 
                 //插入会员账目明细
@@ -1164,15 +1164,15 @@ class UserController extends BaseController
                 /* 如果成功提交 */
                 if ($surplus['rec_id'] > 0) {
                     $content = $_LANG['surplus_appl_submit'];
-                    show_message($content, $_LANG['back_account_log'], 'user.php?act=account_log', 'info');
+                    return show_message($content, $_LANG['back_account_log'], 'user.php?act=account_log', 'info');
                 } else {
                     $content = $_LANG['process_false'];
-                    show_message($content, $_LANG['back_page_up'], '', 'info');
+                    return show_message($content, $_LANG['back_page_up'], '', 'info');
                 }
             } /* 如果是会员预付款，跳转到下一步，进行线上支付的操作 */
             else {
                 if ($surplus['payment_id'] <= 0) {
-                    show_message($_LANG['select_payment_pls']);
+                    return show_message($_LANG['select_payment_pls']);
                 }
 
                 include_once ROOT_PATH.'includes/lib_payment.php';
@@ -1216,11 +1216,11 @@ class UserController extends BaseController
                 $payment_info['pay_button'] = $pay_obj->get_code($order, $payment);
 
                 /* 模板赋值 */
-                $smarty->assign('payment', $payment_info);
-                $smarty->assign('pay_fee', price_format($payment_info['pay_fee'], false));
-                $smarty->assign('amount', price_format($amount, false));
-                $smarty->assign('order', $order);
-                $smarty->display('user_transaction.dwt');
+                $this->assign('payment', $payment_info);
+                $this->assign('pay_fee', price_format($payment_info['pay_fee'], false));
+                $this->assign('amount', price_format($amount, false));
+                $this->assign('order', $order);
+                $this->display('user_transaction.dwt');
             }
         } /* 删除会员余额 */
         elseif ($action == 'cancel') {
@@ -1301,20 +1301,20 @@ class UserController extends BaseController
                 $payment_info['pay_button'] = $pay_obj->get_code($order, $payment);
 
                 /* 模板赋值 */
-                $smarty->assign('payment', $payment_info);
-                $smarty->assign('order', $order);
-                $smarty->assign('pay_fee', price_format($payment_info['pay_fee'], false));
-                $smarty->assign('amount', price_format($order['surplus_amount'], false));
-                $smarty->assign('action', 'act_account');
-                $smarty->display('user_transaction.dwt');
+                $this->assign('payment', $payment_info);
+                $this->assign('order', $order);
+                $this->assign('pay_fee', price_format($payment_info['pay_fee'], false));
+                $this->assign('amount', price_format($order['surplus_amount'], false));
+                $this->assign('action', 'act_account');
+                $this->display('user_transaction.dwt');
             } /* 重新选择支付方式 */
             else {
                 include_once ROOT_PATH.'includes/lib_clips.php';
 
-                $smarty->assign('payment', get_online_payment_list());
-                $smarty->assign('order', $order);
-                $smarty->assign('action', 'account_deposit');
-                $smarty->display('user_transaction.dwt');
+                $this->assign('payment', get_online_payment_list());
+                $this->assign('order', $order);
+                $this->assign('action', 'account_deposit');
+                $this->display('user_transaction.dwt');
             }
         } /* 添加标签(ajax) */
         elseif ($action == 'add_tag') {
@@ -1415,7 +1415,7 @@ class UserController extends BaseController
             $from_order = isset($_POST['from_order']) ? trim($_POST['from_order']) : '';
             $to_order = isset($_POST['to_order']) ? trim($_POST['to_order']) : '';
             if (merge_user_order($from_order, $to_order, $user_id)) {
-                show_message($_LANG['merge_order_success'], $_LANG['order_list_lnk'], 'user.php?act=order_list', 'info');
+                return show_message($_LANG['merge_order_success'], $_LANG['order_list_lnk'], 'user.php?act=order_list', 'info');
             } else {
                 $err->show($_LANG['order_list_lnk']);
             }
@@ -1657,21 +1657,21 @@ class UserController extends BaseController
             $pager = get_pager('user.php', ['act' => $action], $record_count, $page);
             $bonus = get_user_bouns_list($user_id, $pager['size'], $pager['start']);
 
-            $smarty->assign('pager', $pager);
-            $smarty->assign('bonus', $bonus);
-            $smarty->display('user_transaction.dwt');
+            $this->assign('pager', $pager);
+            $this->assign('bonus', $bonus);
+            $this->display('user_transaction.dwt');
         } /* 我的团购列表 */
         elseif ($action == 'group_buy') {
             include_once ROOT_PATH.'includes/lib_transaction.php';
 
             //待议
-            $smarty->display('user_transaction.dwt');
+            $this->display('user_transaction.dwt');
         } /* 团购订单详情 */
         elseif ($action == 'group_buy_detail') {
             include_once ROOT_PATH.'includes/lib_transaction.php';
 
             //待议
-            $smarty->display('user_transaction.dwt');
+            $this->display('user_transaction.dwt');
         } // 用户推荐页面
         elseif ($action == 'affiliate') {
             $goodsid = intval(isset($_REQUEST['goodsid']) ? $_REQUEST['goodsid'] : 0);
@@ -1707,7 +1707,7 @@ class UserController extends BaseController
                         $affdb[$i]['point'] = $affiliate['item'][$i - 1]['level_point'];
                         $affdb[$i]['money'] = $affiliate['item'][$i - 1]['level_money'];
                     }
-                    $smarty->assign('affdb', $affdb);
+                    $this->assign('affdb', $affdb);
 
                     $sqlcount = 'SELECT count(*) FROM '.$ecs->table('order_info').' o'.
                         ' LEFT JOIN'.$ecs->table('users').' u ON o.user_id = u.user_id'.
@@ -1804,20 +1804,20 @@ class UserController extends BaseController
                     $pager['array'][$i] = $i;
                 }
 
-                $smarty->assign('url_format', $url_format);
-                $smarty->assign('pager', $pager);
+                $this->assign('url_format', $url_format);
+                $this->assign('pager', $pager);
 
-                $smarty->assign('affiliate_intro', $affiliate_intro);
-                $smarty->assign('affiliate_type', $affiliate['config']['separate_by']);
+                $this->assign('affiliate_intro', $affiliate_intro);
+                $this->assign('affiliate_type', $affiliate['config']['separate_by']);
 
-                $smarty->assign('logdb', $logdb);
+                $this->assign('logdb', $logdb);
             } else {
                 //单个商品推荐
-                $smarty->assign('userid', $user_id);
-                $smarty->assign('goodsid', $goodsid);
+                $this->assign('userid', $user_id);
+                $this->assign('goodsid', $goodsid);
 
                 $types = [1, 2, 3, 4, 5];
-                $smarty->assign('types', $types);
+                $this->assign('types', $types);
 
                 $goods = get_goods_info($goodsid);
                 $shopurl = $ecs->url();
@@ -1825,15 +1825,15 @@ class UserController extends BaseController
                 $goods['goods_thumb'] = (strpos($goods['goods_thumb'], 'http://') === false && strpos($goods['goods_thumb'], 'https://') === false) ? $shopurl.$goods['goods_thumb'] : $goods['goods_thumb'];
                 $goods['shop_price'] = price_format($goods['shop_price']);
 
-                $smarty->assign('goods', $goods);
+                $this->assign('goods', $goods);
             }
 
-            $smarty->assign('shopname', $_CFG['shop_name']);
-            $smarty->assign('userid', $user_id);
-            $smarty->assign('shopurl', $ecs->url());
-            $smarty->assign('logosrc', 'themes/'.$_CFG['template'].'/images/logo.gif');
+            $this->assign('shopname', $_CFG['shop_name']);
+            $this->assign('userid', $user_id);
+            $this->assign('shopurl', $ecs->url());
+            $this->assign('logosrc', 'themes/'.$_CFG['template'].'/images/logo.gif');
 
-            $smarty->display('user_clips.dwt');
+            $this->display('user_clips.dwt');
         } //首页邮件订阅ajax操做和验证操作
         elseif ($action == 'email_list') {
             $job = $_GET['job'];
@@ -1902,7 +1902,7 @@ class UserController extends BaseController
                         $info = $_LANG['hash_wrong'];
                     }
                 }
-                show_message($info, $_LANG['back_home_lnk'], 'index.php');
+                return show_message($info, $_LANG['back_home_lnk'], 'index.php');
             } elseif ($job == 'del_check') {
                 if (empty($ck)) {
                     $info = sprintf($_LANG['email_invalid'], $email);
@@ -1917,7 +1917,7 @@ class UserController extends BaseController
                 } else {
                     $info = $_LANG['email_not_alive'];
                 }
-                show_message($info, $_LANG['back_home_lnk'], 'index.php');
+                return show_message($info, $_LANG['back_home_lnk'], 'index.php');
             }
         } /* ajax 发送验证邮件 */
         elseif ($action == 'send_hash_mail') {
@@ -1971,9 +1971,9 @@ class UserController extends BaseController
                 }
             }
             $pager = get_pager('user.php', ['act' => $action], $record_count, $page);
-            $smarty->assign('pager', $pager);
-            $smarty->assign('orders', $orders);
-            $smarty->display('user_transaction.dwt');
+            $this->assign('pager', $pager);
+            $this->assign('orders', $orders);
+            $this->display('user_transaction.dwt');
         } elseif ($action == 'order_query') {
             $_GET['order_sn'] = trim(substr($_GET['order_sn'], 1));
             $order_sn = empty($_GET['order_sn']) ? '' : addslashes($_GET['order_sn']);
@@ -2032,8 +2032,8 @@ class UserController extends BaseController
             if ($row['user_id'] == 0 && $row['shipping_time'] > 0) {
                 $order_query['shipping_date'] = local_date($GLOBALS['_CFG']['date_format'], $row['shipping_time']);
             }
-            $smarty->assign('order_query', $order_query);
-            $result['content'] = $smarty->fetch('library/order_query.lbi');
+            $this->assign('order_query', $order_query);
+            $result['content'] = $this->fetch('library/order_query.lbi');
             exit($json->encode($result));
         } elseif ($action == 'transform_points') {
             $rule = [];
@@ -2058,14 +2058,14 @@ class UserController extends BaseController
                         $to_credits_options[$credit['appiddesc'].'|'.$credit['creditdesc']] = $credit['title'];
                     }
                 }
-                $smarty->assign('selected_org', $rule[0]['creditsrc']);
-                $smarty->assign('selected_dst', $rule[0]['appiddesc'].'|'.$rule[0]['creditdesc']);
-                $smarty->assign('descreditunit', $rule[0]['unit']);
-                $smarty->assign('orgcredittitle', $_LANG['exchange_points'][$rule[0]['creditsrc']]);
-                $smarty->assign('descredittitle', $rule[0]['title']);
-                $smarty->assign('descreditamount', round((1 / $rule[0]['ratio']), 2));
-                $smarty->assign('to_credits_options', $to_credits_options);
-                $smarty->assign('out_exchange_allow', $out_exchange_allow);
+                $this->assign('selected_org', $rule[0]['creditsrc']);
+                $this->assign('selected_dst', $rule[0]['appiddesc'].'|'.$rule[0]['creditdesc']);
+                $this->assign('descreditunit', $rule[0]['unit']);
+                $this->assign('orgcredittitle', $_LANG['exchange_points'][$rule[0]['creditsrc']]);
+                $this->assign('descredittitle', $rule[0]['title']);
+                $this->assign('descreditamount', round((1 / $rule[0]['ratio']), 2));
+                $this->assign('to_credits_options', $to_credits_options);
+                $this->assign('out_exchange_allow', $out_exchange_allow);
             } else {
                 $exchange_type = 'other';
 
@@ -2104,20 +2104,20 @@ class UserController extends BaseController
                             break;
                     }
                 }
-                $smarty->assign('bbs_points', $bbs_points);
-                $smarty->assign('rule_list', $rule_list);
+                $this->assign('bbs_points', $bbs_points);
+                $this->assign('rule_list', $rule_list);
             }
-            $smarty->assign('shop_points', $row);
-            $smarty->assign('exchange_type', $exchange_type);
-            $smarty->assign('action', $action);
-            $smarty->assign('lang', $_LANG);
-            $smarty->display('user_transaction.dwt');
+            $this->assign('shop_points', $row);
+            $this->assign('exchange_type', $exchange_type);
+            $this->assign('action', $action);
+            $this->assign('lang', $_LANG);
+            $this->display('user_transaction.dwt');
         } elseif ($action == 'act_transform_points') {
             $rule_index = empty($_POST['rule_index']) ? '' : trim($_POST['rule_index']);
             $num = empty($_POST['num']) ? 0 : intval($_POST['num']);
 
             if ($num <= 0 || $num != floor($num)) {
-                show_message($_LANG['invalid_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
+                return show_message($_LANG['invalid_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
             }
 
             $num = floor($num); //格式化为整数
@@ -2156,7 +2156,7 @@ class UserController extends BaseController
 
             /* 检查积分是否超过最大值 */
             if ($max_points <= 0 || $num > $max_points) {
-                show_message($_LANG['overflow_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
+                return show_message($_LANG['overflow_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
             }
 
             switch ($rule_key) {
@@ -2164,28 +2164,28 @@ class UserController extends BaseController
                     $result_points = floor($num * $to / $from);
                     $user->set_points($row['user_name'], [$bbs_key => 0 - $num]); //调整论坛积分
                     log_account_change($row['user_id'], 0, 0, 0, $result_points, $_LANG['transform_points'], ACT_OTHER);
-                    show_message(sprintf($_LANG['to_pay_points'], $num, $points_name[$bbs_key]['title'], $result_points), $_LANG['transform_points'], 'user.php?act=transform_points');
+                    return show_message(sprintf($_LANG['to_pay_points'], $num, $points_name[$bbs_key]['title'], $result_points), $_LANG['transform_points'], 'user.php?act=transform_points');
 
                     // no break
                 case TO_R:
                     $result_points = floor($num * $to / $from);
                     $user->set_points($row['user_name'], [$bbs_key => 0 - $num]); //调整论坛积分
                     log_account_change($row['user_id'], 0, 0, $result_points, 0, $_LANG['transform_points'], ACT_OTHER);
-                    show_message(sprintf($_LANG['to_rank_points'], $num, $points_name[$bbs_key]['title'], $result_points), $_LANG['transform_points'], 'user.php?act=transform_points');
+                    return show_message(sprintf($_LANG['to_rank_points'], $num, $points_name[$bbs_key]['title'], $result_points), $_LANG['transform_points'], 'user.php?act=transform_points');
 
                     // no break
                 case FROM_P:
                     $result_points = floor($num * $to / $from);
                     log_account_change($row['user_id'], 0, 0, 0, 0 - $num, $_LANG['transform_points'], ACT_OTHER); //调整商城积分
                     $user->set_points($row['user_name'], [$bbs_key => $result_points]); //调整论坛积分
-                    show_message(sprintf($_LANG['from_pay_points'], $num, $result_points, $points_name[$bbs_key]['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
+                    return show_message(sprintf($_LANG['from_pay_points'], $num, $result_points, $points_name[$bbs_key]['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
 
                     // no break
                 case FROM_R:
                     $result_points = floor($num * $to / $from);
                     log_account_change($row['user_id'], 0, 0, 0 - $num, 0, $_LANG['transform_points'], ACT_OTHER); //调整商城积分
                     $user->set_points($row['user_name'], [$bbs_key => $result_points]); //调整论坛积分
-                    show_message(sprintf($_LANG['from_rank_points'], $num, $result_points, $points_name[$bbs_key]['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
+                    return show_message(sprintf($_LANG['from_rank_points'], $num, $result_points, $points_name[$bbs_key]['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
             }
         } elseif ($action == 'act_transform_ucenter_points') {
             $rule = [];
@@ -2207,10 +2207,10 @@ class UserController extends BaseController
             $ratio = 0;
 
             if ($exchange_amount <= 0) {
-                show_message($_LANG['invalid_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
+                return show_message($_LANG['invalid_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
             }
             if ($exchange_amount > $row[$shop_points[$fromcredits]]) {
-                show_message($_LANG['overflow_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
+                return show_message($_LANG['overflow_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
             }
             foreach ($rule as $credit) {
                 if ($credit['appiddesc'] == $appiddesc && $credit['creditdesc'] == $creditdesc && $credit['creditsrc'] == $fromcredits) {
@@ -2219,7 +2219,7 @@ class UserController extends BaseController
                 }
             }
             if ($ratio == 0) {
-                show_message($_LANG['exchange_deny'], $_LANG['transform_points'], 'user.php?act=transform_points');
+                return show_message($_LANG['exchange_deny'], $_LANG['transform_points'], 'user.php?act=transform_points');
             }
             $netamount = floor($exchange_amount / $ratio);
             include_once ROOT_PATH.'./includes/lib_uc.php';
@@ -2229,9 +2229,9 @@ class UserController extends BaseController
                 $db->query($sql);
                 $sql = 'INSERT INTO '.$ecs->table('account_log')."(user_id, {$shop_points[$fromcredits]}, change_time, change_desc, change_type)"." VALUES ('{$row['user_id']}', '-$exchange_amount', '".gmtime()."', '".$cfg['uc_lang']['exchange']."', '98')";
                 $db->query($sql);
-                show_message(sprintf($_LANG['exchange_success'], $exchange_amount, $_LANG['exchange_points'][$fromcredits], $netamount, $credit['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
+                return show_message(sprintf($_LANG['exchange_success'], $exchange_amount, $_LANG['exchange_points'][$fromcredits], $netamount, $credit['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
             } else {
-                show_message($_LANG['exchange_error_1'], $_LANG['transform_points'], 'user.php?act=transform_points');
+                return show_message($_LANG['exchange_error_1'], $_LANG['transform_points'], 'user.php?act=transform_points');
             }
         } /* 清除商品浏览历史 */
         elseif ($action == 'clear_history') {

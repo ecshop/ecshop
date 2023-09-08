@@ -18,10 +18,10 @@ class PictureBatchController extends BaseController
 
         if (empty($_GET['is_ajax'])) {
             assign_query_info();
-            $smarty->assign('ur_here', $_LANG['12_batch_pic']);
-            $smarty->assign('cat_list', cat_list(0, 0));
-            $smarty->assign('brand_list', get_brand_list());
-            $smarty->display('picture_batch.htm');
+            $this->assign('ur_here', $_LANG['12_batch_pic']);
+            $this->assign('cat_list', cat_list(0, 0));
+            $this->assign('brand_list', get_brand_list());
+            $this->display('picture_batch.htm');
         } elseif (! empty($_GET['get_goods'])) {
             include_once ROOT_PATH.'includes/cls_json.php';
             $json = new JSON();
@@ -84,12 +84,12 @@ class PictureBatchController extends BaseController
 
                 /* 检查GD */
                 if ($image->gd_version() < 1) {
-                    make_json_error($_LANG['missing_gd']);
+                    return make_json_error($_LANG['missing_gd']);
                 }
 
                 /* 如果需要添加水印，检查水印文件 */
                 if ((! empty($_CFG['watermark'])) && ($_CFG['watermark_place'] > 0) && $watermark && (! $image->validate_image($_CFG['watermark']))) {
-                    make_json_error($image->error_msg());
+                    return make_json_error($image->error_msg());
                 }
                 $title = '';
 
@@ -249,7 +249,7 @@ class PictureBatchController extends BaseController
 
                             continue;
                         } else {
-                            make_json_error($msg);
+                            return make_json_error($msg);
                         }
                     }
 
@@ -263,7 +263,7 @@ class PictureBatchController extends BaseController
 
                             continue;
                         } else {
-                            make_json_error($msg);
+                            return make_json_error($msg);
                         }
                     }
 
@@ -302,7 +302,7 @@ class PictureBatchController extends BaseController
 
                             continue;
                         } else {
-                            make_json_error($msg);
+                            return make_json_error($msg);
                         }
                     }
                     /* 重新格式化图片名称 */
@@ -351,7 +351,7 @@ class PictureBatchController extends BaseController
 
                             continue;
                         } else {
-                            make_json_error($msg);
+                            return make_json_error($msg);
                         }
                     }
                     /* 重新格式化图片名称 */
@@ -386,7 +386,7 @@ class PictureBatchController extends BaseController
 
                             continue;
                         } else {
-                            make_json_error($msg);
+                            return make_json_error($msg);
                         }
                     }
                     /* 重新格式化图片名称 */
@@ -476,7 +476,7 @@ class PictureBatchController extends BaseController
             if ($silent) {
                 $GLOBALS['err_msg'][] = $msg;
             } else {
-                make_json_error($msg);
+                return make_json_error($msg);
             }
         } else {
             if (file_exists(ROOT_PATH.$old_image.'.bak')) {

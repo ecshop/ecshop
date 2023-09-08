@@ -45,7 +45,7 @@ class AdsenseController extends BaseController
 
                 $ads_stats[] = $rows;
             }
-            $smarty->assign('ads_stats', $ads_stats);
+            $this->assign('ads_stats', $ads_stats);
 
             /* 站外JS投放商品的统计数据 */
             $goods_stats = [];
@@ -77,17 +77,17 @@ class AdsenseController extends BaseController
                 echo ecs_iconv(EC_CHARSET, 'GB2312', $data);
                 exit;
             }
-            $smarty->assign('goods_stats', $goods_stats);
+            $this->assign('goods_stats', $goods_stats);
 
             /* 赋值给模板 */
-            $smarty->assign('action_link', ['href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']]);
-            $smarty->assign('action_link2', ['href' => 'adsense.php?act=download', 'text' => $_LANG['download_ad_statistics']]);
-            $smarty->assign('ur_here', $_LANG['adsense_js_stats']);
-            $smarty->assign('lang', $_LANG);
+            $this->assign('action_link', ['href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']]);
+            $this->assign('action_link2', ['href' => 'adsense.php?act=download', 'text' => $_LANG['download_ad_statistics']]);
+            $this->assign('ur_here', $_LANG['adsense_js_stats']);
+            $this->assign('lang', $_LANG);
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('adsense.htm');
+            $this->display('adsense.htm');
         }
 
     }

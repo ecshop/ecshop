@@ -40,11 +40,11 @@ class SnatchController extends BaseController
                 $myprice = get_myprice($id);
                 if ($goods['is_end']) {
                     //如果活动已经结束,获取活动结果
-                    $smarty->assign('result', get_snatch_result($id));
+                    $this->assign('result', get_snatch_result($id));
                 }
-                $smarty->assign('id', $id);
-                $smarty->assign('snatch_goods', $goods); // 竞价商品
-                $smarty->assign('myprice', get_myprice($id));
+                $this->assign('id', $id);
+                $this->assign('snatch_goods', $goods); // 竞价商品
+                $this->assign('myprice', get_myprice($id));
                 if ($goods['product_id'] > 0) {
                     $goods_specifications = get_specifications_list($goods['goods_id']);
 
@@ -55,39 +55,39 @@ class SnatchController extends BaseController
                     foreach ($_good_products as $value) {
                         $products_info .= ' '.$goods_specifications[$value]['attr_name'].'：'.$goods_specifications[$value]['attr_value'];
                     }
-                    $smarty->assign('products_info', $products_info);
+                    $this->assign('products_info', $products_info);
                     unset($goods_specifications, $good_products, $_good_products, $products_info);
                 }
             } else {
-                show_message($_LANG['now_not_snatch']);
+                return show_message($_LANG['now_not_snatch']);
             }
 
             /* 调查 */
             $vote = get_vote();
             if (! empty($vote)) {
-                $smarty->assign('vote_id', $vote['id']);
-                $smarty->assign('vote', $vote['content']);
+                $this->assign('vote_id', $vote['id']);
+                $this->assign('vote', $vote['content']);
             }
 
             assign_template();
             assign_dynamic('snatch');
-            $smarty->assign('page_title', $position['title']);
-            $smarty->assign('ur_here', $position['ur_here']);
-            $smarty->assign('categories', get_categories_tree()); // 分类树
-            $smarty->assign('helps', get_shop_help());       // 网店帮助
-            $smarty->assign('snatch_list', get_snatch_list());     //所有有效的夺宝奇兵列表
-            $smarty->assign('price_list', get_price_list($id));
-            $smarty->assign('promotion_info', get_promotion_info());
-            $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typesnatch.xml' : 'feed.php?type=snatch'); // RSS URL
-            $smarty->display('snatch.dwt');
+            $this->assign('page_title', $position['title']);
+            $this->assign('ur_here', $position['ur_here']);
+            $this->assign('categories', get_categories_tree()); // 分类树
+            $this->assign('helps', get_shop_help());       // 网店帮助
+            $this->assign('snatch_list', get_snatch_list());     //所有有效的夺宝奇兵列表
+            $this->assign('price_list', get_price_list($id));
+            $this->assign('promotion_info', get_promotion_info());
+            $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typesnatch.xml' : 'feed.php?type=snatch'); // RSS URL
+            $this->display('snatch.dwt');
 
             exit;
         }
 
         /* 最新出价列表 */
         if ($_REQUEST['act'] == 'new_price_list') {
-            $smarty->assign('price_list', get_price_list($id));
-            $smarty->display('library/snatch_price.lbi');
+            $this->assign('price_list', get_price_list($id));
+            $this->display('library/snatch_price.lbi');
 
             exit;
         }
@@ -162,9 +162,9 @@ class SnatchController extends BaseController
                 "('$id', '".$_SESSION['user_id']."', '".$price."', ".gmtime().')';
             $db->query($sql);
 
-            $smarty->assign('myprice', get_myprice($id));
-            $smarty->assign('id', $id);
-            $result['content'] = $smarty->fetch('library/snatch.lbi');
+            $this->assign('myprice', get_myprice($id));
+            $this->assign('id', $id);
+            $result['content'] = $this->fetch('library/snatch.lbi');
             exit($json->encode($result));
         }
 
@@ -178,7 +178,7 @@ class SnatchController extends BaseController
             }
 
             if (empty($_SESSION['user_id'])) {
-                show_message($_LANG['not_login']);
+                return show_message($_LANG['not_login']);
             }
 
             $snatch = get_snatch($id);
@@ -198,12 +198,12 @@ class SnatchController extends BaseController
             $result = get_snatch_result($id);
 
             if ($_SESSION['user_id'] != $result['user_id']) {
-                show_message($_LANG['not_for_you']);
+                return show_message($_LANG['not_for_you']);
             }
 
             //检查是否已经购买过
             if ($result['order_count'] > 0) {
-                show_message($_LANG['order_placed']);
+                return show_message($_LANG['order_placed']);
             }
 
             /* 处理规格属性 */

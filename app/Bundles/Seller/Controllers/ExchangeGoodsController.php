@@ -22,23 +22,23 @@ class ExchangeGoodsController extends BaseController
 
             /* 取得过滤条件 */
             $filter = [];
-            $smarty->assign('ur_here', $_LANG['15_exchange_goods_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['exchange_goods_add'], 'href' => 'exchange_goods.php?act=add']);
-            $smarty->assign('full_page', 1);
-            $smarty->assign('filter', $filter);
+            $this->assign('ur_here', $_LANG['15_exchange_goods_list']);
+            $this->assign('action_link', ['text' => $_LANG['exchange_goods_add'], 'href' => 'exchange_goods.php?act=add']);
+            $this->assign('full_page', 1);
+            $this->assign('filter', $filter);
 
             $goods_list = get_exchange_goodslist();
 
-            $smarty->assign('goods_list', $goods_list['arr']);
-            $smarty->assign('filter', $goods_list['filter']);
-            $smarty->assign('record_count', $goods_list['record_count']);
-            $smarty->assign('page_count', $goods_list['page_count']);
+            $this->assign('goods_list', $goods_list['arr']);
+            $this->assign('filter', $goods_list['filter']);
+            $this->assign('record_count', $goods_list['record_count']);
+            $this->assign('page_count', $goods_list['page_count']);
 
             $sort_flag = sort_flag($goods_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             assign_query_info();
-            $smarty->display('exchange_goods_list.htm');
+            $this->display('exchange_goods_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -49,16 +49,16 @@ class ExchangeGoodsController extends BaseController
 
             $goods_list = get_exchange_goodslist();
 
-            $smarty->assign('goods_list', $goods_list['arr']);
-            $smarty->assign('filter', $goods_list['filter']);
-            $smarty->assign('record_count', $goods_list['record_count']);
-            $smarty->assign('page_count', $goods_list['page_count']);
+            $this->assign('goods_list', $goods_list['arr']);
+            $this->assign('filter', $goods_list['filter']);
+            $this->assign('record_count', $goods_list['record_count']);
+            $this->assign('page_count', $goods_list['page_count']);
 
             $sort_flag = sort_flag($goods_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('exchange_goods_list.htm'),
+            return make_json_result(
+                $this->fetch('exchange_goods_list.htm'),
                 '',
                 ['filter' => $goods_list['filter'], 'page_count' => $goods_list['page_count']]
             );
@@ -77,13 +77,13 @@ class ExchangeGoodsController extends BaseController
             $goods['is_hot'] = 0;
             $goods['option'] = '<option value="0">'.$_LANG['make_option'].'</option>';
 
-            $smarty->assign('goods', $goods);
-            $smarty->assign('ur_here', $_LANG['exchange_goods_add']);
-            $smarty->assign('action_link', ['text' => $_LANG['15_exchange_goods_list'], 'href' => 'exchange_goods.php?act=list']);
-            $smarty->assign('form_action', 'insert');
+            $this->assign('goods', $goods);
+            $this->assign('ur_here', $_LANG['exchange_goods_add']);
+            $this->assign('action_link', ['text' => $_LANG['15_exchange_goods_list'], 'href' => 'exchange_goods.php?act=list']);
+            $this->assign('form_action', 'insert');
 
             assign_query_info();
-            $smarty->display('exchange_goods_info.htm');
+            $this->display('exchange_goods_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -97,7 +97,7 @@ class ExchangeGoodsController extends BaseController
             $is_only = $exc->is_only('goods_id', $_POST['goods_id'], 0, " goods_id ='$_POST[goods_id]'");
 
             if (! $is_only) {
-                sys_msg($_LANG['goods_exist'], 1);
+                return sys_msg($_LANG['goods_exist'], 1);
             }
 
             /*插入数据*/
@@ -119,7 +119,7 @@ class ExchangeGoodsController extends BaseController
 
             clear_cache_files(); // 清除相关的缓存文件
 
-            sys_msg($_LANG['articleadd_succeed'], 0, $link);
+            return sys_msg($_LANG['articleadd_succeed'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -137,13 +137,13 @@ class ExchangeGoodsController extends BaseController
             $goods = $db->getRow($sql);
             $goods['option'] = '<option value="'.$goods['goods_id'].'">'.$goods['goods_name'].'</option>';
 
-            $smarty->assign('goods', $goods);
-            $smarty->assign('ur_here', $_LANG['exchange_goods_add']);
-            $smarty->assign('action_link', ['text' => $_LANG['15_exchange_goods_list'], 'href' => 'exchange_goods.php?act=list&'.list_link_postfix()]);
-            $smarty->assign('form_action', 'update');
+            $this->assign('goods', $goods);
+            $this->assign('ur_here', $_LANG['exchange_goods_add']);
+            $this->assign('action_link', ['text' => $_LANG['15_exchange_goods_list'], 'href' => 'exchange_goods.php?act=list&'.list_link_postfix()]);
+            $this->assign('form_action', 'update');
 
             assign_query_info();
-            $smarty->display('exchange_goods_info.htm');
+            $this->display('exchange_goods_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -164,7 +164,7 @@ class ExchangeGoodsController extends BaseController
                 admin_log($_POST['goods_id'], 'edit', 'exchange_goods');
 
                 clear_cache_files();
-                sys_msg($_LANG['articleedit_succeed'], 0, $link);
+                return sys_msg($_LANG['articleedit_succeed'], 0, $link);
             } else {
                 exit($db->error());
             }
@@ -181,14 +181,14 @@ class ExchangeGoodsController extends BaseController
 
             /* 检查文章标题是否重复 */
             if ($exchange_integral < 0 || $exchange_integral == 0 && $_POST['val'] != "$goods_price") {
-                make_json_error($_LANG['exchange_integral_invalid']);
+                return make_json_error($_LANG['exchange_integral_invalid']);
             } else {
                 if ($exc->edit("exchange_integral = '$exchange_integral'", $id)) {
                     clear_cache_files();
                     admin_log($id, 'edit', 'exchange_goods');
-                    make_json_result(stripslashes($exchange_integral));
+                    return make_json_result(stripslashes($exchange_integral));
                 } else {
-                    make_json_error($db->error());
+                    return make_json_error($db->error());
                 }
             }
         }
@@ -205,7 +205,7 @@ class ExchangeGoodsController extends BaseController
             $exc->edit("is_exchange = '$val'", $id);
             clear_cache_files();
 
-            make_json_result($val);
+            return make_json_result($val);
         }
 
         /*------------------------------------------------------ */
@@ -220,7 +220,7 @@ class ExchangeGoodsController extends BaseController
             $exc->edit("is_hot = '$val'", $id);
             clear_cache_files();
 
-            make_json_result($val);
+            return make_json_result($val);
         }
 
         /*------------------------------------------------------ */
@@ -230,7 +230,7 @@ class ExchangeGoodsController extends BaseController
             admin_priv('exchange_goods');
 
             if (! isset($_POST['checkboxes']) || ! is_array($_POST['checkboxes'])) {
-                sys_msg($_LANG['no_select_goods'], 1);
+                return sys_msg($_LANG['no_select_goods'], 1);
             }
 
             $count = 0;
@@ -242,7 +242,7 @@ class ExchangeGoodsController extends BaseController
             }
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'exchange_goods.php?act=list'];
-            sys_msg(sprintf($_LANG['batch_remove_succeed'], $count), 0, $lnk);
+            return sys_msg(sprintf($_LANG['batch_remove_succeed'], $count), 0, $lnk);
         }
 
         /*------------------------------------------------------ */
@@ -275,7 +275,7 @@ class ExchangeGoodsController extends BaseController
 
             $arr = get_goods_list($filters);
 
-            make_json_result($arr);
+            return make_json_result($arr);
         }
     }
 

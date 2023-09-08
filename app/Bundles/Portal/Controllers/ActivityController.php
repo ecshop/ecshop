@@ -23,8 +23,8 @@ class ActivityController extends BaseController
         assign_template();
         assign_dynamic('activity');
         $position = assign_ur_here(0, $_LANG['shopping_activity']);
-        $smarty->assign('page_title', $position['title']);    // 页面标题
-        $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+        $this->assign('page_title', $position['title']);    // 页面标题
+        $this->assign('ur_here', $position['ur_here']);  // 当前位置
 
         // 数据准备
 
@@ -107,13 +107,13 @@ class ActivityController extends BaseController
             $list[] = $row;
         }
 
-        $smarty->assign('list', $list);
+        $this->assign('list', $list);
 
-        $smarty->assign('helps', get_shop_help());       // 网店帮助
-        $smarty->assign('lang', $_LANG);
+        $this->assign('helps', get_shop_help());       // 网店帮助
+        $this->assign('lang', $_LANG);
 
-        $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typeactivity.xml' : 'feed.php?type=activity'); // RSS URL
-        $smarty->display('activity.dwt');
+        $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typeactivity.xml' : 'feed.php?type=activity'); // RSS URL
+        $this->display('activity.dwt');
 
     }
 }

@@ -23,22 +23,22 @@ class TagManageController extends BaseController
             admin_priv('tag_manage');
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['tag_list']);
-            $smarty->assign('action_link', ['href' => 'tag_manage.php?act=add', 'text' => $_LANG['add_tag']]);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['tag_list']);
+            $this->assign('action_link', ['href' => 'tag_manage.php?act=add', 'text' => $_LANG['add_tag']]);
+            $this->assign('full_page', 1);
 
             $tag_list = get_tag_list();
-            $smarty->assign('tag_list', $tag_list['tags']);
-            $smarty->assign('filter', $tag_list['filter']);
-            $smarty->assign('record_count', $tag_list['record_count']);
-            $smarty->assign('page_count', $tag_list['page_count']);
+            $this->assign('tag_list', $tag_list['tags']);
+            $this->assign('filter', $tag_list['filter']);
+            $this->assign('record_count', $tag_list['record_count']);
+            $this->assign('page_count', $tag_list['page_count']);
 
             $sort_flag = sort_flag($tag_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             /* 页面显示 */
             assign_query_info();
-            $smarty->display('tag_manage.htm');
+            $this->display('tag_manage.htm');
         }
 
         /*------------------------------------------------------ */
@@ -49,7 +49,7 @@ class TagManageController extends BaseController
             admin_priv('tag_manage');
 
             $is_add = $_REQUEST['act'] == 'add';
-            $smarty->assign('insert_or_update', $is_add ? 'insert' : 'update');
+            $this->assign('insert_or_update', $is_add ? 'insert' : 'update');
 
             if ($is_add) {
                 $tag = [
@@ -58,18 +58,18 @@ class TagManageController extends BaseController
                     'goods_id' => 0,
                     'goods_name' => $_LANG['pls_select_goods'],
                 ];
-                $smarty->assign('ur_here', $_LANG['add_tag']);
+                $this->assign('ur_here', $_LANG['add_tag']);
             } else {
                 $tag_id = $_GET['id'];
                 $tag = get_tag_info($tag_id);
                 $tag['tag_words'] = htmlspecialchars($tag['tag_words']);
-                $smarty->assign('ur_here', $_LANG['tag_edit']);
+                $this->assign('ur_here', $_LANG['tag_edit']);
             }
-            $smarty->assign('tag', $tag);
-            $smarty->assign('action_link', ['href' => 'tag_manage.php?act=list', 'text' => $_LANG['tag_list']]);
+            $this->assign('tag', $tag);
+            $this->assign('action_link', ['href' => 'tag_manage.php?act=list', 'text' => $_LANG['tag_list']]);
 
             assign_query_info();
-            $smarty->display('tag_edit.htm');
+            $this->display('tag_edit.htm');
         }
 
         /*------------------------------------------------------ */
@@ -85,11 +85,11 @@ class TagManageController extends BaseController
             $id = intval($_POST['id']);
             $goods_id = intval($_POST['goods_id']);
             if ($goods_id <= 0) {
-                sys_msg($_LANG['pls_select_goods']);
+                return sys_msg($_LANG['pls_select_goods']);
             }
 
             if (! tag_is_only($tag_words, $id, $goods_id)) {
-                sys_msg(sprintf($_LANG['tagword_exist'], $tag_words));
+                return sys_msg(sprintf($_LANG['tagword_exist'], $tag_words));
             }
 
             if ($is_insert) {
@@ -105,7 +105,7 @@ class TagManageController extends BaseController
                 $link[0]['text'] = $_LANG['back_list'];
                 $link[0]['href'] = 'tag_manage.php?act=list';
 
-                sys_msg($_LANG['tag_add_success'], 0, $link);
+                return sys_msg($_LANG['tag_add_success'], 0, $link);
             } else {
                 edit_tag($tag_words, $id, $goods_id);
 
@@ -115,7 +115,7 @@ class TagManageController extends BaseController
                 $link[0]['text'] = $_LANG['back_list'];
                 $link[0]['href'] = 'tag_manage.php?act=list';
 
-                sys_msg($_LANG['tag_edit_success'], 0, $link);
+                return sys_msg($_LANG['tag_edit_success'], 0, $link);
             }
         }
 
@@ -127,16 +127,16 @@ class TagManageController extends BaseController
             check_authz_json('tag_manage');
 
             $tag_list = get_tag_list();
-            $smarty->assign('tag_list', $tag_list['tags']);
-            $smarty->assign('filter', $tag_list['filter']);
-            $smarty->assign('record_count', $tag_list['record_count']);
-            $smarty->assign('page_count', $tag_list['page_count']);
+            $this->assign('tag_list', $tag_list['tags']);
+            $this->assign('filter', $tag_list['filter']);
+            $this->assign('record_count', $tag_list['record_count']);
+            $this->assign('page_count', $tag_list['page_count']);
 
             $sort_flag = sort_flag($tag_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('tag_manage.htm'),
+            return make_json_result(
+                $this->fetch('tag_manage.htm'),
                 '',
                 ['filter' => $tag_list['filter'], 'page_count' => $tag_list['page_count']]
             );
@@ -161,7 +161,7 @@ class TagManageController extends BaseController
                 ];
             }
 
-            make_json_result($arr);
+            return make_json_result($arr);
         }
 
         /*------------------------------------------------------ */
@@ -183,10 +183,10 @@ class TagManageController extends BaseController
                 clear_cache_files();
 
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'tag_manage.php?act=list'];
-                sys_msg(sprintf($_LANG['drop_success'], $count), 0, $link);
+                return sys_msg(sprintf($_LANG['drop_success'], $count), 0, $link);
             } else {
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'tag_manage.php?act=list'];
-                sys_msg($_LANG['no_select_tag'], 0, $link);
+                return sys_msg($_LANG['no_select_tag'], 0, $link);
             }
         }
 
@@ -215,7 +215,7 @@ class TagManageController extends BaseController
                 ecs_header("Location: $url\n");
                 exit;
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
 
@@ -230,10 +230,10 @@ class TagManageController extends BaseController
             $id = intval($_POST['id']);
 
             if (! tag_is_only($name, $id)) {
-                make_json_error(sprintf($_LANG['tagword_exist'], $name));
+                return make_json_error(sprintf($_LANG['tagword_exist'], $name));
             } else {
                 edit_tag($name, $id);
-                make_json_result(stripslashes($name));
+                return make_json_result(stripslashes($name));
             }
         }
     }

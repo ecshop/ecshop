@@ -23,24 +23,24 @@ class AttributeController extends BaseController
         if ($_REQUEST['act'] == 'list') {
             $goods_type = isset($_GET['goods_type']) ? intval($_GET['goods_type']) : 0;
 
-            $smarty->assign('ur_here', $_LANG['09_attribute_list']);
-            $smarty->assign('action_link', ['href' => 'attribute.php?act=add&goods_type='.$goods_type, 'text' => $_LANG['10_attribute_add']]);
-            $smarty->assign('goods_type_list', goods_type_list($goods_type)); // 取得商品类型
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['09_attribute_list']);
+            $this->assign('action_link', ['href' => 'attribute.php?act=add&goods_type='.$goods_type, 'text' => $_LANG['10_attribute_add']]);
+            $this->assign('goods_type_list', goods_type_list($goods_type)); // 取得商品类型
+            $this->assign('full_page', 1);
 
             $list = get_attrlist();
 
-            $smarty->assign('attr_list', $list['item']);
-            $smarty->assign('filter', $list['filter']);
-            $smarty->assign('record_count', $list['record_count']);
-            $smarty->assign('page_count', $list['page_count']);
+            $this->assign('attr_list', $list['item']);
+            $this->assign('filter', $list['filter']);
+            $this->assign('record_count', $list['record_count']);
+            $this->assign('page_count', $list['page_count']);
 
             $sort_flag = sort_flag($list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             /* 显示模板 */
             assign_query_info();
-            $smarty->display('attribute_list.htm');
+            $this->display('attribute_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -50,16 +50,16 @@ class AttributeController extends BaseController
         if ($_REQUEST['act'] == 'query') {
             $list = get_attrlist();
 
-            $smarty->assign('attr_list', $list['item']);
-            $smarty->assign('filter', $list['filter']);
-            $smarty->assign('record_count', $list['record_count']);
-            $smarty->assign('page_count', $list['page_count']);
+            $this->assign('attr_list', $list['item']);
+            $this->assign('filter', $list['filter']);
+            $this->assign('record_count', $list['record_count']);
+            $this->assign('page_count', $list['page_count']);
 
             $sort_flag = sort_flag($list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('attribute_list.htm'),
+            return make_json_result(
+                $this->fetch('attribute_list.htm'),
                 '',
                 ['filter' => $list['filter'], 'page_count' => $list['page_count']]
             );
@@ -74,7 +74,7 @@ class AttributeController extends BaseController
 
             /* 添加还是编辑的标识 */
             $is_add = $_REQUEST['act'] == 'add';
-            $smarty->assign('form_act', $is_add ? 'insert' : 'update');
+            $this->assign('form_act', $is_add ? 'insert' : 'update');
 
             /* 取得属性信息 */
             if ($is_add) {
@@ -94,19 +94,19 @@ class AttributeController extends BaseController
                 $attr = $db->getRow($sql);
             }
 
-            $smarty->assign('attr', $attr);
-            $smarty->assign('attr_groups', get_attr_groups($attr['cat_id']));
+            $this->assign('attr', $attr);
+            $this->assign('attr_groups', get_attr_groups($attr['cat_id']));
 
             /* 取得商品分类列表 */
-            $smarty->assign('goods_type_list', goods_type_list($attr['cat_id']));
+            $this->assign('goods_type_list', goods_type_list($attr['cat_id']));
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $is_add ? $_LANG['10_attribute_add'] : $_LANG['52_attribute_add']);
-            $smarty->assign('action_link', ['href' => 'attribute.php?act=list', 'text' => $_LANG['09_attribute_list']]);
+            $this->assign('ur_here', $is_add ? $_LANG['10_attribute_add'] : $_LANG['52_attribute_add']);
+            $this->assign('action_link', ['href' => 'attribute.php?act=list', 'text' => $_LANG['09_attribute_list']]);
 
             /* 显示模板 */
             assign_query_info();
-            $smarty->display('attribute_info.htm');
+            $this->display('attribute_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -123,7 +123,7 @@ class AttributeController extends BaseController
             /* 检查名称是否重复 */
             $exclude = empty($_POST['attr_id']) ? 0 : intval($_POST['attr_id']);
             if (! $exc->is_only('attr_name', $_POST['attr_name'], $exclude, " cat_id = '$_POST[cat_id]'")) {
-                sys_msg($_LANG['name_exist'], 1);
+                return sys_msg($_LANG['name_exist'], 1);
             }
 
             $cat_id = $_REQUEST['cat_id'];
@@ -148,14 +148,14 @@ class AttributeController extends BaseController
                     ['text' => $_LANG['add_next'], 'href' => '?act=add&goods_type='.$_POST['cat_id']],
                     ['text' => $_LANG['back_list'], 'href' => '?act=list'],
                 ];
-                sys_msg(sprintf($_LANG['add_ok'], $attr['attr_name']), 0, $links);
+                return sys_msg(sprintf($_LANG['add_ok'], $attr['attr_name']), 0, $links);
             } else {
                 $db->autoExecute($ecs->table('attribute'), $attr, 'UPDATE', "attr_id = '$_POST[attr_id]'");
                 admin_log($_POST['attr_name'], 'edit', 'attribute');
                 $links = [
                     ['text' => $_LANG['back_list'], 'href' => '?act=list&amp;goods_type='.$_POST['cat_id'].''],
                 ];
-                sys_msg(sprintf($_LANG['edit_ok'], $attr['attr_name']), 0, $links);
+                return sys_msg(sprintf($_LANG['edit_ok'], $attr['attr_name']), 0, $links);
             }
         }
 
@@ -182,10 +182,10 @@ class AttributeController extends BaseController
                 clear_cache_files();
 
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'attribute.php?act=list'];
-                sys_msg(sprintf($_LANG['drop_ok'], $count), 0, $link);
+                return sys_msg(sprintf($_LANG['drop_ok'], $count), 0, $link);
             } else {
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'attribute.php?act=list'];
-                sys_msg($_LANG['no_select_arrt'], 0, $link);
+                return sys_msg($_LANG['no_select_arrt'], 0, $link);
             }
         }
 
@@ -204,14 +204,14 @@ class AttributeController extends BaseController
 
             /* 检查属性名称是否重复 */
             if (! $exc->is_only('attr_name', $val, $id, " cat_id = '$cat_id'")) {
-                make_json_error($_LANG['name_exist']);
+                return make_json_error($_LANG['name_exist']);
             }
 
             $exc->edit("attr_name='$val'", $id);
 
             admin_log($val, 'edit', 'attribute');
 
-            make_json_result(stripslashes($val));
+            return make_json_result(stripslashes($val));
         }
 
         /*------------------------------------------------------ */
@@ -228,7 +228,7 @@ class AttributeController extends BaseController
 
             admin_log(addslashes($exc->get_name($id)), 'edit', 'attribute');
 
-            make_json_result(stripslashes($val));
+            return make_json_result(stripslashes($val));
         }
 
         /*------------------------------------------------------ */
@@ -269,7 +269,7 @@ class AttributeController extends BaseController
                 $drop_confirm = $_LANG['drop_confirm'];
             }
 
-            make_json_result(['attr_id' => $id, 'drop_confirm' => $drop_confirm]);
+            return make_json_result(['attr_id' => $id, 'drop_confirm' => $drop_confirm]);
         }
 
         /*------------------------------------------------------ */
@@ -282,7 +282,7 @@ class AttributeController extends BaseController
             $cat_id = intval($_GET['cat_id']);
             $groups = get_attr_groups($cat_id);
 
-            make_json_result($groups);
+            return make_json_result($groups);
         }
     }
 

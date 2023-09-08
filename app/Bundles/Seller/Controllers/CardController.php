@@ -19,18 +19,18 @@ class CardController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'list') {
             assign_query_info();
-            $smarty->assign('ur_here', $_LANG['07_card_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['card_add'], 'href' => 'card.php?act=add']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['07_card_list']);
+            $this->assign('action_link', ['text' => $_LANG['card_add'], 'href' => 'card.php?act=add']);
+            $this->assign('full_page', 1);
 
             $cards_list = cards_list();
 
-            $smarty->assign('card_list', $cards_list['card_list']);
-            $smarty->assign('filter', $cards_list['filter']);
-            $smarty->assign('record_count', $cards_list['record_count']);
-            $smarty->assign('page_count', $cards_list['page_count']);
+            $this->assign('card_list', $cards_list['card_list']);
+            $this->assign('filter', $cards_list['filter']);
+            $this->assign('record_count', $cards_list['record_count']);
+            $this->assign('page_count', $cards_list['page_count']);
 
-            $smarty->display('card_list.htm');
+            $this->display('card_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -38,15 +38,15 @@ class CardController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'query') {
             $cards_list = cards_list();
-            $smarty->assign('card_list', $cards_list['card_list']);
-            $smarty->assign('filter', $cards_list['filter']);
-            $smarty->assign('record_count', $cards_list['record_count']);
-            $smarty->assign('page_count', $cards_list['page_count']);
+            $this->assign('card_list', $cards_list['card_list']);
+            $this->assign('filter', $cards_list['filter']);
+            $this->assign('record_count', $cards_list['record_count']);
+            $this->assign('page_count', $cards_list['page_count']);
 
             $sort_flag = sort_flag($cards_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result($smarty->fetch('card_list.htm'), '', ['filter' => $cards_list['filter'], 'page_count' => $cards_list['page_count']]);
+            return make_json_result($this->fetch('card_list.htm'), '', ['filter' => $cards_list['filter'], 'page_count' => $cards_list['page_count']]);
         }
         /*------------------------------------------------------ */
         //-- 删除贺卡
@@ -72,7 +72,7 @@ class CardController extends BaseController
                 ecs_header("Location: $url\n");
                 exit;
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
         /*------------------------------------------------------ */
@@ -86,13 +86,13 @@ class CardController extends BaseController
             $card['card_fee'] = 0;
             $card['free_money'] = 0;
 
-            $smarty->assign('card', $card);
-            $smarty->assign('ur_here', $_LANG['card_add']);
-            $smarty->assign('action_link', ['text' => $_LANG['07_card_list'], 'href' => 'card.php?act=list']);
-            $smarty->assign('form_action', 'insert');
+            $this->assign('card', $card);
+            $this->assign('ur_here', $_LANG['card_add']);
+            $this->assign('action_link', ['text' => $_LANG['07_card_list'], 'href' => 'card.php?act=list']);
+            $this->assign('form_action', 'insert');
 
             assign_query_info();
-            $smarty->display('card_info.htm');
+            $this->display('card_info.htm');
         }
         if ($_REQUEST['act'] == 'insert') {
             /* 权限判断 */
@@ -102,7 +102,7 @@ class CardController extends BaseController
             $is_only = $exc->is_only('card_name', $_POST['card_name']);
 
             if (! $is_only) {
-                sys_msg(sprintf($_LANG['cardname_exist'], stripslashes($_POST['card_name'])), 1);
+                return sys_msg(sprintf($_LANG['cardname_exist'], stripslashes($_POST['card_name'])), 1);
             }
 
             /*处理图片*/
@@ -122,7 +122,7 @@ class CardController extends BaseController
             $link[1]['text'] = $_LANG['back_list'];
             $link[1]['href'] = 'card.php?act=list';
 
-            sys_msg($_POST['card_name'].$_LANG['cardadd_succeed'], 0, $link);
+            return sys_msg($_POST['card_name'].$_LANG['cardadd_succeed'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -135,13 +135,13 @@ class CardController extends BaseController
             $sql = 'SELECT card_id, card_name, card_fee, free_money, card_desc, card_img FROM '.$ecs->table('card')." WHERE card_id='$_REQUEST[id]'";
             $card = $db->getRow($sql);
 
-            $smarty->assign('ur_here', $_LANG['card_edit']);
-            $smarty->assign('action_link', ['text' => $_LANG['07_card_list'], 'href' => 'card.php?act=list&'.list_link_postfix()]);
-            $smarty->assign('card', $card);
-            $smarty->assign('form_action', 'update');
+            $this->assign('ur_here', $_LANG['card_edit']);
+            $this->assign('action_link', ['text' => $_LANG['07_card_list'], 'href' => 'card.php?act=list&'.list_link_postfix()]);
+            $this->assign('card', $card);
+            $this->assign('form_action', 'update');
 
             assign_query_info();
-            $smarty->display('card_info.htm');
+            $this->display('card_info.htm');
         }
         if ($_REQUEST['act'] == 'update') {
             /* 权限判断 */
@@ -152,7 +152,7 @@ class CardController extends BaseController
                 $is_only = $exc->is_only('card_name', $_POST['card_name'], $_POST['id']);
 
                 if (! $is_only) {
-                    sys_msg(sprintf($_LANG['cardname_exist'], stripslashes($_POST['card_name'])), 1);
+                    return sys_msg(sprintf($_LANG['cardname_exist'], stripslashes($_POST['card_name'])), 1);
                 }
             }
             $param = "card_name = '$_POST[card_name]', card_fee = '$_POST[card_fee]', free_money= $_POST[free_money], card_desc = '$_POST[card_desc]'";
@@ -169,7 +169,7 @@ class CardController extends BaseController
                 $link[0]['href'] = 'card.php?act=list&'.list_link_postfix();
 
                 $note = sprintf($_LANG['cardedit_succeed'], $_POST['card_name']);
-                sys_msg($note, 0, $link);
+                return sys_msg($note, 0, $link);
             } else {
                 exit($db->error());
             }
@@ -189,7 +189,7 @@ class CardController extends BaseController
                 $db->query($sql);
             }
             $link = [['text' => $_LANG['card_edit_lnk'], 'href' => 'card.php?act=edit&id='.$card_id], ['text' => $_LANG['card_list_lnk'], 'href' => 'brand.php?act=list']];
-            sys_msg($_LANG['drop_card_img_success'], 0, $link);
+            return sys_msg($_LANG['drop_card_img_success'], 0, $link);
         }
         /*------------------------------------------------------ */
         //-- ajax编辑卡片名字
@@ -200,14 +200,14 @@ class CardController extends BaseController
             $card_name = empty($_REQUEST['val']) ? '' : json_str_iconv(trim($_REQUEST['val']));
 
             if (! $exc->is_only('card_name', $card_name, $card_id)) {
-                make_json_error(sprintf($_LANG['cardname_exist'], $card_name));
+                return make_json_error(sprintf($_LANG['cardname_exist'], $card_name));
             }
             $old_card_name = $exc->get_name($card_id);
             if ($exc->edit("card_name='$card_name'", $card_id)) {
                 admin_log(addslashes($old_card_name), 'edit', 'card');
-                make_json_result(stripcslashes($card_name));
+                return make_json_result(stripcslashes($card_name));
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
         /*------------------------------------------------------ */
@@ -221,9 +221,9 @@ class CardController extends BaseController
             $card_name = $exc->get_name($card_id);
             if ($exc->edit("card_fee ='$card_fee'", $card_id)) {
                 admin_log(addslashes($card_name), 'edit', 'card');
-                make_json_result($card_fee);
+                return make_json_result($card_fee);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
         /*------------------------------------------------------ */
@@ -237,9 +237,9 @@ class CardController extends BaseController
             $card_name = $exc->get_name($card_id);
             if ($exc->edit("free_money ='$free_money'", $card_id)) {
                 admin_log(addslashes($card_name), 'edit', 'card');
-                make_json_result($free_money);
+                return make_json_result($free_money);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
     }

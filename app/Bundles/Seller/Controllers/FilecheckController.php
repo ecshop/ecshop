@@ -13,21 +13,21 @@ class FilecheckController extends BaseController
         admin_priv('file_check');
 
         if (! $files = @file(ROOT_PATH.'temp/files.md5')) {
-            sys_msg($_LANG['filecheck_nofound_md5file'], 1);
+            return sys_msg($_LANG['filecheck_nofound_md5file'], 1);
         }
 
         $step = empty($_REQUEST['step']) ? 1 : max(1, intval($_REQUEST['step']));
 
         if ($step == 1 || $step == 2) {
-            $smarty->assign('step', $step);
+            $this->assign('step', $step);
             if ($step == 1) {
-                $smarty->assign('ur_here', $_LANG['file_check']);
+                $this->assign('ur_here', $_LANG['file_check']);
             }
             if ($step == 2) {
-                $smarty->assign('ur_here', $_LANG['fileperms_verify']);
+                $this->assign('ur_here', $_LANG['fileperms_verify']);
             }
             assign_query_info();
-            $smarty->display('filecheck.htm');
+            $this->display('filecheck.htm');
         } elseif ($step == 3) {
             @set_time_limit(0);
 
@@ -102,15 +102,15 @@ class FilecheckController extends BaseController
             $result[$_LANG['result_delete']] = count($dellist);
             $result[$_LANG['result_unknown']] = count($addlist);
 
-            $smarty->assign('result', $result);
-            $smarty->assign('dirlog', $dirlog);
-            $smarty->assign('filelist', $filelist);
-            $smarty->assign('step', $step);
-            $smarty->assign('ur_here', $_LANG['filecheck_completed']);
-            $smarty->assign('action_link', ['text' => $_LANG['filecheck_return'], 'href' => 'filecheck.php?step=1']);
+            $this->assign('result', $result);
+            $this->assign('dirlog', $dirlog);
+            $this->assign('filelist', $filelist);
+            $this->assign('step', $step);
+            $this->assign('ur_here', $_LANG['filecheck_completed']);
+            $this->assign('action_link', ['text' => $_LANG['filecheck_return'], 'href' => 'filecheck.php?step=1']);
 
             assign_query_info();
-            $smarty->display('filecheck.htm');
+            $this->display('filecheck.htm');
         }
     }
 

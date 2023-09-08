@@ -12,24 +12,24 @@ class AttentionListController extends BaseController
         admin_priv('attention_list');
         if ($_REQUEST['act'] == 'list') {
             $goodsdb = get_attention();
-            $smarty->assign('full_page', 1);
-            $smarty->assign('ur_here', $_LANG['attention_list']);
-            $smarty->assign('goodsdb', $goodsdb['goodsdb']);
-            $smarty->assign('filter', $goodsdb['filter']);
-            $smarty->assign('cfg_lang', $_CFG['lang']);
-            $smarty->assign('record_count', $goodsdb['record_count']);
-            $smarty->assign('page_count', $goodsdb['page_count']);
+            $this->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['attention_list']);
+            $this->assign('goodsdb', $goodsdb['goodsdb']);
+            $this->assign('filter', $goodsdb['filter']);
+            $this->assign('cfg_lang', $_CFG['lang']);
+            $this->assign('record_count', $goodsdb['record_count']);
+            $this->assign('page_count', $goodsdb['page_count']);
             assign_query_info();
-            $smarty->display('attention_list.htm');
+            $this->display('attention_list.htm');
         }
         if ($_REQUEST['act'] == 'query') {
             $goodsdb = get_attention();
-            $smarty->assign('goodsdb', $goodsdb['goodsdb']);
-            $smarty->assign('filter', $goodsdb['filter']);
-            $smarty->assign('record_count', $goodsdb['record_count']);
-            $smarty->assign('page_count', $goodsdb['page_count']);
-            make_json_result(
-                $smarty->fetch('attention_list.htm'),
+            $this->assign('goodsdb', $goodsdb['goodsdb']);
+            $this->assign('filter', $goodsdb['filter']);
+            $this->assign('record_count', $goodsdb['record_count']);
+            $this->assign('page_count', $goodsdb['page_count']);
+            return make_json_result(
+                $this->fetch('attention_list.htm'),
                 '',
                 ['filter' => $goodsdb['filter'], 'page_count' => $goodsdb['page_count']]
             );
@@ -59,8 +59,8 @@ class AttentionListController extends BaseController
                 while ($rt = $db->fetch_array($query)) {
                     $time = time();
                     $goods_url = $ecs->url().build_uri('goods', ['gid' => $id], $rt['goods_name']);
-                    $smarty->assign(['user_name' => $rt['user_name'], 'goods_name' => $rt['goods_name'], 'goods_url' => $goods_url, 'shop_name' => $_CFG['shop_title'], 'send_date' => local_date($_CFG['date_format'])]);
-                    $content = $smarty->fetch("str:$template[template_content]");
+                    $this->assign(['user_name' => $rt['user_name'], 'goods_name' => $rt['goods_name'], 'goods_url' => $goods_url, 'shop_name' => $_CFG['shop_title'], 'send_date' => local_date($_CFG['date_format'])]);
+                    $content = $this->fetch("str:$template[template_content]");
                     $add .= $add ? ",('$rt[email]','$template[template_id]','$content','$pri','$time')" : "('$rt[email]','$template[template_id]','$content','$pri','$time')";
                     $i++;
                 }
@@ -74,10 +74,10 @@ class AttentionListController extends BaseController
                     $start = $start + $i;
                 }
                 $links[] = ['text' => sprintf($_LANG['finish_list'], $start), 'href' => "attention_list.php?act=addtolist&id=$id&pri=$pri&start=$start"];
-                sys_msg($_LANG['finishing'], 0, $links);
+                return sys_msg($_LANG['finishing'], 0, $links);
             } else {
                 $links[] = ['text' => $_LANG['attention_list'], 'href' => 'attention_list.php?act=list'];
-                sys_msg($_LANG['edit_ok'], 0, $links);
+                return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
         if ($_REQUEST['act'] == 'batch_addtolist') {
@@ -109,8 +109,8 @@ class AttentionListController extends BaseController
 
                     $goods_url = $ecs->url().build_uri('goods', ['gid' => $rt['goods_id']], $rt['user_name']);
 
-                    $smarty->assign(['user_name' => $rt['user_name'], 'goods_name' => $rt['goods_name'], 'goods_url' => $goods_url]);
-                    $content = $smarty->fetch("str:$template[template_content]");
+                    $this->assign(['user_name' => $rt['user_name'], 'goods_name' => $rt['goods_name'], 'goods_url' => $goods_url]);
+                    $content = $this->fetch("str:$template[template_content]");
                     $add .= $add ? ",('$rt[email]','$template[template_id]','$content','$pri','$time')" : "('$rt[email]','$template[template_id]','$content','$pri','$time')";
                     $i++;
                 }
@@ -124,10 +124,10 @@ class AttentionListController extends BaseController
                     $start = $start + $i;
                 }
                 $links[] = ['text' => sprintf($_LANG['finish_list'], $start), 'href' => "attention_list.php?act=batch_addtolist&date=$olddate&pri=$pri&start=$start"];
-                sys_msg($_LANG['finishing'], 0, $links);
+                return sys_msg($_LANG['finishing'], 0, $links);
             } else {
                 $links[] = ['text' => $_LANG['attention_list'], 'href' => 'attention_list.php?act=list'];
-                sys_msg($_LANG['edit_ok'], 0, $links);
+                return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
     }

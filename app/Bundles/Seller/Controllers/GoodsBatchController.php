@@ -20,7 +20,7 @@ class GoodsBatchController extends BaseController
             admin_priv('goods_batch');
 
             /* 取得分类列表 */
-            $smarty->assign('cat_list', cat_list());
+            $this->assign('cat_list', cat_list());
 
             /* 取得可选语言 */
             $dir = opendir(ROOT_PATH.'languages');
@@ -43,17 +43,17 @@ class GoodsBatchController extends BaseController
                 'paipai3' => $_LANG['export_paipai3'],
                 'taobao46' => $_LANG['export_taobao46'],
             ];
-            $smarty->assign('data_format', $data_format_array);
-            $smarty->assign('lang_list', $lang_list);
-            $smarty->assign('download_list', $download_list);
+            $this->assign('data_format', $data_format_array);
+            $this->assign('lang_list', $lang_list);
+            $this->assign('download_list', $download_list);
 
             /* 参数赋值 */
             $ur_here = $_LANG['13_batch_add'];
-            $smarty->assign('ur_here', $ur_here);
+            $this->assign('ur_here', $ur_here);
 
             /* 显示模板 */
             assign_query_info();
-            $smarty->display('goods_batch_add.htm');
+            $this->display('goods_batch_add.htm');
         }
 
         /*------------------------------------------------------ */
@@ -300,21 +300,21 @@ class GoodsBatchController extends BaseController
                 }
             }
 
-            $smarty->assign('goods_class', $_LANG['g_class']);
-            $smarty->assign('goods_list', $goods_list);
+            $this->assign('goods_class', $_LANG['g_class']);
+            $this->assign('goods_list', $goods_list);
 
             // 字段名称列表
-            $smarty->assign('title_list', $_LANG['upload_goods']);
+            $this->assign('title_list', $_LANG['upload_goods']);
 
             // 显示的字段列表
-            $smarty->assign('field_show', ['goods_name' => true, 'goods_sn' => true, 'brand_name' => true, 'market_price' => true, 'shop_price' => true]);
+            $this->assign('field_show', ['goods_name' => true, 'goods_sn' => true, 'brand_name' => true, 'market_price' => true, 'shop_price' => true]);
 
             /* 参数赋值 */
-            $smarty->assign('ur_here', $_LANG['goods_upload_confirm']);
+            $this->assign('ur_here', $_LANG['goods_upload_confirm']);
 
             /* 显示模板 */
             assign_query_info();
-            $smarty->display('goods_batch_confirm.htm');
+            $this->display('goods_batch_confirm.htm');
         }
 
         /*------------------------------------------------------ */
@@ -505,7 +505,7 @@ class GoodsBatchController extends BaseController
 
             /* 显示提示信息，返回商品列表 */
             $link[] = ['href' => 'goods.php?act=list', 'text' => $_LANG['01_goods_list']];
-            sys_msg($_LANG['batch_upload_ok'], 0, $link);
+            return sys_msg($_LANG['batch_upload_ok'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -517,18 +517,18 @@ class GoodsBatchController extends BaseController
             admin_priv('goods_batch');
 
             /* 取得分类列表 */
-            $smarty->assign('cat_list', cat_list());
+            $this->assign('cat_list', cat_list());
 
             /* 取得品牌列表 */
-            $smarty->assign('brand_list', get_brand_list());
+            $this->assign('brand_list', get_brand_list());
 
             /* 参数赋值 */
             $ur_here = $_LANG['15_batch_edit'];
-            $smarty->assign('ur_here', $ur_here);
+            $this->assign('ur_here', $ur_here);
 
             /* 显示模板 */
             assign_query_info();
-            $smarty->display('goods_batch_select.htm');
+            $this->display('goods_batch_select.htm');
         }
 
         /*------------------------------------------------------ */
@@ -550,7 +550,7 @@ class GoodsBatchController extends BaseController
                 $where = ' WHERE goods_id '.db_create_in($goods_ids);
             }
             $sql = 'SELECT DISTINCT goods_id, goods_sn, goods_name, market_price, shop_price, goods_number, integral, give_integral, brand_id, is_real FROM '.$ecs->table('goods').$where;
-            $smarty->assign('goods_list', $db->getAll($sql));
+            $this->assign('goods_list', $db->getAll($sql));
 
             /* 取编辑商品的货品列表 */
             $product_exists = false;
@@ -576,13 +576,13 @@ class GoodsBatchController extends BaseController
 
                     $_product_list[$value['goods_id']][] = $value;
                 }
-                $smarty->assign('product_list', $_product_list);
+                $this->assign('product_list', $_product_list);
 
                 //释放资源
                 unset($product_list, $sql, $_product_list);
             }
 
-            $smarty->assign('product_exists', $product_exists);
+            $this->assign('product_exists', $product_exists);
 
             /* 取得会员价格 */
             $member_price_list = [];
@@ -591,27 +591,27 @@ class GoodsBatchController extends BaseController
             while ($row = $db->fetchRow($res)) {
                 $member_price_list[$row['goods_id']][$row['user_rank']] = $row['user_price'];
             }
-            $smarty->assign('member_price_list', $member_price_list);
+            $this->assign('member_price_list', $member_price_list);
 
             /* 取得会员等级 */
             $sql = 'SELECT rank_id, rank_name, discount '.
                 'FROM '.$ecs->table('user_rank').
                 ' ORDER BY discount DESC';
-            $smarty->assign('rank_list', $db->getAll($sql));
+            $this->assign('rank_list', $db->getAll($sql));
 
             /* 取得品牌列表 */
-            $smarty->assign('brand_list', get_brand_list());
+            $this->assign('brand_list', get_brand_list());
 
             /* 赋值编辑方式 */
-            $smarty->assign('edit_method', $_POST['edit_method']);
+            $this->assign('edit_method', $_POST['edit_method']);
 
             /* 参数赋值 */
             $ur_here = $_LANG['15_batch_edit'];
-            $smarty->assign('ur_here', $ur_here);
+            $this->assign('ur_here', $ur_here);
 
             /* 显示模板 */
             assign_query_info();
-            $smarty->display('goods_batch_edit.htm');
+            $this->display('goods_batch_edit.htm');
         }
 
         /*------------------------------------------------------ */
@@ -739,7 +739,7 @@ class GoodsBatchController extends BaseController
 
             // 提示成功
             $link[] = ['href' => 'goods_batch.php?act=select', 'text' => $_LANG['15_batch_edit']];
-            sys_msg($_LANG['batch_edit_ok'], 0, $link);
+            return sys_msg($_LANG['batch_edit_ok'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -787,7 +787,7 @@ class GoodsBatchController extends BaseController
             $filter->real_goods = -1;
             $arr = get_goods_list($filter);
 
-            make_json_result($arr);
+            return make_json_result($arr);
         }
 
     }

@@ -21,23 +21,23 @@ class FavourableController extends BaseController
             admin_priv('favourable');
 
             /* 模板赋值 */
-            $smarty->assign('full_page', 1);
-            $smarty->assign('ur_here', $_LANG['favourable_list']);
-            $smarty->assign('action_link', ['href' => 'favourable.php?act=add', 'text' => $_LANG['add_favourable']]);
+            $this->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['favourable_list']);
+            $this->assign('action_link', ['href' => 'favourable.php?act=add', 'text' => $_LANG['add_favourable']]);
 
             $list = favourable_list();
 
-            $smarty->assign('favourable_list', $list['item']);
-            $smarty->assign('filter', $list['filter']);
-            $smarty->assign('record_count', $list['record_count']);
-            $smarty->assign('page_count', $list['page_count']);
+            $this->assign('favourable_list', $list['item']);
+            $this->assign('filter', $list['filter']);
+            $this->assign('record_count', $list['record_count']);
+            $this->assign('page_count', $list['page_count']);
 
             $sort_flag = sort_flag($list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             /* 显示商品列表页面 */
             assign_query_info();
-            $smarty->display('favourable_list.htm');
+            $this->display('favourable_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -47,16 +47,16 @@ class FavourableController extends BaseController
         if ($_REQUEST['act'] == 'query') {
             $list = favourable_list();
 
-            $smarty->assign('favourable_list', $list['item']);
-            $smarty->assign('filter', $list['filter']);
-            $smarty->assign('record_count', $list['record_count']);
-            $smarty->assign('page_count', $list['page_count']);
+            $this->assign('favourable_list', $list['item']);
+            $this->assign('filter', $list['filter']);
+            $this->assign('record_count', $list['record_count']);
+            $this->assign('page_count', $list['page_count']);
 
             $sort_flag = sort_flag($list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('favourable_list.htm'),
+            return make_json_result(
+                $this->fetch('favourable_list.htm'),
                 '',
                 ['filter' => $list['filter'], 'page_count' => $list['page_count']]
             );
@@ -71,7 +71,7 @@ class FavourableController extends BaseController
             $id = intval($_GET['id']);
             $favourable = favourable_info($id);
             if (empty($favourable)) {
-                make_json_error($_LANG['favourable_not_exist']);
+                return make_json_error($_LANG['favourable_not_exist']);
             }
             $name = $favourable['act_name'];
             $exc->drop($id);
@@ -94,7 +94,7 @@ class FavourableController extends BaseController
         if ($_REQUEST['act'] == 'batch') {
             /* 取得要操作的记录编号 */
             if (empty($_POST['checkboxes'])) {
-                sys_msg($_LANG['no_record_selected']);
+                return sys_msg($_LANG['no_record_selected']);
             } else {
                 /* 检查权限 */
                 admin_priv('favourable');
@@ -114,7 +114,7 @@ class FavourableController extends BaseController
                     clear_cache_files();
 
                     $links[] = ['text' => $_LANG['back_favourable_list'], 'href' => 'favourable.php?act=list&'.list_link_postfix()];
-                    sys_msg($_LANG['batch_drop_ok']);
+                    return sys_msg($_LANG['batch_drop_ok']);
                 }
             }
         }
@@ -133,7 +133,7 @@ class FavourableController extends BaseController
                 " WHERE act_id = '$id' LIMIT 1";
             $db->query($sql);
 
-            make_json_result($val);
+            return make_json_result($val);
         }
 
         /*------------------------------------------------------ */
@@ -146,7 +146,7 @@ class FavourableController extends BaseController
 
             /* 是否添加 */
             $is_add = $_REQUEST['act'] == 'add';
-            $smarty->assign('form_action', $is_add ? 'insert' : 'update');
+            $this->assign('form_action', $is_add ? 'insert' : 'update');
 
             /* 初始化、取得优惠活动信息 */
             if ($is_add) {
@@ -166,15 +166,15 @@ class FavourableController extends BaseController
                 ];
             } else {
                 if (empty($_GET['id'])) {
-                    sys_msg('invalid param');
+                    return sys_msg('invalid param');
                 }
                 $id = intval($_GET['id']);
                 $favourable = favourable_info($id);
                 if (empty($favourable)) {
-                    sys_msg($_LANG['favourable_not_exist']);
+                    return sys_msg($_LANG['favourable_not_exist']);
                 }
             }
-            $smarty->assign('favourable', $favourable);
+            $this->assign('favourable', $favourable);
 
             /* 取得用户等级 */
             $user_rank_list = [];
@@ -189,7 +189,7 @@ class FavourableController extends BaseController
                 $row['checked'] = strpos(','.$favourable['user_rank'].',', ','.$row['rank_id'].',') !== false;
                 $user_rank_list[] = $row;
             }
-            $smarty->assign('user_rank_list', $user_rank_list);
+            $this->assign('user_rank_list', $user_rank_list);
 
             /* 取得优惠范围 */
             $act_range_ext = [];
@@ -206,24 +206,24 @@ class FavourableController extends BaseController
                 }
                 $act_range_ext = $db->getAll($sql);
             }
-            $smarty->assign('act_range_ext', $act_range_ext);
+            $this->assign('act_range_ext', $act_range_ext);
 
             /* 赋值时间控件的语言 */
-            $smarty->assign('cfg_lang', $_CFG['lang']);
+            $this->assign('cfg_lang', $_CFG['lang']);
 
             /* 显示模板 */
             if ($is_add) {
-                $smarty->assign('ur_here', $_LANG['add_favourable']);
+                $this->assign('ur_here', $_LANG['add_favourable']);
             } else {
-                $smarty->assign('ur_here', $_LANG['edit_favourable']);
+                $this->assign('ur_here', $_LANG['edit_favourable']);
             }
             $href = 'favourable.php?act=list';
             if (! $is_add) {
                 $href .= '&'.list_link_postfix();
             }
-            $smarty->assign('action_link', ['href' => $href, 'text' => $_LANG['favourable_list']]);
+            $this->assign('action_link', ['href' => $href, 'text' => $_LANG['favourable_list']]);
             assign_query_info();
-            $smarty->display('favourable_info.htm');
+            $this->display('favourable_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -240,24 +240,24 @@ class FavourableController extends BaseController
             /* 检查名称是否重复 */
             $act_name = sub_str($_POST['act_name'], 255, false);
             if (! $exc->is_only('act_name', $act_name, intval($_POST['id']))) {
-                sys_msg($_LANG['act_name_exists']);
+                return sys_msg($_LANG['act_name_exists']);
             }
 
             /* 检查享受优惠的会员等级 */
             if (! isset($_POST['user_rank'])) {
-                sys_msg($_LANG['pls_set_user_rank']);
+                return sys_msg($_LANG['pls_set_user_rank']);
             }
 
             /* 检查优惠范围扩展信息 */
             if (intval($_POST['act_range']) > 0 && ! isset($_POST['act_range_ext'])) {
-                sys_msg($_LANG['pls_set_act_range']);
+                return sys_msg($_LANG['pls_set_act_range']);
             }
 
             /* 检查金额上下限 */
             $min_amount = floatval($_POST['min_amount']) >= 0 ? floatval($_POST['min_amount']) : 0;
             $max_amount = floatval($_POST['max_amount']) >= 0 ? floatval($_POST['max_amount']) : 0;
             if ($max_amount > 0 && $min_amount > $max_amount) {
-                sys_msg($_LANG['amount_error']);
+                return sys_msg($_LANG['amount_error']);
             }
 
             /* 取得赠品 */
@@ -311,12 +311,12 @@ class FavourableController extends BaseController
                     ['href' => 'favourable.php?act=add', 'text' => $_LANG['continue_add_favourable']],
                     ['href' => 'favourable.php?act=list', 'text' => $_LANG['back_favourable_list']],
                 ];
-                sys_msg($_LANG['add_favourable_ok'], 0, $links);
+                return sys_msg($_LANG['add_favourable_ok'], 0, $links);
             } else {
                 $links = [
                     ['href' => 'favourable.php?act=list&'.list_link_postfix(), 'text' => $_LANG['back_favourable_list']],
                 ];
-                sys_msg($_LANG['edit_favourable_ok'], 0, $links);
+                return sys_msg($_LANG['edit_favourable_ok'], 0, $links);
             }
         }
 
@@ -359,7 +359,7 @@ class FavourableController extends BaseController
                 ]];
             }
 
-            make_json_result($arr);
+            return make_json_result($arr);
         }
     }
 

@@ -30,40 +30,40 @@ class GoodsController extends BaseController
             $handler_list['virtual_card'][] = ['url' => 'virtual_card.php?act=batch_card_add', 'title' => $_LANG['batch_card_add'], 'img' => 'icon_output.gif'];
 
             if ($_REQUEST['act'] == 'list' && isset($handler_list[$code])) {
-                $smarty->assign('add_handler', $handler_list[$code]);
+                $this->assign('add_handler', $handler_list[$code]);
             }
 
             /* 模板赋值 */
             $goods_ur = ['' => $_LANG['01_goods_list'], 'virtual_card' => $_LANG['50_virtual_card_list']];
             $ur_here = ($_REQUEST['act'] == 'list') ? $goods_ur[$code] : $_LANG['11_goods_trash'];
-            $smarty->assign('ur_here', $ur_here);
+            $this->assign('ur_here', $ur_here);
 
             $action_link = ($_REQUEST['act'] == 'list') ? add_link($code) : ['href' => 'goods.php?act=list', 'text' => $_LANG['01_goods_list']];
-            $smarty->assign('action_link', $action_link);
-            $smarty->assign('code', $code);
-            $smarty->assign('cat_list', cat_list(0, $cat_id));
-            $smarty->assign('brand_list', get_brand_list());
-            $smarty->assign('intro_list', get_intro_list());
-            $smarty->assign('lang', $_LANG);
-            $smarty->assign('list_type', $_REQUEST['act'] == 'list' ? 'goods' : 'trash');
-            $smarty->assign('use_storage', empty($_CFG['use_storage']) ? 0 : 1);
+            $this->assign('action_link', $action_link);
+            $this->assign('code', $code);
+            $this->assign('cat_list', cat_list(0, $cat_id));
+            $this->assign('brand_list', get_brand_list());
+            $this->assign('intro_list', get_intro_list());
+            $this->assign('lang', $_LANG);
+            $this->assign('list_type', $_REQUEST['act'] == 'list' ? 'goods' : 'trash');
+            $this->assign('use_storage', empty($_CFG['use_storage']) ? 0 : 1);
 
             $goods_list = goods_list($_REQUEST['act'] == 'list' ? 0 : 1, ($_REQUEST['act'] == 'list') ? (($code == '') ? 1 : 0) : -1);
-            $smarty->assign('goods_list', $goods_list['goods']);
-            $smarty->assign('filter', $goods_list['filter']);
-            $smarty->assign('record_count', $goods_list['record_count']);
-            $smarty->assign('page_count', $goods_list['page_count']);
-            $smarty->assign('full_page', 1);
+            $this->assign('goods_list', $goods_list['goods']);
+            $this->assign('filter', $goods_list['filter']);
+            $this->assign('record_count', $goods_list['record_count']);
+            $this->assign('page_count', $goods_list['page_count']);
+            $this->assign('full_page', 1);
 
             /* 排序标记 */
             $sort_flag = sort_flag($goods_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             /* 显示商品列表页面 */
             assign_query_info();
             $htm_file = ($_REQUEST['act'] == 'list') ?
                 'goods_list.htm' : (($_REQUEST['act'] == 'trash') ? 'goods_trash.htm' : 'group_list.htm');
-            $smarty->display($htm_file);
+            $this->display($htm_file);
         }
 
         /*------------------------------------------------------ */
@@ -86,12 +86,12 @@ class GoodsController extends BaseController
             if (ini_get('safe_mode') == 1 && (! file_exists('../'.IMAGE_DIR.'/'.date('Ym')) || ! is_dir('../'.IMAGE_DIR.'/'.date('Ym')))) {
                 if (@! mkdir('../'.IMAGE_DIR.'/'.date('Ym'), 0777)) {
                     $warning = sprintf($_LANG['safe_mode_warning'], '../'.IMAGE_DIR.'/'.date('Ym'));
-                    $smarty->assign('warning', $warning);
+                    $this->assign('warning', $warning);
                 }
             } /* 如果目录存在但不可写，提示用户 */
             elseif (file_exists('../'.IMAGE_DIR.'/'.date('Ym')) && file_mode_info('../'.IMAGE_DIR.'/'.date('Ym')) < 2) {
                 $warning = sprintf($_LANG['not_writable_warning'], '../'.IMAGE_DIR.'/'.date('Ym'));
-                $smarty->assign('warning', $warning);
+                $this->assign('warning', $warning);
             }
 
             /* 取得商品信息 */
@@ -289,7 +289,7 @@ class GoodsController extends BaseController
                 foreach ($goods['other_cat'] as $cat_id) {
                     $other_cat_list[$cat_id] = cat_list(0, $cat_id);
                 }
-                $smarty->assign('other_cat_list', $other_cat_list);
+                $this->assign('other_cat_list', $other_cat_list);
 
                 $link_goods_list = get_linked_goods($goods['goods_id']); // 关联商品
                 $group_goods_list = get_group_goods($goods['goods_id']); // 配件
@@ -325,34 +325,34 @@ class GoodsController extends BaseController
             create_html_editor('goods_desc', $goods['goods_desc']);
 
             /* 模板赋值 */
-            $smarty->assign('code', $code);
-            $smarty->assign('ur_here', $is_add ? (empty($code) ? $_LANG['02_goods_add'] : $_LANG['51_virtual_card_add']) : ($_REQUEST['act'] == 'edit' ? $_LANG['edit_goods'] : $_LANG['copy_goods']));
-            $smarty->assign('action_link', list_link($is_add, $code));
-            $smarty->assign('goods', $goods);
-            $smarty->assign('goods_name_color', $goods_name_style[0]);
-            $smarty->assign('goods_name_style', $goods_name_style[1]);
-            $smarty->assign('cat_list', cat_list(0, $goods['cat_id']));
-            $smarty->assign('brand_list', get_brand_list());
-            $smarty->assign('unit_list', get_unit_list());
-            $smarty->assign('user_rank_list', get_user_rank_list());
-            $smarty->assign('weight_unit', $is_add ? '1' : ($goods['goods_weight'] >= 1 ? '1' : '0.001'));
-            $smarty->assign('cfg', $_CFG);
-            $smarty->assign('form_act', $is_add ? 'insert' : ($_REQUEST['act'] == 'edit' ? 'update' : 'insert'));
+            $this->assign('code', $code);
+            $this->assign('ur_here', $is_add ? (empty($code) ? $_LANG['02_goods_add'] : $_LANG['51_virtual_card_add']) : ($_REQUEST['act'] == 'edit' ? $_LANG['edit_goods'] : $_LANG['copy_goods']));
+            $this->assign('action_link', list_link($is_add, $code));
+            $this->assign('goods', $goods);
+            $this->assign('goods_name_color', $goods_name_style[0]);
+            $this->assign('goods_name_style', $goods_name_style[1]);
+            $this->assign('cat_list', cat_list(0, $goods['cat_id']));
+            $this->assign('brand_list', get_brand_list());
+            $this->assign('unit_list', get_unit_list());
+            $this->assign('user_rank_list', get_user_rank_list());
+            $this->assign('weight_unit', $is_add ? '1' : ($goods['goods_weight'] >= 1 ? '1' : '0.001'));
+            $this->assign('cfg', $_CFG);
+            $this->assign('form_act', $is_add ? 'insert' : ($_REQUEST['act'] == 'edit' ? 'update' : 'insert'));
             if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
-                $smarty->assign('is_add', true);
+                $this->assign('is_add', true);
             }
             if (! $is_add) {
-                $smarty->assign('member_price_list', get_member_price_list($_REQUEST['goods_id']));
+                $this->assign('member_price_list', get_member_price_list($_REQUEST['goods_id']));
             }
-            $smarty->assign('link_goods_list', $link_goods_list);
-            $smarty->assign('group_goods_list', $group_goods_list);
-            $smarty->assign('goods_article_list', $goods_article_list);
-            $smarty->assign('img_list', $img_list);
-            $smarty->assign('goods_type_list', goods_type_list($goods['goods_type']));
-            $smarty->assign('gd', gd_version());
-            $smarty->assign('thumb_width', $_CFG['thumb_width']);
-            $smarty->assign('thumb_height', $_CFG['thumb_height']);
-            $smarty->assign('goods_attr_html', build_attr_html($goods['goods_type'], $goods['goods_id']));
+            $this->assign('link_goods_list', $link_goods_list);
+            $this->assign('group_goods_list', $group_goods_list);
+            $this->assign('goods_article_list', $goods_article_list);
+            $this->assign('img_list', $img_list);
+            $this->assign('goods_type_list', goods_type_list($goods['goods_type']));
+            $this->assign('gd', gd_version());
+            $this->assign('thumb_width', $_CFG['thumb_width']);
+            $this->assign('thumb_height', $_CFG['thumb_height']);
+            $this->assign('goods_attr_html', build_attr_html($goods['goods_type'], $goods['goods_id']));
             $volume_price_list = '';
             if (isset($_REQUEST['goods_id'])) {
                 $volume_price_list = get_volume_price_list($_REQUEST['goods_id']);
@@ -360,11 +360,11 @@ class GoodsController extends BaseController
             if (empty($volume_price_list)) {
                 $volume_price_list = ['0' => ['number' => '', 'price' => '']];
             }
-            $smarty->assign('volume_price_list', $volume_price_list);
+            $this->assign('volume_price_list', $volume_price_list);
 
             /* 显示商品信息页面 */
             assign_query_info();
-            $smarty->display('goods_info.htm');
+            $this->display('goods_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -387,7 +387,7 @@ class GoodsController extends BaseController
                 $sql = 'SELECT COUNT(*) FROM '.$ecs->table('goods').
                     " WHERE goods_sn = '$_POST[goods_sn]' AND is_delete = 0 AND goods_id <> '$_POST[goods_id]'";
                 if ($db->getOne($sql) > 0) {
-                    sys_msg($_LANG['goods_sn_exists'], 1, [], false);
+                    return sys_msg($_LANG['goods_sn_exists'], 1, [], false);
                 }
             }
 
@@ -400,24 +400,24 @@ class GoodsController extends BaseController
                 // 商品图片
                 if ($_FILES['goods_img']['error'] == 0) {
                     if (! $image->check_img_type($_FILES['goods_img']['type'])) {
-                        sys_msg($_LANG['invalid_goods_img'], 1, [], false);
+                        return sys_msg($_LANG['invalid_goods_img'], 1, [], false);
                     }
                 } elseif ($_FILES['goods_img']['error'] == 1) {
-                    sys_msg(sprintf($_LANG['goods_img_too_big'], $php_maxsize), 1, [], false);
+                    return sys_msg(sprintf($_LANG['goods_img_too_big'], $php_maxsize), 1, [], false);
                 } elseif ($_FILES['goods_img']['error'] == 2) {
-                    sys_msg(sprintf($_LANG['goods_img_too_big'], $htm_maxsize), 1, [], false);
+                    return sys_msg(sprintf($_LANG['goods_img_too_big'], $htm_maxsize), 1, [], false);
                 }
 
                 // 商品缩略图
                 if (isset($_FILES['goods_thumb'])) {
                     if ($_FILES['goods_thumb']['error'] == 0) {
                         if (! $image->check_img_type($_FILES['goods_thumb']['type'])) {
-                            sys_msg($_LANG['invalid_goods_thumb'], 1, [], false);
+                            return sys_msg($_LANG['invalid_goods_thumb'], 1, [], false);
                         }
                     } elseif ($_FILES['goods_thumb']['error'] == 1) {
-                        sys_msg(sprintf($_LANG['goods_thumb_too_big'], $php_maxsize), 1, [], false);
+                        return sys_msg(sprintf($_LANG['goods_thumb_too_big'], $php_maxsize), 1, [], false);
                     } elseif ($_FILES['goods_thumb']['error'] == 2) {
-                        sys_msg(sprintf($_LANG['goods_thumb_too_big'], $htm_maxsize), 1, [], false);
+                        return sys_msg(sprintf($_LANG['goods_thumb_too_big'], $htm_maxsize), 1, [], false);
                     }
                 }
 
@@ -425,12 +425,12 @@ class GoodsController extends BaseController
                 foreach ($_FILES['img_url']['error'] as $key => $value) {
                     if ($value == 0) {
                         if (! $image->check_img_type($_FILES['img_url']['type'][$key])) {
-                            sys_msg(sprintf($_LANG['invalid_img_url'], $key + 1), 1, [], false);
+                            return sys_msg(sprintf($_LANG['invalid_img_url'], $key + 1), 1, [], false);
                         }
                     } elseif ($value == 1) {
-                        sys_msg(sprintf($_LANG['img_url_too_big'], $key + 1, $php_maxsize), 1, [], false);
+                        return sys_msg(sprintf($_LANG['img_url_too_big'], $key + 1, $php_maxsize), 1, [], false);
                     } elseif ($_FILES['img_url']['error'] == 2) {
-                        sys_msg(sprintf($_LANG['img_url_too_big'], $key + 1, $htm_maxsize), 1, [], false);
+                        return sys_msg(sprintf($_LANG['img_url_too_big'], $key + 1, $htm_maxsize), 1, [], false);
                     }
                 }
             } /* 4.1版本 */
@@ -438,7 +438,7 @@ class GoodsController extends BaseController
                 // 商品图片
                 if ($_FILES['goods_img']['tmp_name'] != 'none') {
                     if (! $image->check_img_type($_FILES['goods_img']['type'])) {
-                        sys_msg($_LANG['invalid_goods_img'], 1, [], false);
+                        return sys_msg($_LANG['invalid_goods_img'], 1, [], false);
                     }
                 }
 
@@ -446,7 +446,7 @@ class GoodsController extends BaseController
                 if (isset($_FILES['goods_thumb'])) {
                     if ($_FILES['goods_thumb']['tmp_name'] != 'none') {
                         if (! $image->check_img_type($_FILES['goods_thumb']['type'])) {
-                            sys_msg($_LANG['invalid_goods_thumb'], 1, [], false);
+                            return sys_msg($_LANG['invalid_goods_thumb'], 1, [], false);
                         }
                     }
                 }
@@ -455,7 +455,7 @@ class GoodsController extends BaseController
                 foreach ($_FILES['img_url']['tmp_name'] as $key => $value) {
                     if ($value != 'none') {
                         if (! $image->check_img_type($_FILES['img_url']['type'][$key])) {
-                            sys_msg(sprintf($_LANG['invalid_img_url'], $key + 1), 1, [], false);
+                            return sys_msg(sprintf($_LANG['invalid_img_url'], $key + 1), 1, [], false);
                         }
                     }
                 }
@@ -488,7 +488,7 @@ class GoodsController extends BaseController
 
                 $original_img = $image->upload_image($_FILES['goods_img']); // 原始图片
                 if ($original_img === false) {
-                    sys_msg($image->error_msg(), 1, [], false);
+                    return sys_msg($image->error_msg(), 1, [], false);
                 }
                 $goods_img = $original_img;   // 商品图片
 
@@ -499,7 +499,7 @@ class GoodsController extends BaseController
                     $pos = strpos(basename($img), '.');
                     $newname = dirname($img).'/'.$image->random_filename().substr(basename($img), $pos);
                     if (! copy('../'.$img, '../'.$newname)) {
-                        sys_msg('fail to copy file: '.realpath('../'.$img), 1, [], false);
+                        return sys_msg('fail to copy file: '.realpath('../'.$img), 1, [], false);
                     }
                     $img = $newname;
 
@@ -513,7 +513,7 @@ class GoodsController extends BaseController
                     if ($_CFG['image_width'] != 0 || $_CFG['image_height'] != 0) {
                         $goods_img = $image->make_thumb('../'.$goods_img, $GLOBALS['_CFG']['image_width'], $GLOBALS['_CFG']['image_height']);
                         if ($goods_img === false) {
-                            sys_msg($image->error_msg(), 1, [], false);
+                            return sys_msg($image->error_msg(), 1, [], false);
                         }
                     }
 
@@ -521,7 +521,7 @@ class GoodsController extends BaseController
                     if ($_CFG['auto_generate_gallery']) {
                         $newname = dirname($img).'/'.$image->random_filename().substr(basename($img), $pos);
                         if (! copy('../'.$img, '../'.$newname)) {
-                            sys_msg('fail to copy file: '.realpath('../'.$img), 1, [], false);
+                            return sys_msg('fail to copy file: '.realpath('../'.$img), 1, [], false);
                         }
                         $gallery_img = $newname;
                     }
@@ -529,12 +529,12 @@ class GoodsController extends BaseController
                     // 加水印
                     if (intval($_CFG['watermark_place']) > 0 && ! empty($GLOBALS['_CFG']['watermark'])) {
                         if ($image->add_watermark('../'.$goods_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
-                            sys_msg($image->error_msg(), 1, [], false);
+                            return sys_msg($image->error_msg(), 1, [], false);
                         }
                         /* 添加判断是否自动生成相册图片 */
                         if ($_CFG['auto_generate_gallery']) {
                             if ($image->add_watermark('../'.$gallery_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
-                                sys_msg($image->error_msg(), 1, [], false);
+                                return sys_msg($image->error_msg(), 1, [], false);
                             }
                         }
                     }
@@ -545,7 +545,7 @@ class GoodsController extends BaseController
                         if ($_CFG['thumb_width'] != 0 || $_CFG['thumb_height'] != 0) {
                             $gallery_thumb = $image->make_thumb('../'.$img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
                             if ($gallery_thumb === false) {
-                                sys_msg($image->error_msg(), 1, [], false);
+                                return sys_msg($image->error_msg(), 1, [], false);
                             }
                         }
                     }
@@ -558,7 +558,7 @@ class GoodsController extends BaseController
                 // 上传了，直接使用，原始大小
                 $goods_thumb = $image->upload_image($_FILES['goods_thumb']);
                 if ($goods_thumb === false) {
-                    sys_msg($image->error_msg(), 1, [], false);
+                    return sys_msg($image->error_msg(), 1, [], false);
                 }
             } else {
                 // 未上传，如果自动选择生成，且上传了商品图片，生成所略图
@@ -567,7 +567,7 @@ class GoodsController extends BaseController
                     if ($_CFG['thumb_width'] != 0 || $_CFG['thumb_height'] != 0) {
                         $goods_thumb = $image->make_thumb('../'.$original_img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
                         if ($goods_thumb === false) {
-                            sys_msg($image->error_msg(), 1, [], false);
+                            return sys_msg($image->error_msg(), 1, [], false);
                         }
                     } else {
                         $goods_thumb = $original_img;
@@ -792,7 +792,7 @@ class GoodsController extends BaseController
                 $temp_num = array_count_values($_POST['volume_number']);
                 foreach ($temp_num as $v) {
                     if ($v > 1) {
-                        sys_msg($_LANG['volume_number_continuous'], 1, [], false);
+                        return sys_msg($_LANG['volume_number_continuous'], 1, [], false);
                         break;
                     }
                 }
@@ -876,7 +876,7 @@ class GoodsController extends BaseController
             }
             $link[] = list_link($is_insert, $code);
 
-            sys_msg($is_insert ? $_LANG['add_goods_ok'] : $_LANG['edit_goods_ok'], 0, $link);
+            return sys_msg($is_insert ? $_LANG['add_goods_ok'] : $_LANG['edit_goods_ok'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -973,7 +973,7 @@ class GoodsController extends BaseController
             } else {
                 $link[] = list_link(true, $code);
             }
-            sys_msg($_LANG['batch_handle_ok'], 0, $link);
+            return sys_msg($_LANG['batch_handle_ok'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -990,8 +990,8 @@ class GoodsController extends BaseController
                     $img_url = '../'.$_GET['img_url'];
                 }
             }
-            $smarty->assign('img_url', $img_url);
-            $smarty->display('goods_show_image.htm');
+            $this->assign('img_url', $img_url);
+            $this->display('goods_show_image.htm');
         }
 
         /*------------------------------------------------------ */
@@ -1005,7 +1005,7 @@ class GoodsController extends BaseController
 
             if ($exc->edit("goods_name = '$goods_name', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
-                make_json_result(stripslashes($goods_name));
+                return make_json_result(stripslashes($goods_name));
             }
         }
 
@@ -1020,12 +1020,12 @@ class GoodsController extends BaseController
 
             /* 检查是否重复 */
             if (! $exc->is_only('goods_sn', $goods_sn, $goods_id)) {
-                make_json_error($_LANG['goods_sn_exists']);
+                return make_json_error($_LANG['goods_sn_exists']);
             }
 
             if ($exc->edit("goods_sn = '$goods_sn', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
-                make_json_result(stripslashes($goods_sn));
+                return make_json_result(stripslashes($goods_sn));
             }
         }
         if ($_REQUEST['act'] == 'check_goods_sn') {
@@ -1036,10 +1036,10 @@ class GoodsController extends BaseController
 
             /* 检查是否重复 */
             if (! $exc->is_only('goods_sn', $goods_sn, $goods_id)) {
-                make_json_error($_LANG['goods_sn_exists']);
+                return make_json_error($_LANG['goods_sn_exists']);
             }
 
-            make_json_result('');
+            return make_json_result('');
         }
         /*------------------------------------------------------ */
         //-- 修改商品价格
@@ -1052,11 +1052,11 @@ class GoodsController extends BaseController
             $price_rate = floatval($_CFG['market_price_rate'] * $goods_price);
 
             if ($goods_price < 0 || $goods_price == 0 && $_POST['val'] != "$goods_price") {
-                make_json_error($_LANG['shop_price_invalid']);
+                return make_json_error($_LANG['shop_price_invalid']);
             } else {
                 if ($exc->edit("shop_price = '$goods_price', market_price = '$price_rate', last_update=".gmtime(), $goods_id)) {
                     clear_cache_files();
-                    make_json_result(number_format($goods_price, 2, '.', ''));
+                    return make_json_result(number_format($goods_price, 2, '.', ''));
                 }
             }
         }
@@ -1071,12 +1071,12 @@ class GoodsController extends BaseController
             $goods_num = intval($_POST['val']);
 
             if ($goods_num < 0 || $goods_num == 0 && $_POST['val'] != "$goods_num") {
-                make_json_error($_LANG['goods_number_error']);
+                return make_json_error($_LANG['goods_number_error']);
             }
 
             if ($exc->edit("goods_number = '$goods_num', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
-                make_json_result($goods_num);
+                return make_json_result($goods_num);
             }
         }
 
@@ -1091,7 +1091,7 @@ class GoodsController extends BaseController
 
             if ($exc->edit("is_on_sale = '$on_sale', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
-                make_json_result($on_sale);
+                return make_json_result($on_sale);
             }
         }
 
@@ -1106,7 +1106,7 @@ class GoodsController extends BaseController
 
             if ($exc->edit("is_best = '$is_best', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
-                make_json_result($is_best);
+                return make_json_result($is_best);
             }
         }
 
@@ -1121,7 +1121,7 @@ class GoodsController extends BaseController
 
             if ($exc->edit("is_new = '$is_new', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
-                make_json_result($is_new);
+                return make_json_result($is_new);
             }
         }
 
@@ -1136,7 +1136,7 @@ class GoodsController extends BaseController
 
             if ($exc->edit("is_hot = '$is_hot', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
-                make_json_result($is_hot);
+                return make_json_result($is_hot);
             }
         }
 
@@ -1151,7 +1151,7 @@ class GoodsController extends BaseController
 
             if ($exc->edit("sort_order = '$sort_order', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
-                make_json_result($sort_order);
+                return make_json_result($sort_order);
             }
         }
 
@@ -1169,24 +1169,24 @@ class GoodsController extends BaseController
             $handler_list['virtual_card'][] = ['url' => 'virtual_card.php?act=batch_card_add', 'title' => $_LANG['batch_card_add'], 'img' => 'icon_output.gif'];
 
             if (isset($handler_list[$code])) {
-                $smarty->assign('add_handler', $handler_list[$code]);
+                $this->assign('add_handler', $handler_list[$code]);
             }
 
-            $smarty->assign('goods_list', $goods_list['goods']);
-            $smarty->assign('filter', $goods_list['filter']);
-            $smarty->assign('record_count', $goods_list['record_count']);
-            $smarty->assign('page_count', $goods_list['page_count']);
-            $smarty->assign('list_type', $is_delete ? 'trash' : 'goods');
-            $smarty->assign('use_storage', empty($_CFG['use_storage']) ? 0 : 1);
+            $this->assign('goods_list', $goods_list['goods']);
+            $this->assign('filter', $goods_list['filter']);
+            $this->assign('record_count', $goods_list['record_count']);
+            $this->assign('page_count', $goods_list['page_count']);
+            $this->assign('list_type', $is_delete ? 'trash' : 'goods');
+            $this->assign('use_storage', empty($_CFG['use_storage']) ? 0 : 1);
 
             /* 排序标记 */
             $sort_flag = sort_flag($goods_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             $tpl = $is_delete ? 'goods_trash.htm' : 'goods_list.htm';
 
-            make_json_result(
-                $smarty->fetch($tpl),
+            return make_json_result(
+                $this->fetch($tpl),
                 '',
                 ['filter' => $goods_list['filter'], 'page_count' => $goods_list['page_count']]
             );
@@ -1246,7 +1246,7 @@ class GoodsController extends BaseController
             // 取得参数
             $goods_id = intval($_REQUEST['id']);
             if ($goods_id <= 0) {
-                make_json_error('invalid params');
+                return make_json_error('invalid params');
             }
 
             /* 取得商品信息 */
@@ -1256,11 +1256,11 @@ class GoodsController extends BaseController
                 " WHERE goods_id = '$goods_id'";
             $goods = $db->getRow($sql);
             if (empty($goods)) {
-                make_json_error($_LANG['goods_not_exist']);
+                return make_json_error($_LANG['goods_not_exist']);
             }
 
             if ($goods['is_delete'] != 1) {
-                make_json_error($_LANG['goods_not_in_recycle_bin']);
+                return make_json_error($_LANG['goods_not_in_recycle_bin']);
             }
 
             /* 删除商品图片和轮播图片 */
@@ -1356,7 +1356,7 @@ class GoodsController extends BaseController
 
             $content = build_attr_html($goods_type, $goods_id);
 
-            make_json_result($content);
+            return make_json_result($content);
         }
 
         /*------------------------------------------------------ */
@@ -1388,7 +1388,7 @@ class GoodsController extends BaseController
             $GLOBALS['db']->query($sql);
 
             clear_cache_files();
-            make_json_result($img_id);
+            return make_json_result($img_id);
         }
 
         /*------------------------------------------------------ */
@@ -1409,7 +1409,7 @@ class GoodsController extends BaseController
                     'data' => $val['shop_price']];
             }
 
-            make_json_result($opt);
+            return make_json_result($opt);
         }
 
         /*------------------------------------------------------ */
@@ -1449,7 +1449,7 @@ class GoodsController extends BaseController
             }
 
             clear_cache_files();
-            make_json_result($options);
+            return make_json_result($options);
         }
 
         /*------------------------------------------------------ */
@@ -1497,7 +1497,7 @@ class GoodsController extends BaseController
             }
 
             clear_cache_files();
-            make_json_result($options);
+            return make_json_result($options);
         }
 
         /*------------------------------------------------------ */
@@ -1531,7 +1531,7 @@ class GoodsController extends BaseController
             }
 
             clear_cache_files();
-            make_json_result($opt);
+            return make_json_result($opt);
         }
 
         /*------------------------------------------------------ */
@@ -1566,7 +1566,7 @@ class GoodsController extends BaseController
             }
 
             clear_cache_files();
-            make_json_result($opt);
+            return make_json_result($opt);
         }
 
         /*------------------------------------------------------ */
@@ -1594,7 +1594,7 @@ class GoodsController extends BaseController
                 $arr[] = ['value' => $row['article_id'], 'text' => $row['title'], 'data' => ''];
             }
 
-            make_json_result($arr);
+            return make_json_result($arr);
         }
 
         /*------------------------------------------------------ */
@@ -1627,7 +1627,7 @@ class GoodsController extends BaseController
             }
 
             clear_cache_files();
-            make_json_result($opt);
+            return make_json_result($opt);
         }
 
         /*------------------------------------------------------ */
@@ -1656,7 +1656,7 @@ class GoodsController extends BaseController
             }
 
             clear_cache_files();
-            make_json_result($opt);
+            return make_json_result($opt);
         }
     }
 

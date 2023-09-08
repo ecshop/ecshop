@@ -18,16 +18,16 @@ class ShippingAreaController extends BaseController
             $shipping_id = intval($_REQUEST['shipping']);
 
             $list = get_shipping_area_list($shipping_id);
-            $smarty->assign('areas', $list);
+            $this->assign('areas', $list);
 
-            $smarty->assign('ur_here', '<a href="shipping.php?act=list">'.
+            $this->assign('ur_here', '<a href="shipping.php?act=list">'.
                 $_LANG['03_shipping_list'].'</a> - '.$_LANG['shipping_area_list'].'</a>');
-            $smarty->assign('action_link', ['href' => 'shipping_area.php?act=add&shipping='.$shipping_id,
+            $this->assign('action_link', ['href' => 'shipping_area.php?act=add&shipping='.$shipping_id,
                 'text' => $_LANG['new_area']]);
-            $smarty->assign('full_page', 1);
+            $this->assign('full_page', 1);
 
             assign_query_info();
-            $smarty->display('shipping_area_list.htm');
+            $this->display('shipping_area_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -64,14 +64,14 @@ class ShippingAreaController extends BaseController
             $shipping_area['shipping_id'] = 0;
             $shipping_area['free_money'] = 0;
 
-            $smarty->assign('ur_here', $shipping['shipping_name'].' - '.$_LANG['new_area']);
-            $smarty->assign('shipping_area', ['shipping_id' => $_REQUEST['shipping'], 'shipping_code' => $shipping['shipping_code']]);
-            $smarty->assign('fields', $fields);
-            $smarty->assign('form_action', 'insert');
-            $smarty->assign('countries', get_regions());
-            $smarty->assign('default_country', $_CFG['shop_country']);
+            $this->assign('ur_here', $shipping['shipping_name'].' - '.$_LANG['new_area']);
+            $this->assign('shipping_area', ['shipping_id' => $_REQUEST['shipping'], 'shipping_code' => $shipping['shipping_code']]);
+            $this->assign('fields', $fields);
+            $this->assign('form_action', 'insert');
+            $this->assign('countries', get_regions());
+            $this->assign('default_country', $_CFG['shop_country']);
             assign_query_info();
-            $smarty->display('shipping_area_info.htm');
+            $this->display('shipping_area_info.htm');
         }
         if ($_REQUEST['act'] == 'insert') {
             admin_priv('shiparea_manage');
@@ -80,14 +80,14 @@ class ShippingAreaController extends BaseController
             $sql = 'SELECT COUNT(*) FROM '.$ecs->table('shipping_area').
                 " WHERE shipping_id='$_POST[shipping]' AND shipping_area_name='$_POST[shipping_area_name]'";
             if ($db->getOne($sql) > 0) {
-                sys_msg($_LANG['repeat_area_name'], 1);
+                return sys_msg($_LANG['repeat_area_name'], 1);
             } else {
                 $shipping_code = $db->getOne('SELECT shipping_code FROM '.$ecs->table('shipping').
                     " WHERE shipping_id='$_POST[shipping]'");
                 $plugin = '../includes/modules/shipping/'.$shipping_code.'.php';
 
                 if (! file_exists($plugin)) {
-                    sys_msg($_LANG['not_find_plugin'], 1);
+                    return sys_msg($_LANG['not_find_plugin'], 1);
                 } else {
                     $set_modules = 1;
                     include_once $plugin;
@@ -133,7 +133,7 @@ class ShippingAreaController extends BaseController
 
                 $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'shipping_area.php?act=list&shipping='.$_POST['shipping']];
                 $lnk[] = ['text' => $_LANG['add_continue'], 'href' => 'shipping_area.php?act=add&shipping='.$_POST['shipping']];
-                sys_msg($_LANG['add_area_success'], 0, $lnk);
+                return sys_msg($_LANG['add_area_success'], 0, $lnk);
             }
         }
 
@@ -167,7 +167,7 @@ class ShippingAreaController extends BaseController
                     $item_fee = 1;
                 }
                 if ($val['name'] == 'fee_compute_mode') {
-                    $smarty->assign('fee_compute_mode', $val['value']);
+                    $this->assign('fee_compute_mode', $val['value']);
                     unset($fields[$key]);
                 } else {
                     $fields[$key]['name'] = $val['name'];
@@ -192,15 +192,15 @@ class ShippingAreaController extends BaseController
             }
 
             assign_query_info();
-            $smarty->assign('ur_here', $row['shipping_name'].' - '.$_LANG['edit_area']);
-            $smarty->assign('id', $_REQUEST['id']);
-            $smarty->assign('fields', $fields);
-            $smarty->assign('shipping_area', $row);
-            $smarty->assign('regions', $regions);
-            $smarty->assign('form_action', 'update');
-            $smarty->assign('countries', get_regions());
-            $smarty->assign('default_country', 1);
-            $smarty->display('shipping_area_info.htm');
+            $this->assign('ur_here', $row['shipping_name'].' - '.$_LANG['edit_area']);
+            $this->assign('id', $_REQUEST['id']);
+            $this->assign('fields', $fields);
+            $this->assign('shipping_area', $row);
+            $this->assign('regions', $regions);
+            $this->assign('form_action', 'update');
+            $this->assign('countries', get_regions());
+            $this->assign('default_country', 1);
+            $this->display('shipping_area_info.htm');
         }
         if ($_REQUEST['act'] == 'update') {
             admin_priv('shiparea_manage');
@@ -211,13 +211,13 @@ class ShippingAreaController extends BaseController
                 "shipping_area_name='$_POST[shipping_area_name]' AND ".
                 "shipping_area_id<>'$_POST[id]'";
             if ($db->getOne($sql) > 0) {
-                sys_msg($_LANG['repeat_area_name'], 1);
+                return sys_msg($_LANG['repeat_area_name'], 1);
             } else {
                 $shipping_code = $db->getOne('SELECT shipping_code FROM '.$ecs->table('shipping')." WHERE shipping_id='$_POST[shipping]'");
                 $plugin = '../includes/modules/shipping/'.$shipping_code.'.php';
 
                 if (! file_exists($plugin)) {
-                    sys_msg($_LANG['not_find_plugin'], 1);
+                    return sys_msg($_LANG['not_find_plugin'], 1);
                 } else {
                     $set_modules = 1;
                     include_once $plugin;
@@ -288,7 +288,7 @@ class ShippingAreaController extends BaseController
 
                 $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'shipping_area.php?act=list&shipping='.$_POST['shipping']];
 
-                sys_msg($_LANG['edit_area_success'], 0, $lnk);
+                return sys_msg($_LANG['edit_area_success'], 0, $lnk);
             }
         }
 
@@ -310,7 +310,7 @@ class ShippingAreaController extends BaseController
             }
             /* 返回 */
             $links[0] = ['href' => 'shipping_area.php?act=list&shipping='.intval($_REQUEST['shipping']), 'text' => $_LANG['go_back']];
-            sys_msg($_LANG['remove_success'], 0, $links);
+            return sys_msg($_LANG['remove_success'], 0, $links);
         }
 
         /*------------------------------------------------------ */
@@ -330,7 +330,7 @@ class ShippingAreaController extends BaseController
 
             /* 检查是否有重复的配送区域名称 */
             if (! $exc->is_only('shipping_area_name', $val, $id, "shipping_id = '$shipping_id'")) {
-                make_json_error($_LANG['repeat_area_name']);
+                return make_json_error($_LANG['repeat_area_name']);
             }
 
             /* 更新名称 */
@@ -340,7 +340,7 @@ class ShippingAreaController extends BaseController
             admin_log($val, 'edit', 'shipping_area');
 
             /* 返回 */
-            make_json_result(stripcslashes($val));
+            return make_json_result(stripcslashes($val));
         }
 
         /*------------------------------------------------------ */
@@ -360,8 +360,8 @@ class ShippingAreaController extends BaseController
             admin_log($name, 'remove', 'shipping_area');
 
             $list = get_shipping_area_list($shipping_id);
-            $smarty->assign('areas', $list);
-            make_json_result($smarty->fetch('shipping_area_list.htm'));
+            $this->assign('areas', $list);
+            return make_json_result($this->fetch('shipping_area_list.htm'));
         }
     }
 

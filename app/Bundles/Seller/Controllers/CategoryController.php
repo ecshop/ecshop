@@ -26,15 +26,15 @@ class CategoryController extends BaseController
             $cat_list = cat_list(0, 0, false);
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['03_category_list']);
-            $smarty->assign('action_link', ['href' => 'category.php?act=add', 'text' => $_LANG['04_category_add']]);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['03_category_list']);
+            $this->assign('action_link', ['href' => 'category.php?act=add', 'text' => $_LANG['04_category_add']]);
+            $this->assign('full_page', 1);
 
-            $smarty->assign('cat_info', $cat_list);
+            $this->assign('cat_info', $cat_list);
 
             /* 列表页面 */
             assign_query_info();
-            $smarty->display('category_list.htm');
+            $this->display('category_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -42,9 +42,9 @@ class CategoryController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'query') {
             $cat_list = cat_list(0, 0, false);
-            $smarty->assign('cat_info', $cat_list);
+            $this->assign('cat_info', $cat_list);
 
-            make_json_result($smarty->fetch('category_list.htm'));
+            return make_json_result($this->fetch('category_list.htm'));
         }
         /*------------------------------------------------------ */
         //-- 添加商品分类
@@ -54,19 +54,19 @@ class CategoryController extends BaseController
             admin_priv('cat_manage');
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['04_category_add']);
-            $smarty->assign('action_link', ['href' => 'category.php?act=list', 'text' => $_LANG['03_category_list']]);
+            $this->assign('ur_here', $_LANG['04_category_add']);
+            $this->assign('action_link', ['href' => 'category.php?act=list', 'text' => $_LANG['03_category_list']]);
 
-            $smarty->assign('goods_type_list', goods_type_list(0)); // 取得商品类型
-            $smarty->assign('attr_list', get_attr_list()); // 取得商品属性
+            $this->assign('goods_type_list', goods_type_list(0)); // 取得商品类型
+            $this->assign('attr_list', get_attr_list()); // 取得商品属性
 
-            $smarty->assign('cat_select', cat_list(0, 0, true));
-            $smarty->assign('form_act', 'insert');
-            $smarty->assign('cat_info', ['is_show' => 1]);
+            $this->assign('cat_select', cat_list(0, 0, true));
+            $this->assign('form_act', 'insert');
+            $this->assign('cat_info', ['is_show' => 1]);
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('category_info.htm');
+            $this->display('category_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -95,13 +95,13 @@ class CategoryController extends BaseController
             if (cat_exists($cat['cat_name'], $cat['parent_id'])) {
                 /* 同级别下不能有重复的分类名称 */
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                sys_msg($_LANG['catname_exist'], 0, $link);
+                return sys_msg($_LANG['catname_exist'], 0, $link);
             }
 
             if ($cat['grade'] > 10 || $cat['grade'] < 0) {
                 /* 价格区间数超过范围 */
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                sys_msg($_LANG['grade_error'], 0, $link);
+                return sys_msg($_LANG['grade_error'], 0, $link);
             }
 
             /* 入库的操作 */
@@ -128,7 +128,7 @@ class CategoryController extends BaseController
                 $link[1]['text'] = $_LANG['back_list'];
                 $link[1]['href'] = 'category.php?act=list';
 
-                sys_msg($_LANG['catadd_succed'], 0, $link);
+                return sys_msg($_LANG['catadd_succed'], 0, $link);
             }
         }
 
@@ -158,16 +158,16 @@ class CategoryController extends BaseController
                     $filter_attr_list[$k]['option'] = $attr_option;
                 }
 
-                $smarty->assign('filter_attr_list', $filter_attr_list);
+                $this->assign('filter_attr_list', $filter_attr_list);
             } else {
                 $attr_cat_id = 0;
             }
 
             /* 模板赋值 */
-            $smarty->assign('attr_list', $attr_list); // 取得商品属性
-            $smarty->assign('attr_cat_id', $attr_cat_id);
-            $smarty->assign('ur_here', $_LANG['category_edit']);
-            $smarty->assign('action_link', ['text' => $_LANG['03_category_list'], 'href' => 'category.php?act=list']);
+            $this->assign('attr_list', $attr_list); // 取得商品属性
+            $this->assign('attr_cat_id', $attr_cat_id);
+            $this->assign('ur_here', $_LANG['category_edit']);
+            $this->assign('action_link', ['text' => $_LANG['03_category_list'], 'href' => 'category.php?act=list']);
 
             //分类是否存在首页推荐
             $res = $db->getAll('SELECT recommend_type FROM '.$ecs->table('cat_recommend').' WHERE cat_id='.$cat_id);
@@ -176,24 +176,24 @@ class CategoryController extends BaseController
                 foreach ($res as $data) {
                     $cat_recommend[$data['recommend_type']] = 1;
                 }
-                $smarty->assign('cat_recommend', $cat_recommend);
+                $this->assign('cat_recommend', $cat_recommend);
             }
 
-            $smarty->assign('cat_info', $cat_info);
-            $smarty->assign('form_act', 'update');
-            $smarty->assign('cat_select', cat_list(0, $cat_info['parent_id'], true));
-            $smarty->assign('goods_type_list', goods_type_list(0)); // 取得商品类型
+            $this->assign('cat_info', $cat_info);
+            $this->assign('form_act', 'update');
+            $this->assign('cat_select', cat_list(0, $cat_info['parent_id'], true));
+            $this->assign('goods_type_list', goods_type_list(0)); // 取得商品类型
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('category_info.htm');
+            $this->display('category_info.htm');
         }
         if ($_REQUEST['act'] == 'add_category') {
             $parent_id = empty($_REQUEST['parent_id']) ? 0 : intval($_REQUEST['parent_id']);
             $category = empty($_REQUEST['cat']) ? '' : json_str_iconv(trim($_REQUEST['cat']));
 
             if (cat_exists($category, $parent_id)) {
-                make_json_error($_LANG['catname_exist']);
+                return make_json_error($_LANG['catname_exist']);
             } else {
                 $sql = 'INSERT INTO '.$ecs->table('category').'(cat_name, parent_id, is_show)'.
                     "VALUES ( '$category', '$parent_id', 1)";
@@ -205,7 +205,7 @@ class CategoryController extends BaseController
 
                 clear_cache_files();    // 清除缓存
 
-                make_json_result($arr);
+                return make_json_result($arr);
             }
         }
 
@@ -237,7 +237,7 @@ class CategoryController extends BaseController
             if ($cat['cat_name'] != $old_cat_name) {
                 if (cat_exists($cat['cat_name'], $cat['parent_id'], $cat_id)) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                    sys_msg($_LANG['catname_exist'], 0, $link);
+                    return sys_msg($_LANG['catname_exist'], 0, $link);
                 }
             }
 
@@ -246,13 +246,13 @@ class CategoryController extends BaseController
             if (in_array($cat['parent_id'], $children)) {
                 /* 选定的父类是当前分类或当前分类的下级分类 */
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                sys_msg($_LANG['is_leaf_error'], 0, $link);
+                return sys_msg($_LANG['is_leaf_error'], 0, $link);
             }
 
             if ($cat['grade'] > 10 || $cat['grade'] < 0) {
                 /* 价格区间数超过范围 */
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
-                sys_msg($_LANG['grade_error'], 0, $link);
+                return sys_msg($_LANG['grade_error'], 0, $link);
             }
 
             $dat = $db->getRow('SELECT cat_name, show_in_nav FROM '.$ecs->table('category')." WHERE cat_id = '$cat_id'");
@@ -293,7 +293,7 @@ class CategoryController extends BaseController
 
                 /* 提示信息 */
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'category.php?act=list'];
-                sys_msg($_LANG['catedit_succed'], 0, $link);
+                return sys_msg($_LANG['catedit_succed'], 0, $link);
             }
         }
 
@@ -307,15 +307,15 @@ class CategoryController extends BaseController
             $cat_id = ! empty($_REQUEST['cat_id']) ? intval($_REQUEST['cat_id']) : 0;
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['move_goods']);
-            $smarty->assign('action_link', ['href' => 'category.php?act=list', 'text' => $_LANG['03_category_list']]);
+            $this->assign('ur_here', $_LANG['move_goods']);
+            $this->assign('action_link', ['href' => 'category.php?act=list', 'text' => $_LANG['03_category_list']]);
 
-            $smarty->assign('cat_select', cat_list(0, $cat_id, true));
-            $smarty->assign('form_act', 'move_cat');
+            $this->assign('cat_select', cat_list(0, $cat_id, true));
+            $this->assign('form_act', 'move_cat');
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('category_move.htm');
+            $this->display('category_move.htm');
         }
 
         /*------------------------------------------------------ */
@@ -331,7 +331,7 @@ class CategoryController extends BaseController
             /* 商品分类不允许为空 */
             if ($cat_id == 0 || $target_cat_id == 0) {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'category.php?act=move'];
-                sys_msg($_LANG['cat_move_empty'], 0, $link);
+                return sys_msg($_LANG['cat_move_empty'], 0, $link);
             }
 
             /* 更新商品分类 */
@@ -343,7 +343,7 @@ class CategoryController extends BaseController
 
                 /* 提示信息 */
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'category.php?act=list'];
-                sys_msg($_LANG['move_cat_success'], 0, $link);
+                return sys_msg($_LANG['move_cat_success'], 0, $link);
             }
         }
 
@@ -359,9 +359,9 @@ class CategoryController extends BaseController
 
             if (cat_update($id, ['sort_order' => $val])) {
                 clear_cache_files(); // 清除缓存
-                make_json_result($val);
+                return make_json_result($val);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
 
@@ -377,9 +377,9 @@ class CategoryController extends BaseController
 
             if (cat_update($id, ['measure_unit' => $val])) {
                 clear_cache_files(); // 清除缓存
-                make_json_result($val);
+                return make_json_result($val);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
 
@@ -395,14 +395,14 @@ class CategoryController extends BaseController
 
             if ($val > 10 || $val < 0) {
                 /* 价格区间数超过范围 */
-                make_json_error($_LANG['grade_error']);
+                return make_json_error($_LANG['grade_error']);
             }
 
             if (cat_update($id, ['grade' => $val])) {
                 clear_cache_files(); // 清除缓存
-                make_json_result($val);
+                return make_json_result($val);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
 
@@ -439,9 +439,9 @@ class CategoryController extends BaseController
                     $db->query('UPDATE '.$ecs->table('nav')."SET ifshow = 0 WHERE ctype = 'c' AND cid = '".$id."' AND type = 'middle'");
                 }
                 clear_cache_files();
-                make_json_result($val);
+                return make_json_result($val);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
 
@@ -457,9 +457,9 @@ class CategoryController extends BaseController
 
             if (cat_update($id, ['is_show' => $val]) != false) {
                 clear_cache_files();
-                make_json_result($val);
+                return make_json_result($val);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
 
@@ -489,7 +489,7 @@ class CategoryController extends BaseController
                     admin_log($cat_name, 'remove', 'category');
                 }
             } else {
-                make_json_error($cat_name.' '.$_LANG['cat_isleaf']);
+                return make_json_error($cat_name.' '.$_LANG['cat_isleaf']);
             }
 
             $url = 'category.php?act=query&'.str_replace('act=remove', '', $_SERVER['QUERY_STRING']);

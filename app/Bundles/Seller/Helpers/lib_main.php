@@ -152,7 +152,7 @@ function admin_priv($priv_str, $msg_type = '', $msg_output = true)
     if (strpos(','.$_SESSION['action_list'].',', ','.$priv_str.',') === false) {
         $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
         if ($msg_output) {
-            sys_msg($_LANG['priv_error'], 0, $link);
+            return sys_msg($_LANG['priv_error'], 0, $link);
         }
 
         return false;
@@ -181,7 +181,7 @@ function check_authz($authz)
 function check_authz_json($authz)
 {
     if (! check_authz($authz)) {
-        make_json_error($GLOBALS['_LANG']['priv_error']);
+        return make_json_error($GLOBALS['_LANG']['priv_error']);
     }
 }
 
@@ -283,7 +283,7 @@ function create_html_editor($input_name, $input_value = '')
     $editor->Height = '320';
     $editor->Value = $input_value;
     $FCKeditor = $editor->CreateHtml();
-    $smarty->assign('FCKeditor', $FCKeditor);
+    $this->assign('FCKeditor', $FCKeditor);
 }
 
 /**
@@ -518,7 +518,7 @@ function make_json_response($content = '', $error = '0', $message = '', $append 
  */
 function make_json_result($content, $message = '', $append = [])
 {
-    make_json_response($content, 0, $message, $append);
+    return make_json_response($content, 0, $message, $append);
 }
 
 /**
@@ -529,7 +529,7 @@ function make_json_result($content, $message = '', $append = [])
  */
 function make_json_error($msg)
 {
-    make_json_response('', 1, $msg);
+    return make_json_response('', 1, $msg);
 }
 
 /**

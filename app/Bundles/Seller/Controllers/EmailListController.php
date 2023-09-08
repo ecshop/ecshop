@@ -13,14 +13,14 @@ class EmailListController extends BaseController
 
         if ($_REQUEST['act'] == 'list') {
             $emaildb = get_email_list();
-            $smarty->assign('full_page', 1);
-            $smarty->assign('ur_here', $_LANG['email_list']);
-            $smarty->assign('emaildb', $emaildb['emaildb']);
-            $smarty->assign('filter', $emaildb['filter']);
-            $smarty->assign('record_count', $emaildb['record_count']);
-            $smarty->assign('page_count', $emaildb['page_count']);
+            $this->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['email_list']);
+            $this->assign('emaildb', $emaildb['emaildb']);
+            $this->assign('filter', $emaildb['filter']);
+            $this->assign('record_count', $emaildb['record_count']);
+            $this->assign('page_count', $emaildb['page_count']);
             assign_query_info();
-            $smarty->display('email_list.htm');
+            $this->display('email_list.htm');
         }
         if ($_REQUEST['act'] == 'export') {
             $sql = 'SELECT email FROM '.$ecs->table('email_list').'WHERE stat = 1';
@@ -42,16 +42,16 @@ class EmailListController extends BaseController
         }
         if ($_REQUEST['act'] == 'query') {
             $emaildb = get_email_list();
-            $smarty->assign('emaildb', $emaildb['emaildb']);
-            $smarty->assign('filter', $emaildb['filter']);
-            $smarty->assign('record_count', $emaildb['record_count']);
-            $smarty->assign('page_count', $emaildb['page_count']);
+            $this->assign('emaildb', $emaildb['emaildb']);
+            $this->assign('filter', $emaildb['filter']);
+            $this->assign('record_count', $emaildb['record_count']);
+            $this->assign('page_count', $emaildb['page_count']);
 
             $sort_flag = sort_flag($emaildb['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('email_list.htm'),
+            return make_json_result(
+                $this->fetch('email_list.htm'),
                 '',
                 ['filter' => $emaildb['filter'], 'page_count' => $emaildb['page_count']]
             );
@@ -62,7 +62,7 @@ class EmailListController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'batch_remove') {
             if (! isset($_POST['checkboxes']) || ! is_array($_POST['checkboxes'])) {
-                sys_msg($_LANG['no_select_email'], 1);
+                return sys_msg($_LANG['no_select_email'], 1);
             }
 
             $sql = 'DELETE FROM '.$ecs->table('email_list').
@@ -70,7 +70,7 @@ class EmailListController extends BaseController
             $db->query($sql);
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list'];
-            sys_msg(sprintf($_LANG['batch_remove_succeed'], $db->affected_rows()), 0, $lnk);
+            return sys_msg(sprintf($_LANG['batch_remove_succeed'], $db->affected_rows()), 0, $lnk);
         }
 
         /*------------------------------------------------------ */
@@ -78,7 +78,7 @@ class EmailListController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'batch_unremove') {
             if (! isset($_POST['checkboxes']) || ! is_array($_POST['checkboxes'])) {
-                sys_msg($_LANG['no_select_email'], 1);
+                return sys_msg($_LANG['no_select_email'], 1);
             }
 
             $sql = 'UPDATE '.$ecs->table('email_list').
@@ -86,7 +86,7 @@ class EmailListController extends BaseController
             $db->query($sql);
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list'];
-            sys_msg(sprintf($_LANG['batch_unremove_succeed'], $db->affected_rows()), 0, $lnk);
+            return sys_msg(sprintf($_LANG['batch_unremove_succeed'], $db->affected_rows()), 0, $lnk);
         }
 
         /*------------------------------------------------------ */
@@ -94,7 +94,7 @@ class EmailListController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'batch_exit') {
             if (! isset($_POST['checkboxes']) || ! is_array($_POST['checkboxes'])) {
-                sys_msg($_LANG['no_select_email'], 1);
+                return sys_msg($_LANG['no_select_email'], 1);
             }
 
             $sql = 'UPDATE '.$ecs->table('email_list').
@@ -102,7 +102,7 @@ class EmailListController extends BaseController
             $db->query($sql);
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list'];
-            sys_msg(sprintf($_LANG['batch_exit_succeed'], $db->affected_rows()), 0, $lnk);
+            return sys_msg(sprintf($_LANG['batch_exit_succeed'], $db->affected_rows()), 0, $lnk);
         }
     }
 

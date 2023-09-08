@@ -13,19 +13,19 @@ class GoodsExportController extends BaseController
             /* 检查权限 */
             admin_priv('goods_export');
 
-            $smarty->assign('ur_here', $_LANG['14_goods_export']);
-            $smarty->assign('cat_list', cat_list());
-            $smarty->assign('brand_list', get_brand_list());
-            $smarty->assign('goods_type_list', goods_type_list(0));
+            $this->assign('ur_here', $_LANG['14_goods_export']);
+            $this->assign('cat_list', cat_list());
+            $this->assign('brand_list', get_brand_list());
+            $this->assign('goods_type_list', goods_type_list(0));
             $goods_fields = my_array_merge($_LANG['custom'], get_attributes());
             $data_format_array = [
                 'ecshop' => $_LANG['export_ecshop'],
                 'custom' => $_LANG['export_custom'],
             ];
-            $smarty->assign('data_format', $data_format_array);
-            $smarty->assign('goods_fields', $goods_fields);
+            $this->assign('data_format', $data_format_array);
+            $this->assign('goods_fields', $goods_fields);
             assign_query_info();
-            $smarty->display('goods_export.htm');
+            $this->display('goods_export.htm');
         }
         if ($_REQUEST['act'] == 'act_export_ecshop') {
             /* 检查权限 */
@@ -115,12 +115,12 @@ class GoodsExportController extends BaseController
         if ($_REQUEST['act'] == 'get_goods_fields') {
             $cat_id = isset($_REQUEST['cat_id']) ? intval($_REQUEST['cat_id']) : 0;
             $goods_fields = my_array_merge($_LANG['custom'], get_attributes($cat_id));
-            make_json_result($goods_fields);
+            return make_json_result($goods_fields);
         }
         if ($_REQUEST['act'] == 'act_export_custom') {
             /* 检查输出列 */
             if (empty($_POST['custom_goods_export'])) {
-                sys_msg($_LANG['custom_goods_field_not_null'], 1, [], false);
+                return sys_msg($_LANG['custom_goods_field_not_null'], 1, [], false);
             }
 
             /* 检查权限 */
@@ -209,7 +209,7 @@ class GoodsExportController extends BaseController
                     'goods_name' => $val['goods_name'],
                 ];
             }
-            make_json_result($opt);
+            return make_json_result($opt);
         }
     }
 

@@ -26,20 +26,20 @@ class SmsController extends BaseController
             admin_priv('sms_send');
 
             if ($sms->has_registered()) {
-                $smarty->assign('ur_here', $_LANG['03_sms_send']);
+                $this->assign('ur_here', $_LANG['03_sms_send']);
                 $special_ranks = get_rank_list();
                 $send_rank['1_0'] = $_LANG['user_list'];
                 foreach ($special_ranks as $rank_key => $rank_value) {
                     $send_rank['2_'.$rank_key] = $rank_value;
                 }
                 assign_query_info();
-                $smarty->assign('send_rank', $send_rank);
-                $smarty->display('sms_send_ui.htm');
+                $this->assign('send_rank', $send_rank);
+                $this->display('sms_send_ui.htm');
             } else {
-                $smarty->assign('ur_here', $_LANG['register_sms']);
-                $smarty->assign('sms_site_info', $sms->get_site_info());
+                $this->assign('ur_here', $_LANG['register_sms']);
+                $this->assign('sms_site_info', $sms->get_site_info());
                 assign_query_info();
-                $smarty->display('sms_register_ui.htm');
+                $this->display('sms_register_ui.htm');
             }
         }
         if ($action == 'sms_sign') {
@@ -56,7 +56,7 @@ class SmsController extends BaseController
                             $t[$_CFG['ent_id']][$key]['key'] = $key;
                             $t[$_CFG['ent_id']][$key]['value'] = $val;
                         }
-                        $smarty->assign('sms_sign', $t[$_CFG['ent_id']]);
+                        $this->assign('sms_sign', $t[$_CFG['ent_id']]);
                     }
                 } else {
                     shop_config_update('sms_sign', '');
@@ -64,14 +64,14 @@ class SmsController extends BaseController
                 }
                 $sql = 'SELECT * FROM '.$ecs->table('shop_config')."WHERE  code='default_sms_sign'";
                 $default_sms_sign = $db->getRow($sql);
-                $smarty->assign('default_sign', $default_sms_sign['value']);
+                $this->assign('default_sign', $default_sms_sign['value']);
 
-                $smarty->display('sms_sign.htm');
+                $this->display('sms_sign.htm');
             } else {
-                $smarty->assign('ur_here', $_LANG['register_sms']);
-                $smarty->assign('sms_site_info', $sms->get_site_info());
+                $this->assign('ur_here', $_LANG['register_sms']);
+                $this->assign('sms_site_info', $sms->get_site_info());
                 assign_query_info();
-                $smarty->display('sms_register_ui.htm');
+                $this->display('sms_register_ui.htm');
             }
         }
         if ($action == 'sms_sign_add') {
@@ -79,7 +79,7 @@ class SmsController extends BaseController
 
             if ($sms->has_registered()) {
                 if (empty($_POST['sms_sign'])) {
-                    sys_msg($_LANG['insert_sign'], 1, [], false);
+                    return sys_msg($_LANG['insert_sign'], 1, [], false);
                 }
 
                 $sql = 'SELECT * FROM '.$ecs->table('shop_config')."WHERE  code='sms_sign'";
@@ -87,7 +87,7 @@ class SmsController extends BaseController
 
                 if (! empty($row['id'])) {
                     $sms_sign = unserialize($row['value']);
-                    $smarty->assign('sms_sign', $sms_sign);
+                    $this->assign('sms_sign', $sms_sign);
                     $data = [];
                     $data['shopexid'] = $_CFG['ent_id'];
                     $data['passwd'] = $_CFG['ent_ac'];
@@ -119,26 +119,26 @@ class SmsController extends BaseController
                         shop_config_update('sms_sign', $sms_sign);
                         /* 清除缓存 */
                         clear_all_files();
-                        sys_msg($_LANG['insert_succ'], 1, [], false);
+                        return sys_msg($_LANG['insert_succ'], 1, [], false);
                     } else {
                         $error_smg = $result['data'];
                         if (EC_CHARSET != 'utf-8') {
                             $error_smg = iconv('utf-8', 'gb2312', $error_smg);
                         }
-                        sys_msg($error_smg, 1, [], false);
+                        return sys_msg($error_smg, 1, [], false);
                     }
                 } else {
                     shop_config_update('default_sms_sign', $content_y);
                     shop_config_update('sms_sign', '');
                     /* 清除缓存 */
                     clear_all_files();
-                    sys_msg($_LANG['error_smg'], 1, [], false);
+                    return sys_msg($_LANG['error_smg'], 1, [], false);
                 }
             } else {
-                $smarty->assign('ur_here', $_LANG['register_sms']);
-                $smarty->assign('sms_site_info', $sms->get_site_info());
+                $this->assign('ur_here', $_LANG['register_sms']);
+                $this->assign('sms_site_info', $sms->get_site_info());
                 assign_query_info();
-                $smarty->display('sms_register_ui.htm');
+                $this->display('sms_register_ui.htm');
             }
         }
         if ($action == 'sms_sign_update') {
@@ -148,14 +148,14 @@ class SmsController extends BaseController
                 $row = $db->getRow($sql);
                 if (! empty($row['id'])) {
                     $sms_sign = unserialize($row['value']);
-                    $smarty->assign('sms_sign', $sms_sign);
+                    $this->assign('sms_sign', $sms_sign);
                     $extend_no = $_POST['extend_no'];
 
                     $content_t = $content_y = $sms_sign[$_CFG['ent_id']][$extend_no];
                     $new_content_t = $new_content_y = $_POST['new_sms_sign'];
 
                     if (! isset($sms_sign[$_CFG['ent_id']][$extend_no]) || empty($extend_no)) {
-                        sys_msg($_LANG['error_smg'], 1, [], false);
+                        return sys_msg($_LANG['error_smg'], 1, [], false);
                     }
                     if (EC_CHARSET != 'utf-8') {
                         $content_t = iconv('gb2312', 'utf-8', $content_y);
@@ -188,26 +188,26 @@ class SmsController extends BaseController
 
                         /* 清除缓存 */
                         clear_all_files();
-                        sys_msg($_LANG['edit_succ'], 1, [], false);
+                        return sys_msg($_LANG['edit_succ'], 1, [], false);
                     } else {
                         $error_smg = $result['data'];
                         if (EC_CHARSET != 'utf-8') {
                             $error_smg = iconv('utf-8', 'gb2312', $error_smg);
                         }
-                        sys_msg($error_smg, 1, [], false);
+                        return sys_msg($error_smg, 1, [], false);
                     }
                 } else {
                     shop_config_update('default_sms_sign', $content_y);
                     shop_config_update('sms_sign', '');
                     /* 清除缓存 */
                     clear_all_files();
-                    sys_msg($_LANG['error_smg'], 1, [], false);
+                    return sys_msg($_LANG['error_smg'], 1, [], false);
                 }
             } else {
-                $smarty->assign('ur_here', $_LANG['register_sms']);
-                $smarty->assign('sms_site_info', $sms->get_site_info());
+                $this->assign('ur_here', $_LANG['register_sms']);
+                $this->assign('sms_site_info', $sms->get_site_info());
                 assign_query_info();
-                $smarty->display('sms_register_ui.htm');
+                $this->display('sms_register_ui.htm');
             }
         }
         if ($action == 'sms_sign_default') {
@@ -217,7 +217,7 @@ class SmsController extends BaseController
                 $row = $db->getRow($sql);
                 if (! empty($row['id'])) {
                     $sms_sign = unserialize($row['value']);
-                    $smarty->assign('sms_sign', $sms_sign);
+                    $this->assign('sms_sign', $sms_sign);
                     $data = [];
                     $data['shopexid'] = $_CFG['ent_id'];
                     $data['passwd'] = $_CFG['ent_ac'];
@@ -229,22 +229,22 @@ class SmsController extends BaseController
                         shop_config_update('default_sms_sign', $sms_sign_default);
                         /* 清除缓存 */
                         clear_all_files();
-                        sys_msg($_LANG['default_succ'], 1, [], false);
+                        return sys_msg($_LANG['default_succ'], 1, [], false);
                     } else {
-                        sys_msg($_LANG['no_default'], 1, [], false);
+                        return sys_msg($_LANG['no_default'], 1, [], false);
                     }
                 } else {
                     shop_config_update('default_sms_sign', $content_y);
                     shop_config_update('sms_sign', '');
                     /* 清除缓存 */
                     clear_all_files();
-                    sys_msg($_LANG['error_smg'], 1, [], false);
+                    return sys_msg($_LANG['error_smg'], 1, [], false);
                 }
             } else {
-                $smarty->assign('ur_here', $_LANG['register_sms']);
-                $smarty->assign('sms_site_info', $sms->get_site_info());
+                $this->assign('ur_here', $_LANG['register_sms']);
+                $this->assign('sms_site_info', $sms->get_site_info());
                 assign_query_info();
-                $smarty->display('sms_register_ui.htm');
+                $this->display('sms_register_ui.htm');
             }
 
             /* 发送短信 */
@@ -300,11 +300,11 @@ class SmsController extends BaseController
                 'href' => 'sms.php?act=display_send_ui'];
 
             if ($result === true) {//发送成功
-                sys_msg($_LANG['send_ok'], 0, $link);
+                return sys_msg($_LANG['send_ok'], 0, $link);
             } else {
                 @$error_detail = $_LANG['server_errors'][$sms->errors['server_errors']['error_no']]
                     .$_LANG['api_errors']['send'][$sms->errors['api_errors']['error_no']];
-                sys_msg($_LANG['send_error'].$error_detail, 1, $link);
+                return sys_msg($_LANG['send_error'].$error_detail, 1, $link);
             }
         }
     }

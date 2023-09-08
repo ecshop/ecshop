@@ -142,13 +142,13 @@ class BaseController extends Controller
             $smarty->force_compile = true;
         }
 
-        $smarty->assign('lang', $_LANG);
-        $smarty->assign('help_open', $_CFG['help_open']);
+        $this->assign('lang', $_LANG);
+        $this->assign('help_open', $_CFG['help_open']);
 
         if (isset($_CFG['enable_order_check'])) {  // 为了从旧版本顺利升级到2.5.0
-            $smarty->assign('enable_order_check', $_CFG['enable_order_check']);
+            $this->assign('enable_order_check', $_CFG['enable_order_check']);
         } else {
-            $smarty->assign('enable_order_check', 0);
+            $this->assign('enable_order_check', 0);
         }
 
         /* 验证管理员身份 */
@@ -169,7 +169,7 @@ class BaseController extends Controller
                     setcookie($_COOKIE['ECSCP']['admin_pass'], '', 1, null, null, null, true);
 
                     if (! empty($_REQUEST['is_ajax'])) {
-                        make_json_error($_LANG['priv_error']);
+                        return make_json_error($_LANG['priv_error']);
                     } else {
                         ecs_header("Location: privilege.php?act=login\n");
                     }
@@ -190,7 +190,7 @@ class BaseController extends Controller
                         setcookie($_COOKIE['ECSCP']['admin_pass'], '', 1, null, null, null, true);
 
                         if (! empty($_REQUEST['is_ajax'])) {
-                            make_json_error($_LANG['priv_error']);
+                            return make_json_error($_LANG['priv_error']);
                         } else {
                             ecs_header("Location: privilege.php?act=login\n");
                         }
@@ -200,7 +200,7 @@ class BaseController extends Controller
                 }
             } else {
                 if (! empty($_REQUEST['is_ajax'])) {
-                    make_json_error($_LANG['priv_error']);
+                    return make_json_error($_LANG['priv_error']);
                 } else {
                     ecs_header("Location: privilege.php?act=login\n");
                 }
@@ -209,7 +209,7 @@ class BaseController extends Controller
             }
         }
 
-        $smarty->assign('token', $_CFG['token']);
+        $this->assign('token', $_CFG['token']);
 
         if ($_REQUEST['act'] != 'login' && $_REQUEST['act'] != 'signin' &&
             $_REQUEST['act'] != 'forget_pwd' && $_REQUEST['act'] != 'reset_pwd' && $_REQUEST['act'] != 'check_order') {
@@ -217,7 +217,7 @@ class BaseController extends Controller
             if (! empty($_SERVER['HTTP_REFERER']) &&
                 strpos(preg_replace('/:\d+/', '', $_SERVER['HTTP_REFERER']), $admin_path) === false) {
                 if (! empty($_REQUEST['is_ajax'])) {
-                    make_json_error($_LANG['priv_error']);
+                    return make_json_error($_LANG['priv_error']);
                 } else {
                     ecs_header("Location: privilege.php?act=login\n");
                 }

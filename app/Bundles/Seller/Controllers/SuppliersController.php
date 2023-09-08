@@ -21,20 +21,20 @@ class SuppliersController extends BaseController
             $result = suppliers_list();
 
             /* 模板赋值 */
-            $smarty->assign('ur_here', $_LANG['suppliers_list']); // 当前导航
-            $smarty->assign('action_link', ['href' => 'suppliers.php?act=add', 'text' => $_LANG['add_suppliers']]);
+            $this->assign('ur_here', $_LANG['suppliers_list']); // 当前导航
+            $this->assign('action_link', ['href' => 'suppliers.php?act=add', 'text' => $_LANG['add_suppliers']]);
 
-            $smarty->assign('full_page', 1); // 翻页参数
+            $this->assign('full_page', 1); // 翻页参数
 
-            $smarty->assign('suppliers_list', $result['result']);
-            $smarty->assign('filter', $result['filter']);
-            $smarty->assign('record_count', $result['record_count']);
-            $smarty->assign('page_count', $result['page_count']);
-            $smarty->assign('sort_suppliers_id', '<img src="images/sort_desc.gif">');
+            $this->assign('suppliers_list', $result['result']);
+            $this->assign('filter', $result['filter']);
+            $this->assign('record_count', $result['record_count']);
+            $this->assign('page_count', $result['page_count']);
+            $this->assign('sort_suppliers_id', '<img src="images/sort_desc.gif">');
 
             /* 显示模板 */
             assign_query_info();
-            $smarty->display('suppliers_list.htm');
+            $this->display('suppliers_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -45,17 +45,17 @@ class SuppliersController extends BaseController
 
             $result = suppliers_list();
 
-            $smarty->assign('suppliers_list', $result['result']);
-            $smarty->assign('filter', $result['filter']);
-            $smarty->assign('record_count', $result['record_count']);
-            $smarty->assign('page_count', $result['page_count']);
+            $this->assign('suppliers_list', $result['result']);
+            $this->assign('filter', $result['filter']);
+            $this->assign('record_count', $result['record_count']);
+            $this->assign('page_count', $result['page_count']);
 
             /* 排序标记 */
             $sort_flag = sort_flag($result['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('suppliers_list.htm'),
+            return make_json_result(
+                $this->fetch('suppliers_list.htm'),
                 '',
                 ['filter' => $result['filter'], 'page_count' => $result['page_count']]
             );
@@ -76,7 +76,7 @@ class SuppliersController extends BaseController
             WHERE suppliers_name = '$name'
             AND suppliers_id <> '$id' ";
             if ($db->getOne($sql)) {
-                make_json_error(sprintf($_LANG['suppliers_name_exist'], $name));
+                return make_json_error(sprintf($_LANG['suppliers_name_exist'], $name));
             } else {
                 /* 保存供货商信息 */
                 $sql = 'UPDATE '.$ecs->table('suppliers')."
@@ -88,9 +88,9 @@ class SuppliersController extends BaseController
 
                     clear_cache_files();
 
-                    make_json_result(stripslashes($name));
+                    return make_json_result(stripslashes($name));
                 } else {
-                    make_json_result(sprintf($_LANG['agency_edit_fail'], $name));
+                    return make_json_result(sprintf($_LANG['agency_edit_fail'], $name));
                 }
             }
         }
@@ -172,7 +172,7 @@ class SuppliersController extends BaseController
                 $_suppliers['is_check'] = empty($suppliers['is_check']) ? 1 : 0;
                 $db->autoExecute($ecs->table('suppliers'), $_suppliers, '', "suppliers_id = '$id'");
                 clear_cache_files();
-                make_json_result($_suppliers['is_check']);
+                return make_json_result($_suppliers['is_check']);
             }
 
             exit;
@@ -184,7 +184,7 @@ class SuppliersController extends BaseController
         if ($_REQUEST['act'] == 'batch') {
             /* 取得要操作的记录编号 */
             if (empty($_POST['checkboxes'])) {
-                sys_msg($_LANG['no_record_selected']);
+                return sys_msg($_LANG['no_record_selected']);
             } else {
                 /* 检查权限 */
                 admin_priv('suppliers_manage');
@@ -219,7 +219,7 @@ class SuppliersController extends BaseController
                         }
                     }
                     if (empty($suppliers)) {
-                        sys_msg($_LANG['batch_drop_no']);
+                        return sys_msg($_LANG['batch_drop_no']);
                     }
 
                     $sql = 'DELETE FROM '.$ecs->table('suppliers').'
@@ -243,7 +243,7 @@ class SuppliersController extends BaseController
                     /* 清除缓存 */
                     clear_cache_files();
 
-                    sys_msg($_LANG['batch_drop_ok']);
+                    return sys_msg($_LANG['batch_drop_ok']);
                 }
             }
         }
@@ -269,15 +269,15 @@ class SuppliersController extends BaseController
                 AND action_list <> 'all'";
                 $suppliers['admin_list'] = $db->getAll($sql);
 
-                $smarty->assign('ur_here', $_LANG['add_suppliers']);
-                $smarty->assign('action_link', ['href' => 'suppliers.php?act=list', 'text' => $_LANG['suppliers_list']]);
+                $this->assign('ur_here', $_LANG['add_suppliers']);
+                $this->assign('action_link', ['href' => 'suppliers.php?act=list', 'text' => $_LANG['suppliers_list']]);
 
-                $smarty->assign('form_action', 'insert');
-                $smarty->assign('suppliers', $suppliers);
+                $this->assign('form_action', 'insert');
+                $this->assign('suppliers', $suppliers);
 
                 assign_query_info();
 
-                $smarty->display('suppliers_info.htm');
+                $this->display('suppliers_info.htm');
             }
 
             if ($_REQUEST['act'] == 'edit') {
@@ -288,7 +288,7 @@ class SuppliersController extends BaseController
                 $sql = 'SELECT * FROM '.$ecs->table('suppliers')." WHERE suppliers_id = '$id'";
                 $suppliers = $db->getRow($sql);
                 if (count($suppliers) <= 0) {
-                    sys_msg('suppliers does not exist');
+                    return sys_msg('suppliers does not exist');
                 }
 
                 /* 取得所有管理员，*/
@@ -303,15 +303,15 @@ class SuppliersController extends BaseController
                 AND action_list <> 'all'";
                 $suppliers['admin_list'] = $db->getAll($sql);
 
-                $smarty->assign('ur_here', $_LANG['edit_suppliers']);
-                $smarty->assign('action_link', ['href' => 'suppliers.php?act=list', 'text' => $_LANG['suppliers_list']]);
+                $this->assign('ur_here', $_LANG['edit_suppliers']);
+                $this->assign('action_link', ['href' => 'suppliers.php?act=list', 'text' => $_LANG['suppliers_list']]);
 
-                $smarty->assign('form_action', 'update');
-                $smarty->assign('suppliers', $suppliers);
+                $this->assign('form_action', 'update');
+                $this->assign('suppliers', $suppliers);
 
                 assign_query_info();
 
-                $smarty->display('suppliers_info.htm');
+                $this->display('suppliers_info.htm');
             }
         }
 
@@ -334,7 +334,7 @@ class SuppliersController extends BaseController
                 FROM '.$ecs->table('suppliers')."
                 WHERE suppliers_name = '".$suppliers['suppliers_name']."' ";
                 if ($db->getOne($sql)) {
-                    sys_msg($_LANG['suppliers_name_exist']);
+                    return sys_msg($_LANG['suppliers_name_exist']);
                 }
 
                 $db->autoExecute($ecs->table('suppliers'), $suppliers, 'INSERT');
@@ -355,7 +355,7 @@ class SuppliersController extends BaseController
                 $links = [['href' => 'suppliers.php?act=add', 'text' => $_LANG['continue_add_suppliers']],
                     ['href' => 'suppliers.php?act=list', 'text' => $_LANG['back_suppliers_list']],
                 ];
-                sys_msg($_LANG['add_suppliers_ok'], 0, $links);
+                return sys_msg($_LANG['add_suppliers_ok'], 0, $links);
             }
 
             if ($_REQUEST['act'] == 'update') {
@@ -370,7 +370,7 @@ class SuppliersController extends BaseController
                 $sql = 'SELECT * FROM '.$ecs->table('suppliers')." WHERE suppliers_id = '".$suppliers['id']."'";
                 $suppliers['old'] = $db->getRow($sql);
                 if (empty($suppliers['old']['suppliers_id'])) {
-                    sys_msg('suppliers does not exist');
+                    return sys_msg('suppliers does not exist');
                 }
 
                 /* 判断名称是否重复 */
@@ -379,7 +379,7 @@ class SuppliersController extends BaseController
                 WHERE suppliers_name = '".$suppliers['new']['suppliers_name']."'
                 AND suppliers_id <> '".$suppliers['id']."'";
                 if ($db->getOne($sql)) {
-                    sys_msg($_LANG['suppliers_name_exist']);
+                    return sys_msg($_LANG['suppliers_name_exist']);
                 }
 
                 /* 保存供货商信息 */
@@ -403,7 +403,7 @@ class SuppliersController extends BaseController
 
                 /* 提示信息 */
                 $links[] = ['href' => 'suppliers.php?act=list', 'text' => $_LANG['back_suppliers_list']];
-                sys_msg($_LANG['edit_suppliers_ok'], 0, $links);
+                return sys_msg($_LANG['edit_suppliers_ok'], 0, $links);
             }
         }
     }

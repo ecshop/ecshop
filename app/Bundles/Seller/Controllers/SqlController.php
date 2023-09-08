@@ -22,10 +22,10 @@ class SqlController extends BaseController
         if ($_REQUEST['act'] == 'main') {
             admin_priv('sql_query');
             assign_query_info();
-            $smarty->assign('type', -1);
-            $smarty->assign('ur_here', $_LANG['04_sql_query']);
+            $this->assign('type', -1);
+            $this->assign('ur_here', $_LANG['04_sql_query']);
 
-            $smarty->display('sql.htm');
+            $this->display('sql.htm');
         }
 
         if ($_REQUEST['act'] == 'query') {
@@ -33,19 +33,19 @@ class SqlController extends BaseController
             if (! empty($_POST['sql'])) {
                 preg_match_all('/(SELECT)/i', $_POST['sql'], $matches);
                 if (isset($matches[1]) && count($matches[1]) > 1) {
-                    sys_msg('this sql more than one SELECT ');
+                    return sys_msg('this sql more than one SELECT ');
                 }
 
                 if (preg_match('/(UPDATE|DELETE|TRUNCATE|ALTER|DROP|FLUSH|INSERT|REPLACE|SET|CREATE|CONCAT)/i', $_POST['sql'])) {
-                    sys_msg('this sql May contain UPDATE,DELETE,TRUNCATE,ALTER,DROP,FLUSH,INSERT,REPLACE,SET,CREATE,CONCAT ');
+                    return sys_msg('this sql May contain UPDATE,DELETE,TRUNCATE,ALTER,DROP,FLUSH,INSERT,REPLACE,SET,CREATE,CONCAT ');
                 }
             }
 
             assign_sql($_POST['sql']);
             assign_query_info();
-            $smarty->assign('ur_here', $_LANG['04_sql_query']);
+            $this->assign('ur_here', $_LANG['04_sql_query']);
 
-            $smarty->display('sql.htm');
+            $this->display('sql.htm');
         }
     }
 
@@ -57,7 +57,7 @@ class SqlController extends BaseController
         global $db, $smarty, $_LANG;
 
         $sql = stripslashes($sql);
-        $smarty->assign('sql', $sql);
+        $this->assign('sql', $sql);
 
         /* 解析查询项 */
         $sql = str_replace("\r", '', $sql);
@@ -71,10 +71,10 @@ class SqlController extends BaseController
         if (count($query_items) > 1) {
             foreach ($query_items as $key => $value) {
                 if ($db->query($value, 'SILENT')) {
-                    $smarty->assign('type', 1);
+                    $this->assign('type', 1);
                 } else {
-                    $smarty->assign('type', 0);
-                    $smarty->assign('error', $db->error());
+                    $this->assign('type', 0);
+                    $this->assign('error', $db->error());
 
                     return;
                 }
@@ -86,16 +86,16 @@ class SqlController extends BaseController
         /* 单独一条sql语句处理 */
         if (preg_match('/^(?:UPDATE|DELETE|TRUNCATE|ALTER|DROP|FLUSH|INSERT|REPLACE|SET|CREATE)\\s+/i', $sql)) {
             if ($db->query($sql, 'SILENT')) {
-                $smarty->assign('type', 1);
+                $this->assign('type', 1);
             } else {
-                $smarty->assign('type', 0);
-                $smarty->assign('error', $db->error());
+                $this->assign('type', 0);
+                $this->assign('error', $db->error());
             }
         } else {
             $data = $db->getAll($sql);
             if ($data === false) {
-                $smarty->assign('type', 0);
-                $smarty->assign('error', $db->error());
+                $this->assign('type', 0);
+                $this->assign('error', $db->error());
             } else {
                 $result = '';
                 if (is_array($data) && isset($data[0]) === true) {
@@ -117,8 +117,8 @@ class SqlController extends BaseController
                     $result = '<center><h3>'.$_LANG['no_data'].'</h3></center>';
                 }
 
-                $smarty->assign('type', 2);
-                $smarty->assign('result', $result);
+                $this->assign('type', 2);
+                $this->assign('result', $result);
             }
         }
     }

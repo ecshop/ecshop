@@ -15,22 +15,22 @@ class AgencyController extends BaseController
         //-- 办事处列表
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'list') {
-            $smarty->assign('ur_here', $_LANG['agency_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['add_agency'], 'href' => 'agency.php?act=add']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['agency_list']);
+            $this->assign('action_link', ['text' => $_LANG['add_agency'], 'href' => 'agency.php?act=add']);
+            $this->assign('full_page', 1);
 
             $agency_list = get_agencylist();
-            $smarty->assign('agency_list', $agency_list['agency']);
-            $smarty->assign('filter', $agency_list['filter']);
-            $smarty->assign('record_count', $agency_list['record_count']);
-            $smarty->assign('page_count', $agency_list['page_count']);
+            $this->assign('agency_list', $agency_list['agency']);
+            $this->assign('filter', $agency_list['filter']);
+            $this->assign('record_count', $agency_list['record_count']);
+            $this->assign('page_count', $agency_list['page_count']);
 
             /* 排序标记 */
             $sort_flag = sort_flag($agency_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             assign_query_info();
-            $smarty->display('agency_list.htm');
+            $this->display('agency_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -38,17 +38,17 @@ class AgencyController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'query') {
             $agency_list = get_agencylist();
-            $smarty->assign('agency_list', $agency_list['agency']);
-            $smarty->assign('filter', $agency_list['filter']);
-            $smarty->assign('record_count', $agency_list['record_count']);
-            $smarty->assign('page_count', $agency_list['page_count']);
+            $this->assign('agency_list', $agency_list['agency']);
+            $this->assign('filter', $agency_list['filter']);
+            $this->assign('record_count', $agency_list['record_count']);
+            $this->assign('page_count', $agency_list['page_count']);
 
             /* 排序标记 */
             $sort_flag = sort_flag($agency_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('agency_list.htm'),
+            return make_json_result(
+                $this->fetch('agency_list.htm'),
                 '',
                 ['filter' => $agency_list['filter'], 'page_count' => $agency_list['page_count']]
             );
@@ -65,14 +65,14 @@ class AgencyController extends BaseController
 
             /* 检查名称是否重复 */
             if ($exc->num('agency_name', $name, $id) != 0) {
-                make_json_error(sprintf($_LANG['agency_name_exist'], $name));
+                return make_json_error(sprintf($_LANG['agency_name_exist'], $name));
             } else {
                 if ($exc->edit("agency_name = '$name'", $id)) {
                     admin_log($name, 'edit', 'agency');
                     clear_cache_files();
-                    make_json_result(stripslashes($name));
+                    return make_json_result(stripslashes($name));
                 } else {
-                    make_json_result(sprintf($_LANG['agency_edit_fail'], $name));
+                    return make_json_result(sprintf($_LANG['agency_edit_fail'], $name));
                 }
             }
         }
@@ -112,7 +112,7 @@ class AgencyController extends BaseController
         if ($_REQUEST['act'] == 'batch') {
             /* 取得要操作的记录编号 */
             if (empty($_POST['checkboxes'])) {
-                sys_msg($_LANG['no_record_selected']);
+                return sys_msg($_LANG['no_record_selected']);
             } else {
                 /* 检查权限 */
                 admin_priv('agency_manage');
@@ -138,7 +138,7 @@ class AgencyController extends BaseController
                     /* 清除缓存 */
                     clear_cache_files();
 
-                    sys_msg($_LANG['batch_drop_ok']);
+                    return sys_msg($_LANG['batch_drop_ok']);
                 }
             }
         }
@@ -152,7 +152,7 @@ class AgencyController extends BaseController
 
             /* 是否添加 */
             $is_add = $_REQUEST['act'] == 'add';
-            $smarty->assign('form_action', $is_add ? 'insert' : 'update');
+            $this->assign('form_action', $is_add ? 'insert' : 'update');
 
             /* 初始化、取得办事处信息 */
             if ($is_add) {
@@ -164,14 +164,14 @@ class AgencyController extends BaseController
                 ];
             } else {
                 if (empty($_GET['id'])) {
-                    sys_msg('invalid param');
+                    return sys_msg('invalid param');
                 }
 
                 $id = $_GET['id'];
                 $sql = 'SELECT * FROM '.$ecs->table('agency')." WHERE agency_id = '$id'";
                 $agency = $db->getRow($sql);
                 if (empty($agency)) {
-                    sys_msg('agency does not exist');
+                    return sys_msg('agency does not exist');
                 }
 
                 /* 关联的地区 */
@@ -189,26 +189,26 @@ class AgencyController extends BaseController
                 'FROM '.$ecs->table('admin_user');
             $agency['admin_list'] = $db->getAll($sql);
 
-            $smarty->assign('agency', $agency);
+            $this->assign('agency', $agency);
 
             /* 取得地区 */
             $country_list = get_regions();
-            $smarty->assign('countries', $country_list);
+            $this->assign('countries', $country_list);
 
             /* 显示模板 */
             if ($is_add) {
-                $smarty->assign('ur_here', $_LANG['add_agency']);
+                $this->assign('ur_here', $_LANG['add_agency']);
             } else {
-                $smarty->assign('ur_here', $_LANG['edit_agency']);
+                $this->assign('ur_here', $_LANG['edit_agency']);
             }
             if ($is_add) {
                 $href = 'agency.php?act=list';
             } else {
                 $href = 'agency.php?act=list&'.list_link_postfix();
             }
-            $smarty->assign('action_link', ['href' => $href, 'text' => $_LANG['agency_list']]);
+            $this->assign('action_link', ['href' => $href, 'text' => $_LANG['agency_list']]);
             assign_query_info();
-            $smarty->display('agency_info.htm');
+            $this->display('agency_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -230,12 +230,12 @@ class AgencyController extends BaseController
 
             /* 判断名称是否重复 */
             if (! $exc->is_only('agency_name', $agency['agency_name'], $agency['agency_id'])) {
-                sys_msg($_LANG['agency_name_exist']);
+                return sys_msg($_LANG['agency_name_exist']);
             }
 
             /* 检查是否选择了地区 */
             if (empty($_POST['regions'])) {
-                sys_msg($_LANG['no_regions']);
+                return sys_msg($_LANG['no_regions']);
             }
 
             /* 保存办事处信息 */
@@ -281,12 +281,12 @@ class AgencyController extends BaseController
                     ['href' => 'agency.php?act=add', 'text' => $_LANG['continue_add_agency']],
                     ['href' => 'agency.php?act=list', 'text' => $_LANG['back_agency_list']],
                 ];
-                sys_msg($_LANG['add_agency_ok'], 0, $links);
+                return sys_msg($_LANG['add_agency_ok'], 0, $links);
             } else {
                 $links = [
                     ['href' => 'agency.php?act=list&'.list_link_postfix(), 'text' => $_LANG['back_agency_list']],
                 ];
-                sys_msg($_LANG['edit_agency_ok'], 0, $links);
+                return sys_msg($_LANG['edit_agency_ok'], 0, $links);
             }
         }
     }

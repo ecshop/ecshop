@@ -17,7 +17,7 @@ class CaptchaManageController extends BaseController
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'main') {
             if (gd_version() == 0) {
-                sys_msg($_LANG['captcha_note'], 1);
+                return sys_msg($_LANG['captcha_note'], 1);
             }
 
             assign_query_info();
@@ -45,11 +45,11 @@ class CaptchaManageController extends BaseController
                 $captcha_check['login_fail_no'] = 'checked="checked"';
             }
 
-            $smarty->assign('captcha', $captcha_check);
-            $smarty->assign('captcha_width', $_CFG['captcha_width']);
-            $smarty->assign('captcha_height', $_CFG['captcha_height']);
-            $smarty->assign('ur_here', $_LANG['captcha_manage']);
-            $smarty->display('captcha_manage.htm');
+            $this->assign('captcha', $captcha_check);
+            $this->assign('captcha_width', $_CFG['captcha_width']);
+            $this->assign('captcha_height', $_CFG['captcha_height']);
+            $this->assign('ur_here', $_LANG['captcha_manage']);
+            $this->display('captcha_manage.htm');
         }
 
         /*------------------------------------------------------ */
@@ -77,7 +77,7 @@ class CaptchaManageController extends BaseController
 
             clear_cache_files();
 
-            sys_msg($_LANG['save_ok'], 0, [['href' => 'captcha_manage.php?act=main', 'text' => $_LANG['captcha_manage']]]);
+            return sys_msg($_LANG['save_ok'], 0, [['href' => 'captcha_manage.php?act=main', 'text' => $_LANG['captcha_manage']]]);
         }
 
     }

@@ -53,10 +53,10 @@ class ShippingController extends BaseController
                 }
             }
 
-            $smarty->assign('ur_here', $_LANG['03_shipping_list']);
-            $smarty->assign('modules', $modules);
+            $this->assign('ur_here', $_LANG['03_shipping_list']);
+            $this->assign('modules', $modules);
             assign_query_info();
-            $smarty->display('shipping_list.htm');
+            $this->display('shipping_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -94,7 +94,7 @@ class ShippingController extends BaseController
             /* 提示信息 */
             $lnk[] = ['text' => $_LANG['add_shipping_area'], 'href' => 'shipping_area.php?act=add&shipping='.$id];
             $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'shipping.php?act=list'];
-            sys_msg(sprintf($_LANG['install_succeess'], $_LANG[$modules[0]['code']]), 0, $lnk);
+            return sys_msg(sprintf($_LANG['install_succeess'], $_LANG[$modules[0]['code']]), 0, $lnk);
         }
 
         /*------------------------------------------------------ */
@@ -129,7 +129,7 @@ class ShippingController extends BaseController
                 admin_log(addslashes($shipping_name), 'uninstall', 'shipping');
 
                 $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'shipping.php?act=list'];
-                sys_msg(sprintf($_LANG['uninstall_success'], $shipping_name), 0, $lnk);
+                return sys_msg(sprintf($_LANG['uninstall_success'], $shipping_name), 0, $lnk);
             }
         }
 
@@ -151,10 +151,10 @@ class ShippingController extends BaseController
                 $row['shipping_print'] = ! empty($row['shipping_print']) ? $row['shipping_print'] : '';
                 $row['print_bg'] = empty($row['print_bg']) ? '' : get_site_root_url().$row['print_bg'];
             }
-            $smarty->assign('shipping', $row);
-            $smarty->assign('shipping_id', $shipping_id);
+            $this->assign('shipping', $row);
+            $this->assign('shipping_id', $shipping_id);
 
-            $smarty->display('print_index.htm');
+            $this->display('print_index.htm');
         }
 
         /*------------------------------------------------------ */
@@ -248,10 +248,10 @@ class ShippingController extends BaseController
                 $sql = 'UPDATE '.$ecs->table('shipping')." SET print_bg = '' WHERE shipping_id = '$shipping_id'";
                 $res = $db->query($sql);
             } else {
-                make_json_error($_LANG['js_languages']['upload_del_falid']);
+                return make_json_error($_LANG['js_languages']['upload_del_falid']);
             }
 
-            make_json_result($shipping_id);
+            return make_json_result($shipping_id);
         }
 
         /*------------------------------------------------------ */
@@ -271,19 +271,19 @@ class ShippingController extends BaseController
                 $row['shipping_print'] = ! empty($row['shipping_print']) ? $row['shipping_print'] : '';
                 $row['print_model'] = empty($row['print_model']) ? 1 : $row['print_model']; //兼容以前版本
 
-                $smarty->assign('shipping', $row);
+                $this->assign('shipping', $row);
             } else {
                 $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'shipping.php?act=list'];
-                sys_msg($_LANG['no_shipping_install'], 0, $lnk);
+                return sys_msg($_LANG['no_shipping_install'], 0, $lnk);
             }
 
-            $smarty->assign('ur_here', $_LANG['03_shipping_list'].' - '.$row['shipping_name'].' - '.$_LANG['shipping_print_template']);
-            $smarty->assign('action_link', ['text' => $_LANG['03_shipping_list'], 'href' => 'shipping.php?act=list']);
-            $smarty->assign('shipping_id', $shipping_id);
+            $this->assign('ur_here', $_LANG['03_shipping_list'].' - '.$row['shipping_name'].' - '.$_LANG['shipping_print_template']);
+            $this->assign('action_link', ['text' => $_LANG['03_shipping_list'], 'href' => 'shipping.php?act=list']);
+            $this->assign('shipping_id', $shipping_id);
 
             assign_query_info();
 
-            $smarty->display('shipping_template.htm');
+            $this->display('shipping_template.htm');
         }
 
         /*------------------------------------------------------ */
@@ -313,7 +313,7 @@ class ShippingController extends BaseController
             admin_log(addslashes($_POST['shipping_name']), 'edit', 'shipping');
 
             $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'shipping.php?act=list'];
-            sys_msg($_LANG['edit_template_success'], 0, $lnk);
+            return sys_msg($_LANG['edit_template_success'], 0, $lnk);
         }
 
         /*------------------------------------------------------ */
@@ -330,17 +330,17 @@ class ShippingController extends BaseController
 
             /* 检查名称是否为空 */
             if (empty($val)) {
-                make_json_error($_LANG['no_shipping_name']);
+                return make_json_error($_LANG['no_shipping_name']);
             }
 
             /* 检查名称是否重复 */
             if (! $exc->is_only('shipping_name', $val, $id)) {
-                make_json_error($_LANG['repeat_shipping_name']);
+                return make_json_error($_LANG['repeat_shipping_name']);
             }
 
             /* 更新支付方式名称 */
             $exc->edit("shipping_name = '$val'", $id);
-            make_json_result(stripcslashes($val));
+            return make_json_result(stripcslashes($val));
         }
 
         /*------------------------------------------------------ */
@@ -357,7 +357,7 @@ class ShippingController extends BaseController
 
             /* 更新描述 */
             $exc->edit("shipping_desc = '$val'", $id);
-            make_json_result(stripcslashes($val));
+            return make_json_result(stripcslashes($val));
         }
 
         /*------------------------------------------------------ */
@@ -386,17 +386,17 @@ class ShippingController extends BaseController
             $set_modules = true;
             include_once ROOT_PATH.'includes/modules/shipping/'.$id.'.php';
             if (isset($modules[0]['insure']) && $modules[0]['insure'] === false) {
-                make_json_error($_LANG['not_support_insure']);
+                return make_json_error($_LANG['not_support_insure']);
             }
 
             /* 更新保价费用 */
             $exc->edit("insure = '$val'", $id);
-            make_json_result(stripcslashes($val));
+            return make_json_result(stripcslashes($val));
         }
         if ($_REQUEST['act'] == 'shipping_priv') {
             check_authz_json('ship_manage');
 
-            make_json_result('');
+            return make_json_result('');
         }
         /*------------------------------------------------------ */
         //-- 修改配送方式排序
@@ -412,7 +412,7 @@ class ShippingController extends BaseController
 
             /* 更新排序 */
             $exc->edit("shipping_order = '$order'", $code);
-            make_json_result(stripcslashes($order));
+            return make_json_result(stripcslashes($order));
         }
     }
 

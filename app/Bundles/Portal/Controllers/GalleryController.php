@@ -47,10 +47,10 @@ class GalleryController extends BaseController
             }
         }
 
-        $smarty->assign('shop_name', $_CFG['shop_name']);
-        $smarty->assign('watermark', str_replace('../', './', $_CFG['watermark']));
-        $smarty->assign('gallery', $gallery);
-        $smarty->display('gallery.dwt');
+        $this->assign('shop_name', $_CFG['shop_name']);
+        $this->assign('watermark', str_replace('../', './', $_CFG['watermark']));
+        $this->assign('gallery', $gallery);
+        $this->display('gallery.dwt');
 
     }
 }

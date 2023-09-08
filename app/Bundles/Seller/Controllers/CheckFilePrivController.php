@@ -109,10 +109,10 @@ class CheckFilePrivController extends BaseController
                 }
             }
             $tpl_msg = implode(', ', $tpl_list);
-            $smarty->assign('ur_here', $_LANG['check_file_priv']);
-            $smarty->assign('list', $list);
-            $smarty->assign('tpl_msg', $tpl_msg);
-            $smarty->display('file_priv.html');
+            $this->assign('ur_here', $_LANG['check_file_priv']);
+            $this->assign('list', $list);
+            $this->assign('tpl_msg', $tpl_msg);
+            $this->display('file_priv.html');
         }
     }
 

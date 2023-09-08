@@ -20,14 +20,14 @@ class UserRankController extends BaseController
             $ranks = [];
             $ranks = $db->getAll('SELECT * FROM '.$ecs->table('user_rank'));
 
-            $smarty->assign('ur_here', $_LANG['05_user_rank_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['add_user_rank'], 'href' => 'user_rank.php?act=add']);
-            $smarty->assign('full_page', 1);
+            $this->assign('ur_here', $_LANG['05_user_rank_list']);
+            $this->assign('action_link', ['text' => $_LANG['add_user_rank'], 'href' => 'user_rank.php?act=add']);
+            $this->assign('full_page', 1);
 
-            $smarty->assign('user_ranks', $ranks);
+            $this->assign('user_ranks', $ranks);
 
             assign_query_info();
-            $smarty->display('user_rank.htm');
+            $this->display('user_rank.htm');
         }
 
         /*------------------------------------------------------ */
@@ -37,8 +37,8 @@ class UserRankController extends BaseController
             $ranks = [];
             $ranks = $db->getAll('SELECT * FROM '.$ecs->table('user_rank'));
 
-            $smarty->assign('user_ranks', $ranks);
-            make_json_result($smarty->fetch('user_rank.htm'));
+            $this->assign('user_ranks', $ranks);
+            return make_json_result($this->fetch('user_rank.htm'));
         }
 
         /*------------------------------------------------------ */
@@ -57,14 +57,14 @@ class UserRankController extends BaseController
 
             $form_action = 'insert';
 
-            $smarty->assign('rank', $rank);
-            $smarty->assign('ur_here', $_LANG['add_user_rank']);
-            $smarty->assign('action_link', ['text' => $_LANG['05_user_rank_list'], 'href' => 'user_rank.php?act=list']);
-            $smarty->assign('ur_here', $_LANG['add_user_rank']);
-            $smarty->assign('form_action', $form_action);
+            $this->assign('rank', $rank);
+            $this->assign('ur_here', $_LANG['add_user_rank']);
+            $this->assign('action_link', ['text' => $_LANG['05_user_rank_list'], 'href' => 'user_rank.php?act=list']);
+            $this->assign('ur_here', $_LANG['add_user_rank']);
+            $this->assign('form_action', $form_action);
 
             assign_query_info();
-            $smarty->display('user_rank_info.htm');
+            $this->display('user_rank_info.htm');
         }
 
         /*------------------------------------------------------ */
@@ -80,19 +80,19 @@ class UserRankController extends BaseController
 
             /* 检查是否存在重名的会员等级 */
             if (! $exc->is_only('rank_name', trim($_POST['rank_name']))) {
-                sys_msg(sprintf($_LANG['rank_name_exists'], trim($_POST['rank_name'])), 1);
+                return sys_msg(sprintf($_LANG['rank_name_exists'], trim($_POST['rank_name'])), 1);
             }
 
             /* 非特殊会员组检查积分的上下限是否合理 */
             if ($_POST['min_points'] >= $_POST['max_points'] && $special_rank == 0) {
-                sys_msg($_LANG['js_languages']['integral_max_small'], 1);
+                return sys_msg($_LANG['js_languages']['integral_max_small'], 1);
             }
 
             /* 特殊等级会员组不判断积分限制 */
             if ($special_rank == 0) {
                 /* 检查下限制有无重复 */
                 if (! $exc->is_only('min_points', intval($_POST['min_points']))) {
-                    sys_msg(sprintf($_LANG['integral_min_exists'], intval($_POST['min_points'])));
+                    return sys_msg(sprintf($_LANG['integral_min_exists'], intval($_POST['min_points'])));
                 }
             }
 
@@ -100,7 +100,7 @@ class UserRankController extends BaseController
             if ($special_rank == 0) {
                 /* 检查上限有无重复 */
                 if (! $exc->is_only('max_points', intval($_POST['max_points']))) {
-                    sys_msg(sprintf($_LANG['integral_max_exists'], intval($_POST['max_points'])));
+                    return sys_msg(sprintf($_LANG['integral_max_exists'], intval($_POST['max_points'])));
                 }
             }
 
@@ -117,7 +117,7 @@ class UserRankController extends BaseController
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'user_rank.php?act=list'];
             $lnk[] = ['text' => $_LANG['add_continue'], 'href' => 'user_rank.php?act=add'];
-            sys_msg($_LANG['add_rank_success'], 0, $lnk);
+            return sys_msg($_LANG['add_rank_success'], 0, $lnk);
         }
 
         /*------------------------------------------------------ */
@@ -153,12 +153,12 @@ class UserRankController extends BaseController
                     /* 管理员日志 */
                     admin_log($val, 'edit', 'user_rank');
                     clear_cache_files();
-                    make_json_result(stripcslashes($val));
+                    return make_json_result(stripcslashes($val));
                 } else {
-                    make_json_error($db->error());
+                    return make_json_error($db->error());
                 }
             } else {
-                make_json_error(sprintf($_LANG['rank_name_exists'], htmlspecialchars($val)));
+                return make_json_error(sprintf($_LANG['rank_name_exists'], htmlspecialchars($val)));
             }
         } /*
  *  ajax编辑积分下限
@@ -171,19 +171,19 @@ class UserRankController extends BaseController
 
             $rank = $db->getRow('SELECT max_points, special_rank FROM '.$ecs->table('user_rank')." WHERE rank_id = '$rank_id'");
             if ($val >= $rank['max_points'] && $rank['special_rank'] == 0) {
-                make_json_error($_LANG['js_languages']['integral_max_small']);
+                return make_json_error($_LANG['js_languages']['integral_max_small']);
             }
 
             if ($rank['special_rank'] == 0 && ! $exc->is_only('min_points', $val, $rank_id)) {
-                make_json_error(sprintf($_LANG['integral_min_exists'], $val));
+                return make_json_error(sprintf($_LANG['integral_min_exists'], $val));
             }
 
             if ($exc->edit("min_points = '$val'", $rank_id)) {
                 $rank_name = $exc->get_name($rank_id);
                 admin_log(addslashes($rank_name), 'edit', 'user_rank');
-                make_json_result($val);
+                return make_json_result($val);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         } /*
  *  ajax修改积分上限
@@ -197,18 +197,18 @@ class UserRankController extends BaseController
             $rank = $db->getRow('SELECT min_points, special_rank FROM '.$ecs->table('user_rank')." WHERE rank_id = '$rank_id'");
 
             if ($val <= $rank['min_points'] && $rank['special_rank'] == 0) {
-                make_json_error($_LANG['js_languages']['integral_max_small']);
+                return make_json_error($_LANG['js_languages']['integral_max_small']);
             }
 
             if ($rank['special_rank'] == 0 && ! $exc->is_only('max_points', $val, $rank_id)) {
-                make_json_error(sprintf($_LANG['integral_max_exists'], $val));
+                return make_json_error(sprintf($_LANG['integral_max_exists'], $val));
             }
             if ($exc->edit("max_points = '$val'", $rank_id)) {
                 $rank_name = $exc->get_name($rank_id);
                 admin_log(addslashes($rank_name), 'edit', 'user_rank');
-                make_json_result($val);
+                return make_json_result($val);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         } /*
  *  修改折扣率
@@ -220,16 +220,16 @@ class UserRankController extends BaseController
             $val = empty($_REQUEST['val']) ? 0 : intval($_REQUEST['val']);
 
             if ($val < 1 || $val > 100) {
-                make_json_error($_LANG['js_languages']['discount_invalid']);
+                return make_json_error($_LANG['js_languages']['discount_invalid']);
             }
 
             if ($exc->edit("discount = '$val'", $rank_id)) {
                 $rank_name = $exc->get_name($rank_id);
                 admin_log(addslashes($rank_name), 'edit', 'user_rank');
                 clear_cache_files();
-                make_json_result($val);
+                return make_json_result($val);
             } else {
-                make_json_error($val);
+                return make_json_error($val);
             }
         }
 
@@ -245,9 +245,9 @@ class UserRankController extends BaseController
             if ($exc->edit("special_rank = '$is_special'", $rank_id)) {
                 $rank_name = $exc->get_name($rank_id);
                 admin_log(addslashes($rank_name), 'edit', 'user_rank');
-                make_json_result($is_special);
+                return make_json_result($is_special);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
         /*------------------------------------------------------ */
@@ -263,9 +263,9 @@ class UserRankController extends BaseController
                 $rank_name = $exc->get_name($rank_id);
                 admin_log(addslashes($rank_name), 'edit', 'user_rank');
                 clear_cache_files();
-                make_json_result($is_show);
+                return make_json_result($is_show);
             } else {
-                make_json_error($db->error());
+                return make_json_error($db->error());
             }
         }
 

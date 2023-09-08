@@ -23,15 +23,15 @@ class SnatchController extends BaseController
             $end_time = local_date('Y-m-d H:i', strtotime('+1 week'));
             $snatch = ['start_price' => '1.00', 'end_price' => '800.00', 'max_price' => '0', 'cost_points' => '1', 'start_time' => $start_time, 'end_time' => $end_time, 'option' => '<option value="0">'.$_LANG['make_option'].'</option>'];
 
-            $smarty->assign('snatch', $snatch);
-            $smarty->assign('ur_here', $_LANG['snatch_add']);
-            $smarty->assign('action_link', ['text' => $_LANG['02_snatch_list'], 'href' => 'snatch.php?act=list']);
-            $smarty->assign('cat_list', cat_list());
-            $smarty->assign('brand_list', get_brand_list());
-            $smarty->assign('form_action', 'insert');
+            $this->assign('snatch', $snatch);
+            $this->assign('ur_here', $_LANG['snatch_add']);
+            $this->assign('action_link', ['text' => $_LANG['02_snatch_list'], 'href' => 'snatch.php?act=list']);
+            $this->assign('cat_list', cat_list());
+            $this->assign('brand_list', get_brand_list());
+            $this->assign('form_action', 'insert');
 
             assign_query_info();
-            $smarty->display('snatch_info.htm');
+            $this->display('snatch_info.htm');
         }
         if ($_REQUEST['act'] == 'insert') {
             /* 权限判断 */
@@ -41,7 +41,7 @@ class SnatchController extends BaseController
             $sql = 'SELECT goods_name FROM '.$ecs->table('goods')." WHERE goods_id = '$_POST[goods_id]'";
             $_POST['goods_name'] = $db->getOne($sql);
             if (empty($_POST['goods_name'])) {
-                sys_msg($_LANG['no_goods'], 1);
+                return sys_msg($_LANG['no_goods'], 1);
                 exit;
             }
 
@@ -49,7 +49,7 @@ class SnatchController extends BaseController
                 ' FROM '.$ecs->table('goods_activity').
                 " WHERE act_type='".GAT_SNATCH."' AND act_name='".$_POST['snatch_name']."'";
             if ($db->getOne($sql)) {
-                sys_msg(sprintf($_LANG['snatch_name_exist'], $_POST['snatch_name']), 1);
+                return sys_msg(sprintf($_LANG['snatch_name_exist'], $_POST['snatch_name']), 1);
             }
 
             /* 将时间转换成整数 */
@@ -87,29 +87,29 @@ class SnatchController extends BaseController
             admin_log($_POST['snatch_name'], 'add', 'snatch');
             $link[] = ['text' => $_LANG['back_list'], 'href' => 'snatch.php?act=list'];
             $link[] = ['text' => $_LANG['continue_add'], 'href' => 'snatch.php?act=add'];
-            sys_msg($_LANG['add_succeed'], 0, $link);
+            return sys_msg($_LANG['add_succeed'], 0, $link);
         }
 
         /*------------------------------------------------------ */
         //-- 活动列表
         /*------------------------------------------------------ */
         if ($_REQUEST['act'] == 'list') {
-            $smarty->assign('ur_here', $_LANG['02_snatch_list']);
-            $smarty->assign('action_link', ['text' => $_LANG['snatch_add'], 'href' => 'snatch.php?act=add']);
+            $this->assign('ur_here', $_LANG['02_snatch_list']);
+            $this->assign('action_link', ['text' => $_LANG['snatch_add'], 'href' => 'snatch.php?act=add']);
 
             $snatchs = get_snatchlist();
 
-            $smarty->assign('snatch_list', $snatchs['snatchs']);
-            $smarty->assign('filter', $snatchs['filter']);
-            $smarty->assign('record_count', $snatchs['record_count']);
-            $smarty->assign('page_count', $snatchs['page_count']);
+            $this->assign('snatch_list', $snatchs['snatchs']);
+            $this->assign('filter', $snatchs['filter']);
+            $this->assign('record_count', $snatchs['record_count']);
+            $this->assign('page_count', $snatchs['page_count']);
 
             $sort_flag = sort_flag($snatchs['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            $smarty->assign('full_page', 1);
+            $this->assign('full_page', 1);
             assign_query_info();
-            $smarty->display('snatch_list.htm');
+            $this->display('snatch_list.htm');
         }
 
         /*------------------------------------------------------ */
@@ -119,16 +119,16 @@ class SnatchController extends BaseController
         if ($_REQUEST['act'] == 'query') {
             $snatchs = get_snatchlist();
 
-            $smarty->assign('snatch_list', $snatchs['snatchs']);
-            $smarty->assign('filter', $snatchs['filter']);
-            $smarty->assign('record_count', $snatchs['record_count']);
-            $smarty->assign('page_count', $snatchs['page_count']);
+            $this->assign('snatch_list', $snatchs['snatchs']);
+            $this->assign('filter', $snatchs['filter']);
+            $this->assign('record_count', $snatchs['record_count']);
+            $this->assign('page_count', $snatchs['page_count']);
 
             $sort_flag = sort_flag($snatchs['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('snatch_list.htm'),
+            return make_json_result(
+                $this->fetch('snatch_list.htm'),
                 '',
                 ['filter' => $snatchs['filter'], 'page_count' => $snatchs['page_count']]
             );
@@ -149,11 +149,11 @@ class SnatchController extends BaseController
                 ' FROM '.$ecs->table('goods_activity').
                 " WHERE act_type='".GAT_SNATCH."' AND act_name='$val' AND act_id <> '$id'";
             if ($db->getOne($sql)) {
-                make_json_error(sprintf($_LANG['snatch_name_exist'], $val));
+                return make_json_error(sprintf($_LANG['snatch_name_exist'], $val));
             }
 
             $exc->edit("act_name='$val'", $id);
-            make_json_result(stripslashes($val));
+            return make_json_result(stripslashes($val));
         }
 
         /*------------------------------------------------------ */
@@ -183,16 +183,16 @@ class SnatchController extends BaseController
             $snatch = get_snatch_info($_REQUEST['id']);
 
             $snatch['option'] = '<option value="'.$snatch['goods_id'].'">'.$snatch['goods_name'].'</option>';
-            $smarty->assign('snatch', $snatch);
-            $smarty->assign('ur_here', $_LANG['snatch_edit']);
-            $smarty->assign('action_link', ['text' => $_LANG['02_snatch_list'], 'href' => 'snatch.php?act=list&'.list_link_postfix()]);
-            $smarty->assign('form_action', 'update');
+            $this->assign('snatch', $snatch);
+            $this->assign('ur_here', $_LANG['snatch_edit']);
+            $this->assign('action_link', ['text' => $_LANG['02_snatch_list'], 'href' => 'snatch.php?act=list&'.list_link_postfix()]);
+            $this->assign('form_action', 'update');
 
             /* 商品货品表 */
-            $smarty->assign('good_products_select', get_good_products_select($snatch['goods_id']));
+            $this->assign('good_products_select', get_good_products_select($snatch['goods_id']));
 
             assign_query_info();
-            $smarty->display('snatch_info.htm');
+            $this->display('snatch_info.htm');
         }
         if ($_REQUEST['act'] == 'update') {
             /* 权限判断 */
@@ -232,7 +232,7 @@ class SnatchController extends BaseController
                 ' FROM '.$ecs->table('goods_activity').
                 " WHERE act_type='".GAT_SNATCH."' AND act_name='".$_POST['snatch_name']."' AND act_id <> '".$_POST['id']."'";
             if ($db->getOne($sql)) {
-                sys_msg(sprintf($_LANG['snatch_name_exist'], $_POST['snatch_name']), 1);
+                return sys_msg(sprintf($_LANG['snatch_name_exist'], $_POST['snatch_name']), 1);
             }
 
             $info = ['start_price' => $_POST['start_price'], 'end_price' => $_POST['end_price'], 'max_price' => $_POST['max_price'], 'cost_points' => $_POST['cost_points']];
@@ -247,7 +247,7 @@ class SnatchController extends BaseController
 
             admin_log($_POST['snatch_name'], 'edit', 'snatch');
             $link[] = ['text' => $_LANG['back_list'], 'href' => 'snatch.php?act=list&'.list_link_postfix()];
-            sys_msg($_LANG['edit_succeed'], 0, $link);
+            return sys_msg($_LANG['edit_succeed'], 0, $link);
         }
 
         /*------------------------------------------------------ */
@@ -261,20 +261,20 @@ class SnatchController extends BaseController
 
             $bid_list = get_snatch_detail();
 
-            $smarty->assign('bid_list', $bid_list['bid']);
-            $smarty->assign('filter', $bid_list['filter']);
-            $smarty->assign('record_count', $bid_list['record_count']);
-            $smarty->assign('page_count', $bid_list['page_count']);
+            $this->assign('bid_list', $bid_list['bid']);
+            $this->assign('filter', $bid_list['filter']);
+            $this->assign('record_count', $bid_list['record_count']);
+            $this->assign('page_count', $bid_list['page_count']);
 
             $sort_flag = sort_flag($bid_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
             /* 赋值 */
-            $smarty->assign('info', get_snatch_info($id));
-            $smarty->assign('full_page', 1);
-            $smarty->assign('result', get_snatch_result($id));
-            $smarty->assign('ur_here', $_LANG['view_detail']);
-            $smarty->assign('action_link', ['text' => $_LANG['02_snatch_list'], 'href' => 'snatch.php?act=list']);
-            $smarty->display('snatch_view.htm');
+            $this->assign('info', get_snatch_info($id));
+            $this->assign('full_page', 1);
+            $this->assign('result', get_snatch_result($id));
+            $this->assign('ur_here', $_LANG['view_detail']);
+            $this->assign('action_link', ['text' => $_LANG['02_snatch_list'], 'href' => 'snatch.php?act=list']);
+            $this->display('snatch_view.htm');
         }
 
         /*------------------------------------------------------ */
@@ -284,16 +284,16 @@ class SnatchController extends BaseController
         if ($_REQUEST['act'] == 'query_bid') {
             $bid_list = get_snatch_detail();
 
-            $smarty->assign('bid_list', $bid_list['bid']);
-            $smarty->assign('filter', $bid_list['filter']);
-            $smarty->assign('record_count', $bid_list['record_count']);
-            $smarty->assign('page_count', $bid_list['page_count']);
+            $this->assign('bid_list', $bid_list['bid']);
+            $this->assign('filter', $bid_list['filter']);
+            $this->assign('record_count', $bid_list['record_count']);
+            $this->assign('page_count', $bid_list['page_count']);
 
             $sort_flag = sort_flag($bid_list['filter']);
-            $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+            $this->assign($sort_flag['tag'], $sort_flag['img']);
 
-            make_json_result(
-                $smarty->fetch('snatch_view.htm'),
+            return make_json_result(
+                $this->fetch('snatch_view.htm'),
                 '',
                 ['filter' => $bid_list['filter'], 'page_count' => $bid_list['page_count']]
             );
@@ -315,7 +315,7 @@ class SnatchController extends BaseController
                 $arr['products'] = get_good_products($arr['goods'][0]['goods_id']);
             }
 
-            make_json_result($arr);
+            return make_json_result($arr);
         }
 
         /*------------------------------------------------------ */
@@ -332,7 +332,7 @@ class SnatchController extends BaseController
                 $arr['products'] = get_good_products($filters->goods_id);
             }
 
-            make_json_result($arr);
+            return make_json_result($arr);
         }
     }
 

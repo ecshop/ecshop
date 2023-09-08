@@ -11,7 +11,7 @@ class VisitSoldController extends BaseController
 
         require_once ROOT_PATH.'includes/lib_order.php';
         require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/statistic.php';
-        $smarty->assign('lang', $_LANG);
+        $this->assign('lang', $_LANG);
 
         /* act操作项的初始化 */
         if (empty($_REQUEST['act'])) {
@@ -50,21 +50,21 @@ class VisitSoldController extends BaseController
             }
 
             /* 赋值到模板 */
-            $smarty->assign('ur_here', $_LANG['visit_buy_per']);
+            $this->assign('ur_here', $_LANG['visit_buy_per']);
 
-            $smarty->assign('show_num', $show_num);
-            $smarty->assign('brand_id', $brand_id);
-            $smarty->assign('click_sold_info', $click_sold_info);
+            $this->assign('show_num', $show_num);
+            $this->assign('brand_id', $brand_id);
+            $this->assign('click_sold_info', $click_sold_info);
 
-            $smarty->assign('cat_list', cat_list(0, $cat_id));
-            $smarty->assign('brand_list', get_brand_list());
+            $this->assign('cat_list', cat_list(0, $cat_id));
+            $this->assign('brand_list', get_brand_list());
 
             $filename = 'visit_sold';
-            $smarty->assign('action_link', ['text' => $_LANG['download_visit_buy'], 'href' => 'visit_sold.php?act=download&show_num='.$show_num.'&cat_id='.$cat_id.'&brand_id='.$brand_id.'&show_num='.$show_num]);
+            $this->assign('action_link', ['text' => $_LANG['download_visit_buy'], 'href' => 'visit_sold.php?act=download&show_num='.$show_num.'&cat_id='.$cat_id.'&brand_id='.$brand_id.'&show_num='.$show_num]);
 
             /* 显示页面 */
             assign_query_info();
-            $smarty->display('visit_sold.htm');
+            $this->display('visit_sold.htm');
         }
 
     }

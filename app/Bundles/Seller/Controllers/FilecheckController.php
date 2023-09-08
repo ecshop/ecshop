@@ -9,7 +9,7 @@ class FilecheckController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -119,7 +119,7 @@ if ($step == 1 || $step == 2) {
     assign_query_info();
     $smarty->display('filecheck.htm');
 }
-
+    }
 
 /**检查文件
  * @param string $currentdir //待检查目录

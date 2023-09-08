@@ -9,7 +9,6 @@ class CronController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -302,6 +301,8 @@ if ($_REQUEST['act'] == 'do') {
     $links[] = array('text' => $_LANG['back_list'], 'href' => 'cron.php?act=list');
     sys_msg($_LANG['do_ok'], 0, $links);
 }
+    }
+
 function get_next_time($cron)
 {
     $timestamp = gmtime();

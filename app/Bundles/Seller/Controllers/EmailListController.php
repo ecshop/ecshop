@@ -9,7 +9,6 @@ class EmailListController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -109,6 +108,7 @@ if ($_REQUEST['act'] == 'batch_exit') {
     $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list');
     sys_msg(sprintf($_LANG['batch_exit_succeed'], $db->affected_rows()), 0, $lnk);
 }
+    }
 
 function get_email_list()
 {

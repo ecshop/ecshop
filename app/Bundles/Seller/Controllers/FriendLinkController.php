@@ -9,7 +9,6 @@ class FriendLinkController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -314,6 +313,7 @@ if ($_REQUEST['act'] == 'edit_show_order') {
         }
     }
 }
+    }
 
 /* 获取友情链接数据列表 */
 function get_links_list()

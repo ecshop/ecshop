@@ -9,7 +9,6 @@ class PrivilegeController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -595,6 +594,7 @@ if ($_REQUEST['act'] == 'remove') {
     ecs_header("Location: $url\n");
     exit;
 }
+    }
 
 /* 获取管理员列表 */
 function get_admin_userlist()

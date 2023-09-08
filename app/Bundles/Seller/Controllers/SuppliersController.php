@@ -9,7 +9,6 @@ class SuppliersController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -414,6 +413,7 @@ if (in_array($_REQUEST['act'], array('insert', 'update'))) {
         sys_msg($_LANG['edit_suppliers_ok'], 0, $links);
     }
 }
+    }
 
 /**
  *  获取供应商列表信息

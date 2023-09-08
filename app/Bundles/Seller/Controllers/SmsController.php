@@ -9,7 +9,7 @@ class SmsController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -316,7 +316,7 @@ if ($action == 'send_sms') {
         sys_msg($_LANG['send_error'] . $error_detail, 1, $link);
     }
 }
-
+    }
 
 function shop_config_update($config_code, $config_value)
 {

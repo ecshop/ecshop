@@ -9,12 +9,6 @@ class BonusController extends BaseController
     public function index()
     {
 
-    }
-
-
-
-
-
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -799,6 +793,7 @@ if ($_REQUEST['act'] == 'batch') {
         sys_msg($_LANG['no_select_bonus'], 1);
     }
 }
+    }
 
 /**
  * 获取红包类型列表

@@ -9,12 +9,6 @@ class AdminLogsController extends BaseController
     public function index()
     {
 
-    }
-
-
-
-
-
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
     $_REQUEST['act'] = 'list';
@@ -142,6 +136,7 @@ if ($_REQUEST['act'] == 'batch_drop') {
         }
     }
 }
+    }
 
 /* 获取管理员操作记录 */
 function get_admin_logs()

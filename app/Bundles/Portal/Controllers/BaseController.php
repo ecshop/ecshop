@@ -4,18 +4,12 @@ declare(strict_types=1);
 
 namespace App\Bundles\Portal\Controllers;
 
-class BaseController
+use App\Bundles\Foundation\Controllers\Controller;
+
+class BaseController extends Controller
 {
-    public function index()
+    public function init()
     {
-
-    }
-
-
-
-
-error_reporting(E_ALL);
-
 /* 取得当前ecshop所在的根目录 */
 define('ROOT_PATH', str_replace('\\', '/', dirname(__DIR__) . '/'));
 
@@ -236,5 +230,6 @@ if (!defined('INIT_NO_SMARTY') && gzip_enabled()) {
 } else {
     ob_start();
 }
+    }
 
 }

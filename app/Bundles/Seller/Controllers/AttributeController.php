@@ -9,7 +9,6 @@ class AttributeController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -291,6 +290,7 @@ if ($_REQUEST['act'] == 'get_attr_groups') {
 
     make_json_result($groups);
 }
+    }
 
 /**
  * 获取属性列表

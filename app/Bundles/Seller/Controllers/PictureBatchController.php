@@ -9,7 +9,6 @@ class PictureBatchController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -214,6 +213,7 @@ if (empty($_GET['is_ajax'])) {
         die($json->encode($result));
     }
 }
+    }
 
 /**
  * 图片处理函数

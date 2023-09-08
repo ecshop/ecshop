@@ -9,7 +9,7 @@ class TemplateController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -643,7 +643,7 @@ if ($_REQUEST['act'] == 'restore_backup') {
     }
     sys_msg($_LANG['restore_backup_ok'], 0, array(array('text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting')));
 }
-
+    }
 function array_sort($a, $b)
 {
     $cmp = strcmp($a['region'], $b['region']);

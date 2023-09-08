@@ -9,7 +9,6 @@ class UsersOrderController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -85,6 +84,7 @@ if ($_REQUEST['act'] == 'list') {
     assign_query_info();
     $smarty->display('users_order.htm');
 }
+    }
 
 
 /*------------------------------------------------------ */

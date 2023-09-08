@@ -9,7 +9,7 @@ class WholesaleController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -573,7 +573,7 @@ if ($_REQUEST['act'] == 'get_goods_info') {
 
     echo $json->encode($goods_attr_list);
 }
-
+    }
 /*
  * 取得批发活动列表
  * @return   array

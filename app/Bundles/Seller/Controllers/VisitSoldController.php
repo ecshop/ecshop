@@ -9,7 +9,7 @@ class VisitSoldController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -72,6 +72,8 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'download') {
     assign_query_info();
     $smarty->display('visit_sold.htm');
 }
+
+    }
 
 /*------------------------------------------------------ */
 //--订单统计需要的函数

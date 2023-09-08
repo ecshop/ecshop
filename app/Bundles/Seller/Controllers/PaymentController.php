@@ -9,7 +9,6 @@ class PaymentController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -403,4 +402,5 @@ if ($_REQUEST['act'] == 'edit_pay_fee') {
     make_json_result(stripcslashes($pay_fee));
 }
 
+}
 }

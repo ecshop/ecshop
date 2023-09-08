@@ -9,13 +9,6 @@ class IndexController extends BaseController
     public function index()
     {
 
-    }
-
-
-
-
-
-
 if (!DEBUG_MODE) {
     $smarty->caching = true;
 }
@@ -103,6 +96,7 @@ if (!$smarty->is_cached('index.dwt', $cache_id)) {
 }
 
 $smarty->display('index.dwt', $cache_id);
+    }
 
 /**
  * 调用发货单查询

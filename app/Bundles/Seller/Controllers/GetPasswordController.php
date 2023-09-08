@@ -9,7 +9,6 @@ class GetPasswordController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -157,4 +156,5 @@ else {
     }
 }
 
+}
 }

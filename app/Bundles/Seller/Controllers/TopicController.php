@@ -9,7 +9,7 @@ class TopicController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -293,7 +293,7 @@ if ($_REQUEST["act"] == "query") {
     $tpl = 'topic_list.htm';
     make_json_result($smarty->fetch($tpl), '', array('filter' => $topic_list['filter'], 'page_count' => $topic_list['page_count']));
 }
-
+    }
 /**
  * 获取专题列表
  * @access  public

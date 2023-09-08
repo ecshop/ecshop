@@ -9,7 +9,7 @@ class FavourableController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -366,7 +366,7 @@ if ($_REQUEST['act'] == 'search') {
 
     make_json_result($arr);
 }
-
+    }
 /*
  * 取得优惠活动列表
  * @return   array

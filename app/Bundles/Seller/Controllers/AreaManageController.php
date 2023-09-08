@@ -9,7 +9,6 @@ class AreaManageController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -187,6 +186,7 @@ if ($_REQUEST['act'] == 'drop_area') {
         make_json_error($db->error());
     }
 }
+    }
 
 function new_region_id($region_id)
 {

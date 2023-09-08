@@ -9,7 +9,7 @@ class GoodsController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -1077,7 +1077,7 @@ if ($_REQUEST['act'] == 'show_image') {
     if (isset($GLOBALS['shop_id']) && $GLOBALS['shop_id'] > 0) {
         $img_url = $_GET['img_url'];
     } else {
-        if (strstr($_GET['img_url'], 'http://') || strstr($_GET['img_url'], 'https://')) {        
+        if (strstr($_GET['img_url'], 'http://') || strstr($_GET['img_url'], 'https://')) {
             $img_url = $_GET['img_url'];
         } else {
             $img_url = '../' . $_GET['img_url'];
@@ -2196,7 +2196,7 @@ if ($_REQUEST['act'] == 'batch_product') {
     /* 返回 */
     sys_msg($_LANG['no_operation'], 1, $link);
 }
-
+    }
 /**
  * 列表链接
  * @param bool $is_add 是否添加（插入）

@@ -9,7 +9,6 @@ class AttentionListController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -135,6 +134,8 @@ if ($_REQUEST['act'] == 'batch_addtolist') {
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
 }
+    }
+
 function get_attention()
 {
     $result = get_filter();

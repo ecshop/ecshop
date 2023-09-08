@@ -9,7 +9,7 @@ class ShippingAreaController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -369,7 +369,7 @@ if ($_REQUEST['act'] == 'remove_area') {
     $smarty->assign('areas', $list);
     make_json_result($smarty->fetch('shipping_area_list.htm'));
 }
-
+    }
 /**
  * 取得配送区域列表
  * @param int $shipping_id 配送id

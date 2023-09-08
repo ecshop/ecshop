@@ -9,7 +9,6 @@ class CategoryController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -505,6 +504,8 @@ if ($_REQUEST['act'] == 'remove') {
     ecs_header("Location: $url\n");
     exit;
 }
+    }
+
 /**
  * 获得商品分类的所有信息
  *

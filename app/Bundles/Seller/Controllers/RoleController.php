@@ -9,7 +9,6 @@ class RoleController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -249,6 +248,7 @@ if ($_REQUEST['act'] == 'remove') {
     ecs_header("Location: $url\n");
     exit;
 }
+    }
 
 /* 获取角色列表 */
 function get_role_list()

@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Bundles\Seller\Controllers;
 
-class BaseController 
+use App\Bundles\Foundation\Controllers\Controller;
+
+class BaseController extends Controller
 {
-    public function index()
+    public function init()
     {
-
-    }
-
-
-
 
 define('ECS_ADMIN', true);
 
@@ -248,4 +245,5 @@ if (gzip_enabled()) {
     ob_start();
 }
 
+}
 }

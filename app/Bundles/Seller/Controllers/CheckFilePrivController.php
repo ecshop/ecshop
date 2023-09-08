@@ -9,7 +9,6 @@ class CheckFilePrivController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -122,6 +121,7 @@ if ($_REQUEST['act'] == 'check') {
     $smarty->assign('tpl_msg', $tpl_msg);
     $smarty->display('file_priv.html');
 }
+    }
 
 /**
  *  检查数组中目录权限

@@ -9,7 +9,6 @@ class DatabaseController extends BaseController
     public function index()
     {
 
-    }
 
 
 /**
@@ -508,6 +507,7 @@ if ($_REQUEST['act'] == 'run_optimize') {
 
     sys_msg(sprintf($_LANG['optimize_ok'], $_POST['num']), 0, array(array('text' => $_LANG['go_back'], 'href' => 'database.php?act=optimize')));
 }
+    }
 
 /**
  *

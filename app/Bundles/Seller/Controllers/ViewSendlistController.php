@@ -9,7 +9,6 @@ class ViewSendlistController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -199,6 +198,7 @@ if ($_REQUEST['act'] == 'all_send') {
     $links[] = array('text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list');
     sys_msg($_LANG['mailsend_finished'], 0, $links);
 }
+    }
 
 function get_sendlist()
 {

@@ -9,7 +9,7 @@ class VoteController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -336,7 +336,7 @@ if ($_REQUEST['act'] == 'remove_option') {
     ecs_header("Location: $url\n");
     exit;
 }
-
+    }
 /* 获取在线调查数据列表 */
 function get_votelist()
 {

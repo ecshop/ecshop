@@ -9,7 +9,7 @@ class FlowStatsController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -355,4 +355,5 @@ if ($_REQUEST['act'] = 'download') {
     }
 }
 
+}
 }

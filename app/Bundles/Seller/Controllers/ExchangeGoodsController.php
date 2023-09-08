@@ -9,7 +9,6 @@ class ExchangeGoodsController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -284,6 +283,7 @@ if ($_REQUEST['act'] == 'search_goods') {
 
     make_json_result($arr);
 }
+    }
 
 /* 获得商品列表 */
 function get_exchange_goodslist()

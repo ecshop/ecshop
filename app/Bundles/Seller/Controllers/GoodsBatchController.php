@@ -9,7 +9,7 @@ class GoodsBatchController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -790,4 +790,5 @@ if ($_REQUEST['act'] == 'get_goods') {
     make_json_result($arr);
 }
 
+}
 }

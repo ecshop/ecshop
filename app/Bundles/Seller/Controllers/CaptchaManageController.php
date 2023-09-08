@@ -9,7 +9,6 @@ class CaptchaManageController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -87,4 +86,5 @@ if ($_REQUEST['act'] == 'save_config') {
     sys_msg($_LANG['save_ok'], 0, array(array('href' => 'captcha_manage.php?act=main', 'text' => $_LANG['captcha_manage'])));
 }
 
+}
 }

@@ -9,7 +9,7 @@ class GoodsTypeController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -215,7 +215,7 @@ if ($_REQUEST['act'] == 'remove') {
         make_json_error($_LANG['remove_failed']);
     }
 }
-
+    }
 /**
  * 获得所有商品类型
  *

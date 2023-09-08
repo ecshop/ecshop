@@ -9,7 +9,7 @@ class FlashplayController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -634,7 +634,7 @@ if ($_REQUEST['act'] == 'custom_update') {
     $links[] = array('text' => $_LANG['back_custom_set'], 'href' => 'flashplay.php?act=custom_list');
     sys_msg($_LANG['edit_ok'], 0, $links);
 }
-
+    }
 function get_flash_xml()
 {
     $flashdb = array();

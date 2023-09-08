@@ -9,7 +9,6 @@ class CommentManageController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -290,6 +289,7 @@ if ($_REQUEST['act'] == 'batch') {
         sys_msg($_LANG['no_select_comment'], 0, $link);
     }
 }
+    }
 
 /**
  * 获取评论列表

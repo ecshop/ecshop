@@ -9,7 +9,7 @@ class GoodsExportController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -218,7 +218,7 @@ if ($_REQUEST['act'] == 'get_goods_list') {
     }
     make_json_result($opt);
 }
-
+    }
 /**
  *
  *

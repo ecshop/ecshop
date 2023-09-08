@@ -9,7 +9,6 @@ class GenGoodsScriptController extends BaseController
     public function index()
     {
 
-    }
 
 
 
@@ -45,4 +44,5 @@ if ($_REQUEST['act'] == 'setup') {
     $smarty->display('gen_goods_script.htm');
 }
 
+    }
 }

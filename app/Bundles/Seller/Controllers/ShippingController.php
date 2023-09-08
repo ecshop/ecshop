@@ -9,7 +9,7 @@ class ShippingController extends BaseController
     public function index()
     {
 
-    }
+
 
 
 
@@ -420,6 +420,7 @@ if ($_REQUEST['act'] == 'edit_order') {
     $exc->edit("shipping_order = '$order'", $code);
     make_json_result(stripcslashes($order));
 }
+    }
 /**
  * 获取站点根目录网址
  *

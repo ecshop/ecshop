@@ -9,14 +9,11 @@ use Illuminate\Contracts\Support\Renderable;
 
 class AuthController extends Controller
 {
-    public function showLoginForm(): Renderable
+    private function showLoginForm(): Renderable
     {
         return view('user::auth.login');
     }
 
-    /**
-     * @var array
-     */
     protected array $middleware = [
         [RedirectIfAuthenticated::class, [GlobalConst::USER_MODULE]],
     ];
@@ -24,7 +21,7 @@ class AuthController extends Controller
     /**
      * 显示登录页面
      */
-    public function login(Request $request): Renderable
+    private function login(Request $request): Renderable
     {
         return view('login');
     }
@@ -32,7 +29,7 @@ class AuthController extends Controller
     /**
      * 登录操作
      */
-    public function loginHandle(Request $request): JsonResponse
+    private function loginHandle(Request $request): JsonResponse
     {
         try {
             validate(LoginRequest::class)->check($request->post());
@@ -66,7 +63,7 @@ class AuthController extends Controller
     /**
      * 注册操作
      */
-    public function registerHandle(Request $request): JsonResponse
+    private function registerHandle(Request $request): JsonResponse
     {
         try {
             validate(RegisterRequest::class)->check($request->post());
@@ -80,7 +77,7 @@ class AuthController extends Controller
     /**
      * 显示忘记密码页面
      */
-    public function forgot(Request $request): Renderable
+    private function forgot(Request $request): Renderable
     {
         return view('forgot');
     }
@@ -88,7 +85,7 @@ class AuthController extends Controller
     /**
      * 忘记密码操作
      */
-    public function forgotHandle(Request $request): JsonResponse
+    private function forgotHandle(Request $request): JsonResponse
     {
         try {
             validate(ForgetRequest::class)->check($request->post());
@@ -102,7 +99,7 @@ class AuthController extends Controller
     /**
      * 显示重置密码页面
      */
-    public function reset(Request $request): Renderable
+    private function reset(Request $request): Renderable
     {
         return view('reset');
     }
@@ -110,7 +107,7 @@ class AuthController extends Controller
     /**
      * 重置密码操作
      */
-    public function resetHandle(Request $request): JsonResponse
+    private function resetHandle(Request $request): JsonResponse
     {
         try {
             validate(ResetRequest::class)->check($request->post());
@@ -124,7 +121,7 @@ class AuthController extends Controller
     /**
      * 社会化登录
      */
-    public function connect(Request $request): Redirect
+    private function connect(Request $request): Redirect
     {
         return redirect('/');
     }
@@ -132,7 +129,7 @@ class AuthController extends Controller
     /**
      * 社会化登录回调
      */
-    public function callback(Request $request): Redirect
+    private function callback(Request $request): Redirect
     {
         return redirect('/');
     }
@@ -140,7 +137,7 @@ class AuthController extends Controller
     /**
      * 显示社会化登录绑定页面
      */
-    public function bind(Request $request): Renderable
+    private function bind(Request $request): Renderable
     {
         return view('bind');
     }
@@ -148,7 +145,7 @@ class AuthController extends Controller
     /**
      * 社会化登录绑定操作
      */
-    public function bindHandle(Request $request): JsonResponse
+    private function bindHandle(Request $request): JsonResponse
     {
         return $this->success('data');
     }

@@ -18,7 +18,6 @@ $modules['02_cat_and_goods']['51_virtual_card_add'] = 'goods.php?act=add&extensi
 $modules['02_cat_and_goods']['52_virtual_card_change'] = 'virtual_card.php?act=change';
 $modules['02_cat_and_goods']['goods_auto'] = 'goods_auto.php?act=list';
 
-
 $modules['03_promotion']['02_snatch_list'] = 'snatch.php?act=list';
 $modules['03_promotion']['04_bonustype_list'] = 'bonus.php?act=list';
 $modules['03_promotion']['06_pack_list'] = 'pack.php?act=list';
@@ -31,7 +30,6 @@ $modules['03_promotion']['13_wholesale'] = 'wholesale.php?act=list';
 $modules['03_promotion']['14_package_list'] = 'package.php?act=list';
 //$modules['03_promotion']['ebao_commend']            = 'ebao_commend.php?act=list';
 $modules['03_promotion']['15_exchange_goods'] = 'exchange_goods.php?act=list';
-
 
 $modules['04_order']['02_order_list'] = 'order.php?act=list';
 $modules['04_order']['03_order_query'] = 'order.php?act=order_query';
@@ -63,7 +61,6 @@ $modules['07_content']['vote_list'] = 'vote.php?act=list';
 $modules['07_content']['article_auto'] = 'article_auto.php?act=list';
 //$modules['07_content']['shop_help']                 = 'shophelp.php?act=list_cat';
 //$modules['07_content']['shop_info']                 = 'shopinfo.php?act=list';
-
 
 $modules['08_members']['03_users_list'] = 'users.php?act=list';
 $modules['08_members']['04_users_add'] = 'users.php?act=add';
@@ -98,7 +95,6 @@ $modules['11_system']['file_check'] = 'filecheck.php';
 //$modules['11_system']['fckfile_manage']             = 'fckfile_manage.php?act=list';
 $modules['11_system']['021_reg_fields'] = 'reg_fields.php?act=list';
 
-
 $modules['12_template']['02_template_select'] = 'template.php?act=list';
 $modules['12_template']['03_template_setup'] = 'template.php?act=setup';
 $modules['12_template']['04_template_library'] = 'template.php?act=library';
@@ -106,13 +102,11 @@ $modules['12_template']['05_edit_languages'] = 'edit_languages.php?act=list';
 $modules['12_template']['06_template_backup'] = 'template.php?act=backup_setting';
 $modules['12_template']['mail_template_manage'] = 'mail_template.php?act=list';
 
-
 $modules['13_backup']['02_db_manage'] = 'database.php?act=backup';
 $modules['13_backup']['03_db_optimize'] = 'database.php?act=optimize';
 $modules['13_backup']['04_sql_query'] = 'sql.php?act=main';
 //$modules['13_backup']['05_synchronous']             = 'integrate.php?act=sync';
 $modules['13_backup']['convert'] = 'convert.php?act=main';
-
 
 //$modules['14_sms']['02_sms_my_info']                = 'sms.php?act=display_my_info';
 $modules['14_sms']['03_sms_send'] = 'sms.php?act=display_send_ui';

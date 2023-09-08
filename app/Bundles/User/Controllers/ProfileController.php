@@ -10,12 +10,12 @@ use Illuminate\Http\JsonResponse;
 
 class ProfileController extends BaseController
 {
-    public function showProfileForm(): Renderable
+    private function showProfileForm(): Renderable
     {
         return view('user::profile.index');
     }
 
-    public function update(Request $request): JsonResponse
+    private function update(Request $request): JsonResponse
     {
         return $this->success('');
     }

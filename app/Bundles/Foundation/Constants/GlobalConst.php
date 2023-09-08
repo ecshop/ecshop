@@ -11,5 +11,4 @@ class GlobalConst
     const CONSOLE_MODULE = 'console';
 
     const USER_MODULE = 'user';
-
 }

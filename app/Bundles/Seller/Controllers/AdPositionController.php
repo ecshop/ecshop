@@ -88,6 +88,7 @@ class AdPositionController extends BaseController
                 return sys_msg($_LANG['add'].'&nbsp;'.stripslashes($position_name).'&nbsp;'.$_LANG['attradd_succed'], 0, $link);
             } else {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                 return sys_msg($_LANG['posit_name_exist'], 0, $link);
             }
         }
@@ -141,10 +142,12 @@ class AdPositionController extends BaseController
 
                     /* 提示信息 */
                     $link[] = ['text' => $_LANG['back_position_list'], 'href' => 'ad_position.php?act=list'];
+
                     return sys_msg($_LANG['edit'].' '.stripslashes($position_name).' '.$_LANG['attradd_succed'], 0, $link);
                 }
             } else {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                 return sys_msg($_LANG['posit_name_exist'], 0, $link);
             }
         }
@@ -182,6 +185,7 @@ class AdPositionController extends BaseController
             } else {
                 if ($exc->edit("position_name = '$position_name'", $id)) {
                     admin_log($position_name, 'edit', 'ads_position');
+
                     return make_json_result(stripslashes($position_name));
                 } else {
                     return make_json_result(sprintf($_LANG['brandedit_fail'], $position_name));
@@ -211,6 +215,7 @@ class AdPositionController extends BaseController
             if ($exc->edit("ad_width = '$ad_width'", $id)) {
                 clear_cache_files(); // 清除模版缓存
                 admin_log($ad_width, 'edit', 'ads_position');
+
                 return make_json_result(stripslashes($ad_width));
             } else {
                 return make_json_error($db->error());
@@ -239,6 +244,7 @@ class AdPositionController extends BaseController
             if ($exc->edit("ad_height = '$ad_height'", $id)) {
                 clear_cache_files(); // 清除模版缓存
                 admin_log($ad_height, 'edit', 'ads_position');
+
                 return make_json_result(stripslashes($ad_height));
             } else {
                 return make_json_error($db->error());

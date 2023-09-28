@@ -217,6 +217,7 @@ class RoleController extends BaseController
             $db->query($user_sql);
             /* 提示信息 */
             $link[] = ['text' => $_LANG['back_admin_list'], 'href' => 'role.php?act=list'];
+
             return sys_msg($_LANG['edit'].'&nbsp;'.$_POST['user_name'].'&nbsp;'.$_LANG['action_succeed'], 0, $link);
         }
 

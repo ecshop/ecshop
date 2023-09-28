@@ -119,6 +119,7 @@ class GoodsTypeController extends BaseController
 
             if ($db->autoExecute($ecs->table('goods_type'), $goods_type) !== false) {
                 $links = [['href' => 'goods_type.php?act=manage', 'text' => $_LANG['back_list']]];
+
                 return sys_msg($_LANG['add_goodstype_success'], 0, $links);
             } else {
                 return sys_msg($_LANG['add_goodstype_failed'], 1);
@@ -173,6 +174,7 @@ class GoodsTypeController extends BaseController
                 }
 
                 $links = [['href' => 'goods_type.php?act=manage', 'text' => $_LANG['back_list']]];
+
                 return sys_msg($_LANG['edit_goodstype_success'], 0, $links);
             } else {
                 return sys_msg($_LANG['edit_goodstype_failed'], 1);

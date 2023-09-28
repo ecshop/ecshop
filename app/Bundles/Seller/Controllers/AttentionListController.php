@@ -28,6 +28,7 @@ class AttentionListController extends BaseController
             $this->assign('filter', $goodsdb['filter']);
             $this->assign('record_count', $goodsdb['record_count']);
             $this->assign('page_count', $goodsdb['page_count']);
+
             return make_json_result(
                 $this->fetch('attention_list.htm'),
                 '',
@@ -74,9 +75,11 @@ class AttentionListController extends BaseController
                     $start = $start + $i;
                 }
                 $links[] = ['text' => sprintf($_LANG['finish_list'], $start), 'href' => "attention_list.php?act=addtolist&id=$id&pri=$pri&start=$start"];
+
                 return sys_msg($_LANG['finishing'], 0, $links);
             } else {
                 $links[] = ['text' => $_LANG['attention_list'], 'href' => 'attention_list.php?act=list'];
+
                 return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
@@ -124,9 +127,11 @@ class AttentionListController extends BaseController
                     $start = $start + $i;
                 }
                 $links[] = ['text' => sprintf($_LANG['finish_list'], $start), 'href' => "attention_list.php?act=batch_addtolist&date=$olddate&pri=$pri&start=$start"];
+
                 return sys_msg($_LANG['finishing'], 0, $links);
             } else {
                 $links[] = ['text' => $_LANG['attention_list'], 'href' => 'attention_list.php?act=list'];
+
                 return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }

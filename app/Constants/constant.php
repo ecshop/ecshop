@@ -1,9 +1,7 @@
 <?php
 
-
-
 if (version_compare(PHP_VERSION, '8.0.2', '<')) {
-    die('Require a PHP version "8.0.2". You are running ' . PHP_VERSION . '.');
+    exit('Require a PHP version "8.0.2". You are running '.PHP_VERSION.'.');
 }
 
 if (in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])) {

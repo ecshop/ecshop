@@ -89,6 +89,7 @@ class OrderController extends BaseController
             $this->assign('page_count', $order_list['page_count']);
             $sort_flag = sort_flag($order_list['filter']);
             $this->assign($sort_flag['tag'], $sort_flag['img']);
+
             return make_json_result($this->fetch('order_list.htm'), '', ['filter' => $order_list['filter'], 'page_count' => $order_list['page_count']]);
         }
 
@@ -497,6 +498,7 @@ class OrderController extends BaseController
 
             $sort_flag = sort_flag($result['filter']);
             $this->assign($sort_flag['tag'], $sort_flag['img']);
+
             return make_json_result($this->fetch('delivery_list.htm'), '', ['filter' => $result['filter'], 'page_count' => $result['page_count']]);
         }
 
@@ -640,6 +642,7 @@ class OrderController extends BaseController
                     if (($value['sums'] > $value['storage'] || $value['storage'] <= 0) && (($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_SHIP) || ($_CFG['use_storage'] == '0' && $value['is_real'] == 0))) {
                         /* 操作失败 */
                         $links[] = ['text' => $_LANG['order_info'], 'href' => 'order.php?act=delivery_info&delivery_id='.$delivery_id];
+
                         return sys_msg(sprintf($_LANG['act_good_vacancy'], $value['goods_name']), 1, $links);
                         break;
                     }
@@ -664,6 +667,7 @@ class OrderController extends BaseController
                     if (($value['sums'] > $value['goods_number'] || $value['goods_number'] <= 0) && (($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_SHIP) || ($_CFG['use_storage'] == '0' && $value['is_real'] == 0))) {
                         /* 操作失败 */
                         $links[] = ['text' => $_LANG['order_info'], 'href' => 'order.php?act=delivery_info&delivery_id='.$delivery_id];
+
                         return sys_msg(sprintf($_LANG['act_good_vacancy'], $value['goods_name']), 1, $links);
                         break;
                     }
@@ -719,6 +723,7 @@ class OrderController extends BaseController
             if (! $query) {
                 /* 操作失败 */
                 $links[] = ['text' => $_LANG['delivery_sn'].$_LANG['detail'], 'href' => 'order.php?act=delivery_info&delivery_id='.$delivery_id];
+
                 return sys_msg($_LANG['act_false'], 1, $links);
             }
 
@@ -787,6 +792,7 @@ class OrderController extends BaseController
             /* 操作成功 */
             $links[] = ['text' => $_LANG['09_delivery_order'], 'href' => 'order.php?act=delivery_list'];
             $links[] = ['text' => $_LANG['delivery_sn'].$_LANG['detail'], 'href' => 'order.php?act=delivery_info&delivery_id='.$delivery_id];
+
             return sys_msg($_LANG['act_ok'], 0, $links);
         }
 
@@ -821,6 +827,7 @@ class OrderController extends BaseController
             if (! $query) {
                 /* 操作失败 */
                 $links[] = ['text' => $_LANG['delivery_sn'].$_LANG['detail'], 'href' => 'order.php?act=delivery_info&delivery_id='.$delivery_id];
+
                 return sys_msg($_LANG['act_false'], 1, $links);
                 exit;
             }
@@ -903,6 +910,7 @@ class OrderController extends BaseController
 
             /* 操作成功 */
             $links[] = ['text' => $_LANG['delivery_sn'].$_LANG['detail'], 'href' => 'order.php?act=delivery_info&delivery_id='.$delivery_id];
+
             return sys_msg($_LANG['act_ok'], 0, $links);
         }
 
@@ -951,6 +959,7 @@ class OrderController extends BaseController
 
             $sort_flag = sort_flag($result['filter']);
             $this->assign($sort_flag['tag'], $sort_flag['img']);
+
             return make_json_result($this->fetch('back_list.htm'), '', ['filter' => $result['filter'], 'page_count' => $result['page_count']]);
         }
 
@@ -1342,6 +1351,7 @@ class OrderController extends BaseController
                             // 修改配送为空，配送费和保价费为0
                             update_order($order_id, ['shipping_id' => 0, 'shipping_name' => '']);
                             $links[] = ['text' => $_LANG['step']['shipping'], 'href' => 'order.php?act=edit&order_id='.$order_id.'&step=shipping'];
+
                             return sys_msg($_LANG['continue_shipping'], 1, $links);
                         }
                     }
@@ -2141,6 +2151,7 @@ class OrderController extends BaseController
 
             /* 提示信息 */
             $link[] = ['text' => $_LANG['back_list'], 'href' => 'order.php?act=list'];
+
             return sys_msg($_LANG['edit_template_success'], 0, $link);
         }
 
@@ -2394,6 +2405,7 @@ class OrderController extends BaseController
 
                 /* 操作成功 */
                 $links[] = ['href' => 'order.php?act=list&'.list_link_postfix(), 'text' => $_LANG['02_order_list']];
+
                 return sys_msg($_LANG['act_ok'], 0, $links);
             } /* 订单删除 */
             elseif (isset($_POST['remove'])) {
@@ -2464,6 +2476,7 @@ class OrderController extends BaseController
                     $sql = 'DELETE FROM '.$ecs->table('back_order')." WHERE back_id = '$back_id'";
                     $db->query($sql);
                 }
+
                 /* 返回 */
                 return sys_msg($_LANG['tips_back_del'], 0, [['href' => 'order.php?act=back_list', 'text' => $_LANG['return_list']]]);
             } /* 批量打印订单 */
@@ -2824,6 +2837,7 @@ class OrderController extends BaseController
                 $sn_list = empty($sn_list) ? '' : $_LANG['updated_order'].implode($sn_list, ',');
                 $msg = $sn_list;
                 $links[] = ['text' => $_LANG['return_list'], 'href' => 'order.php?act=list&'.list_link_postfix()];
+
                 return sys_msg($msg, 0, $links);
             } else {
                 $order_list_no_fail = [];
@@ -2999,6 +3013,7 @@ class OrderController extends BaseController
                 if ($order['order_status'] == OS_SPLITED) {
                     /* 操作失败 */
                     $links[] = ['text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id='.$order_id];
+
                     return sys_msg(sprintf(
                         $_LANG['order_splited_sms'],
                         $order['order_sn'],
@@ -3070,6 +3085,7 @@ class OrderController extends BaseController
                             if (($value['goods_number'] - $sended - $send_number[$value['rec_id']]) < 0) {
                                 /* 操作失败 */
                                 $links[] = ['text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id='.$order_id];
+
                                 return sys_msg($_LANG['act_ship_num'], 1, $links);
                             }
                         } else {
@@ -3078,6 +3094,7 @@ class OrderController extends BaseController
                                 if (($pg_value['order_send_number'] - $pg_value['sended'] - $send_number[$value['rec_id']][$pg_value['g_p']]) < 0) {
                                     /* 操作失败 */
                                     $links[] = ['text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id='.$order_id];
+
                                     return sys_msg($_LANG['act_ship_num'], 1, $links);
                                 }
                             }
@@ -3088,6 +3105,7 @@ class OrderController extends BaseController
                 if (empty($send_number) || empty($goods_list)) {
                     /* 操作失败 */
                     $links[] = ['text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id='.$order_id];
+
                     return sys_msg($_LANG['act_false'], 1, $links);
                 }
 
@@ -3102,6 +3120,7 @@ class OrderController extends BaseController
                             if ($pg_value['goods_number'] < $goods_no_package[$pg_value['g_p']] && (($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_SHIP) || ($_CFG['use_storage'] == '0' && $pg_value['is_real'] == 0))) {
                                 /* 操作失败 */
                                 $links[] = ['text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id='.$order_id];
+
                                 return sys_msg(sprintf($_LANG['act_good_vacancy'], $pg_value['goods_name']), 1, $links);
                             }
 
@@ -3121,6 +3140,7 @@ class OrderController extends BaseController
                         if (($num < $goods_no_package[$value['goods_id']]) && ! ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE)) {
                             /* 操作失败 */
                             $links[] = ['text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id='.$order_id];
+
                             return sys_msg(sprintf($GLOBALS['_LANG']['virtual_card_oos'].'【'.$value['goods_name'].'】'), 1, $links);
                         }
 
@@ -3149,6 +3169,7 @@ class OrderController extends BaseController
                         if (($num < $goods_no_package[$_key]) && $_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_SHIP) {
                             /* 操作失败 */
                             $links[] = ['text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id='.$order_id];
+
                             return sys_msg(sprintf($_LANG['act_good_vacancy'], $value['goods_name']), 1, $links);
                         }
                     }
@@ -3236,6 +3257,7 @@ class OrderController extends BaseController
                 } else {
                     /* 操作失败 */
                     $links[] = ['text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id='.$order_id];
+
                     return sys_msg($_LANG['act_false'], 1, $links);
                 }
                 unset($filter_fileds, $delivery, $_delivery, $order_finish);
@@ -3530,6 +3552,7 @@ class OrderController extends BaseController
 
             /* 操作成功 */
             $links[] = ['text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id='.$order_id];
+
             return sys_msg($_LANG['act_ok'].$msg, 0, $links);
         }
         if ($_REQUEST['act'] == 'json') {
@@ -3795,6 +3818,7 @@ class OrderController extends BaseController
             $this->assign('goods_list', $goods_list);
             $str = $this->fetch('order_goods_info.htm');
             $goods[] = ['order_id' => $order_id, 'str' => $str];
+
             return make_json_result($goods);
         }
     }

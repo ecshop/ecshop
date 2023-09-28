@@ -505,6 +505,7 @@ class GoodsBatchController extends BaseController
 
             /* 显示提示信息，返回商品列表 */
             $link[] = ['href' => 'goods.php?act=list', 'text' => $_LANG['01_goods_list']];
+
             return sys_msg($_LANG['batch_upload_ok'], 0, $link);
         }
 
@@ -739,6 +740,7 @@ class GoodsBatchController extends BaseController
 
             // 提示成功
             $link[] = ['href' => 'goods_batch.php?act=select', 'text' => $_LANG['15_batch_edit']];
+
             return sys_msg($_LANG['batch_edit_ok'], 0, $link);
         }
 

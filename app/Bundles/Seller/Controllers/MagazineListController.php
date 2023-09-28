@@ -62,6 +62,7 @@ class MagazineListController extends BaseController
                 $db->query($sql);
                 $links[] = ['text' => $_LANG['magazine_list'], 'href' => 'magazine_list.php?act=list'];
                 $links[] = ['text' => $_LANG['add_new'], 'href' => 'magazine_list.php?act=add'];
+
                 return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
@@ -83,6 +84,7 @@ class MagazineListController extends BaseController
                 $time = gmtime();
                 $db->query('UPDATE '.$ecs->table('mail_templates')." SET is_html = 1, template_subject = '$magazine_name', template_content = '$magazine_content', last_modify = '$time' WHERE type = 'magazine' AND template_id = '$id'");
                 $links[] = ['text' => $_LANG['magazine_list'], 'href' => 'magazine_list.php?act=list'];
+
                 return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
@@ -90,6 +92,7 @@ class MagazineListController extends BaseController
             $id = intval($_REQUEST['id']);
             $db->query('DELETE  FROM '.$ecs->table('mail_templates')." WHERE type = 'magazine' AND template_id = '$id' LIMIT 1");
             $links[] = ['text' => $_LANG['magazine_list'], 'href' => 'magazine_list.php?act=list'];
+
             return sys_msg($_LANG['edit_ok'], 0, $links);
         }
         if ($_REQUEST['act'] == 'addtolist') {
@@ -123,10 +126,12 @@ class MagazineListController extends BaseController
                             $start = $start + $i;
                         }
                         $links[] = ['text' => sprintf($_LANG['finish_list'], $start), 'href' => "magazine_list.php?act=addtolist&id=$id&pri=$pri&start=$start&send_rank=$send_rank"];
+
                         return sys_msg($_LANG['finishing'], 0, $links);
                     } else {
                         $db->query('UPDATE '.$ecs->table('mail_templates').' SET last_send = '.time()." WHERE type = 'magazine' AND template_id = '$id'");
                         $links[] = ['text' => $_LANG['magazine_list'], 'href' => 'magazine_list.php?act=list'];
+
                         return sys_msg($_LANG['edit_ok'], 0, $links);
                     }
                 } else {
@@ -170,15 +175,18 @@ class MagazineListController extends BaseController
                             $start = $start + $i;
                         }
                         $links[] = ['text' => sprintf($_LANG['finish_list'], $start), 'href' => "magazine_list.php?act=addtolist&id=$id&pri=$pri&start=$start&send_rank=$send_rank"];
+
                         return sys_msg($_LANG['finishing'], 0, $links);
                     } else {
                         $db->query('UPDATE '.$ecs->table('mail_templates').' SET last_send = '.time()." WHERE type = 'magazine' AND template_id = '$id'");
                         $links[] = ['text' => $_LANG['magazine_list'], 'href' => 'magazine_list.php?act=list'];
+
                         return sys_msg($_LANG['edit_ok'], 0, $links);
                     }
                 }
             } else {
                 $links[] = ['text' => $_LANG['magazine_list'], 'href' => 'magazine_list.php?act=list'];
+
                 return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }

@@ -284,6 +284,7 @@ class ArticleController extends BaseController
                 if ($exc->edit("title = '$title'", $id)) {
                     clear_cache_files();
                     admin_log($title, 'edit', 'article');
+
                     return make_json_result(stripslashes($title));
                 } else {
                     return make_json_error($db->error());
@@ -519,6 +520,7 @@ class ArticleController extends BaseController
             /* 清除缓存 */
             clear_cache_files();
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'article.php?act=list'];
+
             return sys_msg($_LANG['batch_handle_ok'], 0, $lnk);
         }
     }

@@ -185,6 +185,7 @@ class BonusController extends BaseController
             $sql = 'SELECT COUNT(*) FROM '.$ecs->table('bonus_type')." WHERE type_name='$type_name'";
             if ($db->getOne($sql) > 0) {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                 return sys_msg($_LANG['type_name_exist'], 0, $link);
             }
 
@@ -283,6 +284,7 @@ class BonusController extends BaseController
 
             /* 提示信息 */
             $link[] = ['text' => $_LANG['back_list'], 'href' => 'bonus.php?act=list&'.list_link_postfix()];
+
             return sys_msg($_LANG['edit'].' '.$_POST['type_name'].' '.$_LANG['attradd_succed'], 0, $link);
         }
 
@@ -780,12 +782,14 @@ class BonusController extends BaseController
 
                     $link[] = ['text' => $_LANG['back_bonus_list'],
                         'href' => 'bonus.php?act=bonus_list&bonus_type='.$bonus_type_id];
+
                     return sys_msg(sprintf($_LANG['batch_drop_success'], count($bonus_id_list)), 0, $link);
                 } /* 发邮件 */
                 elseif (isset($_POST['mail'])) {
                     $count = send_bonus_mail($bonus_type_id, $bonus_id_list);
                     $link[] = ['text' => $_LANG['back_bonus_list'],
                         'href' => 'bonus.php?act=bonus_list&bonus_type='.$bonus_type_id];
+
                     return sys_msg(sprintf($_LANG['success_send_mail'], $count), 0, $link);
                 }
             } else {

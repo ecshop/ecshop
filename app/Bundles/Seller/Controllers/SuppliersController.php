@@ -172,6 +172,7 @@ class SuppliersController extends BaseController
                 $_suppliers['is_check'] = empty($suppliers['is_check']) ? 1 : 0;
                 $db->autoExecute($ecs->table('suppliers'), $_suppliers, '', "suppliers_id = '$id'");
                 clear_cache_files();
+
                 return make_json_result($_suppliers['is_check']);
             }
 
@@ -355,6 +356,7 @@ class SuppliersController extends BaseController
                 $links = [['href' => 'suppliers.php?act=add', 'text' => $_LANG['continue_add_suppliers']],
                     ['href' => 'suppliers.php?act=list', 'text' => $_LANG['back_suppliers_list']],
                 ];
+
                 return sys_msg($_LANG['add_suppliers_ok'], 0, $links);
             }
 
@@ -403,6 +405,7 @@ class SuppliersController extends BaseController
 
                 /* 提示信息 */
                 $links[] = ['href' => 'suppliers.php?act=list', 'text' => $_LANG['back_suppliers_list']];
+
                 return sys_msg($_LANG['edit_suppliers_ok'], 0, $links);
             }
         }

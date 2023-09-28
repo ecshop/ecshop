@@ -114,6 +114,7 @@ class FavourableController extends BaseController
                     clear_cache_files();
 
                     $links[] = ['text' => $_LANG['back_favourable_list'], 'href' => 'favourable.php?act=list&'.list_link_postfix()];
+
                     return sys_msg($_LANG['batch_drop_ok']);
                 }
             }
@@ -311,11 +312,13 @@ class FavourableController extends BaseController
                     ['href' => 'favourable.php?act=add', 'text' => $_LANG['continue_add_favourable']],
                     ['href' => 'favourable.php?act=list', 'text' => $_LANG['back_favourable_list']],
                 ];
+
                 return sys_msg($_LANG['add_favourable_ok'], 0, $links);
             } else {
                 $links = [
                     ['href' => 'favourable.php?act=list&'.list_link_postfix(), 'text' => $_LANG['back_favourable_list']],
                 ];
+
                 return sys_msg($_LANG['edit_favourable_ok'], 0, $links);
             }
         }

@@ -216,6 +216,7 @@ class FlowController extends BaseController
                         exit;
                     } else {
                         $_SESSION['login_fail']++;
+
                         return show_message($_LANG['signin_failed'], '', 'flow.php?step=login');
                     }
                 } elseif (! empty($_POST['act']) && $_POST['act'] == 'signup') {

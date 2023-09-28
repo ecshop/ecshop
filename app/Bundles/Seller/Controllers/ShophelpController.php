@@ -49,6 +49,7 @@ class ShophelpController extends BaseController
             $cat_id = intval($_GET['cat']);
 
             $this->assign('list', shophelp_article_list($cat_id));
+
             return make_json_result($this->fetch('shophelp_article_list.htm'));
         }
 
@@ -107,6 +108,7 @@ class ShophelpController extends BaseController
             clear_cache_files();
 
             admin_log($_POST['title'], 'add', 'shophelp');
+
             return sys_msg($_LANG['articleadd_succeed'], 0, $link);
         }
 
@@ -172,6 +174,7 @@ class ShophelpController extends BaseController
                 if ($exc_cat->edit("cat_name = '$cat_name'", $id)) {
                     clear_cache_files();
                     admin_log($cat_name, 'edit', 'shophelpcat');
+
                     return make_json_result(stripslashes($cat_name));
                 } else {
                     return make_json_error($db->error());
@@ -194,6 +197,7 @@ class ShophelpController extends BaseController
             } else {
                 if ($exc_cat->edit("sort_order = '$order'", $id)) {
                     clear_cache_files();
+
                     return make_json_result(stripslashes($order));
                 }
             }
@@ -288,6 +292,7 @@ class ShophelpController extends BaseController
                 if ($exc_article->edit("title = '$title'", $id)) {
                     clear_cache_files();
                     admin_log($title, 'edit', 'shophelp');
+
                     return make_json_result(stripslashes($title));
                 }
             } else {

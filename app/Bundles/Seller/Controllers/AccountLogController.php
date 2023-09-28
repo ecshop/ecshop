@@ -144,6 +144,7 @@ class AccountLogController extends BaseController
             $links = [
                 ['href' => 'account_log.php?act=list&user_id='.$user_id, 'text' => $_LANG['account_list']],
             ];
+
             return sys_msg($_LANG['log_account_change_ok'], 0, $links);
         }
     }

@@ -226,6 +226,7 @@ class TopicController extends BaseController
             clear_cache_files();
 
             $links[] = ['href' => 'topic.php', 'text' => $_LANG['back_list']];
+
             return sys_msg($_LANG['succed'], 0, $links);
         }
         if ($_REQUEST['act'] == 'get_goods_list') {
@@ -269,6 +270,7 @@ class TopicController extends BaseController
             }
 
             $links[] = ['href' => 'topic.php', 'text' => $_LANG['back_list']];
+
             return sys_msg($_LANG['succed'], 0, $links);
         }
         if ($_REQUEST['act'] == 'query') {
@@ -284,6 +286,7 @@ class TopicController extends BaseController
             $this->assign($sort_flag['tag'], $sort_flag['img']);
 
             $tpl = 'topic_list.htm';
+
             return make_json_result($this->fetch($tpl), '', ['filter' => $topic_list['filter'], 'page_count' => $topic_list['page_count']]);
         }
     }

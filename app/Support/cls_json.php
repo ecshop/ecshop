@@ -3,9 +3,6 @@
 /**
  * JSON 类
  */
-
-
-
 class JSON
 {
     public function encode($arg)
@@ -17,7 +14,7 @@ class JSON
     {
         if (empty($text)) {
             return '';
-        } elseif (!is_string($text)) {
+        } elseif (! is_string($text)) {
             return false;
         }
 

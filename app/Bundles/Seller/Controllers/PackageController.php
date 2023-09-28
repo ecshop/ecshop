@@ -77,6 +77,7 @@ class PackageController extends BaseController
             admin_log($_POST['package_name'], 'add', 'package');
             $link[] = ['text' => $_LANG['back_list'], 'href' => 'package.php?act=list'];
             $link[] = ['text' => $_LANG['continue_add'], 'href' => 'package.php?act=add'];
+
             return sys_msg($_LANG['add_succeed'], 0, $link);
         }
 
@@ -131,6 +132,7 @@ class PackageController extends BaseController
 
             admin_log($_POST['package_name'], 'edit', 'package');
             $link[] = ['text' => $_LANG['back_list'], 'href' => 'package.php?act=list&'.list_link_postfix()];
+
             return sys_msg($_LANG['edit_succeed'], 0, $link);
         }
 
@@ -218,6 +220,7 @@ class PackageController extends BaseController
             }
 
             $exc->edit("act_name='$val'", $id);
+
             return make_json_result(stripslashes($val));
         }
 
@@ -281,6 +284,7 @@ class PackageController extends BaseController
             }
 
             clear_cache_files();
+
             return make_json_result($opt);
         }
 
@@ -338,6 +342,7 @@ class PackageController extends BaseController
             }
 
             clear_cache_files();
+
             return make_json_result($opt);
         }
 

@@ -65,6 +65,7 @@ class MessageController extends BaseController
                     $_SESSION['send_time'] = $cur_time;
                 }
                 $msg_info = $_CFG['message_check'] ? $_LANG['message_submit_wait'] : $_LANG['message_submit_done'];
+
                 return show_message($msg_info, $_LANG['message_list_lnk'], 'message.php');
             } else {
                 $err->show($_LANG['message_list_lnk'], 'message.php');

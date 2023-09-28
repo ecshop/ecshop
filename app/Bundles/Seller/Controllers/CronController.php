@@ -138,6 +138,7 @@ class CronController extends BaseController
                 $sql = 'INSERT INTO '.$ecs->table('crons').' (cron_code, cron_name, cron_desc, cron_config, nextime, day, week, hour, minute, run_once, allow_ip, alow_files)'.
                     "VALUES ('$_POST[cron_code]', '$_POST[cron_name]', '$_POST[cron_desc]', '$cron_config', '$next', '$cron_day', '$cron_week', '$cron_hour', '$cron_minute', '$_POST[cron_run_once]', '$_POST[allow_ip]', '$_POST[alow_files]')";
                 $db->query($sql);
+
                 return sys_msg($_LANG['install_ok'], 0, $links);
             }
         }
@@ -153,6 +154,7 @@ class CronController extends BaseController
                 $cron = $db->getRow($sql);
                 if (empty($cron)) {
                     $links[] = ['text' => $_LANG['back_list'], 'href' => 'cron.php?act=list'];
+
                     return sys_msg($_LANG['cron_not_available'], 0, $links);
                 }
                 /* 取相应插件信息 */
@@ -249,6 +251,7 @@ class CronController extends BaseController
                     "SET cron_name = '$_POST[cron_name]', cron_desc = '$_POST[cron_desc]', cron_config = '$cron_config', nextime='$next', day = '$cron_day', week = '$cron_week', hour = '$cron_hour', minute = '$cron_minute', run_once = '$_POST[cron_run_once]', allow_ip = '$_POST[allow_ip]', alow_files = '$_POST[alow_files]'".
                     "WHERE cron_id = '$_POST[cron_id]' LIMIT 1";
                 $db->query($sql);
+
                 return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
@@ -257,6 +260,7 @@ class CronController extends BaseController
                 "WHERE cron_code = '$_REQUEST[code]' LIMIT 1";
             $db->query($sql);
             $links[] = ['text' => $_LANG['back_list'], 'href' => 'cron.php?act=list'];
+
             return sys_msg($_LANG['uninstall_ok'], 0, $links);
         }
         if ($_REQUEST['act'] == 'toggle_show') {
@@ -267,6 +271,7 @@ class CronController extends BaseController
                 "SET enable = '$val' ".
                 "WHERE cron_code = '$id' LIMIT 1";
             $db->query($sql);
+
             return make_json_result($val);
         }
         if ($_REQUEST['act'] == 'do') {
@@ -293,6 +298,7 @@ class CronController extends BaseController
             }
 
             $links[] = ['text' => $_LANG['back_list'], 'href' => 'cron.php?act=list'];
+
             return sys_msg($_LANG['do_ok'], 0, $links);
         }
     }

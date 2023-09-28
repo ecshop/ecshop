@@ -169,6 +169,7 @@ class CardController extends BaseController
                 $link[0]['href'] = 'card.php?act=list&'.list_link_postfix();
 
                 $note = sprintf($_LANG['cardedit_succeed'], $_POST['card_name']);
+
                 return sys_msg($note, 0, $link);
             } else {
                 exit($db->error());
@@ -189,6 +190,7 @@ class CardController extends BaseController
                 $db->query($sql);
             }
             $link = [['text' => $_LANG['card_edit_lnk'], 'href' => 'card.php?act=edit&id='.$card_id], ['text' => $_LANG['card_list_lnk'], 'href' => 'brand.php?act=list']];
+
             return sys_msg($_LANG['drop_card_img_success'], 0, $link);
         }
         /*------------------------------------------------------ */
@@ -205,6 +207,7 @@ class CardController extends BaseController
             $old_card_name = $exc->get_name($card_id);
             if ($exc->edit("card_name='$card_name'", $card_id)) {
                 admin_log(addslashes($old_card_name), 'edit', 'card');
+
                 return make_json_result(stripcslashes($card_name));
             } else {
                 return make_json_error($db->error());
@@ -221,6 +224,7 @@ class CardController extends BaseController
             $card_name = $exc->get_name($card_id);
             if ($exc->edit("card_fee ='$card_fee'", $card_id)) {
                 admin_log(addslashes($card_name), 'edit', 'card');
+
                 return make_json_result($card_fee);
             } else {
                 return make_json_error($db->error());
@@ -237,6 +241,7 @@ class CardController extends BaseController
             $card_name = $exc->get_name($card_id);
             if ($exc->edit("free_money ='$free_money'", $card_id)) {
                 admin_log(addslashes($card_name), 'edit', 'card');
+
                 return make_json_result($free_money);
             } else {
                 return make_json_error($db->error());

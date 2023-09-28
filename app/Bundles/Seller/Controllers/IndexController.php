@@ -692,6 +692,7 @@ class IndexController extends BaseController
                 if (cat_exists($good_category, 0)) {
                     /* 同级别下不能有重复的分类名称 */
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                     return sys_msg($_LANG['catname_exist'], 0, $link);
                 }
             }
@@ -700,6 +701,7 @@ class IndexController extends BaseController
                 if (brand_exists($good_brand)) {
                     /* 同级别下不能有重复的品牌名称 */
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                     return sys_msg($_LANG['brand_name_exist'], 0, $link);
                 }
             }
@@ -932,6 +934,7 @@ class IndexController extends BaseController
                 $sql = 'DELETE FROM '.$ecs->table('email_sendlist')." WHERE id = '$row[id]'";
                 $db->query($sql);
                 $count = $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('email_sendlist'));
+
                 return make_json_result('', $_LANG['mailsend_skip'], ['count' => $count, 'goon' => 1]);
             }
 
@@ -961,6 +964,7 @@ class IndexController extends BaseController
                     } else {
                         $msg = sprintf($_LANG['mailsend_finished'], $row['email']);
                     }
+
                     return make_json_result('', $msg, ['count' => $count]);
                 } else {
                     //发送出错
@@ -975,6 +979,7 @@ class IndexController extends BaseController
                     $db->query($sql);
 
                     $count = $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('email_sendlist'));
+
                     return make_json_result('', sprintf($_LANG['mailsend_fail'], $row['email']), ['count' => $count]);
                 }
             } else {
@@ -982,6 +987,7 @@ class IndexController extends BaseController
                 $sql = 'DELETE FROM '.$ecs->table('email_sendlist')." WHERE id = '$row[id]'";
                 $db->query($sql);
                 $count = $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('email_sendlist'));
+
                 return make_json_result('', sprintf($_LANG['mailsend_fail'], $row['email']), ['count' => $count]);
             }
         }

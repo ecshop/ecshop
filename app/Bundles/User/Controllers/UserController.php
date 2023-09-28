@@ -195,6 +195,7 @@ class UserController extends BaseController
                         send_regiter_hash($_SESSION['user_id']);
                     }
                     $ucdata = empty($user->ucdata) ? '' : $user->ucdata;
+
                     return show_message(sprintf($_LANG['register_success'], $username.$ucdata), [$_LANG['back_up_page'], $_LANG['profile_lnk']], [$back_act, 'user.php'], 'info');
                 } else {
                     $err->show($_LANG['sign_up'], 'user.php?act=register');
@@ -211,9 +212,11 @@ class UserController extends BaseController
                     $db->query($sql);
                     $sql = 'SELECT user_name, email FROM '.$ecs->table('users')." WHERE user_id = '$id'";
                     $row = $db->getRow($sql);
+
                     return show_message(sprintf($_LANG['validate_ok'], $row['user_name'], $row['email']), $_LANG['profile_lnk'], 'user.php');
                 }
             }
+
             return show_message($_LANG['validate_fail']);
         } /* 验证用户注册用户名是否可以注册 */
         elseif ($action == 'is_registered') {
@@ -280,9 +283,11 @@ class UserController extends BaseController
                 recalculate_price();
 
                 $ucdata = isset($user->ucdata) ? $user->ucdata : '';
+
                 return show_message($_LANG['login_success'].$ucdata, [$_LANG['back_up_page'], $_LANG['profile_lnk']], [$back_act, 'user.php'], 'info');
             } else {
                 $_SESSION['login_fail']++;
+
                 return show_message($_LANG['login_failure'], $_LANG['relogin_lnk'], 'user.php', 'error');
             }
         } /* 处理 ajax 的登录请求 */
@@ -340,6 +345,7 @@ class UserController extends BaseController
 
             $user->logout();
             $ucdata = empty($user->ucdata) ? '' : $user->ucdata;
+
             return show_message($_LANG['logout'].$ucdata, [$_LANG['back_up_page'], $_LANG['back_home_lnk']], [$back_act, 'index.php'], 'info');
         } /* 个人资料页面 */
         elseif ($action == 'profile') {
@@ -464,6 +470,7 @@ class UserController extends BaseController
                 } else {
                     $msg = $_LANG['edit_profile_failed'];
                 }
+
                 return show_message($msg, '', '', 'info');
             }
         } /* 密码找回-->修改密码界面 */
@@ -601,6 +608,7 @@ class UserController extends BaseController
                     $sql = 'UPDATE '.$ecs->table('users')."SET `ec_salt`='0' WHERE user_id= '".$user_id."'";
                     $db->query($sql);
                     $user->logout();
+
                     return show_message($_LANG['edit_password_success'], $_LANG['relogin_lnk'], 'user.php?act=login', 'info');
                 } else {
                     return show_message($_LANG['edit_password_failure'], $_LANG['back_page_up'], '', 'info');
@@ -1153,6 +1161,7 @@ class UserController extends BaseController
                 $sur_amount = get_user_surplus($user_id);
                 if ($amount > $sur_amount) {
                     $content = $_LANG['surplus_amount_error'];
+
                     return show_message($content, $_LANG['back_page_up'], '', 'info');
                 }
 
@@ -1164,9 +1173,11 @@ class UserController extends BaseController
                 /* 如果成功提交 */
                 if ($surplus['rec_id'] > 0) {
                     $content = $_LANG['surplus_appl_submit'];
+
                     return show_message($content, $_LANG['back_account_log'], 'user.php?act=account_log', 'info');
                 } else {
                     $content = $_LANG['process_false'];
+
                     return show_message($content, $_LANG['back_page_up'], '', 'info');
                 }
             } /* 如果是会员预付款，跳转到下一步，进行线上支付的操作 */
@@ -1902,6 +1913,7 @@ class UserController extends BaseController
                         $info = $_LANG['hash_wrong'];
                     }
                 }
+
                 return show_message($info, $_LANG['back_home_lnk'], 'index.php');
             } elseif ($job == 'del_check') {
                 if (empty($ck)) {
@@ -1917,6 +1929,7 @@ class UserController extends BaseController
                 } else {
                     $info = $_LANG['email_not_alive'];
                 }
+
                 return show_message($info, $_LANG['back_home_lnk'], 'index.php');
             }
         } /* ajax 发送验证邮件 */
@@ -2164,6 +2177,7 @@ class UserController extends BaseController
                     $result_points = floor($num * $to / $from);
                     $user->set_points($row['user_name'], [$bbs_key => 0 - $num]); //调整论坛积分
                     log_account_change($row['user_id'], 0, 0, 0, $result_points, $_LANG['transform_points'], ACT_OTHER);
+
                     return show_message(sprintf($_LANG['to_pay_points'], $num, $points_name[$bbs_key]['title'], $result_points), $_LANG['transform_points'], 'user.php?act=transform_points');
 
                     // no break
@@ -2171,6 +2185,7 @@ class UserController extends BaseController
                     $result_points = floor($num * $to / $from);
                     $user->set_points($row['user_name'], [$bbs_key => 0 - $num]); //调整论坛积分
                     log_account_change($row['user_id'], 0, 0, $result_points, 0, $_LANG['transform_points'], ACT_OTHER);
+
                     return show_message(sprintf($_LANG['to_rank_points'], $num, $points_name[$bbs_key]['title'], $result_points), $_LANG['transform_points'], 'user.php?act=transform_points');
 
                     // no break
@@ -2178,6 +2193,7 @@ class UserController extends BaseController
                     $result_points = floor($num * $to / $from);
                     log_account_change($row['user_id'], 0, 0, 0, 0 - $num, $_LANG['transform_points'], ACT_OTHER); //调整商城积分
                     $user->set_points($row['user_name'], [$bbs_key => $result_points]); //调整论坛积分
+
                     return show_message(sprintf($_LANG['from_pay_points'], $num, $result_points, $points_name[$bbs_key]['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
 
                     // no break
@@ -2185,6 +2201,7 @@ class UserController extends BaseController
                     $result_points = floor($num * $to / $from);
                     log_account_change($row['user_id'], 0, 0, 0 - $num, 0, $_LANG['transform_points'], ACT_OTHER); //调整商城积分
                     $user->set_points($row['user_name'], [$bbs_key => $result_points]); //调整论坛积分
+
                     return show_message(sprintf($_LANG['from_rank_points'], $num, $result_points, $points_name[$bbs_key]['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
             }
         } elseif ($action == 'act_transform_ucenter_points') {
@@ -2229,6 +2246,7 @@ class UserController extends BaseController
                 $db->query($sql);
                 $sql = 'INSERT INTO '.$ecs->table('account_log')."(user_id, {$shop_points[$fromcredits]}, change_time, change_desc, change_type)"." VALUES ('{$row['user_id']}', '-$exchange_amount', '".gmtime()."', '".$cfg['uc_lang']['exchange']."', '98')";
                 $db->query($sql);
+
                 return show_message(sprintf($_LANG['exchange_success'], $exchange_amount, $_LANG['exchange_points'][$fromcredits], $netamount, $credit['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
             } else {
                 return show_message($_LANG['exchange_error_1'], $_LANG['transform_points'], 'user.php?act=transform_points');

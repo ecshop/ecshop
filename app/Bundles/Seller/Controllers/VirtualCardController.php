@@ -24,11 +24,13 @@ class VirtualCardController extends BaseController
             /* 验证goods_id是否合法 */
             if (empty($_REQUEST['goods_id'])) {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list'];
+
                 return sys_msg($_LANG['replenish_no_goods_id'], 1, $link);
             } else {
                 $goods_name = $db->getOne('SELECT goods_name From '.$ecs->table('goods')." WHERE goods_id='".$_REQUEST['goods_id']."' AND is_real = 0 AND extension_code='virtual_card' ");
                 if (empty($goods_name)) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list'];
+
                     return sys_msg($_LANG['replenish_no_get_goods_name'], 1, $link);
                 }
             }
@@ -85,6 +87,7 @@ class VirtualCardController extends BaseController
 
                 if ($db->getOne($sql) > 0) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=replenish&goods_id='.$_POST['goods_id']];
+
                     return sys_msg(sprintf($_LANG['card_sn_exist'], $_POST['card_sn']), 1, $link);
                 }
             }
@@ -106,6 +109,7 @@ class VirtualCardController extends BaseController
 
                 $link[] = ['text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id='.$_POST['goods_id']];
                 $link[] = ['text' => $_LANG['continue_add'], 'href' => 'virtual_card.php?act=replenish&goods_id='.$_POST['goods_id']];
+
                 return sys_msg($_LANG['action_success'], 0, $link);
             } else {
                 /* 更新数据 */
@@ -116,6 +120,7 @@ class VirtualCardController extends BaseController
 
                 $link[] = ['text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id='.$_POST['goods_id']];
                 $link[] = ['text' => $_LANG['continue_add'], 'href' => 'virtual_card.php?act=replenish&goods_id='.$_POST['goods_id']];
+
                 return sys_msg($_LANG['action_success'], 0, $link);
             }
         }
@@ -129,11 +134,13 @@ class VirtualCardController extends BaseController
             /* 验证goods_id是否合法 */
             if (empty($_REQUEST['goods_id'])) {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list'];
+
                 return sys_msg($_LANG['replenish_no_goods_id'], 1, $link);
             } else {
                 $goods_name = $db->getOne('SELECT goods_name From '.$ecs->table('goods')." WHERE goods_id='".$_REQUEST['goods_id']."' AND is_real = 0 AND extension_code='virtual_card' ");
                 if (empty($goods_name)) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'virtual_card.php?act=list'];
+
                     return sys_msg($_LANG['replenish_no_get_goods_name'], 1, $link);
                 }
             }
@@ -195,6 +202,7 @@ class VirtualCardController extends BaseController
                 /* 商品数量减$num */
                 update_goods_number(intval($_REQUEST['goods_id']));
                 $link[] = ['text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id='.$_REQUEST['goods_id']];
+
                 return sys_msg($_LANG['action_success'], 0, $link);
             }
         } /* 批量上传页面 */
@@ -264,6 +272,7 @@ class VirtualCardController extends BaseController
             /* 更新商品库存 */
             update_goods_number(intval($_REQUEST['goods_id']));
             $link[] = ['text' => $_LANG['card'], 'href' => 'virtual_card.php?act=card&goods_id='.$_POST['goods_id']];
+
             return sys_msg(sprintf($_LANG['batch_card_add_ok'], $i), 0, $link);
         }
 
@@ -343,6 +352,7 @@ class VirtualCardController extends BaseController
                 $goods_id = $db->getOne($sql);
 
                 update_goods_number($goods_id);
+
                 return make_json_result($val);
             } else {
                 return make_json_error($_LANG['action_fail']."\n".$db->error());

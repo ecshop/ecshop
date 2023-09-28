@@ -117,6 +117,7 @@ class VoteController extends BaseController
                 return sys_msg($_LANG['add'].'&nbsp;'.$_POST['vote_name'].'&nbsp;'.$_LANG['attradd_succed'], 0, $link);
             } else {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                 return sys_msg($_LANG['vote_name_exist'], 0, $link);
             }
         }
@@ -162,6 +163,7 @@ class VoteController extends BaseController
 
             /* 提示信息 */
             $link[] = ['text' => $_LANG['back_list'], 'href' => 'vote.php?act=list'];
+
             return sys_msg($_LANG['edit'].' '.$_POST['vote_name'].' '.$_LANG['attradd_succed'], 0, $link);
         }
         /*------------------------------------------------------ */
@@ -243,6 +245,7 @@ class VoteController extends BaseController
             } else {
                 if ($exc->edit("vote_name = '$vote_name'", $id)) {
                     admin_log($vote_name, 'edit', 'vote');
+
                     return make_json_result(stripslashes($vote_name));
                 }
             }
@@ -267,6 +270,7 @@ class VoteController extends BaseController
             } else {
                 if ($exc_opn->edit("option_name = '$option_name'", $id)) {
                     admin_log($option_name, 'edit', 'vote');
+
                     return make_json_result(stripslashes($option_name));
                 }
             }
@@ -283,6 +287,7 @@ class VoteController extends BaseController
 
             if ($exc_opn->edit("option_order = '$option_order'", $id)) {
                 admin_log($_LANG['edit_option_order'], 'edit', 'vote');
+
                 return make_json_result(stripslashes($option_order));
             }
         }

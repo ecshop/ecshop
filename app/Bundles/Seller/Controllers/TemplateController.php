@@ -382,6 +382,7 @@ class TemplateController extends BaseController
             if (file_put_contents($template_file, $template_content)) {
                 clear_cache_files(); // 清除对应的编译文件
                 $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'template.php?act=setup&template_file='.$_POST['template_file']];
+
                 return sys_msg($_LANG['setup_success'], 0, $lnk);
             } else {
                 return sys_msg(sprintf($_LANG['modify_dwt_failed'], 'themes/'.$curr_template.'/'.$_POST['template_file'].'.dwt'), 1, null, false);
@@ -573,6 +574,7 @@ class TemplateController extends BaseController
                 ' AND '.db_create_in($files, 'filename');
 
             $db->query($sql);
+
             return sys_msg($_LANG['backup_template_ok'], 0, [['text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting']]);
         }
 
@@ -582,6 +584,7 @@ class TemplateController extends BaseController
                 $sql = 'DELETE FROM '.$ecs->table('template')." WHERE remarks='$remarks' AND theme = '".$_CFG['template']."'";
                 $db->query($sql);
             }
+
             return sys_msg($_LANG['del_backup_ok'], 0, [['text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting']]);
         }
 
@@ -634,6 +637,7 @@ class TemplateController extends BaseController
                     $db->query($sql);
                 }
             }
+
             return sys_msg($_LANG['restore_backup_ok'], 0, [['text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting']]);
         }
     }

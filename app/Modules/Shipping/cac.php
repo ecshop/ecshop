@@ -1,11 +1,9 @@
 <?php
 
-
-
-$shipping_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/shipping/cac.php';
+$shipping_lang = ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/shipping/cac.php';
 if (file_exists($shipping_lang)) {
     global $_LANG;
-    include_once($shipping_lang);
+    include_once $shipping_lang;
 }
 
 /* 模块的基本信息 */
@@ -33,7 +31,7 @@ if (isset($set_modules) && $set_modules == true) {
     $modules[$i]['website'] = 'http://www.ecshop.com';
 
     /* 配送接口需要的参数 */
-    $modules[$i]['configure'] = array();
+    $modules[$i]['configure'] = [];
 
     /* 模式编辑器 */
     $modules[$i]['print_model'] = 2;
@@ -69,15 +67,15 @@ class cac
      *
      * @return null
      */
-    public function __construct($cfg = array())
+    public function __construct($cfg = [])
     {
     }
 
     /**
      * 计算订单的配送费用的函数
      *
-     * @param float $goods_weight 商品重量
-     * @param float $goods_amount 商品金额
+     * @param  float  $goods_weight 商品重量
+     * @param  float  $goods_amount 商品金额
      * @return  decimal
      */
     public function calculate($goods_weight, $goods_amount)
@@ -89,8 +87,7 @@ class cac
      * 查询发货状态
      * 该配送方式不支持查询发货状态
      *
-     * @access  public
-     * @param string $invoice_sn 发货单号
+     * @param  string  $invoice_sn 发货单号
      * @return  string
      */
     public function query($invoice_sn)

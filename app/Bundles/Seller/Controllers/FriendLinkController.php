@@ -141,6 +141,7 @@ class FriendLinkController extends BaseController
                 return sys_msg($_LANG['add'].'&nbsp;'.stripcslashes($_POST['link_name']).' '.$_LANG['attradd_succed'], 0, $link);
             } else {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                 return sys_msg($_LANG['link_name_exist'], 0, $link);
             }
         }
@@ -256,6 +257,7 @@ class FriendLinkController extends BaseController
                 if ($exc->edit("link_name = '$link_name'", $id)) {
                     admin_log($link_name, 'edit', 'friendlink');
                     clear_cache_files();
+
                     return make_json_result(stripslashes($link_name));
                 } else {
                     return make_json_error($db->error());
@@ -304,6 +306,7 @@ class FriendLinkController extends BaseController
             } else {
                 if ($exc->edit("show_order = '$order'", $id)) {
                     clear_cache_files();
+
                     return make_json_result(stripslashes($order));
                 }
             }

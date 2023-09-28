@@ -41,6 +41,7 @@ class ArticleAutoController extends BaseController
             $sql = 'DELETE FROM '.$ecs->table('auto_manage')." WHERE item_id = '$goods_id' AND type = 'article'";
             $db->query($sql);
             $links[] = ['text' => $_LANG['article_auto'], 'href' => 'article_auto.php?act=list'];
+
             return sys_msg($_LANG['edit_ok'], 0, $links);
         }
         if ($_REQUEST['act'] == 'edit_starttime') {
@@ -60,6 +61,7 @@ class ArticleAutoController extends BaseController
                 'starttime' => $time], ['starttime' => (string) $time]);
 
             clear_cache_files();
+
             return make_json_result(stripslashes($_POST['val']), '', ['act' => 'article_auto', 'id' => $id]);
         }
         if ($_REQUEST['act'] == 'edit_endtime') {
@@ -79,6 +81,7 @@ class ArticleAutoController extends BaseController
                 'endtime' => $time], ['endtime' => (string) $time]);
 
             clear_cache_files();
+
             return make_json_result(stripslashes($_POST['val']), '', ['act' => 'article_auto', 'id' => $id]);
         } //批量发布
         if ($_REQUEST['act'] == 'batch_start') {
@@ -100,6 +103,7 @@ class ArticleAutoController extends BaseController
             }
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'article_auto.php?act=list'];
+
             return sys_msg($_LANG['batch_start_succeed'], 0, $lnk);
         } //批量取消发布
         if ($_REQUEST['act'] == 'batch_end') {
@@ -121,6 +125,7 @@ class ArticleAutoController extends BaseController
             }
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'article_auto.php?act=list'];
+
             return sys_msg($_LANG['batch_end_succeed'], 0, $lnk);
         }
     }

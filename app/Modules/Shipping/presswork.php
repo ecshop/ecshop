@@ -1,11 +1,9 @@
 <?php
 
-
-
-$shipping_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/shipping/presswork.php';
+$shipping_lang = ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/shipping/presswork.php';
 if (file_exists($shipping_lang)) {
     global $_LANG;
-    include_once($shipping_lang);
+    include_once $shipping_lang;
 }
 
 /* 模块的基本信息 */
@@ -33,7 +31,7 @@ if (isset($set_modules) && $set_modules == true) {
     $modules[$i]['website'] = 'http://www.ecshop.com';
 
     /* 配送接口需要的参数 */
-    $modules[$i]['configure'] = array();
+    $modules[$i]['configure'] = [];
 
     /* 模式编辑器 */
     $modules[$i]['print_model'] = 2;
@@ -69,7 +67,7 @@ class presswork
      *
      * @return null
      */
-    public function __construct($cfg = array())
+    public function __construct($cfg = [])
     {
         foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];
@@ -79,8 +77,8 @@ class presswork
     /**
      * 计算订单的配送费用的函数
      *
-     * @param float $goods_weight 商品重量
-     * @param float $goods_amount 商品金额
+     * @param  float  $goods_weight 商品重量
+     * @param  float  $goods_amount 商品金额
      * @return  decimal
      */
     public function calculate($goods_weight, $goods_amount)
@@ -102,8 +100,7 @@ class presswork
      * 查询发货状态
      * 该配送方式不支持查询发货状态
      *
-     * @access  public
-     * @param string $invoice_sn 发货单号
+     * @param  string  $invoice_sn 发货单号
      * @return  string
      */
     public function query($invoice_sn)
@@ -114,10 +111,8 @@ class presswork
     /**
      *  当保价比例以%出现时，计算保价费用
      *
-     * @access  public
-     * @param decimal $tatal_price 需要保价的商品总价
-     * @param decimal $insure_rate 保价计算比例
-     *
+     * @param  decimal  $tatal_price 需要保价的商品总价
+     * @param  decimal  $insure_rate 保价计算比例
      * @return  decimal $price        保价费用
      */
     public function calculate_insure($total_price, $insure_rate)
@@ -127,6 +122,7 @@ class presswork
         if ($price < 1) {
             $price = 1;
         }
+
         return ceil($price);
     }
 }

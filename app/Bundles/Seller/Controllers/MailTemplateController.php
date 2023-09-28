@@ -130,6 +130,7 @@ class MailTemplateController extends BaseController
 
             if ($db->query($sql, 'SILENT')) {
                 $link[0] = ['href' => 'mail_template.php?act=list', 'text' => $_LANG['update_success']];
+
                 return sys_msg($_LANG['update_success'], 0, $link);
             } else {
                 return sys_msg($_LANG['update_failed'], 1, [], false);

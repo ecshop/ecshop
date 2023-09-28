@@ -103,6 +103,7 @@ class ArticlecatController extends BaseController
             $link[1]['text'] = $_LANG['back_list'];
             $link[1]['href'] = 'articlecat.php?act=list';
             clear_cache_files();
+
             return sys_msg($_POST['cat_name'].$_LANG['catadd_succed'], 0, $link);
         }
 
@@ -227,6 +228,7 @@ class ArticlecatController extends BaseController
                 $note = sprintf($_LANG['catedit_succed'], $_POST['cat_name']);
                 admin_log($_POST['cat_name'], 'edit', 'articlecat');
                 clear_cache_files();
+
                 return sys_msg($note, 0, $link);
             } else {
                 exit($db->error());
@@ -248,6 +250,7 @@ class ArticlecatController extends BaseController
             } else {
                 if ($exc->edit("sort_order = '$order'", $id)) {
                     clear_cache_files();
+
                     return make_json_result(stripslashes($order));
                 } else {
                     return make_json_error($db->error());
@@ -324,6 +327,7 @@ class ArticlecatController extends BaseController
                     $db->query('UPDATE '.$ecs->table('nav')." SET ifshow = 0 WHERE ctype='a' AND cid='$id' AND type = 'middle'");
                 }
                 clear_cache_files();
+
                 return make_json_result($val);
             } else {
                 return make_json_error($db->error());

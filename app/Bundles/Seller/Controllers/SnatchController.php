@@ -87,6 +87,7 @@ class SnatchController extends BaseController
             admin_log($_POST['snatch_name'], 'add', 'snatch');
             $link[] = ['text' => $_LANG['back_list'], 'href' => 'snatch.php?act=list'];
             $link[] = ['text' => $_LANG['continue_add'], 'href' => 'snatch.php?act=add'];
+
             return sys_msg($_LANG['add_succeed'], 0, $link);
         }
 
@@ -153,6 +154,7 @@ class SnatchController extends BaseController
             }
 
             $exc->edit("act_name='$val'", $id);
+
             return make_json_result(stripslashes($val));
         }
 
@@ -247,6 +249,7 @@ class SnatchController extends BaseController
 
             admin_log($_POST['snatch_name'], 'edit', 'snatch');
             $link[] = ['text' => $_LANG['back_list'], 'href' => 'snatch.php?act=list&'.list_link_postfix()];
+
             return sys_msg($_LANG['edit_succeed'], 0, $link);
         }
 

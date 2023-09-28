@@ -148,6 +148,7 @@ class AttributeController extends BaseController
                     ['text' => $_LANG['add_next'], 'href' => '?act=add&goods_type='.$_POST['cat_id']],
                     ['text' => $_LANG['back_list'], 'href' => '?act=list'],
                 ];
+
                 return sys_msg(sprintf($_LANG['add_ok'], $attr['attr_name']), 0, $links);
             } else {
                 $db->autoExecute($ecs->table('attribute'), $attr, 'UPDATE', "attr_id = '$_POST[attr_id]'");
@@ -155,6 +156,7 @@ class AttributeController extends BaseController
                 $links = [
                     ['text' => $_LANG['back_list'], 'href' => '?act=list&amp;goods_type='.$_POST['cat_id'].''],
                 ];
+
                 return sys_msg(sprintf($_LANG['edit_ok'], $attr['attr_name']), 0, $links);
             }
         }
@@ -182,9 +184,11 @@ class AttributeController extends BaseController
                 clear_cache_files();
 
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'attribute.php?act=list'];
+
                 return sys_msg(sprintf($_LANG['drop_ok'], $count), 0, $link);
             } else {
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'attribute.php?act=list'];
+
                 return sys_msg($_LANG['no_select_arrt'], 0, $link);
             }
         }

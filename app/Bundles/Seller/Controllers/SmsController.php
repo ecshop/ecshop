@@ -119,12 +119,14 @@ class SmsController extends BaseController
                         shop_config_update('sms_sign', $sms_sign);
                         /* 清除缓存 */
                         clear_all_files();
+
                         return sys_msg($_LANG['insert_succ'], 1, [], false);
                     } else {
                         $error_smg = $result['data'];
                         if (EC_CHARSET != 'utf-8') {
                             $error_smg = iconv('utf-8', 'gb2312', $error_smg);
                         }
+
                         return sys_msg($error_smg, 1, [], false);
                     }
                 } else {
@@ -132,6 +134,7 @@ class SmsController extends BaseController
                     shop_config_update('sms_sign', '');
                     /* 清除缓存 */
                     clear_all_files();
+
                     return sys_msg($_LANG['error_smg'], 1, [], false);
                 }
             } else {
@@ -188,12 +191,14 @@ class SmsController extends BaseController
 
                         /* 清除缓存 */
                         clear_all_files();
+
                         return sys_msg($_LANG['edit_succ'], 1, [], false);
                     } else {
                         $error_smg = $result['data'];
                         if (EC_CHARSET != 'utf-8') {
                             $error_smg = iconv('utf-8', 'gb2312', $error_smg);
                         }
+
                         return sys_msg($error_smg, 1, [], false);
                     }
                 } else {
@@ -201,6 +206,7 @@ class SmsController extends BaseController
                     shop_config_update('sms_sign', '');
                     /* 清除缓存 */
                     clear_all_files();
+
                     return sys_msg($_LANG['error_smg'], 1, [], false);
                 }
             } else {
@@ -229,6 +235,7 @@ class SmsController extends BaseController
                         shop_config_update('default_sms_sign', $sms_sign_default);
                         /* 清除缓存 */
                         clear_all_files();
+
                         return sys_msg($_LANG['default_succ'], 1, [], false);
                     } else {
                         return sys_msg($_LANG['no_default'], 1, [], false);
@@ -238,6 +245,7 @@ class SmsController extends BaseController
                     shop_config_update('sms_sign', '');
                     /* 清除缓存 */
                     clear_all_files();
+
                     return sys_msg($_LANG['error_smg'], 1, [], false);
                 }
             } else {
@@ -304,6 +312,7 @@ class SmsController extends BaseController
             } else {
                 @$error_detail = $_LANG['server_errors'][$sms->errors['server_errors']['error_no']]
                     .$_LANG['api_errors']['send'][$sms->errors['api_errors']['error_no']];
+
                 return sys_msg($_LANG['send_error'].$error_detail, 1, $link);
             }
         }

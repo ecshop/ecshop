@@ -183,9 +183,11 @@ class TagManageController extends BaseController
                 clear_cache_files();
 
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'tag_manage.php?act=list'];
+
                 return sys_msg(sprintf($_LANG['drop_success'], $count), 0, $link);
             } else {
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'tag_manage.php?act=list'];
+
                 return sys_msg($_LANG['no_select_tag'], 0, $link);
             }
         }
@@ -233,6 +235,7 @@ class TagManageController extends BaseController
                 return make_json_error(sprintf($_LANG['tagword_exist'], $name));
             } else {
                 edit_tag($name, $id);
+
                 return make_json_result(stripslashes($name));
             }
         }

@@ -28,6 +28,7 @@ class AffiliateController extends BaseController
         if ($_REQUEST['act'] == 'query') {
             $this->assign('ur_here', $_LANG['affiliate']);
             $this->assign('config', $config);
+
             return make_json_result($this->fetch('affiliate.htm'), '', null);
         }
         /*------------------------------------------------------ */
@@ -98,6 +99,7 @@ class AffiliateController extends BaseController
             $temp['on'] = 1;
             put_affiliate($temp);
             $links[] = ['text' => $_LANG['affiliate'], 'href' => 'affiliate.php?act=list'];
+
             return sys_msg($_LANG['edit_ok'], 0, $links);
         }
         /*------------------------------------------------------ */
@@ -109,6 +111,7 @@ class AffiliateController extends BaseController
             $config['on'] = $on;
             put_affiliate($config);
             $links[] = ['text' => $_LANG['affiliate'], 'href' => 'affiliate.php?act=list'];
+
             return sys_msg($_LANG['edit_ok'], 0, $links);
         }
         /*------------------------------------------------------ */
@@ -132,6 +135,7 @@ class AffiliateController extends BaseController
             $config['item'][$key]['level_point'] = $val;
             $config['on'] = 1;
             put_affiliate($config);
+
             return make_json_result(stripcslashes($val));
         }
         /*------------------------------------------------------ */
@@ -153,6 +157,7 @@ class AffiliateController extends BaseController
             $config['item'][$key]['level_money'] = $val;
             $config['on'] = 1;
             put_affiliate($config);
+
             return make_json_result(stripcslashes($val));
         }
         /*------------------------------------------------------ */

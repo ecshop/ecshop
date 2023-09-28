@@ -58,6 +58,7 @@ class FlashplayController extends BaseController
                 $rt = $flashdb[$id];
             } else {
                 $links[] = ['text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list'];
+
                 return sys_msg($_LANG['id_error'], 0, $links);
             }
 
@@ -119,11 +120,13 @@ class FlashplayController extends BaseController
                     }
                 } else {
                     $links[] = ['text' => $_LANG['add_new'], 'href' => 'flashplay.php?act=add'];
+
                     return sys_msg($_LANG['src_empty'], 0, $links);
                 }
 
                 if (empty($_POST['img_url'])) {
                     $links[] = ['text' => $_LANG['add_new'], 'href' => 'flashplay.php?act=add'];
+
                     return sys_msg($_LANG['link_empty'], 0, $links);
                 }
 
@@ -149,6 +152,7 @@ class FlashplayController extends BaseController
                 $error_msg = '';
                 set_flash_data($_CFG['flash_theme'], $error_msg);
                 $links[] = ['text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list'];
+
                 return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
@@ -161,6 +165,7 @@ class FlashplayController extends BaseController
                 $rt = $flashdb[$id];
             } else {
                 $links[] = ['text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list'];
+
                 return sys_msg($_LANG['id_error'], 0, $links);
             }
             if (empty($_POST['step'])) {
@@ -179,6 +184,7 @@ class FlashplayController extends BaseController
                 if (empty($_POST['img_url'])) {
                     //若链接地址为空
                     $links[] = ['text' => $_LANG['return_edit'], 'href' => 'flashplay.php?act=edit&id='.$id];
+
                     return sys_msg($_LANG['link_empty'], 0, $links);
                 }
 
@@ -208,6 +214,7 @@ class FlashplayController extends BaseController
                     }
                 } else {
                     $links[] = ['text' => $_LANG['return_edit'], 'href' => 'flashplay.php?act=edit&id='.$id];
+
                     return sys_msg($_LANG['src_empty'], 0, $links);
                 }
 
@@ -232,6 +239,7 @@ class FlashplayController extends BaseController
                 $error_msg = '';
                 set_flash_data($_CFG['flash_theme'], $error_msg);
                 $links[] = ['text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list'];
+
                 return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
@@ -345,6 +353,7 @@ class FlashplayController extends BaseController
 
             if (empty($_POST['ad']) || empty($_POST['content']) || empty($_POST['ad']['ad_name'])) {
                 $links[] = ['text' => $_LANG['back'], 'href' => 'flashplay.php?act=custom_list'];
+
                 return sys_msg($_LANG['form_none'], 0, $links);
             }
 
@@ -425,6 +434,7 @@ class FlashplayController extends BaseController
             }
 
             $links[] = ['text' => $_LANG['back_custom_set'], 'href' => 'flashplay.php?act=custom_list'];
+
             return sys_msg($_LANG['edit_ok'], 0, $links);
         }
 
@@ -438,6 +448,7 @@ class FlashplayController extends BaseController
             $id = empty($_GET['id']) ? 0 : intval(trim($_GET['id']));
             if (! $id) {
                 $links[] = ['text' => $_LANG['back_custom_set'], 'href' => 'flashplay.php?act=custom_list'];
+
                 return sys_msg($_LANG['form_none'], 0, $links);
             }
 
@@ -543,6 +554,7 @@ class FlashplayController extends BaseController
 
             if (empty($_POST['ad']) || empty($_POST['content']) || empty($_POST['ad']['ad_name']) || empty($_POST['ad']['id'])) {
                 $links[] = ['text' => $_LANG['back'], 'href' => 'flashplay.php?act=custom_list'];
+
                 return sys_msg($_LANG['form_none'], 0, $links);
             }
 
@@ -625,6 +637,7 @@ class FlashplayController extends BaseController
             }
 
             $links[] = ['text' => $_LANG['back_custom_set'], 'href' => 'flashplay.php?act=custom_list'];
+
             return sys_msg($_LANG['edit_ok'], 0, $links);
         }
     }

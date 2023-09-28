@@ -117,6 +117,7 @@ class WholesaleController extends BaseController
                     clear_cache_files();
 
                     $links[] = ['text' => $_LANG['back_wholesale_list'], 'href' => 'wholesale.php?act=list&'.list_link_postfix()];
+
                     return sys_msg($_LANG['batch_drop_ok'], 0, $links);
                 }
             }
@@ -288,6 +289,7 @@ class WholesaleController extends BaseController
                 ['href' => 'wholesale.php?act=list', 'text' => $_LANG['back_wholesale_list']],
                 ['href' => 'wholesale.php?act=add', 'text' => $_LANG['continue_add_wholesale']],
             ];
+
             return sys_msg($_LANG['add_wholesale_ok'], 0, $links);
         }
 
@@ -504,6 +506,7 @@ class WholesaleController extends BaseController
                 $links = [
                     ['href' => 'wholesale.php?act=list', 'text' => $_LANG['back_wholesale_list']],
                 ];
+
                 return sys_msg(sprintf($_LANG['save_wholesale_falid'], $wholesale['goods_name']), 1, $links);
             }
 
@@ -512,11 +515,13 @@ class WholesaleController extends BaseController
                     ['href' => 'wholesale.php?act=add', 'text' => $_LANG['continue_add_wholesale']],
                     ['href' => 'wholesale.php?act=list', 'text' => $_LANG['back_wholesale_list']],
                 ];
+
                 return sys_msg($_LANG['add_wholesale_ok'], 0, $links);
             } else {
                 $links = [
                     ['href' => 'wholesale.php?act=list&'.list_link_postfix(), 'text' => $_LANG['back_wholesale_list']],
                 ];
+
                 return sys_msg($_LANG['edit_wholesale_ok'], 0, $links);
             }
         }

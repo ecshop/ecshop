@@ -83,6 +83,7 @@ class ShopinfoController extends BaseController
             clear_cache_files();
 
             admin_log($_POST['title'], 'add', 'shopinfo');
+
             return sys_msg($_LANG['articleadd_succeed'], 0, $link);
         }
 
@@ -149,6 +150,7 @@ class ShopinfoController extends BaseController
                 if ($exc->edit("title = '$title'", $id)) {
                     clear_cache_files();
                     admin_log($title, 'edit', 'shopinfo');
+
                     return make_json_result(stripslashes($title));
                 }
             } else {

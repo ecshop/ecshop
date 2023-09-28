@@ -157,6 +157,7 @@ class PaymentController extends BaseController
             $pay = $db->getRow($sql);
             if (empty($pay)) {
                 $links[] = ['text' => $_LANG['back_list'], 'href' => 'payment.php?act=list'];
+
                 return sys_msg($_LANG['payment_not_available'], 0, $links);
             }
 
@@ -305,6 +306,7 @@ class PaymentController extends BaseController
             admin_log($_REQUEST['code'], 'uninstall', 'payment');
 
             $link[] = ['text' => $_LANG['back_list'], 'href' => 'payment.php?act=list'];
+
             return sys_msg($_LANG['uninstall_ok'], 0, $link);
         }
 
@@ -332,6 +334,7 @@ class PaymentController extends BaseController
 
             /* 更新支付方式名称 */
             $exc->edit("pay_name = '$name'", $code);
+
             return make_json_result(stripcslashes($name));
         }
 
@@ -349,6 +352,7 @@ class PaymentController extends BaseController
 
             /* 更新描述 */
             $exc->edit("pay_desc = '$desc'", $code);
+
             return make_json_result(stripcslashes($desc));
         }
 
@@ -366,6 +370,7 @@ class PaymentController extends BaseController
 
             /* 更新排序 */
             $exc->edit("pay_order = '$order'", $code);
+
             return make_json_result(stripcslashes($order));
         }
 
@@ -393,6 +398,7 @@ class PaymentController extends BaseController
 
             /* 更新支付费用 */
             $exc->edit("pay_fee = '$pay_fee'", $code);
+
             return make_json_result(stripcslashes($pay_fee));
         }
 

@@ -265,6 +265,7 @@ class MessageController extends BaseController
 
                 admin_log('', 'remove', 'admin_message');
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'message.php?act=list'];
+
                 return sys_msg(sprintf($_LANG['batch_drop_success'], $count), 0, $link);
             } else {
                 return sys_msg($_LANG['no_select_msg'], 1);

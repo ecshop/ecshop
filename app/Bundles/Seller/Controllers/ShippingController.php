@@ -94,6 +94,7 @@ class ShippingController extends BaseController
             /* 提示信息 */
             $lnk[] = ['text' => $_LANG['add_shipping_area'], 'href' => 'shipping_area.php?act=add&shipping='.$id];
             $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'shipping.php?act=list'];
+
             return sys_msg(sprintf($_LANG['install_succeess'], $_LANG[$modules[0]['code']]), 0, $lnk);
         }
 
@@ -129,6 +130,7 @@ class ShippingController extends BaseController
                 admin_log(addslashes($shipping_name), 'uninstall', 'shipping');
 
                 $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'shipping.php?act=list'];
+
                 return sys_msg(sprintf($_LANG['uninstall_success'], $shipping_name), 0, $lnk);
             }
         }
@@ -274,6 +276,7 @@ class ShippingController extends BaseController
                 $this->assign('shipping', $row);
             } else {
                 $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'shipping.php?act=list'];
+
                 return sys_msg($_LANG['no_shipping_install'], 0, $lnk);
             }
 
@@ -313,6 +316,7 @@ class ShippingController extends BaseController
             admin_log(addslashes($_POST['shipping_name']), 'edit', 'shipping');
 
             $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'shipping.php?act=list'];
+
             return sys_msg($_LANG['edit_template_success'], 0, $lnk);
         }
 
@@ -340,6 +344,7 @@ class ShippingController extends BaseController
 
             /* 更新支付方式名称 */
             $exc->edit("shipping_name = '$val'", $id);
+
             return make_json_result(stripcslashes($val));
         }
 
@@ -357,6 +362,7 @@ class ShippingController extends BaseController
 
             /* 更新描述 */
             $exc->edit("shipping_desc = '$val'", $id);
+
             return make_json_result(stripcslashes($val));
         }
 
@@ -391,6 +397,7 @@ class ShippingController extends BaseController
 
             /* 更新保价费用 */
             $exc->edit("insure = '$val'", $id);
+
             return make_json_result(stripcslashes($val));
         }
         if ($_REQUEST['act'] == 'shipping_priv') {
@@ -412,6 +419,7 @@ class ShippingController extends BaseController
 
             /* 更新排序 */
             $exc->edit("shipping_order = '$order'", $code);
+
             return make_json_result(stripcslashes($order));
         }
     }

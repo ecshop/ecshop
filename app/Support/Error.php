@@ -36,7 +36,7 @@ class Error
      */
     public function clean(): void
     {
-        $this->_message = array();
+        $this->_message = [];
 
         $this->error_no = 0;
     }
@@ -63,7 +63,7 @@ class Error
     public function show($link = '', $href = '')
     {
         if ($this->error_no > 0) {
-            $message = array();
+            $message = [];
 
             $link = (empty($link)) ? $GLOBALS['_LANG']['back_up_page'] : $link;
             $href = (empty($href)) ? 'javascript:history.back();' : $href;
@@ -71,7 +71,7 @@ class Error
             $message['back_url'] = $href;
 
             foreach ($this->_message as $msg) {
-                $message['content'] = '<div>' . htmlspecialchars($msg) . '</div>';
+                $message['content'] = '<div>'.htmlspecialchars($msg).'</div>';
             }
 
             assign_template();

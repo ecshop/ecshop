@@ -116,6 +116,7 @@ class AdminLogsController extends BaseController
                         admin_log('', 'remove', 'adminlog');
 
                         $link[] = ['text' => $_LANG['back_list'], 'href' => 'admin_logs.php?act=list'];
+
                         return sys_msg($_LANG['drop_sueeccud'], 1, $link);
                     }
                 }
@@ -132,6 +133,7 @@ class AdminLogsController extends BaseController
                     admin_log('', 'remove', 'adminlog');
 
                     $link[] = ['text' => $_LANG['back_list'], 'href' => 'admin_logs.php?act=list'];
+
                     return sys_msg(sprintf($_LANG['batch_drop_success'], $count), 0, $link);
                 }
             }

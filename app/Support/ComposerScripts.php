@@ -6,6 +6,6 @@ class ComposerScripts
 {
     public static function postAutoloadDump()
     {
-        
+
     }
 }

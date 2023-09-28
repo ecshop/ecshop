@@ -97,6 +97,7 @@ class PackController extends BaseController
             $link[0]['href'] = 'pack.php?act=list';
             $link[1]['text'] = $_LANG['continue_add'];
             $link[1]['href'] = 'pack.php?act=add';
+
             return sys_msg($_POST['pack_name'].$_LANG['packadd_succed'], 0, $link);
             admin_log($_POST['pack_name'], 'add', 'pack');
         }
@@ -148,6 +149,7 @@ class PackController extends BaseController
                 $link[0]['text'] = $_LANG['back_list'];
                 $link[0]['href'] = 'pack.php?act=list&'.list_link_postfix();
                 $note = sprintf($_LANG['packedit_succed'], $_POST['pack_name']);
+
                 return sys_msg($note, 0, $link);
                 admin_log($_POST['pack_name'], 'edit', 'pack');
             } else {
@@ -171,6 +173,7 @@ class PackController extends BaseController
                 $db->query($sql);
             }
             $link = [['text' => $_LANG['pack_edit_lnk'], 'href' => 'pack.php?act=edit&id='.$pack_id], ['text' => $_LANG['pack_list_lnk'], 'href' => 'pack.php?act=list']];
+
             return sys_msg($_LANG['drop_pack_img_success'], 0, $link);
         }
 
@@ -193,6 +196,7 @@ class PackController extends BaseController
                 $exc->edit("pack_name='$val'", $id);
 
                 admin_log($val, 'edit', 'pack');
+
                 return make_json_result(stripslashes($val));
             }
         }
@@ -212,6 +216,7 @@ class PackController extends BaseController
 
             $exc->edit("pack_fee='$val'", $id);
             admin_log(addslashes($pack_name), 'edit', 'pack');
+
             return make_json_result(number_format($val, 2));
         }
 
@@ -230,6 +235,7 @@ class PackController extends BaseController
 
             $exc->edit("free_money='$val'", $id);
             admin_log(addslashes($pack_name), 'edit', 'pack');
+
             return make_json_result(number_format($val, 2));
         }
 

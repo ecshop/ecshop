@@ -238,6 +238,7 @@ class PrivilegeController extends BaseController
             /* 不能编辑demo这个管理员 */
             if ($_SESSION['admin_name'] == 'demo') {
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'privilege.php?act=list'];
+
                 return sys_msg($_LANG['edit_admininfo_cannot'], 0, $link);
             }
 
@@ -337,12 +338,14 @@ class PrivilegeController extends BaseController
                 }
                 if ($old_password != $old_ec_password) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                     return sys_msg($_LANG['pwd_error'], 0, $link);
                 }
 
                 /* 比较新密码和确认密码是否相同 */
                 if ($_POST['new_password'] != $_POST['pwd_confirm']) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                     return sys_msg($_LANG['js_languages']['password_error'], 0, $link);
                 } else {
                     $pwd_modified = true;
@@ -392,6 +395,7 @@ class PrivilegeController extends BaseController
 
             /* 提示信息 */
             $link[] = ['text' => strpos($g_link, 'list') ? $_LANG['back_admin_list'] : $_LANG['modif_info'], 'href' => $g_link];
+
             return sys_msg("$msg<script>parent.document.getElementById('header-frame').contentWindow.document.location.reload();</script>", 0, $link);
         }
 
@@ -402,6 +406,7 @@ class PrivilegeController extends BaseController
             /* 不能编辑demo这个管理员 */
             if ($_SESSION['admin_name'] == 'demo') {
                 $link[] = ['text' => $_LANG['back_admin_list'], 'href' => 'privilege.php?act=list'];
+
                 return sys_msg($_LANG['edit_admininfo_cannot'], 0, $link);
             }
 
@@ -477,6 +482,7 @@ class PrivilegeController extends BaseController
             /* 如果被编辑的管理员拥有了all这个权限，将不能编辑 */
             if ($priv_str == 'all') {
                 $link[] = ['text' => $_LANG['back_admin_list'], 'href' => 'privilege.php?act=list'];
+
                 return sys_msg($_LANG['edit_admininfo_cannot'], 0, $link);
             }
 
@@ -545,6 +551,7 @@ class PrivilegeController extends BaseController
 
             /* 提示信息 */
             $link[] = ['text' => $_LANG['back_admin_list'], 'href' => 'privilege.php?act=list'];
+
             return sys_msg($_LANG['edit'].'&nbsp;'.$admin_name.'&nbsp;'.$_LANG['action_succeed'], 0, $link);
         }
 

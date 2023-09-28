@@ -120,6 +120,7 @@ class DatabaseController extends BaseController
             $mask = file_mode_info($path);
             if ($mask === false) {
                 $warning = sprintf($_LANG['dir_not_exist'], $path);
+
                 return sys_msg($warning, 1);
             } elseif ($mask != 15) {
                 $warning = sprintf($_LANG['dir_priv'], $path);
@@ -135,6 +136,7 @@ class DatabaseController extends BaseController
                 if (($mask & 8) < 1) {
                     $warning .= $_LANG['cannot_modify'];
                 }
+
                 return sys_msg($warning, 1);
             }
 
@@ -373,6 +375,7 @@ class DatabaseController extends BaseController
                 if (sql_import($path.$file_name)) {
                     clear_cache_files();
                     admin_log($_LANG['backup_time'].$info['date'], 'restore', 'db_backup');
+
                     return sys_msg($_LANG['restore_success'], 0, [['text' => $_LANG['restore'], 'href' => 'database.php?act=restore']]);
                 } else {
                     return sys_msg($_LANG['sqlfile_error'], 1);
@@ -439,6 +442,7 @@ class DatabaseController extends BaseController
                         $lnk = [];
                         $lnk[] = ['text' => $_LANG['confirm_ver'], 'href' => 'database.php?act=upload_sql&mysql_ver_confirm=1'];
                         $lnk[] = ['text' => $_LANG['unconfirm_ver'], 'href' => 'database.php?act=restore'];
+
                         return sys_msg(sprintf($_LANG['mysql_version_error'], $mysql_ver_arr, $sql_info['mysql_ver']), 0, $lnk, false);
                     }
                 }
@@ -450,9 +454,11 @@ class DatabaseController extends BaseController
             if (sql_import($sql_file)) {
                 clear_all_files();
                 @unlink($sql_file);
+
                 return sys_msg($_LANG['restore_success'], 0, []);
             } else {
                 @unlink($sql_file);
+
                 return sys_msg($_LANG['sqlfile_error'], 1);
             }
         }

@@ -1,14 +1,11 @@
 <?php
 
-
-
 /**
  * 截取UTF-8编码下字符串的函数
  *
- * @param string $str 被截取的字符串
- * @param int $length 截取的长度
- * @param bool $append 是否附加省略号
- *
+ * @param  string  $str 被截取的字符串
+ * @param  int  $length 截取的长度
+ * @param  bool  $append 是否附加省略号
  * @return  string
  */
 function sub_str($str, $length = 0, $append = true)
@@ -44,7 +41,6 @@ function sub_str($str, $length = 0, $append = true)
 /**
  * 获得用户的真实IP地址
  *
- * @access  public
  * @return  string
  */
 function real_ip()
@@ -89,7 +85,7 @@ function real_ip()
     }
 
     preg_match("/[\d\.]{7,15}/", $realip, $onlineip);
-    $realip = !empty($onlineip[0]) ? $onlineip[0] : '0.0.0.0';
+    $realip = ! empty($onlineip[0]) ? $onlineip[0] : '0.0.0.0';
 
     return $realip;
 }
@@ -97,8 +93,7 @@ function real_ip()
 /**
  * 计算字符串的长度（汉字按照两个字符计算）
  *
- * @param string $str 字符串
- *
+ * @param  string  $str 字符串
  * @return  int
  */
 function str_len($str)
@@ -115,7 +110,6 @@ function str_len($str)
 /**
  * 获得用户操作系统的换行符
  *
- * @access  public
  * @return  string
  */
 function get_crlf()
@@ -136,13 +130,18 @@ function get_crlf()
  * 邮件发送
  *
  * @param: $name[string]        接收人姓名
+ *
  * @param: $email[string]       接收人邮件地址
+ *
  * @param: $subject[string]     邮件标题
+ *
  * @param: $content[string]     邮件内容
+ *
  * @param: $type[int]           0 普通邮件， 1 HTML邮件
+ *
  * @param: $notification[bool]  true 要求回执， false 不用回执
  *
- * @return boolean
+ * @return bool
  */
 function send_mail($name, $email, $subject, $content, $type = 0, $notification = false)
 {
@@ -159,17 +158,17 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification =
      */
     if ($GLOBALS['_CFG']['mail_service'] == 0 && function_exists('mail')) {
         /* 邮件的头部信息 */
-        $content_type = ($type == 0) ? 'Content-Type: text/plain; charset=' . $charset : 'Content-Type: text/html; charset=' . $charset;
-        $headers = array();
-        $headers[] = 'From: "' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
-        $headers[] = $content_type . '; format=flowed';
+        $content_type = ($type == 0) ? 'Content-Type: text/plain; charset='.$charset : 'Content-Type: text/html; charset='.$charset;
+        $headers = [];
+        $headers[] = 'From: "'.'=?'.$charset.'?B?'.base64_encode($shop_name).'?='.'" <'.$GLOBALS['_CFG']['smtp_mail'].'>';
+        $headers[] = $content_type.'; format=flowed';
         if ($notification) {
-            $headers[] = 'Disposition-Notification-To: ' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
+            $headers[] = 'Disposition-Notification-To: '.'=?'.$charset.'?B?'.base64_encode($shop_name).'?='.'" <'.$GLOBALS['_CFG']['smtp_mail'].'>';
         }
 
-        $res = @mail($email, '=?' . $charset . '?B?' . base64_encode($subject) . '?=', $content, implode("\r\n", $headers));
+        $res = @mail($email, '=?'.$charset.'?B?'.base64_encode($subject).'?=', $content, implode("\r\n", $headers));
 
-        if (!$res) {
+        if (! $res) {
             $GLOBALS['err']->add($GLOBALS['_LANG']['sendemail_false']);
 
             return false;
@@ -182,19 +181,19 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification =
     else {
         /* 邮件的头部信息 */
         $content_type = ($type == 0) ?
-            'Content-Type: text/plain; charset=' . $charset : 'Content-Type: text/html; charset=' . $charset;
+            'Content-Type: text/plain; charset='.$charset : 'Content-Type: text/html; charset='.$charset;
         $content = base64_encode($content);
 
-        $headers = array();
-        $headers[] = 'Date: ' . gmdate('D, j M Y H:i:s') . ' +0000';
-        $headers[] = 'To: "' . '=?' . $charset . '?B?' . base64_encode($name) . '?=' . '" <' . $email . '>';
-        $headers[] = 'From: "' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
-        $headers[] = 'Subject: ' . '=?' . $charset . '?B?' . base64_encode($subject) . '?=';
-        $headers[] = $content_type . '; format=flowed';
+        $headers = [];
+        $headers[] = 'Date: '.gmdate('D, j M Y H:i:s').' +0000';
+        $headers[] = 'To: "'.'=?'.$charset.'?B?'.base64_encode($name).'?='.'" <'.$email.'>';
+        $headers[] = 'From: "'.'=?'.$charset.'?B?'.base64_encode($shop_name).'?='.'" <'.$GLOBALS['_CFG']['smtp_mail'].'>';
+        $headers[] = 'Subject: '.'=?'.$charset.'?B?'.base64_encode($subject).'?=';
+        $headers[] = $content_type.'; format=flowed';
         $headers[] = 'Content-Transfer-Encoding: base64';
         $headers[] = 'Content-Disposition: inline';
         if ($notification) {
-            $headers[] = 'Disposition-Notification-To: ' . '=?' . $charset . '?B?' . base64_encode($shop_name) . '?=' . '" <' . $GLOBALS['_CFG']['smtp_mail'] . '>';
+            $headers[] = 'Disposition-Notification-To: '.'=?'.$charset.'?B?'.base64_encode($shop_name).'?='.'" <'.$GLOBALS['_CFG']['smtp_mail'].'>';
         }
 
         /* 获得邮件服务器的参数设置 */
@@ -210,14 +209,14 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification =
             return false;
         } else {
             // 发送邮件
-            if (!function_exists('fsockopen')) {
+            if (! function_exists('fsockopen')) {
                 //如果fsockopen被禁用，直接返回
                 $GLOBALS['err']->add($GLOBALS['_LANG']['disabled_fsockopen']);
 
                 return false;
             }
 
-            include_once(ROOT_PATH . 'includes/cls_smtp.php');
+            include_once ROOT_PATH.'includes/cls_smtp.php';
             static $smtp;
 
             $send_params['recipients'] = $email;
@@ -225,7 +224,7 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification =
             $send_params['from'] = $GLOBALS['_CFG']['smtp_mail'];
             $send_params['body'] = $content;
 
-            if (!isset($smtp)) {
+            if (! isset($smtp)) {
                 $smtp = new smtp($params);
             }
 
@@ -237,7 +236,7 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification =
                     $GLOBALS['err']->add('Unknown Error');
                 } else {
                     if (strpos($err_msg, 'Failed to connect to server') !== false) {
-                        $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['smtp_connect_failure'], $params['host'] . ':' . $params['port']));
+                        $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['smtp_connect_failure'], $params['host'].':'.$params['port']));
                     } elseif (strpos($err_msg, 'AUTH command failed') !== false) {
                         $GLOBALS['err']->add($GLOBALS['_LANG']['smtp_login_failure']);
                     } elseif (strpos($err_msg, 'bad sequence of commands') !== false) {
@@ -256,12 +255,11 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification =
 /**
  * 获得服务器上的 GD 版本
  *
- * @access      public
  * @return      int         可能的值为0，1，2
  */
 function gd_version()
 {
-    include_once(ROOT_PATH . 'includes/cls_image.php');
+    include_once ROOT_PATH.'includes/cls_image.php';
 
     return cls_image::gd_version();
 }
@@ -269,10 +267,8 @@ function gd_version()
 /**
  * 文件或目录权限检查函数
  *
- * @access          public
- * @param string $file_path 文件路径
- * @param bool $rename_prv 是否在检查修改权限时检查执行rename()函数的权限
- *
+ * @param  string  $file_path 文件路径
+ * @param  bool  $rename_prv 是否在检查修改权限时检查执行rename()函数的权限
  * @return          int     返回值的取值范围为{0 <= x <= 15}，每个值表示的含义可由四位二进制数组合推出。
  *                          返回值在二进制计数法中，四位由高到低分别代表
  *                          可执行rename()函数权限、可对文件追加内容权限、可写入文件权限、可读取文件权限。
@@ -280,7 +276,7 @@ function gd_version()
 function file_mode_info($file_path)
 {
     /* 如果不存在，则不可读、不可写、不可改 */
-    if (!file_exists($file_path)) {
+    if (! file_exists($file_path)) {
         return false;
     }
 
@@ -288,7 +284,7 @@ function file_mode_info($file_path)
 
     if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
         /* 测试文件 */
-        $test_file = $file_path . '/cf_test.txt';
+        $test_file = $file_path.'/cf_test.txt';
 
         /* 如果是目录 */
         if (is_dir($file_path)) {
@@ -366,16 +362,14 @@ function file_mode_info($file_path)
 /**
  * 检查目标文件夹是否存在，如果不存在则自动创建该目录
  *
- * @access      public
  * @param string      folder     目录路径。不能使用相对于网站根目录的URL
- *
  * @return      bool
  */
 function make_dir($folder)
 {
     $reval = false;
 
-    if (!file_exists($folder)) {
+    if (! file_exists($folder)) {
         /* 如果目录不存在则尝试创建该目录 */
         @umask(0);
 
@@ -387,10 +381,10 @@ function make_dir($folder)
 
         /* 遍历包含路径信息的数组 */
         foreach ($atmp[1] as $val) {
-            if ('' != $val) {
+            if ($val != '') {
                 $base .= $val;
 
-                if ('..' == $val || '.' == $val) {
+                if ($val == '..' || $val == '.') {
                     /* 如果目录为.或者..则直接补/继续下一个循环 */
                     $base .= '/';
 
@@ -402,7 +396,7 @@ function make_dir($folder)
 
             $base .= '/';
 
-            if (!file_exists($base)) {
+            if (! file_exists($base)) {
                 /* 尝试创建目录，如果创建失败则继续循环 */
                 if (@mkdir(rtrim($base, '/'), 0777)) {
                     @chmod($base, 0777);
@@ -423,9 +417,8 @@ function make_dir($folder)
 /**
  * 获得系统是否启用了 gzip
  *
- * @access  public
  *
- * @return  boolean
+ * @return  bool
  */
 function gzip_enabled()
 {
@@ -441,9 +434,7 @@ function gzip_enabled()
 /**
  * 递归方式的对变量中的特殊字符进行转义
  *
- * @access  public
- * @param mix $value
- *
+ * @param  mix  $value
  * @return  mix
  */
 function addslashes_deep($value)
@@ -458,8 +449,7 @@ function addslashes_deep($value)
 /**
  * 将对象成员变量或者数组的特殊字符进行转义
  *
- * @access   public
- * @param mix $obj 对象或者数组
+ * @param  mix  $obj 对象或者数组
  * @return   mix                  对象或者数组
  */
 function addslashes_deep_obj($obj)
@@ -478,9 +468,7 @@ function addslashes_deep_obj($obj)
 /**
  * 递归方式的对变量中的特殊字符去除转义
  *
- * @access  public
- * @param mix $value
- *
+ * @param  mix  $value
  * @return  mix
  */
 function stripslashes_deep($value)
@@ -495,14 +483,12 @@ function stripslashes_deep($value)
 /**
  *  将一个字串中含有全角的数字字符、字母、空格或'%+-()'字符转换为相应半角字符
  *
- * @access  public
- * @param string $str 待转换字串
- *
+ * @param  string  $str 待转换字串
  * @return  string       $str         处理后字串
  */
 function make_semiangle($str)
 {
-    $arr = array('０' => '0', '１' => '1', '２' => '2', '３' => '3', '４' => '4',
+    $arr = ['０' => '0', '１' => '1', '２' => '2', '３' => '3', '４' => '4',
         '５' => '5', '６' => '6', '７' => '7', '８' => '8', '９' => '9',
         'Ａ' => 'A', 'Ｂ' => 'B', 'Ｃ' => 'C', 'Ｄ' => 'D', 'Ｅ' => 'E',
         'Ｆ' => 'F', 'Ｇ' => 'G', 'Ｈ' => 'H', 'Ｉ' => 'I', 'Ｊ' => 'J',
@@ -523,7 +509,7 @@ function make_semiangle($str)
         '：' => ':', '。' => '.', '、' => ',', '，' => '.', '、' => '.',
         '；' => ',', '？' => '?', '！' => '!', '…' => '-', '‖' => '|',
         '”' => '"', '’' => '`', '‘' => '`', '｜' => '|', '〃' => '"',
-        '　' => ' ');
+        '　' => ' '];
 
     return strtr($str, $arr);
 }
@@ -531,12 +517,11 @@ function make_semiangle($str)
 /**
  * 过滤用户输入的基本数据，防止script攻击
  *
- * @access      public
  * @return      string
  */
 function compile_str($str)
 {
-    $arr = array('<' => '＜', '>' => '＞', '"' => '”', "'" => '’');
+    $arr = ['<' => '＜', '>' => '＞', '"' => '”', "'" => '’'];
 
     return strtr($str, $arr);
 }
@@ -544,7 +529,6 @@ function compile_str($str)
 /**
  * 检查文件类型
  *
- * @access      public
  * @param string      filename            文件名
  * @param string      realname            真实文件名
  * @param string      limit_ext_types     允许的文件类型
@@ -558,7 +542,7 @@ function check_file_type($filename, $realname = '', $limit_ext_types = '')
         $extname = strtolower(substr($filename, strrpos($filename, '.') + 1));
     }
 
-    if ($limit_ext_types && stristr($limit_ext_types, '|' . $extname . '|') === false) {
+    if ($limit_ext_types && stristr($limit_ext_types, '|'.$extname.'|') === false) {
         return '';
     }
 
@@ -632,7 +616,7 @@ function check_file_type($filename, $realname = '', $limit_ext_types = '')
         }
     }
 
-    if ($limit_ext_types && stristr($limit_ext_types, '|' . $format . '|') === false) {
+    if ($limit_ext_types && stristr($limit_ext_types, '|'.$format.'|') === false) {
         $format = '';
     }
 
@@ -642,19 +626,17 @@ function check_file_type($filename, $realname = '', $limit_ext_types = '')
 /**
  * 对 MYSQL LIKE 的内容进行转义
  *
- * @access      public
  * @param string      string  内容
  * @return      string
  */
 function mysql_like_quote($str)
 {
-    return strtr($str, array("\\\\" => "\\\\\\\\", '_' => '\_', '%' => '\%', "\'" => "\\\\\'"));
+    return strtr($str, ['\\\\' => '\\\\\\\\', '_' => '\_', '%' => '\%', "\'" => "\\\\\'"]);
 }
 
 /**
  * 获取服务器的ip
  *
- * @access      public
  *
  * @return string
  **/
@@ -683,18 +665,17 @@ function real_server_ip()
  * 自定义 header 函数，用于过滤可能出现的安全隐患
  *
  * @param string  string  内容
- *
  * @return  void
  **/
 function ecs_header($string, $replace = true, $http_response_code = 0)
 {
     if (strpos($string, '../upgrade/index.php') === 0) {
-        echo '<script type="text/javascript">window.location.href="' . $string . '";</script>';
+        echo '<script type="text/javascript">window.location.href="'.$string.'";</script>';
     }
-    $string = str_replace(array("\r", "\n"), array('', ''), $string);
+    $string = str_replace(["\r", "\n"], ['', ''], $string);
 
     if (preg_match('/^\s*location:/is', $string)) {
-        @header($string . "\n", $replace);
+        @header($string."\n", $replace);
 
         exit();
     }
@@ -707,14 +688,12 @@ function ecs_iconv($source_lang, $target_lang, $source_string = '')
     static $chs = null;
 
     /* 如果字符串为空或者字符串不需要转换，直接返回 */
-    if ($source_lang == $target_lang || $source_string == '' || preg_match("/[\x80-\xFF]+/", $source_string) == 0)
-    {
+    if ($source_lang == $target_lang || $source_string == '' || preg_match("/[\x80-\xFF]+/", $source_string) == 0) {
         return $source_string;
     }
 
-    if (is_null($chs))
-    {
-        require_once(ROOT_PATH . 'includes/cls_iconv.php');
+    if (is_null($chs)) {
+        require_once ROOT_PATH.'includes/cls_iconv.php';
         $chs = new Chinese(ROOT_PATH);
     }
 
@@ -726,7 +705,7 @@ function ecs_geoip($ip)
     static $ipObj = null;
 
     if (is_null($ipObj)) {
-        include_once(ROOT_PATH . 'includes/cls_ip.php');
+        include_once ROOT_PATH.'includes/cls_ip.php';
         $ipObj = new IpLocation();
     }
 
@@ -736,8 +715,7 @@ function ecs_geoip($ip)
 /**
  * 去除字符串右侧可能出现的乱码
  *
- * @param string $str 字符串
- *
+ * @param  string  $str 字符串
  * @return  string
  */
 function trim_right($str)
@@ -768,31 +746,35 @@ function trim_right($str)
 /**
  * 将上传文件转移到指定位置
  *
- * @param string $file_name
- * @param string $target_name
+ * @param  string  $file_name
+ * @param  string  $target_name
  * @return blog
  */
 function move_upload_file($file_name, $target_name = '')
 {
-    if (function_exists("move_uploaded_file")) {
+    if (function_exists('move_uploaded_file')) {
         if (move_uploaded_file($file_name, $target_name)) {
             @chmod($target_name, 0755);
+
             return true;
         } elseif (copy($file_name, $target_name)) {
             @chmod($target_name, 0755);
+
             return true;
         }
     } elseif (copy($file_name, $target_name)) {
         @chmod($target_name, 0755);
+
         return true;
     }
+
     return false;
 }
 
 /**
  * 将JSON传递的参数转码
  *
- * @param string $str
+ * @param  string  $str
  * @return string
  */
 function json_str_iconv($str)
@@ -804,23 +786,26 @@ function json_str_iconv($str)
             foreach ($str as $key => $value) {
                 $str[$key] = json_str_iconv($value);
             }
+
             return $str;
         } elseif (is_object($str)) {
             foreach ($str as $key => $value) {
                 $str->$key = json_str_iconv($value);
             }
+
             return $str;
         } else {
             return $str;
         }
     }
+
     return $str;
 }
 
 /**
  * 循环转码成utf8内容
  *
- * @param string $str
+ * @param  string  $str
  * @return string
  */
 function to_utf8_iconv($str)
@@ -832,27 +817,30 @@ function to_utf8_iconv($str)
             foreach ($str as $key => $value) {
                 $str[$key] = to_utf8_iconv($value);
             }
+
             return $str;
         } elseif (is_object($str)) {
             foreach ($str as $key => $value) {
                 $str->$key = to_utf8_iconv($value);
             }
+
             return $str;
         } else {
             return $str;
         }
     }
+
     return $str;
 }
 
 /**
  * 获取文件后缀名,并判断是否合法
  *
- * @param string $file_name
- * @param array $allow_type
+ * @param  string  $file_name
+ * @param  array  $allow_type
  * @return blob
  */
-function get_file_suffix($file_name, $allow_type = array())
+function get_file_suffix($file_name, $allow_type = [])
 {
     $file_name_arr = explode('.', $file_name);
     $file_suffix = strtolower(array_pop($file_name_arr));
@@ -879,14 +867,15 @@ function read_static_cache($cache_name)
     if (DEBUG_MODE) {
         return false;
     }
-    static $result = array();
-    if (!empty($result[$cache_name])) {
+    static $result = [];
+    if (! empty($result[$cache_name])) {
         return $result[$cache_name];
     }
-    $cache_file_path = ROOT_PATH . '/temp/static_caches/' . $cache_name . '.php';
+    $cache_file_path = ROOT_PATH.'/temp/static_caches/'.$cache_name.'.php';
     if (file_exists($cache_file_path)) {
-        include_once($cache_file_path);
+        include_once $cache_file_path;
         $result[$cache_name] = $data;
+
         return $result[$cache_name];
     } else {
         return false;
@@ -898,30 +887,29 @@ function read_static_cache($cache_name)
  *
  * @params  string  $cache_name
  * @params  string  $caches
- *
- * @return
  */
 function write_static_cache($cache_name, $caches)
 {
     if (DEBUG_MODE) {
         return false;
     }
-    $cache_file_path = ROOT_PATH . '/temp/static_caches/' . $cache_name . '.php';
+    $cache_file_path = ROOT_PATH.'/temp/static_caches/'.$cache_name.'.php';
     $content = "<?php\r\n";
-    $content .= "\$data = " . var_export($caches, true) . ";\r\n";
-    $content .= "?>";
+    $content .= '$data = '.var_export($caches, true).";\r\n";
+    $content .= '?>';
     file_put_contents($cache_file_path, $content, LOCK_EX);
 }
 
 /**
  * 检测是否使用手机访问
+ *
  * @return bool
  */
 function is_mobile()
 {
-    if (isset($_SERVER['HTTP_VIA']) && stristr($_SERVER['HTTP_VIA'], "wap")) {
+    if (isset($_SERVER['HTTP_VIA']) && stristr($_SERVER['HTTP_VIA'], 'wap')) {
         return true;
-    } elseif (isset($_SERVER['HTTP_ACCEPT']) && strpos(strtoupper($_SERVER['HTTP_ACCEPT']), "VND.WAP.WML")) {
+    } elseif (isset($_SERVER['HTTP_ACCEPT']) && strpos(strtoupper($_SERVER['HTTP_ACCEPT']), 'VND.WAP.WML')) {
         return true;
     } elseif (isset($_SERVER['HTTP_X_WAP_PROFILE']) || isset($_SERVER['HTTP_PROFILE'])) {
         return true;

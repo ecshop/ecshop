@@ -38,6 +38,7 @@ class UserRankController extends BaseController
             $ranks = $db->getAll('SELECT * FROM '.$ecs->table('user_rank'));
 
             $this->assign('user_ranks', $ranks);
+
             return make_json_result($this->fetch('user_rank.htm'));
         }
 
@@ -117,6 +118,7 @@ class UserRankController extends BaseController
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'user_rank.php?act=list'];
             $lnk[] = ['text' => $_LANG['add_continue'], 'href' => 'user_rank.php?act=add'];
+
             return sys_msg($_LANG['add_rank_success'], 0, $lnk);
         }
 
@@ -153,6 +155,7 @@ class UserRankController extends BaseController
                     /* 管理员日志 */
                     admin_log($val, 'edit', 'user_rank');
                     clear_cache_files();
+
                     return make_json_result(stripcslashes($val));
                 } else {
                     return make_json_error($db->error());
@@ -181,6 +184,7 @@ class UserRankController extends BaseController
             if ($exc->edit("min_points = '$val'", $rank_id)) {
                 $rank_name = $exc->get_name($rank_id);
                 admin_log(addslashes($rank_name), 'edit', 'user_rank');
+
                 return make_json_result($val);
             } else {
                 return make_json_error($db->error());
@@ -206,6 +210,7 @@ class UserRankController extends BaseController
             if ($exc->edit("max_points = '$val'", $rank_id)) {
                 $rank_name = $exc->get_name($rank_id);
                 admin_log(addslashes($rank_name), 'edit', 'user_rank');
+
                 return make_json_result($val);
             } else {
                 return make_json_error($db->error());
@@ -227,6 +232,7 @@ class UserRankController extends BaseController
                 $rank_name = $exc->get_name($rank_id);
                 admin_log(addslashes($rank_name), 'edit', 'user_rank');
                 clear_cache_files();
+
                 return make_json_result($val);
             } else {
                 return make_json_error($val);
@@ -245,6 +251,7 @@ class UserRankController extends BaseController
             if ($exc->edit("special_rank = '$is_special'", $rank_id)) {
                 $rank_name = $exc->get_name($rank_id);
                 admin_log(addslashes($rank_name), 'edit', 'user_rank');
+
                 return make_json_result($is_special);
             } else {
                 return make_json_error($db->error());
@@ -263,6 +270,7 @@ class UserRankController extends BaseController
                 $rank_name = $exc->get_name($rank_id);
                 admin_log(addslashes($rank_name), 'edit', 'user_rank');
                 clear_cache_files();
+
                 return make_json_result($is_show);
             } else {
                 return make_json_error($db->error());

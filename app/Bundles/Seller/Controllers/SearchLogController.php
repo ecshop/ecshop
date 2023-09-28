@@ -34,6 +34,7 @@ class SearchLogController extends BaseController
             $this->assign('page_count', $logdb['page_count']);
             $this->assign('start_date', local_date('Y-m-d'));
             $this->assign('end_date', local_date('Y-m-d'));
+
             return make_json_result(
                 $this->fetch('search_log_list.htm'),
                 '',

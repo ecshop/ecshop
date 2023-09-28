@@ -130,6 +130,7 @@ class AreaManageController extends BaseController
 
             if ($exc->edit("region_name = '$region_name'", $id)) {
                 admin_log($region_name, 'edit', 'area');
+
                 return make_json_result(stripslashes($region_name));
             } else {
                 return make_json_error($db->error());

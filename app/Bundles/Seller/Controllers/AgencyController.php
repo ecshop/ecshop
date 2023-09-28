@@ -70,6 +70,7 @@ class AgencyController extends BaseController
                 if ($exc->edit("agency_name = '$name'", $id)) {
                     admin_log($name, 'edit', 'agency');
                     clear_cache_files();
+
                     return make_json_result(stripslashes($name));
                 } else {
                     return make_json_result(sprintf($_LANG['agency_edit_fail'], $name));
@@ -281,11 +282,13 @@ class AgencyController extends BaseController
                     ['href' => 'agency.php?act=add', 'text' => $_LANG['continue_add_agency']],
                     ['href' => 'agency.php?act=list', 'text' => $_LANG['back_agency_list']],
                 ];
+
                 return sys_msg($_LANG['add_agency_ok'], 0, $links);
             } else {
                 $links = [
                     ['href' => 'agency.php?act=list&'.list_link_postfix(), 'text' => $_LANG['back_agency_list']],
                 ];
+
                 return sys_msg($_LANG['edit_agency_ok'], 0, $links);
             }
         }

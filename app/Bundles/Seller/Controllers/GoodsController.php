@@ -1056,6 +1056,7 @@ class GoodsController extends BaseController
             } else {
                 $link[] = list_link(true, $code);
             }
+
             return sys_msg($_LANG['batch_handle_ok'], 0, $link);
         }
 
@@ -1088,6 +1089,7 @@ class GoodsController extends BaseController
 
             if ($exc->edit("goods_name = '$goods_name', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
+
                 return make_json_result(stripslashes($goods_name));
             }
         }
@@ -1111,6 +1113,7 @@ class GoodsController extends BaseController
             }
             if ($exc->edit("goods_sn = '$goods_sn', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
+
                 return make_json_result(stripslashes($goods_sn));
             }
         }
@@ -1130,6 +1133,7 @@ class GoodsController extends BaseController
                     return make_json_error($_LANG['goods_sn_exists']);
                 }
             }
+
             return make_json_result('');
         }
         if ($_REQUEST['act'] == 'check_products_goods_sn') {
@@ -1160,6 +1164,7 @@ class GoodsController extends BaseController
                     }
                 }
             }
+
             /* 检查是否重复 */
             return make_json_result('');
         }
@@ -1179,6 +1184,7 @@ class GoodsController extends BaseController
             } else {
                 if ($exc->edit("shop_price = '$goods_price', market_price = '$price_rate', last_update=".gmtime(), $goods_id)) {
                     clear_cache_files();
+
                     return make_json_result(number_format($goods_price, 2, '.', ''));
                 }
             }
@@ -1203,6 +1209,7 @@ class GoodsController extends BaseController
 
             if ($exc->edit("goods_number = '$goods_num', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
+
                 return make_json_result($goods_num);
             }
         }
@@ -1218,6 +1225,7 @@ class GoodsController extends BaseController
 
             if ($exc->edit("is_on_sale = '$on_sale', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
+
                 return make_json_result($on_sale);
             }
         }
@@ -1233,6 +1241,7 @@ class GoodsController extends BaseController
 
             if ($exc->edit("is_best = '$is_best', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
+
                 return make_json_result($is_best);
             }
         }
@@ -1248,6 +1257,7 @@ class GoodsController extends BaseController
 
             if ($exc->edit("is_new = '$is_new', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
+
                 return make_json_result($is_new);
             }
         }
@@ -1263,6 +1273,7 @@ class GoodsController extends BaseController
 
             if ($exc->edit("is_hot = '$is_hot', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
+
                 return make_json_result($is_hot);
             }
         }
@@ -1278,6 +1289,7 @@ class GoodsController extends BaseController
 
             if ($exc->edit("sort_order = '$sort_order', last_update=".gmtime(), $goods_id)) {
                 clear_cache_files();
+
                 return make_json_result($sort_order);
             }
         }
@@ -1524,6 +1536,7 @@ class GoodsController extends BaseController
             $GLOBALS['db']->query($sql);
 
             clear_cache_files();
+
             return make_json_result($img_id);
         }
 
@@ -1585,6 +1598,7 @@ class GoodsController extends BaseController
             }
 
             clear_cache_files();
+
             return make_json_result($options);
         }
 
@@ -1633,6 +1647,7 @@ class GoodsController extends BaseController
             }
 
             clear_cache_files();
+
             return make_json_result($options);
         }
 
@@ -1667,6 +1682,7 @@ class GoodsController extends BaseController
             }
 
             clear_cache_files();
+
             return make_json_result($opt);
         }
 
@@ -1702,6 +1718,7 @@ class GoodsController extends BaseController
             }
 
             clear_cache_files();
+
             return make_json_result($opt);
         }
 
@@ -1763,6 +1780,7 @@ class GoodsController extends BaseController
             }
 
             clear_cache_files();
+
             return make_json_result($opt);
         }
 
@@ -1792,6 +1810,7 @@ class GoodsController extends BaseController
             }
 
             clear_cache_files();
+
             return make_json_result($opt);
         }
 
@@ -1804,6 +1823,7 @@ class GoodsController extends BaseController
             /* 是否存在商品id */
             if (empty($_GET['goods_id'])) {
                 $link[] = ['href' => 'goods.php?act=list', 'text' => $_LANG['cannot_found_goods']];
+
                 return sys_msg($_LANG['cannot_found_goods'], 1, $link);
             } else {
                 $goods_id = intval($_GET['goods_id']);
@@ -1814,6 +1834,7 @@ class GoodsController extends BaseController
             $goods = $db->getRow($sql);
             if (empty($goods)) {
                 $link[] = ['href' => 'goods.php?act=list', 'text' => $_LANG['01_goods_list']];
+
                 return sys_msg($_LANG['cannot_found_goods'], 1, $link);
             }
             $this->assign('sn', sprintf($_LANG['good_goods_sn'], $goods['goods_sn']));
@@ -1825,6 +1846,7 @@ class GoodsController extends BaseController
             $attribute = get_goods_specifications_list($goods_id);
             if (empty($attribute)) {
                 $link[] = ['href' => 'goods.php?act=edit&goods_id='.$goods_id, 'text' => $_LANG['edit_goods']];
+
                 return sys_msg($_LANG['not_exist_goods_attr'], 1, $link);
             }
             foreach ($attribute as $attribute_value) {
@@ -1998,6 +2020,7 @@ class GoodsController extends BaseController
             $result = $db->query($sql);
             if ($result) {
                 clear_cache_files();
+
                 return make_json_result($product_sn);
             }
         }
@@ -2021,6 +2044,7 @@ class GoodsController extends BaseController
                 /* 修改商品库存 */
                 if (update_goods_stock($product['goods_id'], $product_number - $product['product_number'])) {
                     clear_cache_files();
+
                     return make_json_result($product_number);
                 }
             }
@@ -2130,6 +2154,7 @@ class GoodsController extends BaseController
                 $link[] = ['href' => 'goods.php?act=edit&goods_id='.$product['goods_id'], 'text' => $_LANG['edit_goods']];
                 $link[] = ['href' => 'goods.php?act=product_list&goods_id='.$product['goods_id'], 'text' => $_LANG['18_product_list']];
             }
+
             return sys_msg($_LANG['save_products'], 0, $link);
         }
 

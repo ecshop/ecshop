@@ -135,6 +135,7 @@ class UserAccountController extends BaseController
             /* 此会员是否存在 */
             if ($user_id == 0) {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                 return sys_msg($_LANG['username_not_exist'], 0, $link);
             }
 
@@ -145,6 +146,7 @@ class UserAccountController extends BaseController
                 /* 如果扣除的余额多于此会员拥有的余额，提示 */
                 if ($amount > $user_account) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                     return sys_msg($_LANG['surplus_amount_error'], 0, $link);
                 }
             }
@@ -298,6 +300,7 @@ class UserAccountController extends BaseController
                     //如果扣除的余额多于此会员拥有的余额，提示
                     if ($fmt_amount > $user_account) {
                         $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                         return sys_msg($_LANG['surplus_amount_error'], 0, $link);
                     }
 

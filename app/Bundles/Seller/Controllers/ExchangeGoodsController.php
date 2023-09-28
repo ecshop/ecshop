@@ -164,6 +164,7 @@ class ExchangeGoodsController extends BaseController
                 admin_log($_POST['goods_id'], 'edit', 'exchange_goods');
 
                 clear_cache_files();
+
                 return sys_msg($_LANG['articleedit_succeed'], 0, $link);
             } else {
                 exit($db->error());
@@ -186,6 +187,7 @@ class ExchangeGoodsController extends BaseController
                 if ($exc->edit("exchange_integral = '$exchange_integral'", $id)) {
                     clear_cache_files();
                     admin_log($id, 'edit', 'exchange_goods');
+
                     return make_json_result(stripslashes($exchange_integral));
                 } else {
                     return make_json_error($db->error());
@@ -242,6 +244,7 @@ class ExchangeGoodsController extends BaseController
             }
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'exchange_goods.php?act=list'];
+
             return sys_msg(sprintf($_LANG['batch_remove_succeed'], $count), 0, $lnk);
         }
 

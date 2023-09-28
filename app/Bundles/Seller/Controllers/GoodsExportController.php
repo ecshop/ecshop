@@ -115,6 +115,7 @@ class GoodsExportController extends BaseController
         if ($_REQUEST['act'] == 'get_goods_fields') {
             $cat_id = isset($_REQUEST['cat_id']) ? intval($_REQUEST['cat_id']) : 0;
             $goods_fields = my_array_merge($_LANG['custom'], get_attributes($cat_id));
+
             return make_json_result($goods_fields);
         }
         if ($_REQUEST['act'] == 'act_export_custom') {
@@ -209,6 +210,7 @@ class GoodsExportController extends BaseController
                     'goods_name' => $val['goods_name'],
                 ];
             }
+
             return make_json_result($opt);
         }
     }

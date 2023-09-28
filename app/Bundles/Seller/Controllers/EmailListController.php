@@ -70,6 +70,7 @@ class EmailListController extends BaseController
             $db->query($sql);
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list'];
+
             return sys_msg(sprintf($_LANG['batch_remove_succeed'], $db->affected_rows()), 0, $lnk);
         }
 
@@ -86,6 +87,7 @@ class EmailListController extends BaseController
             $db->query($sql);
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list'];
+
             return sys_msg(sprintf($_LANG['batch_unremove_succeed'], $db->affected_rows()), 0, $lnk);
         }
 
@@ -102,6 +104,7 @@ class EmailListController extends BaseController
             $db->query($sql);
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list'];
+
             return sys_msg(sprintf($_LANG['batch_exit_succeed'], $db->affected_rows()), 0, $lnk);
         }
     }

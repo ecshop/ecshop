@@ -55,6 +55,7 @@ class IntegrateController extends BaseController
 
                 $links[0]['text'] = $_LANG['go_back'];
                 $links[0]['href'] = 'integrate.php?act=list';
+
                 return sys_msg($_LANG['update_success'], 0, $links);
             } else {
                 $sql = 'UPDATE '.$GLOBALS['ecs']->table('users').
@@ -528,6 +529,7 @@ class IntegrateController extends BaseController
             $this->assign('record_count', $arr['record_count']);
             $this->assign('page_count', $arr['page_count']);
             $this->assign('full_page', 0);
+
             return make_json_result($this->fetch('integrates_modify.htm'), '', ['filter' => $arr['filter'], 'page_count' => $arr['page_count']]);
         }
 
@@ -973,6 +975,7 @@ class IntegrateController extends BaseController
             }
             $db->query($sql);
             clear_cache_files();
+
             return sys_msg($_LANG['save_ok'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
         }
     }

@@ -133,6 +133,7 @@ class GroupBuyController extends BaseController
                 $links = [
                     ['href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list']],
                 ];
+
                 return sys_msg($_LANG['edit_success'], 0, $links);
             } elseif (isset($_POST['succeed'])) {
                 /* 设置活动成功 */
@@ -259,6 +260,7 @@ class GroupBuyController extends BaseController
                 $links = [
                     ['href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list']],
                 ];
+
                 return sys_msg($_LANG['edit_success'], 0, $links);
             } elseif (isset($_POST['fail'])) {
                 /* 设置活动失败 */
@@ -315,6 +317,7 @@ class GroupBuyController extends BaseController
                 $links = [
                     ['href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list']],
                 ];
+
                 return sys_msg($_LANG['edit_success'], 0, $links);
             } elseif (isset($_POST['mail'])) {
                 /* 发送通知邮件 */
@@ -464,6 +467,7 @@ class GroupBuyController extends BaseController
                     $links = [
                         ['href' => 'group_buy.php?act=list&'.list_link_postfix(), 'text' => $_LANG['back_list']],
                     ];
+
                     return sys_msg($_LANG['edit_success'], 0, $links);
                 } else {
                     /* insert */
@@ -477,6 +481,7 @@ class GroupBuyController extends BaseController
                         ['href' => 'group_buy.php?act=add', 'text' => $_LANG['continue_add']],
                         ['href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list']],
                     ];
+
                     return sys_msg($_LANG['add_success'], 0, $links);
                 }
             }
@@ -510,9 +515,11 @@ class GroupBuyController extends BaseController
                 }
 
                 $links[] = ['text' => $_LANG['back_list'], 'href' => 'group_buy.php?act=list'];
+
                 return sys_msg(sprintf($_LANG['batch_drop_success'], $del_count), 0, $links);
             } else {
                 $links[] = ['text' => $_LANG['back_list'], 'href' => 'group_buy.php?act=list'];
+
                 return sys_msg($_LANG['no_select_group_buy'], 0, $links);
             }
         }

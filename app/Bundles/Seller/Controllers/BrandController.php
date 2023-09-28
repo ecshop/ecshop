@@ -146,6 +146,7 @@ class BrandController extends BaseController
                 $link[0]['text'] = $_LANG['back_list'];
                 $link[0]['href'] = 'brand.php?act=list&'.list_link_postfix();
                 $note = vsprintf($_LANG['brandedit_succed'], $_POST['brand_name']);
+
                 return sys_msg($note, 0, $link);
             } else {
                 exit($db->error());
@@ -167,6 +168,7 @@ class BrandController extends BaseController
             } else {
                 if ($exc->edit("brand_name = '$name'", $id)) {
                     admin_log($name, 'edit', 'brand');
+
                     return make_json_result(stripslashes($name));
                 } else {
                     return make_json_result(sprintf($_LANG['brandedit_fail'], $name));
@@ -268,6 +270,7 @@ class BrandController extends BaseController
                 $db->query($sql);
             }
             $link = [['text' => $_LANG['brand_edit_lnk'], 'href' => 'brand.php?act=edit&id='.$brand_id], ['text' => $_LANG['brand_list_lnk'], 'href' => 'brand.php?act=list']];
+
             return sys_msg($_LANG['drop_brand_logo_success'], 0, $link);
         }
 

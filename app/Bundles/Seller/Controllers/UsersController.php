@@ -119,6 +119,7 @@ class UsersController extends BaseController
                 } else {
                     //die('Error:'.$users->error_msg());
                 }
+
                 return sys_msg($msg, 1);
             }
 
@@ -168,6 +169,7 @@ class UsersController extends BaseController
 
             /* 提示信息 */
             $link[] = ['text' => $_LANG['go_back'], 'href' => 'users.php?act=list'];
+
             return sys_msg(sprintf($_LANG['add_success'], htmlspecialchars(stripslashes($_POST['username']))), 0, $link);
         }
 
@@ -214,6 +216,7 @@ class UsersController extends BaseController
                 $user['mobile_phone'] = $row['mobile_phone'];
             } else {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'users.php?act=list'];
+
                 return sys_msg($_LANG['username_invalid'], 0, $links);
             }
 
@@ -317,6 +320,7 @@ class UsersController extends BaseController
                 } else {
                     $msg = $_LANG['edit_user_failed'];
                 }
+
                 return sys_msg($msg, 1);
             }
             if (! empty($password)) {
@@ -389,9 +393,11 @@ class UsersController extends BaseController
                 admin_log($usernames, 'batch_remove', 'users');
 
                 $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'users.php?act=list'];
+
                 return sys_msg(sprintf($_LANG['batch_remove_success'], $count), 0, $lnk);
             } else {
                 $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'users.php?act=list'];
+
                 return sys_msg($_LANG['no_select_user'], 0, $lnk);
             }
         } /* 编辑用户名 */
@@ -423,9 +429,11 @@ class UsersController extends BaseController
                 }
 
                 admin_log(addslashes($username), 'edit', 'users');
+
                 return make_json_result(stripcslashes($username));
             } else {
                 $msg = ($users->error == ERR_USERNAME_EXISTS) ? $GLOBALS['_LANG']['username_exists'] : $GLOBALS['_LANG']['edit_user_failed'];
+
                 return make_json_error($msg);
             }
         }
@@ -452,6 +460,7 @@ class UsersController extends BaseController
                     return make_json_result(stripcslashes($email));
                 } else {
                     $msg = ($users->error == ERR_EMAIL_EXISTS) ? $GLOBALS['_LANG']['email_exists'] : $GLOBALS['_LANG']['edit_user_failed'];
+
                     return make_json_error($msg);
                 }
             } else {
@@ -478,6 +487,7 @@ class UsersController extends BaseController
 
             /* 提示信息 */
             $link[] = ['text' => $_LANG['go_back'], 'href' => 'users.php?act=list'];
+
             return sys_msg(sprintf($_LANG['remove_success'], $username), 0, $link);
         }
 
@@ -519,6 +529,7 @@ class UsersController extends BaseController
 
             /* 提示信息 */
             $link[] = ['text' => $_LANG['go_back'], 'href' => 'users.php?act=list'];
+
             return sys_msg(sprintf($_LANG['update_success'], $username), 0, $link);
         }
 

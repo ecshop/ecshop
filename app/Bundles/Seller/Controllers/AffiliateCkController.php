@@ -65,6 +65,7 @@ class AffiliateCkController extends BaseController
                 $db->query($sql);
             }
             $links[] = ['text' => $_LANG['affiliate_ck'], 'href' => 'affiliate_ck.php?act=list'];
+
             return sys_msg($_LANG['edit_ok'], 0, $links);
         } /*
     撤销某次分成，将已分成的收回来
@@ -87,6 +88,7 @@ class AffiliateCkController extends BaseController
                 $db->query($sql);
             }
             $links[] = ['text' => $_LANG['affiliate_ck'], 'href' => 'affiliate_ck.php?act=list'];
+
             return sys_msg($_LANG['edit_ok'], 0, $links);
         } /*
     分成
@@ -161,6 +163,7 @@ class AffiliateCkController extends BaseController
                         write_affiliate_log($oid, $up_uid, $row['user_name'], $money, $point, $separate_by);
                     } else {
                         $links[] = ['text' => $_LANG['affiliate_ck'], 'href' => 'affiliate_ck.php?act=list'];
+
                         return sys_msg($_LANG['edit_fail'], 1, $links);
                     }
                 }
@@ -170,6 +173,7 @@ class AffiliateCkController extends BaseController
                 $db->query($sql);
             }
             $links[] = ['text' => $_LANG['affiliate_ck'], 'href' => 'affiliate_ck.php?act=list'];
+
             return sys_msg($_LANG['edit_ok'], 0, $links);
         }
     }

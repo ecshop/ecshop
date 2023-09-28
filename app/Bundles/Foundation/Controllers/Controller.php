@@ -21,7 +21,6 @@ abstract class Controller extends BaseController
      *
      * @param  string  $method
      * @param  array  $parameters
-     * @return Response
      */
     public function callAction($method, $parameters): Response
     {

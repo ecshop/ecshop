@@ -37,6 +37,7 @@ class RegFieldsController extends BaseController
             $fields = $db->getAll('SELECT * FROM '.$ecs->table('reg_fields').'ORDER BY id');
 
             $this->assign('reg_fields', $fields);
+
             return make_json_result($this->fetch('reg_fields.htm'));
         }
 
@@ -86,6 +87,7 @@ class RegFieldsController extends BaseController
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'reg_fields.php?act=list'];
             $lnk[] = ['text' => $_LANG['add_continue'], 'href' => 'reg_fields.php?act=add'];
+
             return sys_msg($_LANG['add_field_success'], 0, $lnk);
         }
 
@@ -131,6 +133,7 @@ class RegFieldsController extends BaseController
             clear_cache_files();
 
             $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'reg_fields.php?act=list'];
+
             return sys_msg($_LANG['update_field_success'], 0, $lnk);
         }
 
@@ -168,6 +171,7 @@ class RegFieldsController extends BaseController
                     /* 管理员日志 */
                     admin_log($val, 'edit', 'reg_fields');
                     clear_cache_files();
+
                     return make_json_result(stripcslashes($val));
                 } else {
                     return make_json_error($db->error());
@@ -187,6 +191,7 @@ class RegFieldsController extends BaseController
                     /* 管理员日志 */
                     admin_log($val, 'edit', 'reg_fields');
                     clear_cache_files();
+
                     return make_json_result(stripcslashes($val));
                 } else {
                     return make_json_error($db->error());
@@ -207,6 +212,7 @@ class RegFieldsController extends BaseController
 
             if ($exc->edit("display = '$is_dis'", $id)) {
                 clear_cache_files();
+
                 return make_json_result($is_dis);
             }
         }
@@ -222,6 +228,7 @@ class RegFieldsController extends BaseController
 
             if ($exc->edit("is_need = '$is_need'", $id)) {
                 clear_cache_files();
+
                 return make_json_result($is_need);
             }
         }

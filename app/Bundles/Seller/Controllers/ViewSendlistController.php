@@ -40,6 +40,7 @@ class ViewSendlistController extends BaseController
             $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('email_sendlist')." WHERE id = '$id' LIMIT 1";
             $db->query($sql);
             $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
+
             return sys_msg($_LANG['del_ok'], 0, $links);
         }
 
@@ -54,9 +55,11 @@ class ViewSendlistController extends BaseController
                 $db->query($sql);
 
                 $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
+
                 return sys_msg($_LANG['del_ok'], 0, $links);
             } else {
                 $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
+
                 return sys_msg($_LANG['no_select'], 0, $links);
             }
         }
@@ -74,6 +77,7 @@ class ViewSendlistController extends BaseController
                 //发送列表为空
                 if (empty($row['id'])) {
                     $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
+
                     return sys_msg($_LANG['mailsend_null'], 0, $links);
                 }
 
@@ -125,9 +129,11 @@ class ViewSendlistController extends BaseController
                 }
 
                 $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
+
                 return sys_msg($_LANG['mailsend_finished'], 0, $links);
             } else {
                 $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
+
                 return sys_msg($_LANG['no_select'], 0, $links);
             }
         }
@@ -143,6 +149,7 @@ class ViewSendlistController extends BaseController
             //发送列表为空
             if (empty($row['id'])) {
                 $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
+
                 return sys_msg($_LANG['mailsend_null'], 0, $links);
             }
 
@@ -194,6 +201,7 @@ class ViewSendlistController extends BaseController
             }
 
             $links[] = ['text' => $_LANG['view_sendlist'], 'href' => 'view_sendlist.php?act=list'];
+
             return sys_msg($_LANG['mailsend_finished'], 0, $links);
         }
     }

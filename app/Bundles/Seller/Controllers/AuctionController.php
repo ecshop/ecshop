@@ -124,6 +124,7 @@ class AuctionController extends BaseController
                         clear_cache_files();
                     }
                     $links[] = ['text' => $_LANG['back_auction_list'], 'href' => 'auction.php?act=list&'.list_link_postfix()];
+
                     return sys_msg($_LANG['batch_drop_ok'], 0, $links);
                 }
             }
@@ -285,11 +286,13 @@ class AuctionController extends BaseController
                     ['href' => 'auction.php?act=add', 'text' => $_LANG['continue_add_auction']],
                     ['href' => 'auction.php?act=list', 'text' => $_LANG['back_auction_list']],
                 ];
+
                 return sys_msg($_LANG['add_auction_ok'], 0, $links);
             } else {
                 $links = [
                     ['href' => 'auction.php?act=list&'.list_link_postfix(), 'text' => $_LANG['back_auction_list']],
                 ];
+
                 return sys_msg($_LANG['edit_auction_ok'], 0, $links);
             }
         }

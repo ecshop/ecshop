@@ -176,9 +176,11 @@ class ShopConfigController extends BaseController
 
             if ($type == 'mail_setting') {
                 $links[] = ['text' => $_LANG['back_mail_settings'], 'href' => 'shop_config.php?act=mail_settings'];
+
                 return sys_msg($_LANG['mail_save_success'], 0, $links);
             } else {
                 $links[] = ['text' => $_LANG['back_shop_config'], 'href' => 'shop_config.php?act=list_edit'];
+
                 return sys_msg($_LANG['save_success'], 0, $links);
             }
         }

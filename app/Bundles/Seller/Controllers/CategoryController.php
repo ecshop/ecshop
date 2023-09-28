@@ -95,12 +95,14 @@ class CategoryController extends BaseController
             if (cat_exists($cat['cat_name'], $cat['parent_id'])) {
                 /* 同级别下不能有重复的分类名称 */
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                 return sys_msg($_LANG['catname_exist'], 0, $link);
             }
 
             if ($cat['grade'] > 10 || $cat['grade'] < 0) {
                 /* 价格区间数超过范围 */
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                 return sys_msg($_LANG['grade_error'], 0, $link);
             }
 
@@ -237,6 +239,7 @@ class CategoryController extends BaseController
             if ($cat['cat_name'] != $old_cat_name) {
                 if (cat_exists($cat['cat_name'], $cat['parent_id'], $cat_id)) {
                     $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                     return sys_msg($_LANG['catname_exist'], 0, $link);
                 }
             }
@@ -246,12 +249,14 @@ class CategoryController extends BaseController
             if (in_array($cat['parent_id'], $children)) {
                 /* 选定的父类是当前分类或当前分类的下级分类 */
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                 return sys_msg($_LANG['is_leaf_error'], 0, $link);
             }
 
             if ($cat['grade'] > 10 || $cat['grade'] < 0) {
                 /* 价格区间数超过范围 */
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
+
                 return sys_msg($_LANG['grade_error'], 0, $link);
             }
 
@@ -293,6 +298,7 @@ class CategoryController extends BaseController
 
                 /* 提示信息 */
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'category.php?act=list'];
+
                 return sys_msg($_LANG['catedit_succed'], 0, $link);
             }
         }
@@ -331,6 +337,7 @@ class CategoryController extends BaseController
             /* 商品分类不允许为空 */
             if ($cat_id == 0 || $target_cat_id == 0) {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'category.php?act=move'];
+
                 return sys_msg($_LANG['cat_move_empty'], 0, $link);
             }
 
@@ -343,6 +350,7 @@ class CategoryController extends BaseController
 
                 /* 提示信息 */
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'category.php?act=list'];
+
                 return sys_msg($_LANG['move_cat_success'], 0, $link);
             }
         }
@@ -359,6 +367,7 @@ class CategoryController extends BaseController
 
             if (cat_update($id, ['sort_order' => $val])) {
                 clear_cache_files(); // 清除缓存
+
                 return make_json_result($val);
             } else {
                 return make_json_error($db->error());
@@ -377,6 +386,7 @@ class CategoryController extends BaseController
 
             if (cat_update($id, ['measure_unit' => $val])) {
                 clear_cache_files(); // 清除缓存
+
                 return make_json_result($val);
             } else {
                 return make_json_error($db->error());
@@ -400,6 +410,7 @@ class CategoryController extends BaseController
 
             if (cat_update($id, ['grade' => $val])) {
                 clear_cache_files(); // 清除缓存
+
                 return make_json_result($val);
             } else {
                 return make_json_error($db->error());
@@ -439,6 +450,7 @@ class CategoryController extends BaseController
                     $db->query('UPDATE '.$ecs->table('nav')."SET ifshow = 0 WHERE ctype = 'c' AND cid = '".$id."' AND type = 'middle'");
                 }
                 clear_cache_files();
+
                 return make_json_result($val);
             } else {
                 return make_json_error($db->error());
@@ -457,6 +469,7 @@ class CategoryController extends BaseController
 
             if (cat_update($id, ['is_show' => $val]) != false) {
                 clear_cache_files();
+
                 return make_json_result($val);
             } else {
                 return make_json_error($db->error());

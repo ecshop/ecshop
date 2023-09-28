@@ -276,10 +276,12 @@ class CommentManageController extends BaseController
                 admin_log('', $action, 'adminlog');
 
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'comment_manage.php?act=list'];
+
                 return sys_msg(sprintf($_LANG['batch_drop_success'], count($_POST['checkboxes'])), 0, $link);
             } else {
                 /* 提示信息 */
                 $link[] = ['text' => $_LANG['back_list'], 'href' => 'comment_manage.php?act=list'];
+
                 return sys_msg($_LANG['no_select_comment'], 0, $link);
             }
         }

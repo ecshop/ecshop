@@ -133,6 +133,7 @@ class ShippingAreaController extends BaseController
 
                 $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'shipping_area.php?act=list&shipping='.$_POST['shipping']];
                 $lnk[] = ['text' => $_LANG['add_continue'], 'href' => 'shipping_area.php?act=add&shipping='.$_POST['shipping']];
+
                 return sys_msg($_LANG['add_area_success'], 0, $lnk);
             }
         }
@@ -310,6 +311,7 @@ class ShippingAreaController extends BaseController
             }
             /* 返回 */
             $links[0] = ['href' => 'shipping_area.php?act=list&shipping='.intval($_REQUEST['shipping']), 'text' => $_LANG['go_back']];
+
             return sys_msg($_LANG['remove_success'], 0, $links);
         }
 
@@ -361,6 +363,7 @@ class ShippingAreaController extends BaseController
 
             $list = get_shipping_area_list($shipping_id);
             $this->assign('areas', $list);
+
             return make_json_result($this->fetch('shipping_area_list.htm'));
         }
     }

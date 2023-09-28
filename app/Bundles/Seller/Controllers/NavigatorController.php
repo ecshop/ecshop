@@ -90,6 +90,7 @@ class NavigatorController extends BaseController
                 clear_cache_files();
                 $links[] = ['text' => $_LANG['navigator'], 'href' => 'navigator.php?act=list'];
                 $links[] = ['text' => $_LANG['add_new'], 'href' => 'navigator.php?act=add'];
+
                 return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
@@ -165,6 +166,7 @@ class NavigatorController extends BaseController
                 $db->query($sql);
                 clear_cache_files();
                 $links[] = ['text' => $_LANG['navigator'], 'href' => 'navigator.php?act=list'];
+
                 return sys_msg($_LANG['edit_ok'], 0, $links);
             }
         }
@@ -201,6 +203,7 @@ class NavigatorController extends BaseController
             } else {
                 if ($exc->edit("vieworder = '$order'", $id)) {
                     clear_cache_files();
+
                     return make_json_result(stripslashes($order));
                 } else {
                     return make_json_error($db->error());
@@ -224,6 +227,7 @@ class NavigatorController extends BaseController
 
             if (nav_update($id, ['ifshow' => $val]) != false) {
                 clear_cache_files();
+
                 return make_json_result($val);
             } else {
                 return make_json_error($db->error());
@@ -240,6 +244,7 @@ class NavigatorController extends BaseController
 
             if (nav_update($id, ['opennew' => $val]) != false) {
                 clear_cache_files();
+
                 return make_json_result($val);
             } else {
                 return make_json_error($db->error());

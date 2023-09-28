@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Bundles\Activity\Controllers\Seller;
+namespace App\Bundles\Seller\Controllers;
 
 class AuctionController extends BaseController
 {

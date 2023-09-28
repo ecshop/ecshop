@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Contracts\RepositoryInterface;
-use App\Models\VoteModel;
-use App\Models\Entity\Vote;
+use App\Models\Entity\VoteEntity;
+use App\Models\Vote;
+use Focite\Generator\Contracts\RepositoryInterface;
+use Focite\Generator\Repositories\CurdRepository;
 
 class VoteRepository extends CurdRepository implements RepositoryInterface
 {
@@ -27,7 +28,7 @@ class VoteRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function save(Vote $entity): int
+    public function saveEntity(VoteEntity $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -35,75 +36,40 @@ class VoteRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照ID查询返回对象
      */
-    public function findOneById(int $id): ?Vote
+    public function findOneById(int $id): ?VoteEntity
     {
         $data = $this->findById($id);
         if (empty($data)) {
             return null;
         }
 
-        $output = new Vote();
-        $output->setData($data);
+        $entity = new VoteEntity();
+        $entity->setData($data);
 
-        return $output;
+        return $entity;
     }
 
     /**
      * 按照条件查询返回对象
      */
-    public function findOne(array $condition = []): ?Vote
+    public function findOne(array $condition = []): ?VoteEntity
     {
-        $data = $this->findByWhere($condition);
+        $data = $this->find($condition);
         if (empty($data)) {
             return null;
         }
 
-        $output = new Vote();
-        $output->setData($data);
+        $entity = new VoteEntity();
+        $entity->setData($data);
 
-        return $output;
-    }
-
-    /**
-     * 查询列表
-     */
-    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
-    {
-        $result = $this->findAll($condition, $order, $sort);
-        if (empty($result)) {
-            return [];
-        }
-
-        foreach ($result as $key => $item) {
-            $output = new Vote();
-            $output->setData($item);
-            $result[$key] = $output;
-        }
-
-        return $result;
-    }
-
-    /**
-     * 分页查询
-     */
-    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
-    {
-        $result = $this->page($condition, $page, $pageSize);
-
-        foreach ($result['data'] as $key => $item) {
-            $output = new Vote();
-            $output->setData($item);
-            $result['data'][$key] = $output;
-        }
-
-        return $result;
+        return $entity;
     }
 
     /**
      * 定义数据数据模型类
      */
-    public function model(): VoteModel
+    public function model(): Vote
     {
-        return new VoteModel();
+        return new Vote();
     }
 }

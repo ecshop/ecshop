@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Contracts\RepositoryInterface;
-use App\Models\VoteLogModel;
-use App\Models\Entity\VoteLog;
+use App\Models\Entity\VoteLogEntity;
+use App\Models\VoteLog;
+use Focite\Generator\Contracts\RepositoryInterface;
+use Focite\Generator\Repositories\CurdRepository;
 
 class VoteLogRepository extends CurdRepository implements RepositoryInterface
 {
@@ -27,7 +28,7 @@ class VoteLogRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function save(VoteLog $entity): int
+    public function saveEntity(VoteLogEntity $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -35,75 +36,40 @@ class VoteLogRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照ID查询返回对象
      */
-    public function findOneById(int $id): ?VoteLog
+    public function findOneById(int $id): ?VoteLogEntity
     {
         $data = $this->findById($id);
         if (empty($data)) {
             return null;
         }
 
-        $output = new VoteLog();
-        $output->setData($data);
+        $entity = new VoteLogEntity();
+        $entity->setData($data);
 
-        return $output;
+        return $entity;
     }
 
     /**
      * 按照条件查询返回对象
      */
-    public function findOne(array $condition = []): ?VoteLog
+    public function findOne(array $condition = []): ?VoteLogEntity
     {
-        $data = $this->findByWhere($condition);
+        $data = $this->find($condition);
         if (empty($data)) {
             return null;
         }
 
-        $output = new VoteLog();
-        $output->setData($data);
+        $entity = new VoteLogEntity();
+        $entity->setData($data);
 
-        return $output;
-    }
-
-    /**
-     * 查询列表
-     */
-    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
-    {
-        $result = $this->findAll($condition, $order, $sort);
-        if (empty($result)) {
-            return [];
-        }
-
-        foreach ($result as $key => $item) {
-            $output = new VoteLog();
-            $output->setData($item);
-            $result[$key] = $output;
-        }
-
-        return $result;
-    }
-
-    /**
-     * 分页查询
-     */
-    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
-    {
-        $result = $this->page($condition, $page, $pageSize);
-
-        foreach ($result['data'] as $key => $item) {
-            $output = new VoteLog();
-            $output->setData($item);
-            $result['data'][$key] = $output;
-        }
-
-        return $result;
+        return $entity;
     }
 
     /**
      * 定义数据数据模型类
      */
-    public function model(): VoteLogModel
+    public function model(): VoteLog
     {
-        return new VoteLogModel();
+        return new VoteLog();
     }
 }

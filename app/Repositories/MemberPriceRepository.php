@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Contracts\RepositoryInterface;
-use App\Models\MemberPriceModel;
-use App\Models\Entity\MemberPrice;
+use App\Models\Entity\MemberPriceEntity;
+use App\Models\MemberPrice;
+use Focite\Generator\Contracts\RepositoryInterface;
+use Focite\Generator\Repositories\CurdRepository;
 
 class MemberPriceRepository extends CurdRepository implements RepositoryInterface
 {
@@ -27,7 +28,7 @@ class MemberPriceRepository extends CurdRepository implements RepositoryInterfac
     /**
      * 添加
      */
-    public function save(MemberPrice $entity): int
+    public function saveEntity(MemberPriceEntity $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -35,75 +36,40 @@ class MemberPriceRepository extends CurdRepository implements RepositoryInterfac
     /**
      * 按照ID查询返回对象
      */
-    public function findOneById(int $id): ?MemberPrice
+    public function findOneById(int $id): ?MemberPriceEntity
     {
         $data = $this->findById($id);
         if (empty($data)) {
             return null;
         }
 
-        $output = new MemberPrice();
-        $output->setData($data);
+        $entity = new MemberPriceEntity();
+        $entity->setData($data);
 
-        return $output;
+        return $entity;
     }
 
     /**
      * 按照条件查询返回对象
      */
-    public function findOne(array $condition = []): ?MemberPrice
+    public function findOne(array $condition = []): ?MemberPriceEntity
     {
-        $data = $this->findByWhere($condition);
+        $data = $this->find($condition);
         if (empty($data)) {
             return null;
         }
 
-        $output = new MemberPrice();
-        $output->setData($data);
+        $entity = new MemberPriceEntity();
+        $entity->setData($data);
 
-        return $output;
-    }
-
-    /**
-     * 查询列表
-     */
-    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
-    {
-        $result = $this->findAll($condition, $order, $sort);
-        if (empty($result)) {
-            return [];
-        }
-
-        foreach ($result as $key => $item) {
-            $output = new MemberPrice();
-            $output->setData($item);
-            $result[$key] = $output;
-        }
-
-        return $result;
-    }
-
-    /**
-     * 分页查询
-     */
-    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
-    {
-        $result = $this->page($condition, $page, $pageSize);
-
-        foreach ($result['data'] as $key => $item) {
-            $output = new MemberPrice();
-            $output->setData($item);
-            $result['data'][$key] = $output;
-        }
-
-        return $result;
+        return $entity;
     }
 
     /**
      * 定义数据数据模型类
      */
-    public function model(): MemberPriceModel
+    public function model(): MemberPrice
     {
-        return new MemberPriceModel();
+        return new MemberPrice();
     }
 }

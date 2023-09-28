@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Contracts\RepositoryInterface;
-use App\Models\ShopConfigModel;
-use App\Models\Entity\ShopConfig;
+use App\Models\Entity\ShopConfigEntity;
+use App\Models\ShopConfig;
+use Focite\Generator\Contracts\RepositoryInterface;
+use Focite\Generator\Repositories\CurdRepository;
 
 class ShopConfigRepository extends CurdRepository implements RepositoryInterface
 {
@@ -27,7 +28,7 @@ class ShopConfigRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function save(ShopConfig $entity): int
+    public function saveEntity(ShopConfigEntity $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -35,75 +36,40 @@ class ShopConfigRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照ID查询返回对象
      */
-    public function findOneById(int $id): ?ShopConfig
+    public function findOneById(int $id): ?ShopConfigEntity
     {
         $data = $this->findById($id);
         if (empty($data)) {
             return null;
         }
 
-        $output = new ShopConfig();
-        $output->setData($data);
+        $entity = new ShopConfigEntity();
+        $entity->setData($data);
 
-        return $output;
+        return $entity;
     }
 
     /**
      * 按照条件查询返回对象
      */
-    public function findOne(array $condition = []): ?ShopConfig
+    public function findOne(array $condition = []): ?ShopConfigEntity
     {
-        $data = $this->findByWhere($condition);
+        $data = $this->find($condition);
         if (empty($data)) {
             return null;
         }
 
-        $output = new ShopConfig();
-        $output->setData($data);
+        $entity = new ShopConfigEntity();
+        $entity->setData($data);
 
-        return $output;
-    }
-
-    /**
-     * 查询列表
-     */
-    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
-    {
-        $result = $this->findAll($condition, $order, $sort);
-        if (empty($result)) {
-            return [];
-        }
-
-        foreach ($result as $key => $item) {
-            $output = new ShopConfig();
-            $output->setData($item);
-            $result[$key] = $output;
-        }
-
-        return $result;
-    }
-
-    /**
-     * 分页查询
-     */
-    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
-    {
-        $result = $this->page($condition, $page, $pageSize);
-
-        foreach ($result['data'] as $key => $item) {
-            $output = new ShopConfig();
-            $output->setData($item);
-            $result['data'][$key] = $output;
-        }
-
-        return $result;
+        return $entity;
     }
 
     /**
      * 定义数据数据模型类
      */
-    public function model(): ShopConfigModel
+    public function model(): ShopConfig
     {
-        return new ShopConfigModel();
+        return new ShopConfig();
     }
 }

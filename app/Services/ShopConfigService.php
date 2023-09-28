@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Contracts\ServiceInterface;
 use App\Repositories\ShopConfigRepository;
+use Focite\Generator\Contracts\ServiceInterface;
+use Focite\Generator\Services\CommonService;
 
 class ShopConfigService extends CommonService implements ServiceInterface
 {

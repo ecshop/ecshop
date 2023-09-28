@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Contracts\ServiceInterface;
 use App\Repositories\AccountLogRepository;
+use Focite\Generator\Contracts\ServiceInterface;
+use Focite\Generator\Services\CommonService;
 
 class AccountLogService extends CommonService implements ServiceInterface
 {

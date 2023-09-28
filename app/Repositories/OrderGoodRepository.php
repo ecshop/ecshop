@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Contracts\RepositoryInterface;
-use App\Models\OrderGoodModel;
-use App\Models\Entity\OrderGood;
+use App\Models\Entity\OrderGoodEntity;
+use App\Models\OrderGood;
+use Focite\Generator\Contracts\RepositoryInterface;
+use Focite\Generator\Repositories\CurdRepository;
 
 class OrderGoodRepository extends CurdRepository implements RepositoryInterface
 {
@@ -27,7 +28,7 @@ class OrderGoodRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function save(OrderGood $entity): int
+    public function saveEntity(OrderGoodEntity $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -35,75 +36,40 @@ class OrderGoodRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照ID查询返回对象
      */
-    public function findOneById(int $id): ?OrderGood
+    public function findOneById(int $id): ?OrderGoodEntity
     {
         $data = $this->findById($id);
         if (empty($data)) {
             return null;
         }
 
-        $output = new OrderGood();
-        $output->setData($data);
+        $entity = new OrderGoodEntity();
+        $entity->setData($data);
 
-        return $output;
+        return $entity;
     }
 
     /**
      * 按照条件查询返回对象
      */
-    public function findOne(array $condition = []): ?OrderGood
+    public function findOne(array $condition = []): ?OrderGoodEntity
     {
-        $data = $this->findByWhere($condition);
+        $data = $this->find($condition);
         if (empty($data)) {
             return null;
         }
 
-        $output = new OrderGood();
-        $output->setData($data);
+        $entity = new OrderGoodEntity();
+        $entity->setData($data);
 
-        return $output;
-    }
-
-    /**
-     * 查询列表
-     */
-    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
-    {
-        $result = $this->findAll($condition, $order, $sort);
-        if (empty($result)) {
-            return [];
-        }
-
-        foreach ($result as $key => $item) {
-            $output = new OrderGood();
-            $output->setData($item);
-            $result[$key] = $output;
-        }
-
-        return $result;
-    }
-
-    /**
-     * 分页查询
-     */
-    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
-    {
-        $result = $this->page($condition, $page, $pageSize);
-
-        foreach ($result['data'] as $key => $item) {
-            $output = new OrderGood();
-            $output->setData($item);
-            $result['data'][$key] = $output;
-        }
-
-        return $result;
+        return $entity;
     }
 
     /**
      * 定义数据数据模型类
      */
-    public function model(): OrderGoodModel
+    public function model(): OrderGood
     {
-        return new OrderGoodModel();
+        return new OrderGood();
     }
 }

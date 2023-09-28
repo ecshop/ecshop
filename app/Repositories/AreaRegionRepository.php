@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Contracts\RepositoryInterface;
-use App\Models\AreaRegionModel;
-use App\Models\Entity\AreaRegion;
+use App\Models\AreaRegion;
+use App\Models\Entity\AreaRegionEntity;
+use Focite\Generator\Contracts\RepositoryInterface;
+use Focite\Generator\Repositories\CurdRepository;
 
 class AreaRegionRepository extends CurdRepository implements RepositoryInterface
 {
@@ -27,7 +28,7 @@ class AreaRegionRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function save(AreaRegion $entity): int
+    public function saveEntity(AreaRegionEntity $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -35,75 +36,40 @@ class AreaRegionRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照ID查询返回对象
      */
-    public function findOneById(int $id): ?AreaRegion
+    public function findOneById(int $id): ?AreaRegionEntity
     {
         $data = $this->findById($id);
         if (empty($data)) {
             return null;
         }
 
-        $output = new AreaRegion();
-        $output->setData($data);
+        $entity = new AreaRegionEntity();
+        $entity->setData($data);
 
-        return $output;
+        return $entity;
     }
 
     /**
      * 按照条件查询返回对象
      */
-    public function findOne(array $condition = []): ?AreaRegion
+    public function findOne(array $condition = []): ?AreaRegionEntity
     {
-        $data = $this->findByWhere($condition);
+        $data = $this->find($condition);
         if (empty($data)) {
             return null;
         }
 
-        $output = new AreaRegion();
-        $output->setData($data);
+        $entity = new AreaRegionEntity();
+        $entity->setData($data);
 
-        return $output;
-    }
-
-    /**
-     * 查询列表
-     */
-    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
-    {
-        $result = $this->findAll($condition, $order, $sort);
-        if (empty($result)) {
-            return [];
-        }
-
-        foreach ($result as $key => $item) {
-            $output = new AreaRegion();
-            $output->setData($item);
-            $result[$key] = $output;
-        }
-
-        return $result;
-    }
-
-    /**
-     * 分页查询
-     */
-    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
-    {
-        $result = $this->page($condition, $page, $pageSize);
-
-        foreach ($result['data'] as $key => $item) {
-            $output = new AreaRegion();
-            $output->setData($item);
-            $result['data'][$key] = $output;
-        }
-
-        return $result;
+        return $entity;
     }
 
     /**
      * 定义数据数据模型类
      */
-    public function model(): AreaRegionModel
+    public function model(): AreaRegion
     {
-        return new AreaRegionModel();
+        return new AreaRegion();
     }
 }

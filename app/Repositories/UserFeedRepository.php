@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Contracts\RepositoryInterface;
-use App\Models\UserFeedModel;
-use App\Models\Entity\UserFeed;
+use App\Models\Entity\UserFeedEntity;
+use App\Models\UserFeed;
+use Focite\Generator\Contracts\RepositoryInterface;
+use Focite\Generator\Repositories\CurdRepository;
 
 class UserFeedRepository extends CurdRepository implements RepositoryInterface
 {
@@ -27,7 +28,7 @@ class UserFeedRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function save(UserFeed $entity): int
+    public function saveEntity(UserFeedEntity $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -35,75 +36,40 @@ class UserFeedRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照ID查询返回对象
      */
-    public function findOneById(int $id): ?UserFeed
+    public function findOneById(int $id): ?UserFeedEntity
     {
         $data = $this->findById($id);
         if (empty($data)) {
             return null;
         }
 
-        $output = new UserFeed();
-        $output->setData($data);
+        $entity = new UserFeedEntity();
+        $entity->setData($data);
 
-        return $output;
+        return $entity;
     }
 
     /**
      * 按照条件查询返回对象
      */
-    public function findOne(array $condition = []): ?UserFeed
+    public function findOne(array $condition = []): ?UserFeedEntity
     {
-        $data = $this->findByWhere($condition);
+        $data = $this->find($condition);
         if (empty($data)) {
             return null;
         }
 
-        $output = new UserFeed();
-        $output->setData($data);
+        $entity = new UserFeedEntity();
+        $entity->setData($data);
 
-        return $output;
-    }
-
-    /**
-     * 查询列表
-     */
-    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
-    {
-        $result = $this->findAll($condition, $order, $sort);
-        if (empty($result)) {
-            return [];
-        }
-
-        foreach ($result as $key => $item) {
-            $output = new UserFeed();
-            $output->setData($item);
-            $result[$key] = $output;
-        }
-
-        return $result;
-    }
-
-    /**
-     * 分页查询
-     */
-    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
-    {
-        $result = $this->page($condition, $page, $pageSize);
-
-        foreach ($result['data'] as $key => $item) {
-            $output = new UserFeed();
-            $output->setData($item);
-            $result['data'][$key] = $output;
-        }
-
-        return $result;
+        return $entity;
     }
 
     /**
      * 定义数据数据模型类
      */
-    public function model(): UserFeedModel
+    public function model(): UserFeed
     {
-        return new UserFeedModel();
+        return new UserFeed();
     }
 }

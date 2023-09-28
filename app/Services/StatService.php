@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Contracts\ServiceInterface;
 use App\Repositories\StatRepository;
+use Focite\Generator\Contracts\ServiceInterface;
+use Focite\Generator\Services\CommonService;
 
 class StatService extends CommonService implements ServiceInterface
 {

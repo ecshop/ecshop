@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Contracts\RepositoryInterface;
-use App\Models\UserBonuModel;
-use App\Models\Entity\UserBonu;
+use App\Models\Entity\UserBonuEntity;
+use App\Models\UserBonu;
+use Focite\Generator\Contracts\RepositoryInterface;
+use Focite\Generator\Repositories\CurdRepository;
 
 class UserBonuRepository extends CurdRepository implements RepositoryInterface
 {
@@ -27,7 +28,7 @@ class UserBonuRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function save(UserBonu $entity): int
+    public function saveEntity(UserBonuEntity $entity): int
     {
         return $this->save($entity->toArray());
     }
@@ -35,75 +36,40 @@ class UserBonuRepository extends CurdRepository implements RepositoryInterface
     /**
      * 按照ID查询返回对象
      */
-    public function findOneById(int $id): ?UserBonu
+    public function findOneById(int $id): ?UserBonuEntity
     {
         $data = $this->findById($id);
         if (empty($data)) {
             return null;
         }
 
-        $output = new UserBonu();
-        $output->setData($data);
+        $entity = new UserBonuEntity();
+        $entity->setData($data);
 
-        return $output;
+        return $entity;
     }
 
     /**
      * 按照条件查询返回对象
      */
-    public function findOne(array $condition = []): ?UserBonu
+    public function findOne(array $condition = []): ?UserBonuEntity
     {
-        $data = $this->findByWhere($condition);
+        $data = $this->find($condition);
         if (empty($data)) {
             return null;
         }
 
-        $output = new UserBonu();
-        $output->setData($data);
+        $entity = new UserBonuEntity();
+        $entity->setData($data);
 
-        return $output;
-    }
-
-    /**
-     * 查询列表
-     */
-    public function findAll(array $condition = [], string $order = 'id', string $sort = 'asc'): array
-    {
-        $result = $this->findAll($condition, $order, $sort);
-        if (empty($result)) {
-            return [];
-        }
-
-        foreach ($result as $key => $item) {
-            $output = new UserBonu();
-            $output->setData($item);
-            $result[$key] = $output;
-        }
-
-        return $result;
-    }
-
-    /**
-     * 分页查询
-     */
-    public function page(array $condition = [], int $page = 1, int $pageSize = 20): array
-    {
-        $result = $this->page($condition, $page, $pageSize);
-
-        foreach ($result['data'] as $key => $item) {
-            $output = new UserBonu();
-            $output->setData($item);
-            $result['data'][$key] = $output;
-        }
-
-        return $result;
+        return $entity;
     }
 
     /**
      * 定义数据数据模型类
      */
-    public function model(): UserBonuModel
+    public function model(): UserBonu
     {
-        return new UserBonuModel();
+        return new UserBonu();
     }
 }

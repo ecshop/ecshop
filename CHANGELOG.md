@@ -1,6 +1,6 @@
 # Release Notes
 
-## [Unreleased](https://github.com/ecshop/ecshop/compare/v2.8.0...main)
+## [Unreleased](https://github.com/ecshop/ecshop/compare/v2.8.0...master)
 
 
 

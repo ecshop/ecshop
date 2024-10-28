@@ -1,7 +1,6 @@
 User-agent: *
 Disallow: /admin/
 Disallow: /api/
-Disallow: /cert/
 Disallow: /data/
 Disallow: /images/
 Disallow: /includes/

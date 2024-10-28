@@ -170,9 +170,9 @@ $_LANG['skip'] = '完成向导';
 $_LANG['next_step'] = '下一步';
 $_LANG['ur_add'] = '开店向导－添加商品';
 $_LANG['ur_config'] = '开店向导－设置网店';
-$_LANG['shop_basic_first'] = "设置商店的一些基本信息<em>商店的名字、地址、配送方式、支付方式等</em>";
-$_LANG['shop_basic_second'] = "给商店添加一些商品<em>商品的名称、数量、分类、品牌、价格、描述等</em>";
-$_LANG['shop_basic_third'] = "恭喜您，您的网店可以使用了！<em>下面是一些常用功能的链接聚合。您关闭本页后，依然可以在左侧菜单相关项目中找到</em>";
+$_LANG['shop_basic_first'] = '设置商店的一些基本信息<em>商店的名字、地址、配送方式、支付方式等</em>';
+$_LANG['shop_basic_second'] = '给商店添加一些商品<em>商品的名称、数量、分类、品牌、价格、描述等</em>';
+$_LANG['shop_basic_third'] = '恭喜您，您的网店可以使用了！<em>下面是一些常用功能的链接聚合。您关闭本页后，依然可以在左侧菜单相关项目中找到</em>';
 $_LANG['add_good'] = '添加商品';
 $_LANG['add_category'] = '添加商品分类';
 $_LANG['add_type'] = '商品类型';
@@ -182,7 +182,6 @@ $_LANG['select_template'] = '选择模板';
 $_LANG['shop_back_in'] = '进入网店后台';
 $_LANG['goods_img_too_big'] = '商品图片文件太大了（最大值:%s），无法上传。';
 $_LANG['invalid_goods_img'] = '商品图片格式不正确！';
-
 
 //JS语言
 $_LANG['js_languages']['shop_name_not_null'] = '商店名称不能为空';

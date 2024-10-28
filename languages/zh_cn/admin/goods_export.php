@@ -1,10 +1,10 @@
 <?php
 
 $_LANG['user_guide'] =
-    '<br/>使用说明：' .
-    '<ol>' .
-    '<li>使用搜索条件每次只允许搜索符合条件的50个商品。</li>' .
-    '<li>如果用户需要导出某分类下的所有的商品，在条件中选择分类后，不需点击搜索，直接选择数据格式和编码导出即可。</li>' .
+    '<br/>使用说明：'.
+    '<ol>'.
+    '<li>使用搜索条件每次只允许搜索符合条件的50个商品。</li>'.
+    '<li>如果用户需要导出某分类下的所有的商品，在条件中选择分类后，不需点击搜索，直接选择数据格式和编码导出即可。</li>'.
     '</ol>';
 $_LANG['export_taobao'] = '导出淘宝助理支持数据格式';
 $_LANG['export_taobao_v43'] = '导出淘宝助理V4.3支持数据格式';
@@ -107,7 +107,6 @@ $_LANG['taobao46']['another_of_marketing_property'] = '销售属性别名';
 $_LANG['taobao46']['charge_type'] = '代充类型';
 $_LANG['taobao46']['treasure_number'] = '宝贝编号';
 $_LANG['taobao46']['ID_number'] = '数字ID';
-
 
 $_LANG['export_paipai'] = '导出到拍拍助理支持数据格式';
 $_LANG['paipai']['id'] = 'id';

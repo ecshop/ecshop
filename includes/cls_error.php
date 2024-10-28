@@ -1,21 +1,22 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
 class ecs_error
 {
-    public $_message = array();
+    public $_message = [];
+
     public $_template = '';
+
     public $error_no = 0;
 
     /**
      * 构造函数
      *
-     * @access  public
-     * @param string $tpl
-     * @return  void
+     * @param  string  $tpl
+     * @return void
      */
     public function __construct($tpl)
     {
@@ -25,10 +26,9 @@ class ecs_error
     /**
      * 添加一条错误信息
      *
-     * @access  public
-     * @param string $msg
-     * @param integer $errno
-     * @return  void
+     * @param  string  $msg
+     * @param  int  $errno
+     * @return void
      */
     public function add($msg, $errno = 1)
     {
@@ -44,20 +44,18 @@ class ecs_error
     /**
      * 清空错误信息
      *
-     * @access  public
-     * @return  void
+     * @return void
      */
     public function clean()
     {
-        $this->_message = array();
+        $this->_message = [];
         $this->error_no = 0;
     }
 
     /**
      * 返回所有的错误信息的数组
      *
-     * @access  public
-     * @return  array
+     * @return array
      */
     public function get_all()
     {
@@ -67,8 +65,7 @@ class ecs_error
     /**
      * 返回最后一条错误信息
      *
-     * @access  public
-     * @return  void
+     * @return void
      */
     public function last_message()
     {
@@ -78,15 +75,14 @@ class ecs_error
     /**
      * 显示错误信息
      *
-     * @access  public
-     * @param string $link
-     * @param string $href
-     * @return  void
+     * @param  string  $link
+     * @param  string  $href
+     * @return void
      */
     public function show($link = '', $href = '')
     {
         if ($this->error_no > 0) {
-            $message = array();
+            $message = [];
 
             $link = (empty($link)) ? $GLOBALS['_LANG']['back_up_page'] : $link;
             $href = (empty($href)) ? 'javascript:history.back();' : $href;
@@ -94,7 +90,7 @@ class ecs_error
             $message['back_url'] = $href;
 
             foreach ($this->_message as $msg) {
-                $message['content'] = '<div>' . htmlspecialchars($msg) . '</div>';
+                $message['content'] = '<div>'.htmlspecialchars($msg).'</div>';
             }
 
             if (isset($GLOBALS['smarty'])) {
@@ -103,7 +99,7 @@ class ecs_error
                 $GLOBALS['smarty']->assign('message', $message);
                 $GLOBALS['smarty']->display($this->_template);
             } else {
-                die($message['content']);
+                exit($message['content']);
             }
 
             exit;

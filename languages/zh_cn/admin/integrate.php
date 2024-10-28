@@ -90,7 +90,6 @@ $_LANG['ignore_user'] = '需要保留的商城用户';
 $_LANG['submit_modify'] = '保存本页变更';
 $_LANG['button_confirm_next'] = '开始整合';
 
-
 /* 用户同步 */
 $_LANG['user_sync'] = '同步商城数据到论坛，并完成整合';
 $_LANG['button_pre'] = '上一步';
@@ -107,7 +106,6 @@ $_LANG['start_task'] = '开始任务';
 $_LANG['sync_status'] = '已经同步 %s / %s';
 $_LANG['sync_size'] = '每次处理用户数量';
 $_LANG['sync_ok'] = '恭喜您。整合成功';
-
 
 $_LANG['save_ok'] = '保存成功';
 

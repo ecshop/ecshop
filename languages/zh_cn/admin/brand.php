@@ -34,8 +34,8 @@ $_LANG['enter_int'] = '请输入一个整数！';
 $_LANG['back_list'] = '返回品牌列表';
 $_LANG['continue_add'] = '继续添加新品牌';
 
-$_LANG['upfile_type_error'] = "只能上传jpg，gif，png类型的图片";
-$_LANG['upfile_error'] = "图片无法上传，请确保data目录下所有子目录的可写性！";
+$_LANG['upfile_type_error'] = '只能上传jpg，gif，png类型的图片';
+$_LANG['upfile_error'] = '图片无法上传，请确保data目录下所有子目录的可写性！';
 
 $_LANG['visibility_notes'] = '当品牌下还没有商品的时候，首页及分类页的品牌区将不会显示该品牌。';
 

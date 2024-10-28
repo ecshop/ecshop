@@ -1,12 +1,12 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 define('SOURCE_TOKEN', 'b11983d30cb6821158744d5d065d0f70');
 define('SOURCE_ID', '620386');
-require_once(ROOT_PATH . 'includes/cls_JSON.php');
-require_once(ROOT_PATH . 'includes/cls_transport.php');
+require_once ROOT_PATH.'includes/cls_JSON.php';
+require_once ROOT_PATH.'includes/cls_transport.php';
 
 /* 短信模块主类 */
 
@@ -15,36 +15,33 @@ class sms
     /**
      * 存放提供远程服务的URL。
      *
-     * @access  private
-     * @var     array $api_urls
+     * @var array
      */
-    public $api_urls = array(
+    public $api_urls = [
         'info' => 'http://api.sms.cn',
         'send' => 'http://api.sms.cn',
-        'servertime' => 'http://webapi.sms.cn'
+        'servertime' => 'http://webapi.sms.cn',
 
-    );
+    ];
+
     /**
      * 存放MYSQL对象
      *
-     * @access  private
-     * @var     object $db
+     * @var object
      */
     public $db = null;
 
     /**
      * 存放ECS对象
      *
-     * @access  private
-     * @var     object $ecs
+     * @var object
      */
     public $ecs = null;
 
     /**
      * 存放transport对象
      *
-     * @access  private
-     * @var     object $t
+     * @var object
      */
     public $t = null;
 
@@ -53,17 +50,15 @@ class sms
      * 程序在执行相关的操作时，error_no值将被改变，可能被赋为空或大等0的数字.
      * 为空或0表示动作成功；大于0的数字表示动作失败，该数字代表错误号。
      *
-     * @access  public
-     * @var     array $errors
+     * @var array
      */
-    public $errors = array('api_errors' => array('error_no' => -1, 'error_msg' => ''),
-        'server_errors' => array('error_no' => -1, 'error_msg' => ''));
+    public $errors = ['api_errors' => ['error_no' => -1, 'error_msg' => ''],
+        'server_errors' => ['error_no' => -1, 'error_msg' => '']];
 
     /**
      * 构造函数
      *
-     * @access  public
-     * @return  void
+     * @return void
      */
     public function __construct()
     {
@@ -88,32 +83,34 @@ class sms
         /* 检查发送信息的合法性 */
         $contents = $this->get_contents($phones, $msg);
 
-        if (!$contents) {
-            $this->errors['server_errors']['error_no'] = 3;//发送的信息有误
+        if (! $contents) {
+            $this->errors['server_errors']['error_no'] = 3; //发送的信息有误
+
             return false;
         }
 
         $login_info = $this->getSmsInfo();
-        if (!$login_info) {
-            $this->errors['server_errors']['error_no'] = 5;//无效的身份信息
+        if (! $login_info) {
+            $this->errors['server_errors']['error_no'] = 5; //无效的身份信息
 
             return false;
         } else {
             if ($login_info['info']['account_info']['active'] != '1') {
-                $this->errors['server_errors']['error_no'] = 11;//短信功能没有激活
+                $this->errors['server_errors']['error_no'] = 11; //短信功能没有激活
+
                 return false;
             }
         }
         /* 获取API URL */
         $sms_url = $this->get_url('send');
 
-        if (!$sms_url) {
-            $this->errors['server_errors']['error_no'] = 6;//URL不对
+        if (! $sms_url) {
+            $this->errors['server_errors']['error_no'] = 6; //URL不对
 
             return false;
         }
 
-        $t_contents = array();
+        $t_contents = [];
         if (count($contents) > 1) {
             foreach ($contents as $key => $val) {
                 $t_contents['0']['phones'] = $val['phones'];
@@ -168,14 +165,12 @@ class sms
         }
     }
 
-
     /**
      * 检测启用短信服务需要的信息
      *
-     * @access  private
-     * @param string $email 邮箱
-     * @param string $password 密码
-     * @return  boolean                     如果启用信息格式合法就返回true，否则返回false。
+     * @param  string  $email  邮箱
+     * @param  string  $password  密码
+     * @return bool 如果启用信息格式合法就返回true，否则返回false。
      */
     public function check_enable_info($email, $password)
     {
@@ -190,7 +185,7 @@ class sms
     public function has_registered()
     {
         $sql = 'SELECT `value`
-                FROM ' . $this->ecs->table('shop_config') . "
+                FROM '.$this->ecs->table('shop_config')."
                 WHERE `code` = 'ent_id'";
 
         $result = $this->db->getOne($sql);
@@ -221,18 +216,18 @@ class sms
     {
         $url = $this->ecs->url();
         $url = $url ? $url : '';
+
         return $url;
     }
 
     /**
      * 获得当前处于会话状态的管理员的邮箱
      *
-     * @access  private
-     * @return  string or boolean       成功返回管理员的邮箱，否则返回false。
+     * @return string or boolean       成功返回管理员的邮箱，否则返回false。
      */
     public function get_admin_email()
     {
-        $sql = 'SELECT `email` FROM ' . $this->ecs->table('admin_user') . " WHERE `user_id` = '" . $_SESSION['admin_id'] . "'";
+        $sql = 'SELECT `email` FROM '.$this->ecs->table('admin_user')." WHERE `user_id` = '".$_SESSION['admin_id']."'";
         $email = $this->db->getOne($sql);
 
         if (empty($email)) {
@@ -287,7 +282,7 @@ class sms
                 $i--;
             }
         }
-        if (!empty($phone)) {
+        if (! empty($phone)) {
             foreach ($phone as $phone_key => $val) {
                 if (EC_CHARSET != 'utf-8') {
                     $phone_array[$phone_key]['phones'] = implode(',', $val);
@@ -297,6 +292,7 @@ class sms
                     $phone_array[$phone_key]['content'] = $msg;
                 }
             }
+
             return $phone_array;
         } else {
             return false;
@@ -314,15 +310,15 @@ class sms
         $response = $this->t->request($sms_url, $Tsend_str, 'POST');
 
         $result = $this->json->decode($response['body'], true);
+
         return $result['info'];
     }
 
     /**
      * 返回指定键名的URL
      *
-     * @access  public
-     * @param string $key URL的名字，即数组的键名
-     * @return  string or boolean       如果由形参指定的键名对应的URL值存在就返回该URL，否则返回false。
+     * @param  string  $key  URL的名字，即数组的键名
+     * @return string or boolean       如果由形参指定的键名对应的URL值存在就返回该URL，否则返回false。
      */
     public function get_url($key)
     {
@@ -337,7 +333,6 @@ class sms
 
     /**
      * 检测手机号码是否正确
-     *
      */
     public function is_moblie($moblie)
     {
@@ -354,21 +349,23 @@ class sms
                 $str .= $value;
             }
         }
-        return strtolower(md5($str . strtolower(md5($token))));
+
+        return strtolower(md5($str.strtolower(md5($token))));
     }
 
     public function base_encode($str)
     {
         $str = base64_encode($str);
+
         return strtr($str, $this->pattern());
     }
 
     public function pattern()
     {
-        return array(
+        return [
             '+' => '_1_',
             '/' => '_2_',
             '=' => '_3_',
-        );
+        ];
     }
 }

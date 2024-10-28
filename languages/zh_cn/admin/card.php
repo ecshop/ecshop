@@ -36,8 +36,8 @@ $_LANG['no_cardname'] = '你输入的卡片名称为空！';
 $_LANG['back_list'] = '返回贺卡列表';
 $_LANG['continue_add'] = '继续添加新贺卡';
 
-$_LANG['upfile_type_error'] = "只能上传jpg，gif，png类型的图片";
-$_LANG['upfile_error'] = "图片无法上传，请确保data目录下所有子目录的可写性";
+$_LANG['upfile_type_error'] = '只能上传jpg，gif，png类型的图片';
+$_LANG['upfile_error'] = '图片无法上传，请确保data目录下所有子目录的可写性';
 
 /*JS 语言项*/
 $_LANG['js_languages']['no_cardname'] = '没有输入贺卡名';

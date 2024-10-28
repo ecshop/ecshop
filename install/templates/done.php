@@ -18,7 +18,7 @@
     <img id="js-monitor-loading" src='images/loading.gif' style="margin:30px 0 50px 0;"/>
 </div>
 <div style="padding: 1em; border: 1px solid #BBDDE5; background: #F4FAFB; margin-top: 10px; text-align: center;">
-    <?php include ROOT_PATH . 'install/templates/copyright.php'; ?>
+    <?php include ROOT_PATH.'install/templates/copyright.php'; ?>
 </div>
 <script type="text/javascript">
     Ajax.call('cloud.php?step=done', '', welcome_api, 'GET', 'TEXT', 'FLASE');

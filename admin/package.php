@@ -2,8 +2,8 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-$exc = new exchange($ecs->table("goods_activity"), $db, 'act_id', 'act_name');
+require dirname(__FILE__).'/includes/init.php';
+$exc = new exchange($ecs->table('goods_activity'), $db, 'act_id', 'act_name');
 
 /*------------------------------------------------------ */
 //-- 添加活动
@@ -13,8 +13,8 @@ if ($_REQUEST['act'] == 'add') {
     admin_priv('package_manage');
 
     /* 组合商品 */
-    $group_goods_list = array();
-    $sql = "DELETE FROM " . $ecs->table('package_goods') .
+    $group_goods_list = [];
+    $sql = 'DELETE FROM '.$ecs->table('package_goods').
         " WHERE package_id = 0 AND admin_id = '$_SESSION[admin_id]'";
 
     $db->query($sql);
@@ -22,11 +22,11 @@ if ($_REQUEST['act'] == 'add') {
     /* 初始化信息 */
     $start_time = local_date('Y-m-d H:i');
     $end_time = local_date('Y-m-d H:i', strtotime('+1 month'));
-    $package = array('package_price' => '', 'start_time' => $start_time, 'end_time' => $end_time);
+    $package = ['package_price' => '', 'start_time' => $start_time, 'end_time' => $end_time];
 
     $smarty->assign('package', $package);
     $smarty->assign('ur_here', $_LANG['package_add']);
-    $smarty->assign('action_link', array('text' => $_LANG['14_package_list'], 'href' => 'package.php?act=list'));
+    $smarty->assign('action_link', ['text' => $_LANG['14_package_list'], 'href' => 'package.php?act=list']);
     $smarty->assign('cat_list', cat_list());
     $smarty->assign('brand_list', get_brand_list());
     $smarty->assign('form_action', 'insert');
@@ -38,13 +38,12 @@ if ($_REQUEST['act'] == 'insert') {
     /* 权限判断 */
     admin_priv('package_manage');
 
-    $sql = "SELECT COUNT(*) " .
-        " FROM " . $ecs->table('goods_activity') .
-        " WHERE act_type='" . GAT_PACKAGE . "' AND act_name='" . $_POST['package_name'] . "'";
+    $sql = 'SELECT COUNT(*) '.
+        ' FROM '.$ecs->table('goods_activity').
+        " WHERE act_type='".GAT_PACKAGE."' AND act_name='".$_POST['package_name']."'";
     if ($db->getOne($sql)) {
         sys_msg(sprintf($_LANG['package_exist'], $_POST['package_name']), 1);
     }
-
 
     /* 将时间转换成整数 */
     $_POST['start_time'] = local_strtotime($_POST['start_time']);
@@ -55,12 +54,12 @@ if ($_REQUEST['act'] == 'insert') {
         $_POST['package_price'] = 0;
     }
 
-    $info = array('package_price' => $_POST['package_price']);
+    $info = ['package_price' => $_POST['package_price']];
 
     /* 插入数据 */
-    $record = array('act_name' => $_POST['package_name'], 'act_desc' => $_POST['desc'],
+    $record = ['act_name' => $_POST['package_name'], 'act_desc' => $_POST['desc'],
         'act_type' => GAT_PACKAGE, 'start_time' => $_POST['start_time'],
-        'end_time' => $_POST['end_time'], 'is_finished' => 0, 'ext_info' => serialize($info));
+        'end_time' => $_POST['end_time'], 'is_finished' => 0, 'ext_info' => serialize($info)];
 
     $db->autoExecute($ecs->table('goods_activity'), $record, 'INSERT');
 
@@ -70,8 +69,8 @@ if ($_REQUEST['act'] == 'insert') {
     handle_packagep_goods($package_id);
 
     admin_log($_POST['package_name'], 'add', 'package');
-    $link[] = array('text' => $_LANG['back_list'], 'href' => 'package.php?act=list');
-    $link[] = array('text' => $_LANG['continue_add'], 'href' => 'package.php?act=add');
+    $link[] = ['text' => $_LANG['back_list'], 'href' => 'package.php?act=list'];
+    $link[] = ['text' => $_LANG['continue_add'], 'href' => 'package.php?act=add'];
     sys_msg($_LANG['add_succeed'], 0, $link);
 }
 
@@ -87,7 +86,7 @@ if ($_REQUEST['act'] == 'edit') {
 
     $smarty->assign('package', $package);
     $smarty->assign('ur_here', $_LANG['package_edit']);
-    $smarty->assign('action_link', array('text' => $_LANG['14_package_list'], 'href' => 'package.php?act=list&' . list_link_postfix()));
+    $smarty->assign('action_link', ['text' => $_LANG['14_package_list'], 'href' => 'package.php?act=list&'.list_link_postfix()]);
     $smarty->assign('cat_list', cat_list());
     $smarty->assign('brand_list', get_brand_list());
     $smarty->assign('form_action', 'update');
@@ -110,23 +109,22 @@ if ($_REQUEST['act'] == 'update') {
     }
 
     /* 检查活动重名 */
-    $sql = "SELECT COUNT(*) " .
-        " FROM " . $ecs->table('goods_activity') .
-        " WHERE act_type='" . GAT_PACKAGE . "' AND act_name='" . $_POST['package_name'] . "' AND act_id <> '" . $_POST['id'] . "'";
+    $sql = 'SELECT COUNT(*) '.
+        ' FROM '.$ecs->table('goods_activity').
+        " WHERE act_type='".GAT_PACKAGE."' AND act_name='".$_POST['package_name']."' AND act_id <> '".$_POST['id']."'";
     if ($db->getOne($sql)) {
         sys_msg(sprintf($_LANG['package_exist'], $_POST['package_name']), 1);
     }
 
-
-    $info = array('package_price' => $_POST['package_price']);
+    $info = ['package_price' => $_POST['package_price']];
 
     /* 更新数据 */
-    $record = array('act_name' => $_POST['package_name'], 'start_time' => $_POST['start_time'], 'end_time' => $_POST['end_time'],
-        'act_desc' => $_POST['desc'], 'ext_info' => serialize($info));
-    $db->autoExecute($ecs->table('goods_activity'), $record, 'UPDATE', "act_id = '" . $_POST['id'] . "' AND act_type = " . GAT_PACKAGE);
+    $record = ['act_name' => $_POST['package_name'], 'start_time' => $_POST['start_time'], 'end_time' => $_POST['end_time'],
+        'act_desc' => $_POST['desc'], 'ext_info' => serialize($info)];
+    $db->autoExecute($ecs->table('goods_activity'), $record, 'UPDATE', "act_id = '".$_POST['id']."' AND act_type = ".GAT_PACKAGE);
 
     admin_log($_POST['package_name'], 'edit', 'package');
-    $link[] = array('text' => $_LANG['back_list'], 'href' => 'package.php?act=list&' . list_link_postfix());
+    $link[] = ['text' => $_LANG['back_list'], 'href' => 'package.php?act=list&'.list_link_postfix()];
     sys_msg($_LANG['edit_succeed'], 0, $link);
 }
 
@@ -141,11 +139,11 @@ if ($_REQUEST['act'] == 'remove') {
 
     $exc->drop($id);
 
-    $sql = "DELETE FROM " . $ecs->table('package_goods') .
+    $sql = 'DELETE FROM '.$ecs->table('package_goods').
         " WHERE package_id='$id'";
     $db->query($sql);
 
-    $url = 'package.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+    $url = 'package.php?act=query&'.str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
     ecs_header("Location: $url\n");
     exit;
@@ -156,7 +154,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['14_package_list']);
-    $smarty->assign('action_link', array('text' => $_LANG['package_add'], 'href' => 'package.php?act=add'));
+    $smarty->assign('action_link', ['text' => $_LANG['package_add'], 'href' => 'package.php?act=add']);
 
     $packages = get_packagelist();
 
@@ -191,7 +189,7 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result(
         $smarty->fetch('package_list.htm'),
         '',
-        array('filter' => $packages['filter'], 'page_count' => $packages['page_count'])
+        ['filter' => $packages['filter'], 'page_count' => $packages['page_count']]
     );
 }
 
@@ -206,9 +204,9 @@ if ($_REQUEST['act'] == 'edit_package_name') {
     $val = json_str_iconv(trim($_POST['val']));
 
     /* 检查活动重名 */
-    $sql = "SELECT COUNT(*) " .
-        " FROM " . $ecs->table('goods_activity') .
-        " WHERE act_type='" . GAT_PACKAGE . "' AND act_name='$val' AND act_id <> '$id'";
+    $sql = 'SELECT COUNT(*) '.
+        ' FROM '.$ecs->table('goods_activity').
+        " WHERE act_type='".GAT_PACKAGE."' AND act_name='$val' AND act_id <> '$id'";
     if ($db->getOne($sql)) {
         make_json_error(sprintf($_LANG['package_exist'], $val));
     }
@@ -222,18 +220,18 @@ if ($_REQUEST['act'] == 'edit_package_name') {
 /*------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'search_goods') {
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $filters = $json->decode($_GET['JSON']);
 
     $arr = get_goods_list($filters);
 
-    $opt = array();
+    $opt = [];
     foreach ($arr as $key => $val) {
-        $opt[$key] = array('value' => $val['goods_id'],
+        $opt[$key] = ['value' => $val['goods_id'],
             'text' => $val['goods_name'],
-            'data' => $val['shop_price']);
+            'data' => $val['shop_price']];
 
         $opt[$key]['products'] = get_good_products($val['goods_id']);
     }
@@ -246,7 +244,7 @@ if ($_REQUEST['act'] == 'search_goods') {
 /*------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'add_package_goods') {
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('package_manage');
@@ -258,22 +256,22 @@ if ($_REQUEST['act'] == 'add_package_goods') {
 
     foreach ($fittings as $val) {
         $val_array = explode('_', $val);
-        if (!isset($val_array[1]) || $val_array[1] <= 0) {
+        if (! isset($val_array[1]) || $val_array[1] <= 0) {
             $val_array[1] = 0;
         }
 
-        $sql = "INSERT INTO " . $ecs->table('package_goods') . " (package_id, goods_id, product_id, goods_number, admin_id) " .
-            "VALUES ('$package_id', '" . $val_array[0] . "', '" . $val_array[1] . "', '$number', '$_SESSION[admin_id]')";
+        $sql = 'INSERT INTO '.$ecs->table('package_goods').' (package_id, goods_id, product_id, goods_number, admin_id) '.
+            "VALUES ('$package_id', '".$val_array[0]."', '".$val_array[1]."', '$number', '$_SESSION[admin_id]')";
         $db->query($sql, 'SILENT');
     }
 
     $arr = get_package_goods($package_id);
-    $opt = array();
+    $opt = [];
 
     foreach ($arr as $val) {
-        $opt[] = array('value' => $val['g_p'],
+        $opt[] = ['value' => $val['g_p'],
             'text' => $val['goods_name'],
-            'data' => '');
+            'data' => ''];
     }
 
     clear_cache_files();
@@ -285,7 +283,7 @@ if ($_REQUEST['act'] == 'add_package_goods') {
 /*------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'drop_package_goods') {
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('package_manage');
@@ -294,8 +292,8 @@ if ($_REQUEST['act'] == 'drop_package_goods') {
     $arguments = $json->decode($_GET['JSON']);
     $package_id = $arguments[0];
 
-    $goods = array();
-    $g_p = array();
+    $goods = [];
+    $g_p = [];
     foreach ($fittings as $val) {
         $val_array = explode('_', $val);
         if (isset($val_array[1]) && $val_array[1] > 0) {
@@ -306,18 +304,18 @@ if ($_REQUEST['act'] == 'drop_package_goods') {
         }
     }
 
-    if (!empty($goods)) {
-        $sql = "DELETE FROM " . $ecs->table('package_goods') .
-            " WHERE package_id='$package_id' AND " . db_create_in($goods, 'goods_id');
+    if (! empty($goods)) {
+        $sql = 'DELETE FROM '.$ecs->table('package_goods').
+            " WHERE package_id='$package_id' AND ".db_create_in($goods, 'goods_id');
         if ($package_id == 0) {
             $sql .= " AND admin_id = '$_SESSION[admin_id]'";
         }
         $db->query($sql);
     }
 
-    if (!empty($g_p)) {
-        $sql = "DELETE FROM " . $ecs->table('package_goods') .
-            " WHERE package_id='$package_id' AND " . db_create_in($g_p['goods_id'], 'goods_id') . " AND " . db_create_in($g_p['product_id'], 'product_id');
+    if (! empty($g_p)) {
+        $sql = 'DELETE FROM '.$ecs->table('package_goods').
+            " WHERE package_id='$package_id' AND ".db_create_in($g_p['goods_id'], 'goods_id').' AND '.db_create_in($g_p['product_id'], 'product_id');
         if ($package_id == 0) {
             $sql .= " AND admin_id = '$_SESSION[admin_id]'";
         }
@@ -325,23 +323,21 @@ if ($_REQUEST['act'] == 'drop_package_goods') {
     }
 
     $arr = get_package_goods($package_id);
-    $opt = array();
+    $opt = [];
 
     foreach ($arr as $val) {
-        $opt[] = array('value' => $val['goods_id'],
+        $opt[] = ['value' => $val['goods_id'],
             'text' => $val['goods_name'],
-            'data' => '');
+            'data' => ''];
     }
 
     clear_cache_files();
     make_json_result($opt);
 }
 
-
 /**
  * 获取活动列表
  *
- * @access  public
  *
  * @return void
  */
@@ -357,19 +353,19 @@ function get_packagelist()
         $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'act_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-        $where = (!empty($filter['keywords'])) ? " AND act_name like '%" . mysql_like_quote($filter['keywords']) . "%'" : '';
+        $where = (! empty($filter['keywords'])) ? " AND act_name like '%".mysql_like_quote($filter['keywords'])."%'" : '';
 
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_activity') .
-            " WHERE act_type =" . GAT_PACKAGE . $where;
+        $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('goods_activity').
+            ' WHERE act_type ='.GAT_PACKAGE.$where;
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         $filter = page_and_size($filter);
 
         /* 获活动数据 */
-        $sql = "SELECT act_id, act_name AS package_name, start_time, end_time, is_finished, ext_info " .
-            " FROM " . $GLOBALS['ecs']->table('goods_activity') .
-            " WHERE act_type = " . GAT_PACKAGE . $where .
-            " ORDER by $filter[sort_by] $filter[sort_order] LIMIT " . $filter['start'] . ", " . $filter['page_size'];
+        $sql = 'SELECT act_id, act_name AS package_name, start_time, end_time, is_finished, ext_info '.
+            ' FROM '.$GLOBALS['ecs']->table('goods_activity').
+            ' WHERE act_type = '.GAT_PACKAGE.$where.
+            " ORDER by $filter[sort_by] $filter[sort_order] LIMIT ".$filter['start'].', '.$filter['page_size'];
 
         $filter['keywords'] = stripslashes($filter['keywords']);
         set_filter($filter, $sql);
@@ -392,21 +388,22 @@ function get_packagelist()
         }
     }
 
-    $arr = array('packages' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+    $arr = ['packages' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
 }
 
 /**
  * 保存某礼包的商品
- * @param int $package_id
- * @return  void
+ *
+ * @param  int  $package_id
+ * @return void
  */
 function handle_packagep_goods($package_id)
 {
-    $sql = "UPDATE " . $GLOBALS['ecs']->table('package_goods') . " SET " .
-        " package_id = '$package_id' " .
-        " WHERE package_id = '0'" .
+    $sql = 'UPDATE '.$GLOBALS['ecs']->table('package_goods').' SET '.
+        " package_id = '$package_id' ".
+        " WHERE package_id = '0'".
         " AND admin_id = '$_SESSION[admin_id]'";
     $GLOBALS['db']->query($sql);
 }

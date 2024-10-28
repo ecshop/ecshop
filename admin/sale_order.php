@@ -2,9 +2,9 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'includes/lib_order.php');
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
+require dirname(__FILE__).'/includes/init.php';
+require_once ROOT_PATH.'includes/lib_order.php';
+require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/statistic.php';
 $smarty->assign('lang', $_LANG);
 
 if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] == 'download')) {
@@ -20,9 +20,9 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
         $goods_order_data = get_sales_order(false);
         $goods_order_data = $goods_order_data['sales_order_data'];
 
-        $filename = $_REQUEST['start_date'] . '_' . $_REQUEST['end_date'] . 'sale_order';
+        $filename = $_REQUEST['start_date'].'_'.$_REQUEST['end_date'].'sale_order';
 
-        header("Content-type: application/vnd.ms-excel; charset=utf-8");
+        header('Content-type: application/vnd.ms-excel; charset=utf-8');
         header("Content-Disposition: attachment; filename=$filename.xls");
 
         $data = "$_LANG[sell_stats]\t\n";
@@ -49,17 +49,17 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
     $sort_flag = sort_flag($goods_order_data['filter']);
     $smarty->assign($sort_flag['tag'], $sort_flag['img']);
 
-    make_json_result($smarty->fetch('sale_order.htm'), '', array('filter' => $goods_order_data['filter'], 'page_count' => $goods_order_data['page_count']));
+    make_json_result($smarty->fetch('sale_order.htm'), '', ['filter' => $goods_order_data['filter'], 'page_count' => $goods_order_data['page_count']]);
 }
 if ($_REQUEST['act'] == 'list') {
     /* 权限检查 */
     admin_priv('sale_order_stats');
 
     /* 时间参数 */
-    if (!isset($_REQUEST['start_date'])) {
+    if (! isset($_REQUEST['start_date'])) {
         $_REQUEST['start_date'] = local_strtotime('-1 months');
     }
-    if (!isset($_REQUEST['end_date'])) {
+    if (! isset($_REQUEST['end_date'])) {
         $_REQUEST['end_date'] = local_strtotime('+1 day');
     }
     $goods_order_data = get_sales_order();
@@ -75,7 +75,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('sort_goods_num', '<img src="images/sort_desc.gif">');
     $smarty->assign('start_date', local_date('Y-m-d', $_REQUEST['start_date']));
     $smarty->assign('end_date', local_date('Y-m-d', $_REQUEST['end_date']));
-    $smarty->assign('action_link', array('text' => $_LANG['download_sale_sort'], 'href' => '#download'));
+    $smarty->assign('action_link', ['text' => $_LANG['download_sale_sort'], 'href' => '#download']);
 
     /* 显示页面 */
     assign_query_info();
@@ -87,8 +87,9 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 /**
  * 取得销售排行数据信息
- * @param bool $is_pagination 是否分页
- * @return  array   销售排行数据
+ *
+ * @param  bool  $is_pagination  是否分页
+ * @return array 销售排行数据
  */
 function get_sales_order($is_pagination = true)
 {
@@ -97,32 +98,32 @@ function get_sales_order($is_pagination = true)
     $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'goods_num' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-    $where = " WHERE og.order_id = oi.order_id " . order_query_sql('finished', 'oi.');
+    $where = ' WHERE og.order_id = oi.order_id '.order_query_sql('finished', 'oi.');
 
     if ($filter['start_date']) {
-        $where .= " AND oi.add_time >= '" . $filter['start_date'] . "'";
+        $where .= " AND oi.add_time >= '".$filter['start_date']."'";
     }
     if ($filter['end_date']) {
-        $where .= " AND oi.add_time <= '" . $filter['end_date'] . "'";
+        $where .= " AND oi.add_time <= '".$filter['end_date']."'";
     }
 
-    $sql = "SELECT COUNT(distinct(og.goods_id)) FROM " .
-        $GLOBALS['ecs']->table('order_info') . ' AS oi,' .
-        $GLOBALS['ecs']->table('order_goods') . ' AS og ' .
+    $sql = 'SELECT COUNT(distinct(og.goods_id)) FROM '.
+        $GLOBALS['ecs']->table('order_info').' AS oi,'.
+        $GLOBALS['ecs']->table('order_goods').' AS og '.
         $where;
     $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
     /* 分页大小 */
     $filter = page_and_size($filter);
 
-    $sql = "SELECT og.goods_id, og.goods_sn, og.goods_name, oi.order_status, " .
-        "SUM(og.goods_number) AS goods_num, SUM(og.goods_number * og.goods_price) AS turnover " .
-        "FROM " . $GLOBALS['ecs']->table('order_goods') . " AS og, " .
-        $GLOBALS['ecs']->table('order_info') . " AS oi  " . $where .
-        " GROUP BY og.goods_id " .
-        ' ORDER BY ' . $filter['sort_by'] . ' ' . $filter['sort_order'];
+    $sql = 'SELECT og.goods_id, og.goods_sn, og.goods_name, oi.order_status, '.
+        'SUM(og.goods_number) AS goods_num, SUM(og.goods_number * og.goods_price) AS turnover '.
+        'FROM '.$GLOBALS['ecs']->table('order_goods').' AS og, '.
+        $GLOBALS['ecs']->table('order_info').' AS oi  '.$where.
+        ' GROUP BY og.goods_id '.
+        ' ORDER BY '.$filter['sort_by'].' '.$filter['sort_order'];
     if ($is_pagination) {
-        $sql .= " LIMIT " . $filter['start'] . ', ' . $filter['page_size'];
+        $sql .= ' LIMIT '.$filter['start'].', '.$filter['page_size'];
     }
 
     $sales_order_data = $GLOBALS['db']->getAll($sql);
@@ -134,7 +135,7 @@ function get_sales_order($is_pagination = true)
         $sales_order_data[$key]['taxis'] = $key + 1;
     }
 
-    $arr = array('sales_order_data' => $sales_order_data, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+    $arr = ['sales_order_data' => $sales_order_data, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
 }

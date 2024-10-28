@@ -1,13 +1,13 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
-$shipping_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/shipping/post_mail.php';
+$shipping_lang = ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/shipping/post_mail.php';
 if (file_exists($shipping_lang)) {
     global $_LANG;
-    include_once($shipping_lang);
+    include_once $shipping_lang;
 }
 
 /* 模块的基本信息 */
@@ -32,13 +32,13 @@ if (isset($set_modules) && $set_modules == true) {
     $modules[$i]['website'] = 'http://www.ecshop.com';
 
     /* 配送接口需要的参数 */
-    $modules[$i]['configure'] = array(
-        array('name' => 'item_fee', 'value' => 4),
-        array('name' => 'base_fee', 'value' => 3.5),
-        array('name' => 'step_fee', 'value' => 2),
-        array('name' => 'step_fee1', 'value' => 2.5),
-        array('name' => 'pack_fee', 'value' => 0),
-    );
+    $modules[$i]['configure'] = [
+        ['name' => 'item_fee', 'value' => 4],
+        ['name' => 'base_fee', 'value' => 3.5],
+        ['name' => 'step_fee', 'value' => 2],
+        ['name' => 'step_fee1', 'value' => 2.5],
+        ['name' => 'pack_fee', 'value' => 0],
+    ];
 
     /* 模式编辑器 */
     $modules[$i]['print_model'] = 2;
@@ -56,7 +56,6 @@ if (isset($set_modules) && $set_modules == true) {
  * 邮局平邮费用计算方式: 每公斤资费 × 包裹重量 + 挂号费3.00 + 邮单费0.5 + 包装费(按实际收取) ＋ 保价费
  *
  * 保价费 由客户自愿选择，保价费为订单产品价值的1％。客户选择不保价，则保价费＝0
- *
  */
 class post_mail
 {
@@ -80,7 +79,7 @@ class post_mail
      *
      * @return null
      */
-    public function __construct($cfg = array())
+    public function __construct($cfg = [])
     {
         foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];
@@ -90,10 +89,10 @@ class post_mail
     /**
      * 计算订单的配送费用的函数
      *
-     * @param float $goods_weight 商品重量
-     * @param float $goods_amount 商品金额
-     * @param float $goods_number 商品件数
-     * @return  decimal
+     * @param  float  $goods_weight  商品重量
+     * @param  float  $goods_amount  商品金额
+     * @param  float  $goods_number  商品件数
+     * @return decimal
      */
     public function calculate($goods_weight, $goods_amount, $goods_number)
     {
@@ -102,7 +101,7 @@ class post_mail
         } else {
             /* 基本费用 */
             $fee = $this->configure['base_fee'] + $this->configure['pack_fee'];
-            $this->configure['fee_compute_mode'] = !empty($this->configure['fee_compute_mode']) ? $this->configure['fee_compute_mode'] : 'by_weight';
+            $this->configure['fee_compute_mode'] = ! empty($this->configure['fee_compute_mode']) ? $this->configure['fee_compute_mode'] : 'by_weight';
 
             if ($this->configure['fee_compute_mode'] == 'by_number') {
                 $fee = $goods_number * ($this->configure['item_fee'] + $this->configure['pack_fee']);
@@ -117,7 +116,6 @@ class post_mail
                 }
             }
 
-
             return $fee;
         }
     }
@@ -126,9 +124,8 @@ class post_mail
      * 查询发货状态
      * 该配送方式不支持查询发货状态
      *
-     * @access  public
-     * @param string $invoice_sn 发货单号
-     * @return  string
+     * @param  string  $invoice_sn  发货单号
+     * @return string
      */
     public function query($invoice_sn)
     {

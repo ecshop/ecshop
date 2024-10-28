@@ -16,7 +16,7 @@
     </div>
 </div>
 <div style="padding: 1em; border: 1px solid #BBDDE5; background: #F4FAFB; margin-top: 10px; text-align: center;">
-    <?php include ROOT_PATH . 'install/templates/copyright.php'; ?>
+    <?php include ROOT_PATH.'install/templates/copyright.php'; ?>
 </div>
 </body>
 </html>

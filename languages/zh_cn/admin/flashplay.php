@@ -46,7 +46,6 @@ $_LANG['ad_flash'] = 'Flash';
 $_LANG['ad_html'] = '代码';
 $_LANG['ad_text'] = '文字';
 
-
 /* 内容页标签 */
 $_LANG['lable_flash_name'] = '广告名称：';
 $_LANG['lable_flash_type'] = '广告类型：';

@@ -2,7 +2,7 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 
 /*------------------------------------------------------ */
 //-- 生成代码
@@ -13,11 +13,11 @@ if ($_REQUEST['act'] == 'setup') {
     admin_priv('gen_goods_script');
 
     /* 编码 */
-    $lang_list = array(
+    $lang_list = [
         'UTF8' => $_LANG['charset']['utf8'],
         'GB2312' => $_LANG['charset']['zh_cn'],
         'BIG5' => $_LANG['charset']['zh_tw'],
-    );
+    ];
 
     /* 参数赋值 */
     $ur_here = $_LANG['16_goods_script'];

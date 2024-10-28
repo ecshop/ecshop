@@ -2,7 +2,7 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -12,7 +12,7 @@ if (empty($_REQUEST['act'])) {
 }
 
 /* 初始化 $exc 对象 */
-$exc = new exchange($ecs->table("role"), $db, 'role_id', 'role_name');
+$exc = new exchange($ecs->table('role'), $db, 'role_id', 'role_name');
 
 /*------------------------------------------------------ */
 //-- 退出登录
@@ -31,9 +31,9 @@ if ($_REQUEST['act'] == 'logout') {
 //-- 登陆界面
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'login') {
-    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-    header("Cache-Control: no-cache, must-revalidate");
-    header("Pragma: no-cache");
+    header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Pragma: no-cache');
 
     if ((intval($_CFG['captcha']) & CAPTCHA_ADMIN) && gd_version() > 0) {
         $smarty->assign('gd_version', gd_version());
@@ -43,14 +43,13 @@ if ($_REQUEST['act'] == 'login') {
     $smarty->display('login.htm');
 }
 
-
 /*------------------------------------------------------ */
 //-- 角色列表页面
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['admin_role']);
-    $smarty->assign('action_link', array('href' => 'role.php?act=add', 'text' => $_LANG['admin_add_role']));
+    $smarty->assign('action_link', ['href' => 'role.php?act=add', 'text' => $_LANG['admin_add_role']]);
     $smarty->assign('full_page', 1);
     $smarty->assign('admin_list', get_role_list());
 
@@ -74,30 +73,29 @@ if ($_REQUEST['act'] == 'query') {
 if ($_REQUEST['act'] == 'add') {
     /* 检查权限 */
     admin_priv('admin_manage');
-    include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/priv_action.php');
+    include_once ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/priv_action.php';
 
     $priv_str = '';
 
     /* 获取权限的分组数据 */
-    $sql_query = "SELECT action_id, parent_id, action_code, relevance FROM " . $ecs->table('admin_action') .
-        " WHERE parent_id = 0";
+    $sql_query = 'SELECT action_id, parent_id, action_code, relevance FROM '.$ecs->table('admin_action').
+        ' WHERE parent_id = 0';
     $res = $db->query($sql_query);
     while ($rows = $db->fetchRow($res)) {
         $priv_arr[$rows['action_id']] = $rows;
     }
 
-
     /* 按权限组查询底级的权限名称 */
-    $sql = "SELECT action_id, parent_id, action_code, relevance FROM " . $ecs->table('admin_action') .
-        " WHERE parent_id " . db_create_in(array_keys($priv_arr));
+    $sql = 'SELECT action_id, parent_id, action_code, relevance FROM '.$ecs->table('admin_action').
+        ' WHERE parent_id '.db_create_in(array_keys($priv_arr));
     $result = $db->query($sql);
     while ($priv = $db->fetchRow($result)) {
-        $priv_arr[$priv["parent_id"]]["priv"][$priv["action_code"]] = $priv;
+        $priv_arr[$priv['parent_id']]['priv'][$priv['action_code']] = $priv;
     }
 
     // 将同一组的权限使用 "," 连接起来，供JS全选
     foreach ($priv_arr as $action_id => $action_group) {
-        $priv_arr[$action_id]['priv_list'] = join(',', @array_keys($action_group['priv']));
+        $priv_arr[$action_id]['priv_list'] = implode(',', @array_keys($action_group['priv']));
 
         foreach ($action_group['priv'] as $key => $val) {
             $priv_arr[$action_id]['priv'][$key]['cando'] = (strpos($priv_str, $val['action_code']) !== false || $priv_str == 'all') ? 1 : 0;
@@ -106,7 +104,7 @@ if ($_REQUEST['act'] == 'add') {
 
     /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['admin_add_role']);
-    $smarty->assign('action_link', array('href' => 'role.php?act=list', 'text' => $_LANG['admin_list_role']));
+    $smarty->assign('action_link', ['href' => 'role.php?act=list', 'text' => $_LANG['admin_list_role']]);
     $smarty->assign('form_act', 'insert');
     $smarty->assign('action', 'add');
     $smarty->assign('lang', $_LANG);
@@ -122,9 +120,9 @@ if ($_REQUEST['act'] == 'add') {
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'insert') {
     admin_priv('admin_manage');
-    $act_list = @join(",", $_POST['action_code']);
-    $sql = "INSERT INTO " . $ecs->table('role') . " (role_name, action_list, role_describe) " .
-        "VALUES ('" . trim($_POST['user_name']) . "','$act_list','" . trim($_POST['role_describe']) . "')";
+    $act_list = @implode(',', $_POST['action_code']);
+    $sql = 'INSERT INTO '.$ecs->table('role').' (role_name, action_list, role_describe) '.
+        "VALUES ('".trim($_POST['user_name'])."','$act_list','".trim($_POST['role_describe'])."')";
 
     $db->query($sql);
     /* 转入权限分配列表 */
@@ -135,7 +133,7 @@ if ($_REQUEST['act'] == 'insert') {
     $link[0]['text'] = $_LANG['admin_list_role'];
     $link[0]['href'] = 'role.php?act=list';
 
-    sys_msg($_LANG['add'] . "&nbsp;" . $_POST['user_name'] . "&nbsp;" . $_LANG['action_succeed'], 0, $link);
+    sys_msg($_LANG['add'].'&nbsp;'.$_POST['user_name'].'&nbsp;'.$_LANG['action_succeed'], 0, $link);
 
     /* 记录管理员操作 */
     admin_log($_POST['user_name'], 'add', 'role');
@@ -145,10 +143,10 @@ if ($_REQUEST['act'] == 'insert') {
 //-- 编辑角色信息
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit') {
-    include_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/priv_action.php');
-    $_REQUEST['id'] = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
+    include_once ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/priv_action.php';
+    $_REQUEST['id'] = ! empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
     /* 获得该管理员的权限 */
-    $priv_str = $db->getOne("SELECT action_list FROM " . $ecs->table('role') . " WHERE role_id = '$_GET[id]'");
+    $priv_str = $db->getOne('SELECT action_list FROM '.$ecs->table('role')." WHERE role_id = '$_GET[id]'");
 
     /* 查看是否有权限编辑其他管理员的信息 */
     if ($_SESSION['admin_id'] != $_REQUEST['id']) {
@@ -156,35 +154,34 @@ if ($_REQUEST['act'] == 'edit') {
     }
 
     /* 获取角色信息 */
-    $sql = "SELECT role_id, role_name, role_describe FROM " . $ecs->table('role') .
-        " WHERE role_id = '" . $_REQUEST['id'] . "'";
+    $sql = 'SELECT role_id, role_name, role_describe FROM '.$ecs->table('role').
+        " WHERE role_id = '".$_REQUEST['id']."'";
     $user_info = $db->getRow($sql);
 
     /* 获取权限的分组数据 */
-    $sql_query = "SELECT action_id, parent_id, action_code,relevance FROM " . $ecs->table('admin_action') .
-        " WHERE parent_id = 0";
+    $sql_query = 'SELECT action_id, parent_id, action_code,relevance FROM '.$ecs->table('admin_action').
+        ' WHERE parent_id = 0';
     $res = $db->query($sql_query);
     while ($rows = $db->fetchRow($res)) {
         $priv_arr[$rows['action_id']] = $rows;
     }
 
     /* 按权限组查询底级的权限名称 */
-    $sql = "SELECT action_id, parent_id, action_code,relevance FROM " . $ecs->table('admin_action') .
-        " WHERE parent_id " . db_create_in(array_keys($priv_arr));
+    $sql = 'SELECT action_id, parent_id, action_code,relevance FROM '.$ecs->table('admin_action').
+        ' WHERE parent_id '.db_create_in(array_keys($priv_arr));
     $result = $db->query($sql);
     while ($priv = $db->fetchRow($result)) {
-        $priv_arr[$priv["parent_id"]]["priv"][$priv["action_code"]] = $priv;
+        $priv_arr[$priv['parent_id']]['priv'][$priv['action_code']] = $priv;
     }
 
     // 将同一组的权限使用 "," 连接起来，供JS全选
     foreach ($priv_arr as $action_id => $action_group) {
-        $priv_arr[$action_id]['priv_list'] = join(',', @array_keys($action_group['priv']));
+        $priv_arr[$action_id]['priv_list'] = implode(',', @array_keys($action_group['priv']));
 
         foreach ($action_group['priv'] as $key => $val) {
             $priv_arr[$action_id]['priv'][$key]['cando'] = (strpos($priv_str, $val['action_code']) !== false || $priv_str == 'all') ? 1 : 0;
         }
     }
-
 
     /* 模板赋值 */
 
@@ -192,7 +189,7 @@ if ($_REQUEST['act'] == 'edit') {
     $smarty->assign('form_act', 'update');
     $smarty->assign('action', 'edit');
     $smarty->assign('ur_here', $_LANG['admin_edit_role']);
-    $smarty->assign('action_link', array('href' => 'role.php?act=list', 'text' => $_LANG['admin_list_role']));
+    $smarty->assign('action_link', ['href' => 'role.php?act=list', 'text' => $_LANG['admin_list_role']]);
     $smarty->assign('lang', $_LANG);
     $smarty->assign('priv_arr', $priv_arr);
     $smarty->assign('user_id', $_GET['id']);
@@ -206,16 +203,16 @@ if ($_REQUEST['act'] == 'edit') {
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'update') {
     /* 更新管理员的权限 */
-    $act_list = @join(",", $_POST['action_code']);
-    $sql = "UPDATE " . $ecs->table('role') . " SET action_list = '$act_list', role_name = '" . $_POST['user_name'] . "', role_describe = '" . $_POST['role_describe'] . " ' " .
+    $act_list = @implode(',', $_POST['action_code']);
+    $sql = 'UPDATE '.$ecs->table('role')." SET action_list = '$act_list', role_name = '".$_POST['user_name']."', role_describe = '".$_POST['role_describe']." ' ".
         "WHERE role_id = '$_POST[id]'";
     $db->query($sql);
-    $user_sql = "UPDATE " . $ecs->table('admin_user') . " SET action_list = '$act_list' " .
+    $user_sql = 'UPDATE '.$ecs->table('admin_user')." SET action_list = '$act_list' ".
         "WHERE role_id = '$_POST[id]'";
     $db->query($user_sql);
     /* 提示信息 */
-    $link[] = array('text' => $_LANG['back_admin_list'], 'href' => 'role.php?act=list');
-    sys_msg($_LANG['edit'] . "&nbsp;" . $_POST['user_name'] . "&nbsp;" . $_LANG['action_succeed'], 0, $link);
+    $link[] = ['text' => $_LANG['back_admin_list'], 'href' => 'role.php?act=list'];
+    sys_msg($_LANG['edit'].'&nbsp;'.$_POST['user_name'].'&nbsp;'.$_LANG['action_succeed'], 0, $link);
 }
 
 /*------------------------------------------------------ */
@@ -225,13 +222,13 @@ if ($_REQUEST['act'] == 'remove') {
     check_authz_json('admin_drop');
 
     $id = intval($_GET['id']);
-    $num_sql = "SELECT count(*) FROM " . $ecs->table('admin_user') . " WHERE role_id = '$_GET[id]'";
+    $num_sql = 'SELECT count(*) FROM '.$ecs->table('admin_user')." WHERE role_id = '$_GET[id]'";
     $remove_num = $db->getOne($num_sql);
     if ($remove_num > 0) {
         make_json_error($_LANG['remove_cannot_user']);
     } else {
         $exc->drop($id);
-        $url = 'role.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+        $url = 'role.php?act=query&'.str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
     }
 
     ecs_header("Location: $url\n");
@@ -241,9 +238,9 @@ if ($_REQUEST['act'] == 'remove') {
 /* 获取角色列表 */
 function get_role_list()
 {
-    $list = array();
-    $sql = 'SELECT role_id, role_name, action_list, role_describe ' .
-        'FROM ' . $GLOBALS['ecs']->table('role') . ' ORDER BY role_id DESC';
+    $list = [];
+    $sql = 'SELECT role_id, role_name, action_list, role_describe '.
+        'FROM '.$GLOBALS['ecs']->table('role').' ORDER BY role_id DESC';
     $list = $GLOBALS['db']->getAll($sql);
 
     return $list;

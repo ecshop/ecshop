@@ -103,17 +103,17 @@ $_LANG['api_errors']['auth'][1] = '密码错误。';
 $_LANG['api_errors']['auth'][2] = '用户不存在。';
 
 /* 用户服务器检测到的错误信息 */
-$_LANG['server_errors'][1] = '注册信息无效。';//ERROR_INVALID_REGISTER_INFO
-$_LANG['server_errors'][2] = '启用信息无效。';//ERROR_INVALID_ENABLE_INFO
-$_LANG['server_errors'][3] = '发送的信息有误。';//ERROR_INVALID_SEND_INFO
-$_LANG['server_errors'][4] = '填写的查询信息有误。';//ERROR_INVALID_HISTORY_QUERY
-$_LANG['server_errors'][5] = '无效的身份信息。';//ERROR_INVALID_PASSPORT
-$_LANG['server_errors'][6] = 'URL不对。';//ERROR_INVALID_URL
-$_LANG['server_errors'][7] = 'HTTP响应体为空。';//ERROR_EMPTY_RESPONSE
-$_LANG['server_errors'][8] = '无效的XML文件。';//ERROR_INVALID_XML_FILE
-$_LANG['server_errors'][9] = '无效的节点名字。';//ERROR_INVALID_NODE_NAME
-$_LANG['server_errors'][10] = '存储失败。';//ERROR_CANT_STORE
-$_LANG['server_errors'][11] = '短信功能尚未激活。';//ERROR_INVALID_PASSPORT
+$_LANG['server_errors'][1] = '注册信息无效。'; //ERROR_INVALID_REGISTER_INFO
+$_LANG['server_errors'][2] = '启用信息无效。'; //ERROR_INVALID_ENABLE_INFO
+$_LANG['server_errors'][3] = '发送的信息有误。'; //ERROR_INVALID_SEND_INFO
+$_LANG['server_errors'][4] = '填写的查询信息有误。'; //ERROR_INVALID_HISTORY_QUERY
+$_LANG['server_errors'][5] = '无效的身份信息。'; //ERROR_INVALID_PASSPORT
+$_LANG['server_errors'][6] = 'URL不对。'; //ERROR_INVALID_URL
+$_LANG['server_errors'][7] = 'HTTP响应体为空。'; //ERROR_EMPTY_RESPONSE
+$_LANG['server_errors'][8] = '无效的XML文件。'; //ERROR_INVALID_XML_FILE
+$_LANG['server_errors'][9] = '无效的节点名字。'; //ERROR_INVALID_NODE_NAME
+$_LANG['server_errors'][10] = '存储失败。'; //ERROR_CANT_STORE
+$_LANG['server_errors'][11] = '短信功能尚未激活。'; //ERROR_INVALID_PASSPORT
 
 /* 客户端JS语言项 */
 //--注册或启用
@@ -134,7 +134,6 @@ $_LANG['js_languages']['end_date_format_error'] = '结束日期格式不对。';
 //--充值
 $_LANG['js_languages']['money_empty_error'] = '请输入您要充值的金额。';
 $_LANG['js_languages']['money_format_error'] = '金额格式不对。';
-
 
 $_LANG['insert_sign'] = '请输入短信签名';
 $_LANG['insert_succ'] = '添加成功';

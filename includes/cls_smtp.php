@@ -1,7 +1,7 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
 define('SMTP_STATUS_NOT_CONNECTED', 1, true);
@@ -10,18 +10,31 @@ define('SMTP_STATUS_CONNECTED', 2, true);
 class smtp
 {
     public $connection;
+
     public $recipients;
+
     public $headers;
+
     public $timeout;
+
     public $errors;
+
     public $status;
+
     public $body;
+
     public $from;
+
     public $host;
+
     public $port;
+
     public $helo;
+
     public $auth;
+
     public $user;
+
     public $pass;
 
     /**
@@ -32,11 +45,12 @@ class smtp
      *  user        SMTP 服务器的用户名     默认：空值
      *  pass        SMTP 服务器的登陆密码   默认：空值
      *  timeout     连接超时的时间          默认：5
-     * @return  bool
+     *
+     * @return bool
      */
-    public function __construct($params = array())
+    public function __construct($params = [])
     {
-        if (!defined('CRLF')) {
+        if (! defined('CRLF')) {
             define('CRLF', "\r\n", true);
         }
 
@@ -47,7 +61,7 @@ class smtp
         $this->auth = false;
         $this->user = '';
         $this->pass = '';
-        $this->errors = array();
+        $this->errors = [];
 
         foreach ($params as $key => $value) {
             $this->$key = $value;
@@ -56,12 +70,12 @@ class smtp
         $this->helo = $this->host;
 
         //  如果没有设置用户名则不验证
-        $this->auth = ('' == $this->user) ? false : true;
+        $this->auth = ($this->user == '') ? false : true;
     }
 
-    public function connect($params = array())
+    public function connect($params = [])
     {
-        if (!isset($this->status)) {
+        if (! isset($this->status)) {
             $obj = new smtp($params);
 
             if ($obj->connect()) {
@@ -70,8 +84,8 @@ class smtp
 
             return $obj;
         } else {
-            if (!empty($GLOBALS['_CFG']['smtp_ssl'])) {
-                $this->host = "ssl://" . $this->host;
+            if (! empty($GLOBALS['_CFG']['smtp_ssl'])) {
+                $this->host = 'ssl://'.$this->host;
             }
             $this->connection = @fsockopen($this->host, $this->port, $errno, $errstr, $this->timeout);
 
@@ -81,7 +95,7 @@ class smtp
                 return false;
             }
 
-            @socket_set_timeout($this->connection, 0, 250000);
+            @stream_set_timeout($this->connection, 0, 250000);
 
             $greeting = $this->get_data();
 
@@ -90,7 +104,7 @@ class smtp
 
                 return $this->auth ? $this->ehlo() : $this->helo();
             } else {
-                $this->errors[] = 'Failed to connect to server: ' . $errstr;
+                $this->errors[] = 'Failed to connect to server: '.$errstr;
 
                 return false;
             }
@@ -104,8 +118,7 @@ class smtp
      * headers         头部信息的数组
      * body            邮件的主体
      */
-
-    public function send($params = array())
+    public function send($params = [])
     {
         foreach ($params as $key => $value) {
             $this->$key = $value;
@@ -114,7 +127,7 @@ class smtp
         if ($this->is_connected()) {
             //  服务器是否需要验证
             if ($this->auth) {
-                if (!$this->auth()) {
+                if (! $this->auth()) {
                     return false;
                 }
             }
@@ -129,20 +142,20 @@ class smtp
                 $this->rcpt($this->recipients);
             }
 
-            if (!$this->data()) {
+            if (! $this->data()) {
                 return false;
             }
 
-            $headers = str_replace(CRLF . '.', CRLF . '..', trim(implode(CRLF, $this->headers)));
-            $body = str_replace(CRLF . '.', CRLF . '..', $this->body);
-            $body = substr($body, 0, 1) == '.' ? '.' . $body : $body;
+            $headers = str_replace(CRLF.'.', CRLF.'..', trim(implode(CRLF, $this->headers)));
+            $body = str_replace(CRLF.'.', CRLF.'..', $this->body);
+            $body = substr($body, 0, 1) == '.' ? '.'.$body : $body;
 
             $this->send_data($headers);
             $this->send_data('');
             $this->send_data($body);
             $this->send_data('.');
 
-            return (substr($this->get_data(), 0, 3) === '250');
+            return substr($this->get_data(), 0, 3) === '250';
         } else {
             $this->errors[] = 'Not connected!';
 
@@ -153,11 +166,11 @@ class smtp
     public function helo()
     {
         if (is_resource($this->connection)
-            and $this->send_data('HELO ' . $this->helo)
+            and $this->send_data('HELO '.$this->helo)
             and substr($error = $this->get_data(), 0, 3) === '250') {
             return true;
         } else {
-            $this->errors[] = 'HELO command failed, output: ' . trim(substr($error, 3));
+            $this->errors[] = 'HELO command failed, output: '.trim(substr($error, 3));
 
             return false;
         }
@@ -166,11 +179,11 @@ class smtp
     public function ehlo()
     {
         if (is_resource($this->connection)
-            and $this->send_data('EHLO ' . $this->helo)
+            and $this->send_data('EHLO '.$this->helo)
             and substr($error = $this->get_data(), 0, 3) === '250') {
             return true;
         } else {
-            $this->errors[] = 'EHLO command failed, output: ' . trim(substr($error, 3));
+            $this->errors[] = 'EHLO command failed, output: '.trim(substr($error, 3));
 
             return false;
         }
@@ -187,7 +200,7 @@ class smtp
             and substr($error = $this->get_data(), 0, 3) === '235') {
             return true;
         } else {
-            $this->errors[] = 'AUTH command failed: ' . trim(substr($error, 3));
+            $this->errors[] = 'AUTH command failed: '.trim(substr($error, 3));
 
             return false;
         }
@@ -196,7 +209,7 @@ class smtp
     public function mail($from)
     {
         if ($this->is_connected()
-            and $this->send_data('MAIL FROM:<' . $from . '>')
+            and $this->send_data('MAIL FROM:<'.$from.'>')
             and substr($this->get_data(), 0, 2) === '250') {
             return true;
         } else {
@@ -207,7 +220,7 @@ class smtp
     public function rcpt($to)
     {
         if ($this->is_connected()
-            and $this->send_data('RCPT TO:<' . $to . '>')
+            and $this->send_data('RCPT TO:<'.$to.'>')
             and substr($error = $this->get_data(), 0, 2) === '25') {
             return true;
         } else {
@@ -232,13 +245,13 @@ class smtp
 
     public function is_connected()
     {
-        return (is_resource($this->connection) and ($this->status === SMTP_STATUS_CONNECTED));
+        return is_resource($this->connection) and ($this->status === SMTP_STATUS_CONNECTED);
     }
 
     public function send_data($data)
     {
         if (is_resource($this->connection)) {
-            return fwrite($this->connection, $data . CRLF, strlen($data) + 2);
+            return fwrite($this->connection, $data.CRLF, strlen($data) + 2);
         } else {
             return false;
         }
@@ -264,13 +277,13 @@ class smtp
     /**
      * 获得最后一个错误信息
      *
-     * @access  public
-     * @return  string
+     * @return string
      */
     public function error_msg()
     {
-        if (!empty($this->errors)) {
+        if (! empty($this->errors)) {
             $len = count($this->errors) - 1;
+
             return $this->errors[$len];
         } else {
             return '';

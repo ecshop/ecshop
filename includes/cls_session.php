@@ -1,46 +1,52 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
 class cls_session
 {
     public $db = null;
+
     public $session_table = '';
 
     public $max_life_time = 1800; // SESSION 过期时间
 
     public $session_name = '';
+
     public $session_id = '';
 
     public $session_expiry = '';
+
     public $session_md5 = '';
 
     public $session_cookie_path = '/';
+
     public $session_cookie_domain = '';
+
     public $session_cookie_secure = false;
 
     public $_ip = '';
+
     public $_time = 0;
 
     public function __construct(&$db, $session_table, $session_data_table, $session_name = 'ECS_ID', $session_id = '')
     {
-        $GLOBALS['_SESSION'] = array();
+        $GLOBALS['_SESSION'] = [];
 
-        if (!empty($GLOBALS['cookie_path'])) {
+        if (! empty($GLOBALS['cookie_path'])) {
             $this->session_cookie_path = $GLOBALS['cookie_path'];
         } else {
             $this->session_cookie_path = '/';
         }
 
-        if (!empty($GLOBALS['cookie_domain'])) {
+        if (! empty($GLOBALS['cookie_domain'])) {
             $this->session_cookie_domain = $GLOBALS['cookie_domain'];
         } else {
             $this->session_cookie_domain = '';
         }
 
-        if (!empty($GLOBALS['cookie_secure'])) {
+        if (! empty($GLOBALS['cookie_secure'])) {
             $this->session_cookie_secure = $GLOBALS['cookie_secure'];
         } else {
             $this->session_cookie_secure = false;
@@ -53,7 +59,7 @@ class cls_session
         $this->db = $db;
         $this->_ip = real_ip();
 
-        if ($session_id == '' && !empty($_COOKIE[$this->session_name])) {
+        if ($session_id == '' && ! empty($_COOKIE[$this->session_name])) {
             $this->session_id = $_COOKIE[$this->session_name];
         } else {
             $this->session_id = $session_id;
@@ -75,10 +81,10 @@ class cls_session
         } else {
             $this->gen_session_id();
 
-            setcookie($this->session_name, $this->session_id . $this->gen_session_key($this->session_id), 0, $this->session_cookie_path, $this->session_cookie_domain, $this->session_cookie_secure, true);
+            setcookie($this->session_name, $this->session_id.$this->gen_session_key($this->session_id), 0, $this->session_cookie_path, $this->session_cookie_domain, $this->session_cookie_secure, true);
         }
 
-        register_shutdown_function(array(&$this, 'close_session'));
+        register_shutdown_function([&$this, 'close_session']);
     }
 
     public function gen_session_id()
@@ -96,25 +102,25 @@ class cls_session
             $ip = substr($this->_ip, 0, strrpos($this->_ip, '.'));
         }
 
-        return sprintf('%08x', crc32(ROOT_PATH . $ip . $session_id));
+        return sprintf('%08x', crc32(ROOT_PATH.$ip.$session_id));
     }
 
     public function insert_session()
     {
-        return $this->db->query('INSERT INTO ' . $this->session_table . " (sesskey, expiry, ip, data) VALUES ('" . $this->session_id . "', '" . $this->_time . "', '" . $this->_ip . "', 'a:0:{}')");
+        return $this->db->query('INSERT INTO '.$this->session_table." (sesskey, expiry, ip, data) VALUES ('".$this->session_id."', '".$this->_time."', '".$this->_ip."', 'a:0:{}')");
     }
 
     public function load_session()
     {
-        $session = $this->db->getRow('SELECT userid, adminid, user_name, user_rank, discount, email, data, expiry FROM ' . $this->session_table . " WHERE sesskey = '" . $this->session_id . "'");
+        $session = $this->db->getRow('SELECT userid, adminid, user_name, user_rank, discount, email, data, expiry FROM '.$this->session_table." WHERE sesskey = '".$this->session_id."'");
         if (empty($session)) {
             $this->insert_session();
 
             $this->session_expiry = 0;
             $this->session_md5 = '40cd750bba9870f18aada2478b24840a';
-            $GLOBALS['_SESSION'] = array();
+            $GLOBALS['_SESSION'] = [];
         } else {
-            if (!empty($session['data']) && $this->_time - $session['expiry'] <= $this->max_life_time) {
+            if (! empty($session['data']) && $this->_time - $session['expiry'] <= $this->max_life_time) {
                 $this->session_expiry = $session['expiry'];
                 $this->session_md5 = md5($session['data']);
                 $GLOBALS['_SESSION'] = unserialize($session['data']);
@@ -125,8 +131,8 @@ class cls_session
                 $GLOBALS['_SESSION']['discount'] = $session['discount'];
                 $GLOBALS['_SESSION']['email'] = $session['email'];
             } else {
-                $session_data = $this->db->getRow('SELECT data, expiry FROM ' . $this->session_data_table . " WHERE sesskey = '" . $this->session_id . "'");
-                if (!empty($session_data['data']) && $this->_time - $session_data['expiry'] <= $this->max_life_time) {
+                $session_data = $this->db->getRow('SELECT data, expiry FROM '.$this->session_data_table." WHERE sesskey = '".$this->session_id."'");
+                if (! empty($session_data['data']) && $this->_time - $session_data['expiry'] <= $this->max_life_time) {
                     $this->session_expiry = $session_data['expiry'];
                     $this->session_md5 = md5($session_data['data']);
                     $GLOBALS['_SESSION'] = unserialize($session_data['data']);
@@ -139,7 +145,7 @@ class cls_session
                 } else {
                     $this->session_expiry = 0;
                     $this->session_md5 = '40cd750bba9870f18aada2478b24840a';
-                    $GLOBALS['_SESSION'] = array();
+                    $GLOBALS['_SESSION'] = [];
                 }
             }
         }
@@ -147,12 +153,12 @@ class cls_session
 
     public function update_session()
     {
-        $adminid = !empty($GLOBALS['_SESSION']['admin_id']) ? intval($GLOBALS['_SESSION']['admin_id']) : 0;
-        $userid = !empty($GLOBALS['_SESSION']['user_id']) ? intval($GLOBALS['_SESSION']['user_id']) : 0;
-        $user_name = !empty($GLOBALS['_SESSION']['user_name']) ? trim($GLOBALS['_SESSION']['user_name']) : 0;
-        $user_rank = !empty($GLOBALS['_SESSION']['user_rank']) ? intval($GLOBALS['_SESSION']['user_rank']) : 0;
-        $discount = !empty($GLOBALS['_SESSION']['discount']) ? round($GLOBALS['_SESSION']['discount'], 2) : 0;
-        $email = !empty($GLOBALS['_SESSION']['email']) ? trim($GLOBALS['_SESSION']['email']) : 0;
+        $adminid = ! empty($GLOBALS['_SESSION']['admin_id']) ? intval($GLOBALS['_SESSION']['admin_id']) : 0;
+        $userid = ! empty($GLOBALS['_SESSION']['user_id']) ? intval($GLOBALS['_SESSION']['user_id']) : 0;
+        $user_name = ! empty($GLOBALS['_SESSION']['user_name']) ? trim($GLOBALS['_SESSION']['user_name']) : 0;
+        $user_rank = ! empty($GLOBALS['_SESSION']['user_rank']) ? intval($GLOBALS['_SESSION']['user_rank']) : 0;
+        $discount = ! empty($GLOBALS['_SESSION']['discount']) ? round($GLOBALS['_SESSION']['discount'], 2) : 0;
+        $email = ! empty($GLOBALS['_SESSION']['email']) ? trim($GLOBALS['_SESSION']['email']) : 0;
         unset($GLOBALS['_SESSION']['admin_id']);
         unset($GLOBALS['_SESSION']['user_id']);
         unset($GLOBALS['_SESSION']['user_name']);
@@ -170,12 +176,12 @@ class cls_session
         $data = addslashes($data);
 
         if (isset($data[255])) {
-            $this->db->autoReplace($this->session_data_table, array('sesskey' => $this->session_id, 'expiry' => $this->_time, 'data' => $data), array('expiry' => $this->_time, 'data' => $data));
+            $this->db->autoReplace($this->session_data_table, ['sesskey' => $this->session_id, 'expiry' => $this->_time, 'data' => $data], ['expiry' => $this->_time, 'data' => $data]);
 
             $data = '';
         }
 
-        return $this->db->query('UPDATE ' . $this->session_table . " SET expiry = '" . $this->_time . "', ip = '" . $this->_ip . "', userid = '" . $userid . "', adminid = '" . $adminid . "', user_name='" . $user_name . "', user_rank='" . $user_rank . "', discount='" . $discount . "', email='" . $email . "', data = '$data' WHERE sesskey = '" . $this->session_id . "' LIMIT 1");
+        return $this->db->query('UPDATE '.$this->session_table." SET expiry = '".$this->_time."', ip = '".$this->_ip."', userid = '".$userid."', adminid = '".$adminid."', user_name='".$user_name."', user_rank='".$user_rank."', discount='".$discount."', email='".$email."', data = '$data' WHERE sesskey = '".$this->session_id."' LIMIT 1");
     }
 
     public function close_session()
@@ -184,11 +190,11 @@ class cls_session
 
         /* 随机对 sessions_data 的库进行删除操作 */
         if (mt_rand(0, 2) == 2) {
-            $this->db->query('DELETE FROM ' . $this->session_data_table . ' WHERE expiry < ' . ($this->_time - $this->max_life_time));
+            $this->db->query('DELETE FROM '.$this->session_data_table.' WHERE expiry < '.($this->_time - $this->max_life_time));
         }
 
         if ((time() % 2) == 0) {
-            return $this->db->query('DELETE FROM ' . $this->session_table . ' WHERE expiry < ' . ($this->_time - $this->max_life_time));
+            return $this->db->query('DELETE FROM '.$this->session_table.' WHERE expiry < '.($this->_time - $this->max_life_time));
         }
 
         return true;
@@ -196,8 +202,8 @@ class cls_session
 
     public function delete_spec_admin_session($adminid)
     {
-        if (!empty($GLOBALS['_SESSION']['admin_id']) && $adminid) {
-            return $this->db->query('DELETE FROM ' . $this->session_table . " WHERE adminid = '$adminid'");
+        if (! empty($GLOBALS['_SESSION']['admin_id']) && $adminid) {
+            return $this->db->query('DELETE FROM '.$this->session_table." WHERE adminid = '$adminid'");
         } else {
             return false;
         }
@@ -205,19 +211,19 @@ class cls_session
 
     public function destroy_session()
     {
-        $GLOBALS['_SESSION'] = array();
+        $GLOBALS['_SESSION'] = [];
 
         setcookie($this->session_name, $this->session_id, 1, $this->session_cookie_path, $this->session_cookie_domain, $this->session_cookie_secure, true);
 
         /* ECSHOP 自定义执行部分 */
-        if (!empty($GLOBALS['ecs'])) {
-            $this->db->query('DELETE FROM ' . $GLOBALS['ecs']->table('cart') . " WHERE session_id = '$this->session_id'");
+        if (! empty($GLOBALS['ecs'])) {
+            $this->db->query('DELETE FROM '.$GLOBALS['ecs']->table('cart')." WHERE session_id = '$this->session_id'");
         }
         /* ECSHOP 自定义执行部分 */
 
-        $this->db->query('DELETE FROM ' . $this->session_data_table . " WHERE sesskey = '" . $this->session_id . "' LIMIT 1");
+        $this->db->query('DELETE FROM '.$this->session_data_table." WHERE sesskey = '".$this->session_id."' LIMIT 1");
 
-        return $this->db->query('DELETE FROM ' . $this->session_table . " WHERE sesskey = '" . $this->session_id . "' LIMIT 1");
+        return $this->db->query('DELETE FROM '.$this->session_table." WHERE sesskey = '".$this->session_id."' LIMIT 1");
     }
 
     public function get_session_id()
@@ -227,6 +233,6 @@ class cls_session
 
     public function get_users_count()
     {
-        return $this->db->getOne('SELECT count(*) FROM ' . $this->session_table);
+        return $this->db->getOne('SELECT count(*) FROM '.$this->session_table);
     }
 }

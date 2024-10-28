@@ -1,17 +1,17 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
 //商品管理权限
-$purview['01_goods_list'] = array('goods_manage', 'remove_back');
+$purview['01_goods_list'] = ['goods_manage', 'remove_back'];
 $purview['02_goods_add'] = 'goods_manage';
-$purview['03_category_list'] = array('cat_manage', 'cat_drop');   //分类添加、分类转移和删除
+$purview['03_category_list'] = ['cat_manage', 'cat_drop'];   //分类添加、分类转移和删除
 $purview['05_comment_manage'] = 'comment_priv';
 $purview['06_goods_brand_list'] = 'brand_manage';
 $purview['08_goods_type'] = 'attr_manage';   //商品属性
-$purview['11_goods_trash'] = array('goods_manage', 'remove_back');
+$purview['11_goods_trash'] = ['goods_manage', 'remove_back'];
 $purview['12_batch_pic'] = 'picture_batch';
 $purview['13_batch_add'] = 'goods_batch';
 $purview['14_goods_export'] = 'goods_export';
@@ -53,8 +53,8 @@ $purview['08_unreply_msg'] = 'feedback_priv';
 $purview['10_user_account_manage'] = 'account_manage';
 
 //权限管理
-$purview['admin_logs'] = array('logs_manage', 'logs_drop');
-$purview['admin_list'] = array('admin_manage', 'admin_drop', 'allot_priv');
+$purview['admin_logs'] = ['logs_manage', 'logs_drop'];
+$purview['admin_list'] = ['admin_manage', 'admin_drop', 'allot_priv'];
 $purview['agency_list'] = 'agency_manage';
 $purview['suppliers_list'] = 'suppliers_manage'; // 供货商
 $purview['admin_role'] = 'role_manage';
@@ -64,7 +64,7 @@ $purview['01_shop_config'] = 'shop_config';
 $purview['shop_authorized'] = 'shop_authorized';
 $purview['shp_webcollect'] = 'webcollect_manage';
 $purview['02_payment_list'] = 'payment';
-$purview['03_shipping_list'] = array('ship_manage', 'shiparea_manage');
+$purview['03_shipping_list'] = ['ship_manage', 'shiparea_manage'];
 $purview['04_mail_settings'] = 'shop_config';
 $purview['05_area_list'] = 'area_manage';
 $purview['07_cron_schcron'] = 'cron';
@@ -104,7 +104,6 @@ $purview['report_sell'] = 'sale_order_stats';
 $purview['sale_list'] = 'sale_order_stats';
 $purview['sell_stats'] = 'sale_order_stats';
 
-
 //模板管理
 $purview['02_template_select'] = 'template_select';
 $purview['03_template_setup'] = 'template_setup';
@@ -114,7 +113,7 @@ $purview['06_template_backup'] = 'backup_setting';
 $purview['mail_template_manage'] = 'mail_template';
 
 //数据库管理
-$purview['02_db_manage'] = array('db_backup', 'db_renew');
+$purview['02_db_manage'] = ['db_backup', 'db_renew'];
 $purview['03_db_optimize'] = 'db_optimize';
 $purview['04_sql_query'] = 'sql_query';
 $purview['convert'] = 'convert';

@@ -1,35 +1,44 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
 class cls_mysql
 {
     public $link_id = null;
 
-    public $settings = array();
+    public $settings = [];
 
     public $queryCount = 0;
+
     public $queryTime = '';
-    public $queryLog = array();
+
+    public $queryLog = [];
 
     public $max_cache_time = 300; // 最大的缓存时间，以秒为单位
 
     public $cache_data_dir = 'temp/query_caches/';
+
     public $root_path = '';
 
-    public $error_message = array();
+    public $error_message = [];
+
     public $platform = '';
+
     public $version = '';
+
     public $dbhash = '';
+
     public $starttime = 0;
+
     public $timeline = 0;
+
     public $timezone = 0;
 
     public $mysql_config_cache_file_time = 0;
 
-    public $mysql_disable_cache_tables = array(); // 不允许被缓存的表，遇到将不会进行缓存
+    public $mysql_disable_cache_tables = []; // 不允许被缓存的表，遇到将不会进行缓存
 
     public function __construct($dbhost, $dbuser, $dbpw, $dbname = '', $charset = 'utf8', $pconnect = 0, $quiet = 0)
     {
@@ -37,39 +46,39 @@ class cls_mysql
             $charset = strtolower(str_replace('-', '', EC_CHARSET));
         }
 
-        if (defined('ROOT_PATH') && !$this->root_path) {
+        if (defined('ROOT_PATH') && ! $this->root_path) {
             $this->root_path = ROOT_PATH;
         }
 
         if ($quiet) {
             $this->connect($dbhost, $dbuser, $dbpw, $dbname, $charset, $pconnect, $quiet);
         } else {
-            $this->settings = array(
+            $this->settings = [
                 'dbhost' => $dbhost,
                 'dbuser' => $dbuser,
                 'dbpw' => $dbpw,
                 'dbname' => $dbname,
                 'charset' => $charset,
-                'pconnect' => $pconnect
-            );
+                'pconnect' => $pconnect,
+            ];
         }
     }
 
     public function connect($dbhost, $dbuser, $dbpw, $dbname = '', $charset = 'utf8', $pconnect = 0, $quiet = 0)
     {
         if ($pconnect) {
-            if (!($this->link_id = mysqli_pconnect($dbhost, $dbuser, $dbpw))) {
-                if (!$quiet) {
+            if (! ($this->link_id = mysqli_pconnect($dbhost, $dbuser, $dbpw))) {
+                if (! $quiet) {
                     $this->ErrorMsg("Can't pConnect MySQL Server($dbhost)!");
                 }
 
                 return false;
             }
         } else {
-            list($dbhost, $dbport) = array_pad(explode(":", $dbhost), 2, '3306');
+            [$dbhost, $dbport] = array_pad(explode(':', $dbhost), 2, '3306');
             $this->link_id = mysqli_connect($dbhost, $dbuser, $dbpw, $dbname, $dbport);
-            if (!$this->link_id) {
-                if (!$quiet) {
+            if (! $this->link_id) {
+                if (! $quiet) {
                     $this->ErrorMsg("Can't Connect MySQL Server($dbhost)!");
                 }
 
@@ -77,15 +86,15 @@ class cls_mysql
             }
         }
 
-        $this->dbhash = md5($this->root_path . $dbhost . $dbuser . $dbpw . $dbname);
+        $this->dbhash = md5($this->root_path.$dbhost.$dbuser.$dbpw.$dbname);
         $this->version = mysqli_get_server_info($this->link_id);
 
         mysqli_query($this->link_id, "SET character_set_connection=$charset, character_set_results=$charset, character_set_client=binary");
         mysqli_query($this->link_id, "SET sql_mode=''");
 
-        $sqlcache_config_file = $this->root_path . $this->cache_data_dir . 'sqlcache_config_file_' . $this->dbhash . '.php';
+        $sqlcache_config_file = $this->root_path.$this->cache_data_dir.'sqlcache_config_file_'.$this->dbhash.'.php';
         if (file_exists($sqlcache_config_file)) {
-            include($sqlcache_config_file);
+            include $sqlcache_config_file;
         }
 
         $this->starttime = time();
@@ -94,7 +103,7 @@ class cls_mysql
             if ($dbhost != '.') {
                 $result = mysqli_query($this->link_id, "SHOW VARIABLES LIKE 'basedir'");
                 $row = mysqli_fetch_assoc($result);
-                if (!empty($row['Value'][1]) && $row['Value'][1] == ':' && !empty($row['Value'][2]) && $row['Value'][2] == "\\") {
+                if (! empty($row['Value'][1]) && $row['Value'][1] == ':' && ! empty($row['Value'][2]) && $row['Value'][2] == '\\') {
                     $this->platform = 'WINDOWS';
                 } else {
                     $this->platform = 'OTHER';
@@ -106,7 +115,7 @@ class cls_mysql
             if ($this->platform == 'OTHER' &&
                 ($dbhost != '.' && strtolower($dbhost) != 'localhost:3306' && $dbhost != '127.0.0.1:3306') ||
                 (date_default_timezone_get() == 'UTC')) {
-                $result = mysqli_query($this->link_id, "SELECT UNIX_TIMESTAMP() AS timeline, UNIX_TIMESTAMP('" . date('Y-m-d H:i:s', $this->starttime) . "') AS timezone");
+                $result = mysqli_query($this->link_id, "SELECT UNIX_TIMESTAMP() AS timeline, UNIX_TIMESTAMP('".date('Y-m-d H:i:s', $this->starttime)."') AS timezone");
                 $row = mysqli_fetch_assoc($result);
 
                 if ($dbhost != '.' && strtolower($dbhost) != 'localhost:3306' && $dbhost != '127.0.0.1:3306') {
@@ -118,11 +127,11 @@ class cls_mysql
                 }
             }
 
-            $content = '<' . "?php\r\n" .
-                '$this->mysql_config_cache_file_time = ' . $this->starttime . ";\r\n" .
-                '$this->timeline = ' . $this->timeline . ";\r\n" .
-                '$this->timezone = ' . $this->timezone . ";\r\n" .
-                '$this->platform = ' . "'" . $this->platform . "';\r\n?" . '>';
+            $content = '<'."?php\r\n".
+                '$this->mysql_config_cache_file_time = '.$this->starttime.";\r\n".
+                '$this->timeline = '.$this->timeline.";\r\n".
+                '$this->timezone = '.$this->timezone.";\r\n".
+                '$this->platform = '."'".$this->platform."';\r\n?".'>';
 
             file_put_contents($sqlcache_config_file, $content);
         }
@@ -130,7 +139,7 @@ class cls_mysql
         /* 选择数据库 */
         if ($dbname) {
             if (mysqli_select_db($this->link_id, $dbname) === false) {
-                if (!$quiet) {
+                if (! $quiet) {
                     $this->ErrorMsg("Can't select MySQL database($dbname)!");
                 }
 
@@ -150,7 +159,7 @@ class cls_mysql
 
     public function set_mysql_charset($charset)
     {
-        if (in_array(strtolower($charset), array('gbk', 'big5', 'utf-8', 'utf8'))) {
+        if (in_array(strtolower($charset), ['gbk', 'big5', 'utf-8', 'utf8'])) {
             $charset = str_replace('-', '', $charset);
         }
         mysqli_query($this->link_id, "SET character_set_connection=$charset, character_set_results=$charset, character_set_client=binary");
@@ -165,7 +174,7 @@ class cls_mysql
     {
         if ($this->link_id === null) {
             $this->connect($this->settings['dbhost'], $this->settings['dbuser'], $this->settings['dbpw'], $this->settings['dbname'], $this->settings['charset'], $this->settings['pconnect']);
-            $this->settings = array();
+            $this->settings = [];
         }
 
         if ($this->queryCount++ <= 99) {
@@ -180,7 +189,7 @@ class cls_mysql
             mysqli_ping($this->link_id);
         }
 
-        if (!($query = mysqli_query($this->link_id, $sql)) && $type != 'SILENT') {
+        if (! ($query = mysqli_query($this->link_id, $sql)) && $type != 'SILENT') {
             $this->error_message[]['message'] = 'MySQL Query Error';
             $this->error_message[]['sql'] = $sql;
             $this->error_message[]['error'] = mysqli_error($this->link_id);
@@ -269,7 +278,7 @@ class cls_mysql
         if ($message) {
             echo "<b>ECSHOP info</b>: $message\n\n<br /><br />";
         } else {
-            echo "<b>MySQL server error report:";
+            echo '<b>MySQL server error report:';
             print_r($this->error_message);
         }
 
@@ -279,9 +288,9 @@ class cls_mysql
     public function selectLimit($sql, $num, $start = 0)
     {
         if ($start == 0) {
-            $sql .= ' LIMIT ' . $num;
+            $sql .= ' LIMIT '.$num;
         } else {
-            $sql .= ' LIMIT ' . $start . ', ' . $num;
+            $sql .= ' LIMIT '.$start.', '.$num;
         }
 
         return $this->query($sql);
@@ -290,7 +299,7 @@ class cls_mysql
     public function getOne($sql, $limited = false)
     {
         if ($limited == true) {
-            $sql = trim($sql . ' LIMIT 1');
+            $sql = trim($sql.' LIMIT 1');
         }
 
         $res = $this->query($sql);
@@ -309,10 +318,10 @@ class cls_mysql
 
     public function getOneCached($sql, $cached = 'FILEFIRST')
     {
-        $sql = trim($sql . ' LIMIT 1');
+        $sql = trim($sql.' LIMIT 1');
 
         $cachefirst = ($cached == 'FILEFIRST' || ($cached == 'MYSQLFIRST' && $this->platform != 'WINDOWS')) && $this->max_cache_time;
-        if (!$cachefirst) {
+        if (! $cachefirst) {
             return $this->getOne($sql, true);
         } else {
             $result = $this->getSqlCacheData($sql, $cached);
@@ -334,7 +343,7 @@ class cls_mysql
     {
         $res = $this->query($sql);
         if ($res !== false) {
-            $arr = array();
+            $arr = [];
             while ($row = mysqli_fetch_assoc($res)) {
                 $arr[] = $row;
             }
@@ -348,7 +357,7 @@ class cls_mysql
     public function getAllCached($sql, $cached = 'FILEFIRST')
     {
         $cachefirst = ($cached == 'FILEFIRST' || ($cached == 'MYSQLFIRST' && $this->platform != 'WINDOWS')) && $this->max_cache_time;
-        if (!$cachefirst) {
+        if (! $cachefirst) {
             return $this->getAll($sql);
         } else {
             $result = $this->getSqlCacheData($sql, $cached);
@@ -369,7 +378,7 @@ class cls_mysql
     public function getRow($sql, $limited = false)
     {
         if ($limited == true) {
-            $sql = trim($sql . ' LIMIT 1');
+            $sql = trim($sql.' LIMIT 1');
         }
 
         $res = $this->query($sql);
@@ -382,10 +391,10 @@ class cls_mysql
 
     public function getRowCached($sql, $cached = 'FILEFIRST')
     {
-        $sql = trim($sql . ' LIMIT 1');
+        $sql = trim($sql.' LIMIT 1');
 
         $cachefirst = ($cached == 'FILEFIRST' || ($cached == 'MYSQLFIRST' && $this->platform != 'WINDOWS')) && $this->max_cache_time;
-        if (!$cachefirst) {
+        if (! $cachefirst) {
             return $this->getRow($sql, true);
         } else {
             $result = $this->getSqlCacheData($sql, $cached);
@@ -407,7 +416,7 @@ class cls_mysql
     {
         $res = $this->query($sql);
         if ($res !== false) {
-            $arr = array();
+            $arr = [];
             while ($row = mysqli_fetch_row($res)) {
                 $arr[] = $row[0];
             }
@@ -421,7 +430,7 @@ class cls_mysql
     public function getColCached($sql, $cached = 'FILEFIRST')
     {
         $cachefirst = ($cached == 'FILEFIRST' || ($cached == 'MYSQLFIRST' && $this->platform != 'WINDOWS')) && $this->max_cache_time;
-        if (!$cachefirst) {
+        if (! $cachefirst) {
             return $this->getCol($sql);
         } else {
             $result = $this->getSqlCacheData($sql, $cached);
@@ -441,31 +450,31 @@ class cls_mysql
 
     public function autoExecute($table, $field_values, $mode = 'INSERT', $where = '', $querymode = '')
     {
-        $field_names = $this->getCol('DESC ' . $table);
+        $field_names = $this->getCol('DESC '.$table);
 
         $sql = '';
         if ($mode == 'INSERT') {
-            $fields = $values = array();
+            $fields = $values = [];
             foreach ($field_names as $value) {
                 if (array_key_exists($value, $field_values) == true) {
                     $fields[] = $value;
-                    $values[] = "'" . $field_values[$value] . "'";
+                    $values[] = "'".$field_values[$value]."'";
                 }
             }
 
-            if (!empty($fields)) {
-                $sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $fields) . ') VALUES (' . implode(', ', $values) . ')';
+            if (! empty($fields)) {
+                $sql = 'INSERT INTO '.$table.' ('.implode(', ', $fields).') VALUES ('.implode(', ', $values).')';
             }
         } else {
-            $sets = array();
+            $sets = [];
             foreach ($field_names as $value) {
                 if (array_key_exists($value, $field_values) == true) {
-                    $sets[] = $value . " = '" . $field_values[$value] . "'";
+                    $sets[] = $value." = '".$field_values[$value]."'";
                 }
             }
 
-            if (!empty($sets)) {
-                $sql = 'UPDATE ' . $table . ' SET ' . implode(', ', $sets) . ' WHERE ' . $where;
+            if (! empty($sets)) {
+                $sql = 'UPDATE '.$table.' SET '.implode(', ', $sets).' WHERE '.$where;
             }
         }
 
@@ -478,9 +487,9 @@ class cls_mysql
 
     public function autoReplace($table, $field_values, $update_values, $where = '', $querymode = '')
     {
-        $field_descs = $this->getAll('DESC ' . $table);
+        $field_descs = $this->getAll('DESC '.$table);
 
-        $primary_keys = array();
+        $primary_keys = [];
         foreach ($field_descs as $value) {
             $field_names[] = $value['Field'];
             if ($value['Key'] == 'PRI') {
@@ -488,35 +497,35 @@ class cls_mysql
             }
         }
 
-        $fields = $values = array();
+        $fields = $values = [];
         foreach ($field_names as $value) {
             if (array_key_exists($value, $field_values) == true) {
                 $fields[] = $value;
-                $values[] = "'" . $field_values[$value] . "'";
+                $values[] = "'".$field_values[$value]."'";
             }
         }
 
-        $sets = array();
+        $sets = [];
         foreach ($update_values as $key => $value) {
             if (array_key_exists($key, $field_values) == true) {
                 if (is_int($value) || is_float($value)) {
-                    $sets[] = $key . ' = ' . $key . ' + ' . $value;
+                    $sets[] = $key.' = '.$key.' + '.$value;
                 } else {
-                    $sets[] = $key . " = '" . $value . "'";
+                    $sets[] = $key." = '".$value."'";
                 }
             }
         }
 
         $sql = '';
         if (empty($primary_keys)) {
-            if (!empty($fields)) {
-                $sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $fields) . ') VALUES (' . implode(', ', $values) . ')';
+            if (! empty($fields)) {
+                $sql = 'INSERT INTO '.$table.' ('.implode(', ', $fields).') VALUES ('.implode(', ', $values).')';
             }
         } else {
-            if (!empty($fields)) {
-                $sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $fields) . ') VALUES (' . implode(', ', $values) . ')';
-                if (!empty($sets)) {
-                    $sql .= 'ON DUPLICATE KEY UPDATE ' . implode(', ', $sets);
+            if (! empty($fields)) {
+                $sql = 'INSERT INTO '.$table.' ('.implode(', ', $fields).') VALUES ('.implode(', ', $values).')';
+                if (! empty($sets)) {
+                    $sql .= 'ON DUPLICATE KEY UPDATE '.implode(', ', $sets);
                 }
             }
         }
@@ -542,8 +551,8 @@ class cls_mysql
     {
         $sql = trim($sql);
 
-        $result = array();
-        $result['filename'] = $this->root_path . $this->cache_data_dir . 'sqlcache_' . abs(crc32($this->dbhash . $sql)) . '_' . md5($this->dbhash . $sql) . '.php';
+        $result = [];
+        $result['filename'] = $this->root_path.$this->cache_data_dir.'sqlcache_'.abs(crc32($this->dbhash.$sql)).'_'.md5($this->dbhash.$sql).'.php';
 
         $data = file_get_contents($result['filename']);
         if (isset($data[23])) {
@@ -570,7 +579,7 @@ class cls_mysql
     public function setSqlCacheData($result, $data)
     {
         if ($result['storecache'] === true && $result['filename']) {
-            file_put_contents($result['filename'], '<?php exit;?>' . time() . serialize($data));
+            file_put_contents($result['filename'], '<?php exit;?>'.time().serialize($data));
             clearstatcache();
         }
     }
@@ -580,7 +589,7 @@ class cls_mysql
     {
         if ($this->link_id === null) {
             $this->connect($this->settings['dbhost'], $this->settings['dbuser'], $this->settings['dbpw'], $this->settings['dbname'], $this->settings['charset'], $this->settings['pconnect']);
-            $this->settings = array();
+            $this->settings = [];
         }
 
         $lastupdatetime = '0000-00-00 00:00:00';
@@ -597,9 +606,9 @@ class cls_mysql
 
             if (strstr($table, '.') != null) {
                 $tmp = explode('.', $table);
-                $sql = 'SHOW TABLE STATUS FROM `' . trim($tmp[0]) . "` LIKE '" . trim($tmp[1]) . "'";
+                $sql = 'SHOW TABLE STATUS FROM `'.trim($tmp[0])."` LIKE '".trim($tmp[1])."'";
             } else {
-                $sql = "SHOW TABLE STATUS LIKE '" . trim($table) . "'";
+                $sql = "SHOW TABLE STATUS LIKE '".trim($table)."'";
             }
             $result = mysqli_query($this->link_id, $sql);
 
@@ -616,7 +625,7 @@ class cls_mysql
     public function get_table_name($query_item)
     {
         $query_item = trim($query_item);
-        $table_names = array();
+        $table_names = [];
 
         /* 判断语句中是不是含有 JOIN */
         if (stristr($query_item, ' JOIN ') == '') {
@@ -629,10 +638,10 @@ class cls_mysql
         } else {
             /* 对含有 JOIN 的语句进行解析 */
             if (preg_match('/^SELECT.*?FROM\s*((?:`?\w+`?\s*\.\s*)?`?\w+`?)(?:(?:\s*AS)?\s*`?\w+`?)?.*?JOIN.*$/is', $query_item, $table_names)) {
-                $other_table_names = array();
+                $other_table_names = [];
                 preg_match_all('/JOIN\s*((?:`?\w+`?\s*\.\s*)?`?\w+`?)\s*/i', $query_item, $other_table_names);
 
-                return array_merge(array($table_names[1]), $other_table_names[1]);
+                return array_merge([$table_names[1]], $other_table_names[1]);
             }
         }
 
@@ -642,7 +651,7 @@ class cls_mysql
     /* 设置不允许进行缓存的表 */
     public function set_disable_cache_tables($tables)
     {
-        if (!is_array($tables)) {
+        if (! is_array($tables)) {
             $tables = explode(',', $tables);
         }
 

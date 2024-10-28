@@ -2,10 +2,10 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 
 /*初始化数据交换对象 */
-$exc = new exchange($ecs->table("exchange_goods"), $db, 'goods_id', 'exchange_integral');
+$exc = new exchange($ecs->table('exchange_goods'), $db, 'goods_id', 'exchange_integral');
 //$image = new cls_image();
 
 /*------------------------------------------------------ */
@@ -16,9 +16,9 @@ if ($_REQUEST['act'] == 'list') {
     admin_priv('exchange_goods');
 
     /* 取得过滤条件 */
-    $filter = array();
+    $filter = [];
     $smarty->assign('ur_here', $_LANG['15_exchange_goods_list']);
-    $smarty->assign('action_link', array('text' => $_LANG['exchange_goods_add'], 'href' => 'exchange_goods.php?act=add'));
+    $smarty->assign('action_link', ['text' => $_LANG['exchange_goods_add'], 'href' => 'exchange_goods.php?act=add']);
     $smarty->assign('full_page', 1);
     $smarty->assign('filter', $filter);
 
@@ -55,7 +55,7 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result(
         $smarty->fetch('exchange_goods_list.htm'),
         '',
-        array('filter' => $goods_list['filter'], 'page_count' => $goods_list['page_count'])
+        ['filter' => $goods_list['filter'], 'page_count' => $goods_list['page_count']]
     );
 }
 
@@ -67,14 +67,14 @@ if ($_REQUEST['act'] == 'add') {
     admin_priv('exchange_goods');
 
     /*初始化*/
-    $goods = array();
+    $goods = [];
     $goods['is_exchange'] = 1;
     $goods['is_hot'] = 0;
-    $goods['option'] = '<option value="0">' . $_LANG['make_option'] . '</option>';
+    $goods['option'] = '<option value="0">'.$_LANG['make_option'].'</option>';
 
     $smarty->assign('goods', $goods);
     $smarty->assign('ur_here', $_LANG['exchange_goods_add']);
-    $smarty->assign('action_link', array('text' => $_LANG['15_exchange_goods_list'], 'href' => 'exchange_goods.php?act=list'));
+    $smarty->assign('action_link', ['text' => $_LANG['15_exchange_goods_list'], 'href' => 'exchange_goods.php?act=list']);
     $smarty->assign('form_action', 'insert');
 
     assign_query_info();
@@ -91,7 +91,7 @@ if ($_REQUEST['act'] == 'insert') {
     /*检查是否重复*/
     $is_only = $exc->is_only('goods_id', $_POST['goods_id'], 0, " goods_id ='$_POST[goods_id]'");
 
-    if (!$is_only) {
+    if (! $is_only) {
         sys_msg($_LANG['goods_exist'], 1);
     }
 
@@ -100,7 +100,7 @@ if ($_REQUEST['act'] == 'insert') {
     if (empty($_POST['goods_id'])) {
         $_POST['goods_id'] = 0;
     }
-    $sql = "INSERT INTO " . $ecs->table('exchange_goods') . "(goods_id, exchange_integral, is_exchange, is_hot) " .
+    $sql = 'INSERT INTO '.$ecs->table('exchange_goods').'(goods_id, exchange_integral, is_exchange, is_hot) '.
         "VALUES ('$_POST[goods_id]', '$_POST[exchange_integral]', '$_POST[is_exchange]', '$_POST[is_hot]')";
     $db->query($sql);
 
@@ -125,16 +125,16 @@ if ($_REQUEST['act'] == 'edit') {
     admin_priv('exchange_goods');
 
     /* 取商品数据 */
-    $sql = "SELECT eg.goods_id, eg.exchange_integral,eg.is_exchange, eg.is_hot, g.goods_name " .
-        " FROM " . $ecs->table('exchange_goods') . " AS eg " .
-        "  LEFT JOIN " . $ecs->table('goods') . " AS g ON g.goods_id = eg.goods_id " .
+    $sql = 'SELECT eg.goods_id, eg.exchange_integral,eg.is_exchange, eg.is_hot, g.goods_name '.
+        ' FROM '.$ecs->table('exchange_goods').' AS eg '.
+        '  LEFT JOIN '.$ecs->table('goods').' AS g ON g.goods_id = eg.goods_id '.
         " WHERE eg.goods_id='$_REQUEST[id]'";
     $goods = $db->getRow($sql);
-    $goods['option'] = '<option value="' . $goods['goods_id'] . '">' . $goods['goods_name'] . '</option>';
+    $goods['option'] = '<option value="'.$goods['goods_id'].'">'.$goods['goods_name'].'</option>';
 
     $smarty->assign('goods', $goods);
     $smarty->assign('ur_here', $_LANG['exchange_goods_add']);
-    $smarty->assign('action_link', array('text' => $_LANG['15_exchange_goods_list'], 'href' => 'exchange_goods.php?act=list&' . list_link_postfix()));
+    $smarty->assign('action_link', ['text' => $_LANG['15_exchange_goods_list'], 'href' => 'exchange_goods.php?act=list&'.list_link_postfix()]);
     $smarty->assign('form_action', 'update');
 
     assign_query_info();
@@ -154,14 +154,14 @@ if ($_REQUEST['act'] == 'update') {
 
     if ($exc->edit("exchange_integral='$_POST[exchange_integral]', is_exchange='$_POST[is_exchange]', is_hot='$_POST[is_hot]' ", $_POST['goods_id'])) {
         $link[0]['text'] = $_LANG['back_list'];
-        $link[0]['href'] = 'exchange_goods.php?act=list&' . list_link_postfix();
+        $link[0]['href'] = 'exchange_goods.php?act=list&'.list_link_postfix();
 
         admin_log($_POST['goods_id'], 'edit', 'exchange_goods');
 
         clear_cache_files();
         sys_msg($_LANG['articleedit_succeed'], 0, $link);
     } else {
-        die($db->error());
+        exit($db->error());
     }
 }
 
@@ -224,7 +224,7 @@ if ($_REQUEST['act'] == 'toggle_hot') {
 if ($_REQUEST['act'] == 'batch_remove') {
     admin_priv('exchange_goods');
 
-    if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
+    if (! isset($_POST['checkboxes']) || ! is_array($_POST['checkboxes'])) {
         sys_msg($_LANG['no_select_goods'], 1);
     }
 
@@ -236,7 +236,7 @@ if ($_REQUEST['act'] == 'batch_remove') {
         }
     }
 
-    $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'exchange_goods.php?act=list');
+    $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'exchange_goods.php?act=list'];
     sys_msg(sprintf($_LANG['batch_remove_succeed'], $count), 0, $lnk);
 }
 
@@ -252,7 +252,7 @@ if ($_REQUEST['act'] == 'remove') {
         clear_cache_files();
     }
 
-    $url = 'exchange_goods.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+    $url = 'exchange_goods.php?act=query&'.str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
     ecs_header("Location: $url\n");
     exit;
@@ -263,7 +263,7 @@ if ($_REQUEST['act'] == 'remove') {
 /*------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'search_goods') {
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $filters = $json->decode($_GET['JSON']);
@@ -278,7 +278,7 @@ function get_exchange_goodslist()
 {
     $result = get_filter();
     if ($result === false) {
-        $filter = array();
+        $filter = [];
         $filter['keyword'] = empty($_REQUEST['keyword']) ? '' : trim($_REQUEST['keyword']);
         if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1) {
             $filter['keyword'] = json_str_iconv($filter['keyword']);
@@ -287,23 +287,23 @@ function get_exchange_goodslist()
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
         $where = '';
-        if (!empty($filter['keyword'])) {
-            $where = " AND g.goods_name LIKE '%" . mysql_like_quote($filter['keyword']) . "%'";
+        if (! empty($filter['keyword'])) {
+            $where = " AND g.goods_name LIKE '%".mysql_like_quote($filter['keyword'])."%'";
         }
 
         /* 文章总数 */
-        $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = eg.goods_id ' .
-            'WHERE 1 ' . $where;
+        $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('exchange_goods').' AS eg '.
+            'LEFT JOIN '.$GLOBALS['ecs']->table('goods').' AS g ON g.goods_id = eg.goods_id '.
+            'WHERE 1 '.$where;
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         $filter = page_and_size($filter);
 
         /* 获取文章数据 */
-        $sql = 'SELECT eg.* , g.goods_name ' .
-            'FROM ' . $GLOBALS['ecs']->table('exchange_goods') . ' AS eg ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('goods') . ' AS g ON g.goods_id = eg.goods_id ' .
-            'WHERE 1 ' . $where . ' ORDER by ' . $filter['sort_by'] . ' ' . $filter['sort_order'];
+        $sql = 'SELECT eg.* , g.goods_name '.
+            'FROM '.$GLOBALS['ecs']->table('exchange_goods').' AS eg '.
+            'LEFT JOIN '.$GLOBALS['ecs']->table('goods').' AS g ON g.goods_id = eg.goods_id '.
+            'WHERE 1 '.$where.' ORDER by '.$filter['sort_by'].' '.$filter['sort_order'];
 
         $filter['keyword'] = stripslashes($filter['keyword']);
         set_filter($filter, $sql);
@@ -311,11 +311,12 @@ function get_exchange_goodslist()
         $sql = $result['sql'];
         $filter = $result['filter'];
     }
-    $arr = array();
+    $arr = [];
     $res = $GLOBALS['db']->selectLimit($sql, $filter['page_size'], $filter['start']);
 
     while ($rows = $GLOBALS['db']->fetchRow($res)) {
         $arr[] = $rows;
     }
-    return array('arr' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+
+    return ['arr' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 }

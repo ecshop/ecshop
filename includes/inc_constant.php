@@ -1,11 +1,11 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
 if (version_compare(PHP_VERSION, '8.0.0', '<')) {
-    die('Require a PHP version "8.0". You are running ' . PHP_VERSION . '.');
+    exit('Require a PHP version "8.0". You are running '.PHP_VERSION.'.');
 }
 
 if (in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])) {

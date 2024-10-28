@@ -1,29 +1,34 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
 class Chinese
 {
     /**
      * 存放 GB <-> UNICODE 对照表的内容
+     *
      * @变量类型
+     *
      * @访问      内部
      */
-    public $unicode_table = array();
+    public $unicode_table = [];
 
     /**
      * 访问中文繁简互换表的文件指针
      *
      * @变量类型  对象
+     *
      * @访问      内部
      */
     public $ctf;
 
     /**
      * 等待转换的字符串
+     *
      * @变量类型
+     *
      * @访问      内部
      */
     public $SourceText = '';
@@ -32,28 +37,29 @@ class Chinese
      * Chinese 的运行配置
      *
      * @变量类型  数组
+     *
      * @访问      公开
      */
-    public $config = array(
+    public $config = [
         'codetable_dir' => '',                // 存放各种语言互换表的目录
         'source_lang' => '',                // 字符的原编码
         'target_lang' => '',                // 转换后的编码
         'GBtoBIG5_table' => 'gb-big5.table',   // 简体中文转换为繁体中文的对照表
         'BIG5toGB_table' => 'big5-gb.table',   // 繁体中文转换为简体中文的对照表
         'GBtoUTF8_table' => 'gb_utf8.php',     // 简体中文转换为UTF-8的对照表
-        'BIG5toUTF8_table' => 'big5_utf8.php'    // 繁体中文转换为UTF-8的对照表
-    );
+        'BIG5toUTF8_table' => 'big5_utf8.php',    // 繁体中文转换为UTF-8的对照表
+    ];
 
     public $iconv_enabled = false; // 是否存在 ICONV 模块，默认为否
-    public $mbstring_enabled = false; // 是否存在 MBSTRING 模块，默认为否
 
+    public $mbstring_enabled = false; // 是否存在 MBSTRING 模块，默认为否
 
     /**
      * 构造函数
      */
     public function __construct()
     {
-        $this->config['codetable_dir'] = ROOT_PATH . "includes/codetable/";
+        $this->config['codetable_dir'] = ROOT_PATH.'includes/codetable/';
 
         if (function_exists('iconv')) {
             $this->iconv_enabled = true;
@@ -62,8 +68,7 @@ class Chinese
         if (function_exists('mb_convert_encoding') && function_exists('mb_list_encodings')) {
             $encodings = mb_list_encodings();
 
-            if (in_array('UTF-8', $encodings) == true && in_array('BIG-5', $encodings) == true && in_array('CP936', $encodings) == true) // CP936 就是 GBK 字符集的别名
-            {
+            if (in_array('UTF-8', $encodings) == true && in_array('BIG-5', $encodings) == true && in_array('CP936', $encodings) == true) { // CP936 就是 GBK 字符集的别名
                 $this->mbstring_enabled = true;
             }
         }
@@ -91,7 +96,7 @@ class Chinese
 
         $this->SourceText = $source_string;
 
-        if (($this->iconv_enabled || $this->mbstring_enabled) && !($this->config['source_lang'] == 'GBK' && $this->config['target_lang'] == 'BIG-5')) {
+        if (($this->iconv_enabled || $this->mbstring_enabled) && ! ($this->config['source_lang'] == 'GBK' && $this->config['target_lang'] == 'BIG-5')) {
             if ($this->config['target_lang'] != 'UNICODE') {
                 $string = $this->_convert_iconv_mbstring($this->SourceText, $this->config['target_lang'], $this->config['source_lang']);
 
@@ -122,24 +127,24 @@ class Chinese
                                 break;
 
                             case 2:
-                                $uchar = (ord($char[0]) & 0x3f) << 6;
-                                $uchar += ord($char[1]) & 0x3f;
+                                $uchar = (ord($char[0]) & 0x3F) << 6;
+                                $uchar += ord($char[1]) & 0x3F;
                                 break;
 
                             case 3:
-                                $uchar = (ord($char[0]) & 0x1f) << 12;
-                                $uchar += (ord($char[1]) & 0x3f) << 6;
-                                $uchar += ord($char[2]) & 0x3f;
+                                $uchar = (ord($char[0]) & 0x1F) << 12;
+                                $uchar += (ord($char[1]) & 0x3F) << 6;
+                                $uchar += ord($char[2]) & 0x3F;
                                 break;
 
                             case 4:
-                                $uchar = (ord($char[0]) & 0x0f) << 18;
-                                $uchar += (ord($char[1]) & 0x3f) << 12;
-                                $uchar += (ord($char[2]) & 0x3f) << 6;
-                                $uchar += ord($char[3]) & 0x3f;
+                                $uchar = (ord($char[0]) & 0x0F) << 18;
+                                $uchar += (ord($char[1]) & 0x3F) << 12;
+                                $uchar += (ord($char[2]) & 0x3F) << 6;
+                                $uchar += ord($char[3]) & 0x3F;
                                 break;
                         }
-                        $string .= '&#x' . dechex($uchar) . ';';
+                        $string .= '&#x'.dechex($uchar).';';
 
                         if ($this->config['source_lang'] != 'UTF-8') {
                             $text = substr($text, 2);
@@ -229,9 +234,13 @@ class Chinese
      * 将 16 进制转换为 2 进制字符
      *
      * 详细说明
+     *
      * @形参      $hexdata 为16进制的编码
+     *
      * @访问      内部
+     *
      * @返回      字符串
+     *
      * @throws
      */
     private function _hex2bin($hexdata)
@@ -239,7 +248,7 @@ class Chinese
         $bindata = '';
 
         for ($i = 0, $count = strlen($hexdata); $i < $count; $i += 2) {
-            $bindata .= chr(hexdec($hexdata{$i} . $hexdata{$i + 1}));
+            $bindata .= chr(hexdec($hexdata[$i].$hexdata[$i + 1]));
         }
 
         return $bindata;
@@ -249,26 +258,30 @@ class Chinese
      * 打开对照表
      *
      * 详细说明
+     *
      * @形参
+     *
      * @访问      内部
+     *
      * @返回      无
+     *
      * @throws
      */
     private function OpenTable()
     {
-        static $gb_utf8_table = NULL;
-        static $gb_unicode_table = NULL;
-        static $utf8_gb_table = NULL;
+        static $gb_utf8_table = null;
+        static $gb_unicode_table = null;
+        static $utf8_gb_table = null;
 
-        static $big5_utf8_table = NULL;
-        static $big5_unicode_table = NULL;
-        static $utf8_big5_table = NULL;
+        static $big5_utf8_table = null;
+        static $big5_unicode_table = null;
+        static $utf8_big5_table = null;
 
         // 假如原编码为简体中文的话
         if ($this->config['source_lang'] == 'GBK') {
             // 假如转换目标编码为繁体中文的话
             if ($this->config['target_lang'] == 'BIG-5') {
-                $this->ctf = @fopen($this->config['codetable_dir'] . $this->config['GBtoBIG5_table'], 'rb');
+                $this->ctf = @fopen($this->config['codetable_dir'].$this->config['GBtoBIG5_table'], 'rb');
                 if (is_null($this->ctf)) {
                     echo '打开打开转换表文件失败！';
 
@@ -278,17 +291,17 @@ class Chinese
 
             // 假如转换目标编码为 UTF8 的话
             if ($this->config['target_lang'] == 'UTF-8') {
-                if ($gb_utf8_table === NULL) {
-                    require_once($this->config['codetable_dir'] . $this->config['GBtoUTF8_table']);
+                if ($gb_utf8_table === null) {
+                    require_once $this->config['codetable_dir'].$this->config['GBtoUTF8_table'];
                 }
                 $this->unicode_table = $gb_utf8_table;
             }
 
             // 假如转换目标编码为 UNICODE 的话
             if ($this->config['target_lang'] == 'UNICODE') {
-                if ($gb_unicode_table === NULL) {
+                if ($gb_unicode_table === null) {
                     if (isset($gb_utf8_table) === false) {
-                        require_once($this->config['codetable_dir'] . $this->config['GBtoUTF8_table']);
+                        require_once $this->config['codetable_dir'].$this->config['GBtoUTF8_table'];
                     }
                     foreach ($gb_utf8_table as $key => $value) {
                         $gb_unicode_table[$key] = substr($value, 2);
@@ -302,7 +315,7 @@ class Chinese
         if ($this->config['source_lang'] == 'BIG-5') {
             // 假如转换目标编码为简体中文的话
             if ($this->config['target_lang'] == 'GBK') {
-                $this->ctf = @fopen($this->config['codetable_dir'] . $this->config['BIG5toGB_table'], 'rb');
+                $this->ctf = @fopen($this->config['codetable_dir'].$this->config['BIG5toGB_table'], 'rb');
                 if (is_null($this->ctf)) {
                     echo '打开打开转换表文件失败！';
 
@@ -311,17 +324,17 @@ class Chinese
             }
             // 假如转换目标编码为 UTF8 的话
             if ($this->config['target_lang'] == 'UTF-8') {
-                if ($big5_utf8_table === NULL) {
-                    require_once($this->config['codetable_dir'] . $this->config['BIG5toUTF8_table']);
+                if ($big5_utf8_table === null) {
+                    require_once $this->config['codetable_dir'].$this->config['BIG5toUTF8_table'];
                 }
                 $this->unicode_table = $big5_utf8_table;
             }
 
             // 假如转换目标编码为 UNICODE 的话
             if ($this->config['target_lang'] == 'UNICODE') {
-                if ($big5_unicode_table === NULL) {
+                if ($big5_unicode_table === null) {
                     if (isset($big5_utf8_table) === false) {
-                        require_once($this->config['codetable_dir'] . $this->config['BIG5toUTF8_table']);
+                        require_once $this->config['codetable_dir'].$this->config['BIG5toUTF8_table'];
                     }
                     foreach ($big5_utf8_table as $key => $value) {
                         $big5_unicode_table[$key] = substr($value, 2);
@@ -335,12 +348,12 @@ class Chinese
         if ($this->config['source_lang'] == 'UTF-8') {
             // 假如转换目标编码为 GBK 的话
             if ($this->config['target_lang'] == 'GBK') {
-                if ($utf8_gb_table === NULL) {
+                if ($utf8_gb_table === null) {
                     if (isset($gb_utf8_table) === false) {
-                        require_once($this->config['codetable_dir'] . $this->config['GBtoUTF8_table']);
+                        require_once $this->config['codetable_dir'].$this->config['GBtoUTF8_table'];
                     }
                     foreach ($gb_utf8_table as $key => $value) {
-                        $utf8_gb_table[hexdec($value)] = '0x' . dechex($key);
+                        $utf8_gb_table[hexdec($value)] = '0x'.dechex($key);
                     }
                 }
                 $this->unicode_table = $utf8_gb_table;
@@ -348,12 +361,12 @@ class Chinese
 
             // 假如转换目标编码为 BIG5 的话
             if ($this->config['target_lang'] == 'BIG-5') {
-                if ($utf8_big5_table === NULL) {
+                if ($utf8_big5_table === null) {
                     if (isset($big5_utf8_table) === false) {
-                        require_once($this->config['codetable_dir'] . $this->config['BIG5toUTF8_table']);
+                        require_once $this->config['codetable_dir'].$this->config['BIG5toUTF8_table'];
                     }
                     foreach ($big5_utf8_table as $key => $value) {
-                        $utf8_big5_table[hexdec($value)] = '0x' . dechex($key);
+                        $utf8_big5_table[hexdec($value)] = '0x'.dechex($key);
                     }
                 }
                 $this->unicode_table = $utf8_big5_table;
@@ -365,9 +378,13 @@ class Chinese
      * 将简体、繁体中文的 UNICODE 编码转换为 UTF8 字符
      *
      * 详细说明
+     *
      * @形参      数字 $c 简体中文汉字的UNICODE编码的10进制
+     *
      * @访问      内部
+     *
      * @返回      字符串
+     *
      * @throws
      */
     private function CHSUtoUTF8($c)
@@ -397,9 +414,13 @@ class Chinese
      * 简体、繁体中文 <-> UTF8 互相转换的函数
      *
      * 详细说明
+     *
      * @形参
+     *
      * @访问      内部
+     *
      * @返回      字符串
+     *
      * @throws
      */
     private function CHStoUTF8()
@@ -408,12 +429,12 @@ class Chinese
             $ret = '';
 
             while ($this->SourceText) {
-                if (ord($this->SourceText{0}) > 127) {
+                if (ord($this->SourceText[0]) > 127) {
                     if ($this->config['source_lang'] == 'BIG-5') {
-                        $utf8 = $this->CHSUtoUTF8(hexdec(@$this->unicode_table[hexdec(bin2hex($this->SourceText{0} . $this->SourceText{1}))]));
+                        $utf8 = $this->CHSUtoUTF8(hexdec(@$this->unicode_table[hexdec(bin2hex($this->SourceText[0].$this->SourceText[1]))]));
                     }
                     if ($this->config['source_lang'] == 'GBK') {
-                        $utf8 = $this->CHSUtoUTF8(hexdec(@$this->unicode_table[hexdec(bin2hex($this->SourceText{0} . $this->SourceText{1})) - 0x8080]));
+                        $utf8 = $this->CHSUtoUTF8(hexdec(@$this->unicode_table[hexdec(bin2hex($this->SourceText[0].$this->SourceText[1])) - 0x8080]));
                     }
                     for ($i = 0, $count = strlen($utf8); $i < $count; $i += 3) {
                         $ret .= chr(substr($utf8, $i, 3));
@@ -421,11 +442,11 @@ class Chinese
 
                     $this->SourceText = substr($this->SourceText, 2, strlen($this->SourceText));
                 } else {
-                    $ret .= $this->SourceText{0};
+                    $ret .= $this->SourceText[0];
                     $this->SourceText = substr($this->SourceText, 1, strlen($this->SourceText));
                 }
             }
-            $this->unicode_table = array();
+            $this->unicode_table = [];
             $this->SourceText = '';
 
             return $ret;
@@ -436,7 +457,7 @@ class Chinese
             $out = '';
             $len = strlen($this->SourceText);
             while ($i < $len) {
-                $c = ord($this->SourceText{$i++});
+                $c = ord($this->SourceText[$i++]);
                 switch ($c >> 4) {
                     case 0:
                     case 1:
@@ -447,12 +468,12 @@ class Chinese
                     case 6:
                     case 7:
                         // 0xxxxxxx
-                        $out .= $this->SourceText{$i - 1};
+                        $out .= $this->SourceText[$i - 1];
                         break;
                     case 12:
                     case 13:
                         // 110x xxxx   10xx xxxx
-                        $char2 = ord($this->SourceText{$i++});
+                        $char2 = ord($this->SourceText[$i++]);
                         $char3 = @$this->unicode_table[(($c & 0x1F) << 6) | ($char2 & 0x3F)];
 
                         if ($this->config['target_lang'] == 'GBK') {
@@ -463,8 +484,8 @@ class Chinese
                         break;
                     case 14:
                         // 1110 xxxx  10xx xxxx  10xx xxxx
-                        $char2 = ord($this->SourceText{$i++});
-                        $char3 = ord($this->SourceText{$i++});
+                        $char2 = ord($this->SourceText[$i++]);
+                        $char3 = ord($this->SourceText[$i++]);
                         $char4 = @$this->unicode_table[(($c & 0x0F) << 12) | (($char2 & 0x3F) << 6) | (($char3 & 0x3F) << 0)];
 
                         if ($this->config['target_lang'] == 'GBK') {
@@ -486,9 +507,13 @@ class Chinese
      * 简体、繁体中文转换为 UNICODE编码
      *
      * 详细说明
+     *
      * @形参
+     *
      * @访问      内部
+     *
      * @返回      字符串
+     *
      * @throws
      */
     private function CHStoUNICODE()
@@ -496,16 +521,16 @@ class Chinese
         $utf = '';
 
         while ($this->SourceText) {
-            if (ord($this->SourceText{0}) > 127) {
+            if (ord($this->SourceText[0]) > 127) {
                 if ($this->config['source_lang'] == 'GBK') {
-                    $utf .= '&#x' . $this->unicode_table[hexdec(bin2hex($this->SourceText{0} . $this->SourceText{1})) - 0x8080] . ';';
+                    $utf .= '&#x'.$this->unicode_table[hexdec(bin2hex($this->SourceText[0].$this->SourceText[1])) - 0x8080].';';
                 } elseif ($this->config['source_lang'] == 'BIG-5') {
-                    $utf .= '&#x' . $this->unicode_table[hexdec(bin2hex($this->SourceText{0} . $this->SourceText{1}))] . ';';
+                    $utf .= '&#x'.$this->unicode_table[hexdec(bin2hex($this->SourceText[0].$this->SourceText[1]))].';';
                 }
 
                 $this->SourceText = substr($this->SourceText, 2, strlen($this->SourceText));
             } else {
-                $utf .= $this->SourceText{0};
+                $utf .= $this->SourceText[0];
                 $this->SourceText = substr($this->SourceText, 1, strlen($this->SourceText));
             }
         }
@@ -517,8 +542,11 @@ class Chinese
      * 简体中文 <-> 繁体中文 互相转换的函数
      *
      * 详细说明
+     *
      * @访问      内部
+     *
      * @返回值    经过编码的utf8字符
+     *
      * @throws
      */
     private function GBtoBIG5()
@@ -527,9 +555,9 @@ class Chinese
         $max = strlen($this->SourceText) - 1;
 
         for ($i = 0; $i < $max; $i++) {
-            $h = ord($this->SourceText{$i});
+            $h = ord($this->SourceText[$i]);
             if ($h >= 160) {
-                $l = ord($this->SourceText{$i + 1});
+                $l = ord($this->SourceText[$i + 1]);
 
                 if ($h == 161 && $l == 64) {
                     $gb = '  ';
@@ -538,8 +566,8 @@ class Chinese
                     $gb = fread($this->ctf, 2);
                 }
 
-                $this->SourceText{$i} = $gb{0};
-                $this->SourceText{$i + 1} = $gb{1};
+                $this->SourceText[$i] = $gb[0];
+                $this->SourceText[$i + 1] = $gb[1];
 
                 $i++;
             }

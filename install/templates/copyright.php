@@ -1,1 +1,3 @@
-<?php echo $lang['copyright'];
+<?php
+
+echo $lang['copyright'];

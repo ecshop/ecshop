@@ -3,22 +3,20 @@
 /**
  * 数据库导出类
  */
-
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
 /**
  * 对mysql敏感字符串转义
  *
- * @access  public
- * @param string $str
- *
+ * @param  string  $str
  * @return string
  */
 function dump_escape_string($str)
 {
     global $db;
+
     /* 取得参数 */
     return cls_mysql::escape_string($str, $db);
 }
@@ -26,28 +24,30 @@ function dump_escape_string($str)
 /**
  * 对mysql记录中的null值进行处理
  *
- * @access  public
- * @param string $str
- *
+ * @param  string  $str
  * @return string
  */
 function dump_null_string($str)
 {
-    if (!isset($str) || is_null($str)) {
+    if (! isset($str) || is_null($str)) {
         $str = 'NULL';
     }
 
     return $str;
 }
 
-
 class cls_sql_dump
 {
     public $max_size = 2097152; // 2M
+
     public $is_short = false;
+
     public $offset = 300;
+
     public $dump_sql = '';
+
     public $sql_num = 0;
+
     public $error_msg = '';
 
     public $db;
@@ -55,8 +55,6 @@ class cls_sql_dump
     /**
      *  类的构造函数
      *
-     * @access  public
-     * @param
      *
      * @return void
      */
@@ -69,15 +67,12 @@ class cls_sql_dump
     }
 
     /**
-
     /**
      *  获取指定表的定义
      *
-     * @access  public
-     * @param string $table 数据表名
-     * @param boolen $add_drop 是否加入drop table
-     *
-     * @return  string      $sql
+     * @param  string  $table  数据表名
+     * @param  boolen  $add_drop  是否加入drop table
+     * @return string $sql
      */
     public function get_table_df($table, $add_drop = false)
     {
@@ -89,9 +84,9 @@ class cls_sql_dump
 
         $tmp_arr = $this->db->getRow("SHOW CREATE TABLE `$table`");
         $tmp_sql = $tmp_arr['Create Table'];
-        $tmp_sql = substr($tmp_sql, 0, strrpos($tmp_sql, ")") + 1); //去除行尾定义。
+        $tmp_sql = substr($tmp_sql, 0, strrpos($tmp_sql, ')') + 1); //去除行尾定义。
 
-        $table_df .= $tmp_sql . " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;\r\n";
+        $table_df .= $tmp_sql." ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;\r\n";
 
         return $table_df;
     }
@@ -99,11 +94,9 @@ class cls_sql_dump
     /**
      *  获取指定表的数据定义
      *
-     * @access  public
-     * @param string $table 表名
-     * @param int $pos 备份开始位置
-     *
-     * @return  int         $post_pos   记录位置
+     * @param  string  $table  表名
+     * @param  int  $pos  备份开始位置
+     * @return int $post_pos   记录位置
      */
     public function get_table_data($table, $pos)
     {
@@ -123,43 +116,43 @@ class cls_sql_dump
         /* 循环查数据表 */
         for ($i = 0; $i < $cycle_time; $i++) {
             /* 获取数据库数据 */
-            $data = $this->db->getAll("SELECT * FROM $table LIMIT " . ($this->offset * $i + $pos) . ', ' . $this->offset);
+            $data = $this->db->getAll("SELECT * FROM $table LIMIT ".($this->offset * $i + $pos).', '.$this->offset);
             $data_count = count($data);
 
             $fields = array_keys($data[0]);
-            $start_sql = "INSERT INTO `$table` ( `" . implode("`, `", $fields) . "` ) VALUES ";
+            $start_sql = "INSERT INTO `$table` ( `".implode('`, `', $fields).'` ) VALUES ';
 
             /* 循环将数据写入 */
             for ($j = 0; $j < $data_count; $j++) {
-                $record = array_map("dump_escape_string", $data[$j]);   //过滤非法字符
-                $record = array_map("dump_null_string", $record);     //处理null值
+                $record = array_map('dump_escape_string', $data[$j]);   //过滤非法字符
+                $record = array_map('dump_null_string', $record);     //处理null值
 
                 /* 检查是否能写入，能则写入 */
                 if ($this->is_short) {
                     if ($post_pos == $total - 1) {
-                        $tmp_dump_sql = " ( '" . implode("', '", $record) . "' );\r\n";
+                        $tmp_dump_sql = " ( '".implode("', '", $record)."' );\r\n";
                     } else {
                         if ($j == $data_count - 1) {
-                            $tmp_dump_sql = " ( '" . implode("', '", $record) . "' );\r\n";
+                            $tmp_dump_sql = " ( '".implode("', '", $record)."' );\r\n";
                         } else {
-                            $tmp_dump_sql = " ( '" . implode("', '", $record) . "' ),\r\n";
+                            $tmp_dump_sql = " ( '".implode("', '", $record)."' ),\r\n";
                         }
                     }
 
                     if ($post_pos == $pos) {
                         /* 第一次插入数据 */
-                        $tmp_dump_sql = $start_sql . "\r\n" . $tmp_dump_sql;
+                        $tmp_dump_sql = $start_sql."\r\n".$tmp_dump_sql;
                     } else {
                         if ($j == 0) {
-                            $tmp_dump_sql = $start_sql . "\r\n" . $tmp_dump_sql;
+                            $tmp_dump_sql = $start_sql."\r\n".$tmp_dump_sql;
                         }
                     }
                 } else {
-                    $tmp_dump_sql = $start_sql . " ('" . implode("', '", $record) . "');\r\n";
+                    $tmp_dump_sql = $start_sql." ('".implode("', '", $record)."');\r\n";
                 }
 
                 $tmp_str_pos = strpos($tmp_dump_sql, 'NULL');         //把记录中null值的引号去掉
-                $tmp_dump_sql = empty($tmp_str_pos) ? $tmp_dump_sql : substr($tmp_dump_sql, 0, $tmp_str_pos - 1) . 'NULL' . substr($tmp_dump_sql, $tmp_str_pos + 5);
+                $tmp_dump_sql = empty($tmp_str_pos) ? $tmp_dump_sql : substr($tmp_dump_sql, 0, $tmp_str_pos - 1).'NULL'.substr($tmp_dump_sql, $tmp_str_pos + 5);
 
                 if (strlen($this->dump_sql) + strlen($tmp_dump_sql) > $this->max_size - 32) {
                     if ($this->sql_num == 0) {
@@ -188,11 +181,9 @@ class cls_sql_dump
     /**
      *  备份一个数据表
      *
-     * @access  public
-     * @param string $path 保存路径表名的文件
-     * @param int $vol 卷标
-     *
-     * @return  array       $tables     未备份完的表列表
+     * @param  string  $path  保存路径表名的文件
+     * @param  int  $vol  卷标
+     * @return array $tables     未备份完的表列表
      */
     public function dump_table($path, $vol)
     {
@@ -251,10 +242,8 @@ class cls_sql_dump
     /**
      *  生成备份文件头部
      *
-     * @access  public
      * @param int     文件卷数
-     *
-     * @return  string  $str    备份文件头部
+     * @return string $str    备份文件头部
      */
     public function make_head($vol)
     {
@@ -265,14 +254,14 @@ class cls_sql_dump
         $sys_info['mysql_ver'] = $this->db->version();
         $sys_info['date'] = date('Y-m-d H:i:s');
 
-        $head = "-- ecshop v2.x SQL Dump Program\r\n" .
-            "-- " . $sys_info['web_server'] . "\r\n" .
-            "-- \r\n" .
-            "-- DATE : " . $sys_info["date"] . "\r\n" .
-            "-- MYSQL SERVER VERSION : " . $sys_info['mysql_ver'] . "\r\n" .
-            "-- PHP VERSION : " . $sys_info['php_ver'] . "\r\n" .
-            "-- ECShop VERSION : " . VERSION . "\r\n" .
-            "-- Vol : " . $vol . "\r\n";
+        $head = "-- ecshop v2.x SQL Dump Program\r\n".
+            '-- '.$sys_info['web_server']."\r\n".
+            "-- \r\n".
+            '-- DATE : '.$sys_info['date']."\r\n".
+            '-- MYSQL SERVER VERSION : '.$sys_info['mysql_ver']."\r\n".
+            '-- PHP VERSION : '.$sys_info['php_ver']."\r\n".
+            '-- ECShop VERSION : '.VERSION."\r\n".
+            '-- Vol : '.$vol."\r\n";
 
         return $head;
     }
@@ -280,15 +269,13 @@ class cls_sql_dump
     /**
      *  获取备份文件信息
      *
-     * @access  public
-     * @param string $path 备份文件路径
-     *
-     * @return  array       $arr        信息数组
+     * @param  string  $path  备份文件路径
+     * @return array $arr        信息数组
      */
     public function get_head($path)
     {
         /* 获取sql文件头部信息 */
-        $sql_info = array('date' => '', 'mysql_ver' => '', 'php_ver' => 0, 'ecs_ver' => '', 'vol' => 0);
+        $sql_info = ['date' => '', 'mysql_ver' => '', 'php_ver' => 0, 'ecs_ver' => '', 'vol' => 0];
         $fp = fopen($path, 'rb');
         $str = fread($fp, 250);
         fclose($fp);
@@ -319,28 +306,26 @@ class cls_sql_dump
     /**
      *  将文件中数据表列表取出
      *
-     * @access  public
-     * @param string $path 文件路径
-     *
-     * @return  array       $arr    数据表列表
+     * @param  string  $path  文件路径
+     * @return array $arr    数据表列表
      */
     public function get_tables_list($path)
     {
-        if (!file_exists($path)) {
-            $this->error_msg = $path . ' is not exists';
+        if (! file_exists($path)) {
+            $this->error_msg = $path.' is not exists';
 
             return false;
         }
 
-        $arr = array();
+        $arr = [];
         $str = @file_get_contents($path);
 
-        if (!empty($str)) {
+        if (! empty($str)) {
             $tmp_arr = explode("\n", $str);
             foreach ($tmp_arr as $val) {
                 $val = trim($val, "\r;");
-                if (!empty($val)) {
-                    list($table, $count) = explode(':', $val);
+                if (! empty($val)) {
+                    [$table, $count] = explode(':', $val);
                     $arr[$table] = $count;
                 }
             }
@@ -352,24 +337,22 @@ class cls_sql_dump
     /**
      *  将数据表数组写入指定文件
      *
-     * @access  public
-     * @param string $path 文件路径
-     * @param array $arr 要写入的数据
-     *
-     * @return  boolen
+     * @param  string  $path  文件路径
+     * @param  array  $arr  要写入的数据
+     * @return boolen
      */
     public function put_tables_list($path, $arr)
     {
         if (is_array($arr)) {
             $str = '';
             foreach ($arr as $key => $val) {
-                $str .= $key . ':' . $val . ";\r\n";
+                $str .= $key.':'.$val.";\r\n";
             }
 
             if (@file_put_contents($path, $str)) {
                 return true;
             } else {
-                $this->error_msg = 'Can not write ' . $path;
+                $this->error_msg = 'Can not write '.$path;
 
                 return false;
             }
@@ -383,10 +366,8 @@ class cls_sql_dump
     /**
      *  返回一个随机的名字
      *
-     * @access  public
-     * @param
      *
-     * @return      string      $str    随机名称
+     * @return string $str    随机名称
      */
     public static function get_random_name()
     {
@@ -402,8 +383,6 @@ class cls_sql_dump
     /**
      *  返回错误信息
      *
-     * @access  public
-     * @param
      *
      * @return void
      */

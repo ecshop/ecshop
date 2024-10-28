@@ -23,7 +23,6 @@ $_LANG['add_article'] = '添加文章';
 
 $_LANG['articlecat_edit'] = '文章分类编辑';
 
-
 /* 提示信息 */
 $_LANG['catname_exist'] = '分类名 %s 已经存在';
 $_LANG['parent_id_err'] = '分类名 %s 的父分类不能设置成本身或本身的子分类';

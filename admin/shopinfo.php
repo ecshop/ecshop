@@ -2,17 +2,17 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
+require dirname(__FILE__).'/includes/init.php';
+require_once ROOT_PATH.'includes/fckeditor/fckeditor.php';
 
-$exc = new exchange($ecs->table("article"), $db, 'article_id', 'title');
+$exc = new exchange($ecs->table('article'), $db, 'article_id', 'title');
 
 /*------------------------------------------------------ */
 //-- 文章列表
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['shop_info']);
-    $smarty->assign('action_link', array('text' => $_LANG['shopinfo_add'], 'href' => 'shopinfo.php?act=add'));
+    $smarty->assign('action_link', ['text' => $_LANG['shopinfo_add'], 'href' => 'shopinfo.php?act=add']);
     $smarty->assign('full_page', 1);
     $smarty->assign('list', shopinfo_article_list());
 
@@ -44,7 +44,7 @@ if ($_REQUEST['act'] == 'add') {
     $article['article_type'] = 0;
 
     $smarty->assign('ur_here', $_LANG['shopinfo_add']);
-    $smarty->assign('action_link', array('text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list'));
+    $smarty->assign('action_link', ['text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list']);
     $smarty->assign('form_action', 'insert');
 
     assign_query_info();
@@ -58,13 +58,13 @@ if ($_REQUEST['act'] == 'insert') {
     /* 判断是否重名 */
     $is_only = $exc->is_only('title', $_POST['title']);
 
-    if (!$is_only) {
+    if (! $is_only) {
         sys_msg(sprintf($_LANG['title_exist'], stripslashes($_POST['title'])), 1);
     }
 
     /* 插入数据 */
     $add_time = gmtime();
-    $sql = "INSERT INTO " . $ecs->table('article') . "(title, cat_id, content, add_time) VALUES('$_POST[title]', '0', '$_POST[FCKeditor1]','$add_time' )";
+    $sql = 'INSERT INTO '.$ecs->table('article')."(title, cat_id, content, add_time) VALUES('$_POST[title]', '0', '$_POST[FCKeditor1]','$add_time' )";
     $db->query($sql);
 
     $link[0]['text'] = $_LANG['continue_add'];
@@ -89,14 +89,14 @@ if ($_REQUEST['act'] == 'edit') {
     $_REQUEST['id'] = intval($_REQUEST['id']);
 
     /* 取得文章数据 */
-    $sql = "SELECT article_id, title, content FROM " . $ecs->table('article') . "WHERE article_id =" . $_REQUEST['id'];
+    $sql = 'SELECT article_id, title, content FROM '.$ecs->table('article').'WHERE article_id ='.$_REQUEST['id'];
     $article = $db->getRow($sql);
 
     /* 创建 html editor */
     create_html_editor('FCKeditor1', $article['content']);
 
     $smarty->assign('ur_here', $_LANG['article_add']);
-    $smarty->assign('action_link', array('text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list'));
+    $smarty->assign('action_link', ['text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list']);
     $smarty->assign('article', $article);
     $smarty->assign('form_action', 'update');
     $smarty->display('shopinfo_info.htm');
@@ -110,7 +110,7 @@ if ($_REQUEST['act'] == 'update') {
     if ($_POST['title'] != $_POST['old_title']) {
         $is_only = $exc->is_only('title', $_POST['title'], $_POST['id']);
 
-        if (!$is_only) {
+        if (! $is_only) {
             sys_msg(sprintf($_LANG['title_exist'], stripslashes($_POST['title'])), 1);
         }
     }
@@ -165,7 +165,7 @@ if ($_REQUEST['act'] == 'remove') {
         admin_log(addslashes($title), 'remove', 'shopinfo');
     }
 
-    $url = 'shopinfo.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+    $url = 'shopinfo.php?act=query&'.str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
     ecs_header("Location: $url\n");
     exit;
@@ -174,9 +174,9 @@ if ($_REQUEST['act'] == 'remove') {
 /* 获取网店信息文章数据 */
 function shopinfo_article_list()
 {
-    $list = array();
-    $sql = 'SELECT article_id, title ,add_time' .
-        ' FROM ' . $GLOBALS['ecs']->table('article') .
+    $list = [];
+    $sql = 'SELECT article_id, title ,add_time'.
+        ' FROM '.$GLOBALS['ecs']->table('article').
         ' WHERE cat_id = 0 ORDER BY article_id';
     $res = $GLOBALS['db']->query($sql);
     while ($rows = $GLOBALS['db']->fetchRow($res)) {

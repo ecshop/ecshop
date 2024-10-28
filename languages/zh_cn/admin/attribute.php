@@ -38,7 +38,6 @@ $_LANG['attr_type_values'][0] = '唯一属性';
 $_LANG['attr_type_values'][1] = '单选属性';
 $_LANG['attr_type_values'][2] = '复选属性';
 
-
 $_LANG['add_next'] = '添加下一个属性';
 $_LANG['back_list'] = '返回属性列表';
 

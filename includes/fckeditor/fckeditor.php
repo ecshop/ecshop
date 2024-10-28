@@ -25,8 +25,8 @@
  * strict error messages with PHP 5).
  */
 
-if (!function_exists('version_compare') || version_compare(phpversion(), '5', '<')) {
-    include_once('fckeditor_php4.php') ;
+if (! function_exists('version_compare') || version_compare(phpversion(), '5', '<')) {
+    include_once 'fckeditor_php4.php';
 } else {
-    include_once('fckeditor_php5.php') ;
+    include_once 'fckeditor_php5.php';
 }

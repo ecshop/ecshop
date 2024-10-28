@@ -8,7 +8,7 @@ $_LANG['flow_login_register']['email_invalid'] = '您输入的电子邮件不正
 $_LANG['flow_login_register']['password_not_same'] = '您输入的密码和确认密码不一致。';
 $_LANG['flow_login_register']['password_lt_six'] = '密码不能小于6个字符。';
 
-$_LANG['regist_success'] = "恭喜您，%s 账号注册成功!";
+$_LANG['regist_success'] = '恭喜您，%s 账号注册成功!';
 $_LANG['login_success'] = '恭喜！您已经成功登陆本站！';
 
 /* 购物车 */
@@ -26,8 +26,8 @@ $_LANG['username_exists'] = '您输入的用户名已存在，请换一个试试
 $_LANG['email_exists'] = '您输入的电子邮件已存在，请换一个试试。';
 $_LANG['surplus_not_enough'] = '您使用的余额不能超过您现有的余额。';
 $_LANG['integral_not_enough'] = '您使用的积分不能超过您现有的积分。';
-$_LANG['integral_too_much'] = "您使用的积分不能超过%d";
-$_LANG['invalid_bonus'] = "您选择的红包并不存在。";
+$_LANG['integral_too_much'] = '您使用的积分不能超过%d';
+$_LANG['invalid_bonus'] = '您选择的红包并不存在。';
 $_LANG['no_goods_in_cart'] = '您的购物车中没有商品！';
 $_LANG['not_submit_order'] = '您参与本次团购商品的订单已提交，请勿重复操作！';
 $_LANG['pay_success'] = '本次支付已经成功，我们将尽快为您发货。';
@@ -142,7 +142,7 @@ $_LANG['back_home'] = '<a href="index.php">返回首页</a>';
 $_LANG['goto_user_center'] = '<a href="user.php">用户中心</a>';
 $_LANG['order_submit_back'] = '您可以 %s 或去 %s';
 
-$_LANG['order_placed_sms'] = "您有新订单.收货人:%s 电话:%s";
+$_LANG['order_placed_sms'] = '您有新订单.收货人:%s 电话:%s';
 $_LANG['sms_paid'] = '已付款';
 
 $_LANG['notice_gb_order_amount'] = '（备注：团购如果有保证金，第一次只需支付保证金和相应的支付费用）';
@@ -154,7 +154,6 @@ $_LANG['select_bonus'] = '选择已有红包';
 $_LANG['bonus_sn_error'] = '该红包序列号不正确';
 $_LANG['bonus_min_amount_error'] = '订单商品金额没有达到使用该红包的最低金额 %s';
 $_LANG['bonus_is_ok'] = '该红包序列号可以使用，可以抵扣 %s';
-
 
 $_LANG['shopping_myship'] = '我的配送';
 $_LANG['shopping_activity'] = '活动列表';

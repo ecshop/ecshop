@@ -1,7 +1,7 @@
 <?php
 
 define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 admin_priv('email_list');
 
 if ($_REQUEST['act'] == 'list') {
@@ -16,7 +16,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('email_list.htm');
 }
 if ($_REQUEST['act'] == 'export') {
-    $sql = "SELECT email FROM " . $ecs->table('email_list') . "WHERE stat = 1";
+    $sql = 'SELECT email FROM '.$ecs->table('email_list').'WHERE stat = 1';
     $emails = $db->getAll($sql);
     $out = '';
     foreach ($emails as $key => $val) {
@@ -24,11 +24,11 @@ if ($_REQUEST['act'] == 'export') {
     }
     $contentType = 'text/plain';
     $len = strlen($out);
-    header('Last-Modified: ' . gmdate('D, d M Y H:i:s', time() + 31536000) . ' GMT');
+    header('Last-Modified: '.gmdate('D, d M Y H:i:s', time() + 31536000).' GMT');
     header('Pragma: no-cache');
     header('Content-Encoding: none');
-    header('Content-type: ' . $contentType);
-    header('Content-Length: ' . $len);
+    header('Content-type: '.$contentType);
+    header('Content-Length: '.$len);
     header('Content-Disposition: attachment; filename="email_list.txt"');
     echo $out;
     exit;
@@ -46,7 +46,7 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result(
         $smarty->fetch('email_list.htm'),
         '',
-        array('filter' => $emaildb['filter'], 'page_count' => $emaildb['page_count'])
+        ['filter' => $emaildb['filter'], 'page_count' => $emaildb['page_count']]
     );
 }
 
@@ -54,15 +54,15 @@ if ($_REQUEST['act'] == 'query') {
 //-- 批量删除
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'batch_remove') {
-    if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
+    if (! isset($_POST['checkboxes']) || ! is_array($_POST['checkboxes'])) {
         sys_msg($_LANG['no_select_email'], 1);
     }
 
-    $sql = "DELETE FROM " . $ecs->table('email_list') .
-        " WHERE id " . db_create_in(join(',', $_POST['checkboxes']));
+    $sql = 'DELETE FROM '.$ecs->table('email_list').
+        ' WHERE id '.db_create_in(implode(',', $_POST['checkboxes']));
     $db->query($sql);
 
-    $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list');
+    $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list'];
     sys_msg(sprintf($_LANG['batch_remove_succeed'], $db->affected_rows()), 0, $lnk);
 }
 
@@ -70,15 +70,15 @@ if ($_REQUEST['act'] == 'batch_remove') {
 //-- 批量恢复
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'batch_unremove') {
-    if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
+    if (! isset($_POST['checkboxes']) || ! is_array($_POST['checkboxes'])) {
         sys_msg($_LANG['no_select_email'], 1);
     }
 
-    $sql = "UPDATE " . $ecs->table('email_list') .
-        " SET stat = 1 WHERE stat <> 1 AND id " . db_create_in(join(',', $_POST['checkboxes']));
+    $sql = 'UPDATE '.$ecs->table('email_list').
+        ' SET stat = 1 WHERE stat <> 1 AND id '.db_create_in(implode(',', $_POST['checkboxes']));
     $db->query($sql);
 
-    $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list');
+    $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list'];
     sys_msg(sprintf($_LANG['batch_unremove_succeed'], $db->affected_rows()), 0, $lnk);
 }
 
@@ -86,15 +86,15 @@ if ($_REQUEST['act'] == 'batch_unremove') {
 //-- 批量退订
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'batch_exit') {
-    if (!isset($_POST['checkboxes']) || !is_array($_POST['checkboxes'])) {
+    if (! isset($_POST['checkboxes']) || ! is_array($_POST['checkboxes'])) {
         sys_msg($_LANG['no_select_email'], 1);
     }
 
-    $sql = "UPDATE " . $ecs->table('email_list') .
-        " SET stat = 2 WHERE stat <> 2 AND id " . db_create_in(join(',', $_POST['checkboxes']));
+    $sql = 'UPDATE '.$ecs->table('email_list').
+        ' SET stat = 2 WHERE stat <> 2 AND id '.db_create_in(implode(',', $_POST['checkboxes']));
     $db->query($sql);
 
-    $lnk[] = array('text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list');
+    $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'email_list.php?act=list'];
     sys_msg(sprintf($_LANG['batch_exit_succeed'], $db->affected_rows()), 0, $lnk);
 }
 
@@ -105,7 +105,7 @@ function get_email_list()
         $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'stat' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'ASC' : trim($_REQUEST['sort_order']);
 
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('email_list');
+        $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('email_list');
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         /* 分页大小 */
@@ -113,9 +113,9 @@ function get_email_list()
 
         /* 查询 */
 
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('email_list') .
-            " ORDER BY " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
-            " LIMIT " . $filter['start'] . ",$filter[page_size]";
+        $sql = 'SELECT * FROM '.$GLOBALS['ecs']->table('email_list').
+            ' ORDER BY '.$filter['sort_by'].' '.$filter['sort_order'].
+            ' LIMIT '.$filter['start'].",$filter[page_size]";
 
         set_filter($filter, $sql);
     } else {
@@ -125,7 +125,7 @@ function get_email_list()
 
     $emaildb = $GLOBALS['db']->getAll($sql);
 
-    $arr = array('emaildb' => $emaildb, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+    $arr = ['emaildb' => $emaildb, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
 }

@@ -1,7 +1,7 @@
 <?php
 
 define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -17,13 +17,13 @@ if ($_REQUEST['act'] == 'list') {
     /* 权限的判断 */
     admin_priv('logs_manage');
 
-    $user_id = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
-    $admin_ip = !empty($_REQUEST['ip']) ? $_REQUEST['ip'] : '';
-    $log_date = !empty($_REQUEST['log_date']) ? $_REQUEST['log_date'] : '';
+    $user_id = ! empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
+    $admin_ip = ! empty($_REQUEST['ip']) ? $_REQUEST['ip'] : '';
+    $log_date = ! empty($_REQUEST['log_date']) ? $_REQUEST['log_date'] : '';
 
     /* 查询IP地址列表 */
-    $ip_list = array();
-    $res = $db->query("SELECT DISTINCT ip_address FROM " . $ecs->table('admin_log'));
+    $ip_list = [];
+    $res = $db->query('SELECT DISTINCT ip_address FROM '.$ecs->table('admin_log'));
     while ($row = $db->fetchRow($res)) {
         $ip_list[$row['ip_address']] = $row['ip_address'];
     }
@@ -63,7 +63,7 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result(
         $smarty->fetch('admin_logs.htm'),
         '',
-        array('filter' => $log_list['filter'], 'page_count' => $log_list['page_count'])
+        ['filter' => $log_list['filter'], 'page_count' => $log_list['page_count']]
     );
 }
 
@@ -81,35 +81,35 @@ if ($_REQUEST['act'] == 'batch_drop') {
             ecs_header("Location: admin_logs.php?act=list\n");
             exit;
         } elseif ($_POST['log_date'] > '0') {
-            $where = " WHERE 1 ";
+            $where = ' WHERE 1 ';
             switch ($_POST['log_date']) {
                 case '1':
                     $a_week = gmtime() - (3600 * 24 * 7);
-                    $where .= " AND log_time <= '" . $a_week . "'";
+                    $where .= " AND log_time <= '".$a_week."'";
                     break;
                 case '2':
                     $a_month = gmtime() - (3600 * 24 * 30);
-                    $where .= " AND log_time <= '" . $a_month . "'";
+                    $where .= " AND log_time <= '".$a_month."'";
                     break;
                 case '3':
                     $three_month = gmtime() - (3600 * 24 * 90);
-                    $where .= " AND log_time <= '" . $three_month . "'";
+                    $where .= " AND log_time <= '".$three_month."'";
                     break;
                 case '4':
                     $half_year = gmtime() - (3600 * 24 * 180);
-                    $where .= " AND log_time <= '" . $half_year . "'";
+                    $where .= " AND log_time <= '".$half_year."'";
                     break;
                 case '5':
                     $a_year = gmtime() - (3600 * 24 * 365);
-                    $where .= " AND log_time <= '" . $a_year . "'";
+                    $where .= " AND log_time <= '".$a_year."'";
                     break;
             }
-            $sql = "DELETE FROM " . $ecs->table('admin_log') . $where;
+            $sql = 'DELETE FROM '.$ecs->table('admin_log').$where;
             $res = $db->query($sql);
             if ($res) {
                 admin_log('', 'remove', 'adminlog');
 
-                $link[] = array('text' => $_LANG['back_list'], 'href' => 'admin_logs.php?act=list');
+                $link[] = ['text' => $_LANG['back_list'], 'href' => 'admin_logs.php?act=list'];
                 sys_msg($_LANG['drop_sueeccud'], 1, $link);
             }
         }
@@ -117,7 +117,7 @@ if ($_REQUEST['act'] == 'batch_drop') {
     else {
         $count = 0;
         foreach ($_POST['checkboxes'] as $key => $id) {
-            $sql = "DELETE FROM " . $ecs->table('admin_log') . " WHERE log_id = '$id'";
+            $sql = 'DELETE FROM '.$ecs->table('admin_log')." WHERE log_id = '$id'";
             $result = $db->query($sql);
 
             $count++;
@@ -125,7 +125,7 @@ if ($_REQUEST['act'] == 'batch_drop') {
         if ($result) {
             admin_log('', 'remove', 'adminlog');
 
-            $link[] = array('text' => $_LANG['back_list'], 'href' => 'admin_logs.php?act=list');
+            $link[] = ['text' => $_LANG['back_list'], 'href' => 'admin_logs.php?act=list'];
             sys_msg(sprintf($_LANG['batch_drop_success'], $count), 0, $link);
         }
     }
@@ -134,32 +134,32 @@ if ($_REQUEST['act'] == 'batch_drop') {
 /* 获取管理员操作记录 */
 function get_admin_logs()
 {
-    $user_id = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
-    $admin_ip = !empty($_REQUEST['ip']) ? $_REQUEST['ip'] : '';
+    $user_id = ! empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
+    $admin_ip = ! empty($_REQUEST['ip']) ? $_REQUEST['ip'] : '';
 
-    $filter = array();
+    $filter = [];
     $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'al.log_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
     //查询条件
-    $where = " WHERE 1 ";
-    if (!empty($user_id)) {
+    $where = ' WHERE 1 ';
+    if (! empty($user_id)) {
         $where .= " AND al.user_id = '$user_id' ";
-    } elseif (!empty($admin_ip)) {
+    } elseif (! empty($admin_ip)) {
         $where .= " AND al.ip_address = '$admin_ip' ";
     }
 
     /* 获得总记录数据 */
-    $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('admin_log') . ' AS al ' . $where;
+    $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('admin_log').' AS al '.$where;
     $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
     $filter = page_and_size($filter);
 
     /* 获取管理员日志记录 */
-    $list = array();
-    $sql = 'SELECT al.*, u.user_name FROM ' . $GLOBALS['ecs']->table('admin_log') . ' AS al ' .
-        'LEFT JOIN ' . $GLOBALS['ecs']->table('admin_user') . ' AS u ON u.user_id = al.user_id ' .
-        $where . ' ORDER by ' . $filter['sort_by'] . ' ' . $filter['sort_order'];
+    $list = [];
+    $sql = 'SELECT al.*, u.user_name FROM '.$GLOBALS['ecs']->table('admin_log').' AS al '.
+        'LEFT JOIN '.$GLOBALS['ecs']->table('admin_user').' AS u ON u.user_id = al.user_id '.
+        $where.' ORDER by '.$filter['sort_by'].' '.$filter['sort_order'];
     $res = $GLOBALS['db']->selectLimit($sql, $filter['page_size'], $filter['start']);
 
     while ($rows = $GLOBALS['db']->fetchRow($res)) {
@@ -168,5 +168,5 @@ function get_admin_logs()
         $list[] = $rows;
     }
 
-    return array('list' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+    return ['list' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 }

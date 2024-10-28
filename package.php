@@ -2,14 +2,14 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'includes/lib_order.php');
-include_once(ROOT_PATH . 'includes/lib_transaction.php');
+require dirname(__FILE__).'/includes/init.php';
+require_once ROOT_PATH.'includes/lib_order.php';
+include_once ROOT_PATH.'includes/lib_transaction.php';
 
 /* 载入语言文件 */
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/package.php');
+require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/shopping_flow.php';
+require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/user.php';
+require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/package.php';
 
 /*------------------------------------------------------ */
 //-- PROCESSOR
@@ -25,10 +25,10 @@ $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
 
 $now = gmtime();
 
-$sql = "SELECT * FROM " . $ecs->table('goods_activity') . " WHERE `start_time` <= '$now' AND `end_time` >= '$now' AND `act_type` = '4' ORDER BY `end_time`";
+$sql = 'SELECT * FROM '.$ecs->table('goods_activity')." WHERE `start_time` <= '$now' AND `end_time` >= '$now' AND `act_type` = '4' ORDER BY `end_time`";
 $res = $db->query($sql);
 
-$list = array();
+$list = [];
 while ($row = $db->fetchRow($res)) {
     $row['start_time'] = local_date('Y-m-d H:i', $row['start_time']);
     $row['end_time'] = local_date('Y-m-d H:i', $row['end_time']);
@@ -40,16 +40,16 @@ while ($row = $db->fetchRow($res)) {
         }
     }
 
-    $sql = "SELECT pg.package_id, pg.goods_id, pg.goods_number, pg.admin_id, " .
-        " g.goods_sn, g.goods_name, g.market_price, g.goods_thumb, " .
-        " IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS rank_price " .
-        " FROM " . $GLOBALS['ecs']->table('package_goods') . " AS pg " .
-        "   LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g " .
-        "   ON g.goods_id = pg.goods_id " .
-        " LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp " .
-        "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
-        " WHERE pg.package_id = " . $row['act_id'] . " " .
-        " ORDER BY pg.goods_id";
+    $sql = 'SELECT pg.package_id, pg.goods_id, pg.goods_number, pg.admin_id, '.
+        ' g.goods_sn, g.goods_name, g.market_price, g.goods_thumb, '.
+        " IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS rank_price ".
+        ' FROM '.$GLOBALS['ecs']->table('package_goods').' AS pg '.
+        '   LEFT JOIN '.$GLOBALS['ecs']->table('goods').' AS g '.
+        '   ON g.goods_id = pg.goods_id '.
+        ' LEFT JOIN '.$GLOBALS['ecs']->table('member_price').' AS mp '.
+        "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' ".
+        ' WHERE pg.package_id = '.$row['act_id'].' '.
+        ' ORDER BY pg.goods_id';
 
     $goods_res = $GLOBALS['db']->getAll($sql);
 
@@ -60,7 +60,6 @@ while ($row = $db->fetchRow($res)) {
         $goods_res[$key]['rank_price'] = price_format($val['rank_price']);
         $subtotal += $val['rank_price'] * $val['goods_number'];
     }
-
 
     $row['goods_list'] = $goods_res;
     $row['subtotal'] = price_format($subtotal);
@@ -75,5 +74,5 @@ $smarty->assign('list', $list);
 $smarty->assign('helps', get_shop_help());       // 网店帮助
 $smarty->assign('lang', $_LANG);
 
-$smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typepackage.xml" : 'feed.php?type=package'); // RSS URL
+$smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typepackage.xml' : 'feed.php?type=package'); // RSS URL
 $smarty->display('package.dwt');

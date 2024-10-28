@@ -2,13 +2,13 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 
-if (!DEBUG_MODE) {
+if (! DEBUG_MODE) {
     $smarty->caching = true;
 }
 
-if (!$smarty->is_cached('catalog.dwt')) {
+if (! $smarty->is_cached('catalog.dwt')) {
     /* 取出所有分类 */
     $cat_list = cat_list(0, 0, false);
 
@@ -17,7 +17,6 @@ if (!$smarty->is_cached('catalog.dwt')) {
             unset($cat_list[$key]);
         }
     }
-
 
     assign_template();
     assign_dynamic('catalog');
@@ -36,9 +35,7 @@ $smarty->display('catalog.dwt');
 /**
  * 计算指定分类的商品数量
  *
- * @access public
- * @param integer $cat_id
- *
+ * @param  int  $cat_id
  * @return void
  */
 function calculate_goods_num($cat_list, $cat_id)
@@ -46,7 +43,7 @@ function calculate_goods_num($cat_list, $cat_id)
     $goods_num = 0;
 
     foreach ($cat_list as $cat) {
-        if ($cat['parent_id'] == $cat_id && !empty($cat['goods_num'])) {
+        if ($cat['parent_id'] == $cat_id && ! empty($cat['goods_num'])) {
             $goods_num += $cat['goods_num'];
         }
     }

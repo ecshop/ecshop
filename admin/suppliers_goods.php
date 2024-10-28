@@ -2,9 +2,9 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . '/admin/includes/lib_goods.php');
-include_once(ROOT_PATH . '/includes/cls_image.php');
+require dirname(__FILE__).'/includes/init.php';
+require_once ROOT_PATH.'/admin/includes/lib_goods.php';
+include_once ROOT_PATH.'/includes/cls_image.php';
 $image = new cls_image($_CFG['bgcolor']);
 $exc = new exchange($ecs->table('goods'), $db, 'goods_id', 'goods_name');
 
@@ -18,21 +18,21 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'trash') {
     $cat_id = empty($_REQUEST['cat_id']) ? 0 : intval($_REQUEST['cat_id']);
     $code = empty($_REQUEST['extension_code']) ? '' : trim($_REQUEST['extension_code']);
 
-    $handler_list = array();
-    $handler_list['virtual_card'][] = array('url' => 'virtual_card.php?act=card', 'title' => $_LANG['card'], 'img' => 'icon_send_bonus.gif');
-    $handler_list['virtual_card'][] = array('url' => 'virtual_card.php?act=replenish', 'title' => $_LANG['replenish'], 'img' => 'icon_add.gif');
-    $handler_list['virtual_card'][] = array('url' => 'virtual_card.php?act=batch_card_add', 'title' => $_LANG['batch_card_add'], 'img' => 'icon_output.gif');
+    $handler_list = [];
+    $handler_list['virtual_card'][] = ['url' => 'virtual_card.php?act=card', 'title' => $_LANG['card'], 'img' => 'icon_send_bonus.gif'];
+    $handler_list['virtual_card'][] = ['url' => 'virtual_card.php?act=replenish', 'title' => $_LANG['replenish'], 'img' => 'icon_add.gif'];
+    $handler_list['virtual_card'][] = ['url' => 'virtual_card.php?act=batch_card_add', 'title' => $_LANG['batch_card_add'], 'img' => 'icon_output.gif'];
 
     if ($_REQUEST['act'] == 'list' && isset($handler_list[$code])) {
         $smarty->assign('add_handler', $handler_list[$code]);
     }
 
     /* 模板赋值 */
-    $goods_ur = array('' => $_LANG['01_goods_list'], 'virtual_card' => $_LANG['50_virtual_card_list']);
+    $goods_ur = ['' => $_LANG['01_goods_list'], 'virtual_card' => $_LANG['50_virtual_card_list']];
     $ur_here = ($_REQUEST['act'] == 'list') ? $goods_ur[$code] : $_LANG['11_goods_trash'];
     $smarty->assign('ur_here', $ur_here);
 
-    $action_link = ($_REQUEST['act'] == 'list') ? add_link($code) : array('href' => 'goods.php?act=list', 'text' => $_LANG['01_goods_list']);
+    $action_link = ($_REQUEST['act'] == 'list') ? add_link($code) : ['href' => 'goods.php?act=list', 'text' => $_LANG['01_goods_list']];
     $smarty->assign('action_link', $action_link);
     $smarty->assign('code', $code);
     $smarty->assign('cat_list', cat_list(0, $cat_id));
@@ -65,7 +65,7 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'trash') {
 /*------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] == 'copy') {
-    include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
+    include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
 
     $is_add = $_REQUEST['act'] == 'add'; // 添加还是编辑的标识
     $is_copy = $_REQUEST['act'] == 'copy'; //是否复制
@@ -77,32 +77,32 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
     }
 
     /* 如果是安全模式，检查目录是否存在 */
-    if (ini_get('safe_mode') == 1 && (!file_exists('../' . IMAGE_DIR . '/' . date('Ym')) || !is_dir('../' . IMAGE_DIR . '/' . date('Ym')))) {
-        if (@!mkdir('../' . IMAGE_DIR . '/' . date('Ym'), 0777)) {
-            $warning = sprintf($_LANG['safe_mode_warning'], '../' . IMAGE_DIR . '/' . date('Ym'));
+    if (ini_get('safe_mode') == 1 && (! file_exists('../'.IMAGE_DIR.'/'.date('Ym')) || ! is_dir('../'.IMAGE_DIR.'/'.date('Ym')))) {
+        if (@! mkdir('../'.IMAGE_DIR.'/'.date('Ym'), 0777)) {
+            $warning = sprintf($_LANG['safe_mode_warning'], '../'.IMAGE_DIR.'/'.date('Ym'));
             $smarty->assign('warning', $warning);
         }
     } /* 如果目录存在但不可写，提示用户 */
-    elseif (file_exists('../' . IMAGE_DIR . '/' . date('Ym')) && file_mode_info('../' . IMAGE_DIR . '/' . date('Ym')) < 2) {
-        $warning = sprintf($_LANG['not_writable_warning'], '../' . IMAGE_DIR . '/' . date('Ym'));
+    elseif (file_exists('../'.IMAGE_DIR.'/'.date('Ym')) && file_mode_info('../'.IMAGE_DIR.'/'.date('Ym')) < 2) {
+        $warning = sprintf($_LANG['not_writable_warning'], '../'.IMAGE_DIR.'/'.date('Ym'));
         $smarty->assign('warning', $warning);
     }
 
     /* 取得商品信息 */
     if ($is_add) {
         /* 默认值 */
-        $last_choose = array(0, 0);
-        if (!empty($_COOKIE['ECSCP']['last_choose'])) {
+        $last_choose = [0, 0];
+        if (! empty($_COOKIE['ECSCP']['last_choose'])) {
             $last_choose = explode('|', $_COOKIE['ECSCP']['last_choose']);
         }
-        $goods = array(
+        $goods = [
             'goods_id' => 0,
             'goods_desc' => '',
             'cat_id' => $last_choose[0],
             'brand_id' => $last_choose[1],
             'is_on_sale' => '1',
             'is_alone_sale' => '1',
-            'other_cat' => array(), // 扩展分类
+            'other_cat' => [], // 扩展分类
             'goods_type' => 0,       // 商品类型
             'shop_price' => 0,
             'promote_price' => 0,
@@ -114,41 +114,41 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
             'promote_end_date' => local_date('Y-m-d', local_strtotime('+1 month')),
             'goods_weight' => 0,
             'give_integral' => -1,
-            'rank_integral' => -1
-        );
+            'rank_integral' => -1,
+        ];
 
         if ($code != '') {
             $goods['goods_number'] = 0;
         }
 
         /* 关联商品 */
-        $link_goods_list = array();
-        $sql = "DELETE FROM " . $ecs->table('link_goods') .
-            " WHERE (goods_id = 0 OR link_goods_id = 0)" .
+        $link_goods_list = [];
+        $sql = 'DELETE FROM '.$ecs->table('link_goods').
+            ' WHERE (goods_id = 0 OR link_goods_id = 0)'.
             " AND admin_id = '$_SESSION[admin_id]'";
         $db->query($sql);
 
         /* 组合商品 */
-        $group_goods_list = array();
-        $sql = "DELETE FROM " . $ecs->table('group_goods') .
+        $group_goods_list = [];
+        $sql = 'DELETE FROM '.$ecs->table('group_goods').
             " WHERE parent_id = 0 AND admin_id = '$_SESSION[admin_id]'";
         $db->query($sql);
 
         /* 关联文章 */
-        $goods_article_list = array();
-        $sql = "DELETE FROM " . $ecs->table('goods_article') .
+        $goods_article_list = [];
+        $sql = 'DELETE FROM '.$ecs->table('goods_article').
             " WHERE goods_id = 0 AND admin_id = '$_SESSION[admin_id]'";
         $db->query($sql);
 
         /* 属性 */
-        $sql = "DELETE FROM " . $ecs->table('goods_attr') . " WHERE goods_id = 0";
+        $sql = 'DELETE FROM '.$ecs->table('goods_attr').' WHERE goods_id = 0';
         $db->query($sql);
 
         /* 图片列表 */
-        $img_list = array();
+        $img_list = [];
     } else {
         /* 商品信息 */
-        $sql = "SELECT * FROM " . $ecs->table('goods') . " WHERE goods_id = '$_REQUEST[goods_id]'";
+        $sql = 'SELECT * FROM '.$ecs->table('goods')." WHERE goods_id = '$_REQUEST[goods_id]'";
         $goods = $db->getRow($sql);
 
         /* 虚拟卡商品复制时, 将其库存置为0*/
@@ -158,13 +158,13 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
 
         if (empty($goods) === true) {
             /* 默认值 */
-            $goods = array(
+            $goods = [
                 'goods_id' => 0,
                 'goods_desc' => '',
                 'cat_id' => 0,
                 'is_on_sale' => '1',
                 'is_alone_sale' => '1',
-                'other_cat' => array(), // 扩展分类
+                'other_cat' => [], // 扩展分类
                 'goods_type' => 0,       // 商品类型
                 'shop_price' => 0,
                 'promote_price' => 0,
@@ -176,8 +176,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
                 'promote_end_date' => local_date('Y-m-d', gmstr2tome('+1 month')),
                 'goods_weight' => 0,
                 'give_integral' => -1,
-                'rank_integral' => -1
-            );
+                'rank_integral' => -1,
+            ];
         }
 
         /* 根据商品重量的单位重新计算 */
@@ -185,10 +185,10 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
             $goods['goods_weight_by_unit'] = ($goods['goods_weight'] >= 1) ? $goods['goods_weight'] : ($goods['goods_weight'] / 0.001);
         }
 
-        if (!empty($goods['goods_brief'])) {
+        if (! empty($goods['goods_brief'])) {
             $goods['goods_brief'] = $goods['goods_brief'];
         }
-        if (!empty($goods['keywords'])) {
+        if (! empty($goods['keywords'])) {
             $goods['keywords'] = $goods['keywords'];
         }
 
@@ -214,21 +214,21 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
             // 扩展分类不变
 
             // 关联商品
-            $sql = "DELETE FROM " . $ecs->table('link_goods') .
-                " WHERE (goods_id = 0 OR link_goods_id = 0)" .
+            $sql = 'DELETE FROM '.$ecs->table('link_goods').
+                ' WHERE (goods_id = 0 OR link_goods_id = 0)'.
                 " AND admin_id = '$_SESSION[admin_id]'";
             $db->query($sql);
 
-            $sql = "SELECT '0' AS goods_id, link_goods_id, is_double, '$_SESSION[admin_id]' AS admin_id" .
-                " FROM " . $ecs->table('link_goods') .
+            $sql = "SELECT '0' AS goods_id, link_goods_id, is_double, '$_SESSION[admin_id]' AS admin_id".
+                ' FROM '.$ecs->table('link_goods').
                 " WHERE goods_id = '$_REQUEST[goods_id]' ";
             $res = $db->query($sql);
             while ($row = $db->fetchRow($res)) {
                 $db->autoExecute($ecs->table('link_goods'), $row, 'INSERT');
             }
 
-            $sql = "SELECT goods_id, '0' AS link_goods_id, is_double, '$_SESSION[admin_id]' AS admin_id" .
-                " FROM " . $ecs->table('link_goods') .
+            $sql = "SELECT goods_id, '0' AS link_goods_id, is_double, '$_SESSION[admin_id]' AS admin_id".
+                ' FROM '.$ecs->table('link_goods').
                 " WHERE link_goods_id = '$_REQUEST[goods_id]' ";
             $res = $db->query($sql);
             while ($row = $db->fetchRow($res)) {
@@ -236,12 +236,12 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
             }
 
             // 配件
-            $sql = "DELETE FROM " . $ecs->table('group_goods') .
+            $sql = 'DELETE FROM '.$ecs->table('group_goods').
                 " WHERE parent_id = 0 AND admin_id = '$_SESSION[admin_id]'";
             $db->query($sql);
 
-            $sql = "SELECT 0 AS parent_id, goods_id, goods_price, '$_SESSION[admin_id]' AS admin_id " .
-                "FROM " . $ecs->table('group_goods') .
+            $sql = "SELECT 0 AS parent_id, goods_id, goods_price, '$_SESSION[admin_id]' AS admin_id ".
+                'FROM '.$ecs->table('group_goods').
                 " WHERE parent_id = '$_REQUEST[goods_id]' ";
             $res = $db->query($sql);
             while ($row = $db->fetchRow($res)) {
@@ -249,12 +249,12 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
             }
 
             // 关联文章
-            $sql = "DELETE FROM " . $ecs->table('goods_article') .
+            $sql = 'DELETE FROM '.$ecs->table('goods_article').
                 " WHERE goods_id = 0 AND admin_id = '$_SESSION[admin_id]'";
             $db->query($sql);
 
-            $sql = "SELECT 0 AS goods_id, article_id, '$_SESSION[admin_id]' AS admin_id " .
-                "FROM " . $ecs->table('goods_article') .
+            $sql = "SELECT 0 AS goods_id, article_id, '$_SESSION[admin_id]' AS admin_id ".
+                'FROM '.$ecs->table('goods_article').
                 " WHERE goods_id = '$_REQUEST[goods_id]' ";
             $res = $db->query($sql);
             while ($row = $db->fetchRow($res)) {
@@ -264,11 +264,11 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
             // 图片不变
 
             // 商品属性
-            $sql = "DELETE FROM " . $ecs->table('goods_attr') . " WHERE goods_id = 0";
+            $sql = 'DELETE FROM '.$ecs->table('goods_attr').' WHERE goods_id = 0';
             $db->query($sql);
 
-            $sql = "SELECT 0 AS goods_id, attr_id, attr_value, attr_price " .
-                "FROM " . $ecs->table('goods_attr') .
+            $sql = 'SELECT 0 AS goods_id, attr_id, attr_value, attr_price '.
+                'FROM '.$ecs->table('goods_attr').
                 " WHERE goods_id = '$_REQUEST[goods_id]' ";
             $res = $db->query($sql);
             while ($row = $db->fetchRow($res)) {
@@ -277,8 +277,8 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
         }
 
         // 扩展分类
-        $other_cat_list = array();
-        $sql = "SELECT cat_id FROM " . $ecs->table('goods_cat') . " WHERE goods_id = '$_REQUEST[goods_id]'";
+        $other_cat_list = [];
+        $sql = 'SELECT cat_id FROM '.$ecs->table('goods_cat')." WHERE goods_id = '$_REQUEST[goods_id]'";
         $goods['other_cat'] = $db->getCol($sql);
         foreach ($goods['other_cat'] as $cat_id) {
             $other_cat_list[$cat_id] = cat_list(0, $cat_id);
@@ -290,13 +290,13 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
         $goods_article_list = get_goods_articles($goods['goods_id']);   // 关联文章
 
         /* 商品图片路径 */
-        if (isset($GLOBALS['shop_id']) && ($GLOBALS['shop_id'] > 10) && !empty($goods['original_img'])) {
+        if (isset($GLOBALS['shop_id']) && ($GLOBALS['shop_id'] > 10) && ! empty($goods['original_img'])) {
             $goods['goods_img'] = get_image_path($goods['goods_img']);
             $goods['goods_thumb'] = get_image_path($goods['goods_thumb']);
         }
 
         /* 图片列表 */
-        $sql = "SELECT * FROM " . $ecs->table('goods_gallery') . " WHERE goods_id = '$goods[goods_id]'";
+        $sql = 'SELECT * FROM '.$ecs->table('goods_gallery')." WHERE goods_id = '$goods[goods_id]'";
         $img_list = $db->getAll($sql);
 
         /* 格式化相册图片路径 */
@@ -307,7 +307,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
             }
         } else {
             foreach ($img_list as $key => $gallery_img) {
-                $gallery_img[$key]['thumb_url'] = '../' . (empty($gallery_img['thumb_url']) ? $gallery_img['img_url'] : $gallery_img['thumb_url']);
+                $gallery_img[$key]['thumb_url'] = '../'.(empty($gallery_img['thumb_url']) ? $gallery_img['img_url'] : $gallery_img['thumb_url']);
             }
         }
     }
@@ -335,7 +335,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
     if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
         $smarty->assign('is_add', true);
     }
-    if (!$is_add) {
+    if (! $is_add) {
         $smarty->assign('member_price_list', get_member_price_list($_REQUEST['goods_id']));
     }
     $smarty->assign('link_goods_list', $link_goods_list);
@@ -352,7 +352,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
         $volume_price_list = get_volume_price_list($_REQUEST['goods_id']);
     }
     if (empty($volume_price_list)) {
-        $volume_price_list = array('0' => array('number' => '', 'price' => ''));
+        $volume_price_list = ['0' => ['number' => '', 'price' => '']];
     }
     $smarty->assign('volume_price_list', $volume_price_list);
 
@@ -378,10 +378,10 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
     /* 检查货号是否重复 */
     if ($_POST['goods_sn']) {
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('goods') .
+        $sql = 'SELECT COUNT(*) FROM '.$ecs->table('goods').
             " WHERE goods_sn = '$_POST[goods_sn]' AND is_delete = 0 AND goods_id <> '$_POST[goods_id]'";
         if ($db->getOne($sql) > 0) {
-            sys_msg($_LANG['goods_sn_exists'], 1, array(), false);
+            sys_msg($_LANG['goods_sn_exists'], 1, [], false);
         }
     }
 
@@ -393,54 +393,54 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
         // 商品图片
         if ($_FILES['goods_img']['error'] == 0) {
-            if (!$image->check_img_type($_FILES['goods_img']['type'])) {
-                sys_msg($_LANG['invalid_goods_img'], 1, array(), false);
+            if (! $image->check_img_type($_FILES['goods_img']['type'])) {
+                sys_msg($_LANG['invalid_goods_img'], 1, [], false);
             }
         } elseif ($_FILES['goods_img']['error'] == 1) {
-            sys_msg(sprintf($_LANG['goods_img_too_big'], $php_maxsize), 1, array(), false);
+            sys_msg(sprintf($_LANG['goods_img_too_big'], $php_maxsize), 1, [], false);
         } elseif ($_FILES['goods_img']['error'] == 2) {
-            sys_msg(sprintf($_LANG['goods_img_too_big'], $htm_maxsize), 1, array(), false);
+            sys_msg(sprintf($_LANG['goods_img_too_big'], $htm_maxsize), 1, [], false);
         }
 
         // 商品缩略图
         if (isset($_FILES['goods_thumb'])) {
             if ($_FILES['goods_thumb']['error'] == 0) {
-                if (!$image->check_img_type($_FILES['goods_thumb']['type'])) {
-                    sys_msg($_LANG['invalid_goods_thumb'], 1, array(), false);
+                if (! $image->check_img_type($_FILES['goods_thumb']['type'])) {
+                    sys_msg($_LANG['invalid_goods_thumb'], 1, [], false);
                 }
             } elseif ($_FILES['goods_thumb']['error'] == 1) {
-                sys_msg(sprintf($_LANG['goods_thumb_too_big'], $php_maxsize), 1, array(), false);
+                sys_msg(sprintf($_LANG['goods_thumb_too_big'], $php_maxsize), 1, [], false);
             } elseif ($_FILES['goods_thumb']['error'] == 2) {
-                sys_msg(sprintf($_LANG['goods_thumb_too_big'], $htm_maxsize), 1, array(), false);
+                sys_msg(sprintf($_LANG['goods_thumb_too_big'], $htm_maxsize), 1, [], false);
             }
         }
 
         // 相册图片
         foreach ($_FILES['img_url']['error'] as $key => $value) {
             if ($value == 0) {
-                if (!$image->check_img_type($_FILES['img_url']['type'][$key])) {
-                    sys_msg(sprintf($_LANG['invalid_img_url'], $key + 1), 1, array(), false);
+                if (! $image->check_img_type($_FILES['img_url']['type'][$key])) {
+                    sys_msg(sprintf($_LANG['invalid_img_url'], $key + 1), 1, [], false);
                 }
             } elseif ($value == 1) {
-                sys_msg(sprintf($_LANG['img_url_too_big'], $key + 1, $php_maxsize), 1, array(), false);
+                sys_msg(sprintf($_LANG['img_url_too_big'], $key + 1, $php_maxsize), 1, [], false);
             } elseif ($_FILES['img_url']['error'] == 2) {
-                sys_msg(sprintf($_LANG['img_url_too_big'], $key + 1, $htm_maxsize), 1, array(), false);
+                sys_msg(sprintf($_LANG['img_url_too_big'], $key + 1, $htm_maxsize), 1, [], false);
             }
         }
     } /* 4.1版本 */
     else {
         // 商品图片
         if ($_FILES['goods_img']['tmp_name'] != 'none') {
-            if (!$image->check_img_type($_FILES['goods_img']['type'])) {
-                sys_msg($_LANG['invalid_goods_img'], 1, array(), false);
+            if (! $image->check_img_type($_FILES['goods_img']['type'])) {
+                sys_msg($_LANG['invalid_goods_img'], 1, [], false);
             }
         }
 
         // 商品缩略图
         if (isset($_FILES['goods_thumb'])) {
             if ($_FILES['goods_thumb']['tmp_name'] != 'none') {
-                if (!$image->check_img_type($_FILES['goods_thumb']['type'])) {
-                    sys_msg($_LANG['invalid_goods_thumb'], 1, array(), false);
+                if (! $image->check_img_type($_FILES['goods_thumb']['type'])) {
+                    sys_msg($_LANG['invalid_goods_thumb'], 1, [], false);
                 }
             }
         }
@@ -448,8 +448,8 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         // 相册图片
         foreach ($_FILES['img_url']['tmp_name'] as $key => $value) {
             if ($value != 'none') {
-                if (!$image->check_img_type($_FILES['img_url']['type'][$key])) {
-                    sys_msg(sprintf($_LANG['invalid_img_url'], $key + 1), 1, array(), false);
+                if (! $image->check_img_type($_FILES['img_url']['type'][$key])) {
+                    sys_msg(sprintf($_LANG['invalid_img_url'], $key + 1), 1, [], false);
                 }
             }
         }
@@ -468,21 +468,21 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     if ($_FILES['goods_img']['tmp_name'] != '' && $_FILES['goods_img']['tmp_name'] != 'none') {
         if ($_REQUEST['goods_id'] > 0) {
             /* 删除原来的图片文件 */
-            $sql = "SELECT goods_thumb, goods_img, original_img " .
-                " FROM " . $ecs->table('goods') .
+            $sql = 'SELECT goods_thumb, goods_img, original_img '.
+                ' FROM '.$ecs->table('goods').
                 " WHERE goods_id = '$_REQUEST[goods_id]'";
             $row = $db->getRow($sql);
-            if ($row['goods_thumb'] != '' && is_file('../' . $row['goods_thumb'])) {
-                @unlink('../' . $row['goods_thumb']);
+            if ($row['goods_thumb'] != '' && is_file('../'.$row['goods_thumb'])) {
+                @unlink('../'.$row['goods_thumb']);
             }
-            if ($row['goods_img'] != '' && is_file('../' . $row['goods_img'])) {
-                @unlink('../' . $row['goods_img']);
+            if ($row['goods_img'] != '' && is_file('../'.$row['goods_img'])) {
+                @unlink('../'.$row['goods_img']);
             }
         }
 
         $original_img = $image->upload_image($_FILES['goods_img']); // 原始图片
         if ($original_img === false) {
-            sys_msg($image->error_msg(), 1, array(), false);
+            sys_msg($image->error_msg(), 1, [], false);
         }
         $goods_img = $original_img;   // 商品图片
 
@@ -491,9 +491,9 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         if ($_CFG['auto_generate_gallery']) {
             $img = $original_img;   // 相册图片
             $pos = strpos(basename($img), '.');
-            $newname = dirname($img) . '/' . $image->random_filename() . substr(basename($img), $pos);
-            if (!copy('../' . $img, '../' . $newname)) {
-                sys_msg('fail to copy file: ' . realpath('../' . $img), 1, array(), false);
+            $newname = dirname($img).'/'.$image->random_filename().substr(basename($img), $pos);
+            if (! copy('../'.$img, '../'.$newname)) {
+                sys_msg('fail to copy file: '.realpath('../'.$img), 1, [], false);
             }
             $img = $newname;
 
@@ -505,30 +505,30 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         if ($proc_thumb && $image->gd_version() > 0 && $image->check_img_function($_FILES['goods_img']['type'])) {
             // 如果设置大小不为0，缩放图片
             if ($_CFG['image_width'] != 0 || $_CFG['image_height'] != 0) {
-                $goods_img = $image->make_thumb('../' . $goods_img, $GLOBALS['_CFG']['image_width'], $GLOBALS['_CFG']['image_height']);
+                $goods_img = $image->make_thumb('../'.$goods_img, $GLOBALS['_CFG']['image_width'], $GLOBALS['_CFG']['image_height']);
                 if ($goods_img === false) {
-                    sys_msg($image->error_msg(), 1, array(), false);
+                    sys_msg($image->error_msg(), 1, [], false);
                 }
             }
 
             /* 添加判断是否自动生成相册图片 */
             if ($_CFG['auto_generate_gallery']) {
-                $newname = dirname($img) . '/' . $image->random_filename() . substr(basename($img), $pos);
-                if (!copy('../' . $img, '../' . $newname)) {
-                    sys_msg('fail to copy file: ' . realpath('../' . $img), 1, array(), false);
+                $newname = dirname($img).'/'.$image->random_filename().substr(basename($img), $pos);
+                if (! copy('../'.$img, '../'.$newname)) {
+                    sys_msg('fail to copy file: '.realpath('../'.$img), 1, [], false);
                 }
                 $gallery_img = $newname;
             }
 
             // 加水印
-            if (intval($_CFG['watermark_place']) > 0 && !empty($GLOBALS['_CFG']['watermark'])) {
-                if ($image->add_watermark('../' . $goods_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
-                    sys_msg($image->error_msg(), 1, array(), false);
+            if (intval($_CFG['watermark_place']) > 0 && ! empty($GLOBALS['_CFG']['watermark'])) {
+                if ($image->add_watermark('../'.$goods_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
+                    sys_msg($image->error_msg(), 1, [], false);
                 }
                 /* 添加判断是否自动生成相册图片 */
                 if ($_CFG['auto_generate_gallery']) {
-                    if ($image->add_watermark('../' . $gallery_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
-                        sys_msg($image->error_msg(), 1, array(), false);
+                    if ($image->add_watermark('../'.$gallery_img, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']) === false) {
+                        sys_msg($image->error_msg(), 1, [], false);
                     }
                 }
             }
@@ -537,9 +537,9 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
             /* 添加判断是否自动生成相册图片 */
             if ($_CFG['auto_generate_gallery']) {
                 if ($_CFG['thumb_width'] != 0 || $_CFG['thumb_height'] != 0) {
-                    $gallery_thumb = $image->make_thumb('../' . $img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
+                    $gallery_thumb = $image->make_thumb('../'.$img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
                     if ($gallery_thumb === false) {
-                        sys_msg($image->error_msg(), 1, array(), false);
+                        sys_msg($image->error_msg(), 1, [], false);
                     }
                 }
             }
@@ -552,16 +552,16 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         // 上传了，直接使用，原始大小
         $goods_thumb = $image->upload_image($_FILES['goods_thumb']);
         if ($goods_thumb === false) {
-            sys_msg($image->error_msg(), 1, array(), false);
+            sys_msg($image->error_msg(), 1, [], false);
         }
     } else {
         // 未上传，如果自动选择生成，且上传了商品图片，生成所略图
-        if ($proc_thumb && isset($_POST['auto_thumb']) && !empty($original_img)) {
+        if ($proc_thumb && isset($_POST['auto_thumb']) && ! empty($original_img)) {
             // 如果设置缩略图大小不为0，生成缩略图
             if ($_CFG['thumb_width'] != 0 || $_CFG['thumb_height'] != 0) {
-                $goods_thumb = $image->make_thumb('../' . $original_img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
+                $goods_thumb = $image->make_thumb('../'.$original_img, $GLOBALS['_CFG']['thumb_width'], $GLOBALS['_CFG']['thumb_height']);
                 if ($goods_thumb === false) {
-                    sys_msg($image->error_msg(), 1, array(), false);
+                    sys_msg($image->error_msg(), 1, [], false);
                 }
             } else {
                 $goods_thumb = $original_img;
@@ -571,20 +571,20 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
     /* 如果没有输入商品货号则自动生成一个商品货号 */
     if (empty($_POST['goods_sn'])) {
-        $max_id = $is_insert ? $db->getOne("SELECT MAX(goods_id) + 1 FROM " . $ecs->table('goods')) : $_REQUEST['goods_id'];
+        $max_id = $is_insert ? $db->getOne('SELECT MAX(goods_id) + 1 FROM '.$ecs->table('goods')) : $_REQUEST['goods_id'];
         $goods_sn = generate_goods_sn($max_id);
     } else {
         $goods_sn = $_POST['goods_sn'];
     }
 
     /* 处理商品数据 */
-    $shop_price = !empty($_POST['shop_price']) ? $_POST['shop_price'] : 0;
-    $market_price = !empty($_POST['market_price']) ? $_POST['market_price'] : 0;
-    $promote_price = !empty($_POST['promote_price']) ? floatval($_POST['promote_price']) : 0;
+    $shop_price = ! empty($_POST['shop_price']) ? $_POST['shop_price'] : 0;
+    $market_price = ! empty($_POST['market_price']) ? $_POST['market_price'] : 0;
+    $promote_price = ! empty($_POST['promote_price']) ? floatval($_POST['promote_price']) : 0;
     $is_promote = empty($promote_price) ? 0 : 1;
-    $promote_start_date = ($is_promote && !empty($_POST['promote_start_date'])) ? local_strtotime($_POST['promote_start_date']) : 0;
-    $promote_end_date = ($is_promote && !empty($_POST['promote_end_date'])) ? local_strtotime($_POST['promote_end_date']) : 0;
-    $goods_weight = !empty($_POST['goods_weight']) ? $_POST['goods_weight'] * $_POST['weight_unit'] : 0;
+    $promote_start_date = ($is_promote && ! empty($_POST['promote_start_date'])) ? local_strtotime($_POST['promote_start_date']) : 0;
+    $promote_end_date = ($is_promote && ! empty($_POST['promote_end_date'])) ? local_strtotime($_POST['promote_end_date']) : 0;
+    $goods_weight = ! empty($_POST['goods_weight']) ? $_POST['goods_weight'] * $_POST['weight_unit'] : 0;
     $is_best = isset($_POST['is_best']) ? 1 : 0;
     $is_new = isset($_POST['is_new']) ? 1 : 0;
     $is_hot = isset($_POST['is_hot']) ? 1 : 0;
@@ -596,68 +596,68 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     $give_integral = isset($_POST['give_integral']) ? intval($_POST['give_integral']) : '-1';
     $rank_integral = isset($_POST['rank_integral']) ? intval($_POST['rank_integral']) : '-1';
 
-    $goods_name_style = $_POST['goods_name_color'] . '+' . $_POST['goods_name_style'];
+    $goods_name_style = $_POST['goods_name_color'].'+'.$_POST['goods_name_style'];
 
     $catgory_id = empty($_POST['cat_id']) ? '' : intval($_POST['cat_id']);
     $brand_id = empty($_POST['brand_id']) ? '' : intval($_POST['brand_id']);
 
-    $goods_img = (empty($goods_img) && !empty($_POST['goods_img_url']) && goods_parse_url($_POST['goods_img_url'])) ? htmlspecialchars(trim($_POST['goods_img_url'])) : $goods_img;
-    $goods_thumb = (empty($goods_thumb) && !empty($_POST['goods_thumb_url']) && goods_parse_url($_POST['goods_thumb_url'])) ? htmlspecialchars(trim($_POST['goods_thumb_url'])) : $goods_thumb;
+    $goods_img = (empty($goods_img) && ! empty($_POST['goods_img_url']) && goods_parse_url($_POST['goods_img_url'])) ? htmlspecialchars(trim($_POST['goods_img_url'])) : $goods_img;
+    $goods_thumb = (empty($goods_thumb) && ! empty($_POST['goods_thumb_url']) && goods_parse_url($_POST['goods_thumb_url'])) ? htmlspecialchars(trim($_POST['goods_thumb_url'])) : $goods_thumb;
     $goods_thumb = (empty($goods_thumb) && isset($_POST['auto_thumb'])) ? $goods_img : $goods_thumb;
 
     /* 入库 */
     if ($is_insert) {
         if ($code == '') {
-            $sql = "INSERT INTO " . $ecs->table('goods') . " (goods_name, goods_name_style, goods_sn, " .
-                "cat_id, brand_id, shop_price, market_price, is_promote, promote_price, " .
-                "promote_start_date, promote_end_date, goods_img, goods_thumb, original_img, keywords, goods_brief, " .
-                "seller_note, goods_weight, goods_number, warn_number, integral, give_integral, is_best, is_new, is_hot, " .
-                "is_on_sale, is_alone_sale, goods_desc, add_time, last_update, goods_type, rank_integral)" .
-                "VALUES ('$_POST[goods_name]', '$goods_name_style', '$goods_sn', '$catgory_id', " .
-                "'$brand_id', '$shop_price', '$market_price', '$is_promote','$promote_price', " .
-                "'$promote_start_date', '$promote_end_date', '$goods_img', '$goods_thumb', '$original_img', " .
-                "'$_POST[keywords]', '$_POST[goods_brief]', '$_POST[seller_note]', '$goods_weight', '$goods_number'," .
-                " '$warn_number', '$_POST[integral]', '$give_integral', '$is_best', '$is_new', '$is_hot', '$is_on_sale', '$is_alone_sale', " .
-                " '$_POST[goods_desc]', '" . gmtime() . "', '" . gmtime() . "', '$goods_type', '$rank_integral')";
+            $sql = 'INSERT INTO '.$ecs->table('goods').' (goods_name, goods_name_style, goods_sn, '.
+                'cat_id, brand_id, shop_price, market_price, is_promote, promote_price, '.
+                'promote_start_date, promote_end_date, goods_img, goods_thumb, original_img, keywords, goods_brief, '.
+                'seller_note, goods_weight, goods_number, warn_number, integral, give_integral, is_best, is_new, is_hot, '.
+                'is_on_sale, is_alone_sale, goods_desc, add_time, last_update, goods_type, rank_integral)'.
+                "VALUES ('$_POST[goods_name]', '$goods_name_style', '$goods_sn', '$catgory_id', ".
+                "'$brand_id', '$shop_price', '$market_price', '$is_promote','$promote_price', ".
+                "'$promote_start_date', '$promote_end_date', '$goods_img', '$goods_thumb', '$original_img', ".
+                "'$_POST[keywords]', '$_POST[goods_brief]', '$_POST[seller_note]', '$goods_weight', '$goods_number',".
+                " '$warn_number', '$_POST[integral]', '$give_integral', '$is_best', '$is_new', '$is_hot', '$is_on_sale', '$is_alone_sale', ".
+                " '$_POST[goods_desc]', '".gmtime()."', '".gmtime()."', '$goods_type', '$rank_integral')";
         } else {
-            $sql = "INSERT INTO " . $ecs->table('goods') . " (goods_name, goods_name_style, goods_sn, " .
-                "cat_id, brand_id, shop_price, market_price, is_promote, promote_price, " .
-                "promote_start_date, promote_end_date, goods_img, goods_thumb, original_img, keywords, goods_brief, " .
-                "seller_note, goods_weight, goods_number, warn_number, integral, give_integral, is_best, is_new, is_hot, is_real, " .
-                "is_on_sale, is_alone_sale, goods_desc, add_time, last_update, goods_type, extension_code, rank_integral)" .
-                "VALUES ('$_POST[goods_name]', '$goods_name_style', '$goods_sn', '$catgory_id', " .
-                "'$brand_id', '$shop_price', '$market_price', '$is_promote','$promote_price', " .
-                "'$promote_start_date', '$promote_end_date', '$goods_img', '$goods_thumb', '$original_img', " .
-                "'$_POST[keywords]', '$_POST[goods_brief]', '$_POST[seller_note]', '$goods_weight', '$goods_number'," .
-                " '$warn_number', '$_POST[integral]', '$give_integral', '$is_best', '$is_new', '$is_hot', 0, '$is_on_sale', '$is_alone_sale', " .
-                " '$_POST[goods_desc]', '" . gmtime() . "', '" . gmtime() . "', '$goods_type', '$code', '$rank_integral')";
+            $sql = 'INSERT INTO '.$ecs->table('goods').' (goods_name, goods_name_style, goods_sn, '.
+                'cat_id, brand_id, shop_price, market_price, is_promote, promote_price, '.
+                'promote_start_date, promote_end_date, goods_img, goods_thumb, original_img, keywords, goods_brief, '.
+                'seller_note, goods_weight, goods_number, warn_number, integral, give_integral, is_best, is_new, is_hot, is_real, '.
+                'is_on_sale, is_alone_sale, goods_desc, add_time, last_update, goods_type, extension_code, rank_integral)'.
+                "VALUES ('$_POST[goods_name]', '$goods_name_style', '$goods_sn', '$catgory_id', ".
+                "'$brand_id', '$shop_price', '$market_price', '$is_promote','$promote_price', ".
+                "'$promote_start_date', '$promote_end_date', '$goods_img', '$goods_thumb', '$original_img', ".
+                "'$_POST[keywords]', '$_POST[goods_brief]', '$_POST[seller_note]', '$goods_weight', '$goods_number',".
+                " '$warn_number', '$_POST[integral]', '$give_integral', '$is_best', '$is_new', '$is_hot', 0, '$is_on_sale', '$is_alone_sale', ".
+                " '$_POST[goods_desc]', '".gmtime()."', '".gmtime()."', '$goods_type', '$code', '$rank_integral')";
         }
     } else {
         /* 如果有上传图片，删除原来的商品图 */
-        $sql = "SELECT goods_thumb, goods_img, original_img " .
-            " FROM " . $ecs->table('goods') .
+        $sql = 'SELECT goods_thumb, goods_img, original_img '.
+            ' FROM '.$ecs->table('goods').
             " WHERE goods_id = '$_REQUEST[goods_id]'";
         $row = $db->getRow($sql);
-        if ($proc_thumb && $goods_img && $row['goods_img'] && !goods_parse_url($row['goods_img'])) {
-            @unlink(ROOT_PATH . $row['goods_img']);
-            @unlink(ROOT_PATH . $row['original_img']);
+        if ($proc_thumb && $goods_img && $row['goods_img'] && ! goods_parse_url($row['goods_img'])) {
+            @unlink(ROOT_PATH.$row['goods_img']);
+            @unlink(ROOT_PATH.$row['original_img']);
         }
 
-        if ($proc_thumb && $goods_thumb && $row['goods_thumb'] && !goods_parse_url($row['goods_thumb'])) {
-            @unlink(ROOT_PATH . $row['goods_thumb']);
+        if ($proc_thumb && $goods_thumb && $row['goods_thumb'] && ! goods_parse_url($row['goods_thumb'])) {
+            @unlink(ROOT_PATH.$row['goods_thumb']);
         }
 
-        $sql = "UPDATE " . $ecs->table('goods') . " SET " .
-            "goods_name = '$_POST[goods_name]', " .
-            "goods_name_style = '$goods_name_style', " .
-            "goods_sn = '$goods_sn', " .
-            "cat_id = '$catgory_id', " .
-            "brand_id = '$brand_id', " .
-            "shop_price = '$shop_price', " .
-            "market_price = '$market_price', " .
-            "is_promote = '$is_promote', " .
-            "promote_price = '$promote_price', " .
-            "promote_start_date = '$promote_start_date', " .
+        $sql = 'UPDATE '.$ecs->table('goods').' SET '.
+            "goods_name = '$_POST[goods_name]', ".
+            "goods_name_style = '$goods_name_style', ".
+            "goods_sn = '$goods_sn', ".
+            "cat_id = '$catgory_id', ".
+            "brand_id = '$brand_id', ".
+            "shop_price = '$shop_price', ".
+            "market_price = '$market_price', ".
+            "is_promote = '$is_promote', ".
+            "promote_price = '$promote_price', ".
+            "promote_start_date = '$promote_start_date', ".
             "promote_end_date = '$promote_end_date', ";
 
         /* 如果有上传图片，需要更新数据库 */
@@ -670,23 +670,23 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         if ($code != '') {
             $sql .= "is_real=0, extension_code='$code', ";
         }
-        $sql .= "keywords = '$_POST[keywords]', " .
-            "goods_brief = '$_POST[goods_brief]', " .
-            "seller_note = '$_POST[seller_note]', " .
-            "goods_weight = '$goods_weight'," .
-            "goods_number = '$goods_number', " .
-            "warn_number = '$warn_number', " .
-            "integral = '$_POST[integral]', " .
-            "give_integral = '$give_integral', " .
-            "rank_integral = '$rank_integral', " .
-            "is_best = '$is_best', " .
-            "is_new = '$is_new', " .
-            "is_hot = '$is_hot', " .
-            "is_on_sale = '$is_on_sale', " .
-            "is_alone_sale = '$is_alone_sale', " .
-            "goods_desc = '$_POST[goods_desc]', " .
-            "last_update = '" . gmtime() . "', " .
-            "goods_type = '$goods_type' " .
+        $sql .= "keywords = '$_POST[keywords]', ".
+            "goods_brief = '$_POST[goods_brief]', ".
+            "seller_note = '$_POST[seller_note]', ".
+            "goods_weight = '$goods_weight',".
+            "goods_number = '$goods_number', ".
+            "warn_number = '$warn_number', ".
+            "integral = '$_POST[integral]', ".
+            "give_integral = '$give_integral', ".
+            "rank_integral = '$rank_integral', ".
+            "is_best = '$is_best', ".
+            "is_new = '$is_new', ".
+            "is_hot = '$is_hot', ".
+            "is_on_sale = '$is_on_sale', ".
+            "is_alone_sale = '$is_alone_sale', ".
+            "goods_desc = '$_POST[goods_desc]', ".
+            "last_update = '".gmtime()."', ".
+            "goods_type = '$goods_type' ".
             "WHERE goods_id = '$_REQUEST[goods_id]' LIMIT 1";
     }
     $db->query($sql);
@@ -704,38 +704,38 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     /* 处理属性 */
     if ((isset($_POST['attr_id_list']) && isset($_POST['attr_value_list'])) || (empty($_POST['attr_id_list']) && empty($_POST['attr_value_list']))) {
         // 取得原有的属性值
-        $goods_attr_list = array();
+        $goods_attr_list = [];
 
-        $keywords_arr = explode(" ", $_POST['keywords']);
+        $keywords_arr = explode(' ', $_POST['keywords']);
 
         $keywords_arr = array_flip($keywords_arr);
         if (isset($keywords_arr[''])) {
             unset($keywords_arr['']);
         }
 
-        $sql = "SELECT attr_id, attr_index FROM " . $ecs->table('attribute') . " WHERE cat_id = '$goods_type'";
+        $sql = 'SELECT attr_id, attr_index FROM '.$ecs->table('attribute')." WHERE cat_id = '$goods_type'";
 
         $attr_res = $db->query($sql);
 
-        $attr_list = array();
+        $attr_list = [];
 
         while ($row = $db->fetchRow($attr_res)) {
             $attr_list[$row['attr_id']] = $row['attr_index'];
         }
 
-        $sql = "SELECT * FROM " . $ecs->table('goods_attr') . " WHERE goods_id = '$goods_id'";
+        $sql = 'SELECT * FROM '.$ecs->table('goods_attr')." WHERE goods_id = '$goods_id'";
 
         $res = $db->query($sql);
 
         while ($row = $db->fetchRow($res)) {
-            $goods_attr_list[$row['attr_id']][$row['attr_value']] = array('sign' => 'delete', 'goods_attr_id' => $row['goods_attr_id']);
+            $goods_attr_list[$row['attr_id']][$row['attr_value']] = ['sign' => 'delete', 'goods_attr_id' => $row['goods_attr_id']];
         }
         // 循环现有的，根据原有的做相应处理
         if (isset($_POST['attr_id_list'])) {
             foreach ($_POST['attr_id_list'] as $key => $attr_id) {
                 $attr_value = $_POST['attr_value_list'][$key];
                 $attr_price = $_POST['attr_price_list'][$key];
-                if (!empty($attr_value)) {
+                if (! empty($attr_value)) {
                     if (isset($goods_attr_list[$attr_id][$attr_value])) {
                         // 如果原来有，标记为更新
                         $goods_attr_list[$attr_id][$attr_value]['sign'] = 'update';
@@ -747,16 +747,16 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
                     }
                     $val_arr = explode(' ', $attr_value);
                     foreach ($val_arr as $k => $v) {
-                        if (!isset($keywords_arr[$v]) && $attr_list[$attr_id] == "1") {
+                        if (! isset($keywords_arr[$v]) && $attr_list[$attr_id] == '1') {
                             $keywords_arr[$v] = $v;
                         }
                     }
                 }
             }
         }
-        $keywords = join(' ', array_flip($keywords_arr));
+        $keywords = implode(' ', array_flip($keywords_arr));
 
-        $sql = "UPDATE " . $ecs->table('goods') . " SET keywords = '$keywords' WHERE goods_id = '$goods_id' LIMIT 1";
+        $sql = 'UPDATE '.$ecs->table('goods')." SET keywords = '$keywords' WHERE goods_id = '$goods_id' LIMIT 1";
 
         $db->query($sql);
 
@@ -764,12 +764,12 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         foreach ($goods_attr_list as $attr_id => $attr_value_list) {
             foreach ($attr_value_list as $attr_value => $info) {
                 if ($info['sign'] == 'insert') {
-                    $sql = "INSERT INTO " . $ecs->table('goods_attr') . " (attr_id, goods_id, attr_value, attr_price)" .
+                    $sql = 'INSERT INTO '.$ecs->table('goods_attr').' (attr_id, goods_id, attr_value, attr_price)'.
                         "VALUES ('$attr_id', '$goods_id', '$attr_value', '$info[attr_price]')";
                 } elseif ($info['sign'] == 'update') {
-                    $sql = "UPDATE " . $ecs->table('goods_attr') . " SET attr_price = '$info[attr_price]' WHERE goods_attr_id = '$info[goods_attr_id]' LIMIT 1";
+                    $sql = 'UPDATE '.$ecs->table('goods_attr')." SET attr_price = '$info[attr_price]' WHERE goods_attr_id = '$info[goods_attr_id]' LIMIT 1";
                 } else {
-                    $sql = "DELETE FROM " . $ecs->table('goods_attr') . " WHERE goods_attr_id = '$info[goods_attr_id]' LIMIT 1";
+                    $sql = 'DELETE FROM '.$ecs->table('goods_attr')." WHERE goods_attr_id = '$info[goods_attr_id]' LIMIT 1";
                 }
                 $db->query($sql);
             }
@@ -786,7 +786,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         $temp_num = array_count_values($_POST['volume_number']);
         foreach ($temp_num as $v) {
             if ($v > 1) {
-                sys_msg($_LANG['volume_number_continuous'], 1, array(), false);
+                sys_msg($_LANG['volume_number_continuous'], 1, [], false);
                 break;
             }
         }
@@ -814,15 +814,15 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     $goods_img = reformat_image_name('goods', $goods_id, $goods_img, 'goods');
     $goods_thumb = reformat_image_name('goods_thumb', $goods_id, $goods_thumb, 'thumb');
     if ($goods_img !== false) {
-        $db->query("UPDATE " . $ecs->table('goods') . " SET goods_img = '$goods_img' WHERE goods_id='$goods_id'");
+        $db->query('UPDATE '.$ecs->table('goods')." SET goods_img = '$goods_img' WHERE goods_id='$goods_id'");
     }
 
     if ($original_img !== false) {
-        $db->query("UPDATE " . $ecs->table('goods') . " SET original_img = '$original_img' WHERE goods_id='$goods_id'");
+        $db->query('UPDATE '.$ecs->table('goods')." SET original_img = '$original_img' WHERE goods_id='$goods_id'");
     }
 
     if ($goods_thumb !== false) {
-        $db->query("UPDATE " . $ecs->table('goods') . " SET goods_thumb = '$goods_thumb' WHERE goods_id='$goods_id'");
+        $db->query('UPDATE '.$ecs->table('goods')." SET goods_thumb = '$goods_thumb' WHERE goods_id='$goods_id'");
     }
 
     /* 如果有图片，把商品图片加入图片相册 */
@@ -831,7 +831,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         $img = reformat_image_name('gallery', $goods_id, $img, 'source');
         $gallery_img = reformat_image_name('gallery', $goods_id, $gallery_img, 'goods');
         $gallery_thumb = reformat_image_name('gallery_thumb', $goods_id, $gallery_thumb, 'thumb');
-        $sql = "INSERT INTO " . $ecs->table('goods_gallery') . " (goods_id, img_url, img_desc, thumb_url, img_original) " .
+        $sql = 'INSERT INTO '.$ecs->table('goods_gallery').' (goods_id, img_url, img_desc, thumb_url, img_original) '.
             "VALUES ('$goods_id', '$gallery_img', '', '$gallery_thumb', '$img')";
         $db->query($sql);
     }
@@ -840,30 +840,30 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     handle_gallery_image($goods_id, $_FILES['img_url'], $_POST['img_desc']);
 
     /* 编辑时处理相册图片描述 */
-    if (!$is_insert && isset($_POST['old_img_desc'])) {
+    if (! $is_insert && isset($_POST['old_img_desc'])) {
         foreach ($_POST['old_img_desc'] as $img_id => $img_desc) {
-            $sql = "UPDATE " . $ecs->table('goods_gallery') . " SET img_desc = '$img_desc' WHERE img_id = '$img_id' LIMIT 1";
+            $sql = 'UPDATE '.$ecs->table('goods_gallery')." SET img_desc = '$img_desc' WHERE img_id = '$img_id' LIMIT 1";
             $db->query($sql);
         }
     }
 
     /* 不保留商品原图的时候删除原图 */
-    if ($proc_thumb && !$_CFG['retain_original_img'] && !empty($original_img)) {
-        $db->query("UPDATE " . $ecs->table('goods') . " SET original_img='' WHERE `goods_id`='{$goods_id}'");
-        $db->query("UPDATE " . $ecs->table('goods_gallery') . " SET img_original='' WHERE `goods_id`='{$goods_id}'");
-        @unlink('../' . $original_img);
-        @unlink('../' . $img);
+    if ($proc_thumb && ! $_CFG['retain_original_img'] && ! empty($original_img)) {
+        $db->query('UPDATE '.$ecs->table('goods')." SET original_img='' WHERE `goods_id`='{$goods_id}'");
+        $db->query('UPDATE '.$ecs->table('goods_gallery')." SET img_original='' WHERE `goods_id`='{$goods_id}'");
+        @unlink('../'.$original_img);
+        @unlink('../'.$img);
     }
 
     /* 记录上一次选择的分类和品牌 */
-    setcookie('ECSCP[last_choose]', $catgory_id . '|' . $brand_id, gmtime() + 86400, null, null, null, true);
+    setcookie('ECSCP[last_choose]', $catgory_id.'|'.$brand_id, gmtime() + 86400, null, null, null, true);
     /* 清空缓存 */
     clear_cache_files();
 
     /* 提示页面 */
-    $link = array();
+    $link = [];
     if ($code == 'virtual_card') {
-        $link[] = array('href' => 'virtual_card.php?act=replenish&goods_id=' . $goods_id, 'text' => $_LANG['add_replenish']);
+        $link[] = ['href' => 'virtual_card.php?act=replenish&goods_id='.$goods_id, 'text' => $_LANG['add_replenish']];
     }
     if ($is_insert) {
         $link[] = add_link($code);
@@ -881,7 +881,7 @@ if ($_REQUEST['act'] == 'batch') {
     $code = empty($_REQUEST['extension_code']) ? '' : trim($_REQUEST['extension_code']);
 
     /* 取得要操作的商品编号 */
-    $goods_id = !empty($_POST['checkboxes']) ? join(',', $_POST['checkboxes']) : 0;
+    $goods_id = ! empty($_POST['checkboxes']) ? implode(',', $_POST['checkboxes']) : 0;
 
     if (isset($_POST['type'])) {
         /* 放入回收站 */
@@ -963,7 +963,7 @@ if ($_REQUEST['act'] == 'batch') {
     clear_cache_files();
 
     if ($_POST['type'] == 'drop' || $_POST['type'] == 'restore') {
-        $link[] = array('href' => 'goods.php?act=trash', 'text' => $_LANG['11_goods_trash']);
+        $link[] = ['href' => 'goods.php?act=trash', 'text' => $_LANG['11_goods_trash']];
     } else {
         $link[] = list_link(true, $code);
     }
@@ -981,7 +981,7 @@ if ($_REQUEST['act'] == 'show_image') {
         if (strpos($_GET['img_url'], 'http://') === 0) {
             $img_url = $_GET['img_url'];
         } else {
-            $img_url = '../' . $_GET['img_url'];
+            $img_url = '../'.$_GET['img_url'];
         }
     }
     $smarty->assign('img_url', $img_url);
@@ -997,7 +997,7 @@ if ($_REQUEST['act'] == 'edit_goods_name') {
     $goods_id = intval($_POST['id']);
     $goods_name = json_str_iconv(trim($_POST['val']));
 
-    if ($exc->edit("goods_name = '$goods_name', last_update=" . gmtime(), $goods_id)) {
+    if ($exc->edit("goods_name = '$goods_name', last_update=".gmtime(), $goods_id)) {
         clear_cache_files();
         make_json_result(stripslashes($goods_name));
     }
@@ -1013,11 +1013,11 @@ if ($_REQUEST['act'] == 'edit_goods_sn') {
     $goods_sn = json_str_iconv(trim($_POST['val']));
 
     /* 检查是否重复 */
-    if (!$exc->is_only('goods_sn', $goods_sn, $goods_id)) {
+    if (! $exc->is_only('goods_sn', $goods_sn, $goods_id)) {
         make_json_error($_LANG['goods_sn_exists']);
     }
 
-    if ($exc->edit("goods_sn = '$goods_sn', last_update=" . gmtime(), $goods_id)) {
+    if ($exc->edit("goods_sn = '$goods_sn', last_update=".gmtime(), $goods_id)) {
         clear_cache_files();
         make_json_result(stripslashes($goods_sn));
     }
@@ -1029,7 +1029,7 @@ if ($_REQUEST['act'] == 'check_goods_sn') {
     $goods_sn = json_str_iconv(trim($_REQUEST['goods_sn']));
 
     /* 检查是否重复 */
-    if (!$exc->is_only('goods_sn', $goods_sn, $goods_id)) {
+    if (! $exc->is_only('goods_sn', $goods_sn, $goods_id)) {
         make_json_error($_LANG['goods_sn_exists']);
     }
 
@@ -1048,7 +1048,7 @@ if ($_REQUEST['act'] == 'edit_goods_price') {
     if ($goods_price < 0 || $goods_price == 0 && $_POST['val'] != "$goods_price") {
         make_json_error($_LANG['shop_price_invalid']);
     } else {
-        if ($exc->edit("shop_price = '$goods_price', market_price = '$price_rate', last_update=" . gmtime(), $goods_id)) {
+        if ($exc->edit("shop_price = '$goods_price', market_price = '$price_rate', last_update=".gmtime(), $goods_id)) {
             clear_cache_files();
             make_json_result(number_format($goods_price, 2, '.', ''));
         }
@@ -1068,7 +1068,7 @@ if ($_REQUEST['act'] == 'edit_goods_number') {
         make_json_error($_LANG['goods_number_error']);
     }
 
-    if ($exc->edit("goods_number = '$goods_num', last_update=" . gmtime(), $goods_id)) {
+    if ($exc->edit("goods_number = '$goods_num', last_update=".gmtime(), $goods_id)) {
         clear_cache_files();
         make_json_result($goods_num);
     }
@@ -1083,7 +1083,7 @@ if ($_REQUEST['act'] == 'toggle_on_sale') {
     $goods_id = intval($_POST['id']);
     $on_sale = intval($_POST['val']);
 
-    if ($exc->edit("is_on_sale = '$on_sale', last_update=" . gmtime(), $goods_id)) {
+    if ($exc->edit("is_on_sale = '$on_sale', last_update=".gmtime(), $goods_id)) {
         clear_cache_files();
         make_json_result($on_sale);
     }
@@ -1098,7 +1098,7 @@ if ($_REQUEST['act'] == 'toggle_best') {
     $goods_id = intval($_POST['id']);
     $is_best = intval($_POST['val']);
 
-    if ($exc->edit("is_best = '$is_best', last_update=" . gmtime(), $goods_id)) {
+    if ($exc->edit("is_best = '$is_best', last_update=".gmtime(), $goods_id)) {
         clear_cache_files();
         make_json_result($is_best);
     }
@@ -1113,7 +1113,7 @@ if ($_REQUEST['act'] == 'toggle_new') {
     $goods_id = intval($_POST['id']);
     $is_new = intval($_POST['val']);
 
-    if ($exc->edit("is_new = '$is_new', last_update=" . gmtime(), $goods_id)) {
+    if ($exc->edit("is_new = '$is_new', last_update=".gmtime(), $goods_id)) {
         clear_cache_files();
         make_json_result($is_new);
     }
@@ -1128,7 +1128,7 @@ if ($_REQUEST['act'] == 'toggle_hot') {
     $goods_id = intval($_POST['id']);
     $is_hot = intval($_POST['val']);
 
-    if ($exc->edit("is_hot = '$is_hot', last_update=" . gmtime(), $goods_id)) {
+    if ($exc->edit("is_hot = '$is_hot', last_update=".gmtime(), $goods_id)) {
         clear_cache_files();
         make_json_result($is_hot);
     }
@@ -1143,7 +1143,7 @@ if ($_REQUEST['act'] == 'edit_sort_order') {
     $goods_id = intval($_POST['id']);
     $sort_order = intval($_POST['val']);
 
-    if ($exc->edit("sort_order = '$sort_order', last_update=" . gmtime(), $goods_id)) {
+    if ($exc->edit("sort_order = '$sort_order', last_update=".gmtime(), $goods_id)) {
         clear_cache_files();
         make_json_result($sort_order);
     }
@@ -1157,10 +1157,10 @@ if ($_REQUEST['act'] == 'query') {
     $code = empty($_REQUEST['extension_code']) ? '' : trim($_REQUEST['extension_code']);
     $goods_list = goods_list($is_delete, ($code == '') ? 1 : 0);
 
-    $handler_list = array();
-    $handler_list['virtual_card'][] = array('url' => 'virtual_card.php?act=card', 'title' => $_LANG['card'], 'img' => 'icon_send_bonus.gif');
-    $handler_list['virtual_card'][] = array('url' => 'virtual_card.php?act=replenish', 'title' => $_LANG['replenish'], 'img' => 'icon_add.gif');
-    $handler_list['virtual_card'][] = array('url' => 'virtual_card.php?act=batch_card_add', 'title' => $_LANG['batch_card_add'], 'img' => 'icon_output.gif');
+    $handler_list = [];
+    $handler_list['virtual_card'][] = ['url' => 'virtual_card.php?act=card', 'title' => $_LANG['card'], 'img' => 'icon_send_bonus.gif'];
+    $handler_list['virtual_card'][] = ['url' => 'virtual_card.php?act=replenish', 'title' => $_LANG['replenish'], 'img' => 'icon_add.gif'];
+    $handler_list['virtual_card'][] = ['url' => 'virtual_card.php?act=batch_card_add', 'title' => $_LANG['batch_card_add'], 'img' => 'icon_output.gif'];
 
     if (isset($handler_list[$code])) {
         $smarty->assign('add_handler', $handler_list[$code]);
@@ -1182,7 +1182,7 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result(
         $smarty->fetch($tpl),
         '',
-        array('filter' => $goods_list['filter'], 'page_count' => $goods_list['page_count'])
+        ['filter' => $goods_list['filter'], 'page_count' => $goods_list['page_count']]
     );
 }
 
@@ -1195,13 +1195,13 @@ if ($_REQUEST['act'] == 'remove') {
     /* 检查权限 */
     check_authz_json('remove_back');
 
-    if ($exc->edit("is_delete = 1", $goods_id)) {
+    if ($exc->edit('is_delete = 1', $goods_id)) {
         clear_cache_files();
         $goods_name = $exc->get_name($goods_id);
 
         admin_log(addslashes($goods_name), 'trash', 'goods'); // 记录日志
 
-        $url = 'goods.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+        $url = 'goods.php?act=query&'.str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
         ecs_header("Location: $url\n");
         exit;
@@ -1217,14 +1217,14 @@ if ($_REQUEST['act'] == 'restore_goods') {
 
     check_authz_json('remove_back'); // 检查权限
 
-    $exc->edit("is_delete = 0, add_time = '" . gmtime() . "'", $goods_id);
+    $exc->edit("is_delete = 0, add_time = '".gmtime()."'", $goods_id);
     clear_cache_files();
 
     $goods_name = $exc->get_name($goods_id);
 
     admin_log(addslashes($goods_name), 'restore', 'goods'); // 记录日志
 
-    $url = 'goods.php?act=query&' . str_replace('act=restore_goods', '', $_SERVER['QUERY_STRING']);
+    $url = 'goods.php?act=query&'.str_replace('act=restore_goods', '', $_SERVER['QUERY_STRING']);
 
     ecs_header("Location: $url\n");
     exit;
@@ -1244,9 +1244,9 @@ if ($_REQUEST['act'] == 'drop_goods') {
     }
 
     /* 取得商品信息 */
-    $sql = "SELECT goods_id, goods_name, is_delete, is_real, goods_thumb, " .
-        "goods_img, original_img " .
-        "FROM " . $ecs->table('goods') .
+    $sql = 'SELECT goods_id, goods_name, is_delete, is_real, goods_thumb, '.
+        'goods_img, original_img '.
+        'FROM '.$ecs->table('goods').
         " WHERE goods_id = '$goods_id'";
     $goods = $db->getRow($sql);
     if (empty($goods)) {
@@ -1258,14 +1258,14 @@ if ($_REQUEST['act'] == 'drop_goods') {
     }
 
     /* 删除商品图片和轮播图片 */
-    if (!empty($goods['goods_thumb'])) {
-        @unlink('../' . $goods['goods_thumb']);
+    if (! empty($goods['goods_thumb'])) {
+        @unlink('../'.$goods['goods_thumb']);
     }
-    if (!empty($goods['goods_img'])) {
-        @unlink('../' . $goods['goods_img']);
+    if (! empty($goods['goods_img'])) {
+        @unlink('../'.$goods['goods_img']);
     }
-    if (!empty($goods['original_img'])) {
-        @unlink('../' . $goods['original_img']);
+    if (! empty($goods['original_img'])) {
+        @unlink('../'.$goods['original_img']);
     }
     /* 删除商品 */
     $exc->drop($goods_id);
@@ -1274,65 +1274,65 @@ if ($_REQUEST['act'] == 'drop_goods') {
     admin_log(addslashes($goods['goods_name']), 'remove', 'goods');
 
     /* 删除商品相册 */
-    $sql = "SELECT img_url, thumb_url, img_original " .
-        "FROM " . $ecs->table('goods_gallery') .
+    $sql = 'SELECT img_url, thumb_url, img_original '.
+        'FROM '.$ecs->table('goods_gallery').
         " WHERE goods_id = '$goods_id'";
     $res = $db->query($sql);
     while ($row = $db->fetchRow($res)) {
-        if (!empty($row['img_url'])) {
-            @unlink('../' . $row['img_url']);
+        if (! empty($row['img_url'])) {
+            @unlink('../'.$row['img_url']);
         }
-        if (!empty($row['thumb_url'])) {
-            @unlink('../' . $row['thumb_url']);
+        if (! empty($row['thumb_url'])) {
+            @unlink('../'.$row['thumb_url']);
         }
-        if (!empty($row['img_original'])) {
-            @unlink('../' . $row['img_original']);
+        if (! empty($row['img_original'])) {
+            @unlink('../'.$row['img_original']);
         }
     }
 
-    $sql = "DELETE FROM " . $ecs->table('goods_gallery') . " WHERE goods_id = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('goods_gallery')." WHERE goods_id = '$goods_id'";
     $db->query($sql);
 
     /* 删除相关表记录 */
-    $sql = "DELETE FROM " . $ecs->table('collect_goods') . " WHERE goods_id = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('collect_goods')." WHERE goods_id = '$goods_id'";
     $db->query($sql);
-    $sql = "DELETE FROM " . $ecs->table('goods_article') . " WHERE goods_id = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('goods_article')." WHERE goods_id = '$goods_id'";
     $db->query($sql);
-    $sql = "DELETE FROM " . $ecs->table('goods_attr') . " WHERE goods_id = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('goods_attr')." WHERE goods_id = '$goods_id'";
     $db->query($sql);
-    $sql = "DELETE FROM " . $ecs->table('goods_cat') . " WHERE goods_id = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('goods_cat')." WHERE goods_id = '$goods_id'";
     $db->query($sql);
-    $sql = "DELETE FROM " . $ecs->table('member_price') . " WHERE goods_id = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('member_price')." WHERE goods_id = '$goods_id'";
     $db->query($sql);
-    $sql = "DELETE FROM " . $ecs->table('group_goods') . " WHERE parent_id = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('group_goods')." WHERE parent_id = '$goods_id'";
     $db->query($sql);
-    $sql = "DELETE FROM " . $ecs->table('group_goods') . " WHERE goods_id = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('group_goods')." WHERE goods_id = '$goods_id'";
     $db->query($sql);
-    $sql = "DELETE FROM " . $ecs->table('link_goods') . " WHERE goods_id = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('link_goods')." WHERE goods_id = '$goods_id'";
     $db->query($sql);
-    $sql = "DELETE FROM " . $ecs->table('link_goods') . " WHERE link_goods_id = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('link_goods')." WHERE link_goods_id = '$goods_id'";
     $db->query($sql);
-    $sql = "DELETE FROM " . $ecs->table('tag') . " WHERE goods_id = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('tag')." WHERE goods_id = '$goods_id'";
     $db->query($sql);
-    $sql = "DELETE FROM " . $ecs->table('comment') . " WHERE comment_type = 0 AND id_value = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('comment')." WHERE comment_type = 0 AND id_value = '$goods_id'";
     $db->query($sql);
-    $sql = "DELETE FROM " . $ecs->table('collect_goods') . " WHERE goods_id = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('collect_goods')." WHERE goods_id = '$goods_id'";
     $db->query($sql);
-    $sql = "DELETE FROM " . $ecs->table('booking_goods') . " WHERE goods_id = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('booking_goods')." WHERE goods_id = '$goods_id'";
     $db->query($sql);
-    $sql = "DELETE FROM " . $ecs->table('goods_activity') . " WHERE goods_id = '$goods_id'";
+    $sql = 'DELETE FROM '.$ecs->table('goods_activity')." WHERE goods_id = '$goods_id'";
     $db->query($sql);
 
     /* 如果不是实体商品，删除相应虚拟商品记录 */
     if ($goods['is_real'] != 1) {
-        $sql = "DELETE FROM " . $ecs->table('virtual_card') . " WHERE goods_id = '$goods_id'";
-        if (!$db->query($sql, 'SILENT') && $db->errno() != 1146) {
-            die($db->error());
+        $sql = 'DELETE FROM '.$ecs->table('virtual_card')." WHERE goods_id = '$goods_id'";
+        if (! $db->query($sql, 'SILENT') && $db->errno() != 1146) {
+            exit($db->error());
         }
     }
 
     clear_cache_files();
-    $url = 'goods.php?act=query&' . str_replace('act=drop_goods', '', $_SERVER['QUERY_STRING']);
+    $url = 'goods.php?act=query&'.str_replace('act=drop_goods', '', $_SERVER['QUERY_STRING']);
 
     ecs_header("Location: $url\n");
 
@@ -1362,23 +1362,23 @@ if ($_REQUEST['act'] == 'drop_image') {
     $img_id = empty($_REQUEST['img_id']) ? 0 : intval($_REQUEST['img_id']);
 
     /* 删除图片文件 */
-    $sql = "SELECT img_url, thumb_url, img_original " .
-        " FROM " . $GLOBALS['ecs']->table('goods_gallery') .
+    $sql = 'SELECT img_url, thumb_url, img_original '.
+        ' FROM '.$GLOBALS['ecs']->table('goods_gallery').
         " WHERE img_id = '$img_id'";
     $row = $GLOBALS['db']->getRow($sql);
 
-    if ($row['img_url'] != '' && is_file('../' . $row['img_url'])) {
-        @unlink('../' . $row['img_url']);
+    if ($row['img_url'] != '' && is_file('../'.$row['img_url'])) {
+        @unlink('../'.$row['img_url']);
     }
-    if ($row['thumb_url'] != '' && is_file('../' . $row['thumb_url'])) {
-        @unlink('../' . $row['thumb_url']);
+    if ($row['thumb_url'] != '' && is_file('../'.$row['thumb_url'])) {
+        @unlink('../'.$row['thumb_url']);
     }
-    if ($row['img_original'] != '' && is_file('../' . $row['img_original'])) {
-        @unlink('../' . $row['img_original']);
+    if ($row['img_original'] != '' && is_file('../'.$row['img_original'])) {
+        @unlink('../'.$row['img_original']);
     }
 
     /* 删除数据 */
-    $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods_gallery') . " WHERE img_id = '$img_id' LIMIT 1";
+    $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('goods_gallery')." WHERE img_id = '$img_id' LIMIT 1";
     $GLOBALS['db']->query($sql);
 
     clear_cache_files();
@@ -1389,18 +1389,18 @@ if ($_REQUEST['act'] == 'drop_image') {
 //-- 搜索商品，仅返回名称及ID
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'get_goods_list') {
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $filters = $json->decode($_GET['JSON']);
 
     $arr = get_goods_list($filters);
-    $opt = array();
+    $opt = [];
 
     foreach ($arr as $key => $val) {
-        $opt[] = array('value' => $val['goods_id'],
+        $opt[] = ['value' => $val['goods_id'],
             'text' => $val['goods_name'],
-            'data' => $val['shop_price']);
+            'data' => $val['shop_price']];
     }
 
     make_json_result($opt);
@@ -1410,7 +1410,7 @@ if ($_REQUEST['act'] == 'get_goods_list') {
 //-- 把商品加入关联
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'add_link_goods') {
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('goods_manage');
@@ -1423,23 +1423,23 @@ if ($_REQUEST['act'] == 'add_link_goods') {
     foreach ($linked_array as $val) {
         if ($is_double) {
             /* 双向关联 */
-            $sql = "INSERT INTO " . $ecs->table('link_goods') . " (goods_id, link_goods_id, is_double, admin_id) " .
+            $sql = 'INSERT INTO '.$ecs->table('link_goods').' (goods_id, link_goods_id, is_double, admin_id) '.
                 "VALUES ('$val', '$goods_id', '$is_double', '$_SESSION[admin_id]')";
             $db->query($sql, 'SILENT');
         }
 
-        $sql = "INSERT INTO " . $ecs->table('link_goods') . " (goods_id, link_goods_id, is_double, admin_id) " .
+        $sql = 'INSERT INTO '.$ecs->table('link_goods').' (goods_id, link_goods_id, is_double, admin_id) '.
             "VALUES ('$goods_id', '$val', '$is_double', '$_SESSION[admin_id]')";
         $db->query($sql, 'SILENT');
     }
 
     $linked_goods = get_linked_goods($goods_id);
-    $options = array();
+    $options = [];
 
     foreach ($linked_goods as $val) {
-        $options[] = array('value' => $val['goods_id'],
+        $options[] = ['value' => $val['goods_id'],
             'text' => $val['goods_name'],
-            'data' => '');
+            'data' => ''];
     }
 
     clear_cache_files();
@@ -1450,7 +1450,7 @@ if ($_REQUEST['act'] == 'add_link_goods') {
 //-- 删除关联商品
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'drop_link_goods') {
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('goods_manage');
@@ -1461,33 +1461,33 @@ if ($_REQUEST['act'] == 'drop_link_goods') {
     $goods_id = $linked_goods[0];
     $is_signle = $linked_goods[1];
 
-    if (!$is_signle) {
-        $sql = "DELETE FROM " . $ecs->table('link_goods') .
-            " WHERE link_goods_id = '$goods_id' AND goods_id " . $drop_goods_ids;
+    if (! $is_signle) {
+        $sql = 'DELETE FROM '.$ecs->table('link_goods').
+            " WHERE link_goods_id = '$goods_id' AND goods_id ".$drop_goods_ids;
     } else {
-        $sql = "UPDATE " . $ecs->table('link_goods') . " SET is_double = 0 " .
-            " WHERE link_goods_id = '$goods_id' AND goods_id " . $drop_goods_ids;
+        $sql = 'UPDATE '.$ecs->table('link_goods').' SET is_double = 0 '.
+            " WHERE link_goods_id = '$goods_id' AND goods_id ".$drop_goods_ids;
     }
     if ($goods_id == 0) {
         $sql .= " AND admin_id = '$_SESSION[admin_id]'";
     }
     $db->query($sql);
 
-    $sql = "DELETE FROM " . $ecs->table('link_goods') .
-        " WHERE goods_id = '$goods_id' AND link_goods_id " . $drop_goods_ids;
+    $sql = 'DELETE FROM '.$ecs->table('link_goods').
+        " WHERE goods_id = '$goods_id' AND link_goods_id ".$drop_goods_ids;
     if ($goods_id == 0) {
         $sql .= " AND admin_id = '$_SESSION[admin_id]'";
     }
     $db->query($sql);
 
     $linked_goods = get_linked_goods($goods_id);
-    $options = array();
+    $options = [];
 
     foreach ($linked_goods as $val) {
-        $options[] = array(
+        $options[] = [
             'value' => $val['goods_id'],
             'text' => $val['goods_name'],
-            'data' => '');
+            'data' => ''];
     }
 
     clear_cache_files();
@@ -1499,7 +1499,7 @@ if ($_REQUEST['act'] == 'drop_link_goods') {
 /*------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'add_group_goods') {
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('goods_manage');
@@ -1510,18 +1510,18 @@ if ($_REQUEST['act'] == 'add_group_goods') {
     $price = $arguments[1];
 
     foreach ($fittings as $val) {
-        $sql = "INSERT INTO " . $ecs->table('group_goods') . " (parent_id, goods_id, goods_price, admin_id) " .
+        $sql = 'INSERT INTO '.$ecs->table('group_goods').' (parent_id, goods_id, goods_price, admin_id) '.
             "VALUES ('$goods_id', '$val', '$price', '$_SESSION[admin_id]')";
         $db->query($sql, 'SILENT');
     }
 
     $arr = get_group_goods($goods_id);
-    $opt = array();
+    $opt = [];
 
     foreach ($arr as $val) {
-        $opt[] = array('value' => $val['goods_id'],
+        $opt[] = ['value' => $val['goods_id'],
             'text' => $val['goods_name'],
-            'data' => '');
+            'data' => ''];
     }
 
     clear_cache_files();
@@ -1533,7 +1533,7 @@ if ($_REQUEST['act'] == 'add_group_goods') {
 /*------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'drop_group_goods') {
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('goods_manage');
@@ -1543,20 +1543,20 @@ if ($_REQUEST['act'] == 'drop_group_goods') {
     $goods_id = $arguments[0];
     $price = $arguments[1];
 
-    $sql = "DELETE FROM " . $ecs->table('group_goods') .
-        " WHERE parent_id='$goods_id' AND " . db_create_in($fittings, 'goods_id');
+    $sql = 'DELETE FROM '.$ecs->table('group_goods').
+        " WHERE parent_id='$goods_id' AND ".db_create_in($fittings, 'goods_id');
     if ($goods_id == 0) {
         $sql .= " AND admin_id = '$_SESSION[admin_id]'";
     }
     $db->query($sql);
 
     $arr = get_group_goods($goods_id);
-    $opt = array();
+    $opt = [];
 
     foreach ($arr as $val) {
-        $opt[] = array('value' => $val['goods_id'],
+        $opt[] = ['value' => $val['goods_id'],
             'text' => $val['goods_name'],
-            'data' => '');
+            'data' => ''];
     }
 
     clear_cache_files();
@@ -1568,24 +1568,24 @@ if ($_REQUEST['act'] == 'drop_group_goods') {
 /*------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'get_article_list') {
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
-    $filters = (array)$json->decode(json_str_iconv($_GET['JSON']));
+    $filters = (array) $json->decode(json_str_iconv($_GET['JSON']));
 
-    $where = " WHERE cat_id > 0 ";
-    if (!empty($filters['title'])) {
+    $where = ' WHERE cat_id > 0 ';
+    if (! empty($filters['title'])) {
         $keyword = trim($filters['title']);
-        $where .= " AND title LIKE '%" . mysql_like_quote($keyword) . "%' ";
+        $where .= " AND title LIKE '%".mysql_like_quote($keyword)."%' ";
     }
 
-    $sql = 'SELECT article_id, title FROM ' . $ecs->table('article') . $where .
+    $sql = 'SELECT article_id, title FROM '.$ecs->table('article').$where.
         'ORDER BY article_id DESC LIMIT 50';
     $res = $db->query($sql);
-    $arr = array();
+    $arr = [];
 
     while ($row = $db->fetchRow($res)) {
-        $arr[] = array('value' => $row['article_id'], 'text' => $row['title'], 'data' => '');
+        $arr[] = ['value' => $row['article_id'], 'text' => $row['title'], 'data' => ''];
     }
 
     make_json_result($arr);
@@ -1596,7 +1596,7 @@ if ($_REQUEST['act'] == 'get_article_list') {
 /*------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'add_goods_article') {
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('goods_manage');
@@ -1606,18 +1606,18 @@ if ($_REQUEST['act'] == 'add_goods_article') {
     $goods_id = $arguments[0];
 
     foreach ($articles as $val) {
-        $sql = "INSERT INTO " . $ecs->table('goods_article') . " (goods_id, article_id, admin_id) " .
+        $sql = 'INSERT INTO '.$ecs->table('goods_article').' (goods_id, article_id, admin_id) '.
             "VALUES ('$goods_id', '$val', '$_SESSION[admin_id]')";
         $db->query($sql);
     }
 
     $arr = get_goods_articles($goods_id);
-    $opt = array();
+    $opt = [];
 
     foreach ($arr as $val) {
-        $opt[] = array('value' => $val['article_id'],
+        $opt[] = ['value' => $val['article_id'],
             'text' => $val['title'],
-            'data' => '');
+            'data' => ''];
     }
 
     clear_cache_files();
@@ -1628,7 +1628,7 @@ if ($_REQUEST['act'] == 'add_goods_article') {
 //-- 删除关联文章
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'drop_goods_article') {
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('goods_manage');
@@ -1637,16 +1637,16 @@ if ($_REQUEST['act'] == 'drop_goods_article') {
     $arguments = $json->decode($_GET['JSON']);
     $goods_id = $arguments[0];
 
-    $sql = "DELETE FROM " . $ecs->table('goods_article') . " WHERE " . db_create_in($articles, "article_id");
+    $sql = 'DELETE FROM '.$ecs->table('goods_article').' WHERE '.db_create_in($articles, 'article_id');
     $db->query($sql);
 
     $arr = get_goods_articles($goods_id);
-    $opt = array();
+    $opt = [];
 
     foreach ($arr as $val) {
-        $opt[] = array('value' => $val['article_id'],
+        $opt[] = ['value' => $val['article_id'],
             'text' => $val['title'],
-            'data' => '');
+            'data' => ''];
     }
 
     clear_cache_files();
@@ -1655,18 +1655,19 @@ if ($_REQUEST['act'] == 'drop_goods_article') {
 
 /**
  * 列表链接
- * @param bool $is_add 是否添加（插入）
- * @param string $extension_code 虚拟商品扩展代码，实体商品为空
- * @return  array('href' => $href, 'text' => $text)
+ *
+ * @param  bool  $is_add  是否添加（插入）
+ * @param  string  $extension_code  虚拟商品扩展代码，实体商品为空
+ * @return array('href' => $href, 'text' => $text)
  */
 function list_link($is_add = true, $extension_code = '')
 {
     $href = 'goods.php?act=list';
-    if (!empty($extension_code)) {
-        $href .= '&extension_code=' . $extension_code;
+    if (! empty($extension_code)) {
+        $href .= '&extension_code='.$extension_code;
     }
-    if (!$is_add) {
-        $href .= '&' . list_link_postfix();
+    if (! $is_add) {
+        $href .= '&'.list_link_postfix();
     }
 
     if ($extension_code == 'virtual_card') {
@@ -1675,19 +1676,20 @@ function list_link($is_add = true, $extension_code = '')
         $text = $GLOBALS['_LANG']['01_goods_list'];
     }
 
-    return array('href' => $href, 'text' => $text);
+    return ['href' => $href, 'text' => $text];
 }
 
 /**
  * 添加链接
- * @param string $extension_code 虚拟商品扩展代码，实体商品为空
- * @return  array('href' => $href, 'text' => $text)
+ *
+ * @param  string  $extension_code  虚拟商品扩展代码，实体商品为空
+ * @return array('href' => $href, 'text' => $text)
  */
 function add_link($extension_code = '')
 {
     $href = 'goods.php?act=add';
-    if (!empty($extension_code)) {
-        $href .= '&extension_code=' . $extension_code;
+    if (! empty($extension_code)) {
+        $href .= '&extension_code='.$extension_code;
     }
 
     if ($extension_code == 'virtual_card') {
@@ -1696,44 +1698,44 @@ function add_link($extension_code = '')
         $text = $GLOBALS['_LANG']['02_goods_add'];
     }
 
-    return array('href' => $href, 'text' => $text);
+    return ['href' => $href, 'text' => $text];
 }
 
 /**
  * 检查图片网址是否合法
  *
- * @param string $url 网址
- *
- * @return boolean
+ * @param  string  $url  网址
+ * @return bool
  */
 function goods_parse_url($url)
 {
     $parse_url = @parse_url($url);
-    return (!empty($parse_url['scheme']) && !empty($parse_url['host']));
+
+    return ! empty($parse_url['scheme']) && ! empty($parse_url['host']);
 }
 
 /**
  * 保存某商品的优惠价格
- * @param int $goods_id 商品编号
- * @param array $number_list 优惠数量列表
- * @param array $price_list 价格列表
- * @return  void
+ *
+ * @param  int  $goods_id  商品编号
+ * @param  array  $number_list  优惠数量列表
+ * @param  array  $price_list  价格列表
+ * @return void
  */
 function handle_volume_price($goods_id, $number_list, $price_list)
 {
-    $sql = "DELETE FROM " . $GLOBALS['ecs']->table('volume_price') .
+    $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('volume_price').
         " WHERE price_type = '1' AND goods_id = '$goods_id'";
     $GLOBALS['db']->query($sql);
-
 
     /* 循环处理每个优惠价格 */
     foreach ($price_list as $key => $price) {
         /* 价格对应的数量上下限 */
         $volume_number = $number_list[$key];
 
-        if (!empty($price)) {
-            $sql = "INSERT INTO " . $GLOBALS['ecs']->table('volume_price') .
-                " (price_type, goods_id, volume_number, volume_price) " .
+        if (! empty($price)) {
+            $sql = 'INSERT INTO '.$GLOBALS['ecs']->table('volume_price').
+                ' (price_type, goods_id, volume_number, volume_price) '.
                 "VALUES ('1', '$goods_id', '$volume_number', '$price')";
             $GLOBALS['db']->query($sql);
         }

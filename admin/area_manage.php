@@ -2,7 +2,7 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 $exc = new exchange($ecs->table('region'), $db, 'region_id', 'region_name');
 
 /* act操作项的初始化 */
@@ -37,7 +37,7 @@ if ($_REQUEST['act'] == 'list') {
     /* 当前的地区名称 */
     if ($region_id > 0) {
         $area_name = $exc->get_name($region_id);
-        $area = '[ ' . $area_name . ' ] ';
+        $area = '[ '.$area_name.' ] ';
         if ($region_arr) {
             $area .= $region_arr[0]['type'];
         }
@@ -49,7 +49,7 @@ if ($_REQUEST['act'] == 'list') {
     /* 返回上一级的链接 */
     if ($region_id > 0) {
         $parent_id = $exc->get_name($region_id, 'parent_id');
-        $action_link = array('text' => $_LANG['back_page'], 'href' => 'area_manage.php?act=list&&pid=' . $parent_id);
+        $action_link = ['text' => $_LANG['back_page'], 'href' => 'area_manage.php?act=list&&pid='.$parent_id];
     } else {
         $action_link = '';
     }
@@ -79,11 +79,11 @@ if ($_REQUEST['act'] == 'add_area') {
     }
 
     /* 查看区域是否重复 */
-    if (!$exc->is_only('region_name', $region_name, 0, "parent_id = '$parent_id'")) {
+    if (! $exc->is_only('region_name', $region_name, 0, "parent_id = '$parent_id'")) {
         make_json_error($_LANG['region_name_exist']);
     }
 
-    $sql = "INSERT INTO " . $ecs->table('region') . " (parent_id, region_name, region_type) " .
+    $sql = 'INSERT INTO '.$ecs->table('region').' (parent_id, region_name, region_type) '.
         "VALUES ('$parent_id', '$region_name', '$region_type')";
     if ($GLOBALS['db']->query($sql, 'SILENT')) {
         admin_log($region_name, 'add', 'area');
@@ -118,7 +118,7 @@ if ($_REQUEST['act'] == 'edit_area_name') {
 
     /* 查看区域是否重复 */
     $parent_id = $exc->get_name($id, 'parent_id');
-    if (!$exc->is_only('region_name', $region_name, $id, "parent_id = '$parent_id'")) {
+    if (! $exc->is_only('region_name', $region_name, $id, "parent_id = '$parent_id'")) {
         make_json_error($_LANG['region_name_exist']);
     }
 
@@ -138,15 +138,15 @@ if ($_REQUEST['act'] == 'drop_area') {
 
     $id = intval($_REQUEST['id']);
 
-    $sql = "SELECT * FROM " . $ecs->table('region') . " WHERE region_id = '$id'";
+    $sql = 'SELECT * FROM '.$ecs->table('region')." WHERE region_id = '$id'";
     $region = $db->getRow($sql);
 
-//    /* 如果底下有下级区域,不能删除 */
-//    $sql = "SELECT COUNT(*) FROM " . $ecs->table('region') . " WHERE parent_id = '$id'";
-//    if ($db->getOne($sql) > 0)
-//    {
-//        make_json_error($_LANG['parent_id_exist']);
-//    }
+    //    /* 如果底下有下级区域,不能删除 */
+    //    $sql = "SELECT COUNT(*) FROM " . $ecs->table('region') . " WHERE parent_id = '$id'";
+    //    if ($db->getOne($sql) > 0)
+    //    {
+    //        make_json_error($_LANG['parent_id_exist']);
+    //    }
     $region_type = $region['region_type'];
     $delete_region[] = $id;
     $new_region_id = $id;
@@ -160,7 +160,7 @@ if ($_REQUEST['act'] == 'drop_area') {
             }
         }
     }
-    $sql = "DELETE FROM " . $ecs->table("region") . "WHERE region_id" . db_create_in($delete_region);
+    $sql = 'DELETE FROM '.$ecs->table('region').'WHERE region_id'.db_create_in($delete_region);
     $db->query($sql);
     if ($exc->drop($id)) {
         admin_log(addslashes($region['region_name']), 'remove', 'area');
@@ -178,14 +178,15 @@ if ($_REQUEST['act'] == 'drop_area') {
 
 function new_region_id($region_id)
 {
-    $regions_id = array();
+    $regions_id = [];
     if (empty($region_id)) {
         return $regions_id;
     }
-    $sql = "SELECT region_id FROM " . $GLOBALS['ecs']->table("region") . "WHERE parent_id " . db_create_in($region_id);
+    $sql = 'SELECT region_id FROM '.$GLOBALS['ecs']->table('region').'WHERE parent_id '.db_create_in($region_id);
     $result = $GLOBALS['db']->getAll($sql);
     foreach ($result as $val) {
         $regions_id[] = $val['region_id'];
     }
+
     return $regions_id;
 }

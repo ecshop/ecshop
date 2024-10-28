@@ -8,7 +8,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 clearstatcache();
 
 /* 定义站点根 */
-define('ROOT_PATH', dirname(__DIR__, 2) . '/');
+define('ROOT_PATH', dirname(__DIR__, 2).'/');
 
 if (isset($_SERVER['PHP_SELF'])) {
     define('PHP_SELF', $_SERVER['PHP_SELF']);
@@ -19,18 +19,18 @@ if (isset($_SERVER['PHP_SELF'])) {
 /* 定义版本的编码 */
 define('EC_DB_CHARSET', 'utf8mb4');
 
-require(ROOT_PATH . 'includes/lib_base.php');
-require(ROOT_PATH . 'includes/lib_common.php');
-require(ROOT_PATH . 'includes/lib_time.php');
+require ROOT_PATH.'includes/lib_base.php';
+require ROOT_PATH.'includes/lib_common.php';
+require ROOT_PATH.'includes/lib_time.php';
 
 /* 创建错误处理对象 */
-require(ROOT_PATH . 'includes/cls_error.php');
+require ROOT_PATH.'includes/cls_error.php';
 $err = new ecs_error('message.dwt');
 
 /* 初始化模板引擎 */
-require(ROOT_PATH . 'install/includes/cls_template.php');
-$smarty = new template(ROOT_PATH . 'install/templates/');
+require ROOT_PATH.'install/includes/cls_template.php';
+$smarty = new template(ROOT_PATH.'install/templates/');
 
-require(ROOT_PATH . 'install/includes/lib_installer.php');
+require ROOT_PATH.'install/includes/lib_installer.php';
 
 @set_time_limit(360);

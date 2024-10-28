@@ -1,18 +1,18 @@
 <?php
 
-$lang = (!empty($_GET['lang'])) ? trim($_GET['lang']) : 'zh_cn';
+$lang = (! empty($_GET['lang'])) ? trim($_GET['lang']) : 'zh_cn';
 
-if (!file_exists('../languages/' . $lang . '/calendar.php') || strrchr($lang, '.')) {
+if (! file_exists('../languages/'.$lang.'/calendar.php') || strrchr($lang, '.')) {
     $lang = 'zh_cn';
 }
 
-require(dirname(__DIR__) . '/data/config.php');
-header('Content-type: application/x-javascript; charset=' . EC_CHARSET);
+require dirname(__DIR__).'/data/config.php';
+header('Content-type: application/x-javascript; charset='.EC_CHARSET);
 
-include_once('../languages/' . $lang . '/calendar.php');
+include_once '../languages/'.$lang.'/calendar.php';
 
 foreach ($_LANG['calendar_lang'] as $cal_key => $cal_data) {
-    echo 'var ' . $cal_key . " = \"" . $cal_data . "\";\r\n";
+    echo 'var '.$cal_key.' = "'.$cal_data."\";\r\n";
 }
 
-include_once('./calendar/calendar.js');
+include_once './calendar/calendar.js';

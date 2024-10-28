@@ -33,15 +33,15 @@ class IpLocation
     /**
      * 构造函数，打开 QQWry.Dat 文件并初始化类中的信息
      *
-     * @param string $filename
+     * @param  string  $filename
      * @return IpLocation
      */
-    public function __construct($filename = __DIR__ . "/ipdata/ipdata.dat")
+    public function __construct($filename = __DIR__.'/ipdata/ipdata.dat')
     {
         $this->fp = 0;
         if (($this->fp = fopen($filename, 'rb')) !== false) {
             $this->firstip = $this->getlong();
-            $this->lastip  = $this->getlong();
+            $this->lastip = $this->getlong();
             $this->totalip = ($this->lastip - $this->firstip) / 7;
         }
     }
@@ -49,34 +49,33 @@ class IpLocation
     /**
      * 返回读取的长整型数
      *
-     * @access private
      * @return int
      */
     private function getlong()
     {
         //将读取的little-endian编码的4个字节转化为长整型数
         $result = unpack('Vlong', fread($this->fp, 4));
+
         return $result['long'];
     }
 
     /**
      * 返回读取的3个字节的长整型数
      *
-     * @access private
      * @return int
      */
     private function getlong3()
     {
         //将读取的little-endian编码的3个字节转化为长整型数
-        $result = unpack('Vlong', fread($this->fp, 3) . chr(0));
+        $result = unpack('Vlong', fread($this->fp, 3).chr(0));
+
         return $result['long'];
     }
 
     /**
      * 返回压缩后可进行比较的IP地址
      *
-     * @access private
-     * @param string $ip
+     * @param  string  $ip
      * @return string
      */
     private function packip($ip)
@@ -89,11 +88,10 @@ class IpLocation
     /**
      * 返回读取的字符串
      *
-     * @access private
-     * @param string $data
+     * @param  string  $data
      * @return string
      */
-    private function getstring($data = "")
+    private function getstring($data = '')
     {
         $char = fread($this->fp, 1);
         while (ord($char) > 0) {        // 字符串按照C格式保存，以\0结束
@@ -101,13 +99,13 @@ class IpLocation
             $char = fread($this->fp, 1);
         }
         $data = mb_convert_encoding($data, 'UTF-8', 'GBK');
+
         return $data;
     }
 
     /**
      * 返回地区信息
      *
-     * @access private
      * @return string
      */
     private function getarea()
@@ -115,7 +113,7 @@ class IpLocation
         $byte = fread($this->fp, 1);    // 标志字节
         switch (ord($byte)) {
             case 0:                     // 没有区域信息
-                $area = "";
+                $area = '';
                 break;
             case 1:
             case 2:                     // 标志字节为1或2，表示区域信息被重定向
@@ -126,33 +124,35 @@ class IpLocation
                 $area = $this->getstring($byte);
                 break;
         }
+
         return $area;
     }
 
     /**
      * 根据所给 IP 地址或域名返回所在地区信息
      *
-     * @param string $ip
+     * @param  string  $ip
      * @return mixed
+     *
      * @throws Exception
      */
     public function getLocation($ip = '')
     {
-        if (!$this->fp) {
+        if (! $this->fp) {
             throw new Exception('无效的dat文件');
         }            // 如果数据文件没有被正确打开，则直接返回空
         try {
             $ip = $this->getIp($ip);
         } catch (Exception $e) {
-            throw new Exception('无效的参数：' . $ip . '!');
+            throw new Exception('无效的参数：'.$ip.'!');
         }
 
         $location['ip'] = $ip;   // 将输入的域名转化为IP地址
-        $ip             = $this->packip($location['ip']);   // 将输入的IP地址转化为可比较的IP地址
+        $ip = $this->packip($location['ip']);   // 将输入的IP地址转化为可比较的IP地址
         // 不合法的IP地址会被转化为255.255.255.255
         // 对分搜索
-        $l      = 0;                         // 搜索的下边界
-        $u      = $this->totalip;            // 搜索的上边界
+        $l = 0;                         // 搜索的下边界
+        $u = $this->totalip;            // 搜索的上边界
         $findip = $this->lastip;        // 如果没有找到就返回最后一条IP记录（QQWry.Dat的版本信息）
         while ($l <= $u) {              // 当上边界小于下边界时，查找失败
             $i = floor(($l + $u) / 2);  // 计算近似中间记录
@@ -177,10 +177,10 @@ class IpLocation
         //获取查找到的IP地理位置信息
         fseek($this->fp, $findip);
         $location['beginip'] = long2ip($this->getlong());   // 用户IP所在范围的开始地址
-        $offset              = $this->getlong3();
+        $offset = $this->getlong3();
         fseek($this->fp, $offset);
         $location['endip'] = long2ip($this->getlong());     // 用户IP所在范围的结束地址
-        $byte              = fread($this->fp, 1);    // 标志字节
+        $byte = fread($this->fp, 1);    // 标志字节
         switch (ord($byte)) {
             case 1:                     // 标志字节为1，表示国家和区域信息都被同时重定向
                 $countryOffset = $this->getlong3();         // 重定向地址
@@ -195,7 +195,7 @@ class IpLocation
                         break;
                     default:            // 否则，表示国家信息没有被重定向
                         $location['country'] = $this->getstring($byte);
-                        $location['area']    = $this->getarea();
+                        $location['area'] = $this->getarea();
                         break;
                 }
                 break;
@@ -207,7 +207,7 @@ class IpLocation
                 break;
             default:                    // 否则，表示国家信息没有被重定向
                 $location['country'] = $this->getstring($byte);
-                $location['area']    = $this->getarea();
+                $location['area'] = $this->getarea();
                 break;
         }
         if (trim($location['country']) == 'CZ88.NET') {  // CZ88.NET表示没有有效信息
@@ -216,12 +216,14 @@ class IpLocation
         if (trim($location['area']) == 'CZ88.NET') {
             $location['area'] = '';
         }
+
         return $location;
     }
 
     /**
-     * @param string $ip
+     * @param  string  $ip
      * @return string|null
+     *
      * @throws Exception
      */
     private function getIp($ip = '')
@@ -238,8 +240,8 @@ class IpLocation
             $ip = $getHostByName;
         }
 
-        if (!preg_match('/^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:[.](?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}$/', $ip)) {
-            throw new Exception('无效的参数：' . $ip . '!');
+        if (! preg_match('/^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:[.](?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}$/', $ip)) {
+            throw new Exception('无效的参数：'.$ip.'!');
         }
 
         return $ip;
@@ -254,10 +256,12 @@ class IpLocation
         } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {//浏览当前页面的用户计算机的网关
             $arr = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
             $pos = array_search('unknown', $arr);
-            if (false !== $pos) unset($arr[$pos]);
+            if ($pos !== false) {
+                unset($arr[$pos]);
+            }
             $ip = trim($arr[0]);
         } elseif (isset($_SERVER['REMOTE_ADDR'])) {
-            $ip = $_SERVER['REMOTE_ADDR'];//浏览当前页面的用户计算机的ip地址
+            $ip = $_SERVER['REMOTE_ADDR']; //浏览当前页面的用户计算机的ip地址
         } else {
             $ip = null;
         }
@@ -266,12 +270,12 @@ class IpLocation
             $ip = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
             $ip = trim(current($ip));
         }
+
         return $ip;
     }
 
     /**
      * 析构函数，用于在页面执行结束后自动关闭打开的文件。
-     *
      */
     public function __destruct()
     {
@@ -280,5 +284,4 @@ class IpLocation
         }
         $this->fp = 0;
     }
-
 }

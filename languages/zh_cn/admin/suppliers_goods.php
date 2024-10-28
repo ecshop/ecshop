@@ -149,7 +149,7 @@ $_LANG['spec_price'] = '属性价格';
 $_LANG['drop_img_confirm'] = '您确实要删除该图片吗？';
 
 $_LANG['select_font'] = '字体样式';
-$_LANG['font_styles'] = array('strong' => '加粗', 'em' => '斜体', 'u' => '下划线', 'strike' => '删除线');
+$_LANG['font_styles'] = ['strong' => '加粗', 'em' => '斜体', 'u' => '下划线', 'strike' => '删除线'];
 
 $_LANG['rapid_add_cat'] = '添加分类';
 $_LANG['rapid_add_brand'] = '添加品牌';

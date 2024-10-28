@@ -2,11 +2,11 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-include_once(ROOT_PATH . 'includes/cls_image.php');
+require dirname(__FILE__).'/includes/init.php';
+include_once ROOT_PATH.'includes/cls_image.php';
 $image = new cls_image($_CFG['bgcolor']);
-$exc = new exchange($ecs->table("ad"), $db, 'ad_id', 'ad_name');
-$allow_suffix = array('gif', 'jpg', 'png', 'jpeg', 'bmp', 'swf');
+$exc = new exchange($ecs->table('ad'), $db, 'ad_id', 'ad_name');
+$allow_suffix = ['gif', 'jpg', 'png', 'jpeg', 'bmp', 'swf'];
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
     $_REQUEST['act'] = 'list';
@@ -19,10 +19,10 @@ if (empty($_REQUEST['act'])) {
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     admin_priv('ad_manage');
-    $pid = !empty($_REQUEST['pid']) ? intval($_REQUEST['pid']) : 0;
+    $pid = ! empty($_REQUEST['pid']) ? intval($_REQUEST['pid']) : 0;
 
     $smarty->assign('ur_here', $_LANG['ad_list']);
-    $smarty->assign('action_link', array('text' => $_LANG['ads_add'], 'href' => 'ads.php?act=add'));
+    $smarty->assign('action_link', ['text' => $_LANG['ads_add'], 'href' => 'ads.php?act=add']);
     $smarty->assign('pid', $pid);
     $smarty->assign('full_page', 1);
 
@@ -57,7 +57,7 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result(
         $smarty->fetch('ads_list.htm'),
         '',
-        array('filter' => $ads_list['filter'], 'page_count' => $ads_list['page_count'])
+        ['filter' => $ads_list['filter'], 'page_count' => $ads_list['page_count']]
     );
 }
 
@@ -75,12 +75,12 @@ if ($_REQUEST['act'] == 'add') {
 
     $smarty->assign(
         'ads',
-        array('ad_link' => $ad_link, 'ad_name' => $ad_name, 'start_time' => $start_time,
-            'end_time' => $end_time, 'enabled' => 1)
+        ['ad_link' => $ad_link, 'ad_name' => $ad_name, 'start_time' => $start_time,
+            'end_time' => $end_time, 'enabled' => 1]
     );
 
     $smarty->assign('ur_here', $_LANG['ads_add']);
-    $smarty->assign('action_link', array('href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']));
+    $smarty->assign('action_link', ['href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']]);
     $smarty->assign('position_list', get_position_list());
 
     $smarty->assign('form_act', 'insert');
@@ -98,14 +98,14 @@ if ($_REQUEST['act'] == 'insert') {
     admin_priv('ad_manage');
 
     /* 初始化变量 */
-    $id = !empty($_POST['id']) ? intval($_POST['id']) : 0;
-    $type = !empty($_POST['type']) ? intval($_POST['type']) : 0;
-    $ad_name = !empty($_POST['ad_name']) ? trim($_POST['ad_name']) : '';
+    $id = ! empty($_POST['id']) ? intval($_POST['id']) : 0;
+    $type = ! empty($_POST['type']) ? intval($_POST['type']) : 0;
+    $ad_name = ! empty($_POST['ad_name']) ? trim($_POST['ad_name']) : '';
 
     if ($_POST['media_type'] == '0') {
-        $ad_link = !empty($_POST['ad_link']) ? trim($_POST['ad_link']) : '';
+        $ad_link = ! empty($_POST['ad_link']) ? trim($_POST['ad_link']) : '';
     } else {
-        $ad_link = !empty($_POST['ad_link2']) ? trim($_POST['ad_link2']) : '';
+        $ad_link = ! empty($_POST['ad_link2']) ? trim($_POST['ad_link2']) : '';
     }
 
     /* 获得广告的开始时期与结束日期 */
@@ -113,30 +113,30 @@ if ($_REQUEST['act'] == 'insert') {
     $end_time = local_strtotime($_POST['end_time']);
 
     /* 查看广告名称是否有重复 */
-    $sql = "SELECT COUNT(*) FROM " . $ecs->table('ad') . " WHERE ad_name = '$ad_name'";
+    $sql = 'SELECT COUNT(*) FROM '.$ecs->table('ad')." WHERE ad_name = '$ad_name'";
     if ($db->getOne($sql) > 0) {
-        $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+        $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
         sys_msg($_LANG['ad_name_exist'], 0, $link);
     }
 
     /* 添加图片类型的广告 */
     if ($_POST['media_type'] == '0') {
-        if ((isset($_FILES['ad_img']['error']) && $_FILES['ad_img']['error'] == 0) || (!isset($_FILES['ad_img']['error']) && isset($_FILES['ad_img']['tmp_name']) && $_FILES['ad_img']['tmp_name'] != 'none')) {
+        if ((isset($_FILES['ad_img']['error']) && $_FILES['ad_img']['error'] == 0) || (! isset($_FILES['ad_img']['error']) && isset($_FILES['ad_img']['tmp_name']) && $_FILES['ad_img']['tmp_name'] != 'none')) {
             $ad_code = basename($image->upload_image($_FILES['ad_img'], 'afficheimg'));
         }
-        if (!empty($_POST['img_url'])) {
+        if (! empty($_POST['img_url'])) {
             $ad_code = $_POST['img_url'];
         }
-        if (((isset($_FILES['ad_img']['error']) && $_FILES['ad_img']['error'] > 0) || (!isset($_FILES['ad_img']['error']) && isset($_FILES['ad_img']['tmp_name']) && $_FILES['ad_img']['tmp_name'] == 'none')) && empty($_POST['img_url'])) {
-            $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+        if (((isset($_FILES['ad_img']['error']) && $_FILES['ad_img']['error'] > 0) || (! isset($_FILES['ad_img']['error']) && isset($_FILES['ad_img']['tmp_name']) && $_FILES['ad_img']['tmp_name'] == 'none')) && empty($_POST['img_url'])) {
+            $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
             sys_msg($_LANG['js_languages']['ad_photo_empty'], 0, $link);
         }
     } /* 如果添加的广告是Flash广告 */
     elseif ($_POST['media_type'] == '1') {
-        if ((isset($_FILES['upfile_flash']['error']) && $_FILES['upfile_flash']['error'] == 0) || (!isset($_FILES['upfile_flash']['error']) && isset($_FILES['ad_img']['tmp_name']) && $_FILES['upfile_flash']['tmp_name'] != 'none')) {
+        if ((isset($_FILES['upfile_flash']['error']) && $_FILES['upfile_flash']['error'] == 0) || (! isset($_FILES['upfile_flash']['error']) && isset($_FILES['ad_img']['tmp_name']) && $_FILES['upfile_flash']['tmp_name'] != 'none')) {
             /* 检查文件类型 */
-            if ($_FILES['upfile_flash']['type'] != "application/x-shockwave-flash") {
-                $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+            if ($_FILES['upfile_flash']['type'] != 'application/x-shockwave-flash') {
+                $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
                 sys_msg($_LANG['upfile_flash_type'], 0, $link);
             }
 
@@ -147,47 +147,47 @@ if ($_REQUEST['act'] == 'insert') {
             }
 
             $source_file = $_FILES['upfile_flash']['tmp_name'];
-            $target = ROOT_PATH . DATA_DIR . '/afficheimg/';
-            $file_name = $urlstr . '.swf';
+            $target = ROOT_PATH.DATA_DIR.'/afficheimg/';
+            $file_name = $urlstr.'.swf';
 
-            if (!move_upload_file($source_file, $target . $file_name)) {
-                $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+            if (! move_upload_file($source_file, $target.$file_name)) {
+                $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
                 sys_msg($_LANG['upfile_error'], 0, $link);
             } else {
                 $ad_code = $file_name;
             }
-        } elseif (!empty($_POST['flash_url'])) {
+        } elseif (! empty($_POST['flash_url'])) {
             if (substr(strtolower($_POST['flash_url']), strlen($_POST['flash_url']) - 4) != '.swf') {
-                $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+                $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
                 sys_msg($_LANG['upfile_flash_type'], 0, $link);
             }
             $ad_code = $_POST['flash_url'];
         }
 
-        if (((isset($_FILES['upfile_flash']['error']) && $_FILES['upfile_flash']['error'] > 0) || (!isset($_FILES['upfile_flash']['error']) && isset($_FILES['upfile_flash']['tmp_name']) && $_FILES['upfile_flash']['tmp_name'] == 'none')) && empty($_POST['flash_url'])) {
-            $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+        if (((isset($_FILES['upfile_flash']['error']) && $_FILES['upfile_flash']['error'] > 0) || (! isset($_FILES['upfile_flash']['error']) && isset($_FILES['upfile_flash']['tmp_name']) && $_FILES['upfile_flash']['tmp_name'] == 'none')) && empty($_POST['flash_url'])) {
+            $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
             sys_msg($_LANG['js_languages']['ad_flash_empty'], 0, $link);
         }
     } /* 如果广告类型为代码广告 */
     elseif ($_POST['media_type'] == '2') {
-        if (!empty($_POST['ad_code'])) {
+        if (! empty($_POST['ad_code'])) {
             $ad_code = $_POST['ad_code'];
         } else {
-            $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+            $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
             sys_msg($_LANG['js_languages']['ad_code_empty'], 0, $link);
         }
     } /* 广告类型为文本广告 */
     elseif ($_POST['media_type'] == '3') {
-        if (!empty($_POST['ad_text'])) {
+        if (! empty($_POST['ad_text'])) {
             $ad_code = $_POST['ad_text'];
         } else {
-            $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+            $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
             sys_msg($_LANG['js_languages']['ad_text_empty'], 0, $link);
         }
     }
 
     /* 插入数据 */
-    $sql = "INSERT INTO " . $ecs->table('ad') . " (position_id,media_type,ad_name,ad_link,ad_code,start_time,end_time,link_man,link_email,link_phone,click_count,enabled)
+    $sql = 'INSERT INTO '.$ecs->table('ad')." (position_id,media_type,ad_name,ad_link,ad_code,start_time,end_time,link_man,link_email,link_phone,click_count,enabled)
     VALUES ('$_POST[position_id]',
             '$_POST[media_type]',
             '$ad_name',
@@ -217,7 +217,7 @@ if ($_REQUEST['act'] == 'insert') {
 
     $link[2]['text'] = $_LANG['continue_add_ad'];
     $link[2]['href'] = 'ads.php?act=add';
-    sys_msg($_LANG['add'] . "&nbsp;" . $_POST['ad_name'] . "&nbsp;" . $_LANG['attradd_succed'], 0, $link);
+    sys_msg($_LANG['add'].'&nbsp;'.$_POST['ad_name'].'&nbsp;'.$_LANG['attradd_succed'], 0, $link);
 }
 
 /*------------------------------------------------------ */
@@ -227,7 +227,7 @@ if ($_REQUEST['act'] == 'edit') {
     admin_priv('ad_manage');
 
     /* 获取广告数据 */
-    $sql = "SELECT * FROM " . $ecs->table('ad') . " WHERE ad_id='" . intval($_REQUEST['id']) . "'";
+    $sql = 'SELECT * FROM '.$ecs->table('ad')." WHERE ad_id='".intval($_REQUEST['id'])."'";
     $ads_arr = $db->getRow($sql);
 
     $ads_arr['ad_name'] = htmlspecialchars($ads_arr['ad_name']);
@@ -237,7 +237,7 @@ if ($_REQUEST['act'] == 'edit') {
 
     if ($ads_arr['media_type'] == '0') {
         if (strpos($ads_arr['ad_code'], 'http://') === false && strpos($ads_arr['ad_code'], 'https://') === false) {
-            $src = '../' . DATA_DIR . '/afficheimg/' . $ads_arr['ad_code'];
+            $src = '../'.DATA_DIR.'/afficheimg/'.$ads_arr['ad_code'];
             $smarty->assign('img_src', $src);
         } else {
             $src = $ads_arr['ad_code'];
@@ -246,7 +246,7 @@ if ($_REQUEST['act'] == 'edit') {
     }
     if ($ads_arr['media_type'] == '1') {
         if (strpos($ads_arr['ad_code'], 'http://') === false && strpos($ads_arr['ad_code'], 'https://') === false) {
-            $src = '../' . DATA_DIR . '/afficheimg/' . $ads_arr['ad_code'];
+            $src = '../'.DATA_DIR.'/afficheimg/'.$ads_arr['ad_code'];
             $smarty->assign('flash_url', $src);
         } else {
             $src = $ads_arr['ad_code'];
@@ -265,7 +265,7 @@ if ($_REQUEST['act'] == 'edit') {
     }
 
     $smarty->assign('ur_here', $_LANG['ads_edit']);
-    $smarty->assign('action_link', array('href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']));
+    $smarty->assign('action_link', ['href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']]);
     $smarty->assign('form_act', 'update');
     $smarty->assign('action', 'edit');
     $smarty->assign('position_list', get_position_list());
@@ -282,13 +282,13 @@ if ($_REQUEST['act'] == 'update') {
     admin_priv('ad_manage');
 
     /* 初始化变量 */
-    $id = !empty($_POST['id']) ? intval($_POST['id']) : 0;
-    $type = !empty($_POST['media_type']) ? intval($_POST['media_type']) : 0;
+    $id = ! empty($_POST['id']) ? intval($_POST['id']) : 0;
+    $type = ! empty($_POST['media_type']) ? intval($_POST['media_type']) : 0;
 
     if ($_POST['media_type'] == '0') {
-        $ad_link = !empty($_POST['ad_link']) ? trim($_POST['ad_link']) : '';
+        $ad_link = ! empty($_POST['ad_link']) ? trim($_POST['ad_link']) : '';
     } else {
-        $ad_link = !empty($_POST['ad_link2']) ? trim($_POST['ad_link2']) : '';
+        $ad_link = ! empty($_POST['ad_link2']) ? trim($_POST['ad_link2']) : '';
     }
 
     /* 获得广告的开始时期与结束日期 */
@@ -297,21 +297,21 @@ if ($_REQUEST['act'] == 'update') {
 
     /* 编辑图片类型的广告 */
     if ($type == 0) {
-        if ((isset($_FILES['ad_img']['error']) && $_FILES['ad_img']['error'] == 0) || (!isset($_FILES['ad_img']['error']) && isset($_FILES['ad_img']['tmp_name']) && $_FILES['ad_img']['tmp_name'] != 'none')) {
+        if ((isset($_FILES['ad_img']['error']) && $_FILES['ad_img']['error'] == 0) || (! isset($_FILES['ad_img']['error']) && isset($_FILES['ad_img']['tmp_name']) && $_FILES['ad_img']['tmp_name'] != 'none')) {
             $img_up_info = basename($image->upload_image($_FILES['ad_img'], 'afficheimg'));
-            $ad_code = "ad_code = '" . $img_up_info . "'" . ',';
+            $ad_code = "ad_code = '".$img_up_info."'".',';
         } else {
             $ad_code = '';
         }
-        if (!empty($_POST['img_url'])) {
+        if (! empty($_POST['img_url'])) {
             $ad_code = "ad_code = '$_POST[img_url]', ";
         }
     } /* 如果是编辑Flash广告 */
     elseif ($type == 1) {
-        if ((isset($_FILES['upfile_flash']['error']) && $_FILES['upfile_flash']['error'] == 0) || (!isset($_FILES['upfile_flash']['error']) && isset($_FILES['upfile_flash']['tmp_name']) && $_FILES['upfile_flash']['tmp_name'] != 'none')) {
+        if ((isset($_FILES['upfile_flash']['error']) && $_FILES['upfile_flash']['error'] == 0) || (! isset($_FILES['upfile_flash']['error']) && isset($_FILES['upfile_flash']['tmp_name']) && $_FILES['upfile_flash']['tmp_name'] != 'none')) {
             /* 检查文件类型 */
-            if ($_FILES['upfile_flash']['type'] != "application/x-shockwave-flash") {
-                $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+            if ($_FILES['upfile_flash']['type'] != 'application/x-shockwave-flash') {
+                $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
                 sys_msg($_LANG['upfile_flash_type'], 0, $link);
             }
             /* 生成文件名 */
@@ -321,21 +321,21 @@ if ($_REQUEST['act'] == 'update') {
             }
 
             $source_file = $_FILES['upfile_flash']['tmp_name'];
-            $target = ROOT_PATH . DATA_DIR . '/afficheimg/';
-            $file_name = $urlstr . '.swf';
+            $target = ROOT_PATH.DATA_DIR.'/afficheimg/';
+            $file_name = $urlstr.'.swf';
 
-            if (!move_upload_file($source_file, $target . $file_name)) {
-                $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+            if (! move_upload_file($source_file, $target.$file_name)) {
+                $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
                 sys_msg($_LANG['upfile_error'], 0, $link);
             } else {
                 $ad_code = "ad_code = '$file_name', ";
             }
-        } elseif (!empty($_POST['flash_url'])) {
+        } elseif (! empty($_POST['flash_url'])) {
             if (substr(strtolower($_POST['flash_url']), strlen($_POST['flash_url']) - 4) != '.swf') {
-                $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+                $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
                 sys_msg($_LANG['upfile_flash_type'], 0, $link);
             }
-            $ad_code = "ad_code = '" . $_POST['flash_url'] . "', ";
+            $ad_code = "ad_code = '".$_POST['flash_url']."', ";
         } else {
             $ad_code = '';
         }
@@ -349,19 +349,19 @@ if ($_REQUEST['act'] == 'update') {
         $ad_code = "ad_code = '$_POST[ad_text]', ";
     }
 
-    $ad_code = str_replace('../' . DATA_DIR . '/afficheimg/', '', $ad_code);
+    $ad_code = str_replace('../'.DATA_DIR.'/afficheimg/', '', $ad_code);
     /* 更新信息 */
-    $sql = "UPDATE " . $ecs->table('ad') . " SET " .
-        "position_id = '$_POST[position_id]', " .
-        "ad_name     = '$_POST[ad_name]', " .
-        "ad_link     = '$ad_link', " .
-        $ad_code .
-        "start_time  = '$start_time', " .
-        "end_time    = '$end_time', " .
-        "link_man    = '$_POST[link_man]', " .
-        "link_email  = '$_POST[link_email]', " .
-        "link_phone  = '$_POST[link_phone]', " .
-        "enabled     = '$_POST[enabled]' " .
+    $sql = 'UPDATE '.$ecs->table('ad').' SET '.
+        "position_id = '$_POST[position_id]', ".
+        "ad_name     = '$_POST[ad_name]', ".
+        "ad_link     = '$ad_link', ".
+        $ad_code.
+        "start_time  = '$start_time', ".
+        "end_time    = '$end_time', ".
+        "link_man    = '$_POST[link_man]', ".
+        "link_email  = '$_POST[link_email]', ".
+        "link_phone  = '$_POST[link_phone]', ".
+        "enabled     = '$_POST[enabled]' ".
         "WHERE ad_id = '$id'";
     $db->query($sql);
 
@@ -371,8 +371,8 @@ if ($_REQUEST['act'] == 'update') {
     clear_cache_files(); // 清除模版缓存
 
     /* 提示信息 */
-    $href[] = array('text' => $_LANG['back_ads_list'], 'href' => 'ads.php?act=list');
-    sys_msg($_LANG['edit'] . ' ' . $_POST['ad_name'] . ' ' . $_LANG['attradd_succed'], 0, $href);
+    $href[] = ['text' => $_LANG['back_ads_list'], 'href' => 'ads.php?act=list'];
+    sys_msg($_LANG['edit'].' '.$_POST['ad_name'].' '.$_LANG['attradd_succed'], 0, $href);
 }
 
 /*------------------------------------------------------ */
@@ -382,19 +382,19 @@ if ($_REQUEST['act'] == 'add_js') {
     admin_priv('ad_manage');
 
     /* 编码 */
-    $lang_list = array(
+    $lang_list = [
         'UTF8' => $_LANG['charset']['utf8'],
         'GB2312' => $_LANG['charset']['zh_cn'],
         'BIG5' => $_LANG['charset']['zh_tw'],
-    );
+    ];
 
-    $js_code = "<script type=" . '"' . "text/javascript" . '"';
-    $js_code .= ' src=' . '"' . $ecs->url() . 'affiche.php?act=js&type=' . $_REQUEST['type'] . '&ad_id=' . intval($_REQUEST['id']) . '"' . '></script>';
+    $js_code = '<script type='.'"'.'text/javascript'.'"';
+    $js_code .= ' src='.'"'.$ecs->url().'affiche.php?act=js&type='.$_REQUEST['type'].'&ad_id='.intval($_REQUEST['id']).'"'.'></script>';
 
-    $site_url = $ecs->url() . 'affiche.php?act=js&type=' . $_REQUEST['type'] . '&ad_id=' . intval($_REQUEST['id']);
+    $site_url = $ecs->url().'affiche.php?act=js&type='.$_REQUEST['type'].'&ad_id='.intval($_REQUEST['id']);
 
     $smarty->assign('ur_here', $_LANG['add_js_code']);
-    $smarty->assign('action_link', array('href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']));
+    $smarty->assign('action_link', ['href' => 'ads.php?act=list', 'text' => $_LANG['ad_list']]);
     $smarty->assign('url', $site_url);
     $smarty->assign('js_code', $js_code);
     $smarty->assign('lang_list', $lang_list);
@@ -438,12 +438,12 @@ if ($_REQUEST['act'] == 'remove') {
 
     if ((strpos($img, 'http://') === false) && (strpos($img, 'https://') === false) && get_file_suffix($img, $allow_suffix)) {
         $img_name = basename($img);
-        @unlink(ROOT_PATH . DATA_DIR . '/afficheimg/' . $img_name);
+        @unlink(ROOT_PATH.DATA_DIR.'/afficheimg/'.$img_name);
     }
 
     admin_log('', 'remove', 'ads');
 
-    $url = 'ads.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+    $url = 'ads.php?act=query&'.str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
     ecs_header("Location: $url\n");
     exit;
@@ -453,9 +453,9 @@ if ($_REQUEST['act'] == 'remove') {
 function get_adslist()
 {
     /* 过滤查询 */
-    $pid = !empty($_REQUEST['pid']) ? intval($_REQUEST['pid']) : 0;
+    $pid = ! empty($_REQUEST['pid']) ? intval($_REQUEST['pid']) : 0;
 
-    $filter = array();
+    $filter = [];
     $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'ad.ad_name' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
@@ -465,19 +465,19 @@ function get_adslist()
     }
 
     /* 获得总记录数据 */
-    $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('ad') . ' AS ad ' . $where;
+    $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('ad').' AS ad '.$where;
     $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
     $filter = page_and_size($filter);
 
     /* 获得广告数据 */
-    $arr = array();
-    $sql = 'SELECT ad.*, COUNT(o.order_id) AS ad_stats, p.position_name ' .
-        'FROM ' . $GLOBALS['ecs']->table('ad') . 'AS ad ' .
-        'LEFT JOIN ' . $GLOBALS['ecs']->table('ad_position') . ' AS p ON p.position_id = ad.position_id ' .
-        'LEFT JOIN ' . $GLOBALS['ecs']->table('order_info') . " AS o ON o.from_ad = ad.ad_id $where " .
-        'GROUP BY ad.ad_id ' .
-        'ORDER by ' . $filter['sort_by'] . ' ' . $filter['sort_order'];
+    $arr = [];
+    $sql = 'SELECT ad.*, COUNT(o.order_id) AS ad_stats, p.position_name '.
+        'FROM '.$GLOBALS['ecs']->table('ad').'AS ad '.
+        'LEFT JOIN '.$GLOBALS['ecs']->table('ad_position').' AS p ON p.position_id = ad.position_id '.
+        'LEFT JOIN '.$GLOBALS['ecs']->table('order_info')." AS o ON o.from_ad = ad.ad_id $where ".
+        'GROUP BY ad.ad_id '.
+        'ORDER by '.$filter['sort_by'].' '.$filter['sort_order'];
 
     $res = $GLOBALS['db']->selectLimit($sql, $filter['page_size'], $filter['start']);
 
@@ -495,5 +495,5 @@ function get_adslist()
         $arr[] = $rows;
     }
 
-    return array('ads' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+    return ['ads' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 }

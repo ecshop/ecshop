@@ -1,8 +1,8 @@
 <?php
 
 define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
-include_once('../includes/lib_goods.php');
+require dirname(__FILE__).'/includes/init.php';
+include_once '../includes/lib_goods.php';
 
 /*------------------------------------------------------ */
 //-- 活动列表页
@@ -14,8 +14,8 @@ if ($_REQUEST['act'] == 'list') {
     /* 模板赋值 */
     $smarty->assign('full_page', 1);
     $smarty->assign('ur_here', $_LANG['wholesale_list']);
-    $smarty->assign('action_link', array('href' => 'wholesale.php?act=add', 'text' => $_LANG['add_wholesale']));
-    $smarty->assign('action_link2', array('href' => 'wholesale.php?act=batch_add', 'text' => $_LANG['add_batch_wholesale']));
+    $smarty->assign('action_link', ['href' => 'wholesale.php?act=add', 'text' => $_LANG['add_wholesale']]);
+    $smarty->assign('action_link2', ['href' => 'wholesale.php?act=batch_add', 'text' => $_LANG['add_batch_wholesale']]);
 
     $list = wholesale_list();
 
@@ -50,7 +50,7 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result(
         $smarty->fetch('wholesale_list.htm'),
         '',
-        array('filter' => $list['filter'], 'page_count' => $list['page_count'])
+        ['filter' => $list['filter'], 'page_count' => $list['page_count']]
     );
 }
 
@@ -68,7 +68,7 @@ if ($_REQUEST['act'] == 'remove') {
     $name = $wholesale['goods_name'];
 
     /* 删除记录 */
-    $sql = "DELETE FROM " . $ecs->table('wholesale') .
+    $sql = 'DELETE FROM '.$ecs->table('wholesale').
         " WHERE act_id = '$id' LIMIT 1";
     $db->query($sql);
 
@@ -78,7 +78,7 @@ if ($_REQUEST['act'] == 'remove') {
     /* 清除缓存 */
     clear_cache_files();
 
-    $url = 'wholesale.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+    $url = 'wholesale.php?act=query&'.str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
     ecs_header("Location: $url\n");
     exit;
@@ -99,8 +99,8 @@ if ($_REQUEST['act'] == 'batch') {
 
         if (isset($_POST['drop'])) {
             /* 删除记录 */
-            $sql = "DELETE FROM " . $ecs->table('wholesale') .
-                " WHERE act_id " . db_create_in($ids);
+            $sql = 'DELETE FROM '.$ecs->table('wholesale').
+                ' WHERE act_id '.db_create_in($ids);
             $db->query($sql);
 
             /* 记日志 */
@@ -109,7 +109,7 @@ if ($_REQUEST['act'] == 'batch') {
             /* 清除缓存 */
             clear_cache_files();
 
-            $links[] = array('text' => $_LANG['back_wholesale_list'], 'href' => 'wholesale.php?act=list&' . list_link_postfix());
+            $links[] = ['text' => $_LANG['back_wholesale_list'], 'href' => 'wholesale.php?act=list&'.list_link_postfix()];
             sys_msg($_LANG['batch_drop_ok'], 0, $links);
         }
     }
@@ -124,8 +124,8 @@ if ($_REQUEST['act'] == 'toggle_enabled') {
     $id = intval($_POST['id']);
     $val = intval($_POST['val']);
 
-    $sql = "UPDATE " . $ecs->table('wholesale') .
-        " SET enabled = '$val'" .
+    $sql = 'UPDATE '.$ecs->table('wholesale').
+        " SET enabled = '$val'".
         " WHERE act_id = '$id' LIMIT 1";
     $db->query($sql);
 
@@ -142,31 +142,31 @@ if ($_REQUEST['act'] == 'batch_add') {
     $smarty->assign('form_action', 'batch_add_insert');
 
     /* 初始化、取得批发活动信息 */
-    $wholesale = array(
+    $wholesale = [
         'act_id' => 0,
         'goods_id' => 0,
         'goods_name' => $_LANG['pls_search_goods'],
         'enabled' => '1',
-        'price_list' => array()
-    );
+        'price_list' => [],
+    ];
 
-    $wholesale['price_list'] = array(
-        array(
-            'attr' => array(),
-            'qp_list' => array(
-                array('quantity' => 0, 'price' => 0)
-            )
-        )
-    );
+    $wholesale['price_list'] = [
+        [
+            'attr' => [],
+            'qp_list' => [
+                ['quantity' => 0, 'price' => 0],
+            ],
+        ],
+    ];
     $smarty->assign('wholesale', $wholesale);
 
     /* 取得用户等级 */
-    $user_rank_list = array();
-    $sql = "SELECT rank_id, rank_name FROM " . $ecs->table('user_rank') .
-        " ORDER BY special_rank, min_points";
+    $user_rank_list = [];
+    $sql = 'SELECT rank_id, rank_name FROM '.$ecs->table('user_rank').
+        ' ORDER BY special_rank, min_points';
     $res = $db->query($sql);
     while ($rank = $db->fetchRow($res)) {
-        if (!empty($wholesale['rank_ids']) && strpos($wholesale['rank_ids'], $rank['rank_id']) !== false) {
+        if (! empty($wholesale['rank_ids']) && strpos($wholesale['rank_ids'], $rank['rank_id']) !== false) {
             $rank['checked'] = 1;
         }
         $user_rank_list[] = $rank;
@@ -180,7 +180,7 @@ if ($_REQUEST['act'] == 'batch_add') {
     $smarty->assign('ur_here', $_LANG['add_wholesale']);
 
     $href = 'wholesale.php?act=list';
-    $smarty->assign('action_link', array('href' => $href, 'text' => $_LANG['wholesale_list']));
+    $smarty->assign('action_link', ['href' => $href, 'text' => $_LANG['wholesale_list']]);
     assign_query_info();
 
     $smarty->display('wholesale_batch_info.htm');
@@ -195,30 +195,29 @@ if ($_REQUEST['act'] == 'batch_add_insert') {
     admin_priv('whole_sale');
 
     /* 取得goods */
-    $_POST['dst_goods_lists'] = array();
-    if (!empty($_POST['goods_ids'])) {
+    $_POST['dst_goods_lists'] = [];
+    if (! empty($_POST['goods_ids'])) {
         $_POST['dst_goods_lists'] = explode(',', $_POST['goods_ids']);
     }
-    if (!empty($_POST['dst_goods_lists']) && is_array($_POST['dst_goods_lists'])) {
+    if (! empty($_POST['dst_goods_lists']) && is_array($_POST['dst_goods_lists'])) {
         foreach ($_POST['dst_goods_lists'] as $dst_key => $dst_goods) {
             $dst_goods = intval($dst_goods);
             if ($dst_goods == 0) {
                 unset($_POST['dst_goods_lists'][$dst_key]);
             }
         }
-    } elseif (!empty($_POST['dst_goods_lists'])) {
-        $_POST['dst_goods_lists'] = array(intval($_POST['dst_goods_lists']));
+    } elseif (! empty($_POST['dst_goods_lists'])) {
+        $_POST['dst_goods_lists'] = [intval($_POST['dst_goods_lists'])];
     } else {
         sys_msg($_LANG['pls_search_goods']);
     }
     $dst_goods = implode(',', $_POST['dst_goods_lists']);
 
-
-    $sql = "SELECT goods_name, goods_id FROM " . $ecs->table('goods') .
+    $sql = 'SELECT goods_name, goods_id FROM '.$ecs->table('goods').
         " WHERE goods_id IN ($dst_goods)";
     $goods_name = $db->getAll($sql);
-    if (!empty($goods_name)) {
-        $goods_rebulid = array();
+    if (! empty($goods_name)) {
+        $goods_rebulid = [];
         foreach ($goods_name as $goods_value) {
             $goods_rebulid[$goods_value['goods_id']] = addslashes($goods_value['goods_name']);
         }
@@ -228,17 +227,17 @@ if ($_REQUEST['act'] == 'batch_add_insert') {
     }
 
     /* 会员等级 */
-    if (!isset($_POST['rank_id'])) {
+    if (! isset($_POST['rank_id'])) {
         sys_msg($_LANG['pls_set_user_rank']);
     }
 
     /* 同一个商品，会员等级不能重叠 */
     /* 一个批发方案只有一个商品 一个产品最多支持count(rank_id)个批发方案 */
     if (isset($_POST['rank_id'])) {
-        $dst_res = array();
+        $dst_res = [];
         foreach ($_POST['rank_id'] as $rank_id) {
-            $sql = "SELECT COUNT(act_id) AS num, goods_id FROM " . $ecs->table('wholesale') .
-                " WHERE goods_id IN ($dst_goods) " .
+            $sql = 'SELECT COUNT(act_id) AS num, goods_id FROM '.$ecs->table('wholesale').
+                " WHERE goods_id IN ($dst_goods) ".
                 " AND CONCAT(',', rank_ids, ',') LIKE CONCAT('%,', '$rank_id', ',%')
                       GROUP BY goods_id";
             if ($dst_res = $db->getAll($sql)) {
@@ -256,11 +255,11 @@ if ($_REQUEST['act'] == 'batch_add_insert') {
     }
 
     /* 提交值 */
-    $wholesale = array(
-        'rank_ids' => isset($_POST['rank_id']) ? join(',', $_POST['rank_id']) : '',
+    $wholesale = [
+        'rank_ids' => isset($_POST['rank_id']) ? implode(',', $_POST['rank_id']) : '',
         'prices' => '',
-        'enabled' => empty($_POST['enabled']) ? 0 : 1
-    );
+        'enabled' => empty($_POST['enabled']) ? 0 : 1,
+    ];
 
     foreach ($_POST['dst_goods_lists'] as $goods_value) {
         $_wholesale = $wholesale;
@@ -278,10 +277,10 @@ if ($_REQUEST['act'] == 'batch_add_insert') {
     clear_cache_files();
 
     /* 提示信息 */
-    $links = array(
-        array('href' => 'wholesale.php?act=list', 'text' => $_LANG['back_wholesale_list']),
-        array('href' => 'wholesale.php?act=add', 'text' => $_LANG['continue_add_wholesale'])
-    );
+    $links = [
+        ['href' => 'wholesale.php?act=list', 'text' => $_LANG['back_wholesale_list']],
+        ['href' => 'wholesale.php?act=add', 'text' => $_LANG['continue_add_wholesale']],
+    ];
     sys_msg($_LANG['add_wholesale_ok'], 0, $links);
 }
 
@@ -299,13 +298,13 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 
     /* 初始化、取得批发活动信息 */
     if ($is_add) {
-        $wholesale = array(
+        $wholesale = [
             'act_id' => 0,
             'goods_id' => 0,
             'goods_name' => $_LANG['pls_search_goods'],
             'enabled' => '1',
-            'price_list' => array()
-        );
+            'price_list' => [],
+        ];
     } else {
         if (empty($_GET['id'])) {
             sys_msg('invalid param');
@@ -320,24 +319,24 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
         $smarty->assign('attr_list', get_goods_attr($wholesale['goods_id']));
     }
     if (empty($wholesale['price_list'])) {
-        $wholesale['price_list'] = array(
-            array(
-                'attr' => array(),
-                'qp_list' => array(
-                    array('quantity' => 0, 'price' => 0)
-                )
-            )
-        );
+        $wholesale['price_list'] = [
+            [
+                'attr' => [],
+                'qp_list' => [
+                    ['quantity' => 0, 'price' => 0],
+                ],
+            ],
+        ];
     }
     $smarty->assign('wholesale', $wholesale);
 
     /* 取得用户等级 */
-    $user_rank_list = array();
-    $sql = "SELECT rank_id, rank_name FROM " . $ecs->table('user_rank') .
-        " ORDER BY special_rank, min_points";
+    $user_rank_list = [];
+    $sql = 'SELECT rank_id, rank_name FROM '.$ecs->table('user_rank').
+        ' ORDER BY special_rank, min_points';
     $res = $db->query($sql);
     while ($rank = $db->fetchRow($res)) {
-        if (!empty($wholesale['rank_ids']) && strpos($wholesale['rank_ids'], $rank['rank_id']) !== false) {
+        if (! empty($wholesale['rank_ids']) && strpos($wholesale['rank_ids'], $rank['rank_id']) !== false) {
             $rank['checked'] = 1;
         }
         $user_rank_list[] = $rank;
@@ -354,10 +353,10 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
         $smarty->assign('ur_here', $_LANG['edit_wholesale']);
     }
     $href = 'wholesale.php?act=list';
-    if (!$is_add) {
-        $href .= '&' . list_link_postfix();
+    if (! $is_add) {
+        $href .= '&'.list_link_postfix();
     }
-    $smarty->assign('action_link', array('href' => $href, 'text' => $_LANG['wholesale_list']));
+    $smarty->assign('action_link', ['href' => $href, 'text' => $_LANG['wholesale_list']]);
     assign_query_info();
     $smarty->display('wholesale_info.htm');
 }
@@ -378,26 +377,26 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     if ($goods_id <= 0) {
         sys_msg($_LANG['pls_search_goods']);
     }
-    $sql = "SELECT goods_name FROM " . $ecs->table('goods') .
+    $sql = 'SELECT goods_name FROM '.$ecs->table('goods').
         " WHERE goods_id = '$goods_id'";
     $goods_name = $db->getOne($sql);
     $goods_name = addslashes($goods_name);
     if (is_null($goods_name)) {
-        sys_msg('invalid goods id: ' . $goods_id);
+        sys_msg('invalid goods id: '.$goods_id);
     }
 
     /* 会员等级 */
-    if (!isset($_POST['rank_id'])) {
+    if (! isset($_POST['rank_id'])) {
         sys_msg($_LANG['pls_set_user_rank']);
     }
 
     /* 同一个商品，会员等级不能重叠 */
     if (isset($_POST['rank_id'])) {
         foreach ($_POST['rank_id'] as $rank_id) {
-            $sql = "SELECT COUNT(*) FROM " . $ecs->table('wholesale') .
-                " WHERE goods_id = '$goods_id' " .
+            $sql = 'SELECT COUNT(*) FROM '.$ecs->table('wholesale').
+                " WHERE goods_id = '$goods_id' ".
                 " AND CONCAT(',', rank_ids, ',') LIKE CONCAT('%,', '$rank_id', ',%')";
-            if (!$is_add) {
+            if (! $is_add) {
                 $sql .= " AND act_id <> '$_POST[id]'";
             }
             if ($db->getOne($sql) > 0) {
@@ -407,41 +406,42 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     }
 
     /* 取得goods_attr */
-    $sql = "SELECT a.attr_id " .
-        "FROM " . $ecs->table('goods') . " AS g, " . $ecs->table('attribute') . " AS a " .
-        "WHERE g.goods_id = '$goods_id' " .
-        "AND g.goods_type = a.cat_id " .
-        "AND a.attr_type = 1";
+    $sql = 'SELECT a.attr_id '.
+        'FROM '.$ecs->table('goods').' AS g, '.$ecs->table('attribute').' AS a '.
+        "WHERE g.goods_id = '$goods_id' ".
+        'AND g.goods_type = a.cat_id '.
+        'AND a.attr_type = 1';
     $attr_id_list = $db->getCol($sql);
 
     /* 取得属性、数量、价格信息 */
-    $prices = array();
+    $prices = [];
     $key_list = array_keys($_POST['quantity']);
 
     foreach ($key_list as $key) {
-        $attr = array();
+        $attr = [];
         foreach ($attr_id_list as $attr_id) {
-            if ($_POST['attr_' . $attr_id][$key] != 0) {
-                $attr[$attr_id] = $_POST['attr_' . $attr_id][$key];
+            if ($_POST['attr_'.$attr_id][$key] != 0) {
+                $attr[$attr_id] = $_POST['attr_'.$attr_id][$key];
             }
         }
 
         //判断商品的货品表是否存在此规格的货品
         $attr_error = false;
-        if (!empty($attr)) {
+        if (! empty($attr)) {
             $_attr = $attr;
             ksort($_attr);
             $goods_attr = implode('|', $_attr);
 
-            $sql = "SELECT product_id FROM " . $ecs->table('products') . " WHERE goods_attr = '$goods_attr' AND goods_id = '$goods_id'";
-            if (!$db->getOne($sql)) {
+            $sql = 'SELECT product_id FROM '.$ecs->table('products')." WHERE goods_attr = '$goods_attr' AND goods_id = '$goods_id'";
+            if (! $db->getOne($sql)) {
                 $attr_error = true;
+
                 continue;
             }
         }
 
         //
-        $qp_list = array();
+        $qp_list = [];
         foreach ($_POST['quantity'][$key] as $index => $quantity) {
             $quantity = intval($quantity);
             $price = floatval($_POST['price'][$key][$index]);
@@ -453,26 +453,26 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         }
         ksort($qp_list);
 
-        $arranged_qp_list = array();
+        $arranged_qp_list = [];
         foreach ($qp_list as $quantity => $price) {
-            $arranged_qp_list[] = array('quantity' => $quantity, 'price' => $price);
+            $arranged_qp_list[] = ['quantity' => $quantity, 'price' => $price];
         }
 
         /* 只记录有数量价格的数据 */
         if ($arranged_qp_list) {
-            $prices[] = array('attr' => $attr, 'qp_list' => $arranged_qp_list);
+            $prices[] = ['attr' => $attr, 'qp_list' => $arranged_qp_list];
         }
     }
 
     /* 提交值 */
-    $wholesale = array(
+    $wholesale = [
         'act_id' => intval($_POST['id']),
         'goods_id' => $goods_id,
         'goods_name' => $goods_name,
-        'rank_ids' => isset($_POST['rank_id']) ? join(',', $_POST['rank_id']) : '',
+        'rank_ids' => isset($_POST['rank_id']) ? implode(',', $_POST['rank_id']) : '',
         'prices' => serialize($prices),
-        'enabled' => empty($_POST['enabled']) ? 0 : 1
-    );
+        'enabled' => empty($_POST['enabled']) ? 0 : 1,
+    ];
 
     /* 保存数据 */
     if ($is_add) {
@@ -494,22 +494,22 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
     /* 提示信息 */
     if ($attr_error) {
-        $links = array(
-            array('href' => 'wholesale.php?act=list', 'text' => $_LANG['back_wholesale_list'])
-        );
+        $links = [
+            ['href' => 'wholesale.php?act=list', 'text' => $_LANG['back_wholesale_list']],
+        ];
         sys_msg(sprintf($_LANG['save_wholesale_falid'], $wholesale['goods_name']), 1, $links);
     }
 
     if ($is_add) {
-        $links = array(
-            array('href' => 'wholesale.php?act=add', 'text' => $_LANG['continue_add_wholesale']),
-            array('href' => 'wholesale.php?act=list', 'text' => $_LANG['back_wholesale_list'])
-        );
+        $links = [
+            ['href' => 'wholesale.php?act=add', 'text' => $_LANG['continue_add_wholesale']],
+            ['href' => 'wholesale.php?act=list', 'text' => $_LANG['back_wholesale_list']],
+        ];
         sys_msg($_LANG['add_wholesale_ok'], 0, $links);
     } else {
-        $links = array(
-            array('href' => 'wholesale.php?act=list&' . list_link_postfix(), 'text' => $_LANG['back_wholesale_list'])
-        );
+        $links = [
+            ['href' => 'wholesale.php?act=list&'.list_link_postfix(), 'text' => $_LANG['back_wholesale_list']],
+        ];
         sys_msg($_LANG['edit_wholesale_ok'], 0, $links);
     }
 }
@@ -521,16 +521,16 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 if ($_REQUEST['act'] == 'search_goods') {
     check_authz_json('whole_sale');
 
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    include_once ROOT_PATH.'includes/cls_json.php';
 
     $json = new JSON;
     $filter = $json->decode($_GET['JSON']);
     $arr = get_goods_list($filter);
     if (empty($arr)) {
-        $arr[0] = array(
+        $arr[0] = [
             'goods_id' => 0,
-            'goods_name' => $_LANG['search_result_empty']
-        );
+            'goods_name' => $_LANG['search_result_empty'],
+        ];
     }
 
     make_json_result($arr);
@@ -541,18 +541,18 @@ if ($_REQUEST['act'] == 'search_goods') {
 /*------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'get_goods_info') {
-    include_once(ROOT_PATH . 'includes/cls_json.php');
-    $json = new JSON();
+    include_once ROOT_PATH.'includes/cls_json.php';
+    $json = new JSON;
 
     $goods_id = intval($_REQUEST['goods_id']);
     $goods_attr_list = array_values(get_goods_attr($goods_id));
 
     // 将数组中的 goods_attr_list 元素下的元素的数字下标转换成字符串下标
-    if (!empty($goods_attr_list)) {
+    if (! empty($goods_attr_list)) {
         foreach ($goods_attr_list as $goods_attr_key => $goods_attr_value) {
-            if (isset($goods_attr_value['goods_attr_list']) && !empty($goods_attr_value['goods_attr_list'])) {
+            if (isset($goods_attr_value['goods_attr_list']) && ! empty($goods_attr_value['goods_attr_list'])) {
                 foreach ($goods_attr_value['goods_attr_list'] as $key => $value) {
-                    $goods_attr_list[$goods_attr_key]['goods_attr_list']['c' . $key] = $value;
+                    $goods_attr_list[$goods_attr_key]['goods_attr_list']['c'.$key] = $value;
                     unset($goods_attr_list[$goods_attr_key]['goods_attr_list'][$key]);
                 }
             }
@@ -569,8 +569,8 @@ if ($_REQUEST['act'] == 'get_goods_info') {
 function wholesale_list()
 {
     /* 查询会员等级 */
-    $rank_list = array();
-    $sql = "SELECT rank_id, rank_name FROM " . $GLOBALS['ecs']->table('user_rank');
+    $rank_list = [];
+    $sql = 'SELECT rank_id, rank_name FROM '.$GLOBALS['ecs']->table('user_rank');
     $res = $GLOBALS['db']->query($sql);
     while ($row = $GLOBALS['db']->fetchRow($res)) {
         $rank_list[$row['rank_id']] = $row['rank_name'];
@@ -586,12 +586,12 @@ function wholesale_list()
         $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'act_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-        $where = "";
-        if (!empty($filter['keyword'])) {
-            $where .= " AND goods_name LIKE '%" . mysql_like_quote($filter['keyword']) . "%'";
+        $where = '';
+        if (! empty($filter['keyword'])) {
+            $where .= " AND goods_name LIKE '%".mysql_like_quote($filter['keyword'])."%'";
         }
 
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('wholesale') .
+        $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('wholesale').
             " WHERE 1 $where";
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -599,11 +599,11 @@ function wholesale_list()
         $filter = page_and_size($filter);
 
         /* 查询 */
-        $sql = "SELECT * " .
-            "FROM " . $GLOBALS['ecs']->table('wholesale') .
-            " WHERE 1 $where " .
-            " ORDER BY $filter[sort_by] $filter[sort_order] " .
-            " LIMIT " . $filter['start'] . ", $filter[page_size]";
+        $sql = 'SELECT * '.
+            'FROM '.$GLOBALS['ecs']->table('wholesale').
+            " WHERE 1 $where ".
+            " ORDER BY $filter[sort_by] $filter[sort_order] ".
+            ' LIMIT '.$filter['start'].", $filter[page_size]";
 
         $filter['keyword'] = stripslashes($filter['keyword']);
         set_filter($filter, $sql);
@@ -613,9 +613,9 @@ function wholesale_list()
     }
     $res = $GLOBALS['db']->query($sql);
 
-    $list = array();
+    $list = [];
     while ($row = $GLOBALS['db']->fetchRow($res)) {
-        $rank_name_list = array();
+        $rank_name_list = [];
         if ($row['rank_ids']) {
             $rank_id_list = explode(',', $row['rank_ids']);
             foreach ($rank_id_list as $id) {
@@ -624,11 +624,11 @@ function wholesale_list()
                 }
             }
         }
-        $row['rank_names'] = join(',', $rank_name_list);
+        $row['rank_names'] = implode(',', $rank_name_list);
         $row['price_list'] = unserialize($row['prices']);
 
         $list[] = $row;
     }
 
-    return array('item' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+    return ['item' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 }

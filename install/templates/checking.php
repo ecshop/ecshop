@@ -9,7 +9,7 @@
     <script type="text/javascript" src="js/transport.js"></script>
 </head>
 <body id="checking">
-<?php include ROOT_PATH . 'install/templates/header.php'; ?>
+<?php include ROOT_PATH.'install/templates/header.php'; ?>
 <div id="content">
     <p style="font-size:30px;text-align: center;margin-top:50px;">
         <?php echo $lang['loading']; ?>
@@ -18,7 +18,7 @@
 </div>
 <div id="copyright">
     <div id="copyright-inside">
-        <?php include ROOT_PATH . 'install/templates/copyright.php'; ?>
+        <?php include ROOT_PATH.'install/templates/copyright.php'; ?>
     </div>
 </div>
 <script type="text/javascript">

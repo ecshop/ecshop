@@ -2,9 +2,9 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 
-if (!DEBUG_MODE) {
+if (! DEBUG_MODE) {
     $smarty->caching = true;
 }
 
@@ -33,7 +33,7 @@ if ($_REQUEST['act'] == 'list') {
         $page = $page > $page_count ? $page_count : $page;
 
         /* 缓存id：语言 - 每页记录数 - 当前页 */
-        $cache_id = $_CFG['lang'] . '-' . $size . '-' . $page;
+        $cache_id = $_CFG['lang'].'-'.$size.'-'.$page;
         $cache_id = sprintf('%X', crc32($cache_id));
     } else {
         /* 缓存id：语言 */
@@ -42,14 +42,14 @@ if ($_REQUEST['act'] == 'list') {
     }
 
     /* 如果没有缓存，生成缓存 */
-    if (!$smarty->is_cached('group_buy_list.dwt', $cache_id)) {
+    if (! $smarty->is_cached('group_buy_list.dwt', $cache_id)) {
         if ($count > 0) {
             /* 取得当前页的团购活动 */
             $gb_list = group_buy_list($size, $page);
             $smarty->assign('gb_list', $gb_list);
 
             /* 设置分页链接 */
-            $pager = get_pager('group_buy.php', array('act' => 'list'), $count, $page, $size);
+            $pager = get_pager('group_buy.php', ['act' => 'list'], $count, $page, $size);
             $smarty->assign('pager', $pager);
         }
 
@@ -63,7 +63,7 @@ if ($_REQUEST['act'] == 'list') {
         $smarty->assign('helps', get_shop_help());       // 网店帮助
         $smarty->assign('top_goods', get_top10());           // 销售排行
         $smarty->assign('promotion_info', get_promotion_info());
-        $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typegroup_buy.xml" : 'feed.php?type=group_buy'); // RSS URL
+        $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typegroup_buy.xml' : 'feed.php?type=group_buy'); // RSS URL
 
         assign_dynamic('group_buy_list');
     }
@@ -90,21 +90,21 @@ if ($_REQUEST['act'] == 'view') {
         ecs_header("Location: ./\n");
         exit;
     }
-//    elseif ($group_buy['is_on_sale'] == 0 || $group_buy['is_alone_sale'] == 0)
-//    {
-//        header("Location: ./\n");
-//        exit;
-//    }
+    //    elseif ($group_buy['is_on_sale'] == 0 || $group_buy['is_alone_sale'] == 0)
+    //    {
+    //        header("Location: ./\n");
+    //        exit;
+    //    }
 
     /* 缓存id：语言，团购活动id，状态，（如果是进行中）当前数量和是否登录 */
-    $cache_id = $_CFG['lang'] . '-' . $group_buy_id . '-' . $group_buy['status'];
+    $cache_id = $_CFG['lang'].'-'.$group_buy_id.'-'.$group_buy['status'];
     if ($group_buy['status'] == GBS_UNDER_WAY) {
-        $cache_id = $cache_id . '-' . $group_buy['valid_goods'] . '-' . intval($_SESSION['user_id'] > 0);
+        $cache_id = $cache_id.'-'.$group_buy['valid_goods'].'-'.intval($_SESSION['user_id'] > 0);
     }
     $cache_id = sprintf('%X', crc32($cache_id));
 
     /* 如果没有缓存，生成缓存 */
-    if (!$smarty->is_cached('group_buy_goods.dwt', $cache_id)) {
+    if (! $smarty->is_cached('group_buy_goods.dwt', $cache_id)) {
         $group_buy['gmt_end_date'] = $group_buy['end_date'];
         $smarty->assign('group_buy', $group_buy);
 
@@ -115,7 +115,7 @@ if ($_REQUEST['act'] == 'view') {
             ecs_header("Location: ./\n");
             exit;
         }
-        $goods['url'] = build_uri('goods', array('gid' => $goods_id), $goods['goods_name']);
+        $goods['url'] = build_uri('goods', ['gid' => $goods_id], $goods['goods_name']);
         $smarty->assign('gb_goods', $goods);
 
         /* 取得商品的规格 */
@@ -138,8 +138,8 @@ if ($_REQUEST['act'] == 'view') {
     }
 
     //更新商品点击次数
-    $sql = 'UPDATE ' . $ecs->table('goods') . ' SET click_count = click_count + 1 ' .
-        "WHERE goods_id = '" . $group_buy['goods_id'] . "'";
+    $sql = 'UPDATE '.$ecs->table('goods').' SET click_count = click_count + 1 '.
+        "WHERE goods_id = '".$group_buy['goods_id']."'";
     $db->query($sql);
 
     $smarty->assign('now_time', gmtime());           // 当前系统时间
@@ -195,7 +195,7 @@ if ($_REQUEST['act'] == 'buy') {
     $specs = '';
     foreach ($_POST as $key => $value) {
         if (strpos($key, 'spec_') !== false) {
-            $specs .= ',' . intval($value);
+            $specs .= ','.intval($value);
         }
     }
     $specs = trim($specs, ',');
@@ -206,7 +206,7 @@ if ($_REQUEST['act'] == 'buy') {
         $product_info = get_products_info($goods['goods_id'], $_specs);
     }
 
-    empty($product_info) ? $product_info = array('product_number' => 0, 'product_id' => 0) : '';
+    empty($product_info) ? $product_info = ['product_number' => 0, 'product_id' => 0] : '';
 
     /* 查询：判断指定规格的货品数量是否足够 */
     if ($specs && $number > $product_info['product_number']) {
@@ -214,25 +214,25 @@ if ($_REQUEST['act'] == 'buy') {
     }
 
     /* 查询：查询规格名称和值，不考虑价格 */
-    $attr_list = array();
-    $sql = "SELECT a.attr_name, g.attr_value " .
-        "FROM " . $ecs->table('goods_attr') . " AS g, " .
-        $ecs->table('attribute') . " AS a " .
-        "WHERE g.attr_id = a.attr_id " .
-        "AND g.goods_attr_id " . db_create_in($specs);
+    $attr_list = [];
+    $sql = 'SELECT a.attr_name, g.attr_value '.
+        'FROM '.$ecs->table('goods_attr').' AS g, '.
+        $ecs->table('attribute').' AS a '.
+        'WHERE g.attr_id = a.attr_id '.
+        'AND g.goods_attr_id '.db_create_in($specs);
     $res = $db->query($sql);
     while ($row = $db->fetchRow($res)) {
-        $attr_list[] = $row['attr_name'] . ': ' . $row['attr_value'];
+        $attr_list[] = $row['attr_name'].': '.$row['attr_value'];
     }
-    $goods_attr = join(chr(13) . chr(10), $attr_list);
+    $goods_attr = implode(chr(13).chr(10), $attr_list);
 
     /* 更新：清空购物车中所有团购商品 */
-    include_once(ROOT_PATH . 'includes/lib_order.php');
+    include_once ROOT_PATH.'includes/lib_order.php';
     clear_cart(CART_GROUP_BUY_GOODS);
 
     /* 更新：加入购物车 */
     $goods_price = $group_buy['deposit'] > 0 ? $group_buy['deposit'] : $group_buy['cur_price'];
-    $cart = array(
+    $cart = [
         'user_id' => $_SESSION['user_id'],
         'session_id' => SESS_ID,
         'goods_id' => $group_buy['goods_id'],
@@ -248,8 +248,8 @@ if ($_REQUEST['act'] == 'buy') {
         'extension_code' => addslashes($goods['extension_code']),
         'parent_id' => 0,
         'rec_type' => CART_GROUP_BUY_GOODS,
-        'is_gift' => 0
-    );
+        'is_gift' => 0,
+    ];
     $db->autoExecute($ecs->table('cart'), $cart, 'INSERT');
 
     /* 更新：记录购物流程类型：团购 */
@@ -266,9 +266,9 @@ if ($_REQUEST['act'] == 'buy') {
 function group_buy_count()
 {
     $now = gmtime();
-    $sql = "SELECT COUNT(*) " .
-        "FROM " . $GLOBALS['ecs']->table('goods_activity') .
-        "WHERE act_type = '" . GAT_GROUP_BUY . "' " .
+    $sql = 'SELECT COUNT(*) '.
+        'FROM '.$GLOBALS['ecs']->table('goods_activity').
+        "WHERE act_type = '".GAT_GROUP_BUY."' ".
         "AND start_time <= '$now' AND is_finished < 3";
 
     return $GLOBALS['db']->getOne($sql);
@@ -276,20 +276,21 @@ function group_buy_count()
 
 /**
  * 取得某页的所有团购活动
- * @param int $size 每页记录数
- * @param int $page 当前页
- * @return  array
+ *
+ * @param  int  $size  每页记录数
+ * @param  int  $page  当前页
+ * @return array
  */
 function group_buy_list($size, $page)
 {
     /* 取得团购活动 */
-    $gb_list = array();
+    $gb_list = [];
     $now = gmtime();
-    $sql = "SELECT b.*, IFNULL(g.goods_thumb, '') AS goods_thumb, b.act_id AS group_buy_id, " .
-        "b.start_time AS start_date, b.end_time AS end_date " .
-        "FROM " . $GLOBALS['ecs']->table('goods_activity') . " AS b " .
-        "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g ON b.goods_id = g.goods_id " .
-        "WHERE b.act_type = '" . GAT_GROUP_BUY . "' " .
+    $sql = "SELECT b.*, IFNULL(g.goods_thumb, '') AS goods_thumb, b.act_id AS group_buy_id, ".
+        'b.start_time AS start_date, b.end_time AS end_date '.
+        'FROM '.$GLOBALS['ecs']->table('goods_activity').' AS b '.
+        'LEFT JOIN '.$GLOBALS['ecs']->table('goods').' AS g ON b.goods_id = g.goods_id '.
+        "WHERE b.act_type = '".GAT_GROUP_BUY."' ".
         "AND b.start_time <= '$now' AND b.is_finished < 3 ORDER BY b.act_id DESC";
     $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);
     while ($group_buy = $GLOBALS['db']->fetchRow($res)) {
@@ -305,8 +306,8 @@ function group_buy_list($size, $page)
 
         /* 处理价格阶梯 */
         $price_ladder = $group_buy['price_ladder'];
-        if (!is_array($price_ladder) || empty($price_ladder)) {
-            $price_ladder = array(array('amount' => 0, 'price' => 0));
+        if (! is_array($price_ladder) || empty($price_ladder)) {
+            $price_ladder = [['amount' => 0, 'price' => 0]];
         } else {
             foreach ($price_ladder as $key => $amount_price) {
                 $price_ladder[$key]['formated_price'] = price_format($amount_price['price']);
@@ -319,7 +320,7 @@ function group_buy_list($size, $page)
             $group_buy['goods_thumb'] = get_image_path($group_buy['goods_thumb']);
         }
         /* 处理链接 */
-        $group_buy['url'] = build_uri('group_buy', array('gbid' => $group_buy['group_buy_id']));
+        $group_buy['url'] = build_uri('group_buy', ['gbid' => $group_buy['group_buy_id']]);
         /* 加入数组 */
         $gb_list[] = $group_buy;
     }

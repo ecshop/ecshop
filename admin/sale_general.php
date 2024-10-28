@@ -2,15 +2,15 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/statistic.php');
+require dirname(__FILE__).'/includes/init.php';
+require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/statistic.php';
 $smarty->assign('lang', $_LANG);
 
 /* 权限判断 */
 admin_priv('sale_order_stats');
 
 /* act操作项的初始化 */
-if (empty($_REQUEST['act']) || !in_array($_REQUEST['act'], array('list', 'download'))) {
+if (empty($_REQUEST['act']) || ! in_array($_REQUEST['act'], ['list', 'download'])) {
     $_REQUEST['act'] = 'list';
 }
 
@@ -44,14 +44,14 @@ if (empty($_POST['query_by_year']) && empty($_POST['query_by_month'])) {
 
 /* 分组统计订单数和销售额：已发货时间为准 */
 $format = ($query_type == 'year') ? '%Y' : '%Y-%m';
-$sql = "SELECT DATE_FORMAT(FROM_UNIXTIME(shipping_time), '$format') AS period, COUNT(*) AS order_count, " .
-    "SUM(goods_amount + shipping_fee + insure_fee + pay_fee + pack_fee + card_fee - discount) AS order_amount " .
-    "FROM " . $ecs->table('order_info') .
-    " WHERE (order_status = '" . OS_CONFIRMED . "' OR order_status >= '" . OS_SPLITED . "')" .
-    " AND (pay_status = '" . PS_PAYED . "' OR pay_status = '" . PS_PAYING . "') " .
-    " AND (shipping_status = '" . SS_SHIPPED . "' OR shipping_status = '" . SS_RECEIVED . "') " .
-    " AND shipping_time >= '$start_time' AND shipping_time <= '$end_time'" .
-    " GROUP BY period ";
+$sql = "SELECT DATE_FORMAT(FROM_UNIXTIME(shipping_time), '$format') AS period, COUNT(*) AS order_count, ".
+    'SUM(goods_amount + shipping_fee + insure_fee + pay_fee + pack_fee + card_fee - discount) AS order_amount '.
+    'FROM '.$ecs->table('order_info').
+    " WHERE (order_status = '".OS_CONFIRMED."' OR order_status >= '".OS_SPLITED."')".
+    " AND (pay_status = '".PS_PAYED."' OR pay_status = '".PS_PAYING."') ".
+    " AND (shipping_status = '".SS_SHIPPED."' OR shipping_status = '".SS_RECEIVED."') ".
+    " AND shipping_time >= '$start_time' AND shipping_time <= '$end_time'".
+    ' GROUP BY period ';
 $data_list = $db->getAll($sql);
 
 /*------------------------------------------------------ */
@@ -82,15 +82,15 @@ if ($_REQUEST['act'] == 'list') {
 
     /* 根据查询类型生成文件名 */
     if ($query_type == 'year') {
-        $filename = date('Y', $start_time) . "_" . date('Y', $end_time) . '_report';
+        $filename = date('Y', $start_time).'_'.date('Y', $end_time).'_report';
     } else {
-        $filename = date('Ym', $start_time) . "_" . date('Ym', $end_time) . '_report';
+        $filename = date('Ym', $start_time).'_'.date('Ym', $end_time).'_report';
     }
     $smarty->assign(
         'action_link',
-        array('text' => $_LANG['down_sales_stats'],
-            'href' => 'sale_general.php?act=download&filename=' . $filename .
-                '&query_type=' . $query_type . '&start_time=' . $start_time . '&end_time=' . $end_time)
+        ['text' => $_LANG['down_sales_stats'],
+            'href' => 'sale_general.php?act=download&filename='.$filename.
+                '&query_type='.$query_type.'&start_time='.$start_time.'&end_time='.$end_time]
     );
 
     /* 显示模板 */
@@ -104,23 +104,23 @@ if ($_REQUEST['act'] == 'list') {
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'download') {
     /* 文件名 */
-    $filename = !empty($_REQUEST['filename']) ? trim($_REQUEST['filename']) : '';
+    $filename = ! empty($_REQUEST['filename']) ? trim($_REQUEST['filename']) : '';
 
-    header("Content-type: application/vnd.ms-excel; charset=utf-8");
+    header('Content-type: application/vnd.ms-excel; charset=utf-8');
     header("Content-Disposition: attachment; filename=$filename.xls");
 
     /* 文件标题 */
-    echo ecs_iconv(EC_CHARSET, 'GB2312', $filename . $_LANG['sales_statistics']) . "\t\n";
+    echo ecs_iconv(EC_CHARSET, 'GB2312', $filename.$_LANG['sales_statistics'])."\t\n";
 
     /* 订单数量, 销售出商品数量, 销售金额 */
-    echo ecs_iconv(EC_CHARSET, 'GB2312', $_LANG['period']) . "\t";
-    echo ecs_iconv(EC_CHARSET, 'GB2312', $_LANG['order_count_trend']) . "\t";
-    echo ecs_iconv(EC_CHARSET, 'GB2312', $_LANG['order_amount_trend']) . "\t\n";
+    echo ecs_iconv(EC_CHARSET, 'GB2312', $_LANG['period'])."\t";
+    echo ecs_iconv(EC_CHARSET, 'GB2312', $_LANG['order_count_trend'])."\t";
+    echo ecs_iconv(EC_CHARSET, 'GB2312', $_LANG['order_amount_trend'])."\t\n";
 
     foreach ($data_list as $data) {
-        echo ecs_iconv(EC_CHARSET, 'GB2312', $data['period']) . "\t";
-        echo ecs_iconv(EC_CHARSET, 'GB2312', $data['order_count']) . "\t";
-        echo ecs_iconv(EC_CHARSET, 'GB2312', $data['order_amount']) . "\t";
+        echo ecs_iconv(EC_CHARSET, 'GB2312', $data['period'])."\t";
+        echo ecs_iconv(EC_CHARSET, 'GB2312', $data['order_count'])."\t";
+        echo ecs_iconv(EC_CHARSET, 'GB2312', $data['order_amount'])."\t";
         echo "\n";
     }
 }

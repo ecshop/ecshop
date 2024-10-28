@@ -3,9 +3,8 @@
 /**
  * JSON 类
  */
-
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
 class JSON
@@ -19,7 +18,7 @@ class JSON
     {
         if (empty($text)) {
             return '';
-        } elseif (!is_string($text)) {
+        } elseif (! is_string($text)) {
             return false;
         }
 

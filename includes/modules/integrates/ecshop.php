@@ -1,7 +1,7 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
 /* 模块的基本信息 */
@@ -26,7 +26,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-require_once(ROOT_PATH . 'includes/modules/integrates/integrate.php');
+require_once ROOT_PATH.'includes/modules/integrates/integrate.php';
 
 class ecshop extends integrate
 {
@@ -34,7 +34,7 @@ class ecshop extends integrate
 
     public function __construct($cfg)
     {
-        parent::__construct(array());
+        parent::__construct([]);
         $this->user_table = 'users';
         $this->field_id = 'user_id';
         $this->ec_salt = 'ec_salt';
@@ -48,14 +48,11 @@ class ecshop extends integrate
         $this->is_ecshop = 1;
     }
 
-
     /**
      *  检查指定用户是否存在及密码是否正确(重载基类check_user函数，支持zc加密方法)
      *
-     * @access  public
-     * @param string $username 用户名
-     *
-     * @return  int
+     * @param  string  $username  用户名
+     * @return int
      */
     public function check_user($username, $password = null)
     {
@@ -66,14 +63,14 @@ class ecshop extends integrate
         }
 
         if ($password === null) {
-            $sql = "SELECT " . $this->field_id .
-                " FROM " . $this->table($this->user_table) .
-                " WHERE " . $this->field_name . "='" . $post_username . "'";
+            $sql = 'SELECT '.$this->field_id.
+                ' FROM '.$this->table($this->user_table).
+                ' WHERE '.$this->field_name."='".$post_username."'";
 
             return $this->db->getOne($sql);
         } else {
-            $sql = "SELECT user_id, password, salt,ec_salt " .
-                " FROM " . $this->table($this->user_table) .
+            $sql = 'SELECT user_id, password, salt,ec_salt '.
+                ' FROM '.$this->table($this->user_table).
                 " WHERE user_name='$post_username'";
             $row = $this->db->getRow($sql);
             $ec_salt = $row['ec_salt'];
@@ -82,16 +79,17 @@ class ecshop extends integrate
             }
 
             if (empty($row['salt'])) {
-                if ($row['password'] != $this->compile_password(array('password' => $password, 'ec_salt' => $ec_salt))) {
+                if ($row['password'] != $this->compile_password(['password' => $password, 'ec_salt' => $ec_salt])) {
                     return 0;
                 } else {
                     if (empty($ec_salt)) {
                         $ec_salt = rand(1, 9999);
-                        $new_password = md5(md5($password) . $ec_salt);
-                        $sql = "UPDATE " . $this->table($this->user_table) . "SET password= '" . $new_password . "',ec_salt='" . $ec_salt . "'" .
+                        $new_password = md5(md5($password).$ec_salt);
+                        $sql = 'UPDATE '.$this->table($this->user_table)."SET password= '".$new_password."',ec_salt='".$ec_salt."'".
                             " WHERE user_name='$post_username'";
                         $this->db->query($sql);
                     }
+
                     return $row['user_id'];
                 }
             } else {
@@ -103,14 +101,14 @@ class ecshop extends integrate
                 $encrypt_password = '';
                 switch ($encrypt_type) {
                     case ENCRYPT_ZC:
-                        $encrypt_password = md5($encrypt_salt . $password);
+                        $encrypt_password = md5($encrypt_salt.$password);
                         break;
-                    /* 如果还有其他加密方式添加到这里  */
-                    //case other :
-                    //  ----------------------------------
-                    //  break;
+                        /* 如果还有其他加密方式添加到这里  */
+                        //case other :
+                        //  ----------------------------------
+                        //  break;
                     case ENCRYPT_UC:
-                        $encrypt_password = md5(md5($password) . $encrypt_salt);
+                        $encrypt_password = md5(md5($password).$encrypt_salt);
                         break;
 
                     default:
@@ -122,8 +120,8 @@ class ecshop extends integrate
                     return 0;
                 }
 
-                $sql = "UPDATE " . $this->table($this->user_table) .
-                    " SET password = '" . $this->compile_password(array('password' => $password)) . "', salt=''" .
+                $sql = 'UPDATE '.$this->table($this->user_table).
+                    " SET password = '".$this->compile_password(['password' => $password])."', salt=''".
                     " WHERE user_id = '$row[user_id]'";
                 $this->db->query($sql);
 

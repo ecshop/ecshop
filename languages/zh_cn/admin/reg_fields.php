@@ -16,6 +16,5 @@ $_LANG['order_not_num'] = '输入的排序权值不是有效的数字。';
 $_LANG['no_edit'] = '系统保留不可修改';
 $_LANG['no_remove'] = '系统保留不可删除';
 
-
 /* JS 语言 */
 $_LANG['js_languages']['field_name_empty'] = '您没有输入会员注册字段名称。';

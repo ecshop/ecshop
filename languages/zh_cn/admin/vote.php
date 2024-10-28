@@ -28,7 +28,6 @@ $_LANG['continue_add_option'] = '继续添加调查选项';
 $_LANG['continue_add_vote'] = '继续添加调查';
 $_LANG['edit_option_order'] = '修改调查选项排序';
 
-
 /* 提示信息 */
 $_LANG['vote_name_exist'] = '此调查主题已经存在!';
 $_LANG['vote_option_exist'] = '此调查选项已经存在!';

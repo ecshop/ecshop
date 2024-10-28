@@ -1,23 +1,23 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
 /**
  * 获得当前格林威治时间的时间戳
  *
- * @return  integer
+ * @return int
  */
 function gmtime()
 {
-    return (time() - date('Z'));
+    return time() - date('Z');
 }
 
 /**
  * 获得服务器的时区
  *
- * @return  integer
+ * @return int
  */
 function server_timezone()
 {
@@ -28,18 +28,15 @@ function server_timezone()
     }
 }
 
-
 /**
  *  生成一个用户自定义时区日期的GMT时间戳
  *
- * @access  public
- * @param int $hour
- * @param int $minute
- * @param int $second
- * @param int $month
- * @param int $day
- * @param int $year
- *
+ * @param  int  $hour
+ * @param  int  $minute
+ * @param  int  $second
+ * @param  int  $month
+ * @param  int  $day
+ * @param  int  $year
  * @return void
  */
 function local_mktime($hour = null, $minute = null, $second = null, $month = null, $day = null, $year = null)
@@ -55,16 +52,13 @@ function local_mktime($hour = null, $minute = null, $second = null, $month = nul
     return $time;
 }
 
-
 /**
  * 将GMT时间戳格式化为用户自定义时区日期
  *
- * @param string $format
- * @param integer $time 该参数必须是一个GMT的时间戳
- *
- * @return  string
+ * @param  string  $format
+ * @param  int  $time  该参数必须是一个GMT的时间戳
+ * @return string
  */
-
 function local_date($format, $time = null)
 {
     $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : intval($GLOBALS['_CFG']['timezone']);
@@ -80,13 +74,11 @@ function local_date($format, $time = null)
     return date($format, $time);
 }
 
-
 /**
  * 转换字符串形式的时间表达式为GMT时间戳
  *
- * @param string $str
- *
- * @return  integer
+ * @param  string  $str
+ * @return int
  */
 function gmstr2time($str)
 {
@@ -102,10 +94,8 @@ function gmstr2time($str)
 /**
  *  将一个用户自定义时区的日期转为GMT时间戳
  *
- * @access  public
- * @param string $str
- *
- * @return  integer
+ * @param  string  $str
+ * @return int
  */
 function local_strtotime($str)
 {
@@ -123,22 +113,21 @@ function local_strtotime($str)
 /**
  * 获得用户所在时区指定的时间戳
  *
- * @param   $timestamp  integer     该时间戳必须是一个服务器本地的时间戳
- *
- * @return  array
+ * @param  $timestamp  integer     该时间戳必须是一个服务器本地的时间戳
+ * @return array
  */
 function local_gettime($timestamp = null)
 {
     $tmp = local_getdate($timestamp);
+
     return $tmp[0];
 }
 
 /**
  * 获得用户所在时区指定的日期和时间信息
  *
- * @param   $timestamp  integer     该时间戳必须是一个服务器本地的时间戳
- *
- * @return  array
+ * @param  $timestamp  integer     该时间戳必须是一个服务器本地的时间戳
+ * @return array
  */
 function local_getdate($timestamp = null)
 {

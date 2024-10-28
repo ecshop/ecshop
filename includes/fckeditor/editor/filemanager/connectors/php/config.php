@@ -22,7 +22,7 @@
  * Configuration file for the File Manager Connector for PHP.
  */
 
-global $Config ;
+global $Config;
 
 // SECURITY: You must explicitelly enable this "uploader".
 // $Config['Enabled'] = false ;
@@ -47,12 +47,12 @@ if (isset($_SERVER['PHP_SELF'])) {
 
 $root_path = preg_replace('/includes(.*)/i', '', PHP_SELF);
 
-require(ROOT_PATH . 'data/config.php');
-require(ROOT_PATH . 'includes/lib_base.php');
-require(ROOT_PATH . 'includes/cls_mysql.php');
-require(ROOT_PATH . 'includes/cls_ecshop.php');
-require(ROOT_PATH . 'includes/cls_session.php');
-require(ROOT_PATH . 'includes/lib_common.php');
+require ROOT_PATH.'data/config.php';
+require ROOT_PATH.'includes/lib_base.php';
+require ROOT_PATH.'includes/cls_mysql.php';
+require ROOT_PATH.'includes/cls_ecshop.php';
+require ROOT_PATH.'includes/cls_session.php';
+require ROOT_PATH.'includes/lib_common.php';
 
 /* 创建 ECSHOP 对象 */
 $ecs = new ECS($db_name, $prefix);
@@ -64,12 +64,12 @@ $db = new cls_mysql($db_host, $db_user, $db_pass, $db_name);
 /* init session */
 $sess = new cls_session($db, $ecs->table('sessions'), $ecs->table('sessions_data'), 'ECSCP_ID');
 
-if (!empty($_SESSION['admin_id'])) {
+if (! empty($_SESSION['admin_id'])) {
     if ($_SESSION['action_list'] == 'all') {
         $enable = true;
     } else {
-        if (strpos(',' . $_SESSION['action_list'] . ',', ',goods_manage,') === false && strpos(',' . $_SESSION['action_list'] . ',', ',virualcard,') === false && strpos(',' .
-        $_SESSION['action_list'] . ',', ',article_manage,') === false) {
+        if (strpos(','.$_SESSION['action_list'].',', ',goods_manage,') === false && strpos(','.$_SESSION['action_list'].',', ',virualcard,') === false && strpos(','.
+        $_SESSION['action_list'].',', ',article_manage,') === false) {
             $enable = false;
         } else {
             $enable = true;
@@ -89,44 +89,43 @@ $Config['Enabled'] = $enable;
 //      authenticated users can access this file or use some kind of session checking.
 //$Config['Enabled'] = false ;
 
-
 // Path to user files relative to the document root.
-$Config['UserFilesPath'] = $root_path . IMAGE_DIR . '/upload/';
+$Config['UserFilesPath'] = $root_path.IMAGE_DIR.'/upload/';
 
 // Fill the following value it you prefer to specify the absolute path for the
 // user files directory. Useful if you are using a virtual directory, symbolic
 // link or alias. Examples: 'C:\\MySite\\userfiles\\' or '/root/mysite/userfiles/'.
 // Attention: The above 'UserFilesPath' must point to the same directory.
-$Config['UserFilesAbsolutePath'] = ROOT_PATH . IMAGE_DIR . '/upload/' ;
+$Config['UserFilesAbsolutePath'] = ROOT_PATH.IMAGE_DIR.'/upload/';
 
 // Due to security issues with Apache modules, it is recommended to leave the
 // following setting enabled.
-$Config['ForceSingleExtension'] = true ;
+$Config['ForceSingleExtension'] = true;
 
 // Perform additional checks for image files.
 // If set to true, validate image size (using getimagesize).
 $Config['SecureImageUploads'] = true;
 
 // What the user can do with this connector.
-$Config['ConfigAllowedCommands'] = array('QuickUpload', 'FileUpload', 'GetFolders', 'GetFoldersAndFiles', 'CreateFolder') ;
+$Config['ConfigAllowedCommands'] = ['QuickUpload', 'FileUpload', 'GetFolders', 'GetFoldersAndFiles', 'CreateFolder'];
 
 // Allowed Resource Types.
-$Config['ConfigAllowedTypes'] = array('File', 'Image', 'Flash', 'Media') ;
+$Config['ConfigAllowedTypes'] = ['File', 'Image', 'Flash', 'Media'];
 
 // For security, HTML is allowed in the first Kb of data for files having the
 // following extensions only.
-$Config['HtmlExtensions'] = array("html", "htm", "xml", "xsd", "txt", "js") ;
+$Config['HtmlExtensions'] = ['html', 'htm', 'xml', 'xsd', 'txt', 'js'];
 
 // After file is uploaded, sometimes it is required to change its permissions
 // so that it was possible to access it at the later time.
 // If possible, it is recommended to set more restrictive permissions, like 0755.
 // Set to 0 to disable this feature.
 // Note: not needed on Windows-based servers.
-$Config['ChmodOnUpload'] = 0777 ;
+$Config['ChmodOnUpload'] = 0777;
 
 // See comments above.
 // Used when creating folders that does not exist.
-$Config['ChmodOnFolderCreate'] = 0777 ;
+$Config['ChmodOnFolderCreate'] = 0777;
 
 /*
     Configuration settings for each Resource Type
@@ -180,32 +179,32 @@ $Config['ChmodOnFolderCreate'] = 0777 ;
 
 */
 
-$Config['AllowedExtensions']['File']    = array('7z', 'aiff', 'asf', 'avi', 'bmp', 'csv', 'doc', 'fla', 'flv', 'gif', 'gz', 'gzip', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'ods', 'odt', 'pdf', 'png', 'ppt', 'pxd', 'qt', 'ram', 'rar', 'rm', 'rmi', 'rmvb', 'rtf', 'sdc', 'sitd', 'swf', 'sxc', 'sxw', 'tar', 'tgz', 'tif', 'tiff', 'txt', 'vsd', 'wav', 'wma', 'wmv', 'xls', 'xml', 'zip') ;
-$Config['FileTypesPath']['File']        = $Config['UserFilesPath'] . 'File/' ;
-$Config['FileTypesAbsolutePath']['File']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'File/' ;
-$Config['QuickUploadPath']['File']      = $Config['UserFilesPath'] . 'File/' ;
-$Config['QuickUploadAbsolutePath']['File']= $Config['UserFilesAbsolutePath'] . 'File/' ;
+$Config['AllowedExtensions']['File'] = ['7z', 'aiff', 'asf', 'avi', 'bmp', 'csv', 'doc', 'fla', 'flv', 'gif', 'gz', 'gzip', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'ods', 'odt', 'pdf', 'png', 'ppt', 'pxd', 'qt', 'ram', 'rar', 'rm', 'rmi', 'rmvb', 'rtf', 'sdc', 'sitd', 'swf', 'sxc', 'sxw', 'tar', 'tgz', 'tif', 'tiff', 'txt', 'vsd', 'wav', 'wma', 'wmv', 'xls', 'xml', 'zip'];
+$Config['FileTypesPath']['File'] = $Config['UserFilesPath'].'File/';
+$Config['FileTypesAbsolutePath']['File'] = ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'File/';
+$Config['QuickUploadPath']['File'] = $Config['UserFilesPath'].'File/';
+$Config['QuickUploadAbsolutePath']['File'] = $Config['UserFilesAbsolutePath'].'File/';
 
 //$Config['AllowedExtensions']['Image']   = array('bmp','gif','jpeg','jpg','png') ;
-$Config['AllowedExtensions']['Image']    = array('jpg','gif','jpeg','png') ;
-$Config['DeniedExtensions']['Image']    = array() ;
-$Config['FileTypesPath']['Image']       = $Config['UserFilesPath'] . 'Image/' ;
-$Config['FileTypesAbsolutePath']['Image']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Image/' ;
-$Config['QuickUploadPath']['Image']     = $Config['UserFilesPath'] . 'Image/' ;
-$Config['QuickUploadAbsolutePath']['Image']= $Config['UserFilesAbsolutePath'] . 'Image/' ;
+$Config['AllowedExtensions']['Image'] = ['jpg', 'gif', 'jpeg', 'png'];
+$Config['DeniedExtensions']['Image'] = [];
+$Config['FileTypesPath']['Image'] = $Config['UserFilesPath'].'Image/';
+$Config['FileTypesAbsolutePath']['Image'] = ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Image/';
+$Config['QuickUploadPath']['Image'] = $Config['UserFilesPath'].'Image/';
+$Config['QuickUploadAbsolutePath']['Image'] = $Config['UserFilesAbsolutePath'].'Image/';
 
 //$Config['AllowedExtensions']['Flash']   = array('swf','flv') ;
-$Config['AllowedExtensions']['Flash']    = array('swf','fla') ;
-$Config['DeniedExtensions']['Flash']    = array() ;
-$Config['FileTypesPath']['Flash']       = $Config['UserFilesPath'] . 'Flash/' ;
-$Config['FileTypesAbsolutePath']['Flash']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Flash/' ;
-$Config['QuickUploadPath']['Flash']     = $Config['UserFilesPath'] . 'Flash/' ;
-$Config['QuickUploadAbsolutePath']['Flash']= $Config['UserFilesAbsolutePath'] . 'Flash/' ;
+$Config['AllowedExtensions']['Flash'] = ['swf', 'fla'];
+$Config['DeniedExtensions']['Flash'] = [];
+$Config['FileTypesPath']['Flash'] = $Config['UserFilesPath'].'Flash/';
+$Config['FileTypesAbsolutePath']['Flash'] = ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Flash/';
+$Config['QuickUploadPath']['Flash'] = $Config['UserFilesPath'].'Flash/';
+$Config['QuickUploadAbsolutePath']['Flash'] = $Config['UserFilesAbsolutePath'].'Flash/';
 
 //$Config['AllowedExtensions']['Media']   = array('aiff', 'asf', 'avi', 'bmp', 'fla', 'flv', 'gif', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'png', 'qt', 'ram', 'rm', 'rmi', 'rmvb', 'swf', 'tif', 'tiff', 'wav', 'wma', 'wmv') ;
-$Config['AllowedExtensions']['Media']   =array('7z', 'aiff', 'asf', 'avi', 'bmp', 'csv', 'doc', 'fla', 'flv', 'gif', 'gz', 'gzip', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'ods', 'odt', 'pdf', 'png', 'ppt', 'pxd', 'qt', 'ram', 'rar', 'rm', 'rmi', 'rmvb', 'rtf', 'sdc', 'sitd', 'swf', 'sxc', 'sxw', 'tar', 'tgz', 'tif', 'tiff', 'txt', 'vsd', 'wav', 'wma', 'wmv', 'xls', 'xml', 'zip') ;
-$Config['DeniedExtensions']['Media']    = array() ;
-$Config['FileTypesPath']['Media']       = $Config['UserFilesPath'] . 'Media/' ;
-$Config['FileTypesAbsolutePath']['Media']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Media/' ;
-$Config['QuickUploadPath']['Media']     = $Config['UserFilesPath'] . 'Media/' ;
-$Config['QuickUploadAbsolutePath']['Media']= $Config['UserFilesAbsolutePath'] . 'Media/' ;
+$Config['AllowedExtensions']['Media'] = ['7z', 'aiff', 'asf', 'avi', 'bmp', 'csv', 'doc', 'fla', 'flv', 'gif', 'gz', 'gzip', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'ods', 'odt', 'pdf', 'png', 'ppt', 'pxd', 'qt', 'ram', 'rar', 'rm', 'rmi', 'rmvb', 'rtf', 'sdc', 'sitd', 'swf', 'sxc', 'sxw', 'tar', 'tgz', 'tif', 'tiff', 'txt', 'vsd', 'wav', 'wma', 'wmv', 'xls', 'xml', 'zip'];
+$Config['DeniedExtensions']['Media'] = [];
+$Config['FileTypesPath']['Media'] = $Config['UserFilesPath'].'Media/';
+$Config['FileTypesAbsolutePath']['Media'] = ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Media/';
+$Config['QuickUploadPath']['Media'] = $Config['UserFilesPath'].'Media/';
+$Config['QuickUploadAbsolutePath']['Media'] = $Config['UserFilesAbsolutePath'].'Media/';

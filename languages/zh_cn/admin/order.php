@@ -299,8 +299,8 @@ $_LANG['select_card'] = '选择贺卡';
 $_LANG['select_shipping'] = '请先选择配送方式';
 $_LANG['want_insure'] = '我要保价';
 $_LANG['update_goods'] = '更新商品';
-$_LANG['notice_user'] = '<strong>注意：</strong>搜索结果只显示前20条记录，如果没有找到相' .
-    '应会员，请更精确地查找。另外，如果该会员是从论坛注册的且没有在商城登录过，' .
+$_LANG['notice_user'] = '<strong>注意：</strong>搜索结果只显示前20条记录，如果没有找到相'.
+    '应会员，请更精确地查找。另外，如果该会员是从论坛注册的且没有在商城登录过，'.
     '也无法找到，需要先在商城登录。';
 $_LANG['amount_increase'] = '由于您修改了订单，导致订单总金额增加，需要再次付款';
 $_LANG['amount_decrease'] = '由于您修改了订单，导致订单总金额减少，需要退款';

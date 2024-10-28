@@ -1,9 +1,9 @@
 <?php
 
 define('IN_ECS', true);
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'includes/lib_goods.php');
-require_once(ROOT_PATH . 'includes/lib_order.php');
+require dirname(__FILE__).'/includes/init.php';
+require_once ROOT_PATH.'includes/lib_goods.php';
+require_once ROOT_PATH.'includes/lib_order.php';
 
 /* 检查权限 */
 admin_priv('group_by');
@@ -23,7 +23,7 @@ if ($_REQUEST['act'] == 'list') {
     /* 模板赋值 */
     $smarty->assign('full_page', 1);
     $smarty->assign('ur_here', $_LANG['group_buy_list']);
-    $smarty->assign('action_link', array('href' => 'group_buy.php?act=add', 'text' => $_LANG['add_group_buy']));
+    $smarty->assign('action_link', ['href' => 'group_buy.php?act=add', 'text' => $_LANG['add_group_buy']]);
 
     $list = group_buy_list();
 
@@ -53,7 +53,7 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result(
         $smarty->fetch('group_buy_list.htm'),
         '',
-        array('filter' => $list['filter'], 'page_count' => $list['page_count'])
+        ['filter' => $list['filter'], 'page_count' => $list['page_count']]
     );
 }
 
@@ -64,16 +64,16 @@ if ($_REQUEST['act'] == 'query') {
 if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     /* 初始化/取得团购活动信息 */
     if ($_REQUEST['act'] == 'add') {
-        $group_buy = array(
+        $group_buy = [
             'act_id' => 0,
             'start_time' => date('Y-m-d', time() + 86400),
             'end_time' => date('Y-m-d', time() + 4 * 86400),
-            'price_ladder' => array(array('amount' => 0, 'price' => 0))
-        );
+            'price_ladder' => [['amount' => 0, 'price' => 0]],
+        ];
     } else {
         $group_buy_id = intval($_REQUEST['id']);
         if ($group_buy_id <= 0) {
-            die('invalid param');
+            exit('invalid param');
         }
         $group_buy = group_buy_info($group_buy_id);
     }
@@ -114,8 +114,8 @@ if ($_REQUEST['act'] == 'insert_update') {
         }
 
         /* 结束团购活动，修改结束时间为当前时间 */
-        $sql = "UPDATE " . $ecs->table('goods_activity') .
-            " SET end_time = '" . gmtime() . "' " .
+        $sql = 'UPDATE '.$ecs->table('goods_activity').
+            " SET end_time = '".gmtime()."' ".
             "WHERE act_id = '$group_buy_id' LIMIT 1";
         $db->query($sql);
 
@@ -123,9 +123,9 @@ if ($_REQUEST['act'] == 'insert_update') {
         clear_cache_files();
 
         /* 提示信息 */
-        $links = array(
-            array('href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list'])
-        );
+        $links = [
+            ['href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list']],
+        ];
         sys_msg($_LANG['edit_success'], 0, $links);
     } elseif (isset($_POST['succeed'])) {
         /* 设置活动成功 */
@@ -138,25 +138,25 @@ if ($_REQUEST['act'] == 'insert_update') {
         /* 如果有订单，更新订单信息 */
         if ($group_buy['total_order'] > 0) {
             /* 查找该团购活动的已确认或未确认订单（已取消的就不管了） */
-            $sql = "SELECT order_id " .
-                "FROM " . $ecs->table('order_info') .
-                " WHERE extension_code = 'group_buy' " .
-                "AND extension_id = '$group_buy_id' " .
-                "AND (order_status = '" . OS_CONFIRMED . "' or order_status = '" . OS_UNCONFIRMED . "')";
+            $sql = 'SELECT order_id '.
+                'FROM '.$ecs->table('order_info').
+                " WHERE extension_code = 'group_buy' ".
+                "AND extension_id = '$group_buy_id' ".
+                "AND (order_status = '".OS_CONFIRMED."' or order_status = '".OS_UNCONFIRMED."')";
             $order_id_list = $db->getCol($sql);
 
             /* 更新订单商品价 */
             $final_price = $group_buy['trans_price'];
-            $sql = "UPDATE " . $ecs->table('order_goods') .
-                " SET goods_price = '$final_price' " .
-                "WHERE order_id " . db_create_in($order_id_list);
+            $sql = 'UPDATE '.$ecs->table('order_goods').
+                " SET goods_price = '$final_price' ".
+                'WHERE order_id '.db_create_in($order_id_list);
             $db->query($sql);
 
             /* 查询订单商品总额 */
-            $sql = "SELECT order_id, SUM(goods_number * goods_price) AS goods_amount " .
-                "FROM " . $ecs->table('order_goods') .
-                " WHERE order_id " . db_create_in($order_id_list) .
-                " GROUP BY order_id";
+            $sql = 'SELECT order_id, SUM(goods_number * goods_price) AS goods_amount '.
+                'FROM '.$ecs->table('order_goods').
+                ' WHERE order_id '.db_create_in($order_id_list).
+                ' GROUP BY order_id';
             $res = $db->query($sql);
             while ($row = $db->fetchRow($res)) {
                 $order_id = $row['order_id'];
@@ -166,7 +166,7 @@ if ($_REQUEST['act'] == 'insert_update') {
                 $order = order_info($order_id);
 
                 /* 判断订单是否有效：余额支付金额 + 已付款金额 >= 保证金 */
-                if ($order['surplus'] + $order['money_paid'] >= $group_buy['deposit']) {
+                if ($group_buy['deposit'] <= $order['surplus'] + $order['money_paid']) {
                     /* 有效，设为已确认，更新订单 */
 
                     // 更新商品总额
@@ -229,7 +229,7 @@ if ($_REQUEST['act'] == 'insert_update') {
                         $order['order_amount'] = $money;
 
                         // 退款到帐户余额
-                        order_refund($order, 1, $_LANG['cancel_order_reason'] . ':' . $order['order_sn']);
+                        order_refund($order, 1, $_LANG['cancel_order_reason'].':'.$order['order_sn']);
                     }
 
                     /* 更新订单 */
@@ -240,8 +240,8 @@ if ($_REQUEST['act'] == 'insert_update') {
         }
 
         /* 修改团购活动状态为成功 */
-        $sql = "UPDATE " . $ecs->table('goods_activity') .
-            " SET is_finished = '" . GBS_SUCCEED . "' " .
+        $sql = 'UPDATE '.$ecs->table('goods_activity').
+            " SET is_finished = '".GBS_SUCCEED."' ".
             "WHERE act_id = '$group_buy_id' LIMIT 1";
         $db->query($sql);
 
@@ -249,9 +249,9 @@ if ($_REQUEST['act'] == 'insert_update') {
         clear_cache_files();
 
         /* 提示信息 */
-        $links = array(
-            array('href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list'])
-        );
+        $links = [
+            ['href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list']],
+        ];
         sys_msg($_LANG['edit_success'], 0, $links);
     } elseif (isset($_POST['fail'])) {
         /* 设置活动失败 */
@@ -264,11 +264,11 @@ if ($_REQUEST['act'] == 'insert_update') {
         /* 如果有有效订单，取消订单 */
         if ($group_buy['valid_order'] > 0) {
             /* 查找未确认或已确认的订单 */
-            $sql = "SELECT * " .
-                "FROM " . $ecs->table('order_info') .
-                " WHERE extension_code = 'group_buy' " .
-                "AND extension_id = '$group_buy_id' " .
-                "AND (order_status = '" . OS_CONFIRMED . "' OR order_status = '" . OS_UNCONFIRMED . "') ";
+            $sql = 'SELECT * '.
+                'FROM '.$ecs->table('order_info').
+                " WHERE extension_code = 'group_buy' ".
+                "AND extension_id = '$group_buy_id' ".
+                "AND (order_status = '".OS_CONFIRMED."' OR order_status = '".OS_UNCONFIRMED."') ";
             $res = $db->query($sql);
             while ($order = $db->fetchRow($res)) {
                 // 修改订单状态为已取消，付款状态为未付款
@@ -285,7 +285,7 @@ if ($_REQUEST['act'] == 'insert_update') {
                     $order['order_amount'] = $money;
 
                     // 退款到帐户余额
-                    order_refund($order, 1, $_LANG['cancel_order_reason'] . ':' . $order['order_sn'], $money);
+                    order_refund($order, 1, $_LANG['cancel_order_reason'].':'.$order['order_sn'], $money);
                 }
 
                 /* 更新订单 */
@@ -295,9 +295,9 @@ if ($_REQUEST['act'] == 'insert_update') {
         }
 
         /* 修改团购活动状态为失败，记录失败原因（活动说明） */
-        $sql = "UPDATE " . $ecs->table('goods_activity') .
-            " SET is_finished = '" . GBS_FAIL . "', " .
-            "act_desc = '$_POST[act_desc]' " .
+        $sql = 'UPDATE '.$ecs->table('goods_activity').
+            " SET is_finished = '".GBS_FAIL."', ".
+            "act_desc = '$_POST[act_desc]' ".
             "WHERE act_id = '$group_buy_id' LIMIT 1";
         $db->query($sql);
 
@@ -305,9 +305,9 @@ if ($_REQUEST['act'] == 'insert_update') {
         clear_cache_files();
 
         /* 提示信息 */
-        $links = array(
-            array('href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list'])
-        );
+        $links = [
+            ['href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list']],
+        ];
         sys_msg($_LANG['edit_success'], 0, $links);
     } elseif (isset($_POST['mail'])) {
         /* 发送通知邮件 */
@@ -325,14 +325,14 @@ if ($_REQUEST['act'] == 'insert_update') {
         $send_count = 0;
 
         /* 取得有效订单 */
-        $sql = "SELECT o.consignee, o.add_time, g.goods_number, o.order_sn, " .
-            "o.order_amount, o.order_id, o.email " .
-            "FROM " . $ecs->table('order_info') . " AS o, " .
-            $ecs->table('order_goods') . " AS g " .
-            "WHERE o.order_id = g.order_id " .
-            "AND o.extension_code = 'group_buy' " .
-            "AND o.extension_id = '$group_buy_id' " .
-            "AND o.order_status = '" . OS_CONFIRMED . "'";
+        $sql = 'SELECT o.consignee, o.add_time, g.goods_number, o.order_sn, '.
+            'o.order_amount, o.order_id, o.email '.
+            'FROM '.$ecs->table('order_info').' AS o, '.
+            $ecs->table('order_goods').' AS g '.
+            'WHERE o.order_id = g.order_id '.
+            "AND o.extension_code = 'group_buy' ".
+            "AND o.extension_id = '$group_buy_id' ".
+            "AND o.order_status = '".OS_CONFIRMED."'";
         $res = $db->query($sql);
         while ($order = $db->fetchRow($res)) {
             /* 邮件模板赋值 */
@@ -342,12 +342,12 @@ if ($_REQUEST['act'] == 'insert_update') {
             $smarty->assign('goods_number', $order['goods_number']);
             $smarty->assign('order_sn', $order['order_sn']);
             $smarty->assign('order_amount', price_format($order['order_amount']));
-            $smarty->assign('shop_url', $ecs->url() . 'user.php?act=order_detail&order_id=' . $order['order_id']);
+            $smarty->assign('shop_url', $ecs->url().'user.php?act=order_detail&order_id='.$order['order_id']);
             $smarty->assign('shop_name', $_CFG['shop_name']);
             $smarty->assign('send_date', local_date($_CFG['date_format']));
 
             /* 取得模板内容，发邮件 */
-            $content = $smarty->fetch('str:' . $tpl['template_content']);
+            $content = $smarty->fetch('str:'.$tpl['template_content']);
             if (send_mail($order['consignee'], $order['email'], $tpl['template_subject'], $content, $tpl['is_html'])) {
                 $send_count++;
             }
@@ -367,7 +367,7 @@ if ($_REQUEST['act'] == 'insert_update') {
             sys_msg($_LANG['error_goods_exist']);
         }
 
-        $goods_name = $db->getOne("SELECT goods_name FROM " . $ecs->table('goods') . " WHERE goods_id = '$goods_id'");
+        $goods_name = $db->getOne('SELECT goods_name FROM '.$ecs->table('goods')." WHERE goods_id = '$goods_id'");
 
         $act_name = empty($_POST['act_name']) ? $goods_name : sub_str($_POST['act_name'], 0, 255, false);
 
@@ -386,7 +386,7 @@ if ($_REQUEST['act'] == 'insert_update') {
             $gift_integral = 0;
         }
 
-        $price_ladder = array();
+        $price_ladder = [];
         $count = count($_POST['ladder_amount']);
         for ($i = $count - 1; $i >= 0; $i--) {
             /* 如果数量小于等于0，不要 */
@@ -402,7 +402,7 @@ if ($_REQUEST['act'] == 'insert_update') {
             }
 
             /* 加入价格阶梯 */
-            $price_ladder[$amount] = array('amount' => $amount, 'price' => $price);
+            $price_ladder[$amount] = ['amount' => $amount, 'price' => $price];
         }
         if (count($price_ladder) < 1) {
             sys_msg($_LANG['error_price_ladder']);
@@ -424,7 +424,7 @@ if ($_REQUEST['act'] == 'insert_update') {
             sys_msg($_LANG['invalid_time']);
         }
 
-        $group_buy = array(
+        $group_buy = [
             'act_name' => $act_name,
             'act_desc' => $_POST['act_desc'],
             'act_type' => GAT_GROUP_BUY,
@@ -432,13 +432,13 @@ if ($_REQUEST['act'] == 'insert_update') {
             'goods_name' => $goods_name,
             'start_time' => $start_time,
             'end_time' => $end_time,
-            'ext_info' => serialize(array(
+            'ext_info' => serialize([
                 'price_ladder' => $price_ladder,
                 'restrict_amount' => $restrict_amount,
                 'gift_integral' => $gift_integral,
-                'deposit' => $deposit
-            ))
-        );
+                'deposit' => $deposit,
+            ]),
+        ];
 
         /* 清除缓存 */
         clear_cache_files();
@@ -449,14 +449,14 @@ if ($_REQUEST['act'] == 'insert_update') {
             $db->autoExecute($ecs->table('goods_activity'), $group_buy, 'UPDATE', "act_id = '$group_buy_id'");
 
             /* log */
-            admin_log(addslashes($goods_name) . '[' . $group_buy_id . ']', 'edit', 'group_buy');
+            admin_log(addslashes($goods_name).'['.$group_buy_id.']', 'edit', 'group_buy');
 
             /* todo 更新活动表 */
 
             /* 提示信息 */
-            $links = array(
-                array('href' => 'group_buy.php?act=list&' . list_link_postfix(), 'text' => $_LANG['back_list'])
-            );
+            $links = [
+                ['href' => 'group_buy.php?act=list&'.list_link_postfix(), 'text' => $_LANG['back_list']],
+            ];
             sys_msg($_LANG['edit_success'], 0, $links);
         } else {
             /* insert */
@@ -466,10 +466,10 @@ if ($_REQUEST['act'] == 'insert_update') {
             admin_log(addslashes($goods_name), 'add', 'group_buy');
 
             /* 提示信息 */
-            $links = array(
-                array('href' => 'group_buy.php?act=add', 'text' => $_LANG['continue_add']),
-                array('href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list'])
-            );
+            $links = [
+                ['href' => 'group_buy.php?act=add', 'text' => $_LANG['continue_add']],
+                ['href' => 'group_buy.php?act=list', 'text' => $_LANG['back_list']],
+            ];
             sys_msg($_LANG['add_success'], 0, $links);
         }
     }
@@ -488,11 +488,11 @@ if ($_REQUEST['act'] == 'batch_drop') {
             /* 如果团购活动已经有订单，不能删除 */
             if ($group_buy['valid_order'] <= 0) {
                 /* 删除团购活动 */
-                $sql = "DELETE FROM " . $GLOBALS['ecs']->table('goods_activity') .
+                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('goods_activity').
                     " WHERE act_id = '$id' LIMIT 1";
                 $GLOBALS['db']->query($sql, 'SILENT');
 
-                admin_log(addslashes($group_buy['goods_name']) . '[' . $id . ']', 'remove', 'group_buy');
+                admin_log(addslashes($group_buy['goods_name']).'['.$id.']', 'remove', 'group_buy');
                 $del_count++;
             }
         }
@@ -502,10 +502,10 @@ if ($_REQUEST['act'] == 'batch_drop') {
             clear_cache_files();
         }
 
-        $links[] = array('text' => $_LANG['back_list'], 'href' => 'group_buy.php?act=list');
+        $links[] = ['text' => $_LANG['back_list'], 'href' => 'group_buy.php?act=list'];
         sys_msg(sprintf($_LANG['batch_drop_success'], $del_count), 0, $links);
     } else {
-        $links[] = array('text' => $_LANG['back_list'], 'href' => 'group_buy.php?act=list');
+        $links[] = ['text' => $_LANG['back_list'], 'href' => 'group_buy.php?act=list'];
         sys_msg($_LANG['no_select_group_buy'], 0, $links);
     }
 }
@@ -517,7 +517,7 @@ if ($_REQUEST['act'] == 'batch_drop') {
 if ($_REQUEST['act'] == 'search_goods') {
     check_authz_json('group_by');
 
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    include_once ROOT_PATH.'includes/cls_json.php';
 
     $json = new JSON;
     $filter = $json->decode($_GET['JSON']);
@@ -536,13 +536,13 @@ if ($_REQUEST['act'] == 'edit_deposit') {
     $id = intval($_POST['id']);
     $val = floatval($_POST['val']);
 
-    $sql = "SELECT ext_info FROM " . $ecs->table('goods_activity') .
-        " WHERE act_id = '$id' AND act_type = '" . GAT_GROUP_BUY . "'";
+    $sql = 'SELECT ext_info FROM '.$ecs->table('goods_activity').
+        " WHERE act_id = '$id' AND act_type = '".GAT_GROUP_BUY."'";
     $ext_info = unserialize($db->getOne($sql));
     $ext_info['deposit'] = $val;
 
-    $sql = "UPDATE " . $ecs->table('goods_activity') .
-        " SET ext_info = '" . serialize($ext_info) . "'" .
+    $sql = 'UPDATE '.$ecs->table('goods_activity').
+        " SET ext_info = '".serialize($ext_info)."'".
         " WHERE act_id = '$id'";
     $db->query($sql);
 
@@ -561,13 +561,13 @@ if ($_REQUEST['act'] == 'edit_restrict_amount') {
     $id = intval($_POST['id']);
     $val = intval($_POST['val']);
 
-    $sql = "SELECT ext_info FROM " . $ecs->table('goods_activity') .
-        " WHERE act_id = '$id' AND act_type = '" . GAT_GROUP_BUY . "'";
+    $sql = 'SELECT ext_info FROM '.$ecs->table('goods_activity').
+        " WHERE act_id = '$id' AND act_type = '".GAT_GROUP_BUY."'";
     $ext_info = unserialize($db->getOne($sql));
     $ext_info['restrict_amount'] = $val;
 
-    $sql = "UPDATE " . $ecs->table('goods_activity') .
-        " SET ext_info = '" . serialize($ext_info) . "'" .
+    $sql = 'UPDATE '.$ecs->table('goods_activity').
+        " SET ext_info = '".serialize($ext_info)."'".
         " WHERE act_id = '$id'";
     $db->query($sql);
 
@@ -594,14 +594,14 @@ if ($_REQUEST['act'] == 'remove') {
     }
 
     /* 删除团购活动 */
-    $sql = "DELETE FROM " . $ecs->table('goods_activity') . " WHERE act_id = '$id' LIMIT 1";
+    $sql = 'DELETE FROM '.$ecs->table('goods_activity')." WHERE act_id = '$id' LIMIT 1";
     $db->query($sql);
 
-    admin_log(addslashes($group_buy['goods_name']) . '[' . $id . ']', 'remove', 'group_buy');
+    admin_log(addslashes($group_buy['goods_name']).'['.$id.']', 'remove', 'group_buy');
 
     clear_cache_files();
 
-    $url = 'group_buy.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+    $url = 'group_buy.php?act=query&'.str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
     ecs_header("Location: $url\n");
     exit;
@@ -623,21 +623,21 @@ function group_buy_list()
         $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'act_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-        $where = (!empty($filter['keyword'])) ? " AND goods_name LIKE '%" . mysql_like_quote($filter['keyword']) . "%'" : '';
+        $where = (! empty($filter['keyword'])) ? " AND goods_name LIKE '%".mysql_like_quote($filter['keyword'])."%'" : '';
 
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_activity') .
-            " WHERE act_type = '" . GAT_GROUP_BUY . "' $where";
+        $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('goods_activity').
+            " WHERE act_type = '".GAT_GROUP_BUY."' $where";
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         /* 分页大小 */
         $filter = page_and_size($filter);
 
         /* 查询 */
-        $sql = "SELECT * " .
-            "FROM " . $GLOBALS['ecs']->table('goods_activity') .
-            " WHERE act_type = '" . GAT_GROUP_BUY . "' $where " .
-            " ORDER BY $filter[sort_by] $filter[sort_order] " .
-            " LIMIT " . $filter['start'] . ", $filter[page_size]";
+        $sql = 'SELECT * '.
+            'FROM '.$GLOBALS['ecs']->table('goods_activity').
+            " WHERE act_type = '".GAT_GROUP_BUY."' $where ".
+            " ORDER BY $filter[sort_by] $filter[sort_order] ".
+            ' LIMIT '.$filter['start'].", $filter[page_size]";
 
         $filter['keyword'] = stripslashes($filter['keyword']);
         set_filter($filter, $sql);
@@ -647,7 +647,7 @@ function group_buy_list()
     }
     $res = $GLOBALS['db']->query($sql);
 
-    $list = array();
+    $list = [];
     while ($row = $GLOBALS['db']->fetchRow($res)) {
         $ext_info = unserialize($row['ext_info']);
         $stat = group_buy_stat($row['act_id'], $ext_info['deposit']);
@@ -655,8 +655,8 @@ function group_buy_list()
 
         /* 处理价格阶梯 */
         $price_ladder = $arr['price_ladder'];
-        if (!is_array($price_ladder) || empty($price_ladder)) {
-            $price_ladder = array(array('amount' => 0, 'price' => 0));
+        if (! is_array($price_ladder) || empty($price_ladder)) {
+            $price_ladder = [['amount' => 0, 'price' => 0]];
         } else {
             foreach ($price_ladder as $key => $amount_price) {
                 $price_ladder[$key]['formated_price'] = price_format($amount_price['price']);
@@ -684,38 +684,40 @@ function group_buy_list()
 
         $list[] = $arr;
     }
-    $arr = array('item' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+    $arr = ['item' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
 }
 
 /**
  * 取得某商品的团购活动
- * @param int $goods_id 商品id
- * @return  array
+ *
+ * @param  int  $goods_id  商品id
+ * @return array
  */
 function goods_group_buy($goods_id)
 {
-    $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('goods_activity') .
-        " WHERE goods_id = '$goods_id' " .
-        " AND act_type = '" . GAT_GROUP_BUY . "'" .
-        " AND start_time <= " . gmtime() .
-        " AND end_time >= " . gmtime();
+    $sql = 'SELECT * FROM '.$GLOBALS['ecs']->table('goods_activity').
+        " WHERE goods_id = '$goods_id' ".
+        " AND act_type = '".GAT_GROUP_BUY."'".
+        ' AND start_time <= '.gmtime().
+        ' AND end_time >= '.gmtime();
 
     return $GLOBALS['db']->getRow($sql);
 }
 
 /**
  * 列表链接
- * @param bool $is_add 是否添加（插入）
- * @return  array('href' => $href, 'text' => $text)
+ *
+ * @param  bool  $is_add  是否添加（插入）
+ * @return array('href' => $href, 'text' => $text)
  */
 function list_link($is_add = true)
 {
     $href = 'group_buy.php?act=list';
-    if (!$is_add) {
-        $href .= '&' . list_link_postfix();
+    if (! $is_add) {
+        $href .= '&'.list_link_postfix();
     }
 
-    return array('href' => $href, 'text' => $GLOBALS['_LANG']['group_buy_list']);
+    return ['href' => $href, 'text' => $GLOBALS['_LANG']['group_buy_list']];
 }

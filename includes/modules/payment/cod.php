@@ -1,15 +1,15 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
-$payment_lang = ROOT_PATH . 'languages/' . $GLOBALS['_CFG']['lang'] . '/payment/cod.php';
+$payment_lang = ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/payment/cod.php';
 
 if (file_exists($payment_lang)) {
     global $_LANG;
 
-    include_once($payment_lang);
+    include_once $payment_lang;
 }
 
 /* 模块的基本信息 */
@@ -41,7 +41,7 @@ if (isset($set_modules) && $set_modules == true) {
     $modules[$i]['version'] = '1.0.0';
 
     /* 配置信息 */
-    $modules[$i]['config'] = array();
+    $modules[$i]['config'] = [];
 
     return;
 }
@@ -54,14 +54,10 @@ class cod
     /**
      * 构造函数
      *
-     * @access  public
-     * @param
      *
      * @return void
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * 提交函数
@@ -74,8 +70,5 @@ class cod
     /**
      * 处理函数
      */
-    public function response()
-    {
-        return;
-    }
+    public function response() {}
 }

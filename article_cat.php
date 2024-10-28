@@ -2,9 +2,9 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 
-if (!DEBUG_MODE) {
+if (! DEBUG_MODE) {
     $smarty->caching = true;
 }
 
@@ -16,9 +16,9 @@ clear_cache_files();
 /*------------------------------------------------------ */
 
 /* 获得指定的分类ID */
-if (!empty($_GET['id'])) {
+if (! empty($_GET['id'])) {
     $cat_id = intval($_GET['id']);
-} elseif (!empty($_GET['category'])) {
+} elseif (! empty($_GET['category'])) {
     $cat_id = intval($_GET['category']);
 } else {
     ecs_header("Location: ./\n");
@@ -27,19 +27,19 @@ if (!empty($_GET['id'])) {
 }
 
 /* 获得当前页码 */
-$page = !empty($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
+$page = ! empty($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
 
 /*------------------------------------------------------ */
 //-- PROCESSOR
 /*------------------------------------------------------ */
 
 /* 获得页面的缓存ID */
-$cache_id = sprintf('%X', crc32($cat_id . '-' . $page . '-' . $_CFG['lang']));
+$cache_id = sprintf('%X', crc32($cat_id.'-'.$page.'-'.$_CFG['lang']));
 
-if (!$smarty->is_cached('article_cat.dwt', $cache_id)) {
+if (! $smarty->is_cached('article_cat.dwt', $cache_id)) {
     /* 如果页面没有被缓存则重新获得页面的内容 */
 
-    assign_template('a', array($cat_id));
+    assign_template('a', [$cat_id]);
     $position = assign_ur_here($cat_id);
     $smarty->assign('page_title', $position['title']);     // 页面标题
     $smarty->assign('ur_here', $position['ur_here']);   // 当前位置
@@ -56,7 +56,7 @@ if (!$smarty->is_cached('article_cat.dwt', $cache_id)) {
     $smarty->assign('promotion_info', get_promotion_info());
 
     /* Meta */
-    $meta = $db->getRow("SELECT keywords, cat_desc FROM " . $ecs->table('article_cat') . " WHERE cat_id = '$cat_id'");
+    $meta = $db->getRow('SELECT keywords, cat_desc FROM '.$ecs->table('article_cat')." WHERE cat_id = '$cat_id'");
 
     if ($meta === false || empty($meta)) {
         /* 如果没有找到任何记录则返回首页 */
@@ -102,6 +102,6 @@ if (!$smarty->is_cached('article_cat.dwt', $cache_id)) {
     assign_dynamic('article_cat');
 }
 
-$smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-typearticle_cat" . $cat_id . ".xml" : 'feed.php?type=article_cat' . $cat_id); // RSS URL
+$smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typearticle_cat'.$cat_id.'.xml' : 'feed.php?type=article_cat'.$cat_id); // RSS URL
 
 $smarty->display('article_cat.dwt', $cache_id);

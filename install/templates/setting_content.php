@@ -104,7 +104,7 @@
         <tr>
             <td>
                 <div id="install-btn"><input type="button" id="js-pre-step" class="button"
-                                             value="<?php echo $lang['prev_step'] . $lang['check_system_environment']; ?>"/>
+                                             value="<?php echo $lang['prev_step'].$lang['check_system_environment']; ?>"/>
                     <input id="js-install-at-once" type="submit" class="button"
                            value="<?php echo $lang['install_at_once']; ?>"/></div>
             </td>

@@ -1,21 +1,20 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
 class ECS
 {
     public $db_name = '';
+
     public $prefix = 'ecs_';
 
     /**
      * 构造函数
      *
-     * @access  public
-     * @param string $ver 版本号
-     *
-     * @return  void
+     * @param  string  $ver  版本号
+     * @return void
      */
     public function __construct($db_name, $prefix)
     {
@@ -26,23 +25,19 @@ class ECS
     /**
      * 将指定的表名加上前缀后返回
      *
-     * @access  public
-     * @param string $str 表名
-     *
-     * @return  string
+     * @param  string  $str  表名
+     * @return string
      */
     public function table($str)
     {
-        return '`' . $this->db_name . '`.`' . $this->prefix . $str . '`';
+        return '`'.$this->db_name.'`.`'.$this->prefix.$str.'`';
     }
 
     /**
      * ECSHOP 密码编译方法;
      *
-     * @access  public
-     * @param string $pass 需要编译的原始密码
-     *
-     * @return  string
+     * @param  string  $pass  需要编译的原始密码
+     * @return string
      */
     public function compile_password($pass)
     {
@@ -52,9 +47,8 @@ class ECS
     /**
      * 取得当前的域名
      *
-     * @access  public
      *
-     * @return  string      当前的域名
+     * @return string 当前的域名
      */
     public function get_domain()
     {
@@ -69,9 +63,9 @@ class ECS
         } else {
             /* 端口 */
             if (isset($_SERVER['SERVER_PORT'])) {
-                $port = ':' . $_SERVER['SERVER_PORT'];
+                $port = ':'.$_SERVER['SERVER_PORT'];
 
-                if ((':80' == $port && 'http://' == $protocol) || (':443' == $port && 'https://' == $protocol)) {
+                if (($port == ':80' && $protocol == 'http://') || ($port == ':443' && $protocol == 'https://')) {
                     $port = '';
                 }
             } else {
@@ -79,26 +73,25 @@ class ECS
             }
 
             if (isset($_SERVER['SERVER_NAME'])) {
-                $host = $_SERVER['SERVER_NAME'] . $port;
+                $host = $_SERVER['SERVER_NAME'].$port;
             } elseif (isset($_SERVER['SERVER_ADDR'])) {
-                $host = $_SERVER['SERVER_ADDR'] . $port;
+                $host = $_SERVER['SERVER_ADDR'].$port;
             }
         }
 
-        return $protocol . $host;
+        return $protocol.$host;
     }
 
     /**
      * 获得 ECSHOP 当前环境的 URL 地址
      *
-     * @access  public
      *
-     * @return  void
+     * @return void
      */
     public function url()
     {
-        $curr = strpos(PHP_SELF, ADMIN_PATH . '/') !== false ?
-            preg_replace('/(.*)(' . ADMIN_PATH . ')(\/?)(.)*/i', '\1', dirname(PHP_SELF)) :
+        $curr = strpos(PHP_SELF, ADMIN_PATH.'/') !== false ?
+            preg_replace('/(.*)('.ADMIN_PATH.')(\/?)(.)*/i', '\1', dirname(PHP_SELF)) :
             dirname(PHP_SELF);
 
         $root = str_replace('\\', '/', $curr);
@@ -107,15 +100,14 @@ class ECS
             $root .= '/';
         }
 
-        return $this->get_domain() . $root;
+        return $this->get_domain().$root;
     }
 
     /**
      * 获得 ECSHOP 当前环境的 HTTP 协议方式
      *
-     * @access  public
      *
-     * @return  void
+     * @return void
      */
     public function http()
     {
@@ -125,8 +117,7 @@ class ECS
     /**
      * 获得数据目录的路径
      *
-     * @param int $sid
-     *
+     * @param  int  $sid
      * @return string 路径
      */
     public function data_dir($sid = 0)
@@ -135,17 +126,17 @@ class ECS
             $s = 'data';
         } else {
             $s = 'user_files/';
-            $s .= ceil($sid / 3000) . '/';
+            $s .= ceil($sid / 3000).'/';
             $s .= $sid % 3000;
         }
+
         return $s;
     }
 
     /**
      * 获得图片的目录路径
      *
-     * @param int $sid
-     *
+     * @param  int  $sid
      * @return string 路径
      */
     public function image_dir($sid = 0)
@@ -154,10 +145,11 @@ class ECS
             $s = 'images';
         } else {
             $s = 'user_files/';
-            $s .= ceil($sid / 3000) . '/';
-            $s .= ($sid % 3000) . '/';
+            $s .= ceil($sid / 3000).'/';
+            $s .= ($sid % 3000).'/';
             $s .= 'images';
         }
+
         return $s;
     }
 }

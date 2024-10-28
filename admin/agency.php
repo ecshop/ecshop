@@ -2,7 +2,7 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 
 $exc = new exchange($ecs->table('agency'), $db, 'agency_id', 'agency_name');
 
@@ -11,7 +11,7 @@ $exc = new exchange($ecs->table('agency'), $db, 'agency_id', 'agency_name');
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['agency_list']);
-    $smarty->assign('action_link', array('text' => $_LANG['add_agency'], 'href' => 'agency.php?act=add'));
+    $smarty->assign('action_link', ['text' => $_LANG['add_agency'], 'href' => 'agency.php?act=add']);
     $smarty->assign('full_page', 1);
 
     $agency_list = get_agencylist();
@@ -45,7 +45,7 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result(
         $smarty->fetch('agency_list.htm'),
         '',
-        array('filter' => $agency_list['filter'], 'page_count' => $agency_list['page_count'])
+        ['filter' => $agency_list['filter'], 'page_count' => $agency_list['page_count']]
     );
 }
 
@@ -59,7 +59,7 @@ if ($_REQUEST['act'] == 'edit_agency_name') {
     $name = json_str_iconv(trim($_POST['val']));
 
     /* 检查名称是否重复 */
-    if ($exc->num("agency_name", $name, $id) != 0) {
+    if ($exc->num('agency_name', $name, $id) != 0) {
         make_json_error(sprintf($_LANG['agency_name_exist'], $name));
     } else {
         if ($exc->edit("agency_name = '$name'", $id)) {
@@ -83,9 +83,9 @@ if ($_REQUEST['act'] == 'remove') {
     $exc->drop($id);
 
     /* 更新管理员、配送地区、发货单、退货单和订单关联的办事处 */
-    $table_array = array('admin_user', 'region', 'order_info', 'delivery_order', 'back_order');
+    $table_array = ['admin_user', 'region', 'order_info', 'delivery_order', 'back_order'];
     foreach ($table_array as $value) {
-        $sql = "UPDATE " . $ecs->table($value) . " SET agency_id = 0 WHERE agency_id = '$id'";
+        $sql = 'UPDATE '.$ecs->table($value)." SET agency_id = 0 WHERE agency_id = '$id'";
         $db->query($sql);
     }
 
@@ -95,7 +95,7 @@ if ($_REQUEST['act'] == 'remove') {
     /* 清除缓存 */
     clear_cache_files();
 
-    $url = 'agency.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+    $url = 'agency.php?act=query&'.str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
     ecs_header("Location: $url\n");
     exit;
@@ -116,14 +116,14 @@ if ($_REQUEST['act'] == 'batch') {
 
         if (isset($_POST['remove'])) {
             /* 删除记录 */
-            $sql = "DELETE FROM " . $ecs->table('agency') .
-                " WHERE agency_id " . db_create_in($ids);
+            $sql = 'DELETE FROM '.$ecs->table('agency').
+                ' WHERE agency_id '.db_create_in($ids);
             $db->query($sql);
 
             /* 更新管理员、配送地区、发货单、退货单和订单关联的办事处 */
-            $table_array = array('admin_user', 'region', 'order_info', 'delivery_order', 'back_order');
+            $table_array = ['admin_user', 'region', 'order_info', 'delivery_order', 'back_order'];
             foreach ($table_array as $value) {
-                $sql = "UPDATE " . $ecs->table($value) . " SET agency_id = 0 WHERE agency_id " . db_create_in($ids) . " ";
+                $sql = 'UPDATE '.$ecs->table($value).' SET agency_id = 0 WHERE agency_id '.db_create_in($ids).' ';
                 $db->query($sql);
             }
 
@@ -151,37 +151,37 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 
     /* 初始化、取得办事处信息 */
     if ($is_add) {
-        $agency = array(
+        $agency = [
             'agency_id' => 0,
             'agency_name' => '',
             'agency_desc' => '',
-            'region_list' => array()
-        );
+            'region_list' => [],
+        ];
     } else {
         if (empty($_GET['id'])) {
             sys_msg('invalid param');
         }
 
         $id = $_GET['id'];
-        $sql = "SELECT * FROM " . $ecs->table('agency') . " WHERE agency_id = '$id'";
+        $sql = 'SELECT * FROM '.$ecs->table('agency')." WHERE agency_id = '$id'";
         $agency = $db->getRow($sql);
         if (empty($agency)) {
             sys_msg('agency does not exist');
         }
 
         /* 关联的地区 */
-        $sql = "SELECT region_id, region_name FROM " . $ecs->table('region') .
+        $sql = 'SELECT region_id, region_name FROM '.$ecs->table('region').
             " WHERE agency_id = '$id'";
         $agency['region_list'] = $db->getAll($sql);
     }
 
     /* 取得所有管理员，标注哪些是该办事处的('this')，哪些是空闲的('free')，哪些是别的办事处的('other') */
-    $sql = "SELECT user_id, user_name, CASE " .
-        "WHEN agency_id = 0 THEN 'free' " .
-        "WHEN agency_id = '$agency[agency_id]' THEN 'this' " .
-        "ELSE 'other' END " .
-        "AS type " .
-        "FROM " . $ecs->table('admin_user');
+    $sql = 'SELECT user_id, user_name, CASE '.
+        "WHEN agency_id = 0 THEN 'free' ".
+        "WHEN agency_id = '$agency[agency_id]' THEN 'this' ".
+        "ELSE 'other' END ".
+        'AS type '.
+        'FROM '.$ecs->table('admin_user');
     $agency['admin_list'] = $db->getAll($sql);
 
     $smarty->assign('agency', $agency);
@@ -199,9 +199,9 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     if ($is_add) {
         $href = 'agency.php?act=list';
     } else {
-        $href = 'agency.php?act=list&' . list_link_postfix();
+        $href = 'agency.php?act=list&'.list_link_postfix();
     }
-    $smarty->assign('action_link', array('href' => $href, 'text' => $_LANG['agency_list']));
+    $smarty->assign('action_link', ['href' => $href, 'text' => $_LANG['agency_list']]);
     assign_query_info();
     $smarty->display('agency_info.htm');
 }
@@ -217,14 +217,14 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     $is_add = $_REQUEST['act'] == 'insert';
 
     /* 提交值 */
-    $agency = array(
+    $agency = [
         'agency_id' => intval($_POST['id']),
         'agency_name' => sub_str($_POST['agency_name'], 255, false),
-        'agency_desc' => $_POST['agency_desc']
-    );
+        'agency_desc' => $_POST['agency_desc'],
+    ];
 
     /* 判断名称是否重复 */
-    if (!$exc->is_only('agency_name', $agency['agency_name'], $agency['agency_id'])) {
+    if (! $exc->is_only('agency_name', $agency['agency_name'], $agency['agency_id'])) {
         sys_msg($_LANG['agency_name_exist']);
     }
 
@@ -242,21 +242,21 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     }
 
     /* 更新管理员表和地区表 */
-    if (!$is_add) {
-        $sql = "UPDATE " . $ecs->table('admin_user') . " SET agency_id = 0 WHERE agency_id = '$agency[agency_id]'";
+    if (! $is_add) {
+        $sql = 'UPDATE '.$ecs->table('admin_user')." SET agency_id = 0 WHERE agency_id = '$agency[agency_id]'";
         $db->query($sql);
 
-        $sql = "UPDATE " . $ecs->table('region') . " SET agency_id = 0 WHERE agency_id = '$agency[agency_id]'";
+        $sql = 'UPDATE '.$ecs->table('region')." SET agency_id = 0 WHERE agency_id = '$agency[agency_id]'";
         $db->query($sql);
     }
 
     if (isset($_POST['admins'])) {
-        $sql = "UPDATE " . $ecs->table('admin_user') . " SET agency_id = '$agency[agency_id]' WHERE user_id " . db_create_in($_POST['admins']);
+        $sql = 'UPDATE '.$ecs->table('admin_user')." SET agency_id = '$agency[agency_id]' WHERE user_id ".db_create_in($_POST['admins']);
         $db->query($sql);
     }
 
     if (isset($_POST['regions'])) {
-        $sql = "UPDATE " . $ecs->table('region') . " SET agency_id = '$agency[agency_id]' WHERE region_id " . db_create_in($_POST['regions']);
+        $sql = 'UPDATE '.$ecs->table('region')." SET agency_id = '$agency[agency_id]' WHERE region_id ".db_create_in($_POST['regions']);
         $db->query($sql);
     }
 
@@ -272,39 +272,40 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
     /* 提示信息 */
     if ($is_add) {
-        $links = array(
-            array('href' => 'agency.php?act=add', 'text' => $_LANG['continue_add_agency']),
-            array('href' => 'agency.php?act=list', 'text' => $_LANG['back_agency_list'])
-        );
+        $links = [
+            ['href' => 'agency.php?act=add', 'text' => $_LANG['continue_add_agency']],
+            ['href' => 'agency.php?act=list', 'text' => $_LANG['back_agency_list']],
+        ];
         sys_msg($_LANG['add_agency_ok'], 0, $links);
     } else {
-        $links = array(
-            array('href' => 'agency.php?act=list&' . list_link_postfix(), 'text' => $_LANG['back_agency_list'])
-        );
+        $links = [
+            ['href' => 'agency.php?act=list&'.list_link_postfix(), 'text' => $_LANG['back_agency_list']],
+        ];
         sys_msg($_LANG['edit_agency_ok'], 0, $links);
     }
 }
 
 /**
  * 取得办事处列表
- * @return  array
+ *
+ * @return array
  */
 function get_agencylist()
 {
     $result = get_filter();
     if ($result === false) {
         /* 初始化分页参数 */
-        $filter = array();
+        $filter = [];
         $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'agency_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
         /* 查询记录总数，计算分页数 */
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('agency');
+        $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('agency');
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
         $filter = page_and_size($filter);
 
         /* 查询记录 */
-        $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('agency') . " ORDER BY $filter[sort_by] $filter[sort_order]";
+        $sql = 'SELECT * FROM '.$GLOBALS['ecs']->table('agency')." ORDER BY $filter[sort_by] $filter[sort_order]";
 
         set_filter($filter, $sql);
     } else {
@@ -313,10 +314,10 @@ function get_agencylist()
     }
     $res = $GLOBALS['db']->selectLimit($sql, $filter['page_size'], $filter['start']);
 
-    $arr = array();
+    $arr = [];
     while ($rows = $GLOBALS['db']->fetchRow($res)) {
         $arr[] = $rows;
     }
 
-    return array('agency' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+    return ['agency' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 }

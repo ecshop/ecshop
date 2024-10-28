@@ -21,7 +21,7 @@ $_LANG['add_goodstype_failed'] = '新建商品类型失败。';
 $_LANG['edit_goodstype_success'] = '编辑商品类型成功。';
 $_LANG['edit_goodstype_failed'] = '编辑商品类型失败。';
 $_LANG['remove_failed'] = '移除商品类型失败。';
-$_LANG['remove_confirm'] = "删除商品类型将会清除该类型下的所有属性。\\n您确定要删除选定的商品类型吗？";
+$_LANG['remove_confirm'] = '删除商品类型将会清除该类型下的所有属性。\\n您确定要删除选定的商品类型吗？';
 $_LANG['repeat_type_name'] = '已经存在一个同名的商品类型。';
 $_LANG['cannot_found_goodstype'] = '没有找到指定的商品类型。';
 

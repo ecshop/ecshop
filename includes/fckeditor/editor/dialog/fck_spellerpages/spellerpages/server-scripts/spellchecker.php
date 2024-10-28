@@ -5,76 +5,74 @@ header('Content-type: text/html; charset=utf-8');
 
 // The following variables values must reflect your installation needs.
 
-$aspell_prog    = '"C:\Program Files\Aspell\bin\aspell.exe"';    // by FredCK (for Windows)
+$aspell_prog = '"C:\Program Files\Aspell\bin\aspell.exe"';    // by FredCK (for Windows)
 //$aspell_prog    = 'aspell';                                        // by FredCK (for Linux)
 
-$lang            = 'en_US';
-$aspell_opts    = "-a --lang=$lang --encoding=utf-8 -H --rem-sgml-check=alt";        // by FredCK
+$lang = 'en_US';
+$aspell_opts = "-a --lang=$lang --encoding=utf-8 -H --rem-sgml-check=alt";        // by FredCK
 
-$tempfiledir    = "./";
+$tempfiledir = './';
 
-$spellercss        = '../spellerStyle.css';                        // by FredCK
-$word_win_src    = '../wordWindow.js';                            // by FredCK
+$spellercss = '../spellerStyle.css';                        // by FredCK
+$word_win_src = '../wordWindow.js';                            // by FredCK
 
-$textinputs        = addslashes_d($_POST['textinputs']); # array
-$input_separator = "A";
+$textinputs = addslashes_d($_POST['textinputs']); // array
+$input_separator = 'A';
 
-# set the JavaScript variable to the submitted text.
-# textinputs is an array, each element corresponding to the (url-encoded)
-# value of the text control submitted for spell-checking
+// set the JavaScript variable to the submitted text.
+// textinputs is an array, each element corresponding to the (url-encoded)
+// value of the text control submitted for spell-checking
 function print_textinputs_var()
 {
     global $textinputs;
-    foreach ($textinputs as $key=>$val) {
-        # $val = str_replace( "'", "%27", $val );
-        echo "textinputs[$key] = decodeURIComponent(\"" . $val . "\");\n";
+    foreach ($textinputs as $key => $val) {
+        // $val = str_replace( "'", "%27", $val );
+        echo "textinputs[$key] = decodeURIComponent(\"".$val."\");\n";
     }
 }
 
-# make declarations for the text input index
+// make declarations for the text input index
 function print_textindex_decl($text_input_idx)
 {
     echo "words[$text_input_idx] = [];\n";
     echo "suggs[$text_input_idx] = [];\n";
 }
 
-# set an element of the JavaScript 'words' array to a misspelled word
+// set an element of the JavaScript 'words' array to a misspelled word
 function print_words_elem($word, $index, $text_input_idx)
 {
-    echo "words[$text_input_idx][$index] = '" . escape_quote($word) . "';\n";
+    echo "words[$text_input_idx][$index] = '".escape_quote($word)."';\n";
 }
 
-
-# set an element of the JavaScript 'suggs' array to a list of suggestions
+// set an element of the JavaScript 'suggs' array to a list of suggestions
 function print_suggs_elem($suggs, $index, $text_input_idx)
 {
     echo "suggs[$text_input_idx][$index] = [";
-    foreach ($suggs as $key=>$val) {
+    foreach ($suggs as $key => $val) {
         if ($val) {
-            echo "'" . escape_quote($val) . "'";
-            if ($key+1 < count($suggs)) {
-                echo ", ";
+            echo "'".escape_quote($val)."'";
+            if ($key + 1 < count($suggs)) {
+                echo ', ';
             }
         }
     }
     echo "];\n";
 }
 
-# escape single quote
+// escape single quote
 function escape_quote($str)
 {
     return preg_replace("/'/", "\\'", $str);
 }
 
-
-# handle a server-side error.
+// handle a server-side error.
 function error_handler($err)
 {
-    echo "error = '" . preg_replace("/['\\\\]/", "\\\\$0", $err) . "';\n";
+    echo "error = '".preg_replace("/['\\\\]/", '\\\$0', $err)."';\n";
 }
 
-## get the list of misspelled words. Put the results in the javascript words array
-## for each misspelled word, get suggestions and put in the javascript suggs array
+//# get the list of misspelled words. Put the results in the javascript words array
+//# for each misspelled word, get suggestions and put in the javascript suggs array
 function print_checker_results()
 {
     global $aspell_prog;
@@ -82,49 +80,49 @@ function print_checker_results()
     global $tempfiledir;
     global $textinputs;
     global $input_separator;
-    $aspell_err = "";
-    # create temp file
+    $aspell_err = '';
+    // create temp file
     $tempfile = tempnam($tempfiledir, 'aspell_data_');
 
-    # open temp file, add the submitted text.
+    // open temp file, add the submitted text.
     if ($fh = fopen($tempfile, 'w')) {
         for ($i = 0; $i < count($textinputs); $i++) {
             $text = urldecode($textinputs[$i]);
 
             // Strip all tags for the text. (by FredCK - #339 / #681)
-            $text = preg_replace("/<[^>]+>/", " ", $text) ;
+            $text = preg_replace('/<[^>]+>/', ' ', $text);
 
             $lines = explode("\n", $text);
-            fwrite($fh, "%\n"); # exit terse mode
+            fwrite($fh, "%\n"); // exit terse mode
             fwrite($fh, "^$input_separator\n");
-            fwrite($fh, "!\n"); # enter terse mode
-            foreach ($lines as $key=>$value) {
-                # use carat on each line to escape possible aspell commands
+            fwrite($fh, "!\n"); // enter terse mode
+            foreach ($lines as $key => $value) {
+                // use carat on each line to escape possible aspell commands
                 fwrite($fh, "^$value\n");
             }
         }
         fclose($fh);
 
-        # exec aspell command - redirect STDERR to STDOUT
+        // exec aspell command - redirect STDERR to STDOUT
         $cmd = "$aspell_prog $aspell_opts < $tempfile 2>&1";
         if ($aspellret = shell_exec($cmd)) {
             $linesout = explode("\n", $aspellret);
             $index = 0;
             $text_input_index = -1;
-            # parse each line of aspell return
-            foreach ($linesout as $key=>$val) {
+            // parse each line of aspell return
+            foreach ($linesout as $key => $val) {
                 $chardesc = substr($val, 0, 1);
-                # if '&', then not in dictionary but has suggestions
-                # if '#', then not in dictionary and no suggestions
-                # if '*', then it is a delimiter between text inputs
-                # if '@' then version info
+                // if '&', then not in dictionary but has suggestions
+                // if '#', then not in dictionary and no suggestions
+                // if '*', then it is a delimiter between text inputs
+                // if '@' then version info
                 if ($chardesc == '&' || $chardesc == '#') {
-                    $line = explode(" ", $val, 5);
+                    $line = explode(' ', $val, 5);
                     print_words_elem($line[1], $index, $text_input_index);
                     if (isset($line[4])) {
-                        $suggs = explode(", ", $line[4]);
+                        $suggs = explode(', ', $line[4]);
                     } else {
-                        $suggs = array();
+                        $suggs = [];
                     }
                     print_suggs_elem($suggs, $index, $text_input_index);
                     $index++;
@@ -132,23 +130,23 @@ function print_checker_results()
                     $text_input_index++;
                     print_textindex_decl($text_input_index);
                     $index = 0;
-                } elseif ($chardesc != '@' && $chardesc != "") {
-                    # assume this is error output
+                } elseif ($chardesc != '@' && $chardesc != '') {
+                    // assume this is error output
                     $aspell_err .= $val;
                 }
             }
             if ($aspell_err) {
-                $aspell_err = "Error executing";
+                $aspell_err = 'Error executing';
                 error_handler($aspell_err);
             }
         } else {
-            error_handler("System error");
+            error_handler('System error');
         }
     } else {
-        error_handler("System error");
+        error_handler('System error');
     }
 
-    # close temp file, delete file
+    // close temp file, delete file
     unlink($tempfile);
 }
 function addslashes_d($val)

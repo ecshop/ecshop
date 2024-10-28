@@ -4,27 +4,27 @@ session_start();
 
 define('IN_ECS', true);
 
-require(__DIR__ . '/includes/init.php');
-require(ROOT_PATH . 'includes/inc_constant.php');
+require __DIR__.'/includes/init.php';
+require ROOT_PATH.'includes/inc_constant.php';
 
 /* 加载安装程序所使用的语言包 */
-$installer_lang = ROOT_PATH . 'install/languages/zh_cn.php';
+$installer_lang = ROOT_PATH.'install/languages/zh_cn.php';
 if (file_exists($installer_lang)) {
-    include_once($installer_lang);
+    include_once $installer_lang;
     $smarty->assign('lang', $_LANG);
 } else {
-    die('Can\'t find language package!');
+    exit('Can\'t find language package!');
 }
 
 /* 初始化流程控制变量 */
 $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 'welcome';
-if (file_exists(ROOT_PATH . 'data/install.lock') && $step != 'done') {
+if (file_exists(ROOT_PATH.'data/install.lock') && $step != 'done') {
     $step = 'error';
     $err->add($_LANG['has_locked_installer']);
 
     if (isset($_REQUEST['IS_AJAX_REQUEST'])
         && $_REQUEST['IS_AJAX_REQUEST'] === 'yes') {
-        die(implode(',', $err->get_all()));
+        exit(implode(',', $err->get_all()));
     }
 }
 
@@ -35,22 +35,22 @@ switch ($step) {
         break;
 
     case 'check':
-        include_once(ROOT_PATH . 'install/includes/lib_env_checker.php');
-        include_once(ROOT_PATH . 'install/includes/checking_dirs.php');
+        include_once ROOT_PATH.'install/includes/lib_env_checker.php';
+        include_once ROOT_PATH.'install/includes/checking_dirs.php';
         $dir_checking = check_dirs_priv($checking_dirs);
 
-        $templates_root = array(
-            'dwt' => ROOT_PATH . 'themes/default/',
-            'lbi' => ROOT_PATH . 'themes/default/library/');
+        $templates_root = [
+            'dwt' => ROOT_PATH.'themes/default/',
+            'lbi' => ROOT_PATH.'themes/default/library/'];
         $template_checking = check_templates_priv($templates_root);
 
         $rename_priv = check_rename_priv();
 
         $disabled = '';
         if ($dir_checking['result'] === 'ERROR'
-            || !empty($template_checking)
-            || !empty($rename_priv)
-            || !function_exists('mysqli_connect')) {
+            || ! empty($template_checking)
+            || ! empty($rename_priv)
+            || ! function_exists('mysqli_connect')) {
             $disabled = 'disabled="true"';
         }
 
@@ -87,14 +87,14 @@ switch ($step) {
         $db_user = isset($_POST['db_user']) ? trim($_POST['db_user']) : '';
         $db_pass = isset($_POST['db_pass']) ? trim($_POST['db_pass']) : '';
 
-        include_once(ROOT_PATH . 'includes/cls_json.php');
-        $json = new JSON();
+        include_once ROOT_PATH.'includes/cls_json.php';
+        $json = new JSON;
 
         $databases = get_db_list($db_host, $db_port, $db_user, $db_pass);
         if ($databases === false) {
             echo $json->encode(implode(',', $err->get_all()));
         } else {
-            $result = array('msg' => 'OK', 'list' => implode(',', $databases));
+            $result = ['msg' => 'OK', 'list' => implode(',', $databases)];
             echo $json->encode($result);
         }
 
@@ -135,10 +135,10 @@ switch ($step) {
         break;
 
     case 'install_base_data':
-        $sql_files = array(
-            ROOT_PATH . 'install/data/structure.sql',
-            ROOT_PATH . 'install/data/data.sql',
-        );
+        $sql_files = [
+            ROOT_PATH.'install/data/structure.sql',
+            ROOT_PATH.'install/data/data.sql',
+        ];
 
         $result = install_data($sql_files);
 
@@ -187,7 +187,7 @@ switch ($step) {
             $smarty->assign('err_msg', $err_msg);
             $smarty->display('error.php');
         } else {
-            @unlink(ROOT_PATH . 'data/config_temp.php');
+            @unlink(ROOT_PATH.'data/config_temp.php');
             $smarty->display('done.php');
         }
 
@@ -201,5 +201,5 @@ switch ($step) {
         break;
 
     default:
-        die('Error, unknown step!');
+        exit('Error, unknown step!');
 }

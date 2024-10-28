@@ -21,7 +21,7 @@ $_LANG['no_reply'] = '未回复';
 $_LANG['yes_reply'] = '已回复';
 $_LANG['admin_user_name'] = '管理员';
 
-$_LANG['type'] = array('商品', '文章');
+$_LANG['type'] = ['商品', '文章'];
 
 $_LANG['ip_address'] = 'IP地址';
 $_LANG['comment_rank'] = '评论等级';
@@ -55,7 +55,6 @@ $_LANG['back_list'] = '返回评论列表';
 /* JS提示信息 */
 $_LANG['js_languages']['no_content'] = '回复的评论内容不能为空!';
 $_LANG['have_reply_content'] = '提示: 此条评论已有回复, 如果继续回复将更新原来回复的内容!';
-
 
 $_LANG['cfm_allow'] = '你确定要允许显示所选评论吗？';
 $_LANG['cfm_remove'] = '你确定要删除所选评论吗？';

@@ -2,7 +2,7 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 
 $exc = new exchange($ecs->table('payment'), $db, 'pay_code', 'pay_name');
 
@@ -12,8 +12,8 @@ $exc = new exchange($ecs->table('payment'), $db, 'pay_code', 'pay_name');
 
 if ($_REQUEST['act'] == 'list') {
     /* 查询数据库中启用的支付方式 */
-    $pay_list = array();
-    $sql = "SELECT * FROM " . $ecs->table('payment') . " WHERE enabled = '1' ORDER BY pay_order";
+    $pay_list = [];
+    $sql = 'SELECT * FROM '.$ecs->table('payment')." WHERE enabled = '1' ORDER BY pay_order";
     $res = $db->query($sql);
     while ($row = $db->fetchRow($res)) {
         $pay_list[$row['pay_code']] = $row;
@@ -34,7 +34,7 @@ if ($_REQUEST['act'] == 'list') {
             $modules[$i]['install'] = '1';
         } else {
             $modules[$i]['name'] = $_LANG[$modules[$i]['code']];
-            if (!isset($modules[$i]['pay_fee'])) {
+            if (! isset($modules[$i]['pay_fee'])) {
                 $modules[$i]['pay_fee'] = 0;
             }
             $modules[$i]['desc'] = $_LANG[$modules[$i]['desc']];
@@ -58,7 +58,7 @@ if ($_REQUEST['act'] == 'install') {
 
     /* 取相应插件信息 */
     $set_modules = true;
-    include_once(ROOT_PATH . 'includes/modules/payment/' . $_REQUEST['code'] . '.php');
+    include_once ROOT_PATH.'includes/modules/payment/'.$_REQUEST['code'].'.php';
 
     $data = $modules[0];
     /* 对支付费用判断。如果data['pay_fee']为false无支付费用，为空则说明以配送有关，其它可以修改 */
@@ -74,22 +74,22 @@ if ($_REQUEST['act'] == 'install') {
     $pay['is_cod'] = $data['is_cod'];
     $pay['pay_fee'] = $data['pay_fee'];
     $pay['is_online'] = $data['is_online'];
-    $pay['pay_config'] = array();
+    $pay['pay_config'] = [];
 
     foreach ($data['config'] as $key => $value) {
-        $config_desc = (isset($_LANG[$value['name'] . '_desc'])) ? $_LANG[$value['name'] . '_desc'] : '';
+        $config_desc = (isset($_LANG[$value['name'].'_desc'])) ? $_LANG[$value['name'].'_desc'] : '';
         $pay['pay_config'][$key] = $value +
-            array('label' => $_LANG[$value['name']], 'value' => $value['value'], 'desc' => $config_desc);
+            ['label' => $_LANG[$value['name']], 'value' => $value['value'], 'desc' => $config_desc];
 
         if ($pay['pay_config'][$key]['type'] == 'select' ||
             $pay['pay_config'][$key]['type'] == 'radiobox') {
-            $pay['pay_config'][$key]['range'] = $_LANG[$pay['pay_config'][$key]['name'] . '_range'];
+            $pay['pay_config'][$key]['range'] = $_LANG[$pay['pay_config'][$key]['name'].'_range'];
         }
     }
 
     assign_query_info();
 
-    $smarty->assign('action_link', array('text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list'));
+    $smarty->assign('action_link', ['text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list']);
     $smarty->assign('pay', $pay);
     $smarty->display('payment_edit.htm');
 }
@@ -100,35 +100,35 @@ if ($_REQUEST['act'] == 'get_config') {
 
     /* 取相应插件信息 */
     $set_modules = true;
-    include_once(ROOT_PATH . 'includes/modules/payment/' . $code . '.php');
+    include_once ROOT_PATH.'includes/modules/payment/'.$code.'.php';
     $data = $modules[0]['config'];
     $config = '<table>';
     $range = '';
     foreach ($data as $key => $value) {
         $config .= "<tr><td width=80><span class='label'>";
         $config .= $_LANG[$data[$key]['name']];
-        $config .= "</span></td>";
+        $config .= '</span></td>';
         if ($data[$key]['type'] == 'text') {
             if ($data[$key]['name'] == 'alipay_account') {
-                $config .= "<td><input name='cfg_value[]' type='text' value='" . $data[$key]['value'] . "' /><a href=\"https://www.alipay.com/himalayas/practicality.htm\" target=\"_blank\">" . $_LANG['alipay_look'] . "</a></td>";
+                $config .= "<td><input name='cfg_value[]' type='text' value='".$data[$key]['value']."' /><a href=\"https://www.alipay.com/himalayas/practicality.htm\" target=\"_blank\">".$_LANG['alipay_look'].'</a></td>';
             } elseif ($data[$key]['name'] == 'tenpay_account') {
-                $config .= "<td><input name='cfg_value[]' type='text' value='" . $data[$key]['value'] . "' />" . $_LANG['penpay_register'] . "</td>";
+                $config .= "<td><input name='cfg_value[]' type='text' value='".$data[$key]['value']."' />".$_LANG['penpay_register'].'</td>';
             } else {
-                $config .= "<td><input name='cfg_value[]' type='text' value='" . $data[$key]['value'] . "' /></td>";
+                $config .= "<td><input name='cfg_value[]' type='text' value='".$data[$key]['value']."' /></td>";
             }
         } elseif ($data[$key]['type'] == 'select') {
-            $range = $_LANG[$data[$key]['name'] . '_range'];
+            $range = $_LANG[$data[$key]['name'].'_range'];
             $config .= "<td><select name='cfg_value[]'>";
             foreach ($range as $index => $val) {
-                $config .= "<option value='$index'>" . $range[$index] . "</option>";
+                $config .= "<option value='$index'>".$range[$index].'</option>';
             }
-            $config .= "</select></td>";
+            $config .= '</select></td>';
         }
-        $config .= "</tr>";
+        $config .= '</tr>';
         //$config .= '<br />';
-        $config .= "<input name='cfg_name[]' type='hidden' value='" . $data[$key]['name'] . "' />";
-        $config .= "<input name='cfg_type[]' type='hidden' value='" . $data[$key]['type'] . "' />";
-        $config .= "<input name='cfg_lang[]' type='hidden' value='" . $data[$key]['lang'] . "' />";
+        $config .= "<input name='cfg_name[]' type='hidden' value='".$data[$key]['name']."' />";
+        $config .= "<input name='cfg_type[]' type='hidden' value='".$data[$key]['type']."' />";
+        $config .= "<input name='cfg_lang[]' type='hidden' value='".$data[$key]['lang']."' />";
     }
     $config .= '</table>';
 
@@ -145,37 +145,37 @@ if ($_REQUEST['act'] == 'edit') {
     if (isset($_REQUEST['code'])) {
         $_REQUEST['code'] = trim($_REQUEST['code']);
     } else {
-        die('invalid parameter');
+        exit('invalid parameter');
     }
 
-    $sql = "SELECT * FROM " . $ecs->table('payment') . " WHERE pay_code = '$_REQUEST[code]' AND enabled = '1'";
+    $sql = 'SELECT * FROM '.$ecs->table('payment')." WHERE pay_code = '$_REQUEST[code]' AND enabled = '1'";
     $pay = $db->getRow($sql);
     if (empty($pay)) {
-        $links[] = array('text' => $_LANG['back_list'], 'href' => 'payment.php?act=list');
+        $links[] = ['text' => $_LANG['back_list'], 'href' => 'payment.php?act=list'];
         sys_msg($_LANG['payment_not_available'], 0, $links);
     }
 
     /* 取相应插件信息 */
     $set_modules = true;
-    include_once(ROOT_PATH . 'includes/modules/payment/' . $_REQUEST['code'] . '.php');
+    include_once ROOT_PATH.'includes/modules/payment/'.$_REQUEST['code'].'.php';
     $data = $modules[0];
 
     /* 取得配置信息 */
     if (is_string($pay['pay_config'])) {
         $store = unserialize($pay['pay_config']);
         /* 取出已经设置属性的code */
-        $code_list = array();
+        $code_list = [];
         if ($store) {
             foreach ($store as $key => $value) {
                 $code_list[$value['name']] = $value['value'];
             }
         }
 
-        $pay['pay_config'] = array();
+        $pay['pay_config'] = [];
 
         /* 循环插件中所有属性 */
         foreach ($data['config'] as $key => $value) {
-            $pay['pay_config'][$key]['desc'] = (isset($_LANG[$value['name'] . '_desc'])) ? $_LANG[$value['name'] . '_desc'] : '';
+            $pay['pay_config'][$key]['desc'] = (isset($_LANG[$value['name'].'_desc'])) ? $_LANG[$value['name'].'_desc'] : '';
             $pay['pay_config'][$key]['label'] = $_LANG[$value['name']];
             $pay['pay_config'][$key]['name'] = $value['name'];
             $pay['pay_config'][$key]['type'] = $value['type'];
@@ -188,13 +188,13 @@ if ($_REQUEST['act'] == 'edit') {
 
             if ($pay['pay_config'][$key]['type'] == 'select' ||
                 $pay['pay_config'][$key]['type'] == 'radiobox') {
-                $pay['pay_config'][$key]['range'] = $_LANG[$pay['pay_config'][$key]['name'] . '_range'];
+                $pay['pay_config'][$key]['range'] = $_LANG[$pay['pay_config'][$key]['name'].'_range'];
             }
         }
     }
 
     /* 如果以前没设置支付费用，编辑时补上 */
-    if (!isset($pay['pay_fee'])) {
+    if (! isset($pay['pay_fee'])) {
         if (isset($data['pay_fee'])) {
             $pay['pay_fee'] = $data['pay_fee'];
         } else {
@@ -204,8 +204,8 @@ if ($_REQUEST['act'] == 'edit') {
 
     assign_query_info();
 
-    $smarty->assign('action_link', array('text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list'));
-    $smarty->assign('ur_here', $_LANG['edit'] . $_LANG['payment']);
+    $smarty->assign('action_link', ['text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list']);
+    $smarty->assign('ur_here', $_LANG['edit'].$_LANG['payment']);
     $smarty->assign('pay', $pay);
     $smarty->display('payment_edit.htm');
 }
@@ -218,23 +218,23 @@ if (isset($_POST['Submit'])) {
 
     /* 检查输入 */
     if (empty($_POST['pay_name'])) {
-        sys_msg($_LANG['payment_name'] . $_LANG['empty']);
+        sys_msg($_LANG['payment_name'].$_LANG['empty']);
     }
 
-    $sql = "SELECT COUNT(*) FROM " . $ecs->table('payment') .
+    $sql = 'SELECT COUNT(*) FROM '.$ecs->table('payment').
         " WHERE pay_name = '$_POST[pay_name]' AND pay_code <> '$_POST[pay_code]'";
     if ($db->getOne($sql) > 0) {
-        sys_msg($_LANG['payment_name'] . $_LANG['repeat'], 1);
+        sys_msg($_LANG['payment_name'].$_LANG['repeat'], 1);
     }
 
     /* 取得配置信息 */
-    $pay_config = array();
+    $pay_config = [];
     if (isset($_POST['cfg_value']) && is_array($_POST['cfg_value'])) {
         for ($i = 0; $i < count($_POST['cfg_value']); $i++) {
-            $pay_config[] = array('name' => trim($_POST['cfg_name'][$i]),
+            $pay_config[] = ['name' => trim($_POST['cfg_name'][$i]),
                 'type' => trim($_POST['cfg_type'][$i]),
-                'value' => trim($_POST['cfg_value'][$i])
-            );
+                'value' => trim($_POST['cfg_value'][$i]),
+            ];
         }
     }
     $pay_config = serialize($pay_config);
@@ -242,14 +242,14 @@ if (isset($_POST['Submit'])) {
     $pay_fee = empty($_POST['pay_fee']) ? 0 : $_POST['pay_fee'];
 
     /* 检查是编辑还是安装 */
-    $link[] = array('text' => $_LANG['back_list'], 'href' => 'payment.php?act=list');
+    $link[] = ['text' => $_LANG['back_list'], 'href' => 'payment.php?act=list'];
     if ($_POST['pay_id']) {
         /* 编辑 */
-        $sql = "UPDATE " . $ecs->table('payment') .
-            "SET pay_name = '$_POST[pay_name]'," .
-            "    pay_desc = '$_POST[pay_desc]'," .
-            "    pay_config = '$pay_config', " .
-            "    pay_fee    =  '$pay_fee' " .
+        $sql = 'UPDATE '.$ecs->table('payment').
+            "SET pay_name = '$_POST[pay_name]',".
+            "    pay_desc = '$_POST[pay_desc]',".
+            "    pay_config = '$pay_config', ".
+            "    pay_fee    =  '$pay_fee' ".
             "WHERE pay_code = '$_POST[pay_code]' LIMIT 1";
         $db->query($sql);
 
@@ -259,20 +259,20 @@ if (isset($_POST['Submit'])) {
         sys_msg($_LANG['edit_ok'], 0, $link);
     } else {
         /* 安装，检查该支付方式是否曾经安装过 */
-        $sql = "SELECT COUNT(*) FROM " . $ecs->table('payment') . " WHERE pay_code = '$_REQUEST[pay_code]'";
+        $sql = 'SELECT COUNT(*) FROM '.$ecs->table('payment')." WHERE pay_code = '$_REQUEST[pay_code]'";
         if ($db->getOne($sql) > 0) {
             /* 该支付方式已经安装过, 将该支付方式的状态设置为 enable */
-            $sql = "UPDATE " . $ecs->table('payment') .
-                "SET pay_name = '$_POST[pay_name]'," .
-                "    pay_desc = '$_POST[pay_desc]'," .
-                "    pay_config = '$pay_config'," .
-                "    pay_fee    =  '$pay_fee', " .
-                "    enabled = '1' " .
+            $sql = 'UPDATE '.$ecs->table('payment').
+                "SET pay_name = '$_POST[pay_name]',".
+                "    pay_desc = '$_POST[pay_desc]',".
+                "    pay_config = '$pay_config',".
+                "    pay_fee    =  '$pay_fee', ".
+                "    enabled = '1' ".
                 "WHERE pay_code = '$_POST[pay_code]' LIMIT 1";
             $db->query($sql);
         } else {
             /* 该支付方式没有安装过, 将该支付方式的信息添加到数据库 */
-            $sql = "INSERT INTO " . $ecs->table('payment') . " (pay_code, pay_name, pay_desc, pay_config, is_cod, pay_fee, enabled, is_online)" .
+            $sql = 'INSERT INTO '.$ecs->table('payment').' (pay_code, pay_name, pay_desc, pay_config, is_cod, pay_fee, enabled, is_online)'.
                 "VALUES ('$_POST[pay_code]', '$_POST[pay_name]', '$_POST[pay_desc]', '$pay_config', '$_POST[is_cod]', '$pay_fee', 1, '$_POST[is_online]')";
             $db->query($sql);
         }
@@ -291,15 +291,15 @@ if ($_REQUEST['act'] == 'uninstall') {
     admin_priv('payment');
 
     /* 把 enabled 设为 0 */
-    $sql = "UPDATE " . $ecs->table('payment') .
-        "SET enabled = '0' " .
+    $sql = 'UPDATE '.$ecs->table('payment').
+        "SET enabled = '0' ".
         "WHERE pay_code = '$_REQUEST[code]' LIMIT 1";
     $db->query($sql);
 
     /* 记录日志 */
     admin_log($_REQUEST['code'], 'uninstall', 'payment');
 
-    $link[] = array('text' => $_LANG['back_list'], 'href' => 'payment.php?act=list');
+    $link[] = ['text' => $_LANG['back_list'], 'href' => 'payment.php?act=list'];
     sys_msg($_LANG['uninstall_ok'], 0, $link);
 }
 
@@ -321,7 +321,7 @@ if ($_REQUEST['act'] == 'edit_name') {
     }
 
     /* 检查名称是否重复 */
-    if (!$exc->is_only('pay_name', $name, $code)) {
+    if (! $exc->is_only('pay_name', $name, $code)) {
         make_json_error($_LANG['name_exists']);
     }
 
@@ -382,7 +382,7 @@ if ($_REQUEST['act'] == 'edit_pay_fee') {
         if (strpos($pay_fee, '%') === false) {
             $pay_fee = floatval($pay_fee);
         } else {
-            $pay_fee = floatval($pay_fee) . '%';
+            $pay_fee = floatval($pay_fee).'%';
         }
     }
 

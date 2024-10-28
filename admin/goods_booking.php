@@ -2,7 +2,7 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 admin_priv('booking');
 /*------------------------------------------------------ */
 //-- 列出所有订购信息
@@ -42,7 +42,7 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result(
         $smarty->fetch('booking_list.htm'),
         '',
-        array('filter' => $list['filter'], 'page_count' => $list['page_count'])
+        ['filter' => $list['filter'], 'page_count' => $list['page_count']]
     );
 }
 
@@ -55,9 +55,9 @@ if ($_REQUEST['act'] == 'remove') {
 
     $id = intval($_GET['id']);
 
-    $db->query("DELETE FROM " . $ecs->table('booking_goods') . " WHERE rec_id='$id'");
+    $db->query('DELETE FROM '.$ecs->table('booking_goods')." WHERE rec_id='$id'");
 
-    $url = 'goods_booking.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+    $url = 'goods_booking.php?act=query&'.str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
     ecs_header("Location: $url\n");
     exit;
@@ -69,10 +69,10 @@ if ($_REQUEST['act'] == 'remove') {
 if ($_REQUEST['act'] == 'detail') {
     $id = intval($_REQUEST['id']);
 
-    $smarty->assign('send_fail', !empty($_REQUEST['send_ok']));
+    $smarty->assign('send_fail', ! empty($_REQUEST['send_ok']));
     $smarty->assign('booking', get_booking_info($id));
     $smarty->assign('ur_here', $_LANG['detail']);
-    $smarty->assign('action_link', array('text' => $_LANG['06_undispose_booking'], 'href' => 'goods_booking.php?act=list_all'));
+    $smarty->assign('action_link', ['text' => $_LANG['06_undispose_booking'], 'href' => 'goods_booking.php?act=list_all']);
     $smarty->display('booking_info.htm');
 }
 
@@ -83,34 +83,34 @@ if ($_REQUEST['act'] == 'update') {
     /* 权限判断 */
     admin_priv('booking');
 
-    $dispose_note = !empty($_POST['dispose_note']) ? trim($_POST['dispose_note']) : '';
+    $dispose_note = ! empty($_POST['dispose_note']) ? trim($_POST['dispose_note']) : '';
 
-    $sql = "UPDATE  " . $ecs->table('booking_goods') .
-        " SET is_dispose='1', dispose_note='$dispose_note', " .
-        "dispose_time='" . gmtime() . "', dispose_user='" . $_SESSION['admin_name'] . "'" .
+    $sql = 'UPDATE  '.$ecs->table('booking_goods').
+        " SET is_dispose='1', dispose_note='$dispose_note', ".
+        "dispose_time='".gmtime()."', dispose_user='".$_SESSION['admin_name']."'".
         " WHERE rec_id='$_REQUEST[rec_id]'";
     $db->query($sql);
 
     /* 邮件通知处理流程 */
-    if (!empty($_POST['send_email_notice']) or isset($_POST['remail'])) {
+    if (! empty($_POST['send_email_notice']) or isset($_POST['remail'])) {
         //获取邮件中的必要内容
-        $sql = 'SELECT bg.email, bg.link_man, bg.goods_id, g.goods_name ' .
-            'FROM ' . $ecs->table('booking_goods') . ' AS bg, ' . $ecs->table('goods') . ' AS g ' .
+        $sql = 'SELECT bg.email, bg.link_man, bg.goods_id, g.goods_name '.
+            'FROM '.$ecs->table('booking_goods').' AS bg, '.$ecs->table('goods').' AS g '.
             "WHERE bg.goods_id = g.goods_id AND bg.rec_id='$_REQUEST[rec_id]'";
         $booking_info = $db->getRow($sql);
 
         /* 设置缺货回复模板所需要的内容信息 */
         $template = get_mail_template('goods_booking');
-        $goods_link = $ecs->url() . 'goods.php?id=' . $booking_info['goods_id'];
+        $goods_link = $ecs->url().'goods.php?id='.$booking_info['goods_id'];
 
         $smarty->assign('user_name', $booking_info['link_man']);
         $smarty->assign('goods_link', $goods_link);
         $smarty->assign('goods_name', $booking_info['goods_name']);
         $smarty->assign('dispose_note', $dispose_note);
-        $smarty->assign('shop_name', "<a href='" . $ecs->url() . "'>" . $_CFG['shop_name'] . '</a>');
+        $smarty->assign('shop_name', "<a href='".$ecs->url()."'>".$_CFG['shop_name'].'</a>');
         $smarty->assign('send_date', date('Y-m-d'));
 
-        $content = $smarty->fetch('str:' . $template['template_content']);
+        $content = $smarty->fetch('str:'.$template['template_content']);
 
         /* 发送邮件 */
         if (send_mail($booking_info['link_man'], $booking_info['email'], $template['template_subject'], $content, $template['is_html'])) {
@@ -120,14 +120,13 @@ if ($_REQUEST['act'] == 'update') {
         }
     }
 
-    ecs_header("Location: ?act=detail&id=" . $_REQUEST['rec_id'] . "&send_ok=$send_ok\n");
+    ecs_header('Location: ?act=detail&id='.$_REQUEST['rec_id']."&send_ok=$send_ok\n");
     exit;
 }
 
 /**
  * 获取订购信息
  *
- * @access  public
  *
  * @return array
  */
@@ -142,11 +141,11 @@ function get_bookinglist()
     $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'sort_order' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-    $where = (!empty($_REQUEST['keywords'])) ? " AND g.goods_name LIKE '%" . mysql_like_quote($filter['keywords']) . "%' " : '';
-    $where .= (!empty($_REQUEST['dispose'])) ? " AND bg.is_dispose = '$filter[dispose]' " : '';
+    $where = (! empty($_REQUEST['keywords'])) ? " AND g.goods_name LIKE '%".mysql_like_quote($filter['keywords'])."%' " : '';
+    $where .= (! empty($_REQUEST['dispose'])) ? " AND bg.is_dispose = '$filter[dispose]' " : '';
 
-    $sql = 'SELECT COUNT(*) FROM ' . $GLOBALS['ecs']->table('booking_goods') . ' AS bg, ' .
-        $GLOBALS['ecs']->table('goods') . ' AS g ' .
+    $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('booking_goods').' AS bg, '.
+        $GLOBALS['ecs']->table('goods').' AS g '.
         "WHERE bg.goods_id = g.goods_id $where";
     $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
@@ -154,18 +153,18 @@ function get_bookinglist()
     $filter = page_and_size($filter);
 
     /* 获取活动数据 */
-    $sql = 'SELECT bg.rec_id, bg.link_man, g.goods_id, g.goods_name, bg.goods_number, bg.booking_time, bg.is_dispose ' .
-        'FROM ' . $GLOBALS['ecs']->table('booking_goods') . ' AS bg, ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
-        "WHERE bg.goods_id = g.goods_id $where " .
-        "ORDER BY $filter[sort_by] $filter[sort_order] " .
-        "LIMIT " . $filter['start'] . ", $filter[page_size]";
+    $sql = 'SELECT bg.rec_id, bg.link_man, g.goods_id, g.goods_name, bg.goods_number, bg.booking_time, bg.is_dispose '.
+        'FROM '.$GLOBALS['ecs']->table('booking_goods').' AS bg, '.$GLOBALS['ecs']->table('goods').' AS g '.
+        "WHERE bg.goods_id = g.goods_id $where ".
+        "ORDER BY $filter[sort_by] $filter[sort_order] ".
+        'LIMIT '.$filter['start'].", $filter[page_size]";
     $row = $GLOBALS['db']->getAll($sql);
 
     foreach ($row as $key => $val) {
         $row[$key]['booking_time'] = local_date($GLOBALS['_CFG']['time_format'], $val['booking_time']);
     }
     $filter['keywords'] = stripslashes($filter['keywords']);
-    $arr = array('item' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+    $arr = ['item' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
 }
@@ -173,28 +172,27 @@ function get_bookinglist()
 /**
  * 获得缺货登记的详细信息
  *
- * @param integer $id
- *
- * @return  array
+ * @param  int  $id
+ * @return array
  */
 function get_booking_info($id)
 {
     global $ecs, $db, $_CFG, $_LANG;
 
-    $sql = "SELECT bg.rec_id, bg.user_id, IFNULL(u.user_name, '$_LANG[guest_user]') AS user_name, " .
-        "bg.link_man, g.goods_name, bg.goods_id, bg.goods_number, " .
-        "bg.booking_time, bg.goods_desc,bg.dispose_user, bg.dispose_time, bg.email, " .
-        "bg.tel, bg.dispose_note ,bg.dispose_user, bg.dispose_time,bg.is_dispose  " .
-        "FROM " . $ecs->table('booking_goods') . " AS bg " .
-        "LEFT JOIN " . $ecs->table('goods') . " AS g ON g.goods_id=bg.goods_id " .
-        "LEFT JOIN " . $ecs->table('users') . " AS u ON u.user_id=bg.user_id " .
+    $sql = "SELECT bg.rec_id, bg.user_id, IFNULL(u.user_name, '$_LANG[guest_user]') AS user_name, ".
+        'bg.link_man, g.goods_name, bg.goods_id, bg.goods_number, '.
+        'bg.booking_time, bg.goods_desc,bg.dispose_user, bg.dispose_time, bg.email, '.
+        'bg.tel, bg.dispose_note ,bg.dispose_user, bg.dispose_time,bg.is_dispose  '.
+        'FROM '.$ecs->table('booking_goods').' AS bg '.
+        'LEFT JOIN '.$ecs->table('goods').' AS g ON g.goods_id=bg.goods_id '.
+        'LEFT JOIN '.$ecs->table('users').' AS u ON u.user_id=bg.user_id '.
         "WHERE bg.rec_id ='$id'";
 
     $res = $db->getRow($sql);
 
     /* 格式化时间 */
     $res['booking_time'] = local_date($_CFG['time_format'], $res['booking_time']);
-    if (!empty($res['dispose_time'])) {
+    if (! empty($res['dispose_time'])) {
         $res['dispose_time'] = local_date($_CFG['time_format'], $res['dispose_time']);
     }
 

@@ -2,13 +2,13 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'includes/lib_order.php');
-include_once(ROOT_PATH . 'includes/lib_transaction.php');
+require dirname(__FILE__).'/includes/init.php';
+require_once ROOT_PATH.'includes/lib_order.php';
+include_once ROOT_PATH.'includes/lib_transaction.php';
 
 /* 载入语言文件 */
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/shopping_flow.php');
-require_once(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/user.php');
+require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/shopping_flow.php';
+require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/user.php';
 
 /*------------------------------------------------------ */
 //-- INPUT
@@ -55,7 +55,7 @@ $smarty->assign('district_list', $district_list);
 $smarty->assign('country_list', get_regions());
 
 /* 取得配送列表 */
-$region = array($choose['country'], $choose['province'], $choose['city'], $choose['district']);
+$region = [$choose['country'], $choose['province'], $choose['city'], $choose['district']];
 $shipping_list = available_shipping_list($region);
 $cart_weight_price = 0;
 $insure_disabled = true;

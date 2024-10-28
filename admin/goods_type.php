@@ -2,9 +2,9 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 
-$exc = new exchange($ecs->table("goods_type"), $db, 'cat_id', 'cat_name');
+$exc = new exchange($ecs->table('goods_type'), $db, 'cat_id', 'cat_name');
 
 /*------------------------------------------------------ */
 //-- 管理界面
@@ -23,13 +23,13 @@ if ($_REQUEST['act'] == 'manage') {
     $smarty->assign('record_count', $good_type_list['record_count']);
     $smarty->assign('page_count', $good_type_list['page_count']);
 
-    $query = $db->query("SELECT a.cat_id FROM " . $ecs->table('attribute') . " AS a RIGHT JOIN " . $ecs->table('goods_attr') . " AS g ON g.attr_id = a.attr_id GROUP BY a.cat_id");
+    $query = $db->query('SELECT a.cat_id FROM '.$ecs->table('attribute').' AS a RIGHT JOIN '.$ecs->table('goods_attr').' AS g ON g.attr_id = a.attr_id GROUP BY a.cat_id');
     while ($row = $db->fetchRow($query)) {
         $good_in_type[$row['cat_id']] = 1;
     }
     $smarty->assign('good_in_type', $good_in_type);
 
-    $smarty->assign('action_link', array('text' => $_LANG['new_goods_type'], 'href' => 'goods_type.php?act=add'));
+    $smarty->assign('action_link', ['text' => $_LANG['new_goods_type'], 'href' => 'goods_type.php?act=add']);
 
     $smarty->display('goods_type.htm');
 }
@@ -49,7 +49,7 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result(
         $smarty->fetch('goods_type.htm'),
         '',
-        array('filter' => $good_type_list['filter'], 'page_count' => $good_type_list['page_count'])
+        ['filter' => $good_type_list['filter'], 'page_count' => $good_type_list['page_count']]
     );
 }
 
@@ -59,8 +59,8 @@ if ($_REQUEST['act'] == 'query') {
 if ($_REQUEST['act'] == 'edit_type_name') {
     check_authz_json('goods_type');
 
-    $type_id = !empty($_POST['id']) ? intval($_POST['id']) : 0;
-    $type_name = !empty($_POST['val']) ? json_str_iconv(trim($_POST['val'])) : '';
+    $type_id = ! empty($_POST['id']) ? intval($_POST['id']) : 0;
+    $type_name = ! empty($_POST['val']) ? json_str_iconv(trim($_POST['val'])) : '';
 
     /* 检查名称是否重复 */
     $is_only = $exc->is_only('cat_name', $type_name, $type_id);
@@ -99,10 +99,10 @@ if ($_REQUEST['act'] == 'add') {
     admin_priv('goods_type');
 
     $smarty->assign('ur_here', $_LANG['new_goods_type']);
-    $smarty->assign('action_link', array('href' => 'goods_type.php?act=manage', 'text' => $_LANG['goods_type_list']));
+    $smarty->assign('action_link', ['href' => 'goods_type.php?act=manage', 'text' => $_LANG['goods_type_list']]);
     $smarty->assign('action', 'add');
     $smarty->assign('form_act', 'insert');
-    $smarty->assign('goods_type', array('enabled' => 1));
+    $smarty->assign('goods_type', ['enabled' => 1]);
 
     assign_query_info();
     $smarty->display('goods_type_info.htm');
@@ -113,7 +113,7 @@ if ($_REQUEST['act'] == 'insert') {
     $goods_type['enabled'] = intval($_POST['enabled']);
 
     if ($db->autoExecute($ecs->table('goods_type'), $goods_type) !== false) {
-        $links = array(array('href' => 'goods_type.php?act=manage', 'text' => $_LANG['back_list']));
+        $links = [['href' => 'goods_type.php?act=manage', 'text' => $_LANG['back_list']]];
         sys_msg($_LANG['add_goodstype_success'], 0, $links);
     } else {
         sys_msg($_LANG['add_goodstype_failed'], 1);
@@ -134,7 +134,7 @@ if ($_REQUEST['act'] == 'edit') {
     admin_priv('goods_type');
 
     $smarty->assign('ur_here', $_LANG['edit_goods_type']);
-    $smarty->assign('action_link', array('href' => 'goods_type.php?act=manage', 'text' => $_LANG['goods_type_list']));
+    $smarty->assign('action_link', ['href' => 'goods_type.php?act=manage', 'text' => $_LANG['goods_type_list']]);
     $smarty->assign('action', 'add');
     $smarty->assign('form_act', 'update');
     $smarty->assign('goods_type', $goods_type);
@@ -167,7 +167,7 @@ if ($_REQUEST['act'] == 'update') {
             }
         }
 
-        $links = array(array('href' => 'goods_type.php?act=manage', 'text' => $_LANG['back_list']));
+        $links = [['href' => 'goods_type.php?act=manage', 'text' => $_LANG['back_list']]];
         sys_msg($_LANG['edit_goodstype_success'], 0, $links);
     } else {
         sys_msg($_LANG['edit_goodstype_failed'], 1);
@@ -189,13 +189,13 @@ if ($_REQUEST['act'] == 'remove') {
         admin_log(addslashes($name), 'remove', 'goods_type');
 
         /* 清除该类型下的所有属性 */
-        $sql = "SELECT attr_id FROM " . $ecs->table('attribute') . " WHERE cat_id = '$id'";
+        $sql = 'SELECT attr_id FROM '.$ecs->table('attribute')." WHERE cat_id = '$id'";
         $arr = $db->getCol($sql);
 
-        $GLOBALS['db']->query("DELETE FROM " . $ecs->table('attribute') . " WHERE attr_id " . db_create_in($arr));
-        $GLOBALS['db']->query("DELETE FROM " . $ecs->table('goods_attr') . " WHERE attr_id " . db_create_in($arr));
+        $GLOBALS['db']->query('DELETE FROM '.$ecs->table('attribute').' WHERE attr_id '.db_create_in($arr));
+        $GLOBALS['db']->query('DELETE FROM '.$ecs->table('goods_attr').' WHERE attr_id '.db_create_in($arr));
 
-        $url = 'goods_type.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+        $url = 'goods_type.php?act=query&'.str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
         ecs_header("Location: $url\n");
         exit;
@@ -207,28 +207,27 @@ if ($_REQUEST['act'] == 'remove') {
 /**
  * 获得所有商品类型
  *
- * @access  public
- * @return  array
+ * @return array
  */
 function get_goodstype()
 {
     $result = get_filter();
     if ($result === false) {
         /* 分页大小 */
-        $filter = array();
+        $filter = [];
 
         /* 记录总数以及页数 */
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('goods_type');
+        $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('goods_type');
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         $filter = page_and_size($filter);
 
         /* 查询记录 */
-        $sql = "SELECT t.*, COUNT(a.cat_id) AS attr_count " .
-            "FROM " . $GLOBALS['ecs']->table('goods_type') . " AS t " .
-            "LEFT JOIN " . $GLOBALS['ecs']->table('attribute') . " AS a ON a.cat_id=t.cat_id " .
-            "GROUP BY t.cat_id " .
-            'LIMIT ' . $filter['start'] . ',' . $filter['page_size'];
+        $sql = 'SELECT t.*, COUNT(a.cat_id) AS attr_count '.
+            'FROM '.$GLOBALS['ecs']->table('goods_type').' AS t '.
+            'LEFT JOIN '.$GLOBALS['ecs']->table('attribute').' AS a ON a.cat_id=t.cat_id '.
+            'GROUP BY t.cat_id '.
+            'LIMIT '.$filter['start'].','.$filter['page_size'];
         set_filter($filter, $sql);
     } else {
         $sql = $result['sql'];
@@ -238,22 +237,21 @@ function get_goodstype()
     $all = $GLOBALS['db']->getAll($sql);
 
     foreach ($all as $key => $val) {
-        $all[$key]['attr_group'] = strtr($val['attr_group'], array("\r" => '', "\n" => ", "));
+        $all[$key]['attr_group'] = strtr($val['attr_group'], ["\r" => '', "\n" => ', ']);
     }
 
-    return array('type' => $all, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+    return ['type' => $all, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 }
 
 /**
  * 获得指定的商品类型的详情
  *
- * @param integer $cat_id 分类ID
- *
- * @return  array
+ * @param  int  $cat_id  分类ID
+ * @return array
  */
 function get_goodstype_info($cat_id)
 {
-    $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('goods_type') . " WHERE cat_id='$cat_id'";
+    $sql = 'SELECT * FROM '.$GLOBALS['ecs']->table('goods_type')." WHERE cat_id='$cat_id'";
 
     return $GLOBALS['db']->getRow($sql);
 }
@@ -261,15 +259,14 @@ function get_goodstype_info($cat_id)
 /**
  * 更新属性的分组
  *
- * @param integer $cat_id 商品类型ID
- * @param integer $old_group
- * @param integer $new_group
- *
- * @return  void
+ * @param  int  $cat_id  商品类型ID
+ * @param  int  $old_group
+ * @param  int  $new_group
+ * @return void
  */
 function update_attribute_group($cat_id, $old_group, $new_group)
 {
-    $sql = "UPDATE " . $GLOBALS['ecs']->table('attribute') .
+    $sql = 'UPDATE '.$GLOBALS['ecs']->table('attribute').
         " SET attr_group='$new_group' WHERE cat_id='$cat_id' AND attr_group='$old_group'";
     $GLOBALS['db']->query($sql);
 }

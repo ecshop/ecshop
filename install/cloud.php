@@ -4,20 +4,20 @@ session_start();
 
 define('IN_ECS', true);
 
-require(__DIR__ . '/includes/init.php');
+require __DIR__.'/includes/init.php';
 
-$installer_lang = ROOT_PATH . 'install/languages/zh_cn.php';
+$installer_lang = ROOT_PATH.'install/languages/zh_cn.php';
 if (file_exists($installer_lang)) {
-    include_once($installer_lang);
+    include_once $installer_lang;
     $lang = $_LANG;
     $smarty->assign('lang', $_LANG);
 }
 
 $step = isset($_REQUEST['step']) ? trim($_REQUEST['step']) : '';
 
-$step_arr = array('welcome', 'check', 'setting_ui', 'done');
+$step_arr = ['welcome', 'check', 'setting_ui', 'done'];
 
-if (!in_array($step, $step_arr)) {
+if (! in_array($step, $step_arr)) {
     @header('Location: index.php');
 }
 

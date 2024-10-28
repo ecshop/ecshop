@@ -2,36 +2,36 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 
-if (!DEBUG_MODE) {
+if (! DEBUG_MODE) {
     $smarty->caching = true;
 }
 
 //判断是否有ajax请求
-$act = !empty($_GET['act']) ? $_GET['act'] : '';
+$act = ! empty($_GET['act']) ? $_GET['act'] : '';
 if ($act == 'cat_rec') {
-    $rec_array = array(1 => 'best', 2 => 'new', 3 => 'hot');
-    $rec_type = !empty($_REQUEST['rec_type']) ? intval($_REQUEST['rec_type']) : '1';
-    $cat_id = !empty($_REQUEST['cid']) ? intval($_REQUEST['cid']) : '0';
-    include_once('includes/cls_json.php');
+    $rec_array = [1 => 'best', 2 => 'new', 3 => 'hot'];
+    $rec_type = ! empty($_REQUEST['rec_type']) ? intval($_REQUEST['rec_type']) : '1';
+    $cat_id = ! empty($_REQUEST['cid']) ? intval($_REQUEST['cid']) : '0';
+    include_once 'includes/cls_json.php';
     $json = new JSON;
-    $result = array('error' => 0, 'content' => '', 'type' => $rec_type, 'cat_id' => $cat_id);
+    $result = ['error' => 0, 'content' => '', 'type' => $rec_type, 'cat_id' => $cat_id];
 
     $children = get_children($cat_id);
-    $smarty->assign($rec_array[$rec_type] . '_goods', get_category_recommend_goods($rec_array[$rec_type], $children));    // 推荐商品
+    $smarty->assign($rec_array[$rec_type].'_goods', get_category_recommend_goods($rec_array[$rec_type], $children));    // 推荐商品
     $smarty->assign('cat_rec_sign', 1);
-    $result['content'] = $smarty->fetch('library/recommend_' . $rec_array[$rec_type] . '.lbi');
-    die($json->encode($result));
+    $result['content'] = $smarty->fetch('library/recommend_'.$rec_array[$rec_type].'.lbi');
+    exit($json->encode($result));
 }
 
 /*------------------------------------------------------ */
 //-- 判断是否存在缓存，如果存在则调用缓存，反之读取相应内容
 /*------------------------------------------------------ */
 /* 缓存编号 */
-$cache_id = sprintf('%X', crc32($_SESSION['user_rank'] . '-' . $_CFG['lang']));
+$cache_id = sprintf('%X', crc32($_SESSION['user_rank'].'-'.$_CFG['lang']));
 
-if (!$smarty->is_cached('index.dwt', $cache_id)) {
+if (! $smarty->is_cached('index.dwt', $cache_id)) {
     assign_template();
 
     $position = assign_ur_here();
@@ -65,7 +65,7 @@ if (!$smarty->is_cached('index.dwt', $cache_id)) {
     /* 首页主广告设置 */
     $smarty->assign('index_ad', $_CFG['index_ad']);
     if ($_CFG['index_ad'] == 'cus') {
-        $sql = 'SELECT ad_type, content, url FROM ' . $ecs->table("ad_custom") . ' WHERE ad_status = 1';
+        $sql = 'SELECT ad_type, content, url FROM '.$ecs->table('ad_custom').' WHERE ad_status = 1';
         $ad = $db->getRow($sql, true);
         $smarty->assign('ad', $ad);
     }
@@ -77,11 +77,11 @@ if (!$smarty->is_cached('index.dwt', $cache_id)) {
     $smarty->assign('data_dir', DATA_DIR);       // 数据目录
 
     /* 首页推荐分类 */
-    $cat_recommend_res = $db->getAll("SELECT c.cat_id, c.cat_name, cr.recommend_type FROM " . $ecs->table("cat_recommend") . " AS cr INNER JOIN " . $ecs->table("category") . " AS c ON cr.cat_id=c.cat_id");
-    if (!empty($cat_recommend_res)) {
-        $cat_rec_array = array();
+    $cat_recommend_res = $db->getAll('SELECT c.cat_id, c.cat_name, cr.recommend_type FROM '.$ecs->table('cat_recommend').' AS cr INNER JOIN '.$ecs->table('category').' AS c ON cr.cat_id=c.cat_id');
+    if (! empty($cat_recommend_res)) {
+        $cat_rec_array = [];
         foreach ($cat_recommend_res as $cat_recommend_data) {
-            $cat_rec[$cat_recommend_data['recommend_type']][] = array('cat_id' => $cat_recommend_data['cat_id'], 'cat_name' => $cat_recommend_data['cat_name']);
+            $cat_rec[$cat_recommend_data['recommend_type']][] = ['cat_id' => $cat_recommend_data['cat_id'], 'cat_name' => $cat_recommend_data['cat_name']];
         }
         $smarty->assign('cat_rec', $cat_rec);
     }
@@ -95,24 +95,24 @@ $smarty->display('index.dwt', $cache_id);
 /**
  * 调用发货单查询
  *
- * @return  array
+ * @return array
  */
 function index_get_invoice_query()
 {
-    $sql = 'SELECT o.order_sn, o.invoice_no, s.shipping_code FROM ' . $GLOBALS['ecs']->table('order_info') . ' AS o' .
-        ' LEFT JOIN ' . $GLOBALS['ecs']->table('shipping') . ' AS s ON s.shipping_id = o.shipping_id' .
-        " WHERE invoice_no > '' AND shipping_status = " . SS_SHIPPED .
+    $sql = 'SELECT o.order_sn, o.invoice_no, s.shipping_code FROM '.$GLOBALS['ecs']->table('order_info').' AS o'.
+        ' LEFT JOIN '.$GLOBALS['ecs']->table('shipping').' AS s ON s.shipping_id = o.shipping_id'.
+        " WHERE invoice_no > '' AND shipping_status = ".SS_SHIPPED.
         ' ORDER BY shipping_time DESC LIMIT 10';
     $all = $GLOBALS['db']->getAll($sql);
 
     foreach ($all as $key => $row) {
-        $plugin = ROOT_PATH . 'includes/modules/shipping/' . $row['shipping_code'] . '.php';
+        $plugin = ROOT_PATH.'includes/modules/shipping/'.$row['shipping_code'].'.php';
 
         if (file_exists($plugin)) {
-            include_once($plugin);
+            include_once $plugin;
 
             $shipping = new $row['shipping_code'];
-            $all[$key]['invoice_no'] = $shipping->query((string)$row['invoice_no']);
+            $all[$key]['invoice_no'] = $shipping->query((string) $row['invoice_no']);
         }
     }
 
@@ -124,18 +124,18 @@ function index_get_invoice_query()
 /**
  * 获得最新的文章列表。
  *
- * @return  array
+ * @return array
  */
 function index_get_new_articles()
 {
-    $sql = 'SELECT a.article_id, a.title, ac.cat_name, a.add_time, a.file_url, a.open_type, ac.cat_id, ac.cat_name ' .
-        ' FROM ' . $GLOBALS['ecs']->table('article') . ' AS a, ' .
-        $GLOBALS['ecs']->table('article_cat') . ' AS ac' .
-        ' WHERE a.is_open = 1 AND a.cat_id = ac.cat_id AND ac.cat_type = 1' .
-        ' ORDER BY a.article_type DESC, a.add_time DESC LIMIT ' . $GLOBALS['_CFG']['article_number'];
+    $sql = 'SELECT a.article_id, a.title, ac.cat_name, a.add_time, a.file_url, a.open_type, ac.cat_id, ac.cat_name '.
+        ' FROM '.$GLOBALS['ecs']->table('article').' AS a, '.
+        $GLOBALS['ecs']->table('article_cat').' AS ac'.
+        ' WHERE a.is_open = 1 AND a.cat_id = ac.cat_id AND ac.cat_type = 1'.
+        ' ORDER BY a.article_type DESC, a.add_time DESC LIMIT '.$GLOBALS['_CFG']['article_number'];
     $res = $GLOBALS['db']->getAll($sql);
 
-    $arr = array();
+    $arr = [];
     foreach ($res as $idx => $row) {
         $arr[$idx]['id'] = $row['article_id'];
         $arr[$idx]['title'] = $row['title'];
@@ -144,8 +144,8 @@ function index_get_new_articles()
         $arr[$idx]['cat_name'] = $row['cat_name'];
         $arr[$idx]['add_time'] = local_date($GLOBALS['_CFG']['date_format'], $row['add_time']);
         $arr[$idx]['url'] = $row['open_type'] != 1 ?
-            build_uri('article', array('aid' => $row['article_id']), $row['title']) : trim($row['file_url']);
-        $arr[$idx]['cat_url'] = build_uri('article_cat', array('acid' => $row['cat_id']), $row['cat_name']);
+            build_uri('article', ['aid' => $row['article_id']], $row['title']) : trim($row['file_url']);
+        $arr[$idx]['cat_url'] = build_uri('article_cat', ['acid' => $row['cat_id']], $row['cat_name']);
     }
 
     return $arr;
@@ -154,24 +154,24 @@ function index_get_new_articles()
 /**
  * 获得最新的团购活动
  *
- * @return  array
+ * @return array
  */
 function index_get_group_buy()
 {
     $time = gmtime();
     $limit = get_library_number('group_buy', 'index');
 
-    $group_buy_list = array();
+    $group_buy_list = [];
     if ($limit > 0) {
-        $sql = 'SELECT gb.act_id AS group_buy_id, gb.goods_id, gb.ext_info, gb.goods_name, g.goods_thumb, g.goods_img ' .
-            'FROM ' . $GLOBALS['ecs']->table('goods_activity') . ' AS gb, ' .
-            $GLOBALS['ecs']->table('goods') . ' AS g ' .
-            "WHERE gb.act_type = '" . GAT_GROUP_BUY . "' " .
-            "AND g.goods_id = gb.goods_id " .
-            "AND gb.start_time <= '" . $time . "' " .
-            "AND gb.end_time >= '" . $time . "' " .
-            "AND g.is_delete = 0 " .
-            "ORDER BY gb.act_id DESC " .
+        $sql = 'SELECT gb.act_id AS group_buy_id, gb.goods_id, gb.ext_info, gb.goods_name, g.goods_thumb, g.goods_img '.
+            'FROM '.$GLOBALS['ecs']->table('goods_activity').' AS gb, '.
+            $GLOBALS['ecs']->table('goods').' AS g '.
+            "WHERE gb.act_type = '".GAT_GROUP_BUY."' ".
+            'AND g.goods_id = gb.goods_id '.
+            "AND gb.start_time <= '".$time."' ".
+            "AND gb.end_time >= '".$time."' ".
+            'AND g.is_delete = 0 '.
+            'ORDER BY gb.act_id DESC '.
             "LIMIT $limit";
         $res = $GLOBALS['db']->query($sql);
 
@@ -183,7 +183,7 @@ function index_get_group_buy()
             /* 根据价格阶梯，计算最低价 */
             $ext_info = unserialize($row['ext_info']);
             $price_ladder = $ext_info['price_ladder'];
-            if (!is_array($price_ladder) || empty($price_ladder)) {
+            if (! is_array($price_ladder) || empty($price_ladder)) {
                 $row['last_price'] = price_format(0);
             } else {
                 foreach ($price_ladder as $amount_price) {
@@ -192,7 +192,7 @@ function index_get_group_buy()
             }
             ksort($price_ladder);
             $row['last_price'] = price_format(end($price_ladder));
-            $row['url'] = build_uri('group_buy', array('gbid' => $row['group_buy_id']));
+            $row['url'] = build_uri('group_buy', ['gbid' => $row['group_buy_id']]);
             $row['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
                 sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];
             $row['short_style_name'] = add_style($row['short_name'], '');
@@ -205,33 +205,34 @@ function index_get_group_buy()
 
 /**
  * 取得拍卖活动列表
- * @return  array
+ *
+ * @return array
  */
 function index_get_auction()
 {
     $now = gmtime();
     $limit = get_library_number('auction', 'index');
-    $sql = "SELECT a.act_id, a.goods_id, a.goods_name, a.ext_info, g.goods_thumb " .
-        "FROM " . $GLOBALS['ecs']->table('goods_activity') . " AS a," .
-        $GLOBALS['ecs']->table('goods') . " AS g" .
-        " WHERE a.goods_id = g.goods_id" .
-        " AND a.act_type = '" . GAT_AUCTION . "'" .
-        " AND a.is_finished = 0" .
-        " AND a.start_time <= '$now'" .
-        " AND a.end_time >= '$now'" .
-        " AND g.is_delete = 0" .
-        " ORDER BY a.start_time DESC" .
+    $sql = 'SELECT a.act_id, a.goods_id, a.goods_name, a.ext_info, g.goods_thumb '.
+        'FROM '.$GLOBALS['ecs']->table('goods_activity').' AS a,'.
+        $GLOBALS['ecs']->table('goods').' AS g'.
+        ' WHERE a.goods_id = g.goods_id'.
+        " AND a.act_type = '".GAT_AUCTION."'".
+        ' AND a.is_finished = 0'.
+        " AND a.start_time <= '$now'".
+        " AND a.end_time >= '$now'".
+        ' AND g.is_delete = 0'.
+        ' ORDER BY a.start_time DESC'.
         " LIMIT $limit";
     $res = $GLOBALS['db']->query($sql);
 
-    $list = array();
+    $list = [];
     while ($row = $GLOBALS['db']->fetchRow($res)) {
         $ext_info = unserialize($row['ext_info']);
         $arr = array_merge($row, $ext_info);
         $arr['formated_start_price'] = price_format($arr['start_price']);
         $arr['formated_end_price'] = price_format($arr['end_price']);
         $arr['thumb'] = get_image_path($row['goods_thumb']);
-        $arr['url'] = build_uri('auction', array('auid' => $arr['act_id']));
+        $arr['url'] = build_uri('auction', ['auid' => $arr['act_id']]);
         $arr['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
             sub_str($arr['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $arr['goods_name'];
         $arr['short_style_name'] = add_style($arr['short_name'], '');
@@ -244,23 +245,23 @@ function index_get_auction()
 /**
  * 获得所有的友情链接
  *
- * @return  array
+ * @return array
  */
 function index_get_links()
 {
-    $sql = 'SELECT link_logo, link_name, link_url FROM ' . $GLOBALS['ecs']->table('friend_link') . ' ORDER BY show_order';
+    $sql = 'SELECT link_logo, link_name, link_url FROM '.$GLOBALS['ecs']->table('friend_link').' ORDER BY show_order';
     $res = $GLOBALS['db']->getAll($sql);
 
-    $links['img'] = $links['txt'] = array();
+    $links['img'] = $links['txt'] = [];
 
     foreach ($res as $row) {
-        if (!empty($row['link_logo'])) {
-            $links['img'][] = array('name' => $row['link_name'],
+        if (! empty($row['link_logo'])) {
+            $links['img'][] = ['name' => $row['link_name'],
                 'url' => $row['link_url'],
-                'logo' => $row['link_logo']);
+                'logo' => $row['link_logo']];
         } else {
-            $links['txt'][] = array('name' => $row['link_name'],
-                'url' => $row['link_url']);
+            $links['txt'][] = ['name' => $row['link_name'],
+                'url' => $row['link_url']];
         }
     }
 

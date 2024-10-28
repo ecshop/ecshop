@@ -2,7 +2,7 @@
 
 define('IN_ECS', true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+require dirname(__FILE__).'/includes/init.php';
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -52,7 +52,7 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result(
         $smarty->fetch('comment_list.htm'),
         '',
-        array('filter' => $list['filter'], 'page_count' => $list['page_count'])
+        ['filter' => $list['filter'], 'page_count' => $list['page_count']]
     );
 }
 
@@ -63,19 +63,19 @@ if ($_REQUEST['act'] == 'reply') {
     /* 检查权限 */
     admin_priv('comment_priv');
 
-    $comment_info = array();
-    $reply_info = array();
-    $id_value = array();
+    $comment_info = [];
+    $reply_info = [];
+    $id_value = [];
 
     /* 获取评论详细信息并进行字符处理 */
-    $sql = "SELECT * FROM " . $ecs->table('comment') . " WHERE comment_id = '$_REQUEST[id]'";
+    $sql = 'SELECT * FROM '.$ecs->table('comment')." WHERE comment_id = '$_REQUEST[id]'";
     $comment_info = $db->getRow($sql);
     $comment_info['content'] = str_replace('\r\n', '<br />', htmlspecialchars($comment_info['content']));
     $comment_info['content'] = nl2br(str_replace('\n', '<br />', $comment_info['content']));
     $comment_info['add_time'] = local_date($_CFG['time_format'], $comment_info['add_time']);
 
     /* 获得评论回复内容 */
-    $sql = "SELECT * FROM " . $ecs->table('comment') . " WHERE parent_id = '$_REQUEST[id]'";
+    $sql = 'SELECT * FROM '.$ecs->table('comment')." WHERE parent_id = '$_REQUEST[id]'";
     $reply_info = $db->getRow($sql);
 
     if (empty($reply_info)) {
@@ -86,17 +86,17 @@ if ($_REQUEST['act'] == 'reply') {
         $reply_info['add_time'] = local_date($_CFG['time_format'], $reply_info['add_time']);
     }
     /* 获取管理员的用户名和Email地址 */
-    $sql = "SELECT user_name, email FROM " . $ecs->table('admin_user') .
+    $sql = 'SELECT user_name, email FROM '.$ecs->table('admin_user').
         " WHERE user_id = '$_SESSION[admin_id]'";
     $admin_info = $db->getRow($sql);
 
     /* 取得评论的对象(文章或者商品) */
     if ($comment_info['comment_type'] == 0) {
-        $sql = "SELECT goods_name FROM " . $ecs->table('goods') .
+        $sql = 'SELECT goods_name FROM '.$ecs->table('goods').
             " WHERE goods_id = '$comment_info[id_value]'";
         $id_value = $db->getOne($sql);
     } else {
-        $sql = "SELECT title FROM " . $ecs->table('article') .
+        $sql = 'SELECT title FROM '.$ecs->table('article').
             " WHERE article_id='$comment_info[id_value]'";
         $id_value = $db->getOne($sql);
     }
@@ -106,11 +106,11 @@ if ($_REQUEST['act'] == 'reply') {
     $smarty->assign('admin_info', $admin_info);   //管理员信息
     $smarty->assign('reply_info', $reply_info);   //回复的内容
     $smarty->assign('id_value', $id_value);  //评论的对象
-    $smarty->assign('send_fail', !empty($_REQUEST['send_ok']));
+    $smarty->assign('send_fail', ! empty($_REQUEST['send_ok']));
 
     $smarty->assign('ur_here', $_LANG['comment_info']);
-    $smarty->assign('action_link', array('text' => $_LANG['05_comment_manage'],
-        'href' => 'comment_manage.php?act=list'));
+    $smarty->assign('action_link', ['text' => $_LANG['05_comment_manage'],
+        'href' => 'comment_manage.php?act=list']);
 
     /* 页面显示 */
     assign_query_info();
@@ -126,38 +126,38 @@ if ($_REQUEST['act'] == 'action') {
     $ip = real_ip();
 
     /* 获得评论是否有回复 */
-    $sql = "SELECT comment_id, content, parent_id FROM " . $ecs->table('comment') .
+    $sql = 'SELECT comment_id, content, parent_id FROM '.$ecs->table('comment').
         " WHERE parent_id = '$_REQUEST[comment_id]'";
     $reply_info = $db->getRow($sql);
 
-    if (!empty($reply_info['content'])) {
+    if (! empty($reply_info['content'])) {
         /* 更新回复的内容 */
-        $sql = "UPDATE " . $ecs->table('comment') . " SET " .
-            "email     = '$_POST[email]', " .
-            "user_name = '$_POST[user_name]', " .
-            "content   = '$_POST[content]', " .
-            "add_time  =  '" . gmtime() . "', " .
-            "ip_address= '$ip', " .
-            "status    = 0" .
-            " WHERE comment_id = '" . $reply_info['comment_id'] . "'";
+        $sql = 'UPDATE '.$ecs->table('comment').' SET '.
+            "email     = '$_POST[email]', ".
+            "user_name = '$_POST[user_name]', ".
+            "content   = '$_POST[content]', ".
+            "add_time  =  '".gmtime()."', ".
+            "ip_address= '$ip', ".
+            'status    = 0'.
+            " WHERE comment_id = '".$reply_info['comment_id']."'";
     } else {
         /* 插入回复的评论内容 */
-        $sql = "INSERT INTO " . $ecs->table('comment') . " (comment_type, id_value, email, user_name , " .
-            "content, add_time, ip_address, status, parent_id) " .
-            "VALUES('$_POST[comment_type]', '$_POST[id_value]','$_POST[email]', " .
-            "'$_SESSION[admin_name]','$_POST[content]','" . gmtime() . "', '$ip', '0', '$_POST[comment_id]')";
+        $sql = 'INSERT INTO '.$ecs->table('comment').' (comment_type, id_value, email, user_name , '.
+            'content, add_time, ip_address, status, parent_id) '.
+            "VALUES('$_POST[comment_type]', '$_POST[id_value]','$_POST[email]', ".
+            "'$_SESSION[admin_name]','$_POST[content]','".gmtime()."', '$ip', '0', '$_POST[comment_id]')";
     }
     $db->query($sql);
 
     /* 更新当前的评论状态为已回复并且可以显示此条评论 */
-    $sql = "UPDATE " . $ecs->table('comment') . " SET status = 1 WHERE comment_id = '$_POST[comment_id]'";
+    $sql = 'UPDATE '.$ecs->table('comment')." SET status = 1 WHERE comment_id = '$_POST[comment_id]'";
     $db->query($sql);
 
     /* 邮件通知处理流程 */
-    if (!empty($_POST['send_email_notice']) or isset($_POST['remail'])) {
+    if (! empty($_POST['send_email_notice']) or isset($_POST['remail'])) {
         //获取邮件中的必要内容
-        $sql = 'SELECT user_name, email, content ' .
-            'FROM ' . $ecs->table('comment') .
+        $sql = 'SELECT user_name, email, content '.
+            'FROM '.$ecs->table('comment').
             " WHERE comment_id ='$_REQUEST[comment_id]'";
         $comment_info = $db->getRow($sql);
 
@@ -167,10 +167,10 @@ if ($_REQUEST['act'] == 'action') {
         $smarty->assign('user_name', $comment_info['user_name']);
         $smarty->assign('recomment', $_POST['content']);
         $smarty->assign('comment', $comment_info['content']);
-        $smarty->assign('shop_name', "<a href='" . $ecs->url() . "'>" . $_CFG['shop_name'] . '</a>');
+        $smarty->assign('shop_name', "<a href='".$ecs->url()."'>".$_CFG['shop_name'].'</a>');
         $smarty->assign('send_date', date('Y-m-d'));
 
-        $content = $smarty->fetch('str:' . $template['template_content']);
+        $content = $smarty->fetch('str:'.$template['template_content']);
 
         /* 发送邮件 */
         if (send_mail($comment_info['user_name'], $comment_info['email'], $template['template_subject'], $content, $template['is_html'])) {
@@ -195,7 +195,7 @@ if ($_REQUEST['act'] == 'action') {
 if ($_REQUEST['act'] == 'check') {
     if ($_REQUEST['check'] == 'allow') {
         /* 允许评论显示 */
-        $sql = "UPDATE " . $ecs->table('comment') . " SET status = 1 WHERE comment_id = '$_REQUEST[id]'";
+        $sql = 'UPDATE '.$ecs->table('comment')." SET status = 1 WHERE comment_id = '$_REQUEST[id]'";
         $db->query($sql);
 
         //add_feed($_REQUEST['id'], COMMENT_GOODS);
@@ -207,7 +207,7 @@ if ($_REQUEST['act'] == 'check') {
         exit;
     } else {
         /* 禁止评论显示 */
-        $sql = "UPDATE " . $ecs->table('comment') . " SET status = 0 WHERE comment_id = '$_REQUEST[id]'";
+        $sql = 'UPDATE '.$ecs->table('comment')." SET status = 0 WHERE comment_id = '$_REQUEST[id]'";
         $db->query($sql);
 
         /* 清除缓存 */
@@ -226,15 +226,15 @@ if ($_REQUEST['act'] == 'remove') {
 
     $id = intval($_GET['id']);
 
-    $sql = "DELETE FROM " . $ecs->table('comment') . " WHERE comment_id = '$id'";
+    $sql = 'DELETE FROM '.$ecs->table('comment')." WHERE comment_id = '$id'";
     $res = $db->query($sql);
     if ($res) {
-        $db->query("DELETE FROM " . $ecs->table('comment') . " WHERE parent_id = '$id'");
+        $db->query('DELETE FROM '.$ecs->table('comment')." WHERE parent_id = '$id'");
     }
 
     admin_log('', 'remove', 'ads');
 
-    $url = 'comment_manage.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+    $url = 'comment_manage.php?act=query&'.str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
 
     ecs_header("Location: $url\n");
     exit;
@@ -250,16 +250,16 @@ if ($_REQUEST['act'] == 'batch') {
     if (isset($_POST['checkboxes'])) {
         switch ($action) {
             case 'remove':
-                $db->query("DELETE FROM " . $ecs->table('comment') . " WHERE " . db_create_in($_POST['checkboxes'], 'comment_id'));
-                $db->query("DELETE FROM " . $ecs->table('comment') . " WHERE " . db_create_in($_POST['checkboxes'], 'parent_id'));
+                $db->query('DELETE FROM '.$ecs->table('comment').' WHERE '.db_create_in($_POST['checkboxes'], 'comment_id'));
+                $db->query('DELETE FROM '.$ecs->table('comment').' WHERE '.db_create_in($_POST['checkboxes'], 'parent_id'));
                 break;
 
             case 'allow':
-                $db->query("UPDATE " . $ecs->table('comment') . " SET status = 1  WHERE " . db_create_in($_POST['checkboxes'], 'comment_id'));
+                $db->query('UPDATE '.$ecs->table('comment').' SET status = 1  WHERE '.db_create_in($_POST['checkboxes'], 'comment_id'));
                 break;
 
             case 'deny':
-                $db->query("UPDATE " . $ecs->table('comment') . " SET status = 0  WHERE " . db_create_in($_POST['checkboxes'], 'comment_id'));
+                $db->query('UPDATE '.$ecs->table('comment').' SET status = 0  WHERE '.db_create_in($_POST['checkboxes'], 'comment_id'));
                 break;
 
             default:
@@ -270,19 +270,19 @@ if ($_REQUEST['act'] == 'batch') {
         $action = ($action == 'remove') ? 'remove' : 'edit';
         admin_log('', $action, 'adminlog');
 
-        $link[] = array('text' => $_LANG['back_list'], 'href' => 'comment_manage.php?act=list');
+        $link[] = ['text' => $_LANG['back_list'], 'href' => 'comment_manage.php?act=list'];
         sys_msg(sprintf($_LANG['batch_drop_success'], count($_POST['checkboxes'])), 0, $link);
     } else {
         /* 提示信息 */
-        $link[] = array('text' => $_LANG['back_list'], 'href' => 'comment_manage.php?act=list');
+        $link[] = ['text' => $_LANG['back_list'], 'href' => 'comment_manage.php?act=list'];
         sys_msg($_LANG['no_select_comment'], 0, $link);
     }
 }
 
 /**
  * 获取评论列表
- * @access  public
- * @return  array
+ *
+ * @return array
  */
 function get_comment_list()
 {
@@ -292,29 +292,29 @@ function get_comment_list()
         $filter['keywords'] = json_str_iconv($filter['keywords']);
     }
 
-    $sort = array('comment_id', 'user_name', 'comment_type', 'id_value', 'ip_address', 'add_time');
+    $sort = ['comment_id', 'user_name', 'comment_type', 'id_value', 'ip_address', 'add_time'];
     $filter['sort_by'] = isset($_REQUEST['sort_by']) && in_array($_REQUEST['sort_by'], $sort) ? $_REQUEST['sort_by'] : 'add_time';
     $filter['sort_order'] = isset($_REQUEST['sort_order']) && in_array($_REQUEST['sort_order'], ['ASC', 'DESC']) ? $_REQUEST['sort_order'] : 'DESC';
 
-    $where = (!empty($filter['keywords'])) ? " AND content LIKE '%" . mysql_like_quote($filter['keywords']) . "%' " : '';
+    $where = (! empty($filter['keywords'])) ? " AND content LIKE '%".mysql_like_quote($filter['keywords'])."%' " : '';
 
-    $sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('comment') . " WHERE parent_id = 0 $where";
+    $sql = 'SELECT count(*) FROM '.$GLOBALS['ecs']->table('comment')." WHERE parent_id = 0 $where";
     $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
     /* 分页大小 */
     $filter = page_and_size($filter);
 
     /* 获取评论数据 */
-    $arr = array();
-    $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('comment') . " WHERE parent_id = 0 $where " .
-        " ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'] .
-        " LIMIT " . $filter['start'] . "," . $filter['page_size'];
+    $arr = [];
+    $sql = 'SELECT * FROM '.$GLOBALS['ecs']->table('comment')." WHERE parent_id = 0 $where ".
+        ' ORDER BY '.$filter['sort_by'].' '.$filter['sort_order'].
+        ' LIMIT '.$filter['start'].','.$filter['page_size'];
     $res = $GLOBALS['db']->query($sql);
 
     while ($row = $GLOBALS['db']->fetchRow($res)) {
         $sql = ($row['comment_type'] == 0) ?
-            "SELECT goods_name FROM " . $GLOBALS['ecs']->table('goods') . " WHERE goods_id='$row[id_value]'" :
-            "SELECT title FROM " . $GLOBALS['ecs']->table('article') . " WHERE article_id='$row[id_value]'";
+            'SELECT goods_name FROM '.$GLOBALS['ecs']->table('goods')." WHERE goods_id='$row[id_value]'" :
+            'SELECT title FROM '.$GLOBALS['ecs']->table('article')." WHERE article_id='$row[id_value]'";
         $row['title'] = $GLOBALS['db']->getOne($sql);
 
         $row['add_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['add_time']);
@@ -322,7 +322,7 @@ function get_comment_list()
         $arr[] = $row;
     }
     $filter['keywords'] = stripslashes($filter['keywords']);
-    $arr = array('item' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+    $arr = ['item' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
 }

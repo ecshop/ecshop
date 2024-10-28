@@ -1,7 +1,7 @@
 <?php
 
-if (!defined('IN_ECS')) {
-    die('Hacking attempt');
+if (! defined('IN_ECS')) {
+    exit('Hacking attempt');
 }
 
 class PHPZip
@@ -9,7 +9,7 @@ class PHPZip
     public function zip($dir, $zipfilename, $drop = false)
     {
         if (substr($dir, -1) != '/') {
-            $dir = ($dir == '') ? './' : $dir . '/';
+            $dir = ($dir == '') ? './' : $dir.'/';
         }
 
         if (@function_exists('gzcompress')) {
@@ -20,7 +20,7 @@ class PHPZip
                 $filelist = $this->get_filelist($dir);
             }
 
-            if ((!empty($dir)) && (!is_array($dir)) && (file_exists($dir))) {
+            if ((! empty($dir)) && (! is_array($dir)) && (file_exists($dir))) {
                 chdir($dir);
             } else {
                 chdir($curdir);
@@ -59,7 +59,7 @@ class PHPZip
 
     public function get_filelist($dir)
     {
-        $file = array();
+        $file = [];
         $dir = rtrim($dir, '/');
         if (file_exists($dir)) {
             $args = func_get_args();
@@ -68,10 +68,10 @@ class PHPZip
             $dh = opendir($dir);
             while (($files = readdir($dh)) !== false) {
                 if (($files != '.') && ($files != '..')) {
-                    if (is_dir($dir . '/' . $files)) {
-                        $file = array_merge($file, $this->get_filelist($dir . '/' . $files, "$pref$files/"));
+                    if (is_dir($dir.'/'.$files)) {
+                        $file = array_merge($file, $this->get_filelist($dir.'/'.$files, "$pref$files/"));
                     } else {
-                        $file[] = $pref . $files;
+                        $file[] = $pref.$files;
                     }
                 }
             }
@@ -81,20 +81,20 @@ class PHPZip
         return $file;
     }
 
-    public $datasec = array();
-    public $ctrl_dir = array();
+    public $datasec = [];
+
+    public $ctrl_dir = [];
+
     public $eof_ctrl_dir = "\x50\x4b\x05\x06\x00\x00\x00\x00";
+
     public $old_offset = 0;
 
     /**
      * Converts an Unix timestamp to a four byte DOS date and time format (date
      * in high two bytes, time in low two bytes allowing magnitude comparison).
      *
-     * @param integer  the current Unix timestamp
-     *
-     * @return integer  the current date in a four byte DOS format
-     *
-     * @access private
+     * @param int  the current Unix timestamp
+     * @return int the current date in a four byte DOS format
      */
     public function unix2DosTime($unixtime = 0)
     {
@@ -118,20 +118,18 @@ class PHPZip
      *
      * @param string   file contents
      * @param string   name of the file in the archive (may contains the path)
-     * @param integer  the current timestamp
-     *
-     * @access public
+     * @param int  the current timestamp
      */
     public function add_file($data, $name, $time = 0)
     {
         $name = str_replace('\\', '/', $name);
 
         $dtime = dechex($this->unix2DosTime($time));
-        $hexdtime = '\x' . $dtime[6] . $dtime[7]
-            . '\x' . $dtime[4] . $dtime[5]
-            . '\x' . $dtime[2] . $dtime[3]
-            . '\x' . $dtime[0] . $dtime[1];
-        eval('$hexdtime = "' . $hexdtime . '";');
+        $hexdtime = '\x'.$dtime[6].$dtime[7]
+            .'\x'.$dtime[4].$dtime[5]
+            .'\x'.$dtime[2].$dtime[3]
+            .'\x'.$dtime[0].$dtime[1];
+        eval('$hexdtime = "'.$hexdtime.'";');
 
         $fr = "\x50\x4b\x03\x04";
         $fr .= "\x14\x00";            // ver needed to extract
@@ -195,9 +193,7 @@ class PHPZip
     /**
      * Dumps out file
      *
-     * @return  string  the zipped file
-     *
-     * @access public
+     * @return string the zipped file
      */
     public function file()
     {
@@ -205,13 +201,13 @@ class PHPZip
         $ctrldir = implode('', $this->ctrl_dir);
 
         return
-            $data .
-            $ctrldir .
-            $this->eof_ctrl_dir .
-            pack('v', sizeof($this->ctrl_dir)) .  // total # of entries "on this disk"
-            pack('v', sizeof($this->ctrl_dir)) .  // total # of entries overall
-            pack('V', strlen($ctrldir)) .           // size of central dir
-            pack('V', strlen($data)) .              // offset to start of central dir
+            $data.
+            $ctrldir.
+            $this->eof_ctrl_dir.
+            pack('v', count($this->ctrl_dir)).  // total # of entries "on this disk"
+            pack('v', count($this->ctrl_dir)).  // total # of entries overall
+            pack('V', strlen($ctrldir)).           // size of central dir
+            pack('V', strlen($data)).              // offset to start of central dir
             "\x00\x00";                             // .zip file comment length
     } // end of the 'file()' method
 } // end of the 'PHPZip' class

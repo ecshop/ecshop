@@ -42,7 +42,6 @@ $_LANG['back_list'] = '返回计划任务列表';
 $_LANG['name_is_null'] = '您没有输入计划任务名称！';
 $_LANG['js_languages']['lang_removeconfirm'] = '您确定要卸载此计划任务吗？';
 
-
 $_LANG['page']['index'] = '首页';
 
 $_LANG['page']['user'] = '用户中心';

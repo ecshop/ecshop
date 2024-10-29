@@ -1,6 +1,8 @@
 {
   "name": "ecshop/ecshop",
   "type": "project",
+  "description": "e-commerce management system.",
+  "keywords": ["ecshop", "php", "mysql", "shop"],
   "require": {
     "php": "^8.3"
   },

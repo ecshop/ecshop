@@ -9,7 +9,7 @@
 ### Feature
 
 - 系统继承自经典的 ECSHOP v2.7.3 版本 ([ECShop V2.7.3 官方下载地址](http://download.ecshop.com/2.7.3/ECShop_V2.7.3_UTF8_release1106.rar))
-- 提升 PHP 运行时到 8.0 版本 ([PHP版本支持情况](https://www.php.net/supported-versions.php))
+- 提升 PHP 运行时到 8.3 版本 ([PHP版本支持情况](https://www.php.net/supported-versions.php))
 - 修复已知所有的安全问题 (重要：建议所有v2.7.3版本升级)
 - 优化低版本 PHP 不兼容语法
 - 移除历史遗留的废弃代码

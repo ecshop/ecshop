@@ -7,7 +7,8 @@
     "php": "^8.3"
   },
   "require-dev": {
-    "laravel/pint": "^1.18"
+    "laravel/pint": "^1.18",
+    "phpstan/phpstan": "^1.12"
   },
   "autoload": {
   },

@@ -13,7 +13,7 @@ $_LANG['templates_manage'] = '模板管理';
 $_LANG['db_manage'] = '数据库管理';
 $_LANG['sms_manage'] = '短信管理';
 
-//商品管理部分的权限
+// 商品管理部分的权限
 $_LANG['goods_manage'] = '商品添加/编辑';
 $_LANG['remove_back'] = '商品删除/恢复';
 $_LANG['cat_manage'] = '分类添加/编辑';
@@ -32,7 +32,7 @@ $_LANG['goods_batch'] = '商品批量上传/修改';
 $_LANG['gen_goods_script'] = '生成商品代码';
 $_LANG['suppliers_goods'] = '供货商商品管理';
 
-//文章管理部分的权限
+// 文章管理部分的权限
 $_LANG['article_cat'] = '文章分类管理';
 $_LANG['article_manage'] = '文章内容管理';
 $_LANG['shopinfo_manage'] = '网店信息管理';
@@ -40,7 +40,7 @@ $_LANG['shophelp_manage'] = '网店帮助管理';
 $_LANG['vote_priv'] = '在线调查管理';
 $_LANG['article_auto'] = '文章自动发布';
 
-//会员信息管理
+// 会员信息管理
 $_LANG['integrate_users'] = '会员数据整合';
 $_LANG['sync_users'] = '同步会员数据';
 $_LANG['users_manages'] = '会员添加/编辑';
@@ -50,7 +50,7 @@ $_LANG['feedback_priv'] = '会员留言管理';
 $_LANG['surplus_manage'] = '会员余额管理';
 $_LANG['account_manage'] = '会员账户管理';
 
-//权限管理部分的权限
+// 权限管理部分的权限
 $_LANG['admin_manage'] = '管理员添加/编辑';
 $_LANG['admin_drop'] = '删除管理员';
 $_LANG['allot_priv'] = '分派权限';
@@ -61,7 +61,7 @@ $_LANG['agency_manage'] = '办事处管理';
 $_LANG['suppliers_manage'] = '供货商管理';
 $_LANG['role_manage'] = '角色管理';
 
-//系统设置部分权限
+// 系统设置部分权限
 $_LANG['shop_config'] = '商店设置';
 $_LANG['shop_authorized'] = '授权证书';
 $_LANG['webcollect_manage'] = '网罗天下管理';
@@ -72,7 +72,7 @@ $_LANG['area_manage'] = '地区列表管理';
 $_LANG['friendlink'] = '友情链接管理';
 $_LANG['db_backup'] = '数据库备份';
 $_LANG['db_renew'] = '数据库恢复';
-$_LANG['flash_manage'] = '首页主广告管理'; //Flash 播放器管理
+$_LANG['flash_manage'] = '首页主广告管理'; // Flash 播放器管理
 $_LANG['navigator'] = '自定义导航栏';
 $_LANG['cron'] = '计划任务';
 $_LANG['affiliate'] = '推荐设置';
@@ -82,7 +82,7 @@ $_LANG['file_check'] = '文件校验';
 $_LANG['file_priv'] = '文件权限检验';
 $_LANG['reg_fields'] = '会员注册项管理';
 
-//订单管理部分权限
+// 订单管理部分权限
 $_LANG['order_os_edit'] = '编辑订单状态';
 $_LANG['order_ps_edit'] = '编辑付款状态';
 $_LANG['order_ss_edit'] = '编辑发货状态';
@@ -96,7 +96,7 @@ $_LANG['client_flow_stats'] = '客户流量统计';
 $_LANG['delivery_view'] = '查看发货单';
 $_LANG['back_view'] = '查看退货单';
 
-//促销管理
+// 促销管理
 $_LANG['snatch_manage'] = '夺宝奇兵';
 $_LANG['bonus_manage'] = '红包管理';
 $_LANG['card_manage'] = '祝福贺卡';
@@ -110,13 +110,13 @@ $_LANG['whole_sale'] = '批发管理';
 $_LANG['package_manage'] = '超值礼包';
 $_LANG['exchange_goods'] = '积分商城商品';
 
-//邮件管理
+// 邮件管理
 $_LANG['attention_list'] = '关注管理';
 $_LANG['email_list'] = '邮件订阅管理';
 $_LANG['magazine_list'] = '杂志管理';
 $_LANG['view_sendlist'] = '邮件队列管理';
 
-//模板管理
+// 模板管理
 $_LANG['template_select'] = '模板选择';
 $_LANG['template_setup'] = '模板设置';
 $_LANG['library_manage'] = '库项目管理';
@@ -124,14 +124,14 @@ $_LANG['lang_edit'] = '语言项编辑';
 $_LANG['backup_setting'] = '模板设置备份';
 $_LANG['mail_template'] = '邮件模板管理';
 
-//数据库管理
+// 数据库管理
 $_LANG['db_backup'] = '数据备份';
 $_LANG['db_renew'] = '数据恢复';
 $_LANG['db_optimize'] = '数据表优化';
 $_LANG['sql_query'] = 'SQL查询';
 $_LANG['convert'] = '转换数据';
 
-//短信管理
+// 短信管理
 $_LANG['my_info'] = '账号信息';
 $_LANG['sms_send'] = '发送短信';
 $_LANG['sms_charge'] = '短信充值';

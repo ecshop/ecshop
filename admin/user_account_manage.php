@@ -17,9 +17,9 @@ if (empty($_REQUEST['act'])) {
 /* 权限判断 */
 admin_priv('user_account_manage');
 
-/*------------------------------------------------------ */
-//--数据查询
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// --数据查询
+/* ------------------------------------------------------ */
 /* 时间参数 */
 
 $start_date = $end_date = '';
@@ -35,26 +35,26 @@ if (isset($_POST) && ! empty($_POST)) {
     $end_date = $today;
 }
 
-/*------------------------------------------------------ */
-//--商品明细列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// --商品明细列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     $account = $money_list = [];
-    $account['voucher_amount'] = get_total_amount($start_date, $end_date); //充值总额
-    $account['to_cash_amount'] = get_total_amount($start_date, $end_date, 1); //提现总额
+    $account['voucher_amount'] = get_total_amount($start_date, $end_date); // 充值总额
+    $account['to_cash_amount'] = get_total_amount($start_date, $end_date, 1); // 提现总额
 
     $sql = ' SELECT IFNULL(SUM(user_money), 0) AS user_money, IFNULL(SUM(frozen_money), 0) AS frozen_money FROM '.
         $ecs->table('account_log').' WHERE `change_time` >= '.$start_date.' AND `change_time` < '.($end_date + 86400);
     $money_list = $db->getRow($sql);
-    $account['user_money'] = price_format($money_list['user_money']);   //用户可用余额
-    $account['frozen_money'] = price_format($money_list['frozen_money']);   //用户冻结金额
+    $account['user_money'] = price_format($money_list['user_money']);   // 用户可用余额
+    $account['frozen_money'] = price_format($money_list['frozen_money']);   // 用户冻结金额
 
     $sql = 'SELECT IFNULL(SUM(surplus), 0) AS surplus, IFNULL(SUM(integral_money), 0) AS integral_money FROM '.
         $ecs->table('order_info').' WHERE 1 AND `add_time` >= '.$start_date.' AND `add_time` < '.($end_date + 86400);
     $money_list = $db->getRow($sql);
 
-    $account['surplus'] = price_format($money_list['surplus']);   //交易使用余额
-    $account['integral_money'] = price_format($money_list['integral_money']);   //积分使用余额
+    $account['surplus'] = price_format($money_list['surplus']);   // 交易使用余额
+    $account['integral_money'] = price_format($money_list['integral_money']);   // 积分使用余额
 
     /* 赋值到模板 */
     $smarty->assign('account', $account);
@@ -83,9 +83,9 @@ if ($_REQUEST['act'] == 'surplus') {
     $smarty->display('order_surplus_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- ajax返回用户列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- ajax返回用户列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
     $order_list = order_list();
 

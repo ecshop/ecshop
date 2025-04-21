@@ -32,7 +32,7 @@ function update_user_info()
         $_SESSION['login_fail'] = 0;
         $_SESSION['email'] = $row['email'];
 
-        /*判断是否是特殊等级，可能后台把特殊会员组更改普通会员组*/
+        /* 判断是否是特殊等级，可能后台把特殊会员组更改普通会员组 */
         if ($row['user_rank'] > 0) {
             $sql = 'SELECT special_rank from '.$GLOBALS['ecs']->table('user_rank')."where rank_id='$row[user_rank]'";
             if ($GLOBALS['db']->getOne($sql) === '0' || $GLOBALS['db']->getOne($sql) === null) {
@@ -1111,7 +1111,7 @@ function dyna_libs_replace($matches)
                 $str = '{assign var="articles" value=$articles_'.$row['id'].'}{assign var="articles_cat" value=$articles_cat_'.$row['id'].'}';
                 break;
             case 4:
-                //广告位
+                // 广告位
                 $str = '{assign var="ads_id" value='.$row['id'].'}{assign var="ads_num" value='.$row['number'].'}';
                 break;
         }
@@ -1320,7 +1320,7 @@ function assign_comment($id, $type, $page = 1)
         }
     }
     /* 分页样式 */
-    //$pager['styleid'] = isset($GLOBALS['_CFG']['page_style'])? intval($GLOBALS['_CFG']['page_style']) : 0;
+    // $pager['styleid'] = isset($GLOBALS['_CFG']['page_style'])? intval($GLOBALS['_CFG']['page_style']) : 0;
     $pager['page'] = $page;
     $pager['size'] = $size;
     $pager['record_count'] = $count;
@@ -1359,7 +1359,7 @@ function assign_template($ctype = '', $catlist = [])
     $smarty->assign('username', ! empty($_SESSION['user_name']) ? $_SESSION['user_name'] : '');
     $smarty->assign('category_list', cat_list(0, 0, true, 2, false));
     $smarty->assign('catalog_list', cat_list(0, 0, false, 1, false));
-    $smarty->assign('navigator_list', get_navigator($ctype, $catlist));  //自定义导航栏
+    $smarty->assign('navigator_list', get_navigator($ctype, $catlist));  // 自定义导航栏
 
     if (! empty($GLOBALS['_CFG']['search_keywords'])) {
         $searchkeywords = explode(',', trim($GLOBALS['_CFG']['search_keywords']));
@@ -1634,7 +1634,7 @@ function get_navigator($ctype = '', $catlist = [])
         ];
     }
 
-    /*遍历自定义是否存在currentPage*/
+    /* 遍历自定义是否存在currentPage */
     foreach ($navlist['middle'] as $k => $v) {
         $condition = empty($ctype) ? (strpos($cur_url, $v['url']) === 0) : (strpos($cur_url, $v['url']) === 0 && strlen($cur_url) == strlen($v['url']));
         if ($condition) {
@@ -1703,7 +1703,7 @@ function url_domain()
     return $root;
 }
 
-//更新离线购物车
+// 更新离线购物车
 function update_cart_offline()
 {
     if (! $_SESSION['user_id']) {
@@ -1711,28 +1711,28 @@ function update_cart_offline()
     }
     $user_id = intval($_SESSION['user_id']);
 
-    //获取离线购物车
+    // 获取离线购物车
     $sql = 'SELECT * '.
         ' FROM '.$GLOBALS['ecs']->table('cart').
         " WHERE session_id = '".SESS_ID."' AND user_id=0";
     $offline_carts = $GLOBALS['db']->getAll($sql);
 
-    if (! $offline_carts) { //无需合并
+    if (! $offline_carts) { // 无需合并
         return true;
     }
 
-    //获取会员购物车数据
+    // 获取会员购物车数据
     $sql = 'SELECT * '.
         ' FROM '.$GLOBALS['ecs']->table('cart').
         " WHERE user_id = '".$user_id."'";
     $online_carts = $GLOBALS['db']->getAll($sql);
 
-    if (! $online_carts) { //离线转在线
+    if (! $online_carts) { // 离线转在线
         $sql = 'UPDATE '.$GLOBALS['ecs']->table('cart')." SET user_id = '$user_id' WHERE session_id = '".SESS_ID."'";
         $GLOBALS['db']->query($sql);
     }
 
-    //合并购物车相同的商品
+    // 合并购物车相同的商品
     $offcart = [];
     foreach ($offline_carts as $offkey => $offval) {
         if (! $offval['goods_id'] || ! $offval['goods_number']) {
@@ -1755,9 +1755,9 @@ function update_cart_offline()
             unset($offcart[$key]);
         }
     }
-    //不重复的商品转成在线购物车
+    // 不重复的商品转成在线购物车
     if (count($offcart) > 0) {
-        $offcart = array_values($offcart); //初始化数组的key
+        $offcart = array_values($offcart); // 初始化数组的key
         $rec_id = [];
         for ($i = count($offcart); $i >= 0; $rec_id[] = $offcart[$i]['rec_id'], $i--);
         $rec_id = array_unique(array_filter($rec_id));

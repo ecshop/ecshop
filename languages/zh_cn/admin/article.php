@@ -55,7 +55,7 @@ $_LANG['no_title'] = '没有输入文章标题';
 $_LANG['drop_confirm'] = '您确认要删除这篇文章吗？';
 $_LANG['batch_handle_ok'] = '批量操作成功';
 
-/*JS 语言项*/
+/* JS 语言项 */
 $_LANG['js_languages']['no_title'] = '没有文章标题';
 $_LANG['js_languages']['no_cat'] = '没有选择文章分类';
 $_LANG['js_languages']['not_allow_add'] = '系统保留分类，不允许在该分类添加文章';

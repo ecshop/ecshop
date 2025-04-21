@@ -331,7 +331,7 @@ function handle_gallery_image($goods_id, $image_files, $image_descs, $image_urls
         } elseif (! empty($image_urls[$key]) && ($image_urls[$key] != $GLOBALS['_LANG']['img_file']) && ($image_urls[$key] != 'http://') && copy(trim($image_urls[$key]), ROOT_PATH.'temp/'.basename($image_urls[$key]))) {
             $image_url = trim($image_urls[$key]);
 
-            //定义原图路径
+            // 定义原图路径
             $down_img = ROOT_PATH.'temp/'.basename($image_url);
 
             // 生成缩略图
@@ -520,7 +520,7 @@ function check_goods_sn_exist($goods_sn, $goods_id = 0)
     $goods_sn = trim($goods_sn);
     $goods_id = intval($goods_id);
     if (strlen($goods_sn) == 0) {
-        return true;    //重复
+        return true;    // 重复
     }
 
     if (empty($goods_id)) {
@@ -535,9 +535,9 @@ function check_goods_sn_exist($goods_sn, $goods_id = 0)
     $res = $GLOBALS['db']->getOne($sql);
 
     if (empty($res)) {
-        return false;    //不重复
+        return false;    // 不重复
     } else {
-        return true;    //重复
+        return true;    // 重复
     }
 }
 
@@ -843,7 +843,7 @@ function goods_list($is_delete, $real_goods = 1, $conditions = '')
 function check_goods_product_exist($goods_id, $conditions = '')
 {
     if (empty($goods_id)) {
-        return -1;  //$goods_id不能为空
+        return -1;  // $goods_id不能为空
     }
 
     $sql = 'SELECT goods_id
@@ -871,7 +871,7 @@ function check_goods_product_exist($goods_id, $conditions = '')
 function product_number_count($goods_id, $conditions = '')
 {
     if (empty($goods_id)) {
-        return -1;  //$goods_id不能为空
+        return -1;  // $goods_id不能为空
     }
 
     $sql = 'SELECT SUM(product_number)
@@ -894,7 +894,7 @@ function product_number_count($goods_id, $conditions = '')
 function product_goods_attr_list($goods_id)
 {
     if (empty($goods_id)) {
-        return [];  //$goods_id不能为空
+        return [];  // $goods_id不能为空
     }
 
     $sql = 'SELECT goods_attr_id, attr_value FROM '.$GLOBALS['ecs']->table('goods_attr')." WHERE goods_id = '$goods_id'";
@@ -918,7 +918,7 @@ function product_goods_attr_list($goods_id)
 function get_goods_specifications_list($goods_id)
 {
     if (empty($goods_id)) {
-        return [];  //$goods_id不能为空
+        return [];  // $goods_id不能为空
     }
 
     $sql = 'SELECT g.goods_attr_id, g.attr_value, g.attr_id, a.attr_name
@@ -986,7 +986,7 @@ function product_list($goods_id, $conditions = '')
                 ORDER BY $filter[sort_by] $filter[sort_order]";
 
         $filter['keyword'] = stripslashes($filter['keyword']);
-        //set_filter($filter, $sql, $param_str);
+        // set_filter($filter, $sql, $param_str);
     } else {
         $sql = $result['sql'];
         $filter = $result['filter'];
@@ -1053,9 +1053,9 @@ function check_goods_specifications_exist($goods_id)
     $count = $GLOBALS['db']->getOne($sql);
 
     if ($count > 0) {
-        return true;    //存在
+        return true;    // 存在
     } else {
-        return false;    //不存在
+        return false;    // 不存在
     }
 }
 
@@ -1071,7 +1071,7 @@ function check_goods_attr_exist($goods_attr, $goods_id, $product_id = 0)
 {
     $goods_id = intval($goods_id);
     if (strlen($goods_attr) == 0 || empty($goods_id)) {
-        return true;    //重复
+        return true;    // 重复
     }
 
     if (empty($product_id)) {
@@ -1088,9 +1088,9 @@ function check_goods_attr_exist($goods_attr, $goods_id, $product_id = 0)
     $res = $GLOBALS['db']->getOne($sql);
 
     if (empty($res)) {
-        return false;    //不重复
+        return false;    // 不重复
     } else {
-        return true;    //重复
+        return true;    // 重复
     }
 }
 
@@ -1106,11 +1106,11 @@ function check_product_sn_exist($product_sn, $product_id = 0)
     $product_sn = trim($product_sn);
     $product_id = intval($product_id);
     if (strlen($product_sn) == 0) {
-        return true;    //重复
+        return true;    // 重复
     }
     $sql = 'SELECT goods_id FROM '.$GLOBALS['ecs']->table('goods')."WHERE goods_sn='$product_sn'";
     if ($GLOBALS['db']->getOne($sql)) {
-        return true;    //重复
+        return true;    // 重复
     }
 
     if (empty($product_id)) {
@@ -1125,9 +1125,9 @@ function check_product_sn_exist($product_sn, $product_id = 0)
     $res = $GLOBALS['db']->getOne($sql);
 
     if (empty($res)) {
-        return false;    //不重复
+        return false;    // 不重复
     } else {
-        return true;    //重复
+        return true;    // 重复
     }
 }
 

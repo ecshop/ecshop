@@ -121,7 +121,7 @@ function get_top10($cats = '')
         $GLOBALS['ecs']->table('order_info').' AS o, '.
         $GLOBALS['ecs']->table('order_goods').' AS og '.
         "WHERE g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 $where $top10_time ";
-    //判断是否启用库存，库存数量是否大于0
+    // 判断是否启用库存，库存数量是否大于0
     if ($GLOBALS['_CFG']['use_storage'] == 1) {
         $sql .= ' AND g.goods_number > 0 ';
     }
@@ -156,10 +156,10 @@ function get_recommend_goods($type = '', $cats = '')
         return [];
     }
 
-    //取不同推荐对应的商品
+    // 取不同推荐对应的商品
     static $type_goods = [];
     if (empty($type_goods[$type])) {
-        //初始化数据
+        // 初始化数据
         $type_goods['best'] = [];
         $type_goods['new'] = [];
         $type_goods['hot'] = [];
@@ -171,7 +171,7 @@ function get_recommend_goods($type = '', $cats = '')
                 ' WHERE g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 AND (g.is_best = 1 OR g.is_new =1 OR g.is_hot = 1)'.
                 ' ORDER BY g.sort_order, g.last_update DESC';
             $goods_res = $GLOBALS['db']->getAll($sql);
-            //定义推荐,最新，热门，促销商品
+            // 定义推荐,最新，热门，促销商品
             $goods_data['best'] = [];
             $goods_data['new'] = [];
             $goods_data['hot'] = [];
@@ -200,7 +200,7 @@ function get_recommend_goods($type = '', $cats = '')
         $time = gmtime();
         $order_type = $GLOBALS['_CFG']['recommend_order'];
 
-        //按推荐数量及排序取每一项推荐显示的商品 order_type可以根据后台设定进行各种条件显示
+        // 按推荐数量及排序取每一项推荐显示的商品 order_type可以根据后台设定进行各种条件显示
         static $type_array = [];
         $type2lib = ['best' => 'recommend_best', 'new' => 'recommend_new', 'hot' => 'recommend_hot'];
         if (empty($type_array)) {
@@ -210,7 +210,7 @@ function get_recommend_goods($type = '', $cats = '')
                     $data_count = count($goods_data[$key]);
                     $num = $data_count > $num ? $num : $data_count;
                     if ($order_type == 0) {
-                        //usort($goods_data[$key], 'goods_sort');
+                        // usort($goods_data[$key], 'goods_sort');
                         $rand_key = array_slice($goods_data[$key], 0, $num);
                         foreach ($rand_key as $key_data) {
                             $type_array[$key][] = $key_data['goods_id'];
@@ -231,7 +231,7 @@ function get_recommend_goods($type = '', $cats = '')
             }
         }
 
-        //取出所有符合条件的商品数据，并将结果存入对应的推荐类型数组中
+        // 取出所有符合条件的商品数据，并将结果存入对应的推荐类型数组中
         $sql = 'SELECT g.goods_id, g.goods_name, g.goods_name_style, g.market_price, g.shop_price AS org_price, g.promote_price, '.
             "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, ".
             'promote_start_date, promote_end_date, g.goods_brief, g.goods_thumb, g.goods_img, RAND() AS rnd '.
@@ -1269,16 +1269,16 @@ function get_goods_fittings($goods_list = [])
     $res = $GLOBALS['db']->query($sql);
 
     while ($row = $GLOBALS['db']->fetchRow($res)) {
-        $arr[$temp_index]['parent_id'] = $row['parent_id']; //配件的基本件ID
-        $arr[$temp_index]['parent_name'] = $row['parent_name']; //配件的基本件的名称
+        $arr[$temp_index]['parent_id'] = $row['parent_id']; // 配件的基本件ID
+        $arr[$temp_index]['parent_name'] = $row['parent_name']; // 配件的基本件的名称
         $arr[$temp_index]['parent_short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-            sub_str($row['parent_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['parent_name']; //配件的基本件显示的名称
-        $arr[$temp_index]['goods_id'] = $row['goods_id']; //配件的商品ID
-        $arr[$temp_index]['goods_name'] = $row['goods_name']; //配件的名称
+            sub_str($row['parent_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['parent_name']; // 配件的基本件显示的名称
+        $arr[$temp_index]['goods_id'] = $row['goods_id']; // 配件的商品ID
+        $arr[$temp_index]['goods_name'] = $row['goods_name']; // 配件的名称
         $arr[$temp_index]['short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
-            sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name']; //配件显示的名称
-        $arr[$temp_index]['fittings_price'] = price_format($row['goods_price']); //配件价格
-        $arr[$temp_index]['shop_price'] = price_format($row['shop_price']); //配件原价格
+            sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name']; // 配件显示的名称
+        $arr[$temp_index]['fittings_price'] = price_format($row['goods_price']); // 配件价格
+        $arr[$temp_index]['shop_price'] = price_format($row['shop_price']); // 配件原价格
         $arr[$temp_index]['goods_thumb'] = get_image_path($row['goods_thumb']);
         $arr[$temp_index]['goods_img'] = get_image_path($row['goods_img']);
         $arr[$temp_index]['url'] = build_uri('goods', ['gid' => $row['goods_id']], $row['goods_name']);

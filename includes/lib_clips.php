@@ -87,8 +87,8 @@ function get_message_list($user_id, $user_name, $num, $start, $order_id = 0)
 
     while ($rows = $GLOBALS['db']->fetchRow($res)) {
         /* 取得留言的回复 */
-        //if (empty($order_id))
-        //{
+        // if (empty($order_id))
+        // {
         $reply = [];
         $sql = 'SELECT user_name, user_email, msg_time, msg_content'.
             ' FROM '.$GLOBALS['ecs']->table('feedback').
@@ -101,7 +101,7 @@ function get_message_list($user_id, $user_name, $num, $start, $order_id = 0)
             $msg[$rows['msg_id']]['re_msg_time'] = local_date($GLOBALS['_CFG']['time_format'], $reply['msg_time']);
             $msg[$rows['msg_id']]['re_msg_content'] = nl2br(htmlspecialchars($reply['msg_content']));
         }
-        //}
+        // }
 
         $msg[$rows['msg_id']]['msg_content'] = nl2br(htmlspecialchars($rows['msg_content']));
         $msg[$rows['msg_id']]['msg_time'] = local_date($GLOBALS['_CFG']['time_format'], $rows['msg_time']);
@@ -499,7 +499,7 @@ function get_user_default($user_id)
     $info['credit_line'] = $row['credit_line'];
     $info['formated_credit_line'] = price_format($info['credit_line'], false);
 
-    //如果$_SESSION中时间无效说明用户是第一次登录。取当前登录时间。
+    // 如果$_SESSION中时间无效说明用户是第一次登录。取当前登录时间。
     $last_time = ! isset($_SESSION['last_time']) ? $row['last_login'] : $_SESSION['last_time'];
 
     if ($last_time == 0) {

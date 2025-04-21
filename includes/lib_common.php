@@ -221,7 +221,7 @@ function cat_list($cat_id = 0, $selected = 0, $re_type = true, $level = 0, $is_s
             foreach ($res as $k => $v) {
                 $res[$k]['goods_num'] = ! empty($newres[$v['cat_id']]) ? $newres[$v['cat_id']] : 0;
             }
-            //如果数组过大，不采用静态缓存方式
+            // 如果数组过大，不采用静态缓存方式
             if (count($res) <= 1000) {
                 write_static_cache('cat_pid_releate', $res);
             }
@@ -236,7 +236,7 @@ function cat_list($cat_id = 0, $selected = 0, $re_type = true, $level = 0, $is_s
 
     $options = cat_options($cat_id, $res); // 获得指定分类下的子分类的数组
 
-    $children_level = 99999; //大于这个分类的将被删除
+    $children_level = 99999; // 大于这个分类的将被删除
     if ($is_show_all == false) {
         foreach ($options as $key => $val) {
             if ($val['level'] > $children_level) {
@@ -245,10 +245,10 @@ function cat_list($cat_id = 0, $selected = 0, $re_type = true, $level = 0, $is_s
                 if ($val['is_show'] == 0) {
                     unset($options[$key]);
                     if ($children_level > $val['level']) {
-                        $children_level = $val['level']; //标记一下，这样子分类也能删除
+                        $children_level = $val['level']; // 标记一下，这样子分类也能删除
                     }
                 } else {
-                    $children_level = 99999; //恢复初始值
+                    $children_level = 99999; // 恢复初始值
                 }
             }
         }
@@ -379,7 +379,7 @@ function cat_options($spec_cat_id, $arr)
                     $level = 0;
                 }
             }
-            //如果数组过大，不采用静态缓存方式
+            // 如果数组过大，不采用静态缓存方式
             if (count($options) <= 2000) {
                 write_static_cache('cat_option_static', $options);
             }
@@ -445,7 +445,7 @@ function load_config()
         $arr['watermark_alpha'] = intval($arr['watermark_alpha']);
         $arr['market_price_rate'] = floatval($arr['market_price_rate']);
         $arr['integral_scale'] = floatval($arr['integral_scale']);
-        //$arr['integral_percent']     = floatval($arr['integral_percent']);
+        // $arr['integral_percent']     = floatval($arr['integral_percent']);
         $arr['cache_time'] = intval($arr['cache_time']);
         $arr['thumb_width'] = intval($arr['thumb_width']);
         $arr['thumb_height'] = intval($arr['thumb_height']);
@@ -479,7 +479,7 @@ function load_config()
             $GLOBALS['_CFG']['ecs_version'] = 'v2.0.5';
         }
 
-        //限定语言项
+        // 限定语言项
         $lang_array = ['zh_cn', 'zh_tw', 'en_us'];
         if (empty($arr['lang']) || ! in_array($arr['lang'], $lang_array)) {
             $arr['lang'] = 'zh_cn'; // 默认语言为简体中文
@@ -574,7 +574,7 @@ function get_promotion_info($goods_id = '')
     $res = $GLOBALS['db']->getAll($sql);
     foreach ($res as $data) {
         switch ($data['act_type']) {
-            case GAT_SNATCH: //夺宝奇兵
+            case GAT_SNATCH: // 夺宝奇兵
                 $snatch[$data['act_id']]['act_name'] = $data['act_name'];
                 $snatch[$data['act_id']]['url'] = build_uri('snatch', ['sid' => $data['act_id']]);
                 $snatch[$data['act_id']]['time'] = sprintf($GLOBALS['_LANG']['promotion_time'], local_date('Y-m-d', $data['start_time']), local_date('Y-m-d', $data['end_time']));
@@ -582,7 +582,7 @@ function get_promotion_info($goods_id = '')
                 $snatch[$data['act_id']]['type'] = 'snatch';
                 break;
 
-            case GAT_GROUP_BUY: //团购
+            case GAT_GROUP_BUY: // 团购
                 $group[$data['act_id']]['act_name'] = $data['act_name'];
                 $group[$data['act_id']]['url'] = build_uri('group_buy', ['gbid' => $data['act_id']]);
                 $group[$data['act_id']]['time'] = sprintf($GLOBALS['_LANG']['promotion_time'], local_date('Y-m-d', $data['start_time']), local_date('Y-m-d', $data['end_time']));
@@ -590,7 +590,7 @@ function get_promotion_info($goods_id = '')
                 $group[$data['act_id']]['type'] = 'group_buy';
                 break;
 
-            case GAT_AUCTION: //拍卖
+            case GAT_AUCTION: // 拍卖
                 $auction[$data['act_id']]['act_name'] = $data['act_name'];
                 $auction[$data['act_id']]['url'] = build_uri('auction', ['auid' => $data['act_id']]);
                 $auction[$data['act_id']]['time'] = sprintf($GLOBALS['_LANG']['promotion_time'], local_date('Y-m-d', $data['start_time']), local_date('Y-m-d', $data['end_time']));
@@ -598,7 +598,7 @@ function get_promotion_info($goods_id = '')
                 $auction[$data['act_id']]['type'] = 'auction';
                 break;
 
-            case GAT_PACKAGE: //礼包
+            case GAT_PACKAGE: // 礼包
                 $package[$data['act_id']]['act_name'] = $data['act_name'];
                 $package[$data['act_id']]['url'] = 'package.php#'.$data['act_id'];
                 $package[$data['act_id']]['time'] = sprintf($GLOBALS['_LANG']['promotion_time'], local_date('Y-m-d', $data['start_time']), local_date('Y-m-d', $data['end_time']));
@@ -1848,12 +1848,12 @@ function get_volume_price_list($goods_id, $price_type = '1')
  */
 function get_final_price($goods_id, $goods_num = '1', $is_spec_price = false, $spec = [])
 {
-    $final_price = '0'; //商品最终购买价格
-    $volume_price = '0'; //商品优惠价格
-    $promote_price = '0'; //商品促销价格
-    $user_price = '0'; //商品会员价格
+    $final_price = '0'; // 商品最终购买价格
+    $volume_price = '0'; // 商品优惠价格
+    $promote_price = '0'; // 商品促销价格
+    $user_price = '0'; // 商品会员价格
 
-    //取得商品优惠价格列表
+    // 取得商品优惠价格列表
     $price_list = get_volume_price_list($goods_id, '1');
 
     if (! empty($price_list)) {
@@ -1864,7 +1864,7 @@ function get_final_price($goods_id, $goods_num = '1', $is_spec_price = false, $s
         }
     }
 
-    //取得商品促销价格列表
+    // 取得商品促销价格列表
     /* 取得商品信息 */
     $sql = 'SELECT g.promote_price, g.promote_start_date, g.promote_end_date, '.
         "IFNULL(mp.user_price, g.shop_price * '".$_SESSION['discount']."') AS shop_price ".
@@ -1882,27 +1882,27 @@ function get_final_price($goods_id, $goods_num = '1', $is_spec_price = false, $s
         $promote_price = 0;
     }
 
-    //取得商品会员价格列表
+    // 取得商品会员价格列表
     $user_price = $goods['shop_price'];
 
-    //比较商品的促销价格，会员价格，优惠价格
+    // 比较商品的促销价格，会员价格，优惠价格
     if (empty($volume_price) && empty($promote_price)) {
-        //如果优惠价格，促销价格都为空则取会员价格
+        // 如果优惠价格，促销价格都为空则取会员价格
         $final_price = $user_price;
     } elseif (! empty($volume_price) && empty($promote_price)) {
-        //如果优惠价格为空时不参加这个比较。
+        // 如果优惠价格为空时不参加这个比较。
         $final_price = min($volume_price, $user_price);
     } elseif (empty($volume_price) && ! empty($promote_price)) {
-        //如果促销价格为空时不参加这个比较。
+        // 如果促销价格为空时不参加这个比较。
         $final_price = min($promote_price, $user_price);
     } elseif (! empty($volume_price) && ! empty($promote_price)) {
-        //取促销价格，会员价格，优惠价格最小值
+        // 取促销价格，会员价格，优惠价格最小值
         $final_price = min($volume_price, $promote_price, $user_price);
     } else {
         $final_price = $user_price;
     }
 
-    //如果需要加入规格价格
+    // 如果需要加入规格价格
     if ($is_spec_price) {
         if (! empty($spec)) {
             $spec_price = spec_price($spec);
@@ -1910,7 +1910,7 @@ function get_final_price($goods_id, $goods_num = '1', $is_spec_price = false, $s
         }
     }
 
-    //返回商品最终购买价格
+    // 返回商品最终购买价格
     return $final_price;
 }
 
@@ -1929,7 +1929,7 @@ function sort_goods_attr_id_array($goods_attr_id_array, $sort = 'asc')
         return $goods_attr_id_array;
     }
 
-    //重新排序
+    // 重新排序
     $sql = 'SELECT a.attr_type, v.attr_value, v.goods_attr_id
             FROM '.$GLOBALS['ecs']->table('attribute').' AS a
             LEFT JOIN '.$GLOBALS['ecs']->table('goods_attr').' AS v
@@ -1961,7 +1961,7 @@ function is_spec($goods_attr_id_array, $sort = 'asc')
         return $goods_attr_id_array;
     }
 
-    //重新排序
+    // 重新排序
     $sql = 'SELECT a.attr_type, v.attr_value, v.goods_attr_id
             FROM '.$GLOBALS['ecs']->table('attribute').' AS a
             LEFT JOIN '.$GLOBALS['ecs']->table('goods_attr').' AS v
@@ -2100,7 +2100,7 @@ function get_package_goods($package_id)
             $_row['g_p'] = $_row['goods_id'];
         }
 
-        //生成结果数组
+        // 生成结果数组
         $row[] = $_row;
     }
     $good_product_str = trim($good_product_str, ',');

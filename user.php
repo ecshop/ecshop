@@ -42,7 +42,7 @@ if (empty($_SESSION['user_id'])) {
             }
             $action = 'login';
         } else {
-            //未登录提交数据。非正常途径提交数据！
+            // 未登录提交数据。非正常途径提交数据！
             exit($_LANG['require_login']);
         }
     }
@@ -68,7 +68,7 @@ if (in_array($action, $ui_arr)) {
     $smarty->assign('lang', $_LANG);
 }
 
-//用户中心欢迎页
+// 用户中心欢迎页
 if ($action == 'default') {
     include_once ROOT_PATH.'includes/lib_clips.php';
     if ($rank = get_rank_info()) {
@@ -161,11 +161,11 @@ elseif ($action == 'act_register') {
         }
 
         if (register($username, $password, $email, $other) !== false) {
-            /*把新注册用户的扩展信息插入数据库*/
-            $sql = 'SELECT id FROM '.$ecs->table('reg_fields').' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有自定义扩展字段的id
+            /* 把新注册用户的扩展信息插入数据库 */
+            $sql = 'SELECT id FROM '.$ecs->table('reg_fields').' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   // 读出所有自定义扩展字段的id
             $fields_arr = $db->getAll($sql);
 
-            $extend_field_str = '';    //生成扩展字段的内容字符串
+            $extend_field_str = '';    // 生成扩展字段的内容字符串
             foreach ($fields_arr as $val) {
                 $extend_field_index = 'extend_field'.$val['id'];
                 if (! empty($_POST[$extend_field_index])) {
@@ -175,7 +175,7 @@ elseif ($action == 'act_register') {
             }
             $extend_field_str = substr($extend_field_str, 0, -1);
 
-            if ($extend_field_str) {      //插入注册扩展数据
+            if ($extend_field_str) {      // 插入注册扩展数据
                 $sql = 'INSERT INTO '.$ecs->table('reg_extend_info').' (`user_id`, `reg_field_id`, `content`) VALUES'.$extend_field_str;
                 $db->query($sql);
             }
@@ -311,7 +311,7 @@ elseif ($action == 'signin') {
     }
 
     if ($user->login($username, $password)) {
-        update_user_info();  //更新用户信息
+        update_user_info();  // 更新用户信息
         recalculate_price(); // 重新计算购物车中的商品价格
         $smarty->assign('user_info', get_user_info());
         $ucdata = empty($user->ucdata) ? '' : $user->ucdata;
@@ -401,15 +401,15 @@ elseif ($action == 'act_edit_profile') {
     $passwd_answer = isset($_POST['passwd_answer']) ? compile_str(trim($_POST['passwd_answer'])) : '';
 
     /* 更新用户扩展字段的数据 */
-    $sql = 'SELECT id FROM '.$ecs->table('reg_fields').' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有扩展字段的id
+    $sql = 'SELECT id FROM '.$ecs->table('reg_fields').' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   // 读出所有扩展字段的id
     $fields_arr = $db->getAll($sql);
 
-    foreach ($fields_arr as $val) {       //循环更新扩展用户信息
+    foreach ($fields_arr as $val) {       // 循环更新扩展用户信息
         $extend_field_index = 'extend_field'.$val['id'];
         if (isset($_POST[$extend_field_index])) {
             $temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr(htmlspecialchars($_POST[$extend_field_index]), 0, 99) : htmlspecialchars($_POST[$extend_field_index]);
             $sql = 'SELECT * FROM '.$ecs->table('reg_extend_info')."  WHERE reg_field_id = '$val[id]' AND user_id = '$user_id'";
-            if ($db->getOne($sql)) {      //如果之前没有记录，则插入
+            if ($db->getOne($sql)) {      // 如果之前没有记录，则插入
                 $sql = 'UPDATE '.$ecs->table('reg_extend_info')." SET content = '$temp_field_content' WHERE reg_field_id = '$val[id]' AND user_id = '$user_id'";
             } else {
                 $sql = 'INSERT INTO '.$ecs->table('reg_extend_info')." (`user_id`, `reg_field_id`, `content`) VALUES ('$user_id', '$val[id]', '$temp_field_content')";
@@ -465,7 +465,7 @@ elseif ($action == 'act_edit_profile') {
 elseif ($action == 'get_password') {
     include_once ROOT_PATH.'includes/lib_passport.php';
 
-    if (isset($_GET['code']) && isset($_GET['uid'])) { //从邮件处获得的act
+    if (isset($_GET['code']) && isset($_GET['uid'])) { // 从邮件处获得的act
         $code = trim($_GET['code']);
         $uid = intval($_GET['uid']);
 
@@ -480,12 +480,12 @@ elseif ($action == 'get_password') {
         $smarty->assign('action', 'reset_password');
         $smarty->display('user_passport.dwt');
     } else {
-        //显示用户名和email表单
+        // 显示用户名和email表单
         $smarty->display('user_passport.dwt');
     }
 } /* 密码找回-->输入用户名界面 */
 elseif ($action == 'qpassword_name') {
-    //显示输入要找回密码的账号表单
+    // 显示输入要找回密码的账号表单
     $smarty->display('user_passport.dwt');
 } /* 密码找回-->根据注册用户名取得密码提示问题界面 */
 elseif ($action == 'get_passwd_question') {
@@ -495,18 +495,18 @@ elseif ($action == 'get_passwd_question') {
         $user_name = trim($_POST['user_name']);
     }
 
-    //取出会员密码问题和答案
+    // 取出会员密码问题和答案
     $sql = 'SELECT user_id, user_name, passwd_question, passwd_answer FROM '.$ecs->table('users')." WHERE user_name = '".$user_name."'";
     $user_question_arr = $db->getRow($sql);
 
-    //如果没有设置密码问题，给出错误提示
+    // 如果没有设置密码问题，给出错误提示
     if (empty($user_question_arr['passwd_answer'])) {
         show_message($_LANG['no_passwd_question'], $_LANG['back_home_lnk'], './', 'info');
     }
 
-    $_SESSION['temp_user'] = $user_question_arr['user_id'];  //设置临时用户，不具有有效身份
-    $_SESSION['temp_user_name'] = $user_question_arr['user_name'];  //设置临时用户，不具有有效身份
-    $_SESSION['passwd_answer'] = $user_question_arr['passwd_answer'];   //存储密码问题答案，减少一次数据库访问
+    $_SESSION['temp_user'] = $user_question_arr['user_id'];  // 设置临时用户，不具有有效身份
+    $_SESSION['temp_user_name'] = $user_question_arr['user_name'];  // 设置临时用户，不具有有效身份
+    $_SESSION['passwd_answer'] = $user_question_arr['passwd_answer'];   // 存储密码问题答案，减少一次数据库访问
 
     $captcha = intval($_CFG['captcha']);
     if (($captcha & CAPTCHA_LOGIN) && (! ($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
@@ -553,28 +553,28 @@ elseif ($action == 'send_pwd_email') {
     $user_name = ! empty($_POST['user_name']) ? trim($_POST['user_name']) : '';
     $email = ! empty($_POST['email']) ? trim($_POST['email']) : '';
 
-    //用户名和邮件地址是否匹配
+    // 用户名和邮件地址是否匹配
     $user_info = $user->get_user_info($user_name);
 
     if ($user_info && $user_info['email'] == $email) {
-        //生成code
-        //$code = md5($user_info[0] . $user_info[1]);
+        // 生成code
+        // $code = md5($user_info[0] . $user_info[1]);
 
         $code = md5($user_info['user_id'].$_CFG['hash_code'].$user_info['reg_time']);
-        //发送邮件的函数
+        // 发送邮件的函数
         if (send_pwd_email($user_info['user_id'], $user_name, $email, $code)) {
             show_message($_LANG['send_success'].$email, $_LANG['back_home_lnk'], './', 'info');
         } else {
-            //发送邮件出错
+            // 发送邮件出错
             show_message($_LANG['fail_send_password'], $_LANG['back_page_up'], './', 'info');
         }
     } else {
-        //用户名与邮件地址不匹配
+        // 用户名与邮件地址不匹配
         show_message($_LANG['username_no_email'], $_LANG['back_page_up'], '', 'info');
     }
 } /* 重置新密码 */
 elseif ($action == 'reset_password') {
-    //显示重置密码的表单
+    // 显示重置密码的表单
     $smarty->display('user_passport.dwt');
 } /* 修改会员密码 */
 elseif ($action == 'act_edit_password') {
@@ -589,7 +589,7 @@ elseif ($action == 'act_edit_password') {
         show_message($_LANG['passport_js']['password_shorter']);
     }
 
-    $user_info = $user->get_profile_by_id($user_id); //论坛记录
+    $user_info = $user->get_profile_by_id($user_id); // 论坛记录
 
     if (($user_info && (! empty($code) && md5($user_info['user_id'].$_CFG['hash_code'].$user_info['reg_time']) == $code)) || ($_SESSION['user_id'] > 0 && $_SESSION['user_id'] == $user_id && $user->check_user($_SESSION['user_name'], $old_password))) {
         if ($user->edit_user(['username' => (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']), 'old_password' => $old_password, 'password' => $new_password], empty($code) ? 0 : 1)) {
@@ -709,7 +709,7 @@ elseif ($action == 'cancel_order') {
     } else {
         $err->show($_LANG['order_list_lnk'], 'user.php?act=order_list');
     }
-} /* 收货地址列表界面*/
+} /* 收货地址列表界面 */
 elseif ($action == 'address_list') {
     include_once ROOT_PATH.'includes/lib_transaction.php';
     include_once ROOT_PATH.'languages/'.$_CFG['lang'].'/shopping_flow.php';
@@ -729,7 +729,7 @@ elseif ($action == 'address_list') {
 
     $smarty->assign('consignee_list', $consignee_list);
 
-    //取得国家列表，如果有收货人列表，取得省市区列表
+    // 取得国家列表，如果有收货人列表，取得省市区列表
     foreach ($consignee_list as $region_id => $consignee) {
         $consignee['country'] = isset($consignee['country']) ? intval($consignee['country']) : 0;
         $consignee['province'] = isset($consignee['province']) ? intval($consignee['province']) : 0;
@@ -743,7 +743,7 @@ elseif ($action == 'address_list') {
     /* 获取默认收货ID */
     $address_id = $db->getOne('SELECT address_id FROM '.$ecs->table('users')." WHERE user_id='$user_id'");
 
-    //赋值于模板
+    // 赋值于模板
     $smarty->assign('real_goods_count', 1);
     $smarty->assign('shop_country', $_CFG['shop_country']);
     $smarty->assign('shop_province', get_regions(1, $_CFG['shop_country']));
@@ -1061,16 +1061,16 @@ elseif ($action == 'account_detail') {
         " AND $account_type <> 0 ";
     $record_count = $db->getOne($sql);
 
-    //分页函数
+    // 分页函数
     $pager = get_pager('user.php', ['act' => $action], $record_count, $page);
 
-    //获取剩余余额
+    // 获取剩余余额
     $surplus_amount = get_user_surplus($user_id);
     if (empty($surplus_amount)) {
         $surplus_amount = 0;
     }
 
-    //获取余额记录
+    // 获取余额记录
     $account_log = [];
     $sql = 'SELECT * FROM '.$ecs->table('account_log').
         " WHERE user_id = '$user_id'".
@@ -1089,7 +1089,7 @@ elseif ($action == 'account_detail') {
         $account_log[] = $row;
     }
 
-    //模板赋值
+    // 模板赋值
     $smarty->assign('surplus_amount', price_format($surplus_amount, false));
     $smarty->assign('account_log', $account_log);
     $smarty->assign('pager', $pager);
@@ -1106,19 +1106,19 @@ elseif ($action == 'account_log') {
         ' AND process_type '.db_create_in([SURPLUS_SAVE, SURPLUS_RETURN]);
     $record_count = $db->getOne($sql);
 
-    //分页函数
+    // 分页函数
     $pager = get_pager('user.php', ['act' => $action], $record_count, $page);
 
-    //获取剩余余额
+    // 获取剩余余额
     $surplus_amount = get_user_surplus($user_id);
     if (empty($surplus_amount)) {
         $surplus_amount = 0;
     }
 
-    //获取余额记录
+    // 获取余额记录
     $account_log = get_account_log($user_id, $pager['size'], $pager['start']);
 
-    //模板赋值
+    // 模板赋值
     $smarty->assign('surplus_amount', price_format($surplus_amount, false));
     $smarty->assign('account_log', $account_log);
     $smarty->assign('pager', $pager);
@@ -1151,7 +1151,7 @@ elseif ($action == 'act_account') {
             show_message($content, $_LANG['back_page_up'], '', 'info');
         }
 
-        //插入会员账目明细
+        // 插入会员账目明细
         $amount = '-'.$amount;
         $surplus['payment'] = '';
         $surplus['rec_id'] = insert_user_account($surplus, $amount);
@@ -1172,35 +1172,35 @@ elseif ($action == 'act_account') {
 
         include_once ROOT_PATH.'includes/lib_payment.php';
 
-        //获取支付方式名称
+        // 获取支付方式名称
         $payment_info = [];
         $payment_info = payment_info($surplus['payment_id']);
         $surplus['payment'] = $payment_info['pay_name'];
 
         if ($surplus['rec_id'] > 0) {
-            //更新会员账目明细
+            // 更新会员账目明细
             $surplus['rec_id'] = update_user_account($surplus);
         } else {
-            //插入会员账目明细
+            // 插入会员账目明细
             $surplus['rec_id'] = insert_user_account($surplus, $amount);
         }
 
-        //取得支付信息，生成支付代码
+        // 取得支付信息，生成支付代码
         $payment = unserialize_config($payment_info['pay_config']);
 
-        //生成伪订单号, 不足的时候补0
+        // 生成伪订单号, 不足的时候补0
         $order = [];
         $order['order_sn'] = $surplus['rec_id'];
         $order['user_name'] = $_SESSION['user_name'];
         $order['surplus_amount'] = $amount;
 
-        //计算支付手续费用
+        // 计算支付手续费用
         $payment_info['pay_fee'] = pay_fee($surplus['payment_id'], $order['surplus_amount'], 0);
 
-        //计算此次预付款需要支付的总金额
+        // 计算此次预付款需要支付的总金额
         $order['order_amount'] = $amount + $payment_info['pay_fee'];
 
-        //记录支付log
+        // 记录支付log
         $order['log_id'] = insert_pay_log($surplus['rec_id'], $order['order_amount'], $type = PAY_SURPLUS, 0);
 
         /* 调用相应的支付方式文件 */
@@ -1238,7 +1238,7 @@ elseif ($action == 'pay') {
     include_once ROOT_PATH.'includes/lib_payment.php';
     include_once ROOT_PATH.'includes/lib_order.php';
 
-    //变量初始化
+    // 变量初始化
     $surplus_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $payment_id = isset($_GET['pid']) ? intval($_GET['pid']) : 0;
 
@@ -1247,41 +1247,41 @@ elseif ($action == 'pay') {
         exit;
     }
 
-    //如果原来的支付方式已禁用或者已删除, 重新选择支付方式
+    // 如果原来的支付方式已禁用或者已删除, 重新选择支付方式
     if ($payment_id == 0) {
         ecs_header('Location: user.php?act=account_deposit&id='.$surplus_id."\n");
         exit;
     }
 
-    //获取单条会员帐目信息
+    // 获取单条会员帐目信息
     $order = [];
     $order = get_surplus_info($surplus_id);
 
-    //支付方式的信息
+    // 支付方式的信息
     $payment_info = [];
     $payment_info = payment_info($payment_id);
 
     /* 如果当前支付方式没有被禁用，进行支付的操作 */
     if (! empty($payment_info)) {
-        //取得支付信息，生成支付代码
+        // 取得支付信息，生成支付代码
         $payment = unserialize_config($payment_info['pay_config']);
 
-        //生成伪订单号
+        // 生成伪订单号
         $order['order_sn'] = $surplus_id;
 
-        //获取需要支付的log_id
+        // 获取需要支付的log_id
         $order['log_id'] = get_paylog_id($surplus_id, $pay_type = PAY_SURPLUS);
 
         $order['user_name'] = $_SESSION['user_name'];
         $order['surplus_amount'] = $order['amount'];
 
-        //计算支付手续费用
+        // 计算支付手续费用
         $payment_info['pay_fee'] = pay_fee($payment_id, $order['surplus_amount'], 0);
 
-        //计算此次预付款需要支付的总金额
+        // 计算此次预付款需要支付的总金额
         $order['order_amount'] = $order['surplus_amount'] + $payment_info['pay_fee'];
 
-        //如果支付费用改变了，也要相应的更改pay_log表的order_amount
+        // 如果支付费用改变了，也要相应的更改pay_log表的order_amount
         $order_amount = $db->getOne('SELECT order_amount FROM '.$ecs->table('pay_log')." WHERE log_id = '$order[log_id]'");
         if ($order_amount != $order['order_amount']) {
             $db->query('UPDATE '.$ecs->table('pay_log').
@@ -1603,7 +1603,7 @@ elseif ($action == 'act_edit_payment') {
         exit;
     }
 
-    /* 检查订单是否未付款和未发货 以及订单金额是否为0 和支付id是否为改变*/
+    /* 检查订单是否未付款和未发货 以及订单金额是否为0 和支付id是否为改变 */
     if ($order['pay_status'] != PS_UNPAYED || $order['shipping_status'] != SS_UNSHIPPED || $order['goods_amount'] <= 0 || $order['pay_id'] == $pay_id) {
         ecs_header("Location: user.php?act=order_detail&order_id=$order_id\n");
         exit;
@@ -1659,19 +1659,19 @@ elseif ($action == 'bonus') {
 elseif ($action == 'group_buy') {
     include_once ROOT_PATH.'includes/lib_transaction.php';
 
-    //待议
+    // 待议
     $smarty->display('user_transaction.dwt');
 } /* 团购订单详情 */
 elseif ($action == 'group_buy_detail') {
     include_once ROOT_PATH.'includes/lib_transaction.php';
 
-    //待议
+    // 待议
     $smarty->display('user_transaction.dwt');
 } // 用户推荐页面
 elseif ($action == 'affiliate') {
     $goodsid = intval(isset($_REQUEST['goodsid']) ? $_REQUEST['goodsid'] : 0);
     if (empty($goodsid)) {
-        //我的推荐页面
+        // 我的推荐页面
 
         $page = ! empty($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
         $size = ! empty($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
@@ -1679,7 +1679,7 @@ elseif ($action == 'affiliate') {
         empty($affiliate) && $affiliate = [];
 
         if (empty($affiliate['config']['separate_by'])) {
-            //推荐注册分成
+            // 推荐注册分成
             $affdb = [];
             $num = count($affiliate['item']);
             $up_uid = "'$user_id'";
@@ -1731,7 +1731,7 @@ elseif ($action == 'affiliate') {
 
             $affiliate_intro = nl2br(sprintf($_LANG['affiliate_intro'][$affiliate['config']['separate_by']], $affiliate['config']['expire'], $_LANG['expire_unit'][$affiliate['config']['expire_unit']], $affiliate['config']['level_register_all'], $affiliate['config']['level_register_up'], $affiliate['config']['level_money_all'], $affiliate['config']['level_point_all']));
         } else {
-            //推荐订单分成
+            // 推荐订单分成
             $sqlcount = 'SELECT count(*) FROM '.$ecs->table('order_info').' o'.
                 ' LEFT JOIN'.$ecs->table('users').' u ON o.user_id = u.user_id'.
                 ' LEFT JOIN '.$ecs->table('affiliate_log').' a ON o.order_id = a.order_id'.
@@ -1770,9 +1770,9 @@ elseif ($action == 'affiliate') {
         $logdb = [];
         while ($rt = $GLOBALS['db']->fetchRow($res)) {
             if (! empty($rt['suid'])) {
-                //在affiliate_log有记录
+                // 在affiliate_log有记录
                 if ($rt['separate_type'] == -1 || $rt['separate_type'] == -2) {
-                    //已被撤销
+                    // 已被撤销
                     $rt['is_separate'] = 3;
                 }
             }
@@ -1807,7 +1807,7 @@ elseif ($action == 'affiliate') {
 
         $smarty->assign('logdb', $logdb);
     } else {
-        //单个商品推荐
+        // 单个商品推荐
         $smarty->assign('userid', $user_id);
         $smarty->assign('goodsid', $goodsid);
 
@@ -1829,7 +1829,7 @@ elseif ($action == 'affiliate') {
     $smarty->assign('logosrc', 'themes/'.$_CFG['template'].'/images/logo.gif');
 
     $smarty->display('user_clips.dwt');
-} //首页邮件订阅ajax操做和验证操作
+} // 首页邮件订阅ajax操做和验证操作
 elseif ($action == 'email_list') {
     $job = $_GET['job'];
 
@@ -2115,7 +2115,7 @@ elseif ($action == 'send_hash_mail') {
         show_message($_LANG['invalid_points'], $_LANG['transform_points'], 'user.php?act=transform_points');
     }
 
-    $num = floor($num); //格式化为整数
+    $num = floor($num); // 格式化为整数
 
     $bbs_key = substr($rule_index, 1);
     $rule_key = substr($rule_index, 0, 1);
@@ -2157,29 +2157,29 @@ elseif ($action == 'send_hash_mail') {
     switch ($rule_key) {
         case TO_P:
             $result_points = floor($num * $to / $from);
-            $user->set_points($row['user_name'], [$bbs_key => 0 - $num]); //调整论坛积分
+            $user->set_points($row['user_name'], [$bbs_key => 0 - $num]); // 调整论坛积分
             log_account_change($row['user_id'], 0, 0, 0, $result_points, $_LANG['transform_points'], ACT_OTHER);
             show_message(sprintf($_LANG['to_pay_points'], $num, $points_name[$bbs_key]['title'], $result_points), $_LANG['transform_points'], 'user.php?act=transform_points');
 
             // no break
         case TO_R:
             $result_points = floor($num * $to / $from);
-            $user->set_points($row['user_name'], [$bbs_key => 0 - $num]); //调整论坛积分
+            $user->set_points($row['user_name'], [$bbs_key => 0 - $num]); // 调整论坛积分
             log_account_change($row['user_id'], 0, 0, $result_points, 0, $_LANG['transform_points'], ACT_OTHER);
             show_message(sprintf($_LANG['to_rank_points'], $num, $points_name[$bbs_key]['title'], $result_points), $_LANG['transform_points'], 'user.php?act=transform_points');
 
             // no break
         case FROM_P:
             $result_points = floor($num * $to / $from);
-            log_account_change($row['user_id'], 0, 0, 0, 0 - $num, $_LANG['transform_points'], ACT_OTHER); //调整商城积分
-            $user->set_points($row['user_name'], [$bbs_key => $result_points]); //调整论坛积分
+            log_account_change($row['user_id'], 0, 0, 0, 0 - $num, $_LANG['transform_points'], ACT_OTHER); // 调整商城积分
+            $user->set_points($row['user_name'], [$bbs_key => $result_points]); // 调整论坛积分
             show_message(sprintf($_LANG['from_pay_points'], $num, $result_points, $points_name[$bbs_key]['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
 
             // no break
         case FROM_R:
             $result_points = floor($num * $to / $from);
-            log_account_change($row['user_id'], 0, 0, 0 - $num, 0, $_LANG['transform_points'], ACT_OTHER); //调整商城积分
-            $user->set_points($row['user_name'], [$bbs_key => $result_points]); //调整论坛积分
+            log_account_change($row['user_id'], 0, 0, 0 - $num, 0, $_LANG['transform_points'], ACT_OTHER); // 调整商城积分
+            $user->set_points($row['user_name'], [$bbs_key => $result_points]); // 调整论坛积分
             show_message(sprintf($_LANG['from_rank_points'], $num, $result_points, $points_name[$bbs_key]['title']), $_LANG['transform_points'], 'user.php?act=transform_points');
     }
 } elseif ($action == 'act_transform_ucenter_points') {

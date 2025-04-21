@@ -164,7 +164,7 @@ class shopex48
         /* 清空分类、商品类型、属性 */
         truncate_table('category');
         truncate_table('goods_type');
-        //truncate_table('attribute');
+        // truncate_table('attribute');
 
         /* 查询分类并循环处理 */
         $sql = 'SELECT * FROM '.$this->sprefix.'goods_cat';
@@ -178,7 +178,7 @@ class shopex48
 
             /* 插入分类 */
             if (! $db->autoExecute($ecs->table('category'), $cat, 'INSERT', '', 'SILENT')) {
-                //return $db->error();
+                // return $db->error();
             }
         }
 
@@ -191,7 +191,7 @@ class shopex48
             $type['cat_name'] = $row['name'];
             $type['enabled'] = '1';
             if (! $db->autoExecute($ecs->table('goods_type'), $type, 'INSERT', '', 'SILENT')) {
-                //return $db->error();
+                // return $db->error();
             }
         }
 
@@ -233,7 +233,7 @@ class shopex48
                 'brand_logo' => $brand_url,
             ];
             if (! $db->autoExecute($ecs->table('brand'), $brand, 'INSERT', '', 'SILENT')) {
-                //return $db->error();
+                // return $db->error();
             }
         }
 
@@ -294,16 +294,16 @@ class shopex48
             $goods['promote_price'] = $row['name'];
             $goods['goods_brief'] = $row['brief'];
             $goods['goods_desc'] = $row['intro'];
-            //$goods['is_on_sale']    = $row['shop_iffb'];
-            //$goods['is_alone_sale'] = $row['onsale'];
+            // $goods['is_on_sale']    = $row['shop_iffb'];
+            // $goods['is_alone_sale'] = $row['onsale'];
             $goods['add_time'] = $row['uptime'];
-            //$goods['sort_order']    = $row['offer_ord'];
-            //$goods['is_delete']     = '0';
-            //$goods['is_best']       = $row['recommand2'];
-            //$goods['is_new']        = $row['new2'];
-            //$goods['is_hot']        = $row['hot2'];
-            //$goods['is_promote']    = $row['tejia2'];
-            //$goods['goods_type']    = isset($cat_type_list[$row['cat_id']]) ? $cat_type_list[$row['cat_id']] : 0;
+            // $goods['sort_order']    = $row['offer_ord'];
+            // $goods['is_delete']     = '0';
+            // $goods['is_best']       = $row['recommand2'];
+            // $goods['is_new']        = $row['new2'];
+            // $goods['is_hot']        = $row['hot2'];
+            // $goods['is_promote']    = $row['tejia2'];
+            // $goods['goods_type']    = isset($cat_type_list[$row['cat_id']]) ? $cat_type_list[$row['cat_id']] : 0;
             $big_pic = $row['big_pic'];
             $big_pic_arr = explode('|', $big_pic);
             $small_pic = $row['small_pic'];
@@ -315,7 +315,7 @@ class shopex48
 
             /* 插入 */
             if (! $db->autoExecute($ecs->table('goods'), $goods, 'INSERT', '', 'SILENT')) {
-                //return $db->error();
+                // return $db->error();
             }
 
             /* 商品相册 */
@@ -331,10 +331,10 @@ class shopex48
                 $small_pic_arr = explode('|', $small_pic);
                 $goods_gallery['thumb_url'] = $small_pic_arr[0];
                 $goods_gallery['img_url'] = $goods_gallery['thumb_url'];
-                //$goods['original_img']  = $big_pic;
+                // $goods['original_img']  = $big_pic;
 
                 if (! $db->autoExecute($ecs->table('goods_gallery'), $goods_gallery, 'INSERT', '', 'SILENT')) {
-                    //return $db->error();
+                    // return $db->error();
                 }
             }
         }
@@ -373,7 +373,7 @@ class shopex48
             $user_rank['special_rank'] = '0';
 
             if (! $db->autoExecute($ecs->table('user_rank'), $user_rank, 'INSERT', '', 'SILENT')) {
-                //return $db->error();
+                // return $db->error();
             }
 
             $max_points = $row['point'] - 1;
@@ -407,9 +407,9 @@ class shopex48
             $user['user_rank'] = '0';
 
             if (! $db->autoExecute($ecs->table('users'), $user, 'INSERT', '', 'SILENT')) {
-                //return $db->error();
+                // return $db->error();
             }
-            //uc_call('uc_user_register', array($user['user_name'], $user['password'], $user['email']));
+            // uc_call('uc_user_register', array($user['user_name'], $user['password'], $user['email']));
         }
 
         /* 收货人地址 */
@@ -421,7 +421,7 @@ class shopex48
             $address['address_name'] = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['name']));
             $address['user_id'] = $row['member_id'];
             $address['consignee'] = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['name']));
-            //$address['email']           = $row['email'];
+            // $address['email']           = $row['email'];
             $address['address'] = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['addr']));
             $address['zipcode'] = $row['zip'];
             $address['tel'] = $row['tel'];
@@ -431,7 +431,7 @@ class shopex48
             $address['city'] = $row['city'];
 
             if (! $db->autoExecute($ecs->table('user_address'), $address, 'INSERT', '', 'SILENT')) {
-                //return $db->error();
+                // return $db->error();
             }
         }
 
@@ -449,7 +449,7 @@ class shopex48
                 $member_price['user_price'] = $row['price'];
 
                 if (! $db->autoExecute($ecs->table('member_price'), $member_price, 'INSERT', '', 'SILENT')) {
-                    //return $db->error();
+                    // return $db->error();
                 }
             }
         }
@@ -471,7 +471,7 @@ class shopex48
             $user_account['is_paid'] = '1';
 
             if (! $db->autoExecute($ecs->table('user_account'), $user_account, 'INSERT', '', 'SILENT')) {
-                //return $db->error();
+                // return $db->error();
             }
         }
 
@@ -487,8 +487,8 @@ class shopex48
         global $db, $ecs;
 
         /* 清空文章类型、文章、友情链接 */
-        //truncate_table('article_cat');
-        //truncate_table('article');
+        // truncate_table('article_cat');
+        // truncate_table('article');
         truncate_table('friend_link');
 
         /* 文章 */
@@ -506,7 +506,7 @@ class shopex48
             $article['add_time'] = $row['uptime'];
 
             if (! $db->autoExecute($ecs->table('article'), $article, 'INSERT', '', 'SILENT')) {
-                //return $db->error();
+                // return $db->error();
             }
         }
 
@@ -524,7 +524,7 @@ class shopex48
             $logourl = explode('/', $logoarr[0], 3);
             $link['link_logo'] = 'data/afficheimg/'.$logourl[2];
             if (! $db->autoExecute($ecs->table('friend_link'), $link, 'INSERT', '', 'SILENT')) {
-                //return $db->error();
+                // return $db->error();
             }
         }
 
@@ -602,7 +602,7 @@ class shopex48
             }
 
             if (! $db->autoExecute($ecs->table('order_info'), $order, 'INSERT', '', 'SILENT')) {
-                //return $db->error();
+                // return $db->error();
             }
 
             /* 订单商品 */
@@ -625,28 +625,28 @@ class shopex48
         $store = $row['store'];
         $store_arr = unserialize($store);
         $config = [];
-        //$config['shop_name']        = ecs_iconv($this->scharset, $this->tcharset, addslashes($store_arr[0]);
-        //$config['shop_title']       = ecs_iconv($this->scharset, $this->tcharset, addslashes($store_arr[0]));
-        //$config['shop_desc']        = ecs_iconv($this->scharset, $this->tcharset, addslashes($store_arr[1]));
-        //$config['shop_address']     = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['store']));
+        // $config['shop_name']        = ecs_iconv($this->scharset, $this->tcharset, addslashes($store_arr[0]);
+        // $config['shop_title']       = ecs_iconv($this->scharset, $this->tcharset, addslashes($store_arr[0]));
+        // $config['shop_desc']        = ecs_iconv($this->scharset, $this->tcharset, addslashes($store_arr[1]));
+        // $config['shop_address']     = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['store']));
         $config['shop_address'] = $row['store'];
-        //$config['service_email']    = $row['offer_email'];
+        // $config['service_email']    = $row['offer_email'];
         $config['service_phone'] = $store_arr[2];
-        //$config['icp_number']       = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['offer_certtext']));
-        //$config['integral_scale']   = $row['offer_pointtype'] == '0' ? '0' : $row['offer_pointnum'] * 100;
-        //$config['thumb_width']      = $row['offer_smallsize_w'];
-        //$config['thumb_height']     = $row['offer_smallsize_h'];
-        //$config['image_width']      = $row['offer_bigsize_w'];
-        //$config['image_height']     = $row['offer_bigsize_h'];
-        //$config['promote_number']   = $row['offer_tejianums'];
-        //$config['best_number']      = $row['offer_tjnums'];
-        //$config['new_number']       = $row['offer_newgoodsnums'];
-        //$config['hot_number']       = $row['offer_hotnums'];
-        //$config['smtp_host']        = $row['offer_smtp_server'];
-        //$config['smtp_port']        = $row['offer_smtp_port'];
-        //$config['smtp_user']        = $row['offer_smtp_user'];
-        //$config['smtp_pass']        = $row['offer_smtp_password'];
-        //$config['smtp_mail']        = $row['offer_smtp_email'];
+        // $config['icp_number']       = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['offer_certtext']));
+        // $config['integral_scale']   = $row['offer_pointtype'] == '0' ? '0' : $row['offer_pointnum'] * 100;
+        // $config['thumb_width']      = $row['offer_smallsize_w'];
+        // $config['thumb_height']     = $row['offer_smallsize_h'];
+        // $config['image_width']      = $row['offer_bigsize_w'];
+        // $config['image_height']     = $row['offer_bigsize_h'];
+        // $config['promote_number']   = $row['offer_tejianums'];
+        // $config['best_number']      = $row['offer_tjnums'];
+        // $config['new_number']       = $row['offer_newgoodsnums'];
+        // $config['hot_number']       = $row['offer_hotnums'];
+        // $config['smtp_host']        = $row['offer_smtp_server'];
+        // $config['smtp_port']        = $row['offer_smtp_port'];
+        // $config['smtp_user']        = $row['offer_smtp_user'];
+        // $config['smtp_pass']        = $row['offer_smtp_password'];
+        // $config['smtp_mail']        = $row['offer_smtp_email'];
 
         /* 更新 */
         foreach ($config as $code => $value) {
@@ -654,7 +654,7 @@ class shopex48
                 "value = '$value' ".
                 "WHERE code = '$code' LIMIT 1";
             if (! $db->query($sql, 'SILENT')) {
-                //return $db->error();
+                // return $db->error();
             }
         }
 

@@ -162,16 +162,16 @@ define('ACT_ADJUSTING', 2);     // 调节帐户
 define('ACT_OTHER', 99);     // 其他类型
 
 /* 密码加密方法 */
-define('PWD_MD5', 1);  //md5加密方式
-define('PWD_PRE_SALT', 2);  //前置验证串的加密方式
-define('PWD_SUF_SALT', 3);  //后置验证串的加密方式
+define('PWD_MD5', 1);  // md5加密方式
+define('PWD_PRE_SALT', 2);  // 前置验证串的加密方式
+define('PWD_SUF_SALT', 3);  // 后置验证串的加密方式
 
 /* 文章分类类型 */
-define('COMMON_CAT', 1); //普通分类
-define('SYSTEM_CAT', 2); //系统默认分类
-define('INFO_CAT', 3); //网店信息分类
-define('UPHELP_CAT', 4); //网店帮助分类分类
-define('HELP_CAT', 5); //网店帮助分类
+define('COMMON_CAT', 1); // 普通分类
+define('SYSTEM_CAT', 2); // 系统默认分类
+define('INFO_CAT', 3); // 网店信息分类
+define('UPHELP_CAT', 4); // 网店帮助分类分类
+define('HELP_CAT', 5); // 网店帮助分类
 
 /* 活动状态 */
 define('PRE_START', 0); // 未开始
@@ -180,12 +180,12 @@ define('FINISHED', 2); // 已结束
 define('SETTLED', 3); // 已处理
 
 /* 验证码 */
-define('CAPTCHA_REGISTER', 1); //注册时使用验证码
-define('CAPTCHA_LOGIN', 2); //登录时使用验证码
-define('CAPTCHA_COMMENT', 4); //评论时使用验证码
-define('CAPTCHA_ADMIN', 8); //后台登录时使用验证码
-define('CAPTCHA_LOGIN_FAIL', 16); //登录失败后显示验证码
-define('CAPTCHA_MESSAGE', 32); //留言时使用验证码
+define('CAPTCHA_REGISTER', 1); // 注册时使用验证码
+define('CAPTCHA_LOGIN', 2); // 登录时使用验证码
+define('CAPTCHA_COMMENT', 4); // 评论时使用验证码
+define('CAPTCHA_ADMIN', 8); // 后台登录时使用验证码
+define('CAPTCHA_LOGIN_FAIL', 16); // 登录失败后显示验证码
+define('CAPTCHA_MESSAGE', 32); // 留言时使用验证码
 
 /* 优惠活动的优惠范围 */
 define('FAR_ALL', 0); // 全部商品
@@ -199,31 +199,31 @@ define('FAT_PRICE', 1); // 现金减免
 define('FAT_DISCOUNT', 2); // 价格打折优惠
 
 /* 评论条件 */
-define('COMMENT_LOGIN', 1); //只有登录用户可以评论
-define('COMMENT_CUSTOM', 2); //只有有过一次以上购买行为的用户可以评论
-define('COMMENT_BOUGHT', 3); //只有购买够该商品的人可以评论
+define('COMMENT_LOGIN', 1); // 只有登录用户可以评论
+define('COMMENT_CUSTOM', 2); // 只有有过一次以上购买行为的用户可以评论
+define('COMMENT_BOUGHT', 3); // 只有购买够该商品的人可以评论
 
 /* 减库存时机 */
 define('SDT_SHIP', 0); // 发货时
 define('SDT_PLACE', 1); // 下订单时
 
 /* 加密方式 */
-define('ENCRYPT_ZC', 1); //zc加密方式
-define('ENCRYPT_UC', 2); //uc加密方式
+define('ENCRYPT_ZC', 1); // zc加密方式
+define('ENCRYPT_UC', 2); // uc加密方式
 
 /* 商品类别 */
-define('G_REAL', 1); //实体商品
-define('G_CARD', 0); //虚拟卡
+define('G_REAL', 1); // 实体商品
+define('G_CARD', 0); // 虚拟卡
 
 /* 积分兑换 */
-define('TO_P', 0); //兑换到商城消费积分
-define('FROM_P', 1); //用商城消费积分兑换
-define('TO_R', 2); //兑换到商城等级积分
-define('FROM_R', 3); //用商城等级积分兑换
+define('TO_P', 0); // 兑换到商城消费积分
+define('FROM_P', 1); // 用商城消费积分兑换
+define('TO_R', 2); // 兑换到商城等级积分
+define('FROM_R', 3); // 用商城等级积分兑换
 
-/* 添加feed事件到UC的TYPE*/
-define('BUY_GOODS', 1); //购买商品
-define('COMMENT_GOODS', 2); //添加商品评论
+/* 添加feed事件到UC的TYPE */
+define('BUY_GOODS', 1); // 购买商品
+define('COMMENT_GOODS', 2); // 添加商品评论
 
 /* 邮件发送用户 */
 define('SEND_LIST', 0);

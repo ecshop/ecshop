@@ -50,7 +50,7 @@ require ROOT_PATH.'includes/lib_insert.php';
 require ROOT_PATH.'includes/lib_goods.php';
 require ROOT_PATH.'includes/lib_article.php';
 
-/* 对用户传入的变量进行转义操作。*/
+/* 对用户传入的变量进行转义操作。 */
 if (! empty($_GET)) {
     $_GET = addslashes_deep($_GET);
 }
@@ -120,7 +120,7 @@ if (! defined('INIT_NO_SMARTY')) {
     header('Cache-control: private');
     header('Content-type: text/html; charset='.EC_CHARSET);
 
-    /* 创建 Smarty 对象。*/
+    /* 创建 Smarty 对象。 */
     require ROOT_PATH.'includes/cls_template.php';
     $smarty = new cls_template;
 

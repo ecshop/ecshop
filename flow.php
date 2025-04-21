@@ -9,17 +9,17 @@ require ROOT_PATH.'includes/lib_order.php';
 require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/user.php';
 require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/shopping_flow.php';
 
-/*------------------------------------------------------ */
-//-- INPUT
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- INPUT
+/* ------------------------------------------------------ */
 
 if (! isset($_REQUEST['step'])) {
     $_REQUEST['step'] = 'cart';
 }
 
-/*------------------------------------------------------ */
-//-- PROCESSOR
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- PROCESSOR
+/* ------------------------------------------------------ */
 
 assign_template();
 assign_dynamic('flow');
@@ -33,9 +33,9 @@ $smarty->assign('lang', $_LANG);
 $smarty->assign('show_marketprice', $_CFG['show_marketprice']);
 $smarty->assign('data_dir', DATA_DIR);       // 数据目录
 
-/*------------------------------------------------------ */
-//-- 添加商品到购物车
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 添加商品到购物车
+/* ------------------------------------------------------ */
 if ($_REQUEST['step'] == 'add_to_cart') {
     include_once 'includes/cls_json.php';
     $_POST['goods'] = strip_tags(urldecode($_POST['goods']));
@@ -195,8 +195,8 @@ if ($_REQUEST['step'] == 'add_to_cart') {
 
             $_POST['password'] = isset($_POST['password']) ? trim($_POST['password']) : '';
             if ($user->login($_POST['username'], $_POST['password'], isset($_POST['remember']))) {
-                update_cart_offline(); //离线购物车绑定会员id
-                update_user_info();  //更新用户信息
+                update_cart_offline(); // 离线购物车绑定会员id
+                update_user_info();  // 更新用户信息
                 recalculate_price(); // 重新计算购物车中的商品价格
 
                 /* 检查购物车中是否有商品 没有商品则跳转到首页 */
@@ -239,9 +239,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
         }
     }
 } elseif ($_REQUEST['step'] == 'consignee') {
-    /*------------------------------------------------------ */
-    //-- 收货人信息
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 收货人信息
+    /* ------------------------------------------------------ */
     include_once 'includes/lib_transaction.php';
 
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -334,9 +334,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
         exit;
     }
 } elseif ($_REQUEST['step'] == 'drop_consignee') {
-    /*------------------------------------------------------ */
-    //-- 删除收货人信息
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 删除收货人信息
+    /* ------------------------------------------------------ */
     include_once 'includes/lib_transaction.php';
 
     $consignee_id = intval($_GET['id']);
@@ -348,9 +348,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
         show_message($_LANG['not_fount_consignee']);
     }
 } elseif ($_REQUEST['step'] == 'checkout') {
-    /*------------------------------------------------------ */
-    //-- 订单确认
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 订单确认
+    /* ------------------------------------------------------ */
 
     /* 取得购物类型 */
     $flow_type = isset($_SESSION['flow_type']) ? intval($_SESSION['flow_type']) : CART_GENERAL_GOODS;
@@ -362,7 +362,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     elseif ($flow_type == CART_EXCHANGE_GOODS) {
         $smarty->assign('is_exchange_goods', 1);
     } else {
-        //正常购物流程  清空其他购物流程情况
+        // 正常购物流程  清空其他购物流程情况
         $_SESSION['flow_order']['extension_code'] = '';
     }
 
@@ -620,9 +620,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     /* 保存 session */
     $_SESSION['flow_order'] = $order;
 } elseif ($_REQUEST['step'] == 'select_shipping') {
-    /*------------------------------------------------------ */
-    //-- 改变配送方式
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 改变配送方式
+    /* ------------------------------------------------------ */
     include_once 'includes/cls_json.php';
     $json = new JSON;
     $result = ['error' => '', 'content' => '', 'need_insure' => 0];
@@ -673,9 +673,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     echo $json->encode($result);
     exit;
 } elseif ($_REQUEST['step'] == 'select_insure') {
-    /*------------------------------------------------------ */
-    //-- 选定/取消配送的保价
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 选定/取消配送的保价
+    /* ------------------------------------------------------ */
 
     include_once 'includes/cls_json.php';
     $json = new JSON;
@@ -723,9 +723,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     echo $json->encode($result);
     exit;
 } elseif ($_REQUEST['step'] == 'select_payment') {
-    /*------------------------------------------------------ */
-    //-- 改变支付方式
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 改变支付方式
+    /* ------------------------------------------------------ */
 
     include_once 'includes/cls_json.php';
     $json = new JSON;
@@ -775,9 +775,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     echo $json->encode($result);
     exit;
 } elseif ($_REQUEST['step'] == 'select_pack') {
-    /*------------------------------------------------------ */
-    //-- 改变商品包装
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 改变商品包装
+    /* ------------------------------------------------------ */
 
     include_once 'includes/cls_json.php';
     $json = new JSON;
@@ -825,9 +825,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     echo $json->encode($result);
     exit;
 } elseif ($_REQUEST['step'] == 'select_card') {
-    /*------------------------------------------------------ */
-    //-- 改变贺卡
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 改变贺卡
+    /* ------------------------------------------------------ */
 
     include_once 'includes/cls_json.php';
     $json = new JSON;
@@ -875,9 +875,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     echo $json->encode($result);
     exit;
 } elseif ($_REQUEST['step'] == 'change_surplus') {
-    /*------------------------------------------------------ */
-    //-- 改变余额
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 改变余额
+    /* ------------------------------------------------------ */
     include_once 'includes/cls_json.php';
 
     $surplus = floatval($_GET['surplus']);
@@ -921,9 +921,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     $json = new JSON;
     exit($json->encode($result));
 } elseif ($_REQUEST['step'] == 'change_integral') {
-    /*------------------------------------------------------ */
-    //-- 改变积分
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 改变积分
+    /* ------------------------------------------------------ */
     include_once 'includes/cls_json.php';
 
     $points = floatval($_GET['points']);
@@ -972,9 +972,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     $json = new JSON;
     exit($json->encode($result));
 } elseif ($_REQUEST['step'] == 'change_bonus') {
-    /*------------------------------------------------------ */
-    //-- 改变红包
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 改变红包
+    /* ------------------------------------------------------ */
     include_once 'includes/cls_json.php';
     $result = ['error' => '', 'content' => ''];
 
@@ -1020,9 +1020,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     $json = new JSON;
     exit($json->encode($result));
 } elseif ($_REQUEST['step'] == 'change_needinv') {
-    /*------------------------------------------------------ */
-    //-- 改变发票的设置
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 改变发票的设置
+    /* ------------------------------------------------------ */
     include_once 'includes/cls_json.php';
     $result = ['error' => '', 'content' => ''];
     $json = new JSON;
@@ -1073,9 +1073,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
         exit($smarty->fetch('library/order_total.lbi'));
     }
 } elseif ($_REQUEST['step'] == 'change_oos') {
-    /*------------------------------------------------------ */
-    //-- 改变缺货处理时的方式
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 改变缺货处理时的方式
+    /* ------------------------------------------------------ */
 
     /* 取得订单信息 */
     $order = flow_order_info();
@@ -1085,9 +1085,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     /* 保存 session */
     $_SESSION['flow_order'] = $order;
 } elseif ($_REQUEST['step'] == 'check_surplus') {
-    /*------------------------------------------------------ */
-    //-- 检查用户输入的余额
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 检查用户输入的余额
+    /* ------------------------------------------------------ */
     $surplus = floatval($_GET['surplus']);
     $user_info = user_info($_SESSION['user_id']);
 
@@ -1097,9 +1097,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
 
     exit;
 } elseif ($_REQUEST['step'] == 'check_integral') {
-    /*------------------------------------------------------ */
-    //-- 检查用户输入的余额
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 检查用户输入的余额
+    /* ------------------------------------------------------ */
     $points = floatval($_GET['integral']);
     $user_info = user_info($_SESSION['user_id']);
     $flow_points = flow_available_points();  // 该订单允许使用的积分
@@ -1115,9 +1115,9 @@ if ($_REQUEST['step'] == 'add_to_cart') {
 
     exit;
 }
-/*------------------------------------------------------ */
-//-- 完成所有订单操作，提交到数据库
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 完成所有订单操作，提交到数据库
+/* ------------------------------------------------------ */
 elseif ($_REQUEST['step'] == 'done') {
     include_once 'includes/lib_clips.php';
     include_once 'includes/lib_payment.php';
@@ -1335,7 +1335,7 @@ elseif ($_REQUEST['step'] == 'done') {
 
     /* 如果全部使用余额支付，检查余额是否足够 */
     if ($payment['pay_code'] == 'balance' && $order['order_amount'] > 0) {
-        if ($order['surplus'] > 0) { //余额支付里如果输入了一个金额
+        if ($order['surplus'] > 0) { // 余额支付里如果输入了一个金额
             $order['order_amount'] = $order['order_amount'] + $order['surplus'];
             $order['surplus'] = 0;
         }
@@ -1375,16 +1375,16 @@ elseif ($_REQUEST['step'] == 'done') {
 
     $affiliate = unserialize($_CFG['affiliate']);
     if (isset($affiliate['on']) && $affiliate['on'] == 1 && $affiliate['config']['separate_by'] == 1) {
-        //推荐订单分成
+        // 推荐订单分成
         $parent_id = get_affiliate();
         if ($user_id == $parent_id) {
             $parent_id = 0;
         }
     } elseif (isset($affiliate['on']) && $affiliate['on'] == 1 && $affiliate['config']['separate_by'] == 0) {
-        //推荐注册分成
+        // 推荐注册分成
         $parent_id = 0;
     } else {
-        //分成功能关闭
+        // 分成功能关闭
         $parent_id = 0;
     }
     $order['parent_id'] = $parent_id;
@@ -1392,7 +1392,7 @@ elseif ($_REQUEST['step'] == 'done') {
     /* 插入订单表 */
     $error_no = 0;
     do {
-        $order['order_sn'] = get_order_sn(); //获取新订单号
+        $order['order_sn'] = get_order_sn(); // 获取新订单号
         $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('order_info'), $order, 'INSERT');
 
         $error_no = $GLOBALS['db']->errno();
@@ -1400,7 +1400,7 @@ elseif ($_REQUEST['step'] == 'done') {
         if ($error_no > 0 && $error_no != 1062) {
             exit($GLOBALS['db']->errorMsg());
         }
-    } while ($error_no == 1062); //如果是订单号重复则重新提交数据
+    } while ($error_no == 1062); // 如果是订单号重复则重新提交数据
 
     $new_order_id = $db->insert_id();
     $order['order_id'] = $new_order_id;
@@ -1533,15 +1533,15 @@ elseif ($_REQUEST['step'] == 'done') {
     $smarty->assign('goods_list', $cart_goods);
     $smarty->assign('order_submit_back', sprintf($_LANG['order_submit_back'], $_LANG['back_home'], $_LANG['goto_user_center'])); // 返回提示
 
-    user_uc_call('add_feed', [$order['order_id'], BUY_GOODS]); //推送feed到uc
+    user_uc_call('add_feed', [$order['order_id'], BUY_GOODS]); // 推送feed到uc
     unset($_SESSION['flow_consignee']); // 清除session中保存的收货人信息
     unset($_SESSION['flow_order']);
     unset($_SESSION['direct_shopping']);
 }
 
-/*------------------------------------------------------ */
-//-- 更新购物车
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 更新购物车
+/* ------------------------------------------------------ */
 
 elseif ($_REQUEST['step'] == 'update_cart') {
     if (isset($_POST['goods_number']) && is_array($_POST['goods_number'])) {
@@ -1552,9 +1552,9 @@ elseif ($_REQUEST['step'] == 'update_cart') {
     exit;
 }
 
-/*------------------------------------------------------ */
-//-- 删除购物车中的商品
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 删除购物车中的商品
+/* ------------------------------------------------------ */
 
 elseif ($_REQUEST['step'] == 'drop_goods') {
     $rec_id = intval($_GET['id']);
@@ -1693,7 +1693,7 @@ elseif ($_REQUEST['step'] == 'validate_bonus') {
         $order = flow_order_info();
 
         if (((! empty($bonus) && $bonus['user_id'] == $_SESSION['user_id']) || ($bonus['type_money'] > 0 && empty($bonus['user_id']))) && $bonus['order_id'] <= 0) {
-            //$order['bonus_kill'] = $bonus['type_money'];
+            // $order['bonus_kill'] = $bonus['type_money'];
             $now = gmtime();
             if ($now > $bonus['use_end_date']) {
                 $order['bonus_id'] = '';
@@ -1703,7 +1703,7 @@ elseif ($_REQUEST['step'] == 'validate_bonus') {
                 $order['bonus_sn'] = $bonus_sn;
             }
         } else {
-            //$order['bonus_kill'] = 0;
+            // $order['bonus_kill'] = 0;
             $order['bonus_id'] = '';
             $result['error'] = $_LANG['invalid_bonus'];
         }
@@ -1730,9 +1730,9 @@ elseif ($_REQUEST['step'] == 'validate_bonus') {
     $json = new JSON;
     exit($json->encode($result));
 }
-/*------------------------------------------------------ */
-//-- 添加礼包到购物车
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 添加礼包到购物车
+/* ------------------------------------------------------ */
 elseif ($_REQUEST['step'] == 'add_package_to_cart') {
     include_once 'includes/cls_json.php';
     $_POST['package_info'] = json_str_iconv($_POST['package_info']);
@@ -1793,7 +1793,7 @@ elseif ($_REQUEST['step'] == 'add_package_to_cart') {
     $smarty->assign('goods_list', $cart_goods['goods_list']);
     $smarty->assign('total', $cart_goods['total']);
 
-    //购物车的描述的格式化
+    // 购物车的描述的格式化
     $smarty->assign('shopping_money', sprintf($_LANG['shopping_money'], $cart_goods['total']['goods_price']));
     $smarty->assign('market_price_desc', sprintf(
         $_LANG['than_market_price'],
@@ -1831,7 +1831,7 @@ elseif ($_REQUEST['step'] == 'add_package_to_cart') {
     $smarty->assign('show_goods_attribute', $GLOBALS['_CFG']['show_attr_in_cart']);
 
     /* 购物车中商品配件列表 */
-    //取得购物车中基本件ID
+    // 取得购物车中基本件ID
     $sql = 'SELECT goods_id '.
         'FROM '.$GLOBALS['ecs']->table('cart').
         'WHERE '.$where.
@@ -1894,7 +1894,7 @@ function flow_update_cart($arr)
             continue;
         }
 
-        //查询：
+        // 查询：
         $sql = 'SELECT `goods_id`, `goods_attr_id`, `product_id`, `extension_code` FROM'.$GLOBALS['ecs']->table('cart').
             " WHERE rec_id='$key' AND ".$where;
         $goods = $GLOBALS['db']->getRow($sql);
@@ -1905,7 +1905,7 @@ function flow_update_cart($arr)
             "WHERE g.goods_id = c.goods_id AND c.rec_id = '$key'";
         $row = $GLOBALS['db']->getRow($sql);
 
-        //查询：系统启用了库存，检查输入的商品数量是否有效
+        // 查询：系统启用了库存，检查输入的商品数量是否有效
         if (intval($GLOBALS['_CFG']['use_storage']) > 0 && $goods['extension_code'] != 'package_buy') {
             if ($row['goods_number'] < $val) {
                 show_message(sprintf(
@@ -1951,9 +1951,9 @@ function flow_update_cart($arr)
 
         $offers_accessories_res = $GLOBALS['db']->query($sql);
 
-        //订货数量大于0
+        // 订货数量大于0
         if ($val > 0) {
-            /* 判断是否为超出数量的优惠价格的配件 删除*/
+            /* 判断是否为超出数量的优惠价格的配件 删除 */
             $row_num = 1;
             while ($offers_accessories_row = $GLOBALS['db']->fetchRow($offers_accessories_res)) {
                 if ($row_num > $val) {
@@ -1968,7 +1968,7 @@ function flow_update_cart($arr)
 
             /* 处理超值礼包 */
             if ($goods['extension_code'] == 'package_buy') {
-                //更新购物车中的商品数量
+                // 更新购物车中的商品数量
                 $sql = 'UPDATE '.$GLOBALS['ecs']->table('cart').
                     " SET goods_number = '$val' WHERE rec_id='$key' AND ".$where;
             } /* 处理普通商品或非优惠的配件 */
@@ -1976,11 +1976,11 @@ function flow_update_cart($arr)
                 $attr_id = empty($goods['goods_attr_id']) ? [] : explode(',', $goods['goods_attr_id']);
                 $goods_price = get_final_price($goods['goods_id'], $val, true, $attr_id);
 
-                //更新购物车中的商品数量
+                // 更新购物车中的商品数量
                 $sql = 'UPDATE '.$GLOBALS['ecs']->table('cart').
                     " SET goods_number = '$val', goods_price = '$goods_price' WHERE rec_id='$key' AND ".$where;
             }
-        } //订货数量等于0
+        } // 订货数量等于0
         else {
             /* 如果是基本件并且有优惠价格的配件则删除优惠价格的配件 */
             while ($offers_accessories_row = $GLOBALS['db']->fetchRow($offers_accessories_res)) {
@@ -2030,7 +2030,7 @@ function flow_cart_stock($arr)
             "WHERE g.goods_id = c.goods_id AND c.rec_id = '$key'";
         $row = $GLOBALS['db']->getRow($sql);
 
-        //系统启用了库存，检查输入的商品数量是否有效
+        // 系统启用了库存，检查输入的商品数量是否有效
         if (intval($GLOBALS['_CFG']['use_storage']) > 0 && $goods['extension_code'] != 'package_buy') {
             if ($row['goods_number'] < $val) {
                 show_message(sprintf(
@@ -2083,12 +2083,12 @@ function flow_drop_cart_goods($id)
     $sql = 'SELECT * FROM '.$GLOBALS['ecs']->table('cart')." WHERE rec_id = '$id'";
     $row = $GLOBALS['db']->getRow($sql);
     if ($row) {
-        //如果是超值礼包
+        // 如果是超值礼包
         if ($row['extension_code'] == 'package_buy') {
             $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('cart').
                 ' WHERE '.$where.
                 "AND rec_id = '$id' LIMIT 1";
-        } //如果是普通商品，同时删除所有赠品及其配件
+        } // 如果是普通商品，同时删除所有赠品及其配件
         elseif ($row['parent_id'] == 0 && $row['is_gift'] == 0) {
             /* 检查购物车中该普通商品的不可单独销售的配件并删除 */
             $sql = 'SELECT c.rec_id
@@ -2109,7 +2109,7 @@ function flow_drop_cart_goods($id)
             $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('cart').
                 ' WHERE '.$where.
                 "AND (rec_id IN ($_del_str) OR parent_id = '$row[goods_id]' OR is_gift <> 0)";
-        } //如果不是普通商品，只删除该商品即可
+        } // 如果不是普通商品，只删除该商品即可
         else {
             $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('cart').
                 ' WHERE '.$where.

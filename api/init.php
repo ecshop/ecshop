@@ -36,7 +36,7 @@ require ROOT_PATH.'includes/lib_base.php';
 require ROOT_PATH.'includes/lib_common.php';
 require ROOT_PATH.'includes/lib_time.php';
 
-/* 对用户传入的变量进行转义操作。*/
+/* 对用户传入的变量进行转义操作。 */
 if (! empty($_GET)) {
     $_GET = addslashes_deep($_GET);
 }

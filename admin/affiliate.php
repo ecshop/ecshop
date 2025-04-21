@@ -5,9 +5,9 @@ require dirname(__FILE__).'/includes/init.php';
 admin_priv('affiliate');
 $config = get_affiliate();
 
-/*------------------------------------------------------ */
-//-- 分成管理页
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 分成管理页
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     assign_query_info();
     if (empty($_REQUEST['is_ajax'])) {
@@ -23,12 +23,12 @@ if ($_REQUEST['act'] == 'query') {
     $smarty->assign('config', $config);
     make_json_result($smarty->fetch('affiliate.htm'), '', null);
 }
-/*------------------------------------------------------ */
-//-- 增加下线分配方案
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 增加下线分配方案
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'add') {
     if (count($config['item']) < 5) {
-        //下线不能超过5层
+        // 下线不能超过5层
         $_POST['level_point'] = (float) $_POST['level_point'];
         $_POST['level_money'] = (float) $_POST['level_money'];
         $maxpoint = $maxmoney = 100;
@@ -58,9 +58,9 @@ if ($_REQUEST['act'] == 'add') {
     ecs_header("Location: affiliate.php?act=query\n");
     exit;
 }
-/*------------------------------------------------------ */
-//-- 修改配置
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 修改配置
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'updata') {
     $separate_by = (intval($_POST['separate_by']) == 1) ? 1 : 0;
 
@@ -79,13 +79,13 @@ if ($_REQUEST['act'] == 'updata') {
     $_POST['level_register_all'] = intval($_POST['level_register_all']);
     $_POST['level_register_up'] = intval($_POST['level_register_up']);
     $temp = [];
-    $temp['config'] = ['expire' => $_POST['expire'],        //COOKIE过期数字
-        'expire_unit' => $_POST['expire_unit'],   //单位：小时、天、周
-        'separate_by' => $separate_by,            //分成模式：0、注册 1、订单
-        'level_point_all' => $_POST['level_point_all'],    //积分分成比
-        'level_money_all' => $_POST['level_money_all'],    //金钱分成比
-        'level_register_all' => $_POST['level_register_all'], //推荐注册奖励积分
-        'level_register_up' => $_POST['level_register_up'],   //推荐注册奖励积分上限
+    $temp['config'] = ['expire' => $_POST['expire'],        // COOKIE过期数字
+        'expire_unit' => $_POST['expire_unit'],   // 单位：小时、天、周
+        'separate_by' => $separate_by,            // 分成模式：0、注册 1、订单
+        'level_point_all' => $_POST['level_point_all'],    // 积分分成比
+        'level_money_all' => $_POST['level_money_all'],    // 金钱分成比
+        'level_register_all' => $_POST['level_register_all'], // 推荐注册奖励积分
+        'level_register_up' => $_POST['level_register_up'],   // 推荐注册奖励积分上限
     ];
     $temp['item'] = $config['item'];
     $temp['on'] = 1;
@@ -93,9 +93,9 @@ if ($_REQUEST['act'] == 'updata') {
     $links[] = ['text' => $_LANG['affiliate'], 'href' => 'affiliate.php?act=list'];
     sys_msg($_LANG['edit_ok'], 0, $links);
 }
-/*------------------------------------------------------ */
-//-- 推荐开关
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 推荐开关
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'on') {
     $on = (intval($_POST['on']) == 1) ? 1 : 0;
 
@@ -104,9 +104,9 @@ if ($_REQUEST['act'] == 'on') {
     $links[] = ['text' => $_LANG['affiliate'], 'href' => 'affiliate.php?act=list'];
     sys_msg($_LANG['edit_ok'], 0, $links);
 }
-/*------------------------------------------------------ */
-//-- Ajax修改设置
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- Ajax修改设置
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit_point') {
 
     /* 取得参数 */
@@ -127,9 +127,9 @@ if ($_REQUEST['act'] == 'edit_point') {
     put_affiliate($config);
     make_json_result(stripcslashes($val));
 }
-/*------------------------------------------------------ */
-//-- Ajax修改设置
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- Ajax修改设置
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit_money') {
     $key = trim($_POST['id']) - 1;
     $val = (float) trim($_POST['val']);
@@ -148,9 +148,9 @@ if ($_REQUEST['act'] == 'edit_money') {
     put_affiliate($config);
     make_json_result(stripcslashes($val));
 }
-/*------------------------------------------------------ */
-//-- 删除下线分成
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 删除下线分成
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'del') {
     $key = trim($_GET['id']) - 1;
     unset($config['item'][$key]);

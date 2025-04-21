@@ -73,7 +73,7 @@ if ($_REQUEST['act'] == 'edit_endtime') {
 
     clear_cache_files();
     make_json_result(stripslashes($_POST['val']), '', ['act' => 'article_auto', 'id' => $id]);
-} //批量发布
+} // 批量发布
 if ($_REQUEST['act'] == 'batch_start') {
     admin_priv('goods_auto');
 
@@ -94,7 +94,7 @@ if ($_REQUEST['act'] == 'batch_start') {
 
     $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'article_auto.php?act=list'];
     sys_msg($_LANG['batch_start_succeed'], 0, $lnk);
-} //批量取消发布
+} // 批量取消发布
 if ($_REQUEST['act'] == 'batch_end') {
     admin_priv('goods_auto');
 

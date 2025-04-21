@@ -35,7 +35,7 @@ $_LANG['articleedit_succeed'] = '文章 %s 编辑成功';
 $_LANG['articlename_exist'] = '文章 %s 已经存在';
 $_LANG['not_emptycat'] = '分类下还有文章，不允许删除非空分类';
 
-/*JS 语言项*/
+/* JS 语言项 */
 $_LANG['js_languages']['no_catname'] = '没有输入分类名';
 $_LANG['js_languages']['lang_remove'] = '移除';
 $_LANG['js_languages']['lang_sort'] = '排序:';

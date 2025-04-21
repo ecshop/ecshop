@@ -6,7 +6,7 @@ header('Content-type: text/html; charset=utf-8');
 // The following variables values must reflect your installation needs.
 
 $aspell_prog = '"C:\Program Files\Aspell\bin\aspell.exe"';    // by FredCK (for Windows)
-//$aspell_prog    = 'aspell';                                        // by FredCK (for Linux)
+// $aspell_prog    = 'aspell';                                        // by FredCK (for Linux)
 
 $lang = 'en_US';
 $aspell_opts = "-a --lang=$lang --encoding=utf-8 -H --rem-sgml-check=alt";        // by FredCK
@@ -71,8 +71,8 @@ function error_handler($err)
     echo "error = '".preg_replace("/['\\\\]/", '\\\$0', $err)."';\n";
 }
 
-//# get the list of misspelled words. Put the results in the javascript words array
-//# for each misspelled word, get suggestions and put in the javascript suggs array
+// # get the list of misspelled words. Put the results in the javascript words array
+// # for each misspelled word, get suggestions and put in the javascript suggs array
 function print_checker_results()
 {
     global $aspell_prog;

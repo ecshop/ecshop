@@ -42,7 +42,7 @@ if (empty($cat_id)) {
         'FROM '.$ecs->table('goods_attr').' AS g, '.$ecs->table('attribute').' AS a '.
         'WHERE a.attr_id = g.attr_id '.$in_cat;
 
-    $in_attr = $db->getCol($sql); //符合条件attr_id;
+    $in_attr = $db->getCol($sql); // 符合条件attr_id;
     $in_attr = 'AND g.attr_id '.db_create_in($in_attr);
 
     /* 获取所有属性值 */
@@ -63,7 +63,7 @@ if (empty($cat_id)) {
     /* 获取商品总数 */
     $goods_count = $db->getOne('SELECT COUNT(DISTINCT(goods_id)) FROM '.$ecs->table('goods_attr'));
     /* 获取符合条件的商品id */
-    //$sql = "SELECT DISTINCT goods_id FROM " .$ecs->table('goods_attr'). " LIMIT 100";
+    // $sql = "SELECT DISTINCT goods_id FROM " .$ecs->table('goods_attr'). " LIMIT 100";
     $sql = 'SELECT DISTINCT goods_id FROM '.$ecs->table('goods_attr');
     $in_goods = $db->getCol($sql);
     $in_goods = 'AND g.goods_id '.db_create_in(implode(',', $in_goods));
@@ -76,7 +76,7 @@ if (empty($cat_id)) {
 
     $picks[] = ['name' => '<strong>'.$_LANG['goods_type'].':</strong><br />'.$cat_name, 'url' => 'pick_out.php'];
 
-    $attr_picks = []; //选择过的attr_id
+    $attr_picks = []; // 选择过的attr_id
 
     /* 处理属性,获取满足属性的goods_id */
     if (! empty($_GET['attr'])) {
@@ -212,8 +212,8 @@ $position = assign_ur_here(0, $_LANG['pick_out']);
 $smarty->assign('page_title', $position['title']);    // 页面标题
 $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
 
-$smarty->assign('brand_list', $brand_list);       //品牌
-$smarty->assign('cat_list', $cat_list);        //分类列表
+$smarty->assign('brand_list', $brand_list);       // 品牌
+$smarty->assign('cat_list', $cat_list);        // 分类列表
 
 $smarty->assign('categories', get_categories_tree()); // 分类树
 $smarty->assign('helps', get_shop_help());  // 网店帮助

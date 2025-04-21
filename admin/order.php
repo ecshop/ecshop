@@ -6,9 +6,9 @@ require dirname(__FILE__).'/includes/init.php';
 require_once ROOT_PATH.'includes/lib_order.php';
 require_once ROOT_PATH.'includes/lib_goods.php';
 
-/*------------------------------------------------------ */
-//-- 订单查询
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 订单查询
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'order_query') {
     /* 检查权限 */
@@ -37,9 +37,9 @@ if ($_REQUEST['act'] == 'order_query') {
     $smarty->display('order_query.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 订单列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 订单列表
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'list') {
     /* 检查权限 */
@@ -68,9 +68,9 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('order_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 排序、分页、查询
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 排序、分页、查询
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
     /* 检查权限 */
     admin_priv('order_view');
@@ -86,9 +86,9 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result($smarty->fetch('order_list.htm'), '', ['filter' => $order_list['filter'], 'page_count' => $order_list['page_count']]);
 }
 
-/*------------------------------------------------------ */
-//-- 订单详情页面
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 订单详情页面
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'info') {
     /* 根据订单id或订单号查询订单信息 */
@@ -129,7 +129,7 @@ if ($_REQUEST['act'] == 'info') {
         $filter = unserialize(urldecode($_COOKIE['ECSCP']['lastfilter']));
         if (! empty($filter['composite_status'])) {
             $where = '';
-            //综合状态
+            // 综合状态
             switch ($filter['composite_status']) {
                 case CS_AWAIT_PAY:
                     $where .= order_query_sql('await_pay');
@@ -277,7 +277,7 @@ if ($_REQUEST['act'] == 'info') {
         $row['formated_subtotal'] = price_format($row['goods_price'] * $row['goods_number']);
         $row['formated_goods_price'] = price_format($row['goods_price']);
 
-        $goods_attr[] = explode(' ', trim($row['goods_attr'])); //将商品属性拆分为一个数组
+        $goods_attr[] = explode(' ', trim($row['goods_attr'])); // 将商品属性拆分为一个数组
 
         if ($row['extension_code'] == 'package_buy') {
             $row['storage'] = '';
@@ -292,7 +292,7 @@ if ($_REQUEST['act'] == 'info') {
     $arr = [];
     foreach ($goods_attr as $index => $array_val) {
         foreach ($array_val as $value) {
-            $arr = explode(':', $value); //以 : 号将属性拆开
+            $arr = explode(':', $value); // 以 : 号将属性拆开
             $attr[$index][] = @['name' => $arr[0], 'value' => $arr[1]];
         }
     }
@@ -333,8 +333,8 @@ if ($_REQUEST['act'] == 'info') {
         $smarty->display('order_print.html');
     } /* 打印快递单 */
     elseif (isset($_GET['shipping_print'])) {
-        //$smarty->assign('print_time',   local_date($_CFG['time_format']));
-        //发货地址所在地
+        // $smarty->assign('print_time',   local_date($_CFG['time_format']));
+        // 发货地址所在地
         $region_array = [];
         $region_id = ! empty($_CFG['shop_country']) ? $_CFG['shop_country'].',' : '';
         $region_id .= ! empty($_CFG['shop_province']) ? $_CFG['shop_province'].',' : '';
@@ -354,7 +354,7 @@ if ($_REQUEST['act'] == 'info') {
         $smarty->assign('service_phone', $_CFG['service_phone']);
         $shipping = $db->getRow('SELECT * FROM '.$ecs->table('shipping').' WHERE shipping_id = '.$order['shipping_id']);
 
-        //打印单模式
+        // 打印单模式
         if ($shipping['print_model'] == 2) {
             /* 可视化 */
             /* 快递单 */
@@ -375,35 +375,35 @@ if ($_REQUEST['act'] == 'info') {
 
             /* 标签信息 */
             $lable_box = [];
-            $lable_box['t_shop_country'] = $region_array[$_CFG['shop_country']]; //网店-国家
-            $lable_box['t_shop_city'] = $region_array[$_CFG['shop_city']]; //网店-城市
-            $lable_box['t_shop_province'] = $region_array[$_CFG['shop_province']]; //网店-省份
-            $lable_box['t_shop_name'] = $_CFG['shop_name']; //网店-名称
-            $lable_box['t_shop_district'] = ''; //网店-区/县
-            $lable_box['t_shop_tel'] = $_CFG['service_phone']; //网店-联系电话
-            $lable_box['t_shop_address'] = $_CFG['shop_address']; //网店-地址
-            $lable_box['t_customer_country'] = $region_array[$order['country']]; //收件人-国家
-            $lable_box['t_customer_province'] = $region_array[$order['province']]; //收件人-省份
-            $lable_box['t_customer_city'] = $region_array[$order['city']]; //收件人-城市
-            $lable_box['t_customer_district'] = $region_array[$order['district']]; //收件人-区/县
-            $lable_box['t_customer_tel'] = $order['tel']; //收件人-电话
-            $lable_box['t_customer_mobel'] = $order['mobile']; //收件人-手机
-            $lable_box['t_customer_post'] = $order['zipcode']; //收件人-邮编
-            $lable_box['t_customer_address'] = $order['address']; //收件人-详细地址
-            $lable_box['t_customer_name'] = $order['consignee']; //收件人-姓名
+            $lable_box['t_shop_country'] = $region_array[$_CFG['shop_country']]; // 网店-国家
+            $lable_box['t_shop_city'] = $region_array[$_CFG['shop_city']]; // 网店-城市
+            $lable_box['t_shop_province'] = $region_array[$_CFG['shop_province']]; // 网店-省份
+            $lable_box['t_shop_name'] = $_CFG['shop_name']; // 网店-名称
+            $lable_box['t_shop_district'] = ''; // 网店-区/县
+            $lable_box['t_shop_tel'] = $_CFG['service_phone']; // 网店-联系电话
+            $lable_box['t_shop_address'] = $_CFG['shop_address']; // 网店-地址
+            $lable_box['t_customer_country'] = $region_array[$order['country']]; // 收件人-国家
+            $lable_box['t_customer_province'] = $region_array[$order['province']]; // 收件人-省份
+            $lable_box['t_customer_city'] = $region_array[$order['city']]; // 收件人-城市
+            $lable_box['t_customer_district'] = $region_array[$order['district']]; // 收件人-区/县
+            $lable_box['t_customer_tel'] = $order['tel']; // 收件人-电话
+            $lable_box['t_customer_mobel'] = $order['mobile']; // 收件人-手机
+            $lable_box['t_customer_post'] = $order['zipcode']; // 收件人-邮编
+            $lable_box['t_customer_address'] = $order['address']; // 收件人-详细地址
+            $lable_box['t_customer_name'] = $order['consignee']; // 收件人-姓名
 
-            $gmtime_utc_temp = gmtime(); //获取 UTC 时间戳
-            $lable_box['t_year'] = date('Y', $gmtime_utc_temp); //年-当日日期
-            $lable_box['t_months'] = date('m', $gmtime_utc_temp); //月-当日日期
-            $lable_box['t_day'] = date('d', $gmtime_utc_temp); //日-当日日期
+            $gmtime_utc_temp = gmtime(); // 获取 UTC 时间戳
+            $lable_box['t_year'] = date('Y', $gmtime_utc_temp); // 年-当日日期
+            $lable_box['t_months'] = date('m', $gmtime_utc_temp); // 月-当日日期
+            $lable_box['t_day'] = date('d', $gmtime_utc_temp); // 日-当日日期
 
-            $lable_box['t_order_no'] = $order['order_sn']; //订单号-订单
-            $lable_box['t_order_postscript'] = $order['postscript']; //备注-订单
-            $lable_box['t_order_best_time'] = $order['best_time']; //送货时间-订单
-            $lable_box['t_pigeon'] = '√'; //√-对号
-            $lable_box['t_custom_content'] = ''; //自定义内容
+            $lable_box['t_order_no'] = $order['order_sn']; // 订单号-订单
+            $lable_box['t_order_postscript'] = $order['postscript']; // 备注-订单
+            $lable_box['t_order_best_time'] = $order['best_time']; // 送货时间-订单
+            $lable_box['t_pigeon'] = '√'; // √-对号
+            $lable_box['t_custom_content'] = ''; // 自定义内容
 
-            //标签替换
+            // 标签替换
             $temp_config_lable = explode('||,||', $shipping['config_lable']);
             if (! is_array($temp_config_lable)) {
                 $temp_config_lable[] = $shipping['config_lable'];
@@ -446,9 +446,9 @@ if ($_REQUEST['act'] == 'info') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 发货单列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 发货单列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'delivery_list') {
     /* 检查权限 */
     admin_priv('delivery_view');
@@ -475,9 +475,9 @@ if ($_REQUEST['act'] == 'delivery_list') {
     $smarty->display('delivery_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 搜索、排序、分页
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 搜索、排序、分页
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'delivery_query') {
     /* 检查权限 */
     admin_priv('delivery_view');
@@ -494,9 +494,9 @@ if ($_REQUEST['act'] == 'delivery_query') {
     make_json_result($smarty->fetch('delivery_list.htm'), '', ['filter' => $result['filter'], 'page_count' => $result['page_count']]);
 }
 
-/*------------------------------------------------------ */
-//-- 发货单详细
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 发货单详细
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'delivery_info') {
     /* 检查权限 */
     admin_priv('delivery_view');
@@ -590,9 +590,9 @@ if ($_REQUEST['act'] == 'delivery_info') {
     exit; //
 }
 
-/*------------------------------------------------------ */
-//-- 发货单发货确认
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 发货单发货确认
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'delivery_ship') {
     /* 检查权限 */
     admin_priv('delivery_view');
@@ -638,7 +638,7 @@ if ($_REQUEST['act'] == 'delivery_ship') {
                 break;
             }
 
-            /* 虚拟商品列表 virtual_card*/
+            /* 虚拟商品列表 virtual_card */
             if ($value['is_real'] == 0) {
                 $virtual_goods[] = [
                     'goods_id' => $value['goods_id'],
@@ -662,7 +662,7 @@ if ($_REQUEST['act'] == 'delivery_ship') {
                 break;
             }
 
-            /* 虚拟商品列表 virtual_card*/
+            /* 虚拟商品列表 virtual_card */
             if ($value['is_real'] == 0) {
                 $virtual_goods[] = [
                     'goods_id' => $value['goods_id'],
@@ -687,7 +687,7 @@ if ($_REQUEST['act'] == 'delivery_ship') {
 
             /* 商品（实货）、超级礼包（实货） */
             if ($value['is_real'] != 0) {
-                //（货品）
+                // （货品）
                 if (! empty($value['product_id'])) {
                     $minus_stock_sql = 'UPDATE '.$GLOBALS['ecs']->table('products').'
                                         SET product_number = product_number - '.$value['sums'].'
@@ -784,9 +784,9 @@ if ($_REQUEST['act'] == 'delivery_ship') {
     sys_msg($_LANG['act_ok'], 0, $links);
 }
 
-/*------------------------------------------------------ */
-//-- 发货单取消发货
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 发货单取消发货
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'delivery_cancel_ship') {
     /* 检查权限 */
     admin_priv('delivery_view');
@@ -861,7 +861,7 @@ if ($_REQUEST['act'] == 'delivery_cancel_ship') {
                 continue;
             }
 
-            //（货品）
+            // （货品）
             if (! empty($value['product_id'])) {
                 $minus_stock_sql = 'UPDATE '.$GLOBALS['ecs']->table('products').'
                                     SET product_number = product_number + '.$value['sums'].'
@@ -900,9 +900,9 @@ if ($_REQUEST['act'] == 'delivery_cancel_ship') {
     sys_msg($_LANG['act_ok'], 0, $links);
 }
 
-/*------------------------------------------------------ */
-//-- 退货单列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 退货单列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'back_list') {
     /* 检查权限 */
     admin_priv('back_view');
@@ -929,9 +929,9 @@ if ($_REQUEST['act'] == 'back_list') {
     $smarty->display('back_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 搜索、排序、分页
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 搜索、排序、分页
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'back_query') {
     /* 检查权限 */
     admin_priv('back_view');
@@ -948,9 +948,9 @@ if ($_REQUEST['act'] == 'back_query') {
     make_json_result($smarty->fetch('back_list.htm'), '', ['filter' => $result['filter'], 'page_count' => $result['page_count']]);
 }
 
-/*------------------------------------------------------ */
-//-- 退货单详细
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 退货单详细
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'back_info') {
     /* 检查权限 */
     admin_priv('back_view');
@@ -972,7 +972,7 @@ if ($_REQUEST['act'] == 'back_info') {
             sys_msg($_LANG['priv_error']);
         }
 
-        /* 取当前办事处信息*/
+        /* 取当前办事处信息 */
         $sql = 'SELECT agency_name FROM '.$ecs->table('agency')." WHERE agency_id = '$agency_id' LIMIT 0, 1";
         $agency_name = $db->getOne($sql);
         $back_order['agency_name'] = $agency_name;
@@ -1030,9 +1030,9 @@ if ($_REQUEST['act'] == 'back_info') {
     exit; //
 }
 
-/*------------------------------------------------------ */
-//-- 修改订单（处理提交）
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 修改订单（处理提交）
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'step_post') {
     /* 检查权限 */
@@ -1187,7 +1187,7 @@ if ($_REQUEST['act'] == 'step_post') {
             $product_info = get_products_info($_REQUEST['goodslist'], $goods_attr);
         }
 
-        //商品存在规格 是货品 检查该货品库存
+        // 商品存在规格 是货品 检查该货品库存
         if (is_spec($goods_attr) && ! empty($prod)) {
             if (! empty($goods_attr)) {
                 /* 取规格的货品库存 */
@@ -1228,7 +1228,7 @@ if ($_REQUEST['act'] == 'step_post') {
         /* 如果使用库存，且下订单时减库存，则修改库存 */
         if ($_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE) {
 
-            //（货品）
+            // （货品）
             if (! empty($product_info['product_id'])) {
                 $sql = 'UPDATE '.$ecs->table('products').'
                                     SET product_number = product_number - '.$goods_number.'
@@ -1557,7 +1557,7 @@ if ($_REQUEST['act'] == 'step_post') {
 
         $order['money_paid'] = $old_order['money_paid'];
         $order['surplus'] = 0;
-        //$order['integral']      = 0;
+        // $order['integral']      = 0;
         $order['integral'] = intval($_POST['integral']) >= 0 ? intval($_POST['integral']) : 0;
         $order['integral_money'] = 0;
         $order['bonus_id'] = 0;
@@ -1733,9 +1733,9 @@ if ($_REQUEST['act'] == 'step_post') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 修改订单（载入页面）
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 修改订单（载入页面）
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     /* 检查权限 */
@@ -1969,9 +1969,9 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     $smarty->display('order_step.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 处理
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 处理
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'process') {
     /* 取得参数 func */
@@ -2063,9 +2063,9 @@ if ($_REQUEST['act'] == 'process') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 合并订单
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 合并订单
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'merge') {
     /* 检查权限 */
@@ -2088,9 +2088,9 @@ if ($_REQUEST['act'] == 'merge') {
     $smarty->display('merge_order.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 订单打印模板（载入页面）
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 订单打印模板（载入页面）
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'templates') {
     /* 检查权限 */
@@ -2123,9 +2123,9 @@ if ($_REQUEST['act'] == 'templates') {
     assign_query_info();
     $smarty->display('order_templates.htm');
 }
-/*------------------------------------------------------ */
-//-- 订单打印模板（提交修改）
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 订单打印模板（提交修改）
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'edit_templates') {
     /* 更新模板文件的内容 */
@@ -2138,9 +2138,9 @@ if ($_REQUEST['act'] == 'edit_templates') {
     sys_msg($_LANG['edit_template_success'], 0, $link);
 }
 
-/*------------------------------------------------------ */
-//-- 操作订单状态（载入页面）
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 操作订单状态（载入页面）
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'operate') {
     $order_id = '';
@@ -2552,7 +2552,7 @@ if ($_REQUEST['act'] == 'operate') {
                 $row['formated_subtotal'] = price_format($row['goods_price'] * $row['goods_number']);
                 $row['formated_goods_price'] = price_format($row['goods_price']);
 
-                $goods_attr[] = explode(' ', trim($row['goods_attr'])); //将商品属性拆分为一个数组
+                $goods_attr[] = explode(' ', trim($row['goods_attr'])); // 将商品属性拆分为一个数组
                 $goods_list[] = $row;
             }
 
@@ -2560,7 +2560,7 @@ if ($_REQUEST['act'] == 'operate') {
             $arr = [];
             foreach ($goods_attr as $index => $array_val) {
                 foreach ($array_val as $value) {
-                    $arr = explode(':', $value); //以 : 号将属性拆开
+                    $arr = explode(':', $value); // 以 : 号将属性拆开
                     $attr[$index][] = @['name' => $arr[0], 'value' => $arr[1]];
                 }
             }
@@ -2617,9 +2617,9 @@ if ($_REQUEST['act'] == 'operate') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 操作订单状态（处理批量提交）
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 操作订单状态（处理批量提交）
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'batch_operate_post') {
     /* 检查权限 */
@@ -2851,9 +2851,9 @@ if ($_REQUEST['act'] == 'batch_operate_post') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 操作订单状态（处理提交）
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 操作订单状态（处理提交）
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'operate_post') {
     /* 检查权限 */
@@ -3022,7 +3022,7 @@ if ($_REQUEST['act'] == 'operate_post') {
                         $goods_no_package[$_key] += $send_number[$value['rec_id']];
                     }
 
-                    //去除
+                    // 去除
                     if ($send_number[$value['rec_id']] <= 0) {
                         unset($send_number[$value['rec_id']], $goods_list[$key]);
 
@@ -3037,15 +3037,15 @@ if ($_REQUEST['act'] == 'operate_post') {
                         // 如果是货品则键值为商品ID与货品ID的组合
                         $_key = empty($pg_value['product_id']) ? $pg_value['goods_id'] : ($pg_value['goods_id'].'_'.$pg_value['product_id']);
 
-                        //统计此单商品总发货数 合并计算相同ID产品的发货数
+                        // 统计此单商品总发货数 合并计算相同ID产品的发货数
                         if (empty($goods_no_package[$_key])) {
                             $goods_no_package[$_key] = $send_number[$value['rec_id']][$pg_value['g_p']];
-                        } //否则已经存在此键值
+                        } // 否则已经存在此键值
                         else {
                             $goods_no_package[$_key] += $send_number[$value['rec_id']][$pg_value['g_p']];
                         }
 
-                        //去除
+                        // 去除
                         if ($send_number[$value['rec_id']][$pg_value['g_p']] <= 0) {
                             unset($send_number[$value['rec_id']][$pg_value['g_p']], $goods_list[$key]['package_goods_list'][$pg_key]);
                         }
@@ -3099,7 +3099,7 @@ if ($_REQUEST['act'] == 'operate_post') {
                         sys_msg(sprintf($_LANG['act_good_vacancy'], $pg_value['goods_name']), 1, $links);
                     }
 
-                    /* 商品（超值礼包） 虚拟商品列表 package_virtual_goods*/
+                    /* 商品（超值礼包） 虚拟商品列表 package_virtual_goods */
                     if ($pg_value['is_real'] == 0) {
                         $package_virtual_goods[] = [
                             'goods_id' => $pg_value['goods_id'],
@@ -3118,13 +3118,13 @@ if ($_REQUEST['act'] == 'operate_post') {
                     sys_msg(sprintf($GLOBALS['_LANG']['virtual_card_oos'].'【'.$value['goods_name'].'】'), 1, $links);
                 }
 
-                /* 虚拟商品列表 virtual_card*/
+                /* 虚拟商品列表 virtual_card */
                 if ($value['extension_code'] == 'virtual_card') {
                     $virtual_goods[$value['extension_code']][] = ['goods_id' => $value['goods_id'], 'goods_name' => $value['goods_name'], 'num' => $send_number[$value['rec_id']]];
                 }
             } // 商品（实货）、（货品）
             else {
-                //如果是货品则键值为商品ID与货品ID的组合
+                // 如果是货品则键值为商品ID与货品ID的组合
                 $_key = empty($value['product_id']) ? $value['goods_id'] : ($value['goods_id'].'_'.$value['product_id']);
 
                 /* （实货） */
@@ -3182,7 +3182,7 @@ if ($_REQUEST['act'] == 'operate_post') {
         if ($delivery_id) {
             $delivery_goods = [];
 
-            //发货单商品入库
+            // 发货单商品入库
             if (! empty($goods_list)) {
                 foreach ($goods_list as $value) {
                     // 商品（实货）（虚货）
@@ -3255,7 +3255,7 @@ if ($_REQUEST['act'] == 'operate_post') {
             $_virtual_goods = isset($virtual_goods['virtual_card']) ? $virtual_goods['virtual_card'] : '';
             update_order_virtual_goods($order_id, $_sended, $_virtual_goods);
 
-            /* 更新订单的非虚拟商品信息 即：商品（实货）（货品）、商品（超值礼包）*/
+            /* 更新订单的非虚拟商品信息 即：商品（实货）（货品）、商品（超值礼包） */
             update_order_goods($order_id, $_sended, $_goods['goods_list']);
 
             /* 标记订单为已确认 “发货中” */
@@ -3572,9 +3572,9 @@ if ($_REQUEST['act'] == 'json') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 合并订单
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 合并订单
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'ajax_merge_order') {
     /* 检查权限 */
     admin_priv('order_os_edit');
@@ -3596,9 +3596,9 @@ if ($_REQUEST['act'] == 'ajax_merge_order') {
     exit($json->encode($result));
 }
 
-/*------------------------------------------------------ */
-//-- 删除订单
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 删除订单
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'remove_order') {
     /* 检查权限 */
     admin_priv('order_edit');
@@ -3632,9 +3632,9 @@ if ($_REQUEST['act'] == 'remove_order') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 根据关键字和id搜索用户
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 根据关键字和id搜索用户
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'search_users') {
     include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
@@ -3661,9 +3661,9 @@ if ($_REQUEST['act'] == 'search_users') {
     exit($json->encode($result));
 }
 
-/*------------------------------------------------------ */
-//-- 根据关键字搜索商品
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 根据关键字搜索商品
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'search_goods') {
     include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
@@ -3694,9 +3694,9 @@ if ($_REQUEST['act'] == 'search_goods') {
     exit($json->encode($result));
 }
 
-/*------------------------------------------------------ */
-//-- 编辑收货单号
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑收货单号
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit_invoice_no') {
     /* 检查权限 */
     check_authz_json('order_edit');
@@ -3722,9 +3722,9 @@ if ($_REQUEST['act'] == 'edit_invoice_no') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 编辑付款备注
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑付款备注
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit_pay_note') {
     /* 检查权限 */
     check_authz_json('order_edit');
@@ -3750,9 +3750,9 @@ if ($_REQUEST['act'] == 'edit_pay_note') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 获取订单商品信息
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 获取订单商品信息
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'get_goods_info') {
     /* 取得订单商品 */
     $order_id = isset($_REQUEST['order_id']) ? intval($_REQUEST['order_id']) : 0;
@@ -3773,14 +3773,14 @@ if ($_REQUEST['act'] == 'get_goods_info') {
         $_goods_thumb = get_image_path($row['goods_thumb']);
         $_goods_thumb = (strpos($_goods_thumb, 'http://') === 0) ? $_goods_thumb : $ecs->url().$_goods_thumb;
         $row['goods_thumb'] = $_goods_thumb;
-        $goods_attr[] = explode(' ', trim($row['goods_attr'])); //将商品属性拆分为一个数组
+        $goods_attr[] = explode(' ', trim($row['goods_attr'])); // 将商品属性拆分为一个数组
         $goods_list[] = $row;
     }
     $attr = [];
     $arr = [];
     foreach ($goods_attr as $index => $array_val) {
         foreach ($array_val as $value) {
-            $arr = explode(':', $value); //以 : 号将属性拆开
+            $arr = explode(':', $value); // 以 : 号将属性拆开
             $attr[$index][] = @['name' => $arr[0], 'value' => $arr[1]];
         }
     }
@@ -3869,7 +3869,7 @@ function return_user_surplus_integral_bonus($order)
 function update_order_amount($order_id)
 {
     include_once ROOT_PATH.'includes/lib_order.php';
-    //更新订单总金额
+    // 更新订单总金额
     $sql = 'UPDATE '.$GLOBALS['ecs']->table('order_info').
         ' SET order_amount = '.order_due_field().
         " WHERE order_id = '$order_id' LIMIT 1";
@@ -4106,7 +4106,7 @@ function order_list()
         $filter['order_sn'] = empty($_REQUEST['order_sn']) ? '' : trim($_REQUEST['order_sn']);
         if (! empty($_GET['is_ajax']) && $_GET['is_ajax'] == 1) {
             $_REQUEST['consignee'] = json_str_iconv($_REQUEST['consignee']);
-            //$_REQUEST['address'] = json_str_iconv($_REQUEST['address']);
+            // $_REQUEST['address'] = json_str_iconv($_REQUEST['address']);
         }
         $filter['consignee'] = empty($_REQUEST['consignee']) ? '' : trim($_REQUEST['consignee']);
         $filter['email'] = empty($_REQUEST['email']) ? '' : trim($_REQUEST['email']);
@@ -4196,7 +4196,7 @@ function order_list()
             $where .= " AND o.add_time <= '$filter[end_time]'";
         }
 
-        //综合状态
+        // 综合状态
         switch ($filter['composite_status']) {
             case CS_AWAIT_PAY:
                 $where .= order_query_sql('await_pay');
@@ -4375,7 +4375,7 @@ function get_order_goods($order)
         $row['formated_subtotal'] = price_format($row['goods_price'] * $row['goods_number']);
         $row['formated_goods_price'] = price_format($row['goods_price']);
 
-        $goods_attr[] = explode(' ', trim($row['goods_attr'])); //将商品属性拆分为一个数组
+        $goods_attr[] = explode(' ', trim($row['goods_attr'])); // 将商品属性拆分为一个数组
 
         if ($row['extension_code'] == 'package_buy') {
             $row['storage'] = '';
@@ -4383,7 +4383,7 @@ function get_order_goods($order)
             $row['package_goods_list'] = get_package_goods_list($row['goods_id']);
         }
 
-        //处理货品id
+        // 处理货品id
         $row['product_id'] = empty($row['product_id']) ? 0 : $row['product_id'];
 
         $goods_list[] = $row;
@@ -4393,7 +4393,7 @@ function get_order_goods($order)
     $arr = [];
     foreach ($goods_attr as $index => $array_val) {
         foreach ($array_val as $value) {
-            $arr = explode(':', $value); //以 : 号将属性拆开
+            $arr = explode(':', $value); // 以 : 号将属性拆开
             $attr[$index][] = @['name' => $arr[0], 'value' => $arr[1]];
         }
     }
@@ -4436,7 +4436,7 @@ function get_package_goods_list($package_id)
             $_row['g_p'] = $_row['goods_id'];
         }
 
-        //生成结果数组
+        // 生成结果数组
         $row[] = $_row;
     }
     $good_product_str = trim($good_product_str, ',');

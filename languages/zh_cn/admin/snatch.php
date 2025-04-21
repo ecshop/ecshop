@@ -46,7 +46,7 @@ $_LANG['notice_max_price'] = '用户出价范围的上限';
 $_LANG['notice_price'] = '获奖者出价高于这个价格，则以这个价格购买该商品。为0时按用户出价购买商品';
 $_LANG['notice_integral'] = '每次出价所消耗的积分值';
 
-/*JS 语言项*/
+/* JS 语言项 */
 $_LANG['js_languages']['no_name'] = '没有输入活动名';
 $_LANG['js_languages']['no_desc'] = '没有输入活动描述';
 $_LANG['js_languages']['no_goods_id'] = '没有选择商品';

@@ -31,7 +31,7 @@ function sub_str($str, $length = 0, $append = true)
     } elseif (function_exists('iconv_substr')) {
         $newstr = iconv_substr($str, 0, $length, EC_CHARSET);
     } else {
-        //$newstr = trim_right(substr($str, 0, $length));
+        // $newstr = trim_right(substr($str, 0, $length));
         $newstr = substr($str, 0, $length);
     }
 
@@ -214,7 +214,7 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification =
         } else {
             // 发送邮件
             if (! function_exists('fsockopen')) {
-                //如果fsockopen被禁用，直接返回
+                // 如果fsockopen被禁用，直接返回
                 $GLOBALS['err']->add($GLOBALS['_LANG']['disabled_fsockopen']);
 
                 return false;
@@ -295,20 +295,20 @@ function file_mode_info($file_path)
             /* 检查目录是否可读 */
             $dir = @opendir($file_path);
             if ($dir === false) {
-                return $mark; //如果目录打开失败，直接返回目录不可修改、不可写、不可读
+                return $mark; // 如果目录打开失败，直接返回目录不可修改、不可写、不可读
             }
             if (@readdir($dir) !== false) {
-                $mark ^= 1; //目录可读 001，目录不可读 000
+                $mark ^= 1; // 目录可读 001，目录不可读 000
             }
             @closedir($dir);
 
             /* 检查目录是否可写 */
             $fp = @fopen($test_file, 'wb');
             if ($fp === false) {
-                return $mark; //如果目录中的文件创建失败，返回不可写。
+                return $mark; // 如果目录中的文件创建失败，返回不可写。
             }
             if (@fwrite($fp, 'directory access testing.') !== false) {
-                $mark ^= 2; //目录可写可读011，目录可写不可读 010
+                $mark ^= 2; // 目录可写可读011，目录可写不可读 010
             }
             @fclose($fp);
 
@@ -334,14 +334,14 @@ function file_mode_info($file_path)
             /* 以读方式打开 */
             $fp = @fopen($file_path, 'rb');
             if ($fp) {
-                $mark ^= 1; //可读 001
+                $mark ^= 1; // 可读 001
             }
             @fclose($fp);
 
             /* 试着修改文件 */
             $fp = @fopen($file_path, 'ab+');
             if ($fp && @fwrite($fp, '') !== false) {
-                $mark ^= 6; //可修改可写可读 111，不可修改可写可读011...
+                $mark ^= 6; // 可修改可写可读 111，不可修改可写可读011...
             }
             @fclose($fp);
 

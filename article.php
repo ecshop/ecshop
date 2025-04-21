@@ -8,9 +8,9 @@ if (! DEBUG_MODE) {
     $smarty->caching = true;
 }
 
-/*------------------------------------------------------ */
-//-- INPUT
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- INPUT
+/* ------------------------------------------------------ */
 
 $_REQUEST['id'] = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 $article_id = $_REQUEST['id'];
@@ -18,9 +18,9 @@ if (isset($_REQUEST['cat_id']) && $_REQUEST['cat_id'] < 0) {
     $article_id = $db->getOne('SELECT article_id FROM '.$ecs->table('article')." WHERE cat_id = '".intval($_REQUEST['cat_id'])."' ");
 }
 
-/*------------------------------------------------------ */
-//-- PROCESSOR
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- PROCESSOR
+/* ------------------------------------------------------ */
 
 $cache_id = sprintf('%X', crc32($_REQUEST['id'].'-'.$_CFG['lang']));
 
@@ -38,7 +38,7 @@ if (! $smarty->is_cached('article.dwt', $cache_id)) {
         exit;
     }
 
-    $smarty->assign('article_categories', article_categories_tree($article_id)); //文章分类树
+    $smarty->assign('article_categories', article_categories_tree($article_id)); // 文章分类树
     $smarty->assign('categories', get_categories_tree());  // 分类树
     $smarty->assign('helps', get_shop_help()); // 网店帮助
     $smarty->assign('top_goods', get_top10());    // 销售排行

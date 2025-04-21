@@ -84,7 +84,7 @@ class cls_sql_dump
 
         $tmp_arr = $this->db->getRow("SHOW CREATE TABLE `$table`");
         $tmp_sql = $tmp_arr['Create Table'];
-        $tmp_sql = substr($tmp_sql, 0, strrpos($tmp_sql, ')') + 1); //去除行尾定义。
+        $tmp_sql = substr($tmp_sql, 0, strrpos($tmp_sql, ')') + 1); // 去除行尾定义。
 
         $table_df .= $tmp_sql." ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;\r\n";
 
@@ -111,7 +111,7 @@ class cls_sql_dump
         }
 
         /* 确定循环次数 */
-        $cycle_time = ceil(($total - $pos) / $this->offset); //每次取offset条数。需要取的次数
+        $cycle_time = ceil(($total - $pos) / $this->offset); // 每次取offset条数。需要取的次数
 
         /* 循环查数据表 */
         for ($i = 0; $i < $cycle_time; $i++) {
@@ -124,8 +124,8 @@ class cls_sql_dump
 
             /* 循环将数据写入 */
             for ($j = 0; $j < $data_count; $j++) {
-                $record = array_map('dump_escape_string', $data[$j]);   //过滤非法字符
-                $record = array_map('dump_null_string', $record);     //处理null值
+                $record = array_map('dump_escape_string', $data[$j]);   // 过滤非法字符
+                $record = array_map('dump_null_string', $record);     // 处理null值
 
                 /* 检查是否能写入，能则写入 */
                 if ($this->is_short) {
@@ -151,12 +151,12 @@ class cls_sql_dump
                     $tmp_dump_sql = $start_sql." ('".implode("', '", $record)."');\r\n";
                 }
 
-                $tmp_str_pos = strpos($tmp_dump_sql, 'NULL');         //把记录中null值的引号去掉
+                $tmp_str_pos = strpos($tmp_dump_sql, 'NULL');         // 把记录中null值的引号去掉
                 $tmp_dump_sql = empty($tmp_str_pos) ? $tmp_dump_sql : substr($tmp_dump_sql, 0, $tmp_str_pos - 1).'NULL'.substr($tmp_dump_sql, $tmp_str_pos + 5);
 
                 if (strlen($this->dump_sql) + strlen($tmp_dump_sql) > $this->max_size - 32) {
                     if ($this->sql_num == 0) {
-                        $this->dump_sql .= $tmp_dump_sql; //当是第一条记录时强制写入
+                        $this->dump_sql .= $tmp_dump_sql; // 当是第一条记录时强制写入
                         $this->sql_num++;
                         $post_pos++;
                         if ($post_pos == $total) {
@@ -168,7 +168,7 @@ class cls_sql_dump
                     return $post_pos;
                 } else {
                     $this->dump_sql .= $tmp_dump_sql;
-                    $this->sql_num++; //记录sql条数
+                    $this->sql_num++; // 记录sql条数
                     $post_pos++;
                 }
             }

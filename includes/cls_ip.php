@@ -53,7 +53,7 @@ class IpLocation
      */
     private function getlong()
     {
-        //将读取的little-endian编码的4个字节转化为长整型数
+        // 将读取的little-endian编码的4个字节转化为长整型数
         $result = unpack('Vlong', fread($this->fp, 4));
 
         return $result['long'];
@@ -66,7 +66,7 @@ class IpLocation
      */
     private function getlong3()
     {
-        //将读取的little-endian编码的3个字节转化为长整型数
+        // 将读取的little-endian编码的3个字节转化为长整型数
         $result = unpack('Vlong', fread($this->fp, 3).chr(0));
 
         return $result['long'];
@@ -174,7 +174,7 @@ class IpLocation
             }
         }
 
-        //获取查找到的IP地理位置信息
+        // 获取查找到的IP地理位置信息
         fseek($this->fp, $findip);
         $location['beginip'] = long2ip($this->getlong());   // 用户IP所在范围的开始地址
         $offset = $this->getlong3();
@@ -249,11 +249,11 @@ class IpLocation
 
     public function get_client_ip()
     {
-        if (isset($_SERVER['HTTP_X_REAL_IP'])) {//nginx 代理模式下，获取客户端真实IP
+        if (isset($_SERVER['HTTP_X_REAL_IP'])) {// nginx 代理模式下，获取客户端真实IP
             $ip = $_SERVER['HTTP_X_REAL_IP'];
-        } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {//客户端的ip
+        } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {// 客户端的ip
             $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {//浏览当前页面的用户计算机的网关
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {// 浏览当前页面的用户计算机的网关
             $arr = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
             $pos = array_search('unknown', $arr);
             if ($pos !== false) {
@@ -261,7 +261,7 @@ class IpLocation
             }
             $ip = trim($arr[0]);
         } elseif (isset($_SERVER['REMOTE_ADDR'])) {
-            $ip = $_SERVER['REMOTE_ADDR']; //浏览当前页面的用户计算机的ip地址
+            $ip = $_SERVER['REMOTE_ADDR']; // 浏览当前页面的用户计算机的ip地址
         } else {
             $ip = null;
         }

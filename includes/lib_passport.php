@@ -65,10 +65,10 @@ function register($username, $password, $email, $other = [])
             $GLOBALS['err']->add('UNKNOWN ERROR!');
         }
 
-        //注册失败
+        // 注册失败
         return false;
     } else {
-        //注册成功
+        // 注册成功
 
         /* 设置成登录状态 */
         $GLOBALS['user']->set_session($username);
@@ -79,7 +79,7 @@ function register($username, $password, $email, $other = [])
             log_account_change($_SESSION['user_id'], 0, 0, $GLOBALS['_CFG']['register_points'], $GLOBALS['_CFG']['register_points'], $GLOBALS['_LANG']['register_points']);
         }
 
-        /*推荐处理*/
+        /* 推荐处理 */
         $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
         if (isset($affiliate['on']) && $affiliate['on'] == 1) {
             // 推荐开关开启
@@ -99,23 +99,23 @@ function register($username, $password, $email, $other = [])
                     }
                 }
 
-                //设置推荐人
+                // 设置推荐人
                 $sql = 'UPDATE '.$GLOBALS['ecs']->table('users').' SET parent_id = '.$up_uid.' WHERE user_id = '.$_SESSION['user_id'];
 
                 $GLOBALS['db']->query($sql);
             }
         }
 
-        //定义other合法的变量数组
+        // 定义other合法的变量数组
         $other_key_array = ['msn', 'qq', 'office_phone', 'home_phone', 'mobile_phone'];
         $update_data['reg_time'] = local_strtotime(local_date('Y-m-d H:i:s'));
         if ($other) {
             foreach ($other as $key => $val) {
-                //删除非法key值
+                // 删除非法key值
                 if (! in_array($key, $other_key_array)) {
                     unset($other[$key]);
                 } else {
-                    $other[$key] = htmlspecialchars(trim($val)); //防止用户输入javascript代码
+                    $other[$key] = htmlspecialchars(trim($val)); // 防止用户输入javascript代码
                 }
             }
             $update_data = array_merge($update_data, $other);

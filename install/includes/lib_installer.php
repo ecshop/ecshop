@@ -554,7 +554,7 @@ function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = false, $
     if ($post) {
         $out = "POST $path HTTP/1.0\r\n";
         $out .= "Accept: */*\r\n";
-        //$out .= "Referer: $boardurl\r\n";
+        // $out .= "Referer: $boardurl\r\n";
         $out .= "Accept-Language: zh-cn\r\n";
         $out .= "Content-Type: application/x-www-form-urlencoded\r\n";
         $out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
@@ -567,7 +567,7 @@ function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = false, $
     } else {
         $out = "GET $path HTTP/1.0\r\n";
         $out .= "Accept: */*\r\n";
-        //$out .= "Referer: $boardurl\r\n";
+        // $out .= "Referer: $boardurl\r\n";
         $out .= "Accept-Language: zh-cn\r\n";
         $out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
         $out .= "Host: $host\r\n";
@@ -576,7 +576,7 @@ function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = false, $
     }
     $fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
     if (! $fp) {
-        return ''; //note $errstr : $errno \r\n
+        return ''; // note $errstr : $errno \r\n
     } else {
         stream_set_blocking($fp, $block);
         stream_set_timeout($fp, $timeout);

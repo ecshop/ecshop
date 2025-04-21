@@ -11,9 +11,9 @@ if (empty($_REQUEST['act'])) {
     $_REQUEST['act'] = trim($_REQUEST['act']);
 }
 
-/*------------------------------------------------------ */
-//-- 获取没有回复的评论列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 获取没有回复的评论列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     /* 检查权限 */
     admin_priv('comment_priv');
@@ -35,9 +35,9 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('comment_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 翻页、搜索、排序
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 翻页、搜索、排序
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
     $list = get_comment_list();
 
@@ -56,9 +56,9 @@ if ($_REQUEST['act'] == 'query') {
     );
 }
 
-/*------------------------------------------------------ */
-//-- 回复用户评论(同时查看评论详情)
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 回复用户评论(同时查看评论详情)
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'reply') {
     /* 检查权限 */
     admin_priv('comment_priv');
@@ -102,10 +102,10 @@ if ($_REQUEST['act'] == 'reply') {
     }
 
     /* 模板赋值 */
-    $smarty->assign('msg', $comment_info); //评论信息
-    $smarty->assign('admin_info', $admin_info);   //管理员信息
-    $smarty->assign('reply_info', $reply_info);   //回复的内容
-    $smarty->assign('id_value', $id_value);  //评论的对象
+    $smarty->assign('msg', $comment_info); // 评论信息
+    $smarty->assign('admin_info', $admin_info);   // 管理员信息
+    $smarty->assign('reply_info', $reply_info);   // 回复的内容
+    $smarty->assign('id_value', $id_value);  // 评论的对象
     $smarty->assign('send_fail', ! empty($_REQUEST['send_ok']));
 
     $smarty->assign('ur_here', $_LANG['comment_info']);
@@ -116,9 +116,9 @@ if ($_REQUEST['act'] == 'reply') {
     assign_query_info();
     $smarty->display('comment_info.htm');
 }
-/*------------------------------------------------------ */
-//-- 处理 回复用户评论
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 处理 回复用户评论
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'action') {
     admin_priv('comment_priv');
 
@@ -155,7 +155,7 @@ if ($_REQUEST['act'] == 'action') {
 
     /* 邮件通知处理流程 */
     if (! empty($_POST['send_email_notice']) or isset($_POST['remail'])) {
-        //获取邮件中的必要内容
+        // 获取邮件中的必要内容
         $sql = 'SELECT user_name, email, content '.
             'FROM '.$ecs->table('comment').
             " WHERE comment_id ='$_REQUEST[comment_id]'";
@@ -189,16 +189,16 @@ if ($_REQUEST['act'] == 'action') {
     ecs_header("Location: comment_manage.php?act=reply&id=$_REQUEST[comment_id]&send_ok=$send_ok\n");
     exit;
 }
-/*------------------------------------------------------ */
-//-- 更新评论的状态为显示或者禁止
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 更新评论的状态为显示或者禁止
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'check') {
     if ($_REQUEST['check'] == 'allow') {
         /* 允许评论显示 */
         $sql = 'UPDATE '.$ecs->table('comment')." SET status = 1 WHERE comment_id = '$_REQUEST[id]'";
         $db->query($sql);
 
-        //add_feed($_REQUEST['id'], COMMENT_GOODS);
+        // add_feed($_REQUEST['id'], COMMENT_GOODS);
 
         /* 清除缓存 */
         clear_cache_files();
@@ -218,9 +218,9 @@ if ($_REQUEST['act'] == 'check') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 删除某一条评论
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 删除某一条评论
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'remove') {
     check_authz_json('comment_priv');
 
@@ -240,9 +240,9 @@ if ($_REQUEST['act'] == 'remove') {
     exit;
 }
 
-/*------------------------------------------------------ */
-//-- 批量删除用户评论
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 批量删除用户评论
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'batch') {
     admin_priv('comment_priv');
     $action = isset($_POST['sel_action']) ? trim($_POST['sel_action']) : 'deny';

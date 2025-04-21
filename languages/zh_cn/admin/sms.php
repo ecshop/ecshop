@@ -78,16 +78,16 @@ $_LANG['test_now'] = '<span style="color:red;"></span>';
 $_LANG['msg_price'] = '<span style="color:green;">短信每条0.1元(RMB)</span>';
 
 /* API返回的错误信息 */
-//--注册
+// --注册
 $_LANG['api_errors']['register'][1] = '域名不能为空。';
 $_LANG['api_errors']['register'][2] = '邮箱填写不正确。';
 $_LANG['api_errors']['register'][3] = '用户名已存在。';
 $_LANG['api_errors']['register'][4] = '未知错误。';
 $_LANG['api_errors']['register'][5] = '接口错误。';
-//--获取余额
+// --获取余额
 $_LANG['api_errors']['get_balance'][1] = '用户名密码不正确。';
 $_LANG['api_errors']['get_balance'][2] = '用户被禁用。';
-//--发送短信
+// --发送短信
 $_LANG['api_errors']['send'][1] = '用户名密码不正确。';
 $_LANG['api_errors']['send'][2] = '短信内容过长。';
 $_LANG['api_errors']['send'][3] = '发送日期应大于当前时间。';
@@ -95,43 +95,43 @@ $_LANG['api_errors']['send'][4] = '错误的号码。';
 $_LANG['api_errors']['send'][5] = '账户余额不足。';
 $_LANG['api_errors']['send'][6] = '账户已被停用。';
 $_LANG['api_errors']['send'][7] = '接口错误。';
-//--历史记录
+// --历史记录
 $_LANG['api_errors']['get_history'][1] = '用户名密码不正确。';
 $_LANG['api_errors']['get_history'][2] = '查无记录。';
-//--用户验证
+// --用户验证
 $_LANG['api_errors']['auth'][1] = '密码错误。';
 $_LANG['api_errors']['auth'][2] = '用户不存在。';
 
 /* 用户服务器检测到的错误信息 */
-$_LANG['server_errors'][1] = '注册信息无效。'; //ERROR_INVALID_REGISTER_INFO
-$_LANG['server_errors'][2] = '启用信息无效。'; //ERROR_INVALID_ENABLE_INFO
-$_LANG['server_errors'][3] = '发送的信息有误。'; //ERROR_INVALID_SEND_INFO
-$_LANG['server_errors'][4] = '填写的查询信息有误。'; //ERROR_INVALID_HISTORY_QUERY
-$_LANG['server_errors'][5] = '无效的身份信息。'; //ERROR_INVALID_PASSPORT
-$_LANG['server_errors'][6] = 'URL不对。'; //ERROR_INVALID_URL
-$_LANG['server_errors'][7] = 'HTTP响应体为空。'; //ERROR_EMPTY_RESPONSE
-$_LANG['server_errors'][8] = '无效的XML文件。'; //ERROR_INVALID_XML_FILE
-$_LANG['server_errors'][9] = '无效的节点名字。'; //ERROR_INVALID_NODE_NAME
-$_LANG['server_errors'][10] = '存储失败。'; //ERROR_CANT_STORE
-$_LANG['server_errors'][11] = '短信功能尚未激活。'; //ERROR_INVALID_PASSPORT
+$_LANG['server_errors'][1] = '注册信息无效。'; // ERROR_INVALID_REGISTER_INFO
+$_LANG['server_errors'][2] = '启用信息无效。'; // ERROR_INVALID_ENABLE_INFO
+$_LANG['server_errors'][3] = '发送的信息有误。'; // ERROR_INVALID_SEND_INFO
+$_LANG['server_errors'][4] = '填写的查询信息有误。'; // ERROR_INVALID_HISTORY_QUERY
+$_LANG['server_errors'][5] = '无效的身份信息。'; // ERROR_INVALID_PASSPORT
+$_LANG['server_errors'][6] = 'URL不对。'; // ERROR_INVALID_URL
+$_LANG['server_errors'][7] = 'HTTP响应体为空。'; // ERROR_EMPTY_RESPONSE
+$_LANG['server_errors'][8] = '无效的XML文件。'; // ERROR_INVALID_XML_FILE
+$_LANG['server_errors'][9] = '无效的节点名字。'; // ERROR_INVALID_NODE_NAME
+$_LANG['server_errors'][10] = '存储失败。'; // ERROR_CANT_STORE
+$_LANG['server_errors'][11] = '短信功能尚未激活。'; // ERROR_INVALID_PASSPORT
 
 /* 客户端JS语言项 */
-//--注册或启用
+// --注册或启用
 $_LANG['js_languages']['password_empty_error'] = '密码不能为空。';
 $_LANG['js_languages']['username_empty_error'] = '用户名不能为空。';
 $_LANG['js_languages']['username_format_error'] = '用户名格式不对。';
 $_LANG['js_languages']['domain_empty_error'] = '域名不能为空。';
 $_LANG['js_languages']['domain_format_error'] = '域名格式不对。';
 $_LANG['js_languages']['send_empty_error'] = '发送手机号与发送等级至少填写一项！';
-//--发送
+// --发送
 $_LANG['js_languages']['phone_empty_error'] = '请填写手机号。';
 $_LANG['js_languages']['phone_format_error'] = '手机号码格式不对。';
 $_LANG['js_languages']['msg_empty_error'] = '请填写消息内容。';
 $_LANG['js_languages']['send_date_format_error'] = '定时发送时间格式不对。';
-//--历史记录
+// --历史记录
 $_LANG['js_languages']['start_date_format_error'] = '开始日期格式不对。';
 $_LANG['js_languages']['end_date_format_error'] = '结束日期格式不对。';
-//--充值
+// --充值
 $_LANG['js_languages']['money_empty_error'] = '请输入您要充值的金额。';
 $_LANG['js_languages']['money_format_error'] = '金额格式不对。';
 

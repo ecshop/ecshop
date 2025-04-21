@@ -1,4 +1,5 @@
 <?php
+
 /*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
  * Copyright (C) 2003-2008 Frederico Caldeira Knabben
@@ -100,7 +101,7 @@ function CreateServerFolder($folderPath, $lastFolder = null)
 
     // Check if the parent exists, or create it.
     if (! file_exists($sParent)) {
-        //prevents agains infinite loop when we can't create root folder
+        // prevents agains infinite loop when we can't create root folder
         if (! is_null($lastFolder) && $lastFolder === $sParent) {
             return "Can't create $folderPath directory";
         }

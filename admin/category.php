@@ -12,9 +12,9 @@ if (empty($_REQUEST['act'])) {
     $_REQUEST['act'] = trim($_REQUEST['act']);
 }
 
-/*------------------------------------------------------ */
-//-- 商品分类列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 商品分类列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     /* 获取分类列表 */
     $cat_list = cat_list(0, 0, false);
@@ -31,18 +31,18 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('category_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 排序、分页、查询
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 排序、分页、查询
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
     $cat_list = cat_list(0, 0, false);
     $smarty->assign('cat_info', $cat_list);
 
     make_json_result($smarty->fetch('category_list.htm'));
 }
-/*------------------------------------------------------ */
-//-- 添加商品分类
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 添加商品分类
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'add') {
     /* 权限检查 */
     admin_priv('cat_manage');
@@ -63,9 +63,9 @@ if ($_REQUEST['act'] == 'add') {
     $smarty->display('category_info.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 商品分类添加时的处理
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 商品分类添加时的处理
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'insert') {
     /* 权限检查 */
     admin_priv('cat_manage');
@@ -104,7 +104,7 @@ if ($_REQUEST['act'] == 'insert') {
         if ($cat['show_in_nav'] == 1) {
             $vieworder = $db->getOne('SELECT max(vieworder) FROM '.$ecs->table('nav')." WHERE type = 'middle'");
             $vieworder += 2;
-            //显示在自定义导航栏中
+            // 显示在自定义导航栏中
             $sql = 'INSERT INTO '.$ecs->table('nav').
                 ' (name,ctype,cid,ifshow,vieworder,opennew,url,type)'.
                 " VALUES('".$cat['cat_name']."', 'c', '".$db->insert_id()."','1','$vieworder','0', '".build_uri('category', ['cid' => $cat_id], $cat['cat_name'])."','middle')";
@@ -115,7 +115,7 @@ if ($_REQUEST['act'] == 'insert') {
         admin_log($_POST['cat_name'], 'add', 'category');   // 记录管理员操作
         clear_cache_files();    // 清除缓存
 
-        /*添加链接*/
+        /* 添加链接 */
         $link[0]['text'] = $_LANG['continue_add'];
         $link[0]['href'] = 'category.php?act=add';
 
@@ -126,9 +126,9 @@ if ($_REQUEST['act'] == 'insert') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 编辑商品分类信息
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑商品分类信息
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit') {
     admin_priv('cat_manage');   // 权限检查
     $cat_id = intval($_REQUEST['cat_id']);
@@ -137,11 +137,11 @@ if ($_REQUEST['act'] == 'edit') {
     $filter_attr_list = [];
 
     if ($cat_info['filter_attr']) {
-        $filter_attr = explode(',', $cat_info['filter_attr']);  //把多个筛选属性放到数组中
+        $filter_attr = explode(',', $cat_info['filter_attr']);  // 把多个筛选属性放到数组中
 
         foreach ($filter_attr as $k => $v) {
             $attr_cat_id = $db->getOne('SELECT cat_id FROM '.$ecs->table('attribute')." WHERE attr_id = '".intval($v)."'");
-            $filter_attr_list[$k]['goods_type_list'] = goods_type_list($attr_cat_id);  //取得每个属性的商品类型
+            $filter_attr_list[$k]['goods_type_list'] = goods_type_list($attr_cat_id);  // 取得每个属性的商品类型
             $filter_attr_list[$k]['filter_attr'] = $v;
             $attr_option = [];
 
@@ -163,7 +163,7 @@ if ($_REQUEST['act'] == 'edit') {
     $smarty->assign('ur_here', $_LANG['category_edit']);
     $smarty->assign('action_link', ['text' => $_LANG['03_category_list'], 'href' => 'category.php?act=list']);
 
-    //分类是否存在首页推荐
+    // 分类是否存在首页推荐
     $res = $db->getAll('SELECT recommend_type FROM '.$ecs->table('cat_recommend').' WHERE cat_id='.$cat_id);
     if (! empty($res)) {
         $cat_recommend = [];
@@ -203,9 +203,9 @@ if ($_REQUEST['act'] == 'add_category') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 编辑商品分类信息
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑商品分类信息
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'update') {
     /* 权限检查 */
     admin_priv('cat_manage');
@@ -253,17 +253,17 @@ if ($_REQUEST['act'] == 'update') {
 
     if ($db->autoExecute($ecs->table('category'), $cat, 'UPDATE', "cat_id='$cat_id'")) {
         if ($cat['cat_name'] != $dat['cat_name']) {
-            //如果分类名称发生了改变
+            // 如果分类名称发生了改变
             $sql = 'UPDATE '.$ecs->table('nav')." SET name = '".$cat['cat_name']."' WHERE ctype = 'c' AND cid = '".$cat_id."' AND type = 'middle'";
             $db->query($sql);
         }
         if ($cat['show_in_nav'] != $dat['show_in_nav']) {
-            //是否显示于导航栏发生了变化
+            // 是否显示于导航栏发生了变化
             if ($cat['show_in_nav'] == 1) {
-                //显示
+                // 显示
                 $nid = $db->getOne('SELECT id FROM '.$ecs->table('nav')." WHERE ctype = 'c' AND cid = '".$cat_id."' AND type = 'middle'");
                 if (empty($nid)) {
-                    //不存在
+                    // 不存在
                     $vieworder = $db->getOne('SELECT max(vieworder) FROM '.$ecs->table('nav')." WHERE type = 'middle'");
                     $vieworder += 2;
                     $uri = build_uri('category', ['cid' => $cat_id], $cat['cat_name']);
@@ -274,12 +274,12 @@ if ($_REQUEST['act'] == 'update') {
                 }
                 $db->query($sql);
             } else {
-                //去除
+                // 去除
                 $db->query('UPDATE '.$ecs->table('nav')." SET ifshow = 0 WHERE ctype = 'c' AND cid = '".$cat_id."' AND type = 'middle'");
             }
         }
 
-        //更新首页推荐
+        // 更新首页推荐
         insert_cat_recommend($cat['cat_recommend'], $cat_id);
         /* 更新分类信息成功 */
         clear_cache_files(); // 清除缓存
@@ -291,9 +291,9 @@ if ($_REQUEST['act'] == 'update') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 批量转移商品分类页面
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 批量转移商品分类页面
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'move') {
     /* 权限检查 */
     admin_priv('cat_drop');
@@ -312,9 +312,9 @@ if ($_REQUEST['act'] == 'move') {
     $smarty->display('category_move.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 处理批量转移商品分类的处理程序
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 处理批量转移商品分类的处理程序
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'move_cat') {
     /* 权限检查 */
     admin_priv('cat_drop');
@@ -341,9 +341,9 @@ if ($_REQUEST['act'] == 'move_cat') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 编辑排序序号
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑排序序号
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'edit_sort_order') {
     check_authz_json('cat_manage');
@@ -359,9 +359,9 @@ if ($_REQUEST['act'] == 'edit_sort_order') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 编辑数量单位
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑数量单位
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'edit_measure_unit') {
     check_authz_json('cat_manage');
@@ -377,9 +377,9 @@ if ($_REQUEST['act'] == 'edit_measure_unit') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 编辑排序序号
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑排序序号
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'edit_grade') {
     check_authz_json('cat_manage');
@@ -400,9 +400,9 @@ if ($_REQUEST['act'] == 'edit_grade') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 切换是否显示在导航栏
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 切换是否显示在导航栏
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'toggle_show_in_nav') {
     check_authz_json('cat_manage');
@@ -412,24 +412,24 @@ if ($_REQUEST['act'] == 'toggle_show_in_nav') {
 
     if (cat_update($id, ['show_in_nav' => $val]) != false) {
         if ($val == 1) {
-            //显示
+            // 显示
             $vieworder = $db->getOne('SELECT max(vieworder) FROM '.$ecs->table('nav')." WHERE type = 'middle'");
             $vieworder += 2;
             $catname = $db->getOne('SELECT cat_name FROM '.$ecs->table('category')." WHERE cat_id = '$id'");
-            //显示在自定义导航栏中
+            // 显示在自定义导航栏中
             $_CFG['rewrite'] = 0;
             $uri = build_uri('category', ['cid' => $id], $catname);
 
             $nid = $db->getOne('SELECT id FROM '.$ecs->table('nav')." WHERE ctype = 'c' AND cid = '".$id."' AND type = 'middle'");
             if (empty($nid)) {
-                //不存在
+                // 不存在
                 $sql = 'INSERT INTO '.$ecs->table('nav')." (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('".$catname."', 'c', '$id','1','$vieworder','0', '".$uri."','middle')";
             } else {
                 $sql = 'UPDATE '.$ecs->table('nav')." SET ifshow = 1 WHERE ctype = 'c' AND cid = '".$id."' AND type = 'middle'";
             }
             $db->query($sql);
         } else {
-            //去除
+            // 去除
             $db->query('UPDATE '.$ecs->table('nav')."SET ifshow = 0 WHERE ctype = 'c' AND cid = '".$id."' AND type = 'middle'");
         }
         clear_cache_files();
@@ -439,9 +439,9 @@ if ($_REQUEST['act'] == 'toggle_show_in_nav') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 切换是否显示
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 切换是否显示
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'toggle_is_show') {
     check_authz_json('cat_manage');
@@ -457,9 +457,9 @@ if ($_REQUEST['act'] == 'toggle_is_show') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 删除商品分类
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 删除商品分类
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'remove') {
     check_authz_json('cat_manage');
 
@@ -554,9 +554,9 @@ function get_attr_list()
  */
 function insert_cat_recommend($recommend_type, $cat_id)
 {
-    //检查分类是否为首页推荐
+    // 检查分类是否为首页推荐
     if (! empty($recommend_type)) {
-        //取得之前的分类
+        // 取得之前的分类
         $recommend_res = $GLOBALS['db']->getAll('SELECT recommend_type FROM '.$GLOBALS['ecs']->table('cat_recommend').' WHERE cat_id='.$cat_id);
         if (empty($recommend_res)) {
             foreach ($recommend_type as $data) {

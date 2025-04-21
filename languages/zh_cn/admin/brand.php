@@ -13,11 +13,11 @@ $_LANG['drop_brand_logo_success'] = '删除品牌logo成功';
 $_LANG['brand_edit_lnk'] = '重新编辑该品牌';
 $_LANG['brand_list_lnk'] = '返回列表页面';
 
-/*帮助信息*/
+/* 帮助信息 */
 $_LANG['up_brandlogo'] = '请上传图片，做为品牌的LOGO！';
 $_LANG['warn_brandlogo'] = '你已经上传过图片。再次上传时将覆盖原图片！';
 
-/*提示信息*/
+/* 提示信息 */
 $_LANG['brand_edit'] = '编辑品牌记录';
 $_LANG['upload_failure'] = '图片上传失败！';
 $_LANG['brandedit_fail'] = '品牌 %s 修改失败！';
@@ -39,6 +39,6 @@ $_LANG['upfile_error'] = '图片无法上传，请确保data目录下所有子�
 
 $_LANG['visibility_notes'] = '当品牌下还没有商品的时候，首页及分类页的品牌区将不会显示该品牌。';
 
-/*JS 语言项*/
+/* JS 语言项 */
 $_LANG['js_languages']['no_brandname'] = '您必须输入品牌名称！';
 $_LANG['js_languages']['require_num'] = '排序序号必须是一个数字';

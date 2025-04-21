@@ -10,9 +10,9 @@ include_once ROOT_PATH.'includes/lib_transaction.php';
 require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/shopping_flow.php';
 require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/user.php';
 
-/*------------------------------------------------------ */
-//-- INPUT
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- INPUT
+/* ------------------------------------------------------ */
 
 if ($_SESSION['user_id'] > 0) {
     $consignee_list = get_consignee_list($_SESSION['user_id']);
@@ -28,9 +28,9 @@ if ($_SESSION['user_id'] > 0) {
     $choose['district'] = isset($_POST['district']) ? intval($_POST['district']) : 417;
 }
 
-/*------------------------------------------------------ */
-//-- PROCESSOR
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- PROCESSOR
+/* ------------------------------------------------------ */
 
 assign_template();
 assign_dynamic('myship');

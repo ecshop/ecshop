@@ -31,7 +31,7 @@ $_LANG['no_name'] = '活动名不能为空';
 $_LANG['notice_goodsid'] = '需要先搜索商品，生成商品列表，然后再选择';
 $_LANG['notice_package_price'] = '购买礼包的价格';
 
-/*JS 语言项*/
+/* JS 语言项 */
 $_LANG['js_languages']['no_name'] = '没有输入活动名';
 $_LANG['js_languages']['no_desc'] = '没有输入活动描述';
 $_LANG['js_languages']['no_goods_id'] = '没有选择商品';

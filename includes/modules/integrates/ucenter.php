@@ -94,7 +94,7 @@ class ucenter extends integrate
         $uname = addslashes($uname);
 
         if ($uid > 0) {
-            //检查用户是否存在,不存在直接放入用户表
+            // 检查用户是否存在,不存在直接放入用户表
             $result = $this->db->getRow('SELECT user_id,ec_salt FROM '.$GLOBALS['ecs']->table('users')." WHERE user_name='$username'");
             $name_exist = $result['user_id'];
             if (empty($result['ec_salt'])) {
@@ -146,9 +146,9 @@ class ucenter extends integrate
      */
     public function logout()
     {
-        $this->set_cookie();  //清除cookie
-        $this->set_session(); //清除session
-        $this->ucdata = uc_call('uc_user_synlogout');   //同步退出
+        $this->set_cookie();  // 清除cookie
+        $this->set_session(); // 清除session
+        $this->ucdata = uc_call('uc_user_synlogout');   // 同步退出
 
         return true;
     }
@@ -192,7 +192,7 @@ class ucenter extends integrate
                 return false;
             }
         } else {
-            //注册成功，插入用户表
+            // 注册成功，插入用户表
             $reg_date = time();
             $ip = real_ip();
             $password = $this->compile_password(['password' => $password]);
@@ -265,17 +265,17 @@ class ucenter extends integrate
             if ($ucresult > 0) {
                 $flag = true;
             } elseif ($ucresult == -4) {
-                //echo 'Email 格式有误';
+                // echo 'Email 格式有误';
                 $this->error = ERR_INVALID_EMAIL;
 
                 return false;
             } elseif ($ucresult == -5) {
-                //echo 'Email 不允许注册';
+                // echo 'Email 不允许注册';
                 $this->error = ERR_INVALID_EMAIL;
 
                 return false;
             } elseif ($ucresult == -6) {
-                //echo '该 Email 已经被注册';
+                // echo '该 Email 已经被注册';
                 $this->error = ERR_EMAIL_EXISTS;
 
                 return false;
@@ -310,7 +310,7 @@ class ucenter extends integrate
      */
     public function get_profile_by_name($username)
     {
-        //$username = addslashes($username);
+        // $username = addslashes($username);
 
         $sql = 'SELECT user_id, user_name, email, sex, reg_time FROM '.$GLOBALS['ecs']->table('users')." WHERE user_name='$username'";
         $row = $this->db->getRow($sql);
@@ -441,9 +441,9 @@ class ucenter extends integrate
         $col = $GLOBALS['db']->getCol($sql);
 
         if ($col) {
-            $sql = 'UPDATE '.$GLOBALS['ecs']->table('users').' SET parent_id = 0 WHERE '.db_create_in($col, 'parent_id'); //将删除用户的下级的parent_id 改为0
+            $sql = 'UPDATE '.$GLOBALS['ecs']->table('users').' SET parent_id = 0 WHERE '.db_create_in($col, 'parent_id'); // 将删除用户的下级的parent_id 改为0
             $GLOBALS['db']->query($sql);
-            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('users').' WHERE '.db_create_in($col, 'user_id'); //删除用户
+            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('users').' WHERE '.db_create_in($col, 'user_id'); // 删除用户
             $GLOBALS['db']->query($sql);
             /* 删除用户订单 */
             $sql = 'SELECT order_id FROM '.$GLOBALS['ecs']->table('order_info').' WHERE '.db_create_in($col, 'user_id');
@@ -456,21 +456,21 @@ class ucenter extends integrate
                 $GLOBALS['db']->query($sql);
             }
 
-            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('booking_goods').' WHERE '.db_create_in($col, 'user_id'); //删除用户
+            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('booking_goods').' WHERE '.db_create_in($col, 'user_id'); // 删除用户
             $GLOBALS['db']->query($sql);
-            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('collect_goods').' WHERE '.db_create_in($col, 'user_id'); //删除会员收藏商品
+            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('collect_goods').' WHERE '.db_create_in($col, 'user_id'); // 删除会员收藏商品
             $GLOBALS['db']->query($sql);
-            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('feedback').' WHERE '.db_create_in($col, 'user_id'); //删除用户留言
+            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('feedback').' WHERE '.db_create_in($col, 'user_id'); // 删除用户留言
             $GLOBALS['db']->query($sql);
-            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('user_address').' WHERE '.db_create_in($col, 'user_id'); //删除用户地址
+            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('user_address').' WHERE '.db_create_in($col, 'user_id'); // 删除用户地址
             $GLOBALS['db']->query($sql);
-            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('user_bonus').' WHERE '.db_create_in($col, 'user_id'); //删除用户红包
+            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('user_bonus').' WHERE '.db_create_in($col, 'user_id'); // 删除用户红包
             $GLOBALS['db']->query($sql);
-            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('user_account').' WHERE '.db_create_in($col, 'user_id'); //删除用户帐号金额
+            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('user_account').' WHERE '.db_create_in($col, 'user_id'); // 删除用户帐号金额
             $GLOBALS['db']->query($sql);
-            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('tag').' WHERE '.db_create_in($col, 'user_id'); //删除用户标记
+            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('tag').' WHERE '.db_create_in($col, 'user_id'); // 删除用户标记
             $GLOBALS['db']->query($sql);
-            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('account_log').' WHERE '.db_create_in($col, 'user_id'); //删除用户日志
+            $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('account_log').' WHERE '.db_create_in($col, 'user_id'); // 删除用户日志
             $GLOBALS['db']->query($sql);
         }
 

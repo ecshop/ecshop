@@ -138,7 +138,7 @@ function get_msg_list($num, $start)
             $msg[$rows['msg_time']]['comment_rank'] = $rows['comment_rank'];
             $msg[$rows['msg_time']]['id_value'] = $rows['id_value'];
 
-            /*如果id_value为true为商品评论,根据商品id取出商品名称*/
+            /* 如果id_value为true为商品评论,根据商品id取出商品名称 */
             if ($rows['id_value']) {
                 $sql_goods = 'SELECT goods_name FROM '.$GLOBALS['ecs']->table('goods');
                 $sql_goods .= 'WHERE goods_id= '.$rows['id_value'];

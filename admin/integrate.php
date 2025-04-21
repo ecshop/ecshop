@@ -3,9 +3,9 @@
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
-/*------------------------------------------------------ */
-//-- 会员数据整合插件列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 会员数据整合插件列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     $modules = read_modules('../includes/modules/integrates');
     for ($i = 0; $i < count($modules); $i++) {
@@ -22,9 +22,9 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('integrates_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 安装会员数据整合插件
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 安装会员数据整合插件
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'install') {
     admin_priv('integrate_users', '');
 
@@ -54,7 +54,7 @@ if ($_REQUEST['act'] == 'install') {
         $sql = 'UPDATE '.$GLOBALS['ecs']->table('users').
             " SET flag = 0, alias=''".
             ' WHERE flag > 0';
-        $db->query($sql); //如果有标记，清空标记
+        $db->query($sql); // 如果有标记，清空标记
         $set_modules = true;
         include_once ROOT_PATH.'includes/modules/integrates/'.$_GET['code'].'.php';
         $set_modules = false;
@@ -97,9 +97,9 @@ if ($_REQUEST['act'] == 'view_install_log') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 设置会员数据整合插件
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 设置会员数据整合插件
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'setup') {
     admin_priv('integrate_users', '');
@@ -119,9 +119,9 @@ if ($_REQUEST['act'] == 'setup') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 检查用户填写资料
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 检查用户填写资料
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'check_config') {
     $code = $_POST['code'];
 
@@ -209,9 +209,9 @@ if ($_REQUEST['act'] == 'check_config') {
     $smarty->display('integrates_check.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 保存UCenter填写的资料
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 保存UCenter填写的资料
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'save_uc_config') {
     $code = $_POST['code'];
 
@@ -245,9 +245,9 @@ if ($_REQUEST['act'] == 'save_uc_config') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 第一次保存UCenter安装的资料
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 第一次保存UCenter安装的资料
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'save_uc_config_first') {
     $code = $_POST['code'];
 
@@ -316,9 +316,9 @@ if ($_REQUEST['act'] == 'save_uc_config_first') {
     $smarty->display('integrates_uc_import.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 用户重名检查
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 用户重名检查
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'check_user') {
     $code = $_SESSION['code'];
     include_once ROOT_PATH.'includes/cls_json.php';
@@ -364,7 +364,7 @@ if ($_REQUEST['act'] == 'check_user') {
                 $test_user_list[] = $post_user_list[$i].$domain;
             }
             /* 检查改名后用户是否和论坛用户有重名 */
-            $error_user_list = $cls_user->test_conflict($test_user_list);   //检查
+            $error_user_list = $cls_user->test_conflict($test_user_list);   // 检查
             if ($error_user_list) {
                 $domain_len = 0 - str_len($domain);
                 $count = count($error_user_list);
@@ -452,7 +452,7 @@ if ($_REQUEST['act'] == 'import_user') {
     }
     $ucdb->query('ALTER TABLE '.$cfg['db_pre'].'members AUTO_INCREMENT='.($lastuid + 1), 'SILENT');
 
-    //需要更新user_id的表
+    // 需要更新user_id的表
     $up_user_table = ['account_log', 'affiliate_log', 'booking_goods', 'collect_goods', 'comment', 'feedback', 'order_info', 'snatch_log', 'tag', 'users', 'user_account', 'user_address', 'user_bonus', 'reg_extend_info', 'user_feed', 'delivery_order', 'back_order'];
     // 清空的表
     $truncate_user_table = ['cart', 'sessions', 'sessions_data'];
@@ -481,9 +481,9 @@ if ($_REQUEST['act'] == 'import_user') {
     exit($json->encode($result));
 }
 
-/*------------------------------------------------------ */
-//-- 重名用户处理
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 重名用户处理
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'modify') {
     /* 检查是否有改名失败的用户 */
     $sql = 'SELECT COUNT(*) FROM '.$ecs->table('users').' WHERE flag = 1';
@@ -512,9 +512,9 @@ if ($_REQUEST['act'] == 'modify') {
     $smarty->display('integrates_modify.htm');
 }
 
-/*------------------------------------------------------ */
-//-- ajax 用户列表查询
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- ajax 用户列表查询
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
     $arr = conflict_userlist();
     $smarty->assign('list', $arr['list']);
@@ -525,9 +525,9 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result($smarty->fetch('integrates_modify.htm'), '', ['filter' => $arr['filter'], 'page_count' => $arr['page_count']]);
 }
 
-/*------------------------------------------------------ */
-//-- 重名用户处理过程
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 重名用户处理过程
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'act_modify') {
     /* 先处理要改名的用户，改名用户要先检查是否有重名情况，有则标记出来 */
     $alias = [];
@@ -585,14 +585,14 @@ if ($_REQUEST['act'] == 'act_modify') {
         }
     }
 
-    /* 跳转  */
+    /* 跳转 */
     ecs_header('Location: integrate.php?act=modify');
     exit;
 }
 
-/*------------------------------------------------------ */
-//-- 将商城数据同步到论坛
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 将商城数据同步到论坛
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'sync') {
     $size = 100;
     $total = $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('users'));
@@ -652,9 +652,9 @@ if ($_REQUEST['act'] == 'sync') {
     $smarty->display('integrates_sync.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 完成任务
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 完成任务
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'task') {
     if (empty($_GET['size']) || $_GET['size'] < 0) {
         $size = 100;
@@ -753,9 +753,9 @@ if ($_REQUEST['act'] == 'task') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 保存UCenter设置
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 保存UCenter设置
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'setup_ucenter') {
     include_once ROOT_PATH.'includes/cls_json.php';
     include_once ROOT_PATH.'includes/cls_transport.php';
@@ -800,17 +800,17 @@ if ($_REQUEST['act'] == 'setup_ucenter') {
     $ucconfig = $t->request($ucapi.'/index.php', $postdata);
     $ucconfig = $ucconfig['body'];
     if (empty($ucconfig)) {
-        //ucenter 验证失败
+        // ucenter 验证失败
         $result['error'] = 1;
         $result['message'] = $_LANG['uc_msg_verify_failur'];
     } elseif ($ucconfig == '-1') {
-        //管理员密码无效
+        // 管理员密码无效
         $result['error'] = 1;
         $result['message'] = $_LANG['uc_msg_password_wrong'];
     } else {
         [$appauthkey, $appid] = explode('|', $ucconfig);
         if (empty($appauthkey) || empty($appid)) {
-            //ucenter 安装数据错误
+            // ucenter 安装数据错误
             $result['error'] = 1;
             $result['message'] = $_LANG['uc_msg_data_error'];
         } else {
@@ -831,7 +831,7 @@ if ($_REQUEST['act'] == 'points_set') {
     $rule_index = empty($_GET['rule_index']) ? '' : trim($_GET['rule_index']);
 
     $user = init_users();
-    $points = $user->get_points_name(); //获取商城可用积分
+    $points = $user->get_points_name(); // 获取商城可用积分
 
     if (empty($points)) {
         sys_msg($_LANG['no_points'], 0, [['text' => $_LANG['06_list_integrate'], 'href' => 'integrate.php?act=list']]);
@@ -839,7 +839,7 @@ if ($_REQUEST['act'] == 'points_set') {
         sys_msg($_LANG['uc_points'], 0, [['text' => $_LANG['uc_set_credits'], 'href' => UC_API, 'target' => '_blank']], false);
     }
 
-    $rule = []; //取得一样规则
+    $rule = []; // 取得一样规则
     if ($_CFG['points_rule']) {
         $rule = unserialize($_CFG['points_rule']);
     }
@@ -907,7 +907,7 @@ if ($_REQUEST['act'] == 'points_set') {
 if ($_REQUEST['act'] == 'edit_points') {
     $rule_index = empty($_REQUEST['rule_index']) ? '' : trim($_REQUEST['rule_index']);
 
-    $rule = []; //取得一样规则
+    $rule = []; // 取得一样规则
     if ($_CFG['points_rule']) {
         $rule = unserialize($_CFG['points_rule']);
     }

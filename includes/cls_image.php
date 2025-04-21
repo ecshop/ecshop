@@ -103,7 +103,7 @@ class cls_image
      */
     public function make_thumb($img, $thumb_width = 0, $thumb_height = 0, $path = '', $bgcolor = '')
     {
-        $gd = $this->gd_version(); //获取 GD 版本。0 表示没有 GD 库，1 表示 GD 1.x，2 表示 GD 2.x
+        $gd = $this->gd_version(); // 获取 GD 版本。0 表示没有 GD 库，1 表示 GD 1.x，2 表示 GD 2.x
         if ($gd == 0) {
             $this->error_msg = $GLOBALS['_LANG']['missing_gd'];
 
@@ -219,7 +219,7 @@ class cls_image
         imagedestroy($img_thumb);
         imagedestroy($img_org);
 
-        //确认文件是否生成
+        // 确认文件是否生成
         if (file_exists($dir.$filename)) {
             return str_replace(ROOT_PATH, '', $dir).$filename;
         } else {
@@ -412,9 +412,9 @@ class cls_image
         return $this->error_msg;
     }
 
-    /*------------------------------------------------------ */
-    //-- 工具函数
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 工具函数
+    /* ------------------------------------------------------ */
 
     /**
      * 检查图片类型

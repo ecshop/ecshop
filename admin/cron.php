@@ -236,7 +236,7 @@ if ($_REQUEST['act'] == 'edit') {
         $_POST['alow_files'] = isset($_POST['alow_files']) ? implode(' ', $_POST['alow_files']) : '';
 
         ! isset($_POST['cron_run_once']) && $_POST['cron_run_once'] = 0;
-        //$_POST['cron_run_once'] = (int)$_POST['cron_run_once'];
+        // $_POST['cron_run_once'] = (int)$_POST['cron_run_once'];
         $cron_hour = $_POST['cron_hour'];
         $cron = ['day' => $cron_day, 'week' => $cron_week, 'm' => $cron_minute, 'hour' => $cron_hour];
         $next = get_next_time($cron);

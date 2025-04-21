@@ -65,7 +65,7 @@ $_LANG['filter_attr'] = '筛选属性';
 $_LANG['filter_attr_notic'] = '筛选属性可在前分类页面筛选商品';
 $_LANG['filter_attr_not_repeated'] = '筛选属性不可重复';
 
-/*JS 语言项*/
+/* JS 语言项 */
 $_LANG['js_languages']['catname_empty'] = '分类名称不能为空!';
 $_LANG['js_languages']['unit_empyt'] = '数量单位不能为空!';
 $_LANG['js_languages']['is_leafcat'] = '您选定的分类是一个末级分类。\r\n新分类的上级分类不能是一个末级分类';

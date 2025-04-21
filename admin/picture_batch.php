@@ -121,14 +121,14 @@ if (empty($_GET['is_ajax'])) {
             $err_msg = [];
         }
 
-        /*------------------------------------------------------ */
-        //-- 商品图片
-        /*------------------------------------------------------ */
+        /* ------------------------------------------------------ */
+        // -- 商品图片
+        /* ------------------------------------------------------ */
         if ($result['module_no'] == 0) {
             $count = $GLOBALS['db']->getOne('SELECT COUNT(*) FROM '.$ecs->table('goods')." AS g WHERE g.original_img > ''".$goods_where);
             /* 页数在许可范围内 */
             if ($result['page'] <= ceil($count / $result['page_size'])) {
-                $start_time = gmtime(); //开始执行时间
+                $start_time = gmtime(); // 开始执行时间
 
                 /* 开始处理 */
                 if ($proc_thumb) {
@@ -156,7 +156,7 @@ if (empty($_GET['is_ajax'])) {
                 exit($json->encode($result));
             }
         } elseif ($result['module_no'] == 1 && $result['do_album'] == 1) {
-            //商品相册
+            // 商品相册
             $count = $GLOBALS['db']->getOne('SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('goods_gallery').' AS album '.$album_where);
 
             if ($result['page'] <= ceil($count / $result['page_size'])) {
@@ -232,10 +232,10 @@ function process_image($page = 1, $page_size = 100, $type = 0, $thumb = true, $w
                     $dir = dirname(ROOT_PATH.$row['goods_img']).'/';
                 }
 
-                $image = $GLOBALS['image']->make_thumb(ROOT_PATH.$row['original_img'], $GLOBALS['_CFG']['image_width'], $GLOBALS['_CFG']['image_height'], $dir); //先生成缩略图
+                $image = $GLOBALS['image']->make_thumb(ROOT_PATH.$row['original_img'], $GLOBALS['_CFG']['image_width'], $GLOBALS['_CFG']['image_height'], $dir); // 先生成缩略图
 
                 if (! $image) {
-                    //出错返回
+                    // 出错返回
                     $msg = sprintf($GLOBALS['_LANG']['error_pos'], $row['goods_id'])."\n".$GLOBALS['image']->error_msg();
                     if ($silent) {
                         $GLOBALS['err_msg'][] = $msg;
@@ -249,7 +249,7 @@ function process_image($page = 1, $page_size = 100, $type = 0, $thumb = true, $w
                 $image = $GLOBALS['image']->add_watermark(ROOT_PATH.$image, '', $GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']);
 
                 if (! $image) {
-                    //出错返回
+                    // 出错返回
                     $msg = sprintf($GLOBALS['_LANG']['error_pos'], $row['goods_id'])."\n".$GLOBALS['image']->error_msg();
                     if ($silent) {
                         $GLOBALS['err_msg'][] = $msg;

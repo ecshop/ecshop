@@ -8,9 +8,9 @@ $image = new cls_image($_CFG['bgcolor']);
 
 $exc = new exchange($ecs->table('card'), $db, 'card_id', 'card_name');
 
-/*------------------------------------------------------ */
-//-- 包装列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 包装列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     assign_query_info();
     $smarty->assign('ur_here', $_LANG['07_card_list']);
@@ -27,9 +27,9 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('card_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- ajax列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- ajax列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
     $cards_list = cards_list();
     $smarty->assign('card_list', $cards_list['card_list']);
@@ -42,9 +42,9 @@ if ($_REQUEST['act'] == 'query') {
 
     make_json_result($smarty->fetch('card_list.htm'), '', ['filter' => $cards_list['filter'], 'page_count' => $cards_list['page_count']]);
 }
-/*------------------------------------------------------ */
-//-- 删除贺卡
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 删除贺卡
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'remove') {
     /* 检查权限 */
     check_authz_json('card_manage');
@@ -69,14 +69,14 @@ if ($_REQUEST['act'] == 'remove') {
         make_json_error($db->error());
     }
 }
-/*------------------------------------------------------ */
-//-- 添加新包装
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 添加新包装
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'add') {
     /* 权限判断 */
     admin_priv('card_manage');
 
-    /*初始化显示*/
+    /* 初始化显示 */
     $card['card_fee'] = 0;
     $card['free_money'] = 0;
 
@@ -92,24 +92,24 @@ if ($_REQUEST['act'] == 'insert') {
     /* 权限判断 */
     admin_priv('card_manage');
 
-    /*检查包装名是否重复*/
+    /* 检查包装名是否重复 */
     $is_only = $exc->is_only('card_name', $_POST['card_name']);
 
     if (! $is_only) {
         sys_msg(sprintf($_LANG['cardname_exist'], stripslashes($_POST['card_name'])), 1);
     }
 
-    /*处理图片*/
+    /* 处理图片 */
     $img_name = basename($image->upload_image($_FILES['card_img'], 'cardimg'));
 
-    /*插入数据*/
+    /* 插入数据 */
     $sql = 'INSERT INTO '.$ecs->table('card')."(card_name, card_fee, free_money, card_desc, card_img)
             VALUES ('$_POST[card_name]', '$_POST[card_fee]', '$_POST[free_money]', '$_POST[card_desc]', '$img_name')";
     $db->query($sql);
 
     admin_log($_POST['card_name'], 'add', 'card');
 
-    /*添加链接*/
+    /* 添加链接 */
     $link[0]['text'] = $_LANG['continue_add'];
     $link[0]['href'] = 'card.php?act=add';
 
@@ -119,9 +119,9 @@ if ($_REQUEST['act'] == 'insert') {
     sys_msg($_POST['card_name'].$_LANG['cardadd_succeed'], 0, $link);
 }
 
-/*------------------------------------------------------ */
-//-- 编辑包装
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑包装
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit') {
     /* 权限判断 */
     admin_priv('card_manage');
@@ -142,7 +142,7 @@ if ($_REQUEST['act'] == 'update') {
     admin_priv('card_manage');
 
     if ($_POST['card_name'] != $_POST['old_cardname']) {
-        /*检查品牌名是否相同*/
+        /* 检查品牌名是否相同 */
         $is_only = $exc->is_only('card_name', $_POST['card_name'], $_POST['id']);
 
         if (! $is_only) {
@@ -185,9 +185,9 @@ if ($_REQUEST['act'] == 'drop_card_img') {
     $link = [['text' => $_LANG['card_edit_lnk'], 'href' => 'card.php?act=edit&id='.$card_id], ['text' => $_LANG['card_list_lnk'], 'href' => 'brand.php?act=list']];
     sys_msg($_LANG['drop_card_img_success'], 0, $link);
 }
-/*------------------------------------------------------ */
-//-- ajax编辑卡片名字
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- ajax编辑卡片名字
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit_card_name') {
     check_authz_json('card_manage');
     $card_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
@@ -204,9 +204,9 @@ if ($_REQUEST['act'] == 'edit_card_name') {
         make_json_error($db->error());
     }
 }
-/*------------------------------------------------------ */
-//-- ajax编辑卡片费用
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- ajax编辑卡片费用
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit_card_fee') {
     check_authz_json('card_manage');
     $card_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
@@ -220,9 +220,9 @@ if ($_REQUEST['act'] == 'edit_card_fee') {
         make_json_error($db->error());
     }
 }
-/*------------------------------------------------------ */
-//-- ajax编辑免费额度
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- ajax编辑免费额度
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit_free_money') {
     check_authz_json('card_manage');
     $card_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);

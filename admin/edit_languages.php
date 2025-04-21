@@ -13,11 +13,11 @@ if (empty($_REQUEST['act'])) {
 
 admin_priv('lang_edit');
 
-/*------------------------------------------------------ */
-//-- 列表编辑 ?act=list
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 列表编辑 ?act=list
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
-    //从languages目录下获取语言项文件
+    // 从languages目录下获取语言项文件
     $lang_arr = [];
     $lang_path = ROOT_PATH.'languages/'.$_CFG['lang'];
     $lang_dir = @opendir($lang_path);
@@ -55,21 +55,21 @@ if ($_REQUEST['act'] == 'list') {
 
     /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['edit_languages']);
-    $smarty->assign('keyword', $keyword);  //关键字
+    $smarty->assign('keyword', $keyword);  // 关键字
     $smarty->assign('action_link', []);
-    $smarty->assign('file_attr', $file_attr); //文件权限
-    $smarty->assign('lang_arr', $lang_arr); //语言文件列表
-    $smarty->assign('file_path', $file_path); //语言文件
-    $smarty->assign('lang_file', $lang_file); //语言文件
-    $smarty->assign('language_arr', $language_arr); //需要编辑的语言项列表
+    $smarty->assign('file_attr', $file_attr); // 文件权限
+    $smarty->assign('lang_arr', $lang_arr); // 语言文件列表
+    $smarty->assign('file_path', $file_path); // 语言文件
+    $smarty->assign('lang_file', $lang_file); // 语言文件
+    $smarty->assign('language_arr', $language_arr); // 需要编辑的语言项列表
 
     assign_query_info();
     $smarty->display('language_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 编辑语言项
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑语言项
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit') {
     /* 语言项的路径 */
     $lang_file = isset($_POST['file_path']) ? trim($_POST['file_path']) : '';
@@ -111,9 +111,9 @@ if ($_REQUEST['act'] == 'edit') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 语言项的操作函数
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 语言项的操作函数
+/* ------------------------------------------------------ */
 
 /**
  * 获得语言项列表

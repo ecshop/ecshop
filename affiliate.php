@@ -8,7 +8,7 @@ if (! DEBUG_MODE) {
     $smarty->caching = true;
 }
 
-//$charset = empty($_GET['charset']) ? 'UTF8' : $_GET['charset'];
+// $charset = empty($_GET['charset']) ? 'UTF8' : $_GET['charset'];
 $display_mode = empty($_GET['display_mode']) ? 'javascript' : $_GET['display_mode'];
 
 if ($display_mode == 'javascript') {
@@ -19,9 +19,9 @@ if ($display_mode == 'javascript') {
     header('content-type: application/x-javascript; charset='.($charset == 'UTF8' ? 'utf-8' : $charset));
 }
 
-/*------------------------------------------------------ */
-//-- 判断是否存在缓存，如果存在则调用缓存，反之读取相应内容
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 判断是否存在缓存，如果存在则调用缓存，反之读取相应内容
+/* ------------------------------------------------------ */
 /* 缓存编号 */
 $cache_id = sprintf('%X', crc32($_SERVER['QUERY_STRING']));
 

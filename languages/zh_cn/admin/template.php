@@ -29,7 +29,7 @@ $_LANG['not_editable'] = '非可编辑区库文件无选择项';
 $_LANG['template_files']['article'] = '文章内容模板';
 $_LANG['template_files']['article_cat'] = '文章分类模板';
 $_LANG['template_files']['brand'] = '品牌专区';
-//$_LANG['template_files']['catalog'] = '所有分类页';
+// $_LANG['template_files']['catalog'] = '所有分类页';
 $_LANG['template_files']['category'] = '商品分类页模板';
 $_LANG['template_files']['flow'] = '购物流程模板';
 $_LANG['template_files']['goods'] = '商品详情模板';
@@ -44,7 +44,7 @@ $_LANG['template_files']['brand'] = '商品品牌页';
 $_LANG['template_files']['auction_list'] = '拍卖活动列表';
 $_LANG['template_files']['auction'] = '拍卖活动详情';
 $_LANG['template_files']['message_board'] = '留言板';
-//$_LANG['template_files']['quotation'] = '报价单';
+// $_LANG['template_files']['quotation'] = '报价单';
 $_LANG['template_files']['exchange_list'] = '积分商城列表';
 
 /* 每一个库项目的描述 */

@@ -4,11 +4,11 @@ define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
 
-/*------------------------------------------------------ */
-//-- 如果用没有指定活动id，将页面重定向到即将结束的活动
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 如果用没有指定活动id，将页面重定向到即将结束的活动
+/* ------------------------------------------------------ */
 if (empty($_REQUEST['act'])) {
-    //默认显示页面
+    // 默认显示页面
     $_REQUEST['act'] = 'main';
 }
 
@@ -34,7 +34,7 @@ if ($_REQUEST['act'] == 'main') {
         $position = assign_ur_here(0, $goods['snatch_name']);
         $myprice = get_myprice($id);
         if ($goods['is_end']) {
-            //如果活动已经结束,获取活动结果
+            // 如果活动已经结束,获取活动结果
             $smarty->assign('result', get_snatch_result($id));
         }
         $smarty->assign('id', $id);
@@ -70,7 +70,7 @@ if ($_REQUEST['act'] == 'main') {
     $smarty->assign('ur_here', $position['ur_here']);
     $smarty->assign('categories', get_categories_tree()); // 分类树
     $smarty->assign('helps', get_shop_help());       // 网店帮助
-    $smarty->assign('snatch_list', get_snatch_list());     //所有有效的夺宝奇兵列表
+    $smarty->assign('snatch_list', get_snatch_list());     // 所有有效的夺宝奇兵列表
     $smarty->assign('price_list', get_price_list($id));
     $smarty->assign('promotion_info', get_promotion_info());
     $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typesnatch.xml' : 'feed.php?type=snatch'); // RSS URL
@@ -152,7 +152,7 @@ if ($_REQUEST['act'] == 'bid') {
         exit($json->encode($result));
     }
 
-    log_account_change($_SESSION['user_id'], 0, 0, 0, 0 - $row['cost_points'], sprintf($_LANG['snatch_log'], $row['snatch_name'])); //扣除用户积分
+    log_account_change($_SESSION['user_id'], 0, 0, 0, 0 - $row['cost_points'], sprintf($_LANG['snatch_log'], $row['snatch_name'])); // 扣除用户积分
     $sql = 'INSERT INTO '.$ecs->table('snatch_log').'(snatch_id, user_id, bid_price, bid_time) VALUES'.
         "('$id', '".$_SESSION['user_id']."', '".$price."', ".gmtime().')';
     $db->query($sql);
@@ -163,9 +163,9 @@ if ($_REQUEST['act'] == 'bid') {
     exit($json->encode($result));
 }
 
-/*------------------------------------------------------ */
-//-- 购买商品
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 购买商品
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'buy') {
     if (empty($id)) {
         ecs_header("Location: ./\n");
@@ -196,7 +196,7 @@ if ($_REQUEST['act'] == 'buy') {
         show_message($_LANG['not_for_you']);
     }
 
-    //检查是否已经购买过
+    // 检查是否已经购买过
     if ($result['order_count'] > 0) {
         show_message($_LANG['order_placed']);
     }

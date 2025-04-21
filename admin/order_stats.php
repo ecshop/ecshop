@@ -15,9 +15,9 @@ if (empty($_REQUEST['act'])) {
     $_REQUEST['act'] = trim($_REQUEST['act']);
 }
 
-/*------------------------------------------------------ */
-//--订单统计
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// --订单统计
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     admin_priv('sale_order_stats');
 
@@ -58,9 +58,9 @@ if ($_REQUEST['act'] == 'list') {
             $end_date = $start_date + 86400;
         }
     } else {
-        $today = strtotime(local_date('Y-m-d'));   //本地时间
+        $today = strtotime(local_date('Y-m-d'));   // 本地时间
         $start_date = $today - 86400 * 6;
-        $end_date = $today + 86400;               //至明天零时
+        $end_date = $today + 86400;               // 至明天零时
     }
 
     $start_date_arr = [];
@@ -238,9 +238,9 @@ if ($_REQUEST['act'] == 'list') {
     /* 赋值到模板 */
     $smarty->assign('order_general', $order_general);
     $smarty->assign('total_turnover', price_format($order_general['total_turnover']));
-    $smarty->assign('click_count', $click_count);         //商品总点击数
-    $smarty->assign('click_ordernum', $click_ordernum);      //每千点订单数
-    $smarty->assign('click_turnover', price_format($click_turnover));  //每千点购物额
+    $smarty->assign('click_count', $click_count);         // 商品总点击数
+    $smarty->assign('click_ordernum', $click_ordernum);      // 每千点订单数
+    $smarty->assign('click_turnover', price_format($click_turnover));  // 每千点购物额
 
     $smarty->assign('is_multi', $is_multi);
 
@@ -319,9 +319,9 @@ if ($_REQUEST['act'] = 'download') {
     exit;
 }
 
-/*------------------------------------------------------ */
-//--订单统计需要的函数
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// --订单统计需要的函数
+/* ------------------------------------------------------ */
 /**
  * 取得订单概况数据(包括订单的几种状态)
  *

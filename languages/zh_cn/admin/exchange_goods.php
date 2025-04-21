@@ -30,6 +30,6 @@ $_LANG['drop_confirm'] = '您确认要删除这件商品吗？';
 $_LANG['batch_remove_succeed'] = '您已经成功删除 %d 件商品';
 $_LANG['exchange_integral_invalid'] = '积分值为空或不是数字';
 
-/*JS 语言项*/
+/* JS 语言项 */
 $_LANG['js_languages']['no_goods_id'] = '没有选择商品';
 $_LANG['js_languages']['invalid_exchange_integral'] = '积分值为空或不是数字';

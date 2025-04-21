@@ -45,7 +45,7 @@ $_LANG['lable_box']['order_no'] = '订单号-订单';
 $_LANG['lable_box']['order_postscript'] = '备注-订单';
 $_LANG['lable_box']['order_best_time'] = '送货时间-订单';
 $_LANG['lable_box']['pigeon'] = '√-对号';
-//$_LANG['lable_box']['custom_content'] = '自定义内容';
+// $_LANG['lable_box']['custom_content'] = '自定义内容';
 
 /* 提示信息 */
 $_LANG['no_shipping_name'] = '对不起，配送方式名称不能为空。';

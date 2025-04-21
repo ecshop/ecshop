@@ -96,7 +96,7 @@ $_LANG['new_order_2'] = ' 个新订单以及 ';
 $_LANG['new_order_3'] = ' 个新付款的订单';
 $_LANG['new_order_link'] = '点击查看新订单';
 
-/*语言项*/
+/* 语言项 */
 $_LANG['chinese_simplified'] = '简体中文';
 $_LANG['english'] = '英文';
 

@@ -64,7 +64,7 @@ class transport
             exit('Invalid url!');
         }
 
-        if ($this->time_limit > -1) {//如果为0，不限制执行时间
+        if ($this->time_limit > -1) {// 如果为0，不限制执行时间
             set_time_limit($this->time_limit);
         }
 
@@ -156,11 +156,11 @@ class transport
         }
 
         if (! $fp) {
-            return false; //打开失败
+            return false; // 打开失败
         }
 
         if (! @fwrite($fp, $request)) {
-            return false; //写入失败
+            return false; // 写入失败
         }
 
         while (! feof($fp)) {
@@ -168,14 +168,14 @@ class transport
         }
 
         if (! $http_response) {
-            return false; //空响应
+            return false; // 空响应
         }
 
         $separator = '/\r\n\r\n|\n\n|\r\r/';
         [$http_header, $http_body] = preg_split($separator, $http_response, 2);
 
-        $http_response = ['header' => $http_header, //header肯定有值
-            'body' => $http_body]; //body可能为空
+        $http_response = ['header' => $http_header, // header肯定有值
+            'body' => $http_body]; // body可能为空
         @fclose($fp);
 
         return $http_response;
@@ -198,9 +198,9 @@ class transport
 
         /* 基本设置 */
         curl_setopt($curl_session, CURLOPT_FORBID_REUSE, true); // 处理完后，关闭连接，释放资源
-        curl_setopt($curl_session, CURLOPT_HEADER, true); //结果中包含头部信息
-        curl_setopt($curl_session, CURLOPT_RETURNTRANSFER, true); //把结果返回，而非直接输出
-        curl_setopt($curl_session, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0); //采用1.0版的HTTP协议
+        curl_setopt($curl_session, CURLOPT_HEADER, true); // 结果中包含头部信息
+        curl_setopt($curl_session, CURLOPT_RETURNTRANSFER, true); // 把结果返回，而非直接输出
+        curl_setopt($curl_session, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0); // 采用1.0版的HTTP协议
 
         $url_parts = $this->parse_raw_url($url);
 
@@ -257,8 +257,8 @@ class transport
         $separator = '/\r\n\r\n|\n\n|\r\r/';
         [$http_header, $http_body] = preg_split($separator, $http_response, 2);
 
-        $http_response = ['header' => $http_header, //肯定有值
-            'body' => $http_body]; //可能为空
+        $http_response = ['header' => $http_header, // 肯定有值
+            'body' => $http_body]; // 可能为空
 
         curl_close($curl_session);
 

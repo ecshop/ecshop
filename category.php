@@ -8,9 +8,9 @@ if (! DEBUG_MODE) {
     $smarty->caching = true;
 }
 
-/*------------------------------------------------------ */
-//-- INPUT
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- INPUT
+/* ------------------------------------------------------ */
 
 /* 获得请求的分类 ID */
 if (isset($_REQUEST['id'])) {
@@ -46,9 +46,9 @@ $order = (isset($_REQUEST['order']) && in_array(trim(strtoupper($_REQUEST['order
 $display = (isset($_REQUEST['display']) && in_array(trim(strtolower($_REQUEST['display'])), ['list', 'grid', 'text'])) ? trim($_REQUEST['display']) : (isset($_COOKIE['ECS']['display']) ? $_COOKIE['ECS']['display'] : $default_display_type);
 $display = in_array($display, ['list', 'grid', 'text']) ? $display : 'text';
 setcookie('ECS[display]', $display, gmtime() + 86400 * 7, null, null, null, true);
-/*------------------------------------------------------ */
-//-- PROCESSOR
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- PROCESSOR
+/* ------------------------------------------------------ */
 
 /* 页面的缓存ID */
 $cache_id = sprintf('%X', crc32($cat_id.'-'.$display.'-'.$sort.'-'.$order.'-'.$page.'-'.$size.'-'.$_SESSION['user_rank'].'-'.
@@ -82,7 +82,7 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
 
     /* 获取价格分级 */
     if ($cat['grade'] == 0 && $cat['parent_id'] != 0) {
-        $cat['grade'] = get_parent_grade($cat_id); //如果当前分类级别为空，取最近的上级分类
+        $cat['grade'] = get_parent_grade($cat_id); // 如果当前分类级别为空，取最近的上级分类
     }
 
     if ($cat['grade'] > 1) {
@@ -118,7 +118,7 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
         $sql = 'SELECT min(g.shop_price) AS min, max(g.shop_price) as max '.
             ' FROM '.$ecs->table('goods').' AS g '.
             " WHERE ($children OR ".get_extension_goods($children).') AND g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1  ';
-        //获得当前分类下商品价格的最大值、最小值
+        // 获得当前分类下商品价格的最大值、最小值
 
         $row = $db->getRow($sql);
 
@@ -128,7 +128,7 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
             $price_grade *= 10;
         }
 
-        //跨度
+        // 跨度
         $dx = ceil(($row['max'] - $row['min']) / ($cat['grade']) / $price_grade) * $price_grade;
         if ($dx == 0) {
             $dx = $price_grade;
@@ -207,9 +207,9 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
     $smarty->assign('brands', $brands);
 
     /* 属性筛选 */
-    $ext = ''; //商品查询条件扩展
+    $ext = ''; // 商品查询条件扩展
     if ($cat['filter_attr'] > 0) {
-        $cat_filter_attr = explode(',', $cat['filter_attr']);       //提取出此分类的筛选属性
+        $cat_filter_attr = explode(',', $cat['filter_attr']);       // 提取出此分类的筛选属性
         $all_attr_list = [];
 
         foreach ($cat_filter_attr as $key => $value) {
@@ -227,11 +227,11 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
 
                 $temp_arrt_url_arr = [];
 
-                for ($i = 0; $i < count($cat_filter_attr); $i++) {        //获取当前url中已选择属性的值，并保留在数组中
+                for ($i = 0; $i < count($cat_filter_attr); $i++) {        // 获取当前url中已选择属性的值，并保留在数组中
                     $temp_arrt_url_arr[$i] = ! empty($filter_attr[$i]) ? $filter_attr[$i] : 0;
                 }
 
-                $temp_arrt_url_arr[$key] = 0;                           //“全部”的信息生成
+                $temp_arrt_url_arr[$key] = 0;                           // “全部”的信息生成
                 $temp_arrt_url = implode('.', $temp_arrt_url_arr);
                 $all_attr_list[$key]['attr_list'][0]['attr_value'] = $_LANG['all_attribute'];
                 $all_attr_list[$key]['attr_list'][0]['url'] = build_uri('category', ['cid' => $cat_id, 'bid' => $brand, 'price_min' => $price_min, 'price_max' => $price_max, 'filter_attr' => $temp_arrt_url], $cat['cat_name']);
@@ -239,7 +239,7 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
 
                 foreach ($attr_list as $k => $v) {
                     $temp_key = $k + 1;
-                    $temp_arrt_url_arr[$key] = $v['goods_id'];       //为url中代表当前筛选属性的位置变量赋值,并生成以‘.’分隔的筛选属性字符串
+                    $temp_arrt_url_arr[$key] = $v['goods_id'];       // 为url中代表当前筛选属性的位置变量赋值,并生成以‘.’分隔的筛选属性字符串
                     $temp_arrt_url = implode('.', $temp_arrt_url_arr);
 
                     $all_attr_list[$key]['attr_list'][$temp_key]['attr_value'] = $v['attr_value'];

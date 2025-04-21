@@ -12,7 +12,7 @@ if (empty($_GET['ad_id'])) {
     $ad_id = intval($_GET['ad_id']);
 }
 
-/* act 操作项的初始化*/
+/* act 操作项的初始化 */
 $_GET['act'] = ! empty($_GET['act']) ? trim($_GET['act']) : '';
 
 if ($_GET['act'] == 'js') {
@@ -93,7 +93,7 @@ if ($_GET['act'] == 'js') {
             $sql = 'INSERT INTO '.$ecs->table('adsense')."(from_ad, referer, clicks) VALUES ('-1', '".$site_name."', '1')";
         }
         $db->query($sql);
-        //$db->autoReplace($ecs->table('adsense'), array('from_ad' => -1, 'referer' => $site_name, 'clicks' => 1), array('clicks' => 1));
+        // $db->autoReplace($ecs->table('adsense'), array('from_ad' => -1, 'referer' => $site_name, 'clicks' => 1), array('clicks' => 1));
         $sql = 'SELECT goods_name FROM '.$ecs->table('goods')." WHERE goods_id = $goods_id";
         $res = $db->query($sql);
 

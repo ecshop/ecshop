@@ -43,7 +43,7 @@ if ($step == 1 || $step == 2) {
         $md5datanew[$file] = $md5data[$file];
     }
 
-    $weekbefore = time() - 604800;  //一周前的时间
+    $weekbefore = time() - 604800;  // 一周前的时间
     $addlist = @array_diff_assoc($md5data, $md5datanew);
     $dellist = @array_diff_assoc($md5datanew, $md5data);
     $modifylist = @array_diff_assoc($modifylist, $dellist);
@@ -58,28 +58,28 @@ if ($step == 1 || $step == 2) {
             if (! isset($dirlog[$dir]['modify'])) {
                 $dirlog[$dir]['modify'] = '';
             }
-            $dirlog[$dir]['modify']++;  //统计“被修改”的文件
+            $dirlog[$dir]['modify']++;  // 统计“被修改”的文件
             $dirlog[$dir]['marker'] = substr(md5($dir), 0, 3);
         } elseif (@array_key_exists($file, $dellist)) {
             $status = '<em class="del">'.$_LANG['filecheck_delete'].'</em>';
             if (! isset($dirlog[$dir]['del'])) {
                 $dirlog[$dir]['del'] = '';
             }
-            $dirlog[$dir]['del']++;     //统计“被删除”的文件
+            $dirlog[$dir]['del']++;     // 统计“被删除”的文件
             $dirlog[$dir]['marker'] = substr(md5($dir), 0, 3);
         } elseif (@array_key_exists($file, $addlist)) {
             $status = '<em class="unknown">'.$_LANG['filecheck_unknown'].'</em>';
             if (! isset($dirlog[$dir]['add'])) {
                 $dirlog[$dir]['add'] = '';
             }
-            $dirlog[$dir]['add']++;     //统计“未知”的文件
+            $dirlog[$dir]['add']++;     // 统计“未知”的文件
             $dirlog[$dir]['marker'] = substr(md5($dir), 0, 3);
         } else {
             $status = '<em class="correct">'.$_LANG['filecheck_check_ok'].'</em>';
             $statusf = 0;
         }
 
-        //对一周之内发生修改的文件日期加粗显示
+        // 对一周之内发生修改的文件日期加粗显示
         $filemtime = @filemtime(ROOT_PATH.$file);
         if ($filemtime > $weekbefore) {
             $filemtime = '<b>'.date('Y-m-d H:i:s', $filemtime).'</b>';

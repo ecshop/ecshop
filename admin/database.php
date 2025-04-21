@@ -156,9 +156,9 @@ if ($_REQUEST['act'] == 'dumpsql') {
     $dump->is_short = $is_short;
 
     /* 变量验证 */
-    $allow_max_size = intval(@ini_get('upload_max_filesize')); //单位M
+    $allow_max_size = intval(@ini_get('upload_max_filesize')); // 单位M
     if ($allow_max_size > 0 && $max_size > ($allow_max_size * 1024)) {
-        $max_size = $allow_max_size * 1024; //单位K
+        $max_size = $allow_max_size * 1024; // 单位K
     }
 
     if ($max_size > 0) {
@@ -258,8 +258,8 @@ if ($_REQUEST['act'] == 'remove') {
     admin_priv('db_backup');
 
     if (isset($_POST['file'])) {
-        $m_file = []; //多卷文件
-        $s_file = []; //单卷文件
+        $m_file = []; // 多卷文件
+        $s_file = []; // 单卷文件
 
         $path = ROOT_PATH.DATA_DIR.'/sqldata/';
 
@@ -373,9 +373,9 @@ if ($_REQUEST['act'] == 'import') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 上传sql 文件
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 上传sql 文件
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'upload_sql') {
     /* 权限判断 */
     admin_priv('db_renew');
@@ -450,9 +450,9 @@ if ($_REQUEST['act'] == 'upload_sql') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 优化页面
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 优化页面
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'optimize') {
     /* 初始化数据 */
     admin_priv('db_backup');
@@ -509,7 +509,7 @@ function sql_import($sql_file)
 
     /* 执行sql语句 */
     for ($i = 0; $i < $ret_count; $i++) {
-        $ret[$i] = trim($ret[$i], " \r\n;"); //剔除多余信息
+        $ret[$i] = trim($ret[$i], " \r\n;"); // 剔除多余信息
         if (! empty($ret[$i])) {
             if ((strpos($ret[$i], 'CREATE TABLE') !== false) && (strpos($ret[$i], 'DEFAULT CHARSET='.str_replace('-', '', EC_CHARSET)) === false)) {
                 /* 建表时缺 DEFAULT CHARSET=utf8 */

@@ -45,7 +45,7 @@ function add_feed($id, $feed_type)
  */
 function get_linked_tags($tag_data)
 {
-    //取所有应用列表
+    // 取所有应用列表
     $app_list = uc_call('uc_app_ls');
     if ($app_list == '') {
         return '';

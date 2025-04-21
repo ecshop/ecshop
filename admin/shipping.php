@@ -5,9 +5,9 @@ define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 $exc = new exchange($ecs->table('shipping'), $db, 'shipping_code', 'shipping_name');
 
-/*------------------------------------------------------ */
-//-- 配送方式列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 配送方式列表
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'list') {
     $modules = read_modules(ROOT_PATH.'includes/modules/shipping');
@@ -53,9 +53,9 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('shipping_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 安装配送方式
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 安装配送方式
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'install') {
     admin_priv('ship_manage');
@@ -91,9 +91,9 @@ if ($_REQUEST['act'] == 'install') {
     sys_msg(sprintf($_LANG['install_succeess'], $_LANG[$modules[0]['code']]), 0, $lnk);
 }
 
-/*------------------------------------------------------ */
-//-- 卸载配送方式
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 卸载配送方式
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'uninstall') {
     global $ecs, $_LANG;
@@ -114,12 +114,12 @@ if ($_REQUEST['act'] == 'uninstall') {
         $db->query('DELETE FROM '.$ecs->table('shipping_area')." WHERE shipping_id='$shipping_id'");
         $db->query('DELETE FROM '.$ecs->table('shipping')." WHERE shipping_id='$shipping_id'");
 
-        //删除上传的非默认快递单
+        // 删除上传的非默认快递单
         if (($row['print_bg'] != '') && (! is_print_bg_default($row['print_bg']))) {
             @unlink(ROOT_PATH.$row['print_bg']);
         }
 
-        //记录管理员操作
+        // 记录管理员操作
         admin_log(addslashes($shipping_name), 'uninstall', 'shipping');
 
         $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'shipping.php?act=list'];
@@ -127,12 +127,12 @@ if ($_REQUEST['act'] == 'uninstall') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 模板Flash编辑器
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 模板Flash编辑器
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'print_index') {
-    //检查登录权限
+    // 检查登录权限
     admin_priv('ship_manage');
 
     $shipping_id = ! empty($_GET['shipping']) ? intval($_GET['shipping']) : 0;
@@ -151,9 +151,9 @@ if ($_REQUEST['act'] == 'print_index') {
     $smarty->display('print_index.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 模板Flash编辑器
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 模板Flash编辑器
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'recovery_default_template') {
     /* 检查登录权限 */
@@ -175,20 +175,20 @@ if ($_REQUEST['act'] == 'recovery_default_template') {
     ecs_header("Location: $url\n");
 }
 
-/*------------------------------------------------------ */
-//-- 模板Flash编辑器 上传图片
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 模板Flash编辑器 上传图片
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'print_upload') {
-    //检查登录权限
+    // 检查登录权限
     admin_priv('ship_manage');
 
-    //设置上传文件类型
+    // 设置上传文件类型
     $allow_suffix = ['jpg', 'png', 'jpeg'];
 
     $shipping_id = ! empty($_POST['shipping']) ? intval($_POST['shipping']) : 0;
 
-    //接收上传文件
+    // 接收上传文件
     if (! empty($_FILES['bg']['name'])) {
         if (! get_file_suffix($_FILES['bg']['name'], $allow_suffix)) {
             echo '<script language="javascript">';
@@ -210,7 +210,7 @@ if ($_REQUEST['act'] == 'print_upload') {
         }
     }
 
-    //保存
+    // 保存
     $sql = 'UPDATE '.$ecs->table('shipping')." SET print_bg = '$src' WHERE shipping_id = '$shipping_id'";
     $res = $db->query($sql);
     if ($res) {
@@ -220,9 +220,9 @@ if ($_REQUEST['act'] == 'print_upload') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 模板Flash编辑器 删除图片
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 模板Flash编辑器 删除图片
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'print_del') {
     /* 检查权限 */
@@ -248,9 +248,9 @@ if ($_REQUEST['act'] == 'print_del') {
     make_json_result($shipping_id);
 }
 
-/*------------------------------------------------------ */
-//-- 编辑打印模板
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑打印模板
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'edit_print_template') {
     admin_priv('ship_manage');
@@ -263,7 +263,7 @@ if ($_REQUEST['act'] == 'edit_print_template') {
     if ($row) {
         include_once ROOT_PATH.'includes/modules/shipping/'.$row['shipping_code'].'.php';
         $row['shipping_print'] = ! empty($row['shipping_print']) ? $row['shipping_print'] : '';
-        $row['print_model'] = empty($row['print_model']) ? 1 : $row['print_model']; //兼容以前版本
+        $row['print_model'] = empty($row['print_model']) ? 1 : $row['print_model']; // 兼容以前版本
 
         $smarty->assign('shipping', $row);
     } else {
@@ -280,9 +280,9 @@ if ($_REQUEST['act'] == 'edit_print_template') {
     $smarty->display('shipping_template.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 编辑打印模板
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑打印模板
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'do_edit_print_template') {
     /* 检查权限 */
@@ -294,10 +294,10 @@ if ($_REQUEST['act'] == 'do_edit_print_template') {
 
     /* 处理不同模式编辑的表单 */
     if ($print_model == 2) {
-        //所见即所得模式
+        // 所见即所得模式
         $db->query('UPDATE '.$ecs->table('shipping')." SET config_lable = '".$_POST['config_lable']."', print_model = '$print_model'  WHERE shipping_id = '$shipping_id'");
     } elseif ($print_model == 1) {
-        //代码模式
+        // 代码模式
         $template = ! empty($_POST['shipping_print']) ? $_POST['shipping_print'] : '';
 
         $db->query('UPDATE '.$ecs->table('shipping')." SET shipping_print = '".$template."', print_model = '$print_model' WHERE shipping_id = '$shipping_id'");
@@ -310,9 +310,9 @@ if ($_REQUEST['act'] == 'do_edit_print_template') {
     sys_msg($_LANG['edit_template_success'], 0, $lnk);
 }
 
-/*------------------------------------------------------ */
-//-- 编辑配送方式名称
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑配送方式名称
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'edit_name') {
     /* 检查权限 */
@@ -337,9 +337,9 @@ if ($_REQUEST['act'] == 'edit_name') {
     make_json_result(stripcslashes($val));
 }
 
-/*------------------------------------------------------ */
-//-- 编辑配送方式描述
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑配送方式描述
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'edit_desc') {
     /* 检查权限 */
@@ -354,9 +354,9 @@ if ($_REQUEST['act'] == 'edit_desc') {
     make_json_result(stripcslashes($val));
 }
 
-/*------------------------------------------------------ */
-//-- 修改配送方式保价费
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 修改配送方式保价费
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'edit_insure') {
     /* 检查权限 */
@@ -368,7 +368,7 @@ if ($_REQUEST['act'] == 'edit_insure') {
     if (empty($val)) {
         $val = 0;
     } else {
-        $val = make_semiangle($val); //全角转半角
+        $val = make_semiangle($val); // 全角转半角
         if (strpos($val, '%') === false) {
             $val = floatval($val);
         } else {
@@ -392,9 +392,9 @@ if ($_REQUEST['act'] == 'shipping_priv') {
 
     make_json_result('');
 }
-/*------------------------------------------------------ */
-//-- 修改配送方式排序
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 修改配送方式排序
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'edit_order') {
     /* 检查权限 */

@@ -2,7 +2,7 @@
 
 $_LANG['ems'] = 'EMS 国内邮政特快专递';
 $_LANG['ems_express_desc'] = 'EMS 国内邮政特快专递描述内容';
-//$_LANG['fee_compute_mode'] = '费用计算方式';
+// $_LANG['fee_compute_mode'] = '费用计算方式';
 $_LANG['item_fee'] = '单件商品费用：';
 $_LANG['base_fee'] = '500克以内费用：';
 $_LANG['step_fee'] = '续重每500克或其零数的费用：';

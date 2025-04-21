@@ -4,17 +4,17 @@ define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
 require_once ROOT_PATH.'/includes/lib_order.php';
-/*------------------------------------------------------ */
-//-- 框架
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 框架
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == '') {
     $smarty->assign('shop_url', urlencode($ecs->url()));
     $smarty->display('index.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 顶部框架的内容
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 顶部框架的内容
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'top') {
     // 获得管理员设置的菜单
     $lst = [];
@@ -40,17 +40,17 @@ if ($_REQUEST['act'] == 'top') {
     $smarty->display('top.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 计算器
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 计算器
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'calculator') {
     $smarty->display('calculator.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 左边的框架
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 左边的框架
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'menu') {
     include_once 'includes/inc_menu.php';
 
@@ -105,9 +105,9 @@ if ($_REQUEST['act'] == 'menu') {
     $smarty->display('menu.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 清除缓存
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 清除缓存
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'clear_cache') {
     clear_all_files();
@@ -115,13 +115,13 @@ if ($_REQUEST['act'] == 'clear_cache') {
     sys_msg($_LANG['caches_cleared']);
 }
 
-/*------------------------------------------------------ */
-//-- 主窗口，起始页
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 主窗口，起始页
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'main') {
-    //开店向导第一步
+    // 开店向导第一步
     if (isset($_SESSION['shop_guide']) && $_SESSION['shop_guide'] === true) {
-        unset($_SESSION['shop_guide']); //销毁session
+        unset($_SESSION['shop_guide']); // 销毁session
 
         ecs_header("Location: ./index.php?act=first\n");
 
@@ -151,7 +151,7 @@ if ($_REQUEST['act'] == 'main') {
 
     $open_basedir = ini_get('open_basedir');
     if (! empty($open_basedir)) {
-        /* 如果 open_basedir 不为空，则检查是否包含了 upload_tmp_dir  */
+        /* 如果 open_basedir 不为空，则检查是否包含了 upload_tmp_dir */
         $open_basedir = str_replace(['\\', '\\\\'], ['/', '/'], $open_basedir);
         $upload_tmp_dir = ini_get('upload_tmp_dir');
 
@@ -424,9 +424,9 @@ if ($_REQUEST['act'] == 'main_api') {
     echo $data;
 }
 
-/*------------------------------------------------------ */
-//-- 开店向导第一步
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 开店向导第一步
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'first') {
     $smarty->assign('countries', get_regions());
@@ -443,7 +443,7 @@ if ($_REQUEST['act'] == 'first') {
 
     $smarty->assign('shop_title', $shop_title);
 
-    //获取配送方式
+    // 获取配送方式
     $directory = ROOT_PATH.'includes/modules/shipping';
     $dir = @opendir($directory);
     $set_modules = true;
@@ -481,7 +481,7 @@ if ($_REQUEST['act'] == 'first') {
 
     unset($modules);
 
-    //获取支付方式
+    // 获取支付方式
     $modules = read_modules('../includes/modules/payment');
 
     for ($i = 0; $i < count($modules); $i++) {
@@ -500,9 +500,9 @@ if ($_REQUEST['act'] == 'first') {
     $smarty->display('setting_first.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 开店向导第二步
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 开店向导第二步
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'second') {
     admin_priv('shop_config');
@@ -546,7 +546,7 @@ if ($_REQUEST['act'] == 'second') {
         $db->query($sql);
     }
 
-    //设置配送方式
+    // 设置配送方式
     if (! empty($shipping)) {
         $shop_add = read_modules('../includes/modules/shipping');
 
@@ -575,7 +575,7 @@ if ($_REQUEST['act'] == 'second') {
             $shipping_id = $db->insert_Id();
         }
 
-        //设置配送区域
+        // 设置配送区域
         $area_name = empty($_POST['area_name']) ? '' : $_POST['area_name'];
         if (! empty($area_name)) {
             $sql = 'SELECT shipping_area_id FROM '.$ecs->table('shipping_area').
@@ -664,9 +664,9 @@ if ($_REQUEST['act'] == 'second') {
     $smarty->display('setting_second.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 开店向导第三步
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 开店向导第三步
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'third') {
     admin_priv('goods_manage');
@@ -715,7 +715,7 @@ if ($_REQUEST['act'] == 'third') {
 
         $cat_id = $db->insert_Id();
 
-        //货号
+        // 货号
         require_once ROOT_PATH.ADMIN_PATH.'/includes/lib_goods.php';
         $max_id = $db->getOne('SELECT MAX(goods_id) + 1 FROM '.$ecs->table('goods'));
         $goods_sn = generate_goods_sn($max_id);
@@ -850,26 +850,26 @@ if ($_REQUEST['act'] == 'third') {
     $smarty->display('setting_third.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 关于 ECSHOP
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 关于 ECSHOP
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'about_us') {
     assign_query_info();
     $smarty->display('about_us.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 拖动的帧
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 拖动的帧
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'drag') {
     $smarty->display('drag.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 检查订单
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 检查订单
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'check_order') {
     if (empty($_SESSION['last_check'])) {
         $_SESSION['last_check'] = gmtime();
@@ -896,9 +896,9 @@ if ($_REQUEST['act'] == 'check_order') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- Totolist操作
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- Totolist操作
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'save_todolist') {
     $content = json_str_iconv($_POST['content']);
     $sql = 'UPDATE'.$GLOBALS['ecs']->table('admin_user')." SET todolist='".$content."' WHERE user_id = ".$_SESSION['admin_id'];
@@ -917,12 +917,12 @@ if ($_REQUEST['act'] == 'send_mail') {
     $sql = 'SELECT * FROM '.$ecs->table('email_sendlist').' ORDER BY pri DESC, last_send ASC LIMIT 1';
     $row = $db->getRow($sql);
 
-    //发送列表为空
+    // 发送列表为空
     if (empty($row['id'])) {
         make_json_result('', $_LANG['mailsend_null'], 0);
     }
 
-    //发送列表不为空，邮件地址为空
+    // 发送列表不为空，邮件地址为空
     if (! empty($row['id']) && empty($row['email'])) {
         $sql = 'DELETE FROM '.$ecs->table('email_sendlist')." WHERE id = '$row[id]'";
         $db->query($sql);
@@ -930,25 +930,25 @@ if ($_REQUEST['act'] == 'send_mail') {
         make_json_result('', $_LANG['mailsend_skip'], ['count' => $count, 'goon' => 1]);
     }
 
-    //查询相关模板
+    // 查询相关模板
     $sql = 'SELECT * FROM '.$ecs->table('mail_templates')." WHERE template_id = '$row[template_id]'";
     $rt = $db->getRow($sql);
 
-    //如果是模板，则将已存入email_sendlist的内容作为邮件内容
-    //否则即是杂质，将mail_templates调出的内容作为邮件内容
+    // 如果是模板，则将已存入email_sendlist的内容作为邮件内容
+    // 否则即是杂质，将mail_templates调出的内容作为邮件内容
     if ($rt['type'] == 'template') {
         $rt['template_content'] = $row['email_content'];
     }
 
     if ($rt['template_id'] && $rt['template_content']) {
         if (send_mail('', $row['email'], $rt['template_subject'], $rt['template_content'], $rt['is_html'])) {
-            //发送成功
+            // 发送成功
 
-            //从列表中删除
+            // 从列表中删除
             $sql = 'DELETE FROM '.$ecs->table('email_sendlist')." WHERE id = '$row[id]'";
             $db->query($sql);
 
-            //剩余列表数
+            // 剩余列表数
             $count = $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('email_sendlist'));
 
             if ($count > 0) {
@@ -958,13 +958,13 @@ if ($_REQUEST['act'] == 'send_mail') {
             }
             make_json_result('', $msg, ['count' => $count]);
         } else {
-            //发送出错
+            // 发送出错
 
             if ($row['error'] < 3) {
                 $time = time();
                 $sql = 'UPDATE '.$ecs->table('email_sendlist')." SET error = error + 1, pri = 0, last_send = '$time' WHERE id = '$row[id]'";
             } else {
-                //将出错超次的纪录删除
+                // 将出错超次的纪录删除
                 $sql = 'DELETE FROM '.$ecs->table('email_sendlist')." WHERE id = '$row[id]'";
             }
             $db->query($sql);
@@ -973,7 +973,7 @@ if ($_REQUEST['act'] == 'send_mail') {
             make_json_result('', sprintf($_LANG['mailsend_fail'], $row['email']), ['count' => $count]);
         }
     } else {
-        //无效的邮件队列
+        // 无效的邮件队列
         $sql = 'DELETE FROM '.$ecs->table('email_sendlist')." WHERE id = '$row[id]'";
         $db->query($sql);
         $count = $db->getOne('SELECT COUNT(*) FROM '.$ecs->table('email_sendlist'));
@@ -981,9 +981,9 @@ if ($_REQUEST['act'] == 'send_mail') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- license操作
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- license操作
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'license') {
     $is_ajax = $_GET['is_ajax'];
 

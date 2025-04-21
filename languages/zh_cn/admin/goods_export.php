@@ -60,7 +60,7 @@ $_LANG['taobao']['modify_time'] = '修改时间';
 $_LANG['taobao']['upload_status'] = '上传状态';
 $_LANG['taobao']['img_status'] = '图片状态';
 
-/*淘宝4.6*/
+/* 淘宝4.6 */
 $_LANG['taobao46']['goods_name'] = '宝贝名称';
 $_LANG['taobao46']['goods_class'] = '宝贝类目';
 $_LANG['taobao46']['shop_class'] = '店铺类目';
@@ -203,7 +203,7 @@ $_LANG['ecshop']['is_on_sale'] = '是否上架';
 $_LANG['ecshop']['is_alone_sale'] = '能否作为普通商品销售';
 $_LANG['ecshop']['is_real'] = '是否实体商品';
 
-//自定义导出数据格式
+// 自定义导出数据格式
 $_LANG['export_custom'] = '导出到自定义数据格式';
 $_LANG['custom']['goods_name'] = '商品名称';
 $_LANG['custom']['goods_sn'] = '商品货号';

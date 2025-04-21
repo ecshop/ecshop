@@ -11,9 +11,9 @@ if (empty($_REQUEST['act'])) {
     $_REQUEST['act'] = trim($_REQUEST['act']);
 }
 
-/*------------------------------------------------------ */
-//-- 会员余额记录列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 会员余额记录列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     /* 权限判断 */
     admin_priv('surplus_manage');
@@ -54,11 +54,11 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('user_account_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 添加/编辑会员余额页面
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 添加/编辑会员余额页面
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
-    admin_priv('surplus_manage'); //权限判断
+    admin_priv('surplus_manage'); // 权限判断
 
     $ur_here = ($_REQUEST['act'] == 'add') ? $_LANG['surplus_add'] : $_LANG['surplus_edit'];
     $form_act = ($_REQUEST['act'] == 'add') ? 'insert' : 'update';
@@ -108,9 +108,9 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     $smarty->display('user_account_info.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 添加/编辑会员余额的处理部分
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 添加/编辑会员余额的处理部分
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     /* 权限判断 */
     admin_priv('surplus_manage');
@@ -170,7 +170,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         log_account_change($user_id, $amount, 0, 0, 0, $change_desc, $change_type);
     }
 
-    //如果是预付款并且未确认，向pay_log插入一条记录
+    // 如果是预付款并且未确认，向pay_log插入一条记录
     if ($process_type == 0 && $is_paid == 0) {
         include_once ROOT_PATH.'includes/lib_order.php';
 
@@ -178,7 +178,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         $payment_info = [];
         $payment_info = $db->getRow('SELECT * FROM '.$ecs->table('payment').
             " WHERE pay_name = '$payment' AND enabled = '1'");
-        //计算支付手续费用
+        // 计算支付手续费用
         $pay_fee = pay_fee($payment_info['pay_id'], $amount, 0);
         $total_fee = $pay_fee + $amount;
 
@@ -210,9 +210,9 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     sys_msg($_LANG['attradd_succed'], 0, $link);
 }
 
-/*------------------------------------------------------ */
-//-- 审核会员余额页面
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 审核会员余额页面
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'check') {
     /* 检查权限 */
     admin_priv('surplus_manage');
@@ -231,7 +231,7 @@ if ($_REQUEST['act'] == 'check') {
     $account = $db->getRow('SELECT * FROM '.$ecs->table('user_account')." WHERE id = '$id'");
     $account['add_time'] = local_date($_CFG['time_format'], $account['add_time']);
 
-    //余额类型:预付款，退款申请，购买商品，取消订单
+    // 余额类型:预付款，退款申请，购买商品，取消订单
     if ($account['process_type'] == 0) {
         $process_type = $_LANG['surplus_type_0'];
     } elseif ($account['process_type'] == 1) {
@@ -260,9 +260,9 @@ if ($_REQUEST['act'] == 'check') {
     $smarty->display('user_account_check.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 更新会员余额的状态
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 更新会员余额的状态
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'action') {
     /* 检查权限 */
     admin_priv('surplus_manage');
@@ -283,14 +283,14 @@ if ($_REQUEST['act'] == 'action') {
     $account = $db->getRow('SELECT * FROM '.$ecs->table('user_account')." WHERE id = '$id'");
     $amount = $account['amount'];
 
-    //如果状态为未确认
+    // 如果状态为未确认
     if ($account['is_paid'] == 0) {
-        //如果是退款申请, 并且已完成,更新此条记录,扣除相应的余额
+        // 如果是退款申请, 并且已完成,更新此条记录,扣除相应的余额
         if ($is_paid == '1' && $account['process_type'] == '1') {
             $user_account = get_user_surplus($account['user_id']);
             $fmt_amount = str_replace('-', '', $amount);
 
-            //如果扣除的余额多于此会员拥有的余额，提示
+            // 如果扣除的余额多于此会员拥有的余额，提示
             if ($fmt_amount > $user_account) {
                 $link[] = ['text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)'];
                 sys_msg($_LANG['surplus_amount_error'], 0, $link);
@@ -298,13 +298,13 @@ if ($_REQUEST['act'] == 'action') {
 
             update_user_account($id, $amount, $admin_note, $is_paid);
 
-            //更新会员余额数量
+            // 更新会员余额数量
             log_account_change($account['user_id'], $amount, 0, 0, 0, $_LANG['surplus_type_1'], ACT_DRAWING);
         } elseif ($is_paid == '1' && $account['process_type'] == '0') {
-            //如果是预付款，并且已完成, 更新此条记录，增加相应的余额
+            // 如果是预付款，并且已完成, 更新此条记录，增加相应的余额
             update_user_account($id, $amount, $admin_note, $is_paid);
 
-            //更新会员余额数量
+            // 更新会员余额数量
             log_account_change($account['user_id'], $amount, 0, 0, 0, $_LANG['surplus_type_0'], ACT_SAVING);
         } elseif ($is_paid == '0') {
             /* 否则更新信息 */
@@ -326,9 +326,9 @@ if ($_REQUEST['act'] == 'action') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- ajax帐户信息列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- ajax帐户信息列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
     $list = account_list();
     $smarty->assign('list', $list['list']);
@@ -341,9 +341,9 @@ if ($_REQUEST['act'] == 'query') {
 
     make_json_result($smarty->fetch('user_account_list.htm'), '', ['filter' => $list['filter'], 'page_count' => $list['page_count']]);
 }
-/*------------------------------------------------------ */
-//-- ajax删除一条信息
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- ajax删除一条信息
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'remove') {
     /* 检查权限 */
     check_authz_json('surplus_manage');
@@ -363,9 +363,9 @@ if ($_REQUEST['act'] == 'remove') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 会员余额函数部分
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 会员余额函数部分
+/* ------------------------------------------------------ */
 /**
  * 查询会员余额的数量
  *
@@ -444,7 +444,7 @@ function account_list()
             $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('user_account').' AS ua, '.
                 $GLOBALS['ecs']->table('users').' AS u '.$where;
         }
-        /*　时间过滤　*/
+        /*　时间过滤　 */
         if (! empty($filter['start_date']) && ! empty($filter['end_date'])) {
             $where .= 'AND paid_time >= '.$filter['start_date']." AND paid_time < '".$filter['end_date']."'";
         }

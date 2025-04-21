@@ -20,9 +20,9 @@ class captcha
      */
     public $img_type = 'png';
 
-    /*------------------------------------------------------ */
-    //-- 存在session中的名称
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 存在session中的名称
+    /* ------------------------------------------------------ */
     public $session_word = 'captcha_word';
 
     /**
@@ -142,7 +142,7 @@ class captcha
             $clr = imagecolorallocate($img_org, $theme[1], $theme[2], $theme[3]);
 
             /* 绘制边框 */
-            //imagerectangle($img_org, 0, 0, $this->width - 1, $this->height - 1, $clr);
+            // imagerectangle($img_org, 0, 0, $this->width - 1, $this->height - 1, $clr);
 
             /* 获得验证码的高度和宽度 */
             $x = ($this->width - (imagefontwidth(5) * $letters)) / 2;

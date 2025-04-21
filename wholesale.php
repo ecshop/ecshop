@@ -9,16 +9,16 @@ if ($_SESSION['user_rank'] <= 0) {
     show_message($_LANG['ws_user_rank'], $_LANG['ws_return_home'], 'index.php');
 }
 
-/*------------------------------------------------------ */
-//-- act 操作项的初始化
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- act 操作项的初始化
+/* ------------------------------------------------------ */
 if (empty($_REQUEST['act'])) {
     $_REQUEST['act'] = 'list';
 }
 
-/*------------------------------------------------------ */
-//-- 批发活动列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 批发活动列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     $search_category = empty($_REQUEST['search_category']) ? 0 : intval($_REQUEST['search_category']);
     $search_keywords = isset($_REQUEST['search_keywords']) ? trim($_REQUEST['search_keywords']) : '';
@@ -92,9 +92,9 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('wholesale_list.dwt');
 }
 
-/*------------------------------------------------------ */
-//-- 下载价格单
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 下载价格单
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'price_list') {
     $data = $_LANG['goods_name']."\t".$_LANG['goods_attr']."\t".$_LANG['number']."\t".$_LANG['ws_price']."\t\n";
     $sql = 'SELECT * FROM '.$ecs->table('wholesale').
@@ -125,9 +125,9 @@ if ($_REQUEST['act'] == 'price_list') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 加入购物车
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 加入购物车
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'add_to_cart') {
     /* 取得参数 */
     $act_id = intval($_POST['act_id']);
@@ -248,9 +248,9 @@ if ($_REQUEST['act'] == 'add_to_cart') {
     exit;
 }
 
-/*------------------------------------------------------ */
-//-- 从购物车删除
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 从购物车删除
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'drop_goods') {
     $key = intval($_REQUEST['key']);
     if (isset($_SESSION['wholesale_goods'][$key])) {
@@ -262,9 +262,9 @@ if ($_REQUEST['act'] == 'drop_goods') {
     exit;
 }
 
-/*------------------------------------------------------ */
-//-- 提交订单
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 提交订单
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'submit_order') {
     include_once ROOT_PATH.'includes/lib_order.php';
 
@@ -298,7 +298,7 @@ if ($_REQUEST['act'] == 'submit_order') {
     /* 插入订单表 */
     $error_no = 0;
     do {
-        $order['order_sn'] = get_order_sn(); //获取新订单号
+        $order['order_sn'] = get_order_sn(); // 获取新订单号
         $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('order_info'), $order, 'INSERT');
 
         $error_no = $GLOBALS['db']->errno();
@@ -306,14 +306,14 @@ if ($_REQUEST['act'] == 'submit_order') {
         if ($error_no > 0 && $error_no != 1062) {
             exit($GLOBALS['db']->errorMsg());
         }
-    } while ($error_no == 1062); //如果是订单号重复则重新提交数据
+    } while ($error_no == 1062); // 如果是订单号重复则重新提交数据
 
     $new_order_id = $db->insert_id();
     $order['order_id'] = $new_order_id;
 
     /* 插入订单商品 */
     foreach ($_SESSION['wholesale_goods'] as $goods) {
-        //如果存在货品
+        // 如果存在货品
         $product_id = 0;
         if (! empty($goods['goods_attr_id'])) {
             $goods_attr_id = [];
@@ -491,17 +491,17 @@ function is_attr_matching(&$goods_list, $reference)
     return false;
 }
 
-///**
+// /**
 // * 购物车中的商品属性与当前购买的商品属性是否匹配
 // * @param   array   $goods_attr     用户选择的商品属性
 // * @param   array   $reference      参照的商品属性
 // * @return  bool
 // */
-//function is_attr_same($goods_attr, $reference)
-//{
+// function is_attr_same($goods_attr, $reference)
+// {
 //    /* 比较元素个数是否相同 */
 //    if (count($goods_attr) == count($reference)) {
 //    }
 //
 //    return true;
-//}
+// }

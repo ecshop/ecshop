@@ -38,7 +38,7 @@ require ROOT_PATH.'includes/lib_common.php';
 require ROOT_PATH.ADMIN_PATH.'/includes/lib_main.php';
 require ROOT_PATH.ADMIN_PATH.'/includes/cls_exchange.php';
 
-/* 对用户传入的变量进行转义操作。*/
+/* 对用户传入的变量进行转义操作。 */
 if (! empty($_GET)) {
     $_GET = addslashes_deep($_GET);
 }
@@ -91,7 +91,7 @@ if ($_REQUEST['act'] == 'captcha') {
     include ROOT_PATH.'includes/cls_captcha.php';
 
     $img = new captcha('../data/captcha/');
-    @ob_end_clean(); //清除之前出现的多余输入
+    @ob_end_clean(); // 清除之前出现的多余输入
     $img->generate_image();
 
     exit;
@@ -124,7 +124,7 @@ if (preg_replace('/(?:\.|\s+)[a-z]*$/i', '', $_CFG['ecs_version']) != preg_repla
     exit;
 }
 
-/* 创建 Smarty 对象。*/
+/* 创建 Smarty 对象。 */
 require ROOT_PATH.'includes/cls_template.php';
 $smarty = new cls_template;
 

@@ -3,7 +3,7 @@
 define('IN_ECS', true);
 
 require './init.php';
-//require('../includes/lib_time.php');
+// require('../includes/lib_time.php');
 
 $timestamp = gmtime();
 check_method();
@@ -82,7 +82,7 @@ function get_next_time($cron)
             $sd++;
         }
     }
-    //$next = gmmktime($sh,$sm,0,$smo,$sd,$sy);
+    // $next = gmmktime($sh,$sm,0,$smo,$sd,$sy);
     $next = local_strtotime("$sy-$smo-$sd $sh:$sm:0");
     if ($next < $GLOBALS['timestamp']) {
         if ($cron['m']) {

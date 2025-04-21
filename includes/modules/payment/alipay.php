@@ -95,7 +95,7 @@ class alipay
             'extend_param' => $extend_param,
             'service' => $service,
             'partner' => $payment['alipay_partner'],
-            //'partner'           => ALIPAY_ID,
+            // 'partner'           => ALIPAY_ID,
             '_input_charset' => $charset,
             'notify_url' => return_url(basename(__FILE__, '.php')),
             'return_url' => return_url(basename(__FILE__, '.php')),

@@ -37,11 +37,11 @@ $_LANG['edit_fail'] = '编辑失败';
 $_LANG['enter_int'] = '请输入一个整数';
 $_LANG['not_emptycat'] = '分类下还有文章，不允许删除非空分类';
 
-/*帮助信息*/
+/* 帮助信息 */
 $_LANG['notice_keywords'] = '关键字为选填项，其目的在于方便外部搜索引擎搜索';
 $_LANG['notice_isopen'] = '该文章分类是否显示在前台的主导航栏中。';
 
-/*JS 语言项*/
+/* JS 语言项 */
 $_LANG['js_languages']['no_catname'] = '没有输入分类的名称';
 $_LANG['js_languages']['sys_hold'] = '系统保留分类，不允许添加子分类';
 $_LANG['js_languages']['remove_confirm'] = '您确定要删除选定的分类吗？';

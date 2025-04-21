@@ -37,9 +37,9 @@ $_REQUEST = array_merge($_REQUEST, addslashes_deep($string));
 
 $_REQUEST['act'] = ! empty($_REQUEST['act']) ? trim($_REQUEST['act']) : '';
 
-/*------------------------------------------------------ */
-//-- 高级搜索
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 高级搜索
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'advanced_search') {
     $goods_type = ! empty($_REQUEST['goods_type']) ? intval($_REQUEST['goods_type']) : 0;
     $attributes = get_seachable_attributes($goods_type);
@@ -66,9 +66,9 @@ if ($_REQUEST['act'] == 'advanced_search') {
 
     exit;
 }
-/*------------------------------------------------------ */
-//-- 搜索结果
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 搜索结果
+/* ------------------------------------------------------ */
 else {
     $_REQUEST['keywords'] = ! empty($_REQUEST['keywords']) ? htmlspecialchars(trim($_REQUEST['keywords'])) : '';
     $_REQUEST['brand'] = ! empty($_REQUEST['brand']) ? intval($_REQUEST['brand']) : 0;
@@ -189,7 +189,7 @@ else {
     $page = ! empty($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
     $size = ! empty($_CFG['page_size']) && intval($_CFG['page_size']) > 0 ? intval($_CFG['page_size']) : 10;
 
-    $intromode = '';    //方式，用于决定搜索结果页标题图片
+    $intromode = '';    // 方式，用于决定搜索结果页标题图片
 
     if (! empty($_REQUEST['intro'])) {
         switch ($_REQUEST['intro']) {
@@ -225,9 +225,9 @@ else {
         $ur_here = $_LANG['search_goods'];
     }
 
-    /*------------------------------------------------------ */
-    //-- 属性检索
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- 属性检索
+    /* ------------------------------------------------------ */
     $attr_in = '';
     $attr_num = 0;
     $attr_url = '';
@@ -280,7 +280,7 @@ else {
         /* 从选购中心进入的链接 */
         $sql = 'SELECT DISTINCT(goods_id) FROM '.$ecs->table('goods_attr');
         $col = $db->getCol($sql);
-        //如果商店没有设置商品属性,那么此检索条件是无效的
+        // 如果商店没有设置商品属性,那么此检索条件是无效的
         if (! empty($col)) {
             $attr_in = ' AND '.db_create_in($col, 'g.goods_id');
         }

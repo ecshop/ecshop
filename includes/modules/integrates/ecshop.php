@@ -103,8 +103,8 @@ class ecshop extends integrate
                     case ENCRYPT_ZC:
                         $encrypt_password = md5($encrypt_salt.$password);
                         break;
-                        /* 如果还有其他加密方式添加到这里  */
-                        //case other :
+                        /* 如果还有其他加密方式添加到这里 */
+                        // case other :
                         //  ----------------------------------
                         //  break;
                     case ENCRYPT_UC:

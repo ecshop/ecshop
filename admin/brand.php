@@ -8,9 +8,9 @@ $image = new cls_image($_CFG['bgcolor']);
 
 $exc = new exchange($ecs->table('brand'), $db, 'brand_id', 'brand_name');
 
-/*------------------------------------------------------ */
-//-- 品牌列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 品牌列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['06_goods_brand_list']);
     $smarty->assign('action_link', ['text' => $_LANG['07_brand_add'], 'href' => 'brand.php?act=add']);
@@ -27,9 +27,9 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('brand_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 添加品牌
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 添加品牌
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'add') {
     /* 权限判断 */
     admin_priv('brand_manage');
@@ -43,7 +43,7 @@ if ($_REQUEST['act'] == 'add') {
     $smarty->display('brand_info.htm');
 }
 if ($_REQUEST['act'] == 'insert') {
-    /*检查品牌名是否重复*/
+    /* 检查品牌名是否重复 */
     admin_priv('brand_manage');
 
     $is_show = isset($_REQUEST['is_show']) ? intval($_REQUEST['is_show']) : 0;
@@ -54,18 +54,18 @@ if ($_REQUEST['act'] == 'insert') {
         sys_msg(sprintf($_LANG['brandname_exist'], stripslashes($_POST['brand_name'])), 1);
     }
 
-    /*对描述处理*/
+    /* 对描述处理 */
     if (! empty($_POST['brand_desc'])) {
         $_POST['brand_desc'] = $_POST['brand_desc'];
     }
 
-    /*处理图片*/
+    /* 处理图片 */
     $img_name = basename($image->upload_image($_FILES['brand_logo'], 'brandlogo'));
 
-    /*处理URL*/
+    /* 处理URL */
     $site_url = sanitize_url($_POST['site_url']);
 
-    /*插入数据*/
+    /* 插入数据 */
 
     $sql = 'INSERT INTO '.$ecs->table('brand').'(brand_name, site_url, brand_desc, brand_logo, is_show, sort_order) '.
         "VALUES ('$_POST[brand_name]', '$site_url', '$_POST[brand_desc]', '$img_name', '$is_show', '$_POST[sort_order]')";
@@ -85,9 +85,9 @@ if ($_REQUEST['act'] == 'insert') {
     sys_msg($_LANG['brandadd_succed'], 0, $link);
 }
 
-/*------------------------------------------------------ */
-//-- 编辑品牌
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑品牌
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit') {
     /* 权限判断 */
     admin_priv('brand_manage');
@@ -106,7 +106,7 @@ if ($_REQUEST['act'] == 'edit') {
 if ($_REQUEST['act'] == 'updata') {
     admin_priv('brand_manage');
     if ($_POST['brand_name'] != $_POST['old_brandname']) {
-        /*检查品牌名是否相同*/
+        /* 检查品牌名是否相同 */
         $is_only = $exc->is_only('brand_name', $_POST['brand_name'], $_POST['id']);
 
         if (! $is_only) {
@@ -114,20 +114,20 @@ if ($_REQUEST['act'] == 'updata') {
         }
     }
 
-    /*对描述处理*/
+    /* 对描述处理 */
     if (! empty($_POST['brand_desc'])) {
         $_POST['brand_desc'] = $_POST['brand_desc'];
     }
 
     $is_show = isset($_REQUEST['is_show']) ? intval($_REQUEST['is_show']) : 0;
-    /*处理URL*/
+    /* 处理URL */
     $site_url = sanitize_url($_POST['site_url']);
 
     /* 处理图片 */
     $img_name = basename($image->upload_image($_FILES['brand_logo'], 'brandlogo'));
     $param = "brand_name = '$_POST[brand_name]',  site_url='$site_url', brand_desc='$_POST[brand_desc]', is_show='$is_show', sort_order='$_POST[sort_order]' ";
     if (! empty($img_name)) {
-        //有图片上传
+        // 有图片上传
         $param .= " ,brand_logo = '$img_name' ";
     }
 
@@ -146,9 +146,9 @@ if ($_REQUEST['act'] == 'updata') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 编辑品牌名称
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑品牌名称
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit_brand_name') {
     check_authz_json('brand_manage');
 
@@ -184,9 +184,9 @@ if ($_REQUEST['act'] == 'add_brand') {
         make_json_result($arr);
     }
 }
-/*------------------------------------------------------ */
-//-- 编辑排序序号
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑排序序号
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit_sort_order') {
     check_authz_json('brand_manage');
 
@@ -203,9 +203,9 @@ if ($_REQUEST['act'] == 'edit_sort_order') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 切换是否显示
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 切换是否显示
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'toggle_show') {
     check_authz_json('brand_manage');
 
@@ -217,9 +217,9 @@ if ($_REQUEST['act'] == 'toggle_show') {
     make_json_result($val);
 }
 
-/*------------------------------------------------------ */
-//-- 删除品牌
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 删除品牌
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'remove') {
     check_authz_json('brand_manage');
 
@@ -244,9 +244,9 @@ if ($_REQUEST['act'] == 'remove') {
     exit;
 }
 
-/*------------------------------------------------------ */
-//-- 删除品牌图片
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 删除品牌图片
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'drop_logo') {
     /* 权限判断 */
     admin_priv('brand_manage');
@@ -265,9 +265,9 @@ if ($_REQUEST['act'] == 'drop_logo') {
     sys_msg($_LANG['drop_brand_logo_success'], 0, $link);
 }
 
-/*------------------------------------------------------ */
-//-- 排序、分页、查询
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 排序、分页、查询
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
     $brand_list = get_brandlist();
     $smarty->assign('brand_list', $brand_list['brand']);

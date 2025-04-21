@@ -11,15 +11,15 @@ if (! DEBUG_MODE) {
 $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
 $smarty->assign('affiliate', $affiliate);
 
-/*------------------------------------------------------ */
-//-- INPUT
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- INPUT
+/* ------------------------------------------------------ */
 
 $goods_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
-/*------------------------------------------------------ */
-//-- 改变属性、数量时重新计算商品价格
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 改变属性、数量时重新计算商品价格
+/* ------------------------------------------------------ */
 
 if (! empty($_REQUEST['act']) && $_REQUEST['act'] == 'price') {
     include 'includes/cls_json.php';
@@ -47,9 +47,9 @@ if (! empty($_REQUEST['act']) && $_REQUEST['act'] == 'price') {
     exit($json->encode($res));
 }
 
-/*------------------------------------------------------ */
-//-- 商品购买记录ajax处理
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 商品购买记录ajax处理
+/* ------------------------------------------------------ */
 
 if (! empty($_REQUEST['act']) && $_REQUEST['act'] == 'gotopage') {
     include 'includes/cls_json.php';
@@ -105,9 +105,9 @@ if (! empty($_REQUEST['act']) && $_REQUEST['act'] == 'gotopage') {
     exit($json->encode($res));
 }
 
-/*------------------------------------------------------ */
-//-- PROCESSOR
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- PROCESSOR
+/* ------------------------------------------------------ */
 
 $cache_id = $goods_id.'-'.$_SESSION['user_rank'].'-'.$_CFG['lang'];
 $cache_id = sprintf('%X', crc32($cache_id));
@@ -118,7 +118,7 @@ if (! $smarty->is_cached('goods.dwt', $cache_id)) {
     $smarty->assign('id', $goods_id);
     $smarty->assign('type', 0);
     $smarty->assign('cfg', $_CFG);
-    $smarty->assign('promotion', get_promotion_info($goods_id)); //促销信息
+    $smarty->assign('promotion', get_promotion_info($goods_id)); // 促销信息
     $smarty->assign('promotion_info', get_promotion_info());
 
     /* 获得商品的信息 */
@@ -172,13 +172,13 @@ if (! $smarty->is_cached('goods.dwt', $cache_id)) {
         $prev_gid = $db->getOne('SELECT goods_id FROM '.$ecs->table('goods').' WHERE cat_id='.$goods['cat_id'].' AND goods_id > '.$goods['goods_id'].' AND is_on_sale = 1 AND is_alone_sale = 1 AND is_delete = 0 LIMIT 1');
         if (! empty($prev_gid)) {
             $prev_good['url'] = build_uri('goods', ['gid' => $prev_gid], $goods['goods_name']);
-            $smarty->assign('prev_good', $prev_good); //上一个商品
+            $smarty->assign('prev_good', $prev_good); // 上一个商品
         }
 
         $next_gid = $db->getOne('SELECT max(goods_id) FROM '.$ecs->table('goods').' WHERE cat_id='.$goods['cat_id'].' AND goods_id < '.$goods['goods_id'].' AND is_on_sale = 1 AND is_alone_sale = 1 AND is_delete = 0');
         if (! empty($next_gid)) {
             $next_good['url'] = build_uri('goods', ['gid' => $next_gid], $goods['goods_name']);
-            $smarty->assign('next_good', $next_good); //下一个商品
+            $smarty->assign('next_good', $next_good); // 下一个商品
         }
 
         $position = assign_ur_here($goods['cat_id'], $goods['goods_name']);
@@ -200,11 +200,11 @@ if (! $smarty->is_cached('goods.dwt', $cache_id)) {
         $smarty->assign('bought_goods', get_also_bought($goods_id));                      // 购买了该商品的用户还购买了哪些商品
         $smarty->assign('goods_rank', get_goods_rank($goods_id));                       // 商品的销售排名
 
-        //获取tag
+        // 获取tag
         $tag_array = get_tags($goods_id);
         $smarty->assign('tags', $tag_array);                                       // 商品的标记
 
-        //获取关联礼包
+        // 获取关联礼包
         $package_goods_list = get_package_goods_list($goods['goods_id']);
         $smarty->assign('package_goods_list', $package_goods_list);    // 获取关联礼包
 

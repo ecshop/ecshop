@@ -14,13 +14,13 @@ if (! defined('IN_ECS')) {
  */
 function get_cat_articles($cat_id, $page = 1, $size = 20, $requirement = '')
 {
-    //取出所有非0的文章
+    // 取出所有非0的文章
     if ($cat_id == '-1') {
         $cat_str = 'cat_id > 0';
     } else {
         $cat_str = get_article_children($cat_id);
     }
-    //增加搜索条件，如果有搜索内容就进行搜索
+    // 增加搜索条件，如果有搜索内容就进行搜索
     if ($requirement != '') {
         $sql = 'SELECT article_id, title, author, add_time, file_url, open_type'.
             ' FROM '.$GLOBALS['ecs']->table('article').

@@ -13,9 +13,9 @@ if (empty($_REQUEST['act'])) {
     $_REQUEST['act'] = trim($_REQUEST['act']);
 }
 
-/*------------------------------------------------------ */
-//-- 客户统计列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 客户统计列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     /* 权限判断 */
     admin_priv('client_flow_stats');
@@ -95,9 +95,9 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('user_num', $user_num);                    // 会员总数
     $smarty->assign('have_order_usernum', $have_order_usernum);          // 有过订单的会员数
     $smarty->assign('user_order_turnover', $user_all_order['order_num']); // 会员总订单数
-    $smarty->assign('user_all_turnover', price_format($user_all_order['turnover']));  //会员购物总额
-    $smarty->assign('guest_all_turnover', price_format($guest_all_order['turnover'])); //匿名会员购物总额
-    $smarty->assign('guest_order_num', $guest_all_order['order_num']);              //匿名会员订单总数
+    $smarty->assign('user_all_turnover', price_format($user_all_order['turnover']));  // 会员购物总额
+    $smarty->assign('guest_all_turnover', price_format($guest_all_order['turnover'])); // 匿名会员购物总额
+    $smarty->assign('guest_order_num', $guest_all_order['order_num']);              // 匿名会员订单总数
 
     /* 每会员订单数 */
     $smarty->assign('ave_user_ordernum', $user_num > 0 ? sprintf('%0.2f', $user_all_order['order_num'] / $user_num) : 0);
@@ -111,7 +111,7 @@ if ($_REQUEST['act'] == 'list') {
     /* 匿名会员平均订单额 */
     $smarty->assign('guest_order_amount', $guest_all_order['order_num'] > 0 ? price_format($guest_all_order['turnover'] / $guest_all_order['order_num']) : 0);
 
-    $smarty->assign('all_order', $user_all_order);    //所有订单总数以及所有购物总额
+    $smarty->assign('all_order', $user_all_order);    // 所有订单总数以及所有购物总额
     $smarty->assign('ur_here', $_LANG['report_guest']);
     $smarty->assign('lang', $_LANG);
 

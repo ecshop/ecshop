@@ -84,19 +84,19 @@ class sms
         $contents = $this->get_contents($phones, $msg);
 
         if (! $contents) {
-            $this->errors['server_errors']['error_no'] = 3; //发送的信息有误
+            $this->errors['server_errors']['error_no'] = 3; // 发送的信息有误
 
             return false;
         }
 
         $login_info = $this->getSmsInfo();
         if (! $login_info) {
-            $this->errors['server_errors']['error_no'] = 5; //无效的身份信息
+            $this->errors['server_errors']['error_no'] = 5; // 无效的身份信息
 
             return false;
         } else {
             if ($login_info['info']['account_info']['active'] != '1') {
-                $this->errors['server_errors']['error_no'] = 11; //短信功能没有激活
+                $this->errors['server_errors']['error_no'] = 11; // 短信功能没有激活
 
                 return false;
             }
@@ -105,7 +105,7 @@ class sms
         $sms_url = $this->get_url('send');
 
         if (! $sms_url) {
-            $this->errors['server_errors']['error_no'] = 6; //URL不对
+            $this->errors['server_errors']['error_no'] = 6; // URL不对
 
             return false;
         }
@@ -181,7 +181,7 @@ class sms
         return true;
     }
 
-    //查询是否已有通行证
+    // 查询是否已有通行证
     public function has_registered()
     {
         $sql = 'SELECT `value`
@@ -237,7 +237,7 @@ class sms
         return $email;
     }
 
-    //用户短信账户信息获取
+    // 用户短信账户信息获取
     public function getSmsInfo($certi_app = 'sms.info', $version = '1.0', $format = 'json')
     {
         $send_str['certi_app'] = $certi_app;
@@ -258,7 +258,7 @@ class sms
         }
     }
 
-    //检查手机号和发送的内容并生成生成短信队列
+    // 检查手机号和发送的内容并生成生成短信队列
     public function get_contents($phones, $msg)
     {
         if (empty($phones) || empty($msg)) {
@@ -299,7 +299,7 @@ class sms
         }
     }
 
-    //获得服务器时间
+    // 获得服务器时间
     public function getTime()
     {
         $Tsend_str['certi_app'] = 'sms.servertime';
@@ -339,7 +339,7 @@ class sms
         return preg_match("/^0?1((3|8)[0-9]|5[0-35-9]|4[57])\d{8}$/", $moblie);
     }
 
-    //加密算法
+    // 加密算法
     public function make_shopex_ac($temp_arr, $token)
     {
         ksort($temp_arr);

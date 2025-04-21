@@ -1,4 +1,5 @@
 <?php
+
 /*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
  * Copyright (C) 2003-2008 Frederico Caldeira Knabben
@@ -207,7 +208,7 @@ function FileUpload($resourceType, $currentFolder, $sCommand)
                 } else {
                     move_uploaded_file($oFile['tmp_name'], $sFilePath);
 
-                    //判断并给符合条件图片加上水印
+                    // 判断并给符合条件图片加上水印
                     if ($sExtension == 'jpg' || $sExtension == 'jpeg' || $sExtension == 'png' || $sExtension == 'gif' || $sExtension == 'bmp') {
                         require_once ROOT_PATH.'/includes/cls_image.php';
                         $image = new cls_image($GLOBALS['_CFG']['bgcolor']);
@@ -238,7 +239,7 @@ function FileUpload($resourceType, $currentFolder, $sCommand)
             }
 
             if (file_exists($sFilePath)) {
-                //previous checks failed, try once again
+                // previous checks failed, try once again
                 if (isset($isImageValid) && $isImageValid === -1 && IsImageValid($sFilePath, $sExtension) === false) {
                     @unlink($sFilePath);
                     $sErrorNumber = '202';
@@ -315,7 +316,7 @@ function MoreFileUpload($resourceType, $currentFolder, $sCommand)
                         } else {
                             move_uploaded_file($_FILES['NewFile']['tmp_name'][$key], $sFilePath);
 
-                            //判断并给符合条件图片加上水印
+                            // 判断并给符合条件图片加上水印
                             if ($sExtension == 'jpg' || $sExtension == 'jpeg' || $sExtension == 'png' || $sExtension == 'gif' || $sExtension == 'bmp') {
                                 require_once ROOT_PATH.'/includes/cls_image.php';
                                 $image = new cls_image($GLOBALS['_CFG']['bgcolor']);
@@ -346,7 +347,7 @@ function MoreFileUpload($resourceType, $currentFolder, $sCommand)
                     }
 
                     if (file_exists($sFilePath)) {
-                        //previous checks failed, try once again
+                        // previous checks failed, try once again
                         if (isset($isImageValid) && $isImageValid === -1 && IsImageValid($sFilePath, $sExtension) === false) {
                             @unlink($sFilePath);
                             $sErrorNumber = '202';

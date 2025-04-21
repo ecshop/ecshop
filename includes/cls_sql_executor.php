@@ -219,7 +219,7 @@ class sql_executor
         $sql = preg_replace('/^\s*(?:--|#).*/m', '', $sql);
 
         /* 删除SQL块注释，匹配换行符，且为非贪婪匹配 */
-        //$sql = preg_replace('/^\s*\/\*(?:.|\n)*\*\//m', '', $sql);
+        // $sql = preg_replace('/^\s*\/\*(?:.|\n)*\*\//m', '', $sql);
         $sql = preg_replace('/^\s*\/\*.*?\*\//ms', '', $sql);
 
         return $sql;
@@ -481,9 +481,9 @@ class sql_executor
                 }
             }
             $sql = 'ALTER TABLE '.$table_name.' '.$sql;
-            $result[0] = preg_replace('/\s*,\s*$/', '', $sql); //存储CHANGE操作，已过滤末尾的逗号
-            $result[0] = $this->insert_charset($result[0]); //加入字符集设置
-            $result[1] = preg_replace($pattern, '', $query_item); //存储其它操作
+            $result[0] = preg_replace('/\s*,\s*$/', '', $sql); // 存储CHANGE操作，已过滤末尾的逗号
+            $result[0] = $this->insert_charset($result[0]); // 加入字符集设置
+            $result[1] = preg_replace($pattern, '', $query_item); // 存储其它操作
             $result[1] = $this->has_other_query($result[1]) ? $result[1] : '';
         }
 
@@ -519,9 +519,9 @@ class sql_executor
             }
             if ($sql) {
                 $sql = 'ALTER TABLE '.$table_name.' '.$sql;
-                $result[0] = preg_replace('/\s*,\s*$/', '', $sql); //过滤末尾的逗号
+                $result[0] = preg_replace('/\s*,\s*$/', '', $sql); // 过滤末尾的逗号
             }
-            $result[1] = preg_replace($pattern, '', $query_item); //过滤DROP COLUMN操作
+            $result[1] = preg_replace($pattern, '', $query_item); // 过滤DROP COLUMN操作
             $result[1] = $this->has_other_query($result[1]) ? $result[1] : '';
         }
 
@@ -558,9 +558,9 @@ class sql_executor
                 }
             }
             $sql = 'ALTER TABLE '.$table_name.' '.$sql;
-            $result[0] = preg_replace('/\s*,\s*$/', '', $sql); //过滤末尾的逗号
-            $result[0] = $this->insert_charset($result[0]); //加入字符集设置
-            $result[1] = preg_replace($pattern, '', $query_item); //过滤ADD COLUMN操作
+            $result[0] = preg_replace('/\s*,\s*$/', '', $sql); // 过滤末尾的逗号
+            $result[0] = $this->insert_charset($result[0]); // 加入字符集设置
+            $result[1] = preg_replace($pattern, '', $query_item); // 过滤ADD COLUMN操作
             $result[1] = $this->has_other_query($result[1]) ? $result[1] : '';
         }
 
@@ -599,9 +599,9 @@ class sql_executor
             }
             if ($sql) {
                 $sql = 'ALTER TABLE '.$table_name.' '.$sql;
-                $result[0] = preg_replace('/\s*,\s*$/', '', $sql); //存储DROP INDEX操作，已过滤末尾的逗号
+                $result[0] = preg_replace('/\s*,\s*$/', '', $sql); // 存储DROP INDEX操作，已过滤末尾的逗号
             }
-            $result[1] = preg_replace($pattern, '', $query_item); //存储其它操作
+            $result[1] = preg_replace($pattern, '', $query_item); // 存储其它操作
             $result[1] = $this->has_other_query($result[1]) ? $result[1] : '';
         }
 
@@ -639,8 +639,8 @@ class sql_executor
                 $sql .= 'ADD '.$matches[$i][1].',';
             }
             $sql = 'ALTER TABLE '.$table_name.' '.$sql;
-            $result[0] = preg_replace('/\s*,\s*$/', '', $sql); //存储ADD INDEX操作，已过滤末尾的逗号
-            $result[1] = preg_replace($pattern, '', $query_item); //存储其它的操作
+            $result[0] = preg_replace('/\s*,\s*$/', '', $sql); // 存储ADD INDEX操作，已过滤末尾的逗号
+            $result[1] = preg_replace($pattern, '', $query_item); // 存储其它的操作
             $result[1] = $this->has_other_query($result[1]) ? $result[1] : '';
         }
 

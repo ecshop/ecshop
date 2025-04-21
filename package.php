@@ -11,9 +11,9 @@ require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/shopping_flow.php';
 require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/user.php';
 require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/package.php';
 
-/*------------------------------------------------------ */
-//-- PROCESSOR
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- PROCESSOR
+/* ------------------------------------------------------ */
 
 assign_template();
 assign_dynamic('package');

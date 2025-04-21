@@ -50,19 +50,19 @@ foreach ($autodb as $key => $val) {
         $where = " WHERE article_id = '$val[item_id]'";
     }
 
-    //上下架判断
+    // 上下架判断
     if (! empty($val['starttime']) && ! empty($val['endtime'])) {
-        //上下架时间均设置
+        // 上下架时间均设置
         if ($val['starttime'] <= $time && $time < $val['endtime']) {
-            //上架时间 <= 当前时间 < 下架时间
+            // 上架时间 <= 当前时间 < 下架时间
             $up = true;
             $del = false;
         } elseif ($val['starttime'] >= $time && $time > $val['endtime']) {
-            //下架时间 <= 当前时间 < 上架时间
+            // 下架时间 <= 当前时间 < 上架时间
             $up = false;
             $del = false;
         } elseif ($val['starttime'] == $time && $time == $val['endtime']) {
-            //下架时间 == 当前时间 == 上架时间
+            // 下架时间 == 当前时间 == 上架时间
             $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('auto_manage')."WHERE item_id = '$val[item_id]' AND type = '$val[type]'";
             $db->query($sql);
 
@@ -83,11 +83,11 @@ foreach ($autodb as $key => $val) {
             continue;
         }
     } elseif (! empty($val['starttime'])) {
-        //只设置了上架时间
+        // 只设置了上架时间
         $up = true;
         $del = true;
     } else {
-        //只设置了下架时间
+        // 只设置了下架时间
         $up = false;
         $del = true;
     }

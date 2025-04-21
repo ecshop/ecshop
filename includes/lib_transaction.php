@@ -48,11 +48,11 @@ function edit_profile($profile)
     /* 过滤非法的键值 */
     $other_key_array = ['msn', 'qq', 'office_phone', 'home_phone', 'mobile_phone'];
     foreach ($profile['other'] as $key => $val) {
-        //删除非法key值
+        // 删除非法key值
         if (! in_array($key, $other_key_array)) {
             unset($profile['other'][$key]);
         } else {
-            $profile['other'][$key] = htmlspecialchars(trim($val)); //防止用户输入javascript代码
+            $profile['other'][$key] = htmlspecialchars(trim($val)); // 防止用户输入javascript代码
         }
     }
     /* 修改在其他资料 */
@@ -82,8 +82,8 @@ function get_profile($user_id)
     $infos = $GLOBALS['db']->getRow($sql);
     $infos['user_name'] = addslashes($infos['user_name']);
 
-    $row = $user->get_profile_by_name($infos['user_name']); //获取用户帐号信息
-    $_SESSION['email'] = $row['email'];    //注册SESSION
+    $row = $user->get_profile_by_name($infos['user_name']); // 获取用户帐号信息
+    $_SESSION['email'] = $row['email'];    // 注册SESSION
 
     /* 会员等级 */
     if ($infos['user_rank'] > 0) {
@@ -175,7 +175,7 @@ function add_bonus($user_id, $bouns_sn)
     $row = $GLOBALS['db']->getRow($sql);
     if ($row) {
         if ($row['user_id'] == 0) {
-            //红包没有被使用
+            // 红包没有被使用
             $sql = 'SELECT send_end_date, use_end_date '.
                 ' FROM '.$GLOBALS['ecs']->table('bonus_type').
                 " WHERE type_id = '".$row['bonus_type_id']."'";
@@ -199,17 +199,17 @@ function add_bonus($user_id, $bouns_sn)
             }
         } else {
             if ($row['user_id'] == $user_id) {
-                //红包已经添加过了。
+                // 红包已经添加过了。
                 $GLOBALS['err']->add($GLOBALS['_LANG']['bonus_is_used']);
             } else {
-                //红包被其他人使用过了。
+                // 红包被其他人使用过了。
                 $GLOBALS['err']->add($GLOBALS['_LANG']['bonus_is_used_by_other']);
             }
 
             return false;
         }
     } else {
-        //红包不存在
+        // 红包不存在
         $GLOBALS['err']->add($GLOBALS['_LANG']['bonus_not_exist']);
 
         return false;
@@ -302,7 +302,7 @@ function cancel_order($order_id, $user_id = 0)
         return false;
     }
 
-    //订单一旦确认，不允许用户取消
+    // 订单一旦确认，不允许用户取消
     if ($order['order_status'] == OS_CONFIRMED) {
         $GLOBALS['err']->add($GLOBALS['_LANG']['current_os_already_confirmed']);
 
@@ -323,7 +323,7 @@ function cancel_order($order_id, $user_id = 0)
         return false;
     }
 
-    //将用户订单设置为取消
+    // 将用户订单设置为取消
     $sql = 'UPDATE '.$GLOBALS['ecs']->table('order_info')." SET order_status = '".OS_CANCELED."' WHERE order_id = '$order_id'";
     if ($GLOBALS['db']->query($sql)) {
         /* 记录log */
@@ -504,7 +504,7 @@ function get_order_detail($order_id, $user_id = 0)
     }
     $order = order_info($order_id);
 
-    //检查订单是否属于该用户
+    // 检查订单是否属于该用户
     if ($user_id > 0 && $user_id != $order['user_id']) {
         $GLOBALS['err']->add($GLOBALS['_LANG']['no_priv']);
 
@@ -524,7 +524,7 @@ function get_order_detail($order_id, $user_id = 0)
 
     /* 只有未确认才允许用户修改订单地址 */
     if ($order['order_status'] == OS_UNCONFIRMED) {
-        $order['allow_update_address'] = 1; //允许修改收货地址
+        $order['allow_update_address'] = 1; // 允许修改收货地址
     } else {
         $order['allow_update_address'] = 0;
     }
@@ -539,18 +539,18 @@ function get_order_detail($order_id, $user_id = 0)
         /*
          * 在线支付按钮
          */
-        //支付方式信息
+        // 支付方式信息
         $payment_info = [];
         $payment_info = payment_info($order['pay_id']);
 
-        //无效支付方式
+        // 无效支付方式
         if ($payment_info === false) {
             $order['pay_online'] = '';
         } else {
-            //取得支付信息，生成支付代码
+            // 取得支付信息，生成支付代码
             $payment = unserialize_config($payment_info['pay_config']);
 
-            //获取需要支付的log_id
+            // 获取需要支付的log_id
             $order['log_id'] = get_paylog_id($order['order_id'], $pay_type = PAY_ORDER);
             $order['user_name'] = $_SESSION['user_name'];
             $order['pay_desc'] = $payment_info['pay_desc'];
@@ -738,7 +738,7 @@ function return_to_cart($order_id)
             }
         }
 
-        //检查商品价格是否有会员价格
+        // 检查商品价格是否有会员价格
         $sql = 'SELECT goods_number FROM'.$GLOBALS['ecs']->table('cart').' '.
             "WHERE session_id = '".SESS_ID."' ".
             "AND goods_id = '".$row['goods_id']."' ".

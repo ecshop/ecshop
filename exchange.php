@@ -8,20 +8,20 @@ if (! DEBUG_MODE) {
     $smarty->caching = true;
 }
 
-/*------------------------------------------------------ */
-//-- act 操作项的初始化
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- act 操作项的初始化
+/* ------------------------------------------------------ */
 if (empty($_REQUEST['act'])) {
     $_REQUEST['act'] = 'list';
 }
 
-/*------------------------------------------------------ */
-//-- PROCESSOR
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- PROCESSOR
+/* ------------------------------------------------------ */
 
-/*------------------------------------------------------ */
-//-- 积分兑换商品列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 积分兑换商品列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     /* 初始化分页信息 */
     $page = isset($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
@@ -75,10 +75,10 @@ if ($_REQUEST['act'] == 'list') {
             $smarty->assign('vote', $vote['content']);
         }
 
-        $ext = ''; //商品查询条件扩展
+        $ext = ''; // 商品查询条件扩展
 
-        //$smarty->assign('best_goods',      get_exchange_recommend_goods('best', $children, $integral_min, $integral_max));
-        //$smarty->assign('new_goods',       get_exchange_recommend_goods('new',  $children, $integral_min, $integral_max));
+        // $smarty->assign('best_goods',      get_exchange_recommend_goods('best', $children, $integral_min, $integral_max));
+        // $smarty->assign('new_goods',       get_exchange_recommend_goods('new',  $children, $integral_min, $integral_max));
         $smarty->assign('hot_goods', get_exchange_recommend_goods('hot', $children, $integral_min, $integral_max));
 
         $count = get_exchange_goods_count($children, $integral_min, $integral_max);
@@ -105,9 +105,9 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('exchange_list.dwt', $cache_id);
 }
 
-/*------------------------------------------------------ */
-//-- 积分兑换商品详情
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 积分兑换商品详情
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'view') {
     $goods_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
@@ -151,14 +151,14 @@ if ($_REQUEST['act'] == 'view') {
             $prev_gid = $db->getOne($sql);
             if (! empty($prev_gid)) {
                 $prev_good['url'] = build_uri('exchange_goods', ['gid' => $prev_gid], $goods['goods_name']);
-                $smarty->assign('prev_good', $prev_good); //上一个商品
+                $smarty->assign('prev_good', $prev_good); // 上一个商品
             }
 
             $sql = 'SELECT max(eg.goods_id) FROM '.$ecs->table('exchange_goods').' AS eg,'.$GLOBALS['ecs']->table('goods').' AS g WHERE eg.goods_id = g.goods_id AND eg.goods_id < '.$goods['goods_id'].' AND eg.is_exchange = 1 AND g.is_delete = 0';
             $next_gid = $db->getOne($sql);
             if (! empty($next_gid)) {
                 $next_good['url'] = build_uri('exchange_goods', ['gid' => $next_gid], $goods['goods_name']);
-                $smarty->assign('next_good', $next_good); //下一个商品
+                $smarty->assign('next_good', $next_good); // 下一个商品
             }
 
             /* current position */
@@ -179,9 +179,9 @@ if ($_REQUEST['act'] == 'view') {
     $smarty->display('exchange_goods.dwt', $cache_id);
 }
 
-/*------------------------------------------------------ */
-//--  兑换
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// --  兑换
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'buy') {
     /* 查询：判断是否登录 */
@@ -241,7 +241,7 @@ if ($_REQUEST['act'] == 'buy') {
         $product_info = ['product_number' => '', 'product_id' => 0];
     }
 
-    //查询：商品存在规格 是货品 检查该货品库存
+    // 查询：商品存在规格 是货品 检查该货品库存
     if ((! empty($specs)) && ($product_info['product_number'] == 0) && ($_CFG['use_storage'] == 1)) {
         show_message($_LANG['eg_error_number'], [$_LANG['back_up_page']], [$back_act], 'error');
     }
@@ -273,7 +273,7 @@ if ($_REQUEST['act'] == 'buy') {
         'goods_sn' => addslashes($goods['goods_sn']),
         'goods_name' => addslashes($goods['goods_name']),
         'market_price' => $goods['market_price'],
-        'goods_price' => 0, //$goods['exchange_integral']
+        'goods_price' => 0, // $goods['exchange_integral']
         'goods_number' => $number,
         'goods_attr' => addslashes($goods_attr),
         'goods_attr_id' => $specs,

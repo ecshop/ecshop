@@ -11,9 +11,9 @@ if (! DEBUG_MODE) {
 /* 清除缓存 */
 clear_cache_files();
 
-/*------------------------------------------------------ */
-//-- INPUT
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- INPUT
+/* ------------------------------------------------------ */
 
 /* 获得指定的分类ID */
 if (! empty($_GET['id'])) {
@@ -29,9 +29,9 @@ if (! empty($_GET['id'])) {
 /* 获得当前页码 */
 $page = ! empty($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
 
-/*------------------------------------------------------ */
-//-- PROCESSOR
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- PROCESSOR
+/* ------------------------------------------------------ */
 
 /* 获得页面的缓存ID */
 $cache_id = sprintf('%X', crc32($cat_id.'-'.$page.'-'.$_CFG['lang']));
@@ -45,7 +45,7 @@ if (! $smarty->is_cached('article_cat.dwt', $cache_id)) {
     $smarty->assign('ur_here', $position['ur_here']);   // 当前位置
 
     $smarty->assign('categories', get_categories_tree(0)); // 分类树
-    $smarty->assign('article_categories', article_categories_tree($cat_id)); //文章分类树
+    $smarty->assign('article_categories', article_categories_tree($cat_id)); // 文章分类树
     $smarty->assign('helps', get_shop_help());        // 网店帮助
     $smarty->assign('top_goods', get_top10());            // 销售排行
 
@@ -77,7 +77,7 @@ if (! $smarty->is_cached('article_cat.dwt', $cache_id)) {
     }
     $pager['search']['id'] = $cat_id;
     $keywords = '';
-    $goon_keywords = ''; //继续传递的搜索关键词
+    $goon_keywords = ''; // 继续传递的搜索关键词
 
     /* 获得文章列表 */
     if (isset($_REQUEST['keywords'])) {

@@ -62,7 +62,7 @@ if ($_REQUEST['act'] == 'check') {
 
     /* 检查当前模板可写性 */
     $dwt = @opendir(ROOT_PATH.$tpl);
-    $tpl_file = []; //获取要检查的文件
+    $tpl_file = []; // 获取要检查的文件
     while ($file = readdir($dwt)) {
         if (is_file(ROOT_PATH.$tpl.$file) && strrpos($file, '.dwt') > 0) {
             $tpl_file[] = $tpl.$file;

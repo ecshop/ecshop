@@ -438,7 +438,7 @@ function order_goods($order_id)
         $goods_list[] = $row;
     }
 
-    //return $GLOBALS['db']->getAll($sql);
+    // return $GLOBALS['db']->getAll($sql);
     return $goods_list;
 }
 
@@ -982,14 +982,14 @@ function addto_cart($goods_id, $num = 1, $spec = [], $parent = 0, $rec_type = CA
 
     /* 检查：库存 */
     if ($GLOBALS['_CFG']['use_storage'] == 1) {
-        //检查：商品购买数量是否大于总库存
+        // 检查：商品购买数量是否大于总库存
         if ($num > $goods['goods_number']) {
             $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['shortage'], $goods['goods_number']), ERR_OUT_OF_STOCK);
 
             return false;
         }
 
-        //商品存在规格 是货品 检查该货品库存
+        // 商品存在规格 是货品 检查该货品库存
         if (is_spec($spec) && ! empty($prod)) {
             if (! empty($spec)) {
                 /* 取规格的货品库存 */
@@ -1092,7 +1092,7 @@ function addto_cart($goods_id, $num = 1, $spec = [], $parent = 0, $rec_type = CA
         }
 
         /* 作为该基本件的配件插入 */
-        $parent['goods_price'] = max($fitting_price, 0) + $spec_price; //允许该配件优惠价格为0
+        $parent['goods_price'] = max($fitting_price, 0) + $spec_price; // 允许该配件优惠价格为0
         $parent['goods_number'] = min($num, $basic_count_list[$parent_id]);
         $parent['parent_id'] = $parent_id;
 
@@ -1114,7 +1114,7 @@ function addto_cart($goods_id, $num = 1, $spec = [], $parent = 0, $rec_type = CA
 
         $row = $GLOBALS['db']->getRow($sql);
 
-        if ($row) { //如果购物车已经有此物品，则更新
+        if ($row) { // 如果购物车已经有此物品，则更新
             $num += $row['goods_number'];
             if (is_spec($spec) && ! empty($prod)) {
                 $goods_storage = $product_info['product_number'];
@@ -1135,7 +1135,7 @@ function addto_cart($goods_id, $num = 1, $spec = [], $parent = 0, $rec_type = CA
 
                 return false;
             }
-        } else { //购物车没有此物品，则插入
+        } else { // 购物车没有此物品，则插入
             $goods_price = get_final_price($goods_id, $num, true, $spec);
             $parent['goods_price'] = max($goods_price, 0);
             $parent['goods_number'] = $num;
@@ -2612,7 +2612,7 @@ function add_package_to_cart($package_id, $num = 1)
 
         $row = $GLOBALS['db']->getRow($sql);
 
-        if ($row) { //如果购物车已经有此物品，则更新
+        if ($row) { // 如果购物车已经有此物品，则更新
             $num += $row['goods_number'];
             if ($GLOBALS['_CFG']['use_storage'] == 0 || $num > 0) {
                 $sql = 'UPDATE '.$GLOBALS['ecs']->table('cart')." SET goods_number = '".$num."'".
@@ -2625,7 +2625,7 @@ function add_package_to_cart($package_id, $num = 1)
 
                 return false;
             }
-        } else { //购物车没有此物品，则插入
+        } else { // 购物车没有此物品，则插入
             $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('cart'), $parent, 'INSERT');
         }
     }

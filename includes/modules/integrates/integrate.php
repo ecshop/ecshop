@@ -2,9 +2,9 @@
 
 class integrate
 {
-    /*------------------------------------------------------ */
-    //-- PUBLIC ATTRIBUTEs
-    /*------------------------------------------------------ */
+    /* ------------------------------------------------------ */
+    // -- PUBLIC ATTRIBUTEs
+    /* ------------------------------------------------------ */
 
     /* 整合对象使用的数据库主机 */
     public $db_host = '';
@@ -95,7 +95,7 @@ class integrate
         }
 
         if (! is_resource($this->db->link_id)) {
-            $this->error = 1; //数据库地址帐号
+            $this->error = 1; // 数据库地址帐号
         } else {
             $this->error = $this->db->errno();
         }
@@ -128,8 +128,8 @@ class integrate
      */
     public function logout()
     {
-        $this->set_cookie(); //清除cookie
-        $this->set_session(); //清除session
+        $this->set_cookie(); // 清除cookie
+        $this->set_session(); // 清除session
     }
 
     /**
@@ -282,9 +282,9 @@ class integrate
             $col = $GLOBALS['db']->getCol($sql);
 
             if ($col) {
-                $sql = 'UPDATE '.$GLOBALS['ecs']->table('users').' SET parent_id = 0 WHERE '.db_create_in($col, 'parent_id'); //将删除用户的下级的parent_id 改为0
+                $sql = 'UPDATE '.$GLOBALS['ecs']->table('users').' SET parent_id = 0 WHERE '.db_create_in($col, 'parent_id'); // 将删除用户的下级的parent_id 改为0
                 $GLOBALS['db']->query($sql);
-                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('users').' WHERE '.db_create_in($col, 'user_id'); //删除用户
+                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('users').' WHERE '.db_create_in($col, 'user_id'); // 删除用户
                 $GLOBALS['db']->query($sql);
                 /* 删除用户订单 */
                 $sql = 'SELECT order_id FROM '.$GLOBALS['ecs']->table('order_info').' WHERE '.db_create_in($col, 'user_id');
@@ -297,21 +297,21 @@ class integrate
                     $GLOBALS['db']->query($sql);
                 }
 
-                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('booking_goods').' WHERE '.db_create_in($col, 'user_id'); //删除用户
+                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('booking_goods').' WHERE '.db_create_in($col, 'user_id'); // 删除用户
                 $GLOBALS['db']->query($sql);
-                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('collect_goods').' WHERE '.db_create_in($col, 'user_id'); //删除会员收藏商品
+                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('collect_goods').' WHERE '.db_create_in($col, 'user_id'); // 删除会员收藏商品
                 $GLOBALS['db']->query($sql);
-                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('feedback').' WHERE '.db_create_in($col, 'user_id'); //删除用户留言
+                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('feedback').' WHERE '.db_create_in($col, 'user_id'); // 删除用户留言
                 $GLOBALS['db']->query($sql);
-                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('user_address').' WHERE '.db_create_in($col, 'user_id'); //删除用户地址
+                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('user_address').' WHERE '.db_create_in($col, 'user_id'); // 删除用户地址
                 $GLOBALS['db']->query($sql);
-                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('user_bonus').' WHERE '.db_create_in($col, 'user_id'); //删除用户红包
+                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('user_bonus').' WHERE '.db_create_in($col, 'user_id'); // 删除用户红包
                 $GLOBALS['db']->query($sql);
-                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('user_account').' WHERE '.db_create_in($col, 'user_id'); //删除用户帐号金额
+                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('user_account').' WHERE '.db_create_in($col, 'user_id'); // 删除用户帐号金额
                 $GLOBALS['db']->query($sql);
-                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('tag').' WHERE '.db_create_in($col, 'user_id'); //删除用户标记
+                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('tag').' WHERE '.db_create_in($col, 'user_id'); // 删除用户标记
                 $GLOBALS['db']->query($sql);
-                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('account_log').' WHERE '.db_create_in($col, 'user_id'); //删除用户日志
+                $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('account_log').' WHERE '.db_create_in($col, 'user_id'); // 删除用户日志
                 $GLOBALS['db']->query($sql);
             }
         }

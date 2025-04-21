@@ -293,7 +293,7 @@ if ($action == 'send_sms') {
     $link[] = ['text' => $_LANG['back'].$_LANG['03_sms_send'],
         'href' => 'sms.php?act=display_send_ui'];
 
-    if ($result === true) {//发送成功
+    if ($result === true) {// 发送成功
         sys_msg($_LANG['send_ok'], 0, $link);
     } else {
         @$error_detail = $_LANG['server_errors'][$sms->errors['server_errors']['error_no']]

@@ -10,9 +10,9 @@ if (empty($_REQUEST['act'])) {
     $_REQUEST['act'] = 'list';
 }
 
-/*------------------------------------------------------ */
-//-- 分类列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 分类列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     $articlecat = article_cat_list(0, 0, false);
     foreach ($articlecat as $key => $cat) {
@@ -27,9 +27,9 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('articlecat_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 查询
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 查询
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
     $articlecat = article_cat_list(0, 0, false);
     foreach ($articlecat as $key => $cat) {
@@ -40,9 +40,9 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result($smarty->fetch('articlecat_list.htm'));
 }
 
-/*------------------------------------------------------ */
-//-- 添加分类
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 添加分类
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'add') {
     /* 权限判断 */
     admin_priv('article_cat');
@@ -59,7 +59,7 @@ if ($_REQUEST['act'] == 'insert') {
     /* 权限判断 */
     admin_priv('article_cat');
 
-    /*检查分类名是否重复*/
+    /* 检查分类名是否重复 */
     $is_only = $exc->is_only('cat_name', $_POST['cat_name']);
 
     if (! $is_only) {
@@ -84,7 +84,7 @@ if ($_REQUEST['act'] == 'insert') {
     if ($_POST['show_in_nav'] == 1) {
         $vieworder = $db->getOne('SELECT max(vieworder) FROM '.$ecs->table('nav')." WHERE type = 'middle'");
         $vieworder += 2;
-        //显示在自定义导航栏中
+        // 显示在自定义导航栏中
         $sql = 'INSERT INTO '.$ecs->table('nav')." (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('".$_POST['cat_name']."', 'a', '".$db->insert_id()."','1','$vieworder','0', '".build_uri('article_cat', ['acid' => $db->insert_id()], $_POST['cat_name'])."','middle')";
         $db->query($sql);
     }
@@ -100,9 +100,9 @@ if ($_REQUEST['act'] == 'insert') {
     sys_msg($_POST['cat_name'].$_LANG['catadd_succed'], 0, $link);
 }
 
-/*------------------------------------------------------ */
-//-- 编辑文章分类
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑文章分类
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit') {
     /* 权限判断 */
     admin_priv('article_cat');
@@ -144,7 +144,7 @@ if ($_REQUEST['act'] == 'update') {
     /* 权限判断 */
     admin_priv('article_cat');
 
-    /*检查重名*/
+    /* 检查重名 */
     if ($_POST['cat_name'] != $_POST['old_catname']) {
         $is_only = $exc->is_only('cat_name', $_POST['cat_name'], $_POST['id']);
 
@@ -191,19 +191,19 @@ if ($_REQUEST['act'] == 'update') {
     $dat = $db->getOne('SELECT cat_name, show_in_nav FROM '.$ecs->table('article_cat')." WHERE cat_id = '".$_POST['id']."'");
     if ($exc->edit("cat_name = '$_POST[cat_name]', cat_desc ='$_POST[cat_desc]', keywords='$_POST[keywords]',parent_id = '$_POST[parent_id]', cat_type='$cat_type', sort_order='$_POST[sort_order]', show_in_nav = '$_POST[show_in_nav]'", $_POST['id'])) {
         if ($_POST['cat_name'] != $dat['cat_name']) {
-            //如果分类名称发生了改变
+            // 如果分类名称发生了改变
             $sql = 'UPDATE '.$ecs->table('nav')." SET name = '".$_POST['cat_name']."' WHERE ctype = 'a' AND cid = '".$_POST['id']."' AND type = 'middle'";
             $db->query($sql);
         }
         if ($_POST['show_in_nav'] != $dat['show_in_nav']) {
             if ($_POST['show_in_nav'] == 1) {
-                //显示
+                // 显示
                 $nid = $db->getOne('SELECT id FROM '.$ecs->table('nav')." WHERE ctype = 'a' AND cid = '".$_POST['id']."' AND type = 'middle'");
                 if (empty($nid)) {
                     $vieworder = $db->getOne('SELECT max(vieworder) FROM '.$ecs->table('nav')." WHERE type = 'middle'");
                     $vieworder += 2;
                     $uri = build_uri('article_cat', ['acid' => $_POST['id']], $_POST['cat_name']);
-                    //不存在
+                    // 不存在
                     $sql = 'INSERT INTO '.$ecs->table('nav').
                         ' (name,ctype,cid,ifshow,vieworder,opennew,url,type) '.
                         "VALUES('".$_POST['cat_name']."', 'a', '".$_POST['id']."','1','$vieworder','0', '".$uri."','middle')";
@@ -212,7 +212,7 @@ if ($_REQUEST['act'] == 'update') {
                 }
                 $db->query($sql);
             } else {
-                //去除
+                // 去除
                 $db->query('UPDATE '.$ecs->table('nav')." SET ifshow = 0 WHERE ctype = 'a' AND cid = '".$_POST['id']."' AND type = 'middle'");
             }
         }
@@ -227,9 +227,9 @@ if ($_REQUEST['act'] == 'update') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 编辑文章分类的排序
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑文章分类的排序
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit_sort_order') {
     check_authz_json('article_cat');
 
@@ -249,9 +249,9 @@ if ($_REQUEST['act'] == 'edit_sort_order') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 删除文章分类
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 删除文章分类
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'remove') {
     check_authz_json('article_cat');
 
@@ -286,9 +286,9 @@ if ($_REQUEST['act'] == 'remove') {
     ecs_header("Location: $url\n");
     exit;
 }
-/*------------------------------------------------------ */
-//-- 切换是否显示在导航栏
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 切换是否显示在导航栏
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'toggle_show_in_nav') {
     check_authz_json('cat_manage');
@@ -298,10 +298,10 @@ if ($_REQUEST['act'] == 'toggle_show_in_nav') {
 
     if (cat_update($id, ['show_in_nav' => $val]) != false) {
         if ($val == 1) {
-            //显示
+            // 显示
             $nid = $db->getOne('SELECT id FROM '.$ecs->table('nav')." WHERE ctype='a' AND cid='$id' AND type = 'middle'");
             if (empty($nid)) {
-                //不存在
+                // 不存在
                 $vieworder = $db->getOne('SELECT max(vieworder) FROM '.$ecs->table('nav')." WHERE type = 'middle'");
                 $vieworder += 2;
                 $catname = $db->getOne('SELECT cat_name FROM '.$ecs->table('article_cat')." WHERE cat_id = '$id'");
@@ -314,7 +314,7 @@ if ($_REQUEST['act'] == 'toggle_show_in_nav') {
             }
             $db->query($sql);
         } else {
-            //去除
+            // 去除
             $db->query('UPDATE '.$ecs->table('nav')." SET ifshow = 0 WHERE ctype='a' AND cid='$id' AND type = 'middle'");
         }
         clear_cache_files();

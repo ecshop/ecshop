@@ -5,9 +5,9 @@ define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 require 'includes/lib_goods.php';
 
-/*------------------------------------------------------ */
-//-- 批量上传
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 批量上传
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'add') {
     /* 检查权限 */
@@ -50,9 +50,9 @@ if ($_REQUEST['act'] == 'add') {
     $smarty->display('goods_batch_add.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 批量上传：处理
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 批量上传：处理
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'upload') {
     /* 检查权限 */
@@ -311,9 +311,9 @@ if ($_REQUEST['act'] == 'upload') {
     $smarty->display('goods_batch_confirm.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 批量上传：入库
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 批量上传：入库
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'insert') {
     /* 检查权限 */
@@ -351,7 +351,7 @@ if ($_REQUEST['act'] == 'insert') {
 
         /* 字段列表 */
         $field_list = array_keys($_LANG['upload_goods']);
-        $field_list[] = 'goods_class'; //实体或虚拟商品
+        $field_list[] = 'goods_class'; // 实体或虚拟商品
 
         /* 获取商品good id */
         $max_id = $db->getOne('SELECT MAX(goods_id) + 1 FROM '.$ecs->table('goods'));
@@ -436,7 +436,7 @@ if ($_REQUEST['act'] == 'insert') {
 
             $max_id = $db->insert_id() + 1;
 
-            /* 如果图片不为空,修改商品图片，插入商品相册*/
+            /* 如果图片不为空,修改商品图片，插入商品相册 */
             if (! empty($field_arr['original_img']) || ! empty($field_arr['goods_img']) || ! empty($field_arr['goods_thumb'])) {
                 $goods_img = '';
                 $goods_thumb = '';
@@ -445,7 +445,7 @@ if ($_REQUEST['act'] == 'insert') {
                 $goods_gallery['goods_id'] = $db->insert_id();
 
                 if (! empty($field_arr['original_img'])) {
-                    //设置商品相册原图和商品相册图
+                    // 设置商品相册原图和商品相册图
                     if ($_CFG['auto_generate_gallery']) {
                         $ext = substr($field_arr['original_img'], strrpos($field_arr['original_img'], '.'));
                         $img = dirname($field_arr['original_img']).'/'.$image->random_filename().$ext;
@@ -454,7 +454,7 @@ if ($_REQUEST['act'] == 'insert') {
                         @copy(ROOT_PATH.$field_arr['original_img'], ROOT_PATH.$gallery_img);
                         $goods_gallery['img_original'] = reformat_image_name('gallery', $goods_gallery['goods_id'], $img, 'source');
                     }
-                    //设置商品原图
+                    // 设置商品原图
                     if ($_CFG['retain_original_img']) {
                         $original_img = reformat_image_name('goods', $goods_gallery['goods_id'], $field_arr['original_img'], 'source');
                     } else {
@@ -463,30 +463,30 @@ if ($_REQUEST['act'] == 'insert') {
                 }
 
                 if (! empty($field_arr['goods_img'])) {
-                    //设置商品相册图
+                    // 设置商品相册图
                     if ($_CFG['auto_generate_gallery'] && ! empty($gallery_img)) {
                         $goods_gallery['img_url'] = reformat_image_name('gallery', $goods_gallery['goods_id'], $gallery_img, 'goods');
                     }
-                    //设置商品图
+                    // 设置商品图
                     $goods_img = reformat_image_name('goods', $goods_gallery['goods_id'], $field_arr['goods_img'], 'goods');
                 }
 
                 if (! empty($field_arr['goods_thumb'])) {
-                    //设置商品相册缩略图
+                    // 设置商品相册缩略图
                     if ($_CFG['auto_generate_gallery']) {
                         $ext = substr($field_arr['goods_thumb'], strrpos($field_arr['goods_thumb'], '.'));
                         $gallery_thumb = dirname($field_arr['goods_thumb']).'/'.$image->random_filename().$ext;
                         @copy(ROOT_PATH.$field_arr['goods_thumb'], ROOT_PATH.$gallery_thumb);
                         $goods_gallery['thumb_url'] = reformat_image_name('gallery_thumb', $goods_gallery['goods_id'], $gallery_thumb, 'thumb');
                     }
-                    //设置商品缩略图
+                    // 设置商品缩略图
                     $goods_thumb = reformat_image_name('goods_thumb', $goods_gallery['goods_id'], $field_arr['goods_thumb'], 'thumb');
                 }
 
-                //修改商品图
+                // 修改商品图
                 $db->query('UPDATE '.$ecs->table('goods')." SET goods_img = '$goods_img', goods_thumb = '$goods_thumb', original_img = '$original_img' WHERE goods_id='".$goods_gallery['goods_id']."'");
 
-                //添加商品相册图
+                // 添加商品相册图
                 if ($_CFG['auto_generate_gallery']) {
                     $db->autoExecute($ecs->table('goods_gallery'), $goods_gallery, 'INSERT');
                 }
@@ -502,9 +502,9 @@ if ($_REQUEST['act'] == 'insert') {
     sys_msg($_LANG['batch_upload_ok'], 0, $link);
 }
 
-/*------------------------------------------------------ */
-//-- 批量修改：选择商品
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 批量修改：选择商品
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'select') {
     /* 检查权限 */
@@ -525,9 +525,9 @@ if ($_REQUEST['act'] == 'select') {
     $smarty->display('goods_batch_select.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 批量修改：修改
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 批量修改：修改
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'edit') {
     /* 检查权限 */
@@ -572,7 +572,7 @@ if ($_REQUEST['act'] == 'edit') {
         }
         $smarty->assign('product_list', $_product_list);
 
-        //释放资源
+        // 释放资源
         unset($product_list, $sql, $_product_list);
     }
 
@@ -608,9 +608,9 @@ if ($_REQUEST['act'] == 'edit') {
     $smarty->display('goods_batch_edit.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 批量修改：提交
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 批量修改：提交
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'update') {
     /* 检查权限 */
@@ -620,7 +620,7 @@ if ($_REQUEST['act'] == 'update') {
         // 循环更新每个商品
         if (! empty($_POST['goods_id'])) {
             foreach ($_POST['goods_id'] as $goods_id) {
-                //如果存在货品则处理货品
+                // 如果存在货品则处理货品
                 if (! empty($_POST['product_number'][$goods_id])) {
                     $_POST['goods_number'][$goods_id] = 0;
                     foreach ($_POST['product_number'][$goods_id] as $key => $value) {
@@ -736,9 +736,9 @@ if ($_REQUEST['act'] == 'update') {
     sys_msg($_LANG['batch_edit_ok'], 0, $link);
 }
 
-/*------------------------------------------------------ */
-//-- 下载文件
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 下载文件
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'download') {
     /* 检查权限 */
@@ -769,9 +769,9 @@ if ($_REQUEST['act'] == 'download') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 取得商品
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 取得商品
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'get_goods') {
     $filter = new stdclass;

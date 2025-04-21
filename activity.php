@@ -10,9 +10,9 @@ include_once ROOT_PATH.'includes/lib_transaction.php';
 require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/shopping_flow.php';
 require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/user.php';
 
-/*------------------------------------------------------ */
-//-- PROCESSOR
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- PROCESSOR
+/* ------------------------------------------------------ */
 
 assign_template();
 assign_dynamic('activity');
@@ -41,7 +41,7 @@ while ($row = $db->fetchRow($res)) {
     $row['start_time'] = local_date('Y-m-d H:i', $row['start_time']);
     $row['end_time'] = local_date('Y-m-d H:i', $row['end_time']);
 
-    //享受优惠会员等级
+    // 享受优惠会员等级
     $user_rank = explode(',', $row['user_rank']);
     $row['user_rank'] = [];
     foreach ($user_rank as $val) {
@@ -50,7 +50,7 @@ while ($row = $db->fetchRow($res)) {
         }
     }
 
-    //优惠范围类型、内容
+    // 优惠范围类型、内容
     if ($row['act_range'] != FAR_ALL && ! empty($row['act_range_ext'])) {
         if ($row['act_range'] == FAR_CATEGORY) {
             $row['act_range'] = $_LANG['far_category'];
@@ -74,7 +74,7 @@ while ($row = $db->fetchRow($res)) {
         $row['act_range'] = $_LANG['far_all'];
     }
 
-    //优惠方式
+    // 优惠方式
 
     switch ($row['act_type']) {
         case 0:

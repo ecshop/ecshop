@@ -435,12 +435,12 @@ function get_editable_libs($curr_template, $curr_page_libs)
     $edit_libs = [];
 
     if ($xml_content = @file_get_contents(ROOT_PATH.'themes/'.$_CFG['template'].'/libs.xml')) {
-        $p = xml_parser_create();                                                   //把xml解析到数组
+        $p = xml_parser_create();                                                   // 把xml解析到数组
         xml_parse_into_struct($p, $xml_content, $vals, $index);
         xml_parser_free($p);
 
         $i = 0;
-        for (; $i < count($vals); $i++) {                                      //找到相应模板文件的位置
+        for (; $i < count($vals); $i++) {                                      // 找到相应模板文件的位置
             if ($vals[$i]['tag'] == 'FILE' && isset($vals[$i]['attributes'])) {
                 if ($vals[$i]['attributes']['NAME'] == $curr_template.'.dwt') {
                     break;
@@ -448,7 +448,7 @@ function get_editable_libs($curr_template, $curr_page_libs)
             }
         }
 
-        while ($vals[++$i]['tag'] != 'FILE' || ! isset($vals[$i]['attributes'])) {     //读出可编辑区库文件名称，放到一个数组中
+        while ($vals[++$i]['tag'] != 'FILE' || ! isset($vals[$i]['attributes'])) {     // 读出可编辑区库文件名称，放到一个数组中
             if ($vals[$i]['tag'] == 'LIB') {
                 $edit_libs[] = $vals[$i]['value'];
             }

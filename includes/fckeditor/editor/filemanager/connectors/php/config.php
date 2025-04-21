@@ -1,4 +1,5 @@
 <?php
+
 /*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
  * Copyright (C) 2003-2008 Frederico Caldeira Knabben
@@ -87,7 +88,7 @@ $Config['Enabled'] = $enable;
 // SECURITY: You must explicitly enable this "connector". (Set it to "true").
 // WARNING: don't just set "$Config['Enabled'] = true ;", you must be sure that only
 //      authenticated users can access this file or use some kind of session checking.
-//$Config['Enabled'] = false ;
+// $Config['Enabled'] = false ;
 
 // Path to user files relative to the document root.
 $Config['UserFilesPath'] = $root_path.IMAGE_DIR.'/upload/';
@@ -185,7 +186,7 @@ $Config['FileTypesAbsolutePath']['File'] = ($Config['UserFilesAbsolutePath'] == 
 $Config['QuickUploadPath']['File'] = $Config['UserFilesPath'].'File/';
 $Config['QuickUploadAbsolutePath']['File'] = $Config['UserFilesAbsolutePath'].'File/';
 
-//$Config['AllowedExtensions']['Image']   = array('bmp','gif','jpeg','jpg','png') ;
+// $Config['AllowedExtensions']['Image']   = array('bmp','gif','jpeg','jpg','png') ;
 $Config['AllowedExtensions']['Image'] = ['jpg', 'gif', 'jpeg', 'png'];
 $Config['DeniedExtensions']['Image'] = [];
 $Config['FileTypesPath']['Image'] = $Config['UserFilesPath'].'Image/';
@@ -193,7 +194,7 @@ $Config['FileTypesAbsolutePath']['Image'] = ($Config['UserFilesAbsolutePath'] ==
 $Config['QuickUploadPath']['Image'] = $Config['UserFilesPath'].'Image/';
 $Config['QuickUploadAbsolutePath']['Image'] = $Config['UserFilesAbsolutePath'].'Image/';
 
-//$Config['AllowedExtensions']['Flash']   = array('swf','flv') ;
+// $Config['AllowedExtensions']['Flash']   = array('swf','flv') ;
 $Config['AllowedExtensions']['Flash'] = ['swf', 'fla'];
 $Config['DeniedExtensions']['Flash'] = [];
 $Config['FileTypesPath']['Flash'] = $Config['UserFilesPath'].'Flash/';
@@ -201,7 +202,7 @@ $Config['FileTypesAbsolutePath']['Flash'] = ($Config['UserFilesAbsolutePath'] ==
 $Config['QuickUploadPath']['Flash'] = $Config['UserFilesPath'].'Flash/';
 $Config['QuickUploadAbsolutePath']['Flash'] = $Config['UserFilesAbsolutePath'].'Flash/';
 
-//$Config['AllowedExtensions']['Media']   = array('aiff', 'asf', 'avi', 'bmp', 'fla', 'flv', 'gif', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'png', 'qt', 'ram', 'rm', 'rmi', 'rmvb', 'swf', 'tif', 'tiff', 'wav', 'wma', 'wmv') ;
+// $Config['AllowedExtensions']['Media']   = array('aiff', 'asf', 'avi', 'bmp', 'fla', 'flv', 'gif', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'png', 'qt', 'ram', 'rm', 'rmi', 'rmvb', 'swf', 'tif', 'tiff', 'wav', 'wma', 'wmv') ;
 $Config['AllowedExtensions']['Media'] = ['7z', 'aiff', 'asf', 'avi', 'bmp', 'csv', 'doc', 'fla', 'flv', 'gif', 'gz', 'gzip', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'ods', 'odt', 'pdf', 'png', 'ppt', 'pxd', 'qt', 'ram', 'rar', 'rm', 'rmi', 'rmvb', 'rtf', 'sdc', 'sitd', 'swf', 'sxc', 'sxw', 'tar', 'tgz', 'tif', 'tiff', 'txt', 'vsd', 'wav', 'wma', 'wmv', 'xls', 'xml', 'zip'];
 $Config['DeniedExtensions']['Media'] = [];
 $Config['FileTypesPath']['Media'] = $Config['UserFilesPath'].'Media/';

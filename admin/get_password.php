@@ -11,11 +11,11 @@ if (empty($_SERVER['REQUEST_METHOD'])) {
     $_SERVER['REQUEST_METHOD'] = trim($_SERVER['REQUEST_METHOD']);
 }
 
-/*------------------------------------------------------ */
-//-- 填写管理员帐号和email页面
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 填写管理员帐号和email页面
+/* ------------------------------------------------------ */
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    //验证从邮件地址过来的链接
+    // 验证从邮件地址过来的链接
     if (! empty($_GET['act']) && $_GET['act'] == 'reset_pwd') {
         $code = ! empty($_GET['code']) ? trim($_GET['code']) : '';
         $adminid = ! empty($_GET['uid']) ? intval($_GET['uid']) : 0;
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $password = $db->getOne($sql);
 
         if (md5($adminid.$password) != $code) {
-            //此链接不合法
+            // 此链接不合法
             $link[0]['text'] = $_LANG['back'];
             $link[0]['href'] = 'privilege.php?act=login';
 
@@ -50,9 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $smarty->display('get_pwd.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 验证管理员帐号和email, 发送邮件
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 验证管理员帐号和email, 发送邮件
+/* ------------------------------------------------------ */
 else {
     /* 发送找回密码确认邮件 */
     if (! empty($_POST['action']) && $_POST['action'] == 'get_pwd') {
@@ -94,7 +94,7 @@ else {
                 $content,
                 $template['is_html']
             )) {
-                //提示信息
+                // 提示信息
                 $link[0]['text'] = $_LANG['back'];
                 $link[0]['href'] = 'privilege.php?act=login';
 
@@ -122,14 +122,14 @@ else {
         $au = $db->getRow($sql);
 
         if (md5($adminid.$au['password'].$au['add_time']) != $code) {
-            //此链接不合法
+            // 此链接不合法
             $link[0]['text'] = $_LANG['back'];
             $link[0]['href'] = 'privilege.php?act=login';
 
             sys_msg($_LANG['code_param_error'], 0, $link);
         }
 
-        //更新管理员的密码
+        // 更新管理员的密码
         $ec_salt = rand(1, 9999);
         $sql = 'UPDATE '.$ecs->table('admin_user')."SET password = '".md5(md5($new_password).$ec_salt)."',`ec_salt`='$ec_salt' ".
             "WHERE user_id = '$adminid'";

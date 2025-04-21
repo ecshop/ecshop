@@ -4,9 +4,9 @@ define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
 
-/*------------------------------------------------------ */
-//-- 用户帐号列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 用户帐号列表
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'list') {
     /* 检查权限 */
@@ -36,9 +36,9 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('users_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- ajax返回用户列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- ajax返回用户列表
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
     $user_list = user_list();
 
@@ -53,9 +53,9 @@ if ($_REQUEST['act'] == 'query') {
     make_json_result($smarty->fetch('users_list.htm'), '', ['filter' => $user_list['filter'], 'page_count' => $user_list['page_count']]);
 }
 
-/*------------------------------------------------------ */
-//-- 添加会员帐号
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 添加会员帐号
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'add') {
     /* 检查权限 */
     admin_priv('users_manage');
@@ -80,9 +80,9 @@ if ($_REQUEST['act'] == 'add') {
     $smarty->display('user_info.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 添加会员帐号
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 添加会员帐号
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'insert') {
     /* 检查权限 */
     admin_priv('users_manage');
@@ -112,7 +112,7 @@ if ($_REQUEST['act'] == 'insert') {
         } elseif ($users->error == ERR_EMAIL_EXISTS) {
             $msg = $_LANG['email_exists'];
         } else {
-            //die('Error:'.$users->error_msg());
+            // die('Error:'.$users->error_msg());
         }
         sys_msg($msg, 1);
     }
@@ -122,11 +122,11 @@ if ($_REQUEST['act'] == 'insert') {
         log_account_change($_SESSION['user_id'], 0, 0, $GLOBALS['_CFG']['register_points'], $GLOBALS['_CFG']['register_points'], $_LANG['register_points']);
     }
 
-    /*把新注册用户的扩展信息插入数据库*/
-    $sql = 'SELECT id FROM '.$ecs->table('reg_fields').' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有扩展字段的id
+    /* 把新注册用户的扩展信息插入数据库 */
+    $sql = 'SELECT id FROM '.$ecs->table('reg_fields').' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   // 读出所有扩展字段的id
     $fields_arr = $db->getAll($sql);
 
-    $extend_field_str = '';    //生成扩展字段的内容字符串
+    $extend_field_str = '';    // 生成扩展字段的内容字符串
     $user_id_arr = $users->get_profile_by_name($username);
     foreach ($fields_arr as $val) {
         $extend_field_index = 'extend_field'.$val['id'];
@@ -137,7 +137,7 @@ if ($_REQUEST['act'] == 'insert') {
     }
     $extend_field_str = substr($extend_field_str, 0, -1);
 
-    if ($extend_field_str) {      //插入注册扩展数据
+    if ($extend_field_str) {      // 插入注册扩展数据
         $sql = 'INSERT INTO '.$ecs->table('reg_extend_info').' (`user_id`, `reg_field_id`, `content`) VALUES'.$extend_field_str;
         $db->query($sql);
     }
@@ -166,9 +166,9 @@ if ($_REQUEST['act'] == 'insert') {
     sys_msg(sprintf($_LANG['add_success'], htmlspecialchars(stripslashes($_POST['username']))), 0, $link);
 }
 
-/*------------------------------------------------------ */
-//-- 编辑用户帐号
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑用户帐号
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'edit') {
     /* 检查权限 */
@@ -257,7 +257,7 @@ if ($_REQUEST['act'] == 'edit') {
     empty($affiliate) && $affiliate = [];
 
     if (empty($affiliate['config']['separate_by'])) {
-        //推荐注册分成
+        // 推荐注册分成
         $affdb = [];
         $num = count($affiliate['item']);
         $up_uid = "'$_GET[id]'";
@@ -288,9 +288,9 @@ if ($_REQUEST['act'] == 'edit') {
     $smarty->display('user_info.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 更新用户帐号
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 更新用户帐号
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'update') {
     /* 检查权限 */
@@ -319,18 +319,18 @@ if ($_REQUEST['act'] == 'update') {
         $db->query($sql);
     }
     /* 更新用户扩展字段的数据 */
-    $sql = 'SELECT id FROM '.$ecs->table('reg_fields').' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有扩展字段的id
+    $sql = 'SELECT id FROM '.$ecs->table('reg_fields').' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   // 读出所有扩展字段的id
     $fields_arr = $db->getAll($sql);
     $user_id_arr = $users->get_profile_by_name($username);
     $user_id = $user_id_arr['user_id'];
 
-    foreach ($fields_arr as $val) {       //循环更新扩展用户信息
+    foreach ($fields_arr as $val) {       // 循环更新扩展用户信息
         $extend_field_index = 'extend_field'.$val['id'];
         if (isset($_POST[$extend_field_index])) {
             $temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr($_POST[$extend_field_index], 0, 99) : $_POST[$extend_field_index];
 
             $sql = 'SELECT * FROM '.$ecs->table('reg_extend_info')."  WHERE reg_field_id = '$val[id]' AND user_id = '$user_id'";
-            if ($db->getOne($sql)) {      //如果之前没有记录，则插入
+            if ($db->getOne($sql)) {      // 如果之前没有记录，则插入
                 $sql = 'UPDATE '.$ecs->table('reg_extend_info')." SET content = '$temp_field_content' WHERE reg_field_id = '$val[id]' AND user_id = '$user_id'";
             } else {
                 $sql = 'INSERT INTO '.$ecs->table('reg_extend_info')." (`user_id`, `reg_field_id`, `content`) VALUES ('$user_id', '$val[id]', '$temp_field_content')";
@@ -364,9 +364,9 @@ if ($_REQUEST['act'] == 'update') {
     sys_msg($_LANG['update_success'], 0, $links);
 }
 
-/*------------------------------------------------------ */
-//-- 批量删除会员帐号
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 批量删除会员帐号
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'batch_remove') {
     /* 检查权限 */
@@ -425,9 +425,9 @@ if ($_REQUEST['act'] == 'edit_username') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 编辑email
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 编辑email
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'edit_email') {
     /* 检查权限 */
     check_authz_json('users_manage');
@@ -454,9 +454,9 @@ if ($_REQUEST['act'] == 'edit_email') {
     }
 }
 
-/*------------------------------------------------------ */
-//-- 删除会员帐号
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 删除会员帐号
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'remove') {
     /* 检查权限 */
@@ -466,7 +466,7 @@ if ($_REQUEST['act'] == 'remove') {
     $username = $db->getOne($sql);
     /* 通过插件来删除用户 */
     $users = init_users();
-    $users->remove_user($username); //已经删除用户所有数据
+    $users->remove_user($username); // 已经删除用户所有数据
 
     /* 记录管理员操作 */
     admin_log(addslashes($username), 'remove', 'users');
@@ -476,9 +476,9 @@ if ($_REQUEST['act'] == 'remove') {
     sys_msg(sprintf($_LANG['remove_success'], $username), 0, $link);
 }
 
-/*------------------------------------------------------ */
-//--  收货地址查看
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// --  收货地址查看
+/* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'address_list') {
     $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $sql = 'SELECT a.*, c.region_name AS country_name, p.region_name AS province, ct.region_name AS city_name, d.region_name AS district_name '.
@@ -496,9 +496,9 @@ if ($_REQUEST['act'] == 'address_list') {
     $smarty->display('user_address_list.htm');
 }
 
-/*------------------------------------------------------ */
-//-- 脱离推荐关系
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 脱离推荐关系
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'remove_parent') {
     /* 检查权限 */
@@ -517,9 +517,9 @@ if ($_REQUEST['act'] == 'remove_parent') {
     sys_msg(sprintf($_LANG['update_success'], $username), 0, $link);
 }
 
-/*------------------------------------------------------ */
-//-- 查看用户推荐会员列表
-/*------------------------------------------------------ */
+/* ------------------------------------------------------ */
+// -- 查看用户推荐会员列表
+/* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'aff_list') {
     /* 检查权限 */

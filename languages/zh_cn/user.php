@@ -61,7 +61,7 @@ $_LANG['back_account_log'] = '返回帐户明细列表';
 $_LANG['amount_gt_zero'] = '请在“金额”栏输入大于0的数字';
 $_LANG['select_payment_pls'] = '请选择支付方式';
 
-//JS语言项
+// JS语言项
 $_LANG['account_js']['surplus_amount_empty'] = '请输入您要操作的金额数量！';
 $_LANG['account_js']['surplus_amount_error'] = '您输入的金额数量格式不正确！';
 $_LANG['account_js']['process_desc'] = '请输入您此次操作的备注信息！';
@@ -83,7 +83,7 @@ $_LANG['back_booking_list'] = '返回缺货登记列表';
 $_LANG['not_dispose'] = '未处理';
 $_LANG['no_goods_id'] = '请指定商品ID';
 
-//JS语言项
+// JS语言项
 $_LANG['booking_js']['booking_amount_empty'] = '请输入您要订购的商品数量！';
 $_LANG['booking_js']['booking_amount_error'] = '您输入的订购数量格式不正确！';
 $_LANG['booking_js']['describe_empty'] = '请输入您的订购描述信息！';
@@ -120,7 +120,7 @@ $_LANG['edit_profile_success'] = '您的个人资料已经成功修改！';
 $_LANG['edit_profile_failed'] = '修改个人资料操作失败！';
 $_LANG['oldpassword_error'] = '您输入的旧密码有误!请确认再后输入！';
 
-//JS语言项
+// JS语言项
 $_LANG['profile_js']['bonus_sn_empty'] = '请输入您要添加的红包号码！';
 $_LANG['profile_js']['bonus_sn_error'] = '您输入的红包号码格式不正确！';
 
@@ -186,7 +186,7 @@ $_LANG['no_passwd_question'] = '您没有设置密码提示问题，无法通过
 $_LANG['input_answer'] = '请根据您注册时设置的密码问题输入设置的答案';
 $_LANG['wrong_passwd_answer'] = '您输入的密码答案是错误的';
 
-//JS语言项
+// JS语言项
 $_LANG['password_js']['user_name_empty'] = '请输入您的用户名！';
 $_LANG['password_js']['email_address_empty'] = '请输入您的电子邮件地址！';
 $_LANG['password_js']['email_address_error'] = '您输入的电子邮件地址格式不正确！';

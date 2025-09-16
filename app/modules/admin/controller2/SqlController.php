@@ -47,7 +47,7 @@ if ($_REQUEST['act'] == 'query') {
  */
 function assign_sql($sql)
 {
-    global $db, $smarty, $_LANG;
+    // global $db, $smarty, $_LANG;
 
     $sql = stripslashes($sql);
     $smarty->assign('sql', $sql);

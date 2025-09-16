@@ -3798,7 +3798,7 @@ if ($_REQUEST['act'] == 'get_goods_info') {
  */
 function get_status_list($type = 'all')
 {
-    global $_LANG;
+    // global $_LANG;
 
     $list = [];
 

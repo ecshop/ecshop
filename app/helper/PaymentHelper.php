@@ -1,5 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\helpers;
 
 /**
  * 取得返回信息地址

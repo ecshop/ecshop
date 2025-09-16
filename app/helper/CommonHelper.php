@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
-/*  开启全局的Cookie的HttpOnly属性 */
-@ini_set('session.cookie_httponly', 1);
+namespace app\helpers;
 
 /**
  * 创建像这样的查询: "IN('a','b')";
@@ -99,7 +99,7 @@ function assign_query_info()
  */
 function region_result($parent, $sel_name, $type)
 {
-    global $cp;
+    // global $cp;
 
     $arr = get_regions($type, $parent);
     foreach ($arr as $v) {
@@ -519,7 +519,7 @@ function get_brand_list()
  */
 function get_brands($cat = 0, $app = 'brand')
 {
-    global $page_libs;
+    // global $page_libs;
     $template = basename(PHP_SELF);
     $template = substr($template, 0, strrpos($template, '.'));
     // include_once ROOT_PATH.ADMIN_PATH.'/includes/lib_template.php';
@@ -1990,7 +1990,7 @@ function is_spec($goods_attr_id_array, $sort = 'asc')
  */
 function get_package_info($id)
 {
-    global $ecs, $db, $_CFG;
+    // global $ecs, $db, $_CFG;
     $id = is_numeric($id) ? intval($id) : 0;
     $now = gmtime();
 

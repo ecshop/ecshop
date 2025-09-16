@@ -1,5 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\helpers;
 
 /**
  * 商品推荐usort用自定义排序行数

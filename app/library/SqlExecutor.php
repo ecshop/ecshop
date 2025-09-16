@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
 
-class sql_executor
+namespace app\library;
+
+class SqlExecutor
 {
     /**
      * 记录程序执行过程中最后产生的那条错误信息

@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
 
-class ECS
+namespace app\library;
+
+class Shop
 {
     public $db_name = '';
 

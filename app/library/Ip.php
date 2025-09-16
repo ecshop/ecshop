@@ -1,6 +1,10 @@
 <?php
 
-class IpLocation
+declare(strict_types=1);
+
+namespace app\library;
+
+class Ip
 {
     /**
      * QQWry.Dat文件指针

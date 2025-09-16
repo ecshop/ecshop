@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
 
-class transport
+namespace app\library;
+
+class Transport
 {
     /**
      * 脚本执行时间。－1表示采用PHP的默认值。

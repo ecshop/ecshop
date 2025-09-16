@@ -427,7 +427,7 @@ function fetch_tag($tagname, $num = 100)
  */
 function _setcookie($var, $value, $life = 0, $prefix = 1)
 {
-    global $cookiepre, $cookiedomain, $cookiepath, $timestamp, $_SERVER;
+    // global $cookiepre, $cookiedomain, $cookiepath, $timestamp, $_SERVER;
     setcookie(
         ($prefix ? $cookiepre : '').$var,
         $value,

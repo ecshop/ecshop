@@ -83,7 +83,7 @@ if ($_REQUEST['act'] == 'list') {
  */
 function get_user_orderinfo($is_pagination = true)
 {
-    global $db, $ecs, $start_date, $end_date;
+    // global $db, $ecs, $start_date, $end_date;
 
     $filter['start_date'] = empty($_REQUEST['start_date']) ? $start_date : local_strtotime($_REQUEST['start_date']);
     $filter['end_date'] = empty($_REQUEST['end_date']) ? $end_date : local_strtotime($_REQUEST['end_date']);

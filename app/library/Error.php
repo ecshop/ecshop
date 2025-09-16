@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
 
-class ecs_error
+namespace app\library;
+
+class Error
 {
     public $_message = [];
 

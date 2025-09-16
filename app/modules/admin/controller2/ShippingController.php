@@ -95,7 +95,7 @@ if ($_REQUEST['act'] == 'install') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'uninstall') {
-    global $ecs, $_LANG;
+    // global $ecs, $_LANG;
 
     admin_priv('ship_manage');
 

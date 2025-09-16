@@ -1,5 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\helpers;
 
 /**
  * 更新用户SESSION,COOKIE及登录时间、登录次数。
@@ -1334,7 +1337,7 @@ function assign_comment($id, $type, $page = 1)
 
 function assign_template($ctype = '', $catlist = [])
 {
-    global $smarty;
+    // global $smarty;
 
     $smarty->assign('image_width', $GLOBALS['_CFG']['image_width']);
     $smarty->assign('image_height', $GLOBALS['_CFG']['image_height']);
@@ -1550,7 +1553,7 @@ function get_article_parent_cats($cat)
  */
 function get_library_number($library, $template = null)
 {
-    global $page_libs;
+    // global $page_libs;
 
     if (empty($template)) {
         $template = basename(PHP_SELF);

@@ -1,5 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\helpers;
 
 /**
  * 获得查询次数以及查询时间

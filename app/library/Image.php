@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
 
-class cls_image
+namespace app\library;
+class Image
 {
     public $error_no = 0;
 

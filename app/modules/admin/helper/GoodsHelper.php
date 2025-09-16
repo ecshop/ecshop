@@ -1,5 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\modules\admin\helper;
 
 /**
  * 取得推荐类型列表

@@ -1,5 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\helpers;
 
 /**
  * 修改个人资料（Email, 性别，生日)
@@ -68,7 +71,7 @@ function edit_profile($profile)
  */
 function get_profile($user_id)
 {
-    global $user;
+    // global $user;
 
     /* 会员帐号信息 */
     $info = [];

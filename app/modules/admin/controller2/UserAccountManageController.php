@@ -124,7 +124,7 @@ function get_total_amount($start_date, $end_date, $type = 0)
  */
 function order_list()
 {
-    global $start_date, $end_date;
+    // global $start_date, $end_date;
 
     $result = get_filter();
 

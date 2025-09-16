@@ -256,7 +256,7 @@ function update_configure($key, $val = '')
  */
 function get_settings($groups = null, $excludes = null)
 {
-    global $db, $ecs, $_LANG;
+    // global $db, $ecs, $_LANG;
 
     $config_groups = '';
     $excludes_groups = '';

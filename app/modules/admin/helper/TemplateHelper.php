@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\modules\admin\helper;
+
 
 /* 可以设置内容的模板 */
 $template_files = [
@@ -337,7 +341,7 @@ function get_template_info($template_name, $template_style = '')
  */
 function get_template_region($tmp_name, $tmp_file, $lib = true)
 {
-    global $dyna_libs;
+    // global $dyna_libs;
 
     $file = '../themes/'.$tmp_name.'/'.$tmp_file;
 
@@ -427,7 +431,7 @@ function get_setted($lib, &$arr)
  */
 function get_editable_libs($curr_template, $curr_page_libs)
 {
-    global $_CFG;
+    // global $_CFG;
     $vals = [];
     $edit_libs = [];
 

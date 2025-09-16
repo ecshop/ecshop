@@ -294,7 +294,7 @@ function sort_nav($a, $b)
 /* ------------------------------------------------------ */
 function get_sysnav()
 {
-    global $_LANG;
+    // global $_LANG;
     $sysmain = [
         [$_LANG['view_cart'], 'flow.php'],
         [$_LANG['pick_out'], 'pick_out.php'],

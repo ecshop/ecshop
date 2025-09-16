@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\modules\admin\library;
 
 /* ------------------------------------------------------ */
 // -- 该类用于与数据库数据进行交换
 /* ------------------------------------------------------ */
 
-class exchange
+class Exchange
 {
     public $table;
 

@@ -1,5 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\helpers;
 
 /**
  *  获取指定用户的收藏商品列表
@@ -615,7 +618,7 @@ function color_tag(&$tags)
  */
 function get_rank_info()
 {
-    global $db, $ecs;
+    // global $db, $ecs;
 
     if (! empty($_SESSION['user_rank'])) {
         $sql = 'SELECT rank_name, special_rank FROM '.$ecs->table('user_rank')." WHERE rank_id = '$_SESSION[user_rank]'";

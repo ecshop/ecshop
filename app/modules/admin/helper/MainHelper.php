@@ -1,5 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\modules\admin\helper;
 
 /**
  * 获得所有模块的名称以及链接地址
@@ -9,7 +12,7 @@
  */
 function read_modules($directory = '.')
 {
-    global $_LANG;
+    // global $_LANG;
 
     $dir = @opendir($directory);
     $set_modules = true;
@@ -123,7 +126,7 @@ function set_admin_session($user_id, $username, $action_list, $last_time)
  */
 function insert_config($parent, $code, $value)
 {
-    global $ecs, $db, $_LANG;
+    // global $ecs, $db, $_LANG;
 
     $sql = 'SELECT id FROM '.$ecs->table('shop_config')." WHERE code = '$parent' AND type = 1";
     $parent_id = $db->getOne($sql);
@@ -144,7 +147,7 @@ function insert_config($parent, $code, $value)
  */
 function admin_priv($priv_str, $msg_type = '', $msg_output = true)
 {
-    global $_LANG;
+    // global $_LANG;
 
     if ($_SESSION['action_list'] == 'all') {
         return true;
@@ -275,7 +278,7 @@ function get_position_list()
  */
 function create_html_editor($input_name, $input_value = '')
 {
-    global $smarty;
+    // global $smarty;
 
     $editor = new FCKeditor($input_name);
     $editor->BasePath = '../includes/fckeditor/';

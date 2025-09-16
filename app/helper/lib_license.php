@@ -1,8 +1,5 @@
 <?php
 
-if (! defined('IN_ECS')) {
-    exit('Hacking attempt');
-}
 
 /**
  * 获得网店 license 信息

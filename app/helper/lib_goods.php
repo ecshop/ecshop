@@ -1,8 +1,5 @@
 <?php
 
-if (! defined('IN_ECS')) {
-    exit('Hacking attempt');
-}
 
 /**
  * 商品推荐usort用自定义排序行数

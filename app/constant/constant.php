@@ -1,8 +1,5 @@
 <?php
 
-if (! defined('IN_ECS')) {
-    exit('Hacking attempt');
-}
 
 if (version_compare(PHP_VERSION, '8.0.0', '<')) {
     exit('Require a PHP version "8.0". You are running '.PHP_VERSION.'.');

@@ -1,8 +1,5 @@
 <?php
 
-if (! defined('IN_ECS')) {
-    exit('Hacking attempt');
-}
 
 $modules['02_cat_and_goods']['01_goods_list'] = 'goods.php?act=list';         // 商品列表
 $modules['02_cat_and_goods']['02_goods_add'] = 'goods.php?act=add';          // 添加商品

@@ -1,8 +1,5 @@
 <?php
 
-if (! defined('IN_ECS')) {
-    exit('Hacking attempt');
-}
 $cron_lang = ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/cron/auto_manage.php';
 if (file_exists($cron_lang)) {
     global $_LANG;

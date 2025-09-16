@@ -217,7 +217,7 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification =
                 return false;
             }
 
-            include_once ROOT_PATH.'includes/cls_smtp.php';
+            // include_once ROOT_PATH.'includes/cls_smtp.php';
             static $smtp;
 
             $send_params['recipients'] = $email;
@@ -260,7 +260,7 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification =
  */
 function gd_version()
 {
-    include_once ROOT_PATH.'includes/cls_image.php';
+    // include_once ROOT_PATH.'includes/cls_image.php';
 
     return cls_image::gd_version();
 }
@@ -694,7 +694,7 @@ function ecs_iconv($source_lang, $target_lang, $source_string = '')
     }
 
     if (is_null($chs)) {
-        require_once ROOT_PATH.'includes/cls_iconv.php';
+        // require_once ROOT_PATH.'includes/cls_iconv.php';
         $chs = new Chinese(ROOT_PATH);
     }
 
@@ -706,7 +706,7 @@ function ecs_geoip($ip)
     static $ipObj = null;
 
     if (is_null($ipObj)) {
-        include_once ROOT_PATH.'includes/cls_ip.php';
+        // include_once ROOT_PATH.'includes/cls_ip.php';
         $ipObj = new IpLocation;
     }
 

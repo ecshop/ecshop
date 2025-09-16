@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 /* 初始化数据交换对象 */
 $exc = new exchange($ecs->table('exchange_goods'), $db, 'goods_id', 'exchange_integral');
@@ -263,7 +262,7 @@ if ($_REQUEST['act'] == 'remove') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'search_goods') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $filters = $json->decode($_GET['JSON']);

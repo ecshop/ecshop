@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 /* 权限判断 */
 admin_priv('feedback_priv');
 /* 初始化数据交换对象 */

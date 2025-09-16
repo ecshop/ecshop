@@ -1,10 +1,9 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
-require_once ROOT_PATH.'includes/lib_order.php';
-require_once ROOT_PATH.'includes/lib_goods.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require_once ROOT_PATH.'includes/lib_order.php';
+// require_once ROOT_PATH.'includes/lib_goods.php';
 
 /* ------------------------------------------------------ */
 // -- 订单查询
@@ -426,7 +425,7 @@ if ($_REQUEST['act'] == 'info') {
         } else {
             $shipping_code = $db->getOne('SELECT shipping_code FROM '.$ecs->table('shipping').' WHERE shipping_id='.$order['shipping_id']);
             if ($shipping_code) {
-                include_once ROOT_PATH.'includes/modules/shipping/'.$shipping_code.'.php';
+                // include_once ROOT_PATH.'includes/modules/shipping/'.$shipping_code.'.php';
             }
 
             if (! empty($_LANG['shipping_print'])) {
@@ -764,7 +763,7 @@ if ($_REQUEST['act'] == 'delivery_ship') {
 
         /* 如果需要，发短信 */
         if ($GLOBALS['_CFG']['sms_order_shipped'] == '1' && $order['mobile'] != '') {
-            include_once '../includes/cls_sms.php';
+            // include_once '../includes/cls_sms.php';
             $sms = new sms;
             $sms->send($order['mobile'], sprintf(
                 $GLOBALS['_LANG']['order_shipped_sms'],
@@ -2101,7 +2100,7 @@ if ($_REQUEST['act'] == 'templates') {
     $file_content = file_get_contents($file_path);
     @fclose($file_content);
 
-    include_once ROOT_PATH.'includes/fckeditor/fckeditor.php';
+    // include_once ROOT_PATH.'includes/fckeditor/fckeditor.php';
 
     /* 编辑器 */
     $editor = new FCKeditor('FCKeditor1');
@@ -3527,7 +3526,7 @@ if ($_REQUEST['act'] == 'operate_post') {
     sys_msg($_LANG['act_ok'].$msg, 0, $links);
 }
 if ($_REQUEST['act'] == 'json') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $func = $_REQUEST['func'];
@@ -3579,7 +3578,7 @@ if ($_REQUEST['act'] == 'ajax_merge_order') {
     /* 检查权限 */
     admin_priv('order_os_edit');
 
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $from_order_sn = empty($_POST['from_order_sn']) ? '' : json_str_iconv(substr($_POST['from_order_sn'], 1));
@@ -3636,7 +3635,7 @@ if ($_REQUEST['act'] == 'remove_order') {
 // -- 根据关键字和id搜索用户
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'search_users') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $id_name = empty($_GET['id_name']) ? '' : json_str_iconv(trim($_GET['id_name']));
@@ -3665,7 +3664,7 @@ if ($_REQUEST['act'] == 'search_users') {
 // -- 根据关键字搜索商品
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'search_goods') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $keyword = empty($_GET['keyword']) ? '' : json_str_iconv(trim($_GET['keyword']));
@@ -3868,7 +3867,7 @@ function return_user_surplus_integral_bonus($order)
  */
 function update_order_amount($order_id)
 {
-    include_once ROOT_PATH.'includes/lib_order.php';
+    // include_once ROOT_PATH.'includes/lib_order.php';
     // 更新订单总金额
     $sql = 'UPDATE '.$GLOBALS['ecs']->table('order_info').
         ' SET order_amount = '.order_due_field().
@@ -4044,7 +4043,7 @@ function operable_list($order)
     if (! empty($list['split'])) {
         /* 如果是团购活动且未处理成功，不能发货 */
         if ($order['extension_code'] == 'group_buy') {
-            include_once ROOT_PATH.'includes/lib_goods.php';
+            // include_once ROOT_PATH.'includes/lib_goods.php';
             $group_buy = group_buy_info(intval($order['extension_id']));
             if ($group_buy['status'] != GBS_SUCCEED) {
                 unset($list['split']);
@@ -5251,7 +5250,7 @@ function package_virtual_card_shipping($goods, $order_sn)
     }
 
     /* 包含加密解密函数所在文件 */
-    include_once ROOT_PATH.'includes/lib_code.php';
+    // include_once ROOT_PATH.'includes/lib_code.php';
 
     // 取出超值礼包中的虚拟商品信息
     foreach ($goods as $virtual_goods_key => $virtual_goods_value) {

@@ -1,9 +1,8 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
-require 'includes/lib_goods.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require 'includes/lib_goods.php';
 
 /* ------------------------------------------------------ */
 // -- 批量上传
@@ -320,7 +319,7 @@ if ($_REQUEST['act'] == 'insert') {
     admin_priv('goods_batch');
 
     if (isset($_POST['checked'])) {
-        include_once ROOT_PATH.'includes/cls_image.php';
+        // include_once ROOT_PATH.'includes/cls_image.php';
         $image = new cls_image($_CFG['bgcolor']);
 
         /* 字段默认值 */

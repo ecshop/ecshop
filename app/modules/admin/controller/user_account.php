@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -172,7 +171,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
     // 如果是预付款并且未确认，向pay_log插入一条记录
     if ($process_type == 0 && $is_paid == 0) {
-        include_once ROOT_PATH.'includes/lib_order.php';
+        // include_once ROOT_PATH.'includes/lib_order.php';
 
         /* 取支付方式信息 */
         $payment_info = [];

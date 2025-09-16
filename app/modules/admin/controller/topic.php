@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -54,7 +53,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     $smarty->assign('isadd', $isadd);
     $topic_id = empty($_REQUEST['topic_id']) ? 0 : intval($_REQUEST['topic_id']);
 
-    include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
+    // include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
 
     $smarty->assign('ur_here', $_LANG['09_topic']);
     $smarty->assign('action_link', list_link($isadd));
@@ -80,7 +79,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 
         create_html_editor('topic_intro', $topic['intro']);
 
-        require ROOT_PATH.'includes/cls_json.php';
+        // require ROOT_PATH.'includes/cls_json.php';
 
         $json = new JSON;
         $topic['data'] = addcslashes($topic['data'], "'");
@@ -195,7 +194,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
     $title_pic = empty($title_pic) ? $_POST['title_img_url'] : $title_pic;
 
-    require ROOT_PATH.'includes/cls_json.php';
+    // require ROOT_PATH.'includes/cls_json.php';
 
     $start_time = local_strtotime($_POST['start_time']);
     $end_time = local_strtotime($_POST['end_time']);
@@ -224,7 +223,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     sys_msg($_LANG['succed'], 0, $links);
 }
 if ($_REQUEST['act'] == 'get_goods_list') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $filters = $json->decode($_GET['JSON']);

@@ -1,9 +1,8 @@
 <?php
 
-define('IN_ECS', true);
-require dirname(__FILE__).'/includes/init.php';
-require_once ROOT_PATH.'includes/lib_goods.php';
-require_once ROOT_PATH.'includes/lib_order.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require_once ROOT_PATH.'includes/lib_goods.php';
+// require_once ROOT_PATH.'includes/lib_order.php';
 
 /* 检查权限 */
 admin_priv('group_by');
@@ -517,7 +516,7 @@ if ($_REQUEST['act'] == 'batch_drop') {
 if ($_REQUEST['act'] == 'search_goods') {
     check_authz_json('group_by');
 
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
 
     $json = new JSON;
     $filter = $json->decode($_GET['JSON']);

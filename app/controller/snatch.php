@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 /* ------------------------------------------------------ */
 // -- 如果用没有指定活动id，将页面重定向到即将结束的活动
@@ -89,7 +88,7 @@ if ($_REQUEST['act'] == 'new_price_list') {
 
 /* 用户出价处理 */
 if ($_REQUEST['act'] == 'bid') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
     $result = ['error' => 0, 'content' => ''];
 
@@ -225,7 +224,7 @@ if ($_REQUEST['act'] == 'buy') {
     }
 
     /* 清空购物车中所有商品 */
-    include_once ROOT_PATH.'includes/lib_order.php';
+    // include_once ROOT_PATH.'includes/lib_order.php';
     clear_cart(CART_SNATCH_GOODS);
 
     /* 加入购物车 */

@@ -1,9 +1,8 @@
 <?php
 
-define('IN_ECS', true);
 
 /* 代码 */
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 /* ------------------------------------------------------ */
 // -- 列表编辑 ?act=list_edit
@@ -106,7 +105,7 @@ if ($_REQUEST['act'] == 'post') {
                 sys_msg(sprintf($_LANG['msg_invalid_file'], $file['name']));
             } else {
                 if ($code == 'shop_logo') {
-                    include_once 'includes/lib_template.php';
+                    // include_once 'includes/lib_template.php';
                     $info = get_template_info($_CFG['template']);
 
                     $file_name = str_replace('{$template}', $_CFG['template'], $file_var_list[$code]['store_dir']).$info['logo'];

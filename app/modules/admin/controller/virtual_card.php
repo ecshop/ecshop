@@ -1,10 +1,9 @@
 <?php
 
-define('IN_ECS', true);
 
 /* 包含文件 */
-require dirname(__FILE__).'/includes/init.php';
-require_once ROOT_PATH.'includes/lib_code.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require_once ROOT_PATH.'includes/lib_code.php';
 
 /* ------------------------------------------------------ */
 // -- 补货处理

@@ -1,9 +1,8 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
-require_once ROOT_PATH.'/includes/lib_order.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require_once ROOT_PATH.'/includes/lib_order.php';
 /* ------------------------------------------------------ */
 // -- 框架
 /* ------------------------------------------------------ */
@@ -52,10 +51,10 @@ if ($_REQUEST['act'] == 'calculator') {
 // -- 左边的框架
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'menu') {
-    include_once 'includes/inc_menu.php';
+    // include_once 'includes/inc_menu.php';
 
     // 权限对照表
-    include_once 'includes/inc_priv.php';
+    // include_once 'includes/inc_priv.php';
 
     foreach ($modules as $key => $value) {
         ksort($modules[$key]);
@@ -399,11 +398,11 @@ if ($_REQUEST['act'] == 'main') {
     $smarty->display('start.htm');
 }
 if ($_REQUEST['act'] == 'main_api') {
-    require_once ROOT_PATH.'/includes/lib_base.php';
+    // require_once ROOT_PATH.'/includes/lib_base.php';
     $data = read_static_cache('api_str');
 
     if ($data === false || date('Y-m-d H:i:s', time() - 43200) > API_TIME) {
-        include_once ROOT_PATH.'includes/cls_transport.php';
+        // include_once ROOT_PATH.'includes/cls_transport.php';
         $t = new transport;
         $api_comment = $t->request('https://api.github.com/repos/ecshop/ecshop/releases/latest', '', 'GET');
         if (isset($api_comment['body'])) {
@@ -559,7 +558,7 @@ if ($_REQUEST['act'] == 'second') {
         if (strpos($mod_shop, $shipping) === false) {
             exit;
         } else {
-            include_once ROOT_PATH.'includes/modules/shipping/'.$shipping.'.php';
+            // include_once ROOT_PATH.'includes/modules/shipping/'.$shipping.'.php';
         }
         $sql = 'SELECT shipping_id FROM '.$ecs->table('shipping')." WHERE shipping_code = '$shipping'";
         $shipping_id = $db->getOne($sql);
@@ -623,7 +622,7 @@ if ($_REQUEST['act'] == 'second') {
     if (! empty($payment)) {
         /* 取相应插件信息 */
         $set_modules = true;
-        include_once ROOT_PATH.'includes/modules/payment/'.$payment.'.php';
+        // include_once ROOT_PATH.'includes/modules/payment/'.$payment.'.php';
 
         $pay_config = [];
         if (isset($_REQUEST['cfg_value']) && is_array($_REQUEST['cfg_value'])) {
@@ -716,11 +715,11 @@ if ($_REQUEST['act'] == 'third') {
         $cat_id = $db->insert_Id();
 
         // 货号
-        require_once ROOT_PATH.ADMIN_PATH.'/includes/lib_goods.php';
+        // require_once ROOT_PATH.ADMIN_PATH.'/includes/lib_goods.php';
         $max_id = $db->getOne('SELECT MAX(goods_id) + 1 FROM '.$ecs->table('goods'));
         $goods_sn = generate_goods_sn($max_id);
 
-        include_once ROOT_PATH.'includes/cls_image.php';
+        // include_once ROOT_PATH.'includes/cls_image.php';
         $image = new cls_image($_CFG['bgcolor']);
 
         if (! empty($good_name)) {
@@ -989,10 +988,10 @@ if ($_REQUEST['act'] == 'license') {
 
     if (isset($is_ajax) && $is_ajax) {
         // license 检查
-        include_once ROOT_PATH.'includes/cls_transport.php';
-        include_once ROOT_PATH.'includes/cls_json.php';
-        include_once ROOT_PATH.'includes/lib_main.php';
-        include_once ROOT_PATH.'includes/lib_license.php';
+        // include_once ROOT_PATH.'includes/cls_transport.php';
+        // include_once ROOT_PATH.'includes/cls_json.php';
+        // include_once ROOT_PATH.'includes/lib_main.php';
+        // include_once ROOT_PATH.'includes/lib_license.php';
 
         $license = license_check();
         switch ($license['flag']) {

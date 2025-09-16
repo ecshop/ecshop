@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 /* 取得参数 */
 $order_id = ! empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;  // 订单号

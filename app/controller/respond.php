@@ -1,10 +1,9 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
-require ROOT_PATH.'includes/lib_payment.php';
-require ROOT_PATH.'includes/lib_order.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require ROOT_PATH.'includes/lib_payment.php';
+// require ROOT_PATH.'includes/lib_order.php';
 /* 支付方式代码 */
 $pay_code = ! empty($_REQUEST['code']) ? trim($_REQUEST['code']) : '';
 

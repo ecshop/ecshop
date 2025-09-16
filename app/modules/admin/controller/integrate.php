@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 /* ------------------------------------------------------ */
 // -- 会员数据整合插件列表
 /* ------------------------------------------------------ */
@@ -56,7 +55,7 @@ if ($_REQUEST['act'] == 'install') {
             ' WHERE flag > 0';
         $db->query($sql); // 如果有标记，清空标记
         $set_modules = true;
-        include_once ROOT_PATH.'includes/modules/integrates/'.$_GET['code'].'.php';
+        // include_once ROOT_PATH.'includes/modules/integrates/'.$_GET['code'].'.php';
         $set_modules = false;
 
         $cfg = $modules[0]['default'];
@@ -125,7 +124,7 @@ if ($_REQUEST['act'] == 'setup') {
 if ($_REQUEST['act'] == 'check_config') {
     $code = $_POST['code'];
 
-    include_once ROOT_PATH.'includes/modules/integrates/'.$code.'.php';
+    // include_once ROOT_PATH.'includes/modules/integrates/'.$code.'.php';
     $_POST['cfg']['quiet'] = 1;
     $cls_user = new $code($_POST['cfg']);
 
@@ -217,7 +216,7 @@ if ($_REQUEST['act'] == 'save_uc_config') {
 
     $cfg = unserialize($_CFG['integrate_config']);
 
-    include_once ROOT_PATH.'includes/modules/integrates/'.$code.'.php';
+    // include_once ROOT_PATH.'includes/modules/integrates/'.$code.'.php';
     $_POST['cfg']['quiet'] = 1;
     $cls_user = new $code($_POST['cfg']);
 
@@ -251,7 +250,7 @@ if ($_REQUEST['act'] == 'save_uc_config') {
 if ($_REQUEST['act'] == 'save_uc_config_first') {
     $code = $_POST['code'];
 
-    include_once ROOT_PATH.'includes/modules/integrates/'.$code.'.php';
+    // include_once ROOT_PATH.'includes/modules/integrates/'.$code.'.php';
     $_POST['cfg']['quiet'] = 1;
     $cls_user = new $code($_POST['cfg']);
 
@@ -321,8 +320,8 @@ if ($_REQUEST['act'] == 'save_uc_config_first') {
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'check_user') {
     $code = $_SESSION['code'];
-    include_once ROOT_PATH.'includes/cls_json.php';
-    include_once ROOT_PATH.'includes/modules/integrates/'.$code.'.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/modules/integrates/'.$code.'.php';
     $cls_user = new $code($_SESSION['cfg']);
     $json = new JSON;
 
@@ -411,7 +410,7 @@ if ($_REQUEST['act'] == 'check_user') {
 
 if ($_REQUEST['act'] == 'import_user') {
     $cfg = $_SESSION['cfg'];
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $ucdb = new cls_mysql($cfg['db_host'], $cfg['db_user'], $cfg['db_pass'], $cfg['db_name'], $cfg['db_charset']);
     $json = new JSON;
     $result = ['error' => 0, 'message' => ''];
@@ -543,7 +542,7 @@ if ($_REQUEST['act'] == 'act_modify') {
 
         /* 检查和商城是否有重名 */
         $code = $_SESSION['code'];
-        include_once ROOT_PATH.'includes/modules/integrates/'.$code.'.php';
+        // include_once ROOT_PATH.'includes/modules/integrates/'.$code.'.php';
         $cls_user = new $code($_SESSION['cfg']);
 
         $bbs_error_list = $cls_user->test_conflict($alias);
@@ -662,7 +661,7 @@ if ($_REQUEST['act'] == 'task') {
         $size = intval($_GET['size']);
     }
 
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
     $result = ['message' => '', 'error' => 0, 'content' => '', 'id' => '', 'end' => 0, 'size' => $size];
 
@@ -700,7 +699,7 @@ if ($_REQUEST['act'] == 'task') {
         exit($json->encode($result));
     } elseif ($_SESSION['task']['sync']['start'] < $_SESSION['task']['sync']['total']) {
         $code = $_SESSION['code'];
-        include_once ROOT_PATH.'includes/modules/integrates/'.$code.'.php';
+        // include_once ROOT_PATH.'includes/modules/integrates/'.$code.'.php';
         $cls_user = new $code($_SESSION['cfg']);
         $cls_user->need_sync = false;
 
@@ -757,8 +756,8 @@ if ($_REQUEST['act'] == 'task') {
 // -- 保存UCenter设置
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'setup_ucenter') {
-    include_once ROOT_PATH.'includes/cls_json.php';
-    include_once ROOT_PATH.'includes/cls_transport.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_transport.php';
     $json = new JSON;
     $result = ['error' => 0, 'message' => ''];
 

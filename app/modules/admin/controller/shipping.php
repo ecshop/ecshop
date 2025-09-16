@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 $exc = new exchange($ecs->table('shipping'), $db, 'shipping_code', 'shipping_name');
 
 /* ------------------------------------------------------ */
@@ -61,7 +60,7 @@ if ($_REQUEST['act'] == 'install') {
     admin_priv('ship_manage');
 
     $set_modules = true;
-    include_once ROOT_PATH.'includes/modules/shipping/'.$_GET['code'].'.php';
+    // include_once ROOT_PATH.'includes/modules/shipping/'.$_GET['code'].'.php';
 
     /* 检查该配送方式是否已经安装 */
     $sql = 'SELECT shipping_id FROM '.$ecs->table('shipping')." WHERE shipping_code = '$_GET[code]'";
@@ -141,7 +140,7 @@ if ($_REQUEST['act'] == 'print_index') {
     $sql = 'SELECT * FROM '.$ecs->table('shipping')." WHERE shipping_id = '$shipping_id' LIMIT 0,1";
     $row = $db->getRow($sql);
     if ($row) {
-        include_once ROOT_PATH.'includes/modules/shipping/'.$row['shipping_code'].'.php';
+        // include_once ROOT_PATH.'includes/modules/shipping/'.$row['shipping_code'].'.php';
         $row['shipping_print'] = ! empty($row['shipping_print']) ? $row['shipping_print'] : '';
         $row['print_bg'] = empty($row['print_bg']) ? '' : get_site_root_url().$row['print_bg'];
     }
@@ -166,7 +165,7 @@ if ($_REQUEST['act'] == 'recovery_default_template') {
     $code = $db->getOne($sql);
 
     $set_modules = true;
-    include_once ROOT_PATH.'includes/modules/shipping/'.$code.'.php';
+    // include_once ROOT_PATH.'includes/modules/shipping/'.$code.'.php';
 
     /* 恢复默认 */
     $db->query('UPDATE '.$ecs->table('shipping')." SET print_bg = '".addslashes($modules[0]['print_bg'])."',  config_lable = '".addslashes($modules[0]['config_lable'])."' WHERE shipping_code = '$code' LIMIT 1");
@@ -261,7 +260,7 @@ if ($_REQUEST['act'] == 'edit_print_template') {
     $sql = 'SELECT * FROM '.$ecs->table('shipping')." WHERE shipping_id=$shipping_id";
     $row = $db->getRow($sql);
     if ($row) {
-        include_once ROOT_PATH.'includes/modules/shipping/'.$row['shipping_code'].'.php';
+        // include_once ROOT_PATH.'includes/modules/shipping/'.$row['shipping_code'].'.php';
         $row['shipping_print'] = ! empty($row['shipping_print']) ? $row['shipping_print'] : '';
         $row['print_model'] = empty($row['print_model']) ? 1 : $row['print_model']; // 兼容以前版本
 
@@ -378,7 +377,7 @@ if ($_REQUEST['act'] == 'edit_insure') {
 
     /* 检查该插件是否支持保价 */
     $set_modules = true;
-    include_once ROOT_PATH.'includes/modules/shipping/'.$id.'.php';
+    // include_once ROOT_PATH.'includes/modules/shipping/'.$id.'.php';
     if (isset($modules[0]['insure']) && $modules[0]['insure'] === false) {
         make_json_error($_LANG['not_support_insure']);
     }

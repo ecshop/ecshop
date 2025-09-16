@@ -1,10 +1,9 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
-require_once ROOT_PATH.'includes/fckeditor/fckeditor.php';
-require_once ROOT_PATH.'includes/cls_image.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require_once ROOT_PATH.'includes/fckeditor/fckeditor.php';
+// require_once ROOT_PATH.'includes/cls_image.php';
 
 /* 初始化数据交换对象 */
 $exc = new exchange($ecs->table('article'), $db, 'article_id', 'title');
@@ -348,7 +347,7 @@ if ($_REQUEST['act'] == 'remove') {
 // -- 将商品加入关联
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'add_link_goods') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('article_manage');
@@ -384,7 +383,7 @@ if ($_REQUEST['act'] == 'add_link_goods') {
 // -- 将商品删除关联
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'drop_link_goods') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('article_manage');
@@ -418,7 +417,7 @@ if ($_REQUEST['act'] == 'drop_link_goods') {
 // -- 搜索商品
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'get_goods_list') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $filters = $json->decode($_GET['JSON']);

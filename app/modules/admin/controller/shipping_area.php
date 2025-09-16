@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 $exc = new exchange($ecs->table('shipping_area'), $db, 'shipping_area_id', 'shipping_area_name');
 
 /* ------------------------------------------------------ */
@@ -34,7 +33,7 @@ if ($_REQUEST['act'] == 'add' && ! empty($_REQUEST['shipping'])) {
     $shipping = $db->getRow('SELECT shipping_name, shipping_code FROM '.$ecs->table('shipping')." WHERE shipping_id='$_REQUEST[shipping]'");
 
     $set_modules = 1;
-    include_once ROOT_PATH.'includes/modules/shipping/'.$shipping['shipping_code'].'.php';
+    // include_once ROOT_PATH.'includes/modules/shipping/'.$shipping['shipping_code'].'.php';
 
     $fields = [];
     foreach ($modules[0]['configure'] as $key => $val) {
@@ -144,7 +143,7 @@ if ($_REQUEST['act'] == 'edit') {
     $row = $db->getRow($sql);
 
     $set_modules = 1;
-    include_once ROOT_PATH.'includes/modules/shipping/'.$row['shipping_code'].'.php';
+    // include_once ROOT_PATH.'includes/modules/shipping/'.$row['shipping_code'].'.php';
 
     $fields = unserialize($row['configure']);
     /* 如果配送方式支持货到付款并且没有设置货到付款支付费用，则加入货到付款费用 */

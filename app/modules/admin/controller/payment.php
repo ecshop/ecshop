@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 $exc = new exchange($ecs->table('payment'), $db, 'pay_code', 'pay_name');
 
@@ -58,7 +57,7 @@ if ($_REQUEST['act'] == 'install') {
 
     /* 取相应插件信息 */
     $set_modules = true;
-    include_once ROOT_PATH.'includes/modules/payment/'.$_REQUEST['code'].'.php';
+    // include_once ROOT_PATH.'includes/modules/payment/'.$_REQUEST['code'].'.php';
 
     $data = $modules[0];
     /* 对支付费用判断。如果data['pay_fee']为false无支付费用，为空则说明以配送有关，其它可以修改 */
@@ -100,7 +99,7 @@ if ($_REQUEST['act'] == 'get_config') {
 
     /* 取相应插件信息 */
     $set_modules = true;
-    include_once ROOT_PATH.'includes/modules/payment/'.$code.'.php';
+    // include_once ROOT_PATH.'includes/modules/payment/'.$code.'.php';
     $data = $modules[0]['config'];
     $config = '<table>';
     $range = '';
@@ -157,7 +156,7 @@ if ($_REQUEST['act'] == 'edit') {
 
     /* 取相应插件信息 */
     $set_modules = true;
-    include_once ROOT_PATH.'includes/modules/payment/'.$_REQUEST['code'].'.php';
+    // include_once ROOT_PATH.'includes/modules/payment/'.$_REQUEST['code'].'.php';
     $data = $modules[0];
 
     /* 取得配置信息 */

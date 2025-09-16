@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -467,7 +466,7 @@ if ($_REQUEST['act'] == 'send_mail') {
     }
 
     /* 取得红包信息 */
-    include_once ROOT_PATH.'includes/lib_order.php';
+    // include_once ROOT_PATH.'includes/lib_order.php';
     $bonus = bonus_info($bonus_id);
     if (empty($bonus)) {
         sys_msg($_LANG['bonus_not_exist']);
@@ -580,7 +579,7 @@ if ($_REQUEST['act'] == 'gen_excel') {
 // -- 搜索商品
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'get_goods_list') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $filters = $json->decode($_GET['JSON']);
@@ -601,7 +600,7 @@ if ($_REQUEST['act'] == 'get_goods_list') {
 // -- 添加发放红包的商品
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'add_bonus_goods') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('bonus_manage');
@@ -632,7 +631,7 @@ if ($_REQUEST['act'] == 'add_bonus_goods') {
 // -- 删除发放红包的商品
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'drop_bonus_goods') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('bonus_manage');

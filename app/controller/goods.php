@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 if (! DEBUG_MODE) {
     $smarty->caching = true;
@@ -22,7 +21,7 @@ $goods_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 /* ------------------------------------------------------ */
 
 if (! empty($_REQUEST['act']) && $_REQUEST['act'] == 'price') {
-    include 'includes/cls_json.php';
+    // include 'includes/cls_json.php';
 
     $json = new JSON;
     $res = ['err_msg' => '', 'result' => '', 'qty' => 1];
@@ -52,7 +51,7 @@ if (! empty($_REQUEST['act']) && $_REQUEST['act'] == 'price') {
 /* ------------------------------------------------------ */
 
 if (! empty($_REQUEST['act']) && $_REQUEST['act'] == 'gotopage') {
-    include 'includes/cls_json.php';
+    // include 'includes/cls_json.php';
 
     $json = new JSON;
     $res = ['err_msg' => '', 'result' => ''];

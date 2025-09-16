@@ -1,9 +1,8 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
-require ROOT_PATH.'includes/cls_json.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require ROOT_PATH.'includes/cls_json.php';
 if (! isset($_REQUEST['cmt']) && ! isset($_REQUEST['act'])) {
     /* 只有在没有提交评论内容以及没有act的情况下才跳转 */
     ecs_header("Location: ./\n");
@@ -33,7 +32,7 @@ if (empty($_REQUEST['act'])) {
     } else {
         if ((intval($_CFG['captcha']) & CAPTCHA_COMMENT) && gd_version() > 0) {
             /* 检查验证码 */
-            include_once 'includes/cls_captcha.php';
+            // include_once 'includes/cls_captcha.php';
 
             $validator = new captcha;
             if (! $validator->check_word($cmt->captcha)) {

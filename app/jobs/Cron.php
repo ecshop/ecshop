@@ -45,7 +45,7 @@ class Cron
                         $cron[$v['name']] = $v['value'];
                     }
                 }
-                // include_once ROOT_PATH . 'includes/modules/cron/' . $cron_val['cron_code'] . '.php';
+                // // include_once ROOT_PATH . 'includes/modules/cron/' . $cron_val['cron_code'] . '.php';
             } else {
                 $error_log[] = make_error_arr('includes/modules/cron/' . $cron_val['cron_code'] . '.php not found!', __FILE__);
             }

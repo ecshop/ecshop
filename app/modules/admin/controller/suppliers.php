@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 define('SUPPLIERS_ACTION_LIST', 'delivery_view,back_view');
 /* ------------------------------------------------------ */

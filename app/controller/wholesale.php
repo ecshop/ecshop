@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 /* 如果没登录，提示登录 */
 if ($_SESSION['user_rank'] <= 0) {
@@ -266,7 +265,7 @@ if ($_REQUEST['act'] == 'drop_goods') {
 // -- 提交订单
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'submit_order') {
-    include_once ROOT_PATH.'includes/lib_order.php';
+    // include_once ROOT_PATH.'includes/lib_order.php';
 
     /* 检查购物车中是否有商品 */
     if (count($_SESSION['wholesale_goods']) == 0) {
@@ -350,7 +349,7 @@ if ($_REQUEST['act'] == 'submit_order') {
 
     /* 如果需要，发短信 */
     if ($_CFG['sms_order_placed'] == '1' && $_CFG['sms_shop_mobile'] != '') {
-        include_once 'includes/cls_sms.php';
+        // include_once 'includes/cls_sms.php';
         $sms = new sms;
         $msg = $_LANG['order_placed_sms'];
         $sms->send($_CFG['sms_shop_mobile'], sprintf($msg, $order['consignee'], $order['tel']), '', 13, 1);

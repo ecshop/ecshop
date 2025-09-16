@@ -497,7 +497,7 @@ function get_charset_list()
  */
 function make_json_response($content = '', $error = '0', $message = '', $append = [])
 {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
 
     $json = new JSON;
 

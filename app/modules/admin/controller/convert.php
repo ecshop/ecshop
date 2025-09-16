@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 /* ------------------------------------------------------ */
 // -- 转换程序主页面
@@ -52,7 +51,7 @@ if ($_REQUEST['act'] == 'check') {
     check_authz_json('convert');
 
     /* 取得参数 */
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
     //    $_POST['JSON'] = '{"host":"localhost","db":"shopex","user":"root","pass":"123456","prefix":"sdb_","code":"shopex48","path":"../shopex","charset":"UTF8"}';
     $config = $json->decode($_POST['JSON']);
@@ -63,7 +62,7 @@ if ($_REQUEST['act'] == 'check') {
     /* 检查必需的表是否存在 */
     $sprefix = $config->prefix;
     $config->path = rtrim(str_replace('\\', '/', $config->path), '/');  // 把斜线替换为反斜线，去掉结尾的反斜线
-    include_once ROOT_PATH.'includes/modules/convert/'.$config->code.'.php';
+    // include_once ROOT_PATH.'includes/modules/convert/'.$config->code.'.php';
     $convert = new $config->code($sdb, $sprefix, $config->path);
     $required_table_list = $convert->required_tables();
 
@@ -121,7 +120,7 @@ if ($_REQUEST['act'] == 'check') {
     $_SESSION['convert_config'] = $config;
 
     /* 包含插件语言文件 */
-    include_once ROOT_PATH.'languages/'.$_CFG['lang'].'/convert/'.$config->code.'.php';
+    // include_once ROOT_PATH.'languages/'.$_CFG['lang'].'/convert/'.$config->code.'.php';
 
     /* 取得第一步操作 */
     $step = $convert->next_step('');
@@ -151,11 +150,11 @@ if ($_REQUEST['act'] == 'process') {
     $sdb->set_mysql_charset($config->charset);
 
     /* 创建插件对象 */
-    include_once ROOT_PATH.'includes/modules/convert/'.$config->code.'.php';
+    // include_once ROOT_PATH.'includes/modules/convert/'.$config->code.'.php';
     $convert = new $config->code($sdb, $config->prefix, $config->path, $config->charset);
 
     /* 包含插件语言文件 */
-    include_once ROOT_PATH.'languages/'.$_CFG['lang'].'/convert/'.$config->code.'.php';
+    // include_once ROOT_PATH.'languages/'.$_CFG['lang'].'/convert/'.$config->code.'.php';
 
     /* 执行步骤 */
     $result = $convert->process($step);

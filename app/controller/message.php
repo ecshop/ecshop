@@ -1,19 +1,18 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 if (empty($_CFG['message_board'])) {
     show_message($_LANG['message_board_close']);
 }
 $action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
 if ($action == 'act_add_message') {
-    include_once ROOT_PATH.'includes/lib_clips.php';
+    // include_once ROOT_PATH.'includes/lib_clips.php';
 
     /* 验证码防止灌水刷屏 */
     if ((intval($_CFG['captcha']) & CAPTCHA_MESSAGE) && gd_version() > 0) {
-        include_once 'includes/cls_captcha.php';
+        // include_once 'includes/cls_captcha.php';
         $validator = new captcha;
         if (! $validator->check_word($_POST['captcha'])) {
             show_message($_LANG['invalid_captcha']);

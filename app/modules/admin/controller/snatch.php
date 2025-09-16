@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 $exc = new exchange($ecs->table('goods_activity'), $db, 'act_id', 'act_name');
 
 /* ------------------------------------------------------ */
@@ -298,7 +297,7 @@ if ($_REQUEST['act'] == 'query_bid') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'search_goods') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $filters = $json->decode($_GET['JSON']);
@@ -317,7 +316,7 @@ if ($_REQUEST['act'] == 'search_goods') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'search_products') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $filters = $json->decode($_GET['JSON']);

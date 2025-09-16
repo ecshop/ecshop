@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 
 define('ROOT_PATH', str_replace('\\', '/', dirname(__DIR__, 2)).'/');
 
-require ROOT_PATH.'includes/inc_constant.php';
+// require ROOT_PATH.'includes/inc_constant.php';
 
 /* 初始化设置 */
 @ini_set('memory_limit', '1G');
@@ -27,13 +27,13 @@ if (isset($_SERVER['PHP_SELF'])) {
     define('PHP_SELF', $_SERVER['SCRIPT_NAME']);
 }
 
-require ROOT_PATH.'includes/cls_ecshop.php';
-require ROOT_PATH.'includes/cls_error.php';
-require ROOT_PATH.'includes/lib_time.php';
-require ROOT_PATH.'includes/lib_base.php';
-require ROOT_PATH.'includes/lib_common.php';
-require ROOT_PATH.ADMIN_PATH.'/includes/lib_main.php';
-require ROOT_PATH.ADMIN_PATH.'/includes/cls_exchange.php';
+// require ROOT_PATH.'includes/cls_ecshop.php';
+// require ROOT_PATH.'includes/cls_error.php';
+// require ROOT_PATH.'includes/lib_time.php';
+// require ROOT_PATH.'includes/lib_base.php';
+// require ROOT_PATH.'includes/lib_common.php';
+// require ROOT_PATH.ADMIN_PATH.'/includes/lib_main.php';
+// require ROOT_PATH.ADMIN_PATH.'/includes/cls_exchange.php';
 
 /* 对用户传入的变量进行转义操作。 */
 if (! empty($_GET)) {
@@ -58,7 +58,7 @@ define('DATA_DIR', $ecs->data_dir());
 define('IMAGE_DIR', $ecs->image_dir());
 
 /* 初始化数据库类 */
-require ROOT_PATH.'includes/cls_mysql.php';
+// require ROOT_PATH.'includes/cls_mysql.php';
 $db = new cls_mysql($db_host, $db_user, $db_pass, $db_name);
 $db_host = $db_user = $db_pass = $db_name = null;
 
@@ -66,7 +66,7 @@ $db_host = $db_user = $db_pass = $db_name = null;
 $err = new ecs_error('message.htm');
 
 /* 初始化session */
-require ROOT_PATH.'includes/cls_session.php';
+// require ROOT_PATH.'includes/cls_session.php';
 $sess = new cls_session($db, $ecs->table('sessions'), $ecs->table('sessions_data'), 'ECSCP_ID');
 
 /* 初始化 action */
@@ -85,7 +85,7 @@ $_CFG = load_config();
 
 // TODO : 登录部分准备拿出去做，到时候把以下操作一起挪过去
 if ($_REQUEST['act'] == 'captcha') {
-    include ROOT_PATH.'includes/cls_captcha.php';
+    // include ROOT_PATH.'includes/cls_captcha.php';
 
     $img = new captcha('../data/captcha/');
     @ob_end_clean(); // 清除之前出现的多余输入
@@ -94,11 +94,11 @@ if ($_REQUEST['act'] == 'captcha') {
     exit;
 }
 
-require ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/common.php';
-require ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/log_action.php';
+// require ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/common.php';
+// require ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/log_action.php';
 
 if (file_exists(ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/'.basename(PHP_SELF))) {
-    include ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/'.basename(PHP_SELF);
+    // include ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/'.basename(PHP_SELF);
 }
 
 if (! file_exists('../temp/caches')) {
@@ -122,7 +122,7 @@ if (preg_replace('/(?:\.|\s+)[a-z]*$/i', '', $_CFG['ecs_version']) != preg_repla
 }
 
 /* 创建 Smarty 对象。 */
-require ROOT_PATH.'includes/cls_template.php';
+// require ROOT_PATH.'includes/cls_template.php';
 $smarty = new cls_template;
 
 $smarty->template_dir = ROOT_PATH.ADMIN_PATH.'/templates';

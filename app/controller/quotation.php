@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 $action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
 if ($action == 'print_quotation') {
@@ -61,7 +60,7 @@ $smarty->display('quotation.dwt');
 
 function get_quotation_where($filter)
 {
-    include_once ROOT_PATH.ADMIN_PATH.'/includes/lib_main.php';
+    // include_once ROOT_PATH.ADMIN_PATH.'/includes/lib_main.php';
     $_filter = new StdClass;
     $_filter->cat_id = $filter['cat_id'];
     $_filter->brand_id = $filter['brand_id'];

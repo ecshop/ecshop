@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
-require dirname(__FILE__).'/includes/init.php';
-include_once '../includes/lib_goods.php';
+// require dirname(__FILE__).'/includes/init.php';
+// include_once '../includes/lib_goods.php';
 
 /* ------------------------------------------------------ */
 // -- 活动列表页
@@ -521,7 +520,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 if ($_REQUEST['act'] == 'search_goods') {
     check_authz_json('whole_sale');
 
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
 
     $json = new JSON;
     $filter = $json->decode($_GET['JSON']);
@@ -541,7 +540,7 @@ if ($_REQUEST['act'] == 'search_goods') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'get_goods_info') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $goods_id = intval($_REQUEST['goods_id']);

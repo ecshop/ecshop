@@ -1,9 +1,8 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
-require_once 'includes/lib_template.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require_once 'includes/lib_template.php';
 
 /* ------------------------------------------------------ */
 // -- 模版列表
@@ -451,7 +450,7 @@ if ($_REQUEST['act'] == 'install') {
 
 if ($_REQUEST['act'] == 'backup') {
     check_authz_json('backup_setting');
-    include_once 'includes/cls_phpzip.php';
+    // include_once 'includes/cls_phpzip.php';
     $tpl = $_CFG['template'];
     // $tpl = trim($_REQUEST['tpl_name']);
 

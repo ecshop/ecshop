@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
-require dirname(__FILE__).'/includes/init.php';
-require ROOT_PATH.'includes/lib_goods.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require ROOT_PATH.'includes/lib_goods.php';
 
 $exc = new exchange($ecs->table('favourable_activity'), $db, 'act_id', 'act_name');
 
@@ -321,7 +320,7 @@ if ($_REQUEST['act'] == 'search') {
     /* 检查权限 */
     check_authz_json('favourable');
 
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
 
     $json = new JSON;
     $filter = $json->decode($_GET['JSON']);

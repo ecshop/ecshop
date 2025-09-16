@@ -1,7 +1,6 @@
 <?php
 
-define('IN_ECS', true);
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 admin_priv('magazine_list');
 if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['magazine_list']);
@@ -40,7 +39,7 @@ if ($_REQUEST['act'] == 'query') {
 }
 if ($_REQUEST['act'] == 'add') {
     if (empty($_POST['step'])) {
-        include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
+        // include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
         $smarty->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'magazine_list.php?act=list']);
         $smarty->assign(['ur_here' => $_LANG['magazine_list'], 'act' => 'add']);
         create_html_editor('magazine_content');
@@ -59,7 +58,7 @@ if ($_REQUEST['act'] == 'add') {
     }
 }
 if ($_REQUEST['act'] == 'edit') {
-    include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
+    // include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
     $id = intval($_REQUEST['id']);
     if (empty($_POST['step'])) {
         $rt = $db->getRow('SELECT * FROM '.$ecs->table('mail_templates')." WHERE type = 'magazine' AND template_id = '$id'");

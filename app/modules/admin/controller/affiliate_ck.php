@@ -1,7 +1,6 @@
 <?php
 
-define('IN_ECS', true);
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 admin_priv('affiliate_ck');
 $timestamp = time();
@@ -86,7 +85,7 @@ if ($_REQUEST['act'] == 'rollback') {
     分成
 */
 if ($_REQUEST['act'] == 'separate') {
-    include_once ROOT_PATH.'includes/lib_order.php';
+    // include_once ROOT_PATH.'includes/lib_order.php';
     $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
     empty($affiliate) && $affiliate = [];
 

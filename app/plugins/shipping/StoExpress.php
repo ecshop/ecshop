@@ -50,7 +50,7 @@ class StoExpress
 
         /* 模块的基本信息 */
         if (isset($set_modules) && $set_modules == true) {
-            // include_once ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/admin/shipping.php';
+            // // include_once ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/admin/shipping.php';
 
             $i = (isset($modules)) ? count($modules) : 0;
 

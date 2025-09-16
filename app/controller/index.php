@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 if (! DEBUG_MODE) {
     $smarty->caching = true;
@@ -14,7 +13,7 @@ if ($act == 'cat_rec') {
     $rec_array = [1 => 'best', 2 => 'new', 3 => 'hot'];
     $rec_type = ! empty($_REQUEST['rec_type']) ? intval($_REQUEST['rec_type']) : '1';
     $cat_id = ! empty($_REQUEST['cid']) ? intval($_REQUEST['cid']) : '0';
-    include_once 'includes/cls_json.php';
+    // include_once 'includes/cls_json.php';
     $json = new JSON;
     $result = ['error' => 0, 'content' => '', 'type' => $rec_type, 'cat_id' => $cat_id];
 

@@ -22,7 +22,6 @@ define('API_RETURN_SUCCEED', '1');
 define('API_RETURN_FAILED', '-1');
 define('API_RETURN_FORBIDDEN', '-2');
 
-define('IN_ECS', true);
 require './init.php';
 // 数据验证
 if (! defined('IN_UC')) {
@@ -339,7 +338,7 @@ function set_login($user_id = '', $user_name = '')
         if ($row) {
             set_cookie($user_id, $row['user_name'], $row['email']);
             set_session($user_id, $row['user_name'], $row['email']);
-            include_once ROOT_PATH.'includes/lib_main.php';
+            // include_once ROOT_PATH.'includes/lib_main.php';
             update_user_info();
         } else {
             include_once ROOT_PATH.'uc_client/client.php';

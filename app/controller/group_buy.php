@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 if (! DEBUG_MODE) {
     $smarty->caching = true;
@@ -227,7 +226,7 @@ if ($_REQUEST['act'] == 'buy') {
     $goods_attr = implode(chr(13).chr(10), $attr_list);
 
     /* 更新：清空购物车中所有团购商品 */
-    include_once ROOT_PATH.'includes/lib_order.php';
+    // include_once ROOT_PATH.'includes/lib_order.php';
     clear_cart(CART_GROUP_BUY_GOODS);
 
     /* 更新：加入购物车 */

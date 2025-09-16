@@ -491,7 +491,7 @@ function update_address($address)
  */
 function get_order_detail($order_id, $user_id = 0)
 {
-    include_once ROOT_PATH.'includes/lib_order.php';
+    // include_once ROOT_PATH.'includes/lib_order.php';
 
     $order_id = intval($order_id);
     if ($order_id <= 0) {
@@ -553,7 +553,7 @@ function get_order_detail($order_id, $user_id = 0)
             $order['pay_desc'] = $payment_info['pay_desc'];
 
             /* 调用相应的支付方式文件 */
-            include_once ROOT_PATH.'includes/modules/payment/'.$payment_info['pay_code'].'.php';
+            // include_once ROOT_PATH.'includes/modules/payment/'.$payment_info['pay_code'].'.php';
 
             /* 取得在线支付方式的支付按钮 */
             $pay_obj = new $payment_info['pay_code'];
@@ -631,7 +631,7 @@ function get_order_detail($order_id, $user_id = 0)
  */
 function get_user_merge($user_id)
 {
-    include_once ROOT_PATH.'includes/lib_order.php';
+    // include_once ROOT_PATH.'includes/lib_order.php';
     $sql = 'SELECT order_sn FROM '.$GLOBALS['ecs']->table('order_info').
         " WHERE user_id  = '$user_id' ".order_query_sql('unprocessed').
         "AND extension_code = '' ".

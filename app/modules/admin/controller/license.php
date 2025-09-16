@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 /* ------------------------------------------------------ */
 // -- 证书编辑页
@@ -11,7 +10,7 @@ if ($_REQUEST['act'] == 'list_edit') {
     /* 检查权限 */
     admin_priv('shop_authorized');
 
-    include_once ROOT_PATH.'includes/lib_license.php';
+    // include_once ROOT_PATH.'includes/lib_license.php';
 
     $license = get_shop_license();
 
@@ -35,7 +34,7 @@ if ($_REQUEST['act'] == 'download') {
     /* 检查权限 */
     admin_priv('shop_authorized');
 
-    include_once ROOT_PATH.'includes/lib_license.php';
+    // include_once ROOT_PATH.'includes/lib_license.php';
 
     $license = get_shop_license();
 
@@ -81,10 +80,10 @@ if ($_REQUEST['act'] == 'upload') {
         $links[] = ['text' => $_LANG['back'], 'href' => 'license.php?act=list_edit'];
         sys_msg($_LANG['fail_license'], 1, $links);
     } else {
-        include_once ROOT_PATH.'includes/cls_transport.php';
-        include_once ROOT_PATH.'includes/cls_json.php';
-        include_once ROOT_PATH.'includes/lib_main.php';
-        include_once ROOT_PATH.'includes/lib_license.php';
+        // include_once ROOT_PATH.'includes/cls_transport.php';
+        // include_once ROOT_PATH.'includes/cls_json.php';
+        // include_once ROOT_PATH.'includes/lib_main.php';
+        // include_once ROOT_PATH.'includes/lib_license.php';
 
         // 证书登录
         $login_result = license_login();

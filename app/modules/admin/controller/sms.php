@@ -1,9 +1,8 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
-require_once ROOT_PATH.'includes/cls_sms.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require_once ROOT_PATH.'includes/cls_sms.php';
 
 $action = isset($_REQUEST['act']) ? $_REQUEST['act'] : 'display_my_info';
 if (isset($_POST['sms_sign_update'])) {

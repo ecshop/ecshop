@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 if ($_REQUEST['act'] == 'goods_export') {
     /* 检查权限 */
@@ -26,7 +25,7 @@ if ($_REQUEST['act'] == 'act_export_ecshop') {
     /* 检查权限 */
     admin_priv('goods_export');
 
-    include_once 'includes/cls_phpzip.php';
+    // include_once 'includes/cls_phpzip.php';
     $zip = new PHPZip;
 
     $where = get_export_where_sql($_POST);
@@ -121,7 +120,7 @@ if ($_REQUEST['act'] == 'act_export_custom') {
     /* 检查权限 */
     admin_priv('goods_export');
 
-    include_once 'includes/cls_phpzip.php';
+    // include_once 'includes/cls_phpzip.php';
     $zip = new PHPZip;
 
     $where = get_export_where_sql($_POST);
@@ -193,7 +192,7 @@ if ($_REQUEST['act'] == 'act_export_custom') {
     exit($zip->file());
 }
 if ($_REQUEST['act'] == 'get_goods_list') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
     $filters = $json->decode($_REQUEST['JSON']);
     $arr = get_goods_list($filters);

@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 $_REQUEST['act'] = trim($_REQUEST['act']);
 admin_priv('cron');
@@ -44,7 +43,7 @@ if ($_REQUEST['act'] == 'install') {
     if (empty($_POST['step'])) {
         /* 取相应插件信息 */
         $set_modules = true;
-        include_once ROOT_PATH.'includes/modules/cron/'.$_REQUEST['code'].'.php';
+        // include_once ROOT_PATH.'includes/modules/cron/'.$_REQUEST['code'].'.php';
 
         $data = $modules[0];
 
@@ -152,7 +151,7 @@ if ($_REQUEST['act'] == 'edit') {
         }
         /* 取相应插件信息 */
         $set_modules = true;
-        include_once ROOT_PATH.'includes/modules/cron/'.$_REQUEST['code'].'.php';
+        // include_once ROOT_PATH.'includes/modules/cron/'.$_REQUEST['code'].'.php';
         $data = $modules[0];
 
         /* 取得配置信息 */
@@ -279,7 +278,7 @@ if ($_REQUEST['act'] == 'do') {
                 $cron[$val['name']] = $val['value'];
             }
         }
-        include_once ROOT_PATH.'includes/modules/cron/'.$_REQUEST['code'].'.php';
+        // include_once ROOT_PATH.'includes/modules/cron/'.$_REQUEST['code'].'.php';
         $timestamp = gmtime();
         $sql = 'UPDATE '.$ecs->table('crons').
             "SET thistime = '$timestamp' ".

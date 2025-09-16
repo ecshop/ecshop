@@ -147,7 +147,7 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
 
                 /* 如果需要，发短信 */
                 if ($GLOBALS['_CFG']['sms_order_payed'] == '1' && $GLOBALS['_CFG']['sms_shop_mobile'] != '') {
-                    include_once ROOT_PATH.'includes/cls_sms.php';
+                    // include_once ROOT_PATH.'includes/cls_sms.php';
                     $sms = new sms;
                     $sms->send(
                         $GLOBALS['_CFG']['sms_shop_mobile'],
@@ -197,7 +197,7 @@ function order_paid($log_id, $pay_status = PS_PAYED, $note = '')
 
                     /* 修改会员帐户金额 */
                     $_LANG = [];
-                    include_once ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/user.php';
+                    // include_once ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/user.php';
                     log_account_change($arr['user_id'], $arr['amount'], 0, 0, 0, $_LANG['surplus_type_0'], ACT_SAVING);
                 }
             }

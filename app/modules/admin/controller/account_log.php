@@ -1,9 +1,8 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
-include_once ROOT_PATH.'includes/lib_order.php';
+// require dirname(__FILE__).'/includes/init.php';
+// include_once ROOT_PATH.'includes/lib_order.php';
 
 /* ------------------------------------------------------ */
 // -- 办事处列表

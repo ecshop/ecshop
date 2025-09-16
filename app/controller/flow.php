@@ -1,13 +1,12 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
-require ROOT_PATH.'includes/lib_order.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require ROOT_PATH.'includes/lib_order.php';
 
 /* 载入语言文件 */
-require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/user.php';
-require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/shopping_flow.php';
+// require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/user.php';
+// require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/shopping_flow.php';
 
 /* ------------------------------------------------------ */
 // -- INPUT
@@ -37,7 +36,7 @@ $smarty->assign('data_dir', DATA_DIR);       // 数据目录
 // -- 添加商品到购物车
 /* ------------------------------------------------------ */
 if ($_REQUEST['step'] == 'add_to_cart') {
-    include_once 'includes/cls_json.php';
+    // include_once 'includes/cls_json.php';
     $_POST['goods'] = strip_tags(urldecode($_POST['goods']));
     $_POST['goods'] = json_str_iconv($_POST['goods']);
 
@@ -145,7 +144,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     ecs_header("Location:./flow.php\n");
     exit;
 } elseif ($_REQUEST['step'] == 'login') {
-    include_once 'languages/'.$_CFG['lang'].'/user.php';
+    // include_once 'languages/'.$_CFG['lang'].'/user.php';
 
     $where = "session_id = '".SESS_ID."'";
     if ($_SESSION['user_id']) {
@@ -175,7 +174,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
             $smarty->assign('rand', mt_rand());
         }
     } else {
-        include_once 'includes/lib_passport.php';
+        // include_once 'includes/lib_passport.php';
         if (! empty($_POST['act']) && $_POST['act'] == 'signin') {
             $captcha = intval($_CFG['captcha']);
             if (($captcha & CAPTCHA_LOGIN) && (! ($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0) {
@@ -184,7 +183,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
                 }
 
                 /* 检查验证码 */
-                include_once 'includes/cls_captcha.php';
+                // include_once 'includes/cls_captcha.php';
 
                 $validator = new captcha;
                 $validator->session_word = 'captcha_login';
@@ -219,7 +218,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
                 }
 
                 /* 检查验证码 */
-                include_once 'includes/cls_captcha.php';
+                // include_once 'includes/cls_captcha.php';
 
                 $validator = new captcha;
                 if (! $validator->check_word($_POST['captcha'])) {
@@ -242,7 +241,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     /* ------------------------------------------------------ */
     // -- 收货人信息
     /* ------------------------------------------------------ */
-    include_once 'includes/lib_transaction.php';
+    // include_once 'includes/lib_transaction.php';
 
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         /* 取得购物类型 */
@@ -319,7 +318,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
         ];
 
         if ($_SESSION['user_id'] > 0) {
-            include_once ROOT_PATH.'includes/lib_transaction.php';
+            // include_once ROOT_PATH.'includes/lib_transaction.php';
 
             /* 如果用户已经登录，则保存收货人信息 */
             $consignee['user_id'] = $_SESSION['user_id'];
@@ -337,7 +336,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     /* ------------------------------------------------------ */
     // -- 删除收货人信息
     /* ------------------------------------------------------ */
-    include_once 'includes/lib_transaction.php';
+    // include_once 'includes/lib_transaction.php';
 
     $consignee_id = intval($_GET['id']);
 
@@ -623,7 +622,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     /* ------------------------------------------------------ */
     // -- 改变配送方式
     /* ------------------------------------------------------ */
-    include_once 'includes/cls_json.php';
+    // include_once 'includes/cls_json.php';
     $json = new JSON;
     $result = ['error' => '', 'content' => '', 'need_insure' => 0];
 
@@ -677,7 +676,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     // -- 选定/取消配送的保价
     /* ------------------------------------------------------ */
 
-    include_once 'includes/cls_json.php';
+    // include_once 'includes/cls_json.php';
     $json = new JSON;
     $result = ['error' => '', 'content' => '', 'need_insure' => 0];
 
@@ -727,7 +726,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     // -- 改变支付方式
     /* ------------------------------------------------------ */
 
-    include_once 'includes/cls_json.php';
+    // include_once 'includes/cls_json.php';
     $json = new JSON;
     $result = ['error' => '', 'content' => '', 'need_insure' => 0, 'payment' => 1];
 
@@ -779,7 +778,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     // -- 改变商品包装
     /* ------------------------------------------------------ */
 
-    include_once 'includes/cls_json.php';
+    // include_once 'includes/cls_json.php';
     $json = new JSON;
     $result = ['error' => '', 'content' => '', 'need_insure' => 0];
 
@@ -829,7 +828,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     // -- 改变贺卡
     /* ------------------------------------------------------ */
 
-    include_once 'includes/cls_json.php';
+    // include_once 'includes/cls_json.php';
     $json = new JSON;
     $result = ['error' => '', 'content' => '', 'need_insure' => 0];
 
@@ -878,7 +877,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     /* ------------------------------------------------------ */
     // -- 改变余额
     /* ------------------------------------------------------ */
-    include_once 'includes/cls_json.php';
+    // include_once 'includes/cls_json.php';
 
     $surplus = floatval($_GET['surplus']);
     $user_info = user_info($_SESSION['user_id']);
@@ -924,7 +923,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     /* ------------------------------------------------------ */
     // -- 改变积分
     /* ------------------------------------------------------ */
-    include_once 'includes/cls_json.php';
+    // include_once 'includes/cls_json.php';
 
     $points = floatval($_GET['points']);
     $user_info = user_info($_SESSION['user_id']);
@@ -975,7 +974,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     /* ------------------------------------------------------ */
     // -- 改变红包
     /* ------------------------------------------------------ */
-    include_once 'includes/cls_json.php';
+    // include_once 'includes/cls_json.php';
     $result = ['error' => '', 'content' => ''];
 
     /* 取得购物类型 */
@@ -1023,7 +1022,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     /* ------------------------------------------------------ */
     // -- 改变发票的设置
     /* ------------------------------------------------------ */
-    include_once 'includes/cls_json.php';
+    // include_once 'includes/cls_json.php';
     $result = ['error' => '', 'content' => ''];
     $json = new JSON;
     $_GET['inv_type'] = ! empty($_GET['inv_type']) ? json_str_iconv(urldecode($_GET['inv_type'])) : '';
@@ -1119,8 +1118,8 @@ if ($_REQUEST['step'] == 'add_to_cart') {
 // -- 完成所有订单操作，提交到数据库
 /* ------------------------------------------------------ */
 elseif ($_REQUEST['step'] == 'done') {
-    include_once 'includes/lib_clips.php';
-    include_once 'includes/lib_payment.php';
+    // include_once 'includes/lib_clips.php';
+    // include_once 'includes/lib_payment.php';
 
     $where = "session_id = '".SESS_ID."'";
     if ($_SESSION['user_id']) {
@@ -1451,7 +1450,7 @@ elseif ($_REQUEST['step'] == 'done') {
 
     /* 如果需要，发短信 */
     if ($_CFG['sms_order_placed'] == '1' && $_CFG['sms_shop_mobile'] != '') {
-        include_once 'includes/cls_sms.php';
+        // include_once 'includes/cls_sms.php';
         $sms = new sms;
         $msg = $order['pay_status'] == PS_UNPAYED ?
             $_LANG['order_placed_sms'] : $_LANG['order_placed_sms'].'['.$_LANG['sms_paid'].']';
@@ -1513,7 +1512,7 @@ elseif ($_REQUEST['step'] == 'done') {
     if ($order['order_amount'] > 0) {
         $payment = payment_info($order['pay_id']);
 
-        include_once 'includes/modules/payment/'.$payment['pay_code'].'.php';
+        // include_once 'includes/modules/payment/'.$payment['pay_code'].'.php';
 
         $pay_obj = new $payment['pay_code'];
 
@@ -1671,7 +1670,7 @@ elseif ($_REQUEST['step'] == 'validate_bonus') {
     //    die(sprintf($_LANG['bonus_is_ok'], price_format($bonus['type_money'], false)));
     $bonus_kill = price_format($bonus['type_money'], false);
 
-    include_once 'includes/cls_json.php';
+    // include_once 'includes/cls_json.php';
     $result = ['error' => '', 'content' => ''];
 
     /* 取得购物类型 */
@@ -1734,7 +1733,7 @@ elseif ($_REQUEST['step'] == 'validate_bonus') {
 // -- 添加礼包到购物车
 /* ------------------------------------------------------ */
 elseif ($_REQUEST['step'] == 'add_package_to_cart') {
-    include_once 'includes/cls_json.php';
+    // include_once 'includes/cls_json.php';
     $_POST['package_info'] = json_str_iconv($_POST['package_info']);
 
     $result = ['error' => 0, 'message' => '', 'content' => '', 'package_id' => ''];
@@ -1804,7 +1803,7 @@ elseif ($_REQUEST['step'] == 'add_package_to_cart') {
 
     // 显示收藏夹内的商品
     if ($_SESSION['user_id'] > 0) {
-        require_once ROOT_PATH.'includes/lib_clips.php';
+        // require_once ROOT_PATH.'includes/lib_clips.php';
         $collection_goods = get_collection_goods($_SESSION['user_id']);
         $smarty->assign('collection_goods', $collection_goods);
         $where = "user_id = '".intval($_SESSION['user_id'])."' ";

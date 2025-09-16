@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 /* 检查权限 */
 admin_priv('sitemap');
@@ -22,8 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     /* ------------------------------------------------------ */
     // -- 生成站点地图
     /* ------------------------------------------------------ */
-    include_once 'includes/cls_phpzip.php';
-    include_once 'includes/cls_google_sitemap.php';
+    // include_once 'includes/cls_phpzip.php';
+    // include_once 'includes/cls_google_sitemap.php';
 
     $domain = $ecs->url();
     $today = local_date('Y-m-d');

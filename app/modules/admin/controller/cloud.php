@@ -1,10 +1,9 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
-require ROOT_PATH.'includes/cls_transport.php';
-require ROOT_PATH.'includes/cls_json.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require ROOT_PATH.'includes/cls_transport.php';
+// require ROOT_PATH.'includes/cls_json.php';
 
 $data['api_ver'] = '1.0';
 $data['version'] = VERSION;

@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 $exc = new exchange($ecs->table('category'), $db, 'cat_id', 'cat_name');
 
 /* act操作项的初始化 */

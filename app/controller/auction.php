@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 /* ------------------------------------------------------ */
 // -- act 操作项的初始化
@@ -162,7 +161,7 @@ if ($_REQUEST['act'] == 'view') {
 // -- 拍卖商品 --> 出价
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'bid') {
-    include_once ROOT_PATH.'includes/lib_order.php';
+    // include_once ROOT_PATH.'includes/lib_order.php';
 
     /* 取得参数：拍卖活动id */
     $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
@@ -350,7 +349,7 @@ if ($_REQUEST['act'] == 'buy') {
     }
 
     /* 清空购物车中所有拍卖商品 */
-    include_once ROOT_PATH.'includes/lib_order.php';
+    // include_once ROOT_PATH.'includes/lib_order.php';
     clear_cart(CART_AUCTION_GOODS);
 
     /* 加入购物车 */

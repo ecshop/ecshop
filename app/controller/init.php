@@ -11,7 +11,7 @@ if (! file_exists(ROOT_PATH.'data/install.lock')) {
     exit;
 }
 
-require ROOT_PATH.'includes/inc_constant.php';
+// require ROOT_PATH.'includes/inc_constant.php';
 
 /* 初始化设置 */
 @ini_set('memory_limit', '1G');
@@ -37,15 +37,15 @@ if (substr($php_self, -1) == '/') {
 }
 define('PHP_SELF', $php_self);
 
-require ROOT_PATH.'includes/cls_ecshop.php';
-require ROOT_PATH.'includes/cls_error.php';
-require ROOT_PATH.'includes/lib_time.php';
-require ROOT_PATH.'includes/lib_base.php';
-require ROOT_PATH.'includes/lib_common.php';
-require ROOT_PATH.'includes/lib_main.php';
-require ROOT_PATH.'includes/lib_insert.php';
-require ROOT_PATH.'includes/lib_goods.php';
-require ROOT_PATH.'includes/lib_article.php';
+// require ROOT_PATH.'includes/cls_ecshop.php';
+// require ROOT_PATH.'includes/cls_error.php';
+// require ROOT_PATH.'includes/lib_time.php';
+// require ROOT_PATH.'includes/lib_base.php';
+// require ROOT_PATH.'includes/lib_common.php';
+// require ROOT_PATH.'includes/lib_main.php';
+// require ROOT_PATH.'includes/lib_insert.php';
+// require ROOT_PATH.'includes/lib_goods.php';
+// require ROOT_PATH.'includes/lib_article.php';
 
 /* 对用户传入的变量进行转义操作。 */
 if (! empty($_GET)) {
@@ -64,7 +64,7 @@ define('DATA_DIR', $ecs->data_dir());
 define('IMAGE_DIR', $ecs->image_dir());
 
 /* 初始化数据库类 */
-require ROOT_PATH.'includes/cls_mysql.php';
+// require ROOT_PATH.'includes/cls_mysql.php';
 $db = new cls_mysql($db_host, $db_user, $db_pass, $db_name);
 $db->set_disable_cache_tables([$ecs->table('sessions'), $ecs->table('sessions_data'), $ecs->table('cart')]);
 $db_host = $db_user = $db_pass = $db_name = null;
@@ -76,7 +76,7 @@ $err = new ecs_error('message.dwt');
 $_CFG = load_config();
 
 /* 载入语言文件 */
-require ROOT_PATH.'languages/'.$_CFG['lang'].'/common.php';
+// require ROOT_PATH.'languages/'.$_CFG['lang'].'/common.php';
 
 if ($_CFG['shop_closed'] == 1) {
     /* 商店关闭了，输出关闭的消息 */
@@ -104,7 +104,7 @@ if (is_spider()) {
 
 if (! defined('INIT_NO_USERS')) {
     /* 初始化session */
-    include ROOT_PATH.'includes/cls_session.php';
+    // include ROOT_PATH.'includes/cls_session.php';
 
     $sess = new cls_session($db, $ecs->table('sessions'), $ecs->table('sessions_data'));
 
@@ -118,7 +118,7 @@ if (! defined('INIT_NO_SMARTY')) {
     header('Content-type: text/html; charset='.EC_CHARSET);
 
     /* 创建 Smarty 对象。 */
-    require ROOT_PATH.'includes/cls_template.php';
+    // require ROOT_PATH.'includes/cls_template.php';
     $smarty = new cls_template;
 
     $smarty->cache_lifetime = $_CFG['cache_time'];

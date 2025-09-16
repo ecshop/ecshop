@@ -1,10 +1,9 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
-require_once ROOT_PATH.'/admin/includes/lib_goods.php';
-include_once ROOT_PATH.'/includes/cls_image.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require_once ROOT_PATH.'/admin/includes/lib_goods.php';
+// include_once ROOT_PATH.'/includes/cls_image.php';
 $image = new cls_image($_CFG['bgcolor']);
 $exc = new exchange($ecs->table('goods'), $db, 'goods_id', 'goods_name');
 
@@ -65,7 +64,7 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'trash') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] == 'copy') {
-    include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
+    // include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
 
     $is_add = $_REQUEST['act'] == 'add'; // 添加还是编辑的标识
     $is_copy = $_REQUEST['act'] == 'copy'; // 是否复制
@@ -1389,7 +1388,7 @@ if ($_REQUEST['act'] == 'drop_image') {
 // -- 搜索商品，仅返回名称及ID
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'get_goods_list') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $filters = $json->decode($_GET['JSON']);
@@ -1410,7 +1409,7 @@ if ($_REQUEST['act'] == 'get_goods_list') {
 // -- 把商品加入关联
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'add_link_goods') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('goods_manage');
@@ -1450,7 +1449,7 @@ if ($_REQUEST['act'] == 'add_link_goods') {
 // -- 删除关联商品
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'drop_link_goods') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('goods_manage');
@@ -1499,7 +1498,7 @@ if ($_REQUEST['act'] == 'drop_link_goods') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'add_group_goods') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('goods_manage');
@@ -1533,7 +1532,7 @@ if ($_REQUEST['act'] == 'add_group_goods') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'drop_group_goods') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('goods_manage');
@@ -1568,7 +1567,7 @@ if ($_REQUEST['act'] == 'drop_group_goods') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'get_article_list') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     $filters = (array) $json->decode(json_str_iconv($_GET['JSON']));
@@ -1596,7 +1595,7 @@ if ($_REQUEST['act'] == 'get_article_list') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'add_goods_article') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('goods_manage');
@@ -1628,7 +1627,7 @@ if ($_REQUEST['act'] == 'add_goods_article') {
 // -- 删除关联文章
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'drop_goods_article') {
-    include_once ROOT_PATH.'includes/cls_json.php';
+    // include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;
 
     check_authz_json('goods_manage');

@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 admin_priv('mail_template');
 
@@ -10,7 +9,7 @@ admin_priv('mail_template');
 // -- 模版列表
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
-    include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
+    // include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
 
     /* 获得所有邮件模板 */
     $sql = 'SELECT template_id, template_code FROM '.$ecs->table('mail_templates')." WHERE  type = 'template'";
@@ -54,7 +53,7 @@ if ($_REQUEST['act'] == 'list') {
 // -- 载入指定模版
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'loat_template') {
-    include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
+    // include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
 
     $tpl = intval($_GET['tpl']);
     $mail_type = isset($_GET['mail_type']) ? $_GET['mail_type'] : -1;

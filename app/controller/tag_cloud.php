@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 assign_template();
 $position = assign_ur_here(0, $_LANG['tag_cloud']);
 $smarty->assign('page_title', $position['title']);    // 页面标题
@@ -24,7 +23,7 @@ assign_dynamic('tag_cloud');
 $tags = get_tags();
 
 if (! empty($tags)) {
-    include_once ROOT_PATH.'includes/lib_clips.php';
+    // include_once ROOT_PATH.'includes/lib_clips.php';
     color_tag($tags);
 }
 

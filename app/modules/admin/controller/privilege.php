@@ -1,8 +1,7 @@
 <?php
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+// require dirname(__FILE__).'/includes/init.php';
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -48,7 +47,7 @@ if ($_REQUEST['act'] == 'login') {
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'signin') {
     if (intval($_CFG['captcha']) & CAPTCHA_ADMIN) {
-        include_once ROOT_PATH.'includes/cls_captcha.php';
+        // include_once ROOT_PATH.'includes/cls_captcha.php';
 
         /* 检查验证码是否正确 */
         $validator = new captcha;
@@ -400,8 +399,8 @@ if ($_REQUEST['act'] == 'modif') {
         sys_msg($_LANG['edit_admininfo_cannot'], 0, $link);
     }
 
-    include_once 'includes/inc_menu.php';
-    include_once 'includes/inc_priv.php';
+    // include_once 'includes/inc_menu.php';
+    // include_once 'includes/inc_priv.php';
 
     foreach ($modules as $key => $value) {
         ksort($modules[$key]);
@@ -459,7 +458,7 @@ if ($_REQUEST['act'] == 'modif') {
 // -- 为管理员分配权限
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'allot') {
-    include_once ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/priv_action.php';
+    // include_once ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/priv_action.php';
 
     admin_priv('allot_priv');
     if ($_SESSION['admin_id'] == $_GET['id']) {

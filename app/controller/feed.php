@@ -1,11 +1,10 @@
 <?php
 
-define('IN_ECS', true);
 define('INIT_NO_USERS', true);
 define('INIT_NO_SMARTY', true);
 
-require dirname(__FILE__).'/includes/init.php';
-require ROOT_PATH.'includes/cls_rss.php';
+// require dirname(__FILE__).'/includes/init.php';
+// require ROOT_PATH.'includes/cls_rss.php';
 
 header('Content-Type: application/xml; charset='.EC_CHARSET);
 header('Cache-Control: no-cache, must-revalidate');

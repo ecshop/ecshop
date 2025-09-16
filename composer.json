@@ -1,70 +1,74 @@
 {
-  "name": "ecshop/ecshop",
-  "type": "project",
-  "description": "e-commerce management system.",
-  "keywords": ["ecshop", "php", "mysql", "shop"],
-  "license": "Apache-2.0",
-  "require": {
-    "php": "^8.4",
-    "alibabacloud/aliyun-log-php-sdk": "^0.6.8",
-    "aliyuncs/oss-sdk-php": "^2.7",
-    "elasticsearch/elasticsearch": "^8.19",
-    "endroid/qr-code": "^5.1",
-    "firebase/php-jwt": "^6.11",
-    "intervention/image": "^3.11",
-    "juling/think-foundation": "dev-master",
-    "overtrue/easy-sms": "^3.2",
-    "overtrue/pinyin": "^5.3",
-    "overtrue/socialite": "^4.12",
-    "phpoffice/phpspreadsheet": "^5.1",
-    "qcloud/cos-sdk-v5": "^2.6",
-    "qiniu/php-sdk": "^7.14",
-    "ramsey/uuid": "^4.9",
-    "topthink/framework": "^8.1",
-    "topthink/think-captcha": "^3.0",
-    "topthink/think-cors": "^1.0",
-    "topthink/think-filesystem": "^3.0",
-    "topthink/think-image": "^1.0",
-    "topthink/think-migration": "^3.1",
-    "topthink/think-orm": "^4.0",
-    "topthink/think-queue": "^3.0",
-    "topthink/think-swoole": "^4.1",
-    "topthink/think-throttle": "^2.0",
-    "topthink/think-view": "^2.0",
-    "w7corp/easywechat": "^6.18",
-    "workerman/crontab": "^1.0",
-    "workerman/gateway-worker": "^4.0",
-    "yansongda/pay": "^3.7"
-  },
-  "require-dev": {
-    "laravel/pint": "^1.24",
-    "phpstan/phpstan": "^1.12",
-    "topthink/think-dumper": "^1.0",
-    "zircote/swagger-php": "^5.3"
-  },
-  "autoload": {
-    "psr-4": {
-      "app\\": "app/"
-    }
-  },
-  "scripts": {
-    "post-autoload-dump": [
-      "app\\support\\ComposerScripts::postAutoloadDump",
-      "@php artisan service:discover",
-      "@php artisan vendor:publish"
+    "name": "ecshop/ecshop",
+    "type": "project",
+    "description": "e-commerce management system.",
+    "keywords": [
+        "ecshop",
+        "php",
+        "mysql",
+        "shop"
     ],
-    "post-root-package-install": [
-      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-    ]
-  },
-  "config": {
-    "optimize-autoloader": true,
-    "preferred-install": "dist",
-    "sort-packages": true,
-    "allow-plugins": {
-      "php-http/discovery": true
-    }
-  },
-  "minimum-stability": "stable",
-  "prefer-stable": true
+    "license": "Apache-2.0",
+    "require": {
+        "php": "^8.4",
+        "alibabacloud/aliyun-log-php-sdk": "^0.6.8",
+        "aliyuncs/oss-sdk-php": "^2.7",
+        "elasticsearch/elasticsearch": "^8.19",
+        "endroid/qr-code": "^5.1",
+        "firebase/php-jwt": "^6.11",
+        "intervention/image": "^3.11",
+        "juling/think-foundation": "dev-master",
+        "overtrue/easy-sms": "^3.2",
+        "overtrue/pinyin": "^5.3",
+        "overtrue/socialite": "^4.12",
+        "phpoffice/phpspreadsheet": "^5.1",
+        "qcloud/cos-sdk-v5": "^2.6",
+        "qiniu/php-sdk": "^7.14",
+        "ramsey/uuid": "^4.9",
+        "topthink/framework": "^8.1",
+        "topthink/think-captcha": "^3.0",
+        "topthink/think-cors": "^1.0",
+        "topthink/think-filesystem": "^3.0",
+        "topthink/think-image": "^1.0",
+        "topthink/think-migration": "^3.1",
+        "topthink/think-orm": "^4.0",
+        "topthink/think-queue": "^3.0",
+        "topthink/think-throttle": "^2.0",
+        "topthink/think-view": "^2.0",
+        "w7corp/easywechat": "^6.18",
+        "workerman/crontab": "^1.0",
+        "workerman/gateway-worker": "^4.0",
+        "yansongda/pay": "^3.7"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.24",
+        "phpstan/phpstan": "^1.12",
+        "topthink/think-dumper": "^1.0",
+        "zircote/swagger-php": "^5.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "app\\support\\ComposerScripts::postAutoloadDump",
+            "@php artisan service:discover",
+            "@php artisan vendor:publish"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

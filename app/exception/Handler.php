@@ -48,7 +48,7 @@ class Handler extends Handle
     public function render(Request $request, Throwable $e): Response
     {
         // 添加自定义异常处理机制
-        if (str_contains($request->pathinfo(), 'api/')) {
+        if (str_contains($request->pathinfo(), 'api/') || $request->isAjax()) {
             $code = $e->getCode() ?: SymfonyResponse::HTTP_INTERNAL_SERVER_ERROR;
 
             return json(['code' => $code, 'message' => $e->getMessage(), 'data' => null], $code);

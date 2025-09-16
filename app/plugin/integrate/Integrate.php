@@ -1,6 +1,10 @@
 <?php
 
-class integrate
+declare(strict_types=1);
+
+namespace app\plugins\integrate;
+
+abstract class Integrate
 {
     /* ------------------------------------------------------ */
     // -- PUBLIC ATTRIBUTEs

@@ -1,60 +1,18 @@
 <?php
 
 
-$shipping_lang = ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/shipping/post_mail.php';
-if (file_exists($shipping_lang)) {
-    global $_LANG;
-    include_once $shipping_lang;
-}
 
-/* 模块的基本信息 */
-if (isset($set_modules) && $set_modules == true) {
-    $i = (isset($modules)) ? count($modules) : 0;
+declare(strict_types=1);
 
-    /* 配送方式插件的代码必须和文件名保持一致 */
-    $modules[$i]['code'] = basename(__FILE__, '.php');
+namespace app\plugins\shipping;
 
-    $modules[$i]['version'] = '1.0.0';
-
-    /* 配送方式的描述 */
-    $modules[$i]['desc'] = 'post_mail_desc';
-
-    /* 配送方式是否支持货到付款 */
-    $modules[$i]['cod'] = false;
-
-    /* 插件的作者 */
-    $modules[$i]['author'] = 'ECSHOP TEAM';
-
-    /* 插件作者的官方网站 */
-    $modules[$i]['website'] = 'http://www.ecshop.com';
-
-    /* 配送接口需要的参数 */
-    $modules[$i]['configure'] = [
-        ['name' => 'item_fee', 'value' => 4],
-        ['name' => 'base_fee', 'value' => 3.5],
-        ['name' => 'step_fee', 'value' => 2],
-        ['name' => 'step_fee1', 'value' => 2.5],
-        ['name' => 'pack_fee', 'value' => 0],
-    ];
-
-    /* 模式编辑器 */
-    $modules[$i]['print_model'] = 2;
-
-    /* 打印单背景 */
-    $modules[$i]['print_bg'] = '';
-
-    /* 打印快递单标签位置信息 */
-    $modules[$i]['config_lable'] = '';
-
-    return;
-}
 
 /**
  * 邮局平邮费用计算方式: 每公斤资费 × 包裹重量 + 挂号费3.00 + 邮单费0.5 + 包装费(按实际收取) ＋ 保价费
  *
  * 保价费 由客户自愿选择，保价费为订单产品价值的1％。客户选择不保价，则保价费＝0
  */
-class post_mail
+class PostMail
 {
     /* ------------------------------------------------------ */
     // -- PUBLIC ATTRIBUTEs
@@ -80,6 +38,52 @@ class post_mail
     {
         foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];
+        }
+    }
+
+    public function config()
+    {
+
+        /* 模块的基本信息 */
+        if (isset($set_modules) && $set_modules == true) {
+            $i = (isset($modules)) ? count($modules) : 0;
+
+            /* 配送方式插件的代码必须和文件名保持一致 */
+            $modules[$i]['code'] = basename(__FILE__, '.php');
+
+            $modules[$i]['version'] = '1.0.0';
+
+            /* 配送方式的描述 */
+            $modules[$i]['desc'] = 'post_mail_desc';
+
+            /* 配送方式是否支持货到付款 */
+            $modules[$i]['cod'] = false;
+
+            /* 插件的作者 */
+            $modules[$i]['author'] = 'ECSHOP TEAM';
+
+            /* 插件作者的官方网站 */
+            $modules[$i]['website'] = 'http://www.ecshop.com';
+
+            /* 配送接口需要的参数 */
+            $modules[$i]['configure'] = [
+                ['name' => 'item_fee', 'value' => 4],
+                ['name' => 'base_fee', 'value' => 3.5],
+                ['name' => 'step_fee', 'value' => 2],
+                ['name' => 'step_fee1', 'value' => 2.5],
+                ['name' => 'pack_fee', 'value' => 0],
+            ];
+
+            /* 模式编辑器 */
+            $modules[$i]['print_model'] = 2;
+
+            /* 打印单背景 */
+            $modules[$i]['print_bg'] = '';
+
+            /* 打印快递单标签位置信息 */
+            $modules[$i]['config_lable'] = '';
+
+            return;
         }
     }
 

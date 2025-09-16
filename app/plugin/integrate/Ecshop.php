@@ -1,32 +1,35 @@
 <?php
 
+declare(strict_types=1);
 
-/* 模块的基本信息 */
-if (isset($set_modules) && $set_modules == true) {
-    $i = (isset($modules)) ? count($modules) : 0;
+namespace app\plugins\integrate;
 
-    /* 会员数据整合插件的代码必须和文件名保持一致 */
-    $modules[$i]['code'] = 'ecshop';
+class Ecshop extends Integrate {
+    public function config()
+    {
+        /* 模块的基本信息 */
+        if (isset($set_modules) && $set_modules == true) {
+            $i = (isset($modules)) ? count($modules) : 0;
 
-    /* 被整合的第三方程序的名称 */
-    $modules[$i]['name'] = 'ECSHOP';
+            /* 会员数据整合插件的代码必须和文件名保持一致 */
+            $modules[$i]['code'] = 'ecshop';
 
-    /* 被整合的第三方程序的版本 */
-    $modules[$i]['version'] = '2.0';
+            /* 被整合的第三方程序的名称 */
+            $modules[$i]['name'] = 'ECSHOP';
 
-    /* 插件的作者 */
-    $modules[$i]['author'] = 'ECSHOP R&D TEAM';
+            /* 被整合的第三方程序的版本 */
+            $modules[$i]['version'] = '2.0';
 
-    /* 插件作者的官方网站 */
-    $modules[$i]['website'] = 'http://www.ecshop.com';
+            /* 插件的作者 */
+            $modules[$i]['author'] = 'ECSHOP R&D TEAM';
 
-    return;
-}
+            /* 插件作者的官方网站 */
+            $modules[$i]['website'] = 'http://www.ecshop.com';
 
-require_once ROOT_PATH.'includes/modules/integrates/integrate.php';
+            return;
+        }
+    }
 
-class ecshop extends integrate
-{
     public $is_ecshop = 1;
 
     public function __construct($cfg)

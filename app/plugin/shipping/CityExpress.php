@@ -1,51 +1,10 @@
 <?php
 
+declare(strict_types=1);
 
-$shipping_lang = ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/shipping/city_express.php';
-if (file_exists($shipping_lang)) {
-    global $_LANG;
-    include_once $shipping_lang;
-}
+namespace app\plugins\shipping;
 
-/* 模块的基本信息 */
-if (isset($set_modules) && $set_modules == true) {
-    $i = (isset($modules)) ? count($modules) : 0;
-
-    /* 配送方式插件的代码必须和文件名保持一致 */
-    $modules[$i]['code'] = 'city_express';
-
-    $modules[$i]['version'] = '1.0.0';
-
-    /* 配送方式的描述 */
-    $modules[$i]['desc'] = 'city_express_desc';
-
-    /* 配送方式是否支持货到付款 */
-    $modules[$i]['cod'] = true;
-
-    /* 插件的作者 */
-    $modules[$i]['author'] = 'ECSHOP TEAM';
-
-    /* 插件作者的官方网站 */
-    $modules[$i]['website'] = 'http://www.ecshop.com';
-
-    /* 配送接口需要的参数 */
-    $modules[$i]['configure'] = [
-        ['name' => 'base_fee', 'value' => 10],
-    ];
-
-    /* 模式编辑器 */
-    $modules[$i]['print_model'] = 2;
-
-    /* 打印单背景 */
-    $modules[$i]['print_bg'] = '';
-
-    /* 打印快递单标签位置信息 */
-    $modules[$i]['config_lable'] = '';
-
-    return;
-}
-
-class city_express
+class CityExpress
 {
     /* ------------------------------------------------------ */
     // -- PUBLIC ATTRIBUTEs
@@ -71,6 +30,47 @@ class city_express
     {
         foreach ($cfg as $key => $val) {
             $this->configure[$val['name']] = $val['value'];
+        }
+    }
+
+    public function config()
+    {
+        /* 模块的基本信息 */
+        if (isset($set_modules) && $set_modules == true) {
+            $i = (isset($modules)) ? count($modules) : 0;
+
+            /* 配送方式插件的代码必须和文件名保持一致 */
+            $modules[$i]['code'] = 'city_express';
+
+            $modules[$i]['version'] = '1.0.0';
+
+            /* 配送方式的描述 */
+            $modules[$i]['desc'] = 'city_express_desc';
+
+            /* 配送方式是否支持货到付款 */
+            $modules[$i]['cod'] = true;
+
+            /* 插件的作者 */
+            $modules[$i]['author'] = 'ECSHOP TEAM';
+
+            /* 插件作者的官方网站 */
+            $modules[$i]['website'] = 'http://www.ecshop.com';
+
+            /* 配送接口需要的参数 */
+            $modules[$i]['configure'] = [
+                ['name' => 'base_fee', 'value' => 10],
+            ];
+
+            /* 模式编辑器 */
+            $modules[$i]['print_model'] = 2;
+
+            /* 打印单背景 */
+            $modules[$i]['print_bg'] = '';
+
+            /* 打印快递单标签位置信息 */
+            $modules[$i]['config_lable'] = '';
+
+            return;
         }
     }
 

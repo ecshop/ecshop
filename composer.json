@@ -33,6 +33,7 @@
         "topthink/think-migration": "^3.1",
         "topthink/think-orm": "^4.0",
         "topthink/think-queue": "^3.0",
+        "topthink/think-swoole": "^4.1",
         "topthink/think-throttle": "^2.0",
         "topthink/think-view": "^2.0",
         "w7corp/easywechat": "^6.18",

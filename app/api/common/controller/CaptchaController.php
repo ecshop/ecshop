@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace app\api\common\controller;
 
 use app\api\common\response\captcha\CaptchaImageResponse;
-use app\bundles\captcha\service\CaptchaBundleService;
+use app\support\captcha\Captcha;
 use OpenApi\Attributes as OA;
 use Ramsey\Uuid\Uuid;
 use think\response\Json;
@@ -19,7 +19,7 @@ class CaptchaController extends BaseController
         try {
             $captchaId = Uuid::uuid4()->toString();
 
-            $captchaBundleService = new CaptchaBundleService;
+            $captchaBundleService = new Captcha;
             $captchaImg = $captchaBundleService->create($captchaId);
 
             $response = new CaptchaImageResponse($captchaId, $captchaImg);

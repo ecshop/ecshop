@@ -17,7 +17,7 @@
         "endroid/qr-code": "^5.1",
         "firebase/php-jwt": "^6.11",
         "intervention/image": "^3.11",
-        "juling/think-foundation": "dev-master",
+        "juling/think-foundation": "^1.0",
         "overtrue/easy-sms": "^3.2",
         "overtrue/pinyin": "^5.3",
         "overtrue/socialite": "^4.12",

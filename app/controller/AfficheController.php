@@ -1,5 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\controller;
+
+use think\response\View;
+class AfficheController extends BaseController
+{
+    public function index(): View
+    {
+
+    }
+}
+
 define('INIT_NO_SMARTY', true);
 // require dirname(__FILE__).'/includes/init.php';
 

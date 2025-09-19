@@ -1,5 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\controller;
+
+use think\response\View;
+class TagCloudController extends BaseController
+{
+    public function index(): View
+    {
+
+    }
+}
+
 
 // require dirname(__FILE__).'/includes/init.php';
 assign_template();

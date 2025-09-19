@@ -1,5 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\controller;
+
+use think\response\View;
+class SitemapController extends BaseController
+{
+    public function index(): View
+    {
+
+    }
+}
+
 define('INIT_NO_USERS', true);
 define('INIT_NO_SMARTY', true);
 // require dirname(__FILE__).'/includes/init.php';

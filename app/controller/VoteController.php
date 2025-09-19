@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\controller;
+
+use think\response\View;
+class VoteController extends BaseController
+{
+    public function index(): View
+    {
+
+    }
+}
 
 // require dirname(__FILE__).'/includes/init.php';
 // require ROOT_PATH.'includes/cls_json.php';

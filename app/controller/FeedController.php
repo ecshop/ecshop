@@ -1,5 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
+namespace app\controller;
+
+use think\response\View;
+class FeedController extends BaseController
+{
+    public function index(): View
+    {
+
+    }
+}
+
 define('INIT_NO_USERS', true);
 define('INIT_NO_SMARTY', true);
 

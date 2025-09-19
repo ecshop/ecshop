@@ -17,7 +17,7 @@ abstract class BaseController extends Controller
         $theme = config('app.default_theme', 'default');
 
         Config::set([
-            'view_path' => public_path().sprintf('/themes/%s/', $theme),
+            'view_path' => public_path(sprintf('/themes/%s/', $theme)),
             'view_suffix' => 'php',
         ], 'view');
     }

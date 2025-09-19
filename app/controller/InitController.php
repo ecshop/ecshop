@@ -1,6 +1,5 @@
 <?php
 
-
 error_reporting(E_ALL);
 
 /* 取得当前ecshop所在的根目录 */

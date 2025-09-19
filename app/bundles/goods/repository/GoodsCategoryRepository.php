@@ -20,7 +20,7 @@ class GoodsCategoryRepository extends CurdRepository implements RepositoryInterf
     public static function getInstance(): GoodsCategoryRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new GoodsCategoryRepository();
+            self::$instance = new GoodsCategoryRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class GoodsCategoryRepository extends CurdRepository implements RepositoryInterf
     /**
      * 添加
      */
-    public function createByEntity(GoodsCategoryEntity $entity): int    {
+    public function createByEntity(GoodsCategoryEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class GoodsCategoryRepository extends CurdRepository implements RepositoryInterf
             return null;
         }
 
-        $entity = new GoodsCategoryEntity();
+        $entity = new GoodsCategoryEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class GoodsCategoryRepository extends CurdRepository implements RepositoryInterf
             return null;
         }
 
-        $entity = new GoodsCategoryEntity();
+        $entity = new GoodsCategoryEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class GoodsCategoryRepository extends CurdRepository implements RepositoryInterf
         }
 
         foreach ($result as $key => $item) {
-            $entity = new GoodsCategoryEntity();
+            $entity = new GoodsCategoryEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class GoodsCategoryRepository extends CurdRepository implements RepositoryInterf
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new GoodsCategoryEntity();
+            $entity = new GoodsCategoryEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class GoodsCategoryRepository extends CurdRepository implements RepositoryInterf
     {
         $model = '\\app\\bundles\\goods\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

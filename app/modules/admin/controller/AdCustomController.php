@@ -32,7 +32,7 @@ class AdCustomController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new AdCustomQueryRequest();
+            $v = new AdCustomQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class AdCustomController extends BaseController
                 //
             ];
 
-            $adCustomBundleService = new AdCustomBundleService();
+            $adCustomBundleService = new AdCustomBundleService;
             $result = $adCustomBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new AdCustomResponse();
+                $response = new AdCustomResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class AdCustomController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdCustomCreateRequest();
+            $v = new AdCustomCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adCustomEntity = new AdCustomEntity();
+            $adCustomEntity = new AdCustomEntity;
             $adCustomEntity->loadData($request);
 
-            $adCustomBundleService = new AdCustomBundleService();
+            $adCustomBundleService = new AdCustomBundleService;
             $insertId = $adCustomBundleService->save($adCustomEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class AdCustomController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adCustomBundleService = new AdCustomBundleService();
+            $adCustomBundleService = new AdCustomBundleService;
             $adCustom = $adCustomBundleService->getOne($condition);
 
             if (empty($adCustom)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new AdCustomResponse();
+            $response = new AdCustomResponse;
             $response->loadData($adCustom);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class AdCustomController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdCustomUpdateRequest();
+            $v = new AdCustomUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adCustomBundleService = new AdCustomBundleService();
+            $adCustomBundleService = new AdCustomBundleService;
             $adCustom = $adCustomBundleService->getById($request['id']);
             if (empty($adCustom)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $adCustomEntity = new AdCustomEntity();
+            $adCustomEntity = new AdCustomEntity;
             $adCustomEntity->loadData($request);
 
             $adCustomBundleService->update($adCustomEntity->toArray(), [
@@ -191,7 +191,7 @@ class AdCustomController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adCustomBundleService = new AdCustomBundleService();
+            $adCustomBundleService = new AdCustomBundleService;
             if ($adCustomBundleService->remove($condition)) {
                 DB::commit();
 

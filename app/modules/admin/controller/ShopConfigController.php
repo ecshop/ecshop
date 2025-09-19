@@ -32,7 +32,7 @@ class ShopConfigController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShopConfigQueryRequest();
+            $v = new ShopConfigQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShopConfigController extends BaseController
                 //
             ];
 
-            $shopConfigBundleService = new ShopConfigBundleService();
+            $shopConfigBundleService = new ShopConfigBundleService;
             $result = $shopConfigBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShopConfigResponse();
+                $response = new ShopConfigResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShopConfigController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopConfigCreateRequest();
+            $v = new ShopConfigCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopConfigEntity = new ShopConfigEntity();
+            $shopConfigEntity = new ShopConfigEntity;
             $shopConfigEntity->loadData($request);
 
-            $shopConfigBundleService = new ShopConfigBundleService();
+            $shopConfigBundleService = new ShopConfigBundleService;
             $insertId = $shopConfigBundleService->save($shopConfigEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShopConfigController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopConfigBundleService = new ShopConfigBundleService();
+            $shopConfigBundleService = new ShopConfigBundleService;
             $shopConfig = $shopConfigBundleService->getOne($condition);
 
             if (empty($shopConfig)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShopConfigResponse();
+            $response = new ShopConfigResponse;
             $response->loadData($shopConfig);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShopConfigController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopConfigUpdateRequest();
+            $v = new ShopConfigUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopConfigBundleService = new ShopConfigBundleService();
+            $shopConfigBundleService = new ShopConfigBundleService;
             $shopConfig = $shopConfigBundleService->getById($request['id']);
             if (empty($shopConfig)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shopConfigEntity = new ShopConfigEntity();
+            $shopConfigEntity = new ShopConfigEntity;
             $shopConfigEntity->loadData($request);
 
             $shopConfigBundleService->update($shopConfigEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShopConfigController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopConfigBundleService = new ShopConfigBundleService();
+            $shopConfigBundleService = new ShopConfigBundleService;
             if ($shopConfigBundleService->remove($condition)) {
                 DB::commit();
 

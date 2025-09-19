@@ -32,7 +32,7 @@ class AdPositionController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new AdPositionQueryRequest();
+            $v = new AdPositionQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class AdPositionController extends BaseController
                 //
             ];
 
-            $adPositionBundleService = new AdPositionBundleService();
+            $adPositionBundleService = new AdPositionBundleService;
             $result = $adPositionBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new AdPositionResponse();
+                $response = new AdPositionResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class AdPositionController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdPositionCreateRequest();
+            $v = new AdPositionCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adPositionEntity = new AdPositionEntity();
+            $adPositionEntity = new AdPositionEntity;
             $adPositionEntity->loadData($request);
 
-            $adPositionBundleService = new AdPositionBundleService();
+            $adPositionBundleService = new AdPositionBundleService;
             $insertId = $adPositionBundleService->save($adPositionEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class AdPositionController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adPositionBundleService = new AdPositionBundleService();
+            $adPositionBundleService = new AdPositionBundleService;
             $adPosition = $adPositionBundleService->getOne($condition);
 
             if (empty($adPosition)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new AdPositionResponse();
+            $response = new AdPositionResponse;
             $response->loadData($adPosition);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class AdPositionController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdPositionUpdateRequest();
+            $v = new AdPositionUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adPositionBundleService = new AdPositionBundleService();
+            $adPositionBundleService = new AdPositionBundleService;
             $adPosition = $adPositionBundleService->getById($request['id']);
             if (empty($adPosition)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $adPositionEntity = new AdPositionEntity();
+            $adPositionEntity = new AdPositionEntity;
             $adPositionEntity->loadData($request);
 
             $adPositionBundleService->update($adPositionEntity->toArray(), [
@@ -191,7 +191,7 @@ class AdPositionController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adPositionBundleService = new AdPositionBundleService();
+            $adPositionBundleService = new AdPositionBundleService;
             if ($adPositionBundleService->remove($condition)) {
                 DB::commit();
 

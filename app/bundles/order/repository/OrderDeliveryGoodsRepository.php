@@ -20,7 +20,7 @@ class OrderDeliveryGoodsRepository extends CurdRepository implements RepositoryI
     public static function getInstance(): OrderDeliveryGoodsRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new OrderDeliveryGoodsRepository();
+            self::$instance = new OrderDeliveryGoodsRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class OrderDeliveryGoodsRepository extends CurdRepository implements RepositoryI
     /**
      * 添加
      */
-    public function createByEntity(OrderDeliveryGoodsEntity $entity): int    {
+    public function createByEntity(OrderDeliveryGoodsEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class OrderDeliveryGoodsRepository extends CurdRepository implements RepositoryI
             return null;
         }
 
-        $entity = new OrderDeliveryGoodsEntity();
+        $entity = new OrderDeliveryGoodsEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class OrderDeliveryGoodsRepository extends CurdRepository implements RepositoryI
             return null;
         }
 
-        $entity = new OrderDeliveryGoodsEntity();
+        $entity = new OrderDeliveryGoodsEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class OrderDeliveryGoodsRepository extends CurdRepository implements RepositoryI
         }
 
         foreach ($result as $key => $item) {
-            $entity = new OrderDeliveryGoodsEntity();
+            $entity = new OrderDeliveryGoodsEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class OrderDeliveryGoodsRepository extends CurdRepository implements RepositoryI
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new OrderDeliveryGoodsEntity();
+            $entity = new OrderDeliveryGoodsEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class OrderDeliveryGoodsRepository extends CurdRepository implements RepositoryI
     {
         $model = '\\app\\bundles\\order\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

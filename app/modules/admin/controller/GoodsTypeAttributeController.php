@@ -32,7 +32,7 @@ class GoodsTypeAttributeController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new GoodsTypeAttributeQueryRequest();
+            $v = new GoodsTypeAttributeQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class GoodsTypeAttributeController extends BaseController
                 //
             ];
 
-            $goodsTypeAttributeBundleService = new GoodsTypeAttributeBundleService();
+            $goodsTypeAttributeBundleService = new GoodsTypeAttributeBundleService;
             $result = $goodsTypeAttributeBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new GoodsTypeAttributeResponse();
+                $response = new GoodsTypeAttributeResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class GoodsTypeAttributeController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsTypeAttributeCreateRequest();
+            $v = new GoodsTypeAttributeCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsTypeAttributeEntity = new GoodsTypeAttributeEntity();
+            $goodsTypeAttributeEntity = new GoodsTypeAttributeEntity;
             $goodsTypeAttributeEntity->loadData($request);
 
-            $goodsTypeAttributeBundleService = new GoodsTypeAttributeBundleService();
+            $goodsTypeAttributeBundleService = new GoodsTypeAttributeBundleService;
             $insertId = $goodsTypeAttributeBundleService->save($goodsTypeAttributeEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class GoodsTypeAttributeController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsTypeAttributeBundleService = new GoodsTypeAttributeBundleService();
+            $goodsTypeAttributeBundleService = new GoodsTypeAttributeBundleService;
             $goodsTypeAttribute = $goodsTypeAttributeBundleService->getOne($condition);
 
             if (empty($goodsTypeAttribute)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new GoodsTypeAttributeResponse();
+            $response = new GoodsTypeAttributeResponse;
             $response->loadData($goodsTypeAttribute);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class GoodsTypeAttributeController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsTypeAttributeUpdateRequest();
+            $v = new GoodsTypeAttributeUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsTypeAttributeBundleService = new GoodsTypeAttributeBundleService();
+            $goodsTypeAttributeBundleService = new GoodsTypeAttributeBundleService;
             $goodsTypeAttribute = $goodsTypeAttributeBundleService->getById($request['id']);
             if (empty($goodsTypeAttribute)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $goodsTypeAttributeEntity = new GoodsTypeAttributeEntity();
+            $goodsTypeAttributeEntity = new GoodsTypeAttributeEntity;
             $goodsTypeAttributeEntity->loadData($request);
 
             $goodsTypeAttributeBundleService->update($goodsTypeAttributeEntity->toArray(), [
@@ -191,7 +191,7 @@ class GoodsTypeAttributeController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsTypeAttributeBundleService = new GoodsTypeAttributeBundleService();
+            $goodsTypeAttributeBundleService = new GoodsTypeAttributeBundleService;
             if ($goodsTypeAttributeBundleService->remove($condition)) {
                 DB::commit();
 

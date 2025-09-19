@@ -32,7 +32,7 @@ class UserRankController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserRankQueryRequest();
+            $v = new UserRankQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserRankController extends BaseController
                 //
             ];
 
-            $userRankBundleService = new UserRankBundleService();
+            $userRankBundleService = new UserRankBundleService;
             $result = $userRankBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserRankResponse();
+                $response = new UserRankResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserRankController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserRankCreateRequest();
+            $v = new UserRankCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userRankEntity = new UserRankEntity();
+            $userRankEntity = new UserRankEntity;
             $userRankEntity->loadData($request);
 
-            $userRankBundleService = new UserRankBundleService();
+            $userRankBundleService = new UserRankBundleService;
             $insertId = $userRankBundleService->save($userRankEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserRankController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userRankBundleService = new UserRankBundleService();
+            $userRankBundleService = new UserRankBundleService;
             $userRank = $userRankBundleService->getOne($condition);
 
             if (empty($userRank)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserRankResponse();
+            $response = new UserRankResponse;
             $response->loadData($userRank);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserRankController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserRankUpdateRequest();
+            $v = new UserRankUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userRankBundleService = new UserRankBundleService();
+            $userRankBundleService = new UserRankBundleService;
             $userRank = $userRankBundleService->getById($request['id']);
             if (empty($userRank)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userRankEntity = new UserRankEntity();
+            $userRankEntity = new UserRankEntity;
             $userRankEntity->loadData($request);
 
             $userRankBundleService->update($userRankEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserRankController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userRankBundleService = new UserRankBundleService();
+            $userRankBundleService = new UserRankBundleService;
             if ($userRankBundleService->remove($condition)) {
                 DB::commit();
 

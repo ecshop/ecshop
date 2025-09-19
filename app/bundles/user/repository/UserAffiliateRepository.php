@@ -20,7 +20,7 @@ class UserAffiliateRepository extends CurdRepository implements RepositoryInterf
     public static function getInstance(): UserAffiliateRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new UserAffiliateRepository();
+            self::$instance = new UserAffiliateRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class UserAffiliateRepository extends CurdRepository implements RepositoryInterf
     /**
      * 添加
      */
-    public function createByEntity(UserAffiliateEntity $entity): int    {
+    public function createByEntity(UserAffiliateEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class UserAffiliateRepository extends CurdRepository implements RepositoryInterf
             return null;
         }
 
-        $entity = new UserAffiliateEntity();
+        $entity = new UserAffiliateEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class UserAffiliateRepository extends CurdRepository implements RepositoryInterf
             return null;
         }
 
-        $entity = new UserAffiliateEntity();
+        $entity = new UserAffiliateEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class UserAffiliateRepository extends CurdRepository implements RepositoryInterf
         }
 
         foreach ($result as $key => $item) {
-            $entity = new UserAffiliateEntity();
+            $entity = new UserAffiliateEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class UserAffiliateRepository extends CurdRepository implements RepositoryInterf
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new UserAffiliateEntity();
+            $entity = new UserAffiliateEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class UserAffiliateRepository extends CurdRepository implements RepositoryInterf
     {
         $model = '\\app\\bundles\\user\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

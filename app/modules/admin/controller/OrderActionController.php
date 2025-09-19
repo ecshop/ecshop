@@ -32,7 +32,7 @@ class OrderActionController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new OrderActionQueryRequest();
+            $v = new OrderActionQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class OrderActionController extends BaseController
                 //
             ];
 
-            $orderActionBundleService = new OrderActionBundleService();
+            $orderActionBundleService = new OrderActionBundleService;
             $result = $orderActionBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new OrderActionResponse();
+                $response = new OrderActionResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class OrderActionController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new OrderActionCreateRequest();
+            $v = new OrderActionCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $orderActionEntity = new OrderActionEntity();
+            $orderActionEntity = new OrderActionEntity;
             $orderActionEntity->loadData($request);
 
-            $orderActionBundleService = new OrderActionBundleService();
+            $orderActionBundleService = new OrderActionBundleService;
             $insertId = $orderActionBundleService->save($orderActionEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class OrderActionController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $orderActionBundleService = new OrderActionBundleService();
+            $orderActionBundleService = new OrderActionBundleService;
             $orderAction = $orderActionBundleService->getOne($condition);
 
             if (empty($orderAction)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new OrderActionResponse();
+            $response = new OrderActionResponse;
             $response->loadData($orderAction);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class OrderActionController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new OrderActionUpdateRequest();
+            $v = new OrderActionUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $orderActionBundleService = new OrderActionBundleService();
+            $orderActionBundleService = new OrderActionBundleService;
             $orderAction = $orderActionBundleService->getById($request['id']);
             if (empty($orderAction)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $orderActionEntity = new OrderActionEntity();
+            $orderActionEntity = new OrderActionEntity;
             $orderActionEntity->loadData($request);
 
             $orderActionBundleService->update($orderActionEntity->toArray(), [
@@ -191,7 +191,7 @@ class OrderActionController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $orderActionBundleService = new OrderActionBundleService();
+            $orderActionBundleService = new OrderActionBundleService;
             if ($orderActionBundleService->remove($condition)) {
                 DB::commit();
 

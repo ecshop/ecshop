@@ -32,7 +32,7 @@ class OrderDeliveryOrderController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new OrderDeliveryOrderQueryRequest();
+            $v = new OrderDeliveryOrderQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class OrderDeliveryOrderController extends BaseController
                 //
             ];
 
-            $orderDeliveryOrderBundleService = new OrderDeliveryOrderBundleService();
+            $orderDeliveryOrderBundleService = new OrderDeliveryOrderBundleService;
             $result = $orderDeliveryOrderBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new OrderDeliveryOrderResponse();
+                $response = new OrderDeliveryOrderResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class OrderDeliveryOrderController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new OrderDeliveryOrderCreateRequest();
+            $v = new OrderDeliveryOrderCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $orderDeliveryOrderEntity = new OrderDeliveryOrderEntity();
+            $orderDeliveryOrderEntity = new OrderDeliveryOrderEntity;
             $orderDeliveryOrderEntity->loadData($request);
 
-            $orderDeliveryOrderBundleService = new OrderDeliveryOrderBundleService();
+            $orderDeliveryOrderBundleService = new OrderDeliveryOrderBundleService;
             $insertId = $orderDeliveryOrderBundleService->save($orderDeliveryOrderEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class OrderDeliveryOrderController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $orderDeliveryOrderBundleService = new OrderDeliveryOrderBundleService();
+            $orderDeliveryOrderBundleService = new OrderDeliveryOrderBundleService;
             $orderDeliveryOrder = $orderDeliveryOrderBundleService->getOne($condition);
 
             if (empty($orderDeliveryOrder)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new OrderDeliveryOrderResponse();
+            $response = new OrderDeliveryOrderResponse;
             $response->loadData($orderDeliveryOrder);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class OrderDeliveryOrderController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new OrderDeliveryOrderUpdateRequest();
+            $v = new OrderDeliveryOrderUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $orderDeliveryOrderBundleService = new OrderDeliveryOrderBundleService();
+            $orderDeliveryOrderBundleService = new OrderDeliveryOrderBundleService;
             $orderDeliveryOrder = $orderDeliveryOrderBundleService->getById($request['id']);
             if (empty($orderDeliveryOrder)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $orderDeliveryOrderEntity = new OrderDeliveryOrderEntity();
+            $orderDeliveryOrderEntity = new OrderDeliveryOrderEntity;
             $orderDeliveryOrderEntity->loadData($request);
 
             $orderDeliveryOrderBundleService->update($orderDeliveryOrderEntity->toArray(), [
@@ -191,7 +191,7 @@ class OrderDeliveryOrderController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $orderDeliveryOrderBundleService = new OrderDeliveryOrderBundleService();
+            $orderDeliveryOrderBundleService = new OrderDeliveryOrderBundleService;
             if ($orderDeliveryOrderBundleService->remove($condition)) {
                 DB::commit();
 

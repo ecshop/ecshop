@@ -1,10 +1,8 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace app\plugins\shipping;
-
 
 class Yto
 {
@@ -37,7 +35,6 @@ class Yto
 
     public function config()
     {
-
 
         /* 模块的基本信息 */
         if (isset($set_modules) && $set_modules == true) {

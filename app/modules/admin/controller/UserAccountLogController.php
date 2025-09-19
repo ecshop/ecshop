@@ -32,7 +32,7 @@ class UserAccountLogController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserAccountLogQueryRequest();
+            $v = new UserAccountLogQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserAccountLogController extends BaseController
                 //
             ];
 
-            $userAccountLogBundleService = new UserAccountLogBundleService();
+            $userAccountLogBundleService = new UserAccountLogBundleService;
             $result = $userAccountLogBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserAccountLogResponse();
+                $response = new UserAccountLogResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserAccountLogController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserAccountLogCreateRequest();
+            $v = new UserAccountLogCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userAccountLogEntity = new UserAccountLogEntity();
+            $userAccountLogEntity = new UserAccountLogEntity;
             $userAccountLogEntity->loadData($request);
 
-            $userAccountLogBundleService = new UserAccountLogBundleService();
+            $userAccountLogBundleService = new UserAccountLogBundleService;
             $insertId = $userAccountLogBundleService->save($userAccountLogEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserAccountLogController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userAccountLogBundleService = new UserAccountLogBundleService();
+            $userAccountLogBundleService = new UserAccountLogBundleService;
             $userAccountLog = $userAccountLogBundleService->getOne($condition);
 
             if (empty($userAccountLog)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserAccountLogResponse();
+            $response = new UserAccountLogResponse;
             $response->loadData($userAccountLog);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserAccountLogController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserAccountLogUpdateRequest();
+            $v = new UserAccountLogUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userAccountLogBundleService = new UserAccountLogBundleService();
+            $userAccountLogBundleService = new UserAccountLogBundleService;
             $userAccountLog = $userAccountLogBundleService->getById($request['id']);
             if (empty($userAccountLog)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userAccountLogEntity = new UserAccountLogEntity();
+            $userAccountLogEntity = new UserAccountLogEntity;
             $userAccountLogEntity->loadData($request);
 
             $userAccountLogBundleService->update($userAccountLogEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserAccountLogController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userAccountLogBundleService = new UserAccountLogBundleService();
+            $userAccountLogBundleService = new UserAccountLogBundleService;
             if ($userAccountLogBundleService->remove($condition)) {
                 DB::commit();
 

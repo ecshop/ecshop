@@ -1,10 +1,8 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace app\plugins\shipping;
-
 
 /**
  * 申通快递费用计算方式:
@@ -46,7 +44,6 @@ class StoExpress
 
     public function config()
     {
-
 
         /* 模块的基本信息 */
         if (isset($set_modules) && $set_modules == true) {
@@ -90,6 +87,7 @@ class StoExpress
             return;
         }
     }
+
     /**
      * 计算订单的配送费用的函数
      *

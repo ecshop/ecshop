@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace app\plugins\integrate;
 
-class Ecshop extends Integrate {
+class Ecshop extends Integrate
+{
     public function config()
     {
         /* 模块的基本信息 */

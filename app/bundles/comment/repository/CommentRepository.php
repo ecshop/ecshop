@@ -20,7 +20,7 @@ class CommentRepository extends CurdRepository implements RepositoryInterface
     public static function getInstance(): CommentRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new CommentRepository();
+            self::$instance = new CommentRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class CommentRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function createByEntity(CommentEntity $entity): int    {
+    public function createByEntity(CommentEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class CommentRepository extends CurdRepository implements RepositoryInterface
             return null;
         }
 
-        $entity = new CommentEntity();
+        $entity = new CommentEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class CommentRepository extends CurdRepository implements RepositoryInterface
             return null;
         }
 
-        $entity = new CommentEntity();
+        $entity = new CommentEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class CommentRepository extends CurdRepository implements RepositoryInterface
         }
 
         foreach ($result as $key => $item) {
-            $entity = new CommentEntity();
+            $entity = new CommentEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class CommentRepository extends CurdRepository implements RepositoryInterface
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new CommentEntity();
+            $entity = new CommentEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class CommentRepository extends CurdRepository implements RepositoryInterface
     {
         $model = '\\app\\bundles\\comment\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

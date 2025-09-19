@@ -20,7 +20,7 @@ class ShippingRepository extends CurdRepository implements RepositoryInterface
     public static function getInstance(): ShippingRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new ShippingRepository();
+            self::$instance = new ShippingRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class ShippingRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function createByEntity(ShippingEntity $entity): int    {
+    public function createByEntity(ShippingEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class ShippingRepository extends CurdRepository implements RepositoryInterface
             return null;
         }
 
-        $entity = new ShippingEntity();
+        $entity = new ShippingEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class ShippingRepository extends CurdRepository implements RepositoryInterface
             return null;
         }
 
-        $entity = new ShippingEntity();
+        $entity = new ShippingEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class ShippingRepository extends CurdRepository implements RepositoryInterface
         }
 
         foreach ($result as $key => $item) {
-            $entity = new ShippingEntity();
+            $entity = new ShippingEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class ShippingRepository extends CurdRepository implements RepositoryInterface
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new ShippingEntity();
+            $entity = new ShippingEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class ShippingRepository extends CurdRepository implements RepositoryInterface
     {
         $model = '\\app\\bundles\\shipping\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

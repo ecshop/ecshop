@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace app\plugins\integrate;
 
-class Ucenter  extends Integrate {
+class Ucenter extends Integrate
+{
     public function config()
     {
         /* 模块的基本信息 */

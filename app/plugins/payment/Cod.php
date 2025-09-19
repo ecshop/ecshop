@@ -6,7 +6,8 @@ namespace app\plugins\payment;
 
 class Cod
 {
-    public function config() {
+    public function config()
+    {
 
         /* 模块的基本信息 */
         if (isset($set_modules) && $set_modules == true) {

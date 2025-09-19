@@ -1,6 +1,5 @@
 <?php
 
-
 // require dirname(__FILE__).'/includes/init.php';
 
 /* act操作项的初始化 */

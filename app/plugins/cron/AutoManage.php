@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace app\plugins\cron;
 
-class AutoManage {
+class AutoManage
+{
     public function config()
     {
         $i = isset($modules) ? count($modules) : 0;
@@ -29,7 +30,6 @@ class AutoManage {
             ['name' => 'auto_manage_count', 'type' => 'select', 'value' => '5'],
         ];
 
-        return;
     }
 
     public function handle()

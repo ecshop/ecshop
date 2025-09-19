@@ -32,7 +32,7 @@ class EmailSendController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new EmailSendQueryRequest();
+            $v = new EmailSendQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class EmailSendController extends BaseController
                 //
             ];
 
-            $emailSendBundleService = new EmailSendBundleService();
+            $emailSendBundleService = new EmailSendBundleService;
             $result = $emailSendBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new EmailSendResponse();
+                $response = new EmailSendResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class EmailSendController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new EmailSendCreateRequest();
+            $v = new EmailSendCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $emailSendEntity = new EmailSendEntity();
+            $emailSendEntity = new EmailSendEntity;
             $emailSendEntity->loadData($request);
 
-            $emailSendBundleService = new EmailSendBundleService();
+            $emailSendBundleService = new EmailSendBundleService;
             $insertId = $emailSendBundleService->save($emailSendEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class EmailSendController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $emailSendBundleService = new EmailSendBundleService();
+            $emailSendBundleService = new EmailSendBundleService;
             $emailSend = $emailSendBundleService->getOne($condition);
 
             if (empty($emailSend)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new EmailSendResponse();
+            $response = new EmailSendResponse;
             $response->loadData($emailSend);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class EmailSendController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new EmailSendUpdateRequest();
+            $v = new EmailSendUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $emailSendBundleService = new EmailSendBundleService();
+            $emailSendBundleService = new EmailSendBundleService;
             $emailSend = $emailSendBundleService->getById($request['id']);
             if (empty($emailSend)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $emailSendEntity = new EmailSendEntity();
+            $emailSendEntity = new EmailSendEntity;
             $emailSendEntity->loadData($request);
 
             $emailSendBundleService->update($emailSendEntity->toArray(), [
@@ -191,7 +191,7 @@ class EmailSendController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $emailSendBundleService = new EmailSendBundleService();
+            $emailSendBundleService = new EmailSendBundleService;
             if ($emailSendBundleService->remove($condition)) {
                 DB::commit();
 

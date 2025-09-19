@@ -32,7 +32,7 @@ class AdminMessageController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new AdminMessageQueryRequest();
+            $v = new AdminMessageQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class AdminMessageController extends BaseController
                 //
             ];
 
-            $adminMessageBundleService = new AdminMessageBundleService();
+            $adminMessageBundleService = new AdminMessageBundleService;
             $result = $adminMessageBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new AdminMessageResponse();
+                $response = new AdminMessageResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class AdminMessageController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdminMessageCreateRequest();
+            $v = new AdminMessageCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adminMessageEntity = new AdminMessageEntity();
+            $adminMessageEntity = new AdminMessageEntity;
             $adminMessageEntity->loadData($request);
 
-            $adminMessageBundleService = new AdminMessageBundleService();
+            $adminMessageBundleService = new AdminMessageBundleService;
             $insertId = $adminMessageBundleService->save($adminMessageEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class AdminMessageController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adminMessageBundleService = new AdminMessageBundleService();
+            $adminMessageBundleService = new AdminMessageBundleService;
             $adminMessage = $adminMessageBundleService->getOne($condition);
 
             if (empty($adminMessage)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new AdminMessageResponse();
+            $response = new AdminMessageResponse;
             $response->loadData($adminMessage);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class AdminMessageController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdminMessageUpdateRequest();
+            $v = new AdminMessageUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adminMessageBundleService = new AdminMessageBundleService();
+            $adminMessageBundleService = new AdminMessageBundleService;
             $adminMessage = $adminMessageBundleService->getById($request['id']);
             if (empty($adminMessage)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $adminMessageEntity = new AdminMessageEntity();
+            $adminMessageEntity = new AdminMessageEntity;
             $adminMessageEntity->loadData($request);
 
             $adminMessageBundleService->update($adminMessageEntity->toArray(), [
@@ -191,7 +191,7 @@ class AdminMessageController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adminMessageBundleService = new AdminMessageBundleService();
+            $adminMessageBundleService = new AdminMessageBundleService;
             if ($adminMessageBundleService->remove($condition)) {
                 DB::commit();
 

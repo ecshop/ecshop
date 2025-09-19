@@ -1,11 +1,8 @@
 <?php
 
-
-
 declare(strict_types=1);
 
 namespace app\plugins\shipping;
-
 
 /**
  * 邮局平邮费用计算方式: 每公斤资费 × 包裹重量 + 挂号费3.00 + 邮单费0.5 + 包装费(按实际收取) ＋ 保价费

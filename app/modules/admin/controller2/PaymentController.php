@@ -1,6 +1,5 @@
 <?php
 
-
 // require dirname(__FILE__).'/includes/init.php';
 
 $exc = new exchange($ecs->table('payment'), $db, 'pay_code', 'pay_name');

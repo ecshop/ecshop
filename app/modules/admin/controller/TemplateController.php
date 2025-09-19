@@ -32,7 +32,7 @@ class TemplateController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new TemplateQueryRequest();
+            $v = new TemplateQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class TemplateController extends BaseController
                 //
             ];
 
-            $templateBundleService = new TemplateBundleService();
+            $templateBundleService = new TemplateBundleService;
             $result = $templateBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new TemplateResponse();
+                $response = new TemplateResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class TemplateController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new TemplateCreateRequest();
+            $v = new TemplateCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $templateEntity = new TemplateEntity();
+            $templateEntity = new TemplateEntity;
             $templateEntity->loadData($request);
 
-            $templateBundleService = new TemplateBundleService();
+            $templateBundleService = new TemplateBundleService;
             $insertId = $templateBundleService->save($templateEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class TemplateController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $templateBundleService = new TemplateBundleService();
+            $templateBundleService = new TemplateBundleService;
             $template = $templateBundleService->getOne($condition);
 
             if (empty($template)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new TemplateResponse();
+            $response = new TemplateResponse;
             $response->loadData($template);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class TemplateController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new TemplateUpdateRequest();
+            $v = new TemplateUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $templateBundleService = new TemplateBundleService();
+            $templateBundleService = new TemplateBundleService;
             $template = $templateBundleService->getById($request['id']);
             if (empty($template)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $templateEntity = new TemplateEntity();
+            $templateEntity = new TemplateEntity;
             $templateEntity->loadData($request);
 
             $templateBundleService->update($templateEntity->toArray(), [
@@ -191,7 +191,7 @@ class TemplateController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $templateBundleService = new TemplateBundleService();
+            $templateBundleService = new TemplateBundleService;
             if ($templateBundleService->remove($condition)) {
                 DB::commit();
 

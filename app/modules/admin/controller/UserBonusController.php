@@ -32,7 +32,7 @@ class UserBonusController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserBonusQueryRequest();
+            $v = new UserBonusQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserBonusController extends BaseController
                 //
             ];
 
-            $userBonusBundleService = new UserBonusBundleService();
+            $userBonusBundleService = new UserBonusBundleService;
             $result = $userBonusBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserBonusResponse();
+                $response = new UserBonusResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserBonusController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserBonusCreateRequest();
+            $v = new UserBonusCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userBonusEntity = new UserBonusEntity();
+            $userBonusEntity = new UserBonusEntity;
             $userBonusEntity->loadData($request);
 
-            $userBonusBundleService = new UserBonusBundleService();
+            $userBonusBundleService = new UserBonusBundleService;
             $insertId = $userBonusBundleService->save($userBonusEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserBonusController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userBonusBundleService = new UserBonusBundleService();
+            $userBonusBundleService = new UserBonusBundleService;
             $userBonus = $userBonusBundleService->getOne($condition);
 
             if (empty($userBonus)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserBonusResponse();
+            $response = new UserBonusResponse;
             $response->loadData($userBonus);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserBonusController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserBonusUpdateRequest();
+            $v = new UserBonusUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userBonusBundleService = new UserBonusBundleService();
+            $userBonusBundleService = new UserBonusBundleService;
             $userBonus = $userBonusBundleService->getById($request['id']);
             if (empty($userBonus)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userBonusEntity = new UserBonusEntity();
+            $userBonusEntity = new UserBonusEntity;
             $userBonusEntity->loadData($request);
 
             $userBonusBundleService->update($userBonusEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserBonusController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userBonusBundleService = new UserBonusBundleService();
+            $userBonusBundleService = new UserBonusBundleService;
             if ($userBonusBundleService->remove($condition)) {
                 DB::commit();
 

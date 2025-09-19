@@ -32,7 +32,7 @@ class UserAccountController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserAccountQueryRequest();
+            $v = new UserAccountQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserAccountController extends BaseController
                 //
             ];
 
-            $userAccountBundleService = new UserAccountBundleService();
+            $userAccountBundleService = new UserAccountBundleService;
             $result = $userAccountBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserAccountResponse();
+                $response = new UserAccountResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserAccountController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserAccountCreateRequest();
+            $v = new UserAccountCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userAccountEntity = new UserAccountEntity();
+            $userAccountEntity = new UserAccountEntity;
             $userAccountEntity->loadData($request);
 
-            $userAccountBundleService = new UserAccountBundleService();
+            $userAccountBundleService = new UserAccountBundleService;
             $insertId = $userAccountBundleService->save($userAccountEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserAccountController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userAccountBundleService = new UserAccountBundleService();
+            $userAccountBundleService = new UserAccountBundleService;
             $userAccount = $userAccountBundleService->getOne($condition);
 
             if (empty($userAccount)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserAccountResponse();
+            $response = new UserAccountResponse;
             $response->loadData($userAccount);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserAccountController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserAccountUpdateRequest();
+            $v = new UserAccountUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userAccountBundleService = new UserAccountBundleService();
+            $userAccountBundleService = new UserAccountBundleService;
             $userAccount = $userAccountBundleService->getById($request['id']);
             if (empty($userAccount)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userAccountEntity = new UserAccountEntity();
+            $userAccountEntity = new UserAccountEntity;
             $userAccountEntity->loadData($request);
 
             $userAccountBundleService->update($userAccountEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserAccountController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userAccountBundleService = new UserAccountBundleService();
+            $userAccountBundleService = new UserAccountBundleService;
             if ($userAccountBundleService->remove($condition)) {
                 DB::commit();
 

@@ -32,7 +32,7 @@ class ShopStatsController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShopStatsQueryRequest();
+            $v = new ShopStatsQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShopStatsController extends BaseController
                 //
             ];
 
-            $shopStatsBundleService = new ShopStatsBundleService();
+            $shopStatsBundleService = new ShopStatsBundleService;
             $result = $shopStatsBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShopStatsResponse();
+                $response = new ShopStatsResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShopStatsController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopStatsCreateRequest();
+            $v = new ShopStatsCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopStatsEntity = new ShopStatsEntity();
+            $shopStatsEntity = new ShopStatsEntity;
             $shopStatsEntity->loadData($request);
 
-            $shopStatsBundleService = new ShopStatsBundleService();
+            $shopStatsBundleService = new ShopStatsBundleService;
             $insertId = $shopStatsBundleService->save($shopStatsEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShopStatsController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopStatsBundleService = new ShopStatsBundleService();
+            $shopStatsBundleService = new ShopStatsBundleService;
             $shopStats = $shopStatsBundleService->getOne($condition);
 
             if (empty($shopStats)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShopStatsResponse();
+            $response = new ShopStatsResponse;
             $response->loadData($shopStats);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShopStatsController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopStatsUpdateRequest();
+            $v = new ShopStatsUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopStatsBundleService = new ShopStatsBundleService();
+            $shopStatsBundleService = new ShopStatsBundleService;
             $shopStats = $shopStatsBundleService->getById($request['id']);
             if (empty($shopStats)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shopStatsEntity = new ShopStatsEntity();
+            $shopStatsEntity = new ShopStatsEntity;
             $shopStatsEntity->loadData($request);
 
             $shopStatsBundleService->update($shopStatsEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShopStatsController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopStatsBundleService = new ShopStatsBundleService();
+            $shopStatsBundleService = new ShopStatsBundleService;
             if ($shopStatsBundleService->remove($condition)) {
                 DB::commit();
 

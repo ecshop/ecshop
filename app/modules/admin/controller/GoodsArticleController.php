@@ -32,7 +32,7 @@ class GoodsArticleController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new GoodsArticleQueryRequest();
+            $v = new GoodsArticleQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class GoodsArticleController extends BaseController
                 //
             ];
 
-            $goodsArticleBundleService = new GoodsArticleBundleService();
+            $goodsArticleBundleService = new GoodsArticleBundleService;
             $result = $goodsArticleBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new GoodsArticleResponse();
+                $response = new GoodsArticleResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class GoodsArticleController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsArticleCreateRequest();
+            $v = new GoodsArticleCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsArticleEntity = new GoodsArticleEntity();
+            $goodsArticleEntity = new GoodsArticleEntity;
             $goodsArticleEntity->loadData($request);
 
-            $goodsArticleBundleService = new GoodsArticleBundleService();
+            $goodsArticleBundleService = new GoodsArticleBundleService;
             $insertId = $goodsArticleBundleService->save($goodsArticleEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class GoodsArticleController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsArticleBundleService = new GoodsArticleBundleService();
+            $goodsArticleBundleService = new GoodsArticleBundleService;
             $goodsArticle = $goodsArticleBundleService->getOne($condition);
 
             if (empty($goodsArticle)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new GoodsArticleResponse();
+            $response = new GoodsArticleResponse;
             $response->loadData($goodsArticle);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class GoodsArticleController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsArticleUpdateRequest();
+            $v = new GoodsArticleUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsArticleBundleService = new GoodsArticleBundleService();
+            $goodsArticleBundleService = new GoodsArticleBundleService;
             $goodsArticle = $goodsArticleBundleService->getById($request['id']);
             if (empty($goodsArticle)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $goodsArticleEntity = new GoodsArticleEntity();
+            $goodsArticleEntity = new GoodsArticleEntity;
             $goodsArticleEntity->loadData($request);
 
             $goodsArticleBundleService->update($goodsArticleEntity->toArray(), [
@@ -191,7 +191,7 @@ class GoodsArticleController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsArticleBundleService = new GoodsArticleBundleService();
+            $goodsArticleBundleService = new GoodsArticleBundleService;
             if ($goodsArticleBundleService->remove($condition)) {
                 DB::commit();
 

@@ -32,7 +32,7 @@ class ActivityGroupController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ActivityGroupQueryRequest();
+            $v = new ActivityGroupQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ActivityGroupController extends BaseController
                 //
             ];
 
-            $activityGroupBundleService = new ActivityGroupBundleService();
+            $activityGroupBundleService = new ActivityGroupBundleService;
             $result = $activityGroupBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ActivityGroupResponse();
+                $response = new ActivityGroupResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ActivityGroupController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ActivityGroupCreateRequest();
+            $v = new ActivityGroupCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $activityGroupEntity = new ActivityGroupEntity();
+            $activityGroupEntity = new ActivityGroupEntity;
             $activityGroupEntity->loadData($request);
 
-            $activityGroupBundleService = new ActivityGroupBundleService();
+            $activityGroupBundleService = new ActivityGroupBundleService;
             $insertId = $activityGroupBundleService->save($activityGroupEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ActivityGroupController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $activityGroupBundleService = new ActivityGroupBundleService();
+            $activityGroupBundleService = new ActivityGroupBundleService;
             $activityGroup = $activityGroupBundleService->getOne($condition);
 
             if (empty($activityGroup)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ActivityGroupResponse();
+            $response = new ActivityGroupResponse;
             $response->loadData($activityGroup);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ActivityGroupController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ActivityGroupUpdateRequest();
+            $v = new ActivityGroupUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $activityGroupBundleService = new ActivityGroupBundleService();
+            $activityGroupBundleService = new ActivityGroupBundleService;
             $activityGroup = $activityGroupBundleService->getById($request['id']);
             if (empty($activityGroup)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $activityGroupEntity = new ActivityGroupEntity();
+            $activityGroupEntity = new ActivityGroupEntity;
             $activityGroupEntity->loadData($request);
 
             $activityGroupBundleService->update($activityGroupEntity->toArray(), [
@@ -191,7 +191,7 @@ class ActivityGroupController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $activityGroupBundleService = new ActivityGroupBundleService();
+            $activityGroupBundleService = new ActivityGroupBundleService;
             if ($activityGroupBundleService->remove($condition)) {
                 DB::commit();
 

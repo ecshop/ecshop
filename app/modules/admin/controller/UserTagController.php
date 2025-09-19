@@ -32,7 +32,7 @@ class UserTagController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserTagQueryRequest();
+            $v = new UserTagQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserTagController extends BaseController
                 //
             ];
 
-            $userTagBundleService = new UserTagBundleService();
+            $userTagBundleService = new UserTagBundleService;
             $result = $userTagBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserTagResponse();
+                $response = new UserTagResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserTagController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserTagCreateRequest();
+            $v = new UserTagCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userTagEntity = new UserTagEntity();
+            $userTagEntity = new UserTagEntity;
             $userTagEntity->loadData($request);
 
-            $userTagBundleService = new UserTagBundleService();
+            $userTagBundleService = new UserTagBundleService;
             $insertId = $userTagBundleService->save($userTagEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserTagController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userTagBundleService = new UserTagBundleService();
+            $userTagBundleService = new UserTagBundleService;
             $userTag = $userTagBundleService->getOne($condition);
 
             if (empty($userTag)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserTagResponse();
+            $response = new UserTagResponse;
             $response->loadData($userTag);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserTagController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserTagUpdateRequest();
+            $v = new UserTagUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userTagBundleService = new UserTagBundleService();
+            $userTagBundleService = new UserTagBundleService;
             $userTag = $userTagBundleService->getById($request['id']);
             if (empty($userTag)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userTagEntity = new UserTagEntity();
+            $userTagEntity = new UserTagEntity;
             $userTagEntity->loadData($request);
 
             $userTagBundleService->update($userTagEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserTagController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userTagBundleService = new UserTagBundleService();
+            $userTagBundleService = new UserTagBundleService;
             if ($userTagBundleService->remove($condition)) {
                 DB::commit();
 

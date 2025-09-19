@@ -32,7 +32,7 @@ class ActivityAuctionController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ActivityAuctionQueryRequest();
+            $v = new ActivityAuctionQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ActivityAuctionController extends BaseController
                 //
             ];
 
-            $activityAuctionBundleService = new ActivityAuctionBundleService();
+            $activityAuctionBundleService = new ActivityAuctionBundleService;
             $result = $activityAuctionBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ActivityAuctionResponse();
+                $response = new ActivityAuctionResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ActivityAuctionController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ActivityAuctionCreateRequest();
+            $v = new ActivityAuctionCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $activityAuctionEntity = new ActivityAuctionEntity();
+            $activityAuctionEntity = new ActivityAuctionEntity;
             $activityAuctionEntity->loadData($request);
 
-            $activityAuctionBundleService = new ActivityAuctionBundleService();
+            $activityAuctionBundleService = new ActivityAuctionBundleService;
             $insertId = $activityAuctionBundleService->save($activityAuctionEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ActivityAuctionController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $activityAuctionBundleService = new ActivityAuctionBundleService();
+            $activityAuctionBundleService = new ActivityAuctionBundleService;
             $activityAuction = $activityAuctionBundleService->getOne($condition);
 
             if (empty($activityAuction)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ActivityAuctionResponse();
+            $response = new ActivityAuctionResponse;
             $response->loadData($activityAuction);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ActivityAuctionController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ActivityAuctionUpdateRequest();
+            $v = new ActivityAuctionUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $activityAuctionBundleService = new ActivityAuctionBundleService();
+            $activityAuctionBundleService = new ActivityAuctionBundleService;
             $activityAuction = $activityAuctionBundleService->getById($request['id']);
             if (empty($activityAuction)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $activityAuctionEntity = new ActivityAuctionEntity();
+            $activityAuctionEntity = new ActivityAuctionEntity;
             $activityAuctionEntity->loadData($request);
 
             $activityAuctionBundleService->update($activityAuctionEntity->toArray(), [
@@ -191,7 +191,7 @@ class ActivityAuctionController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $activityAuctionBundleService = new ActivityAuctionBundleService();
+            $activityAuctionBundleService = new ActivityAuctionBundleService;
             if ($activityAuctionBundleService->remove($condition)) {
                 DB::commit();
 

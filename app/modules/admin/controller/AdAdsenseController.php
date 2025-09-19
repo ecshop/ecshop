@@ -32,7 +32,7 @@ class AdAdsenseController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new AdAdsenseQueryRequest();
+            $v = new AdAdsenseQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class AdAdsenseController extends BaseController
                 //
             ];
 
-            $adAdsenseBundleService = new AdAdsenseBundleService();
+            $adAdsenseBundleService = new AdAdsenseBundleService;
             $result = $adAdsenseBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new AdAdsenseResponse();
+                $response = new AdAdsenseResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class AdAdsenseController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdAdsenseCreateRequest();
+            $v = new AdAdsenseCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adAdsenseEntity = new AdAdsenseEntity();
+            $adAdsenseEntity = new AdAdsenseEntity;
             $adAdsenseEntity->loadData($request);
 
-            $adAdsenseBundleService = new AdAdsenseBundleService();
+            $adAdsenseBundleService = new AdAdsenseBundleService;
             $insertId = $adAdsenseBundleService->save($adAdsenseEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class AdAdsenseController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adAdsenseBundleService = new AdAdsenseBundleService();
+            $adAdsenseBundleService = new AdAdsenseBundleService;
             $adAdsense = $adAdsenseBundleService->getOne($condition);
 
             if (empty($adAdsense)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new AdAdsenseResponse();
+            $response = new AdAdsenseResponse;
             $response->loadData($adAdsense);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class AdAdsenseController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdAdsenseUpdateRequest();
+            $v = new AdAdsenseUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adAdsenseBundleService = new AdAdsenseBundleService();
+            $adAdsenseBundleService = new AdAdsenseBundleService;
             $adAdsense = $adAdsenseBundleService->getById($request['id']);
             if (empty($adAdsense)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $adAdsenseEntity = new AdAdsenseEntity();
+            $adAdsenseEntity = new AdAdsenseEntity;
             $adAdsenseEntity->loadData($request);
 
             $adAdsenseBundleService->update($adAdsenseEntity->toArray(), [
@@ -191,7 +191,7 @@ class AdAdsenseController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adAdsenseBundleService = new AdAdsenseBundleService();
+            $adAdsenseBundleService = new AdAdsenseBundleService;
             if ($adAdsenseBundleService->remove($condition)) {
                 DB::commit();
 

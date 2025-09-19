@@ -32,7 +32,7 @@ class UserCollectController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserCollectQueryRequest();
+            $v = new UserCollectQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserCollectController extends BaseController
                 //
             ];
 
-            $userCollectBundleService = new UserCollectBundleService();
+            $userCollectBundleService = new UserCollectBundleService;
             $result = $userCollectBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserCollectResponse();
+                $response = new UserCollectResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserCollectController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserCollectCreateRequest();
+            $v = new UserCollectCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userCollectEntity = new UserCollectEntity();
+            $userCollectEntity = new UserCollectEntity;
             $userCollectEntity->loadData($request);
 
-            $userCollectBundleService = new UserCollectBundleService();
+            $userCollectBundleService = new UserCollectBundleService;
             $insertId = $userCollectBundleService->save($userCollectEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserCollectController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userCollectBundleService = new UserCollectBundleService();
+            $userCollectBundleService = new UserCollectBundleService;
             $userCollect = $userCollectBundleService->getOne($condition);
 
             if (empty($userCollect)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserCollectResponse();
+            $response = new UserCollectResponse;
             $response->loadData($userCollect);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserCollectController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserCollectUpdateRequest();
+            $v = new UserCollectUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userCollectBundleService = new UserCollectBundleService();
+            $userCollectBundleService = new UserCollectBundleService;
             $userCollect = $userCollectBundleService->getById($request['id']);
             if (empty($userCollect)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userCollectEntity = new UserCollectEntity();
+            $userCollectEntity = new UserCollectEntity;
             $userCollectEntity->loadData($request);
 
             $userCollectBundleService->update($userCollectEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserCollectController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userCollectBundleService = new UserCollectBundleService();
+            $userCollectBundleService = new UserCollectBundleService;
             if ($userCollectBundleService->remove($condition)) {
                 DB::commit();
 

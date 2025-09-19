@@ -32,7 +32,7 @@ class GoodsBrandController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new GoodsBrandQueryRequest();
+            $v = new GoodsBrandQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class GoodsBrandController extends BaseController
                 //
             ];
 
-            $goodsBrandBundleService = new GoodsBrandBundleService();
+            $goodsBrandBundleService = new GoodsBrandBundleService;
             $result = $goodsBrandBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new GoodsBrandResponse();
+                $response = new GoodsBrandResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class GoodsBrandController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsBrandCreateRequest();
+            $v = new GoodsBrandCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsBrandEntity = new GoodsBrandEntity();
+            $goodsBrandEntity = new GoodsBrandEntity;
             $goodsBrandEntity->loadData($request);
 
-            $goodsBrandBundleService = new GoodsBrandBundleService();
+            $goodsBrandBundleService = new GoodsBrandBundleService;
             $insertId = $goodsBrandBundleService->save($goodsBrandEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class GoodsBrandController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsBrandBundleService = new GoodsBrandBundleService();
+            $goodsBrandBundleService = new GoodsBrandBundleService;
             $goodsBrand = $goodsBrandBundleService->getOne($condition);
 
             if (empty($goodsBrand)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new GoodsBrandResponse();
+            $response = new GoodsBrandResponse;
             $response->loadData($goodsBrand);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class GoodsBrandController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsBrandUpdateRequest();
+            $v = new GoodsBrandUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsBrandBundleService = new GoodsBrandBundleService();
+            $goodsBrandBundleService = new GoodsBrandBundleService;
             $goodsBrand = $goodsBrandBundleService->getById($request['id']);
             if (empty($goodsBrand)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $goodsBrandEntity = new GoodsBrandEntity();
+            $goodsBrandEntity = new GoodsBrandEntity;
             $goodsBrandEntity->loadData($request);
 
             $goodsBrandBundleService->update($goodsBrandEntity->toArray(), [
@@ -191,7 +191,7 @@ class GoodsBrandController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsBrandBundleService = new GoodsBrandBundleService();
+            $goodsBrandBundleService = new GoodsBrandBundleService;
             if ($goodsBrandBundleService->remove($condition)) {
                 DB::commit();
 

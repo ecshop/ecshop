@@ -32,7 +32,7 @@ class ActivityTopicController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ActivityTopicQueryRequest();
+            $v = new ActivityTopicQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ActivityTopicController extends BaseController
                 //
             ];
 
-            $activityTopicBundleService = new ActivityTopicBundleService();
+            $activityTopicBundleService = new ActivityTopicBundleService;
             $result = $activityTopicBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ActivityTopicResponse();
+                $response = new ActivityTopicResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ActivityTopicController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ActivityTopicCreateRequest();
+            $v = new ActivityTopicCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $activityTopicEntity = new ActivityTopicEntity();
+            $activityTopicEntity = new ActivityTopicEntity;
             $activityTopicEntity->loadData($request);
 
-            $activityTopicBundleService = new ActivityTopicBundleService();
+            $activityTopicBundleService = new ActivityTopicBundleService;
             $insertId = $activityTopicBundleService->save($activityTopicEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ActivityTopicController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $activityTopicBundleService = new ActivityTopicBundleService();
+            $activityTopicBundleService = new ActivityTopicBundleService;
             $activityTopic = $activityTopicBundleService->getOne($condition);
 
             if (empty($activityTopic)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ActivityTopicResponse();
+            $response = new ActivityTopicResponse;
             $response->loadData($activityTopic);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ActivityTopicController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ActivityTopicUpdateRequest();
+            $v = new ActivityTopicUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $activityTopicBundleService = new ActivityTopicBundleService();
+            $activityTopicBundleService = new ActivityTopicBundleService;
             $activityTopic = $activityTopicBundleService->getById($request['id']);
             if (empty($activityTopic)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $activityTopicEntity = new ActivityTopicEntity();
+            $activityTopicEntity = new ActivityTopicEntity;
             $activityTopicEntity->loadData($request);
 
             $activityTopicBundleService->update($activityTopicEntity->toArray(), [
@@ -191,7 +191,7 @@ class ActivityTopicController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $activityTopicBundleService = new ActivityTopicBundleService();
+            $activityTopicBundleService = new ActivityTopicBundleService;
             if ($activityTopicBundleService->remove($condition)) {
                 DB::commit();
 

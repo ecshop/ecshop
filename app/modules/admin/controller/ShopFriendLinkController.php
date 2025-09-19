@@ -32,7 +32,7 @@ class ShopFriendLinkController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShopFriendLinkQueryRequest();
+            $v = new ShopFriendLinkQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShopFriendLinkController extends BaseController
                 //
             ];
 
-            $shopFriendLinkBundleService = new ShopFriendLinkBundleService();
+            $shopFriendLinkBundleService = new ShopFriendLinkBundleService;
             $result = $shopFriendLinkBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShopFriendLinkResponse();
+                $response = new ShopFriendLinkResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShopFriendLinkController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopFriendLinkCreateRequest();
+            $v = new ShopFriendLinkCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopFriendLinkEntity = new ShopFriendLinkEntity();
+            $shopFriendLinkEntity = new ShopFriendLinkEntity;
             $shopFriendLinkEntity->loadData($request);
 
-            $shopFriendLinkBundleService = new ShopFriendLinkBundleService();
+            $shopFriendLinkBundleService = new ShopFriendLinkBundleService;
             $insertId = $shopFriendLinkBundleService->save($shopFriendLinkEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShopFriendLinkController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopFriendLinkBundleService = new ShopFriendLinkBundleService();
+            $shopFriendLinkBundleService = new ShopFriendLinkBundleService;
             $shopFriendLink = $shopFriendLinkBundleService->getOne($condition);
 
             if (empty($shopFriendLink)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShopFriendLinkResponse();
+            $response = new ShopFriendLinkResponse;
             $response->loadData($shopFriendLink);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShopFriendLinkController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopFriendLinkUpdateRequest();
+            $v = new ShopFriendLinkUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopFriendLinkBundleService = new ShopFriendLinkBundleService();
+            $shopFriendLinkBundleService = new ShopFriendLinkBundleService;
             $shopFriendLink = $shopFriendLinkBundleService->getById($request['id']);
             if (empty($shopFriendLink)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shopFriendLinkEntity = new ShopFriendLinkEntity();
+            $shopFriendLinkEntity = new ShopFriendLinkEntity;
             $shopFriendLinkEntity->loadData($request);
 
             $shopFriendLinkBundleService->update($shopFriendLinkEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShopFriendLinkController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopFriendLinkBundleService = new ShopFriendLinkBundleService();
+            $shopFriendLinkBundleService = new ShopFriendLinkBundleService;
             if ($shopFriendLinkBundleService->remove($condition)) {
                 DB::commit();
 

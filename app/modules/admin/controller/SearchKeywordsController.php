@@ -32,7 +32,7 @@ class SearchKeywordsController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new SearchKeywordsQueryRequest();
+            $v = new SearchKeywordsQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class SearchKeywordsController extends BaseController
                 //
             ];
 
-            $searchKeywordsBundleService = new SearchKeywordsBundleService();
+            $searchKeywordsBundleService = new SearchKeywordsBundleService;
             $result = $searchKeywordsBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new SearchKeywordsResponse();
+                $response = new SearchKeywordsResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class SearchKeywordsController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new SearchKeywordsCreateRequest();
+            $v = new SearchKeywordsCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $searchKeywordsEntity = new SearchKeywordsEntity();
+            $searchKeywordsEntity = new SearchKeywordsEntity;
             $searchKeywordsEntity->loadData($request);
 
-            $searchKeywordsBundleService = new SearchKeywordsBundleService();
+            $searchKeywordsBundleService = new SearchKeywordsBundleService;
             $insertId = $searchKeywordsBundleService->save($searchKeywordsEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class SearchKeywordsController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $searchKeywordsBundleService = new SearchKeywordsBundleService();
+            $searchKeywordsBundleService = new SearchKeywordsBundleService;
             $searchKeywords = $searchKeywordsBundleService->getOne($condition);
 
             if (empty($searchKeywords)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new SearchKeywordsResponse();
+            $response = new SearchKeywordsResponse;
             $response->loadData($searchKeywords);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class SearchKeywordsController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new SearchKeywordsUpdateRequest();
+            $v = new SearchKeywordsUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $searchKeywordsBundleService = new SearchKeywordsBundleService();
+            $searchKeywordsBundleService = new SearchKeywordsBundleService;
             $searchKeywords = $searchKeywordsBundleService->getById($request['id']);
             if (empty($searchKeywords)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $searchKeywordsEntity = new SearchKeywordsEntity();
+            $searchKeywordsEntity = new SearchKeywordsEntity;
             $searchKeywordsEntity->loadData($request);
 
             $searchKeywordsBundleService->update($searchKeywordsEntity->toArray(), [
@@ -191,7 +191,7 @@ class SearchKeywordsController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $searchKeywordsBundleService = new SearchKeywordsBundleService();
+            $searchKeywordsBundleService = new SearchKeywordsBundleService;
             if ($searchKeywordsBundleService->remove($condition)) {
                 DB::commit();
 

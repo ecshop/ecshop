@@ -32,7 +32,7 @@ class GoodsCatRecommendController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new GoodsCatRecommendQueryRequest();
+            $v = new GoodsCatRecommendQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class GoodsCatRecommendController extends BaseController
                 //
             ];
 
-            $goodsCatRecommendBundleService = new GoodsCatRecommendBundleService();
+            $goodsCatRecommendBundleService = new GoodsCatRecommendBundleService;
             $result = $goodsCatRecommendBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new GoodsCatRecommendResponse();
+                $response = new GoodsCatRecommendResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class GoodsCatRecommendController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsCatRecommendCreateRequest();
+            $v = new GoodsCatRecommendCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsCatRecommendEntity = new GoodsCatRecommendEntity();
+            $goodsCatRecommendEntity = new GoodsCatRecommendEntity;
             $goodsCatRecommendEntity->loadData($request);
 
-            $goodsCatRecommendBundleService = new GoodsCatRecommendBundleService();
+            $goodsCatRecommendBundleService = new GoodsCatRecommendBundleService;
             $insertId = $goodsCatRecommendBundleService->save($goodsCatRecommendEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class GoodsCatRecommendController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsCatRecommendBundleService = new GoodsCatRecommendBundleService();
+            $goodsCatRecommendBundleService = new GoodsCatRecommendBundleService;
             $goodsCatRecommend = $goodsCatRecommendBundleService->getOne($condition);
 
             if (empty($goodsCatRecommend)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new GoodsCatRecommendResponse();
+            $response = new GoodsCatRecommendResponse;
             $response->loadData($goodsCatRecommend);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class GoodsCatRecommendController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsCatRecommendUpdateRequest();
+            $v = new GoodsCatRecommendUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsCatRecommendBundleService = new GoodsCatRecommendBundleService();
+            $goodsCatRecommendBundleService = new GoodsCatRecommendBundleService;
             $goodsCatRecommend = $goodsCatRecommendBundleService->getById($request['id']);
             if (empty($goodsCatRecommend)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $goodsCatRecommendEntity = new GoodsCatRecommendEntity();
+            $goodsCatRecommendEntity = new GoodsCatRecommendEntity;
             $goodsCatRecommendEntity->loadData($request);
 
             $goodsCatRecommendBundleService->update($goodsCatRecommendEntity->toArray(), [
@@ -191,7 +191,7 @@ class GoodsCatRecommendController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsCatRecommendBundleService = new GoodsCatRecommendBundleService();
+            $goodsCatRecommendBundleService = new GoodsCatRecommendBundleService;
             if ($goodsCatRecommendBundleService->remove($condition)) {
                 DB::commit();
 

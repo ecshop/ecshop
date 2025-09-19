@@ -20,7 +20,7 @@ class UserBookingRepository extends CurdRepository implements RepositoryInterfac
     public static function getInstance(): UserBookingRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new UserBookingRepository();
+            self::$instance = new UserBookingRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class UserBookingRepository extends CurdRepository implements RepositoryInterfac
     /**
      * 添加
      */
-    public function createByEntity(UserBookingEntity $entity): int    {
+    public function createByEntity(UserBookingEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class UserBookingRepository extends CurdRepository implements RepositoryInterfac
             return null;
         }
 
-        $entity = new UserBookingEntity();
+        $entity = new UserBookingEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class UserBookingRepository extends CurdRepository implements RepositoryInterfac
             return null;
         }
 
-        $entity = new UserBookingEntity();
+        $entity = new UserBookingEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class UserBookingRepository extends CurdRepository implements RepositoryInterfac
         }
 
         foreach ($result as $key => $item) {
-            $entity = new UserBookingEntity();
+            $entity = new UserBookingEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class UserBookingRepository extends CurdRepository implements RepositoryInterfac
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new UserBookingEntity();
+            $entity = new UserBookingEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class UserBookingRepository extends CurdRepository implements RepositoryInterfac
     {
         $model = '\\app\\bundles\\user\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

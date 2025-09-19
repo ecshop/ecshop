@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace app\modules\admin\helper;
 
-
 /* 可以设置内容的模板 */
 $template_files = [
     'index.dwt',

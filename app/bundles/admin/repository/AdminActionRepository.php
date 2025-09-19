@@ -20,7 +20,7 @@ class AdminActionRepository extends CurdRepository implements RepositoryInterfac
     public static function getInstance(): AdminActionRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new AdminActionRepository();
+            self::$instance = new AdminActionRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class AdminActionRepository extends CurdRepository implements RepositoryInterfac
     /**
      * 添加
      */
-    public function createByEntity(AdminActionEntity $entity): int    {
+    public function createByEntity(AdminActionEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class AdminActionRepository extends CurdRepository implements RepositoryInterfac
             return null;
         }
 
-        $entity = new AdminActionEntity();
+        $entity = new AdminActionEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class AdminActionRepository extends CurdRepository implements RepositoryInterfac
             return null;
         }
 
-        $entity = new AdminActionEntity();
+        $entity = new AdminActionEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class AdminActionRepository extends CurdRepository implements RepositoryInterfac
         }
 
         foreach ($result as $key => $item) {
-            $entity = new AdminActionEntity();
+            $entity = new AdminActionEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class AdminActionRepository extends CurdRepository implements RepositoryInterfac
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new AdminActionEntity();
+            $entity = new AdminActionEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class AdminActionRepository extends CurdRepository implements RepositoryInterfac
     {
         $model = '\\app\\bundles\\admin\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

@@ -32,7 +32,7 @@ class GoodsVirtualCardController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new GoodsVirtualCardQueryRequest();
+            $v = new GoodsVirtualCardQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class GoodsVirtualCardController extends BaseController
                 //
             ];
 
-            $goodsVirtualCardBundleService = new GoodsVirtualCardBundleService();
+            $goodsVirtualCardBundleService = new GoodsVirtualCardBundleService;
             $result = $goodsVirtualCardBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new GoodsVirtualCardResponse();
+                $response = new GoodsVirtualCardResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class GoodsVirtualCardController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsVirtualCardCreateRequest();
+            $v = new GoodsVirtualCardCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsVirtualCardEntity = new GoodsVirtualCardEntity();
+            $goodsVirtualCardEntity = new GoodsVirtualCardEntity;
             $goodsVirtualCardEntity->loadData($request);
 
-            $goodsVirtualCardBundleService = new GoodsVirtualCardBundleService();
+            $goodsVirtualCardBundleService = new GoodsVirtualCardBundleService;
             $insertId = $goodsVirtualCardBundleService->save($goodsVirtualCardEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class GoodsVirtualCardController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsVirtualCardBundleService = new GoodsVirtualCardBundleService();
+            $goodsVirtualCardBundleService = new GoodsVirtualCardBundleService;
             $goodsVirtualCard = $goodsVirtualCardBundleService->getOne($condition);
 
             if (empty($goodsVirtualCard)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new GoodsVirtualCardResponse();
+            $response = new GoodsVirtualCardResponse;
             $response->loadData($goodsVirtualCard);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class GoodsVirtualCardController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsVirtualCardUpdateRequest();
+            $v = new GoodsVirtualCardUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsVirtualCardBundleService = new GoodsVirtualCardBundleService();
+            $goodsVirtualCardBundleService = new GoodsVirtualCardBundleService;
             $goodsVirtualCard = $goodsVirtualCardBundleService->getById($request['id']);
             if (empty($goodsVirtualCard)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $goodsVirtualCardEntity = new GoodsVirtualCardEntity();
+            $goodsVirtualCardEntity = new GoodsVirtualCardEntity;
             $goodsVirtualCardEntity->loadData($request);
 
             $goodsVirtualCardBundleService->update($goodsVirtualCardEntity->toArray(), [
@@ -191,7 +191,7 @@ class GoodsVirtualCardController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsVirtualCardBundleService = new GoodsVirtualCardBundleService();
+            $goodsVirtualCardBundleService = new GoodsVirtualCardBundleService;
             if ($goodsVirtualCardBundleService->remove($condition)) {
                 DB::commit();
 

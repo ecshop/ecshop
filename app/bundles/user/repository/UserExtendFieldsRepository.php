@@ -20,7 +20,7 @@ class UserExtendFieldsRepository extends CurdRepository implements RepositoryInt
     public static function getInstance(): UserExtendFieldsRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new UserExtendFieldsRepository();
+            self::$instance = new UserExtendFieldsRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class UserExtendFieldsRepository extends CurdRepository implements RepositoryInt
     /**
      * 添加
      */
-    public function createByEntity(UserExtendFieldsEntity $entity): int    {
+    public function createByEntity(UserExtendFieldsEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class UserExtendFieldsRepository extends CurdRepository implements RepositoryInt
             return null;
         }
 
-        $entity = new UserExtendFieldsEntity();
+        $entity = new UserExtendFieldsEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class UserExtendFieldsRepository extends CurdRepository implements RepositoryInt
             return null;
         }
 
-        $entity = new UserExtendFieldsEntity();
+        $entity = new UserExtendFieldsEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class UserExtendFieldsRepository extends CurdRepository implements RepositoryInt
         }
 
         foreach ($result as $key => $item) {
-            $entity = new UserExtendFieldsEntity();
+            $entity = new UserExtendFieldsEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class UserExtendFieldsRepository extends CurdRepository implements RepositoryInt
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new UserExtendFieldsEntity();
+            $entity = new UserExtendFieldsEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class UserExtendFieldsRepository extends CurdRepository implements RepositoryInt
     {
         $model = '\\app\\bundles\\user\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

@@ -32,7 +32,7 @@ class ShopRegionController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShopRegionQueryRequest();
+            $v = new ShopRegionQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShopRegionController extends BaseController
                 //
             ];
 
-            $shopRegionBundleService = new ShopRegionBundleService();
+            $shopRegionBundleService = new ShopRegionBundleService;
             $result = $shopRegionBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShopRegionResponse();
+                $response = new ShopRegionResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShopRegionController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopRegionCreateRequest();
+            $v = new ShopRegionCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopRegionEntity = new ShopRegionEntity();
+            $shopRegionEntity = new ShopRegionEntity;
             $shopRegionEntity->loadData($request);
 
-            $shopRegionBundleService = new ShopRegionBundleService();
+            $shopRegionBundleService = new ShopRegionBundleService;
             $insertId = $shopRegionBundleService->save($shopRegionEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShopRegionController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopRegionBundleService = new ShopRegionBundleService();
+            $shopRegionBundleService = new ShopRegionBundleService;
             $shopRegion = $shopRegionBundleService->getOne($condition);
 
             if (empty($shopRegion)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShopRegionResponse();
+            $response = new ShopRegionResponse;
             $response->loadData($shopRegion);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShopRegionController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopRegionUpdateRequest();
+            $v = new ShopRegionUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopRegionBundleService = new ShopRegionBundleService();
+            $shopRegionBundleService = new ShopRegionBundleService;
             $shopRegion = $shopRegionBundleService->getById($request['id']);
             if (empty($shopRegion)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shopRegionEntity = new ShopRegionEntity();
+            $shopRegionEntity = new ShopRegionEntity;
             $shopRegionEntity->loadData($request);
 
             $shopRegionBundleService->update($shopRegionEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShopRegionController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopRegionBundleService = new ShopRegionBundleService();
+            $shopRegionBundleService = new ShopRegionBundleService;
             if ($shopRegionBundleService->remove($condition)) {
                 DB::commit();
 

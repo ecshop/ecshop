@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace app\plugins\shipping;
 
-class Zto {
-
+class Zto
+{
     /* ------------------------------------------------------ */
     // -- PUBLIC ATTRIBUTEs
     /* ------------------------------------------------------ */
@@ -32,6 +32,7 @@ class Zto {
             $this->configure[$val['name']] = $val['value'];
         }
     }
+
     public function config()
     {
         /* 配送方式插件的代码必须和文件名保持一致 */

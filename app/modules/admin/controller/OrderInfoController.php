@@ -32,7 +32,7 @@ class OrderInfoController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new OrderInfoQueryRequest();
+            $v = new OrderInfoQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class OrderInfoController extends BaseController
                 //
             ];
 
-            $orderInfoBundleService = new OrderInfoBundleService();
+            $orderInfoBundleService = new OrderInfoBundleService;
             $result = $orderInfoBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new OrderInfoResponse();
+                $response = new OrderInfoResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class OrderInfoController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new OrderInfoCreateRequest();
+            $v = new OrderInfoCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $orderInfoEntity = new OrderInfoEntity();
+            $orderInfoEntity = new OrderInfoEntity;
             $orderInfoEntity->loadData($request);
 
-            $orderInfoBundleService = new OrderInfoBundleService();
+            $orderInfoBundleService = new OrderInfoBundleService;
             $insertId = $orderInfoBundleService->save($orderInfoEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class OrderInfoController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $orderInfoBundleService = new OrderInfoBundleService();
+            $orderInfoBundleService = new OrderInfoBundleService;
             $orderInfo = $orderInfoBundleService->getOne($condition);
 
             if (empty($orderInfo)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new OrderInfoResponse();
+            $response = new OrderInfoResponse;
             $response->loadData($orderInfo);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class OrderInfoController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new OrderInfoUpdateRequest();
+            $v = new OrderInfoUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $orderInfoBundleService = new OrderInfoBundleService();
+            $orderInfoBundleService = new OrderInfoBundleService;
             $orderInfo = $orderInfoBundleService->getById($request['id']);
             if (empty($orderInfo)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $orderInfoEntity = new OrderInfoEntity();
+            $orderInfoEntity = new OrderInfoEntity;
             $orderInfoEntity->loadData($request);
 
             $orderInfoBundleService->update($orderInfoEntity->toArray(), [
@@ -191,7 +191,7 @@ class OrderInfoController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $orderInfoBundleService = new OrderInfoBundleService();
+            $orderInfoBundleService = new OrderInfoBundleService;
             if ($orderInfoBundleService->remove($condition)) {
                 DB::commit();
 

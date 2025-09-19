@@ -32,7 +32,7 @@ class GoodsVolumePriceController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new GoodsVolumePriceQueryRequest();
+            $v = new GoodsVolumePriceQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class GoodsVolumePriceController extends BaseController
                 //
             ];
 
-            $goodsVolumePriceBundleService = new GoodsVolumePriceBundleService();
+            $goodsVolumePriceBundleService = new GoodsVolumePriceBundleService;
             $result = $goodsVolumePriceBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new GoodsVolumePriceResponse();
+                $response = new GoodsVolumePriceResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class GoodsVolumePriceController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsVolumePriceCreateRequest();
+            $v = new GoodsVolumePriceCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsVolumePriceEntity = new GoodsVolumePriceEntity();
+            $goodsVolumePriceEntity = new GoodsVolumePriceEntity;
             $goodsVolumePriceEntity->loadData($request);
 
-            $goodsVolumePriceBundleService = new GoodsVolumePriceBundleService();
+            $goodsVolumePriceBundleService = new GoodsVolumePriceBundleService;
             $insertId = $goodsVolumePriceBundleService->save($goodsVolumePriceEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class GoodsVolumePriceController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsVolumePriceBundleService = new GoodsVolumePriceBundleService();
+            $goodsVolumePriceBundleService = new GoodsVolumePriceBundleService;
             $goodsVolumePrice = $goodsVolumePriceBundleService->getOne($condition);
 
             if (empty($goodsVolumePrice)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new GoodsVolumePriceResponse();
+            $response = new GoodsVolumePriceResponse;
             $response->loadData($goodsVolumePrice);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class GoodsVolumePriceController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsVolumePriceUpdateRequest();
+            $v = new GoodsVolumePriceUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsVolumePriceBundleService = new GoodsVolumePriceBundleService();
+            $goodsVolumePriceBundleService = new GoodsVolumePriceBundleService;
             $goodsVolumePrice = $goodsVolumePriceBundleService->getById($request['id']);
             if (empty($goodsVolumePrice)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $goodsVolumePriceEntity = new GoodsVolumePriceEntity();
+            $goodsVolumePriceEntity = new GoodsVolumePriceEntity;
             $goodsVolumePriceEntity->loadData($request);
 
             $goodsVolumePriceBundleService->update($goodsVolumePriceEntity->toArray(), [
@@ -191,7 +191,7 @@ class GoodsVolumePriceController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsVolumePriceBundleService = new GoodsVolumePriceBundleService();
+            $goodsVolumePriceBundleService = new GoodsVolumePriceBundleService;
             if ($goodsVolumePriceBundleService->remove($condition)) {
                 DB::commit();
 

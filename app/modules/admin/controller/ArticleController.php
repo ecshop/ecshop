@@ -32,7 +32,7 @@ class ArticleController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ArticleQueryRequest();
+            $v = new ArticleQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ArticleController extends BaseController
                 //
             ];
 
-            $articleBundleService = new ArticleBundleService();
+            $articleBundleService = new ArticleBundleService;
             $result = $articleBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ArticleResponse();
+                $response = new ArticleResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ArticleController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ArticleCreateRequest();
+            $v = new ArticleCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $articleEntity = new ArticleEntity();
+            $articleEntity = new ArticleEntity;
             $articleEntity->loadData($request);
 
-            $articleBundleService = new ArticleBundleService();
+            $articleBundleService = new ArticleBundleService;
             $insertId = $articleBundleService->save($articleEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ArticleController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $articleBundleService = new ArticleBundleService();
+            $articleBundleService = new ArticleBundleService;
             $article = $articleBundleService->getOne($condition);
 
             if (empty($article)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ArticleResponse();
+            $response = new ArticleResponse;
             $response->loadData($article);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ArticleController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ArticleUpdateRequest();
+            $v = new ArticleUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $articleBundleService = new ArticleBundleService();
+            $articleBundleService = new ArticleBundleService;
             $article = $articleBundleService->getById($request['id']);
             if (empty($article)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $articleEntity = new ArticleEntity();
+            $articleEntity = new ArticleEntity;
             $articleEntity->loadData($request);
 
             $articleBundleService->update($articleEntity->toArray(), [
@@ -191,7 +191,7 @@ class ArticleController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $articleBundleService = new ArticleBundleService();
+            $articleBundleService = new ArticleBundleService;
             if ($articleBundleService->remove($condition)) {
                 DB::commit();
 

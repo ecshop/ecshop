@@ -32,7 +32,7 @@ class UserExtendInfoController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserExtendInfoQueryRequest();
+            $v = new UserExtendInfoQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserExtendInfoController extends BaseController
                 //
             ];
 
-            $userExtendInfoBundleService = new UserExtendInfoBundleService();
+            $userExtendInfoBundleService = new UserExtendInfoBundleService;
             $result = $userExtendInfoBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserExtendInfoResponse();
+                $response = new UserExtendInfoResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserExtendInfoController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserExtendInfoCreateRequest();
+            $v = new UserExtendInfoCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userExtendInfoEntity = new UserExtendInfoEntity();
+            $userExtendInfoEntity = new UserExtendInfoEntity;
             $userExtendInfoEntity->loadData($request);
 
-            $userExtendInfoBundleService = new UserExtendInfoBundleService();
+            $userExtendInfoBundleService = new UserExtendInfoBundleService;
             $insertId = $userExtendInfoBundleService->save($userExtendInfoEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserExtendInfoController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userExtendInfoBundleService = new UserExtendInfoBundleService();
+            $userExtendInfoBundleService = new UserExtendInfoBundleService;
             $userExtendInfo = $userExtendInfoBundleService->getOne($condition);
 
             if (empty($userExtendInfo)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserExtendInfoResponse();
+            $response = new UserExtendInfoResponse;
             $response->loadData($userExtendInfo);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserExtendInfoController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserExtendInfoUpdateRequest();
+            $v = new UserExtendInfoUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userExtendInfoBundleService = new UserExtendInfoBundleService();
+            $userExtendInfoBundleService = new UserExtendInfoBundleService;
             $userExtendInfo = $userExtendInfoBundleService->getById($request['id']);
             if (empty($userExtendInfo)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userExtendInfoEntity = new UserExtendInfoEntity();
+            $userExtendInfoEntity = new UserExtendInfoEntity;
             $userExtendInfoEntity->loadData($request);
 
             $userExtendInfoBundleService->update($userExtendInfoEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserExtendInfoController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userExtendInfoBundleService = new UserExtendInfoBundleService();
+            $userExtendInfoBundleService = new UserExtendInfoBundleService;
             if ($userExtendInfoBundleService->remove($condition)) {
                 DB::commit();
 

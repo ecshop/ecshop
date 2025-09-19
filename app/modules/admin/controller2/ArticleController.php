@@ -1,6 +1,5 @@
 <?php
 
-
 // require dirname(__FILE__).'/includes/init.php';
 // require_once ROOT_PATH.'includes/fckeditor/fckeditor.php';
 // require_once ROOT_PATH.'includes/cls_image.php';

@@ -32,7 +32,7 @@ class OrderBackGoodsController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new OrderBackGoodsQueryRequest();
+            $v = new OrderBackGoodsQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class OrderBackGoodsController extends BaseController
                 //
             ];
 
-            $orderBackGoodsBundleService = new OrderBackGoodsBundleService();
+            $orderBackGoodsBundleService = new OrderBackGoodsBundleService;
             $result = $orderBackGoodsBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new OrderBackGoodsResponse();
+                $response = new OrderBackGoodsResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class OrderBackGoodsController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new OrderBackGoodsCreateRequest();
+            $v = new OrderBackGoodsCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $orderBackGoodsEntity = new OrderBackGoodsEntity();
+            $orderBackGoodsEntity = new OrderBackGoodsEntity;
             $orderBackGoodsEntity->loadData($request);
 
-            $orderBackGoodsBundleService = new OrderBackGoodsBundleService();
+            $orderBackGoodsBundleService = new OrderBackGoodsBundleService;
             $insertId = $orderBackGoodsBundleService->save($orderBackGoodsEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class OrderBackGoodsController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $orderBackGoodsBundleService = new OrderBackGoodsBundleService();
+            $orderBackGoodsBundleService = new OrderBackGoodsBundleService;
             $orderBackGoods = $orderBackGoodsBundleService->getOne($condition);
 
             if (empty($orderBackGoods)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new OrderBackGoodsResponse();
+            $response = new OrderBackGoodsResponse;
             $response->loadData($orderBackGoods);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class OrderBackGoodsController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new OrderBackGoodsUpdateRequest();
+            $v = new OrderBackGoodsUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $orderBackGoodsBundleService = new OrderBackGoodsBundleService();
+            $orderBackGoodsBundleService = new OrderBackGoodsBundleService;
             $orderBackGoods = $orderBackGoodsBundleService->getById($request['id']);
             if (empty($orderBackGoods)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $orderBackGoodsEntity = new OrderBackGoodsEntity();
+            $orderBackGoodsEntity = new OrderBackGoodsEntity;
             $orderBackGoodsEntity->loadData($request);
 
             $orderBackGoodsBundleService->update($orderBackGoodsEntity->toArray(), [
@@ -191,7 +191,7 @@ class OrderBackGoodsController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $orderBackGoodsBundleService = new OrderBackGoodsBundleService();
+            $orderBackGoodsBundleService = new OrderBackGoodsBundleService;
             if ($orderBackGoodsBundleService->remove($condition)) {
                 DB::commit();
 

@@ -20,7 +20,7 @@ class ActivityTopicRepository extends CurdRepository implements RepositoryInterf
     public static function getInstance(): ActivityTopicRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new ActivityTopicRepository();
+            self::$instance = new ActivityTopicRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class ActivityTopicRepository extends CurdRepository implements RepositoryInterf
     /**
      * 添加
      */
-    public function createByEntity(ActivityTopicEntity $entity): int    {
+    public function createByEntity(ActivityTopicEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class ActivityTopicRepository extends CurdRepository implements RepositoryInterf
             return null;
         }
 
-        $entity = new ActivityTopicEntity();
+        $entity = new ActivityTopicEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class ActivityTopicRepository extends CurdRepository implements RepositoryInterf
             return null;
         }
 
-        $entity = new ActivityTopicEntity();
+        $entity = new ActivityTopicEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class ActivityTopicRepository extends CurdRepository implements RepositoryInterf
         }
 
         foreach ($result as $key => $item) {
-            $entity = new ActivityTopicEntity();
+            $entity = new ActivityTopicEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class ActivityTopicRepository extends CurdRepository implements RepositoryInterf
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new ActivityTopicEntity();
+            $entity = new ActivityTopicEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class ActivityTopicRepository extends CurdRepository implements RepositoryInterf
     {
         $model = '\\app\\bundles\\activity\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

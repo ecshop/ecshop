@@ -1,6 +1,5 @@
 <?php
 
-
 // require dirname(__FILE__).'/includes/init.php';
 
 /* 载入语言文件 */

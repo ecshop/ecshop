@@ -32,7 +32,7 @@ class ShopAgencyController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShopAgencyQueryRequest();
+            $v = new ShopAgencyQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShopAgencyController extends BaseController
                 //
             ];
 
-            $shopAgencyBundleService = new ShopAgencyBundleService();
+            $shopAgencyBundleService = new ShopAgencyBundleService;
             $result = $shopAgencyBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShopAgencyResponse();
+                $response = new ShopAgencyResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShopAgencyController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopAgencyCreateRequest();
+            $v = new ShopAgencyCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopAgencyEntity = new ShopAgencyEntity();
+            $shopAgencyEntity = new ShopAgencyEntity;
             $shopAgencyEntity->loadData($request);
 
-            $shopAgencyBundleService = new ShopAgencyBundleService();
+            $shopAgencyBundleService = new ShopAgencyBundleService;
             $insertId = $shopAgencyBundleService->save($shopAgencyEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShopAgencyController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopAgencyBundleService = new ShopAgencyBundleService();
+            $shopAgencyBundleService = new ShopAgencyBundleService;
             $shopAgency = $shopAgencyBundleService->getOne($condition);
 
             if (empty($shopAgency)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShopAgencyResponse();
+            $response = new ShopAgencyResponse;
             $response->loadData($shopAgency);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShopAgencyController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopAgencyUpdateRequest();
+            $v = new ShopAgencyUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopAgencyBundleService = new ShopAgencyBundleService();
+            $shopAgencyBundleService = new ShopAgencyBundleService;
             $shopAgency = $shopAgencyBundleService->getById($request['id']);
             if (empty($shopAgency)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shopAgencyEntity = new ShopAgencyEntity();
+            $shopAgencyEntity = new ShopAgencyEntity;
             $shopAgencyEntity->loadData($request);
 
             $shopAgencyBundleService->update($shopAgencyEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShopAgencyController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopAgencyBundleService = new ShopAgencyBundleService();
+            $shopAgencyBundleService = new ShopAgencyBundleService;
             if ($shopAgencyBundleService->remove($condition)) {
                 DB::commit();
 

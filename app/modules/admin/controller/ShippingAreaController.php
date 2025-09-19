@@ -32,7 +32,7 @@ class ShippingAreaController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShippingAreaQueryRequest();
+            $v = new ShippingAreaQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShippingAreaController extends BaseController
                 //
             ];
 
-            $shippingAreaBundleService = new ShippingAreaBundleService();
+            $shippingAreaBundleService = new ShippingAreaBundleService;
             $result = $shippingAreaBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShippingAreaResponse();
+                $response = new ShippingAreaResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShippingAreaController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShippingAreaCreateRequest();
+            $v = new ShippingAreaCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shippingAreaEntity = new ShippingAreaEntity();
+            $shippingAreaEntity = new ShippingAreaEntity;
             $shippingAreaEntity->loadData($request);
 
-            $shippingAreaBundleService = new ShippingAreaBundleService();
+            $shippingAreaBundleService = new ShippingAreaBundleService;
             $insertId = $shippingAreaBundleService->save($shippingAreaEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShippingAreaController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shippingAreaBundleService = new ShippingAreaBundleService();
+            $shippingAreaBundleService = new ShippingAreaBundleService;
             $shippingArea = $shippingAreaBundleService->getOne($condition);
 
             if (empty($shippingArea)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShippingAreaResponse();
+            $response = new ShippingAreaResponse;
             $response->loadData($shippingArea);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShippingAreaController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShippingAreaUpdateRequest();
+            $v = new ShippingAreaUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shippingAreaBundleService = new ShippingAreaBundleService();
+            $shippingAreaBundleService = new ShippingAreaBundleService;
             $shippingArea = $shippingAreaBundleService->getById($request['id']);
             if (empty($shippingArea)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shippingAreaEntity = new ShippingAreaEntity();
+            $shippingAreaEntity = new ShippingAreaEntity;
             $shippingAreaEntity->loadData($request);
 
             $shippingAreaBundleService->update($shippingAreaEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShippingAreaController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shippingAreaBundleService = new ShippingAreaBundleService();
+            $shippingAreaBundleService = new ShippingAreaBundleService;
             if ($shippingAreaBundleService->remove($condition)) {
                 DB::commit();
 

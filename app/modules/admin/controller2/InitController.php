@@ -1,6 +1,5 @@
 <?php
 
-
 define('ECS_ADMIN', true);
 
 error_reporting(E_ALL);

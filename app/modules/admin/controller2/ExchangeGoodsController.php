@@ -1,6 +1,5 @@
 <?php
 
-
 // require dirname(__FILE__).'/includes/init.php';
 
 /* 初始化数据交换对象 */

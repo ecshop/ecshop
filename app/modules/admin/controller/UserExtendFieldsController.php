@@ -32,7 +32,7 @@ class UserExtendFieldsController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserExtendFieldsQueryRequest();
+            $v = new UserExtendFieldsQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserExtendFieldsController extends BaseController
                 //
             ];
 
-            $userExtendFieldsBundleService = new UserExtendFieldsBundleService();
+            $userExtendFieldsBundleService = new UserExtendFieldsBundleService;
             $result = $userExtendFieldsBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserExtendFieldsResponse();
+                $response = new UserExtendFieldsResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserExtendFieldsController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserExtendFieldsCreateRequest();
+            $v = new UserExtendFieldsCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userExtendFieldsEntity = new UserExtendFieldsEntity();
+            $userExtendFieldsEntity = new UserExtendFieldsEntity;
             $userExtendFieldsEntity->loadData($request);
 
-            $userExtendFieldsBundleService = new UserExtendFieldsBundleService();
+            $userExtendFieldsBundleService = new UserExtendFieldsBundleService;
             $insertId = $userExtendFieldsBundleService->save($userExtendFieldsEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserExtendFieldsController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userExtendFieldsBundleService = new UserExtendFieldsBundleService();
+            $userExtendFieldsBundleService = new UserExtendFieldsBundleService;
             $userExtendFields = $userExtendFieldsBundleService->getOne($condition);
 
             if (empty($userExtendFields)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserExtendFieldsResponse();
+            $response = new UserExtendFieldsResponse;
             $response->loadData($userExtendFields);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserExtendFieldsController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserExtendFieldsUpdateRequest();
+            $v = new UserExtendFieldsUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userExtendFieldsBundleService = new UserExtendFieldsBundleService();
+            $userExtendFieldsBundleService = new UserExtendFieldsBundleService;
             $userExtendFields = $userExtendFieldsBundleService->getById($request['id']);
             if (empty($userExtendFields)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userExtendFieldsEntity = new UserExtendFieldsEntity();
+            $userExtendFieldsEntity = new UserExtendFieldsEntity;
             $userExtendFieldsEntity->loadData($request);
 
             $userExtendFieldsBundleService->update($userExtendFieldsEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserExtendFieldsController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userExtendFieldsBundleService = new UserExtendFieldsBundleService();
+            $userExtendFieldsBundleService = new UserExtendFieldsBundleService;
             if ($userExtendFieldsBundleService->remove($condition)) {
                 DB::commit();
 

@@ -32,7 +32,7 @@ class SupplierController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new SupplierQueryRequest();
+            $v = new SupplierQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class SupplierController extends BaseController
                 //
             ];
 
-            $supplierBundleService = new SupplierBundleService();
+            $supplierBundleService = new SupplierBundleService;
             $result = $supplierBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new SupplierResponse();
+                $response = new SupplierResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class SupplierController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new SupplierCreateRequest();
+            $v = new SupplierCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $supplierEntity = new SupplierEntity();
+            $supplierEntity = new SupplierEntity;
             $supplierEntity->loadData($request);
 
-            $supplierBundleService = new SupplierBundleService();
+            $supplierBundleService = new SupplierBundleService;
             $insertId = $supplierBundleService->save($supplierEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class SupplierController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $supplierBundleService = new SupplierBundleService();
+            $supplierBundleService = new SupplierBundleService;
             $supplier = $supplierBundleService->getOne($condition);
 
             if (empty($supplier)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new SupplierResponse();
+            $response = new SupplierResponse;
             $response->loadData($supplier);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class SupplierController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new SupplierUpdateRequest();
+            $v = new SupplierUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $supplierBundleService = new SupplierBundleService();
+            $supplierBundleService = new SupplierBundleService;
             $supplier = $supplierBundleService->getById($request['id']);
             if (empty($supplier)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $supplierEntity = new SupplierEntity();
+            $supplierEntity = new SupplierEntity;
             $supplierEntity->loadData($request);
 
             $supplierBundleService->update($supplierEntity->toArray(), [
@@ -191,7 +191,7 @@ class SupplierController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $supplierBundleService = new SupplierBundleService();
+            $supplierBundleService = new SupplierBundleService;
             if ($supplierBundleService->remove($condition)) {
                 DB::commit();
 

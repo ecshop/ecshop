@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace app\plugins\payment;
@@ -10,7 +9,8 @@ namespace app\plugins\payment;
  */
 class Post
 {
-    public function config() {
+    public function config()
+    {
         /* 模块的基本信息 */
         if (isset($set_modules) && $set_modules == true) {
             $i = isset($modules) ? count($modules) : 0;

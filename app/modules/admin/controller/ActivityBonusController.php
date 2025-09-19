@@ -32,7 +32,7 @@ class ActivityBonusController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ActivityBonusQueryRequest();
+            $v = new ActivityBonusQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ActivityBonusController extends BaseController
                 //
             ];
 
-            $activityBonusBundleService = new ActivityBonusBundleService();
+            $activityBonusBundleService = new ActivityBonusBundleService;
             $result = $activityBonusBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ActivityBonusResponse();
+                $response = new ActivityBonusResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ActivityBonusController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ActivityBonusCreateRequest();
+            $v = new ActivityBonusCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $activityBonusEntity = new ActivityBonusEntity();
+            $activityBonusEntity = new ActivityBonusEntity;
             $activityBonusEntity->loadData($request);
 
-            $activityBonusBundleService = new ActivityBonusBundleService();
+            $activityBonusBundleService = new ActivityBonusBundleService;
             $insertId = $activityBonusBundleService->save($activityBonusEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ActivityBonusController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $activityBonusBundleService = new ActivityBonusBundleService();
+            $activityBonusBundleService = new ActivityBonusBundleService;
             $activityBonus = $activityBonusBundleService->getOne($condition);
 
             if (empty($activityBonus)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ActivityBonusResponse();
+            $response = new ActivityBonusResponse;
             $response->loadData($activityBonus);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ActivityBonusController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ActivityBonusUpdateRequest();
+            $v = new ActivityBonusUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $activityBonusBundleService = new ActivityBonusBundleService();
+            $activityBonusBundleService = new ActivityBonusBundleService;
             $activityBonus = $activityBonusBundleService->getById($request['id']);
             if (empty($activityBonus)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $activityBonusEntity = new ActivityBonusEntity();
+            $activityBonusEntity = new ActivityBonusEntity;
             $activityBonusEntity->loadData($request);
 
             $activityBonusBundleService->update($activityBonusEntity->toArray(), [
@@ -191,7 +191,7 @@ class ActivityBonusController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $activityBonusBundleService = new ActivityBonusBundleService();
+            $activityBonusBundleService = new ActivityBonusBundleService;
             if ($activityBonusBundleService->remove($condition)) {
                 DB::commit();
 

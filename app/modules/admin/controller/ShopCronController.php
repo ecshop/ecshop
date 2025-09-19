@@ -32,7 +32,7 @@ class ShopCronController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShopCronQueryRequest();
+            $v = new ShopCronQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShopCronController extends BaseController
                 //
             ];
 
-            $shopCronBundleService = new ShopCronBundleService();
+            $shopCronBundleService = new ShopCronBundleService;
             $result = $shopCronBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShopCronResponse();
+                $response = new ShopCronResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShopCronController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopCronCreateRequest();
+            $v = new ShopCronCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopCronEntity = new ShopCronEntity();
+            $shopCronEntity = new ShopCronEntity;
             $shopCronEntity->loadData($request);
 
-            $shopCronBundleService = new ShopCronBundleService();
+            $shopCronBundleService = new ShopCronBundleService;
             $insertId = $shopCronBundleService->save($shopCronEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShopCronController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopCronBundleService = new ShopCronBundleService();
+            $shopCronBundleService = new ShopCronBundleService;
             $shopCron = $shopCronBundleService->getOne($condition);
 
             if (empty($shopCron)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShopCronResponse();
+            $response = new ShopCronResponse;
             $response->loadData($shopCron);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShopCronController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopCronUpdateRequest();
+            $v = new ShopCronUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopCronBundleService = new ShopCronBundleService();
+            $shopCronBundleService = new ShopCronBundleService;
             $shopCron = $shopCronBundleService->getById($request['id']);
             if (empty($shopCron)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shopCronEntity = new ShopCronEntity();
+            $shopCronEntity = new ShopCronEntity;
             $shopCronEntity->loadData($request);
 
             $shopCronBundleService->update($shopCronEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShopCronController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopCronBundleService = new ShopCronBundleService();
+            $shopCronBundleService = new ShopCronBundleService;
             if ($shopCronBundleService->remove($condition)) {
                 DB::commit();
 

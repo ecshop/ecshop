@@ -32,7 +32,7 @@ class AdminRoleController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new AdminRoleQueryRequest();
+            $v = new AdminRoleQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class AdminRoleController extends BaseController
                 //
             ];
 
-            $adminRoleBundleService = new AdminRoleBundleService();
+            $adminRoleBundleService = new AdminRoleBundleService;
             $result = $adminRoleBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new AdminRoleResponse();
+                $response = new AdminRoleResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class AdminRoleController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdminRoleCreateRequest();
+            $v = new AdminRoleCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adminRoleEntity = new AdminRoleEntity();
+            $adminRoleEntity = new AdminRoleEntity;
             $adminRoleEntity->loadData($request);
 
-            $adminRoleBundleService = new AdminRoleBundleService();
+            $adminRoleBundleService = new AdminRoleBundleService;
             $insertId = $adminRoleBundleService->save($adminRoleEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class AdminRoleController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adminRoleBundleService = new AdminRoleBundleService();
+            $adminRoleBundleService = new AdminRoleBundleService;
             $adminRole = $adminRoleBundleService->getOne($condition);
 
             if (empty($adminRole)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new AdminRoleResponse();
+            $response = new AdminRoleResponse;
             $response->loadData($adminRole);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class AdminRoleController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdminRoleUpdateRequest();
+            $v = new AdminRoleUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adminRoleBundleService = new AdminRoleBundleService();
+            $adminRoleBundleService = new AdminRoleBundleService;
             $adminRole = $adminRoleBundleService->getById($request['id']);
             if (empty($adminRole)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $adminRoleEntity = new AdminRoleEntity();
+            $adminRoleEntity = new AdminRoleEntity;
             $adminRoleEntity->loadData($request);
 
             $adminRoleBundleService->update($adminRoleEntity->toArray(), [
@@ -191,7 +191,7 @@ class AdminRoleController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adminRoleBundleService = new AdminRoleBundleService();
+            $adminRoleBundleService = new AdminRoleBundleService;
             if ($adminRoleBundleService->remove($condition)) {
                 DB::commit();
 

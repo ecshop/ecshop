@@ -32,7 +32,7 @@ class EmailSubscriptionController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new EmailSubscriptionQueryRequest();
+            $v = new EmailSubscriptionQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class EmailSubscriptionController extends BaseController
                 //
             ];
 
-            $emailSubscriptionBundleService = new EmailSubscriptionBundleService();
+            $emailSubscriptionBundleService = new EmailSubscriptionBundleService;
             $result = $emailSubscriptionBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new EmailSubscriptionResponse();
+                $response = new EmailSubscriptionResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class EmailSubscriptionController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new EmailSubscriptionCreateRequest();
+            $v = new EmailSubscriptionCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $emailSubscriptionEntity = new EmailSubscriptionEntity();
+            $emailSubscriptionEntity = new EmailSubscriptionEntity;
             $emailSubscriptionEntity->loadData($request);
 
-            $emailSubscriptionBundleService = new EmailSubscriptionBundleService();
+            $emailSubscriptionBundleService = new EmailSubscriptionBundleService;
             $insertId = $emailSubscriptionBundleService->save($emailSubscriptionEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class EmailSubscriptionController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $emailSubscriptionBundleService = new EmailSubscriptionBundleService();
+            $emailSubscriptionBundleService = new EmailSubscriptionBundleService;
             $emailSubscription = $emailSubscriptionBundleService->getOne($condition);
 
             if (empty($emailSubscription)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new EmailSubscriptionResponse();
+            $response = new EmailSubscriptionResponse;
             $response->loadData($emailSubscription);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class EmailSubscriptionController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new EmailSubscriptionUpdateRequest();
+            $v = new EmailSubscriptionUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $emailSubscriptionBundleService = new EmailSubscriptionBundleService();
+            $emailSubscriptionBundleService = new EmailSubscriptionBundleService;
             $emailSubscription = $emailSubscriptionBundleService->getById($request['id']);
             if (empty($emailSubscription)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $emailSubscriptionEntity = new EmailSubscriptionEntity();
+            $emailSubscriptionEntity = new EmailSubscriptionEntity;
             $emailSubscriptionEntity->loadData($request);
 
             $emailSubscriptionBundleService->update($emailSubscriptionEntity->toArray(), [
@@ -191,7 +191,7 @@ class EmailSubscriptionController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $emailSubscriptionBundleService = new EmailSubscriptionBundleService();
+            $emailSubscriptionBundleService = new EmailSubscriptionBundleService;
             if ($emailSubscriptionBundleService->remove($condition)) {
                 DB::commit();
 

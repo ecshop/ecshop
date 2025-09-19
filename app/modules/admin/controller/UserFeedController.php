@@ -32,7 +32,7 @@ class UserFeedController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserFeedQueryRequest();
+            $v = new UserFeedQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserFeedController extends BaseController
                 //
             ];
 
-            $userFeedBundleService = new UserFeedBundleService();
+            $userFeedBundleService = new UserFeedBundleService;
             $result = $userFeedBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserFeedResponse();
+                $response = new UserFeedResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserFeedController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserFeedCreateRequest();
+            $v = new UserFeedCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userFeedEntity = new UserFeedEntity();
+            $userFeedEntity = new UserFeedEntity;
             $userFeedEntity->loadData($request);
 
-            $userFeedBundleService = new UserFeedBundleService();
+            $userFeedBundleService = new UserFeedBundleService;
             $insertId = $userFeedBundleService->save($userFeedEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserFeedController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userFeedBundleService = new UserFeedBundleService();
+            $userFeedBundleService = new UserFeedBundleService;
             $userFeed = $userFeedBundleService->getOne($condition);
 
             if (empty($userFeed)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserFeedResponse();
+            $response = new UserFeedResponse;
             $response->loadData($userFeed);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserFeedController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserFeedUpdateRequest();
+            $v = new UserFeedUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userFeedBundleService = new UserFeedBundleService();
+            $userFeedBundleService = new UserFeedBundleService;
             $userFeed = $userFeedBundleService->getById($request['id']);
             if (empty($userFeed)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userFeedEntity = new UserFeedEntity();
+            $userFeedEntity = new UserFeedEntity;
             $userFeedEntity->loadData($request);
 
             $userFeedBundleService->update($userFeedEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserFeedController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userFeedBundleService = new UserFeedBundleService();
+            $userFeedBundleService = new UserFeedBundleService;
             if ($userFeedBundleService->remove($condition)) {
                 DB::commit();
 

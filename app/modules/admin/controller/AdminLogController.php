@@ -32,7 +32,7 @@ class AdminLogController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new AdminLogQueryRequest();
+            $v = new AdminLogQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class AdminLogController extends BaseController
                 //
             ];
 
-            $adminLogBundleService = new AdminLogBundleService();
+            $adminLogBundleService = new AdminLogBundleService;
             $result = $adminLogBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new AdminLogResponse();
+                $response = new AdminLogResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class AdminLogController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdminLogCreateRequest();
+            $v = new AdminLogCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adminLogEntity = new AdminLogEntity();
+            $adminLogEntity = new AdminLogEntity;
             $adminLogEntity->loadData($request);
 
-            $adminLogBundleService = new AdminLogBundleService();
+            $adminLogBundleService = new AdminLogBundleService;
             $insertId = $adminLogBundleService->save($adminLogEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class AdminLogController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adminLogBundleService = new AdminLogBundleService();
+            $adminLogBundleService = new AdminLogBundleService;
             $adminLog = $adminLogBundleService->getOne($condition);
 
             if (empty($adminLog)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new AdminLogResponse();
+            $response = new AdminLogResponse;
             $response->loadData($adminLog);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class AdminLogController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdminLogUpdateRequest();
+            $v = new AdminLogUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adminLogBundleService = new AdminLogBundleService();
+            $adminLogBundleService = new AdminLogBundleService;
             $adminLog = $adminLogBundleService->getById($request['id']);
             if (empty($adminLog)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $adminLogEntity = new AdminLogEntity();
+            $adminLogEntity = new AdminLogEntity;
             $adminLogEntity->loadData($request);
 
             $adminLogBundleService->update($adminLogEntity->toArray(), [
@@ -191,7 +191,7 @@ class AdminLogController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adminLogBundleService = new AdminLogBundleService();
+            $adminLogBundleService = new AdminLogBundleService;
             if ($adminLogBundleService->remove($condition)) {
                 DB::commit();
 

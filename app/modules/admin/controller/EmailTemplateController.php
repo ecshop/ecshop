@@ -32,7 +32,7 @@ class EmailTemplateController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new EmailTemplateQueryRequest();
+            $v = new EmailTemplateQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class EmailTemplateController extends BaseController
                 //
             ];
 
-            $emailTemplateBundleService = new EmailTemplateBundleService();
+            $emailTemplateBundleService = new EmailTemplateBundleService;
             $result = $emailTemplateBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new EmailTemplateResponse();
+                $response = new EmailTemplateResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class EmailTemplateController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new EmailTemplateCreateRequest();
+            $v = new EmailTemplateCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $emailTemplateEntity = new EmailTemplateEntity();
+            $emailTemplateEntity = new EmailTemplateEntity;
             $emailTemplateEntity->loadData($request);
 
-            $emailTemplateBundleService = new EmailTemplateBundleService();
+            $emailTemplateBundleService = new EmailTemplateBundleService;
             $insertId = $emailTemplateBundleService->save($emailTemplateEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class EmailTemplateController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $emailTemplateBundleService = new EmailTemplateBundleService();
+            $emailTemplateBundleService = new EmailTemplateBundleService;
             $emailTemplate = $emailTemplateBundleService->getOne($condition);
 
             if (empty($emailTemplate)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new EmailTemplateResponse();
+            $response = new EmailTemplateResponse;
             $response->loadData($emailTemplate);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class EmailTemplateController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new EmailTemplateUpdateRequest();
+            $v = new EmailTemplateUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $emailTemplateBundleService = new EmailTemplateBundleService();
+            $emailTemplateBundleService = new EmailTemplateBundleService;
             $emailTemplate = $emailTemplateBundleService->getById($request['id']);
             if (empty($emailTemplate)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $emailTemplateEntity = new EmailTemplateEntity();
+            $emailTemplateEntity = new EmailTemplateEntity;
             $emailTemplateEntity->loadData($request);
 
             $emailTemplateBundleService->update($emailTemplateEntity->toArray(), [
@@ -191,7 +191,7 @@ class EmailTemplateController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $emailTemplateBundleService = new EmailTemplateBundleService();
+            $emailTemplateBundleService = new EmailTemplateBundleService;
             if ($emailTemplateBundleService->remove($condition)) {
                 DB::commit();
 

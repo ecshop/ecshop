@@ -1,6 +1,5 @@
 <?php
 
-
 // require dirname(__FILE__).'/includes/init.php';
 // require_once ROOT_PATH.'/admin/includes/lib_goods.php';
 // include_once ROOT_PATH.'/includes/cls_image.php';

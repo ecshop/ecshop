@@ -1,6 +1,5 @@
 <?php
 
-
 // require dirname(__FILE__).'/includes/init.php';
 admin_priv('booking');
 /* ------------------------------------------------------ */

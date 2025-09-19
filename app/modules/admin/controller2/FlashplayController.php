@@ -1,6 +1,5 @@
 <?php
 
-
 // require dirname(__FILE__).'/includes/init.php';
 $uri = $ecs->url();
 $allow_suffix = ['gif', 'jpg', 'png', 'jpeg', 'bmp'];

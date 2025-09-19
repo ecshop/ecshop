@@ -32,7 +32,7 @@ class UserController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserQueryRequest();
+            $v = new UserQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserController extends BaseController
                 //
             ];
 
-            $userBundleService = new UserBundleService();
+            $userBundleService = new UserBundleService;
             $result = $userBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserResponse();
+                $response = new UserResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserCreateRequest();
+            $v = new UserCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userEntity = new UserEntity();
+            $userEntity = new UserEntity;
             $userEntity->loadData($request);
 
-            $userBundleService = new UserBundleService();
+            $userBundleService = new UserBundleService;
             $insertId = $userBundleService->save($userEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userBundleService = new UserBundleService();
+            $userBundleService = new UserBundleService;
             $user = $userBundleService->getOne($condition);
 
             if (empty($user)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserResponse();
+            $response = new UserResponse;
             $response->loadData($user);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserUpdateRequest();
+            $v = new UserUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userBundleService = new UserBundleService();
+            $userBundleService = new UserBundleService;
             $user = $userBundleService->getById($request['id']);
             if (empty($user)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userEntity = new UserEntity();
+            $userEntity = new UserEntity;
             $userEntity->loadData($request);
 
             $userBundleService->update($userEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userBundleService = new UserBundleService();
+            $userBundleService = new UserBundleService;
             if ($userBundleService->remove($condition)) {
                 DB::commit();
 

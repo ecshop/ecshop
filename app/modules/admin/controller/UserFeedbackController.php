@@ -32,7 +32,7 @@ class UserFeedbackController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserFeedbackQueryRequest();
+            $v = new UserFeedbackQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserFeedbackController extends BaseController
                 //
             ];
 
-            $userFeedbackBundleService = new UserFeedbackBundleService();
+            $userFeedbackBundleService = new UserFeedbackBundleService;
             $result = $userFeedbackBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserFeedbackResponse();
+                $response = new UserFeedbackResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserFeedbackController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserFeedbackCreateRequest();
+            $v = new UserFeedbackCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userFeedbackEntity = new UserFeedbackEntity();
+            $userFeedbackEntity = new UserFeedbackEntity;
             $userFeedbackEntity->loadData($request);
 
-            $userFeedbackBundleService = new UserFeedbackBundleService();
+            $userFeedbackBundleService = new UserFeedbackBundleService;
             $insertId = $userFeedbackBundleService->save($userFeedbackEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserFeedbackController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userFeedbackBundleService = new UserFeedbackBundleService();
+            $userFeedbackBundleService = new UserFeedbackBundleService;
             $userFeedback = $userFeedbackBundleService->getOne($condition);
 
             if (empty($userFeedback)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserFeedbackResponse();
+            $response = new UserFeedbackResponse;
             $response->loadData($userFeedback);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserFeedbackController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserFeedbackUpdateRequest();
+            $v = new UserFeedbackUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userFeedbackBundleService = new UserFeedbackBundleService();
+            $userFeedbackBundleService = new UserFeedbackBundleService;
             $userFeedback = $userFeedbackBundleService->getById($request['id']);
             if (empty($userFeedback)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userFeedbackEntity = new UserFeedbackEntity();
+            $userFeedbackEntity = new UserFeedbackEntity;
             $userFeedbackEntity->loadData($request);
 
             $userFeedbackBundleService->update($userFeedbackEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserFeedbackController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userFeedbackBundleService = new UserFeedbackBundleService();
+            $userFeedbackBundleService = new UserFeedbackBundleService;
             if ($userFeedbackBundleService->remove($condition)) {
                 DB::commit();
 

@@ -1,6 +1,5 @@
 <?php
 
-
 // require dirname(__FILE__).'/includes/init.php';
 
 $exc = new exchange($ecs->table('user_rank'), $db, 'rank_id', 'rank_name');

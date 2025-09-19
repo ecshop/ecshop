@@ -32,7 +32,7 @@ class AdminUserController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new AdminUserQueryRequest();
+            $v = new AdminUserQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class AdminUserController extends BaseController
                 //
             ];
 
-            $adminUserBundleService = new AdminUserBundleService();
+            $adminUserBundleService = new AdminUserBundleService;
             $result = $adminUserBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new AdminUserResponse();
+                $response = new AdminUserResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class AdminUserController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdminUserCreateRequest();
+            $v = new AdminUserCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adminUserEntity = new AdminUserEntity();
+            $adminUserEntity = new AdminUserEntity;
             $adminUserEntity->loadData($request);
 
-            $adminUserBundleService = new AdminUserBundleService();
+            $adminUserBundleService = new AdminUserBundleService;
             $insertId = $adminUserBundleService->save($adminUserEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class AdminUserController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adminUserBundleService = new AdminUserBundleService();
+            $adminUserBundleService = new AdminUserBundleService;
             $adminUser = $adminUserBundleService->getOne($condition);
 
             if (empty($adminUser)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new AdminUserResponse();
+            $response = new AdminUserResponse;
             $response->loadData($adminUser);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class AdminUserController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdminUserUpdateRequest();
+            $v = new AdminUserUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adminUserBundleService = new AdminUserBundleService();
+            $adminUserBundleService = new AdminUserBundleService;
             $adminUser = $adminUserBundleService->getById($request['id']);
             if (empty($adminUser)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $adminUserEntity = new AdminUserEntity();
+            $adminUserEntity = new AdminUserEntity;
             $adminUserEntity->loadData($request);
 
             $adminUserBundleService->update($adminUserEntity->toArray(), [
@@ -191,7 +191,7 @@ class AdminUserController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adminUserBundleService = new AdminUserBundleService();
+            $adminUserBundleService = new AdminUserBundleService;
             if ($adminUserBundleService->remove($condition)) {
                 DB::commit();
 

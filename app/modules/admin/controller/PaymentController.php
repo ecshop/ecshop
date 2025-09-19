@@ -32,7 +32,7 @@ class PaymentController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new PaymentQueryRequest();
+            $v = new PaymentQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class PaymentController extends BaseController
                 //
             ];
 
-            $paymentBundleService = new PaymentBundleService();
+            $paymentBundleService = new PaymentBundleService;
             $result = $paymentBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new PaymentResponse();
+                $response = new PaymentResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class PaymentController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new PaymentCreateRequest();
+            $v = new PaymentCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $paymentEntity = new PaymentEntity();
+            $paymentEntity = new PaymentEntity;
             $paymentEntity->loadData($request);
 
-            $paymentBundleService = new PaymentBundleService();
+            $paymentBundleService = new PaymentBundleService;
             $insertId = $paymentBundleService->save($paymentEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class PaymentController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $paymentBundleService = new PaymentBundleService();
+            $paymentBundleService = new PaymentBundleService;
             $payment = $paymentBundleService->getOne($condition);
 
             if (empty($payment)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new PaymentResponse();
+            $response = new PaymentResponse;
             $response->loadData($payment);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class PaymentController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new PaymentUpdateRequest();
+            $v = new PaymentUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $paymentBundleService = new PaymentBundleService();
+            $paymentBundleService = new PaymentBundleService;
             $payment = $paymentBundleService->getById($request['id']);
             if (empty($payment)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $paymentEntity = new PaymentEntity();
+            $paymentEntity = new PaymentEntity;
             $paymentEntity->loadData($request);
 
             $paymentBundleService->update($paymentEntity->toArray(), [
@@ -191,7 +191,7 @@ class PaymentController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $paymentBundleService = new PaymentBundleService();
+            $paymentBundleService = new PaymentBundleService;
             if ($paymentBundleService->remove($condition)) {
                 DB::commit();
 

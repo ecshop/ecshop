@@ -1,6 +1,5 @@
 <?php
 
-
 // require dirname(__FILE__).'/includes/init.php';
 
 $_POST['sql'] = ! empty($_POST['sql']) ? trim($_POST['sql']) : '';

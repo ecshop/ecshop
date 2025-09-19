@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace app\support\library;
+
 class Image
 {
     public $error_no = 0;

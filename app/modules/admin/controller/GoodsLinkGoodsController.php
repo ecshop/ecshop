@@ -32,7 +32,7 @@ class GoodsLinkGoodsController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new GoodsLinkGoodsQueryRequest();
+            $v = new GoodsLinkGoodsQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class GoodsLinkGoodsController extends BaseController
                 //
             ];
 
-            $goodsLinkGoodsBundleService = new GoodsLinkGoodsBundleService();
+            $goodsLinkGoodsBundleService = new GoodsLinkGoodsBundleService;
             $result = $goodsLinkGoodsBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new GoodsLinkGoodsResponse();
+                $response = new GoodsLinkGoodsResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class GoodsLinkGoodsController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsLinkGoodsCreateRequest();
+            $v = new GoodsLinkGoodsCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsLinkGoodsEntity = new GoodsLinkGoodsEntity();
+            $goodsLinkGoodsEntity = new GoodsLinkGoodsEntity;
             $goodsLinkGoodsEntity->loadData($request);
 
-            $goodsLinkGoodsBundleService = new GoodsLinkGoodsBundleService();
+            $goodsLinkGoodsBundleService = new GoodsLinkGoodsBundleService;
             $insertId = $goodsLinkGoodsBundleService->save($goodsLinkGoodsEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class GoodsLinkGoodsController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsLinkGoodsBundleService = new GoodsLinkGoodsBundleService();
+            $goodsLinkGoodsBundleService = new GoodsLinkGoodsBundleService;
             $goodsLinkGoods = $goodsLinkGoodsBundleService->getOne($condition);
 
             if (empty($goodsLinkGoods)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new GoodsLinkGoodsResponse();
+            $response = new GoodsLinkGoodsResponse;
             $response->loadData($goodsLinkGoods);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class GoodsLinkGoodsController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsLinkGoodsUpdateRequest();
+            $v = new GoodsLinkGoodsUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsLinkGoodsBundleService = new GoodsLinkGoodsBundleService();
+            $goodsLinkGoodsBundleService = new GoodsLinkGoodsBundleService;
             $goodsLinkGoods = $goodsLinkGoodsBundleService->getById($request['id']);
             if (empty($goodsLinkGoods)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $goodsLinkGoodsEntity = new GoodsLinkGoodsEntity();
+            $goodsLinkGoodsEntity = new GoodsLinkGoodsEntity;
             $goodsLinkGoodsEntity->loadData($request);
 
             $goodsLinkGoodsBundleService->update($goodsLinkGoodsEntity->toArray(), [
@@ -191,7 +191,7 @@ class GoodsLinkGoodsController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsLinkGoodsBundleService = new GoodsLinkGoodsBundleService();
+            $goodsLinkGoodsBundleService = new GoodsLinkGoodsBundleService;
             if ($goodsLinkGoodsBundleService->remove($condition)) {
                 DB::commit();
 

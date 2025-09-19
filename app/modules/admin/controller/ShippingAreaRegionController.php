@@ -32,7 +32,7 @@ class ShippingAreaRegionController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShippingAreaRegionQueryRequest();
+            $v = new ShippingAreaRegionQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShippingAreaRegionController extends BaseController
                 //
             ];
 
-            $shippingAreaRegionBundleService = new ShippingAreaRegionBundleService();
+            $shippingAreaRegionBundleService = new ShippingAreaRegionBundleService;
             $result = $shippingAreaRegionBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShippingAreaRegionResponse();
+                $response = new ShippingAreaRegionResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShippingAreaRegionController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShippingAreaRegionCreateRequest();
+            $v = new ShippingAreaRegionCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shippingAreaRegionEntity = new ShippingAreaRegionEntity();
+            $shippingAreaRegionEntity = new ShippingAreaRegionEntity;
             $shippingAreaRegionEntity->loadData($request);
 
-            $shippingAreaRegionBundleService = new ShippingAreaRegionBundleService();
+            $shippingAreaRegionBundleService = new ShippingAreaRegionBundleService;
             $insertId = $shippingAreaRegionBundleService->save($shippingAreaRegionEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShippingAreaRegionController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shippingAreaRegionBundleService = new ShippingAreaRegionBundleService();
+            $shippingAreaRegionBundleService = new ShippingAreaRegionBundleService;
             $shippingAreaRegion = $shippingAreaRegionBundleService->getOne($condition);
 
             if (empty($shippingAreaRegion)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShippingAreaRegionResponse();
+            $response = new ShippingAreaRegionResponse;
             $response->loadData($shippingAreaRegion);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShippingAreaRegionController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShippingAreaRegionUpdateRequest();
+            $v = new ShippingAreaRegionUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shippingAreaRegionBundleService = new ShippingAreaRegionBundleService();
+            $shippingAreaRegionBundleService = new ShippingAreaRegionBundleService;
             $shippingAreaRegion = $shippingAreaRegionBundleService->getById($request['id']);
             if (empty($shippingAreaRegion)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shippingAreaRegionEntity = new ShippingAreaRegionEntity();
+            $shippingAreaRegionEntity = new ShippingAreaRegionEntity;
             $shippingAreaRegionEntity->loadData($request);
 
             $shippingAreaRegionBundleService->update($shippingAreaRegionEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShippingAreaRegionController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shippingAreaRegionBundleService = new ShippingAreaRegionBundleService();
+            $shippingAreaRegionBundleService = new ShippingAreaRegionBundleService;
             if ($shippingAreaRegionBundleService->remove($condition)) {
                 DB::commit();
 

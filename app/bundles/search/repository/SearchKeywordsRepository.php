@@ -20,7 +20,7 @@ class SearchKeywordsRepository extends CurdRepository implements RepositoryInter
     public static function getInstance(): SearchKeywordsRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new SearchKeywordsRepository();
+            self::$instance = new SearchKeywordsRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class SearchKeywordsRepository extends CurdRepository implements RepositoryInter
     /**
      * 添加
      */
-    public function createByEntity(SearchKeywordsEntity $entity): int    {
+    public function createByEntity(SearchKeywordsEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class SearchKeywordsRepository extends CurdRepository implements RepositoryInter
             return null;
         }
 
-        $entity = new SearchKeywordsEntity();
+        $entity = new SearchKeywordsEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class SearchKeywordsRepository extends CurdRepository implements RepositoryInter
             return null;
         }
 
-        $entity = new SearchKeywordsEntity();
+        $entity = new SearchKeywordsEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class SearchKeywordsRepository extends CurdRepository implements RepositoryInter
         }
 
         foreach ($result as $key => $item) {
-            $entity = new SearchKeywordsEntity();
+            $entity = new SearchKeywordsEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class SearchKeywordsRepository extends CurdRepository implements RepositoryInter
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new SearchKeywordsEntity();
+            $entity = new SearchKeywordsEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class SearchKeywordsRepository extends CurdRepository implements RepositoryInter
     {
         $model = '\\app\\bundles\\search\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

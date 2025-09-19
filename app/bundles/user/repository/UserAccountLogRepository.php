@@ -20,7 +20,7 @@ class UserAccountLogRepository extends CurdRepository implements RepositoryInter
     public static function getInstance(): UserAccountLogRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new UserAccountLogRepository();
+            self::$instance = new UserAccountLogRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class UserAccountLogRepository extends CurdRepository implements RepositoryInter
     /**
      * 添加
      */
-    public function createByEntity(UserAccountLogEntity $entity): int    {
+    public function createByEntity(UserAccountLogEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class UserAccountLogRepository extends CurdRepository implements RepositoryInter
             return null;
         }
 
-        $entity = new UserAccountLogEntity();
+        $entity = new UserAccountLogEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class UserAccountLogRepository extends CurdRepository implements RepositoryInter
             return null;
         }
 
-        $entity = new UserAccountLogEntity();
+        $entity = new UserAccountLogEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class UserAccountLogRepository extends CurdRepository implements RepositoryInter
         }
 
         foreach ($result as $key => $item) {
-            $entity = new UserAccountLogEntity();
+            $entity = new UserAccountLogEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class UserAccountLogRepository extends CurdRepository implements RepositoryInter
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new UserAccountLogEntity();
+            $entity = new UserAccountLogEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class UserAccountLogRepository extends CurdRepository implements RepositoryInter
     {
         $model = '\\app\\bundles\\user\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

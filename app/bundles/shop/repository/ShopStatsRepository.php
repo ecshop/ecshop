@@ -20,7 +20,7 @@ class ShopStatsRepository extends CurdRepository implements RepositoryInterface
     public static function getInstance(): ShopStatsRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new ShopStatsRepository();
+            self::$instance = new ShopStatsRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class ShopStatsRepository extends CurdRepository implements RepositoryInterface
     /**
      * 添加
      */
-    public function createByEntity(ShopStatsEntity $entity): int    {
+    public function createByEntity(ShopStatsEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class ShopStatsRepository extends CurdRepository implements RepositoryInterface
             return null;
         }
 
-        $entity = new ShopStatsEntity();
+        $entity = new ShopStatsEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class ShopStatsRepository extends CurdRepository implements RepositoryInterface
             return null;
         }
 
-        $entity = new ShopStatsEntity();
+        $entity = new ShopStatsEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class ShopStatsRepository extends CurdRepository implements RepositoryInterface
         }
 
         foreach ($result as $key => $item) {
-            $entity = new ShopStatsEntity();
+            $entity = new ShopStatsEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class ShopStatsRepository extends CurdRepository implements RepositoryInterface
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new ShopStatsEntity();
+            $entity = new ShopStatsEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class ShopStatsRepository extends CurdRepository implements RepositoryInterface
     {
         $model = '\\app\\bundles\\shop\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

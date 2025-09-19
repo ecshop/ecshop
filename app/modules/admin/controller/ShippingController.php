@@ -32,7 +32,7 @@ class ShippingController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShippingQueryRequest();
+            $v = new ShippingQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShippingController extends BaseController
                 //
             ];
 
-            $shippingBundleService = new ShippingBundleService();
+            $shippingBundleService = new ShippingBundleService;
             $result = $shippingBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShippingResponse();
+                $response = new ShippingResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShippingController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShippingCreateRequest();
+            $v = new ShippingCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shippingEntity = new ShippingEntity();
+            $shippingEntity = new ShippingEntity;
             $shippingEntity->loadData($request);
 
-            $shippingBundleService = new ShippingBundleService();
+            $shippingBundleService = new ShippingBundleService;
             $insertId = $shippingBundleService->save($shippingEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShippingController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shippingBundleService = new ShippingBundleService();
+            $shippingBundleService = new ShippingBundleService;
             $shipping = $shippingBundleService->getOne($condition);
 
             if (empty($shipping)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShippingResponse();
+            $response = new ShippingResponse;
             $response->loadData($shipping);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShippingController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShippingUpdateRequest();
+            $v = new ShippingUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shippingBundleService = new ShippingBundleService();
+            $shippingBundleService = new ShippingBundleService;
             $shipping = $shippingBundleService->getById($request['id']);
             if (empty($shipping)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shippingEntity = new ShippingEntity();
+            $shippingEntity = new ShippingEntity;
             $shippingEntity->loadData($request);
 
             $shippingBundleService->update($shippingEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShippingController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shippingBundleService = new ShippingBundleService();
+            $shippingBundleService = new ShippingBundleService;
             if ($shippingBundleService->remove($condition)) {
                 DB::commit();
 

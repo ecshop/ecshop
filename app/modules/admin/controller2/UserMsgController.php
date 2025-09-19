@@ -1,6 +1,5 @@
 <?php
 
-
 // require dirname(__FILE__).'/includes/init.php';
 /* 权限判断 */
 admin_priv('feedback_priv');

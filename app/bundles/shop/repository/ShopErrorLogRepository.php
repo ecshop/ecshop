@@ -20,7 +20,7 @@ class ShopErrorLogRepository extends CurdRepository implements RepositoryInterfa
     public static function getInstance(): ShopErrorLogRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new ShopErrorLogRepository();
+            self::$instance = new ShopErrorLogRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class ShopErrorLogRepository extends CurdRepository implements RepositoryInterfa
     /**
      * 添加
      */
-    public function createByEntity(ShopErrorLogEntity $entity): int    {
+    public function createByEntity(ShopErrorLogEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class ShopErrorLogRepository extends CurdRepository implements RepositoryInterfa
             return null;
         }
 
-        $entity = new ShopErrorLogEntity();
+        $entity = new ShopErrorLogEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class ShopErrorLogRepository extends CurdRepository implements RepositoryInterfa
             return null;
         }
 
-        $entity = new ShopErrorLogEntity();
+        $entity = new ShopErrorLogEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class ShopErrorLogRepository extends CurdRepository implements RepositoryInterfa
         }
 
         foreach ($result as $key => $item) {
-            $entity = new ShopErrorLogEntity();
+            $entity = new ShopErrorLogEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class ShopErrorLogRepository extends CurdRepository implements RepositoryInterfa
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new ShopErrorLogEntity();
+            $entity = new ShopErrorLogEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class ShopErrorLogRepository extends CurdRepository implements RepositoryInterfa
     {
         $model = '\\app\\bundles\\shop\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

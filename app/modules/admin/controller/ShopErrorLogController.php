@@ -32,7 +32,7 @@ class ShopErrorLogController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShopErrorLogQueryRequest();
+            $v = new ShopErrorLogQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShopErrorLogController extends BaseController
                 //
             ];
 
-            $shopErrorLogBundleService = new ShopErrorLogBundleService();
+            $shopErrorLogBundleService = new ShopErrorLogBundleService;
             $result = $shopErrorLogBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShopErrorLogResponse();
+                $response = new ShopErrorLogResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShopErrorLogController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopErrorLogCreateRequest();
+            $v = new ShopErrorLogCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopErrorLogEntity = new ShopErrorLogEntity();
+            $shopErrorLogEntity = new ShopErrorLogEntity;
             $shopErrorLogEntity->loadData($request);
 
-            $shopErrorLogBundleService = new ShopErrorLogBundleService();
+            $shopErrorLogBundleService = new ShopErrorLogBundleService;
             $insertId = $shopErrorLogBundleService->save($shopErrorLogEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShopErrorLogController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopErrorLogBundleService = new ShopErrorLogBundleService();
+            $shopErrorLogBundleService = new ShopErrorLogBundleService;
             $shopErrorLog = $shopErrorLogBundleService->getOne($condition);
 
             if (empty($shopErrorLog)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShopErrorLogResponse();
+            $response = new ShopErrorLogResponse;
             $response->loadData($shopErrorLog);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShopErrorLogController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopErrorLogUpdateRequest();
+            $v = new ShopErrorLogUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopErrorLogBundleService = new ShopErrorLogBundleService();
+            $shopErrorLogBundleService = new ShopErrorLogBundleService;
             $shopErrorLog = $shopErrorLogBundleService->getById($request['id']);
             if (empty($shopErrorLog)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shopErrorLogEntity = new ShopErrorLogEntity();
+            $shopErrorLogEntity = new ShopErrorLogEntity;
             $shopErrorLogEntity->loadData($request);
 
             $shopErrorLogBundleService->update($shopErrorLogEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShopErrorLogController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopErrorLogBundleService = new ShopErrorLogBundleService();
+            $shopErrorLogBundleService = new ShopErrorLogBundleService;
             if ($shopErrorLogBundleService->remove($condition)) {
                 DB::commit();
 

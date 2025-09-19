@@ -32,7 +32,7 @@ class UserAddressController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserAddressQueryRequest();
+            $v = new UserAddressQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserAddressController extends BaseController
                 //
             ];
 
-            $userAddressBundleService = new UserAddressBundleService();
+            $userAddressBundleService = new UserAddressBundleService;
             $result = $userAddressBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserAddressResponse();
+                $response = new UserAddressResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserAddressController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserAddressCreateRequest();
+            $v = new UserAddressCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userAddressEntity = new UserAddressEntity();
+            $userAddressEntity = new UserAddressEntity;
             $userAddressEntity->loadData($request);
 
-            $userAddressBundleService = new UserAddressBundleService();
+            $userAddressBundleService = new UserAddressBundleService;
             $insertId = $userAddressBundleService->save($userAddressEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserAddressController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userAddressBundleService = new UserAddressBundleService();
+            $userAddressBundleService = new UserAddressBundleService;
             $userAddress = $userAddressBundleService->getOne($condition);
 
             if (empty($userAddress)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserAddressResponse();
+            $response = new UserAddressResponse;
             $response->loadData($userAddress);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserAddressController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserAddressUpdateRequest();
+            $v = new UserAddressUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userAddressBundleService = new UserAddressBundleService();
+            $userAddressBundleService = new UserAddressBundleService;
             $userAddress = $userAddressBundleService->getById($request['id']);
             if (empty($userAddress)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userAddressEntity = new UserAddressEntity();
+            $userAddressEntity = new UserAddressEntity;
             $userAddressEntity->loadData($request);
 
             $userAddressBundleService->update($userAddressEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserAddressController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userAddressBundleService = new UserAddressBundleService();
+            $userAddressBundleService = new UserAddressBundleService;
             if ($userAddressBundleService->remove($condition)) {
                 DB::commit();
 

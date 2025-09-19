@@ -20,7 +20,7 @@ class UserAccountRepository extends CurdRepository implements RepositoryInterfac
     public static function getInstance(): UserAccountRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new UserAccountRepository();
+            self::$instance = new UserAccountRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class UserAccountRepository extends CurdRepository implements RepositoryInterfac
     /**
      * 添加
      */
-    public function createByEntity(UserAccountEntity $entity): int    {
+    public function createByEntity(UserAccountEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class UserAccountRepository extends CurdRepository implements RepositoryInterfac
             return null;
         }
 
-        $entity = new UserAccountEntity();
+        $entity = new UserAccountEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class UserAccountRepository extends CurdRepository implements RepositoryInterfac
             return null;
         }
 
-        $entity = new UserAccountEntity();
+        $entity = new UserAccountEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class UserAccountRepository extends CurdRepository implements RepositoryInterfac
         }
 
         foreach ($result as $key => $item) {
-            $entity = new UserAccountEntity();
+            $entity = new UserAccountEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class UserAccountRepository extends CurdRepository implements RepositoryInterfac
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new UserAccountEntity();
+            $entity = new UserAccountEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class UserAccountRepository extends CurdRepository implements RepositoryInterfac
     {
         $model = '\\app\\bundles\\user\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

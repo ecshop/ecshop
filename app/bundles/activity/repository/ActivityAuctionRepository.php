@@ -20,7 +20,7 @@ class ActivityAuctionRepository extends CurdRepository implements RepositoryInte
     public static function getInstance(): ActivityAuctionRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new ActivityAuctionRepository();
+            self::$instance = new ActivityAuctionRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class ActivityAuctionRepository extends CurdRepository implements RepositoryInte
     /**
      * 添加
      */
-    public function createByEntity(ActivityAuctionEntity $entity): int    {
+    public function createByEntity(ActivityAuctionEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class ActivityAuctionRepository extends CurdRepository implements RepositoryInte
             return null;
         }
 
-        $entity = new ActivityAuctionEntity();
+        $entity = new ActivityAuctionEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class ActivityAuctionRepository extends CurdRepository implements RepositoryInte
             return null;
         }
 
-        $entity = new ActivityAuctionEntity();
+        $entity = new ActivityAuctionEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class ActivityAuctionRepository extends CurdRepository implements RepositoryInte
         }
 
         foreach ($result as $key => $item) {
-            $entity = new ActivityAuctionEntity();
+            $entity = new ActivityAuctionEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class ActivityAuctionRepository extends CurdRepository implements RepositoryInte
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new ActivityAuctionEntity();
+            $entity = new ActivityAuctionEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class ActivityAuctionRepository extends CurdRepository implements RepositoryInte
     {
         $model = '\\app\\bundles\\activity\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

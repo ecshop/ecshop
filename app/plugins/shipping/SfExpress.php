@@ -1,11 +1,8 @@
 <?php
 
-
-
 declare(strict_types=1);
 
 namespace app\plugins\shipping;
-
 
 /**
  * 顺丰速运费用计算方式: 起点到终点 * 重量(kg)

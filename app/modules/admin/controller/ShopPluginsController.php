@@ -32,7 +32,7 @@ class ShopPluginsController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShopPluginsQueryRequest();
+            $v = new ShopPluginsQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShopPluginsController extends BaseController
                 //
             ];
 
-            $shopPluginsBundleService = new ShopPluginsBundleService();
+            $shopPluginsBundleService = new ShopPluginsBundleService;
             $result = $shopPluginsBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShopPluginsResponse();
+                $response = new ShopPluginsResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShopPluginsController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopPluginsCreateRequest();
+            $v = new ShopPluginsCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopPluginsEntity = new ShopPluginsEntity();
+            $shopPluginsEntity = new ShopPluginsEntity;
             $shopPluginsEntity->loadData($request);
 
-            $shopPluginsBundleService = new ShopPluginsBundleService();
+            $shopPluginsBundleService = new ShopPluginsBundleService;
             $insertId = $shopPluginsBundleService->save($shopPluginsEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShopPluginsController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopPluginsBundleService = new ShopPluginsBundleService();
+            $shopPluginsBundleService = new ShopPluginsBundleService;
             $shopPlugins = $shopPluginsBundleService->getOne($condition);
 
             if (empty($shopPlugins)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShopPluginsResponse();
+            $response = new ShopPluginsResponse;
             $response->loadData($shopPlugins);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShopPluginsController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopPluginsUpdateRequest();
+            $v = new ShopPluginsUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopPluginsBundleService = new ShopPluginsBundleService();
+            $shopPluginsBundleService = new ShopPluginsBundleService;
             $shopPlugins = $shopPluginsBundleService->getById($request['id']);
             if (empty($shopPlugins)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shopPluginsEntity = new ShopPluginsEntity();
+            $shopPluginsEntity = new ShopPluginsEntity;
             $shopPluginsEntity->loadData($request);
 
             $shopPluginsBundleService->update($shopPluginsEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShopPluginsController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopPluginsBundleService = new ShopPluginsBundleService();
+            $shopPluginsBundleService = new ShopPluginsBundleService;
             if ($shopPluginsBundleService->remove($condition)) {
                 DB::commit();
 

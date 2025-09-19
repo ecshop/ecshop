@@ -32,7 +32,7 @@ class VoteController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new VoteQueryRequest();
+            $v = new VoteQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class VoteController extends BaseController
                 //
             ];
 
-            $voteBundleService = new VoteBundleService();
+            $voteBundleService = new VoteBundleService;
             $result = $voteBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new VoteResponse();
+                $response = new VoteResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class VoteController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new VoteCreateRequest();
+            $v = new VoteCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $voteEntity = new VoteEntity();
+            $voteEntity = new VoteEntity;
             $voteEntity->loadData($request);
 
-            $voteBundleService = new VoteBundleService();
+            $voteBundleService = new VoteBundleService;
             $insertId = $voteBundleService->save($voteEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class VoteController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $voteBundleService = new VoteBundleService();
+            $voteBundleService = new VoteBundleService;
             $vote = $voteBundleService->getOne($condition);
 
             if (empty($vote)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new VoteResponse();
+            $response = new VoteResponse;
             $response->loadData($vote);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class VoteController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new VoteUpdateRequest();
+            $v = new VoteUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $voteBundleService = new VoteBundleService();
+            $voteBundleService = new VoteBundleService;
             $vote = $voteBundleService->getById($request['id']);
             if (empty($vote)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $voteEntity = new VoteEntity();
+            $voteEntity = new VoteEntity;
             $voteEntity->loadData($request);
 
             $voteBundleService->update($voteEntity->toArray(), [
@@ -191,7 +191,7 @@ class VoteController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $voteBundleService = new VoteBundleService();
+            $voteBundleService = new VoteBundleService;
             if ($voteBundleService->remove($condition)) {
                 DB::commit();
 

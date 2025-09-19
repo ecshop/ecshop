@@ -20,7 +20,7 @@ class EmailSubscriptionRepository extends CurdRepository implements RepositoryIn
     public static function getInstance(): EmailSubscriptionRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new EmailSubscriptionRepository();
+            self::$instance = new EmailSubscriptionRepository;
         }
 
         return self::$instance;
@@ -29,7 +29,8 @@ class EmailSubscriptionRepository extends CurdRepository implements RepositoryIn
     /**
      * 添加
      */
-    public function createByEntity(EmailSubscriptionEntity $entity): int    {
+    public function createByEntity(EmailSubscriptionEntity $entity): int
+    {
         return $this->create($entity->toArray());
     }
 
@@ -43,7 +44,7 @@ class EmailSubscriptionRepository extends CurdRepository implements RepositoryIn
             return null;
         }
 
-        $entity = new EmailSubscriptionEntity();
+        $entity = new EmailSubscriptionEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -59,7 +60,7 @@ class EmailSubscriptionRepository extends CurdRepository implements RepositoryIn
             return null;
         }
 
-        $entity = new EmailSubscriptionEntity();
+        $entity = new EmailSubscriptionEntity;
         $entity->loadData($data);
 
         return $entity;
@@ -78,7 +79,7 @@ class EmailSubscriptionRepository extends CurdRepository implements RepositoryIn
         }
 
         foreach ($result as $key => $item) {
-            $entity = new EmailSubscriptionEntity();
+            $entity = new EmailSubscriptionEntity;
             $entity->loadData($item);
             $result[$key] = $entity;
         }
@@ -96,7 +97,7 @@ class EmailSubscriptionRepository extends CurdRepository implements RepositoryIn
         $result = $this->paginate($condition, $page, $pageSize);
 
         foreach ($result['data'] as $key => $item) {
-            $entity = new EmailSubscriptionEntity();
+            $entity = new EmailSubscriptionEntity;
             $entity->loadData($item);
             $result['data'][$key] = $entity;
         }
@@ -111,6 +112,6 @@ class EmailSubscriptionRepository extends CurdRepository implements RepositoryIn
     {
         $model = '\\app\\bundles\\email\\model\\'.$modelName.'Model';
 
-        return new $model();
+        return new $model;
     }
 }

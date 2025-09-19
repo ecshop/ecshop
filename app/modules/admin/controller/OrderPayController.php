@@ -32,7 +32,7 @@ class OrderPayController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new OrderPayQueryRequest();
+            $v = new OrderPayQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class OrderPayController extends BaseController
                 //
             ];
 
-            $orderPayBundleService = new OrderPayBundleService();
+            $orderPayBundleService = new OrderPayBundleService;
             $result = $orderPayBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new OrderPayResponse();
+                $response = new OrderPayResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class OrderPayController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new OrderPayCreateRequest();
+            $v = new OrderPayCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $orderPayEntity = new OrderPayEntity();
+            $orderPayEntity = new OrderPayEntity;
             $orderPayEntity->loadData($request);
 
-            $orderPayBundleService = new OrderPayBundleService();
+            $orderPayBundleService = new OrderPayBundleService;
             $insertId = $orderPayBundleService->save($orderPayEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class OrderPayController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $orderPayBundleService = new OrderPayBundleService();
+            $orderPayBundleService = new OrderPayBundleService;
             $orderPay = $orderPayBundleService->getOne($condition);
 
             if (empty($orderPay)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new OrderPayResponse();
+            $response = new OrderPayResponse;
             $response->loadData($orderPay);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class OrderPayController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new OrderPayUpdateRequest();
+            $v = new OrderPayUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $orderPayBundleService = new OrderPayBundleService();
+            $orderPayBundleService = new OrderPayBundleService;
             $orderPay = $orderPayBundleService->getById($request['id']);
             if (empty($orderPay)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $orderPayEntity = new OrderPayEntity();
+            $orderPayEntity = new OrderPayEntity;
             $orderPayEntity->loadData($request);
 
             $orderPayBundleService->update($orderPayEntity->toArray(), [
@@ -191,7 +191,7 @@ class OrderPayController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $orderPayBundleService = new OrderPayBundleService();
+            $orderPayBundleService = new OrderPayBundleService;
             if ($orderPayBundleService->remove($condition)) {
                 DB::commit();
 

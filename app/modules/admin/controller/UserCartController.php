@@ -32,7 +32,7 @@ class UserCartController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserCartQueryRequest();
+            $v = new UserCartQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserCartController extends BaseController
                 //
             ];
 
-            $userCartBundleService = new UserCartBundleService();
+            $userCartBundleService = new UserCartBundleService;
             $result = $userCartBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserCartResponse();
+                $response = new UserCartResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserCartController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserCartCreateRequest();
+            $v = new UserCartCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userCartEntity = new UserCartEntity();
+            $userCartEntity = new UserCartEntity;
             $userCartEntity->loadData($request);
 
-            $userCartBundleService = new UserCartBundleService();
+            $userCartBundleService = new UserCartBundleService;
             $insertId = $userCartBundleService->save($userCartEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserCartController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userCartBundleService = new UserCartBundleService();
+            $userCartBundleService = new UserCartBundleService;
             $userCart = $userCartBundleService->getOne($condition);
 
             if (empty($userCart)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserCartResponse();
+            $response = new UserCartResponse;
             $response->loadData($userCart);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserCartController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserCartUpdateRequest();
+            $v = new UserCartUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userCartBundleService = new UserCartBundleService();
+            $userCartBundleService = new UserCartBundleService;
             $userCart = $userCartBundleService->getById($request['id']);
             if (empty($userCart)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userCartEntity = new UserCartEntity();
+            $userCartEntity = new UserCartEntity;
             $userCartEntity->loadData($request);
 
             $userCartBundleService->update($userCartEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserCartController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userCartBundleService = new UserCartBundleService();
+            $userCartBundleService = new UserCartBundleService;
             if ($userCartBundleService->remove($condition)) {
                 DB::commit();
 

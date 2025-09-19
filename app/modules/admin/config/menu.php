@@ -1,6 +1,5 @@
 <?php
 
-
 $modules['02_cat_and_goods']['01_goods_list'] = 'goods.php?act=list';         // 商品列表
 $modules['02_cat_and_goods']['02_goods_add'] = 'goods.php?act=add';          // 添加商品
 $modules['02_cat_and_goods']['03_category_list'] = 'category.php?act=list';

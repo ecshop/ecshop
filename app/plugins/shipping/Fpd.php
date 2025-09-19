@@ -1,11 +1,8 @@
 <?php
 
-
-
 declare(strict_types=1);
 
 namespace app\plugins\shipping;
-
 
 class Fpd
 {
@@ -70,6 +67,7 @@ class Fpd
             return;
         }
     }
+
     /**
      * 计算订单的配送费用的函数
      *

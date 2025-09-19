@@ -32,7 +32,7 @@ class ArticleCatController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ArticleCatQueryRequest();
+            $v = new ArticleCatQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ArticleCatController extends BaseController
                 //
             ];
 
-            $articleCatBundleService = new ArticleCatBundleService();
+            $articleCatBundleService = new ArticleCatBundleService;
             $result = $articleCatBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ArticleCatResponse();
+                $response = new ArticleCatResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ArticleCatController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ArticleCatCreateRequest();
+            $v = new ArticleCatCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $articleCatEntity = new ArticleCatEntity();
+            $articleCatEntity = new ArticleCatEntity;
             $articleCatEntity->loadData($request);
 
-            $articleCatBundleService = new ArticleCatBundleService();
+            $articleCatBundleService = new ArticleCatBundleService;
             $insertId = $articleCatBundleService->save($articleCatEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ArticleCatController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $articleCatBundleService = new ArticleCatBundleService();
+            $articleCatBundleService = new ArticleCatBundleService;
             $articleCat = $articleCatBundleService->getOne($condition);
 
             if (empty($articleCat)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ArticleCatResponse();
+            $response = new ArticleCatResponse;
             $response->loadData($articleCat);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ArticleCatController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ArticleCatUpdateRequest();
+            $v = new ArticleCatUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $articleCatBundleService = new ArticleCatBundleService();
+            $articleCatBundleService = new ArticleCatBundleService;
             $articleCat = $articleCatBundleService->getById($request['id']);
             if (empty($articleCat)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $articleCatEntity = new ArticleCatEntity();
+            $articleCatEntity = new ArticleCatEntity;
             $articleCatEntity->loadData($request);
 
             $articleCatBundleService->update($articleCatEntity->toArray(), [
@@ -191,7 +191,7 @@ class ArticleCatController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $articleCatBundleService = new ArticleCatBundleService();
+            $articleCatBundleService = new ArticleCatBundleService;
             if ($articleCatBundleService->remove($condition)) {
                 DB::commit();
 

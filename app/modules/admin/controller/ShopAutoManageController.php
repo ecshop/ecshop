@@ -32,7 +32,7 @@ class ShopAutoManageController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShopAutoManageQueryRequest();
+            $v = new ShopAutoManageQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShopAutoManageController extends BaseController
                 //
             ];
 
-            $shopAutoManageBundleService = new ShopAutoManageBundleService();
+            $shopAutoManageBundleService = new ShopAutoManageBundleService;
             $result = $shopAutoManageBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShopAutoManageResponse();
+                $response = new ShopAutoManageResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShopAutoManageController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopAutoManageCreateRequest();
+            $v = new ShopAutoManageCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopAutoManageEntity = new ShopAutoManageEntity();
+            $shopAutoManageEntity = new ShopAutoManageEntity;
             $shopAutoManageEntity->loadData($request);
 
-            $shopAutoManageBundleService = new ShopAutoManageBundleService();
+            $shopAutoManageBundleService = new ShopAutoManageBundleService;
             $insertId = $shopAutoManageBundleService->save($shopAutoManageEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShopAutoManageController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopAutoManageBundleService = new ShopAutoManageBundleService();
+            $shopAutoManageBundleService = new ShopAutoManageBundleService;
             $shopAutoManage = $shopAutoManageBundleService->getOne($condition);
 
             if (empty($shopAutoManage)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShopAutoManageResponse();
+            $response = new ShopAutoManageResponse;
             $response->loadData($shopAutoManage);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShopAutoManageController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopAutoManageUpdateRequest();
+            $v = new ShopAutoManageUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopAutoManageBundleService = new ShopAutoManageBundleService();
+            $shopAutoManageBundleService = new ShopAutoManageBundleService;
             $shopAutoManage = $shopAutoManageBundleService->getById($request['id']);
             if (empty($shopAutoManage)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shopAutoManageEntity = new ShopAutoManageEntity();
+            $shopAutoManageEntity = new ShopAutoManageEntity;
             $shopAutoManageEntity->loadData($request);
 
             $shopAutoManageBundleService->update($shopAutoManageEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShopAutoManageController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopAutoManageBundleService = new ShopAutoManageBundleService();
+            $shopAutoManageBundleService = new ShopAutoManageBundleService;
             if ($shopAutoManageBundleService->remove($condition)) {
                 DB::commit();
 

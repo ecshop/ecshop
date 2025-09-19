@@ -32,7 +32,7 @@ class AdController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new AdQueryRequest();
+            $v = new AdQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class AdController extends BaseController
                 //
             ];
 
-            $adBundleService = new AdBundleService();
+            $adBundleService = new AdBundleService;
             $result = $adBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new AdResponse();
+                $response = new AdResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class AdController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdCreateRequest();
+            $v = new AdCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adEntity = new AdEntity();
+            $adEntity = new AdEntity;
             $adEntity->loadData($request);
 
-            $adBundleService = new AdBundleService();
+            $adBundleService = new AdBundleService;
             $insertId = $adBundleService->save($adEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class AdController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adBundleService = new AdBundleService();
+            $adBundleService = new AdBundleService;
             $ad = $adBundleService->getOne($condition);
 
             if (empty($ad)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new AdResponse();
+            $response = new AdResponse;
             $response->loadData($ad);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class AdController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new AdUpdateRequest();
+            $v = new AdUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $adBundleService = new AdBundleService();
+            $adBundleService = new AdBundleService;
             $ad = $adBundleService->getById($request['id']);
             if (empty($ad)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $adEntity = new AdEntity();
+            $adEntity = new AdEntity;
             $adEntity->loadData($request);
 
             $adBundleService->update($adEntity->toArray(), [
@@ -191,7 +191,7 @@ class AdController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $adBundleService = new AdBundleService();
+            $adBundleService = new AdBundleService;
             if ($adBundleService->remove($condition)) {
                 DB::commit();
 

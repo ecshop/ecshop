@@ -32,7 +32,7 @@ class GoodsCatController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new GoodsCatQueryRequest();
+            $v = new GoodsCatQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class GoodsCatController extends BaseController
                 //
             ];
 
-            $goodsCatBundleService = new GoodsCatBundleService();
+            $goodsCatBundleService = new GoodsCatBundleService;
             $result = $goodsCatBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new GoodsCatResponse();
+                $response = new GoodsCatResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class GoodsCatController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsCatCreateRequest();
+            $v = new GoodsCatCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsCatEntity = new GoodsCatEntity();
+            $goodsCatEntity = new GoodsCatEntity;
             $goodsCatEntity->loadData($request);
 
-            $goodsCatBundleService = new GoodsCatBundleService();
+            $goodsCatBundleService = new GoodsCatBundleService;
             $insertId = $goodsCatBundleService->save($goodsCatEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class GoodsCatController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsCatBundleService = new GoodsCatBundleService();
+            $goodsCatBundleService = new GoodsCatBundleService;
             $goodsCat = $goodsCatBundleService->getOne($condition);
 
             if (empty($goodsCat)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new GoodsCatResponse();
+            $response = new GoodsCatResponse;
             $response->loadData($goodsCat);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class GoodsCatController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsCatUpdateRequest();
+            $v = new GoodsCatUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsCatBundleService = new GoodsCatBundleService();
+            $goodsCatBundleService = new GoodsCatBundleService;
             $goodsCat = $goodsCatBundleService->getById($request['id']);
             if (empty($goodsCat)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $goodsCatEntity = new GoodsCatEntity();
+            $goodsCatEntity = new GoodsCatEntity;
             $goodsCatEntity->loadData($request);
 
             $goodsCatBundleService->update($goodsCatEntity->toArray(), [
@@ -191,7 +191,7 @@ class GoodsCatController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsCatBundleService = new GoodsCatBundleService();
+            $goodsCatBundleService = new GoodsCatBundleService;
             if ($goodsCatBundleService->remove($condition)) {
                 DB::commit();
 

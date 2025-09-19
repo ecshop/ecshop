@@ -32,7 +32,7 @@ class GoodsGalleryController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new GoodsGalleryQueryRequest();
+            $v = new GoodsGalleryQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class GoodsGalleryController extends BaseController
                 //
             ];
 
-            $goodsGalleryBundleService = new GoodsGalleryBundleService();
+            $goodsGalleryBundleService = new GoodsGalleryBundleService;
             $result = $goodsGalleryBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new GoodsGalleryResponse();
+                $response = new GoodsGalleryResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class GoodsGalleryController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsGalleryCreateRequest();
+            $v = new GoodsGalleryCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsGalleryEntity = new GoodsGalleryEntity();
+            $goodsGalleryEntity = new GoodsGalleryEntity;
             $goodsGalleryEntity->loadData($request);
 
-            $goodsGalleryBundleService = new GoodsGalleryBundleService();
+            $goodsGalleryBundleService = new GoodsGalleryBundleService;
             $insertId = $goodsGalleryBundleService->save($goodsGalleryEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class GoodsGalleryController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsGalleryBundleService = new GoodsGalleryBundleService();
+            $goodsGalleryBundleService = new GoodsGalleryBundleService;
             $goodsGallery = $goodsGalleryBundleService->getOne($condition);
 
             if (empty($goodsGallery)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new GoodsGalleryResponse();
+            $response = new GoodsGalleryResponse;
             $response->loadData($goodsGallery);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class GoodsGalleryController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsGalleryUpdateRequest();
+            $v = new GoodsGalleryUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsGalleryBundleService = new GoodsGalleryBundleService();
+            $goodsGalleryBundleService = new GoodsGalleryBundleService;
             $goodsGallery = $goodsGalleryBundleService->getById($request['id']);
             if (empty($goodsGallery)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $goodsGalleryEntity = new GoodsGalleryEntity();
+            $goodsGalleryEntity = new GoodsGalleryEntity;
             $goodsGalleryEntity->loadData($request);
 
             $goodsGalleryBundleService->update($goodsGalleryEntity->toArray(), [
@@ -191,7 +191,7 @@ class GoodsGalleryController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsGalleryBundleService = new GoodsGalleryBundleService();
+            $goodsGalleryBundleService = new GoodsGalleryBundleService;
             if ($goodsGalleryBundleService->remove($condition)) {
                 DB::commit();
 

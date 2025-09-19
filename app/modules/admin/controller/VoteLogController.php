@@ -32,7 +32,7 @@ class VoteLogController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new VoteLogQueryRequest();
+            $v = new VoteLogQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class VoteLogController extends BaseController
                 //
             ];
 
-            $voteLogBundleService = new VoteLogBundleService();
+            $voteLogBundleService = new VoteLogBundleService;
             $result = $voteLogBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new VoteLogResponse();
+                $response = new VoteLogResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class VoteLogController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new VoteLogCreateRequest();
+            $v = new VoteLogCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $voteLogEntity = new VoteLogEntity();
+            $voteLogEntity = new VoteLogEntity;
             $voteLogEntity->loadData($request);
 
-            $voteLogBundleService = new VoteLogBundleService();
+            $voteLogBundleService = new VoteLogBundleService;
             $insertId = $voteLogBundleService->save($voteLogEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class VoteLogController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $voteLogBundleService = new VoteLogBundleService();
+            $voteLogBundleService = new VoteLogBundleService;
             $voteLog = $voteLogBundleService->getOne($condition);
 
             if (empty($voteLog)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new VoteLogResponse();
+            $response = new VoteLogResponse;
             $response->loadData($voteLog);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class VoteLogController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new VoteLogUpdateRequest();
+            $v = new VoteLogUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $voteLogBundleService = new VoteLogBundleService();
+            $voteLogBundleService = new VoteLogBundleService;
             $voteLog = $voteLogBundleService->getById($request['id']);
             if (empty($voteLog)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $voteLogEntity = new VoteLogEntity();
+            $voteLogEntity = new VoteLogEntity;
             $voteLogEntity->loadData($request);
 
             $voteLogBundleService->update($voteLogEntity->toArray(), [
@@ -191,7 +191,7 @@ class VoteLogController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $voteLogBundleService = new VoteLogBundleService();
+            $voteLogBundleService = new VoteLogBundleService;
             if ($voteLogBundleService->remove($condition)) {
                 DB::commit();
 

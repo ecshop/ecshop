@@ -32,7 +32,7 @@ class ActivityWholesaleController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ActivityWholesaleQueryRequest();
+            $v = new ActivityWholesaleQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ActivityWholesaleController extends BaseController
                 //
             ];
 
-            $activityWholesaleBundleService = new ActivityWholesaleBundleService();
+            $activityWholesaleBundleService = new ActivityWholesaleBundleService;
             $result = $activityWholesaleBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ActivityWholesaleResponse();
+                $response = new ActivityWholesaleResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ActivityWholesaleController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ActivityWholesaleCreateRequest();
+            $v = new ActivityWholesaleCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $activityWholesaleEntity = new ActivityWholesaleEntity();
+            $activityWholesaleEntity = new ActivityWholesaleEntity;
             $activityWholesaleEntity->loadData($request);
 
-            $activityWholesaleBundleService = new ActivityWholesaleBundleService();
+            $activityWholesaleBundleService = new ActivityWholesaleBundleService;
             $insertId = $activityWholesaleBundleService->save($activityWholesaleEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ActivityWholesaleController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $activityWholesaleBundleService = new ActivityWholesaleBundleService();
+            $activityWholesaleBundleService = new ActivityWholesaleBundleService;
             $activityWholesale = $activityWholesaleBundleService->getOne($condition);
 
             if (empty($activityWholesale)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ActivityWholesaleResponse();
+            $response = new ActivityWholesaleResponse;
             $response->loadData($activityWholesale);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ActivityWholesaleController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ActivityWholesaleUpdateRequest();
+            $v = new ActivityWholesaleUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $activityWholesaleBundleService = new ActivityWholesaleBundleService();
+            $activityWholesaleBundleService = new ActivityWholesaleBundleService;
             $activityWholesale = $activityWholesaleBundleService->getById($request['id']);
             if (empty($activityWholesale)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $activityWholesaleEntity = new ActivityWholesaleEntity();
+            $activityWholesaleEntity = new ActivityWholesaleEntity;
             $activityWholesaleEntity->loadData($request);
 
             $activityWholesaleBundleService->update($activityWholesaleEntity->toArray(), [
@@ -191,7 +191,7 @@ class ActivityWholesaleController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $activityWholesaleBundleService = new ActivityWholesaleBundleService();
+            $activityWholesaleBundleService = new ActivityWholesaleBundleService;
             if ($activityWholesaleBundleService->remove($condition)) {
                 DB::commit();
 

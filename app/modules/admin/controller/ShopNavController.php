@@ -32,7 +32,7 @@ class ShopNavController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShopNavQueryRequest();
+            $v = new ShopNavQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShopNavController extends BaseController
                 //
             ];
 
-            $shopNavBundleService = new ShopNavBundleService();
+            $shopNavBundleService = new ShopNavBundleService;
             $result = $shopNavBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShopNavResponse();
+                $response = new ShopNavResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShopNavController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopNavCreateRequest();
+            $v = new ShopNavCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopNavEntity = new ShopNavEntity();
+            $shopNavEntity = new ShopNavEntity;
             $shopNavEntity->loadData($request);
 
-            $shopNavBundleService = new ShopNavBundleService();
+            $shopNavBundleService = new ShopNavBundleService;
             $insertId = $shopNavBundleService->save($shopNavEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShopNavController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopNavBundleService = new ShopNavBundleService();
+            $shopNavBundleService = new ShopNavBundleService;
             $shopNav = $shopNavBundleService->getOne($condition);
 
             if (empty($shopNav)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShopNavResponse();
+            $response = new ShopNavResponse;
             $response->loadData($shopNav);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShopNavController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopNavUpdateRequest();
+            $v = new ShopNavUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopNavBundleService = new ShopNavBundleService();
+            $shopNavBundleService = new ShopNavBundleService;
             $shopNav = $shopNavBundleService->getById($request['id']);
             if (empty($shopNav)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shopNavEntity = new ShopNavEntity();
+            $shopNavEntity = new ShopNavEntity;
             $shopNavEntity->loadData($request);
 
             $shopNavBundleService->update($shopNavEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShopNavController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopNavBundleService = new ShopNavBundleService();
+            $shopNavBundleService = new ShopNavBundleService;
             if ($shopNavBundleService->remove($condition)) {
                 DB::commit();
 

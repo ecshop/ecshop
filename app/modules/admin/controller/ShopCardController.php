@@ -32,7 +32,7 @@ class ShopCardController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShopCardQueryRequest();
+            $v = new ShopCardQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShopCardController extends BaseController
                 //
             ];
 
-            $shopCardBundleService = new ShopCardBundleService();
+            $shopCardBundleService = new ShopCardBundleService;
             $result = $shopCardBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShopCardResponse();
+                $response = new ShopCardResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShopCardController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopCardCreateRequest();
+            $v = new ShopCardCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopCardEntity = new ShopCardEntity();
+            $shopCardEntity = new ShopCardEntity;
             $shopCardEntity->loadData($request);
 
-            $shopCardBundleService = new ShopCardBundleService();
+            $shopCardBundleService = new ShopCardBundleService;
             $insertId = $shopCardBundleService->save($shopCardEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShopCardController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopCardBundleService = new ShopCardBundleService();
+            $shopCardBundleService = new ShopCardBundleService;
             $shopCard = $shopCardBundleService->getOne($condition);
 
             if (empty($shopCard)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShopCardResponse();
+            $response = new ShopCardResponse;
             $response->loadData($shopCard);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShopCardController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopCardUpdateRequest();
+            $v = new ShopCardUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopCardBundleService = new ShopCardBundleService();
+            $shopCardBundleService = new ShopCardBundleService;
             $shopCard = $shopCardBundleService->getById($request['id']);
             if (empty($shopCard)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shopCardEntity = new ShopCardEntity();
+            $shopCardEntity = new ShopCardEntity;
             $shopCardEntity->loadData($request);
 
             $shopCardBundleService->update($shopCardEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShopCardController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopCardBundleService = new ShopCardBundleService();
+            $shopCardBundleService = new ShopCardBundleService;
             if ($shopCardBundleService->remove($condition)) {
                 DB::commit();
 

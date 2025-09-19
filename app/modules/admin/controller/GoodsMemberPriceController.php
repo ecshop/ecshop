@@ -32,7 +32,7 @@ class GoodsMemberPriceController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new GoodsMemberPriceQueryRequest();
+            $v = new GoodsMemberPriceQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class GoodsMemberPriceController extends BaseController
                 //
             ];
 
-            $goodsMemberPriceBundleService = new GoodsMemberPriceBundleService();
+            $goodsMemberPriceBundleService = new GoodsMemberPriceBundleService;
             $result = $goodsMemberPriceBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new GoodsMemberPriceResponse();
+                $response = new GoodsMemberPriceResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class GoodsMemberPriceController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsMemberPriceCreateRequest();
+            $v = new GoodsMemberPriceCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsMemberPriceEntity = new GoodsMemberPriceEntity();
+            $goodsMemberPriceEntity = new GoodsMemberPriceEntity;
             $goodsMemberPriceEntity->loadData($request);
 
-            $goodsMemberPriceBundleService = new GoodsMemberPriceBundleService();
+            $goodsMemberPriceBundleService = new GoodsMemberPriceBundleService;
             $insertId = $goodsMemberPriceBundleService->save($goodsMemberPriceEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class GoodsMemberPriceController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsMemberPriceBundleService = new GoodsMemberPriceBundleService();
+            $goodsMemberPriceBundleService = new GoodsMemberPriceBundleService;
             $goodsMemberPrice = $goodsMemberPriceBundleService->getOne($condition);
 
             if (empty($goodsMemberPrice)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new GoodsMemberPriceResponse();
+            $response = new GoodsMemberPriceResponse;
             $response->loadData($goodsMemberPrice);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class GoodsMemberPriceController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new GoodsMemberPriceUpdateRequest();
+            $v = new GoodsMemberPriceUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $goodsMemberPriceBundleService = new GoodsMemberPriceBundleService();
+            $goodsMemberPriceBundleService = new GoodsMemberPriceBundleService;
             $goodsMemberPrice = $goodsMemberPriceBundleService->getById($request['id']);
             if (empty($goodsMemberPrice)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $goodsMemberPriceEntity = new GoodsMemberPriceEntity();
+            $goodsMemberPriceEntity = new GoodsMemberPriceEntity;
             $goodsMemberPriceEntity->loadData($request);
 
             $goodsMemberPriceBundleService->update($goodsMemberPriceEntity->toArray(), [
@@ -191,7 +191,7 @@ class GoodsMemberPriceController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $goodsMemberPriceBundleService = new GoodsMemberPriceBundleService();
+            $goodsMemberPriceBundleService = new GoodsMemberPriceBundleService;
             if ($goodsMemberPriceBundleService->remove($condition)) {
                 DB::commit();
 

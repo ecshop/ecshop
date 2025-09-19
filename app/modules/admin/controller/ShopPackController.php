@@ -32,7 +32,7 @@ class ShopPackController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ShopPackQueryRequest();
+            $v = new ShopPackQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ShopPackController extends BaseController
                 //
             ];
 
-            $shopPackBundleService = new ShopPackBundleService();
+            $shopPackBundleService = new ShopPackBundleService;
             $result = $shopPackBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ShopPackResponse();
+                $response = new ShopPackResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ShopPackController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopPackCreateRequest();
+            $v = new ShopPackCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopPackEntity = new ShopPackEntity();
+            $shopPackEntity = new ShopPackEntity;
             $shopPackEntity->loadData($request);
 
-            $shopPackBundleService = new ShopPackBundleService();
+            $shopPackBundleService = new ShopPackBundleService;
             $insertId = $shopPackBundleService->save($shopPackEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ShopPackController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopPackBundleService = new ShopPackBundleService();
+            $shopPackBundleService = new ShopPackBundleService;
             $shopPack = $shopPackBundleService->getOne($condition);
 
             if (empty($shopPack)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ShopPackResponse();
+            $response = new ShopPackResponse;
             $response->loadData($shopPack);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ShopPackController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ShopPackUpdateRequest();
+            $v = new ShopPackUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $shopPackBundleService = new ShopPackBundleService();
+            $shopPackBundleService = new ShopPackBundleService;
             $shopPack = $shopPackBundleService->getById($request['id']);
             if (empty($shopPack)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $shopPackEntity = new ShopPackEntity();
+            $shopPackEntity = new ShopPackEntity;
             $shopPackEntity->loadData($request);
 
             $shopPackBundleService->update($shopPackEntity->toArray(), [
@@ -191,7 +191,7 @@ class ShopPackController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $shopPackBundleService = new ShopPackBundleService();
+            $shopPackBundleService = new ShopPackBundleService;
             if ($shopPackBundleService->remove($condition)) {
                 DB::commit();
 

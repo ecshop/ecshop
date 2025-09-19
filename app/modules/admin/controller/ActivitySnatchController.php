@@ -32,7 +32,7 @@ class ActivitySnatchController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ActivitySnatchQueryRequest();
+            $v = new ActivitySnatchQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ActivitySnatchController extends BaseController
                 //
             ];
 
-            $activitySnatchBundleService = new ActivitySnatchBundleService();
+            $activitySnatchBundleService = new ActivitySnatchBundleService;
             $result = $activitySnatchBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ActivitySnatchResponse();
+                $response = new ActivitySnatchResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ActivitySnatchController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ActivitySnatchCreateRequest();
+            $v = new ActivitySnatchCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $activitySnatchEntity = new ActivitySnatchEntity();
+            $activitySnatchEntity = new ActivitySnatchEntity;
             $activitySnatchEntity->loadData($request);
 
-            $activitySnatchBundleService = new ActivitySnatchBundleService();
+            $activitySnatchBundleService = new ActivitySnatchBundleService;
             $insertId = $activitySnatchBundleService->save($activitySnatchEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ActivitySnatchController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $activitySnatchBundleService = new ActivitySnatchBundleService();
+            $activitySnatchBundleService = new ActivitySnatchBundleService;
             $activitySnatch = $activitySnatchBundleService->getOne($condition);
 
             if (empty($activitySnatch)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ActivitySnatchResponse();
+            $response = new ActivitySnatchResponse;
             $response->loadData($activitySnatch);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ActivitySnatchController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ActivitySnatchUpdateRequest();
+            $v = new ActivitySnatchUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $activitySnatchBundleService = new ActivitySnatchBundleService();
+            $activitySnatchBundleService = new ActivitySnatchBundleService;
             $activitySnatch = $activitySnatchBundleService->getById($request['id']);
             if (empty($activitySnatch)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $activitySnatchEntity = new ActivitySnatchEntity();
+            $activitySnatchEntity = new ActivitySnatchEntity;
             $activitySnatchEntity->loadData($request);
 
             $activitySnatchBundleService->update($activitySnatchEntity->toArray(), [
@@ -191,7 +191,7 @@ class ActivitySnatchController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $activitySnatchBundleService = new ActivitySnatchBundleService();
+            $activitySnatchBundleService = new ActivitySnatchBundleService;
             if ($activitySnatchBundleService->remove($condition)) {
                 DB::commit();
 

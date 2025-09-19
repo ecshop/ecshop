@@ -32,7 +32,7 @@ class CommentController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new CommentQueryRequest();
+            $v = new CommentQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class CommentController extends BaseController
                 //
             ];
 
-            $commentBundleService = new CommentBundleService();
+            $commentBundleService = new CommentBundleService;
             $result = $commentBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new CommentResponse();
+                $response = new CommentResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class CommentController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new CommentCreateRequest();
+            $v = new CommentCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $commentEntity = new CommentEntity();
+            $commentEntity = new CommentEntity;
             $commentEntity->loadData($request);
 
-            $commentBundleService = new CommentBundleService();
+            $commentBundleService = new CommentBundleService;
             $insertId = $commentBundleService->save($commentEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class CommentController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $commentBundleService = new CommentBundleService();
+            $commentBundleService = new CommentBundleService;
             $comment = $commentBundleService->getOne($condition);
 
             if (empty($comment)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new CommentResponse();
+            $response = new CommentResponse;
             $response->loadData($comment);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class CommentController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new CommentUpdateRequest();
+            $v = new CommentUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $commentBundleService = new CommentBundleService();
+            $commentBundleService = new CommentBundleService;
             $comment = $commentBundleService->getById($request['id']);
             if (empty($comment)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $commentEntity = new CommentEntity();
+            $commentEntity = new CommentEntity;
             $commentEntity->loadData($request);
 
             $commentBundleService->update($commentEntity->toArray(), [
@@ -191,7 +191,7 @@ class CommentController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $commentBundleService = new CommentBundleService();
+            $commentBundleService = new CommentBundleService;
             if ($commentBundleService->remove($condition)) {
                 DB::commit();
 

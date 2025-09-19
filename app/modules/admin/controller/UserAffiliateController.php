@@ -32,7 +32,7 @@ class UserAffiliateController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserAffiliateQueryRequest();
+            $v = new UserAffiliateQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserAffiliateController extends BaseController
                 //
             ];
 
-            $userAffiliateBundleService = new UserAffiliateBundleService();
+            $userAffiliateBundleService = new UserAffiliateBundleService;
             $result = $userAffiliateBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserAffiliateResponse();
+                $response = new UserAffiliateResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserAffiliateController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserAffiliateCreateRequest();
+            $v = new UserAffiliateCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userAffiliateEntity = new UserAffiliateEntity();
+            $userAffiliateEntity = new UserAffiliateEntity;
             $userAffiliateEntity->loadData($request);
 
-            $userAffiliateBundleService = new UserAffiliateBundleService();
+            $userAffiliateBundleService = new UserAffiliateBundleService;
             $insertId = $userAffiliateBundleService->save($userAffiliateEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserAffiliateController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userAffiliateBundleService = new UserAffiliateBundleService();
+            $userAffiliateBundleService = new UserAffiliateBundleService;
             $userAffiliate = $userAffiliateBundleService->getOne($condition);
 
             if (empty($userAffiliate)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserAffiliateResponse();
+            $response = new UserAffiliateResponse;
             $response->loadData($userAffiliate);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserAffiliateController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserAffiliateUpdateRequest();
+            $v = new UserAffiliateUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userAffiliateBundleService = new UserAffiliateBundleService();
+            $userAffiliateBundleService = new UserAffiliateBundleService;
             $userAffiliate = $userAffiliateBundleService->getById($request['id']);
             if (empty($userAffiliate)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userAffiliateEntity = new UserAffiliateEntity();
+            $userAffiliateEntity = new UserAffiliateEntity;
             $userAffiliateEntity->loadData($request);
 
             $userAffiliateBundleService->update($userAffiliateEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserAffiliateController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userAffiliateBundleService = new UserAffiliateBundleService();
+            $userAffiliateBundleService = new UserAffiliateBundleService;
             if ($userAffiliateBundleService->remove($condition)) {
                 DB::commit();
 

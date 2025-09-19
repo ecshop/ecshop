@@ -32,7 +32,7 @@ class ActivityExchangeController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new ActivityExchangeQueryRequest();
+            $v = new ActivityExchangeQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class ActivityExchangeController extends BaseController
                 //
             ];
 
-            $activityExchangeBundleService = new ActivityExchangeBundleService();
+            $activityExchangeBundleService = new ActivityExchangeBundleService;
             $result = $activityExchangeBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new ActivityExchangeResponse();
+                $response = new ActivityExchangeResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class ActivityExchangeController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ActivityExchangeCreateRequest();
+            $v = new ActivityExchangeCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $activityExchangeEntity = new ActivityExchangeEntity();
+            $activityExchangeEntity = new ActivityExchangeEntity;
             $activityExchangeEntity->loadData($request);
 
-            $activityExchangeBundleService = new ActivityExchangeBundleService();
+            $activityExchangeBundleService = new ActivityExchangeBundleService;
             $insertId = $activityExchangeBundleService->save($activityExchangeEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class ActivityExchangeController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $activityExchangeBundleService = new ActivityExchangeBundleService();
+            $activityExchangeBundleService = new ActivityExchangeBundleService;
             $activityExchange = $activityExchangeBundleService->getOne($condition);
 
             if (empty($activityExchange)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new ActivityExchangeResponse();
+            $response = new ActivityExchangeResponse;
             $response->loadData($activityExchange);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class ActivityExchangeController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new ActivityExchangeUpdateRequest();
+            $v = new ActivityExchangeUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $activityExchangeBundleService = new ActivityExchangeBundleService();
+            $activityExchangeBundleService = new ActivityExchangeBundleService;
             $activityExchange = $activityExchangeBundleService->getById($request['id']);
             if (empty($activityExchange)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $activityExchangeEntity = new ActivityExchangeEntity();
+            $activityExchangeEntity = new ActivityExchangeEntity;
             $activityExchangeEntity->loadData($request);
 
             $activityExchangeBundleService->update($activityExchangeEntity->toArray(), [
@@ -191,7 +191,7 @@ class ActivityExchangeController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $activityExchangeBundleService = new ActivityExchangeBundleService();
+            $activityExchangeBundleService = new ActivityExchangeBundleService;
             if ($activityExchangeBundleService->remove($condition)) {
                 DB::commit();
 

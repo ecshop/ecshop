@@ -32,7 +32,7 @@ class SearchEngineController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new SearchEngineQueryRequest();
+            $v = new SearchEngineQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class SearchEngineController extends BaseController
                 //
             ];
 
-            $searchEngineBundleService = new SearchEngineBundleService();
+            $searchEngineBundleService = new SearchEngineBundleService;
             $result = $searchEngineBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new SearchEngineResponse();
+                $response = new SearchEngineResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class SearchEngineController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new SearchEngineCreateRequest();
+            $v = new SearchEngineCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $searchEngineEntity = new SearchEngineEntity();
+            $searchEngineEntity = new SearchEngineEntity;
             $searchEngineEntity->loadData($request);
 
-            $searchEngineBundleService = new SearchEngineBundleService();
+            $searchEngineBundleService = new SearchEngineBundleService;
             $insertId = $searchEngineBundleService->save($searchEngineEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class SearchEngineController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $searchEngineBundleService = new SearchEngineBundleService();
+            $searchEngineBundleService = new SearchEngineBundleService;
             $searchEngine = $searchEngineBundleService->getOne($condition);
 
             if (empty($searchEngine)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new SearchEngineResponse();
+            $response = new SearchEngineResponse;
             $response->loadData($searchEngine);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class SearchEngineController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new SearchEngineUpdateRequest();
+            $v = new SearchEngineUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $searchEngineBundleService = new SearchEngineBundleService();
+            $searchEngineBundleService = new SearchEngineBundleService;
             $searchEngine = $searchEngineBundleService->getById($request['id']);
             if (empty($searchEngine)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $searchEngineEntity = new SearchEngineEntity();
+            $searchEngineEntity = new SearchEngineEntity;
             $searchEngineEntity->loadData($request);
 
             $searchEngineBundleService->update($searchEngineEntity->toArray(), [
@@ -191,7 +191,7 @@ class SearchEngineController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $searchEngineBundleService = new SearchEngineBundleService();
+            $searchEngineBundleService = new SearchEngineBundleService;
             if ($searchEngineBundleService->remove($condition)) {
                 DB::commit();
 

@@ -32,7 +32,7 @@ class UserBookingController extends BaseController
             $page = intval($this->request->param('page', 1));
             $pageSize = intval($this->request->param('pageSize', 10));
 
-            $v = new UserBookingQueryRequest();
+            $v = new UserBookingQueryRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
@@ -41,11 +41,11 @@ class UserBookingController extends BaseController
                 //
             ];
 
-            $userBookingBundleService = new UserBookingBundleService();
+            $userBookingBundleService = new UserBookingBundleService;
             $result = $userBookingBundleService->page($condition, $page, $pageSize);
 
             foreach ($result['data'] as $key => $item) {
-                $response = new UserBookingResponse();
+                $response = new UserBookingResponse;
                 $response->loadData($item);
                 $result['data'][$key] = $response->toArray();
             }
@@ -71,15 +71,15 @@ class UserBookingController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserBookingCreateRequest();
+            $v = new UserBookingCreateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userBookingEntity = new UserBookingEntity();
+            $userBookingEntity = new UserBookingEntity;
             $userBookingEntity->loadData($request);
 
-            $userBookingBundleService = new UserBookingBundleService();
+            $userBookingBundleService = new UserBookingBundleService;
             $insertId = $userBookingBundleService->save($userBookingEntity->toArray());
             if ($insertId > 0) {
                 DB::commit();
@@ -113,14 +113,14 @@ class UserBookingController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userBookingBundleService = new UserBookingBundleService();
+            $userBookingBundleService = new UserBookingBundleService;
             $userBooking = $userBookingBundleService->getOne($condition);
 
             if (empty($userBooking)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $response = new UserBookingResponse();
+            $response = new UserBookingResponse;
             $response->loadData($userBooking);
 
             return $this->success($response->toArray());
@@ -144,18 +144,18 @@ class UserBookingController extends BaseController
         try {
             $request = $this->request->get();
 
-            $v = new UserBookingUpdateRequest();
+            $v = new UserBookingUpdateRequest;
             if (! $v->check($request)) {
                 throw new CustomException($v->getError());
             }
 
-            $userBookingBundleService = new UserBookingBundleService();
+            $userBookingBundleService = new UserBookingBundleService;
             $userBooking = $userBookingBundleService->getById($request['id']);
             if (empty($userBooking)) {
                 throw new CustomException('数据不存在或状态异常');
             }
 
-            $userBookingEntity = new UserBookingEntity();
+            $userBookingEntity = new UserBookingEntity;
             $userBookingEntity->loadData($request);
 
             $userBookingBundleService->update($userBookingEntity->toArray(), [
@@ -191,7 +191,7 @@ class UserBookingController extends BaseController
                 ['id', '=', $id],
             ];
 
-            $userBookingBundleService = new UserBookingBundleService();
+            $userBookingBundleService = new UserBookingBundleService;
             if ($userBookingBundleService->remove($condition)) {
                 DB::commit();
 

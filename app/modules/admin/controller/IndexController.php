@@ -14,10 +14,10 @@ class IndexController extends BaseController
     public function index(Request $request): View
     {
 
-// require dirname(__FILE__).'/includes/init.php';
-// require_once ROOT_PATH.'/includes/lib_order.php';
+        // require dirname(__FILE__).'/includes/init.php';
+        // require_once ROOT_PATH.'/includes/lib_order.php';
         /* ------------------------------------------------------ */
-// -- 框架
+        // -- 框架
         /* ------------------------------------------------------ */
         if ($_REQUEST['act'] == '') {
             $smarty->assign('shop_url', urlencode($ecs->url()));
@@ -25,7 +25,7 @@ class IndexController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- 顶部框架的内容
+        // -- 顶部框架的内容
         /* ------------------------------------------------------ */
         if ($_REQUEST['act'] == 'top') {
             // 获得管理员设置的菜单
@@ -53,7 +53,7 @@ class IndexController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- 计算器
+        // -- 计算器
         /* ------------------------------------------------------ */
 
         if ($_REQUEST['act'] == 'calculator') {
@@ -61,7 +61,7 @@ class IndexController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- 左边的框架
+        // -- 左边的框架
         /* ------------------------------------------------------ */
         if ($_REQUEST['act'] == 'menu') {
             // include_once 'includes/inc_menu.php';
@@ -118,7 +118,7 @@ class IndexController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- 清除缓存
+        // -- 清除缓存
         /* ------------------------------------------------------ */
 
         if ($_REQUEST['act'] == 'clear_cache') {
@@ -128,7 +128,7 @@ class IndexController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- 主窗口，起始页
+        // -- 主窗口，起始页
         /* ------------------------------------------------------ */
         if ($_REQUEST['act'] == 'main') {
             // 开店向导第一步
@@ -437,7 +437,7 @@ class IndexController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- 开店向导第一步
+        // -- 开店向导第一步
         /* ------------------------------------------------------ */
 
         if ($_REQUEST['act'] == 'first') {
@@ -513,7 +513,7 @@ class IndexController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- 开店向导第二步
+        // -- 开店向导第二步
         /* ------------------------------------------------------ */
 
         if ($_REQUEST['act'] == 'second') {
@@ -677,7 +677,7 @@ class IndexController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- 开店向导第三步
+        // -- 开店向导第三步
         /* ------------------------------------------------------ */
 
         if ($_REQUEST['act'] == 'third') {
@@ -863,7 +863,7 @@ class IndexController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- 关于 ECSHOP
+        // -- 关于 ECSHOP
         /* ------------------------------------------------------ */
 
         if ($_REQUEST['act'] == 'about_us') {
@@ -872,7 +872,7 @@ class IndexController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- 拖动的帧
+        // -- 拖动的帧
         /* ------------------------------------------------------ */
 
         if ($_REQUEST['act'] == 'drag') {
@@ -880,7 +880,7 @@ class IndexController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- 检查订单
+        // -- 检查订单
         /* ------------------------------------------------------ */
         if ($_REQUEST['act'] == 'check_order') {
             if (empty($_SESSION['last_check'])) {
@@ -909,7 +909,7 @@ class IndexController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- Totolist操作
+        // -- Totolist操作
         /* ------------------------------------------------------ */
         if ($_REQUEST['act'] == 'save_todolist') {
             $content = json_str_iconv($_POST['content']);
@@ -994,7 +994,7 @@ class IndexController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- license操作
+        // -- license操作
         /* ------------------------------------------------------ */
         if ($_REQUEST['act'] == 'license') {
             $is_ajax = $_GET['is_ajax'];

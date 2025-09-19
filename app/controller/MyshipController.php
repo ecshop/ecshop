@@ -10,8 +10,6 @@ class MyshipController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 // require dirname(__FILE__).'/includes/init.php';
 // require_once ROOT_PATH.'includes/lib_order.php';
@@ -91,3 +89,6 @@ foreach ($shipping_list as $key => $val) {
 $smarty->assign('shipping_list', $shipping_list);
 
 $smarty->display('myship.dwt');
+
+    }
+}

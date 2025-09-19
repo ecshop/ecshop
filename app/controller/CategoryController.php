@@ -10,9 +10,6 @@ class CategoryController extends BaseController
     public function index(): View
     {
 
-    }
-}
-
 
 // require dirname(__FILE__).'/includes/init.php';
 
@@ -348,6 +345,8 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
 
 $smarty->display('category.dwt', $cache_id);
 
+}
+
 /**
  * 获得分类的信息
  *
@@ -506,3 +505,4 @@ function get_parent_grade($cat_id)
 
     return $grade_arr[$cat_id];
 }
+    }

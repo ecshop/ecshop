@@ -10,8 +10,6 @@ class CatalogController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 
 // require dirname(__FILE__).'/includes/init.php';
@@ -44,6 +42,7 @@ if (! $smarty->is_cached('catalog.dwt')) {
 
 $smarty->display('catalog.dwt');
 
+}
 /**
  * 计算指定分类的商品数量
  *
@@ -62,3 +61,4 @@ function calculate_goods_num($cat_list, $cat_id)
 
     return $goods_num;
 }
+    }

@@ -10,8 +10,6 @@ class RespondController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 
 // require dirname(__FILE__).'/includes/init.php';
@@ -67,3 +65,6 @@ $smarty->assign('message', $msg);
 $smarty->assign('shop_url', $ecs->url());
 
 $smarty->display('respond.dwt');
+
+    }
+}

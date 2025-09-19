@@ -10,9 +10,6 @@ class GoodsController extends BaseController
     public function index(): View
     {
 
-    }
-}
-
 // require dirname(__FILE__).'/includes/init.php';
 
 if (! DEBUG_MODE) {
@@ -246,6 +243,9 @@ $db->query('UPDATE '.$ecs->table('goods')." SET click_count = click_count + 1 WH
 
 $smarty->assign('now_time', gmtime());           // 当前系统时间
 $smarty->display('goods.dwt', $cache_id);
+
+
+}
 
 /**
  * 获得指定商品的关联商品
@@ -545,3 +545,4 @@ function get_package_goods_list($goods_id)
 
     return $res;
 }
+    }

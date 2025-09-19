@@ -10,9 +10,6 @@ class AffiliateController extends BaseController
     public function index(): View
     {
 
-    }
-}
-
 // require dirname(__FILE__).'/includes/init.php';
 
 if (! DEBUG_MODE) {
@@ -72,4 +69,7 @@ if ($display_mode == 'javascript') {
     echo "document.write('$output');";
 } elseif ($display_mode == 'iframe') {
     echo $output;
+}
+
+    }
 }

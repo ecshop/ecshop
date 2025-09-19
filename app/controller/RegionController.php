@@ -10,8 +10,6 @@ class RegionController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 define('INIT_NO_USERS', true);
 define('INIT_NO_SMARTY', true);
@@ -31,3 +29,6 @@ $arr['target'] = htmlspecialchars($arr['target']);
 
 $json = new JSON;
 echo $json->encode($arr);
+
+    }
+}

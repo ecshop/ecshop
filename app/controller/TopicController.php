@@ -10,8 +10,6 @@ class TopicController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 
 // require dirname(__FILE__).'/includes/init.php';
@@ -114,3 +112,6 @@ if (! $smarty->is_cached($templates, $cache_id)) {
 }
 /* 显示模板 */
 $smarty->display($templates, $cache_id);
+
+    }
+}

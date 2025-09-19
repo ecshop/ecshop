@@ -10,8 +10,6 @@ class WholesaleController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 
 // require dirname(__FILE__).'/includes/init.php';
@@ -375,6 +373,7 @@ if ($_REQUEST['act'] == 'submit_order') {
     show_message(sprintf($_LANG['ws_order_submitted'], $order['order_sn']), $_LANG['ws_return_home'], 'index.php');
 }
 
+}
 /**
  * 取得某页的批发商品
  *
@@ -517,3 +516,4 @@ function is_attr_matching(&$goods_list, $reference)
 //
 //    return true;
 // }
+    }

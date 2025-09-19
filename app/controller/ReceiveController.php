@@ -10,9 +10,6 @@ class ReceiveController extends BaseController
     public function index(): View
     {
 
-    }
-}
-
 // require dirname(__FILE__).'/includes/init.php';
 
 /* 取得参数 */
@@ -56,3 +53,6 @@ assign_dynamic('receive');
 
 $smarty->assign('msg', $msg);
 $smarty->display('receive.dwt');
+
+    }
+}

@@ -11,9 +11,6 @@ class ActivityController extends BaseController
     public function index(): View
     {
 
-    }
-}
-
 // require dirname(__FILE__).'/includes/init.php';
 // require_once ROOT_PATH.'includes/lib_order.php';
 // include_once ROOT_PATH.'includes/lib_transaction.php';
@@ -120,3 +117,6 @@ $smarty->assign('lang', $_LANG);
 
 $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typeactivity.xml' : 'feed.php?type=activity'); // RSS URL
 $smarty->display('activity.dwt');
+
+    }
+}

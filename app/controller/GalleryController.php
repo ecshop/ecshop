@@ -10,9 +10,6 @@ class GalleryController extends BaseController
     public function index(): View
     {
 
-    }
-}
-
 // require dirname(__FILE__).'/includes/init.php';
 
 /* 参数 */
@@ -57,3 +54,6 @@ $smarty->assign('shop_name', $_CFG['shop_name']);
 $smarty->assign('watermark', str_replace('../', './', $_CFG['watermark']));
 $smarty->assign('gallery', $gallery);
 $smarty->display('gallery.dwt');
+
+    }
+}

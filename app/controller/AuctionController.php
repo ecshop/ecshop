@@ -10,8 +10,6 @@ class AuctionController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 
 // require dirname(__FILE__).'/includes/init.php';
@@ -395,6 +393,7 @@ if ($_REQUEST['act'] == 'buy') {
     exit;
 }
 
+}
 /**
  * 取得拍卖活动数量
  *
@@ -454,3 +453,4 @@ function auction_list($size, $page)
 
     return $auction_list;
 }
+    }

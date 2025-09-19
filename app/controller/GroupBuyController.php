@@ -10,9 +10,6 @@ class GroupBuyController extends BaseController
     public function index(): View
     {
 
-    }
-}
-
 
 // require dirname(__FILE__).'/includes/init.php';
 
@@ -274,6 +271,9 @@ if ($_REQUEST['act'] == 'buy') {
     exit;
 }
 
+
+}
+
 /* 取得团购活动总数 */
 function group_buy_count()
 {
@@ -339,3 +339,4 @@ function group_buy_list($size, $page)
 
     return $gb_list;
 }
+    }

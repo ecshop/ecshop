@@ -10,9 +10,6 @@ class AfficheController extends BaseController
     public function index(): View
     {
 
-    }
-}
-
 define('INIT_NO_SMARTY', true);
 // require dirname(__FILE__).'/includes/init.php';
 
@@ -139,5 +136,8 @@ if ($_GET['act'] == 'js') {
 
         ecs_header("Location: $uri\n");
         exit;
+    }
+}
+
     }
 }

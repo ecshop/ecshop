@@ -10,9 +10,6 @@ class ArticleController extends BaseController
     public function index(): View
     {
 
-    }
-}
-
 // require dirname(__FILE__).'/includes/init.php';
 
 if (! DEBUG_MODE) {
@@ -115,6 +112,8 @@ if (isset($article) && $article['cat_id'] > 2) {
     $smarty->display('article_pro.dwt', $cache_id);
 }
 
+}
+
 /**
  * 获得指定的文章的详细信息
  *
@@ -183,3 +182,4 @@ function article_related_goods($id)
 
     return $arr;
 }
+    }

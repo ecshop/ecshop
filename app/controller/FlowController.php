@@ -10,9 +10,6 @@ class FlowController extends BaseController
     public function index(): View
     {
 
-    }
-}
-
 
 // require dirname(__FILE__).'/includes/init.php';
 // require ROOT_PATH.'includes/lib_order.php';
@@ -1865,6 +1862,9 @@ assign_dynamic('shopping_flow');
 
 $smarty->display('flow.dwt');
 
+
+}
+
 /**
  * 获得用户的可用积分
  *
@@ -2452,3 +2452,4 @@ function cart_favourable_amount($favourable)
     /* 优惠范围内的商品总额 */
     return $GLOBALS['db']->getOne($sql);
 }
+    }

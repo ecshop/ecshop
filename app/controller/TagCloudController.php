@@ -10,8 +10,6 @@ class TagCloudController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 
 // require dirname(__FILE__).'/includes/init.php';
@@ -43,3 +41,6 @@ if (! empty($tags)) {
 $smarty->assign('tags', $tags);
 
 $smarty->display('tag_cloud.dwt');
+
+    }
+}

@@ -10,9 +10,6 @@ class FeedController extends BaseController
     public function index(): View
     {
 
-    }
-}
-
 define('INIT_NO_USERS', true);
 define('INIT_NO_SMARTY', true);
 
@@ -225,5 +222,8 @@ if (isset($_REQUEST['type'])) {
         }
 
         $rss->outputRSS($ver);
+    }
+}
+
     }
 }

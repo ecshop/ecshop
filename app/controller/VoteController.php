@@ -10,8 +10,6 @@ class VoteController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 // require dirname(__FILE__).'/includes/init.php';
 // require ROOT_PATH.'includes/cls_json.php';
@@ -54,6 +52,7 @@ $json = new JSON;
 
 echo $json->encode($res);
 
+}
 /**
  * 检查是否已经提交过投票
  *
@@ -95,3 +94,4 @@ function save_vote($vote_id, $ip_address, $option_id)
         'WHERE '.db_create_in($option_id, 'option_id');
     $GLOBALS['db']->query($sql);
 }
+    }

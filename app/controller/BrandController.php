@@ -10,8 +10,6 @@ class BrandController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 
 // require dirname(__FILE__).'/includes/init.php';
@@ -130,6 +128,7 @@ if (! $smarty->is_cached('brand.dwt', $cache_id)) {
 
 $smarty->display('brand.dwt', $cache_id);
 
+}
 /**
  * 获得指定品牌的详细信息
  *
@@ -312,3 +311,4 @@ function brand_related_cat($brand)
 
     return $arr;
 }
+    }

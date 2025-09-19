@@ -10,8 +10,6 @@ class QuotationController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 // require dirname(__FILE__).'/includes/init.php';
 
@@ -70,6 +68,7 @@ if (is_null($smarty->get_template_vars('helps'))) {
 
 $smarty->display('quotation.dwt');
 
+}
 function get_quotation_where($filter)
 {
     // include_once ROOT_PATH.ADMIN_PATH.'/includes/lib_main.php';
@@ -141,3 +140,4 @@ function product_info($goods_attr, $goods_id)
 
     return $product_info;
 }
+    }

@@ -10,8 +10,6 @@ class SitemapController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 define('INIT_NO_USERS', true);
 define('INIT_NO_SMARTY', true);
@@ -92,3 +90,6 @@ if (function_exists('gzencode')) {
     header('Content-type: application/xml; charset=utf-8');
 }
 exit($out);
+
+    }
+}

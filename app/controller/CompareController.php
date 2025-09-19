@@ -10,8 +10,6 @@ class CompareController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 
 // require dirname(__FILE__).'/includes/init.php';
@@ -113,3 +111,5 @@ $smarty->assign('helps', get_shop_help());       // 网店帮助
 assign_dynamic('compare');
 
 $smarty->display('compare.dwt');
+    }
+}

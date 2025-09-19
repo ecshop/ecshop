@@ -10,8 +10,6 @@ class MessageController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 // require dirname(__FILE__).'/includes/init.php';
 
@@ -109,6 +107,8 @@ if ($action == 'default') {
     $smarty->display('message_board.dwt');
 }
 
+
+}
 /**
  * 获取留言的详细信息
  *
@@ -186,3 +186,4 @@ function get_msg_list($num, $start)
 
     return $msg;
 }
+    }

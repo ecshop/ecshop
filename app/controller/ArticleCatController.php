@@ -10,9 +10,6 @@ class ArticleCatController extends BaseController
     public function index(): View
     {
 
-    }
-}
-
 // require dirname(__FILE__).'/includes/init.php';
 
 if (! DEBUG_MODE) {
@@ -116,3 +113,6 @@ if (! $smarty->is_cached('article_cat.dwt', $cache_id)) {
 $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typearticle_cat'.$cat_id.'.xml' : 'feed.php?type=article_cat'.$cat_id); // RSS URL
 
 $smarty->display('article_cat.dwt', $cache_id);
+
+    }
+}

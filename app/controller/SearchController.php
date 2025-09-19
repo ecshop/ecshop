@@ -10,8 +10,6 @@ class SearchController extends BaseController
     public function index(): View
     {
 
-    }
-}
 
 
 // require dirname(__FILE__).'/includes/init.php';
@@ -425,6 +423,7 @@ else {
     $smarty->display('search.dwt');
 }
 
+}
 /**
  * @return void
  */
@@ -497,3 +496,4 @@ function get_seachable_attributes($cat_id = 0)
 
     return $attributes;
 }
+    }

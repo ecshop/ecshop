@@ -10,9 +10,6 @@ class CommentController extends BaseController
     public function index(): View
     {
 
-    }
-}
-
 
 // require dirname(__FILE__).'/includes/init.php';
 // require ROOT_PATH.'includes/cls_json.php';
@@ -218,6 +215,9 @@ if ($result['error'] == 0) {
 
 echo $json->encode($result);
 
+
+}
+
 /**
  * 添加评论内容
  *
@@ -249,3 +249,4 @@ function add_comment($cmt)
     }*/
     return $result;
 }
+    }

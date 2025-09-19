@@ -10,9 +10,6 @@ class ExchangeController extends BaseController
     public function index(): View
     {
 
-    }
-}
-
 
 // require dirname(__FILE__).'/includes/init.php';
 
@@ -307,6 +304,9 @@ if ($_REQUEST['act'] == 'buy') {
     exit;
 }
 
+    }
+
+
 /**
  * 获得分类的信息
  *
@@ -528,4 +528,5 @@ function get_exchange_goods_info($goods_id)
     } else {
         return false;
     }
+}
 }

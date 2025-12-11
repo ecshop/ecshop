@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Bundles;
 
-use App\Bundles\Repositories\AdminMessageRepository;
+use App\Repositories\AdminMessageRepository;
 use Juling\Foundation\Contracts\ServiceInterface;
 use Juling\Foundation\Services\CommonService;
 

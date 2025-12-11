@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Bundles;
 
-use App\Bundles\Repositories\OrderInfoRepository;
+use App\Repositories\OrderInfoRepository;
 use Juling\Foundation\Contracts\ServiceInterface;
 use Juling\Foundation\Services\CommonService;
 

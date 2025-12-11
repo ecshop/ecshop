@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Api\Admin\Controllers;
+namespace App\Api\Shop\Controllers;
 
 use App\Http\Controllers\Controller;
 

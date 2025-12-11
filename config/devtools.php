@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'dist' => app_path(),
+    'dist' => base_path(),
     'multi_module' => false,
     'exclude_tables' => [
         'cache',

@@ -10,5 +10,9 @@ use Illuminate\Support\Facades\Route;
 
 // Route start
 Route::prefix('common')->group(function () {
+    // 显示图片验证码
+    Route::get('captcha', [\App\Api\Common\Controllers\CaptchaController::class, 'index']);
+    // 发送短信验证码
+    Route::post('sms/code', [\App\Api\Common\Controllers\SmsController::class, 'code']);
 });
 // end

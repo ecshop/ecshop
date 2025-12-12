@@ -1,12 +1,19 @@
 <?php
 
-define('IN_ECS', true);
+declare(strict_types=1);
 
-require dirname(__FILE__).'/includes/init.php';
+namespace App\Modules\Shop\Controllers;
 
-if (! DEBUG_MODE) {
-    $smarty->caching = true;
+use Illuminate\Contracts\Support\Renderable;
+
+class CatalogController extends BaseController
+{
+    public function index(): Renderable
+    {
+        return $this->display('index');
+    }
 }
+
 
 if (! $smarty->is_cached('catalog.dwt')) {
     /* 取出所有分类 */

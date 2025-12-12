@@ -1,8 +1,19 @@
 <?php
 
-define('IN_ECS', true);
+declare(strict_types=1);
 
-require dirname(__FILE__).'/includes/init.php';
+namespace App\Modules\Shop\Controllers;
+
+use Illuminate\Contracts\Support\Renderable;
+
+class RespondController extends BaseController
+{
+    public function index(): Renderable
+    {
+        return $this->display('index');
+    }
+}
+
 require ROOT_PATH.'includes/lib_payment.php';
 require ROOT_PATH.'includes/lib_order.php';
 /* 支付方式代码 */

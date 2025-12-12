@@ -1,15 +1,19 @@
 <?php
 
-define('IN_ECS', true);
+declare(strict_types=1);
 
-require dirname(__FILE__).'/includes/init.php';
+namespace App\Modules\Shop\Controllers;
 
-/* ------------------------------------------------------ */
-// -- act 操作项的初始化
-/* ------------------------------------------------------ */
-if (empty($_REQUEST['act'])) {
-    $_REQUEST['act'] = 'list';
+use Illuminate\Contracts\Support\Renderable;
+
+class AuctionController extends BaseController
+{
+    public function index(): Renderable
+    {
+        return $this->display('index');
+    }
 }
+
 
 /* ------------------------------------------------------ */
 // -- 拍卖活动列表

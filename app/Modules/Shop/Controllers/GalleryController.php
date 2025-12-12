@@ -1,8 +1,19 @@
 <?php
 
-define('IN_ECS', true);
+declare(strict_types=1);
 
-require dirname(__FILE__).'/includes/init.php';
+namespace App\Modules\Shop\Controllers;
+
+use Illuminate\Contracts\Support\Renderable;
+
+class GalleryController extends BaseController
+{
+    public function index(): Renderable
+    {
+        return $this->display('index');
+    }
+}
+
 
 /* 参数 */
 $_REQUEST['id'] = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0; // 商品编号

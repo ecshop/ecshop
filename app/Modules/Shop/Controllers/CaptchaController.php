@@ -1,9 +1,19 @@
 <?php
 
-define('IN_ECS', true);
-define('INIT_NO_SMARTY', true);
+declare(strict_types=1);
 
-require dirname(__FILE__).'/includes/init.php';
+namespace App\Modules\Shop\Controllers;
+
+use Illuminate\Contracts\Support\Renderable;
+
+class CaptchaController extends BaseController
+{
+    public function index(): Renderable
+    {
+        return $this->display('index');
+    }
+}
+
 require ROOT_PATH.'includes/cls_captcha.php';
 
 $img = new captcha(ROOT_PATH.'data/captcha/', $_CFG['captcha_width'], $_CFG['captcha_height']);

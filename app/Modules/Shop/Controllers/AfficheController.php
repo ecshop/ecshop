@@ -1,8 +1,18 @@
 <?php
 
-define('IN_ECS', true);
-define('INIT_NO_SMARTY', true);
-require dirname(__FILE__).'/includes/init.php';
+declare(strict_types=1);
+
+namespace App\Modules\Shop\Controllers;
+
+use Illuminate\Contracts\Support\Renderable;
+
+class AfficheController extends BaseController
+{
+    public function index(): Renderable
+    {
+        return $this->display('index');
+    }
+}
 
 /* 没有指定广告的id及跳转地址 */
 if (empty($_GET['ad_id'])) {

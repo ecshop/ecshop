@@ -1,8 +1,19 @@
 <?php
 
-define('IN_ECS', true);
+declare(strict_types=1);
 
-require dirname(__FILE__).'/includes/init.php';
+namespace App\Modules\Shop\Controllers;
+
+use Illuminate\Contracts\Support\Renderable;
+
+class TagCloudController extends BaseController
+{
+    public function index(): Renderable
+    {
+        return $this->display('index');
+    }
+}
+
 assign_template();
 $position = assign_ur_here(0, $_LANG['tag_cloud']);
 $smarty->assign('page_title', $position['title']);    // 页面标题

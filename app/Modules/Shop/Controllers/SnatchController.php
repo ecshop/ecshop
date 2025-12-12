@@ -1,8 +1,18 @@
 <?php
 
-define('IN_ECS', true);
+declare(strict_types=1);
 
-require dirname(__FILE__).'/includes/init.php';
+namespace App\Modules\Shop\Controllers;
+
+use Illuminate\Contracts\Support\Renderable;
+
+class SnatchController extends BaseController
+{
+    public function index(): Renderable
+    {
+        return $this->display('index');
+    }
+}
 
 /* ------------------------------------------------------ */
 // -- 如果用没有指定活动id，将页面重定向到即将结束的活动

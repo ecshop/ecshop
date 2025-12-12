@@ -1,8 +1,19 @@
 <?php
 
-define('IN_ECS', true);
+declare(strict_types=1);
 
-require dirname(__FILE__).'/includes/init.php';
+namespace App\Modules\Shop\Controllers;
+
+use Illuminate\Contracts\Support\Renderable;
+
+class CommentController extends BaseController
+{
+    public function index(): Renderable
+    {
+        return $this->display('index');
+    }
+}
+
 require ROOT_PATH.'includes/cls_json.php';
 if (! isset($_REQUEST['cmt']) && ! isset($_REQUEST['act'])) {
     /* 只有在没有提交评论内容以及没有act的情况下才跳转 */

@@ -1,12 +1,19 @@
 <?php
 
-define('IN_ECS', true);
+declare(strict_types=1);
 
-require dirname(__FILE__).'/includes/init.php';
+namespace App\Modules\Shop\Controllers;
 
-if (! DEBUG_MODE) {
-    $smarty->caching = true;
+use Illuminate\Contracts\Support\Renderable;
+
+class GoodsController extends BaseController
+{
+    public function index(): Renderable
+    {
+        return $this->display('index');
+    }
 }
+
 
 $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
 $smarty->assign('affiliate', $affiliate);

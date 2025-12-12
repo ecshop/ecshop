@@ -10,11 +10,6 @@ class PickOutController extends BaseController
 {
     public function index(): Renderable
     {
-        return $this->display('index');
-    }
-}
-
-
 $condition = [];
 $picks = [];
 $cat_id = ! empty($_GET['cat_id']) ? intval($_GET['cat_id']) : 0;
@@ -220,33 +215,33 @@ $picks[] = ['name' => $_LANG['remove_all'], 'url' => 'pick_out.php'];
 
 assign_template();
 $position = assign_ur_here(0, $_LANG['pick_out']);
-$smarty->assign('page_title', $position['title']);    // 页面标题
-$smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+$this->assign('page_title', $position['title']);    // 页面标题
+$this->assign('ur_here', $position['ur_here']);  // 当前位置
 
-$smarty->assign('brand_list', $brand_list);       // 品牌
-$smarty->assign('cat_list', $cat_list);        // 分类列表
+$this->assign('brand_list', $brand_list);       // 品牌
+$this->assign('cat_list', $cat_list);        // 分类列表
 
-$smarty->assign('categories', get_categories_tree()); // 分类树
-$smarty->assign('helps', get_shop_help());  // 网店帮助
-$smarty->assign('top_goods', get_top10());      // 销售排行
-$smarty->assign('data_dir', DATA_DIR);  // 数据目录
+$this->assign('categories', get_categories_tree()); // 分类树
+$this->assign('helps', get_shop_help());  // 网店帮助
+$this->assign('top_goods', get_top10());      // 销售排行
+$this->assign('data_dir', DATA_DIR);  // 数据目录
 
 /* 调查 */
 $vote = get_vote();
 if (! empty($vote)) {
-    $smarty->assign('vote_id', $vote['id']);
-    $smarty->assign('vote', $vote['content']);
+    $this->assign('vote_id', $vote['id']);
+    $this->assign('vote', $vote['content']);
 }
 
 assign_dynamic('pick_out');
 
-$smarty->assign('url', $url);
-$smarty->assign('pickout_goods', $goods);
-$smarty->assign('count', $goods_count);
-$smarty->assign('picks', $picks);
-$smarty->assign('condition', $condition);
-$smarty->display('pick_out.dwt');
-
+$this->assign('url', $url);
+$this->assign('pickout_goods', $goods);
+$this->assign('count', $goods_count);
+$this->assign('picks', $picks);
+$this->assign('condition', $condition);
+return $this->display('pick_out');
+}
 /**
  *  生成搜索的链接地址
  *
@@ -263,4 +258,5 @@ function search_url(&$attr_picks, $attr_id = 0)
     }
 
     return $str;
+}
 }

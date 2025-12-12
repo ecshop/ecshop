@@ -10,10 +10,6 @@ class SnatchController extends BaseController
 {
     public function index(): Renderable
     {
-        return $this->display('index');
-    }
-}
-
 /* ------------------------------------------------------ */
 // -- 如果用没有指定活动id，将页面重定向到即将结束的活动
 /* ------------------------------------------------------ */
@@ -45,11 +41,11 @@ if ($_REQUEST['act'] == 'main') {
         $myprice = get_myprice($id);
         if ($goods['is_end']) {
             // 如果活动已经结束,获取活动结果
-            $smarty->assign('result', get_snatch_result($id));
+            $this->assign('result', get_snatch_result($id));
         }
-        $smarty->assign('id', $id);
-        $smarty->assign('snatch_goods', $goods); // 竞价商品
-        $smarty->assign('myprice', get_myprice($id));
+        $this->assign('id', $id);
+        $this->assign('snatch_goods', $goods); // 竞价商品
+        $this->assign('myprice', get_myprice($id));
         if ($goods['product_id'] > 0) {
             $goods_specifications = get_specifications_list($goods['goods_id']);
 
@@ -60,7 +56,7 @@ if ($_REQUEST['act'] == 'main') {
             foreach ($_good_products as $value) {
                 $products_info .= ' '.$goods_specifications[$value]['attr_name'].'：'.$goods_specifications[$value]['attr_value'];
             }
-            $smarty->assign('products_info', $products_info);
+            $this->assign('products_info', $products_info);
             unset($goods_specifications, $good_products, $_good_products, $products_info);
         }
     } else {
@@ -70,29 +66,29 @@ if ($_REQUEST['act'] == 'main') {
     /* 调查 */
     $vote = get_vote();
     if (! empty($vote)) {
-        $smarty->assign('vote_id', $vote['id']);
-        $smarty->assign('vote', $vote['content']);
+        $this->assign('vote_id', $vote['id']);
+        $this->assign('vote', $vote['content']);
     }
 
     assign_template();
     assign_dynamic('snatch');
-    $smarty->assign('page_title', $position['title']);
-    $smarty->assign('ur_here', $position['ur_here']);
-    $smarty->assign('categories', get_categories_tree()); // 分类树
-    $smarty->assign('helps', get_shop_help());       // 网店帮助
-    $smarty->assign('snatch_list', get_snatch_list());     // 所有有效的夺宝奇兵列表
-    $smarty->assign('price_list', get_price_list($id));
-    $smarty->assign('promotion_info', get_promotion_info());
-    $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typesnatch.xml' : 'feed.php?type=snatch'); // RSS URL
-    $smarty->display('snatch.dwt');
+    $this->assign('page_title', $position['title']);
+    $this->assign('ur_here', $position['ur_here']);
+    $this->assign('categories', get_categories_tree()); // 分类树
+    $this->assign('helps', get_shop_help());       // 网店帮助
+    $this->assign('snatch_list', get_snatch_list());     // 所有有效的夺宝奇兵列表
+    $this->assign('price_list', get_price_list($id));
+    $this->assign('promotion_info', get_promotion_info());
+    $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typesnatch.xml' : 'feed.php?type=snatch'); // RSS URL
+    return $this->display('snatch');
 
     exit;
 }
 
 /* 最新出价列表 */
 if ($_REQUEST['act'] == 'new_price_list') {
-    $smarty->assign('price_list', get_price_list($id));
-    $smarty->display('library/snatch_price.lbi');
+    $this->assign('price_list', get_price_list($id));
+    return $this->display('library/snatch_price.lbi');
 
     exit;
 }
@@ -167,8 +163,8 @@ if ($_REQUEST['act'] == 'bid') {
         "('$id', '".$_SESSION['user_id']."', '".$price."', ".gmtime().')';
     $db->query($sql);
 
-    $smarty->assign('myprice', get_myprice($id));
-    $smarty->assign('id', $id);
+    $this->assign('myprice', get_myprice($id));
+    $this->assign('id', $id);
     $result['content'] = $smarty->fetch('library/snatch.lbi');
     exit($json->encode($result));
 }
@@ -269,7 +265,7 @@ if ($_REQUEST['act'] == 'buy') {
     ecs_header("Location: ./flow.php?step=consignee\n");
     exit;
 }
-
+}
 /**
  * 取得用户对当前活动的所出过的价格
  *
@@ -429,4 +425,5 @@ function get_last_snatch()
         ' ORDER BY end_time ASC LIMIT 1';
 
     return $GLOBALS['db']->getOne($sql);
+}
 }

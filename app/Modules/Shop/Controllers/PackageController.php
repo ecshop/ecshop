@@ -10,9 +10,6 @@ class PackageController extends BaseController
 {
     public function index(): Renderable
     {
-        return $this->display('index');
-    }
-}
 
 require_once ROOT_PATH.'includes/lib_order.php';
 include_once ROOT_PATH.'includes/lib_transaction.php';
@@ -29,8 +26,8 @@ require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/package.php';
 assign_template();
 assign_dynamic('package');
 $position = assign_ur_here(0, $_LANG['shopping_package']);
-$smarty->assign('page_title', $position['title']);    // 页面标题
-$smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+$this->assign('page_title', $position['title']);    // 页面标题
+$this->assign('ur_here', $position['ur_here']);  // 当前位置
 
 /* 读出所有礼包信息 */
 
@@ -80,10 +77,12 @@ while ($row = $db->fetchRow($res)) {
     $list[] = $row;
 }
 
-$smarty->assign('list', $list);
+$this->assign('list', $list);
 
-$smarty->assign('helps', get_shop_help());       // 网店帮助
-$smarty->assign('lang', $_LANG);
+$this->assign('helps', get_shop_help());       // 网店帮助
+$this->assign('lang', $_LANG);
 
-$smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typepackage.xml' : 'feed.php?type=package'); // RSS URL
-$smarty->display('package.dwt');
+$this->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typepackage.xml' : 'feed.php?type=package'); // RSS URL
+return $this->display('package');
+    }
+}

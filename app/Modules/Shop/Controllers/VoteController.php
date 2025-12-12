@@ -10,10 +10,6 @@ class VoteController extends BaseController
 {
     public function index(): Renderable
     {
-        return $this->display('index');
-    }
-}
-
 require ROOT_PATH.'includes/cls_json.php';
 
 if (! isset($_REQUEST['vote']) || ! isset($_REQUEST['options']) || ! isset($_REQUEST['type'])) {
@@ -36,8 +32,8 @@ if (vote_already_submited($vote_id, $ip_address)) {
 
     $vote = get_vote($vote_id);
     if (! empty($vote)) {
-        $smarty->assign('vote_id', $vote['id']);
-        $smarty->assign('vote', $vote['content']);
+        $this->assign('vote_id', $vote['id']);
+        $this->assign('vote', $vote['content']);
     }
 
     $str = $smarty->fetch('library/vote.lbi');
@@ -53,7 +49,7 @@ if (vote_already_submited($vote_id, $ip_address)) {
 $json = new JSON;
 
 echo $json->encode($res);
-
+}
 /**
  * 检查是否已经提交过投票
  *
@@ -94,4 +90,5 @@ function save_vote($vote_id, $ip_address, $option_id)
         'option_count = option_count + 1 '.
         'WHERE '.db_create_in($option_id, 'option_id');
     $GLOBALS['db']->query($sql);
+}
 }

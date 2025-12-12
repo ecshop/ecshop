@@ -10,9 +10,6 @@ class CategoryController extends BaseController
 {
     public function index(): Renderable
     {
-        return $this->display('index');
-    }
-}
 
 
 /* ------------------------------------------------------ */
@@ -61,7 +58,7 @@ setcookie('ECS[display]', $display, gmtime() + 86400 * 7, null, null, null, true
 $cache_id = sprintf('%X', crc32($cat_id.'-'.$display.'-'.$sort.'-'.$order.'-'.$page.'-'.$size.'-'.$_SESSION['user_rank'].'-'.
     $_CFG['lang'].'-'.$brand.'-'.$price_max.'-'.$price_min.'-'.$filter_attr_str));
 
-if (! $smarty->is_cached('category.dwt', $cache_id)) {
+if (! $smarty->is_cached('category', $cache_id)) {
     /* 如果页面没有被缓存则重新获取页面的内容 */
 
     $children = get_children($cat_id);
@@ -69,9 +66,9 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
     $cat = get_cat_info($cat_id);   // 获得分类的相关信息
 
     if (! empty($cat)) {
-        $smarty->assign('keywords', htmlspecialchars($cat['keywords']));
-        $smarty->assign('description', htmlspecialchars($cat['cat_desc']));
-        $smarty->assign('cat_style', htmlspecialchars($cat['style']));
+        $this->assign('keywords', htmlspecialchars($cat['keywords']));
+        $this->assign('description', htmlspecialchars($cat['cat_desc']));
+        $this->assign('cat_style', htmlspecialchars($cat['style']));
     } else {
         /* 如果分类不存在则返回首页 */
         ecs_header("Location: ./\n");
@@ -180,7 +177,7 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
         $price_grade[0]['url'] = build_uri('category', ['cid' => $cat_id, 'bid' => $brand, 'price_min' => 0, 'price_max' => 0, 'filter_attr' => $filter_attr_str], $cat['cat_name']);
         $price_grade[0]['selected'] = empty($price_max) ? 1 : 0;
 
-        $smarty->assign('price_grade', $price_grade);
+        $this->assign('price_grade', $price_grade);
     }
 
     /* 品牌筛选 */
@@ -211,7 +208,7 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
     $brands[0]['url'] = build_uri('category', ['cid' => $cat_id, 'bid' => 0, 'price_min' => $price_min, 'price_max' => $price_max, 'filter_attr' => $filter_attr_str], $cat['cat_name']);
     $brands[0]['selected'] = empty($brand) ? 1 : 0;
 
-    $smarty->assign('brands', $brands);
+    $this->assign('brands', $brands);
 
     /* 属性筛选 */
     $ext = ''; // 商品查询条件扩展
@@ -261,7 +258,7 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
             }
         }
 
-        $smarty->assign('filter_attr_list', $all_attr_list);
+        $this->assign('filter_attr_list', $all_attr_list);
         /* 扩展商品查询条件 */
         if (! empty($filter_attr)) {
             $ext_sql = 'SELECT DISTINCT(b.goods_id) FROM '.$ecs->table('goods_attr').' AS a, '.$ecs->table('goods_attr').' AS b '.'WHERE ';
@@ -280,19 +277,19 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
     assign_template('c', [$cat_id]);
 
     $position = assign_ur_here($cat_id, $brand_name);
-    $smarty->assign('page_title', $position['title']);    // 页面标题
-    $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+    $this->assign('page_title', $position['title']);    // 页面标题
+    $this->assign('ur_here', $position['ur_here']);  // 当前位置
 
-    $smarty->assign('categories', get_categories_tree($cat_id)); // 分类树
-    $smarty->assign('helps', get_shop_help());              // 网店帮助
-    $smarty->assign('top_goods', get_top10());                  // 销售排行
-    $smarty->assign('show_marketprice', $_CFG['show_marketprice']);
-    $smarty->assign('category', $cat_id);
-    $smarty->assign('brand_id', $brand);
-    $smarty->assign('price_max', $price_max);
-    $smarty->assign('price_min', $price_min);
-    $smarty->assign('filter_attr', $filter_attr_str);
-    $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-c$cat_id.xml" : 'feed.php?cat='.$cat_id); // RSS URL
+    $this->assign('categories', get_categories_tree($cat_id)); // 分类树
+    $this->assign('helps', get_shop_help());              // 网店帮助
+    $this->assign('top_goods', get_top10());                  // 销售排行
+    $this->assign('show_marketprice', $_CFG['show_marketprice']);
+    $this->assign('category', $cat_id);
+    $this->assign('brand_id', $brand);
+    $this->assign('price_max', $price_max);
+    $this->assign('price_min', $price_min);
+    $this->assign('filter_attr', $filter_attr_str);
+    $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-c$cat_id.xml" : 'feed.php?cat='.$cat_id); // RSS URL
 
     if ($brand > 0) {
         $arr['all'] = ['brand_id' => 0,
@@ -307,20 +304,20 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
 
     $brand_list = array_merge($arr, get_brands($cat_id, 'category'));
 
-    $smarty->assign('data_dir', DATA_DIR);
-    $smarty->assign('brand_list', $brand_list);
-    $smarty->assign('promotion_info', get_promotion_info());
+    $this->assign('data_dir', DATA_DIR);
+    $this->assign('brand_list', $brand_list);
+    $this->assign('promotion_info', get_promotion_info());
 
     /* 调查 */
     $vote = get_vote();
     if (! empty($vote)) {
-        $smarty->assign('vote_id', $vote['id']);
-        $smarty->assign('vote', $vote['content']);
+        $this->assign('vote_id', $vote['id']);
+        $this->assign('vote', $vote['content']);
     }
 
-    $smarty->assign('best_goods', get_category_recommend_goods('best', $children, $brand, $price_min, $price_max, $ext));
-    $smarty->assign('promotion_goods', get_category_recommend_goods('promote', $children, $brand, $price_min, $price_max, $ext));
-    $smarty->assign('hot_goods', get_category_recommend_goods('hot', $children, $brand, $price_min, $price_max, $ext));
+    $this->assign('best_goods', get_category_recommend_goods('best', $children, $brand, $price_min, $price_max, $ext));
+    $this->assign('promotion_goods', get_category_recommend_goods('promote', $children, $brand, $price_min, $price_max, $ext));
+    $this->assign('hot_goods', get_category_recommend_goods('hot', $children, $brand, $price_min, $price_max, $ext));
 
     $count = get_cagtegory_goods_count($children, $brand, $price_min, $price_max, $ext);
     $max_page = ($count > 0) ? ceil($count / $size) : 1;
@@ -333,15 +330,17 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
             $goodslist[] = [];
         }
     }
-    $smarty->assign('goods_list', $goodslist);
-    $smarty->assign('category', $cat_id);
-    $smarty->assign('script_name', 'category');
+    $this->assign('goods_list', $goodslist);
+    $this->assign('category', $cat_id);
+    $this->assign('script_name', 'category');
 
     assign_pager('category', $cat_id, $count, $size, $sort, $order, $page, '', $brand, $price_min, $price_max, $display, $filter_attr_str); // 分页
     assign_dynamic('category'); // 动态内容
 }
 
-$smarty->display('category.dwt', $cache_id);
+return $this->display('category');
+
+}
 
 /**
  * 获得分类的信息
@@ -500,4 +499,5 @@ function get_parent_grade($cat_id)
     }
 
     return $grade_arr[$cat_id];
+}
 }

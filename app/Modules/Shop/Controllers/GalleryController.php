@@ -10,9 +10,7 @@ class GalleryController extends BaseController
 {
     public function index(): Renderable
     {
-        return $this->display('index');
-    }
-}
+
 
 
 /* 参数 */
@@ -53,7 +51,9 @@ if ($img_count == 0) {
     }
 }
 
-$smarty->assign('shop_name', $_CFG['shop_name']);
-$smarty->assign('watermark', str_replace('../', './', $_CFG['watermark']));
-$smarty->assign('gallery', $gallery);
-$smarty->display('gallery.dwt');
+$this->assign('shop_name', $_CFG['shop_name']);
+$this->assign('watermark', str_replace('../', './', $_CFG['watermark']));
+$this->assign('gallery', $gallery);
+return $this->display('gallery');
+    }
+}

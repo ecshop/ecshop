@@ -10,10 +10,6 @@ class ReceiveController extends BaseController
 {
     public function index(): Renderable
     {
-        return $this->display('index');
-    }
-}
-
 
 /* 取得参数 */
 $order_id = ! empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;  // 订单号
@@ -46,13 +42,15 @@ elseif ($order['shipping_status'] == SS_RECEIVED) {
 /* 显示模板 */
 assign_template();
 $position = assign_ur_here();
-$smarty->assign('page_title', $position['title']);    // 页面标题
-$smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+$this->assign('page_title', $position['title']);    // 页面标题
+$this->assign('ur_here', $position['ur_here']);  // 当前位置
 
-$smarty->assign('categories', get_categories_tree()); // 分类树
-$smarty->assign('helps', get_shop_help());       // 网店帮助
+$this->assign('categories', get_categories_tree()); // 分类树
+$this->assign('helps', get_shop_help());       // 网店帮助
 
 assign_dynamic('receive');
 
-$smarty->assign('msg', $msg);
-$smarty->display('receive.dwt');
+$this->assign('msg', $msg);
+return $this->display('receive');
+    }
+}

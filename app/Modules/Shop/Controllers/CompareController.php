@@ -10,9 +10,6 @@ class CompareController extends BaseController
 {
     public function index(): Renderable
     {
-        return $this->display('index');
-    }
-}
 
 
 if (! empty($_REQUEST['goods']) && is_array($_REQUEST['goods']) && count($_REQUEST['goods']) > 1) {
@@ -94,8 +91,8 @@ if (! empty($_REQUEST['goods']) && is_array($_REQUEST['goods']) && count($_REQUE
         $attribute[$rt['attr_id']] = $rt['attr_name'];
     }
 
-    $smarty->assign('attribute', $attribute);
-    $smarty->assign('goods_list', $arr);
+    $this->assign('attribute', $attribute);
+    $this->assign('goods_list', $arr);
 } else {
     show_message($_LANG['compare_no_goods']);
     exit;
@@ -103,12 +100,14 @@ if (! empty($_REQUEST['goods']) && is_array($_REQUEST['goods']) && count($_REQUE
 
 assign_template();
 $position = assign_ur_here(0, $_LANG['goods_compare']);
-$smarty->assign('page_title', $position['title']);    // 页面标题
-$smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+$this->assign('page_title', $position['title']);    // 页面标题
+$this->assign('ur_here', $position['ur_here']);  // 当前位置
 
-$smarty->assign('categories', get_categories_tree()); // 分类树
-$smarty->assign('helps', get_shop_help());       // 网店帮助
+$this->assign('categories', get_categories_tree()); // 分类树
+$this->assign('helps', get_shop_help());       // 网店帮助
 
 assign_dynamic('compare');
 
-$smarty->display('compare.dwt');
+return $this->display('compare');
+    }
+}

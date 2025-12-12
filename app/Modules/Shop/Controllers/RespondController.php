@@ -10,9 +10,6 @@ class RespondController extends BaseController
 {
     public function index(): Renderable
     {
-        return $this->display('index');
-    }
-}
 
 require ROOT_PATH.'includes/lib_payment.php';
 require ROOT_PATH.'includes/lib_order.php';
@@ -56,13 +53,15 @@ if (empty($pay_code)) {
 
 assign_template();
 $position = assign_ur_here();
-$smarty->assign('page_title', $position['title']);   // 页面标题
-$smarty->assign('ur_here', $position['ur_here']); // 当前位置
-$smarty->assign('page_title', $position['title']);   // 页面标题
-$smarty->assign('ur_here', $position['ur_here']); // 当前位置
-$smarty->assign('helps', get_shop_help());      // 网店帮助
+$this->assign('page_title', $position['title']);   // 页面标题
+$this->assign('ur_here', $position['ur_here']); // 当前位置
+$this->assign('page_title', $position['title']);   // 页面标题
+$this->assign('ur_here', $position['ur_here']); // 当前位置
+$this->assign('helps', get_shop_help());      // 网店帮助
 
-$smarty->assign('message', $msg);
-$smarty->assign('shop_url', $ecs->url());
+$this->assign('message', $msg);
+$this->assign('shop_url', $ecs->url());
 
-$smarty->display('respond.dwt');
+return $this->display('respond');
+    }
+}

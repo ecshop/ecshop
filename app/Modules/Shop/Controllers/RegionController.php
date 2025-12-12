@@ -10,9 +10,6 @@ class RegionController extends BaseController
 {
     public function index(): Renderable
     {
-        return $this->display('index');
-    }
-}
 
 require ROOT_PATH.'includes/cls_json.php';
 
@@ -28,3 +25,5 @@ $arr['target'] = htmlspecialchars($arr['target']);
 
 $json = new JSON;
 echo $json->encode($arr);
+    }
+}

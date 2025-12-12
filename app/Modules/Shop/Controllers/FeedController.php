@@ -10,9 +10,7 @@ class FeedController extends BaseController
 {
     public function index(): Renderable
     {
-        return $this->display('index');
-    }
-}
+
 
 require ROOT_PATH.'includes/cls_rss.php';
 
@@ -222,5 +220,7 @@ if (isset($_REQUEST['type'])) {
         }
 
         $rss->outputRSS($ver);
+    }
+}
     }
 }

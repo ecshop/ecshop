@@ -10,16 +10,12 @@ class QuotationController extends BaseController
 {
     public function index(): Renderable
     {
-        return $this->display('index');
-    }
-}
-
 
 $action = isset($_REQUEST['act']) ? trim($_REQUEST['act']) : 'default';
 if ($action == 'print_quotation') {
     $smarty->template_dir = DATA_DIR;
-    $smarty->assign('shop_name', $_CFG['shop_title']);
-    $smarty->assign('cfg', $_CFG);
+    $this->assign('shop_name', $_CFG['shop_title']);
+    $this->assign('cfg', $_CFG);
     $where = get_quotation_where($_POST);
     $sql = 'SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, c.cat_name AS goods_category,p.product_id,p.product_number,p.goods_attr'.
         ' FROM '.$ecs->table('goods').' AS g LEFT JOIN '.$ecs->table('category').' AS c ON g.cat_id = c.cat_id LEFT JOIN '.$ecs->table('products').'as p  On g.goods_id=p.goods_id'.$where.' AND is_on_sale = 1 AND is_alone_sale = 1 ';
@@ -47,9 +43,9 @@ if ($action == 'print_quotation') {
     }
     $user_rank = calc_user_rank($user_rank, $rank_point);
     $user_men = serve_user($goods_list);
-    $smarty->assign('extend_price', $user_rank['ext_price']);
-    $smarty->assign('extend_rank', $user_men);
-    $smarty->assign('goods_list', $goods_list);
+    $this->assign('extend_price', $user_rank['ext_price']);
+    $this->assign('extend_rank', $user_men);
+    $this->assign('goods_list', $goods_list);
 
     $html = $smarty->fetch('quotation_print.html');
     exit($html);
@@ -58,18 +54,18 @@ if ($action == 'print_quotation') {
 assign_template();
 
 $position = assign_ur_here(0, $_LANG['quotation']);
-$smarty->assign('page_title', $position['title']);   // 页面标题
-$smarty->assign('ur_here', $position['ur_here']); // 当前位置
+$this->assign('page_title', $position['title']);   // 页面标题
+$this->assign('ur_here', $position['ur_here']); // 当前位置
 
-$smarty->assign('cat_list', cat_list());
-$smarty->assign('brand_list', get_brand_list());
+$this->assign('cat_list', cat_list());
+$this->assign('brand_list', get_brand_list());
 
 if (is_null($smarty->get_template_vars('helps'))) {
-    $smarty->assign('helps', get_shop_help()); // 网店帮助
+    $this->assign('helps', get_shop_help()); // 网店帮助
 }
 
-$smarty->display('quotation.dwt');
-
+return $this->display('quotation');
+}
 function get_quotation_where($filter)
 {
     include_once ROOT_PATH.ADMIN_PATH.'/includes/lib_main.php';
@@ -140,4 +136,5 @@ function product_info($goods_attr, $goods_id)
     }
 
     return $product_info;
+}
 }

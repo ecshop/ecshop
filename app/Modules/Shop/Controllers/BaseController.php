@@ -7,6 +7,7 @@ namespace App\Modules\Shop\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Shop\ShopServiceProvider;
 use Illuminate\Contracts\Support\Renderable;
+use OpenApi\Attributes as OA;
 
 abstract class BaseController extends Controller
 {

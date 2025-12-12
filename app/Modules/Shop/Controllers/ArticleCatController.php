@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace App\Modules\Shop\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
+use OpenApi\Attributes as OA;
 
 class ArticleCatController extends BaseController
 {
+    #[OA\Get(path: 'article-cat', summary: '接口', tags: ['模块'])]
+    #[OA\Response(response: 200, description: 'OK')]
     public function index(): Renderable
     {
 
         /* ------------------------------------------------------ */
-// -- INPUT
+        // -- INPUT
         /* ------------------------------------------------------ */
 
         /* 获得指定的分类ID */
@@ -30,7 +33,7 @@ class ArticleCatController extends BaseController
         $page = ! empty($_REQUEST['page']) && intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
 
         /* ------------------------------------------------------ */
-// -- PROCESSOR
+        // -- PROCESSOR
         /* ------------------------------------------------------ */
 
         /* 获得页面的缓存ID */

@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Modules\Shop\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
+use OpenApi\Attributes as OA;
 
 class CatalogController extends BaseController
 {
+    #[OA\Get(path: 'catalog', summary: '接口', tags: ['模块'])]
+    #[OA\Response(response: 200, description: 'OK')]
     public function index(): Renderable
     {
         if (! $smarty->is_cached('catalog')) {
@@ -35,22 +38,22 @@ class CatalogController extends BaseController
         return $this->display('catalog');
     }
 
-/**
- * 计算指定分类的商品数量
- *
- * @param  int  $cat_id
- * @return void
- */
-function calculate_goods_num($cat_list, $cat_id)
-{
-    $goods_num = 0;
+    /**
+     * 计算指定分类的商品数量
+     *
+     * @param  int  $cat_id
+     * @return void
+     */
+    private function calculate_goods_num($cat_list, $cat_id)
+    {
+        $goods_num = 0;
 
-    foreach ($cat_list as $cat) {
-        if ($cat['parent_id'] == $cat_id && ! empty($cat['goods_num'])) {
-            $goods_num += $cat['goods_num'];
+        foreach ($cat_list as $cat) {
+            if ($cat['parent_id'] == $cat_id && ! empty($cat['goods_num'])) {
+                $goods_num += $cat['goods_num'];
+            }
         }
-    }
 
-    return $goods_num;
-}
+        return $goods_num;
+    }
 }

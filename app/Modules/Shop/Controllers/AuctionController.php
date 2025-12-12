@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace App\Modules\Shop\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
+use OpenApi\Attributes as OA;
 
 class AuctionController extends BaseController
 {
+    #[OA\Get(path: 'auction', summary: '接口', tags: ['模块'])]
+    #[OA\Response(response: 200, description: 'OK')]
     public function index(): Renderable
     {
 
         /* ------------------------------------------------------ */
-// -- 拍卖活动列表
+        // -- 拍卖活动列表
         /* ------------------------------------------------------ */
         if ($_REQUEST['act'] == 'list') {
             /* 取得拍卖活动总数 */
@@ -69,7 +72,7 @@ class AuctionController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- 拍卖商品 --> 商品详情
+        // -- 拍卖商品 --> 商品详情
         /* ------------------------------------------------------ */
         if ($_REQUEST['act'] == 'view') {
             /* 取得参数：拍卖活动id */
@@ -155,11 +158,12 @@ class AuctionController extends BaseController
             $db->query($sql);
 
             $this->assign('now_time', gmtime());           // 当前系统时间
+
             return $this->display('auction');
         }
 
         /* ------------------------------------------------------ */
-// -- 拍卖商品 --> 出价
+        // -- 拍卖商品 --> 出价
         /* ------------------------------------------------------ */
         if ($_REQUEST['act'] == 'bid') {
             include_once ROOT_PATH.'includes/lib_order.php';
@@ -280,7 +284,7 @@ class AuctionController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- 拍卖商品 --> 购买
+        // -- 拍卖商品 --> 购买
         /* ------------------------------------------------------ */
         if ($_REQUEST['act'] == 'buy') {
             /* 查询：取得参数：拍卖活动id */
@@ -385,64 +389,63 @@ class AuctionController extends BaseController
 
     }
 
+    /**
+     * 取得拍卖活动数量
+     *
+     * @return int
+     */
+    private function auction_count()
+    {
+        $now = gmtime();
+        $sql = 'SELECT COUNT(*) '.
+            'FROM '.$GLOBALS['ecs']->table('goods_activity').
+            "WHERE act_type = '".GAT_AUCTION."' ".
+            "AND start_time <= '$now' AND end_time >= '$now' AND is_finished < 2";
 
-/**
- * 取得拍卖活动数量
- *
- * @return int
- */
-function auction_count()
-{
-    $now = gmtime();
-    $sql = 'SELECT COUNT(*) '.
-        'FROM '.$GLOBALS['ecs']->table('goods_activity').
-        "WHERE act_type = '".GAT_AUCTION."' ".
-        "AND start_time <= '$now' AND end_time >= '$now' AND is_finished < 2";
-
-    return $GLOBALS['db']->getOne($sql);
-}
-
-/**
- * 取得某页的拍卖活动
- *
- * @param  int  $size  每页记录数
- * @param  int  $page  当前页
- * @return array
- */
-function auction_list($size, $page)
-{
-    $auction_list = [];
-    $auction_list['finished'] = $auction_list['finished'] = [];
-
-    $now = gmtime();
-    $sql = "SELECT a.*, IFNULL(g.goods_thumb, '') AS goods_thumb ".
-        'FROM '.$GLOBALS['ecs']->table('goods_activity').' AS a '.
-        'LEFT JOIN '.$GLOBALS['ecs']->table('goods').' AS g ON a.goods_id = g.goods_id '.
-        "WHERE a.act_type = '".GAT_AUCTION."' ".
-        "AND a.start_time <= '$now' AND a.end_time >= '$now' AND a.is_finished < 2 ORDER BY a.act_id DESC";
-    $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);
-    while ($row = $GLOBALS['db']->fetchRow($res)) {
-        $ext_info = unserialize($row['ext_info']);
-        $auction = array_merge($row, $ext_info);
-        $auction['status_no'] = auction_status($auction);
-
-        $auction['start_time'] = local_date($GLOBALS['_CFG']['time_format'], $auction['start_time']);
-        $auction['end_time'] = local_date($GLOBALS['_CFG']['time_format'], $auction['end_time']);
-        $auction['formated_start_price'] = price_format($auction['start_price']);
-        $auction['formated_end_price'] = price_format($auction['end_price']);
-        $auction['formated_deposit'] = price_format($auction['deposit']);
-        $auction['goods_thumb'] = get_image_path($row['goods_thumb']);
-        $auction['url'] = build_uri('auction', ['auid' => $auction['act_id']]);
-
-        if ($auction['status_no'] < 2) {
-            $auction_list['under_way'][] = $auction;
-        } else {
-            $auction_list['finished'][] = $auction;
-        }
+        return $GLOBALS['db']->getOne($sql);
     }
 
-    $auction_list = @array_merge($auction_list['under_way'], $auction_list['finished']);
+    /**
+     * 取得某页的拍卖活动
+     *
+     * @param  int  $size  每页记录数
+     * @param  int  $page  当前页
+     * @return array
+     */
+    private function auction_list($size, $page)
+    {
+        $auction_list = [];
+        $auction_list['finished'] = $auction_list['finished'] = [];
 
-    return $auction_list;
-}
+        $now = gmtime();
+        $sql = "SELECT a.*, IFNULL(g.goods_thumb, '') AS goods_thumb ".
+            'FROM '.$GLOBALS['ecs']->table('goods_activity').' AS a '.
+            'LEFT JOIN '.$GLOBALS['ecs']->table('goods').' AS g ON a.goods_id = g.goods_id '.
+            "WHERE a.act_type = '".GAT_AUCTION."' ".
+            "AND a.start_time <= '$now' AND a.end_time >= '$now' AND a.is_finished < 2 ORDER BY a.act_id DESC";
+        $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);
+        while ($row = $GLOBALS['db']->fetchRow($res)) {
+            $ext_info = unserialize($row['ext_info']);
+            $auction = array_merge($row, $ext_info);
+            $auction['status_no'] = auction_status($auction);
+
+            $auction['start_time'] = local_date($GLOBALS['_CFG']['time_format'], $auction['start_time']);
+            $auction['end_time'] = local_date($GLOBALS['_CFG']['time_format'], $auction['end_time']);
+            $auction['formated_start_price'] = price_format($auction['start_price']);
+            $auction['formated_end_price'] = price_format($auction['end_price']);
+            $auction['formated_deposit'] = price_format($auction['deposit']);
+            $auction['goods_thumb'] = get_image_path($row['goods_thumb']);
+            $auction['url'] = build_uri('auction', ['auid' => $auction['act_id']]);
+
+            if ($auction['status_no'] < 2) {
+                $auction_list['under_way'][] = $auction;
+            } else {
+                $auction_list['finished'][] = $auction;
+            }
+        }
+
+        $auction_list = @array_merge($auction_list['under_way'], $auction_list['finished']);
+
+        return $auction_list;
+    }
 }

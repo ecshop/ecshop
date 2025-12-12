@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Modules\Shop\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
+use OpenApi\Attributes as OA;
 
 class CaptchaController extends BaseController
 {
+    #[OA\Get(path: 'captcha', summary: '接口', tags: ['模块'])]
+    #[OA\Response(response: 200, description: 'OK')]
     public function index(): Renderable
     {
         require ROOT_PATH.'includes/cls_captcha.php';

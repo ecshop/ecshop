@@ -9,6 +9,74 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Route;
 
 // shop route start
-Route::prefix('shop')->middleware('web')->name('shop.')->group(function () {
+Route::middleware('web')->name('shop.')->group(function () {
+    // 接口
+    Route::get('activity', [\App\Modules\Shop\Controllers\ActivityController::class, 'index'])->name('activity');
+    // 接口
+    Route::get('affiche', [\App\Modules\Shop\Controllers\AfficheController::class, 'index'])->name('affiche');
+    // 接口
+    Route::get('affiliate', [\App\Modules\Shop\Controllers\AffiliateController::class, 'index'])->name('affiliate');
+    // 接口
+    Route::get('article-cat', [\App\Modules\Shop\Controllers\ArticleCatController::class, 'index'])->name('article-cat');
+    // 接口
+    Route::get('article', [\App\Modules\Shop\Controllers\ArticleController::class, 'index'])->name('article');
+    // 接口
+    Route::get('auction', [\App\Modules\Shop\Controllers\AuctionController::class, 'index'])->name('auction');
+    // 接口
+    Route::get('brand', [\App\Modules\Shop\Controllers\BrandController::class, 'index'])->name('brand');
+    // 接口
+    Route::get('captcha', [\App\Modules\Shop\Controllers\CaptchaController::class, 'index'])->name('captcha');
+    // 接口
+    Route::get('catalog', [\App\Modules\Shop\Controllers\CatalogController::class, 'index'])->name('catalog');
+    // 接口
+    Route::get('category', [\App\Modules\Shop\Controllers\CategoryController::class, 'index'])->name('category');
+    // 接口
+    Route::get('comment', [\App\Modules\Shop\Controllers\CommentController::class, 'index'])->name('comment');
+    // 接口
+    Route::get('compare', [\App\Modules\Shop\Controllers\CompareController::class, 'index'])->name('compare');
+    // 接口
+    Route::get('exchange', [\App\Modules\Shop\Controllers\ExchangeController::class, 'index'])->name('exchange');
+    // 接口
+    Route::get('feed', [\App\Modules\Shop\Controllers\FeedController::class, 'index'])->name('feed');
+    // 接口
+    Route::get('flow', [\App\Modules\Shop\Controllers\FlowController::class, 'index'])->name('flow');
+    // 接口
+    Route::get('gallery', [\App\Modules\Shop\Controllers\GalleryController::class, 'index'])->name('gallery');
+    // 接口
+    Route::get('goods', [\App\Modules\Shop\Controllers\GoodsController::class, 'index'])->name('goods');
+    // 接口
+    Route::get('group-buy', [\App\Modules\Shop\Controllers\GroupBuyController::class, 'index'])->name('group-buy');
+    // 接口
+    Route::get('/', [\App\Modules\Shop\Controllers\IndexController::class, 'index'])->name('index');
+    // 接口
+    Route::get('message', [\App\Modules\Shop\Controllers\MessageController::class, 'index'])->name('message');
+    // 接口
+    Route::get('myship', [\App\Modules\Shop\Controllers\MyshipController::class, 'index'])->name('myship');
+    // 接口
+    Route::get('package', [\App\Modules\Shop\Controllers\PackageController::class, 'index'])->name('package');
+    // 接口
+    Route::get('pick-out', [\App\Modules\Shop\Controllers\PickOutController::class, 'index'])->name('pick-out');
+    // 接口
+    Route::get('quotation', [\App\Modules\Shop\Controllers\QuotationController::class, 'index'])->name('quotation');
+    // 接口
+    Route::get('receive', [\App\Modules\Shop\Controllers\ReceiveController::class, 'index'])->name('receive');
+    // 接口
+    Route::get('region', [\App\Modules\Shop\Controllers\RegionController::class, 'index'])->name('region');
+    // 接口
+    Route::get('respond', [\App\Modules\Shop\Controllers\RespondController::class, 'index'])->name('respond');
+    // 接口
+    Route::get('search', [\App\Modules\Shop\Controllers\SearchController::class, 'index'])->name('search');
+    // 接口
+    Route::get('sitemap', [\App\Modules\Shop\Controllers\SitemapController::class, 'index'])->name('sitemap');
+    // 接口
+    Route::get('snatch', [\App\Modules\Shop\Controllers\SnatchController::class, 'index'])->name('snatch');
+    // 接口
+    Route::get('tag-cloud', [\App\Modules\Shop\Controllers\TagCloudController::class, 'index'])->name('tag-cloud');
+    // 接口
+    Route::get('topic', [\App\Modules\Shop\Controllers\TopicController::class, 'index'])->name('topic');
+    // 接口
+    Route::get('vote', [\App\Modules\Shop\Controllers\VoteController::class, 'index'])->name('vote');
+    // 接口
+    Route::get('wholesale', [\App\Modules\Shop\Controllers\WholesaleController::class, 'index'])->name('wholesale');
 });
 // end

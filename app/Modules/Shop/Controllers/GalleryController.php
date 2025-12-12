@@ -5,55 +5,57 @@ declare(strict_types=1);
 namespace App\Modules\Shop\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
+use OpenApi\Attributes as OA;
 
 class GalleryController extends BaseController
 {
+    #[OA\Get(path: 'gallery', summary: '接口', tags: ['模块'])]
+    #[OA\Response(response: 200, description: 'OK')]
     public function index(): Renderable
     {
 
+        /* 参数 */
+        $_REQUEST['id'] = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0; // 商品编号
+        $_REQUEST['img'] = isset($_REQUEST['img']) ? intval($_REQUEST['img']) : 0; // 图片编号
 
+        /* 获得商品名称 */
+        $sql = 'SELECT goods_name FROM '.$ecs->table('goods')."WHERE goods_id = '$_REQUEST[id]'";
+        $goods_name = $db->getOne($sql);
 
-/* 参数 */
-$_REQUEST['id'] = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0; // 商品编号
-$_REQUEST['img'] = isset($_REQUEST['img']) ? intval($_REQUEST['img']) : 0; // 图片编号
+        /* 如果该商品不存在，返回首页 */
+        if ($goods_name === false) {
+            ecs_header("Location: ./\n");
 
-/* 获得商品名称 */
-$sql = 'SELECT goods_name FROM '.$ecs->table('goods')."WHERE goods_id = '$_REQUEST[id]'";
-$goods_name = $db->getOne($sql);
+            exit;
+        }
 
-/* 如果该商品不存在，返回首页 */
-if ($goods_name === false) {
-    ecs_header("Location: ./\n");
+        /* 获得所有的图片 */
+        $sql = 'SELECT img_id, img_desc, thumb_url, img_url'.
+            ' FROM '.$ecs->table('goods_gallery').
+            " WHERE goods_id = '$_REQUEST[id]' ORDER BY img_id";
+        $img_list = $db->getAll($sql);
 
-    exit;
-}
+        $img_count = count($img_list);
 
-/* 获得所有的图片 */
-$sql = 'SELECT img_id, img_desc, thumb_url, img_url'.
-    ' FROM '.$ecs->table('goods_gallery').
-    " WHERE goods_id = '$_REQUEST[id]' ORDER BY img_id";
-$img_list = $db->getAll($sql);
+        $gallery = ['goods_name' => htmlspecialchars($goods_name, ENT_QUOTES), 'list' => []];
+        if ($img_count == 0) {
+            /* 如果没有图片，返回商品详情页 */
+            ecs_header('Location: goods.php?id='.$_REQUEST['id']."\n");
+            exit;
+        } else {
+            foreach ($img_list as $key => $img) {
+                $gallery['list'][] = [
+                    'gallery_thumb' => get_image_path($img_list[$key]['thumb_url']),
+                    'gallery' => get_image_path($img_list[$key]['img_url']),
+                    'img_desc' => $img_list[$key]['img_desc'],
+                ];
+            }
+        }
 
-$img_count = count($img_list);
+        $this->assign('shop_name', $_CFG['shop_name']);
+        $this->assign('watermark', str_replace('../', './', $_CFG['watermark']));
+        $this->assign('gallery', $gallery);
 
-$gallery = ['goods_name' => htmlspecialchars($goods_name, ENT_QUOTES), 'list' => []];
-if ($img_count == 0) {
-    /* 如果没有图片，返回商品详情页 */
-    ecs_header('Location: goods.php?id='.$_REQUEST['id']."\n");
-    exit;
-} else {
-    foreach ($img_list as $key => $img) {
-        $gallery['list'][] = [
-            'gallery_thumb' => get_image_path($img_list[$key]['thumb_url']),
-            'gallery' => get_image_path($img_list[$key]['img_url']),
-            'img_desc' => $img_list[$key]['img_desc'],
-        ];
-    }
-}
-
-$this->assign('shop_name', $_CFG['shop_name']);
-$this->assign('watermark', str_replace('../', './', $_CFG['watermark']));
-$this->assign('gallery', $gallery);
-return $this->display('gallery');
+        return $this->display('gallery');
     }
 }

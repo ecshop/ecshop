@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace App\Modules\Shop\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
+use OpenApi\Attributes as OA;
 
 class AffiliateController extends BaseController
 {
+    #[OA\Get(path: 'affiliate', summary: '接口', tags: ['模块'])]
+    #[OA\Response(response: 200, description: 'OK')]
     public function index(): Renderable
     {
 
-// $charset = empty($_GET['charset']) ? 'UTF8' : $_GET['charset'];
+        // $charset = empty($_GET['charset']) ? 'UTF8' : $_GET['charset'];
         $display_mode = empty($_GET['display_mode']) ? 'javascript' : $_GET['display_mode'];
 
         if ($display_mode == 'javascript') {
@@ -23,7 +26,7 @@ class AffiliateController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-// -- 判断是否存在缓存，如果存在则调用缓存，反之读取相应内容
+        // -- 判断是否存在缓存，如果存在则调用缓存，反之读取相应内容
         /* ------------------------------------------------------ */
         /* 缓存编号 */
         $cache_id = sprintf('%X', crc32($_SERVER['QUERY_STRING']));

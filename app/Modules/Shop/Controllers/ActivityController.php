@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Modules\Shop\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
+use OpenApi\Attributes as OA;
 
 class ActivityController extends BaseController
 {
+    #[OA\Get(path: 'activity', summary: '接口', tags: ['模块'])]
+    #[OA\Response(response: 200, description: 'OK')]
     public function index(): Renderable
     {
         require_once ROOT_PATH.'includes/lib_order.php';
@@ -105,8 +108,8 @@ class ActivityController extends BaseController
         $this->assign('lang', $_LANG);
 
         $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typeactivity.xml' : 'feed.php?type=activity'); // RSS URL
+
         return $this->display('activity');
 
     }
 }
-

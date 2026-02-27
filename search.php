@@ -15,7 +15,7 @@ if (empty($_GET['encode'])) {
 } else {
     $string = base64_decode(trim($_GET['encode']));
     if ($string !== false) {
-        $string = unserialize($string);
+        $string = unserialize($string, ['allowed_classes' => false]);
         if ($string !== false) {
             /* 用户在重定向的情况下当作一次访问 */
             if (! empty($string['search_encode_time'])) {

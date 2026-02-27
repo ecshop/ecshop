@@ -25,10 +25,13 @@
 
 ### 1.3 不安全函数修复
 
-- [ ] **cls_template.php:1147** - 移除 extract($params)，改用安全的方式传递变量
-- [ ] **lib_common.php:1183,1243** - 移除 extract() 使用
-- [ ] **lib_common.php:148** - unserialize 添加第二个参数 ['allowed_classes' => false]
-- [ ] **cls_template.php:126,139,217,565,748,962,965** - 移除或重构 eval() 代码
+- [x] **cls_template.php:1147** - 移除 extract($params)，改用安全的方式传递变量
+- [x] **lib_common.php:1183** - 移除 extract() 使用，改为直接访问数组
+- [x] **lib_common.php:1243** - 移除 extract() 使用，改为直接访问数组
+- [x] **lib_common.php:148,169,473,1026,2028** - unserialize 添加 ['allowed_classes' => false]
+- [x] **search.php:18** - unserialize 添加 ['allowed_classes' => false]
+- [x] **wholesale.php:104,415,417** - unserialize 添加 ['allowed_classes' => false]
+- [ ] **cls_template.php:126,139,217,565,748,962,965** - eval() 为模板引擎核心功能，暂不修改
 
 ---
 

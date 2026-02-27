@@ -101,7 +101,7 @@ if ($_REQUEST['act'] == 'price_list') {
         "WHERE enabled = 1 AND CONCAT(',', rank_ids, ',') LIKE '".'%,'.$_SESSION['user_rank'].',%'."'";
     $res = $db->query($sql);
     while ($row = $db->fetchRow($res)) {
-        $price_list = unserialize($row['prices']);
+        $price_list = unserialize($row['prices'], ['allowed_classes' => false]);
         foreach ($price_list as $attr_price) {
             if ($attr_price['attr']) {
                 $sql = 'SELECT attr_value FROM '.$ecs->table('goods_attr').
@@ -412,9 +412,9 @@ function get_price_ladder($goods_id)
     $row = $GLOBALS['db']->getRow($sql);
 
     $arr = [];
-    $_arr = unserialize($row['prices']);
+    $_arr = unserialize($row['prices'], ['allowed_classes' => false]);
     if (is_array($_arr)) {
-        foreach (unserialize($row['prices']) as $key => $val) {
+        foreach (unserialize($row['prices'], ['allowed_classes' => false]) as $key => $val) {
             // 显示属性
             if (! empty($val['attr'])) {
                 foreach ($val['attr'] as $attr_key => $attr_val) {

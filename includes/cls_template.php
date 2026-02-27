@@ -1144,7 +1144,9 @@ class cls_template
 
     public function smarty_create_pages($params)
     {
-        extract($params);
+        $page = isset($params['page']) ? intval($params['page']) : 1;
+        $count = isset($params['count']) ? intval($params['count']) : 0;
+        $url = isset($params['url']) ? $params['url'] : '';
 
         if (empty($page)) {
             $page = 1;

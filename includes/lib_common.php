@@ -145,7 +145,7 @@ function get_shipping_config($area_id)
 
     if ($cfg) {
         /* 拆分成配置信息的数组 */
-        $arr = unserialize($cfg);
+        $arr = unserialize($cfg, ['allowed_classes' => false]);
     } else {
         $arr = [];
     }
@@ -166,7 +166,7 @@ function init_users()
         return $cls;
     }
     include_once ROOT_PATH.'includes/modules/integrates/'.$GLOBALS['_CFG']['integrate_code'].'.php';
-    $cfg = unserialize($GLOBALS['_CFG']['integrate_config']);
+    $cfg = unserialize($GLOBALS['_CFG']['integrate_config'], ['allowed_classes' => false]);
     $cls = new $GLOBALS['_CFG']['integrate_code']($cfg);
 
     return $cls;
@@ -470,7 +470,7 @@ function load_config()
         $arr['default_storage'] = isset($arr['default_storage']) ? intval($arr['default_storage']) : 1;
         $arr['min_goods_amount'] = isset($arr['min_goods_amount']) ? floatval($arr['min_goods_amount']) : 0;
         $arr['one_step_buy'] = empty($arr['one_step_buy']) ? 0 : 1;
-        $arr['invoice_type'] = empty($arr['invoice_type']) ? ['type' => [], 'rate' => []] : unserialize($arr['invoice_type']);
+        $arr['invoice_type'] = empty($arr['invoice_type']) ? ['type' => [], 'rate' => []] : unserialize($arr['invoice_type'], ['allowed_classes' => false]);
         $arr['show_order_type'] = isset($arr['show_order_type']) ? $arr['show_order_type'] : 0;    // 显示方式默认为列表方式
         $arr['help_open'] = isset($arr['help_open']) ? $arr['help_open'] : 1;    // 显示方式默认为列表方式
 
@@ -1023,7 +1023,7 @@ function get_snatch_result($id)
             " WHERE act_id= '$id' AND act_type=".GAT_SNATCH.
             ' LIMIT 1';
         $row = $GLOBALS['db']->getOne($sql);
-        $info = unserialize($row);
+        $info = unserialize($row, ['allowed_classes' => false]);
 
         if (! empty($info['max_price'])) {
             $rec['buy_price'] = ($rec['bid_price'] > $info['max_price']) ? $info['max_price'] : $rec['bid_price'];
@@ -1180,7 +1180,8 @@ function smarty_insert_scripts($args)
  */
 function smarty_create_pages($params)
 {
-    extract($params);
+    $page = isset($params['page']) ? intval($params['page']) : 1;
+    $count = isset($params['count']) ? intval($params['count']) : 0;
 
     $str = '';
     $len = 10;
@@ -1240,7 +1241,20 @@ function build_uri($app, $params, $append = '', $page = 0, $keywords = '', $size
         'order' => '',
     ];
 
-    extract(array_merge($args, $params));
+    $merged = array_merge($args, $params);
+    $cid = intval($merged['cid']);
+    $gid = intval($merged['gid']);
+    $bid = intval($merged['bid']);
+    $acid = intval($merged['acid']);
+    $aid = intval($merged['aid']);
+    $sid = intval($merged['sid']);
+    $gbid = intval($merged['gbid']);
+    $auid = intval($merged['auid']);
+    $sort = isset($merged['sort']) ? addslashes($merged['sort']) : '';
+    $order = isset($merged['order']) ? addslashes($merged['order']) : '';
+    $price_min = isset($merged['price_min']) ? intval($merged['price_min']) : 0;
+    $price_max = isset($merged['price_max']) ? intval($merged['price_max']) : 0;
+    $filter_attr = isset($merged['filter_attr']) ? addslashes($merged['filter_attr']) : '';
 
     $uri = '';
     switch ($app) {
@@ -2011,7 +2025,7 @@ function get_package_info($id)
     }
     $package['start_time'] = local_date('Y-m-d H:i', $package['start_time']);
     $package['end_time'] = local_date('Y-m-d H:i', $package['end_time']);
-    $row = unserialize($package['ext_info']);
+    $row = unserialize($package['ext_info'], ['allowed_classes' => false]);
     unset($package['ext_info']);
     if ($row) {
         foreach ($row as $key => $val) {

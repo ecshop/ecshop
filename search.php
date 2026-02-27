@@ -70,7 +70,7 @@ if ($_REQUEST['act'] == 'advanced_search') {
 // -- 搜索结果
 /* ------------------------------------------------------ */
 else {
-    $_REQUEST['keywords'] = ! empty($_REQUEST['keywords']) ? htmlspecialchars(trim($_REQUEST['keywords'])) : '';
+    $_REQUEST['keywords'] = ! empty($_REQUEST['keywords']) ? htmlspecialchars(trim($_REQUEST['keywords']), ENT_QUOTES, 'UTF-8') : '';
     $_REQUEST['brand'] = ! empty($_REQUEST['brand']) ? intval($_REQUEST['brand']) : 0;
     $_REQUEST['category'] = ! empty($_REQUEST['category']) ? intval($_REQUEST['category']) : 0;
     $_REQUEST['min_price'] = ! empty($_REQUEST['min_price']) ? intval($_REQUEST['min_price']) : 0;
@@ -82,7 +82,7 @@ else {
     $action = '';
     if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'form') {
         /* 要显示高级搜索栏 */
-        $adv_value['keywords'] = htmlspecialchars(stripcslashes($_REQUEST['keywords']));
+        $adv_value['keywords'] = htmlspecialchars(stripcslashes($_REQUEST['keywords']), ENT_QUOTES, 'UTF-8');
         $adv_value['brand'] = $_REQUEST['brand'];
         $adv_value['min_price'] = $_REQUEST['min_price'];
         $adv_value['max_price'] = $_REQUEST['max_price'];
@@ -94,10 +94,10 @@ else {
         foreach ($attributes['attr'] as $key => $val) {
             if (! empty($_REQUEST['attr'][$val['id']])) {
                 if ($val['type'] == 2) {
-                    $attributes['attr'][$key]['value']['from'] = ! empty($_REQUEST['attr'][$val['id']]['from']) ? htmlspecialchars(stripcslashes(trim($_REQUEST['attr'][$val['id']]['from']))) : '';
-                    $attributes['attr'][$key]['value']['to'] = ! empty($_REQUEST['attr'][$val['id']]['to']) ? htmlspecialchars(stripcslashes(trim($_REQUEST['attr'][$val['id']]['to']))) : '';
+                    $attributes['attr'][$key]['value']['from'] = ! empty($_REQUEST['attr'][$val['id']]['from']) ? htmlspecialchars(stripcslashes(trim($_REQUEST['attr'][$val['id']]['from'])), ENT_QUOTES, 'UTF-8') : '';
+                    $attributes['attr'][$key]['value']['to'] = ! empty($_REQUEST['attr'][$val['id']]['to']) ? htmlspecialchars(stripcslashes(trim($_REQUEST['attr'][$val['id']]['to'])), ENT_QUOTES, 'UTF-8') : '';
                 } else {
-                    $attributes['attr'][$key]['value'] = ! empty($_REQUEST['attr'][$val['id']]) ? htmlspecialchars(stripcslashes(trim($_REQUEST['attr'][$val['id']]))) : '';
+                    $attributes['attr'][$key]['value'] = ! empty($_REQUEST['attr'][$val['id']]) ? htmlspecialchars(stripcslashes(trim($_REQUEST['attr'][$val['id']])), ENT_QUOTES, 'UTF-8') : '';
                 }
             }
         }
@@ -358,7 +358,7 @@ else {
     }
     $smarty->assign('goods_list', $arr);
     $smarty->assign('category', $category);
-    $smarty->assign('keywords', htmlspecialchars(stripslashes($_REQUEST['keywords'])));
+    $smarty->assign('keywords', htmlspecialchars(stripslashes($_REQUEST['keywords']), ENT_QUOTES, 'UTF-8'));
     $smarty->assign('search_keywords', stripslashes(htmlspecialchars_decode($_REQUEST['keywords'])));
     $smarty->assign('brand', $_REQUEST['brand']);
     $smarty->assign('min_price', $min_price);

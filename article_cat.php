@@ -81,11 +81,11 @@ if (! $smarty->is_cached('article_cat.dwt', $cache_id)) {
 
     /* 获得文章列表 */
     if (isset($_REQUEST['keywords'])) {
-        $keywords = addslashes(htmlspecialchars(urldecode(trim($_REQUEST['keywords']))));
+        $keywords = addslashes(htmlspecialchars(urldecode(trim($_REQUEST['keywords']))), ENT_QUOTES, 'UTF-8');
         $pager['search']['keywords'] = $keywords;
         $search_url = substr(strrchr($_POST['cur_url'], '/'), 1);
 
-        $smarty->assign('search_value', stripslashes(stripslashes($keywords)));
+        $smarty->assign('search_value', stripslashes($keywords));
         $smarty->assign('search_url', $search_url);
         $count = get_article_count($cat_id, $keywords);
         $pages = ($count > 0) ? ceil($count / $size) : 1;

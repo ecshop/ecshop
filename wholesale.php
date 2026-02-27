@@ -285,7 +285,7 @@ if ($_REQUEST['act'] == 'submit_order') {
     }
 
     $order = [
-        'postscript' => htmlspecialchars($_POST['remark']),
+        'postscript' => htmlspecialchars($_POST['remark'], ENT_QUOTES, 'UTF-8'),
         'user_id' => $_SESSION['user_id'],
         'add_time' => gmtime(),
         'order_status' => OS_UNCONFIRMED,

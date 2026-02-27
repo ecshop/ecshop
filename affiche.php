@@ -75,7 +75,7 @@ if ($_GET['act'] == 'js') {
 } else {
     /* 获取投放站点的名称 */
 
-    $site_name = ! empty($_GET['from']) ? htmlspecialchars($_GET['from']) : addslashes($_LANG['self_site']);
+    $site_name = ! empty($_GET['from']) ? htmlspecialchars($_GET['from'], ENT_QUOTES, 'UTF-8') : addslashes($_LANG['self_site']);
 
     /* 商品的ID */
     $goods_id = ! empty($_GET['goods_id']) ? intval($_GET['goods_id']) : 0;

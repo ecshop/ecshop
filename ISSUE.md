@@ -17,10 +17,11 @@
 
 ### 1.2 XSS 跨站脚本修复
 
-- [ ] **category.php:33** - htmlspecialchars 添加 ENT_QUOTES 参数
-- [ ] **article_cat.php:84** - 修复 $_REQUEST[keywords] XSS 风险
-- [ ] **affiche.php:78** - 修复 $_GET[from] XSS
-- [ ] **search.php:361** - 修复多处 keywords XSS
+- [x] **category.php:33** - htmlspecialchars 添加 ENT_QUOTES 参数
+- [x] **article_cat.php:84** - 修复 $_REQUEST[keywords] XSS 风险
+- [x] **affiche.php:78** - 修复 $_GET[from] XSS
+- [x] **search.php:73,85,97,98,100,361** - 修复多处 keywords XSS
+- [x] **wholesale.php:288** - 修复 $_POST[remark] XSS
 
 ### 1.3 不安全函数修复
 

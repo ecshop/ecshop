@@ -125,10 +125,11 @@ if ($_REQUEST['act'] == 'edit') {
     admin_priv('exchange_goods');
 
     /* 取商品数据 */
+    $goods_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
     $sql = 'SELECT eg.goods_id, eg.exchange_integral,eg.is_exchange, eg.is_hot, g.goods_name '.
         ' FROM '.$ecs->table('exchange_goods').' AS eg '.
         '  LEFT JOIN '.$ecs->table('goods').' AS g ON g.goods_id = eg.goods_id '.
-        " WHERE eg.goods_id='$_REQUEST[id]'";
+        " WHERE eg.goods_id='$goods_id'";
     $goods = $db->getRow($sql);
     $goods['option'] = '<option value="'.$goods['goods_id'].'">'.$goods['goods_name'].'</option>';
 

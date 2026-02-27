@@ -208,12 +208,14 @@ if ($_REQUEST['act'] == 'update') {
                         ' (name,ctype,cid,ifshow,vieworder,opennew,url,type) '.
                         "VALUES('".$_POST['cat_name']."', 'a', '".$_POST['id']."','1','$vieworder','0', '".$uri."','middle')";
                 } else {
-                    $sql = 'UPDATE '.$ecs->table('nav')." SET ifshow = 1 WHERE ctype = 'a' AND cid = '".$_POST['id']."' AND type = 'middle'";
+                    $cat_id = intval($_POST['id']);
+                    $sql = 'UPDATE '.$ecs->table('nav')." SET ifshow = 1 WHERE ctype = 'a' AND cid = '$cat_id' AND type = 'middle'";
                 }
                 $db->query($sql);
             } else {
                 // 去除
-                $db->query('UPDATE '.$ecs->table('nav')." SET ifshow = 0 WHERE ctype = 'a' AND cid = '".$_POST['id']."' AND type = 'middle'");
+                $cat_id = intval($_POST['id']);
+                $db->query('UPDATE '.$ecs->table('nav')." SET ifshow = 0 WHERE ctype = 'a' AND cid = '$cat_id' AND type = 'middle'");
             }
         }
         $link[0]['text'] = $_LANG['back_list'];

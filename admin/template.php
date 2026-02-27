@@ -194,16 +194,19 @@ if ($_REQUEST['act'] == 'setting') {
     admin_priv('template_setup');
 
     $curr_template = $_CFG['template'];
-    $db->query('DELETE FROM '.$ecs->table('template')." WHERE remarks = '' AND filename = '$_POST[template_file]' AND theme = '$curr_template'");
+    $template_file = isset($_POST['template_file']) ? addslashes($_POST['template_file']) : '';
+    $db->query('DELETE FROM '.$ecs->table('template')." WHERE remarks = '' AND filename = '$template_file' AND theme = '$curr_template'");
 
     /* 先处理固定内容 */
     foreach ($_POST['regions'] as $key => $val) {
         $number = isset($_POST['number'][$key]) ? intval($_POST['number'][$key]) : 0;
         if (! in_array($key, $GLOBALS['dyna_libs']) and (isset($_POST['display'][$key]) and $_POST['display'][$key] == 1 or $number > 0)) {
+            $library = isset($_POST['map'][$key]) ? addslashes($_POST['map'][$key]) : '';
+            $sort_order = isset($_POST['sort_order'][$key]) ? intval($_POST['sort_order'][$key]) : 0;
             $sql = 'INSERT INTO '.$ecs->table('template').
                 '(theme, filename, region, library, sort_order, number)'.
                 ' VALUES '.
-                "('$curr_template', '$_POST[template_file]', '$val', '".$_POST['map'][$key]."', '".@$_POST['sort_order'][$key]."', '$number')";
+                "('$curr_template', '$template_file', '".addslashes($val)."', '$library', '$sort_order', '$number')";
             $db->query($sql);
         }
     }

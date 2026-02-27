@@ -84,11 +84,13 @@ if ($_REQUEST['act'] == 'insert') {
     $end_time = local_strtotime($_POST['end_time']);
 
     /* 查看广告名称是否有重复 */
-    $sql = 'SELECT COUNT(*) FROM '.$ecs->table('vote')." WHERE vote_name='$_POST[vote_name]'";
+    $vote_name = isset($_POST['vote_name']) ? addslashes($_POST['vote_name']) : '';
+    $sql = 'SELECT COUNT(*) FROM '.$ecs->table('vote')." WHERE vote_name='$vote_name'";
     if ($db->getOne($sql) == 0) {
         /* 插入数据 */
+        $can_multi = isset($_POST['can_multi']) ? intval($_POST['can_multi']) : 0;
         $sql = 'INSERT INTO '.$ecs->table('vote')." (vote_name, start_time, end_time, can_multi, vote_count)
-        VALUES ('$_POST[vote_name]', '$start_time', '$end_time', '$_POST[can_multi]', '0')";
+        VALUES ('$vote_name', '$start_time', '$end_time', '$can_multi', '0')";
         $db->query($sql);
 
         $new_id = $db->Insert_ID();
@@ -122,7 +124,8 @@ if ($_REQUEST['act'] == 'edit') {
     admin_priv('vote_priv');
 
     /* 获取数据 */
-    $vote_arr = $db->getRow('SELECT * FROM '.$ecs->table('vote')." WHERE vote_id='$_REQUEST[id]'");
+    $vote_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
+    $vote_arr = $db->getRow('SELECT * FROM '.$ecs->table('vote')." WHERE vote_id='$vote_id'");
     $vote_arr['start_time'] = local_date('Y-m-d', $vote_arr['start_time']);
     $vote_arr['end_time'] = local_date('Y-m-d', $vote_arr['end_time']);
 
@@ -140,13 +143,17 @@ if ($_REQUEST['act'] == 'update') {
     $start_time = local_strtotime($_POST['start_time']);
     $end_time = local_strtotime($_POST['end_time']);
 
+    $vote_name = isset($_POST['vote_name']) ? addslashes($_POST['vote_name']) : '';
+    $can_multi = isset($_POST['can_multi']) ? intval($_POST['can_multi']) : 0;
+    $vote_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
+
     /* 更新信息 */
     $sql = 'UPDATE '.$ecs->table('vote').' SET '.
-        "vote_name     = '$_POST[vote_name]', ".
+        "vote_name     = '$vote_name', ".
         "start_time    = '$start_time', ".
         "end_time      = '$end_time', ".
-        "can_multi     = '$_POST[can_multi]' ".
-        "WHERE vote_id = '$_REQUEST[id]'";
+        "can_multi     = '$can_multi' ".
+        "WHERE vote_id = '$vote_id'";
     $db->query($sql);
 
     /* 清除缓存 */

@@ -4,13 +4,16 @@
 
 ### 1.1 SQL 注入漏洞修复
 
-- [ ] **goods.php:234** - 修复 `$_REQUEST[id]` 直接用于 SQL 的问题，改用参数化查询
-- [ ] **admin/user_msg.php:263** - 修复 `$_GET[id]` SQL 注入
-- [ ] **admin/articlecat.php:216** - 修复 `$_POST[id]` SQL 注入
-- [ ] **admin/shipping.php:72,298** - 修复 `$_GET[code]` 和 `$_POST[config_lable]` SQL 注入
-- [ ] **admin/shipping_area.php:275** - 修复 `$_POST[id]` SQL 注入
-- [ ] **admin/template.php:197** - 修复 `$_POST[template_file]` SQL 注入
-- [ ] **admin/wholesale.php:400** - 修复 `$_POST[id]` SQL 注入
+- [x] **goods.php:234** - 修复 `$_REQUEST[id]` 直接用于 SQL 的问题，改用参数化查询
+- [x] **admin/user_msg.php:263** - 修复 `$_GET[id]` SQL 注入
+- [x] **admin/articlecat.php:216** - 修复 `$_POST[id]` SQL 注入
+- [x] **admin/shipping.php:72,298** - 修复 `$_GET[code]` 和 `$_POST[config_lable]` SQL 注入
+- [x] **admin/shipping_area.php:275** - 修复 `$_POST[id]` SQL 注入
+- [x] **admin/template.php:197** - 修复 `$_POST[template_file]` SQL 注入
+- [x] **admin/wholesale.php:400** - 修复 `$_POST[id]` SQL 注入
+- [x] **admin/vote.php:87,125,149** - 修复 `$_POST[vote_name]`, `$_REQUEST[id]` SQL 注入
+- [x] **admin/exchange_goods.php:131** - 修复 `$_REQUEST[id]` SQL 注入
+- [x] **admin/virtual_card.php** - 修复多处 `$_POST[goods_id]`, `$_POST[card_id]`, `$_REQUEST[goods_id]` SQL 注入
 
 ### 1.2 XSS 跨站脚本修复
 

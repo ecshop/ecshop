@@ -231,7 +231,8 @@ if (! empty($_COOKIE['ECS']['history'])) {
 }
 
 /* 更新点击次数 */
-$db->query('UPDATE '.$ecs->table('goods')." SET click_count = click_count + 1 WHERE goods_id = '$_REQUEST[id]'");
+$goods_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
+$db->query('UPDATE '.$ecs->table('goods')." SET click_count = click_count + 1 WHERE goods_id = '$goods_id'");
 
 $smarty->assign('now_time', gmtime());           // 当前系统时间
 $smarty->display('goods.dwt', $cache_id);

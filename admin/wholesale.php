@@ -392,12 +392,14 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
     /* 同一个商品，会员等级不能重叠 */
     if (isset($_POST['rank_id'])) {
+        $wholesale_id = isset($_POST['id']) ? intval($_POST['id']) : 0;
         foreach ($_POST['rank_id'] as $rank_id) {
+            $rank_id = intval($rank_id);
             $sql = 'SELECT COUNT(*) FROM '.$ecs->table('wholesale').
                 " WHERE goods_id = '$goods_id' ".
                 " AND CONCAT(',', rank_ids, ',') LIKE CONCAT('%,', '$rank_id', ',%')";
             if (! $is_add) {
-                $sql .= " AND act_id <> '$_POST[id]'";
+                $sql .= " AND act_id <> '$wholesale_id'";
             }
             if ($db->getOne($sql) > 0) {
                 sys_msg($_LANG['user_rank_exist']);

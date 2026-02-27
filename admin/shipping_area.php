@@ -272,15 +272,16 @@ if ($_REQUEST['act'] == 'update') {
         }
 
         /* 清除原有的城市和地区 */
-        $db->query('DELETE FROM '.$ecs->table('area_region')." WHERE shipping_area_id='$_POST[id]'");
+        $area_id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        $db->query('DELETE FROM '.$ecs->table('area_region')." WHERE shipping_area_id='$area_id'");
 
         /* 添加选定的城市和地区 */
         foreach ($selected_regions as $key => $val) {
-            $sql = 'INSERT INTO '.$ecs->table('area_region')." (shipping_area_id, region_id) VALUES ('$_POST[id]', '$val')";
+            $sql = 'INSERT INTO '.$ecs->table('area_region')." (shipping_area_id, region_id) VALUES ('$area_id', '".intval($val)."')";
             $db->query($sql);
         }
 
-        $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'shipping_area.php?act=list&shipping='.$_POST['shipping']];
+        $lnk[] = ['text' => $_LANG['back_list'], 'href' => 'shipping_area.php?act=list&shipping='.intval($_POST['shipping'])];
 
         sys_msg($_LANG['edit_area_success'], 0, $lnk);
     }

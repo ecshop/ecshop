@@ -260,9 +260,10 @@ if ($_REQUEST['act'] == 'drop_file') {
     @unlink('../'.DATA_DIR.'/feedbackimg/'.$file);
 
     /* 更新数据库 */
-    $db->query('UPDATE '.$ecs->table('feedback')." SET message_img = '' WHERE msg_id = '$_GET[id]'");
+    $msg_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+    $db->query('UPDATE '.$ecs->table('feedback')." SET message_img = '' WHERE msg_id = '$msg_id'");
 
-    ecs_header('Location: user_msg.php?act=view&amp;id='.$_GET['id']."\n");
+    ecs_header('Location: user_msg.php?act=view&amp;id='.$msg_id."\n");
     exit;
 }
 

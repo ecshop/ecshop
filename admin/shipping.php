@@ -61,15 +61,16 @@ if ($_REQUEST['act'] == 'install') {
     admin_priv('ship_manage');
 
     $set_modules = true;
-    include_once ROOT_PATH.'includes/modules/shipping/'.$_GET['code'].'.php';
+    $shipping_code = isset($_GET['code']) ? preg_replace('/[^a-zA-Z0-9_]/', '', $_GET['code']) : '';
+    include_once ROOT_PATH.'includes/modules/shipping/'.$shipping_code.'.php';
 
     /* 检查该配送方式是否已经安装 */
-    $sql = 'SELECT shipping_id FROM '.$ecs->table('shipping')." WHERE shipping_code = '$_GET[code]'";
+    $sql = 'SELECT shipping_id FROM '.$ecs->table('shipping')." WHERE shipping_code = '".addslashes($shipping_code)."'";
     $id = $db->getOne($sql);
 
     if ($id > 0) {
         /* 该配送方式已经安装过, 将该配送方式的状态设置为 enable */
-        $db->query('UPDATE '.$ecs->table('shipping')." SET enabled = 1 WHERE shipping_code = '$_GET[code]' LIMIT 1");
+        $db->query('UPDATE '.$ecs->table('shipping')." SET enabled = 1 WHERE shipping_code = '".addslashes($shipping_code)."' LIMIT 1");
     } else {
         /* 该配送方式没有安装过, 将该配送方式的信息添加到数据库 */
         $insure = empty($modules[0]['insure']) ? 0 : $modules[0]['insure'];
@@ -295,10 +296,11 @@ if ($_REQUEST['act'] == 'do_edit_print_template') {
     /* 处理不同模式编辑的表单 */
     if ($print_model == 2) {
         // 所见即所得模式
-        $db->query('UPDATE '.$ecs->table('shipping')." SET config_lable = '".$_POST['config_lable']."', print_model = '$print_model'  WHERE shipping_id = '$shipping_id'");
+        $config_lable = isset($_POST['config_lable']) ? addslashes($_POST['config_lable']) : '';
+        $db->query('UPDATE '.$ecs->table('shipping')." SET config_lable = '".$config_lable."', print_model = '$print_model'  WHERE shipping_id = '$shipping_id'");
     } elseif ($print_model == 1) {
         // 代码模式
-        $template = ! empty($_POST['shipping_print']) ? $_POST['shipping_print'] : '';
+        $template = ! empty($_POST['shipping_print']) ? addslashes($_POST['shipping_print']) : '';
 
         $db->query('UPDATE '.$ecs->table('shipping')." SET shipping_print = '".$template."', print_model = '$print_model' WHERE shipping_id = '$shipping_id'");
     }

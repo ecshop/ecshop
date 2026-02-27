@@ -283,7 +283,8 @@ function msg_list()
 
     $where = '';
     if ($filter['keywords']) {
-        $where .= " AND f.msg_title LIKE '%".mysql_like_quote($filter['keywords'])."%' ";
+        // 优化：使用前缀匹配可以利用索引
+        $where .= " AND f.msg_title LIKE '".mysql_like_quote($filter['keywords'])."%' ";
     }
     if ($filter['msg_type'] != -1) {
         $where .= " AND f.msg_type = '$filter[msg_type]' ";

@@ -663,9 +663,11 @@ if ($_REQUEST['act'] == 'drop_bonus_goods') {
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'search_users') {
     $keywords = json_str_iconv(trim($_GET['keywords']));
+    $keywords = addslashes($keywords);
 
+    // 优化：使用前缀匹配可以利用索引，user_id 改为精确匹配
     $sql = 'SELECT user_id, user_name FROM '.$ecs->table('users').
-        " WHERE user_name LIKE '%".mysql_like_quote($keywords)."%' OR user_id LIKE '%".mysql_like_quote($keywords)."%'";
+        " WHERE user_name LIKE '$keywords%' OR user_id = '".intval($keywords)."'";
     $row = $db->getAll($sql);
 
     make_json_result($row);

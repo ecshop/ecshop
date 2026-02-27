@@ -38,8 +38,10 @@ if ($_REQUEST['act'] == 'list') {
     }
     /* 搜索商品名称和关键字 */
     if ($search_keywords) {
-        $where .= " AND (g.keywords LIKE '%$search_keywords%'
-                    OR g.goods_name LIKE '%$search_keywords%') ";
+        // 优化：使用前缀匹配可以利用索引，同时添加转义防止SQL注入
+        $keywords = addslashes($search_keywords);
+        $where .= " AND (g.keywords LIKE '$keywords%'
+                    OR g.goods_name LIKE '$keywords%') ";
         $param['search_keywords'] = $search_keywords;
         $smarty->assign('search_keywords', $search_keywords);
     }

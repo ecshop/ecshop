@@ -67,7 +67,8 @@ function get_quotation_where($filter)
     $_filter->brand_id = $filter['brand_id'];
     $where = get_where_sql($_filter);
     $_filter->keyword = $filter['keyword'];
-    $where .= isset($_filter->keyword) && trim($_filter->keyword) != '' ? " AND (g.goods_name LIKE '%".mysql_like_quote($_filter->keyword)."%' OR g.goods_sn LIKE '%".mysql_like_quote($_filter->keyword)."%' OR g.goods_id LIKE '%".mysql_like_quote($_filter->keyword)."%') " : '';
+    // 优化：使用前缀匹配可以利用索引
+    $where .= isset($_filter->keyword) && trim($_filter->keyword) != '' ? " AND (g.goods_name LIKE '".mysql_like_quote($_filter->keyword)."%' OR g.goods_sn LIKE '".mysql_like_quote($_filter->keyword)."%' OR g.goods_id = '".intval($_filter->keyword)."') " : '';
 
     return $where;
 }

@@ -623,7 +623,8 @@ function group_buy_list()
         $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'act_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-        $where = (! empty($filter['keyword'])) ? " AND goods_name LIKE '%".mysql_like_quote($filter['keyword'])."%'" : '';
+        // 优化：使用前缀匹配可以利用索引
+        $where = (! empty($filter['keyword'])) ? " AND goods_name LIKE '".mysql_like_quote($filter['keyword'])."%'" : '';
 
         $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('goods_activity').
             " WHERE act_type = '".GAT_GROUP_BUY."' $where";

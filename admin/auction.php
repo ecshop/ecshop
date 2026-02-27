@@ -401,7 +401,8 @@ function auction_list()
 
         $where = '';
         if (! empty($filter['keyword'])) {
-            $where .= " AND goods_name LIKE '%".mysql_like_quote($filter['keyword'])."%'";
+            // 优化：使用前缀匹配可以利用索引
+            $where .= " AND goods_name LIKE '".mysql_like_quote($filter['keyword'])."%'";
         }
         if ($filter['is_going']) {
             $now = gmtime();

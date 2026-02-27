@@ -130,8 +130,9 @@ function get_attention()
     if ($result === false) {
         $where = 'WHERE c.is_attention = 1 AND g.is_delete = 0 ';
         if (! empty($_POST['goods_name'])) {
-            $goods_name = trim($_POST['goods_name']);
-            $where .= " AND g.goods_name LIKE '%$goods_name%'";
+            $goods_name = addslashes(trim($_POST['goods_name']));
+            // 优化：使用前缀匹配可以利用索引
+            $where .= " AND g.goods_name LIKE '$goods_name%'";
             $filter['goods_name'] = $goods_name;
         }
 

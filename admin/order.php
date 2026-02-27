@@ -4136,25 +4136,32 @@ function order_list()
 
         $where = 'WHERE 1 ';
         if ($filter['order_sn']) {
-            $where .= " AND o.order_sn LIKE '%".mysql_like_quote($filter['order_sn'])."%'";
+            // 优化：使用前缀匹配可以利用索引
+            $where .= " AND o.order_sn LIKE '".mysql_like_quote($filter['order_sn'])."%'";
         }
         if ($filter['consignee']) {
-            $where .= " AND o.consignee LIKE '%".mysql_like_quote($filter['consignee'])."%'";
+            // 优化：使用前缀匹配可以利用索引
+            $where .= " AND o.consignee LIKE '".mysql_like_quote($filter['consignee'])."%'";
         }
         if ($filter['email']) {
-            $where .= " AND o.email LIKE '%".mysql_like_quote($filter['email'])."%'";
+            // 优化：email 精确匹配
+            $where .= " AND o.email = '".mysql_like_quote($filter['email'])."'";
         }
         if ($filter['address']) {
-            $where .= " AND o.address LIKE '%".mysql_like_quote($filter['address'])."%'";
+            // 优化：使用前缀匹配
+            $where .= " AND o.address LIKE '".mysql_like_quote($filter['address'])."%'";
         }
         if ($filter['zipcode']) {
-            $where .= " AND o.zipcode LIKE '%".mysql_like_quote($filter['zipcode'])."%'";
+            // 优化：邮编精确匹配
+            $where .= " AND o.zipcode = '".mysql_like_quote($filter['zipcode'])."'";
         }
         if ($filter['tel']) {
-            $where .= " AND o.tel LIKE '%".mysql_like_quote($filter['tel'])."%'";
+            // 优化：电话精确匹配
+            $where .= " AND o.tel = '".mysql_like_quote($filter['tel'])."'";
         }
         if ($filter['mobile']) {
-            $where .= " AND o.mobile LIKE '%".mysql_like_quote($filter['mobile'])."%'";
+            // 优化：手机精确匹配
+            $where .= " AND o.mobile = '".mysql_like_quote($filter['mobile'])."'";
         }
         if ($filter['country']) {
             $where .= " AND o.country = '$filter[country]'";

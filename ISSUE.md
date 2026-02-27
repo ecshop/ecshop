@@ -39,9 +39,15 @@
 
 ### 2.1 优化 LIKE 查询
 
-- [ ] **search.php:149-152** - 优化 LIKE '%...%' 查询，考虑全文索引
-- [ ] **wholesale.php:41-42** - 优化搜索查询
-- [ ] **admin/order.php:4139-4157** - 优化订单搜索 LIKE 查询
+- [x] **search.php:149-152** - 优化 LIKE '%...%' 改为前缀匹配
+- [x] **wholesale.php:41-42** - 优化搜索查询，改为前缀匹配
+- [x] **admin/order.php:4139-4157** - 优化订单搜索，部分字段改为精确匹配
+- [x] **quotation.php:70** - 优化为前缀匹配和精确匹配
+- [x] **admin/attention_list.php:134** - 优化为前缀匹配
+- [x] **admin/user_msg.php:286** - 优化为前缀匹配
+- [x] **admin/bonus.php:668** - 优化为前缀匹配和精确匹配
+- [x] **admin/group_buy.php:626** - 优化为前缀匹配
+- [x] **admin/auction.php:404** - 优化为前缀匹配
 
 ### 2.2 解决 N+1 查询
 

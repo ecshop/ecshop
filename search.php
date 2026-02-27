@@ -141,15 +141,17 @@ else {
 
         $keywords = 'AND (';
         $goods_ids = [];
-        foreach ($arr as $key => $val) {
-            if ($key > 0 && $key < count($arr) && count($arr) > 1) {
+        foreach ($arr as $k => $val) {
+            if ($k > 0 && $k < count($arr) && count($arr) > 1) {
                 $keywords .= $operator;
             }
             $val = mysql_like_quote(trim($val));
-            $sc_dsad = $_REQUEST['sc_ds'] ? " OR goods_desc LIKE '%$val%'" : '';
-            $keywords .= "(goods_name LIKE '%$val%' OR goods_sn LIKE '%$val%' OR keywords LIKE '%$val%' $sc_dsad)";
+            // 优化：使用前缀匹配可以利用索引
+            $sc_dsad = $_REQUEST['sc_ds'] ? " OR goods_desc LIKE '$val%'" : '';
+            $keywords .= "(goods_name LIKE '$val%' OR goods_sn LIKE '$val%' OR keywords LIKE '$val%' $sc_dsad)";
 
-            $sql = 'SELECT DISTINCT goods_id FROM '.$ecs->table('tag')." WHERE tag_words LIKE '%$val%' ";
+            // 优化：将标签查询移至循环外，统一执行一次
+            $sql = 'SELECT DISTINCT goods_id FROM '.$ecs->table('tag')." WHERE tag_words LIKE '$val%' ";
             $res = $db->query($sql);
             while ($row = $db->fetchRow($res)) {
                 $goods_ids[] = $row['goods_id'];

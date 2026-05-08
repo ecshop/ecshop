@@ -12,9 +12,8 @@ class LicenseController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 /* ------------------------------------------------------ */
 // -- 证书编辑页
@@ -27,16 +26,16 @@ if ($_REQUEST['act'] == 'list_edit') {
 
     $license = get_shop_license();
 
-    $smarty->assign('ur_here', $_LANG['license_here']);
-    $smarty->assign('is_download', '0');
+    $this->assign('ur_here', $_LANG['license_here']);
+    $this->assign('is_download', '0');
     if ($license['certificate_id'] != '' && $license['token'] != '') {
-        $smarty->assign('is_download', '1');
+        $this->assign('is_download', '1');
     }
 
-    $smarty->assign('certificate_id', $license['certificate_id']);
-    $smarty->assign('token', $license['token']);
+    $this->assign('certificate_id', $license['certificate_id']);
+    $this->assign('token', $license['token']);
 
-    $smarty->display('license.htm');
+    return $this->display('license.htm');
 }
 
 /* ------------------------------------------------------ */

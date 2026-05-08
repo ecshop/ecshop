@@ -12,9 +12,8 @@ class CaptchaManageController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 /* 检查权限 */
 admin_priv('shop_config');
@@ -52,11 +51,11 @@ if ($_REQUEST['act'] == 'main') {
         $captcha_check['login_fail_no'] = 'checked="checked"';
     }
 
-    $smarty->assign('captcha', $captcha_check);
-    $smarty->assign('captcha_width', $_CFG['captcha_width']);
-    $smarty->assign('captcha_height', $_CFG['captcha_height']);
-    $smarty->assign('ur_here', $_LANG['captcha_manage']);
-    $smarty->display('captcha_manage.htm');
+    $this->assign('captcha', $captcha_check);
+    $this->assign('captcha_width', $_CFG['captcha_width']);
+    $this->assign('captcha_height', $_CFG['captcha_height']);
+    $this->assign('ur_here', $_LANG['captcha_manage']);
+    return $this->display('captcha_manage.htm');
 }
 
 /* ------------------------------------------------------ */

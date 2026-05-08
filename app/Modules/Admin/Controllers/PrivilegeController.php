@@ -12,9 +12,8 @@ class PrivilegeController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -48,11 +47,11 @@ if ($_REQUEST['act'] == 'login') {
     header('Pragma: no-cache');
 
     if ((intval($_CFG['captcha']) & CAPTCHA_ADMIN) && gd_version() > 0) {
-        $smarty->assign('gd_version', gd_version());
-        $smarty->assign('random', mt_rand());
+        $this->assign('gd_version', gd_version());
+        $this->assign('random', mt_rand());
     }
 
-    $smarty->display('login.htm');
+    return $this->display('login.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -138,21 +137,21 @@ if ($_REQUEST['act'] == 'signin') {
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     /* 模板赋值 */
-    $smarty->assign('ur_here', $_LANG['admin_list']);
-    $smarty->assign('action_link', ['href' => 'privilege.php?act=add', 'text' => $_LANG['admin_add']]);
-    $smarty->assign('full_page', 1);
-    $smarty->assign('admin_list', $this->get_admin_userlist());
+    $this->assign('ur_here', $_LANG['admin_list']);
+    $this->assign('action_link', ['href' => 'privilege.php?act=add', 'text' => $_LANG['admin_add']]);
+    $this->assign('full_page', 1);
+    $this->assign('admin_list', $this->get_admin_userlist());
 
     /* 显示页面 */
     assign_query_info();
-    $smarty->display('privilege_list.htm');
+    return $this->display('privilege_list.htm');
 }
 
 /* ------------------------------------------------------ */
 // -- 查询
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $smarty->assign('admin_list', $this->get_admin_userlist());
+    $this->assign('admin_list', $this->get_admin_userlist());
 
     make_json_result($smarty->fetch('privilege_list.htm'));
 }
@@ -165,15 +164,15 @@ if ($_REQUEST['act'] == 'add') {
     admin_priv('admin_manage');
 
     /* 模板赋值 */
-    $smarty->assign('ur_here', $_LANG['admin_add']);
-    $smarty->assign('action_link', ['href' => 'privilege.php?act=list', 'text' => $_LANG['admin_list']]);
-    $smarty->assign('form_act', 'insert');
-    $smarty->assign('action', 'add');
-    $smarty->assign('select_role', $this->get_role_list());
+    $this->assign('ur_here', $_LANG['admin_add']);
+    $this->assign('action_link', ['href' => 'privilege.php?act=list', 'text' => $_LANG['admin_list']]);
+    $this->assign('form_act', 'insert');
+    $this->assign('action', 'add');
+    $this->assign('select_role', $this->get_role_list());
 
     /* 显示页面 */
     assign_query_info();
-    $smarty->display('privilege_info.htm');
+    return $this->display('privilege_info.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -267,22 +266,22 @@ if ($_REQUEST['act'] == 'edit') {
     }
 
     /* 模板赋值 */
-    $smarty->assign('ur_here', $_LANG['admin_edit']);
-    $smarty->assign('action_link', ['text' => $_LANG['admin_list'], 'href' => 'privilege.php?act=list']);
-    $smarty->assign('user', $user_info);
+    $this->assign('ur_here', $_LANG['admin_edit']);
+    $this->assign('action_link', ['text' => $_LANG['admin_list'], 'href' => 'privilege.php?act=list']);
+    $this->assign('user', $user_info);
 
     /* 获得该管理员的权限 */
     $priv_str = $db->getOne('SELECT action_list FROM '.$ecs->table('admin_user')." WHERE user_id = '$_GET[id]'");
 
     /* 如果被编辑的管理员拥有了all这个权限，将不能编辑 */
     if ($priv_str != 'all') {
-        $smarty->assign('select_role', $this->get_role_list());
+        $this->assign('select_role', $this->get_role_list());
     }
-    $smarty->assign('form_act', 'update');
-    $smarty->assign('action', 'edit');
+    $this->assign('form_act', 'update');
+    $this->assign('action', 'edit');
 
     assign_query_info();
-    $smarty->display('privilege_info.htm');
+    return $this->display('privilege_info.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -452,19 +451,19 @@ if ($_REQUEST['act'] == 'modif') {
     }
 
     /* 模板赋值 */
-    $smarty->assign('lang', $_LANG);
-    $smarty->assign('ur_here', $_LANG['modif_info']);
-    $smarty->assign('action_link', ['text' => $_LANG['admin_list'], 'href' => 'privilege.php?act=list']);
-    $smarty->assign('user', $user_info);
-    $smarty->assign('menus', $modules);
-    $smarty->assign('nav_arr', $nav_lst);
+    $this->assign('lang', $_LANG);
+    $this->assign('ur_here', $_LANG['modif_info']);
+    $this->assign('action_link', ['text' => $_LANG['admin_list'], 'href' => 'privilege.php?act=list']);
+    $this->assign('user', $user_info);
+    $this->assign('menus', $modules);
+    $this->assign('nav_arr', $nav_lst);
 
-    $smarty->assign('form_act', 'update_self');
-    $smarty->assign('action', 'modif');
+    $this->assign('form_act', 'update_self');
+    $this->assign('action', 'modif');
 
     /* 显示页面 */
     assign_query_info();
-    $smarty->display('privilege_info.htm');
+    return $this->display('privilege_info.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -513,16 +512,16 @@ if ($_REQUEST['act'] == 'allot') {
     }
 
     /* 赋值 */
-    $smarty->assign('lang', $_LANG);
-    $smarty->assign('ur_here', $_LANG['allot_priv'].' [ '.$_GET['user'].' ] ');
-    $smarty->assign('action_link', ['href' => 'privilege.php?act=list', 'text' => $_LANG['admin_list']]);
-    $smarty->assign('priv_arr', $priv_arr);
-    $smarty->assign('form_act', 'update_allot');
-    $smarty->assign('user_id', $_GET['id']);
+    $this->assign('lang', $_LANG);
+    $this->assign('ur_here', $_LANG['allot_priv'].' [ '.$_GET['user'].' ] ');
+    $this->assign('action_link', ['href' => 'privilege.php?act=list', 'text' => $_LANG['admin_list']]);
+    $this->assign('priv_arr', $priv_arr);
+    $this->assign('form_act', 'update_allot');
+    $this->assign('user_id', $_GET['id']);
 
     /* 显示页面 */
     assign_query_info();
-    $smarty->display('privilege_allot.htm');
+    return $this->display('privilege_allot.htm');
 }
 
 /* ------------------------------------------------------ */

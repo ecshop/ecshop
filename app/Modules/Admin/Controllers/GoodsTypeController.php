@@ -12,9 +12,8 @@ class GoodsTypeController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 $exc = new exchange($ecs->table('goods_type'), $db, 'cat_id', 'cat_name');
 
@@ -24,26 +23,26 @@ $exc = new exchange($ecs->table('goods_type'), $db, 'cat_id', 'cat_name');
 if ($_REQUEST['act'] == 'manage') {
     assign_query_info();
 
-    $smarty->assign('ur_here', $_LANG['08_goods_type']);
-    $smarty->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['08_goods_type']);
+    $this->assign('full_page', 1);
 
     $good_type_list = $this->get_goodstype();
     $good_in_type = '';
 
-    $smarty->assign('goods_type_arr', $good_type_list['type']);
-    $smarty->assign('filter', $good_type_list['filter']);
-    $smarty->assign('record_count', $good_type_list['record_count']);
-    $smarty->assign('page_count', $good_type_list['page_count']);
+    $this->assign('goods_type_arr', $good_type_list['type']);
+    $this->assign('filter', $good_type_list['filter']);
+    $this->assign('record_count', $good_type_list['record_count']);
+    $this->assign('page_count', $good_type_list['page_count']);
 
     $query = $db->query('SELECT a.cat_id FROM '.$ecs->table('attribute').' AS a RIGHT JOIN '.$ecs->table('goods_attr').' AS g ON g.attr_id = a.attr_id GROUP BY a.cat_id');
     while ($row = $db->fetchRow($query)) {
         $good_in_type[$row['cat_id']] = 1;
     }
-    $smarty->assign('good_in_type', $good_in_type);
+    $this->assign('good_in_type', $good_in_type);
 
-    $smarty->assign('action_link', ['text' => $_LANG['new_goods_type'], 'href' => 'goods_type.php?act=add']);
+    $this->assign('action_link', ['text' => $_LANG['new_goods_type'], 'href' => 'goods_type.php?act=add']);
 
-    $smarty->display('goods_type.htm');
+    return $this->display('goods_type.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -53,10 +52,10 @@ if ($_REQUEST['act'] == 'manage') {
 if ($_REQUEST['act'] == 'query') {
     $good_type_list = $this->get_goodstype();
 
-    $smarty->assign('goods_type_arr', $good_type_list['type']);
-    $smarty->assign('filter', $good_type_list['filter']);
-    $smarty->assign('record_count', $good_type_list['record_count']);
-    $smarty->assign('page_count', $good_type_list['page_count']);
+    $this->assign('goods_type_arr', $good_type_list['type']);
+    $this->assign('filter', $good_type_list['filter']);
+    $this->assign('record_count', $good_type_list['record_count']);
+    $this->assign('page_count', $good_type_list['page_count']);
 
     make_json_result(
         $smarty->fetch('goods_type.htm'),
@@ -110,14 +109,14 @@ if ($_REQUEST['act'] == 'toggle_enabled') {
 if ($_REQUEST['act'] == 'add') {
     admin_priv('goods_type');
 
-    $smarty->assign('ur_here', $_LANG['new_goods_type']);
-    $smarty->assign('action_link', ['href' => 'goods_type.php?act=manage', 'text' => $_LANG['goods_type_list']]);
-    $smarty->assign('action', 'add');
-    $smarty->assign('form_act', 'insert');
-    $smarty->assign('goods_type', ['enabled' => 1]);
+    $this->assign('ur_here', $_LANG['new_goods_type']);
+    $this->assign('action_link', ['href' => 'goods_type.php?act=manage', 'text' => $_LANG['goods_type_list']]);
+    $this->assign('action', 'add');
+    $this->assign('form_act', 'insert');
+    $this->assign('goods_type', ['enabled' => 1]);
 
     assign_query_info();
-    $smarty->display('goods_type_info.htm');
+    return $this->display('goods_type_info.htm');
 }
 if ($_REQUEST['act'] == 'insert') {
     $goods_type['cat_name'] = sub_str($_POST['cat_name'], 60);
@@ -145,14 +144,14 @@ if ($_REQUEST['act'] == 'edit') {
 
     admin_priv('goods_type');
 
-    $smarty->assign('ur_here', $_LANG['edit_goods_type']);
-    $smarty->assign('action_link', ['href' => 'goods_type.php?act=manage', 'text' => $_LANG['goods_type_list']]);
-    $smarty->assign('action', 'add');
-    $smarty->assign('form_act', 'update');
-    $smarty->assign('goods_type', $goods_type);
+    $this->assign('ur_here', $_LANG['edit_goods_type']);
+    $this->assign('action_link', ['href' => 'goods_type.php?act=manage', 'text' => $_LANG['goods_type_list']]);
+    $this->assign('action', 'add');
+    $this->assign('form_act', 'update');
+    $this->assign('goods_type', $goods_type);
 
     assign_query_info();
-    $smarty->display('goods_type_info.htm');
+    return $this->display('goods_type_info.htm');
 }
 if ($_REQUEST['act'] == 'update') {
     $goods_type['cat_name'] = sub_str($_POST['cat_name'], 60);

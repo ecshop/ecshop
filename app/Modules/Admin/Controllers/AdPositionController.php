@@ -12,9 +12,8 @@ class AdPositionController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/ads.php';
 
 /* act操作项的初始化 */
@@ -24,26 +23,26 @@ if (empty($_REQUEST['act'])) {
     $_REQUEST['act'] = trim($_REQUEST['act']);
 }
 
-$smarty->assign('lang', $_LANG);
+$this->assign('lang', $_LANG);
 $exc = new exchange($ecs->table('ad_position'), $db, 'position_id', 'position_name');
 
 /* ------------------------------------------------------ */
 // -- 广告位置列表
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
-    $smarty->assign('ur_here', $_LANG['ad_position']);
-    $smarty->assign('action_link', ['text' => $_LANG['position_add'], 'href' => 'ad_position.php?act=add']);
-    $smarty->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['ad_position']);
+    $this->assign('action_link', ['text' => $_LANG['position_add'], 'href' => 'ad_position.php?act=add']);
+    $this->assign('full_page', 1);
 
     $position_list = $this->ad_position_list();
 
-    $smarty->assign('position_list', $position_list['position']);
-    $smarty->assign('filter', $position_list['filter']);
-    $smarty->assign('record_count', $position_list['record_count']);
-    $smarty->assign('page_count', $position_list['page_count']);
+    $this->assign('position_list', $position_list['position']);
+    $this->assign('filter', $position_list['filter']);
+    $this->assign('record_count', $position_list['record_count']);
+    $this->assign('page_count', $position_list['page_count']);
 
     assign_query_info();
-    $smarty->display('ad_position_list.htm');
+    return $this->display('ad_position_list.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -53,14 +52,14 @@ if ($_REQUEST['act'] == 'add') {
     admin_priv('ad_manage');
 
     /* 模板赋值 */
-    $smarty->assign('ur_here', $_LANG['position_add']);
-    $smarty->assign('form_act', 'insert');
+    $this->assign('ur_here', $_LANG['position_add']);
+    $this->assign('form_act', 'insert');
 
-    $smarty->assign('action_link', ['href' => 'ad_position.php?act=list', 'text' => $_LANG['ad_position']]);
-    $smarty->assign('posit_arr', ['position_style' => '<table cellpadding="0" cellspacing="0">'."\n".'{foreach from=$ads item=ad}'."\n".'<tr><td>{$ad}</td></tr>'."\n".'{/foreach}'."\n".'</table>']);
+    $this->assign('action_link', ['href' => 'ad_position.php?act=list', 'text' => $_LANG['ad_position']]);
+    $this->assign('posit_arr', ['position_style' => '<table cellpadding="0" cellspacing="0">'."\n".'{foreach from=$ads item=ad}'."\n".'<tr><td>{$ad}</td></tr>'."\n".'{/foreach}'."\n".'</table>']);
 
     assign_query_info();
-    $smarty->display('ad_position_info.htm');
+    return $this->display('ad_position_info.htm');
 }
 if ($_REQUEST['act'] == 'insert') {
     admin_priv('ad_manage');
@@ -110,13 +109,13 @@ if ($_REQUEST['act'] == 'edit') {
     $sql = 'SELECT * FROM '.$ecs->table('ad_position')." WHERE position_id='$id'";
     $posit_arr = $db->getRow($sql);
 
-    $smarty->assign('ur_here', $_LANG['position_edit']);
-    $smarty->assign('action_link', ['href' => 'ad_position.php?act=list', 'text' => $_LANG['ad_position']]);
-    $smarty->assign('posit_arr', $posit_arr);
-    $smarty->assign('form_act', 'update');
+    $this->assign('ur_here', $_LANG['position_edit']);
+    $this->assign('action_link', ['href' => 'ad_position.php?act=list', 'text' => $_LANG['ad_position']]);
+    $this->assign('posit_arr', $posit_arr);
+    $this->assign('form_act', 'update');
 
     assign_query_info();
-    $smarty->display('ad_position_info.htm');
+    return $this->display('ad_position_info.htm');
 }
 if ($_REQUEST['act'] == 'update') {
     admin_priv('ad_manage');
@@ -161,10 +160,10 @@ if ($_REQUEST['act'] == 'update') {
 if ($_REQUEST['act'] == 'query') {
     $position_list = $this->ad_position_list();
 
-    $smarty->assign('position_list', $position_list['position']);
-    $smarty->assign('filter', $position_list['filter']);
-    $smarty->assign('record_count', $position_list['record_count']);
-    $smarty->assign('page_count', $position_list['page_count']);
+    $this->assign('position_list', $position_list['position']);
+    $this->assign('filter', $position_list['filter']);
+    $this->assign('record_count', $position_list['record_count']);
+    $this->assign('page_count', $position_list['page_count']);
 
     make_json_result(
         $smarty->fetch('ad_position_list.htm'),

@@ -12,9 +12,8 @@ class GalleryController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 /* 参数 */
 $_REQUEST['id'] = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0; // 商品编号
@@ -54,10 +53,10 @@ if ($img_count == 0) {
     }
 }
 
-$smarty->assign('shop_name', $_CFG['shop_name']);
-$smarty->assign('watermark', str_replace('../', './', $_CFG['watermark']));
-$smarty->assign('gallery', $gallery);
-$smarty->display('gallery.dwt');
+$this->assign('shop_name', $_CFG['shop_name']);
+$this->assign('watermark', str_replace('../', './', $_CFG['watermark']));
+$this->assign('gallery', $gallery);
+return $this->display('gallery.dwt');
 
 }
 }

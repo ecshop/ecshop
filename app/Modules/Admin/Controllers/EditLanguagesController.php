@@ -12,9 +12,8 @@ class EditLanguagesController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -66,17 +65,17 @@ if ($_REQUEST['act'] == 'list') {
     $language_arr = $this->get_language_item_list($file_path, $keyword);
 
     /* 模板赋值 */
-    $smarty->assign('ur_here', $_LANG['edit_languages']);
-    $smarty->assign('keyword', $keyword);  // 关键字
-    $smarty->assign('action_link', []);
-    $smarty->assign('file_attr', $file_attr); // 文件权限
-    $smarty->assign('lang_arr', $lang_arr); // 语言文件列表
-    $smarty->assign('file_path', $file_path); // 语言文件
-    $smarty->assign('lang_file', $lang_file); // 语言文件
-    $smarty->assign('language_arr', $language_arr); // 需要编辑的语言项列表
+    $this->assign('ur_here', $_LANG['edit_languages']);
+    $this->assign('keyword', $keyword);  // 关键字
+    $this->assign('action_link', []);
+    $this->assign('file_attr', $file_attr); // 文件权限
+    $this->assign('lang_arr', $lang_arr); // 语言文件列表
+    $this->assign('file_path', $file_path); // 语言文件
+    $this->assign('lang_file', $lang_file); // 语言文件
+    $this->assign('language_arr', $language_arr); // 需要编辑的语言项列表
 
     assign_query_info();
-    $smarty->display('language_list.htm');
+    return $this->display('language_list.htm');
 }
 
 /* ------------------------------------------------------ */

@@ -12,9 +12,8 @@ class VoteController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 require ROOT_PATH.'includes/cls_json.php';
 
 if (! isset($_REQUEST['vote']) || ! isset($_REQUEST['options']) || ! isset($_REQUEST['type'])) {
@@ -37,8 +36,8 @@ if ($this->vote_already_submited($vote_id, $ip_address)) {
 
     $vote = get_vote($vote_id);
     if (! empty($vote)) {
-        $smarty->assign('vote_id', $vote['id']);
-        $smarty->assign('vote', $vote['content']);
+        $this->assign('vote_id', $vote['id']);
+        $this->assign('vote', $vote['content']);
     }
 
     $str = $smarty->fetch('library/vote.lbi');

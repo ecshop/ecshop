@@ -12,8 +12,7 @@ class FavourableController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
-require dirname(__FILE__).'/includes/init.php';
+
 require ROOT_PATH.'includes/lib_goods.php';
 
 $exc = new exchange($ecs->table('favourable_activity'), $db, 'act_id', 'act_name');
@@ -26,23 +25,23 @@ if ($_REQUEST['act'] == 'list') {
     admin_priv('favourable');
 
     /* 模板赋值 */
-    $smarty->assign('full_page', 1);
-    $smarty->assign('ur_here', $_LANG['favourable_list']);
-    $smarty->assign('action_link', ['href' => 'favourable.php?act=add', 'text' => $_LANG['add_favourable']]);
+    $this->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['favourable_list']);
+    $this->assign('action_link', ['href' => 'favourable.php?act=add', 'text' => $_LANG['add_favourable']]);
 
     $list = $this->favourable_list();
 
-    $smarty->assign('favourable_list', $list['item']);
-    $smarty->assign('filter', $list['filter']);
-    $smarty->assign('record_count', $list['record_count']);
-    $smarty->assign('page_count', $list['page_count']);
+    $this->assign('favourable_list', $list['item']);
+    $this->assign('filter', $list['filter']);
+    $this->assign('record_count', $list['record_count']);
+    $this->assign('page_count', $list['page_count']);
 
     $sort_flag = sort_flag($list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     /* 显示商品列表页面 */
     assign_query_info();
-    $smarty->display('favourable_list.htm');
+    return $this->display('favourable_list.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -52,13 +51,13 @@ if ($_REQUEST['act'] == 'list') {
 if ($_REQUEST['act'] == 'query') {
     $list = $this->favourable_list();
 
-    $smarty->assign('favourable_list', $list['item']);
-    $smarty->assign('filter', $list['filter']);
-    $smarty->assign('record_count', $list['record_count']);
-    $smarty->assign('page_count', $list['page_count']);
+    $this->assign('favourable_list', $list['item']);
+    $this->assign('filter', $list['filter']);
+    $this->assign('record_count', $list['record_count']);
+    $this->assign('page_count', $list['page_count']);
 
     $sort_flag = sort_flag($list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
         $smarty->fetch('favourable_list.htm'),
@@ -151,7 +150,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 
     /* 是否添加 */
     $is_add = $_REQUEST['act'] == 'add';
-    $smarty->assign('form_action', $is_add ? 'insert' : 'update');
+    $this->assign('form_action', $is_add ? 'insert' : 'update');
 
     /* 初始化、取得优惠活动信息 */
     if ($is_add) {
@@ -179,7 +178,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
             sys_msg($_LANG['favourable_not_exist']);
         }
     }
-    $smarty->assign('favourable', $favourable);
+    $this->assign('favourable', $favourable);
 
     /* 取得用户等级 */
     $user_rank_list = [];
@@ -194,7 +193,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
         $row['checked'] = strpos(','.$favourable['user_rank'].',', ','.$row['rank_id'].',') !== false;
         $user_rank_list[] = $row;
     }
-    $smarty->assign('user_rank_list', $user_rank_list);
+    $this->assign('user_rank_list', $user_rank_list);
 
     /* 取得优惠范围 */
     $act_range_ext = [];
@@ -211,24 +210,24 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
         }
         $act_range_ext = $db->getAll($sql);
     }
-    $smarty->assign('act_range_ext', $act_range_ext);
+    $this->assign('act_range_ext', $act_range_ext);
 
     /* 赋值时间控件的语言 */
-    $smarty->assign('cfg_lang', $_CFG['lang']);
+    $this->assign('cfg_lang', $_CFG['lang']);
 
     /* 显示模板 */
     if ($is_add) {
-        $smarty->assign('ur_here', $_LANG['add_favourable']);
+        $this->assign('ur_here', $_LANG['add_favourable']);
     } else {
-        $smarty->assign('ur_here', $_LANG['edit_favourable']);
+        $this->assign('ur_here', $_LANG['edit_favourable']);
     }
     $href = 'favourable.php?act=list';
     if (! $is_add) {
         $href .= '&'.list_link_postfix();
     }
-    $smarty->assign('action_link', ['href' => $href, 'text' => $_LANG['favourable_list']]);
+    $this->assign('action_link', ['href' => $href, 'text' => $_LANG['favourable_list']]);
     assign_query_info();
-    $smarty->display('favourable_info.htm');
+    return $this->display('favourable_info.htm');
 }
 
 /* ------------------------------------------------------ */

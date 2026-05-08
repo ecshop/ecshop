@@ -12,9 +12,8 @@ class IntegrateController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 /* ------------------------------------------------------ */
 // -- 会员数据整合插件列表
 /* ------------------------------------------------------ */
@@ -26,12 +25,12 @@ if ($_REQUEST['act'] == 'list') {
 
     $allow_set_points = $_CFG['integrate_code'] == 'ecshop' ? 0 : 1;
 
-    $smarty->assign('allow_set_points', $allow_set_points);
-    $smarty->assign('ur_here', $_LANG['06_list_integrate']);
-    $smarty->assign('modules', $modules);
+    $this->assign('allow_set_points', $allow_set_points);
+    $this->assign('ur_here', $_LANG['06_list_integrate']);
+    $this->assign('modules', $modules);
 
     assign_query_info();
-    $smarty->display('integrates_list.htm');
+    return $this->display('integrates_list.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -78,12 +77,12 @@ if ($_REQUEST['act'] == 'install') {
 
         assign_query_info();
 
-        $smarty->assign('cfg', $cfg);
-        $smarty->assign('save', 0);
-        $smarty->assign('set_list', get_charset_list());
-        $smarty->assign('ur_here', $_LANG['integrate_setup']);
-        $smarty->assign('code', $_GET['code']);
-        $smarty->display('integrates_setup.htm');
+        $this->assign('cfg', $cfg);
+        $this->assign('save', 0);
+        $this->assign('set_list', get_charset_list());
+        $this->assign('ur_here', $_LANG['integrate_setup']);
+        $this->assign('code', $_GET['code']);
+        return $this->display('integrates_setup.htm');
     }
 }
 
@@ -122,12 +121,12 @@ if ($_REQUEST['act'] == 'setup') {
         $cfg = unserialize($_CFG['integrate_config']);
         assign_query_info();
 
-        $smarty->assign('save', 1);
-        $smarty->assign('set_list', get_charset_list());
-        $smarty->assign('ur_here', $_LANG['integrate_setup']);
-        $smarty->assign('code', $_GET['code']);
-        $smarty->assign('cfg', $cfg);
-        $smarty->display('integrates_setup.htm');
+        $this->assign('save', 1);
+        $this->assign('set_list', get_charset_list());
+        $this->assign('ur_here', $_LANG['integrate_setup']);
+        $this->assign('code', $_GET['code']);
+        $this->assign('cfg', $cfg);
+        return $this->display('integrates_setup.htm');
     }
 }
 
@@ -214,11 +213,11 @@ if ($_REQUEST['act'] == 'check_config') {
 
     $size = 100;
 
-    $smarty->assign('ur_here', $_LANG['conflict_username_check']);
-    $smarty->assign('domain', '@ecshop');
-    $smarty->assign('lang_total', sprintf($_LANG['shop_user_total'], $total));
-    $smarty->assign('size', $size);
-    $smarty->display('integrates_check.htm');
+    $this->assign('ur_here', $_LANG['conflict_username_check']);
+    $this->assign('domain', '@ecshop');
+    $this->assign('lang_total', sprintf($_LANG['shop_user_total'], $total));
+    $this->assign('size', $size);
+    return $this->display('integrates_check.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -323,9 +322,9 @@ if ($_REQUEST['act'] == 'save_uc_config_first') {
     /* 保存完成整合 */
     $this->save_integrate_config($code, $cfg);
 
-    $smarty->assign('ur_here', $_LANG['ucenter_import_username']);
-    $smarty->assign('user_startid_intro', sprintf($_LANG['user_startid_intro'], $maxuid, $maxuid));
-    $smarty->display('integrates_uc_import.htm');
+    $this->assign('ur_here', $_LANG['ucenter_import_username']);
+    $this->assign('user_startid_intro', sprintf($_LANG['user_startid_intro'], $maxuid, $maxuid));
+    return $this->display('integrates_uc_import.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -513,27 +512,27 @@ if ($_REQUEST['act'] == 'modify') {
     $sql = 'SELECT COUNT(*) FROM '.$ecs->table('users').' WHERE flag = 1';
     if ($db->getOne($sql) > 0) {
         $_REQUEST['flag'] = 1;
-        $smarty->assign('default_flag', 1);
+        $this->assign('default_flag', 1);
     } else {
         $_REQUEST['flag'] = 0;
-        $smarty->assign('default_flag', 0);
+        $this->assign('default_flag', 0);
     }
 
     /* 显示重名用户及处理方法 */
     $flags = [0 => $_LANG['all_user'], 1 => $_LANG['error_user'], 2 => $_LANG['rename_user'], 3 => $_LANG['delete_user'], 4 => $_LANG['ignore_user']];
-    $smarty->assign('flags', $flags);
+    $this->assign('flags', $flags);
 
     $arr = $this->conflict_userlist();
 
-    $smarty->assign('ur_here', $_LANG['conflict_username_modify']);
-    $smarty->assign('domain', '@ecshop');
-    $smarty->assign('list', $arr['list']);
-    $smarty->assign('filter', $arr['filter']);
-    $smarty->assign('record_count', $arr['record_count']);
-    $smarty->assign('page_count', $arr['page_count']);
-    $smarty->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['conflict_username_modify']);
+    $this->assign('domain', '@ecshop');
+    $this->assign('list', $arr['list']);
+    $this->assign('filter', $arr['filter']);
+    $this->assign('record_count', $arr['record_count']);
+    $this->assign('page_count', $arr['page_count']);
+    $this->assign('full_page', 1);
 
-    $smarty->display('integrates_modify.htm');
+    return $this->display('integrates_modify.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -541,11 +540,11 @@ if ($_REQUEST['act'] == 'modify') {
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
     $arr = $this->conflict_userlist();
-    $smarty->assign('list', $arr['list']);
-    $smarty->assign('filter', $arr['filter']);
-    $smarty->assign('record_count', $arr['record_count']);
-    $smarty->assign('page_count', $arr['page_count']);
-    $smarty->assign('full_page', 0);
+    $this->assign('list', $arr['list']);
+    $this->assign('filter', $arr['filter']);
+    $this->assign('record_count', $arr['record_count']);
+    $this->assign('page_count', $arr['page_count']);
+    $this->assign('full_page', 0);
     make_json_result($smarty->fetch('integrates_modify.htm'), '', ['filter' => $arr['filter'], 'page_count' => $arr['page_count']]);
 }
 
@@ -670,10 +669,10 @@ if ($_REQUEST['act'] == 'sync') {
     fwrite($fp, $log);
     fclose($fp);
 
-    $smarty->assign('tasks', $tasks);
-    $smarty->assign('ur_here', $_LANG['user_sync']);
-    $smarty->assign('size', $size);
-    $smarty->display('integrates_sync.htm');
+    $this->assign('tasks', $tasks);
+    $this->assign('ur_here', $_LANG['user_sync']);
+    $this->assign('size', $size);
+    return $this->display('integrates_sync.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -913,19 +912,19 @@ if ($_REQUEST['act'] == 'points_set') {
         [$from_val, $to_val] = explode(':', $rule[$rule_index]);
 
         $select_rule[$rule_index] = $exist_rule[$rule_index];
-        $smarty->assign('from_val', $from_val);
-        $smarty->assign('to_val', $to_val);
+        $this->assign('from_val', $from_val);
+        $this->assign('to_val', $to_val);
     }
 
-    $smarty->assign('rule_index', $rule_index);
-    $smarty->assign('allow_add', $allow_add);
-    $smarty->assign('select_rule', $select_rule);
-    $smarty->assign('exist_rule', $exist_rule);
-    $smarty->assign('rule_list', $rule);
-    $smarty->assign('integral_name', $_CFG['integral_name']);
-    $smarty->assign('full_page', 1);
-    $smarty->assign('points', $points);
-    $smarty->display('integrates_points.htm');
+    $this->assign('rule_index', $rule_index);
+    $this->assign('allow_add', $allow_add);
+    $this->assign('select_rule', $select_rule);
+    $this->assign('exist_rule', $exist_rule);
+    $this->assign('rule_list', $rule);
+    $this->assign('integral_name', $_CFG['integral_name']);
+    $this->assign('full_page', 1);
+    $this->assign('points', $points);
+    return $this->display('integrates_points.htm');
 }
 
 if ($_REQUEST['act'] == 'edit_points') {

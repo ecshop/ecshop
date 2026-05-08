@@ -14,9 +14,8 @@ class PaymentController extends BaseController
 
 use App\Plugins\Payment\PaymentFactory;
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 $exc = new exchange($ecs->table('payment'), $db, 'pay_code', 'pay_name');
 
@@ -58,9 +57,9 @@ if ($_REQUEST['act'] == 'list') {
 
     assign_query_info();
 
-    $smarty->assign('ur_here', $_LANG['02_payment_list']);
-    $smarty->assign('modules', $modules);
-    $smarty->display('payment_list.htm');
+    $this->assign('ur_here', $_LANG['02_payment_list']);
+    $this->assign('modules', $modules);
+    return $this->display('payment_list.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -99,9 +98,9 @@ if ($_REQUEST['act'] == 'install') {
 
     assign_query_info();
 
-    $smarty->assign('action_link', ['text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list']);
-    $smarty->assign('pay', $pay);
-    $smarty->display('payment_edit.htm');
+    $this->assign('action_link', ['text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list']);
+    $this->assign('pay', $pay);
+    return $this->display('payment_edit.htm');
 }
 if ($_REQUEST['act'] == 'get_config') {
     check_authz_json('payment');
@@ -209,10 +208,10 @@ if ($_REQUEST['act'] == 'edit') {
 
     assign_query_info();
 
-    $smarty->assign('action_link', ['text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list']);
-    $smarty->assign('ur_here', $_LANG['edit'].$_LANG['payment']);
-    $smarty->assign('pay', $pay);
-    $smarty->display('payment_edit.htm');
+    $this->assign('action_link', ['text' => $_LANG['02_payment_list'], 'href' => 'payment.php?act=list']);
+    $this->assign('ur_here', $_LANG['edit'].$_LANG['payment']);
+    $this->assign('pay', $pay);
+    return $this->display('payment_edit.htm');
 }
 
 /* ------------------------------------------------------ */

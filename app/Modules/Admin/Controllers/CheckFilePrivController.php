@@ -12,9 +12,8 @@ class CheckFilePrivController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 if ($_REQUEST['act'] == 'check') {
     /* 检查权限 */
@@ -116,10 +115,10 @@ if ($_REQUEST['act'] == 'check') {
         }
     }
     $tpl_msg = implode(', ', $tpl_list);
-    $smarty->assign('ur_here', $_LANG['check_file_priv']);
-    $smarty->assign('list', $list);
-    $smarty->assign('tpl_msg', $tpl_msg);
-    $smarty->display('file_priv.html');
+    $this->assign('ur_here', $_LANG['check_file_priv']);
+    $this->assign('list', $list);
+    $this->assign('tpl_msg', $tpl_msg);
+    return $this->display('file_priv.html');
 }
 
 /**

@@ -12,9 +12,8 @@ class ShopinfoController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 require_once ROOT_PATH.'includes/fckeditor/fckeditor.php';
 
 $exc = new exchange($ecs->table('article'), $db, 'article_id', 'title');
@@ -23,20 +22,20 @@ $exc = new exchange($ecs->table('article'), $db, 'article_id', 'title');
 // -- 文章列表
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
-    $smarty->assign('ur_here', $_LANG['shop_info']);
-    $smarty->assign('action_link', ['text' => $_LANG['shopinfo_add'], 'href' => 'shopinfo.php?act=add']);
-    $smarty->assign('full_page', 1);
-    $smarty->assign('list', $this->shopinfo_article_list());
+    $this->assign('ur_here', $_LANG['shop_info']);
+    $this->assign('action_link', ['text' => $_LANG['shopinfo_add'], 'href' => 'shopinfo.php?act=add']);
+    $this->assign('full_page', 1);
+    $this->assign('list', $this->shopinfo_article_list());
 
     assign_query_info();
-    $smarty->display('shopinfo_list.htm');
+    return $this->display('shopinfo_list.htm');
 }
 
 /* ------------------------------------------------------ */
 // -- 查询
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $smarty->assign('list', $this->shopinfo_article_list());
+    $this->assign('list', $this->shopinfo_article_list());
 
     make_json_result($smarty->fetch('shopinfo_list.htm'));
 }
@@ -55,12 +54,12 @@ if ($_REQUEST['act'] == 'add') {
     /* 初始化 */
     $article['article_type'] = 0;
 
-    $smarty->assign('ur_here', $_LANG['shopinfo_add']);
-    $smarty->assign('action_link', ['text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list']);
-    $smarty->assign('form_action', 'insert');
+    $this->assign('ur_here', $_LANG['shopinfo_add']);
+    $this->assign('action_link', ['text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list']);
+    $this->assign('form_action', 'insert');
 
     assign_query_info();
-    $smarty->display('shopinfo_info.htm');
+    return $this->display('shopinfo_info.htm');
 }
 if ($_REQUEST['act'] == 'insert') {
     /* 权限判断 */
@@ -107,11 +106,11 @@ if ($_REQUEST['act'] == 'edit') {
     /* 创建 html editor */
     create_html_editor('FCKeditor1', $article['content']);
 
-    $smarty->assign('ur_here', $_LANG['article_add']);
-    $smarty->assign('action_link', ['text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list']);
-    $smarty->assign('article', $article);
-    $smarty->assign('form_action', 'update');
-    $smarty->display('shopinfo_info.htm');
+    $this->assign('ur_here', $_LANG['article_add']);
+    $this->assign('action_link', ['text' => $_LANG['shopinfo_list'], 'href' => 'shopinfo.php?act=list']);
+    $this->assign('article', $article);
+    $this->assign('form_action', 'update');
+    return $this->display('shopinfo_info.htm');
 }
 if ($_REQUEST['act'] == 'update') {
     /* 权限判断 */

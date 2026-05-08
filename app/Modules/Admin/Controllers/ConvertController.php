@@ -12,9 +12,8 @@ class ConvertController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 /* ------------------------------------------------------ */
 // -- 转换程序主页面
@@ -33,7 +32,7 @@ if ($_REQUEST['act'] == 'main') {
         }
         $modules[$i]['desc'] = $_LANG[$modules[$i]['desc']];
     }
-    $smarty->assign('module_list', $modules);
+    $this->assign('module_list', $modules);
 
     /* 设置默认值 */
     $def_val = [
@@ -44,15 +43,15 @@ if ($_REQUEST['act'] == 'main') {
         'prefix' => 'sdb_',
         'path' => '',
     ];
-    $smarty->assign('def_val', $def_val);
+    $this->assign('def_val', $def_val);
 
     /* 取得字符集数组 */
-    $smarty->assign('charset_list', get_charset_list());
+    $this->assign('charset_list', get_charset_list());
 
     /* 显示模板 */
-    $smarty->assign('ur_here', $_LANG['convert']);
+    $this->assign('ur_here', $_LANG['convert']);
     assign_query_info();
-    $smarty->display('convert_main.htm');
+    return $this->display('convert_main.htm');
 }
 
 /* ------------------------------------------------------ */

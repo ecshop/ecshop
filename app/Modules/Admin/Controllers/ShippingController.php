@@ -12,9 +12,8 @@ class ShippingController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 $exc = new exchange($ecs->table('shipping'), $db, 'shipping_code', 'shipping_name');
 
 /* ------------------------------------------------------ */
@@ -59,10 +58,10 @@ if ($_REQUEST['act'] == 'list') {
         }
     }
 
-    $smarty->assign('ur_here', $_LANG['03_shipping_list']);
-    $smarty->assign('modules', $modules);
+    $this->assign('ur_here', $_LANG['03_shipping_list']);
+    $this->assign('modules', $modules);
     assign_query_info();
-    $smarty->display('shipping_list.htm');
+    return $this->display('shipping_list.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -158,10 +157,10 @@ if ($_REQUEST['act'] == 'print_index') {
         $row['shipping_print'] = ! empty($row['shipping_print']) ? $row['shipping_print'] : '';
         $row['print_bg'] = empty($row['print_bg']) ? '' : $this->get_site_root_url().$row['print_bg'];
     }
-    $smarty->assign('shipping', $row);
-    $smarty->assign('shipping_id', $shipping_id);
+    $this->assign('shipping', $row);
+    $this->assign('shipping_id', $shipping_id);
 
-    $smarty->display('print_index.htm');
+    return $this->display('print_index.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -278,19 +277,19 @@ if ($_REQUEST['act'] == 'edit_print_template') {
         $row['shipping_print'] = ! empty($row['shipping_print']) ? $row['shipping_print'] : '';
         $row['print_model'] = empty($row['print_model']) ? 1 : $row['print_model']; // 兼容以前版本
 
-        $smarty->assign('shipping', $row);
+        $this->assign('shipping', $row);
     } else {
         $lnk[] = ['text' => $_LANG['go_back'], 'href' => 'shipping.php?act=list'];
         sys_msg($_LANG['no_shipping_install'], 0, $lnk);
     }
 
-    $smarty->assign('ur_here', $_LANG['03_shipping_list'].' - '.$row['shipping_name'].' - '.$_LANG['shipping_print_template']);
-    $smarty->assign('action_link', ['text' => $_LANG['03_shipping_list'], 'href' => 'shipping.php?act=list']);
-    $smarty->assign('shipping_id', $shipping_id);
+    $this->assign('ur_here', $_LANG['03_shipping_list'].' - '.$row['shipping_name'].' - '.$_LANG['shipping_print_template']);
+    $this->assign('action_link', ['text' => $_LANG['03_shipping_list'], 'href' => 'shipping.php?act=list']);
+    $this->assign('shipping_id', $shipping_id);
 
     assign_query_info();
 
-    $smarty->display('shipping_template.htm');
+    return $this->display('shipping_template.htm');
 }
 
 /* ------------------------------------------------------ */

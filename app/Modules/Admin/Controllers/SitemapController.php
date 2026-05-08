@@ -12,9 +12,8 @@ class SitemapController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 /* 检查权限 */
 admin_priv('sitemap');
@@ -25,10 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     /* ------------------------------------------------------ */
     assign_query_info();
     $config = unserialize($_CFG['sitemap']);
-    $smarty->assign('config', $config);
-    $smarty->assign('ur_here', $_LANG['sitemap']);
-    $smarty->assign('arr_changefreq', [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]);
-    $smarty->display('sitemap.htm');
+    $this->assign('config', $config);
+    $this->assign('ur_here', $_LANG['sitemap']);
+    $this->assign('arr_changefreq', [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]);
+    return $this->display('sitemap.htm');
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     /* ------------------------------------------------------ */

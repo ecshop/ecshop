@@ -12,9 +12,8 @@ class CronController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 $_REQUEST['act'] = trim($_REQUEST['act']);
 admin_priv('cron');
@@ -48,9 +47,9 @@ if ($_REQUEST['act'] == 'list') {
         }
     }
     assign_query_info();
-    $smarty->assign('ur_here', $_LANG['07_cron_schcron']);
-    $smarty->assign('modules', $modules);
-    $smarty->display('cron_list.htm');
+    $this->assign('ur_here', $_LANG['07_cron_schcron']);
+    $this->assign('modules', $modules);
+    return $this->display('cron_list.htm');
 }
 if ($_REQUEST['act'] == 'install') {
     if (empty($_POST['step'])) {
@@ -93,12 +92,12 @@ if ($_REQUEST['act'] == 'install') {
             'search' => 0,
         ];
 
-        $smarty->assign('days', $day);
-        $smarty->assign('page_list', $page_list);
-        $smarty->assign('week', $week);
-        $smarty->assign('hours', $hours);
-        $smarty->assign('cron', $cron);
-        $smarty->display('cron_edit.htm');
+        $this->assign('days', $day);
+        $this->assign('page_list', $page_list);
+        $this->assign('week', $week);
+        $this->assign('hours', $hours);
+        $this->assign('cron', $cron);
+        return $this->display('cron_edit.htm');
     } elseif ($_POST['step'] == 2) {
         $links[] = ['text' => $_LANG['back_list'], 'href' => 'cron.php?act=list'];
         if (empty($_POST['cron_name'])) {
@@ -208,13 +207,13 @@ if ($_REQUEST['act'] == 'edit') {
         }
 
         assign_query_info();
-        $smarty->assign('ur_here', $_LANG['edit'].$_LANG['cron_code']);
-        $smarty->assign('cron', $cron);
-        $smarty->assign('days', $day);
-        $smarty->assign('week', $week);
-        $smarty->assign('hours', $hours);
-        $smarty->assign('page_list', $page_list);
-        $smarty->display('cron_edit.htm');
+        $this->assign('ur_here', $_LANG['edit'].$_LANG['cron_code']);
+        $this->assign('cron', $cron);
+        $this->assign('days', $day);
+        $this->assign('week', $week);
+        $this->assign('hours', $hours);
+        $this->assign('page_list', $page_list);
+        return $this->display('cron_edit.htm');
     } elseif ($_POST['step'] == 2) {
         $links[] = ['text' => $_LANG['back_list'], 'href' => 'cron.php?act=list'];
         if (empty($_POST['cron_id'])) {

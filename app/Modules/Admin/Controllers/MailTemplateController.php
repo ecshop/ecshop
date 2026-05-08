@@ -12,9 +12,8 @@ class MailTemplateController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 admin_priv('mail_template');
 
@@ -52,14 +51,14 @@ if ($_REQUEST['act'] == 'list') {
     $editor->Height = '320';
     $editor->Value = $content['template_content'];
     $FCKeditor = $editor->CreateHtml();
-    $smarty->assign('FCKeditor', $FCKeditor);
-    $smarty->assign('tpl', $cur);
-    $smarty->assign('cur', $cur);
-    $smarty->assign('ur_here', $_LANG['mail_template_manage']);
-    $smarty->assign('templates', $templates);
-    $smarty->assign('template', $content);
-    $smarty->assign('full_page', 1);
-    $smarty->display('mail_template.htm');
+    $this->assign('FCKeditor', $FCKeditor);
+    $this->assign('tpl', $cur);
+    $this->assign('cur', $cur);
+    $this->assign('ur_here', $_LANG['mail_template_manage']);
+    $this->assign('templates', $templates);
+    $this->assign('template', $content);
+    $this->assign('full_page', 1);
+    return $this->display('mail_template.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -93,17 +92,17 @@ if ($_REQUEST['act'] == 'loat_template') {
         $editor->Height = '320';
         $editor->Value = $content['template_content'];
         $FCKeditor = $editor->CreateHtml();
-        $smarty->assign('FCKeditor', $FCKeditor);
+        $this->assign('FCKeditor', $FCKeditor);
 
         $content['is_html'] = 1;
     } elseif ($mail_type == 0) {
         $content['is_html'] = 0;
     }
 
-    $smarty->assign('tpl', $tpl);
-    $smarty->assign('cur', $tpl);
-    $smarty->assign('templates', $templates);
-    $smarty->assign('template', $content);
+    $this->assign('tpl', $tpl);
+    $this->assign('cur', $tpl);
+    $this->assign('templates', $templates);
+    $this->assign('template', $content);
 
     make_json_result($smarty->fetch('mail_template.htm'));
 }

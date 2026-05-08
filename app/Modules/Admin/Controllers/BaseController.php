@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Modules\Admin\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class InitController extends BaseController
+abstract class BaseController extends Controller
 {
     public function __invoke(Request $request)
     {
@@ -143,13 +144,13 @@ if (DEBUG_MODE) {
     $smarty->force_compile = true;
 }
 
-$smarty->assign('lang', $_LANG);
-$smarty->assign('help_open', $_CFG['help_open']);
+$this->assign('lang', $_LANG);
+$this->assign('help_open', $_CFG['help_open']);
 
 if (isset($_CFG['enable_order_check'])) {  // 为了从旧版本顺利升级到2.5.0
-    $smarty->assign('enable_order_check', $_CFG['enable_order_check']);
+    $this->assign('enable_order_check', $_CFG['enable_order_check']);
 } else {
-    $smarty->assign('enable_order_check', 0);
+    $this->assign('enable_order_check', 0);
 }
 
 /* 验证管理员身份 */
@@ -210,7 +211,7 @@ if ((! isset($_SESSION['admin_id']) || intval($_SESSION['admin_id']) <= 0) &&
     }
 }
 
-$smarty->assign('token', $_CFG['token']);
+$this->assign('token', $_CFG['token']);
 
 if ($_REQUEST['act'] != 'login' && $_REQUEST['act'] != 'signin' &&
     $_REQUEST['act'] != 'forget_pwd' && $_REQUEST['act'] != 'reset_pwd' && $_REQUEST['act'] != 'check_order') {

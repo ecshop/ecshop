@@ -12,11 +12,10 @@ class RegionController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
+
 define('INIT_NO_USERS', true);
 define('INIT_NO_SMARTY', true);
 
-require dirname(__FILE__).'/includes/init.php';
 require ROOT_PATH.'includes/cls_json.php';
 
 header('Content-type: text/html; charset='.EC_CHARSET);

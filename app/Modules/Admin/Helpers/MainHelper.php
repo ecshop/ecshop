@@ -285,7 +285,7 @@ function create_html_editor($input_name, $input_value = '')
     $editor->Height = '320';
     $editor->Value = $input_value;
     $FCKeditor = $editor->CreateHtml();
-    $smarty->assign('FCKeditor', $FCKeditor);
+    $this->assign('FCKeditor', $FCKeditor);
 }
 
 /**

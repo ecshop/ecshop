@@ -12,10 +12,9 @@ class VirtualCardController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
+
 
 /* 包含文件 */
-require dirname(__FILE__).'/includes/init.php';
 require_once ROOT_PATH.'includes/lib_code.php';
 
 /* ------------------------------------------------------ */
@@ -40,11 +39,11 @@ if ($_REQUEST['act'] == 'replenish') {
     }
 
     $card = ['goods_id' => $goods_id, 'goods_name' => $goods_name, 'end_date' => date('Y-m-d', strtotime('+1 year'))];
-    $smarty->assign('card', $card);
+    $this->assign('card', $card);
 
-    $smarty->assign('ur_here', $_LANG['replenish']);
-    $smarty->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id='.$card['goods_id']]);
-    $smarty->display('replenish_info.htm');
+    $this->assign('ur_here', $_LANG['replenish']);
+    $this->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id='.$card['goods_id']]);
+    return $this->display('replenish_info.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -70,10 +69,10 @@ if ($_REQUEST['act'] == 'edit_replenish') {
         $card['card_password'] = '***';
     }
 
-    $smarty->assign('ur_here', $_LANG['replenish']);
-    $smarty->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id='.$card['goods_id']]);
-    $smarty->assign('card', $card);
-    $smarty->display('replenish_info.htm');
+    $this->assign('ur_here', $_LANG['replenish']);
+    $this->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'virtual_card.php?act=card&goods_id='.$card['goods_id']]);
+    $this->assign('card', $card);
+    return $this->display('replenish_info.htm');
 }
 if ($_REQUEST['act'] == 'action') {
     /* 检查权限 */
@@ -153,26 +152,26 @@ if ($_REQUEST['act'] == 'card') {
         $_REQUEST['order_sn'] = '';
     }
 
-    $smarty->assign('goods_id', $goods_id);
-    $smarty->assign('full_page', 1);
-    $smarty->assign('lang', $_LANG);
-    $smarty->assign('ur_here', $goods_name);
-    $smarty->assign('action_link', ['text' => $_LANG['replenish'],
+    $this->assign('goods_id', $goods_id);
+    $this->assign('full_page', 1);
+    $this->assign('lang', $_LANG);
+    $this->assign('ur_here', $goods_name);
+    $this->assign('action_link', ['text' => $_LANG['replenish'],
         'href' => 'virtual_card.php?act=replenish&goods_id='.$_REQUEST['goods_id']]);
-    $smarty->assign('goods_id', $_REQUEST['goods_id']);
+    $this->assign('goods_id', $_REQUEST['goods_id']);
 
     $list = $this->get_replenish_list();
 
-    $smarty->assign('card_list', $list['item']);
-    $smarty->assign('filter', $list['filter']);
-    $smarty->assign('record_count', $list['record_count']);
-    $smarty->assign('page_count', $list['page_count']);
+    $this->assign('card_list', $list['item']);
+    $this->assign('filter', $list['filter']);
+    $this->assign('record_count', $list['record_count']);
+    $this->assign('page_count', $list['page_count']);
 
     $sort_flag = sort_flag($list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     assign_query_info();
-    $smarty->display('replenish_list.htm');
+    return $this->display('replenish_list.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -182,13 +181,13 @@ if ($_REQUEST['act'] == 'card') {
 if ($_REQUEST['act'] == 'query_card') {
     $list = $this->get_replenish_list();
 
-    $smarty->assign('card_list', $list['item']);
-    $smarty->assign('filter', $list['filter']);
-    $smarty->assign('record_count', $list['record_count']);
-    $smarty->assign('page_count', $list['page_count']);
+    $this->assign('card_list', $list['item']);
+    $this->assign('filter', $list['filter']);
+    $this->assign('record_count', $list['record_count']);
+    $this->assign('page_count', $list['page_count']);
 
     $sort_flag = sort_flag($list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
         $smarty->fetch('replenish_list.htm'),
@@ -214,10 +213,10 @@ if ($_REQUEST['act'] == 'batch_card_add') {
     /* 检查权限 */
     admin_priv('virualcard');
 
-    $smarty->assign('ur_here', $_LANG['batch_card_add']);
-    $smarty->assign('action_link', ['text' => $_LANG['virtual_card_list'], 'href' => 'goods.php?act=list&extension_code=virtual_card']);
-    $smarty->assign('goods_id', $_REQUEST['goods_id']);
-    $smarty->display('batch_card_info.htm');
+    $this->assign('ur_here', $_LANG['batch_card_add']);
+    $this->assign('action_link', ['text' => $_LANG['virtual_card_list'], 'href' => 'goods.php?act=list&extension_code=virtual_card']);
+    $this->assign('goods_id', $_REQUEST['goods_id']);
+    return $this->display('batch_card_info.htm');
 }
 if ($_REQUEST['act'] == 'batch_confirm') {
     /* 检查上传是否成功 */
@@ -250,10 +249,10 @@ if ($_REQUEST['act'] == 'batch_confirm') {
         $i++;
     }
 
-    $smarty->assign('ur_here', $_LANG['batch_card_add']);
-    $smarty->assign('action_link', ['text' => $_LANG['batch_card_add'], 'href' => 'virtual_card.php?act=batch_card_add&goods_id='.$_REQUEST['goods_id']]);
-    $smarty->assign('list', $rec);
-    $smarty->display('batch_card_confirm.htm');
+    $this->assign('ur_here', $_LANG['batch_card_add']);
+    $this->assign('action_link', ['text' => $_LANG['batch_card_add'], 'href' => 'virtual_card.php?act=batch_card_add&goods_id='.$_REQUEST['goods_id']]);
+    $this->assign('list', $rec);
+    return $this->display('batch_card_confirm.htm');
 } /* 批量上传处理 */
 if ($_REQUEST['act'] == 'batch_insert') {
     /* 检查权限 */
@@ -286,10 +285,10 @@ if ($_REQUEST['act'] == 'change') {
     /* 检查权限 */
     admin_priv('virualcard');
 
-    $smarty->assign('ur_here', $_LANG['virtual_card_change']);
+    $this->assign('ur_here', $_LANG['virtual_card_change']);
 
     assign_query_info();
-    $smarty->display('virtual_card_change.htm');
+    return $this->display('virtual_card_change.htm');
 }
 
 /* ------------------------------------------------------ */

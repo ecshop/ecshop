@@ -12,9 +12,8 @@ class SuppliersController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 define('SUPPLIERS_ACTION_LIST', 'delivery_view,back_view');
 /* ------------------------------------------------------ */
@@ -28,20 +27,20 @@ if ($_REQUEST['act'] == 'list') {
     $result = $this->suppliers_list();
 
     /* 模板赋值 */
-    $smarty->assign('ur_here', $_LANG['suppliers_list']); // 当前导航
-    $smarty->assign('action_link', ['href' => 'suppliers.php?act=add', 'text' => $_LANG['add_suppliers']]);
+    $this->assign('ur_here', $_LANG['suppliers_list']); // 当前导航
+    $this->assign('action_link', ['href' => 'suppliers.php?act=add', 'text' => $_LANG['add_suppliers']]);
 
-    $smarty->assign('full_page', 1); // 翻页参数
+    $this->assign('full_page', 1); // 翻页参数
 
-    $smarty->assign('suppliers_list', $result['result']);
-    $smarty->assign('filter', $result['filter']);
-    $smarty->assign('record_count', $result['record_count']);
-    $smarty->assign('page_count', $result['page_count']);
-    $smarty->assign('sort_suppliers_id', '<img src="images/sort_desc.gif">');
+    $this->assign('suppliers_list', $result['result']);
+    $this->assign('filter', $result['filter']);
+    $this->assign('record_count', $result['record_count']);
+    $this->assign('page_count', $result['page_count']);
+    $this->assign('sort_suppliers_id', '<img src="images/sort_desc.gif">');
 
     /* 显示模板 */
     assign_query_info();
-    $smarty->display('suppliers_list.htm');
+    return $this->display('suppliers_list.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -52,14 +51,14 @@ if ($_REQUEST['act'] == 'query') {
 
     $result = $this->suppliers_list();
 
-    $smarty->assign('suppliers_list', $result['result']);
-    $smarty->assign('filter', $result['filter']);
-    $smarty->assign('record_count', $result['record_count']);
-    $smarty->assign('page_count', $result['page_count']);
+    $this->assign('suppliers_list', $result['result']);
+    $this->assign('filter', $result['filter']);
+    $this->assign('record_count', $result['record_count']);
+    $this->assign('page_count', $result['page_count']);
 
     /* 排序标记 */
     $sort_flag = sort_flag($result['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
         $smarty->fetch('suppliers_list.htm'),
@@ -276,15 +275,15 @@ if (in_array($_REQUEST['act'], ['add', 'edit'])) {
                 AND action_list <> 'all'";
         $suppliers['admin_list'] = $db->getAll($sql);
 
-        $smarty->assign('ur_here', $_LANG['add_suppliers']);
-        $smarty->assign('action_link', ['href' => 'suppliers.php?act=list', 'text' => $_LANG['suppliers_list']]);
+        $this->assign('ur_here', $_LANG['add_suppliers']);
+        $this->assign('action_link', ['href' => 'suppliers.php?act=list', 'text' => $_LANG['suppliers_list']]);
 
-        $smarty->assign('form_action', 'insert');
-        $smarty->assign('suppliers', $suppliers);
+        $this->assign('form_action', 'insert');
+        $this->assign('suppliers', $suppliers);
 
         assign_query_info();
 
-        $smarty->display('suppliers_info.htm');
+        return $this->display('suppliers_info.htm');
     }
 
     if ($_REQUEST['act'] == 'edit') {
@@ -310,15 +309,15 @@ if (in_array($_REQUEST['act'], ['add', 'edit'])) {
                 AND action_list <> 'all'";
         $suppliers['admin_list'] = $db->getAll($sql);
 
-        $smarty->assign('ur_here', $_LANG['edit_suppliers']);
-        $smarty->assign('action_link', ['href' => 'suppliers.php?act=list', 'text' => $_LANG['suppliers_list']]);
+        $this->assign('ur_here', $_LANG['edit_suppliers']);
+        $this->assign('action_link', ['href' => 'suppliers.php?act=list', 'text' => $_LANG['suppliers_list']]);
 
-        $smarty->assign('form_action', 'update');
-        $smarty->assign('suppliers', $suppliers);
+        $this->assign('form_action', 'update');
+        $this->assign('suppliers', $suppliers);
 
         assign_query_info();
 
-        $smarty->display('suppliers_info.htm');
+        return $this->display('suppliers_info.htm');
     }
 }
 

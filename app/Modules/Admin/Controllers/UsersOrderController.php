@@ -12,12 +12,11 @@ class UsersOrderController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 require_once ROOT_PATH.'includes/lib_order.php';
 require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/statistic.php';
-$smarty->assign('lang', $_LANG);
+$this->assign('lang', $_LANG);
 
 if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] == 'download')) {
     /* 检查权限 */
@@ -45,13 +44,13 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
         exit;
     }
     $user_orderinfo = $this->get_user_orderinfo();
-    $smarty->assign('filter', $user_orderinfo['filter']);
-    $smarty->assign('record_count', $user_orderinfo['record_count']);
-    $smarty->assign('page_count', $user_orderinfo['page_count']);
-    $smarty->assign('user_orderinfo', $user_orderinfo['user_orderinfo']);
+    $this->assign('filter', $user_orderinfo['filter']);
+    $this->assign('record_count', $user_orderinfo['record_count']);
+    $this->assign('page_count', $user_orderinfo['page_count']);
+    $this->assign('user_orderinfo', $user_orderinfo['user_orderinfo']);
 
     $sort_flag = sort_flag($user_orderinfo['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result($smarty->fetch('users_order.htm'), '', ['filter' => $user_orderinfo['filter'], 'page_count' => $user_orderinfo['page_count']]);
 }
@@ -71,19 +70,19 @@ if ($_REQUEST['act'] == 'list') {
     $user_orderinfo = $this->get_user_orderinfo();
 
     /* 赋值到模板 */
-    $smarty->assign('ur_here', $_LANG['report_users']);
-    $smarty->assign('action_link', ['text' => $_LANG['download_amount_sort'], 'href' => '#download']);
-    $smarty->assign('filter', $user_orderinfo['filter']);
-    $smarty->assign('record_count', $user_orderinfo['record_count']);
-    $smarty->assign('page_count', $user_orderinfo['page_count']);
-    $smarty->assign('user_orderinfo', $user_orderinfo['user_orderinfo']);
-    $smarty->assign('full_page', 1);
-    $smarty->assign('start_date', local_date('Y-m-d', $start_date));
-    $smarty->assign('end_date', local_date('Y-m-d', $end_date));
-    $smarty->assign('sort_order_num', '<img src="images/sort_desc.gif">');
+    $this->assign('ur_here', $_LANG['report_users']);
+    $this->assign('action_link', ['text' => $_LANG['download_amount_sort'], 'href' => '#download']);
+    $this->assign('filter', $user_orderinfo['filter']);
+    $this->assign('record_count', $user_orderinfo['record_count']);
+    $this->assign('page_count', $user_orderinfo['page_count']);
+    $this->assign('user_orderinfo', $user_orderinfo['user_orderinfo']);
+    $this->assign('full_page', 1);
+    $this->assign('start_date', local_date('Y-m-d', $start_date));
+    $this->assign('end_date', local_date('Y-m-d', $end_date));
+    $this->assign('sort_order_num', '<img src="images/sort_desc.gif">');
     /* 页面显示 */
     assign_query_info();
-    $smarty->display('users_order.htm');
+    return $this->display('users_order.htm');
 }
 
 /* ------------------------------------------------------ */

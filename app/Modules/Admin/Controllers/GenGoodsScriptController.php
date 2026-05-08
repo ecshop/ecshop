@@ -12,9 +12,8 @@ class GenGoodsScriptController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 /* ------------------------------------------------------ */
 // -- 生成代码
@@ -33,16 +32,16 @@ if ($_REQUEST['act'] == 'setup') {
 
     /* 参数赋值 */
     $ur_here = $_LANG['16_goods_script'];
-    $smarty->assign('ur_here', $ur_here);
-    $smarty->assign('cat_list', cat_list());
-    $smarty->assign('brand_list', get_brand_list());
-    $smarty->assign('intro_list', $_LANG['intro']);
-    $smarty->assign('url', $ecs->url());
-    $smarty->assign('lang_list', $lang_list);
+    $this->assign('ur_here', $ur_here);
+    $this->assign('cat_list', cat_list());
+    $this->assign('brand_list', get_brand_list());
+    $this->assign('intro_list', $_LANG['intro']);
+    $this->assign('url', $ecs->url());
+    $this->assign('lang_list', $lang_list);
 
     /* 显示模板 */
     assign_query_info();
-    $smarty->display('gen_goods_script.htm');
+    return $this->display('gen_goods_script.htm');
 }
 
 }

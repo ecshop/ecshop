@@ -1,6 +1,6 @@
 <?php
 
-define('IN_ECS', true);
+
 
 require './init.php';
 // require('../includes/lib_time.php');

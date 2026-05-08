@@ -12,20 +12,19 @@ class EmailListController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
-require dirname(__FILE__).'/includes/init.php';
+
 admin_priv('email_list');
 
 if ($_REQUEST['act'] == 'list') {
     $emaildb = $this->get_email_list();
-    $smarty->assign('full_page', 1);
-    $smarty->assign('ur_here', $_LANG['email_list']);
-    $smarty->assign('emaildb', $emaildb['emaildb']);
-    $smarty->assign('filter', $emaildb['filter']);
-    $smarty->assign('record_count', $emaildb['record_count']);
-    $smarty->assign('page_count', $emaildb['page_count']);
+    $this->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['email_list']);
+    $this->assign('emaildb', $emaildb['emaildb']);
+    $this->assign('filter', $emaildb['filter']);
+    $this->assign('record_count', $emaildb['record_count']);
+    $this->assign('page_count', $emaildb['page_count']);
     assign_query_info();
-    $smarty->display('email_list.htm');
+    return $this->display('email_list.htm');
 }
 if ($_REQUEST['act'] == 'export') {
     $sql = 'SELECT email FROM '.$ecs->table('email_list').'WHERE stat = 1';
@@ -47,13 +46,13 @@ if ($_REQUEST['act'] == 'export') {
 }
 if ($_REQUEST['act'] == 'query') {
     $emaildb = $this->get_email_list();
-    $smarty->assign('emaildb', $emaildb['emaildb']);
-    $smarty->assign('filter', $emaildb['filter']);
-    $smarty->assign('record_count', $emaildb['record_count']);
-    $smarty->assign('page_count', $emaildb['page_count']);
+    $this->assign('emaildb', $emaildb['emaildb']);
+    $this->assign('filter', $emaildb['filter']);
+    $this->assign('record_count', $emaildb['record_count']);
+    $this->assign('page_count', $emaildb['page_count']);
 
     $sort_flag = sort_flag($emaildb['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
         $smarty->fetch('email_list.htm'),

@@ -12,9 +12,8 @@ class SqlController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 $_POST['sql'] = ! empty($_POST['sql']) ? trim($_POST['sql']) : '';
 
@@ -29,10 +28,10 @@ if (! $_POST['sql']) {
 if ($_REQUEST['act'] == 'main') {
     admin_priv('sql_query');
     assign_query_info();
-    $smarty->assign('type', -1);
-    $smarty->assign('ur_here', $_LANG['04_sql_query']);
+    $this->assign('type', -1);
+    $this->assign('ur_here', $_LANG['04_sql_query']);
 
-    $smarty->display('sql.htm');
+    return $this->display('sql.htm');
 }
 
 if ($_REQUEST['act'] == 'query') {
@@ -50,9 +49,9 @@ if ($_REQUEST['act'] == 'query') {
 
     $this->assign_sql($_POST['sql']);
     assign_query_info();
-    $smarty->assign('ur_here', $_LANG['04_sql_query']);
+    $this->assign('ur_here', $_LANG['04_sql_query']);
 
-    $smarty->display('sql.htm');
+    return $this->display('sql.htm');
 }
 
 /**
@@ -66,7 +65,7 @@ private function assign_sql($sql)
     global $db, $smarty, $_LANG;
 
     $sql = stripslashes($sql);
-    $smarty->assign('sql', $sql);
+    $this->assign('sql', $sql);
 
     /* 解析查询项 */
     $sql = str_replace("\r", '', $sql);
@@ -80,10 +79,10 @@ private function assign_sql($sql)
     if (count($query_items) > 1) {
         foreach ($query_items as $key => $value) {
             if ($db->query($value, 'SILENT')) {
-                $smarty->assign('type', 1);
+                $this->assign('type', 1);
             } else {
-                $smarty->assign('type', 0);
-                $smarty->assign('error', $db->error());
+                $this->assign('type', 0);
+                $this->assign('error', $db->error());
 
                 return;
             }
@@ -95,16 +94,16 @@ private function assign_sql($sql)
     /* 单独一条sql语句处理 */
     if (preg_match('/^(?:UPDATE|DELETE|TRUNCATE|ALTER|DROP|FLUSH|INSERT|REPLACE|SET|CREATE)\\s+/i', $sql)) {
         if ($db->query($sql, 'SILENT')) {
-            $smarty->assign('type', 1);
+            $this->assign('type', 1);
         } else {
-            $smarty->assign('type', 0);
-            $smarty->assign('error', $db->error());
+            $this->assign('type', 0);
+            $this->assign('error', $db->error());
         }
     } else {
         $data = $db->getAll($sql);
         if ($data === false) {
-            $smarty->assign('type', 0);
-            $smarty->assign('error', $db->error());
+            $this->assign('type', 0);
+            $this->assign('error', $db->error());
         } else {
             $result = '';
             if (is_array($data) && isset($data[0]) === true) {
@@ -126,8 +125,8 @@ private function assign_sql($sql)
                 $result = '<center><h3>'.$_LANG['no_data'].'</h3></center>';
             }
 
-            $smarty->assign('type', 2);
-            $smarty->assign('result', $result);
+            $this->assign('type', 2);
+            $this->assign('result', $result);
         }
     }
 }

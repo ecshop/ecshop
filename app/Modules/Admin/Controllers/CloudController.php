@@ -12,9 +12,8 @@ class CloudController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 require ROOT_PATH.'includes/cls_transport.php';
 require ROOT_PATH.'includes/cls_json.php';
 

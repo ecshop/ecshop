@@ -12,31 +12,30 @@ class ViewSendlistController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
-require dirname(__FILE__).'/includes/init.php';
+
 admin_priv('view_sendlist');
 if ($_REQUEST['act'] == 'list') {
     $listdb = $this->get_sendlist();
-    $smarty->assign('ur_here', $_LANG['view_sendlist']);
-    $smarty->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['view_sendlist']);
+    $this->assign('full_page', 1);
 
-    $smarty->assign('listdb', $listdb['listdb']);
-    $smarty->assign('filter', $listdb['filter']);
-    $smarty->assign('record_count', $listdb['record_count']);
-    $smarty->assign('page_count', $listdb['page_count']);
+    $this->assign('listdb', $listdb['listdb']);
+    $this->assign('filter', $listdb['filter']);
+    $this->assign('record_count', $listdb['record_count']);
+    $this->assign('page_count', $listdb['page_count']);
 
     assign_query_info();
-    $smarty->display('view_sendlist.htm');
+    return $this->display('view_sendlist.htm');
 }
 if ($_REQUEST['act'] == 'query') {
     $listdb = $this->get_sendlist();
-    $smarty->assign('listdb', $listdb['listdb']);
-    $smarty->assign('filter', $listdb['filter']);
-    $smarty->assign('record_count', $listdb['record_count']);
-    $smarty->assign('page_count', $listdb['page_count']);
+    $this->assign('listdb', $listdb['listdb']);
+    $this->assign('filter', $listdb['filter']);
+    $this->assign('record_count', $listdb['record_count']);
+    $this->assign('page_count', $listdb['page_count']);
 
     $sort_flag = sort_flag($listdb['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result($smarty->fetch('view_sendlist.htm'), '', ['filter' => $listdb['filter'], 'page_count' => $listdb['page_count']]);
 }

@@ -12,9 +12,8 @@ class RegFieldsController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 $exc = new exchange($ecs->table('reg_fields'), $db, 'id', 'reg_field_name');
 
@@ -26,14 +25,14 @@ if ($_REQUEST['act'] == 'list') {
     $fields = [];
     $fields = $db->getAll('SELECT * FROM '.$ecs->table('reg_fields').' ORDER BY dis_order, id');
 
-    $smarty->assign('ur_here', $_LANG['021_reg_fields']);
-    $smarty->assign('action_link', ['text' => $_LANG['add_reg_field'], 'href' => 'reg_fields.php?act=add']);
-    $smarty->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['021_reg_fields']);
+    $this->assign('action_link', ['text' => $_LANG['add_reg_field'], 'href' => 'reg_fields.php?act=add']);
+    $this->assign('full_page', 1);
 
-    $smarty->assign('reg_fields', $fields);
+    $this->assign('reg_fields', $fields);
 
     assign_query_info();
-    $smarty->display('reg_fields.htm');
+    return $this->display('reg_fields.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -43,7 +42,7 @@ if ($_REQUEST['act'] == 'query') {
     $fields = [];
     $fields = $db->getAll('SELECT * FROM '.$ecs->table('reg_fields').'ORDER BY id');
 
-    $smarty->assign('reg_fields', $fields);
+    $this->assign('reg_fields', $fields);
     make_json_result($smarty->fetch('reg_fields.htm'));
 }
 
@@ -60,13 +59,13 @@ if ($_REQUEST['act'] == 'add') {
     $reg_field['reg_field_display'] = 1;
     $reg_field['reg_field_need'] = 1;
 
-    $smarty->assign('reg_field', $reg_field);
-    $smarty->assign('ur_here', $_LANG['add_reg_field']);
-    $smarty->assign('action_link', ['text' => $_LANG['021_reg_fields'], 'href' => 'reg_fields.php?act=list']);
-    $smarty->assign('form_action', $form_action);
+    $this->assign('reg_field', $reg_field);
+    $this->assign('ur_here', $_LANG['add_reg_field']);
+    $this->assign('action_link', ['text' => $_LANG['021_reg_fields'], 'href' => 'reg_fields.php?act=list']);
+    $this->assign('form_action', $form_action);
 
     assign_query_info();
-    $smarty->display('reg_field_info.htm');
+    return $this->display('reg_field_info.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -109,13 +108,13 @@ if ($_REQUEST['act'] == 'edit') {
         $ecs->table('reg_fields')." WHERE id='$_REQUEST[id]'";
     $reg_field = $db->getRow($sql);
 
-    $smarty->assign('reg_field', $reg_field);
-    $smarty->assign('ur_here', $_LANG['add_reg_field']);
-    $smarty->assign('action_link', ['text' => $_LANG['021_reg_fields'], 'href' => 'reg_fields.php?act=list']);
-    $smarty->assign('form_action', $form_action);
+    $this->assign('reg_field', $reg_field);
+    $this->assign('ur_here', $_LANG['add_reg_field']);
+    $this->assign('action_link', ['text' => $_LANG['021_reg_fields'], 'href' => 'reg_fields.php?act=list']);
+    $this->assign('form_action', $form_action);
 
     assign_query_info();
-    $smarty->display('reg_field_info.htm');
+    return $this->display('reg_field_info.htm');
 }
 
 /* ------------------------------------------------------ */

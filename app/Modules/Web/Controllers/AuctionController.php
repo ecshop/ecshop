@@ -12,9 +12,8 @@ class AuctionController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 /* ------------------------------------------------------ */
 // -- act 操作项的初始化
@@ -54,30 +53,30 @@ if ($_REQUEST['act'] == 'list') {
         if ($count > 0) {
             /* 取得当前页的拍卖活动 */
             $auction_list = $this->auction_list($size, $page);
-            $smarty->assign('auction_list', $auction_list);
+            $this->assign('auction_list', $auction_list);
 
             /* 设置分页链接 */
             $pager = get_pager('auction.php', ['act' => 'list'], $count, $page, $size);
-            $smarty->assign('pager', $pager);
+            $this->assign('pager', $pager);
         }
 
         /* 模板赋值 */
-        $smarty->assign('cfg', $_CFG);
+        $this->assign('cfg', $_CFG);
         assign_template();
         $position = assign_ur_here();
-        $smarty->assign('page_title', $position['title']);    // 页面标题
-        $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
-        $smarty->assign('categories', get_categories_tree()); // 分类树
-        $smarty->assign('helps', get_shop_help());       // 网店帮助
-        $smarty->assign('top_goods', get_top10());           // 销售排行
-        $smarty->assign('promotion_info', get_promotion_info());
-        $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typeauction.xml' : 'feed.php?type=auction'); // RSS URL
+        $this->assign('page_title', $position['title']);    // 页面标题
+        $this->assign('ur_here', $position['ur_here']);  // 当前位置
+        $this->assign('categories', get_categories_tree()); // 分类树
+        $this->assign('helps', get_shop_help());       // 网店帮助
+        $this->assign('top_goods', get_top10());           // 销售排行
+        $this->assign('promotion_info', get_promotion_info());
+        $this->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typeauction.xml' : 'feed.php?type=auction'); // RSS URL
 
         assign_dynamic('auction_list');
     }
 
     /* 显示模板 */
-    $smarty->display('auction_list.dwt', $cache_id);
+    return $this->display('auction_list.dwt', $cache_id);
 }
 
 /* ------------------------------------------------------ */
@@ -125,12 +124,12 @@ if ($_REQUEST['act'] == 'view') {
             foreach ($_good_products as $value) {
                 $products_info .= ' '.$goods_specifications[$value]['attr_name'].'：'.$goods_specifications[$value]['attr_value'];
             }
-            $smarty->assign('products_info', $products_info);
+            $this->assign('products_info', $products_info);
             unset($goods_specifications, $good_products, $_good_products, $products_info);
         }
 
         $auction['gmt_end_time'] = local_strtotime($auction['end_time']);
-        $smarty->assign('auction', $auction);
+        $this->assign('auction', $auction);
 
         /* 取得拍卖商品信息 */
         $goods_id = $auction['goods_id'];
@@ -140,23 +139,23 @@ if ($_REQUEST['act'] == 'view') {
             exit;
         }
         $goods['url'] = build_uri('goods', ['gid' => $goods_id], $goods['goods_name']);
-        $smarty->assign('auction_goods', $goods);
+        $this->assign('auction_goods', $goods);
 
         /* 出价记录 */
-        $smarty->assign('auction_log', auction_log($id));
+        $this->assign('auction_log', auction_log($id));
 
         // 模板赋值
-        $smarty->assign('cfg', $_CFG);
+        $this->assign('cfg', $_CFG);
         assign_template();
 
         $position = assign_ur_here(0, $goods['goods_name']);
-        $smarty->assign('page_title', $position['title']);    // 页面标题
-        $smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+        $this->assign('page_title', $position['title']);    // 页面标题
+        $this->assign('ur_here', $position['ur_here']);  // 当前位置
 
-        $smarty->assign('categories', get_categories_tree()); // 分类树
-        $smarty->assign('helps', get_shop_help());       // 网店帮助
-        $smarty->assign('top_goods', get_top10());           // 销售排行
-        $smarty->assign('promotion_info', get_promotion_info());
+        $this->assign('categories', get_categories_tree()); // 分类树
+        $this->assign('helps', get_shop_help());       // 网店帮助
+        $this->assign('top_goods', get_top10());           // 销售排行
+        $this->assign('promotion_info', get_promotion_info());
 
         assign_dynamic('auction');
     }
@@ -166,8 +165,8 @@ if ($_REQUEST['act'] == 'view') {
         "WHERE goods_id = '".$auction['goods_id']."'";
     $db->query($sql);
 
-    $smarty->assign('now_time', gmtime());           // 当前系统时间
-    $smarty->display('auction.dwt', $cache_id);
+    $this->assign('now_time', gmtime());           // 当前系统时间
+    return $this->display('auction.dwt', $cache_id);
 }
 
 /* ------------------------------------------------------ */

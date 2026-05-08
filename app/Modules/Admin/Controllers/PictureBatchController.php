@@ -12,9 +12,8 @@ class PictureBatchController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 include_once ROOT_PATH.'includes/cls_image.php';
 include_once ROOT_PATH.'/'.ADMIN_PATH.'/includes/lib_goods.php';
 $image = new cls_image($_CFG['bgcolor']);
@@ -24,10 +23,10 @@ admin_priv('picture_batch');
 
 if (empty($_GET['is_ajax'])) {
     assign_query_info();
-    $smarty->assign('ur_here', $_LANG['12_batch_pic']);
-    $smarty->assign('cat_list', cat_list(0, 0));
-    $smarty->assign('brand_list', get_brand_list());
-    $smarty->display('picture_batch.htm');
+    $this->assign('ur_here', $_LANG['12_batch_pic']);
+    $this->assign('cat_list', cat_list(0, 0));
+    $this->assign('brand_list', get_brand_list());
+    return $this->display('picture_batch.htm');
 } elseif (! empty($_GET['get_goods'])) {
     include_once ROOT_PATH.'includes/cls_json.php';
     $json = new JSON;

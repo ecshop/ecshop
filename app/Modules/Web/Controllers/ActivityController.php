@@ -12,9 +12,8 @@ class ActivityController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 require_once ROOT_PATH.'includes/lib_order.php';
 include_once ROOT_PATH.'includes/lib_transaction.php';
 
@@ -29,8 +28,8 @@ require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/user.php';
 assign_template();
 assign_dynamic('activity');
 $position = assign_ur_here(0, $_LANG['shopping_activity']);
-$smarty->assign('page_title', $position['title']);    // 页面标题
-$smarty->assign('ur_here', $position['ur_here']);  // 当前位置
+$this->assign('page_title', $position['title']);    // 页面标题
+$this->assign('ur_here', $position['ur_here']);  // 当前位置
 
 // 数据准备
 
@@ -113,13 +112,13 @@ while ($row = $db->fetchRow($res)) {
     $list[] = $row;
 }
 
-$smarty->assign('list', $list);
+$this->assign('list', $list);
 
-$smarty->assign('helps', get_shop_help());       // 网店帮助
-$smarty->assign('lang', $_LANG);
+$this->assign('helps', get_shop_help());       // 网店帮助
+$this->assign('lang', $_LANG);
 
-$smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typeactivity.xml' : 'feed.php?type=activity'); // RSS URL
-$smarty->display('activity.dwt');
+$this->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typeactivity.xml' : 'feed.php?type=activity'); // RSS URL
+return $this->display('activity.dwt');
 
 }
 }

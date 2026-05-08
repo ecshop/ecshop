@@ -12,32 +12,31 @@ class ArticleAutoController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
-require dirname(__FILE__).'/includes/init.php';
+
 admin_priv('article_auto');
-$smarty->assign('thisfile', 'article_auto.php');
+$this->assign('thisfile', 'article_auto.php');
 if ($_REQUEST['act'] == 'list') {
     $goodsdb = $this->get_auto_goods();
     $crons_enable = $db->getOne('SELECT enable FROM '.$GLOBALS['ecs']->table('crons')." WHERE cron_code='ipdel'");
-    $smarty->assign('crons_enable', $crons_enable);
-    $smarty->assign('full_page', 1);
-    $smarty->assign('ur_here', $_LANG['article_auto']);
-    $smarty->assign('goodsdb', $goodsdb['goodsdb']);
-    $smarty->assign('filter', $goodsdb['filter']);
-    $smarty->assign('record_count', $goodsdb['record_count']);
-    $smarty->assign('page_count', $goodsdb['page_count']);
+    $this->assign('crons_enable', $crons_enable);
+    $this->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['article_auto']);
+    $this->assign('goodsdb', $goodsdb['goodsdb']);
+    $this->assign('filter', $goodsdb['filter']);
+    $this->assign('record_count', $goodsdb['record_count']);
+    $this->assign('page_count', $goodsdb['page_count']);
     assign_query_info();
-    $smarty->display('goods_auto.htm');
+    return $this->display('goods_auto.htm');
 }
 if ($_REQUEST['act'] == 'query') {
     $goodsdb = $this->get_auto_goods();
-    $smarty->assign('goodsdb', $goodsdb['goodsdb']);
-    $smarty->assign('filter', $goodsdb['filter']);
-    $smarty->assign('record_count', $goodsdb['record_count']);
-    $smarty->assign('page_count', $goodsdb['page_count']);
+    $this->assign('goodsdb', $goodsdb['goodsdb']);
+    $this->assign('filter', $goodsdb['filter']);
+    $this->assign('record_count', $goodsdb['record_count']);
+    $this->assign('page_count', $goodsdb['page_count']);
 
     $sort_flag = sort_flag($goodsdb['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result($smarty->fetch('goods_auto.htm'), '', ['filter' => $goodsdb['filter'], 'page_count' => $goodsdb['page_count']]);
 }

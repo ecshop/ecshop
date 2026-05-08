@@ -12,8 +12,7 @@ class AffiliateController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
-require dirname(__FILE__).'/includes/init.php';
+
 admin_priv('affiliate');
 $config = $this->get_affiliate();
 
@@ -23,16 +22,16 @@ $config = $this->get_affiliate();
 if ($_REQUEST['act'] == 'list') {
     assign_query_info();
     if (empty($_REQUEST['is_ajax'])) {
-        $smarty->assign('full_page', 1);
+        $this->assign('full_page', 1);
     }
 
-    $smarty->assign('ur_here', $_LANG['affiliate']);
-    $smarty->assign('config', $config);
-    $smarty->display('affiliate.htm');
+    $this->assign('ur_here', $_LANG['affiliate']);
+    $this->assign('config', $config);
+    return $this->display('affiliate.htm');
 }
 if ($_REQUEST['act'] == 'query') {
-    $smarty->assign('ur_here', $_LANG['affiliate']);
-    $smarty->assign('config', $config);
+    $this->assign('ur_here', $_LANG['affiliate']);
+    $this->assign('config', $config);
     make_json_result($smarty->fetch('affiliate.htm'), '', null);
 }
 /* ------------------------------------------------------ */

@@ -12,9 +12,8 @@ class UserRankController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 $exc = new exchange($ecs->table('user_rank'), $db, 'rank_id', 'rank_name');
 $exc_user = new exchange($ecs->table('users'), $db, 'user_rank', 'user_rank');
@@ -27,14 +26,14 @@ if ($_REQUEST['act'] == 'list') {
     $ranks = [];
     $ranks = $db->getAll('SELECT * FROM '.$ecs->table('user_rank'));
 
-    $smarty->assign('ur_here', $_LANG['05_user_rank_list']);
-    $smarty->assign('action_link', ['text' => $_LANG['add_user_rank'], 'href' => 'user_rank.php?act=add']);
-    $smarty->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['05_user_rank_list']);
+    $this->assign('action_link', ['text' => $_LANG['add_user_rank'], 'href' => 'user_rank.php?act=add']);
+    $this->assign('full_page', 1);
 
-    $smarty->assign('user_ranks', $ranks);
+    $this->assign('user_ranks', $ranks);
 
     assign_query_info();
-    $smarty->display('user_rank.htm');
+    return $this->display('user_rank.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -44,7 +43,7 @@ if ($_REQUEST['act'] == 'query') {
     $ranks = [];
     $ranks = $db->getAll('SELECT * FROM '.$ecs->table('user_rank'));
 
-    $smarty->assign('user_ranks', $ranks);
+    $this->assign('user_ranks', $ranks);
     make_json_result($smarty->fetch('user_rank.htm'));
 }
 
@@ -64,14 +63,14 @@ if ($_REQUEST['act'] == 'add') {
 
     $form_action = 'insert';
 
-    $smarty->assign('rank', $rank);
-    $smarty->assign('ur_here', $_LANG['add_user_rank']);
-    $smarty->assign('action_link', ['text' => $_LANG['05_user_rank_list'], 'href' => 'user_rank.php?act=list']);
-    $smarty->assign('ur_here', $_LANG['add_user_rank']);
-    $smarty->assign('form_action', $form_action);
+    $this->assign('rank', $rank);
+    $this->assign('ur_here', $_LANG['add_user_rank']);
+    $this->assign('action_link', ['text' => $_LANG['05_user_rank_list'], 'href' => 'user_rank.php?act=list']);
+    $this->assign('ur_here', $_LANG['add_user_rank']);
+    $this->assign('form_action', $form_action);
 
     assign_query_info();
-    $smarty->display('user_rank_info.htm');
+    return $this->display('user_rank_info.htm');
 }
 
 /* ------------------------------------------------------ */

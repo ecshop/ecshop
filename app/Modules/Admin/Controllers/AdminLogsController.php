@@ -12,8 +12,7 @@ class AdminLogsController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
-require dirname(__FILE__).'/includes/init.php';
+
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -40,22 +39,22 @@ if ($_REQUEST['act'] == 'list') {
         $ip_list[$row['ip_address']] = $row['ip_address'];
     }
 
-    $smarty->assign('ur_here', $_LANG['admin_logs']);
-    $smarty->assign('ip_list', $ip_list);
-    $smarty->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['admin_logs']);
+    $this->assign('ip_list', $ip_list);
+    $this->assign('full_page', 1);
 
     $log_list = $this->get_admin_logs();
 
-    $smarty->assign('log_list', $log_list['list']);
-    $smarty->assign('filter', $log_list['filter']);
-    $smarty->assign('record_count', $log_list['record_count']);
-    $smarty->assign('page_count', $log_list['page_count']);
+    $this->assign('log_list', $log_list['list']);
+    $this->assign('filter', $log_list['filter']);
+    $this->assign('record_count', $log_list['record_count']);
+    $this->assign('page_count', $log_list['page_count']);
 
     $sort_flag = sort_flag($log_list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     assign_query_info();
-    $smarty->display('admin_logs.htm');
+    return $this->display('admin_logs.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -64,13 +63,13 @@ if ($_REQUEST['act'] == 'list') {
 if ($_REQUEST['act'] == 'query') {
     $log_list = $this->get_admin_logs();
 
-    $smarty->assign('log_list', $log_list['list']);
-    $smarty->assign('filter', $log_list['filter']);
-    $smarty->assign('record_count', $log_list['record_count']);
-    $smarty->assign('page_count', $log_list['page_count']);
+    $this->assign('log_list', $log_list['list']);
+    $this->assign('filter', $log_list['filter']);
+    $this->assign('record_count', $log_list['record_count']);
+    $this->assign('page_count', $log_list['page_count']);
 
     $sort_flag = sort_flag($log_list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
         $smarty->fetch('admin_logs.htm'),

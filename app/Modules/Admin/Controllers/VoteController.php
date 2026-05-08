@@ -12,9 +12,8 @@ class VoteController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -31,20 +30,20 @@ $exc_opn = new exchange($ecs->table('vote_option'), $db, 'option_id', 'option_na
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     /* 模板赋值 */
-    $smarty->assign('ur_here', $_LANG['list_vote']);
-    $smarty->assign('action_link', ['text' => $_LANG['add_vote'], 'href' => 'vote.php?act=add']);
-    $smarty->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['list_vote']);
+    $this->assign('action_link', ['text' => $_LANG['add_vote'], 'href' => 'vote.php?act=add']);
+    $this->assign('full_page', 1);
 
     $vote_list = $this->get_votelist();
 
-    $smarty->assign('list', $vote_list['list']);
-    $smarty->assign('filter', $vote_list['filter']);
-    $smarty->assign('record_count', $vote_list['record_count']);
-    $smarty->assign('page_count', $vote_list['page_count']);
+    $this->assign('list', $vote_list['list']);
+    $this->assign('filter', $vote_list['filter']);
+    $this->assign('record_count', $vote_list['record_count']);
+    $this->assign('page_count', $vote_list['page_count']);
 
     /* 显示页面 */
     assign_query_info();
-    $smarty->display('vote_list.htm');
+    return $this->display('vote_list.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -53,10 +52,10 @@ if ($_REQUEST['act'] == 'list') {
 if ($_REQUEST['act'] == 'query') {
     $vote_list = $this->get_votelist();
 
-    $smarty->assign('list', $vote_list['list']);
-    $smarty->assign('filter', $vote_list['filter']);
-    $smarty->assign('record_count', $vote_list['record_count']);
-    $smarty->assign('page_count', $vote_list['page_count']);
+    $this->assign('list', $vote_list['list']);
+    $this->assign('filter', $vote_list['filter']);
+    $this->assign('record_count', $vote_list['record_count']);
+    $this->assign('page_count', $vote_list['page_count']);
 
     make_json_result(
         $smarty->fetch('vote_list.htm'),
@@ -76,17 +75,17 @@ if ($_REQUEST['act'] == 'add') {
     $vote = ['start_time' => local_date('Y-m-d'), 'end_time' => local_date('Y-m-d', local_strtotime('+2 weeks'))];
 
     /* 模板赋值 */
-    $smarty->assign('ur_here', $_LANG['add_vote']);
-    $smarty->assign('action_link', ['href' => 'vote.php?act=list', 'text' => $_LANG['list_vote']]);
+    $this->assign('ur_here', $_LANG['add_vote']);
+    $this->assign('action_link', ['href' => 'vote.php?act=list', 'text' => $_LANG['list_vote']]);
 
-    $smarty->assign('action', 'add');
-    $smarty->assign('form_act', 'insert');
-    $smarty->assign('vote_arr', $vote);
-    $smarty->assign('cfg_lang', $_CFG['lang']);
+    $this->assign('action', 'add');
+    $this->assign('form_act', 'insert');
+    $this->assign('vote_arr', $vote);
+    $this->assign('cfg_lang', $_CFG['lang']);
 
     /* 显示页面 */
     assign_query_info();
-    $smarty->display('vote_info.htm');
+    return $this->display('vote_info.htm');
 }
 if ($_REQUEST['act'] == 'insert') {
     admin_priv('vote_priv');
@@ -142,13 +141,13 @@ if ($_REQUEST['act'] == 'edit') {
     $vote_arr['end_time'] = local_date('Y-m-d', $vote_arr['end_time']);
 
     /* 模板赋值 */
-    $smarty->assign('ur_here', $_LANG['edit_vote']);
-    $smarty->assign('action_link', ['href' => 'vote.php?act=list', 'text' => $_LANG['list_vote']]);
-    $smarty->assign('form_act', 'update');
-    $smarty->assign('vote_arr', $vote_arr);
+    $this->assign('ur_here', $_LANG['edit_vote']);
+    $this->assign('action_link', ['href' => 'vote.php?act=list', 'text' => $_LANG['list_vote']]);
+    $this->assign('form_act', 'update');
+    $this->assign('vote_arr', $vote_arr);
 
     assign_query_info();
-    $smarty->display('vote_info.htm');
+    return $this->display('vote_info.htm');
 }
 if ($_REQUEST['act'] == 'update') {
     /* 获得广告的开始时期与结束日期 */
@@ -185,16 +184,16 @@ if ($_REQUEST['act'] == 'option') {
     $id = ! empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
     /* 模板赋值 */
-    $smarty->assign('ur_here', $_LANG['list_vote_option']);
-    $smarty->assign('action_link', ['href' => 'vote.php?act=list', 'text' => $_LANG['list_vote']]);
-    $smarty->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['list_vote_option']);
+    $this->assign('action_link', ['href' => 'vote.php?act=list', 'text' => $_LANG['list_vote']]);
+    $this->assign('full_page', 1);
 
-    $smarty->assign('id', $id);
-    $smarty->assign('option_arr', $this->get_optionlist($id));
+    $this->assign('id', $id);
+    $this->assign('option_arr', $this->get_optionlist($id));
 
     /* 显示页面 */
     assign_query_info();
-    $smarty->display('vote_option.htm');
+    return $this->display('vote_option.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -203,8 +202,8 @@ if ($_REQUEST['act'] == 'option') {
 if ($_REQUEST['act'] == 'query_option') {
     $id = intval($_GET['vid']);
 
-    $smarty->assign('id', $id);
-    $smarty->assign('option_arr', $this->get_optionlist($id));
+    $this->assign('id', $id);
+    $this->assign('option_arr', $this->get_optionlist($id));
 
     make_json_result($smarty->fetch('vote_option.htm'));
 }

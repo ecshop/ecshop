@@ -12,9 +12,8 @@ class ExchangeGoodsController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 /* 初始化数据交换对象 */
 $exc = new exchange($ecs->table('exchange_goods'), $db, 'goods_id', 'exchange_integral');
@@ -29,23 +28,23 @@ if ($_REQUEST['act'] == 'list') {
 
     /* 取得过滤条件 */
     $filter = [];
-    $smarty->assign('ur_here', $_LANG['15_exchange_goods_list']);
-    $smarty->assign('action_link', ['text' => $_LANG['exchange_goods_add'], 'href' => 'exchange_goods.php?act=add']);
-    $smarty->assign('full_page', 1);
-    $smarty->assign('filter', $filter);
+    $this->assign('ur_here', $_LANG['15_exchange_goods_list']);
+    $this->assign('action_link', ['text' => $_LANG['exchange_goods_add'], 'href' => 'exchange_goods.php?act=add']);
+    $this->assign('full_page', 1);
+    $this->assign('filter', $filter);
 
     $goods_list = $this->get_exchange_goodslist();
 
-    $smarty->assign('goods_list', $goods_list['arr']);
-    $smarty->assign('filter', $goods_list['filter']);
-    $smarty->assign('record_count', $goods_list['record_count']);
-    $smarty->assign('page_count', $goods_list['page_count']);
+    $this->assign('goods_list', $goods_list['arr']);
+    $this->assign('filter', $goods_list['filter']);
+    $this->assign('record_count', $goods_list['record_count']);
+    $this->assign('page_count', $goods_list['page_count']);
 
     $sort_flag = sort_flag($goods_list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     assign_query_info();
-    $smarty->display('exchange_goods_list.htm');
+    return $this->display('exchange_goods_list.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -56,13 +55,13 @@ if ($_REQUEST['act'] == 'query') {
 
     $goods_list = $this->get_exchange_goodslist();
 
-    $smarty->assign('goods_list', $goods_list['arr']);
-    $smarty->assign('filter', $goods_list['filter']);
-    $smarty->assign('record_count', $goods_list['record_count']);
-    $smarty->assign('page_count', $goods_list['page_count']);
+    $this->assign('goods_list', $goods_list['arr']);
+    $this->assign('filter', $goods_list['filter']);
+    $this->assign('record_count', $goods_list['record_count']);
+    $this->assign('page_count', $goods_list['page_count']);
 
     $sort_flag = sort_flag($goods_list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
         $smarty->fetch('exchange_goods_list.htm'),
@@ -84,13 +83,13 @@ if ($_REQUEST['act'] == 'add') {
     $goods['is_hot'] = 0;
     $goods['option'] = '<option value="0">'.$_LANG['make_option'].'</option>';
 
-    $smarty->assign('goods', $goods);
-    $smarty->assign('ur_here', $_LANG['exchange_goods_add']);
-    $smarty->assign('action_link', ['text' => $_LANG['15_exchange_goods_list'], 'href' => 'exchange_goods.php?act=list']);
-    $smarty->assign('form_action', 'insert');
+    $this->assign('goods', $goods);
+    $this->assign('ur_here', $_LANG['exchange_goods_add']);
+    $this->assign('action_link', ['text' => $_LANG['15_exchange_goods_list'], 'href' => 'exchange_goods.php?act=list']);
+    $this->assign('form_action', 'insert');
 
     assign_query_info();
-    $smarty->display('exchange_goods_info.htm');
+    return $this->display('exchange_goods_info.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -145,13 +144,13 @@ if ($_REQUEST['act'] == 'edit') {
     $goods = $db->getRow($sql);
     $goods['option'] = '<option value="'.$goods['goods_id'].'">'.$goods['goods_name'].'</option>';
 
-    $smarty->assign('goods', $goods);
-    $smarty->assign('ur_here', $_LANG['exchange_goods_add']);
-    $smarty->assign('action_link', ['text' => $_LANG['15_exchange_goods_list'], 'href' => 'exchange_goods.php?act=list&'.list_link_postfix()]);
-    $smarty->assign('form_action', 'update');
+    $this->assign('goods', $goods);
+    $this->assign('ur_here', $_LANG['exchange_goods_add']);
+    $this->assign('action_link', ['text' => $_LANG['15_exchange_goods_list'], 'href' => 'exchange_goods.php?act=list&'.list_link_postfix()]);
+    $this->assign('form_action', 'update');
 
     assign_query_info();
-    $smarty->display('exchange_goods_info.htm');
+    return $this->display('exchange_goods_info.htm');
 }
 
 /* ------------------------------------------------------ */

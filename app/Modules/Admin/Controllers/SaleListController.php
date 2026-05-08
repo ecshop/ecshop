@@ -12,12 +12,11 @@ class SaleListController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 require_once ROOT_PATH.'includes/lib_order.php';
 require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/admin/statistic.php';
-$smarty->assign('lang', $_LANG);
+$this->assign('lang', $_LANG);
 
 if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] == 'download')) {
     /* 检查权限 */
@@ -56,10 +55,10 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
         exit;
     }
     $sale_list_data = $this->get_sale_list();
-    $smarty->assign('goods_sales_list', $sale_list_data['sale_list_data']);
-    $smarty->assign('filter', $sale_list_data['filter']);
-    $smarty->assign('record_count', $sale_list_data['record_count']);
-    $smarty->assign('page_count', $sale_list_data['page_count']);
+    $this->assign('goods_sales_list', $sale_list_data['sale_list_data']);
+    $this->assign('filter', $sale_list_data['filter']);
+    $this->assign('record_count', $sale_list_data['record_count']);
+    $this->assign('page_count', $sale_list_data['page_count']);
 
     make_json_result($smarty->fetch('sale_list.htm'), '', ['filter' => $sale_list_data['filter'], 'page_count' => $sale_list_data['page_count']]);
 }
@@ -79,21 +78,21 @@ if ($_REQUEST['act'] == 'list') {
 
     $sale_list_data = $this->get_sale_list();
     /* 赋值到模板 */
-    $smarty->assign('filter', $sale_list_data['filter']);
-    $smarty->assign('record_count', $sale_list_data['record_count']);
-    $smarty->assign('page_count', $sale_list_data['page_count']);
-    $smarty->assign('goods_sales_list', $sale_list_data['sale_list_data']);
-    $smarty->assign('ur_here', $_LANG['sell_stats']);
-    $smarty->assign('full_page', 1);
-    $smarty->assign('start_date', local_date('Y-m-d', $start_date));
-    $smarty->assign('end_date', local_date('Y-m-d', $end_date));
-    $smarty->assign('ur_here', $_LANG['sale_list']);
-    $smarty->assign('cfg_lang', $_CFG['lang']);
-    $smarty->assign('action_link', ['text' => $_LANG['down_sales'], 'href' => '#download']);
+    $this->assign('filter', $sale_list_data['filter']);
+    $this->assign('record_count', $sale_list_data['record_count']);
+    $this->assign('page_count', $sale_list_data['page_count']);
+    $this->assign('goods_sales_list', $sale_list_data['sale_list_data']);
+    $this->assign('ur_here', $_LANG['sell_stats']);
+    $this->assign('full_page', 1);
+    $this->assign('start_date', local_date('Y-m-d', $start_date));
+    $this->assign('end_date', local_date('Y-m-d', $end_date));
+    $this->assign('ur_here', $_LANG['sale_list']);
+    $this->assign('cfg_lang', $_CFG['lang']);
+    $this->assign('action_link', ['text' => $_LANG['down_sales'], 'href' => '#download']);
 
     /* 显示页面 */
     assign_query_info();
-    $smarty->display('sale_list.htm');
+    return $this->display('sale_list.htm');
 }
 /* ------------------------------------------------------ */
 // --获取销售明细需要的函数

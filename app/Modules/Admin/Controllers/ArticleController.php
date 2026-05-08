@@ -12,9 +12,8 @@ class ArticleController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 require_once ROOT_PATH.'includes/fckeditor/fckeditor.php';
 require_once ROOT_PATH.'includes/cls_image.php';
 
@@ -31,24 +30,24 @@ $allow_file_types = '|GIF|JPG|PNG|BMP|SWF|DOC|XLS|PPT|MID|WAV|ZIP|RAR|PDF|CHM|RM
 if ($_REQUEST['act'] == 'list') {
     /* 取得过滤条件 */
     $filter = [];
-    $smarty->assign('cat_select', article_cat_list(0));
-    $smarty->assign('ur_here', $_LANG['03_article_list']);
-    $smarty->assign('action_link', ['text' => $_LANG['article_add'], 'href' => 'article.php?act=add']);
-    $smarty->assign('full_page', 1);
-    $smarty->assign('filter', $filter);
+    $this->assign('cat_select', article_cat_list(0));
+    $this->assign('ur_here', $_LANG['03_article_list']);
+    $this->assign('action_link', ['text' => $_LANG['article_add'], 'href' => 'article.php?act=add']);
+    $this->assign('full_page', 1);
+    $this->assign('filter', $filter);
 
     $article_list = $this->get_articleslist();
 
-    $smarty->assign('article_list', $article_list['arr']);
-    $smarty->assign('filter', $article_list['filter']);
-    $smarty->assign('record_count', $article_list['record_count']);
-    $smarty->assign('page_count', $article_list['page_count']);
+    $this->assign('article_list', $article_list['arr']);
+    $this->assign('filter', $article_list['filter']);
+    $this->assign('record_count', $article_list['record_count']);
+    $this->assign('page_count', $article_list['page_count']);
 
     $sort_flag = sort_flag($article_list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     assign_query_info();
-    $smarty->display('article_list.htm');
+    return $this->display('article_list.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -59,13 +58,13 @@ if ($_REQUEST['act'] == 'query') {
 
     $article_list = $this->get_articleslist();
 
-    $smarty->assign('article_list', $article_list['arr']);
-    $smarty->assign('filter', $article_list['filter']);
-    $smarty->assign('record_count', $article_list['record_count']);
-    $smarty->assign('page_count', $article_list['page_count']);
+    $this->assign('article_list', $article_list['arr']);
+    $this->assign('filter', $article_list['filter']);
+    $this->assign('record_count', $article_list['record_count']);
+    $this->assign('page_count', $article_list['page_count']);
 
     $sort_flag = sort_flag($article_list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
         $smarty->fetch('article_list.htm'),
@@ -89,24 +88,24 @@ if ($_REQUEST['act'] == 'add') {
     $article['is_open'] = 1;
 
     /* 取得分类、品牌 */
-    $smarty->assign('goods_cat_list', cat_list());
-    $smarty->assign('brand_list', get_brand_list());
+    $this->assign('goods_cat_list', cat_list());
+    $this->assign('brand_list', get_brand_list());
 
     /* 清理关联商品 */
     $sql = 'DELETE FROM '.$ecs->table('goods_article').' WHERE article_id = 0';
     $db->query($sql);
 
     if (isset($_GET['id'])) {
-        $smarty->assign('cur_id', $_GET['id']);
+        $this->assign('cur_id', $_GET['id']);
     }
-    $smarty->assign('article', $article);
-    $smarty->assign('cat_select', article_cat_list(0));
-    $smarty->assign('ur_here', $_LANG['article_add']);
-    $smarty->assign('action_link', ['text' => $_LANG['03_article_list'], 'href' => 'article.php?act=list']);
-    $smarty->assign('form_action', 'insert');
+    $this->assign('article', $article);
+    $this->assign('cat_select', article_cat_list(0));
+    $this->assign('ur_here', $_LANG['article_add']);
+    $this->assign('action_link', ['text' => $_LANG['03_article_list'], 'href' => 'article.php?act=list']);
+    $this->assign('form_action', 'insert');
 
     assign_query_info();
-    $smarty->display('article_info.htm');
+    return $this->display('article_info.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -194,21 +193,21 @@ if ($_REQUEST['act'] == 'edit') {
     create_html_editor('FCKeditor1', $article['content']);
 
     /* 取得分类、品牌 */
-    $smarty->assign('goods_cat_list', cat_list());
-    $smarty->assign('brand_list', get_brand_list());
+    $this->assign('goods_cat_list', cat_list());
+    $this->assign('brand_list', get_brand_list());
 
     /* 取得关联商品 */
     $goods_list = $this->get_article_goods($_REQUEST['id']);
-    $smarty->assign('goods_list', $goods_list);
+    $this->assign('goods_list', $goods_list);
 
-    $smarty->assign('article', $article);
-    $smarty->assign('cat_select', article_cat_list(0, $article['cat_id']));
-    $smarty->assign('ur_here', $_LANG['article_edit']);
-    $smarty->assign('action_link', ['text' => $_LANG['03_article_list'], 'href' => 'article.php?act=list&'.list_link_postfix()]);
-    $smarty->assign('form_action', 'update');
+    $this->assign('article', $article);
+    $this->assign('cat_select', article_cat_list(0, $article['cat_id']));
+    $this->assign('ur_here', $_LANG['article_edit']);
+    $this->assign('action_link', ['text' => $_LANG['03_article_list'], 'href' => 'article.php?act=list&'.list_link_postfix()]);
+    $this->assign('form_action', 'update');
 
     assign_query_info();
-    $smarty->display('article_info.htm');
+    return $this->display('article_info.htm');
 }
 
 if ($_REQUEST['act'] == 'update') {

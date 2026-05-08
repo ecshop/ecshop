@@ -12,9 +12,8 @@ class CategoryController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 $exc = new exchange($ecs->table('category'), $db, 'cat_id', 'cat_name');
 
 /* act操作项的初始化 */
@@ -32,15 +31,15 @@ if ($_REQUEST['act'] == 'list') {
     $cat_list = cat_list(0, 0, false);
 
     /* 模板赋值 */
-    $smarty->assign('ur_here', $_LANG['03_category_list']);
-    $smarty->assign('action_link', ['href' => 'category.php?act=add', 'text' => $_LANG['04_category_add']]);
-    $smarty->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['03_category_list']);
+    $this->assign('action_link', ['href' => 'category.php?act=add', 'text' => $_LANG['04_category_add']]);
+    $this->assign('full_page', 1);
 
-    $smarty->assign('cat_info', $cat_list);
+    $this->assign('cat_info', $cat_list);
 
     /* 列表页面 */
     assign_query_info();
-    $smarty->display('category_list.htm');
+    return $this->display('category_list.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -48,7 +47,7 @@ if ($_REQUEST['act'] == 'list') {
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
     $cat_list = cat_list(0, 0, false);
-    $smarty->assign('cat_info', $cat_list);
+    $this->assign('cat_info', $cat_list);
 
     make_json_result($smarty->fetch('category_list.htm'));
 }
@@ -60,19 +59,19 @@ if ($_REQUEST['act'] == 'add') {
     admin_priv('cat_manage');
 
     /* 模板赋值 */
-    $smarty->assign('ur_here', $_LANG['04_category_add']);
-    $smarty->assign('action_link', ['href' => 'category.php?act=list', 'text' => $_LANG['03_category_list']]);
+    $this->assign('ur_here', $_LANG['04_category_add']);
+    $this->assign('action_link', ['href' => 'category.php?act=list', 'text' => $_LANG['03_category_list']]);
 
-    $smarty->assign('goods_type_list', goods_type_list(0)); // 取得商品类型
-    $smarty->assign('attr_list', $this->get_attr_list()); // 取得商品属性
+    $this->assign('goods_type_list', goods_type_list(0)); // 取得商品类型
+    $this->assign('attr_list', $this->get_attr_list()); // 取得商品属性
 
-    $smarty->assign('cat_select', cat_list(0, 0, true));
-    $smarty->assign('form_act', 'insert');
-    $smarty->assign('cat_info', ['is_show' => 1]);
+    $this->assign('cat_select', cat_list(0, 0, true));
+    $this->assign('form_act', 'insert');
+    $this->assign('cat_info', ['is_show' => 1]);
 
     /* 显示页面 */
     assign_query_info();
-    $smarty->display('category_info.htm');
+    return $this->display('category_info.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -164,16 +163,16 @@ if ($_REQUEST['act'] == 'edit') {
             $filter_attr_list[$k]['option'] = $attr_option;
         }
 
-        $smarty->assign('filter_attr_list', $filter_attr_list);
+        $this->assign('filter_attr_list', $filter_attr_list);
     } else {
         $attr_cat_id = 0;
     }
 
     /* 模板赋值 */
-    $smarty->assign('attr_list', $attr_list); // 取得商品属性
-    $smarty->assign('attr_cat_id', $attr_cat_id);
-    $smarty->assign('ur_here', $_LANG['category_edit']);
-    $smarty->assign('action_link', ['text' => $_LANG['03_category_list'], 'href' => 'category.php?act=list']);
+    $this->assign('attr_list', $attr_list); // 取得商品属性
+    $this->assign('attr_cat_id', $attr_cat_id);
+    $this->assign('ur_here', $_LANG['category_edit']);
+    $this->assign('action_link', ['text' => $_LANG['03_category_list'], 'href' => 'category.php?act=list']);
 
     // 分类是否存在首页推荐
     $res = $db->getAll('SELECT recommend_type FROM '.$ecs->table('cat_recommend').' WHERE cat_id='.$cat_id);
@@ -182,17 +181,17 @@ if ($_REQUEST['act'] == 'edit') {
         foreach ($res as $data) {
             $cat_recommend[$data['recommend_type']] = 1;
         }
-        $smarty->assign('cat_recommend', $cat_recommend);
+        $this->assign('cat_recommend', $cat_recommend);
     }
 
-    $smarty->assign('cat_info', $cat_info);
-    $smarty->assign('form_act', 'update');
-    $smarty->assign('cat_select', cat_list(0, $cat_info['parent_id'], true));
-    $smarty->assign('goods_type_list', goods_type_list(0)); // 取得商品类型
+    $this->assign('cat_info', $cat_info);
+    $this->assign('form_act', 'update');
+    $this->assign('cat_select', cat_list(0, $cat_info['parent_id'], true));
+    $this->assign('goods_type_list', goods_type_list(0)); // 取得商品类型
 
     /* 显示页面 */
     assign_query_info();
-    $smarty->display('category_info.htm');
+    return $this->display('category_info.htm');
 }
 if ($_REQUEST['act'] == 'add_category') {
     $parent_id = empty($_REQUEST['parent_id']) ? 0 : intval($_REQUEST['parent_id']);
@@ -313,15 +312,15 @@ if ($_REQUEST['act'] == 'move') {
     $cat_id = ! empty($_REQUEST['cat_id']) ? intval($_REQUEST['cat_id']) : 0;
 
     /* 模板赋值 */
-    $smarty->assign('ur_here', $_LANG['move_goods']);
-    $smarty->assign('action_link', ['href' => 'category.php?act=list', 'text' => $_LANG['03_category_list']]);
+    $this->assign('ur_here', $_LANG['move_goods']);
+    $this->assign('action_link', ['href' => 'category.php?act=list', 'text' => $_LANG['03_category_list']]);
 
-    $smarty->assign('cat_select', cat_list(0, $cat_id, true));
-    $smarty->assign('form_act', 'move_cat');
+    $this->assign('cat_select', cat_list(0, $cat_id, true));
+    $this->assign('form_act', 'move_cat');
 
     /* 显示页面 */
     assign_query_info();
-    $smarty->display('category_move.htm');
+    return $this->display('category_move.htm');
 }
 
 /* ------------------------------------------------------ */

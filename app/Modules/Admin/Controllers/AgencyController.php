@@ -12,9 +12,8 @@ class AgencyController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 $exc = new exchange($ecs->table('agency'), $db, 'agency_id', 'agency_name');
 
@@ -22,22 +21,22 @@ $exc = new exchange($ecs->table('agency'), $db, 'agency_id', 'agency_name');
 // -- 办事处列表
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
-    $smarty->assign('ur_here', $_LANG['agency_list']);
-    $smarty->assign('action_link', ['text' => $_LANG['add_agency'], 'href' => 'agency.php?act=add']);
-    $smarty->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['agency_list']);
+    $this->assign('action_link', ['text' => $_LANG['add_agency'], 'href' => 'agency.php?act=add']);
+    $this->assign('full_page', 1);
 
     $agency_list = $this->get_agencylist();
-    $smarty->assign('agency_list', $agency_list['agency']);
-    $smarty->assign('filter', $agency_list['filter']);
-    $smarty->assign('record_count', $agency_list['record_count']);
-    $smarty->assign('page_count', $agency_list['page_count']);
+    $this->assign('agency_list', $agency_list['agency']);
+    $this->assign('filter', $agency_list['filter']);
+    $this->assign('record_count', $agency_list['record_count']);
+    $this->assign('page_count', $agency_list['page_count']);
 
     /* 排序标记 */
     $sort_flag = sort_flag($agency_list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     assign_query_info();
-    $smarty->display('agency_list.htm');
+    return $this->display('agency_list.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -45,14 +44,14 @@ if ($_REQUEST['act'] == 'list') {
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
     $agency_list = $this->get_agencylist();
-    $smarty->assign('agency_list', $agency_list['agency']);
-    $smarty->assign('filter', $agency_list['filter']);
-    $smarty->assign('record_count', $agency_list['record_count']);
-    $smarty->assign('page_count', $agency_list['page_count']);
+    $this->assign('agency_list', $agency_list['agency']);
+    $this->assign('filter', $agency_list['filter']);
+    $this->assign('record_count', $agency_list['record_count']);
+    $this->assign('page_count', $agency_list['page_count']);
 
     /* 排序标记 */
     $sort_flag = sort_flag($agency_list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
         $smarty->fetch('agency_list.htm'),
@@ -159,7 +158,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 
     /* 是否添加 */
     $is_add = $_REQUEST['act'] == 'add';
-    $smarty->assign('form_action', $is_add ? 'insert' : 'update');
+    $this->assign('form_action', $is_add ? 'insert' : 'update');
 
     /* 初始化、取得办事处信息 */
     if ($is_add) {
@@ -196,26 +195,26 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
         'FROM '.$ecs->table('admin_user');
     $agency['admin_list'] = $db->getAll($sql);
 
-    $smarty->assign('agency', $agency);
+    $this->assign('agency', $agency);
 
     /* 取得地区 */
     $country_list = get_regions();
-    $smarty->assign('countries', $country_list);
+    $this->assign('countries', $country_list);
 
     /* 显示模板 */
     if ($is_add) {
-        $smarty->assign('ur_here', $_LANG['add_agency']);
+        $this->assign('ur_here', $_LANG['add_agency']);
     } else {
-        $smarty->assign('ur_here', $_LANG['edit_agency']);
+        $this->assign('ur_here', $_LANG['edit_agency']);
     }
     if ($is_add) {
         $href = 'agency.php?act=list';
     } else {
         $href = 'agency.php?act=list&'.list_link_postfix();
     }
-    $smarty->assign('action_link', ['href' => $href, 'text' => $_LANG['agency_list']]);
+    $this->assign('action_link', ['href' => $href, 'text' => $_LANG['agency_list']]);
     assign_query_info();
-    $smarty->display('agency_info.htm');
+    return $this->display('agency_info.htm');
 }
 
 /* ------------------------------------------------------ */

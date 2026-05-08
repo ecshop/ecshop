@@ -12,9 +12,8 @@ class BonusController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 
 /* act操作项的初始化 */
 if (empty($_REQUEST['act'])) {
@@ -30,22 +29,22 @@ $exc = new exchange($ecs->table('bonus_type'), $db, 'type_id', 'type_name');
 // -- 红包类型列表页面
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
-    $smarty->assign('ur_here', $_LANG['04_bonustype_list']);
-    $smarty->assign('action_link', ['text' => $_LANG['bonustype_add'], 'href' => 'bonus.php?act=add']);
-    $smarty->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['04_bonustype_list']);
+    $this->assign('action_link', ['text' => $_LANG['bonustype_add'], 'href' => 'bonus.php?act=add']);
+    $this->assign('full_page', 1);
 
     $list = $this->get_type_list();
 
-    $smarty->assign('type_list', $list['item']);
-    $smarty->assign('filter', $list['filter']);
-    $smarty->assign('record_count', $list['record_count']);
-    $smarty->assign('page_count', $list['page_count']);
+    $this->assign('type_list', $list['item']);
+    $this->assign('filter', $list['filter']);
+    $this->assign('record_count', $list['record_count']);
+    $this->assign('page_count', $list['page_count']);
 
     $sort_flag = sort_flag($list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     assign_query_info();
-    $smarty->display('bonus_type.htm');
+    return $this->display('bonus_type.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -55,13 +54,13 @@ if ($_REQUEST['act'] == 'list') {
 if ($_REQUEST['act'] == 'query') {
     $list = $this->get_type_list();
 
-    $smarty->assign('type_list', $list['item']);
-    $smarty->assign('filter', $list['filter']);
-    $smarty->assign('record_count', $list['record_count']);
-    $smarty->assign('page_count', $list['page_count']);
+    $this->assign('type_list', $list['item']);
+    $this->assign('filter', $list['filter']);
+    $this->assign('record_count', $list['record_count']);
+    $this->assign('page_count', $list['page_count']);
 
     $sort_flag = sort_flag($list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
         $smarty->fetch('bonus_type.htm'),
@@ -157,13 +156,13 @@ if ($_REQUEST['act'] == 'remove') {
 if ($_REQUEST['act'] == 'add') {
     admin_priv('bonus_manage');
 
-    $smarty->assign('lang', $_LANG);
-    $smarty->assign('ur_here', $_LANG['bonustype_add']);
-    $smarty->assign('action_link', ['href' => 'bonus.php?act=list', 'text' => $_LANG['04_bonustype_list']]);
-    $smarty->assign('action', 'add');
+    $this->assign('lang', $_LANG);
+    $this->assign('ur_here', $_LANG['bonustype_add']);
+    $this->assign('action_link', ['href' => 'bonus.php?act=list', 'text' => $_LANG['04_bonustype_list']]);
+    $this->assign('action', 'add');
 
-    $smarty->assign('form_act', 'insert');
-    $smarty->assign('cfg_lang', $_CFG['lang']);
+    $this->assign('form_act', 'insert');
+    $this->assign('cfg_lang', $_CFG['lang']);
 
     $next_month = local_strtotime('+1 months');
     $bonus_arr['send_start_date'] = local_date('Y-m-d');
@@ -171,10 +170,10 @@ if ($_REQUEST['act'] == 'add') {
     $bonus_arr['send_end_date'] = local_date('Y-m-d', $next_month);
     $bonus_arr['use_end_date'] = local_date('Y-m-d', $next_month);
 
-    $smarty->assign('bonus_arr', $bonus_arr);
+    $this->assign('bonus_arr', $bonus_arr);
 
     assign_query_info();
-    $smarty->display('bonus_type_info.htm');
+    return $this->display('bonus_type_info.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -244,14 +243,14 @@ if ($_REQUEST['act'] == 'edit') {
     $bonus_arr['use_start_date'] = local_date('Y-m-d', $bonus_arr['use_start_date']);
     $bonus_arr['use_end_date'] = local_date('Y-m-d', $bonus_arr['use_end_date']);
 
-    $smarty->assign('lang', $_LANG);
-    $smarty->assign('ur_here', $_LANG['bonustype_edit']);
-    $smarty->assign('action_link', ['href' => 'bonus.php?act=list&'.list_link_postfix(), 'text' => $_LANG['04_bonustype_list']]);
-    $smarty->assign('form_act', 'update');
-    $smarty->assign('bonus_arr', $bonus_arr);
+    $this->assign('lang', $_LANG);
+    $this->assign('ur_here', $_LANG['bonustype_edit']);
+    $this->assign('action_link', ['href' => 'bonus.php?act=list&'.list_link_postfix(), 'text' => $_LANG['04_bonustype_list']]);
+    $this->assign('form_act', 'update');
+    $this->assign('bonus_arr', $bonus_arr);
 
     assign_query_info();
-    $smarty->display('bonus_type_info.htm');
+    return $this->display('bonus_type_info.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -304,14 +303,14 @@ if ($_REQUEST['act'] == 'send') {
 
     assign_query_info();
 
-    $smarty->assign('ur_here', $_LANG['send_bonus']);
-    $smarty->assign('action_link', ['href' => 'bonus.php?act=list', 'text' => $_LANG['04_bonustype_list']]);
+    $this->assign('ur_here', $_LANG['send_bonus']);
+    $this->assign('action_link', ['href' => 'bonus.php?act=list', 'text' => $_LANG['04_bonustype_list']]);
 
     if ($_REQUEST['send_by'] == SEND_BY_USER) {
-        $smarty->assign('id', $id);
-        $smarty->assign('ranklist', get_rank_list());
+        $this->assign('id', $id);
+        $this->assign('ranklist', get_rank_list());
 
-        $smarty->display('bonus_by_user.htm');
+        return $this->display('bonus_by_user.htm');
     } elseif ($_REQUEST['send_by'] == SEND_BY_GOODS) {
         /* 查询此红包类型信息 */
         $bonus_type = $db->getRow('SELECT type_id, type_name FROM '.$ecs->table('bonus_type').
@@ -324,20 +323,20 @@ if ($_REQUEST['act'] == 'send') {
         $sql = 'SELECT goods_id FROM '.$ecs->table('goods').
             " WHERE bonus_type_id > 0 AND bonus_type_id <> '$_REQUEST[id]'";
         $other_goods_list = $db->getCol($sql);
-        $smarty->assign('other_goods', implode(',', $other_goods_list));
+        $this->assign('other_goods', implode(',', $other_goods_list));
 
         /* 模板赋值 */
-        $smarty->assign('cat_list', cat_list());
-        $smarty->assign('brand_list', get_brand_list());
+        $this->assign('cat_list', cat_list());
+        $this->assign('brand_list', get_brand_list());
 
-        $smarty->assign('bonus_type', $bonus_type);
-        $smarty->assign('goods_list', $goods_list);
+        $this->assign('bonus_type', $bonus_type);
+        $this->assign('goods_list', $goods_list);
 
-        $smarty->display('bonus_by_goods.htm');
+        return $this->display('bonus_by_goods.htm');
     } elseif ($_REQUEST['send_by'] == SEND_BY_PRINT) {
-        $smarty->assign('type_list', get_bonus_type());
+        $this->assign('type_list', get_bonus_type());
 
-        $smarty->display('bonus_by_print.htm');
+        return $this->display('bonus_by_print.htm');
     }
 }
 
@@ -418,12 +417,12 @@ if ($_REQUEST['act'] == 'send_by_user') {
 
     foreach ($user_list as $key => $val) {
         /* 发送邮件通知 */
-        $smarty->assign('user_name', $val['user_name']);
-        $smarty->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
-        $smarty->assign('send_date', $today);
-        $smarty->assign('sent_date', $today);
-        $smarty->assign('count', 1);
-        $smarty->assign('money', price_format($bonus_type['type_money']));
+        $this->assign('user_name', $val['user_name']);
+        $this->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
+        $this->assign('send_date', $today);
+        $this->assign('sent_date', $today);
+        $this->assign('count', 1);
+        $this->assign('money', price_format($bonus_type['type_money']));
 
         $content = $smarty->fetch('str:'.$tpl['template_content']);
 
@@ -690,31 +689,31 @@ if ($_REQUEST['act'] == 'search_users') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'bonus_list') {
-    $smarty->assign('full_page', 1);
-    $smarty->assign('ur_here', $_LANG['bonus_list']);
-    $smarty->assign('action_link', ['href' => 'bonus.php?act=list', 'text' => $_LANG['04_bonustype_list']]);
+    $this->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['bonus_list']);
+    $this->assign('action_link', ['href' => 'bonus.php?act=list', 'text' => $_LANG['04_bonustype_list']]);
 
     $list = $this->get_bonus_list();
 
     /* 赋值是否显示红包序列号 */
     $bonus_type = $this->bonus_type_info(intval($_REQUEST['bonus_type']));
     if ($bonus_type['send_type'] == SEND_BY_PRINT) {
-        $smarty->assign('show_bonus_sn', 1);
+        $this->assign('show_bonus_sn', 1);
     } /* 赋值是否显示发邮件操作和是否发过邮件 */
     elseif ($bonus_type['send_type'] == SEND_BY_USER) {
-        $smarty->assign('show_mail', 1);
+        $this->assign('show_mail', 1);
     }
 
-    $smarty->assign('bonus_list', $list['item']);
-    $smarty->assign('filter', $list['filter']);
-    $smarty->assign('record_count', $list['record_count']);
-    $smarty->assign('page_count', $list['page_count']);
+    $this->assign('bonus_list', $list['item']);
+    $this->assign('filter', $list['filter']);
+    $this->assign('record_count', $list['record_count']);
+    $this->assign('page_count', $list['page_count']);
 
     $sort_flag = sort_flag($list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     assign_query_info();
-    $smarty->display('bonus_list.htm');
+    return $this->display('bonus_list.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -727,19 +726,19 @@ if ($_REQUEST['act'] == 'query_bonus') {
     /* 赋值是否显示红包序列号 */
     $bonus_type = $this->bonus_type_info(intval($_REQUEST['bonus_type']));
     if ($bonus_type['send_type'] == SEND_BY_PRINT) {
-        $smarty->assign('show_bonus_sn', 1);
+        $this->assign('show_bonus_sn', 1);
     } /* 赋值是否显示发邮件操作和是否发过邮件 */
     elseif ($bonus_type['send_type'] == SEND_BY_USER) {
-        $smarty->assign('show_mail', 1);
+        $this->assign('show_mail', 1);
     }
 
-    $smarty->assign('bonus_list', $list['item']);
-    $smarty->assign('filter', $list['filter']);
-    $smarty->assign('record_count', $list['record_count']);
-    $smarty->assign('page_count', $list['page_count']);
+    $this->assign('bonus_list', $list['item']);
+    $this->assign('filter', $list['filter']);
+    $this->assign('record_count', $list['record_count']);
+    $this->assign('page_count', $list['page_count']);
 
     $sort_flag = sort_flag($list['filter']);
-    $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    $this->assign($sort_flag['tag'], $sort_flag['img']);
 
     make_json_result(
         $smarty->fetch('bonus_list.htm'),

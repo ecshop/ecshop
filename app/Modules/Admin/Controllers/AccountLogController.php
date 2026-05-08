@@ -12,9 +12,8 @@ class AccountLogController extends BaseController
     public function __invoke(Request $request)
     {
 
-define('IN_ECS', true);
 
-require dirname(__FILE__).'/includes/init.php';
+
 include_once ROOT_PATH.'includes/lib_order.php';
 
 /* ------------------------------------------------------ */
@@ -30,27 +29,27 @@ if ($_REQUEST['act'] == 'list') {
     if (empty($user)) {
         sys_msg($_LANG['user_not_exist']);
     }
-    $smarty->assign('user', $user);
+    $this->assign('user', $user);
 
     if (empty($_REQUEST['account_type']) || ! in_array($_REQUEST['account_type'], ['user_money', 'frozen_money', 'rank_points', 'pay_points'])) {
         $account_type = '';
     } else {
         $account_type = $_REQUEST['account_type'];
     }
-    $smarty->assign('account_type', $account_type);
+    $this->assign('account_type', $account_type);
 
-    $smarty->assign('ur_here', $_LANG['account_list']);
-    $smarty->assign('action_link', ['text' => $_LANG['add_account'], 'href' => 'account_log.php?act=add&user_id='.$user_id]);
-    $smarty->assign('full_page', 1);
+    $this->assign('ur_here', $_LANG['account_list']);
+    $this->assign('action_link', ['text' => $_LANG['add_account'], 'href' => 'account_log.php?act=add&user_id='.$user_id]);
+    $this->assign('full_page', 1);
 
     $account_list = $this->get_accountlist($user_id, $account_type);
-    $smarty->assign('account_list', $account_list['account']);
-    $smarty->assign('filter', $account_list['filter']);
-    $smarty->assign('record_count', $account_list['record_count']);
-    $smarty->assign('page_count', $account_list['page_count']);
+    $this->assign('account_list', $account_list['account']);
+    $this->assign('filter', $account_list['filter']);
+    $this->assign('record_count', $account_list['record_count']);
+    $this->assign('page_count', $account_list['page_count']);
 
     assign_query_info();
-    $smarty->display('account_list.htm');
+    return $this->display('account_list.htm');
 }
 
 /* ------------------------------------------------------ */
@@ -66,20 +65,20 @@ if ($_REQUEST['act'] == 'query') {
     if (empty($user)) {
         sys_msg($_LANG['user_not_exist']);
     }
-    $smarty->assign('user', $user);
+    $this->assign('user', $user);
 
     if (empty($_REQUEST['account_type']) || ! in_array($_REQUEST['account_type'], ['user_money', 'frozen_money', 'rank_points', 'pay_points'])) {
         $account_type = '';
     } else {
         $account_type = $_REQUEST['account_type'];
     }
-    $smarty->assign('account_type', $account_type);
+    $this->assign('account_type', $account_type);
 
     $account_list = $this->get_accountlist($user_id, $account_type);
-    $smarty->assign('account_list', $account_list['account']);
-    $smarty->assign('filter', $account_list['filter']);
-    $smarty->assign('record_count', $account_list['record_count']);
-    $smarty->assign('page_count', $account_list['page_count']);
+    $this->assign('account_list', $account_list['account']);
+    $this->assign('filter', $account_list['filter']);
+    $this->assign('record_count', $account_list['record_count']);
+    $this->assign('page_count', $account_list['page_count']);
 
     make_json_result(
         $smarty->fetch('account_list.htm'),
@@ -103,13 +102,13 @@ if ($_REQUEST['act'] == 'add') {
     if (empty($user)) {
         sys_msg($_LANG['user_not_exist']);
     }
-    $smarty->assign('user', $user);
+    $this->assign('user', $user);
 
     /* 显示模板 */
-    $smarty->assign('ur_here', $_LANG['add_account']);
-    $smarty->assign('action_link', ['href' => 'account_log.php?act=list&user_id='.$user_id, 'text' => $_LANG['account_list']]);
+    $this->assign('ur_here', $_LANG['add_account']);
+    $this->assign('action_link', ['href' => 'account_log.php?act=list&user_id='.$user_id, 'text' => $_LANG['account_list']]);
     assign_query_info();
-    $smarty->display('account_info.htm');
+    return $this->display('account_info.htm');
 }
 
 /* ------------------------------------------------------ */

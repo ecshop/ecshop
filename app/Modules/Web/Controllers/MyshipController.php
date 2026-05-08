@@ -5,92 +5,89 @@ declare(strict_types=1);
 namespace App\Modules\Web\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class MyshipController extends BaseController
 {
     public function __invoke(Request $request)
     {
 
+        require_once ROOT_PATH.'includes/lib_order.php';
+        include_once ROOT_PATH.'includes/lib_transaction.php';
 
+        /* 载入语言文件 */
+        require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/shopping_flow.php';
+        require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/user.php';
 
-require_once ROOT_PATH.'includes/lib_order.php';
-include_once ROOT_PATH.'includes/lib_transaction.php';
+        /* ------------------------------------------------------ */
+        // -- INPUT
+        /* ------------------------------------------------------ */
 
-/* 载入语言文件 */
-require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/shopping_flow.php';
-require_once ROOT_PATH.'languages/'.$_CFG['lang'].'/user.php';
+        if ($_SESSION['user_id'] > 0) {
+            $consignee_list = get_consignee_list($_SESSION['user_id']);
 
-/* ------------------------------------------------------ */
-// -- INPUT
-/* ------------------------------------------------------ */
+            $choose['country'] = isset($_POST['country']) ? intval($_POST['country']) : $consignee_list[0]['country'];
+            $choose['province'] = isset($_POST['province']) ? intval($_POST['province']) : $consignee_list[0]['province'];
+            $choose['city'] = isset($_POST['city']) ? intval($_POST['city']) : $consignee_list[0]['city'];
+            $choose['district'] = isset($_POST['district']) ? intval($_POST['district']) : (isset($consignee_list[0]['district']) ? $consignee_list[0]['district'] : 0);
+        } else {
+            $choose['country'] = isset($_POST['country']) ? intval($_POST['country']) : $_CFG['shop_country'];
+            $choose['province'] = isset($_POST['province']) ? intval($_POST['province']) : 2;
+            $choose['city'] = isset($_POST['city']) ? intval($_POST['city']) : 35;
+            $choose['district'] = isset($_POST['district']) ? intval($_POST['district']) : 417;
+        }
 
-if ($_SESSION['user_id'] > 0) {
-    $consignee_list = get_consignee_list($_SESSION['user_id']);
+        /* ------------------------------------------------------ */
+        // -- PROCESSOR
+        /* ------------------------------------------------------ */
 
-    $choose['country'] = isset($_POST['country']) ? intval($_POST['country']) : $consignee_list[0]['country'];
-    $choose['province'] = isset($_POST['province']) ? intval($_POST['province']) : $consignee_list[0]['province'];
-    $choose['city'] = isset($_POST['city']) ? intval($_POST['city']) : $consignee_list[0]['city'];
-    $choose['district'] = isset($_POST['district']) ? intval($_POST['district']) : (isset($consignee_list[0]['district']) ? $consignee_list[0]['district'] : 0);
-} else {
-    $choose['country'] = isset($_POST['country']) ? intval($_POST['country']) : $_CFG['shop_country'];
-    $choose['province'] = isset($_POST['province']) ? intval($_POST['province']) : 2;
-    $choose['city'] = isset($_POST['city']) ? intval($_POST['city']) : 35;
-    $choose['district'] = isset($_POST['district']) ? intval($_POST['district']) : 417;
-}
+        assign_template();
+        assign_dynamic('myship');
+        $position = assign_ur_here(0, $_LANG['shopping_myship']);
+        $this->assign('page_title', $position['title']);    // 页面标题
+        $this->assign('ur_here', $position['ur_here']);  // 当前位置
 
-/* ------------------------------------------------------ */
-// -- PROCESSOR
-/* ------------------------------------------------------ */
+        $this->assign('helps', get_shop_help());       // 网店帮助
+        $this->assign('lang', $_LANG);
 
-assign_template();
-assign_dynamic('myship');
-$position = assign_ur_here(0, $_LANG['shopping_myship']);
-$this->assign('page_title', $position['title']);    // 页面标题
-$this->assign('ur_here', $position['ur_here']);  // 当前位置
+        $this->assign('choose', $choose);
 
-$this->assign('helps', get_shop_help());       // 网店帮助
-$this->assign('lang', $_LANG);
+        $province_list[null] = get_regions(1, $choose['country']);
+        $city_list[null] = get_regions(2, $choose['province']);
+        $district_list[null] = get_regions(3, $choose['city']);
 
-$this->assign('choose', $choose);
+        $this->assign('province_list', $province_list);
+        $this->assign('city_list', $city_list);
+        $this->assign('district_list', $district_list);
 
-$province_list[null] = get_regions(1, $choose['country']);
-$city_list[null] = get_regions(2, $choose['province']);
-$district_list[null] = get_regions(3, $choose['city']);
+        /* 取得国家列表、商店所在国家、商店所在国家的省列表 */
+        $this->assign('country_list', get_regions());
 
-$this->assign('province_list', $province_list);
-$this->assign('city_list', $city_list);
-$this->assign('district_list', $district_list);
+        /* 取得配送列表 */
+        $region = [$choose['country'], $choose['province'], $choose['city'], $choose['district']];
+        $shipping_list = available_shipping_list($region);
+        $cart_weight_price = 0;
+        $insure_disabled = true;
+        $cod_disabled = true;
 
-/* 取得国家列表、商店所在国家、商店所在国家的省列表 */
-$this->assign('country_list', get_regions());
+        foreach ($shipping_list as $key => $val) {
+            $shipping_cfg = unserialize_config($val['configure']);
+            $shipping_fee = shipping_fee(
+                $val['shipping_code'],
+                unserialize($val['configure']),
+                $cart_weight_price['weight'],
+                $cart_weight_price['amount']
+            );
 
-/* 取得配送列表 */
-$region = [$choose['country'], $choose['province'], $choose['city'], $choose['district']];
-$shipping_list = available_shipping_list($region);
-$cart_weight_price = 0;
-$insure_disabled = true;
-$cod_disabled = true;
+            $shipping_list[$key]['format_shipping_fee'] = price_format($shipping_fee, false);
+            $shipping_list[$key]['fee'] = $shipping_fee;
+            $shipping_list[$key]['free_money'] = price_format($shipping_cfg['free_money'], false);
+            $shipping_list[$key]['insure_formated'] = strpos($val['insure'], '%') === false ?
+                price_format($val['insure'], false) : $val['insure'];
+        }
 
-foreach ($shipping_list as $key => $val) {
-    $shipping_cfg = unserialize_config($val['configure']);
-    $shipping_fee = shipping_fee(
-        $val['shipping_code'],
-        unserialize($val['configure']),
-        $cart_weight_price['weight'],
-        $cart_weight_price['amount']
-    );
+        $this->assign('shipping_list', $shipping_list);
 
-    $shipping_list[$key]['format_shipping_fee'] = price_format($shipping_fee, false);
-    $shipping_list[$key]['fee'] = $shipping_fee;
-    $shipping_list[$key]['free_money'] = price_format($shipping_cfg['free_money'], false);
-    $shipping_list[$key]['insure_formated'] = strpos($val['insure'], '%') === false ?
-        price_format($val['insure'], false) : $val['insure'];
-}
+        return $this->display('myship.dwt');
 
-$this->assign('shipping_list', $shipping_list);
-
-return $this->display('myship.dwt');
-
-}
+    }
 }

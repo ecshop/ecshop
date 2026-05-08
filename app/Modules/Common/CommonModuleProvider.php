@@ -19,6 +19,6 @@ class CommonModuleProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->loadRoutesFrom(__DIR__ . '/Routes/web.php');
+        $this->loadRoutesFrom(__DIR__.'/Routes/web.php');
     }
 }

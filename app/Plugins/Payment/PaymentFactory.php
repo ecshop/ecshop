@@ -26,19 +26,19 @@ class PaymentFactory
             return self::$instances[$payCode];
         }
 
-        if (!isset(self::$classMap[$payCode])) {
+        if (! isset(self::$classMap[$payCode])) {
             throw new \RuntimeException("Payment plugin '{$payCode}' not registered.");
         }
 
         $shortName = self::$classMap[$payCode];
-        $className = __NAMESPACE__ . '\\' . $shortName;
+        $className = __NAMESPACE__.'\\'.$shortName;
 
-        if (!isset(self::$loaded[$shortName])) {
+        if (! isset(self::$loaded[$shortName])) {
             self::loadPlugin($shortName);
         }
 
-        $instance = new $className();
-        if (!$instance instanceof PaymentInterface) {
+        $instance = new $className;
+        if (! $instance instanceof PaymentInterface) {
             throw new \RuntimeException("Payment class '{$className}' must implement PaymentInterface.");
         }
 
@@ -51,14 +51,14 @@ class PaymentFactory
     {
         $payCode = strtolower($payCode);
 
-        if (!isset(self::$classMap[$payCode])) {
+        if (! isset(self::$classMap[$payCode])) {
             return null;
         }
 
         $shortName = self::$classMap[$payCode];
-        $className = __NAMESPACE__ . '\\' . $shortName;
+        $className = __NAMESPACE__.'\\'.$shortName;
 
-        if (!isset(self::$loaded[$shortName])) {
+        if (! isset(self::$loaded[$shortName])) {
             self::loadPlugin($shortName);
         }
 
@@ -74,9 +74,9 @@ class PaymentFactory
         $modules = [];
 
         foreach (self::$classMap as $code => $shortName) {
-            $className = __NAMESPACE__ . '\\' . $shortName;
+            $className = __NAMESPACE__.'\\'.$shortName;
 
-            if (!isset(self::$loaded[$shortName])) {
+            if (! isset(self::$loaded[$shortName])) {
                 self::loadPlugin($shortName);
             }
 
@@ -109,15 +109,15 @@ class PaymentFactory
     {
         if (self::$pluginBaseDir === '') {
             if (defined('ROOT_PATH')) {
-                self::$pluginBaseDir = ROOT_PATH . 'app/Plugins/Payment/';
+                self::$pluginBaseDir = ROOT_PATH.'app/Plugins/Payment/';
             } else {
-                self::$pluginBaseDir = dirname(__FILE__) . '/';
+                self::$pluginBaseDir = dirname(__FILE__).'/';
             }
         }
 
-        $file = self::$pluginBaseDir . ucfirst($className) . '.php';
+        $file = self::$pluginBaseDir.ucfirst($className).'.php';
 
-        if (!file_exists($file)) {
+        if (! file_exists($file)) {
             throw new \RuntimeException("Payment plugin file not found: {$file}");
         }
 

@@ -5,44 +5,41 @@ declare(strict_types=1);
 namespace App\Modules\Admin\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class GenGoodsScriptController extends BaseController
 {
     public function __invoke(Request $request)
     {
 
+        /* ------------------------------------------------------ */
+        // -- 生成代码
+        /* ------------------------------------------------------ */
 
+        if ($_REQUEST['act'] == 'setup') {
+            /* 检查权限 */
+            admin_priv('gen_goods_script');
 
+            /* 编码 */
+            $lang_list = [
+                'UTF8' => $_LANG['charset']['utf8'],
+                'GB2312' => $_LANG['charset']['zh_cn'],
+                'BIG5' => $_LANG['charset']['zh_tw'],
+            ];
 
-/* ------------------------------------------------------ */
-// -- 生成代码
-/* ------------------------------------------------------ */
+            /* 参数赋值 */
+            $ur_here = $_LANG['16_goods_script'];
+            $this->assign('ur_here', $ur_here);
+            $this->assign('cat_list', cat_list());
+            $this->assign('brand_list', get_brand_list());
+            $this->assign('intro_list', $_LANG['intro']);
+            $this->assign('url', $ecs->url());
+            $this->assign('lang_list', $lang_list);
 
-if ($_REQUEST['act'] == 'setup') {
-    /* 检查权限 */
-    admin_priv('gen_goods_script');
+            /* 显示模板 */
+            assign_query_info();
 
-    /* 编码 */
-    $lang_list = [
-        'UTF8' => $_LANG['charset']['utf8'],
-        'GB2312' => $_LANG['charset']['zh_cn'],
-        'BIG5' => $_LANG['charset']['zh_tw'],
-    ];
+            return $this->display('gen_goods_script.htm');
+        }
 
-    /* 参数赋值 */
-    $ur_here = $_LANG['16_goods_script'];
-    $this->assign('ur_here', $ur_here);
-    $this->assign('cat_list', cat_list());
-    $this->assign('brand_list', get_brand_list());
-    $this->assign('intro_list', $_LANG['intro']);
-    $this->assign('url', $ecs->url());
-    $this->assign('lang_list', $lang_list);
-
-    /* 显示模板 */
-    assign_query_info();
-    return $this->display('gen_goods_script.htm');
-}
-
-}
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 $cron_lang = ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/cron/ipdel.php';
 if (file_exists($cron_lang)) {
     global $_LANG;

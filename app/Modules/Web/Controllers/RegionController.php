@@ -5,31 +5,29 @@ declare(strict_types=1);
 namespace App\Modules\Web\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class RegionController extends BaseController
 {
     public function __invoke(Request $request)
     {
 
+        define('INIT_NO_USERS', true);
+        define('INIT_NO_SMARTY', true);
 
-define('INIT_NO_USERS', true);
-define('INIT_NO_SMARTY', true);
+        require ROOT_PATH.'includes/cls_json.php';
 
-require ROOT_PATH.'includes/cls_json.php';
+        header('Content-type: text/html; charset='.EC_CHARSET);
 
-header('Content-type: text/html; charset='.EC_CHARSET);
+        $type = ! empty($_REQUEST['type']) ? intval($_REQUEST['type']) : 0;
+        $parent = ! empty($_REQUEST['parent']) ? intval($_REQUEST['parent']) : 0;
 
-$type = ! empty($_REQUEST['type']) ? intval($_REQUEST['type']) : 0;
-$parent = ! empty($_REQUEST['parent']) ? intval($_REQUEST['parent']) : 0;
+        $arr['regions'] = get_regions($type, $parent);
+        $arr['type'] = $type;
+        $arr['target'] = ! empty($_REQUEST['target']) ? stripslashes(trim($_REQUEST['target'])) : '';
+        $arr['target'] = htmlspecialchars($arr['target']);
 
-$arr['regions'] = get_regions($type, $parent);
-$arr['type'] = $type;
-$arr['target'] = ! empty($_REQUEST['target']) ? stripslashes(trim($_REQUEST['target'])) : '';
-$arr['target'] = htmlspecialchars($arr['target']);
+        $json = new JSON;
+        echo $json->encode($arr);
 
-$json = new JSON;
-echo $json->encode($arr);
-
-}
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Libraries;
 
-class  Captcha
+class Captcha
 {
     /**
      * 背景图片所在目录

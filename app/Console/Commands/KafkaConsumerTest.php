@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use RdKafka\Conf;
+use RdKafka\KafkaConsumer;
 
 /**
  * @see https://arnaud-lb.github.io/php-rdkafka-doc/phpdoc/rdkafka.examples-high-level-consumer.html
@@ -30,14 +32,14 @@ class KafkaConsumerTest extends Command
      */
     public function handle(): void
     {
-        $conf = new \RdKafka\Conf;
+        $conf = new Conf;
         $conf->set('group.id', 'myConsumerGroup');
         // Initial list of Kafka brokers
         $conf->set('metadata.broker.list', '192.168.100.30');
         $conf->set('auto.offset.reset', 'earliest');
         $conf->set('enable.partition.eof', 'true');
 
-        $consumer = new \RdKafka\KafkaConsumer($conf);
+        $consumer = new KafkaConsumer($conf);
         $consumer->subscribe(['test']);
 
         echo "Waiting for partition assignment... (make take some time when\n";

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use RdKafka\Conf;
+use RdKafka\Producer;
 
 /**
  * @see https://arnaud-lb.github.io/php-rdkafka-doc/phpdoc/rdkafka.examples-producer.html
@@ -30,12 +32,12 @@ class KafkaProducerTest extends Command
      */
     public function handle(): void
     {
-        $conf = new \RdKafka\Conf;
+        $conf = new Conf;
         $conf->set('metadata.broker.list', '192.168.100.30:9092');
         // $conf->set('log_level', (string)LOG_DEBUG);
         // $conf->set('debug', 'all');
 
-        $producer = new \RdKafka\Producer($conf);
+        $producer = new Producer($conf);
         $topic = $producer->newTopic('test');
 
         for ($i = 0; $i < 10; $i++) {

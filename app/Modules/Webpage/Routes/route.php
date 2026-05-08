@@ -6,11 +6,12 @@
 
 declare(strict_types=1);
 
+use App\Modules\Webpage\Http\Controllers\IndexController;
 use Illuminate\Support\Facades\Route;
 
 // webpage route start
 Route::prefix('webpage')->group(function () {
     // 首页
-    Route::get('/', [\App\Modules\Webpage\Http\Controllers\IndexController::class, 'index'])->name('index');
+    Route::get('/', [IndexController::class, 'index'])->name('index');
 });
 // end

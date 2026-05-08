@@ -5,57 +5,54 @@ declare(strict_types=1);
 namespace App\Modules\Web\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ReceiveController extends BaseController
 {
     public function __invoke(Request $request)
     {
 
+        /* 取得参数 */
+        $order_id = ! empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;  // 订单号
+        $consignee = ! empty($_REQUEST['con']) ? rawurldecode(trim($_REQUEST['con'])) : ''; // 收货人
 
+        /* 查询订单信息 */
+        $sql = 'SELECT * FROM '.$ecs->table('order_info')." WHERE order_id = '$order_id'";
+        $order = $db->getRow($sql);
 
+        if (empty($order)) {
+            $msg = $_LANG['order_not_exists'];
+        } /* 检查订单 */
+        elseif ($order['shipping_status'] == SS_RECEIVED) {
+            $msg = $_LANG['order_already_received'];
+        } elseif ($order['shipping_status'] != SS_SHIPPED) {
+            $msg = $_LANG['order_invalid'];
+        } elseif ($order['consignee'] != $consignee) {
+            $msg = $_LANG['order_invalid'];
+        } else {
+            /* 修改订单发货状态为“确认收货” */
+            $sql = 'UPDATE '.$ecs->table('order_info')." SET shipping_status = '".SS_RECEIVED."' WHERE order_id = '$order_id'";
+            $db->query($sql);
 
-/* 取得参数 */
-$order_id = ! empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;  // 订单号
-$consignee = ! empty($_REQUEST['con']) ? rawurldecode(trim($_REQUEST['con'])) : ''; // 收货人
+            /* 记录日志 */
+            order_action($order['order_sn'], $order['order_status'], SS_RECEIVED, $order['pay_status'], '', $_LANG['buyer']);
 
-/* 查询订单信息 */
-$sql = 'SELECT * FROM '.$ecs->table('order_info')." WHERE order_id = '$order_id'";
-$order = $db->getRow($sql);
+            $msg = $_LANG['act_ok'];
+        }
 
-if (empty($order)) {
-    $msg = $_LANG['order_not_exists'];
-} /* 检查订单 */
-elseif ($order['shipping_status'] == SS_RECEIVED) {
-    $msg = $_LANG['order_already_received'];
-} elseif ($order['shipping_status'] != SS_SHIPPED) {
-    $msg = $_LANG['order_invalid'];
-} elseif ($order['consignee'] != $consignee) {
-    $msg = $_LANG['order_invalid'];
-} else {
-    /* 修改订单发货状态为“确认收货” */
-    $sql = 'UPDATE '.$ecs->table('order_info')." SET shipping_status = '".SS_RECEIVED."' WHERE order_id = '$order_id'";
-    $db->query($sql);
+        /* 显示模板 */
+        assign_template();
+        $position = assign_ur_here();
+        $this->assign('page_title', $position['title']);    // 页面标题
+        $this->assign('ur_here', $position['ur_here']);  // 当前位置
 
-    /* 记录日志 */
-    order_action($order['order_sn'], $order['order_status'], SS_RECEIVED, $order['pay_status'], '', $_LANG['buyer']);
+        $this->assign('categories', get_categories_tree()); // 分类树
+        $this->assign('helps', get_shop_help());       // 网店帮助
 
-    $msg = $_LANG['act_ok'];
-}
+        assign_dynamic('receive');
 
-/* 显示模板 */
-assign_template();
-$position = assign_ur_here();
-$this->assign('page_title', $position['title']);    // 页面标题
-$this->assign('ur_here', $position['ur_here']);  // 当前位置
+        $this->assign('msg', $msg);
 
-$this->assign('categories', get_categories_tree()); // 分类树
-$this->assign('helps', get_shop_help());       // 网店帮助
+        return $this->display('receive.dwt');
 
-assign_dynamic('receive');
-
-$this->assign('msg', $msg);
-return $this->display('receive.dwt');
-
-}
+    }
 }

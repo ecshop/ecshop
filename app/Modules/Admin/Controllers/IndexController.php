@@ -6,13 +6,13 @@ namespace App\Modules\Admin\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Plugins\Payment\PaymentFactory;
 
 class IndexController extends BaseController
 {
     public function __invoke(Request $request)
     {
 
-use App\Plugins\Payment\PaymentFactory;
 
 
 
@@ -63,6 +63,7 @@ if ($_REQUEST['act'] == 'calculator') {
 
 /* ------------------------------------------------------ */
 // -- 左边的框架
+
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'menu') {
     include_once 'includes/inc_menu.php';

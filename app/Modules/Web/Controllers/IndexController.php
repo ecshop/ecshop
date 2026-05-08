@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class IndexController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -97,7 +109,10 @@ $smarty->display('index.dwt', $cache_id);
  *
  * @return array
  */
-function index_get_invoice_query()
+
+}
+
+private function index_get_invoice_query()
 {
     $sql = 'SELECT o.order_sn, o.invoice_no, s.shipping_code FROM '.$GLOBALS['ecs']->table('order_info').' AS o'.
         ' LEFT JOIN '.$GLOBALS['ecs']->table('shipping').' AS s ON s.shipping_id = o.shipping_id'.
@@ -126,7 +141,7 @@ function index_get_invoice_query()
  *
  * @return array
  */
-function index_get_new_articles()
+private function index_get_new_articles()
 {
     $sql = 'SELECT a.article_id, a.title, ac.cat_name, a.add_time, a.file_url, a.open_type, ac.cat_id, ac.cat_name '.
         ' FROM '.$GLOBALS['ecs']->table('article').' AS a, '.
@@ -156,7 +171,7 @@ function index_get_new_articles()
  *
  * @return array
  */
-function index_get_group_buy()
+private function index_get_group_buy()
 {
     $time = gmtime();
     $limit = get_library_number('group_buy', 'index');
@@ -208,7 +223,7 @@ function index_get_group_buy()
  *
  * @return array
  */
-function index_get_auction()
+private function index_get_auction()
 {
     $now = gmtime();
     $limit = get_library_number('auction', 'index');
@@ -247,7 +262,7 @@ function index_get_auction()
  *
  * @return array
  */
-function index_get_links()
+private function index_get_links()
 {
     $sql = 'SELECT link_logo, link_name, link_url FROM '.$GLOBALS['ecs']->table('friend_link').' ORDER BY show_order';
     $res = $GLOBALS['db']->getAll($sql);
@@ -266,4 +281,6 @@ function index_get_links()
     }
 
     return $links;
+}
+
 }

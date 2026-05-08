@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ShophelpController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -290,7 +302,10 @@ if ($_REQUEST['act'] == 'edit_title') {
 }
 
 /* 获得网店帮助文章分类 */
-function get_shophelp_list()
+
+}
+
+private function get_shophelp_list()
 {
     $list = [];
     $sql = 'SELECT cat_id, cat_name, sort_order'.
@@ -308,7 +323,7 @@ function get_shophelp_list()
 }
 
 /* 获得网店帮助某分类下的文章 */
-function shophelp_article_list($cat_id)
+private function shophelp_article_list($cat_id)
 {
     $list = [];
     $sql = 'SELECT article_id, title, article_type , add_time'.
@@ -322,4 +337,6 @@ function shophelp_article_list($cat_id)
     }
 
     return $list;
+}
+
 }

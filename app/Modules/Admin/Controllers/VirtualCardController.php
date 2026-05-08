@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class VirtualCardController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 /* 包含文件 */
@@ -466,7 +478,10 @@ if ($_REQUEST['act'] == 'on_change') {
  *
  * @return array
  */
-function get_replenish_list()
+
+}
+
+private function get_replenish_list()
 {
     /* 查询条件 */
     $filter['goods_id'] = empty($_REQUEST['goods_id']) ? 0 : intval($_REQUEST['goods_id']);
@@ -532,7 +547,7 @@ function get_replenish_list()
  * @param  int  $goods_id
  * @return bool
  */
-function update_goods_number($goods_id)
+private function update_goods_number($goods_id)
 {
     $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('virtual_card')." WHERE goods_id = '$goods_id' AND is_saled = 0";
     $goods_number = $GLOBALS['db']->getOne($sql);
@@ -540,4 +555,6 @@ function update_goods_number($goods_id)
     $sql = 'UPDATE '.$GLOBALS['ecs']->table('goods')." SET goods_number = '$goods_number' WHERE goods_id = '$goods_id' AND extension_code='virtual_card'";
 
     return $GLOBALS['db']->query($sql);
+}
+
 }

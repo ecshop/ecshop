@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class IntegrateController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -474,7 +486,19 @@ if ($_REQUEST['act'] == 'import_user') {
     }
     // 保存重复的用户信息
     if (! empty($repeat_user)) {
-        @file_put_contents(ROOT_PATH.'data/repeat_user.php', '<?php die();?>'.$json->encode($repeat_user));
+        @file_put_contents(ROOT_PATH.'data/repeat_user.php', '<?php
+
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class IntegrateController extends BaseController
+{
+    public function __invoke(Request $request)
+    { die();?>'.$json->encode($repeat_user));
     }
     $result['error'] = 0;
     $result['message'] = $_LANG['import_user_success'];
@@ -976,7 +1000,10 @@ if ($_REQUEST['act'] == 'save_points') {
  *
  * @return void
  */
-function conflict_userlist()
+
+}
+
+private function conflict_userlist()
 {
     $filter['flag'] = empty($_REQUEST['flag']) ? 0 : intval($_REQUEST['flag']);
     $where = ' WHERE flag';
@@ -1011,7 +1038,7 @@ function conflict_userlist()
 /**
  * @return void
  */
-function save_integrate_config($code, $cfg)
+private function save_integrate_config($code, $cfg)
 {
     $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('shop_config')." WHERE code = 'integrate_code'";
 
@@ -1102,4 +1129,6 @@ function save_integrate_config($code, $cfg)
     clear_cache_files();
 
     return true;
+}
+
 }

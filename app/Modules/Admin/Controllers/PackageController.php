@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class PackageController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -341,7 +353,10 @@ if ($_REQUEST['act'] == 'drop_package_goods') {
  *
  * @return void
  */
-function get_packagelist()
+
+}
+
+private function get_packagelist()
 {
     $result = get_filter();
     if ($result === false) {
@@ -399,11 +414,13 @@ function get_packagelist()
  * @param  int  $package_id
  * @return void
  */
-function handle_packagep_goods($package_id)
+private function handle_packagep_goods($package_id)
 {
     $sql = 'UPDATE '.$GLOBALS['ecs']->table('package_goods').' SET '.
         " package_id = '$package_id' ".
         " WHERE package_id = '0'".
         " AND admin_id = '$_SESSION[admin_id]'";
     $GLOBALS['db']->query($sql);
+}
+
 }

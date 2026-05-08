@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class RespondController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 use App\Plugins\Payment\PaymentFactory;
 
 define('IN_ECS', true);
@@ -50,3 +62,6 @@ $smarty->assign('message', $msg);
 $smarty->assign('shop_url', $ecs->url());
 
 $smarty->display('respond.dwt');
+
+}
+}

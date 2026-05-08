@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class VoteController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -331,7 +343,10 @@ if ($_REQUEST['act'] == 'remove_option') {
 }
 
 /* 获取在线调查数据列表 */
-function get_votelist()
+
+}
+
+private function get_votelist()
 {
     $filter = [];
 
@@ -356,7 +371,7 @@ function get_votelist()
 }
 
 /* 获取调查选项列表 */
-function get_optionlist($id)
+private function get_optionlist($id)
 {
     $list = [];
     $sql = 'SELECT option_id, vote_id, option_name, option_count, option_order'.
@@ -368,4 +383,6 @@ function get_optionlist($id)
     }
 
     return $list;
+}
+
 }

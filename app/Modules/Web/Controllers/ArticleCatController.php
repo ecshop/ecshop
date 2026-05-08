@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ArticleCatController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -105,3 +117,6 @@ if (! $smarty->is_cached('article_cat.dwt', $cache_id)) {
 $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typearticle_cat'.$cat_id.'.xml' : 'feed.php?type=article_cat'.$cat_id); // RSS URL
 
 $smarty->display('article_cat.dwt', $cache_id);
+
+}
+}

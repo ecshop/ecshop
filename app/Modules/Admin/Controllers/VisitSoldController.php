@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class VisitSoldController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -72,7 +84,10 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'download') {
  * @param  int  $show_num  显示个数
  * @return array $click_sold_info  访问购买比例数据
  */
-function click_sold_info($cat_id, $brand_id, $show_num)
+
+}
+
+private function click_sold_info($cat_id, $brand_id, $show_num)
 {
     global $db, $ecs;
 
@@ -104,4 +119,6 @@ function click_sold_info($cat_id, $brand_id, $show_num)
     }
 
     return $click_sold_info;
+}
+
 }

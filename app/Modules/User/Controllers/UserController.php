@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\User\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class UserController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 use App\Plugins\Payment\PaymentFactory;
 
 define('IN_ECS', true);
@@ -2227,4 +2239,7 @@ elseif ($action == 'send_hash_mail') {
 } /* 清除商品浏览历史 */
 elseif ($action == 'clear_history') {
     setcookie('ECS[history]', '', 1, null, null, null, true);
+}
+
+}
 }

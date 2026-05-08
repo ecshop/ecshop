@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class NavigatorController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 
@@ -240,7 +252,10 @@ if ($_REQUEST['act'] == 'toggle_opennew') {
     }
 }
 
-function get_nav()
+
+}
+
+private function get_nav()
 {
     $result = get_filter();
     if ($result === false) {
@@ -285,7 +300,7 @@ function get_nav()
 /* ------------------------------------------------------ */
 // -- 排序相关
 /* ------------------------------------------------------ */
-function sort_nav($a, $b)
+private function sort_nav($a, $b)
 {
     return $a['vieworder'] > $b['vieworder'] ? 1 : -1;
 }
@@ -293,7 +308,7 @@ function sort_nav($a, $b)
 /* ------------------------------------------------------ */
 // -- 获得系统列表
 /* ------------------------------------------------------ */
-function get_sysnav()
+private function get_sysnav()
 {
     global $_LANG;
     $sysmain = [
@@ -329,7 +344,7 @@ function get_sysnav()
 /* ------------------------------------------------------ */
 // -- 列表项修改
 /* ------------------------------------------------------ */
-function nav_update($id, $args)
+private function nav_update($id, $args)
 {
     if (empty($args) || empty($id)) {
         return false;
@@ -341,7 +356,7 @@ function nav_update($id, $args)
 /* ------------------------------------------------------ */
 // -- 根据URI对导航栏项目进行分析，确定其为商品分类还是文章分类
 /* ------------------------------------------------------ */
-function analyse_uri($uri)
+private function analyse_uri($uri)
 {
     $uri = strtolower(str_replace('&amp;', '&', $uri));
     $arr = explode('-', $uri);
@@ -393,7 +408,7 @@ function analyse_uri($uri)
 /* ------------------------------------------------------ */
 // -- 是否显示
 /* ------------------------------------------------------ */
-function is_show_in_nav($type, $id)
+private function is_show_in_nav($type, $id)
 {
     if ($type == 'c') {
         $tablename = $GLOBALS['ecs']->table('category');
@@ -407,7 +422,7 @@ function is_show_in_nav($type, $id)
 /* ------------------------------------------------------ */
 // -- 设置是否显示
 /* ------------------------------------------------------ */
-function set_show_in_nav($type, $id, $val)
+private function set_show_in_nav($type, $id, $val)
 {
     if ($type == 'c') {
         $tablename = $GLOBALS['ecs']->table('category');
@@ -416,4 +431,6 @@ function set_show_in_nav($type, $id, $val)
     }
     $GLOBALS['db']->query("UPDATE $tablename SET show_in_nav = '$val' WHERE cat_id = '$id'");
     clear_cache_files();
+}
+
 }

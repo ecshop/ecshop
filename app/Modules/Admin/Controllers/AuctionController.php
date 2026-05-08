@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AuctionController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 require ROOT_PATH.'includes/lib_goods.php';
@@ -386,7 +398,10 @@ if ($_REQUEST['act'] == 'search_products') {
  * 取得拍卖活动列表
  * @return   array
  */
-function auction_list()
+
+}
+
+private function auction_list()
 {
     $result = get_filter();
     if ($result === false) {
@@ -453,7 +468,7 @@ function auction_list()
  * @param  string  $text  文字
  * @return array('href' => $href, 'text' => $text)
  */
-function list_link($is_add = true, $text = '')
+private function list_link($is_add = true, $text = '')
 {
     $href = 'auction.php?act=list';
     if (! $is_add) {
@@ -464,4 +479,6 @@ function list_link($is_add = true, $text = '')
     }
 
     return ['href' => $href, 'text' => $text];
+}
+
 }

@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class DatabaseController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 /**
  * 数据库管理
  */
@@ -499,7 +511,10 @@ if ($_REQUEST['act'] == 'run_optimize') {
 /**
  * @return void
  */
-function sql_import($sql_file)
+
+}
+
+private function sql_import($sql_file)
 {
     $sql_str = array_filter(file($sql_file), 'remove_comment');
     $sql_str = str_replace("\r", '', implode('', $sql_str));
@@ -528,7 +543,7 @@ function sql_import($sql_file)
  *
  * @return void
  */
-function num_bitunit($num)
+private function num_bitunit($num)
 {
     $bitunit = [' B', ' KB', ' MB', ' GB'];
     for ($key = 0, $count = count($bitunit); $key < $count; $key++) {
@@ -543,7 +558,9 @@ function num_bitunit($num)
 /**
  * @return void
  */
-function remove_comment($var)
+private function remove_comment($var)
 {
     return substr($var, 0, 2) != '--';
+}
+
 }

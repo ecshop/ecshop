@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class InitController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('ECS_ADMIN', true);
 
 error_reporting(E_ALL);
@@ -232,4 +244,7 @@ if (gzip_enabled()) {
     ob_start('ob_gzhandler');
 } else {
     ob_start();
+}
+
+}
 }

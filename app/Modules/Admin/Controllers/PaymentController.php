@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class PaymentController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 use App\Plugins\Payment\PaymentFactory;
 
 define('IN_ECS', true);
@@ -382,4 +394,7 @@ if ($_REQUEST['act'] == 'edit_pay_fee') {
     /* 更新支付费用 */
     $exc->edit("pay_fee = '$pay_fee'", $code);
     make_json_result(stripcslashes($pay_fee));
+}
+
+}
 }

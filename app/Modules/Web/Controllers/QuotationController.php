@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class QuotationController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -59,7 +71,10 @@ if (is_null($smarty->get_template_vars('helps'))) {
 
 $smarty->display('quotation.dwt');
 
-function get_quotation_where($filter)
+
+}
+
+private function get_quotation_where($filter)
 {
     include_once ROOT_PATH.ADMIN_PATH.'/includes/lib_main.php';
     $_filter = new StdClass;
@@ -73,7 +88,7 @@ function get_quotation_where($filter)
     return $where;
 }
 
-function calc_user_rank($rank, $rank_point)
+private function calc_user_rank($rank, $rank_point)
 {
     $_tmprank = [];
     foreach ($rank as $_rank) {
@@ -91,7 +106,7 @@ function calc_user_rank($rank, $rank_point)
     return $_tmprank;
 }
 
-function serve_user($goods_list)
+private function serve_user($goods_list)
 {
     foreach ($goods_list as $key => $all_list) {
         $goods_id = $all_list['goods_id'];
@@ -115,7 +130,7 @@ function serve_user($goods_list)
     return $arr_list;
 }
 
-function product_info($goods_attr, $goods_id)
+private function product_info($goods_attr, $goods_id)
 {
     $goods_attr = str_replace('|', ' OR goods_attr_id=', $goods_attr);
     $sql = 'SELECT attr_value,attr_price FROM '.$GLOBALS['ecs']->table('goods_attr')." WHERE goods_id='$goods_id' AND (goods_attr_id = $goods_attr)";
@@ -130,4 +145,6 @@ function product_info($goods_attr, $goods_id)
     }
 
     return $product_info;
+}
+
 }

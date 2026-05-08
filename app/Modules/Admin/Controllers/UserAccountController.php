@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class UserAccountController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -372,7 +384,10 @@ if ($_REQUEST['act'] == 'remove') {
  * @param  int  $user_id  会员ID
  * @return int
  */
-function get_user_surplus($user_id)
+
+}
+
+private function get_user_surplus($user_id)
 {
     $sql = 'SELECT SUM(user_money) FROM '.$GLOBALS['ecs']->table('account_log').
         " WHERE user_id = '$user_id'";
@@ -389,7 +404,7 @@ function get_user_surplus($user_id)
  * @param  array  $is_paid  是否已完成
  * @return int
  */
-function update_user_account($id, $amount, $admin_note, $is_paid)
+private function update_user_account($id, $amount, $admin_note, $is_paid)
 {
     $sql = 'UPDATE '.$GLOBALS['ecs']->table('user_account').' SET '.
         "admin_user  = '$_SESSION[admin_name]', ".
@@ -404,7 +419,7 @@ function update_user_account($id, $amount, $admin_note, $is_paid)
 /**
  * @return void
  */
-function account_list()
+private function account_list()
 {
     $result = get_filter();
     if ($result === false) {
@@ -478,4 +493,6 @@ function account_list()
     $arr = ['list' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

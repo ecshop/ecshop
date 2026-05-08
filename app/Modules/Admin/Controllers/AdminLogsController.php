@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AdminLogsController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 
@@ -132,7 +144,10 @@ if ($_REQUEST['act'] == 'batch_drop') {
 }
 
 /* 获取管理员操作记录 */
-function get_admin_logs()
+
+}
+
+private function get_admin_logs()
 {
     $user_id = ! empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
     $admin_ip = ! empty($_REQUEST['ip']) ? $_REQUEST['ip'] : '';
@@ -169,4 +184,6 @@ function get_admin_logs()
     }
 
     return ['list' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
+}
+
 }

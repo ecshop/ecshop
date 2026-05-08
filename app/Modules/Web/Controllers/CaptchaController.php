@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class CaptchaController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 define('INIT_NO_SMARTY', true);
 
@@ -12,3 +24,6 @@ if (isset($_REQUEST['is_login'])) {
     $img->session_word = 'captcha_login';
 }
 $img->generate_image();
+
+}
+}

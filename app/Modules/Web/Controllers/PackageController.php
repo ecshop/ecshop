@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class PackageController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -76,3 +88,6 @@ $smarty->assign('lang', $_LANG);
 
 $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typepackage.xml' : 'feed.php?type=package'); // RSS URL
 $smarty->display('package.dwt');
+
+}
+}

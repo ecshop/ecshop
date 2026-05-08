@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class BonusController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -795,7 +807,10 @@ if ($_REQUEST['act'] == 'batch') {
  *
  * @return void
  */
-function get_type_list()
+
+}
+
+private function get_type_list()
 {
     /* 获得所有红包类型的发放数量 */
     $sql = 'SELECT bonus_type_id, COUNT(*) AS sent_count'.
@@ -861,7 +876,7 @@ function get_type_list()
  * @param  int  $type_id
  * @return array
  */
-function get_bonus_goods($type_id)
+private function get_bonus_goods($type_id)
 {
     $sql = 'SELECT goods_id, goods_name FROM '.$GLOBALS['ecs']->table('goods').
         " WHERE bonus_type_id = '$type_id'";
@@ -876,7 +891,7 @@ function get_bonus_goods($type_id)
  * @param  $page_param
  * @return void
  */
-function get_bonus_list()
+private function get_bonus_list()
 {
     /* 查询条件 */
     $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'bonus_type_id' : trim($_REQUEST['sort_by']);
@@ -917,7 +932,7 @@ function get_bonus_list()
  * @param  int  $bonus_type_id  红包类型id
  * @return array
  */
-function bonus_type_info($bonus_type_id)
+private function bonus_type_info($bonus_type_id)
 {
     $sql = 'SELECT * FROM '.$GLOBALS['ecs']->table('bonus_type').
         " WHERE type_id = '$bonus_type_id'";
@@ -932,7 +947,7 @@ function bonus_type_info($bonus_type_id)
  * @param  array  $bonus_id_list  红包id数组
  * @return int 成功发送数量
  */
-function send_bonus_mail($bonus_type_id, $bonus_id_list)
+private function send_bonus_mail($bonus_type_id, $bonus_id_list)
 {
     /* 取得红包类型信息 */
     $bonus_type = bonus_type_info($bonus_type_id);
@@ -985,7 +1000,7 @@ function send_bonus_mail($bonus_type_id, $bonus_id_list)
     return $send_count;
 }
 
-function add_to_maillist($username, $email, $subject, $content, $is_html)
+private function add_to_maillist($username, $email, $subject, $content, $is_html)
 {
     $time = time();
     $content = addslashes($content);
@@ -994,4 +1009,6 @@ function add_to_maillist($username, $email, $subject, $content, $is_html)
     $GLOBALS['db']->query($sql);
 
     return true;
+}
+
 }

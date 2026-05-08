@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class MailTemplateController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -137,11 +149,16 @@ if ($_REQUEST['act'] == 'save_template') {
  * @param  string  $temp  邮件模板的ID
  * @return array
  */
-function load_template($temp_id)
+
+}
+
+private function load_template($temp_id)
 {
     $sql = 'SELECT template_subject, template_content, is_html '.
         'FROM '.$GLOBALS['ecs']->table('mail_templates')." WHERE template_id='$temp_id'";
     $row = $GLOBALS['db']->getRow($sql);
 
     return $row;
+}
+
 }

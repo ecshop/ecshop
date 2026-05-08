@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class CheckFilePrivController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -117,7 +129,10 @@ if ($_REQUEST['act'] == 'check') {
  * @param  array  $err_msg  错误信息回馈数组
  * @return int $mark          文件权限掩码
  */
-function check_file_in_array($arr, &$err_msg)
+
+}
+
+private function check_file_in_array($arr, &$err_msg)
 {
     $read = true;
     $writen = true;
@@ -150,4 +165,6 @@ function check_file_in_array($arr, &$err_msg)
     }
 
     return $mark;
+}
+
 }

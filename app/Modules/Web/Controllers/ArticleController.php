@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ArticleController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -110,7 +122,10 @@ if (isset($article) && $article['cat_id'] > 2) {
  * @param  int  $article_id
  * @return array
  */
-function get_article_info($article_id)
+
+}
+
+private function get_article_info($article_id)
 {
     /* 获得文章的信息 */
     $sql = 'SELECT a.*, IFNULL(AVG(r.comment_rank), 0) AS comment_rank '.
@@ -138,7 +153,7 @@ function get_article_info($article_id)
  * @param  int  $id
  * @return array
  */
-function article_related_goods($id)
+private function article_related_goods($id)
 {
     $sql = 'SELECT g.goods_id, g.goods_name, g.goods_thumb, g.goods_img, g.shop_price AS org_price, '.
         "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, ".
@@ -171,4 +186,6 @@ function article_related_goods($id)
     }
 
     return $arr;
+}
+
 }

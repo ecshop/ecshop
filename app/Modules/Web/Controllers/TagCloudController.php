@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class TagCloudController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -31,3 +43,6 @@ if (! empty($tags)) {
 $smarty->assign('tags', $tags);
 
 $smarty->display('tag_cloud.dwt');
+
+}
+}

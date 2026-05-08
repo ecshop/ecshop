@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ExchangeGoodsController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -275,7 +287,10 @@ if ($_REQUEST['act'] == 'search_goods') {
 }
 
 /* 获得商品列表 */
-function get_exchange_goodslist()
+
+}
+
+private function get_exchange_goodslist()
 {
     $result = get_filter();
     if ($result === false) {
@@ -320,4 +335,6 @@ function get_exchange_goodslist()
     }
 
     return ['arr' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
+}
+
 }

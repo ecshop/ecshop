@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class InitController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 error_reporting(E_ALL);
 
 /* 取得当前ecshop所在的根目录 */
@@ -221,4 +233,7 @@ if (! defined('INIT_NO_SMARTY') && gzip_enabled()) {
     ob_start('ob_gzhandler');
 } else {
     ob_start();
+}
+
+}
 }

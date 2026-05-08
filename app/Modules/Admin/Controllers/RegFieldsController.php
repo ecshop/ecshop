@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class RegFieldsController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -219,4 +231,7 @@ if ($_REQUEST['act'] == 'toggle_need') {
         clear_cache_files();
         make_json_result($is_need);
     }
+}
+
+}
 }

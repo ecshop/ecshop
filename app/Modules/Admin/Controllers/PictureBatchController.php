@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class PictureBatchController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -214,7 +226,10 @@ if (empty($_GET['is_ajax'])) {
  * @param  boolen  $silent  是否执行能忽略错误
  * @return void
  */
-function process_image($page = 1, $page_size = 100, $type = 0, $thumb = true, $watermark = true, $change = false, $silent = true)
+
+}
+
+private function process_image($page = 1, $page_size = 100, $type = 0, $thumb = true, $watermark = true, $change = false, $silent = true)
 {
     if ($type == 0) {
         $sql = 'SELECT g.goods_id, g.original_img, g.goods_img, g.goods_thumb FROM '.$GLOBALS['ecs']->table('goods')." AS g WHERE g.original_img > ''".$GLOBALS['goods_where'];
@@ -410,7 +425,7 @@ function process_image($page = 1, $page_size = 100, $type = 0, $thumb = true, $w
  * @param  boolen  $silent  是否执行能忽略错误
  * @return void
  */
-function process_image_ex($page = 1, $page_size = 100, $type = 0, $thumb = true, $watermark = true, $change = false, $silent = true)
+private function process_image_ex($page = 1, $page_size = 100, $type = 0, $thumb = true, $watermark = true, $change = false, $silent = true)
 {
     if ($type == 0) {
         $sql = 'SELECT g.goods_id, g.original_img, g.goods_img, g.goods_thumb FROM '.$GLOBALS['ecs']->table('goods')." AS g WHERE g.original_img > ''".$goods_where;
@@ -448,7 +463,7 @@ function process_image_ex($page = 1, $page_size = 100, $type = 0, $thumb = true,
  * @param  boolen  $silent  是否使用静态函数
  * @return void
  */
-function replace_image($new_image, $old_image, $goods_id, $silent)
+private function replace_image($new_image, $old_image, $goods_id, $silent)
 {
     $error = false;
     if (file_exists(ROOT_PATH.$old_image)) {
@@ -478,4 +493,6 @@ function replace_image($new_image, $old_image, $goods_id, $silent)
 
         return;
     }
+}
+
 }

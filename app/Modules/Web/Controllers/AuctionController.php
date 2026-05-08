@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AuctionController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -388,7 +400,10 @@ if ($_REQUEST['act'] == 'buy') {
  *
  * @return int
  */
-function auction_count()
+
+}
+
+private function auction_count()
 {
     $now = gmtime();
     $sql = 'SELECT COUNT(*) '.
@@ -406,7 +421,7 @@ function auction_count()
  * @param  int  $page  当前页
  * @return array
  */
-function auction_list($size, $page)
+private function auction_list($size, $page)
 {
     $auction_list = [];
     $auction_list['finished'] = $auction_list['finished'] = [];
@@ -441,4 +456,6 @@ function auction_list($size, $page)
     $auction_list = @array_merge($auction_list['under_way'], $auction_list['finished']);
 
     return $auction_list;
+}
+
 }

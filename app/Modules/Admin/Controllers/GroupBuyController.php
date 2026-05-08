@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class GroupBuyController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 require_once ROOT_PATH.'includes/lib_goods.php';
@@ -611,7 +623,10 @@ if ($_REQUEST['act'] == 'remove') {
  * 取得团购活动列表
  * @return   array
  */
-function group_buy_list()
+
+}
+
+private function group_buy_list()
 {
     $result = get_filter();
     if ($result === false) {
@@ -696,7 +711,7 @@ function group_buy_list()
  * @param  int  $goods_id  商品id
  * @return array
  */
-function goods_group_buy($goods_id)
+private function goods_group_buy($goods_id)
 {
     $sql = 'SELECT * FROM '.$GLOBALS['ecs']->table('goods_activity').
         " WHERE goods_id = '$goods_id' ".
@@ -713,7 +728,7 @@ function goods_group_buy($goods_id)
  * @param  bool  $is_add  是否添加（插入）
  * @return array('href' => $href, 'text' => $text)
  */
-function list_link($is_add = true)
+private function list_link($is_add = true)
 {
     $href = 'group_buy.php?act=list';
     if (! $is_add) {
@@ -721,4 +736,6 @@ function list_link($is_add = true)
     }
 
     return ['href' => $href, 'text' => $GLOBALS['_LANG']['group_buy_list']];
+}
+
 }

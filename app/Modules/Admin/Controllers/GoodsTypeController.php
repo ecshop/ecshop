@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class GoodsTypeController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -209,7 +221,10 @@ if ($_REQUEST['act'] == 'remove') {
  *
  * @return array
  */
-function get_goodstype()
+
+}
+
+private function get_goodstype()
 {
     $result = get_filter();
     if ($result === false) {
@@ -249,7 +264,7 @@ function get_goodstype()
  * @param  int  $cat_id  分类ID
  * @return array
  */
-function get_goodstype_info($cat_id)
+private function get_goodstype_info($cat_id)
 {
     $sql = 'SELECT * FROM '.$GLOBALS['ecs']->table('goods_type')." WHERE cat_id='$cat_id'";
 
@@ -264,9 +279,11 @@ function get_goodstype_info($cat_id)
  * @param  int  $new_group
  * @return void
  */
-function update_attribute_group($cat_id, $old_group, $new_group)
+private function update_attribute_group($cat_id, $old_group, $new_group)
 {
     $sql = 'UPDATE '.$GLOBALS['ecs']->table('attribute').
         " SET attr_group='$new_group' WHERE cat_id='$cat_id' AND attr_group='$old_group'";
     $GLOBALS['db']->query($sql);
+}
+
 }

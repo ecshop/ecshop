@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class SitemapsController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 namespace App\Modules\Web\Controllers;
 
 class sitemap
@@ -10,7 +22,10 @@ class sitemap
 
     public $item;
 
-    public function item($item)
+    public 
+}
+
+private function item($item)
     {
         $this->item .= "<url>\n";
         foreach ($item as $key => $val) {
@@ -19,7 +34,7 @@ class sitemap
         $this->item .= "</url>\n";
     }
 
-    public function generate()
+    public private function generate()
     {
         $all = $this->head;
         $all .= $this->item;
@@ -109,3 +124,5 @@ if (function_exists('gzencode')) {
     header('Content-type: application/xml; charset=utf-8');
 }
 exit($out);
+
+}

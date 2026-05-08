@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class GoodsExportController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -210,7 +222,10 @@ if ($_REQUEST['act'] == 'get_goods_list') {
 /**
  * @return void
  */
-function utf82u2($str)
+
+}
+
+private function utf82u2($str)
 {
     $len = strlen($str);
     $start = 0;
@@ -274,7 +289,7 @@ function utf82u2($str)
 /**
  * @return string
  */
-function image_path_format($content)
+private function image_path_format($content)
 {
     $prefix = 'http://'.$_SERVER['SERVER_NAME'];
     $pattern = '/(background|src)=[\'|\"]((?!http:\/\/).*?)[\'|\"]/i';
@@ -289,7 +304,7 @@ function image_path_format($content)
  * @param  int  $cat_id  商品类型ID
  * @return array
  */
-function get_attributes($cat_id = 0)
+private function get_attributes($cat_id = 0)
 {
     $sql = 'SELECT `attr_id`, `cat_id`, `attr_name` FROM '.$GLOBALS['ecs']->table('attribute').' ';
     if (! empty($cat_id)) {
@@ -313,7 +328,7 @@ function get_attributes($cat_id = 0)
  * @param  array  $lang  字段名
  * @return array
  */
-function set_goods_field_name($array, $lang)
+private function set_goods_field_name($array, $lang)
 {
     $tmp_fields = $array;
     foreach ($array as $key => $value) {
@@ -334,7 +349,7 @@ function set_goods_field_name($array, $lang)
  * @param  array  $array2  数组2
  * @return array
  */
-function my_array_merge($array1, $array2)
+private function my_array_merge($array1, $array2)
 {
     $new_array = $array1;
     foreach ($array2 as $key => $val) {
@@ -350,7 +365,7 @@ function my_array_merge($array1, $array2)
  * @param  array  $filter  过滤条件数组
  * @return string
  */
-function get_export_where_sql($filter)
+private function get_export_where_sql($filter)
 {
     $where = '';
     if (! empty($filter['goods_ids'])) {
@@ -378,7 +393,7 @@ function get_export_where_sql($filter)
  *
  * @param  $str  string 处理字符串
  */
-function replace_special_char($str, $replace = true)
+private function replace_special_char($str, $replace = true)
 {
     $str = str_replace("\r\n", '', image_path_format($str));
     $str = str_replace("\t", '    ', $str);
@@ -388,4 +403,6 @@ function replace_special_char($str, $replace = true)
     }
 
     return $str;
+}
+
 }

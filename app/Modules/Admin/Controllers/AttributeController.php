@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AttributeController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -285,7 +297,10 @@ if ($_REQUEST['act'] == 'get_attr_groups') {
  *
  * @return array
  */
-function get_attrlist()
+
+}
+
+private function get_attrlist()
 {
     /* 查询条件 */
     $filter = [];
@@ -317,4 +332,6 @@ function get_attrlist()
     $arr = ['item' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

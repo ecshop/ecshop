@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AfficheController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 define('INIT_NO_SMARTY', true);
 require dirname(__FILE__).'/includes/init.php';
@@ -128,4 +140,7 @@ if ($_GET['act'] == 'js') {
         ecs_header("Location: $uri\n");
         exit;
     }
+}
+
+}
 }

@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class SearchController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -418,7 +430,10 @@ else {
 /**
  * @return void
  */
-function is_not_null($value)
+
+}
+
+private function is_not_null($value)
 {
     if (is_array($value)) {
         return (! empty($value['from'])) || (! empty($value['to']));
@@ -434,7 +449,7 @@ function is_not_null($value)
  *
  * @return void
  */
-function get_seachable_attributes($cat_id = 0)
+private function get_seachable_attributes($cat_id = 0)
 {
     $attributes = [
         'cate' => [],
@@ -486,4 +501,6 @@ function get_seachable_attributes($cat_id = 0)
     }
 
     return $attributes;
+}
+
 }

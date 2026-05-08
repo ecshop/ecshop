@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class PackController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -256,7 +268,10 @@ if ($_REQUEST['act'] == 'remove') {
     }
 }
 
-function packs_list()
+
+}
+
+private function packs_list()
 {
     $result = get_filter();
     if ($result === false) {
@@ -286,4 +301,6 @@ function packs_list()
     $arr = ['packs_list' => $packs_list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

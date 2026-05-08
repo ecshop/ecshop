@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class CronController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -290,7 +302,10 @@ if ($_REQUEST['act'] == 'do') {
     $links[] = ['text' => $_LANG['back_list'], 'href' => 'cron.php?act=list'];
     sys_msg($_LANG['do_ok'], 0, $links);
 }
-function get_next_time($cron)
+
+}
+
+private function get_next_time($cron)
 {
     $timestamp = gmtime();
     $y = local_date('Y', $timestamp);
@@ -318,7 +333,7 @@ function get_next_time($cron)
     return $next;
 }
 
-function get_minute($cron_minute)
+private function get_minute($cron_minute)
 {
     $cron_minute = explode(',', $cron_minute);
     $cron_minute = array_unique($cron_minute);
@@ -334,7 +349,7 @@ function get_minute($cron_minute)
     return trim(implode(',', $cron_minute));
 }
 
-function get_dwh()
+private function get_dwh()
 {
     $days = $week = $hours = [];
     for ($i = 1; $i <= 31; $i++) {
@@ -348,4 +363,6 @@ function get_dwh()
     }
 
     return [$days, $week, $hours];
+}
+
 }

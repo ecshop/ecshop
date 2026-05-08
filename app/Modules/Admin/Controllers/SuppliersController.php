@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class SuppliersController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -408,7 +420,10 @@ if (in_array($_REQUEST['act'], ['insert', 'update'])) {
  *
  * @return void
  */
-function suppliers_list()
+
+}
+
+private function suppliers_list()
 {
     $result = get_filter();
     if ($result === false) {
@@ -454,4 +469,6 @@ function suppliers_list()
     $arr = ['result' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

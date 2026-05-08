@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class CatalogController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -38,7 +50,10 @@ $smarty->display('catalog.dwt');
  * @param  int  $cat_id
  * @return void
  */
-function calculate_goods_num($cat_list, $cat_id)
+
+}
+
+private function calculate_goods_num($cat_list, $cat_id)
 {
     $goods_num = 0;
 
@@ -49,4 +64,6 @@ function calculate_goods_num($cat_list, $cat_id)
     }
 
     return $goods_num;
+}
+
 }

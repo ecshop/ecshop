@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class UsersOrderController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -82,7 +94,10 @@ if ($_REQUEST['act'] == 'list') {
  * @param   bool  $is_pagination  是否分页
  * @return  array   取得会员订单量/购物额排名统计数据
  */
-function get_user_orderinfo($is_pagination = true)
+
+}
+
+private function get_user_orderinfo($is_pagination = true)
 {
     global $db, $ecs, $start_date, $end_date;
 
@@ -124,4 +139,6 @@ function get_user_orderinfo($is_pagination = true)
     $arr = ['user_orderinfo' => $user_orderinfo, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

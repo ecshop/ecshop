@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class SmsController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -302,7 +314,10 @@ if ($action == 'send_sms') {
     }
 }
 
-function shop_config_update($config_code, $config_value)
+
+}
+
+private function shop_config_update($config_code, $config_value)
 {
     $sql = 'SELECT `id` FROM '.$GLOBALS['ecs']->table('shop_config')." WHERE `code`='$config_code'";
     $c_node_id = $GLOBALS['db']->getOne($sql);
@@ -320,4 +335,6 @@ function shop_config_update($config_code, $config_value)
         $sql = 'UPDATE '.$GLOBALS['ecs']->table('shop_config')." SET `value`='$config_value'  WHERE `code`='$config_code'";
         $GLOBALS['db']->query($sql);
     }
+}
+
 }

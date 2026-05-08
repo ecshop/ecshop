@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AttentionListController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 admin_priv('attention_list');
@@ -123,7 +135,10 @@ if ($_REQUEST['act'] == 'batch_addtolist') {
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
 }
-function get_attention()
+
+}
+
+private function get_attention()
 {
     $result = get_filter();
 
@@ -168,4 +183,6 @@ function get_attention()
     $arr = ['goodsdb' => $goodsdb, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

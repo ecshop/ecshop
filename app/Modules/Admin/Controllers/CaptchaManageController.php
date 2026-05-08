@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class CaptchaManageController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -73,4 +85,7 @@ if ($_REQUEST['act'] == 'save_config') {
     clear_cache_files();
 
     sys_msg($_LANG['save_ok'], 0, [['href' => 'captcha_manage.php?act=main', 'text' => $_LANG['captcha_manage']]]);
+}
+
+}
 }

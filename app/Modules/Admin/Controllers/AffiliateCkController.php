@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AffiliateCkController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 
@@ -166,7 +178,10 @@ if ($_REQUEST['act'] == 'separate') {
     $links[] = ['text' => $_LANG['affiliate_ck'], 'href' => 'affiliate_ck.php?act=list'];
     sys_msg($_LANG['edit_ok'], 0, $links);
 }
-function get_affiliate_ck()
+
+}
+
+private function get_affiliate_ck()
 {
     $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
     empty($affiliate) && $affiliate = [];
@@ -287,7 +302,7 @@ function get_affiliate_ck()
     return $arr;
 }
 
-function write_affiliate_log($oid, $uid, $username, $money, $point, $separate_by)
+private function write_affiliate_log($oid, $uid, $username, $money, $point, $separate_by)
 {
     $time = gmtime();
     $sql = 'INSERT INTO '.$GLOBALS['ecs']->table('affiliate_log').'( order_id, user_id, user_name, time, money, point, separate_type)'.
@@ -295,4 +310,6 @@ function write_affiliate_log($oid, $uid, $username, $money, $point, $separate_by
     if ($oid) {
         $GLOBALS['db']->query($sql);
     }
+}
+
 }

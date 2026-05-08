@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class GenGoodsScriptController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -31,4 +43,7 @@ if ($_REQUEST['act'] == 'setup') {
     /* 显示模板 */
     assign_query_info();
     $smarty->display('gen_goods_script.htm');
+}
+
+}
 }

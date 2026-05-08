@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ShopConfigController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 /* 代码 */
@@ -237,7 +249,10 @@ if ($_REQUEST['act'] == 'del') {
  * @param  string  $val
  * @return bool
  */
-function update_configure($key, $val = '')
+
+}
+
+private function update_configure($key, $val = '')
 {
     if (! empty($key)) {
         $sql = 'UPDATE '.$GLOBALS['ecs']->table('shop_config')." SET value='$val' WHERE code='$key'";
@@ -255,7 +270,7 @@ function update_configure($key, $val = '')
  * @param  array  $excludes  不需要获得的设置组
  * @return array
  */
-function get_settings($groups = null, $excludes = null)
+private function get_settings($groups = null, $excludes = null)
 {
     global $db, $ecs, $_LANG;
 
@@ -311,4 +326,6 @@ function get_settings($groups = null, $excludes = null)
     }
 
     return $group_list;
+}
+
 }

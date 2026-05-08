@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class LicenseController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -122,4 +134,7 @@ if ($_REQUEST['act'] == 'del') {
 
     $links[] = ['text' => $_LANG['back'], 'href' => 'license.php?act=list_edit'];
     sys_msg($_LANG['delete_license'], 0, $links);
+}
+
+}
 }

@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class IndexController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 use App\Plugins\Payment\PaymentFactory;
 
 define('IN_ECS', true);
@@ -1042,7 +1054,10 @@ if ($_REQUEST['act'] == 'license') {
  *
  * @return bool
  */
-function license_check()
+
+}
+
+private function license_check()
 {
     // return 返回数组
     $return_array = [];
@@ -1060,4 +1075,6 @@ function license_check()
     }
 
     return $return_array;
+}
+
 }

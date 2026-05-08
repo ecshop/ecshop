@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ActivityController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -108,3 +120,6 @@ $smarty->assign('lang', $_LANG);
 
 $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typeactivity.xml' : 'feed.php?type=activity'); // RSS URL
 $smarty->display('activity.dwt');
+
+}
+}

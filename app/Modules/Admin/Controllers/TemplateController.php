@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class TemplateController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -612,7 +624,10 @@ if ($_REQUEST['act'] == 'restore_backup') {
                 $temple_file = ROOT_PATH.'themes/'.$_CFG['template'].'/'.$file.'.dwt';
                 $template_content = file_get_contents($temple_file);
                 $match = [];
-                $template_content = preg_replace_callback($pattern, function ($r) use ($regions) {
+                $template_content = preg_replace_callback($pattern, 
+}
+
+private function ($r) use ($regions) {
                     return '<!-- TemplateBeginEditable name="'.$r[1]."\" -->\r\n".$regions[$r[1]]."\r\n<!-- TemplateEndEditable -->";
                 }, $template_content);
                 file_put_contents($temple_file, $template_content);
@@ -634,7 +649,7 @@ if ($_REQUEST['act'] == 'restore_backup') {
     sys_msg($_LANG['restore_backup_ok'], 0, [['text' => $_LANG['backup_setting'], 'href' => 'template.php?act=backup_setting']]);
 }
 
-function array_sort($a, $b)
+private function array_sort($a, $b)
 {
     $cmp = strcmp($a['region'], $b['region']);
 
@@ -652,7 +667,7 @@ function array_sort($a, $b)
  * @param  string  $lib_name  库项目名称
  * @return array
  */
-function load_library($curr_template, $lib_name)
+private function load_library($curr_template, $lib_name)
 {
     $lib_name = str_replace('0xa', '', $lib_name); // 过滤 0xa 非法字符
 
@@ -669,7 +684,7 @@ function load_library($curr_template, $lib_name)
  * @param  string  $tpl_name  模版名称
  * @param  int  $flag  1，AJAX数据；2，Array
  */
-function read_tpl_style($tpl_name, $flag = 1)
+private function read_tpl_style($tpl_name, $flag = 1)
 {
     if (empty($tpl_name) && $flag == 1) {
         return 0;
@@ -728,7 +743,7 @@ function read_tpl_style($tpl_name, $flag = 1)
  * @param  string  $tpl_name  模版名称
  * @param  string  $tpl_style  模版风格名
  */
-function read_style_and_tpl($tpl_name, $tpl_style)
+private function read_style_and_tpl($tpl_name, $tpl_style)
 {
     $style_info = [];
     $style_info = get_template_info($tpl_name, $tpl_style);
@@ -751,4 +766,6 @@ function read_style_and_tpl($tpl_name, $tpl_style)
     $style_info['tpl_style'] = $tpl_style_list;
 
     return $style_info;
+}
+
 }

@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class OrderController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -3797,7 +3809,10 @@ if ($_REQUEST['act'] == 'get_goods_info') {
  *
  * @param  string  $type  类型：all | order | shipping | payment
  */
-function get_status_list($type = 'all')
+
+}
+
+private function get_status_list($type = 'all')
 {
     global $_LANG;
 
@@ -3832,7 +3847,7 @@ function get_status_list($type = 'all')
  *
  * @param  array  $order  订单信息
  */
-function return_user_surplus_integral_bonus($order)
+private function return_user_surplus_integral_bonus($order)
 {
     /* 处理余额、积分、红包 */
     if ($order['user_id'] > 0 && $order['surplus'] > 0) {
@@ -3866,7 +3881,7 @@ function return_user_surplus_integral_bonus($order)
  * @param  int  $order_id  订单id
  * @return bool
  */
-function update_order_amount($order_id)
+private function update_order_amount($order_id)
 {
     include_once ROOT_PATH.'includes/lib_order.php';
     // 更新订单总金额
@@ -3885,7 +3900,7 @@ function update_order_amount($order_id)
  * @return array 可执行的操作  confirm, pay, unpay, prepare, ship, unship, receive, cancel, invalid, return, drop
  *               格式 array('confirm' => true, 'pay' => true)
  */
-function operable_list($order)
+private function operable_list($order)
 {
     /* 取得订单状态、发货状态、付款状态 */
     $os = $order['order_status'];
@@ -4072,7 +4087,7 @@ function operable_list($order)
  * @param  array  $msgs  提示信息
  * @param  array  $links  链接信息
  */
-function handle_order_money_change($order, &$msgs, &$links)
+private function handle_order_money_change($order, &$msgs, &$links)
 {
     $order_id = $order['order_id'];
     if ($order['pay_status'] == PS_PAYED || $order['pay_status'] == PS_PAYING) {
@@ -4098,7 +4113,7 @@ function handle_order_money_change($order, &$msgs, &$links)
  *
  * @return void
  */
-function order_list()
+private function order_list()
 {
     $result = get_filter();
     if ($result === false) {
@@ -4312,7 +4327,7 @@ function order_list()
  *
  * @param  int  $order_id  订单id
  */
-function update_pay_log($order_id)
+private function update_pay_log($order_id)
 {
     $order_id = intval($order_id);
     if ($order_id > 0) {
@@ -4346,7 +4361,7 @@ function update_pay_log($order_id)
  *
  * @return array 二维数组
  */
-function get_suppliers_list()
+private function get_suppliers_list()
 {
     $sql = 'SELECT *
             FROM '.$GLOBALS['ecs']->table('suppliers').'
@@ -4367,7 +4382,7 @@ function get_suppliers_list()
  * @param  array  $order  订单数组
  * @return array
  */
-function get_order_goods($order)
+private function get_order_goods($order)
 {
     $goods_list = [];
     $goods_attr = [];
@@ -4414,7 +4429,7 @@ function get_order_goods($order)
  * @param  int  $package_id  订单商品表礼包类商品id
  * @return array
  */
-function get_package_goods_list($package_id)
+private function get_package_goods_list($package_id)
 {
     $sql = 'SELECT pg.goods_id, g.goods_name, (CASE WHEN pg.product_id > 0 THEN p.product_number ELSE g.goods_number END) AS goods_number, p.goods_attr, p.product_id, pg.goods_number AS
             order_goods_number, g.goods_sn, g.is_real, p.product_sn
@@ -4505,7 +4520,7 @@ function get_package_goods_list($package_id)
  * @param  int  $product_id  货品 id
  * @return int
  */
-function order_delivery_num($order_id, $goods_id, $product_id = 0)
+private function order_delivery_num($order_id, $goods_id, $product_id = 0)
 {
     $sql = 'SELECT SUM(G.send_number) AS sums
             FROM '.$GLOBALS['ecs']->table('delivery_goods').' AS G, '.$GLOBALS['ecs']->table('delivery_order').' AS O
@@ -4532,7 +4547,7 @@ function order_delivery_num($order_id, $goods_id, $product_id = 0)
  * @param  int  $order_id  订单 id
  * @return int 1，已发货；0，未发货
  */
-function order_deliveryed($order_id)
+private function order_deliveryed($order_id)
 {
     $return_res = 0;
 
@@ -4561,7 +4576,7 @@ function order_deliveryed($order_id)
  * @param  array  $goods_list
  * @return bool
  */
-function update_order_goods($order_id, $_sended, $goods_list = [])
+private function update_order_goods($order_id, $_sended, $goods_list = [])
 {
     if (! is_array($_sended) || empty($order_id)) {
         return false;
@@ -4627,7 +4642,7 @@ function update_order_goods($order_id, $_sended, $goods_list = [])
  * @param  array  $virtual_goods  虚拟商品列表
  * @return bool
  */
-function update_order_virtual_goods($order_id, $_sended, $virtual_goods)
+private function update_order_virtual_goods($order_id, $_sended, $virtual_goods)
 {
     if (! is_array($_sended) || empty($order_id)) {
         return false;
@@ -4657,7 +4672,7 @@ function update_order_virtual_goods($order_id, $_sended, $virtual_goods)
  * @param  int  $order_id  订单 id
  * @return int 1，全部发货；0，未全部发货
  */
-function get_order_finish($order_id)
+private function get_order_finish($order_id)
 {
     $return_res = 0;
 
@@ -4684,7 +4699,7 @@ function get_order_finish($order_id)
  * @param  int  $order_id  订单 id
  * @return int 1，全部发货；0，未全部发货；-1，部分发货；-2，完全没发货；
  */
-function get_all_delivery_finish($order_id)
+private function get_all_delivery_finish($order_id)
 {
     $return_res = 0;
 
@@ -4725,7 +4740,7 @@ function get_all_delivery_finish($order_id)
     return $return_res;
 }
 
-function trim_array_walk(&$array_value)
+private function trim_array_walk(&$array_value)
 {
     if (is_array($array_value)) {
         array_walk($array_value, 'trim_array_walk');
@@ -4734,7 +4749,7 @@ function trim_array_walk(&$array_value)
     }
 }
 
-function intval_array_walk(&$array_value)
+private function intval_array_walk(&$array_value)
 {
     if (is_array($array_value)) {
         array_walk($array_value, 'intval_array_walk');
@@ -4749,7 +4764,7 @@ function intval_array_walk(&$array_value)
  * @param  int  $order_id  订单 id
  * @return int 1，成功；0，失败
  */
-function del_order_delivery($order_id)
+private function del_order_delivery($order_id)
 {
     $return_res = 0;
 
@@ -4778,7 +4793,7 @@ function del_order_delivery($order_id)
  * @param  int  $action_array  操作列表 Array('delivery', 'back', ......)
  * @return int 1，成功；0，失败
  */
-function del_delivery($order_id, $action_array)
+private function del_delivery($order_id, $action_array)
 {
     $return_res = 0;
 
@@ -4816,7 +4831,7 @@ function del_delivery($order_id, $action_array)
  *
  * @return void
  */
-function delivery_list()
+private function delivery_list()
 {
     $result = get_filter();
     if ($result === false) {
@@ -4925,7 +4940,7 @@ function delivery_list()
  *
  * @return void
  */
-function back_list()
+private function back_list()
 {
     $result = get_filter();
     if ($result === false) {
@@ -5022,7 +5037,7 @@ function back_list()
  * @param  string  $delivery_sn  发货单号
  * @return array 发货单信息（金额都有相应格式化的字段，前缀是formated_）
  */
-function delivery_order_info($delivery_id, $delivery_sn = '')
+private function delivery_order_info($delivery_id, $delivery_sn = '')
 {
     $return_order = [];
     if (empty($delivery_id) || ! is_numeric($delivery_id)) {
@@ -5074,7 +5089,7 @@ function delivery_order_info($delivery_id, $delivery_sn = '')
  * @param  int  $back_id  退货单 id（如果 back_id > 0 就按 id 查，否则按 sn 查）
  * @return array 退货单信息（金额都有相应格式化的字段，前缀是 formated_ ）
  */
-function back_order_info($back_id)
+private function back_order_info($back_id)
 {
     $return_order = [];
     if (empty($back_id) || ! is_numeric($back_id)) {
@@ -5126,7 +5141,7 @@ function back_order_info($back_id)
  * @param int     礼包ID
  * @return array 格式化结果
  */
-function package_goods(&$package_goods, $goods_number, $order_id, $extension_code, $package_id)
+private function package_goods(&$package_goods, $goods_number, $order_id, $extension_code, $package_id)
 {
     $return_array = [];
 
@@ -5166,7 +5181,7 @@ function package_goods(&$package_goods, $goods_number, $order_id, $extension_cod
  * @param  int  $product_id  货品id
  * @return int 数值
  */
-function package_sended($package_id, $goods_id, $order_id, $extension_code, $product_id = 0)
+private function package_sended($package_id, $goods_id, $order_id, $extension_code, $product_id = 0)
 {
     if (empty($package_id) || empty($goods_id) || empty($order_id) || empty($extension_code)) {
         return false;
@@ -5195,7 +5210,7 @@ function package_sended($package_id, $goods_id, $order_id, $extension_code, $pro
  * @param  array  $goods_list
  * @return bool
  */
-function change_order_goods_storage_split($order_id, $_sended, $goods_list = [])
+private function change_order_goods_storage_split($order_id, $_sended, $goods_list = [])
 {
     /* 参数检查 */
     if (! is_array($_sended) || empty($order_id)) {
@@ -5251,7 +5266,7 @@ function change_order_goods_storage_split($order_id, $_sended, $goods_list = [])
  * @param  string  $order_sn  本次操作的订单
  * @return boolen
  */
-function package_virtual_card_shipping($goods, $order_sn)
+private function package_virtual_card_shipping($goods, $order_sn)
 {
     if (! is_array($goods)) {
         return false;
@@ -5336,7 +5351,7 @@ function package_virtual_card_shipping($goods, $order_sn)
  * @param  array  $delivery_order  发货单信息数组
  * @return void
  */
-function delivery_return_goods($delivery_id, $delivery_order)
+private function delivery_return_goods($delivery_id, $delivery_order)
 {
     /* 查询：取得发货单商品 */
     $goods_sql = 'SELECT *
@@ -5363,7 +5378,7 @@ function delivery_return_goods($delivery_id, $delivery_order)
  * @param  string  $delivery_invoice_no  发货单号
  * @return void
  */
-function del_order_invoice_no($order_id, $delivery_invoice_no)
+private function del_order_invoice_no($order_id, $delivery_invoice_no)
 {
     /* 查询：取得订单中的发货单号 */
     $sql = 'SELECT invoice_no
@@ -5395,7 +5410,9 @@ function del_order_invoice_no($order_id, $delivery_invoice_no)
  *
  * @return bool
  */
-function get_site_root_url()
+private function get_site_root_url()
 {
     return 'http://'.$_SERVER['HTTP_HOST'].str_replace('/'.ADMIN_PATH.'/order.php', '', PHP_SELF);
+}
+
 }

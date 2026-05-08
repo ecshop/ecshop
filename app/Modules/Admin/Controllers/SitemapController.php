@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class SitemapController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -114,4 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             sys_msg(sprintf($_LANG['generate_failed']));
         }
     }
+}
+
+}
 }

@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ArticleAutoController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 admin_priv('article_auto');
@@ -117,7 +129,10 @@ if ($_REQUEST['act'] == 'batch_end') {
     sys_msg($_LANG['batch_end_succeed'], 0, $lnk);
 }
 
-function get_auto_goods()
+
+}
+
+private function get_auto_goods()
 {
     $where = '';
     if (! empty($_POST['goods_name'])) {
@@ -147,4 +162,6 @@ function get_auto_goods()
     $arr = ['goodsdb' => $goodsdb, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

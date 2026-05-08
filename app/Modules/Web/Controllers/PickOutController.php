@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class PickOutController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -242,7 +254,10 @@ $smarty->display('pick_out.dwt');
  * @param int        attr_id        要排除的attr_id
  * @return string
  */
-function search_url(&$attr_picks, $attr_id = 0)
+
+}
+
+private function search_url(&$attr_picks, $attr_id = 0)
 {
     $str = '';
     foreach ($attr_picks as $pick_id) {
@@ -252,4 +267,6 @@ function search_url(&$attr_picks, $attr_id = 0)
     }
 
     return $str;
+}
+
 }

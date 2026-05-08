@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class WholesaleController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -373,7 +385,10 @@ if ($_REQUEST['act'] == 'submit_order') {
  * @param  string  $where  查询条件
  * @return array
  */
-function wholesale_list($size, $page, $where)
+
+}
+
+private function wholesale_list($size, $page, $where)
 {
     $list = [];
     $sql = 'SELECT w.*, g.goods_thumb, g.goods_name as goods_name '.
@@ -405,7 +420,7 @@ function wholesale_list($size, $page, $where)
  * @param  int  $goods_id  商品ID
  * @return array
  */
-function get_price_ladder($goods_id)
+private function get_price_ladder($goods_id)
 {
     /* 显示商品规格 */
     $goods_attr_list = array_values(get_goods_attr($goods_id));
@@ -458,7 +473,7 @@ function get_price_ladder($goods_id)
  * @param  array  $reference  参照的商品属性
  * @return bool
  */
-function is_attr_matching(&$goods_list, $reference)
+private function is_attr_matching(&$goods_list, $reference)
 {
     foreach ($goods_list as $key => $goods) {
         // 需要相同的元素个数
@@ -499,7 +514,7 @@ function is_attr_matching(&$goods_list, $reference)
 // * @param   array   $reference      参照的商品属性
 // * @return  bool
 // */
-// function is_attr_same($goods_attr, $reference)
+// private function is_attr_same($goods_attr, $reference)
 // {
 //    /* 比较元素个数是否相同 */
 //    if (count($goods_attr) == count($reference)) {
@@ -507,3 +522,5 @@ function is_attr_matching(&$goods_list, $reference)
 //
 //    return true;
 // }
+
+}

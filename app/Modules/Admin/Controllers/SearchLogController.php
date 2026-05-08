@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class SearchLogController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -34,7 +46,10 @@ if ($_REQUEST['act'] == 'query') {
         ['filter' => $logdb['filter'], 'page_count' => $logdb['page_count']]
     );
 }
-function get_search_log()
+
+}
+
+private function get_search_log()
 {
     $where = '';
     if (isset($_REQUEST['start_dateYear']) && isset($_REQUEST['end_dateYear'])) {
@@ -66,4 +81,6 @@ function get_search_log()
     $arr = ['logdb' => $logdb, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

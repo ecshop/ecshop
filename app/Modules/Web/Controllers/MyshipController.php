@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class MyshipController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -80,3 +92,6 @@ foreach ($shipping_list as $key => $val) {
 $smarty->assign('shipping_list', $shipping_list);
 
 $smarty->display('myship.dwt');
+
+}
+}

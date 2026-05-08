@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AccountLogController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -150,7 +162,10 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
  *                                frozen_money表示冻结资金，rank_points表示等级积分，pay_points表示消费积分
  * @return array
  */
-function get_accountlist($user_id, $account_type = '')
+
+}
+
+private function get_accountlist($user_id, $account_type = '')
 {
     /* 检查参数 */
     $where = " WHERE user_id = '$user_id' ";
@@ -181,4 +196,6 @@ function get_accountlist($user_id, $account_type = '')
     }
 
     return ['account' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
+}
+
 }

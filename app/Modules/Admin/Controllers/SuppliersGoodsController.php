@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class SuppliersGoodsController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -1660,7 +1672,10 @@ if ($_REQUEST['act'] == 'drop_goods_article') {
  * @param  string  $extension_code  虚拟商品扩展代码，实体商品为空
  * @return array('href' => $href, 'text' => $text)
  */
-function list_link($is_add = true, $extension_code = '')
+
+}
+
+private function list_link($is_add = true, $extension_code = '')
 {
     $href = 'goods.php?act=list';
     if (! empty($extension_code)) {
@@ -1685,7 +1700,7 @@ function list_link($is_add = true, $extension_code = '')
  * @param  string  $extension_code  虚拟商品扩展代码，实体商品为空
  * @return array('href' => $href, 'text' => $text)
  */
-function add_link($extension_code = '')
+private function add_link($extension_code = '')
 {
     $href = 'goods.php?act=add';
     if (! empty($extension_code)) {
@@ -1707,7 +1722,7 @@ function add_link($extension_code = '')
  * @param  string  $url  网址
  * @return bool
  */
-function goods_parse_url($url)
+private function goods_parse_url($url)
 {
     $parse_url = @parse_url($url);
 
@@ -1722,7 +1737,7 @@ function goods_parse_url($url)
  * @param  array  $price_list  价格列表
  * @return void
  */
-function handle_volume_price($goods_id, $number_list, $price_list)
+private function handle_volume_price($goods_id, $number_list, $price_list)
 {
     $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('volume_price').
         " WHERE price_type = '1' AND goods_id = '$goods_id'";
@@ -1740,4 +1755,6 @@ function handle_volume_price($goods_id, $number_list, $price_list)
             $GLOBALS['db']->query($sql);
         }
     }
+}
+
 }

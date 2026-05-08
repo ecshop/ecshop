@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class TopicController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -102,3 +114,6 @@ if (! $smarty->is_cached($templates, $cache_id)) {
 }
 /* 显示模板 */
 $smarty->display($templates, $cache_id);
+
+}
+}

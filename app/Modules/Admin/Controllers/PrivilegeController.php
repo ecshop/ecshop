@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class PrivilegeController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -583,7 +595,10 @@ if ($_REQUEST['act'] == 'remove') {
 }
 
 /* 获取管理员列表 */
-function get_admin_userlist()
+
+}
+
+private function get_admin_userlist()
 {
     $list = [];
     $sql = 'SELECT user_id, user_name, email, add_time, last_login '.
@@ -599,7 +614,7 @@ function get_admin_userlist()
 }
 
 /* 清除购物车中过期的数据 */
-function clear_cart()
+private function clear_cart()
 {
     /* 取得有效的session */
     $sql = 'SELECT DISTINCT session_id '.
@@ -615,7 +630,7 @@ function clear_cart()
 }
 
 /* 获取角色列表 */
-function get_role_list()
+private function get_role_list()
 {
     $list = [];
     $sql = 'SELECT role_id, role_name, action_list '.
@@ -623,4 +638,6 @@ function get_role_list()
     $list = $GLOBALS['db']->getAll($sql);
 
     return $list;
+}
+
 }

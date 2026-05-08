@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class FlashplayController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -622,7 +634,10 @@ if ($_REQUEST['act'] == 'custom_update') {
     sys_msg($_LANG['edit_ok'], 0, $links);
 }
 
-function get_flash_xml()
+
+}
+
+private function get_flash_xml()
 {
     $flashdb = [];
     if (file_exists(ROOT_PATH.DATA_DIR.'/flash_data.xml')) {
@@ -643,7 +658,7 @@ function get_flash_xml()
     return $flashdb;
 }
 
-function put_flash_xml($flashdb)
+private function put_flash_xml($flashdb)
 {
     if (! empty($flashdb)) {
         $xml = '<?xml version="1.0" encoding="'.EC_CHARSET.'"?><bcaster>';
@@ -657,7 +672,7 @@ function put_flash_xml($flashdb)
     }
 }
 
-function get_url_image($url)
+private function get_url_image($url)
 {
     $url_arr = explode('.', $url);
     $ext = strtolower(end($url_arr));
@@ -684,7 +699,7 @@ function get_url_image($url)
     return $tmp_file;
 }
 
-function get_width_height()
+private function get_width_height()
 {
     $curr_template = $GLOBALS['_CFG']['template'];
     $path = ROOT_PATH.'themes/'.$curr_template.'/library/';
@@ -711,7 +726,7 @@ function get_width_height()
     return $width_height;
 }
 
-function get_flash_templates($dir)
+private function get_flash_templates($dir)
 {
     $flashtpls = [];
     $template_dir = @opendir($dir);
@@ -725,7 +740,7 @@ function get_flash_templates($dir)
     return $flashtpls;
 }
 
-function get_flash_tpl_info($dir, $file)
+private function get_flash_tpl_info($dir, $file)
 {
     $info = [];
     if (is_file($dir.$file.'/preview.jpg')) {
@@ -741,7 +756,7 @@ function get_flash_tpl_info($dir, $file)
     return $info;
 }
 
-function set_flash_data($tplname, &$msg)
+private function set_flash_data($tplname, &$msg)
 {
     $flashdata = get_flash_xml();
     if (empty($flashdata)) {
@@ -779,7 +794,7 @@ function set_flash_data($tplname, &$msg)
     return $msg !== true;
 }
 
-function set_flash_uproll($tplname, $flashdata)
+private function set_flash_uproll($tplname, $flashdata)
 {
     $data_file = ROOT_PATH.DATA_DIR.'/flashdata/'.$tplname.'/data.xml';
     $xmldata = '<?xml version="1.0" encoding="'.EC_CHARSET.'"?><myMenu>';
@@ -792,7 +807,7 @@ function set_flash_uproll($tplname, $flashdata)
     return true;
 }
 
-function set_flash_focus($tplname, $flashdata)
+private function set_flash_focus($tplname, $flashdata)
 {
     $data_file = ROOT_PATH.DATA_DIR.'/flashdata/'.$tplname.'/data.js';
     $jsdata = '';
@@ -816,7 +831,7 @@ function set_flash_focus($tplname, $flashdata)
     return true;
 }
 
-function set_flash_default($tplname, $flashdata)
+private function set_flash_default($tplname, $flashdata)
 {
     $data_file = ROOT_PATH.DATA_DIR.'/flashdata/'.$tplname.'/data.xml';
     $xmldata = '<?xml version="1.0" encoding="'.EC_CHARSET.'"?><bcaster>';
@@ -835,7 +850,7 @@ function set_flash_default($tplname, $flashdata)
  *
  * @return void
  */
-function ad_list()
+private function ad_list()
 {
     $result = get_filter();
     if ($result === false) {
@@ -882,7 +897,7 @@ function ad_list()
  * @param  int  $ad_status  自定义广告 状态 0，关闭；1，开启。
  * @return bool
  */
-function modfiy_ad_status($ad_id, $ad_status = 0)
+private function modfiy_ad_status($ad_id, $ad_status = 0)
 {
     $return = false;
 
@@ -933,4 +948,6 @@ function modfiy_ad_status($ad_id, $ad_status = 0)
     }
 
     return $return = true;
+}
+
 }

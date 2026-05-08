@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ArticleController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -517,7 +529,10 @@ if ($_REQUEST['act'] == 'batch') {
 }
 
 /* 把商品删除关联 */
-function drop_link_goods($goods_id, $article_id)
+
+}
+
+private function drop_link_goods($goods_id, $article_id)
 {
     $sql = 'DELETE FROM '.$GLOBALS['ecs']->table('goods_article').
         " WHERE goods_id = '$goods_id' AND article_id = '$article_id' LIMIT 1";
@@ -526,7 +541,7 @@ function drop_link_goods($goods_id, $article_id)
 }
 
 /* 取得文章关联商品 */
-function get_article_goods($article_id)
+private function get_article_goods($article_id)
 {
     $list = [];
     $sql = 'SELECT g.goods_id, g.goods_name'.
@@ -539,7 +554,7 @@ function get_article_goods($article_id)
 }
 
 /* 获得文章列表 */
-function get_articleslist()
+private function get_articleslist()
 {
     $result = get_filter();
     if ($result === false) {
@@ -593,7 +608,7 @@ function get_articleslist()
 }
 
 /* 上传文件 */
-function upload_article_file($upload)
+private function upload_article_file($upload)
 {
     if (! make_dir('../'.DATA_DIR.'/article')) {
         /* 创建目录失败 */
@@ -608,4 +623,6 @@ function upload_article_file($upload)
     } else {
         return false;
     }
+}
+
 }

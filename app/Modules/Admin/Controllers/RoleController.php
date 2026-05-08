@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class RoleController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -236,7 +248,10 @@ if ($_REQUEST['act'] == 'remove') {
 }
 
 /* 获取角色列表 */
-function get_role_list()
+
+}
+
+private function get_role_list()
 {
     $list = [];
     $sql = 'SELECT role_id, role_name, action_list, role_describe '.
@@ -244,4 +259,6 @@ function get_role_list()
     $list = $GLOBALS['db']->getAll($sql);
 
     return $list;
+}
+
 }

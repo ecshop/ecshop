@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class CategoryController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -497,7 +509,10 @@ if ($_REQUEST['act'] == 'remove') {
  * @param  int  $cat_id  指定的分类ID
  * @return mix
  */
-function get_cat_info($cat_id)
+
+}
+
+private function get_cat_info($cat_id)
 {
     $sql = 'SELECT * FROM '.$GLOBALS['ecs']->table('category')." WHERE cat_id='$cat_id' LIMIT 1";
 
@@ -511,7 +526,7 @@ function get_cat_info($cat_id)
  * @param  array  $args
  * @return mix
  */
-function cat_update($cat_id, $args)
+private function cat_update($cat_id, $args)
 {
     if (empty($args) || empty($cat_id)) {
         return false;
@@ -526,7 +541,7 @@ function cat_update($cat_id, $args)
  *
  * @return void
  */
-function get_attr_list()
+private function get_attr_list()
 {
     $sql = 'SELECT a.attr_id, a.cat_id, a.attr_name '.
         ' FROM '.$GLOBALS['ecs']->table('attribute').' AS a,  '.
@@ -552,7 +567,7 @@ function get_attr_list()
  * @param  int  $cat_id  分类ID
  * @return void
  */
-function insert_cat_recommend($recommend_type, $cat_id)
+private function insert_cat_recommend($recommend_type, $cat_id)
 {
     // 检查分类是否为首页推荐
     if (! empty($recommend_type)) {
@@ -583,4 +598,6 @@ function insert_cat_recommend($recommend_type, $cat_id)
     } else {
         $GLOBALS['db']->query('DELETE FROM '.$GLOBALS['ecs']->table('cat_recommend').' WHERE cat_id='.$cat_id);
     }
+}
+
 }

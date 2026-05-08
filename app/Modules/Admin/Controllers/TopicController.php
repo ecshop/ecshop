@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class TopicController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -287,7 +299,10 @@ if ($_REQUEST['act'] == 'query') {
  *
  * @return void
  */
-function get_topic_list()
+
+}
+
+private function get_topic_list()
 {
     $result = get_filter();
     if ($result === false) {
@@ -332,7 +347,7 @@ function get_topic_list()
  * @param  string  $text  文字
  * @return array('href' => $href, 'text' => $text)
  */
-function list_link($is_add = true, $text = '')
+private function list_link($is_add = true, $text = '')
 {
     $href = 'topic.php?act=list';
     if (! $is_add) {
@@ -345,7 +360,7 @@ function list_link($is_add = true, $text = '')
     return ['href' => $href, 'text' => $text];
 }
 
-function get_toppic_width_height()
+private function get_toppic_width_height()
 {
     $width_height = [];
 
@@ -382,7 +397,7 @@ function get_toppic_width_height()
     return $width_height;
 }
 
-function get_url_image($url)
+private function get_url_image($url)
 {
     $url_arr = explode('.', $url);
     $ext = strtolower(end($url_arr));
@@ -407,4 +422,6 @@ function get_url_image($url)
     fclose($fp);
 
     return $tmp_file;
+}
+
 }

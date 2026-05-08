@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class WholesaleController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 include_once '../includes/lib_goods.php';
@@ -568,7 +580,10 @@ if ($_REQUEST['act'] == 'get_goods_info') {
  * 取得批发活动列表
  * @return   array
  */
-function wholesale_list()
+
+}
+
+private function wholesale_list()
 {
     /* 查询会员等级 */
     $rank_list = [];
@@ -633,4 +648,6 @@ function wholesale_list()
     }
 
     return ['item' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
+}
+
 }

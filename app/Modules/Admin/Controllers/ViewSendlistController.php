@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ViewSendlistController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 admin_priv('view_sendlist');
@@ -190,7 +202,10 @@ if ($_REQUEST['act'] == 'all_send') {
     sys_msg($_LANG['mailsend_finished'], 0, $links);
 }
 
-function get_sendlist()
+
+}
+
+private function get_sendlist()
 {
     $result = get_filter();
     if ($result === false) {
@@ -218,4 +233,6 @@ function get_sendlist()
     $arr = ['listdb' => $listdb, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

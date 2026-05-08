@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class MessageController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -105,7 +117,10 @@ if ($action == 'default') {
  * @param  int  $start
  * @return array
  */
-function get_msg_list($num, $start)
+
+}
+
+private function get_msg_list($num, $start)
 {
     /* 获取留言数据 */
     $msg = [];
@@ -174,4 +189,6 @@ function get_msg_list($num, $start)
     }
 
     return $msg;
+}
+
 }

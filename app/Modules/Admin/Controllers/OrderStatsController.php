@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class OrderStatsController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -329,7 +341,10 @@ if ($_REQUEST['act'] = 'download') {
  * @param  $end_date  查询的结束日期
  * @return $order_info    订单概况数据
  */
-function get_orderinfo($start_date, $end_date)
+
+}
+
+private function get_orderinfo($start_date, $end_date)
 {
     $order_info = [];
 
@@ -359,4 +374,6 @@ function get_orderinfo($start_date, $end_date)
     $order_info['invalid_num'] = $GLOBALS['db']->getOne($sql);
 
     return $order_info;
+}
+
 }

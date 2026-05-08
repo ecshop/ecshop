@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class EmailListController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 admin_priv('email_list');
@@ -98,7 +110,10 @@ if ($_REQUEST['act'] == 'batch_exit') {
     sys_msg(sprintf($_LANG['batch_exit_succeed'], $db->affected_rows()), 0, $lnk);
 }
 
-function get_email_list()
+
+}
+
+private function get_email_list()
 {
     $result = get_filter();
     if ($result === false) {
@@ -128,4 +143,6 @@ function get_email_list()
     $arr = ['emaildb' => $emaildb, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

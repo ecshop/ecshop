@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class VoteController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -50,7 +62,10 @@ echo $json->encode($res);
  * @param  string  $ip_address
  * @return bool
  */
-function vote_already_submited($vote_id, $ip_address)
+
+}
+
+private function vote_already_submited($vote_id, $ip_address)
 {
     $sql = 'SELECT COUNT(*) FROM '.$GLOBALS['ecs']->table('vote_log').' '.
         "WHERE ip_address = '$ip_address' AND vote_id = '$vote_id' ";
@@ -66,7 +81,7 @@ function vote_already_submited($vote_id, $ip_address)
  * @param  string  $option_id
  * @return void
  */
-function save_vote($vote_id, $ip_address, $option_id)
+private function save_vote($vote_id, $ip_address, $option_id)
 {
     $sql = 'INSERT INTO '.$GLOBALS['ecs']->table('vote_log').' (vote_id, ip_address, vote_time) '.
         "VALUES ('$vote_id', '$ip_address', ".gmtime().')';
@@ -83,4 +98,6 @@ function save_vote($vote_id, $ip_address, $option_id)
         'option_count = option_count + 1 '.
         'WHERE '.db_create_in($option_id, 'option_id');
     $GLOBALS['db']->query($sql);
+}
+
 }

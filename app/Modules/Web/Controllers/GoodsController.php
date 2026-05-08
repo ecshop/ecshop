@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class GoodsController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -243,7 +255,10 @@ $smarty->display('goods.dwt', $cache_id);
  * @param  int  $goods_id
  * @return array
  */
-function get_linked_goods($goods_id)
+
+}
+
+private function get_linked_goods($goods_id)
 {
     $sql = 'SELECT g.goods_id, g.goods_name, g.goods_thumb, g.goods_img, g.shop_price AS org_price, '.
         "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, ".
@@ -285,7 +300,7 @@ function get_linked_goods($goods_id)
  * @param  int  $goods_id
  * @return void
  */
-function get_linked_articles($goods_id)
+private function get_linked_articles($goods_id)
 {
     $sql = 'SELECT a.article_id, a.title, a.file_url, a.open_type, a.add_time '.
         'FROM '.$GLOBALS['ecs']->table('goods_article').' AS g, '.
@@ -314,7 +329,7 @@ function get_linked_articles($goods_id)
  * @param  int  $goods_id
  * @return array
  */
-function get_user_rank_prices($goods_id, $shop_price)
+private function get_user_rank_prices($goods_id, $shop_price)
 {
     $sql = "SELECT rank_id, IFNULL(mp.user_price, r.discount * $shop_price / 100) AS price, r.rank_name, r.discount ".
         'FROM '.$GLOBALS['ecs']->table('user_rank').' AS r '.
@@ -339,7 +354,7 @@ function get_user_rank_prices($goods_id, $shop_price)
  * @param  int  $goods_id
  * @return array
  */
-function get_also_bought($goods_id)
+private function get_also_bought($goods_id)
 {
     $sql = 'SELECT COUNT(b.goods_id ) AS num, g.goods_id, g.goods_name, g.goods_thumb, g.goods_img, g.shop_price, g.promote_price, g.promote_start_date, g.promote_end_date '.
         'FROM '.$GLOBALS['ecs']->table('order_goods').' AS a '.
@@ -382,7 +397,7 @@ function get_also_bought($goods_id)
  * @param  int  $goods_id
  * @return int
  */
-function get_goods_rank($goods_id)
+private function get_goods_rank($goods_id)
 {
     /* 统计时间段 */
     $period = intval($GLOBALS['_CFG']['top10_time']);
@@ -440,7 +455,7 @@ function get_goods_rank($goods_id)
  * @param  array  $attr
  * @return void
  */
-function get_attr_amount($goods_id, $attr)
+private function get_attr_amount($goods_id, $attr)
 {
     $sql = 'SELECT SUM(attr_price) FROM '.$GLOBALS['ecs']->table('goods_attr').
         " WHERE goods_id='$goods_id' AND ".db_create_in($attr, 'goods_attr_id');
@@ -454,7 +469,7 @@ function get_attr_amount($goods_id, $attr)
  * @param  string  $goods_id  商品编号
  * @return 礼包列表
  */
-function get_package_goods_list($goods_id)
+private function get_package_goods_list($goods_id)
 {
     $now = gmtime();
     $sql = 'SELECT pg.goods_id, ga.act_id, ga.act_name, ga.act_desc, ga.goods_name, ga.start_time,
@@ -534,4 +549,6 @@ function get_package_goods_list($goods_id)
     }
 
     return $res;
+}
+
 }

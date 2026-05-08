@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ShopinfoController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -172,7 +184,10 @@ if ($_REQUEST['act'] == 'remove') {
 }
 
 /* 获取网店信息文章数据 */
-function shopinfo_article_list()
+
+}
+
+private function shopinfo_article_list()
 {
     $list = [];
     $sql = 'SELECT article_id, title ,add_time'.
@@ -186,4 +201,6 @@ function shopinfo_article_list()
     }
 
     return $list;
+}
+
 }

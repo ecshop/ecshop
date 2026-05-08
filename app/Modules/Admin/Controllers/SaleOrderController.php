@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class SaleOrderController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -91,7 +103,10 @@ if ($_REQUEST['act'] == 'list') {
  * @param  bool  $is_pagination  是否分页
  * @return array 销售排行数据
  */
-function get_sales_order($is_pagination = true)
+
+}
+
+private function get_sales_order($is_pagination = true)
 {
     $filter['start_date'] = empty($_REQUEST['start_date']) ? '' : local_strtotime($_REQUEST['start_date']);
     $filter['end_date'] = empty($_REQUEST['end_date']) ? '' : local_strtotime($_REQUEST['end_date']);
@@ -138,4 +153,6 @@ function get_sales_order($is_pagination = true)
     $arr = ['sales_order_data' => $sales_order_data, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

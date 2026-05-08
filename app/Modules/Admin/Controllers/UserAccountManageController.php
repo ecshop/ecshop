@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class UserAccountManageController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -106,7 +118,10 @@ if ($_REQUEST['act'] == 'query') {
  * @param  string  $type  0,充值 1,提现
  * @return array
  */
-function get_total_amount($start_date, $end_date, $type = 0)
+
+}
+
+private function get_total_amount($start_date, $end_date, $type = 0)
 {
     $sql = ' SELECT IFNULL(SUM(amount), 0) AS total_amount FROM '.$GLOBALS['ecs']->table('user_account').' AS a, '.$GLOBALS['ecs']->table('users').' AS u '.
         " WHERE process_type = $type AND is_paid = 1 AND a.user_id = u.user_id AND paid_time >= '$start_date' AND paid_time < '".($end_date + 86400)."'";
@@ -123,7 +138,7 @@ function get_total_amount($start_date, $end_date, $type = 0)
  *
  * @return void
  */
-function order_list()
+private function order_list()
 {
     global $start_date, $end_date;
 
@@ -174,4 +189,6 @@ function order_list()
         'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

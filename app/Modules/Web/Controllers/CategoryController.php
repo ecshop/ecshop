@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class CategoryController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -342,7 +354,10 @@ $smarty->display('category.dwt', $cache_id);
  * @param  int  $cat_id
  * @return void
  */
-function get_cat_info($cat_id)
+
+}
+
+private function get_cat_info($cat_id)
 {
     return $GLOBALS['db']->getRow('SELECT cat_name, keywords, cat_desc, style, grade, filter_attr, parent_id FROM '.$GLOBALS['ecs']->table('category').
         " WHERE cat_id = '$cat_id'");
@@ -354,7 +369,7 @@ function get_cat_info($cat_id)
  * @param  string  $children
  * @return array
  */
-function category_get_goods($children, $brand, $min, $max, $ext, $size, $page, $sort, $order)
+private function category_get_goods($children, $brand, $min, $max, $ext, $size, $page, $sort, $order)
 {
     $display = $GLOBALS['display'];
     $where = 'g.is_on_sale = 1 AND g.is_alone_sale = 1 AND '.
@@ -434,7 +449,7 @@ function category_get_goods($children, $brand, $min, $max, $ext, $size, $page, $
  * @param  string  $cat_id
  * @return int
  */
-function get_cagtegory_goods_count($children, $brand = 0, $min = 0, $max = 0, $ext = '')
+private function get_cagtegory_goods_count($children, $brand = 0, $min = 0, $max = 0, $ext = '')
 {
     $where = "g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 AND ($children OR ".get_extension_goods($children).')';
 
@@ -460,7 +475,7 @@ function get_cagtegory_goods_count($children, $brand = 0, $min = 0, $max = 0, $e
  * @param  int  $cat_id  //当前的cat_id
  * @return int
  */
-function get_parent_grade($cat_id)
+private function get_parent_grade($cat_id)
 {
     static $res = null;
 
@@ -493,4 +508,6 @@ function get_parent_grade($cat_id)
     }
 
     return $grade_arr[$cat_id];
+}
+
 }

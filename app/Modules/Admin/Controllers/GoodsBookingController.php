@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class GoodsBookingController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -130,7 +142,10 @@ if ($_REQUEST['act'] == 'update') {
  *
  * @return array
  */
-function get_bookinglist()
+
+}
+
+private function get_bookinglist()
 {
     /* 查询条件 */
     $filter['keywords'] = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);
@@ -175,7 +190,7 @@ function get_bookinglist()
  * @param  int  $id
  * @return array
  */
-function get_booking_info($id)
+private function get_booking_info($id)
 {
     global $ecs, $db, $_CFG, $_LANG;
 
@@ -197,4 +212,6 @@ function get_booking_info($id)
     }
 
     return $res;
+}
+
 }

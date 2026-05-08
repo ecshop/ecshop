@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class GroupBuyController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -263,7 +275,10 @@ if ($_REQUEST['act'] == 'buy') {
 }
 
 /* 取得团购活动总数 */
-function group_buy_count()
+
+}
+
+private function group_buy_count()
 {
     $now = gmtime();
     $sql = 'SELECT COUNT(*) '.
@@ -281,7 +296,7 @@ function group_buy_count()
  * @param  int  $page  当前页
  * @return array
  */
-function group_buy_list($size, $page)
+private function group_buy_list($size, $page)
 {
     /* 取得团购活动 */
     $gb_list = [];
@@ -326,4 +341,6 @@ function group_buy_list($size, $page)
     }
 
     return $gb_list;
+}
+
 }

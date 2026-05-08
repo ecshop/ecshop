@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class CommentController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -212,7 +224,10 @@ echo $json->encode($result);
  * @param  object  $cmt
  * @return void
  */
-function add_comment($cmt)
+
+}
+
+private function add_comment($cmt)
 {
     /* 评论是否需要审核 */
     $status = 1 - $GLOBALS['_CFG']['comment_check'];
@@ -236,4 +251,6 @@ function add_comment($cmt)
         add_feed($GLOBALS['db']->insert_id(), COMMENT_GOODS);
     }*/
     return $result;
+}
+
 }

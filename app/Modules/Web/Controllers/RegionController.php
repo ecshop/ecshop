@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class RegionController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 define('INIT_NO_USERS', true);
 define('INIT_NO_SMARTY', true);
@@ -19,3 +31,6 @@ $arr['target'] = htmlspecialchars($arr['target']);
 
 $json = new JSON;
 echo $json->encode($arr);
+
+}
+}

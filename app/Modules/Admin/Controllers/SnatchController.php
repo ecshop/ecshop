@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class SnatchController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -335,7 +347,10 @@ if ($_REQUEST['act'] == 'search_products') {
  *
  * @return void
  */
-function get_snatchlist()
+
+}
+
+private function get_snatchlist()
 {
     $result = get_filter();
     if ($result === false) {
@@ -393,7 +408,7 @@ function get_snatchlist()
  * @param  int  $id  snatch_id
  * @return array array(snatch_id, snatch_name, goods_id,start_time, end_time, min_price, integral)
  */
-function get_snatch_info($id)
+private function get_snatch_info($id)
 {
     global $ecs, $db, $_CFG;
 
@@ -423,7 +438,7 @@ function get_snatch_info($id)
  *
  * @return array
  */
-function get_snatch_detail()
+private function get_snatch_detail()
 {
     $filter['snatch_id'] = empty($_REQUEST['snatch_id']) ? 0 : intval($_REQUEST['snatch_id']);
     $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'bid_time' : trim($_REQUEST['sort_by']);
@@ -452,4 +467,6 @@ function get_snatch_detail()
     $arr = ['bid' => $row, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

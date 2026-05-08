@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class UsersController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -580,7 +592,10 @@ if ($_REQUEST['act'] == 'aff_list') {
  *
  * @return void
  */
-function user_list()
+
+}
+
+private function user_list()
 {
     $result = get_filter();
     if ($result === false) {
@@ -645,4 +660,6 @@ function user_list()
         'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

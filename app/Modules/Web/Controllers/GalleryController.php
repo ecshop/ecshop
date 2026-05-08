@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class GalleryController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -46,3 +58,6 @@ $smarty->assign('shop_name', $_CFG['shop_name']);
 $smarty->assign('watermark', str_replace('../', './', $_CFG['watermark']));
 $smarty->assign('gallery', $gallery);
 $smarty->display('gallery.dwt');
+
+}
+}

@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class FavourableController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 require ROOT_PATH.'includes/lib_goods.php';
@@ -359,7 +371,10 @@ if ($_REQUEST['act'] == 'search') {
  * 取得优惠活动列表
  * @return   array
  */
-function favourable_list()
+
+}
+
+private function favourable_list()
 {
     $result = get_filter();
     if ($result === false) {
@@ -412,4 +427,6 @@ function favourable_list()
     }
 
     return ['item' => $list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
+}
+
 }

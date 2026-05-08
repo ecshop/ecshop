@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AffiliateController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -61,4 +73,7 @@ if ($display_mode == 'javascript') {
     echo "document.write('$output');";
 } elseif ($display_mode == 'iframe') {
     echo $output;
+}
+
+}
 }

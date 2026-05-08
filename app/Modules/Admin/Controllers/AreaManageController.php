@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AreaManageController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -176,7 +188,10 @@ if ($_REQUEST['act'] == 'drop_area') {
     }
 }
 
-function new_region_id($region_id)
+
+}
+
+private function new_region_id($region_id)
 {
     $regions_id = [];
     if (empty($region_id)) {
@@ -189,4 +204,6 @@ function new_region_id($region_id)
     }
 
     return $regions_id;
+}
+
 }

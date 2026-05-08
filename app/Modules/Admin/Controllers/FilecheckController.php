@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class FilecheckController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -114,7 +126,10 @@ if ($step == 1 || $step == 2) {
  * @param int $sub //是否检查子目录
  * @param string $skip //不检查的目录或文件
  */
-function checkfiles($currentdir, $ext = '', $sub = 1, $skip = '')
+
+}
+
+private function checkfiles($currentdir, $ext = '', $sub = 1, $skip = '')
 {
     global $md5data;
 
@@ -136,4 +151,6 @@ function checkfiles($currentdir, $ext = '', $sub = 1, $skip = '')
             }
         }
     }
+}
+
 }

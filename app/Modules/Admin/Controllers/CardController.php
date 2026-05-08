@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class CardController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -237,7 +249,10 @@ if ($_REQUEST['act'] == 'edit_free_money') {
     }
 }
 
-function cards_list()
+
+}
+
+private function cards_list()
 {
     $result = get_filter();
     if ($result === false) {
@@ -267,4 +282,6 @@ function cards_list()
     $arr = ['card_list' => $card_list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

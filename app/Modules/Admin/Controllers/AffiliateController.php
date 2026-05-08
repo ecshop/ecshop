@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AffiliateController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 admin_priv('affiliate');
@@ -166,7 +178,10 @@ if ($_REQUEST['act'] == 'del') {
     exit;
 }
 
-function get_affiliate()
+
+}
+
+private function get_affiliate()
 {
     $config = unserialize($GLOBALS['_CFG']['affiliate']);
     empty($config) && $config = [];
@@ -174,7 +189,7 @@ function get_affiliate()
     return $config;
 }
 
-function put_affiliate($config)
+private function put_affiliate($config)
 {
     $temp = serialize($config);
     $sql = 'UPDATE '.$GLOBALS['ecs']->table('shop_config').
@@ -182,4 +197,6 @@ function put_affiliate($config)
         "WHERE code = 'affiliate'";
     $GLOBALS['db']->query($sql);
     clear_all_files();
+}
+
 }

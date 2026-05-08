@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Web\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ExchangeController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -301,7 +313,10 @@ if ($_REQUEST['act'] == 'buy') {
  * @param  int  $cat_id
  * @return void
  */
-function get_cat_info($cat_id)
+
+}
+
+private function get_cat_info($cat_id)
 {
     return $GLOBALS['db']->getRow('SELECT keywords, cat_desc, style, grade, filter_attr, parent_id FROM '.$GLOBALS['ecs']->table('category').
         " WHERE cat_id = '$cat_id'");
@@ -313,7 +328,7 @@ function get_cat_info($cat_id)
  * @param  string  $children
  * @return array
  */
-function exchange_get_goods($children, $min, $max, $ext, $size, $page, $sort, $order)
+private function exchange_get_goods($children, $min, $max, $ext, $size, $page, $sort, $order)
 {
     $display = $GLOBALS['display'];
     $where = 'eg.is_exchange = 1 AND g.is_delete = 0 AND '.
@@ -381,7 +396,7 @@ function exchange_get_goods($children, $min, $max, $ext, $size, $page, $sort, $o
  * @param  string  $cat_id
  * @return int
  */
-function get_exchange_goods_count($children, $min = 0, $max = 0, $ext = '')
+private function get_exchange_goods_count($children, $min = 0, $max = 0, $ext = '')
 {
     $where = "eg.is_exchange = 1 AND g.is_delete = 0 AND ($children OR ".get_extension_goods($children).')';
 
@@ -410,7 +425,7 @@ function get_exchange_goods_count($children, $min = 0, $max = 0, $ext = '')
  * @param  string  $ext  商品扩展查询
  * @return array
  */
-function get_exchange_recommend_goods($type = '', $cats = '', $min = 0, $max = 0, $ext = '')
+private function get_exchange_recommend_goods($type = '', $cats = '', $min = 0, $max = 0, $ext = '')
 {
     $price_where = ($min > 0) ? " AND g.shop_price >= $min " : '';
     $price_where .= ($max > 0) ? " AND g.shop_price <= $max " : '';
@@ -471,7 +486,7 @@ function get_exchange_recommend_goods($type = '', $cats = '', $min = 0, $max = 0
  * @param  int  $goods_id
  * @return void
  */
-function get_exchange_goods_info($goods_id)
+private function get_exchange_goods_info($goods_id)
 {
     $time = gmtime();
     $sql = 'SELECT g.*, c.measure_unit, b.brand_id, b.brand_name AS goods_brand, eg.exchange_integral, eg.is_exchange '.
@@ -516,4 +531,6 @@ function get_exchange_goods_info($goods_id)
     } else {
         return false;
     }
+}
+
 }

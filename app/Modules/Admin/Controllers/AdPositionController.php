@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AdPositionController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -264,7 +276,10 @@ if ($_REQUEST['act'] == 'remove') {
 }
 
 /* 获取广告位置列表 */
-function ad_position_list()
+
+}
+
+private function ad_position_list()
 {
     $filter = [];
 
@@ -286,4 +301,6 @@ function ad_position_list()
     }
 
     return ['position' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
+}
+
 }

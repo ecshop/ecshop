@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class SaleListController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -92,7 +104,10 @@ if ($_REQUEST['act'] == 'list') {
  * @param  bool  $is_pagination  是否分页
  * @return array 销售明细数据
  */
-function get_sale_list($is_pagination = true)
+
+}
+
+private function get_sale_list($is_pagination = true)
 {
 
     /* 时间参数 */
@@ -129,4 +144,6 @@ function get_sale_list($is_pagination = true)
     $arr = ['sale_list_data' => $sale_list_data, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class TagManageController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -239,7 +251,10 @@ if ($_REQUEST['act'] == 'edit_tag_name') {
  * @param  $id  标签id
  * @return bool
  */
-function tag_is_only($name, $tag_id, $goods_id = '')
+
+}
+
+private function tag_is_only($name, $tag_id, $goods_id = '')
 {
     if (empty($goods_id)) {
         $db = $GLOBALS['db'];
@@ -263,7 +278,7 @@ function tag_is_only($name, $tag_id, $goods_id = '')
  *
  * @return void
  */
-function edit_tag($name, $id, $goods_id = '')
+private function edit_tag($name, $id, $goods_id = '')
 {
     $db = $GLOBALS['db'];
     $sql = 'UPDATE '.$GLOBALS['ecs']->table('tag')." SET tag_words = '$name'";
@@ -281,7 +296,7 @@ function edit_tag($name, $id, $goods_id = '')
  *
  * @return array
  */
-function get_tag_list()
+private function get_tag_list()
 {
     $filter['sort_by'] = empty($_REQUEST['sort_by']) ? 't.tag_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
@@ -310,7 +325,7 @@ function get_tag_list()
  * 取得标签的信息
  * return array
  */
-function get_tag_info($tag_id)
+private function get_tag_info($tag_id)
 {
     $sql = 'SELECT t.tag_id, t.tag_words, t.goods_id, g.goods_name FROM '.$GLOBALS['ecs']->table('tag').' AS t'.
         ' LEFT JOIN '.$GLOBALS['ecs']->table('goods').' AS g ON t.goods_id=g.goods_id'.
@@ -318,4 +333,6 @@ function get_tag_info($tag_id)
     $row = $GLOBALS['db']->getRow($sql);
 
     return $row;
+}
+
 }

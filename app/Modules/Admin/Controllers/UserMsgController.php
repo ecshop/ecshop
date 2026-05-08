@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class UserMsgController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -270,7 +282,10 @@ if ($_REQUEST['act'] == 'drop_file') {
 /**
  * @return void
  */
-function msg_list()
+
+}
+
+private function msg_list()
 {
     /* 过滤条件 */
     $filter['keywords'] = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);
@@ -325,7 +340,7 @@ function msg_list()
  * @param  int  $id
  * @return array
  */
-function get_feedback_detail($id)
+private function get_feedback_detail($id)
 {
     global $ecs, $db, $_CFG;
 
@@ -343,4 +358,6 @@ function get_feedback_detail($id)
     }
 
     return $msg;
+}
+
 }

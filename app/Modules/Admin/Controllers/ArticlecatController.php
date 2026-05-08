@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ArticlecatController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -333,11 +345,16 @@ if ($_REQUEST['act'] == 'toggle_show_in_nav') {
  * @param  array  $args
  * @return mix
  */
-function cat_update($cat_id, $args)
+
+}
+
+private function cat_update($cat_id, $args)
 {
     if (empty($args) || empty($cat_id)) {
         return false;
     }
 
     return $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('article_cat'), $args, 'update', "cat_id='$cat_id'");
+}
+
 }

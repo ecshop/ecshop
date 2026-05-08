@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class EditLanguagesController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -124,7 +136,10 @@ if ($_REQUEST['act'] == 'edit') {
  * @param  string  $keyword  搜索时指定的关键字
  * @return array 正确返回语言项列表，错误返回false
  */
-function get_language_item_list($file_path, $keyword)
+
+}
+
+private function get_language_item_list($file_path, $keyword)
 {
     if (empty($keyword)) {
         return [];
@@ -164,7 +179,7 @@ function get_language_item_list($file_path, $keyword)
  * @param  array  $dst_items  替换后的语言项
  * @return void 成功就把结果写入文件，失败返回false
  */
-function set_language_items($file_path, $src_items, $dst_items)
+private function set_language_items($file_path, $src_items, $dst_items)
 {
     /* 检查文件是否可写（修改） */
     if (file_mode_info($file_path) < 2) {
@@ -201,4 +216,6 @@ function set_language_items($file_path, $src_items, $dst_items)
     } else {
         return true;
     }
+}
+
 }

@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class CloudController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -55,4 +67,7 @@ if ($act == 'default') {
     }
     ecs_header('Location: http://cloud.ecshop.com/api.php?act='.$act.$query."\n");
     exit();
+}
+
+}
 }

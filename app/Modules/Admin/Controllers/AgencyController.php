@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AgencyController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -290,7 +302,10 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
  *
  * @return array
  */
-function get_agencylist()
+
+}
+
+private function get_agencylist()
 {
     $result = get_filter();
     if ($result === false) {
@@ -320,4 +335,6 @@ function get_agencylist()
     }
 
     return ['agency' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
+}
+
 }

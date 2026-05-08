@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AdsController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -450,7 +462,10 @@ if ($_REQUEST['act'] == 'remove') {
 }
 
 /* 获取广告数据列表 */
-function get_adslist()
+
+}
+
+private function get_adslist()
 {
     /* 过滤查询 */
     $pid = ! empty($_REQUEST['pid']) ? intval($_REQUEST['pid']) : 0;
@@ -496,4 +511,6 @@ function get_adslist()
     }
 
     return ['ads' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
+}
+
 }

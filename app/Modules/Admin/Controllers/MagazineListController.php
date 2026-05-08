@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class MagazineListController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 admin_priv('magazine_list');
@@ -176,7 +188,10 @@ if ($_REQUEST['act'] == 'addtolist') {
     }
 }
 
-function get_magazine()
+
+}
+
+private function get_magazine()
 {
     $result = get_filter();
 
@@ -213,4 +228,6 @@ function get_magazine()
     $arr = ['magazinedb' => $magazinedb, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']];
 
     return $arr;
+}
+
 }

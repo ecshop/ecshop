@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class SqlController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -46,7 +58,10 @@ if ($_REQUEST['act'] == 'query') {
 /**
  * @return void
  */
-function assign_sql($sql)
+
+}
+
+private function assign_sql($sql)
 {
     global $db, $smarty, $_LANG;
 
@@ -115,4 +130,6 @@ function assign_sql($sql)
             $smarty->assign('result', $result);
         }
     }
+}
+
 }

@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ShippingController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -415,7 +427,10 @@ if ($_REQUEST['act'] == 'edit_order') {
  *
  * @return bool
  */
-function get_site_root_url()
+
+}
+
+private function get_site_root_url()
 {
     return 'http://'.$_SERVER['HTTP_HOST'].str_replace('/'.ADMIN_PATH.'/shipping.php', '', PHP_SELF);
 }
@@ -426,7 +441,7 @@ function get_site_root_url()
  * @param  string  $print_bg  快递单背景图片路径名
  * @return bool
  */
-function is_print_bg_default($print_bg)
+private function is_print_bg_default($print_bg)
 {
     $_bg = basename($print_bg);
 
@@ -448,4 +463,6 @@ function is_print_bg_default($print_bg)
     }
 
     return false;
+}
+
 }

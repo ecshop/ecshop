@@ -1,5 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Modules\Admin\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ShippingAreaController extends BaseController
+{
+    public function __invoke(Request $request)
+    {
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -364,7 +376,10 @@ if ($_REQUEST['act'] == 'remove_area') {
  *
  * @param  int  $shipping_id  配送id
  */
-function get_shipping_area_list($shipping_id)
+
+}
+
+private function get_shipping_area_list($shipping_id)
 {
     $sql = 'SELECT * FROM '.$GLOBALS['ecs']->table('shipping_area');
     if ($shipping_id > 0) {
@@ -387,4 +402,6 @@ function get_shipping_area_list($shipping_id)
     }
 
     return $list;
+}
+
 }

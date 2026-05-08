@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware('web')->group(function () {
     Route::any('/', 'IndexController@index');

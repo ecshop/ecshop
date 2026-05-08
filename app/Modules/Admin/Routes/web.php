@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware('auth:admin')->group(function () {
-    Route::any('/', 'AccountLogController@index');
+    Route::any('/', 'IndexController@index');
     Route::any('account_log.php', 'AccountLogController@index');
     Route::any('ad_position.php', 'AccountLogController@index');
     Route::any('admin_logs.php', 'AccountLogController@index');

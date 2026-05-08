@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         $moduleDirs = glob($modulesPath . '/*', GLOB_ONLYDIR);
         foreach ($moduleDirs as $moduleDir) {
             $moduleName = basename($moduleDir);
-            $providerClass = "App\\Modules\\{$moduleName}\\{$moduleName}ModuleProvider";
+            $providerClass = "\\App\\Modules\\{$moduleName}\\{$moduleName}ModuleProvider";
             if (class_exists($providerClass)) {
                 $this->app->register($providerClass);
             }

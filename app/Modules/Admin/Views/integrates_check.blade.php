@@ -1,26 +1,27 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <!-- start integrate setup form -->
-<div style="border: 1px solid #CC0000;background-color:#FFFFCE;color:#CE0000;padding:4px;" >{$lang.check_notice}</div>
+<div style="border: 1px solid #CC0000;background-color:#FFFFCE;color:#CE0000;padding:4px;" >{{ $lang['check_notice'] }}</div>
 <div class="main-div" style="padding:5px;">
   <form action="integrate.php" method="post" name="theForm">
-  <h3>{$lang_total}</h3>
+  <h3>{{ $lang_total }}</h3>
   <ul>
-    <li style="list-style-type:none;">{$lang.lable_size}&nbsp;&nbsp;<input type="text" name="size" size="5" value="{$size}" id="ECS_SIZE"></li>
+    <li style="list-style-type:none;">{{ $lang['lable_size'] }}&nbsp;&nbsp;<input type="text" name="size" size="5" value="{{ $size }}" id="ECS_SIZE"></li>
   </ul>
-  <h3>{$lang.default_method}</h3>
+  <h3>{{ $lang['default_method'] }}</h3>
   <ul>
-    <li style="list-style-type:none;"><input type="radio" name="method" value="2" />{$lang.lable_rename}&nbsp;&nbsp;<input type="type" name="domain" value="{$domain}" /></li>
-    <li style="list-style-type:none;"><input type="radio" name="method" value="3" />{$lang.lable_delete}</li>
-    <li style="list-style-type:none;"><input type="radio" name="method" value="4" />{$lang.lable_ignore}</li>
+    <li style="list-style-type:none;"><input type="radio" name="method" value="2" />{{ $lang['lable_rename'] }}&nbsp;&nbsp;<input type="type" name="domain" value="{{ $domain }}" /></li>
+    <li style="list-style-type:none;"><input type="radio" name="method" value="3" />{{ $lang['lable_delete'] }}</li>
+    <li style="list-style-type:none;"><input type="radio" name="method" value="4" />{{ $lang['lable_ignore'] }}</li>
   </ul>
-  <h3 id="ECS_LOADING" style="display:none">{$lang.checking}</h3>
+  <h3 id="ECS_LOADING" style="display:none">{{ $lang['checking'] }}</h3>
   <p id="ECS_NOTICE"></p>
-  <input type="button" value="{$lang.start_check}" class="button" onclick="check_start(this)">
+  <input type="button" value="{{ $lang['start_check'] }}" class="button" onclick="check_start(this)">
   </form>
 </div>
 <!-- end integrate setup form -->
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 onload = function()
@@ -76,5 +77,5 @@ function checkResponse(result)
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Cache-Control" content="public">
-{insert_scripts files="../js/utils.js"}
+<script src="../js/utils.js"></script>
 <style type="text/css">
 body
 {
@@ -32,7 +32,7 @@ body
 <!--打印区 end-->
 </body>
 </html>
-{if $print_part != 1}
+@if($print_part != 1)
 <script type="text/javascript">
 <!--
 onload = function()
@@ -49,7 +49,7 @@ function _create_shipping_print()
   var print_bg = _create_print_bg();
 
   //创建文本
-  var config_lable = '{$shipping.config_lable}';
+  var config_lable = '{{ $shipping['config_lable'] }}';
 
   var lable = config_lable.split("||,||");
 
@@ -88,11 +88,11 @@ function _create_print_bg()
   print.appendChild(print_bg);
 
   //测试打印效果
-  //print_bg.style.background = '{$shipping.print_bg}';
+  //print_bg.style.background = '{{ $shipping['print_bg'] }}';
 
   //设置快递单样式
-  print_bg.style.width = '{$shipping.print_bg_size.width}px';
-  print_bg.style.height = '{$shipping.print_bg_size.height}px';
+  print_bg.style.width = '{{ $shipping['print_bg_size']['width'] }}px';
+  print_bg.style.height = '{{ $shipping['print_bg_size']['height'] }}px';
   print_bg.style.zIndex = 1;
   print_bg.style.border = "solid 1px #FFF";
   print_bg.style.padding = "0";
@@ -135,4 +135,4 @@ function _create_text_box(print_bg, id, text_content, text_width, text_height, x
 }
 //-->
 </script>
-{/if}
+@endif

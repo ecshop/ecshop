@@ -1,27 +1,27 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 
 <div class="main-div">
 <form method="post" action="virtual_card.php" name="theForm"  onsubmit="return validate()">
 <table width="100%" >
   <tr>
-    <td class="label">{$lang.lab_goods_name}</td>
-    <td><input type="text" name="goods_name" maxlength="60"  value="{$card.goods_name}" disabled="true" /></td>
+    <td class="label">{{ $lang['lab_goods_name'] }}</td>
+    <td><input type="text" name="goods_name" maxlength="60"  value="{{ $card['goods_name'] }}" disabled="true" /></td>
   </tr>
   <tr>
-    <td class="label">{$lang.lab_card_sn}</td>
-    <td><input type="text" name="card_sn" maxlength="60" size="40" value="{$card.card_sn}" />{$lang.require_field}</td>
+    <td class="label">{{ $lang['lab_card_sn'] }}</td>
+    <td><input type="text" name="card_sn" maxlength="60" size="40" value="{{ $card['card_sn'] }}" />{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.lab_card_password}</td>
-    <td><input type="text" name="card_password" maxlength="60" size="40" value="{$card.card_password}" /></td>
+    <td class="label">{{ $lang['lab_card_password'] }}</td>
+    <td><input type="text" name="card_password" maxlength="60" size="40" value="{{ $card['card_password'] }}" /></td>
   </tr>
   <tr>
-    <td class="label">{$lang.lab_end_date}</td>
+    <td class="label">{{ $lang['lab_end_date'] }}</td>
     <td>{html_select_date prefix="end_date" field_order="YMD" month_format="%m"  day_value_format="%02d" start_year="-1" end_year="+10" display_days=yes time=$card.end_date}</td>
   </tr>
   <tr>
-    <td class="label"><input type="hidden" name="act" value="action" /><input type="hidden" name="goods_id" value="{$card.goods_id}" /><input type="hidden" name="old_card_sn" value="{$card.card_sn}" /><input type="hidden" name="card_id" value="{$card.card_id}" /></td>
-    <td><input type="submit" value="{$lang.button_submit}" class="button"  /></td>
+    <td class="label"><input type="hidden" name="act" value="action" /><input type="hidden" name="goods_id" value="{{ $card['goods_id'] }}" /><input type="hidden" name="old_card_sn" value="{{ $card['card_sn'] }}" /><input type="hidden" name="card_id" value="{{ $card['card_id'] }}" /></td>
+    <td><input type="submit" value="{{ $lang['button_submit'] }}" class="button"  /></td>
   </tr>
 </table>
 
@@ -31,7 +31,7 @@
 <script language="javascript" src="js/validator.js"></script>
 <script language="JavaScript">
 <!--
-{literal}
+
 document.forms['theForm'].elements['card_sn'].focus();
 
 onload = function()
@@ -57,7 +57,7 @@ function validate()
   }
 }
 //-->
-{/literal}
+
 </script>
 
-{include file="pagefooter.htm"}
+@include('pagefooter')

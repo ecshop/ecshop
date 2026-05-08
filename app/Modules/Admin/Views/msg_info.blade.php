@@ -1,64 +1,64 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="main-div">
   <table width="98%">
     <tr>
       <td style="padding: 0px 20px">
-        <h3>{$msg.msg_title|escape:"html"}</h3>
+        <h3>{{ $msg['msg_title'] }}</h3>
         <hr size="1" />
-        <div>{$msg.msg_content|escape:"html"|nl2br}</div>
-        {if $msg.message_img}
+        <div>{!! nl2br(e($msg['msg_content'])) !!}</div>
+        @if($msg['message_img'])
         <div align="right">
-          <a href="../data/feedbackimg/{$msg.message_img}" target="_bank" width="300" height="400">{$lang.view_upload_file}</a>
-          <a href="user_msg.php?act=drop_file&id={$msg.msg_id}&file={$msg.message_img}">{$lang.drop}</a>
+          <a href="../data/feedbackimg/{{ $msg['message_img'] }}" target="_bank" width="300" height="400">{{ $lang['view_upload_file'] }}</a>
+          <a href="user_msg.php?act=drop_file&id={{ $msg['msg_id'] }}&file={{ $msg['message_img'] }}">{{ $lang['drop'] }}</a>
         </div>
-        {/if}
-        <div align="right"  nowrap="nowrap">【 {if $msg.msg_area eq "1"}{$lang.message_board}{else}{$lang.user_center}{/if} 】<a href="mailto:{$msg.user_email}">{$msg.user_name}</a> @ {$msg.msg_time}</div>
+        @endif
+        <div align="right"  nowrap="nowrap">【 @if($msg['msg_area'] == "1"){{ $lang['message_board'] }}@else{{ $lang['user_center'] }}@endif 】<a href="mailto:{{ $msg['user_email'] }}">{{ $msg['user_name'] }}</a> @ {{ $msg['msg_time'] }}</div>
       </td>
     </tr>
-{if $msg.msg_area eq "1"}
+@if($msg['msg_area'] == "1")
     <tr>
       <td align="center">
-        {if $msg.msg_status eq "0"}
-        <input type="button" onclick="location.href='user_msg.php?act=check&check=allow&id={$msg.msg_id}'" value="{$lang.allow}" class="button" />
-        {else}
-        <input type="button" onclick="location.href='user_msg.php?act=check&check=forbid&id={$msg.msg_id}'" value="{$lang.forbid}" class="button" />
-        {/if}
+        @if($msg['msg_status'] == "0")
+        <input type="button" onclick="location.href='user_msg.php?act=check&check=allow&id={{ $msg['msg_id'] }}'" value="{{ $lang['allow'] }}" class="button" />
+        @else
+        <input type="button" onclick="location.href='user_msg.php?act=check&check=forbid&id={{ $msg['msg_id'] }}'" value="{{ $lang['forbid'] }}" class="button" />
+        @endif
     </td>
     </tr>
-{/if}
+@endif
   </table>
 </div>
 
-{if $msg.reply_id}
+@if($msg['reply_id'])
 <div class="main-div">
   <table width="98%">
     <tr>
       <td style="padding: 0px 20px">
-        <h3>{$msg.reply_name} {$lang.from} {$msg.reply_time} {$lang.reply}:</h3>
+        <h3>{{ $msg['reply_name'] }} {{ $lang['from'] }} {{ $msg['reply_time'] }} {{ $lang['reply'] }}:</h3>
         <hr size="1" />
-        <div>{$msg.reply_content|escape:"html"|nl2br}</div>
+        <div>{!! nl2br(e($msg['reply_content'])) !!}</div>
       </td>
     </tr>
   </table>
 </div>
-{/if}
+@endif
 
-{if $send_fail}
+@if($send_fail)
 <ul style="padding:0; margin: 0; list-style-type:none; color: #CC0000;">
-<li style="border: 1px solid #CC0000; background: #FFFFCC; padding: 10px; margin-bottom: 5px;" >{$lang.mail_send_fail}</li>
+<li style="border: 1px solid #CC0000; background: #FFFFCC; padding: 10px; margin-bottom: 5px;" >{{ $lang['mail_send_fail'] }}</li>
 </ul>
-{/if}
+@endif
 
 <div class="main-div">
 <form method="post" action="user_msg.php?act=action" name="theForm"  onsubmit="return validate()">
 <table border="0" width="98%">
   <tr>
-    <td>{$lang.email}:</td>
-    <td><input name="user_email" id="user_email"  type="text" value="{$msg.reply_email}"></td>
+    <td>{{ $lang['email'] }}:</td>
+    <td><input name="user_email" id="user_email"  type="text" value="{{ $msg['reply_email'] }}"></td>
   </tr>
   <tr>
-    <td>{$lang.reply_content}:</td>
-    <td rowspan="2"><textarea name="msg_content" cols="50" rows="4" wrap="VIRTUAL" id="msg_content">{$msg.reply_content}</textarea></td>
+    <td>{{ $lang['reply_content'] }}:</td>
+    <td rowspan="2"><textarea name="msg_content" cols="50" rows="4" wrap="VIRTUAL" id="msg_content">{{ $msg['reply_content'] }}</textarea></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -66,31 +66,32 @@
   </tr>
   <tr>
     <td></td>
-    <td><input name="send_email_notice" type="checkbox" value='1'/>{$lang.send_email_notice}</td>
+    <td><input name="send_email_notice" type="checkbox" value='1'/>{{ $lang['send_email_notice'] }}</td>
   </tr>
-  {if $msg.reply_id}
+  @if($msg['reply_id'])
   <tr>
     <td>&nbsp;</td>
-    <td>{$lang.have_reply_content}</td>
+    <td>{{ $lang['have_reply_content'] }}</td>
   </tr>
-  {/if}
+  @endif
   <tr>
     <td>&nbsp;</td>
     <td>
-      <input type="hidden" name="msg_id" value="{$msg.msg_id}">      
-      <input type="hidden" name="parent_id" value="{$msg.reply_id}">
-      <input name="Submit" value="{$lang.button_submit}" type="submit" class="button">
-      <input type="reset" value="{$lang.button_reset}" class="button">
-      {if $msg.reply_id}<input type="submit" name="remail" value="{$lang.remail}" class="button">{/if}
+      <input type="hidden" name="msg_id" value="{{ $msg['msg_id'] }}">      
+      <input type="hidden" name="parent_id" value="{{ $msg['reply_id'] }}">
+      <input name="Submit" value="{{ $lang['button_submit'] }}" type="submit" class="button">
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button">
+      @if($msg['reply_id'])<input type="submit" name="remail" value="{{ $lang['remail'] }}" class="button">@endif
     </td>
   </tr>
 </table>
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
 <script language="JavaScript">
 <!--
-{literal}
+
 document.forms['theForm'].elements['msg_content'].focus();
 
 /**
@@ -109,6 +110,6 @@ onload = function()
     startCheckOrder();
 }
 //-->
-{/literal}
+
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

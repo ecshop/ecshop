@@ -1,3 +1,4 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-{insert_scripts files='transport.js,utils.js'}
+<script src="transport.js"></script>
+<script src="utils.js"></script>
 <div id="ECS_COMMENT"> {* ECSHOP 提醒您：动态载入comments_list.lbi，显示评论列表和评论表单 *}{insert name='comments' type=$type id=$id}</div>

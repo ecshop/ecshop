@@ -1,64 +1,65 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="list-div">
 <form name="theForm">
 <table cellpadding="3" cellspacing="1">
   <tr>
-    <td colspan="4"><span style="color:#FF0000;"><strong>{$lang.confirm_convert}</strong></span><br />
-    {$lang.backup_data}<a href="database.php?act=backup"><strong>{$lang.backup}</strong></a></td>
+    <td colspan="4"><span style="color:#FF0000;"><strong>{{ $lang['confirm_convert'] }}</strong></span><br />
+    {{ $lang['backup_data'] }}<a href="database.php?act=backup"><strong>{{ $lang['backup'] }}</strong></a></td>
   </tr>
   <tr>
-    <td colspan="4">{$lang.select_system}
+    <td colspan="4">{{ $lang['select_system'] }}
       <select name="selModule" id="selModule">
-        {foreach from=$module_list item=module}
-          <option value="{$module.code}">{$module.desc}</option>
-        {/foreach}
+        @foreach($module_list as $module)
+          <option value="{{ $module['code'] }}">{{ $module['desc'] }}</option>
+        @endforeach
       </select>
-      {$lang.note_select_system}</td>
+      {{ $lang['note_select_system'] }}</td>
     </tr>
   <tr>
-    <td colspan="4">{$lang.select_charset}
+    <td colspan="4">{{ $lang['select_charset'] }}
       <select name="selCharset" id="selCharset">
-        {html_options options=$charset_list}
+        @foreach($charset_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach
       </select>
-      {$lang.note_select_charset}</td>
+      {{ $lang['note_select_charset'] }}</td>
   </tr>
   <tr>
-    <td colspan="4"><strong>{$lang.your_config}</strong><br />{$lang.dir_notes}</td>
+    <td colspan="4"><strong>{{ $lang['your_config'] }}</strong><br />{{ $lang['dir_notes'] }}</td>
     </tr>
   <tr>
-    <td><div align="right"><strong>{$lang.your_host}</strong></div></td>
-    <td><input name="host" type="text" id="host" value="{$def_val.host}" /></td>
-    <td><div align="right"><strong>{$lang.your_db}</strong></div></td>
-  <td><input name="db" type="text" id="db" value="{$def_val.db}" /></td>
+    <td><div align="right"><strong>{{ $lang['your_host'] }}</strong></div></td>
+    <td><input name="host" type="text" id="host" value="{{ $def_val['host'] }}" /></td>
+    <td><div align="right"><strong>{{ $lang['your_db'] }}</strong></div></td>
+  <td><input name="db" type="text" id="db" value="{{ $def_val['db'] }}" /></td>
   </tr>
   <tr>
-    <td><div align="right"><strong>{$lang.your_user}</strong></div></td>
-    <td><input name="user" type="text" id="user" value="{$def_val.user}" /></td>
-    <td><div align="right"><strong>{$lang.your_pass}</strong></div></td>
-    <td><input name="pass" type="password" id="pass" value="{$def_val.pass}" /></td>
+    <td><div align="right"><strong>{{ $lang['your_user'] }}</strong></div></td>
+    <td><input name="user" type="text" id="user" value="{{ $def_val['user'] }}" /></td>
+    <td><div align="right"><strong>{{ $lang['your_pass'] }}</strong></div></td>
+    <td><input name="pass" type="password" id="pass" value="{{ $def_val['pass'] }}" /></td>
   </tr>
   <tr>
-    <td><div align="right"><strong>{$lang.your_prefix}</strong></div></td>
-    <td><input name="prefix" type="text" id="prefix" value="{$def_val.prefix}" /></td>
-    <td><div align="right"><strong>{$lang.your_path}</strong></div></td>
-    <td><input name="path" type="text" id="path" value="{$def_val.path}" /></td>
+    <td><div align="right"><strong>{{ $lang['your_prefix'] }}</strong></div></td>
+    <td><input name="prefix" type="text" id="prefix" value="{{ $def_val['prefix'] }}" /></td>
+    <td><div align="right"><strong>{{ $lang['your_path'] }}</strong></div></td>
+    <td><input name="path" type="text" id="path" value="{{ $def_val['path'] }}" /></td>
   </tr>
   <tr>
     <td colspan="4"><div align="center">
-        <input name="convert" type="button" class="button" id="convert" onclick="convertData()" value="{$lang.convert}" />
+        <input name="convert" type="button" class="button" id="convert" onclick="convertData()" value="{{ $lang['convert'] }}" />
     </div></td>
     </tr>
   <tr>
     <td colspan="4"><span id="status_1"></span><br /><span id="status_2"></span><br /><span id="status_3"></span></td>
   </tr>
   <tr>
-    <td colspan="4"><strong>{$lang.remark}</strong><br />{$lang.remark_info}</td>
+    <td colspan="4"><strong>{{ $lang['remark'] }}</strong><br />{{ $lang['remark_info'] }}</td>
   </tr>
 </table>
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="javascript">
   /**
    * 检查可选系统
@@ -156,5 +157,5 @@
     document.getElementById('status_1').innerHTML = msg;
   }
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

@@ -1,36 +1,36 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <form method="POST" action="privilege.php" name="theFrom">
 <div class="list-div">
 <table cellspacing='1' id="list-table">
-{foreach from=$priv_arr item=priv}
+@foreach($priv_arr as $priv)
  <tr>
   <td width="18%" valign="top" class="first-cell">
-    <input name="chkGroup" type="checkbox" value="checkbox" onclick="check('{$priv.priv_list}',this);" class="checkbox">{$lang[$priv.action_code]}
+    <input name="chkGroup" type="checkbox" value="checkbox" onclick="check('{{ $priv['priv_list'] }}',this);" class="checkbox">{{ $lang[$priv['action_code]'] }}
   </td>
   <td>
-    {foreach from=$priv.priv key=priv_list item=list}
+    @foreach($priv['priv'] as $priv_list => $list)
     <div style="width:200px;float:left;">
-    <label for="{$priv_list}"><input type="checkbox" name="action_code[]" value="{$priv_list}" id="{$priv_list}" class="checkbox" {if $list.cando eq 1} checked="true" {/if} onclick="checkrelevance('{$list.relevance}', '{$priv_list}')" title="{$list.relevance}"/>
-    {$lang[$list.action_code]}</label>
+    <label for="{{ $priv_list }}"><input type="checkbox" name="action_code[]" value="{{ $priv_list }}" id="{{ $priv_list }}" class="checkbox" @if($list['cando'] == 1) checked="true" @endif onclick="checkrelevance('{{ $list['relevance'] }}', '{{ $priv_list }}')" title="{{ $list['relevance'] }}"/>
+    {{ $lang[$list['action_code]'] }}</label>
     </div>
-    {/foreach}
+    @endforeach
 </td></tr>
-{/foreach}
+@endforeach
   <tr>
     <td align="center" colspan="2" >
-      <input type="checkbox" name="checkall" value="checkbox" onclick="checkAll(this.form, this);" class="checkbox" />{$lang.check_all}
+      <input type="checkbox" name="checkall" value="checkbox" onclick="checkAll(this.form, this);" class="checkbox" />{{ $lang['check_all'] }}
       &nbsp;&nbsp;&nbsp;&nbsp;
-      <input type="submit"   name="Submit"   value="{$lang.button_save}" class="button" />
-      <input type="hidden"   name="id"    value="{$user_id}" />
-      <input type="hidden" name="token" value="{$token}" />
-      <input type="hidden"   name="act"   value="{$form_act}" />
+      <input type="submit"   name="Submit"   value="{{ $lang['button_save'] }}" class="button" />
+      <input type="hidden"   name="id"    value="{{ $user_id }}" />
+      <input type="hidden" name="token" value="{{ $token }}" />
+      <input type="hidden"   name="act"   value="{{ $form_act }}" />
     </td>
   </tr>
 </table>
 </div>
 </form>
 
-{literal}
+
 <script language="javascript">
 function checkAll(frm, checkbox)
 {
@@ -80,5 +80,5 @@ function checkrelevance(relevance, priv_list)
   }
 }
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

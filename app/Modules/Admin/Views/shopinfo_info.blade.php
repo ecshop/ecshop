@@ -1,30 +1,31 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <form method="post" action="shopinfo.php" name="theForm"  onsubmit="return validate()">
 <div class="form-div">
-{$lang.title}&nbsp;:&nbsp;
-<input type="text" name="title" size ="50" maxlength="60" value="{$article.title|escape}" />{$lang.require_field}
+{{ $lang['title'] }}&nbsp;:&nbsp;
+<input type="text" name="title" size ="50" maxlength="60" value="{{ $article['title'] }}" />{{ $lang['require_field'] }}
 </div>
 <div class="main-div">
 <table >
   <tr>
     <td  colspan ="2" align ="center" >
-     {$FCKeditor}</script>
+     {{ $FCKeditor }}</script>
     </td>
   </tr>
   <tr>
     <td colspan="2" align="center"><br />
-      <input type="submit" class="button" value="{$lang.button_submit}" />
-      <input type="reset" class="button" value="{$lang.button_reset}" />
-      <input type="hidden" name="act" value="{$form_action}" />
-      <input type="hidden" name="old_title" value="{$article.title}" />
-      <input type="hidden" name="id" value="{$article.article_id}" />
+      <input type="submit" class="button" value="{{ $lang['button_submit'] }}" />
+      <input type="reset" class="button" value="{{ $lang['button_reset'] }}" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
+      <input type="hidden" name="old_title" value="{{ $article['title'] }}" />
+      <input type="hidden" name="id" value="{{ $article['article_id'] }}" />
     </td>
   </tr>
 </table>
 </div>
 </form>
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 document.forms['theForm'].elements['title'].focus();
@@ -46,5 +47,5 @@ function validate()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

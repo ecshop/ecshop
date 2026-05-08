@@ -1,12 +1,14 @@
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,selectzone.js,validator.js"}
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="selectzone.js"></script>
+<script src="validator.js"></script>
 <!-- start goods form -->
 <div class="tab-div">
   <div id="tabbar-div">
     <p>
-      <span class="tab-front" id="general-tab">{$lang.tab_general}</span><span
-      class="tab-back" id="detail-tab">{$lang.tab_content}</span><span
-      class="tab-back" id="goods-tab">{$lang.tab_goods}</span>
+      <span class="tab-front" id="general-tab">{{ $lang['tab_general'] }}</span><span
+      class="tab-back" id="detail-tab">{{ $lang['tab_content'] }}</span><span
+      class="tab-back" id="goods-tab">{{ $lang['tab_goods'] }}</span>
     </p>
   </div>
 
@@ -14,71 +16,71 @@
     <form  action="article.php" method="post" enctype="multipart/form-data" name="theForm" onsubmit="return validate();">
     <table width="90%" id="general-table">
       <tr>
-        <td class="narrow-label">{$lang.title}</td>
-        <td><input type="text" name="title" size ="40" maxlength="60" value="{$article.title|escape}" />{$lang.require_field}</td>
+        <td class="narrow-label">{{ $lang['title'] }}</td>
+        <td><input type="text" name="title" size ="40" maxlength="60" value="{{ $article['title'] }}" />{{ $lang['require_field'] }}</td>
       </tr>          
-      <!-- {if $article.cat_id >= 0} -->
+      @if($article['cat_id'] >= 0)
       <tr>
-        <td class="narrow-label">{$lang.cat} </td>
+        <td class="narrow-label">{{ $lang['cat'] }} </td>
         <td>
           <select name="article_cat" onchange="catChanged()">
-            <option value="0">{$lang.select_plz}</option>
-            {$cat_select}
+            <option value="0">{{ $lang['select_plz'] }}</option>
+            {{ $cat_select }}
           </select>
-         {$lang.require_field}</td>
+         {{ $lang['require_field'] }}</td>
       </tr>
-      <!-- {else} -->
+      @else
       <input type="hidden" name="article_cat" value="-1" />
-      <!-- {/if} -->
-      {if $article.cat_id >= 0}
+      @endif
+      @if($article['cat_id'] >= 0)
       <tr>
-        <td class="narrow-label">{$lang.article_type}</td>
-        <td><input type="radio" name="article_type" value="0" {if $article.article_type eq 0}checked{/if}>{$lang.common}
-      <input type="radio" name="article_type" value="1" {if $article.article_type eq 1}checked{/if}>{$lang.top}
-        {$lang.require_field}        </td>
+        <td class="narrow-label">{{ $lang['article_type'] }}</td>
+        <td><input type="radio" name="article_type" value="0" @if($article['article_type'] == 0)checked@endif>{{ $lang['common'] }}
+      <input type="radio" name="article_type" value="1" @if($article['article_type'] == 1)checked@endif>{{ $lang['top'] }}
+        {{ $lang['require_field'] }}        </td>
       </tr>
       <tr>
-        <td class="narrow-label">{$lang.is_open}</td>
+        <td class="narrow-label">{{ $lang['is_open'] }}</td>
         <td>
-        <input type="radio" name="is_open" value="1" {if $article.is_open eq 1}checked{/if}> {$lang.isopen}
-      <input type="radio" name="is_open" value="0" {if $article.is_open eq 0}checked{/if}> {$lang.isclose}{$lang.require_field}        </td>
+        <input type="radio" name="is_open" value="1" @if($article['is_open'] == 1)checked@endif> {{ $lang['isopen'] }}
+      <input type="radio" name="is_open" value="0" @if($article['is_open'] == 0)checked@endif> {{ $lang['isclose'] }}{{ $lang['require_field'] }}        </td>
       </tr>
-      {else}
+      @else
       <tr style="display:none">
       <td colspan="2"><input type="hidden" name="article_type" value="0" /><input type="hidden" name="is_open" value="1" /></td>
       </tr>
-      {/if}
+      @endif
       <tr>
-        <td class="narrow-label">{$lang.author}</td>
-        <td><input type="text" name="author" maxlength="60" value="{$article.author|escape}" /></td>
+        <td class="narrow-label">{{ $lang['author'] }}</td>
+        <td><input type="text" name="author" maxlength="60" value="{{ $article['author'] }}" /></td>
       </tr>
       <tr>
-        <td class="narrow-label">{$lang.email}</td>
-        <td><input type="text" name="author_email" maxlength="60" value="{$article.author_email|escape}" /></td>
+        <td class="narrow-label">{{ $lang['email'] }}</td>
+        <td><input type="text" name="author_email" maxlength="60" value="{{ $article['author_email'] }}" /></td>
       </tr>
       <tr>
-        <td class="narrow-label">{$lang.keywords}</td>
-        <td><input type="text" name="keywords" maxlength="60" value="{$article.keywords|escape}" /></td>
+        <td class="narrow-label">{{ $lang['keywords'] }}</td>
+        <td><input type="text" name="keywords" maxlength="60" value="{{ $article['keywords'] }}" /></td>
       </tr>
       <tr>
-        <td class="narrow-label">{$lang.lable_description}</td>
-        <td><textarea name="description" id="description" cols="40" rows="5">{$article.description|escape}</textarea></td>
+        <td class="narrow-label">{{ $lang['lable_description'] }}</td>
+        <td><textarea name="description" id="description" cols="40" rows="5">{{ $article['description'] }}</textarea></td>
       </tr>
       <tr>
-        <td class="narrow-label">{$lang.external_links}</td>
-        <td><input name="link_url" type="text" id="link_url" value="{if $article.link neq ''}{$article.link|escape}{else}http://{/if}" maxlength="60" /></td>
+        <td class="narrow-label">{{ $lang['external_links'] }}</td>
+        <td><input name="link_url" type="text" id="link_url" value="@if($article['link'] != ''){{ $article['link'] }}@elsehttp://@endif" maxlength="60" /></td>
       </tr>
       <tr>
-        <td class="narrow-label">{$lang.upload_file}</td>
+        <td class="narrow-label">{{ $lang['upload_file'] }}</td>
         <td><input type="file" name="file">
-          <span class="narrow-label">{$lang.file_url}
-          <input name="file_url" type="text" value="{$article.file_url|escape}" size="30" maxlength="255" />
+          <span class="narrow-label">{{ $lang['file_url'] }}
+          <input name="file_url" type="text" value="{{ $article['file_url'] }}" size="30" maxlength="255" />
           </span></td>
       </tr>
     </table>
 
     <table width="90%" id="detail-table" style="display:none">
-     <tr><td>{$FCKeditor}</td></tr>
+     <tr><td>{{ $FCKeditor }}</td></tr>
     </table>
 
     <table width="90%" id="goods-table" style="display:none">
@@ -87,19 +89,19 @@
       <td colspan="5">
         <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
         <!-- 分类 -->
-        <select name="cat_id"><option value="0">{$lang.all_category}</caption>{$goods_cat_list}</select>
+        <select name="cat_id"><option value="0">{{ $lang['all_category'] }}</caption>{{ $goods_cat_list }}</select>
         <!-- 品牌 -->
-        <select name="brand_id"><option value="0">{$lang.all_brand}</caption>{html_options options=$brand_list}</select>
+        <select name="brand_id"><option value="0">{{ $lang['all_brand'] }}</caption>@foreach($brand_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach</select>
         <!-- 关键字 -->
         <input type="text" name="keyword" size="30" />
-        <input type="button" value="{$lang.button_search}" onclick="searchGoods()" class="button" />
+        <input type="button" value="{{ $lang['button_search'] }}" onclick="searchGoods()" class="button" />
       <td>
       </tr>
       <!-- 商品列表 -->
       <tr>
-        <th>{$lang.all_goods}</th>
-        <th>{$lang.handler}</th>
-        <th>{$lang.send_bouns_goods}</th>
+        <th>{{ $lang['all_goods'] }}</th>
+        <th>{{ $lang['handler'] }}</th>
+        <th>{{ $lang['send_bouns_goods'] }}</th>
       </tr>
       <tr>
         <td width="45%" align="center">
@@ -114,19 +116,19 @@
         </td>
         <td width="45%" align="center">
           <select name="target_select" multiple="true" size="20" style="width:90%" ondblclick="sz.dropItem(false, 'drop_link_goods', articleId)">
-            {foreach from=$goods_list item=goods}
-            <option value="{$goods.goods_id}">{$goods.goods_name}</option>
-            {/foreach}
+            @foreach($goods_list as $goods)
+            <option value="{{ $goods['goods_id'] }}">{{ $goods['goods_name'] }}</option>
+            @endforeach
           </select>
         </td>
       </tr>
     </table>
     <div class="button-div">
-      <input type="hidden" name="act" value="{$form_action}" />
-      <input type="hidden" name="old_title" value="{$article.title}"/>
-      <input type="hidden" name="id" value="{$article.article_id}" />
-      <input type="submit" value="{$lang.button_submit}" class="button"  />
-      <input type="reset" value="{$lang.button_reset}" class="button" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
+      <input type="hidden" name="old_title" value="{{ $article['title'] }}"/>
+      <input type="hidden" name="id" value="{{ $article['article_id'] }}" />
+      <input type="submit" value="{{ $lang['button_submit'] }}" class="button"  />
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
     </div>
     </form>
   </div>
@@ -135,11 +137,11 @@
 <!-- end goods form -->
 <script language="JavaScript">
 
-var articleId = {$article.article_id|default:0};
+var articleId = {{ $article['article_id'] ?? 0 }};
 var elements  = document.forms['theForm'].elements;
 var sz        = new SelectZone(1, elements['source_select'], elements['target_select'], '');
 
-{literal}
+
 onload = function()
 {
   // 开始检查订单
@@ -150,11 +152,11 @@ function validate()
 {
   var validator = new Validator('theForm');
   validator.required('title', no_title);
-{/literal}
-{if $article.cat_id >= 0}
+
+@if($article['cat_id'] >= 0)
   validator.isNullOption('article_cat',no_cat);
-{/if}
-{literal}
+@endif
+
 
   return validator.passed();
 }
@@ -245,7 +247,7 @@ function searchGoods()
 
     sz.loadOptions('get_goods_list', filters);
 }
-{/literal}
+
 
 /**
  * 选取上级分类时判断选定的分类是不是底层分类
@@ -270,4 +272,4 @@ function catChanged()
   return true;
 }
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

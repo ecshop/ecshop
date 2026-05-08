@@ -1,59 +1,59 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <!-- directory install start -->
 <ul id="lilist" style="padding:0; margin: 0; list-style-type:none; color: #CC0000;">
-  {foreach from=$warning_arr item=warning}
-  <li class="Start315">{$warning}</li>
-  {/foreach}
+  @foreach($warning_arr as $warning)
+  <li class="Start315">{{ $warning }}</li>
+  @endforeach
 </ul>
 <!-- directory install end -->
 <!-- start personal message -->
-{if $admin_msg}
+@if($admin_msg)
 <div class="list-div" style="border: 1px solid #CC0000">
   <table cellspacing='1' cellpadding='3'>
     <tr>
-      <th>{$lang.pm_title}</th>
-      <th>{$lang.pm_username}</th>
-      <th>{$lang.pm_time}</th>
+      <th>{{ $lang['pm_title'] }}</th>
+      <th>{{ $lang['pm_username'] }}</th>
+      <th>{{ $lang['pm_time'] }}</th>
     </tr>
-    {foreach from=$admin_msg item=msg}
+    @foreach($admin_msg as $msg)
       <tr align="center">
-        <td align="left"><a href="message.php?act=view&id={$msg.message_id}">{$msg.title|truncate:60:"..."}</a></td>
-        <td>{$msg.user_name}</td>
-        <td>{$msg.send_date}</td>
+        <td align="left"><a href="message.php?act=view&id={{ $msg['message_id'] }}">{{ \Illuminate\Support\Str::limit($msg['title'], 60, '...') }}</a></td>
+        <td>{{ $msg['user_name'] }}</td>
+        <td>{{ $msg['send_date'] }}</td>
       </tr>
-    {/foreach}
+    @endforeach
   </table>
   </div>
 <br />
-{/if}
+@endif
 <!-- end personal message -->
 <!-- start order statistics -->
 <div class="list-div">
 <table cellspacing='1' cellpadding='3'>
   <tr>
-    <th colspan="4" class="group-title">{$lang.order_stat}</th>
+    <th colspan="4" class="group-title">{{ $lang['order_stat'] }}</th>
   </tr>
   <tr>
-    <td width="20%"><a href="order.php?act=list&composite_status={$status.await_ship}">{$lang.await_ship}</a></td>
-    <td width="30%"><strong style="color: red">{$order.await_ship}</strong></td>
-    <td width="20%"><a href="order.php?act=list&composite_status={$status.unconfirmed}">{$lang.unconfirmed}</a></td>
-    <td width="30%"><strong>{$order.unconfirmed}</strong></td>
+    <td width="20%"><a href="order.php?act=list&composite_status={{ $status['await_ship'] }}">{{ $lang['await_ship'] }}</a></td>
+    <td width="30%"><strong style="color: red">{{ $order['await_ship'] }}</strong></td>
+    <td width="20%"><a href="order.php?act=list&composite_status={{ $status['unconfirmed'] }}">{{ $lang['unconfirmed'] }}</a></td>
+    <td width="30%"><strong>{{ $order['unconfirmed'] }}</strong></td>
   </tr>
   <tr>
-    <td><a href="order.php?act=list&composite_status={$status.await_pay}">{$lang.await_pay}</a></td>
-    <td><strong>{$order.await_pay}</strong></td>
-    <td><a href="order.php?act=list&composite_status={$status.finished}">{$lang.finished}</a></td>
-    <td><strong>{$order.finished}</strong></td>
+    <td><a href="order.php?act=list&composite_status={{ $status['await_pay'] }}">{{ $lang['await_pay'] }}</a></td>
+    <td><strong>{{ $order['await_pay'] }}</strong></td>
+    <td><a href="order.php?act=list&composite_status={{ $status['finished'] }}">{{ $lang['finished'] }}</a></td>
+    <td><strong>{{ $order['finished'] }}</strong></td>
   </tr>
   <tr>
-    <td><a href="goods_booking.php?act=list_all">{$lang.new_booking}</a></td>
-    <td><strong>{$booking_goods}</strong></td>
-    <td><a href="user_account.php?act=list&process_type=1&is_paid=0">{$lang.new_reimburse}</a></td>
-    <td><strong>{$new_repay}</strong></td>
+    <td><a href="goods_booking.php?act=list_all">{{ $lang['new_booking'] }}</a></td>
+    <td><strong>{{ $booking_goods }}</strong></td>
+    <td><a href="user_account.php?act=list&process_type=1&is_paid=0">{{ $lang['new_reimburse'] }}</a></td>
+    <td><strong>{{ $new_repay }}</strong></td>
   </tr>
   <tr>
-    <td><a href="order.php?act=list&composite_status={$status.shipped_part}">{$lang.shipped_part}</a></td>
-    <td><strong>{$order.shipped_part}</strong></td>
+    <td><a href="order.php?act=list&composite_status={{ $status['shipped_part'] }}">{{ $lang['shipped_part'] }}</a></td>
+    <td><strong>{{ $order['shipped_part'] }}</strong></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
@@ -65,25 +65,25 @@
 <div class="list-div">
 <table cellspacing='1' cellpadding='3'>
   <tr>
-    <th colspan="4" class="group-title">{$lang.goods_stat}</th>
+    <th colspan="4" class="group-title">{{ $lang['goods_stat'] }}</th>
   </tr>
   <tr>
-    <td width="20%">{$lang.goods_count}</td>
-    <td width="30%"><strong>{$goods.total}</strong></td>
-    <td width="20%"><a href="goods.php?act=list&stock_warning=1">{$lang.warn_goods}</a></td>
-    <td width="30%"><strong style="color: red">{$goods.warn}</strong></td>
+    <td width="20%">{{ $lang['goods_count'] }}</td>
+    <td width="30%"><strong>{{ $goods['total'] }}</strong></td>
+    <td width="20%"><a href="goods.php?act=list&stock_warning=1">{{ $lang['warn_goods'] }}</a></td>
+    <td width="30%"><strong style="color: red">{{ $goods['warn'] }}</strong></td>
   </tr>
   <tr>
-    <td><a href="goods.php?act=list&amp;intro_type=is_new">{$lang.new_goods}</a></td>
-    <td><strong>{$goods.new}</strong></td>
-    <td><a href="goods.php?act=list&amp;intro_type=is_best">{$lang.recommed_goods}</a></td>
-    <td><strong>{$goods.best}</strong></td>
+    <td><a href="goods.php?act=list&amp;intro_type=is_new">{{ $lang['new_goods'] }}</a></td>
+    <td><strong>{{ $goods['new'] }}</strong></td>
+    <td><a href="goods.php?act=list&amp;intro_type=is_best">{{ $lang['recommed_goods'] }}</a></td>
+    <td><strong>{{ $goods['best'] }}</strong></td>
   </tr>
   <tr>
-    <td><a href="goods.php?act=list&amp;intro_type=is_hot">{$lang.hot_goods}</a></td>
-    <td><strong>{$goods.hot}</strong></td>
-    <td><a href="goods.php?act=list&amp;intro_type=is_promote">{$lang.sales_count}</a></td>
-    <td><strong>{$goods.promote}</strong></td>
+    <td><a href="goods.php?act=list&amp;intro_type=is_hot">{{ $lang['hot_goods'] }}</a></td>
+    <td><strong>{{ $goods['hot'] }}</strong></td>
+    <td><a href="goods.php?act=list&amp;intro_type=is_promote">{{ $lang['sales_count'] }}</a></td>
+    <td><strong>{{ $goods['promote'] }}</strong></td>
   </tr>
 </table>
 </div>
@@ -92,25 +92,25 @@
 <div class="list-div">
 <table cellspacing='1' cellpadding='3'>
   <tr>
-    <th colspan="4" class="group-title">{$lang.virtual_card_stat}</th>
+    <th colspan="4" class="group-title">{{ $lang['virtual_card_stat'] }}</th>
   </tr>
   <tr>
-    <td width="20%">{$lang.goods_count}</td>
-    <td width="30%"><strong>{$virtual_card.total}</strong></td>
-    <td width="20%"><a href="goods.php?act=list&amp;stock_warning=1&amp;extension_code=virtual_card">{$lang.warn_goods}</a></td>
-    <td width="30%"><strong style="color: red">{$virtual_card.warn}</strong></td>
+    <td width="20%">{{ $lang['goods_count'] }}</td>
+    <td width="30%"><strong>{{ $virtual_card['total'] }}</strong></td>
+    <td width="20%"><a href="goods.php?act=list&amp;stock_warning=1&amp;extension_code=virtual_card">{{ $lang['warn_goods'] }}</a></td>
+    <td width="30%"><strong style="color: red">{{ $virtual_card['warn'] }}</strong></td>
   </tr>
   <tr>
-    <td><a href="goods.php?act=list&amp;intro_type=is_new&amp;extension_code=virtual_card">{$lang.new_goods}</a></td>
-    <td><strong>{$virtual_card.new}</strong></td>
-    <td><a href="goods.php?act=list&amp;intro_type=is_best&amp;extension_code=virtual_card">{$lang.recommed_goods}</a></td>
-    <td><strong>{$virtual_card.best}</strong></td>
+    <td><a href="goods.php?act=list&amp;intro_type=is_new&amp;extension_code=virtual_card">{{ $lang['new_goods'] }}</a></td>
+    <td><strong>{{ $virtual_card['new'] }}</strong></td>
+    <td><a href="goods.php?act=list&amp;intro_type=is_best&amp;extension_code=virtual_card">{{ $lang['recommed_goods'] }}</a></td>
+    <td><strong>{{ $virtual_card['best'] }}</strong></td>
   </tr>
   <tr>
-    <td><a href="goods.php?act=list&amp;intro_type=is_hot&amp;extension_code=virtual_card">{$lang.hot_goods}</a></td>
-    <td><strong>{$virtual_card.hot}</strong></td>
-    <td><a href="goods.php?act=list&amp;intro_type=is_promote&amp;extension_code=virtual_card">{$lang.sales_count}</a></td>
-    <td><strong>{$virtual_card.promote}</strong></td>
+    <td><a href="goods.php?act=list&amp;intro_type=is_hot&amp;extension_code=virtual_card">{{ $lang['hot_goods'] }}</a></td>
+    <td><strong>{{ $virtual_card['hot'] }}</strong></td>
+    <td><a href="goods.php?act=list&amp;intro_type=is_promote&amp;extension_code=virtual_card">{{ $lang['sales_count'] }}</a></td>
+    <td><strong>{{ $virtual_card['promote'] }}</strong></td>
   </tr>
 </table>
 </div>
@@ -120,19 +120,19 @@
 <div class="list-div">
 <table cellspacing='1' cellpadding='3'>
   <tr>
-    <th colspan="4" class="group-title">{$lang.acess_stat}</th>
+    <th colspan="4" class="group-title">{{ $lang['acess_stat'] }}</th>
   </tr>
   <tr>
-    <td width="20%">{$lang.acess_today}</td>
-    <td width="30%"><strong>{$today_visit}</strong></td>
-    <td width="20%">{$lang.online_users}</td>
-    <td width="30%"><strong>{$online_users}</strong></td>
+    <td width="20%">{{ $lang['acess_today'] }}</td>
+    <td width="30%"><strong>{{ $today_visit }}</strong></td>
+    <td width="20%">{{ $lang['online_users'] }}</td>
+    <td width="30%"><strong>{{ $online_users }}</strong></td>
   </tr>
   <tr>
-    <td><a href="user_msg.php?act=list_all">{$lang.new_feedback}</a></td>
-    <td><strong>{$feedback_number}</strong></td>
-    <td><a href="comment_manage.php?act=list">{$lang.new_comments}</a></td>
-    <td><strong>{$comment_number}</strong></td>
+    <td><a href="user_msg.php?act=list_all">{{ $lang['new_feedback'] }}</a></td>
+    <td><strong>{{ $feedback_number }}</strong></td>
+    <td><a href="comment_manage.php?act=list">{{ $lang['new_comments'] }}</a></td>
+    <td><strong>{{ $comment_number }}</strong></td>
   </tr>
 </table>
 </div>
@@ -142,59 +142,59 @@
 <div class="list-div">
 <table cellspacing='1' cellpadding='3'>
   <tr>
-    <th colspan="4" class="group-title">{$lang.system_info}</th>
+    <th colspan="4" class="group-title">{{ $lang['system_info'] }}</th>
   </tr>
   <tr>
-    <td width="20%">{$lang.os}</td>
-    <td width="30%">{$sys_info.os} ({$sys_info.ip})</td>
-    <td width="20%">{$lang.web_server}</td>
-    <td width="30%">{$sys_info.web_server}</td>
+    <td width="20%">{{ $lang['os'] }}</td>
+    <td width="30%">{{ $sys_info['os'] }} ({{ $sys_info['ip'] }})</td>
+    <td width="20%">{{ $lang['web_server'] }}</td>
+    <td width="30%">{{ $sys_info['web_server'] }}</td>
   </tr>
   <tr>
-    <td>{$lang.php_version}</td>
-    <td>{$sys_info.php_ver}</td>
-    <td>{$lang.mysql_version}</td>
-    <td>{$sys_info.mysql_ver}</td>
+    <td>{{ $lang['php_version'] }}</td>
+    <td>{{ $sys_info['php_ver'] }}</td>
+    <td>{{ $lang['mysql_version'] }}</td>
+    <td>{{ $sys_info['mysql_ver'] }}</td>
   </tr>
   <tr>
-    <td>{$lang.safe_mode}</td>
-    <td>{$sys_info.safe_mode}</td>
-    <td>{$lang.safe_mode_gid}</td>
-    <td>{$sys_info.safe_mode_gid}</td>
+    <td>{{ $lang['safe_mode'] }}</td>
+    <td>{{ $sys_info['safe_mode'] }}</td>
+    <td>{{ $lang['safe_mode_gid'] }}</td>
+    <td>{{ $sys_info['safe_mode_gid'] }}</td>
   </tr>
   <tr>
-    <td>{$lang.socket}</td>
-    <td>{$sys_info.socket}</td>
-    <td>{$lang.timezone}</td>
-    <td>{$sys_info.timezone}</td>
+    <td>{{ $lang['socket'] }}</td>
+    <td>{{ $sys_info['socket'] }}</td>
+    <td>{{ $lang['timezone'] }}</td>
+    <td>{{ $sys_info['timezone'] }}</td>
   </tr>
   <tr>
-    <td>{$lang.gd_version}</td>
-    <td>{$sys_info.gd}</td>
-    <td>{$lang.zlib}</td>
-    <td>{$sys_info.zlib}</td>
+    <td>{{ $lang['gd_version'] }}</td>
+    <td>{{ $sys_info['gd'] }}</td>
+    <td>{{ $lang['zlib'] }}</td>
+    <td>{{ $sys_info['zlib'] }}</td>
   </tr>
   <tr>
-    <td>{$lang.ip_version}</td>
-    <td>{$sys_info.ip_version}</td>
-    <td>{$lang.max_filesize}</td>
-    <td>{$sys_info.max_filesize}</td>
+    <td>{{ $lang['ip_version'] }}</td>
+    <td>{{ $sys_info['ip_version'] }}</td>
+    <td>{{ $lang['max_filesize'] }}</td>
+    <td>{{ $sys_info['max_filesize'] }}</td>
   </tr>
   <tr>
-    <td>{$lang.ecs_version}</td>
-    <td>{$ecs_version} RELEASE {$ecs_release}</td>
-    <td>{$lang.install_date}</td>
-    <td>{$install_date}</td>
+    <td>{{ $lang['ecs_version'] }}</td>
+    <td>{{ $ecs_version }} RELEASE {{ $ecs_release }}</td>
+    <td>{{ $lang['install_date'] }}</td>
+    <td>{{ $install_date }}</td>
   </tr>
   <tr>
-    <td>{$lang.ec_charset}</td>
-    <td>{$ecs_charset}</td>
+    <td>{{ $lang['ec_charset'] }}</td>
+    <td>{{ $ecs_charset }}</td>
     <td></td>
     <td></td>
   </tr>
 </table>
 </div>
-{literal}
+
 {insert_scripts files="../js/utils.js"}
 <script type="Text/Javascript" language="JavaScript">
 <!--
@@ -264,5 +264,5 @@ onload = function()
       }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

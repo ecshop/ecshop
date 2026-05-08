@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
  <head>
-  <title> {$lang.calculator} </title>
-  {insert_scripts files="../js/utils.js"}
-  {literal}
+  <title> {{ $lang['calculator'] }} </title>
+  <script src="../js/utils.js"></script>
+  
   <style type="text/css">
     body, div, input {
       font: 12px arial;
@@ -133,7 +133,7 @@
   }
   //-->
   </script>
-  {/literal}
+  
  </head>
 
  <body style="background:buttonFace">
@@ -141,8 +141,8 @@
       <div id="calculatorOutput" style="width:95%; text-align:right;border:2px inset;background:#FFF;">0</div>
       <table width="100%">
       <tr>
-        <td colspan="2"><input type="button" class="calculatorButton2" value="{$lang.clear_calculator}" onclick="Calculator.clear()" /></td>
-        <td colspan="2"><input type="button" class="calculatorButton2" value="{$lang.backspace}" onclick="Calculator.backspace()" /></td>
+        <td colspan="2"><input type="button" class="calculatorButton2" value="{{ $lang['clear_calculator'] }}" onclick="Calculator.clear()" /></td>
+        <td colspan="2"><input type="button" class="calculatorButton2" value="{{ $lang['backspace'] }}" onclick="Calculator.backspace()" /></td>
       </tr>
       <tr>
         <td><input class="calculatorButton" type="button" value="7" onclick="Calculator.input(7)" /></td>
@@ -170,7 +170,7 @@
       </tr>
       <tr>
         <td height="38">&nbsp;</td>
-        <td colspan="2"><div align="center"><a href="#" onclick="top.close()">{$lang.close_window}</a></div></td>
+        <td colspan="2"><div align="center"><a href="#" onclick="top.close()">{{ $lang['close_window'] }}</a></div></td>
         <td>&nbsp;</td>
       </tr>
       </table>
@@ -179,7 +179,7 @@
 
  <script type="text/javascript">
  <!--
-  {literal}
+  
 
   document.onkeyup = function(e)
   {
@@ -234,7 +234,7 @@
 
     //alert(evt.keyCode);
   }
-  {/literal}
+  
  //-->
  </script>
 </html>

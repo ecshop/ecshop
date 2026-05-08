@@ -1,14 +1,15 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
-{insert_scripts files="validator.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
+<script src="validator.js"></script>
 <div class="form-div">
 <form method="post" action="affiliate.php">
-<input type="radio" name="on" value="1" {if $config.on eq 1} checked="true" {/if} onClick="javascript:actDiv('separate','');actDiv('btnon','none');">{$lang.on}
-<input type="radio" name="on" value="0" {if !$config.on || $config.on eq 0} checked="true" {/if} onClick="javascript:actDiv('separate','none');actDiv('btnon','');">{$lang.off}
+<input type="radio" name="on" value="1" @if($config['on'] == 1) checked="true" @endif onClick="javascript:actDiv('separate','');actDiv('btnon','none');">{{ $lang['on'] }}
+<input type="radio" name="on" value="0" @if(!$config['on'] || $config['on'] == 0) checked="true" @endif onClick="javascript:actDiv('separate','none');actDiv('btnon','');">{{ $lang['off'] }}
 <br><br>
 <input type="hidden" name="act" value="on" />
-<input type="submit" value="{$lang.button_submit}" class="button" id="btnon"/>
+<input type="submit" value="{{ $lang['button_submit'] }}" class="button" id="btnon"/>
 </form>
 </div>
 <div id="separate">
@@ -16,84 +17,84 @@
 <form method="post" action="affiliate.php">
             <table width="100%" border="0" cellspacing="0" cellpadding="4">
                 <tr>
-                    <td colspan="2" style="border-bottom:1px dashed #dadada;"><input type="radio" name="separate_by" value="0" {if !$config.config.separate_by || $config.config.separate_by eq 0} checked="true" {/if} onClick="actDiv('listDiv','');">
-                    {$lang.separate_by.0}<input type="radio" name="separate_by" value="1" {if $config.config.separate_by eq 1} checked="true" {/if} onClick="actDiv('listDiv','none');">
-                        {$lang.separate_by.1}</td>
+                    <td colspan="2" style="border-bottom:1px dashed #dadada;"><input type="radio" name="separate_by" value="0" @if(!$config['config']['separate_by'] || $config['config']['separate_by'] == 0) checked="true" @endif onClick="actDiv('listDiv','');">
+                    {{ $lang['separate_by'][0] }}<input type="radio" name="separate_by" value="1" @if($config['config']['separate_by'] == 1) checked="true" @endif onClick="actDiv('listDiv','none');">
+                        {{ $lang['separate_by'][1] }}</td>
                 </tr>
                 <tr>
-                    <td width="20%" align="right" class="label"><a href="javascript:showNotice('notice1');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a>{$lang.expire} </td>
-                    <td><input type="text" name="expire" maxlength="150" size="10" value="{$config.config.expire}" />
+                    <td width="20%" align="right" class="label"><a href="javascript:showNotice('notice1');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}" /></a>{{ $lang['expire'] }} </td>
+                    <td><input type="text" name="expire" maxlength="150" size="10" value="{{ $config['config']['expire'] }}" />
                         <select name="expire_unit">
-                            {html_options options=$lang.unit selected=$config.config.expire_unit}
+                            @foreach($lang['unit'] as $__k => $__v)<option value="{{ $__k }}" @if($__k == $config['config']['expire_unit']) selected @endif>{{ $__v }}</option>@endforeach
                         </select>
                         <br />
-                        <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="notice1">{$lang.help_expire|nl2br}</span>                        
+                        <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="notice1">{!! nl2br(e($lang['help_expire'])) !!}</span>                        
                         </td>
                 </tr>
                 <tr>
-                    <td align="right" class="label"><a href="javascript:showNotice('notice2');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a>{$lang.level_point_all} </td>
-                    <td><input type="text" name="level_point_all" maxlength="150" size="10" value="{$config.config.level_point_all}" />
+                    <td align="right" class="label"><a href="javascript:showNotice('notice2');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}" /></a>{{ $lang['level_point_all'] }} </td>
+                    <td><input type="text" name="level_point_all" maxlength="150" size="10" value="{{ $config['config']['level_point_all'] }}" />
                     <br />
-                    <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="notice2">{$lang.help_lpa|nl2br}</span></td>
+                    <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="notice2">{!! nl2br(e($lang['help_lpa'])) !!}</span></td>
                 </tr>
                 <tr>
-                    <td align="right" class="label"><a href="javascript:showNotice('notice3');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a>{$lang.level_money_all} </td>
-                    <td><input type="text" name="level_money_all" maxlength="150" size="10" value="{$config.config.level_money_all}" />
+                    <td align="right" class="label"><a href="javascript:showNotice('notice3');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}" /></a>{{ $lang['level_money_all'] }} </td>
+                    <td><input type="text" name="level_money_all" maxlength="150" size="10" value="{{ $config['config']['level_money_all'] }}" />
                     <br />
-                    <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="notice3">{$lang.help_lma|nl2br}</span></td>
+                    <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="notice3">{!! nl2br(e($lang['help_lma'])) !!}</span></td>
                 </tr>
                 <tr>
-                    <td align="right" class="label"><a href="javascript:showNotice('notice4');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a>{$lang.level_register_all}</td>
-                    <td><input type="text" name="level_register_all" maxlength="150" size="10" value="{$config.config.level_register_all}" />
+                    <td align="right" class="label"><a href="javascript:showNotice('notice4');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}" /></a>{{ $lang['level_register_all'] }}</td>
+                    <td><input type="text" name="level_register_all" maxlength="150" size="10" value="{{ $config['config']['level_register_all'] }}" />
                     <br />
-                    <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="notice4">{$lang.help_lra|nl2br}</span></td>
+                    <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="notice4">{!! nl2br(e($lang['help_lra'])) !!}</span></td>
                 </tr>
                 <tr>
-                    <td align="right" class="label"><a href="javascript:showNotice('notice5');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a>{$lang.level_register_up}</td>
-                    <td><input type="text" name="level_register_up" maxlength="150" size="10" value="{$config.config.level_register_up}" />
+                    <td align="right" class="label"><a href="javascript:showNotice('notice5');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}" /></a>{{ $lang['level_register_up'] }}</td>
+                    <td><input type="text" name="level_register_up" maxlength="150" size="10" value="{{ $config['config']['level_register_up'] }}" />
                     <br />
-                    <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="notice5">{$lang.help_lru|nl2br}</span></td>
+                    <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="notice5">{!! nl2br(e($lang['help_lru'])) !!}</span></td>
                 <tr><td></td>
-                    <td><input type="hidden" name="act" value="updata" /><input type="submit" value="{$lang.button_submit}" class="button" /></td>
+                    <td><input type="hidden" name="act" value="updata" /><input type="submit" value="{{ $lang['button_submit'] }}" class="button" /></td>
                 </tr>
                 </tr>
             </table>
     </form>
 </div>
 <div class="list-div" id="listDiv">
-{/if}
+@endif
 <table cellspacing='1' cellpadding='3'>
 	<tr>
-		<th name="levels" ReadOnly="true" width="10%">{$lang.levels}</th>
-		<th name="level_point" Type="TextBox">{$lang.level_point}</th>
-		<th name="level_money" Type="TextBox">{$lang.level_money}</th>
-		<th Type="Button">{$lang.handler}</th>
+		<th name="levels" ReadOnly="true" width="10%">{{ $lang['levels'] }}</th>
+		<th name="level_point" Type="TextBox">{{ $lang['level_point'] }}</th>
+		<th name="level_money" Type="TextBox">{{ $lang['level_money'] }}</th>
+		<th Type="Button">{{ $lang['handler'] }}</th>
 	</tr>
-{foreach from=$config.item item=val name=nav}
+@foreach($config['item'] as $val)
 <tr align="center">
-	<td>{$smarty.foreach.nav.iteration}</td>
-	<td><span onclick="listTable.edit(this, 'edit_point', '{$smarty.foreach.nav.iteration}'); return false;">{$val.level_point}</span></td>
-	<td><span onclick="listTable.edit(this, 'edit_money', '{$smarty.foreach.nav.iteration}'); return false;">{$val.level_money}</span></td>
-	<td ><a href="javascript:confirm_redirect(lang_removeconfirm, 'affiliate.php?act=del&id={$smarty.foreach.nav.iteration}')"><img style="border:0px;" src="images/no.gif" /></a></td>
+	<td>{{ $loop->iteration }}</td>
+	<td><span onclick="listTable.edit(this, 'edit_point', '{{ $loop->iteration }}'); return false;">{{ $val['level_point'] }}</span></td>
+	<td><span onclick="listTable.edit(this, 'edit_money', '{{ $loop->iteration }}'); return false;">{{ $val['level_money'] }}</span></td>
+	<td ><a href="javascript:confirm_redirect(lang_removeconfirm, 'affiliate.php?act=del&id={{ $loop->iteration }}')"><img style="border:0px;" src="images/no.gif" /></a></td>
 </tr>
-{/foreach}
+@endforeach
 </table>
-{if $full_page}
+@if($full_page)
 </div>
 </div>
 <script type="Text/Javascript" language="JavaScript">
 <!--
-{if !$config.on || $config.on eq 0}
+@if(!$config['on'] || $config['on'] == 0)
 actDiv('separate','none');
-{else}
+@else
 actDiv('btnon','none');
-{/if}
-{if $config.config.separate_by eq 1}
+@endif
+@if($config['config']['separate_by'] == 1)
 actDiv('listDiv','none');
-{/if}
+@endif
 
-var all_null = '{$lang.all_null}';
-{literal}
+var all_null = '{{ $lang['all_null'] }}';
+
 onload = function()
 {
   // 开始检查订单
@@ -120,8 +121,8 @@ function actDiv(divname, flag)
 {
     document.getElementById(divname).style.display = flag;
 }
-{/literal}
+
 //-->
 </script>
-{include file="pagefooter.htm"}
-{/if}
+@include('pagefooter')
+@endif

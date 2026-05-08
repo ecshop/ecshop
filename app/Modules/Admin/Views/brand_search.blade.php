@@ -1,8 +1,8 @@
 <div class="form-div">
   <form action="javascript:search_brand()" name="searchForm">
     <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
-    {$lang.keyword} <input type="text" name="brand_name" size="15" />
-    <input type="submit" value="{$lang.button_search}" class="button" />
+    {{ $lang['keyword'] }} <input type="text" name="brand_name" size="15" />
+    <input type="submit" value="{{ $lang['button_search'] }}" class="button" />
   </form>
 </div>
 

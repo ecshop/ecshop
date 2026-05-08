@@ -1,21 +1,22 @@
-{include file="pageheader.htm"}
-{insert_scripts files="validator.js,../js/transport.js}
+@include('pageheader')
+<script src="validator.js"></script>
+<script src="../js/transport.js"></script>
 <div class="main-div">
 <form method="post" action="wholesale.php" name="theForm" enctype="multipart/form-data" onSubmit="return validate()">
 <table width="100%">
   <tr>
-    <td width="14%" align="right">{$lang.pls_search_goods}</td>
+    <td width="14%" align="right">{{ $lang['pls_search_goods'] }}</td>
     <td width="86%"><!-- 分类 -->
-      <select name="cat_id"><option value="0">{$lang.custom_goods_cat}</option>{$cat_list}</select>
+      <select name="cat_id"><option value="0">{{ $lang['custom_goods_cat'] }}</option>{{ $cat_list }}</select>
       <!-- 品牌 -->
-      <select name="brand_id"><option value="0">{$lang.custom_goods_brand}</option>{html_options options=$brand_list}</select>
+      <select name="brand_id"><option value="0">{{ $lang['custom_goods_brand'] }}</option>@foreach($brand_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach</select>
       <!-- 关键字 -->
-      {$lang.label_search_goods}<input name="keyword" type="text" id="keyword" size="10">
+      {{ $lang['label_search_goods'] }}<input name="keyword" type="text" id="keyword" size="10">
       <!-- 搜索 -->
-      <input name="search" type="button" id="search" value="{$lang.button_search}" class="button" onclick="searchGoods()" /></td>
+      <input name="search" type="button" id="search" value="{{ $lang['button_search'] }}" class="button" onclick="searchGoods()" /></td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_goods_name}</td>
+    <td class="label">{{ $lang['label_goods_name'] }}</td>
     <td><table width="100%" border="0">
   <tr>
     <td width="46%"><select name="src_goods_lists" id="src_goods_lists" size="14" style="width:100%" multiple="true">
@@ -32,28 +33,28 @@
     </td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_rank_name}</td>
-    <td>{foreach from=$user_rank_list item=rank} 
-      <input name="rank_id[]" type="checkbox" id="rank_id[]" value="{$rank.rank_id}" {if $rank.checked}checked="checked"{/if} />
-      {$rank.rank_name} {/foreach}</td>
+    <td class="label">{{ $lang['label_rank_name'] }}</td>
+    <td>@foreach($user_rank_list as $rank) 
+      <input name="rank_id[]" type="checkbox" id="rank_id[]" value="{{ $rank['rank_id'] }}" @if($rank['checked'])checked="checked"@endif />
+      {{ $rank['rank_name'] }} @endforeach</td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_enabled}</td>
+    <td class="label">{{ $lang['label_enabled'] }}</td>
     <td><label>
-        <input type="radio" name="enabled" value="1" {if $wholesale.enabled}checked="checked"{/if} />
-        {$lang.yes}</label>
+        <input type="radio" name="enabled" value="1" @if($wholesale['enabled'])checked="checked"@endif />
+        {{ $lang['yes'] }}</label>
       <label>
-        <input type="radio" name="enabled" value="0" {if !$wholesale.enabled}checked="checked"{/if} />
-        {$lang.no}</label>    </td>
+        <input type="radio" name="enabled" value="0" @if(!$wholesale['enabled'])checked="checked"@endif />
+        {{ $lang['no'] }}</label>    </td>
   </tr>
 </table>
 
 <table width="100%">
   <tr>
     <td colspan="2" align="center">
-      <input type="submit" class="button" value="{$lang.button_submit}" />
-      <input type="reset" class="button" value="{$lang.button_reset}" />
-      <input type="hidden" name="act" value="{$form_action}" />
+      <input type="submit" class="button" value="{{ $lang['button_submit'] }}" />
+      <input type="reset" class="button" value="{{ $lang['button_reset'] }}" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
       <input name="goods_ids" type="hidden" value="" />
     </td>
   </tr>
@@ -61,7 +62,7 @@
 </form>
 </div>
 
-{insert_scripts files="../js/utils.js"}{literal}
+<script src="../js/utils.js"></script>
 
 <script language="JavaScript">
 <!--
@@ -249,5 +250,5 @@ if (Utils.$('dst_goods_lists'))
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

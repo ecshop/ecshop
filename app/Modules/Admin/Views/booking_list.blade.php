@@ -1,65 +1,66 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 <div class="form-div">
   <form action="javascript:searchGoodsname()" name="searchForm">
     <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
-    {$lang.goods_name} <input type="text" name="keyword" /> <input type="submit" value="{$lang.button_search}" class="button" />
+    {{ $lang['goods_name'] }} <input type="text" name="keyword" /> <input type="submit" value="{{ $lang['button_search'] }}" class="button" />
   </form>
 </div>
 
 <form method="POST" action="" name="listForm">
 <div class="list-div" id="listDiv">
-{/if}
+@endif
 
   <table cellpadding="3" cellspacing="1">
     <tr>
-      <th><a href="javascript:listTable.sort('rec_id'); ">{$lang.record_id}</a>{$sort_rec_id}</th>
-      <th><a href="javascript:listTable.sort('link_man'); ">{$lang.link_man}</a>{$sort_link_man}</th>
-      <th><a href="javascript:listTable.sort('goods_name'); ">{$lang.goods_name}</a>{$sort_goods_name}</th>
-      <th><a href="javascript:listTable.sort('goods_number'); ">{$lang.number}</a>{$sort_goods_number}</th>
-      <th><a href="javascript:listTable.sort('booking_time'); ">{$lang.booking_time}</a>{$sort_booking_time}</th>
-      <th><a href="javascript:listTable.sort('is_dispose'); ">{$lang.is_dispose}</a>{$sort_is_dispose}</th>
-      <th>{$lang.handler}</th>
+      <th><a href="javascript:listTable.sort('rec_id'); ">{{ $lang['record_id'] }}</a>{{ $sort_rec_id }}</th>
+      <th><a href="javascript:listTable.sort('link_man'); ">{{ $lang['link_man'] }}</a>{{ $sort_link_man }}</th>
+      <th><a href="javascript:listTable.sort('goods_name'); ">{{ $lang['goods_name'] }}</a>{{ $sort_goods_name }}</th>
+      <th><a href="javascript:listTable.sort('goods_number'); ">{{ $lang['number'] }}</a>{{ $sort_goods_number }}</th>
+      <th><a href="javascript:listTable.sort('booking_time'); ">{{ $lang['booking_time'] }}</a>{{ $sort_booking_time }}</th>
+      <th><a href="javascript:listTable.sort('is_dispose'); ">{{ $lang['is_dispose'] }}</a>{{ $sort_is_dispose }}</th>
+      <th>{{ $lang['handler'] }}</th>
     </tr>
-    {foreach from=$booking_list item=booking}
+    @forelse($booking_list as $booking)
     <tr>
-      <td>{$booking.rec_id}</td>
-      <td>{$booking.link_man|escape}</td>
-      <td><a href="../goods.php?id={$booking.goods_id}" target="_blank" title="{$lang.view}">{$booking.goods_name}</a></td>
-      <td align="right">{$booking.goods_number}</td>
-      <td align="right">{$booking.booking_time}</td>
-      <td align="center"><img src="images/{if $booking.is_dispose}yes{else}no{/if}.gif" /></td>
+      <td>{{ $booking['rec_id'] }}</td>
+      <td>{{ $booking['link_man'] }}</td>
+      <td><a href="../goods.php?id={{ $booking['goods_id'] }}" target="_blank" title="{{ $lang['view'] }}">{{ $booking['goods_name'] }}</a></td>
+      <td align="right">{{ $booking['goods_number'] }}</td>
+      <td align="right">{{ $booking['booking_time'] }}</td>
+      <td align="center"><img src="images/@if($booking['is_dispose'])yes@elseno@endif.gif" /></td>
       <td align="center">
-        <a href="?act=detail&amp;id={$booking.rec_id}" title="{$lang.detail}"><img src="images/icon_view.gif" border="0" height="16" width="16" /></a>
-        <a href="javascript:;" onclick="listTable.remove({$booking.rec_id},'{$lang.drop_confirm}')" title="{$lang.remove}"><img src="images/icon_drop.gif" border="0" height="16" width="16" /></a>
+        <a href="?act=detail&amp;id={{ $booking['rec_id'] }}" title="{{ $lang['detail'] }}"><img src="images/icon_view.gif" border="0" height="16" width="16" /></a>
+        <a href="javascript:;" onclick="listTable.remove({{ $booking['rec_id'] }},'{{ $lang['drop_confirm'] }}')" title="{{ $lang['remove'] }}"><img src="images/icon_drop.gif" border="0" height="16" width="16" /></a>
       </td>
     </tr>
-    {foreachelse}
-    <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
-    {/foreach}
+    @empty
+    <tr><td class="no-records" colspan="10">{{ $lang['no_records'] }}</td></tr>
+    @endforelse
   </table>
 
   <table cellpadding="4" cellspacing="0">
     <tr>
-      <td align="right">{include file="page.htm"}</td>
+      <td align="right">@include('page')</td>
     </tr>
   </table>
 
-{if $full_page}
+@if($full_page)
 </div>
 </form>
 
 <script type="text/javascript" language="JavaScript">
 <!--
-  listTable.recordCount = {$record_count};
-  listTable.pageCount = {$page_count};
+  listTable.recordCount = {{ $record_count }};
+  listTable.pageCount = {{ $page_count }};
 
-  {foreach from=$filter item=item key=key}
-  listTable.filter.{$key} = '{$item}';
-  {/foreach}
+  @foreach($filter as $key => $item)
+  listTable.filter.{{ $key }} = '{{ $item }}';
+  @endforeach
 
-  {literal}
+  
   onload = function()
   {
     // 开始检查订单
@@ -76,8 +77,8 @@
       listTable.filter['page'] = 1;
       listTable.loadList("get_bookinglist");
   }
-  {/literal}
+  
 //-->
 </script>
-{include file="pagefooter.htm"}
-{/if}
+@include('pagefooter')
+@endif

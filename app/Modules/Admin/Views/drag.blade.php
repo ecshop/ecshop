@@ -2,7 +2,7 @@
 <html>
 <head>
 <title></title>
-{literal}
+
 <style type="text/css">
 body {
   margin: 0;
@@ -72,7 +72,7 @@ Utils.fixEvent = function(e)
 }
 //-->
 </script>
-{/literal}
+
 </head>
 <body onselect="return false;">
 <table height="100%" cellspacing="0" cellpadding="0" id="tbl">

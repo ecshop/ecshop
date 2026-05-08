@@ -35,100 +35,6 @@ class PrivilegeController extends BaseController
         }
 
         /* ------------------------------------------------------ */
-        // -- 登陆界面
-        /* ------------------------------------------------------ */
-        if ($_REQUEST['act'] == 'login') {
-            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-            header('Cache-Control: no-cache, must-revalidate');
-            header('Pragma: no-cache');
-
-            if ((intval($_CFG['captcha']) & CAPTCHA_ADMIN) && gd_version() > 0) {
-                $this->assign('gd_version', gd_version());
-                $this->assign('random', mt_rand());
-            }
-
-            return $this->display('login.htm');
-        }
-
-        /* ------------------------------------------------------ */
-        // -- 验证登陆信息
-        /* ------------------------------------------------------ */
-        if ($_REQUEST['act'] == 'signin') {
-            if (intval($_CFG['captcha']) & CAPTCHA_ADMIN) {
-                include_once ROOT_PATH.'includes/cls_captcha.php';
-
-                /* 检查验证码是否正确 */
-                $validator = new captcha;
-                if (! empty($_POST['captcha']) && ! $validator->check_word($_POST['captcha'])) {
-                    sys_msg($_LANG['captcha_error'], 1);
-                }
-            }
-
-            $_POST['username'] = isset($_POST['username']) ? trim($_POST['username']) : '';
-            $_POST['password'] = isset($_POST['password']) ? trim($_POST['password']) : '';
-
-            $sql = 'SELECT `ec_salt` FROM '.$ecs->table('admin_user')."WHERE user_name = '".$_POST['username']."'";
-            $ec_salt = $db->getOne($sql);
-            if (! empty($ec_salt)) {
-                /* 检查密码是否正确 */
-                $sql = 'SELECT user_id, user_name, password, add_time, action_list, last_login,suppliers_id,ec_salt'.
-                    ' FROM '.$ecs->table('admin_user').
-                    " WHERE user_name = '".$_POST['username']."' AND password = '".md5(md5($_POST['password']).$ec_salt)."'";
-            } else {
-                /* 检查密码是否正确 */
-                $sql = 'SELECT user_id, user_name, password, add_time, action_list, last_login,suppliers_id,ec_salt'.
-                    ' FROM '.$ecs->table('admin_user').
-                    " WHERE user_name = '".$_POST['username']."' AND password = '".md5($_POST['password'])."'";
-            }
-            $row = $db->getRow($sql);
-
-            if ($row) {
-                // 检查是否为供货商的管理员 所属供货商是否有效
-                if (! empty($row['suppliers_id'])) {
-                    $supplier_is_check = suppliers_list_info(' is_check = 1 AND suppliers_id = '.$row['suppliers_id']);
-                    if (empty($supplier_is_check)) {
-                        sys_msg($_LANG['login_disable'], 1);
-                    }
-                }
-
-                // 登录成功
-                set_admin_session($row['user_id'], $row['user_name'], $row['action_list'], $row['last_login']);
-                $_SESSION['suppliers_id'] = $row['suppliers_id'];
-                if (empty($row['ec_salt'])) {
-                    $ec_salt = rand(1, 9999);
-                    $new_possword = md5(md5($_POST['password']).$ec_salt);
-                    $db->query('UPDATE '.$ecs->table('admin_user').
-                        " SET ec_salt='".$ec_salt."', password='".$new_possword."'".
-                        " WHERE user_id='$_SESSION[admin_id]'");
-                }
-
-                if ($row['action_list'] == 'all' && empty($row['last_login'])) {
-                    $_SESSION['shop_guide'] = true;
-                }
-
-                // 更新最后登录时间和IP
-                $db->query('UPDATE '.$ecs->table('admin_user').
-                    " SET last_login='".gmtime()."', last_ip='".real_ip()."'".
-                    " WHERE user_id='$_SESSION[admin_id]'");
-
-                if (isset($_POST['remember'])) {
-                    $time = gmtime() + 3600 * 24 * 365;
-                    setcookie('ECSCP[admin_id]', $row['user_id'], $time, null, null, null, true);
-                    setcookie('ECSCP[admin_pass]', md5($row['password'].$_CFG['hash_code'].$row['add_time']), $time, null, null, null, true);
-                }
-
-                // 清除购物车中过期的数据
-                $this->clear_cart();
-
-                ecs_header("Location: ./index.php\n");
-
-                exit;
-            } else {
-                sys_msg($_LANG['login_faild'], 1);
-            }
-        }
-
-        /* ------------------------------------------------------ */
         // -- 管理员列表页面
         /* ------------------------------------------------------ */
         if ($_REQUEST['act'] == 'list') {
@@ -593,11 +499,9 @@ class PrivilegeController extends BaseController
             ecs_header("Location: $url\n");
             exit;
         }
-
-        /* 获取管理员列表 */
-
     }
 
+    /* 获取管理员列表 */
     private function get_admin_userlist()
     {
         $list = [];

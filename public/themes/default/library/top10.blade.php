@@ -3,20 +3,20 @@
  <div class="box_2">
   <div class="top10Tit"></div>
   <div class="top10List clearfix">
-  <!-- {foreach name=top_goods from=$top_goods item=goods}-->
+  @foreach($top_goods as $goods)
   <ul class="clearfix">
-	<img src="../images/top_{$smarty.foreach.top_goods.iteration}.gif" class="iteration" />
-	<!-- {if $smarty.foreach.top_goods.iteration<4}-->
+	<img src="../images/top_{{ $loop->iteration }}.gif" class="iteration" />
+	@if($loop->iteration<4)
       <li class="topimg">
-      <a href="{$goods.url}"><img src="{$goods.thumb}" alt="{$goods.name|escape:html}" class="samllimg" /></a>
+      <a href="{{ $goods['url'] }}"><img src="{{ $goods['thumb'] }}" alt="{{ $goods['name'] }}" class="samllimg" /></a>
       </li>
-	<!-- {/if} -->		
-      <li {if $smarty.foreach.top_goods.iteration<4}class="iteration1"{/if}>
-      <a href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.short_name}</a><br />
-      {$lang.shop_price}<font class="f1">{$goods.price}</font><br />
+	@endif		
+      <li @if($loop->iteration<4)class="iteration1"@endif>
+      <a href="{{ $goods['url'] }}" title="{{ $goods['name'] }}">{{ $goods['short_name'] }}</a><br />
+      {{ $lang['shop_price'] }}<font class="f1">{{ $goods['price'] }}</font><br />
       </li>
     </ul>
-  <!-- {/foreach} -->
+  @endforeach
   </div>
  </div>
 </div>

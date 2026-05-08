@@ -1,60 +1,62 @@
-{include file="pageheader.htm"}
-{insert_scripts files="validator.js,../js/transport.js,../js/region.js"}
+@include('pageheader')
+<script src="validator.js"></script>
+<script src="../js/transport.js"></script>
+<script src="../js/region.js"></script>
 <div class="main-div">
 <form method="post" action="agency.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
 <table cellspacing="1" cellpadding="3" width="100%">
   <tr>
-    <td class="label">{$lang.label_agency_name}</td>
-    <td><input type="text" name="agency_name" maxlength="60" value="{$agency.agency_name}" />{$lang.require_field}</td>
+    <td class="label">{{ $lang['label_agency_name'] }}</td>
+    <td><input type="text" name="agency_name" maxlength="60" value="{{ $agency['agency_name'] }}" />{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_agency_desc}</td>
-    <td><textarea  name="agency_desc" cols="60" rows="4"  >{$agency.agency_desc}</textarea></td>
+    <td class="label">{{ $lang['label_agency_desc'] }}</td>
+    <td><textarea  name="agency_desc" cols="60" rows="4"  >{{ $agency['agency_desc'] }}</textarea></td>
   </tr>
   <tr>
     <td class="label">
-    <a href="javascript:showNotice('noticeAdmins');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.label_admins}</td>
-    <td>{foreach from=$agency.admin_list item=admin}
-      <input type="checkbox" name="admins[]" value="{$admin.user_id}" {if $admin.type eq "this"}checked="checked"{/if} />
-      {$admin.user_name}{if $admin.type eq "other"}(*){/if}&nbsp;&nbsp;
-    {/foreach}<br />
-    <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeAdmins">{$lang.notice_admins}</span></td>
+    <a href="javascript:showNotice('noticeAdmins');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['label_admins'] }}</td>
+    <td>@foreach($agency['admin_list'] as $admin)
+      <input type="checkbox" name="admins[]" value="{{ $admin['user_id'] }}" @if($admin['type'] == "this")checked="checked"@endif />
+      {{ $admin['user_name'] }}@if($admin['type'] == "other")(*)@endif&nbsp;&nbsp;
+    @endforeach<br />
+    <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeAdmins">{{ $lang['notice_admins'] }}</span></td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_regions}</td>
-    <td id="regionCell">{foreach from=$agency.region_list item=region}
-        <input type="checkbox" name="regions[]" value="{$region.region_id}" checked="true" />
-        {$region.region_name}&nbsp;&nbsp;
-      {/foreach} </td>
+    <td class="label">{{ $lang['label_regions'] }}</td>
+    <td id="regionCell">@foreach($agency['region_list'] as $region)
+        <input type="checkbox" name="regions[]" value="{{ $region['region_id'] }}" checked="true" />
+        {{ $region['region_name'] }}&nbsp;&nbsp;
+      @endforeach </td>
   </tr>
 </table>
 <hr>
 <table cellspacing="1" cellpadding="3" width="100%">
-  <caption><strong>{$lang.add_region}</strong></caption>
+  <caption><strong>{{ $lang['add_region'] }}</strong></caption>
   <tr>
     <td width="10%">&nbsp;</td>
-    <td>{$lang.label_country}</td>
-    <td>{$lang.label_province}</td>
-    <td>{$lang.label_city}</td>
-    <td>{$lang.label_district}</td>
+    <td>{{ $lang['label_country'] }}</td>
+    <td>{{ $lang['label_province'] }}</td>
+    <td>{{ $lang['label_city'] }}</td>
+    <td>{{ $lang['label_district'] }}</td>
     <td width="10">&nbsp;</td>
     <td width="10%">&nbsp;</td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td><select name="country" id="selCountries" onChange="region.changed(this, 1, 'selProvinces')" size="10">
-      {foreach from=$countries item=country name="fe_country"}
-        <option value="{$country.region_id}" {if $smarty.foreach.fe_country.first}selected{/if}>{$country.region_name|escape:html}</option>
-      {/foreach}
+      @foreach($countries as $country)
+        <option value="{{ $country['region_id'] }}" @if($loop->first)selected@endif>{{ $country['region_name'] }}</option>
+      @endforeach
     </select></td>
     <td><select name="province" id="selProvinces" onChange="region.changed(this, 2, 'selCities')" size="10">
-      <option value="">{$lang.select_please}</option>
+      <option value="">{{ $lang['select_please'] }}</option>
     </select></td>
     <td><select name="city" id="selCities" onChange="region.changed(this, 3, 'selDistricts')" size="10">
-      <option value="">{$lang.select_please}</option>
+      <option value="">{{ $lang['select_please'] }}</option>
     </select></td>
     <td><select name="district" id="selDistricts" size="10">
-      <option value="">{$lang.select_please}</option>
+      <option value="">{{ $lang['select_please'] }}</option>
     </select></td>
     <td><input type="button" value="+" class="button" onclick="addRegion()" /></td>
     <td>&nbsp;</td>
@@ -64,17 +66,18 @@
 <table align="center">
   <tr>
     <td colspan="2" align="center">
-      <input type="submit" class="button" value="{$lang.button_submit}" />
-      <input type="reset" class="button" value="{$lang.button_reset}" />
-      <input type="hidden" name="act" value="{$form_action}" />
-      <input type="hidden" name="id" value="{$agency.agency_id}" />
+      <input type="submit" class="button" value="{{ $lang['button_submit'] }}" />
+      <input type="reset" class="button" value="{{ $lang['button_reset'] }}" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
+      <input type="hidden" name="id" value="{{ $agency['agency_id'] }}" />
     </td>
   </tr>
 </table>
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 region.isAdmin = true;
@@ -167,5 +170,5 @@ function addRegion()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

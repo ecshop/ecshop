@@ -1,57 +1,58 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 <div class="form-div">
   <form name="TimeInterval"  action="javascript:getList()" style="margin:0px">
-    {$lang.start_date}&nbsp;{html_select_date field_order="YMD" prefix="start_date" time=$start_date start_year="-10" end_year="+1" display_days=true month_format="%m"}&nbsp;&nbsp;
-    {$lang.end_date}&nbsp;{html_select_date field_order="YMD" prefix="end_date" time=$end_date start_year="-10" end_year="+1" display_days=true month_format="%m"}
-    <input type="submit" name="submit" value="{$lang.query}" class="button" />
+    {{ $lang['start_date'] }}&nbsp;{html_select_date field_order="YMD" prefix="start_date" time=$start_date start_year="-10" end_year="+1" display_days=true month_format="%m"}&nbsp;&nbsp;
+    {{ $lang['end_date'] }}&nbsp;{html_select_date field_order="YMD" prefix="end_date" time=$end_date start_year="-10" end_year="+1" display_days=true month_format="%m"}
+    <input type="submit" name="submit" value="{{ $lang['query'] }}" class="button" />
   </form>
 </div>
 <form method="POST" action="" name="listForm">
 <div class="list-div" id="listDiv">
-{/if}
+@endif
   <table width="100%" cellspacing="1" cellpadding="3">
      <tr>
-      <th>{$lang.order_by}</th>
-      <th>{$lang.goods_name}</th>
-      <th>{$lang.goods_sn}</th>
-      <th><a href="javascript:listTable.sort('goods_num', 'DESC'); ">{$lang.sell_amount}</a>{$sort_goods_num}</th>
-      <th><a href="javascript:listTable.sort('turnover', 'DESC'); ">{$lang.sell_sum}</a>{$sort_turnover}</th>
-      <th>{$lang.percent_count}</th>
+      <th>{{ $lang['order_by'] }}</th>
+      <th>{{ $lang['goods_name'] }}</th>
+      <th>{{ $lang['goods_sn'] }}</th>
+      <th><a href="javascript:listTable.sort('goods_num', 'DESC'); ">{{ $lang['sell_amount'] }}</a>{{ $sort_goods_num }}</th>
+      <th><a href="javascript:listTable.sort('turnover', 'DESC'); ">{{ $lang['sell_sum'] }}</a>{{ $sort_turnover }}</th>
+      <th>{{ $lang['percent_count'] }}</th>
     </tr>
-  {foreach from=$goods_order_data item=list name=val}
+  @forelse($goods_order_data as $list)
     <tr align="center">
-      <td>{$smarty.foreach.val.iteration}</td>
-      <td align="left"><a href="../goods.php?id={$list.goods_id}" target="_blank">{$list.goods_name}</a></td>
-      <td>{$list.goods_sn}</td>
-      <td align="right">{$list.goods_num}</td>
-      <td align="right">{$list.turnover}</td>
-      <td align="right">{$list.wvera_price}</td>
+      <td>{{ $loop->iteration }}</td>
+      <td align="left"><a href="../goods.php?id={{ $list['goods_id'] }}" target="_blank">{{ $list['goods_name'] }}</a></td>
+      <td>{{ $list['goods_sn'] }}</td>
+      <td align="right">{{ $list['goods_num'] }}</td>
+      <td align="right">{{ $list['turnover'] }}</td>
+      <td align="right">{{ $list['wvera_price'] }}</td>
     </tr>
-  {foreachelse}
-    <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
-  {/foreach}
+  @empty
+    <tr><td class="no-records" colspan="10">{{ $lang['no_records'] }}</td></tr>
+  @endforelse
   </table>
   <table id="page-table" cellspacing="0">
   <tr>
     <td>&nbsp;</td>
     <td align="right" nowrap="true">
-    {include file="page.htm"}
+    @include('page')
     </td>
   </tr>
   </table>
-{if $full_page}
+@if($full_page)
 </div>
 </form>
 
 <script type="Text/Javascript" language="JavaScript">
-listTable.recordCount = {$record_count};
-listTable.pageCount = {$page_count};
-{foreach from=$filter item=item key=key}
-listTable.filter.{$key} = '{$item}';
-{/foreach}
-{literal}
+listTable.recordCount = {{ $record_count }};
+listTable.pageCount = {{ $page_count }};
+@foreach($filter as $key => $item)
+listTable.filter.{{ $key }} = '{{ $item }}';
+@endforeach
+
 <!--
 onload = function()
 {
@@ -89,6 +90,6 @@ function getDownUrl()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
-{/if}
+
+@include('pagefooter')
+@endif

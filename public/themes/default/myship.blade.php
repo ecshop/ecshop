@@ -2,15 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$page_title}</title>
+<title>{{ $page_title }}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
 {* 包含脚本文件 *}
-{insert_scripts files='common.js,myship.js'}
+<script src="common.js"></script>
+<script src="myship.js"></script>
 </head>
 <body>
 <!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
@@ -23,17 +24,18 @@
 <!--当前位置 end-->
 <div class="blank"></div>
 <div class="block">
-  <h5><span>{$lang.shipping_method}</span></h5>
+  <h5><span>{{ $lang['shipping_method'] }}</span></h5>
   <div class="blank"></div>
   <!-- 开始收货人信息填写界面 -->
-      {insert_scripts files='region.js,utils.js'}
+      <script src="region.js"></script>
+<script src="utils.js"></script>
       <script type="text/javascript">
         region.isAdmin = false;
-        {foreach from=$lang.flow_js item=item key=key}
-        var {$key} = "{$item}";
-        {/foreach}
+        @foreach($lang['flow_js'] as $key => $item)
+        var {{ $key }} = "{{ $item }}";
+        @endforeach
 
-        {literal}
+        
         onload = function() {
           if (!document.all)
           {
@@ -84,7 +86,7 @@ function checkForm(frm)
   return ! err;
 }
 
-        {/literal}
+        
       </script>
 <form action="myship.php" method="post" name="theForm" id="theForm" onsubmit="return checkForm(this)">
     <!-- #BeginLibraryItem "/Library/myship.lbi" --><!-- #EndLibraryItem -->
@@ -102,22 +104,22 @@ function checkForm(frm)
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>]
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+    <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>]
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->

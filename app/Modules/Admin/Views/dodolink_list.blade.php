@@ -1,63 +1,64 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 <form method="POST" action="" name="listForm">
 <!-- start user_bonus list -->
 <div class="list-div" id="listDiv">
-{/if}
+@endif
 
   <table cellpadding="3" cellspacing="1">
     <tr>
       <th width="13%">
         <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox">
-        <a href="javascript:listTable.sort('log_id'); ">{$lang.record_id}</a>{$sort_log_id}</th>
-      <th width="26%"><a href="javascript:listTable.sort('sn');">{$lang.sn}</a>{$sort_sn}</th>
-	  <th width="10%"><a href="javascript:listTable.sort('count');">{$lang.count}</a>{$sort_count}</th>
-      <th width="15%"><a href="javascript:listTable.sort('end_time');">{$lang.end_time}</a>{$sort_end_time}</th>
-      <th width="15%"><a href="javascript:listTable.sort('user_name');">{$lang.user}</a>{$sort_user_name}</th>
-      <th width="31%">{$lang.handler}</th>
+        <a href="javascript:listTable.sort('log_id'); ">{{ $lang['record_id'] }}</a>{{ $sort_log_id }}</th>
+      <th width="26%"><a href="javascript:listTable.sort('sn');">{{ $lang['sn'] }}</a>{{ $sort_sn }}</th>
+	  <th width="10%"><a href="javascript:listTable.sort('count');">{{ $lang['count'] }}</a>{{ $sort_count }}</th>
+      <th width="15%"><a href="javascript:listTable.sort('end_time');">{{ $lang['end_time'] }}</a>{{ $sort_end_time }}</th>
+      <th width="15%"><a href="javascript:listTable.sort('user_name');">{{ $lang['user'] }}</a>{{ $sort_user_name }}</th>
+      <th width="31%">{{ $lang['handler'] }}</th>
     </tr>
-    {foreach from=$items item=item}
+    @forelse($items as $item)
     <tr>
-      <td><span><input value="{$topic.topic_id}" name="checkboxes[]" type="checkbox">{$item.log_id}</span></td>
+      <td><span><input value="{{ $topic['topic_id'] }}" name="checkboxes[]" type="checkbox">{{ $item['log_id'] }}</span></td>
       
-      <td>{$item.sn}</td>
-      <td>{$item.count}</td>
-      <td>{$item.end_time}</td>
-      <td>{$item.user_name}</td>
+      <td>{{ $item['sn'] }}</td>
+      <td>{{ $item['count'] }}</td>
+      <td>{{ $item['end_time'] }}</td>
+      <td>{{ $item['user_name'] }}</td>
       <td align="center">
-      <a href="javascript:;" title="{$lang.drop}" onclick="listTable.remove({$item.log_id}, delete_topic_confirm, 'delete');">{$lang.drop}</a>
+      <a href="javascript:;" title="{{ $lang['drop'] }}" onclick="listTable.remove({{ $item['log_id'] }}, delete_topic_confirm, 'delete');">{{ $lang['drop'] }}</a>
 	  </td>
    
     </tr>
-    {foreachelse}
-    <tr><td class="no-records" colspan="11">{$lang.no_records}</td></tr>
-    {/foreach}
+    @empty
+    <tr><td class="no-records" colspan="11">{{ $lang['no_records'] }}</td></tr>
+    @endforelse
   </table>
 
   <table cellpadding="4" cellspacing="0">
     <tr>
-      <td><input type="submit" name="drop" id="btnSubmit" value="{$lang.drop}" class="button" disabled="true" />
+      <td><input type="submit" name="drop" id="btnSubmit" value="{{ $lang['drop'] }}" class="button" disabled="true" />
       </td>
-      <td align="right">{include file="page.htm"}</td>
+      <td align="right">@include('page')</td>
     </tr>
   </table>
 
-{if $full_page}
+@if($full_page)
 </div>
 <!-- end user_bonus list -->
 </form>
 
 <script type="text/javascript" language="JavaScript">
-  listTable.recordCount = {$record_count};
-  listTable.pageCount = {$page_count};
+  listTable.recordCount = {{ $record_count }};
+  listTable.pageCount = {{ $page_count }};
   listTable.query = "query";
 
-  {foreach from=$filter item=item key=key}
-  listTable.filter.{$key} = '{$item}';
-  {/foreach}
+  @foreach($filter as $key => $item)
+  listTable.filter.{{ $key }} = '{{ $item }}';
+  @endforeach
 
-  {literal}
+  
   onload = function()
   {
     // 开始检查订单
@@ -77,7 +78,7 @@
 	  return false;
 	}
   }
-  {/literal}
+  
 </script>
-{include file="pagefooter.htm"}
-{/if}
+@include('pagefooter')
+@endif

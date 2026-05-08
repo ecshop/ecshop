@@ -1,38 +1,39 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="form-div">
 <form action="" method="post" name="js_code">
   <table width="100%">
     <tr>
-      <td class="label">{$lang.outside_address}</td>
+      <td class="label">{{ $lang['outside_address'] }}</td>
       <td><input type="text" name="outside_address" size="30" /></td>
     </tr>
     <tr>
-      <td class="label">{$lang.label_charset}</td>
+      <td class="label">{{ $lang['label_charset'] }}</td>
       <td><select name="charset" id="charset">
-        {html_options options=$lang_list}
+        @foreach($lang_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach
       </select></td>
     </tr>
     <tr>
       <td colspan="2"><div align="center">
-        <input type="button" name="gen_code" value="{$lang.add_js_code}" onclick="validate(); genCode(); autocopy()" class="button" />
+        <input type="button" name="gen_code" value="{{ $lang['add_js_code'] }}" onclick="validate(); genCode(); autocopy()" class="button" />
       </div></td>
       </tr>
     <tr>
       <td colspan="2">
         <div align="center">
-          <textarea name="ads_js" cols="70" rows="5">{$js_code}</textarea>
+          <textarea name="ads_js" cols="70" rows="5">{{ $js_code }}</textarea>
         </div></td>
     </tr>
   </table>
  </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
 <script language="JavaScript">
 var elements = document.forms['js_code'].elements;
-var url = '{$url}';
+var url = '{{ $url }}';
 
 <!--
-{literal}
+
 document.forms['js_code'].elements['outside_address'].focus();
 
 onload = function()
@@ -73,6 +74,6 @@ function autocopy()
 }
 
 //-->
-{/literal}
+
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

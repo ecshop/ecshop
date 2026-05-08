@@ -1,64 +1,65 @@
 
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 
 <div class="form-div">
   <form action="javascript:searchSnatch()" name="searchForm">
     <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
     <select name = "searchType">
-      <option value="card_sn">{$lang.lab_card_sn}</option>
-      <option value="order_sn">{$lang.lab_order_sn}</option>
+      <option value="card_sn">{{ $lang['lab_card_sn'] }}</option>
+      <option value="order_sn">{{ $lang['lab_order_sn'] }}</option>
     </select>
-    <input type="text" name="keyword" /> <input type="submit" value="{$lang.button_search}" class="button" />
+    <input type="text" name="keyword" /> <input type="submit" value="{{ $lang['button_search'] }}" class="button" />
   </form>
 </div>
 
-<form method="POST" action="virtual_card.php?act=batch_drop_card&goods_id={$goods_id}" name="listForm">
+<form method="POST" action="virtual_card.php?act=batch_drop_card&goods_id={{ $goods_id }}" name="listForm">
 <!-- start card list -->
 <div class="list-div" id="listDiv">
-{/if}
+@endif
 
   <table cellpadding="3" cellspacing="1">
     <tr>
       <th>
         <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox">
-        <a href="javascript:listTable.sort('card_id'); ">{$lang.record_id}</a>{$sort_card_id}
+        <a href="javascript:listTable.sort('card_id'); ">{{ $lang['record_id'] }}</a>{{ $sort_card_id }}
       </th>
-      <th><a href="javascript:listTable.sort('card_sn'); ">{$lang.lab_card_sn}</a>{$sort_card_sn}</th>
-      <th><a href="javascript:listTable.sort('card_password'); ">{$lang.lab_card_password}</a>{$sort_card_password}</th>
-      <th><a href="javascript:listTable.sort('end_date'); ">{$lang.lab_end_date}</a>{$sort_end_date}</th>
-      <th><a href="javascript:listTable.sort('is_saled'); ">{$lang.lab_is_saled}</a>{$sort_is_sold}</th>
-      <th><a href="javascript:listTable.sort('order_sn'); ">{$lang.lab_order_sn}</a>{$sort_order_sn}</th>
-      <th>{$lang.handler}</th>
+      <th><a href="javascript:listTable.sort('card_sn'); ">{{ $lang['lab_card_sn'] }}</a>{{ $sort_card_sn }}</th>
+      <th><a href="javascript:listTable.sort('card_password'); ">{{ $lang['lab_card_password'] }}</a>{{ $sort_card_password }}</th>
+      <th><a href="javascript:listTable.sort('end_date'); ">{{ $lang['lab_end_date'] }}</a>{{ $sort_end_date }}</th>
+      <th><a href="javascript:listTable.sort('is_saled'); ">{{ $lang['lab_is_saled'] }}</a>{{ $sort_is_sold }}</th>
+      <th><a href="javascript:listTable.sort('order_sn'); ">{{ $lang['lab_order_sn'] }}</a>{{ $sort_order_sn }}</th>
+      <th>{{ $lang['handler'] }}</th>
     </tr>
-    {foreach from=$card_list item=card}
+    @forelse($card_list as $card)
     <tr>
-      <td><input value="{$card.card_id}" name="checkboxes[]" type="checkbox">{$card.card_id}</td>
-      <td><span>{$card.card_sn}</span></td>
-      <td><span>{$card.card_password}</span></td>
-      <td align="right"><span>{$card.end_date}</span></td>
-      <td align="center"><img src="images/{if $card.is_saled}yes{else}no{/if}.gif" /></span>
+      <td><input value="{{ $card['card_id'] }}" name="checkboxes[]" type="checkbox">{{ $card['card_id'] }}</td>
+      <td><span>{{ $card['card_sn'] }}</span></td>
+      <td><span>{{ $card['card_password'] }}</span></td>
+      <td align="right"><span>{{ $card['end_date'] }}</span></td>
+      <td align="center"><img src="images/@if($card['is_saled'])yes@elseno@endif.gif" /></span>
       </td>
-      <td>{$card.order_sn}</td>
+      <td>{{ $card['order_sn'] }}</td>
       <td align="center">
-        <a href="virtual_card.php?act=edit_replenish&amp;card_id={$card.card_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" border="0" height="16" width="16" /></a>
-        <a href="javascript:;" onclick="listTable.remove({$card.card_id}, '{$lang.drop_confirm}', 'remove_card')" title="{$lang.drop}"><img src="images/icon_drop.gif" border="0" height="16" width="16" /></a>
+        <a href="virtual_card.php?act=edit_replenish&amp;card_id={{ $card['card_id'] }}" title="{{ $lang['edit'] }}"><img src="images/icon_edit.gif" border="0" height="16" width="16" /></a>
+        <a href="javascript:;" onclick="listTable.remove({{ $card['card_id'] }}, '{{ $lang['drop_confirm'] }}', 'remove_card')" title="{{ $lang['drop'] }}"><img src="images/icon_drop.gif" border="0" height="16" width="16" /></a>
       </td>
     </tr>
-    {foreachelse}
-    <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
-    {/foreach}
+    @empty
+    <tr><td class="no-records" colspan="10">{{ $lang['no_records'] }}</td></tr>
+    @endforelse
   </table>
 
   <table cellpadding="4" cellspacing="0">
     <tr>
-      <td><input type="submit" name="drop" id="btnSubmit" value="{$lang.drop}" class="button" disabled="true" /></td>
-      <td align="right">{include file="page.htm"}</td>
+      <td><input type="submit" name="drop" id="btnSubmit" value="{{ $lang['drop'] }}" class="button" disabled="true" /></td>
+      <td align="right">@include('page')</td>
     </tr>
   </table>
 
-{if $full_page}
+@if($full_page)
 </div>
 <!-- end card_list list -->
 </form>
@@ -66,15 +67,15 @@
 <script type="text/javascript" language="JavaScript">
 <!--
 
-  listTable.recordCount = {$record_count};
-  listTable.pageCount = {$page_count};
+  listTable.recordCount = {{ $record_count }};
+  listTable.pageCount = {{ $page_count }};
   listTable.query = "query_card";
 
-  {foreach from=$filter item=item key=key}
-  listTable.filter.{$key} = '{$item}';
-  {/foreach}
+  @foreach($filter as $key => $item)
+  listTable.filter.{{ $key }} = '{{ $item }}';
+  @endforeach
 
-{literal}
+
   onload = function()
   {
     document.forms['searchForm'].elements['keyword'].focus();
@@ -102,7 +103,7 @@ function searchSnatch()
 }
 //-->
 </script>
-{/literal}
 
-{include file="pagefooter.htm"}
-{/if}
+
+@include('pagefooter')
+@endif

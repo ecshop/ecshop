@@ -2,17 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$page_title}</title>
+<title>{{ $page_title }}</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
 <!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
 {* 包含脚本文件 *}
-{insert_scripts files='common.js'}
+<script src="common.js"></script>
 </head>
 <body>
 <!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
@@ -48,34 +48,34 @@
    <div class="blank5"></div>
    <div class="box">
    <div class="box_1">
-    <h3><span>{$lang.auction_goods}</span></h3>
+    <h3><span>{{ $lang['auction_goods'] }}</span></h3>
     <div class="boxCenterList">
-      <!-- {if $auction_list} 如果有拍卖活动 -->
-      <!-- {foreach from=$auction_list item=auction} 循环拍卖活动开始 -->
+      <!-- @if($auction_list) 如果有拍卖活动 -->
+      <!-- @foreach($auction_list as $auction) 循环拍卖活动开始 -->
       <ul class="group clearfix">
       <li style="margin-right:8px; text-align:center;">
-      <a href="{$auction.url}"><img src="{$auction.goods_thumb}" border="0" alt="{$auction.goods_name|escape:html}" style="vertical-align: middle" /></a>
+      <a href="{{ $auction['url'] }}"><img src="{{ $auction['goods_thumb'] }}" border="0" alt="{{ $auction['goods_name'] }}" style="vertical-align: middle" /></a>
       </li>
       <li style="width:555px; line-height:23px;">
-      {$lang.goods_name}：<a href="{$auction.url}" class="f5">{$auction.goods_name|escape:html}</a><br />
-      {$lang.act_status}：
-    <!-- {if $auction.status_no eq 0} -->
-            {$lang.au_pre_start}<br>
-            <!-- {elseif $auction.status_no eq 1} -->
-            {$lang.au_under_way_1}<br>
-            <!-- {else} -->
-            {$lang.au_finished}<br>
-            <!-- {/if} -->
-    {$lang.au_start_price}：{$auction.formated_start_price}<br>
-    <!-- {if $auction.end_price gt 0} -->
-    {$lang.au_end_price}：{$auction.formated_end_price}
-          <!-- {/if} -->
+      {{ $lang['goods_name'] }}：<a href="{{ $auction['url'] }}" class="f5">{{ $auction['goods_name'] }}</a><br />
+      {{ $lang['act_status'] }}：
+    @if($auction['status_no'] == 0)
+            {{ $lang['au_pre_start'] }}<br>
+            @elseif($auction['status_no'] == 1)
+            {{ $lang['au_under_way_1'] }}<br>
+            @else
+            {{ $lang['au_finished'] }}<br>
+            @endif
+    {{ $lang['au_start_price'] }}：{{ $auction['formated_start_price'] }}<br>
+    @if($auction['end_price'] > 0)
+    {{ $lang['au_end_price'] }}：{{ $auction['formated_end_price'] }}
+          @endif
       </li>
       </ul>
-      <!--{/foreach}-->
-      <!-- {else} -->
-       <span style="margin:2px 10px; font-size:14px; line-height:36px;">{$lang.no_auction}</span>
-      <!-- {/if} -->
+      @endforeach
+      @else
+       <span style="margin:2px 10px; font-size:14px; line-height:36px;">{{ $lang['no_auction'] }}</span>
+      @endif
     </div>
    </div>
   </div>
@@ -96,22 +96,22 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>]
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+    <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>]
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->

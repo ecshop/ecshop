@@ -1,12 +1,12 @@
 <div id="custabbar-div">
     <p>
-      {foreach from=$group_list item=group key=group_key name="bar_group"}
-      {if $group_key eq $current}
-      <span class="custab-front" id="{$group_key}-tab">{$group.text}</span>
-      {else}
-      <span class="custab-back" id="{$group_key}-tab" onclick="javascript:location.href='{$group.url}';">{$group.text}</span>
-      {/if}
-      {/foreach}
+      @foreach($group_list as $group_key => $group)
+      @if($group_key == $current)
+      <span class="custab-front" id="{{ $group_key }}-tab">{{ $group['text'] }}</span>
+      @else
+      <span class="custab-back" id="{{ $group_key }}-tab" onclick="javascript:location.href='{{ $group['url'] }}';">{{ $group['text'] }}</span>
+      @endif
+      @endforeach
     </p>
   </div>
 

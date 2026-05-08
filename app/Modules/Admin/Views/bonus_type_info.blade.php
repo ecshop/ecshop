@@ -1,84 +1,85 @@
-<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+<script type="text/javascript" src="../js/calendar.php?lang={{ $cfg_lang }}"></script>
 <link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
 
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="main-div">
 <form action="bonus.php" method="post" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
 <table width="100%">
   <tr>
-    <td class="label">{$lang.type_name}</td>
+    <td class="label">{{ $lang['type_name'] }}</td>
     <td>
-      <input type='text' name='type_name' maxlength="30" value="{$bonus_arr.type_name}" size='20' />    </td>
+      <input type='text' name='type_name' maxlength="30" value="{{ $bonus_arr['type_name'] }}" size='20' />    </td>
   </tr>
   <tr>
     <td class="label">
-      <a href="javascript:showNotice('Type_money_a');" title="{$lang.form_notice}">
-      <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.type_money}</td>
+      <a href="javascript:showNotice('Type_money_a');" title="{{ $lang['form_notice'] }}">
+      <img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['type_money'] }}</td>
     <td>
-    <input type="text" name="type_money" value="{$bonus_arr.type_money}" size="20" />
-    <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="Type_money_a">{$lang.type_money_notic}</span>    </td>
+    <input type="text" name="type_money" value="{{ $bonus_arr['type_money'] }}" size="20" />
+    <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="Type_money_a">{{ $lang['type_money_notic'] }}</span>    </td>
   </tr>
   <tr>
-    <td class="label"><a href="javascript:showNotice('NoticeMinGoodsAmount');" title="{$lang.form_notice}"> <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a>{$lang.min_goods_amount}</td>
-    <td><input name="min_goods_amount" type="text" id="min_goods_amount" value="{$bonus_arr.min_goods_amount}" size="20" />
-    <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="NoticeMinGoodsAmount">{$lang.notice_min_goods_amount}</span> </td>
+    <td class="label"><a href="javascript:showNotice('NoticeMinGoodsAmount');" title="{{ $lang['form_notice'] }}"> <img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}" /></a>{{ $lang['min_goods_amount'] }}</td>
+    <td><input name="min_goods_amount" type="text" id="min_goods_amount" value="{{ $bonus_arr['min_goods_amount'] }}" size="20" />
+    <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="NoticeMinGoodsAmount">{{ $lang['notice_min_goods_amount'] }}</span> </td>
   </tr>
   <tr>
-    <td class="label">{$lang.send_method}</td>
+    <td class="label">{{ $lang['send_method'] }}</td>
     <td>
-      <input type="radio" name="send_type" value="0" {if $bonus_arr.send_type eq 0} checked="true" {/if} onClick="showunit(0)"  />{$lang.send_by[0]}
-      <input type="radio" name="send_type" value="1" {if $bonus_arr.send_type eq 1} checked="true" {/if} onClick="showunit(1)"  />{$lang.send_by[1]}
-      <input type="radio" name="send_type" value="2" {if $bonus_arr.send_type eq 2} checked="true" {/if} onClick="showunit(2)"  />{$lang.send_by[2]}
-      <input type="radio" name="send_type" value="3" {if $bonus_arr.send_type eq 3} checked="true" {/if} onClick="showunit(3)"  />{$lang.send_by[3]}    </td>
+      <input type="radio" name="send_type" value="0" @if($bonus_arr['send_type'] == 0) checked="true" @endif onClick="showunit(0)"  />{{ $lang['send_by[0]'] }}
+      <input type="radio" name="send_type" value="1" @if($bonus_arr['send_type'] == 1) checked="true" @endif onClick="showunit(1)"  />{{ $lang['send_by[1]'] }}
+      <input type="radio" name="send_type" value="2" @if($bonus_arr['send_type'] == 2) checked="true" @endif onClick="showunit(2)"  />{{ $lang['send_by[2]'] }}
+      <input type="radio" name="send_type" value="3" @if($bonus_arr['send_type'] == 3) checked="true" @endif onClick="showunit(3)"  />{{ $lang['send_by[3]'] }}    </td>
   </tr>
   <tr id="1" style="display:none">
     <td class="label">
-      <a href="javascript:showNotice('Order_money_a');" title="{$lang.form_notice}">
-      <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.min_amount}</td>
+      <a href="javascript:showNotice('Order_money_a');" title="{{ $lang['form_notice'] }}">
+      <img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['min_amount'] }}</td>
     <td>
-      <input name="min_amount" type="text" id="min_amount" value="{$bonus_arr.min_amount}" size="20" />
-      <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="Order_money_a">{$lang.order_money_notic}</span>    </td>
+      <input name="min_amount" type="text" id="min_amount" value="{{ $bonus_arr['min_amount'] }}" size="20" />
+      <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="Order_money_a">{{ $lang['order_money_notic'] }}</span>    </td>
   </tr>
   <tr>
     <td class="label">
-      <a href="javascript:showNotice('Send_start_a');" title="{$lang.form_notice}">
-      <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.send_startdate}</td>
+      <a href="javascript:showNotice('Send_start_a');" title="{{ $lang['form_notice'] }}">
+      <img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['send_startdate'] }}</td>
     <td>
-      <input name="send_start_date" type="text" id="send_start_date" size="22" value='{$bonus_arr.send_start_date}' readonly="readonly" /><input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('send_start_date', '%Y-%m-%d', false, false, 'selbtn1');" value="{$lang.btn_select}" class="button"/>
-      <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="Send_start_a">{$lang.send_startdate_notic}</span>    </td>
+      <input name="send_start_date" type="text" id="send_start_date" size="22" value='{{ $bonus_arr['send_start_date'] }}' readonly="readonly" /><input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('send_start_date', '%Y-%m-%d', false, false, 'selbtn1');" value="{{ $lang['btn_select'] }}" class="button"/>
+      <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="Send_start_a">{{ $lang['send_startdate_notic'] }}</span>    </td>
   </tr>
   <tr>
-    <td class="label">{$lang.send_enddate}</td>
+    <td class="label">{{ $lang['send_enddate'] }}</td>
     <td>
-      <input name="send_end_date" type="text" id="send_end_date" size="22" value='{$bonus_arr.send_end_date}' readonly="readonly" /><input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('send_end_date', '%Y-%m-%d', false, false, 'selbtn2');" value="{$lang.btn_select}" class="button"/>    </td>
+      <input name="send_end_date" type="text" id="send_end_date" size="22" value='{{ $bonus_arr['send_end_date'] }}' readonly="readonly" /><input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('send_end_date', '%Y-%m-%d', false, false, 'selbtn2');" value="{{ $lang['btn_select'] }}" class="button"/>    </td>
   </tr>
   <tr>
     <td class="label">
-	  <a href="javascript:showNotice('Use_start_a');" title="{$lang.form_notice}">
-      <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>
-	{$lang.use_startdate}</td>
+	  <a href="javascript:showNotice('Use_start_a');" title="{{ $lang['form_notice'] }}">
+      <img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>
+	{{ $lang['use_startdate'] }}</td>
     <td>
-      <input name="use_start_date" type="text" id="use_start_date" size="22" value='{$bonus_arr.use_start_date}' readonly="readonly" /><input name="selbtn3" type="button" id="selbtn3" onclick="return showCalendar('use_start_date', '%Y-%m-%d', false, false, 'selbtn3');" value="{$lang.btn_select}" class="button"/>
-	  <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="Use_start_a">{$lang.use_startdate_notic}</span>    </td>
+      <input name="use_start_date" type="text" id="use_start_date" size="22" value='{{ $bonus_arr['use_start_date'] }}' readonly="readonly" /><input name="selbtn3" type="button" id="selbtn3" onclick="return showCalendar('use_start_date', '%Y-%m-%d', false, false, 'selbtn3');" value="{{ $lang['btn_select'] }}" class="button"/>
+	  <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="Use_start_a">{{ $lang['use_startdate_notic'] }}</span>    </td>
   </tr>
   <tr>
-    <td class="label">{$lang.use_enddate}</td>
+    <td class="label">{{ $lang['use_enddate'] }}</td>
     <td>
-      <input name="use_end_date" type="text" id="use_end_date" size="22" value='{$bonus_arr.use_end_date}' readonly="readonly" /><input name="selbtn4" type="button" id="selbtn4" onclick="return showCalendar('use_end_date', '%Y-%m-%d', false, false, 'selbtn4');" value="{$lang.btn_select}" class="button"/>    </td>
+      <input name="use_end_date" type="text" id="use_end_date" size="22" value='{{ $bonus_arr['use_end_date'] }}' readonly="readonly" /><input name="selbtn4" type="button" id="selbtn4" onclick="return showCalendar('use_end_date', '%Y-%m-%d', false, false, 'selbtn4');" value="{{ $lang['btn_select'] }}" class="button"/>    </td>
   </tr>
   <tr>
     <td class="label">&nbsp;</td>
     <td>
-      <input type="submit" value="{$lang.button_submit}" class="button" />
-      <input type="reset" value="{$lang.button_reset}" class="button" />
-      <input type="hidden" name="act" value="{$form_act}" />
-      <input type="hidden" name="type_id" value="{$bonus_arr.type_id}" />    </td>
+      <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
+      <input type="hidden" name="act" value="{{ $form_act }}" />
+      <input type="hidden" name="type_id" value="{{ $bonus_arr['type_id'] }}" />    </td>
   </tr>
 </table>
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="javascript">
 <!--
 document.forms['theForm'].elements['type_name'].focus();
@@ -105,9 +106,9 @@ function validate()
 }
 onload = function()
 {
-  {/literal}
-  get_value = '{$bonus_arr.send_type}';
-  {literal}
+  
+  get_value = '{{ $bonus_arr['send_type'] }}';
+  
 
   showunit(get_value)
   // 开始检查订单
@@ -138,5 +139,5 @@ function showunit(get_value)
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

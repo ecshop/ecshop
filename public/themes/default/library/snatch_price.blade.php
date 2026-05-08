@@ -1,12 +1,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <div class="box">
  <div class="box_1">
-  <h3><span>{$lang.new_price}</span></h3>
+  <h3><span>{{ $lang['new_price'] }}</span></h3>
   <div class="boxCenterList RelaArticle">
     <ul class="clearfix">
-    <!--{foreach from=$price_list item=item}-->
-    <li>{$item.user_name}&nbsp;&nbsp;{$item.bid_price}</li>
-    <!--{/foreach}-->
+    @foreach($price_list as $item)
+    <li>{{ $item['user_name'] }}&nbsp;&nbsp;{{ $item['bid_price'] }}</li>
+    @endforeach
     </ul>
   </div>
  </div>

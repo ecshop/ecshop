@@ -1,11 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>{$app_name}</title>
+<title>{{ $app_name }}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="styles/general.css" rel="stylesheet" type="text/css" />
 
-{literal}
+
 <style type="text/css">
 #header-div {
   background: #278296;
@@ -180,9 +180,9 @@ function ShowToDoList()
   {
   }
 }
-{/literal}
 
-var adminId = "{$admin_id}"; 
+
+var adminId = "{{ $admin_id }}"; 
 </script>
 </head>
 <body>
@@ -191,33 +191,33 @@ var adminId = "{$admin_id}";
   <div id="license-div" style="bgcolor:#000000;"></div>
   <div id="submenu-div">
     <ul>
-      <li><a href="index.php?act=about_us" target="main-frame">{$lang.about}</a></li>
-      <li><a href="javascript:web_address();">{$lang.help}</a></li>
-      <li><a href="../" target="_blank">{$lang.preview}</a></li>
-      <li><a href="message.php?act=list" target="main-frame">{$lang.view_message}</a></li>
-      <li><a href="privilege.php?act=modif" target="main-frame">{$lang.profile}</a></li>
-      <li><a href="javascript:window.top.frames['main-frame'].document.location.reload();window.top.frames['header-frame'].document.location.reload()">{$lang.refresh}</a></li>
-      <li><a href="#"  onclick="ShowToDoList()">{$lang.todolist}</a></li>
-      <li style="border-left:none;"><a href="index.php?act=first" target="main-frame">{$lang.shop_guide}</a></li>
+      <li><a href="index.php?act=about_us" target="main-frame">{{ $lang['about'] }}</a></li>
+      <li><a href="javascript:web_address();">{{ $lang['help'] }}</a></li>
+      <li><a href="../" target="_blank">{{ $lang['preview'] }}</a></li>
+      <li><a href="message.php?act=list" target="main-frame">{{ $lang['view_message'] }}</a></li>
+      <li><a href="privilege.php?act=modif" target="main-frame">{{ $lang['profile'] }}</a></li>
+      <li><a href="javascript:window.top.frames['main-frame'].document.location.reload();window.top.frames['header-frame'].document.location.reload()">{{ $lang['refresh'] }}</a></li>
+      <li><a href="#"  onclick="ShowToDoList()">{{ $lang['todolist'] }}</a></li>
+      <li style="border-left:none;"><a href="index.php?act=first" target="main-frame">{{ $lang['shop_guide'] }}</a></li>
     </ul>
     <div id="send_info" style="padding: 5px 10px 0 0; clear:right;text-align: right; color: #FF9900;width:40%;float: right;">
-      {if $send_mail_on eq 'on'}
-      <span id="send_msg"><img src="images/top_loader.gif" width="16" height="16" alt="{$lang.loading}" style="vertical-align: middle" /> {$lang.email_sending}</span>
-      <a href="javascript:;" onClick="Javascript:switcher()" id="lnkSwitch" style="margin-right:10px;color: #FF9900;text-decoration: underline">{$lang.pause}</a>
-      {/if}
-      <a href="index.php?act=clear_cache" target="main-frame" class="fix-submenu">{$lang.clear_cache}</a>
-      <a href="privilege.php?act=logout" target="_top" class="fix-submenu">{$lang.signout}</a>
+      @if($send_mail_on == 'on')
+      <span id="send_msg"><img src="images/top_loader.gif" width="16" height="16" alt="{{ $lang['loading'] }}" style="vertical-align: middle" /> {{ $lang['email_sending'] }}</span>
+      <a href="javascript:;" onClick="Javascript:switcher()" id="lnkSwitch" style="margin-right:10px;color: #FF9900;text-decoration: underline">{{ $lang['pause'] }}</a>
+      @endif
+      <a href="index.php?act=clear_cache" target="main-frame" class="fix-submenu">{{ $lang['clear_cache'] }}</a>
+      <a href="privilege.php?act=logout" target="_top" class="fix-submenu">{{ $lang['signout'] }}</a>
     </div>
-    {if $send_mail_on eq 'on'}
+    @if($send_mail_on == 'on')
     <script type="text/javascript" charset="gb2312">
     var sm = window.setInterval("start_sendmail()", 5000);
     var finished = 0;
     var error = 0;
-    var conti = "{$lang.conti}";
-    var pause = "{$lang.pause}";
+    var conti = "{{ $lang['conti'] }}";
+    var pause = "{{ $lang['pause'] }}";
     var counter = 0;
-    var str = "{$lang.str}";
-    {literal}
+    var str = "{{ $lang['str'] }}";
+    
     function start_sendmail()
     {
       Ajax.call('index.php?is_ajax=1&act=send_mail','', start_sendmail_Response, 'GET', 'JSON');
@@ -390,20 +390,20 @@ var adminId = "{$admin_id}";
 
 
 
-    {/literal}
+    
     </script>
-    {/if}
-    <div id="load-div" style="padding: 5px 10px 0 0; text-align: right; color: #FF9900; display: none;width:40%;float:right;"><img src="images/top_loader.gif" width="16" height="16" alt="{$lang.loading}" style="vertical-align: middle" /> {$lang.loading}</div>
+    @endif
+    <div id="load-div" style="padding: 5px 10px 0 0; text-align: right; color: #FF9900; display: none;width:40%;float:right;"><img src="images/top_loader.gif" width="16" height="16" alt="{{ $lang['loading'] }}" style="vertical-align: middle" /> {{ $lang['loading'] }}</div>
   </div>
 </div>
 <div id="menu-div">
   <ul>
     <li class="fix-spacel">&nbsp;</li>
-    <li><a href="index.php?act=main" target="main-frame">{$lang.admin_home}</a></li>
-    <li><a href="privilege.php?act=modif" target="main-frame">{$lang.set_navigator}</a></li>
-    {foreach from=$nav_list item=item key=key}
-    <li><a href="{$key}" target="main-frame">{$item}</a></li>
-    {/foreach}
+    <li><a href="index.php?act=main" target="main-frame">{{ $lang['admin_home'] }}</a></li>
+    <li><a href="privilege.php?act=modif" target="main-frame">{{ $lang['set_navigator'] }}</a></li>
+    @foreach($nav_list as $key => $item)
+    <li><a href="{{ $key }}" target="main-frame">{{ $item }}</a></li>
+    @endforeach
     <li class="fix-spacer">&nbsp;</li>
   </ul>
   <br class="clear" />

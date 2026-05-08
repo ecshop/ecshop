@@ -1,49 +1,49 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <form method="POST" action="role.php" name="theFrom">
 <div class="list-div">
 <table width="100%">
   <tr>
-    <td class="label">{$lang.user_name}</td>
+    <td class="label">{{ $lang['user_name'] }}</td>
     <td>
-      <input type="text" name="user_name" maxlength="20" value="{$user.role_name|escape}" size="34"/>{$lang.require_field}</td>
+      <input type="text" name="user_name" maxlength="20" value="{{ $user['role_name'] }}" size="34"/>{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.role_describe}</td>
+    <td class="label">{{ $lang['role_describe'] }}</td>
     <td>
-    <textarea name="role_describe" cols="31" rows="6">{$user.role_describe|escape}</textarea>
-{$lang.require_field}</td>
+    <textarea name="role_describe" cols="31" rows="6">{{ $user['role_describe'] }}</textarea>
+{{ $lang['require_field'] }}</td>
   </tr>
   </table>
 <table cellspacing='1' id="list-table">
-{foreach from=$priv_arr item=priv}
+@foreach($priv_arr as $priv)
  <tr>
   <td width="18%" valign="top" class="first-cell">
-    <input name="chkGroup" type="checkbox" value="checkbox" onclick="check('{$priv.priv_list}',this);" class="checkbox">{$lang[$priv.action_code]}
+    <input name="chkGroup" type="checkbox" value="checkbox" onclick="check('{{ $priv['priv_list'] }}',this);" class="checkbox">{{ $lang[$priv['action_code]'] }}
   </td>
   <td>
-    {foreach from=$priv.priv key=priv_list item=list}
+    @foreach($priv['priv'] as $priv_list => $list)
     <div style="width:200px;float:left;">
-    <label for="{$priv_list}"><input type="checkbox" name="action_code[]" value="{$priv_list}" id="{$priv_list}" class="checkbox" {if $list.cando eq 1} checked="true" {/if} onclick="checkrelevance('{$list.relevance}', '{$priv_list}')" title="{$list.relevance}"/>
-    {$lang[$list.action_code]}</label>
+    <label for="{{ $priv_list }}"><input type="checkbox" name="action_code[]" value="{{ $priv_list }}" id="{{ $priv_list }}" class="checkbox" @if($list['cando'] == 1) checked="true" @endif onclick="checkrelevance('{{ $list['relevance'] }}', '{{ $priv_list }}')" title="{{ $list['relevance'] }}"/>
+    {{ $lang[$list['action_code]'] }}</label>
     </div>
-    {/foreach}
+    @endforeach
 </td></tr>
-{/foreach}
+@endforeach
   <tr>
     <td align="center" colspan="2" >
-      <input type="checkbox" name="checkall" value="checkbox" onclick="checkAll(this.form, this);" class="checkbox" />{$lang.check_all}
+      <input type="checkbox" name="checkall" value="checkbox" onclick="checkAll(this.form, this);" class="checkbox" />{{ $lang['check_all'] }}
       &nbsp;&nbsp;&nbsp;&nbsp;
-      <input type="submit"   name="Submit"   value="{$lang.button_save}" class="button" />&nbsp;&nbsp;&nbsp;
-      <input type="reset" value="{$lang.button_reset}" class="button" />
-      <input type="hidden"   name="id"    value="{$user_id}" />
-      <input type="hidden"   name="act"   value="{$form_act}" />
+      <input type="submit"   name="Submit"   value="{{ $lang['button_save'] }}" class="button" />&nbsp;&nbsp;&nbsp;
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
+      <input type="hidden"   name="id"    value="{{ $user_id }}" />
+      <input type="hidden"   name="act"   value="{{ $form_act }}" />
     </td>
   </tr>
 </table>
 </div>
 </form>
 
-{literal}
+
 <script language="javascript">
 function checkAll(frm, checkbox)
 {
@@ -93,5 +93,5 @@ function checkrelevance(relevance, priv_list)
   }
 }
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

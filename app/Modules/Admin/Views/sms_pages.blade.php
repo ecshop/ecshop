@@ -1,25 +1,25 @@
       <div id="turn-page">
-        {$lang.total_records} <span id="totalRecords">{$turn_page.total_records}</span>
-        {$lang.total_pages} <span id="totalPages">{$turn_page.total_pages}</span>
-        {$lang.page_current} <span id="pageCurrent">{$turn_page.page}</span>
-        {$lang.page_size} <input type='text' size='3' name="page_size" id='pageSize' value="{$turn_page.page_size}" />
+        {{ $lang['total_records'] }} <span id="totalRecords">{{ $turn_page['total_records'] }}</span>
+        {{ $lang['total_pages'] }} <span id="totalPages">{{ $turn_page['total_pages'] }}</span>
+        {{ $lang['page_current'] }} <span id="pageCurrent">{{ $turn_page['page'] }}</span>
+        {{ $lang['page_size'] }} <input type='text' size='3' name="page_size" id='pageSize' value="{{ $turn_page['page_size'] }}" />
         <span id="page-link">
-          <a href="javascript:gotoPageFirst()">{$lang.page_first}</a>
-          {literal}<a href="javascript:gotoPagePrev()">{/literal}{$lang.page_prev}</a>
-          {literal}<a href="javascript:gotoPageNext()">{/literal}{$lang.page_next}</a>
-          {literal}<a href="javascript:gotoPageLast()">{/literal}{$lang.page_last}</a>
+          <a href="javascript:gotoPageFirst()">{{ $lang['page_first'] }}</a>
+          <a href="javascript:gotoPagePrev()">{{ $lang['page_prev'] }}</a>
+          <a href="javascript:gotoPageNext()">{{ $lang['page_next'] }}</a>
+          <a href="javascript:gotoPageLast()">{{ $lang['page_last'] }}</a>
           <select id="gotoPage" onchange="gotoPage(this.value)"></select>
-          <input type="hidden" value="{$turn_page.page}" name="page">
+          <input type="hidden" value="{{ $turn_page['page'] }}" name="page">
         </span>
       </div>
-      {insert_scripts files="../js/utils.js"}
+      <script src="../js/utils.js"></script>
       <script language="JavaScript">
       <!--
-      var total_pages = {$turn_page.total_pages};
-      var page        = {$turn_page.page};
-      var page_size   = {$turn_page.page_size};
+      var total_pages = {{ $turn_page['total_pages'] }};
+      var page        = {{ $turn_page['page'] }};
+      var page_size   = {{ $turn_page['page_size'] }};
 
-      {literal}
+      
       onload = function()
       {
         var lst = document.getElementById('gotoPage');
@@ -90,6 +90,6 @@
           document.forms['listForm'].submit();
         }
       }
-      {/literal}
+      
       //-->
       </script>

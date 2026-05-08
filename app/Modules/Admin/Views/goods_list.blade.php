@@ -1,66 +1,67 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 
 <!-- 商品搜索 -->
-{include file="goods_search.htm"}
+@include('goods_search')
 <!-- 商品列表 -->
 <form method="post" action="" name="listForm" onsubmit="return confirmSubmit(this)">
   <!-- start goods list -->
   <div class="list-div" id="listDiv">
-{/if}
+@endif
 <table cellpadding="3" cellspacing="1">
   <tr>
     <th>
       <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox" />
-      <a href="javascript:listTable.sort('goods_id'); ">{$lang.record_id}</a>{$sort_goods_id}
+      <a href="javascript:listTable.sort('goods_id'); ">{{ $lang['record_id'] }}</a>{{ $sort_goods_id }}
     </th>
-    <th><a href="javascript:listTable.sort('goods_name'); ">{$lang.goods_name}</a>{$sort_goods_name}</th>
-    <th><a href="javascript:listTable.sort('goods_sn'); ">{$lang.goods_sn}</a>{$sort_goods_sn}</th>
-    <th><a href="javascript:listTable.sort('shop_price'); ">{$lang.shop_price}</a>{$sort_shop_price}</th>
-    <th><a href="javascript:listTable.sort('is_on_sale'); ">{$lang.is_on_sale}</a>{$sort_is_on_sale}</th>
-    <th><a href="javascript:listTable.sort('is_best'); ">{$lang.is_best}</a>{$sort_is_best}</th>
-    <th><a href="javascript:listTable.sort('is_new'); ">{$lang.is_new}</a>{$sort_is_new}</th>
-    <th><a href="javascript:listTable.sort('is_hot'); ">{$lang.is_hot}</a>{$sort_is_hot}</th>
-    <th><a href="javascript:listTable.sort('sort_order'); ">{$lang.sort_order}</a>{$sort_sort_order}</th>
-    {if $use_storage}
-    <th><a href="javascript:listTable.sort('goods_number'); ">{$lang.goods_number}</a>{$sort_goods_number}</th>
-    {/if}
-    <th>{$lang.handler}</th>
+    <th><a href="javascript:listTable.sort('goods_name'); ">{{ $lang['goods_name'] }}</a>{{ $sort_goods_name }}</th>
+    <th><a href="javascript:listTable.sort('goods_sn'); ">{{ $lang['goods_sn'] }}</a>{{ $sort_goods_sn }}</th>
+    <th><a href="javascript:listTable.sort('shop_price'); ">{{ $lang['shop_price'] }}</a>{{ $sort_shop_price }}</th>
+    <th><a href="javascript:listTable.sort('is_on_sale'); ">{{ $lang['is_on_sale'] }}</a>{{ $sort_is_on_sale }}</th>
+    <th><a href="javascript:listTable.sort('is_best'); ">{{ $lang['is_best'] }}</a>{{ $sort_is_best }}</th>
+    <th><a href="javascript:listTable.sort('is_new'); ">{{ $lang['is_new'] }}</a>{{ $sort_is_new }}</th>
+    <th><a href="javascript:listTable.sort('is_hot'); ">{{ $lang['is_hot'] }}</a>{{ $sort_is_hot }}</th>
+    <th><a href="javascript:listTable.sort('sort_order'); ">{{ $lang['sort_order'] }}</a>{{ $sort_sort_order }}</th>
+    @if($use_storage)
+    <th><a href="javascript:listTable.sort('goods_number'); ">{{ $lang['goods_number'] }}</a>{{ $sort_goods_number }}</th>
+    @endif
+    <th>{{ $lang['handler'] }}</th>
   <tr>
-  {foreach from=$goods_list item=goods}
+  @forelse($goods_list as $goods)
   <tr>
-    <td><input type="checkbox" name="checkboxes[]" value="{$goods.goods_id}" />{$goods.goods_id}</td>
-    <td class="first-cell" style="{if $goods.is_promote}color:red;{/if}"><span onclick="listTable.edit(this, 'edit_goods_name', {$goods.goods_id})">{$goods.goods_name|escape:html}</span></td>
-    <td><span onclick="listTable.edit(this, 'edit_goods_sn', {$goods.goods_id})">{$goods.goods_sn}</span></td>
-    <td align="right"><span onclick="listTable.edit(this, 'edit_goods_price', {$goods.goods_id})">{$goods.shop_price}
+    <td><input type="checkbox" name="checkboxes[]" value="{{ $goods['goods_id'] }}" />{{ $goods['goods_id'] }}</td>
+    <td class="first-cell" style="@if($goods['is_promote'])color:red;@endif"><span onclick="listTable.edit(this, 'edit_goods_name', {{ $goods['goods_id'] }})">{{ $goods['goods_name'] }}</span></td>
+    <td><span onclick="listTable.edit(this, 'edit_goods_sn', {{ $goods['goods_id'] }})">{{ $goods['goods_sn'] }}</span></td>
+    <td align="right"><span onclick="listTable.edit(this, 'edit_goods_price', {{ $goods['goods_id'] }})">{{ $goods['shop_price'] }}
 
     </span></td>
-    <td align="center"><img src="images/{if $goods.is_on_sale}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_on_sale', {$goods.goods_id})" /></td>
-    <td align="center"><img src="images/{if $goods.is_best}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_best', {$goods.goods_id})" /></td>
-    <td align="center"><img src="images/{if $goods.is_new}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_new', {$goods.goods_id})" /></td>
-    <td align="center"><img src="images/{if $goods.is_hot}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_hot', {$goods.goods_id})" /></td>
-    <td align="center"><span onclick="listTable.edit(this, 'edit_sort_order', {$goods.goods_id})">{$goods.sort_order}</span></td>
-    {if $use_storage}
-    <td align="right"><span onclick="listTable.edit(this, 'edit_goods_number', {$goods.goods_id})">{$goods.goods_number}</span></td>
-    {/if}
+    <td align="center"><img src="images/@if($goods['is_on_sale'])yes@elseno@endif.gif" onclick="listTable.toggle(this, 'toggle_on_sale', {{ $goods['goods_id'] }})" /></td>
+    <td align="center"><img src="images/@if($goods['is_best'])yes@elseno@endif.gif" onclick="listTable.toggle(this, 'toggle_best', {{ $goods['goods_id'] }})" /></td>
+    <td align="center"><img src="images/@if($goods['is_new'])yes@elseno@endif.gif" onclick="listTable.toggle(this, 'toggle_new', {{ $goods['goods_id'] }})" /></td>
+    <td align="center"><img src="images/@if($goods['is_hot'])yes@elseno@endif.gif" onclick="listTable.toggle(this, 'toggle_hot', {{ $goods['goods_id'] }})" /></td>
+    <td align="center"><span onclick="listTable.edit(this, 'edit_sort_order', {{ $goods['goods_id'] }})">{{ $goods['sort_order'] }}</span></td>
+    @if($use_storage)
+    <td align="right"><span onclick="listTable.edit(this, 'edit_goods_number', {{ $goods['goods_id'] }})">{{ $goods['goods_number'] }}</span></td>
+    @endif
     <td align="center">
-      <a href="../goods.php?id={$goods.goods_id}" target="_blank" title="{$lang.view}"><img src="images/icon_view.gif" width="16" height="16" border="0" /></a>
-      <a href="goods.php?act=edit&goods_id={$goods.goods_id}{if $code neq 'real_goods'}&extension_code={$code}{/if}" title="{$lang.edit}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>
-      <a href="goods.php?act=copy&goods_id={$goods.goods_id}{if $code neq 'real_goods'}&extension_code={$code}{/if}" title="{$lang.copy}"><img src="images/icon_copy.gif" width="16" height="16" border="0" /></a>
-      <a href="javascript:;" onclick="listTable.remove({$goods.goods_id}, '{$lang.trash_goods_confirm}')" title="{$lang.trash}"><img src="images/icon_trash.gif" width="16" height="16" border="0" /></a>
-      {if $specifications[$goods.goods_type] neq ''}<a href="goods.php?act=product_list&goods_id={$goods.goods_id}" title="{$lang.item_list}"><img src="images/icon_docs.gif" width="16" height="16" border="0" /></a>{else}<img src="images/empty.gif" width="16" height="16" border="0" />{/if}
-      {if $add_handler}
+      <a href="../goods.php?id={{ $goods['goods_id'] }}" target="_blank" title="{{ $lang['view'] }}"><img src="images/icon_view.gif" width="16" height="16" border="0" /></a>
+      <a href="goods.php?act=edit&goods_id={{ $goods['goods_id'] }}@if($code != 'real_goods')&extension_code={{ $code }}@endif" title="{{ $lang['edit'] }}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>
+      <a href="goods.php?act=copy&goods_id={{ $goods['goods_id'] }}@if($code != 'real_goods')&extension_code={{ $code }}@endif" title="{{ $lang['copy'] }}"><img src="images/icon_copy.gif" width="16" height="16" border="0" /></a>
+      <a href="javascript:;" onclick="listTable.remove({{ $goods['goods_id'] }}, '{{ $lang['trash_goods_confirm'] }}')" title="{{ $lang['trash'] }}"><img src="images/icon_trash.gif" width="16" height="16" border="0" /></a>
+      @if($specifications[$goods['goods_type']] != '')<a href="goods.php?act=product_list&goods_id={{ $goods['goods_id'] }}" title="{{ $lang['item_list'] }}"><img src="images/icon_docs.gif" width="16" height="16" border="0" /></a>@else<img src="images/empty.gif" width="16" height="16" border="0" />@endif
+      @if($add_handler)
         |
-        {foreach from=$add_handler item=handler}
-        <a href="{$handler.url}&goods_id={$goods.goods_id}" title="{$handler.title}"><img src="images/{$handler.img}" width="16" height="16" border="0" /></a>
-        {/foreach}
-      {/if}
+        @foreach($add_handler as $handler)
+        <a href="{{ $handler['url'] }}&goods_id={{ $goods['goods_id'] }}" title="{{ $handler['title'] }}"><img src="images/{{ $handler['img'] }}" width="16" height="16" border="0" /></a>
+        @endforeach
+      @endif
     </td>
   </tr>
-  {foreachelse}
-  <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
-  {/foreach}
+  @empty
+  <tr><td class="no-records" colspan="10">{{ $lang['no_records'] }}</td></tr>
+  @endforelse
 </table>
 <!-- end goods list -->
 
@@ -68,62 +69,62 @@
 <table id="page-table" cellspacing="0">
   <tr>
     <td align="right" nowrap="true">
-    {include file="page.htm"}
+    @include('page')
     </td>
   </tr>
 </table>
 
-{if $full_page}
+@if($full_page)
 </div>
 
 <div>
   <input type="hidden" name="act" value="batch" />
   <select name="type" id="selAction" onchange="changeAction()">
-    <option value="">{$lang.select_please}</option>
-    <option value="trash">{$lang.trash}</option>
-    <option value="on_sale">{$lang.on_sale}</option>
-    <option value="not_on_sale">{$lang.not_on_sale}</option>
-    <option value="best">{$lang.best}</option>
-    <option value="not_best">{$lang.not_best}</option>
-    <option value="new">{$lang.new}</option>
-    <option value="not_new">{$lang.not_new}</option>
-    <option value="hot">{$lang.hot}</option>
-    <option value="not_hot">{$lang.not_hot}</option>
-    <option value="move_to">{$lang.move_to}</option>
-	{if $suppliers_list > 0}
-    <option value="suppliers_move_to">{$lang.suppliers_move_to}</option>
-	{/if}    
+    <option value="">{{ $lang['select_please'] }}</option>
+    <option value="trash">{{ $lang['trash'] }}</option>
+    <option value="on_sale">{{ $lang['on_sale'] }}</option>
+    <option value="not_on_sale">{{ $lang['not_on_sale'] }}</option>
+    <option value="best">{{ $lang['best'] }}</option>
+    <option value="not_best">{{ $lang['not_best'] }}</option>
+    <option value="new">{{ $lang['new'] }}</option>
+    <option value="not_new">{{ $lang['not_new'] }}</option>
+    <option value="hot">{{ $lang['hot'] }}</option>
+    <option value="not_hot">{{ $lang['not_hot'] }}</option>
+    <option value="move_to">{{ $lang['move_to'] }}</option>
+	@if($suppliers_list > 0)
+    <option value="suppliers_move_to">{{ $lang['suppliers_move_to'] }}</option>
+	@endif    
   </select>
   <select name="target_cat" style="display:none">
-    <option value="0">{$lang.select_please}</option>{$cat_list}
+    <option value="0">{{ $lang['select_please'] }}</option>{{ $cat_list }}
   </select>
-	{if $suppliers_list > 0}
+	@if($suppliers_list > 0)
   <!--二级主菜单：转移供货商-->
   <select name="suppliers_id" style="display:none">
-    <option value="-1">{$lang.select_please}</option>
-    <option value="0">{$lang.lab_to_shopex}</option>
-    {foreach name=sln from=$suppliers_list item=sl}
-      <option value="{$sl.suppliers_id}">{$sl.suppliers_name}</option>
-    {/foreach}
+    <option value="-1">{{ $lang['select_please'] }}</option>
+    <option value="0">{{ $lang['lab_to_shopex'] }}</option>
+    @foreach($suppliers_list as $sl)
+      <option value="{{ $sl['suppliers_id'] }}">{{ $sl['suppliers_name'] }}</option>
+    @endforeach
   </select>
   <!--end!-->
-	{/if}  
-  {if $code neq 'real_goods'}
-  <input type="hidden" name="extension_code" value="{$code}" />
-  {/if}
-  <input type="submit" value="{$lang.button_submit}" id="btnSubmit" name="btnSubmit" class="button" disabled="true" />
+	@endif  
+  @if($code != 'real_goods')
+  <input type="hidden" name="extension_code" value="{{ $code }}" />
+  @endif
+  <input type="submit" value="{{ $lang['button_submit'] }}" id="btnSubmit" name="btnSubmit" class="button" disabled="true" />
 </div>
 </form>
 
 <script type="text/javascript">
-  listTable.recordCount = {$record_count};
-  listTable.pageCount = {$page_count};
+  listTable.recordCount = {{ $record_count }};
+  listTable.pageCount = {{ $page_count }};
 
-  {foreach from=$filter item=item key=key}
-  listTable.filter.{$key} = '{$item}';
-  {/foreach}
+  @foreach($filter as $key => $item)
+  listTable.filter.{{ $key }} = '{{ $item }}';
+  @endforeach
 
-  {literal}
+  
   onload = function()
   {
     startCheckOrder(); // 开始检查订单
@@ -175,7 +176,7 @@
           frm.submit();
       }
   }
-{/literal}
+
 </script>
-{include file="pagefooter.htm"}
-{/if}
+@include('pagefooter')
+@endif

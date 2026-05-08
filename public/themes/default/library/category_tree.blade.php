@@ -2,18 +2,18 @@
 <div class="box">
  <div class="box_1">
   <div id="category_tree">
-    <!--{foreach from=$categories item=cat}-->
+    @foreach($categories as $cat)
      <dl>
-     <dt><a href="{$cat.url}">{$cat.name|escape:html}</a></dt>
-     <!--{foreach from=$cat.cat_id item=child}-->
-     <dd><a href="{$child.url}">{$child.name|escape:html}</a></dd>
-       <!--{foreach from=$child.cat_id item=childer}-->
-       <dd>&nbsp;&nbsp;<a href="{$childer.url}">{$childer.name|escape:html}</a></dd>
-       <!--{/foreach}-->
-     <!--{/foreach}-->
+     <dt><a href="{{ $cat['url'] }}">{{ $cat['name'] }}</a></dt>
+     @foreach($cat['cat_id'] as $child)
+     <dd><a href="{{ $child['url'] }}">{{ $child['name'] }}</a></dd>
+       @foreach($child['cat_id'] as $childer)
+       <dd>&nbsp;&nbsp;<a href="{{ $childer['url'] }}">{{ $childer['name'] }}</a></dd>
+       @endforeach
+     @endforeach
        
        </dl>
-    <!--{/foreach}--> 
+    @endforeach 
   </div>
  </div>
 </div>

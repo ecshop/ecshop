@@ -1,103 +1,104 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="main-div">
   <form action="attribute.php"  method="post" name="theForm" onsubmit="return validate();">
   <table width="100%" id="general-table">
       <tr>
-        <td class="label">{$lang.label_attr_name}</td>
+        <td class="label">{{ $lang['label_attr_name'] }}</td>
         <td>
-          <input type='text' name='attr_name' value="{$attr.attr_name}" size='30' />
-          {$lang.require_field}
+          <input type='text' name='attr_name' value="{{ $attr['attr_name'] }}" size='30' />
+          {{ $lang['require_field'] }}
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.label_cat_id}</td>
+        <td class="label">{{ $lang['label_cat_id'] }}</td>
         <td>
           <select name="cat_id" onchange="onChangeGoodsType(this.value)">
-          <option value="0">{$lang.select_please}</option>
-            {$goods_type_list}
-          </select> {$lang.require_field}
+          <option value="0">{{ $lang['select_please'] }}</option>
+            {{ $goods_type_list }}
+          </select> {{ $lang['require_field'] }}
         </td>
       </tr>
       <tr id="attrGroups" style="display:none">
-        <td class="label">{$lang.label_attr_group}</td>
+        <td class="label">{{ $lang['label_attr_group'] }}</td>
         <td>
           <select name="attr_group">
-          {if $attr_groups}
-          {html_options options=$attr_groups selected=$attr.attr_group}
-          {/if}
+          @if($attr_groups)
+          @foreach($attr_groups as $__k => $__v)<option value="{{ $__k }}" @if($__k == $attr['attr_group']) selected @endif>{{ $__v }}</option>@endforeach
+          @endif
           </select>
         </td>
       </tr>
       <tr>
-        <td class="label"><a href="javascript:showNotice('noticeindex');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.label_attr_index}</td>
+        <td class="label"><a href="javascript:showNotice('noticeindex');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['label_attr_index'] }}</td>
         <td>
-          <input type="radio" name="attr_index" value="0" {if $attr.attr_index eq 0} checked="true" {/if} />
-          {$lang.no_index}
-          <input type="radio" name="attr_index" value="1" {if $attr.attr_index eq 1} checked="true" {/if} />
-          {$lang.keywords_index}
-          <input type="radio" name="attr_index" value="2" {if $attr.attr_index eq 2} checked="true" {/if} />
-          {$lang.range_index}
-          <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeindex">{$lang.note_attr_index}</span>
+          <input type="radio" name="attr_index" value="0" @if($attr['attr_index'] == 0) checked="true" @endif />
+          {{ $lang['no_index'] }}
+          <input type="radio" name="attr_index" value="1" @if($attr['attr_index'] == 1) checked="true" @endif />
+          {{ $lang['keywords_index'] }}
+          <input type="radio" name="attr_index" value="2" @if($attr['attr_index'] == 2) checked="true" @endif />
+          {{ $lang['range_index'] }}
+          <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeindex">{{ $lang['note_attr_index'] }}</span>
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.label_is_linked}</td>
+        <td class="label">{{ $lang['label_is_linked'] }}</td>
         <td>
-          <input type="radio" name="is_linked" value="0" {if $attr.is_linked eq 0} checked="true" {/if} /> {$lang.no}
-          <input type="radio" name="is_linked" value="1" {if $attr.is_linked eq 1} checked="true" {/if} /> {$lang.yes}
+          <input type="radio" name="is_linked" value="0" @if($attr['is_linked'] == 0) checked="true" @endif /> {{ $lang['no'] }}
+          <input type="radio" name="is_linked" value="1" @if($attr['is_linked'] == 1) checked="true" @endif /> {{ $lang['yes'] }}
         </td>
       </tr>
       <tr>
-        <td class="label"><a href="javascript:showNotice('noticeAttrType');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.label_attr_type}</td>
+        <td class="label"><a href="javascript:showNotice('noticeAttrType');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['label_attr_type'] }}</td>
         <td>
-          <input type="radio" name="attr_type" value="0" {if $attr.attr_type eq 0} checked="true" {/if} /> {$lang.attr_type_values[0]}
-          <input type="radio" name="attr_type" value="1" {if $attr.attr_type eq 1} checked="true" {/if} /> {$lang.attr_type_values[1]}
-          <input type="radio" name="attr_type" value="2" {if $attr.attr_type eq 2} checked="true" {/if} /> {$lang.attr_type_values[2]}
-          <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeAttrType">{$lang.note_attr_type}</span>
+          <input type="radio" name="attr_type" value="0" @if($attr['attr_type'] == 0) checked="true" @endif /> {{ $lang['attr_type_values[0]'] }}
+          <input type="radio" name="attr_type" value="1" @if($attr['attr_type'] == 1) checked="true" @endif /> {{ $lang['attr_type_values[1]'] }}
+          <input type="radio" name="attr_type" value="2" @if($attr['attr_type'] == 2) checked="true" @endif /> {{ $lang['attr_type_values[2]'] }}
+          <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeAttrType">{{ $lang['note_attr_type'] }}</span>
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.label_attr_input_type}</td>
+        <td class="label">{{ $lang['label_attr_input_type'] }}</td>
         <td>
-          <input type="radio" name="attr_input_type" value="0" {if $attr.attr_input_type eq 0} checked="true" {/if} onclick="radioClicked(0)"/>
-          {$lang.text}
-          <input type="radio" name="attr_input_type" value="1" {if $attr.attr_input_type eq 1} checked="true" {/if} onclick="radioClicked(1)"/>
-          {$lang.select}
-          <input type="radio" name="attr_input_type" value="2" {if $attr.attr_input_type eq 2} checked="true" {/if} onclick="radioClicked(0)"/>
-          {$lang.text_area}
+          <input type="radio" name="attr_input_type" value="0" @if($attr['attr_input_type'] == 0) checked="true" @endif onclick="radioClicked(0)"/>
+          {{ $lang['text'] }}
+          <input type="radio" name="attr_input_type" value="1" @if($attr['attr_input_type'] == 1) checked="true" @endif onclick="radioClicked(1)"/>
+          {{ $lang['select'] }}
+          <input type="radio" name="attr_input_type" value="2" @if($attr['attr_input_type'] == 2) checked="true" @endif onclick="radioClicked(0)"/>
+          {{ $lang['text_area'] }}
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.label_attr_values}</td>
+        <td class="label">{{ $lang['label_attr_values'] }}</td>
         <td>
-          <textarea name="attr_values" cols="30" rows="5">{$attr.attr_values}</textarea>
+          <textarea name="attr_values" cols="30" rows="5">{{ $attr['attr_values'] }}</textarea>
         </td>
       </tr>
       <tr>
         <td colspan="2">
         <div class="button-div">
-          <input type="submit" value="{$lang.button_submit}" class="button"/>
-          <input type="reset" value="{$lang.button_reset}" class="button" />
+          <input type="submit" value="{{ $lang['button_submit'] }}" class="button"/>
+          <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
         </div>
         </td>
       </tr>
       </table>
-    <input type="hidden" name="act" value="{$form_act}" />
-    <input type="hidden" name="attr_id" value="{$attr.attr_id}" />
+    <input type="hidden" name="act" value="{{ $form_act }}" />
+    <input type="hidden" name="attr_id" value="{{ $attr['attr_id'] }}" />
   </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 onload = function()
 {
-{/literal}
-  radioClicked({$attr.attr_input_type});
-  onChangeGoodsType({$attr.cat_id});
+
+  radioClicked({{ $attr['attr_input_type'] }});
+  onChangeGoodsType({{ $attr['cat_id'] }});
   // 开始检查订单
   startCheckOrder();
-{literal}
+
 }
 
 /**
@@ -186,5 +187,5 @@ function changeGoodsTypeResponse(res)
 
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

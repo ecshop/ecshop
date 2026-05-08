@@ -1,57 +1,58 @@
-{if $full_page}
-{include file="pageheader.htm"}
-<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+@if($full_page)
+@include('pageheader')
+<script type="text/javascript" src="../js/calendar.php?lang={{ $cfg_lang }}"></script>
 <link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
-{insert_scripts files="../js/utils.js,listtable.js"}
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 <div class="form-div">
   <form name="TimeInterval"  action="javascript:getList()" style="margin:0px">
-  {$lang.start_date}&nbsp;
-    <input name="start_date" type="text" id="start_date" size="15" value='{$start_date}' readonly="readonly" /><input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_date', '%Y-%m-%d', false, false, 'selbtn1');" value="{$lang.btn_select}" class="button"/>&nbsp;&nbsp;
-    {$lang.end_date}&nbsp;
-    <input name="end_date" type="text" id="end_date" size="15" value='{$end_date}' readonly="readonly" /><input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_date', '%Y-%m-%d', false, false, 'selbtn2');" value="{$lang.btn_select}" class="button"/>&nbsp;&nbsp;
-    <input type="submit" name="submit" value="{$lang.query}" class="button" />
+  {{ $lang['start_date'] }}&nbsp;
+    <input name="start_date" type="text" id="start_date" size="15" value='{{ $start_date }}' readonly="readonly" /><input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_date', '%Y-%m-%d', false, false, 'selbtn1');" value="{{ $lang['btn_select'] }}" class="button"/>&nbsp;&nbsp;
+    {{ $lang['end_date'] }}&nbsp;
+    <input name="end_date" type="text" id="end_date" size="15" value='{{ $end_date }}' readonly="readonly" /><input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_date', '%Y-%m-%d', false, false, 'selbtn2');" value="{{ $lang['btn_select'] }}" class="button"/>&nbsp;&nbsp;
+    <input type="submit" name="submit" value="{{ $lang['query'] }}" class="button" />
   </form>
 </div>
 <form method="POST" action="" name="listForm">
 <div class="list-div" id="listDiv">
-{/if}
+@endif
   <table width="100%" cellspacing="1" cellpadding="3">
      <tr>
-      <th>{$lang.order_by}</th>
-      <th>{$lang.member_name}</th>
-      <th><a href="javascript:listTable.sort('order_num', 'DESC'); ">{$lang.order_amount}</a>{$sort_order_num}</th>
-      <th><a href="javascript:listTable.sort('turnover', 'DESC'); ">{$lang.buy_sum}</a>{$sort_turnover}</th>
+      <th>{{ $lang['order_by'] }}</th>
+      <th>{{ $lang['member_name'] }}</th>
+      <th><a href="javascript:listTable.sort('order_num', 'DESC'); ">{{ $lang['order_amount'] }}</a>{{ $sort_order_num }}</th>
+      <th><a href="javascript:listTable.sort('turnover', 'DESC'); ">{{ $lang['buy_sum'] }}</a>{{ $sort_turnover }}</th>
     </tr>
-  {foreach from=$user_orderinfo item=list name=val}
+  @forelse($user_orderinfo as $list)
     <tr align="center">
-      <td align="center">{$smarty.foreach.val.iteration}</td>
-      <td align="left">{$list.user_name}</td>
-      <td>{$list.order_num}</td>
-      <td>{$list.turnover}</td>
+      <td align="center">{{ $loop->iteration }}</td>
+      <td align="left">{{ $list['user_name'] }}</td>
+      <td>{{ $list['order_num'] }}</td>
+      <td>{{ $list['turnover'] }}</td>
     </tr>
-  {foreachelse}
-    <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
-  {/foreach}
+  @empty
+    <tr><td class="no-records" colspan="10">{{ $lang['no_records'] }}</td></tr>
+  @endforelse
   </table>
   <table id="page-table" cellspacing="0">
   <tr>
     <td>&nbsp;</td>
     <td align="right" nowrap="true">
-    {include file="page.htm"}
+    @include('page')
     </td>
   </tr>
   </table>
-{if $full_page}
+@if($full_page)
 </div>
 </form>
 
 <script type="Text/Javascript" language="JavaScript">
-listTable.recordCount = {$record_count};
-listTable.pageCount = {$page_count};
-{foreach from=$filter item=item key=key}
-listTable.filter.{$key} = '{$item}';
-{/foreach}
-{literal}
+listTable.recordCount = {{ $record_count }};
+listTable.pageCount = {{ $page_count }};
+@foreach($filter as $key => $item)
+listTable.filter.{{ $key }} = '{{ $item }}';
+@endforeach
+
 <!--
 onload = function()
 {
@@ -89,6 +90,6 @@ function getDownUrl()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
-{/if}
+
+@include('pagefooter')
+@endif

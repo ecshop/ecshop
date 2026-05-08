@@ -1,33 +1,34 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-{insert_scripts files='utils.js,transport.js'}
+<script src="utils.js"></script>
+<script src="transport.js"></script>
 <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
   <tr>
     <td bgcolor="#ffffff">
-      {$lang.country_province}:
-      <select name="country" id="selCountries_{$sn}" onchange="region.changed(this, 1, 'selProvinces_{$sn}')" style="border:1px solid #ccc;">
-        <option value="0">{$lang.please_select}</option>
-        <!-- {foreach from=$country_list item=country} -->
-        <option value="{$country.region_id}" {if $choose.country eq $country.region_id}selected{/if}>{$country.region_name}</option>
-        <!-- {/foreach} -->
+      {{ $lang['country_province'] }}:
+      <select name="country" id="selCountries_{{ $sn }}" onchange="region.changed(this, 1, 'selProvinces_{{ $sn }}')" style="border:1px solid #ccc;">
+        <option value="0">{{ $lang['please_select'] }}</option>
+        @foreach($country_list as $country)
+        <option value="{{ $country['region_id'] }}" @if($choose['country'] == $country['region_id'])selected@endif>{{ $country['region_name'] }}</option>
+        @endforeach
       </select>
-      <select name="province" id="selProvinces_{$sn}" onchange="region.changed(this, 2, 'selCities_{$sn}')" style="border:1px solid #ccc;">
-        <option value="0">{$lang.please_select}</option>
-        <!-- {foreach from=$province_list.$sn item=province} -->
-        <option value="{$province.region_id}" {if $choose.province eq $province.region_id}selected{/if}>{$province.region_name}</option>
-        <!-- {/foreach} -->
+      <select name="province" id="selProvinces_{{ $sn }}" onchange="region.changed(this, 2, 'selCities_{{ $sn }}')" style="border:1px solid #ccc;">
+        <option value="0">{{ $lang['please_select'] }}</option>
+        @foreach($province_list['$sn'] as $province)
+        <option value="{{ $province['region_id'] }}" @if($choose['province'] == $province['region_id'])selected@endif>{{ $province['region_name'] }}</option>
+        @endforeach
       </select>
-      <select name="city" id="selCities_{$sn}" onchange="region.changed(this, 3, 'selDistricts_{$sn}')" style="border:1px solid #ccc;">
-        <option value="0">{$lang.please_select}</option>
-        <!-- {foreach from=$city_list.$sn item=city} -->
-        <option value="{$city.region_id}" {if $choose.city eq $city.region_id}selected{/if}>{$city.region_name}</option>
-        <!-- {/foreach} -->
+      <select name="city" id="selCities_{{ $sn }}" onchange="region.changed(this, 3, 'selDistricts_{{ $sn }}')" style="border:1px solid #ccc;">
+        <option value="0">{{ $lang['please_select'] }}</option>
+        @foreach($city_list['$sn'] as $city)
+        <option value="{{ $city['region_id'] }}" @if($choose['city'] == $city['region_id'])selected@endif>{{ $city['region_name'] }}</option>
+        @endforeach
       </select>
-      <select name="district" id="selDistricts_{$sn}" {if !$district_list.$sn}style="display:none"{/if} style="border:1px solid #ccc;">
-        <option value="0">{$lang.please_select}</option>
-        <!-- {foreach from=$district_list.$sn item=district} -->
-        <option value="{$district.region_id}" {if $choose.district eq $district.region_id}selected{/if}>{$district.region_name}</option>
-        <!-- {/foreach} -->
-      </select> <input type="submit" name="Submit" class="bnt_blue_2"  value="{$lang.search_ship}" />
+      <select name="district" id="selDistricts_{{ $sn }}" @if(!$district_list.$sn)style="display:none"@endif style="border:1px solid #ccc;">
+        <option value="0">{{ $lang['please_select'] }}</option>
+        @foreach($district_list['$sn'] as $district)
+        <option value="{{ $district['region_id'] }}" @if($choose['district'] == $district['region_id'])selected@endif>{{ $district['region_name'] }}</option>
+        @endforeach
+      </select> <input type="submit" name="Submit" class="bnt_blue_2"  value="{{ $lang['search_ship'] }}" />
       <input type="hidden" name="act" value="viewship" />
     </td>
   </tr>
@@ -35,22 +36,22 @@
 
 <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
   <tr>
-    <th width="20%" bgcolor="#ffffff">{$lang.name}</th>
-    <th bgcolor="#ffffff">{$lang.describe}</th>
-    <th width="40%" bgcolor="#ffffff">{$lang.fee}</th>
-    <th width="15%" bgcolor="#ffffff">{$lang.insure_fee}</th>
+    <th width="20%" bgcolor="#ffffff">{{ $lang['name'] }}</th>
+    <th bgcolor="#ffffff">{{ $lang['describe'] }}</th>
+    <th width="40%" bgcolor="#ffffff">{{ $lang['fee'] }}</th>
+    <th width="15%" bgcolor="#ffffff">{{ $lang['insure_fee'] }}</th>
   </tr>
-  <!-- {foreach from=$shipping_list item=shipping} 循环配送方式 -->
+  <!-- @foreach($shipping_list as $shipping) 循环配送方式 -->
   <tr>
-    <td valign="top" bgcolor="#ffffff"><strong>{$shipping.shipping_name}</strong></td>
-    <td valign="top" bgcolor="#ffffff" >{$shipping.shipping_desc}</td>
-    <td valign="top" bgcolor="#ffffff">{$shipping.fee}</td>
+    <td valign="top" bgcolor="#ffffff"><strong>{{ $shipping['shipping_name'] }}</strong></td>
+    <td valign="top" bgcolor="#ffffff" >{{ $shipping['shipping_desc'] }}</td>
+    <td valign="top" bgcolor="#ffffff">{{ $shipping['fee'] }}</td>
     <td align="center" valign="top" bgcolor="#ffffff">
-      <!-- {if $shipping.insure neq 0} -->
-      {$shipping.insure_formated}
-      <!-- {else} -->
-      {$lang.not_support_insure}
-      <!-- {/if} -->    </td>
+      @if($shipping['insure'] != 0)
+      {{ $shipping['insure_formated'] }}
+      @else
+      {{ $lang['not_support_insure'] }}
+      @endif    </td>
   </tr>
-  <!-- {/foreach} 循环配送方式 -->
+  <!-- @endforeach 循环配送方式 -->
 </table>

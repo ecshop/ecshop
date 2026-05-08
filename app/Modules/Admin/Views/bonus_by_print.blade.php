@@ -1,37 +1,38 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="main-div">
 <form action="bonus.php" method="post" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
 <table width="100%">
   <tr>
-    <td class="label">{$lang.bonus_type_id}</td>
+    <td class="label">{{ $lang['bonus_type_id'] }}</td>
     <td>
     <select name="bonus_type_id">
-      {html_options options=$type_list selected=$smarty.get.id}
+      @foreach($type_list as $__k => $__v)<option value="{{ $__k }}" @if($__k == request()->query('id')) selected @endif>{{ $__v }}</option>@endforeach
     </select>
     </td>
   </tr>
    <tr>
-      <td class="label">{$lang.send_bonus_count}</td>
+      <td class="label">{{ $lang['send_bonus_count'] }}</td>
       <td>
       <input type="text" name="bonus_sum" size="30" maxlength="6" />
       </td>
     </tr>
     <td class="label">&nbsp;</td>
-    <td>{$lang.bonus_sn_notic}</td>
+    <td>{{ $lang['bonus_sn_notic'] }}</td>
    </tr>
    <tr>
    <td class="label">&nbsp;</td>
    <td>
-    <input type="submit" value="{$lang.button_submit}" class="button" />
-    <input type="reset" value="{$lang.button_reset}" class="button" />
+    <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+    <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
   </td>
  </tr>
 </table>
 <input type="hidden" name="act" value="send_by_print" />
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 document.forms['theForm'].elements['bonus_sum'].focus();
@@ -54,5 +55,5 @@ onload = function()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

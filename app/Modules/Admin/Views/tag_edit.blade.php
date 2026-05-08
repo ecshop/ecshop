@@ -1,39 +1,40 @@
-{include file="pageheader.htm"}
-{insert_scripts files="validator.js,../js/transport.js}
+@include('pageheader')
+<script src="validator.js"></script>
+<script src="../js/transport.js"></script>
 <div class="main-div">
 <form method="post" action="tag_manage.php" name="theForm" onSubmit="return validate()">
 <table cellspacing="1" cellpadding="3" width="100%">
   <tr>
-    <td class="label">{$lang.tag_words}</td>
-    <td><input name="tag_name" type="text" id="tag_name" value="{$tag.tag_words}" maxlength="60" />
+    <td class="label">{{ $lang['tag_words'] }}</td>
+    <td><input name="tag_name" type="text" id="tag_name" value="{{ $tag['tag_words'] }}" maxlength="60" />
     </td>
   </tr>
   
   <tr>
-    <td align="right">{$lang.name_search}</td>
+    <td align="right">{{ $lang['name_search'] }}</td>
     <td><input name="keyword" type="text" id="keyword">
-      <input name="search" type="button" id="search" value="{$lang.button_search}" class="button" onclick="searchGoods()" /></td>
+      <input name="search" type="button" id="search" value="{{ $lang['button_search'] }}" class="button" onclick="searchGoods()" /></td>
   </tr>
   <tr>
-    <td class="label">{$lang.goods_name}</td>
+    <td class="label">{{ $lang['goods_name'] }}</td>
     <td><select name="goods_id" id="goods_id">
-      <option value="{$tag.goods_id}" selected="selected">{$tag.goods_name}</option>
+      <option value="{{ $tag['goods_id'] }}" selected="selected">{{ $tag['goods_name'] }}</option>
     </select>    
     </td>
   </tr>
 
   <tr>
     <td colspan="2" align="center">
-      <input type="submit" class="button" value="{$lang.button_submit}" />
-      <input type="reset" class="button" value="{$lang.button_reset}" />
-      <input type="hidden" name="id" value="{$tag.tag_id}" /></td>
-      <input type="hidden" name="act" value="{$insert_or_update}" />
+      <input type="submit" class="button" value="{{ $lang['button_submit'] }}" />
+      <input type="reset" class="button" value="{{ $lang['button_reset'] }}" />
+      <input type="hidden" name="id" value="{{ $tag['tag_id'] }}" /></td>
+      <input type="hidden" name="act" value="{{ $insert_or_update }}" />
   </tr>
 </table>
 </form>
 </div>
 
-{literal}
+
 <script language="JavaScript">
 <!--
 onload = function()
@@ -88,5 +89,5 @@ function searchGoodsResponse(result)
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

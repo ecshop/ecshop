@@ -1,2 +1,2 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-{$lang.ur_here} {$ur_here}
+{{ $lang['ur_here'] }} {{ $ur_here }}

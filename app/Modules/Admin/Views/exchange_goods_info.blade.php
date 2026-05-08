@@ -1,52 +1,54 @@
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,selectzone.js,validator.js"}
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="selectzone.js"></script>
+<script src="validator.js"></script>
 <!-- start goods form -->
 <div class="tab-div">
 <form  action="exchange_goods.php" method="post" name="theForm" onsubmit="return validate();">
   <table width="90%" id="general-table">
     <tr>
-      <td align="right">{$lang.keywords}</td>
+      <td align="right">{{ $lang['keywords'] }}</td>
       <td><input type="text" name="keywords" size="30" />
-      <input type="button" value="{$lang.button_search}" class="button" onclick="searchGoods()" {if $form_action eq 'update'} disabled="true" {/if}></td>
+      <input type="button" value="{{ $lang['button_search'] }}" class="button" onclick="searchGoods()" @if($form_action == 'update') disabled="true" @endif></td>
     </tr>
     <tr>
-      <td class="label"><a href="javascript:showNotice('noticegoodsid');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.goodsid}</td>
+      <td class="label"><a href="javascript:showNotice('noticegoodsid');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['goodsid'] }}</td>
       <td>
         <select name="goods_id">
-        {$goods.option}
+        {{ $goods['option'] }}
         </select>
-        {$lang.require_field}
-       <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticegoodsid">{$lang.notice_goodsid}</span></td>
+        {{ $lang['require_field'] }}
+       <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticegoodsid">{{ $lang['notice_goodsid'] }}</span></td>
     </tr>
     <tr>
-      <td class="label"><a href="javascript:showNotice('noticepackagePrice');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.integral}</td>
-      <td><input type="text" name="exchange_integral" maxlength="60" size="20" value="{$goods.exchange_integral}" />{$lang.require_field}<br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticepackagePrice">{$lang.notice_integral}</span></td>
+      <td class="label"><a href="javascript:showNotice('noticepackagePrice');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['integral'] }}</td>
+      <td><input type="text" name="exchange_integral" maxlength="60" size="20" value="{{ $goods['exchange_integral'] }}" />{{ $lang['require_field'] }}<br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticepackagePrice">{{ $lang['notice_integral'] }}</span></td>
     </tr>
     <tr>
-      <td class="narrow-label">{$lang.is_exchange}</td>
+      <td class="narrow-label">{{ $lang['is_exchange'] }}</td>
       <td>
-        <input type="radio" name="is_exchange" value="1" {if $goods.is_exchange eq 1}checked{/if}> {$lang.isexchange}
-        <input type="radio" name="is_exchange" value="0" {if $goods.is_exchange eq 0}checked{/if}> {$lang.isnotexchange}{$lang.require_field}</td>
+        <input type="radio" name="is_exchange" value="1" @if($goods['is_exchange'] == 1)checked@endif> {{ $lang['isexchange'] }}
+        <input type="radio" name="is_exchange" value="0" @if($goods['is_exchange'] == 0)checked@endif> {{ $lang['isnotexchange'] }}{{ $lang['require_field'] }}</td>
     </tr>
     <tr>
-      <td class="narrow-label">{$lang.is_hot}</td>
+      <td class="narrow-label">{{ $lang['is_hot'] }}</td>
       <td>
-        <input type="radio" name="is_hot" value="1" {if $goods.is_hot eq 1}checked{/if}> {$lang.ishot}
-        <input type="radio" name="is_hot" value="0" {if $goods.is_hot eq 0}checked{/if}> {$lang.isnothot}{$lang.require_field}</td>
+        <input type="radio" name="is_hot" value="1" @if($goods['is_hot'] == 1)checked@endif> {{ $lang['ishot'] }}
+        <input type="radio" name="is_hot" value="0" @if($goods['is_hot'] == 0)checked@endif> {{ $lang['isnothot'] }}{{ $lang['require_field'] }}</td>
     </tr>
   </table>
 
   <div class="button-div">
-    <input type="hidden" name="act" value="{$form_action}" />
-    <input type="submit" value="{$lang.button_submit}" class="button"  />
-    <input type="reset" value="{$lang.button_reset}" class="button" />
+    <input type="hidden" name="act" value="{{ $form_action }}" />
+    <input type="submit" value="{{ $lang['button_submit'] }}" class="button"  />
+    <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
   </div>
 </form>
 </div>
 <!-- end goods form -->
 <script language="JavaScript">
 
-{literal}
+
 onload = function()
 {
   // 开始检查订单
@@ -108,6 +110,6 @@ function searchGoodsResponse(result)
   }
 }
 
-{/literal}
+
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

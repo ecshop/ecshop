@@ -1,22 +1,22 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="list-div">
 <table cellspacing='1' cellpadding='3'>
   <tr>
-    <th colspan="2" class="group-title">{$lang.team_member}</th>
+    <th colspan="2" class="group-title">{{ $lang['team_member'] }}</th>
   </tr>
   <tr>
-    <td width="20%" class="first-cell">{$lang.director}</td><td>
+    <td width="20%" class="first-cell">{{ $lang['director'] }}</td><td>
     KunPeng Liu,&nbsp; Kai Li
     </td>
   </tr>
   <tr>
-    <td class="first-cell">{$lang.programmer}</td><td>
+    <td class="first-cell">{{ $lang['programmer'] }}</td><td>
 
       Robb Liu,&nbsp; Huaixiao Ye,&nbsp; Qinghua Dou,&nbsp; Lei Wang, Hui Liu
     </td>
   </tr>
   <tr>
-    <td class="first-cell">{$lang.ui_designer}</td><td>
+    <td class="first-cell">{{ $lang['ui_designer'] }}</td><td>
       JianXi Wang,Dujuan Zhu,Qi Gao
     </td>
   </tr>
@@ -27,10 +27,10 @@
 <div class="list-div">
 <table cellspacing='1' cellpadding='3'>
   <tr>
-    <th colspan="2" class="group-title">{$lang.special_thanks}</th>
+    <th colspan="2" class="group-title">{{ $lang['special_thanks'] }}</th>
   </tr>
   <tr>
-    <td class="first-cell" width="20%" rowspan="2">{$lang.before_team_member}</td><td >Paul Gao,&nbsp; Weber Liu,&nbsp; Kelly Yang,&nbsp;DaMing Wen, &nbsp;Scott Ye <br/> Wenjin Zhang, &nbsp;Steven liu,  &nbsp;Xiaodong Sun,&nbsp;
+    <td class="first-cell" width="20%" rowspan="2">{{ $lang['before_team_member'] }}</td><td >Paul Gao,&nbsp; Weber Liu,&nbsp; Kelly Yang,&nbsp;DaMing Wen, &nbsp;Scott Ye <br/> Wenjin Zhang, &nbsp;Steven liu,  &nbsp;Xiaodong Sun,&nbsp;
   Xiaochuan Shi<br/>Yecior,&nbsp;Zhibin Li,&nbsp;Hua Change,&nbsp;ShaoFeng Qu</td>
 
   </tr>
@@ -46,17 +46,17 @@
 <div class="list-div">
 <table cellspacing='1' cellpadding='3'>
   <tr>
-    <th colspan="2" class="group-title">{$lang.official_site}</th>
+    <th colspan="2" class="group-title">{{ $lang['official_site'] }}</th>
   </tr>
   <tr>
-    <td class="first-cell" width="20%">{$lang.site_url}</td><td><a href="http://www.ecshop.com" target="_blank">http://www.ecshop.com</a></td>
+    <td class="first-cell" width="20%">{{ $lang['site_url'] }}</td><td><a href="http://www.ecshop.com" target="_blank">http://www.ecshop.com</a></td>
   </tr>
   <tr>
-    <td class="first-cell" width="20%">{$lang.support_forum}</td><td><a href="http://bbs.ecshop.com" target="_blank">http://bbs.ecshop.com</a></td>
+    <td class="first-cell" width="20%">{{ $lang['support_forum'] }}</td><td><a href="http://bbs.ecshop.com" target="_blank">http://bbs.ecshop.com</a></td>
   </tr>
 </table>
 </div>
-{literal}
+
 <script type="Text/Javascript" language="JavaScript">
 <!--
 onload = function()
@@ -66,5 +66,5 @@ onload = function()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

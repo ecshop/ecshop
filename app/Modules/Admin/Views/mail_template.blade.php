@@ -1,54 +1,55 @@
-{if $full_page}
+@if($full_page)
 
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 
 <div class="form-div" id="conent_area">
 
-{/if}
+@endif
 <form method="post" name="theForm" action="mail_template.php?act=save_template">
 
   <table id="general-table" align="center">
   <tr>
-    <td style="font-weight: bold; " width="15%">{$lang.select_template}</td>
+    <td style="font-weight: bold; " width="15%">{{ $lang['select_template'] }}</td>
     <td>
       <select id="selTemplate" onchange="loadTemplate()">
-        {html_options options=$templates selected=$cur}
+        @foreach($templates as $__k => $__v)<option value="{{ $__k }}" @if($__k == $cur) selected @endif>{{ $__v }}</option>@endforeach
       </select>
     </td>
   </tr>
   <tr>
-    <td style="font-weight: bold; " width="15%">{$lang.mail_subject}:</td>
-    <td><input type="text" name="subject" id="subject" style="width: 300px" value="{$template.template_subject}"/></td>
+    <td style="font-weight: bold; " width="15%">{{ $lang['mail_subject'] }}:</td>
+    <td><input type="text" name="subject" id="subject" style="width: 300px" value="{{ $template['template_subject'] }}"/></td>
   </tr>
   <tr>
-    <td style="font-weight: bold" >{$lang.mail_type}:</td>
+    <td style="font-weight: bold" >{{ $lang['mail_type'] }}:</td>
     <td>
-      <input type="radio" name="mail_type" value="0" {if $template.is_html eq '0'}checked="true"{/if} onclick="javascript:change_editor();"/>{$lang.mail_plain_text}
-      <input type="radio" name="mail_type" value="1" {if $template.is_html eq '1'}checked="true"{/if} onclick="javascript:change_editor();"/>{$lang.mail_html}
+      <input type="radio" name="mail_type" value="0" @if($template['is_html'] == '0')checked="true"@endif onclick="javascript:change_editor();"/>{{ $lang['mail_plain_text'] }}
+      <input type="radio" name="mail_type" value="1" @if($template['is_html'] == '1')checked="true"@endif onclick="javascript:change_editor();"/>{{ $lang['mail_html'] }}
 
-      <input type="hidden" name="tpl" value="{$tpl}" />
+      <input type="hidden" name="tpl" value="{{ $tpl }}" />
     </td>
   </tr>
   <tr>
-    <td colspan="2">{if $template.is_html eq '1'}
-                      {$FCKeditor}
-                    {else}
-                      <textarea name="content" id="content" style="width:90%" rows="16" >{$template.template_content}</textarea>
-                    {/if}</td>
+    <td colspan="2">@if($template['is_html'] == '1')
+                      {{ $FCKeditor }}
+                    @else
+                      <textarea name="content" id="content" style="width:90%" rows="16" >{{ $template['template_content'] }}</textarea>
+                    @endif</td>
   </tr>
   <tr>
-    <td colspan="2" align="center"><input type="submit" value="{$lang.button_submit}" class="button" /></td>
+    <td colspan="2" align="center"><input type="submit" value="{{ $lang['button_submit'] }}" class="button" /></td>
   </tr>
   </table>
 </form>
 
-{if $full_page}
+@if($full_page)
 
 </div>
 
 <script language="JavaScript">
-{literal}
+
 
 var orgContent = '';
 
@@ -196,8 +197,8 @@ function saveTemplateResponse(result)
     alert(result.message);
   }
 }
-{/literal}
-</script>
-{include file="pagefooter.htm"}
 
-{/if}
+</script>
+@include('pagefooter')
+
+@endif

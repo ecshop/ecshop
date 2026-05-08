@@ -1,24 +1,24 @@
- {include file="pageheader.htm"}
-{insert_scripts files="validator.js"}
+ @include('pageheader')
+<script src="validator.js"></script>
 <div class="main-div">
   <form action="flashplay.php" method="post" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
   <table width="100%" id="general-table">
   <tbody>
     <tr>
       <td  class="label">
-        {$lang.lable_flash_name}</td>
+        {{ $lang['lable_flash_name'] }}</td>
       <td>
-        <input type="text" name="ad[ad_name]" id="ad_name" value="{$ad.ad_name}" size="35" /><span class="require-field">*</span>
+        <input type="text" name="ad[ad_name]" id="ad_name" value="{{ $ad['ad_name'] }}" size="35" /><span class="require-field">*</span>
       </td>
     </tr>
     <tr>
-      <td class="label">{$lang.lable_flash_type}</td>
+      <td class="label">{{ $lang['lable_flash_type'] }}</td>
       <td>
        <select name="ad[ad_type]" id="ad_type" onchange="showMedia(this.value)">
-       <option value='0'>{$lang.ad_img}</option>
-       <option value='1'>{$lang.ad_flash}</option>
-       <option value='2'>{$lang.ad_html}</option>
-       <option value='3'>{$lang.ad_text}</option>
+       <option value='0'>{{ $lang['ad_img'] }}</option>
+       <option value='1'>{{ $lang['ad_flash'] }}</option>
+       <option value='2'>{{ $lang['ad_html'] }}</option>
+       <option value='3'>{{ $lang['ad_text'] }}</option>
        </select>
       </td>
     </tr>
@@ -27,53 +27,53 @@
   <tbody id="content_01">
     <tr>
       <td  class="label">
-        <a href="javascript:showNotice('title_upload');" title="{$lang.form_notice}">
-        <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.lable_upload}</td>
+        <a href="javascript:showNotice('title_upload');" title="{{ $lang['form_notice'] }}">
+        <img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['lable_upload'] }}</td>
       <td>
         <input type='file' name='ad_img' id='ad_img' size='35' />
-        <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="title_upload">{$width_height}</span>
+        <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="title_upload">{{ $width_height }}</span>
       </td>
     </tr>
     <tr>
-      <td class="label">{$lang.lable_from_web}</td>
-      <td><input type="text" name="content[url]" id="ad_url" value="{$ad.ad_url}" size="35" /></td>
+      <td class="label">{{ $lang['lable_from_web'] }}</td>
+      <td><input type="text" name="content[url]" id="ad_url" value="{{ $ad['ad_url'] }}" size="35" /></td>
     </tr>
   </tbody>
 
   <tbody id="edit_img">
     <tr>
       <td class="label">&nbsp;</td>
-      <td><input type="text" name="content[img_url]" id="img_url" value="{$ad.content}" size="35" disabled="disabled"/></td>
+      <td><input type="text" name="content[img_url]" id="img_url" value="{{ $ad['content'] }}" size="35" disabled="disabled"/></td>
     </tr>
   </tbody>
 
   <tbody id="content_23">
     <tr>
-      <td class="label">{$lang.lable_content}</td>
-      <td><textarea name="content[htmls]" id="htmls" cols="50" rows="7">{$ad.content}</textarea></td>
+      <td class="label">{{ $lang['lable_content'] }}</td>
+      <td><textarea name="content[htmls]" id="htmls" cols="50" rows="7">{{ $ad['content'] }}</textarea></td>
     </tr>
   </tbody>
 
   <tbody id="url_tr">
     <tr>
-      <td class="label">{$lang.lable_url}</td>
-      <td><input type="text" name="ad[url]" id="url" value="{$ad.url}" size="35" /></td>
+      <td class="label">{{ $lang['lable_url'] }}</td>
+      <td><input type="text" name="ad[url]" id="url" value="{{ $ad['url'] }}" size="35" /></td>
     </tr>
   </tbody>
 
   <tbody>
     <tr>
-      <td class="label">{$lang.lable_flash_status}</td>
-      <td><input type="radio" name="ad[ad_status]" id="ad_status" value="0" {if $ad.ad_status eq 0}checked="checked"{/if}>关闭
-      <input type="radio" name="ad[ad_status]" id="ad_status" value="1" {if $ad.ad_status eq 1}checked="checked"{/if}>启用</td>
+      <td class="label">{{ $lang['lable_flash_status'] }}</td>
+      <td><input type="radio" name="ad[ad_status]" id="ad_status" value="0" @if($ad['ad_status'] == 0)checked="checked"@endif>关闭
+      <input type="radio" name="ad[ad_status]" id="ad_status" value="1" @if($ad['ad_status'] == 1)checked="checked"@endif>启用</td>
     </tr>
     <tr>
        <td class="label">&nbsp;</td>
        <td>
-        <input type="submit" value="{$lang.button_submit}" class="button" />
-        <input type="reset" value="{$lang.button_reset}" class="button" />
-        <input type="hidden" name="act" id="act" value="{$form_act}" />
-        <input type="hidden" name="ad[id]" id="ad_id" value="{$ad.ad_id}" />
+        <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+        <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
+        <input type="hidden" name="act" id="act" value="{{ $form_act }}" />
+        <input type="hidden" name="ad[id]" id="ad_id" value="{{ $ad['ad_id'] }}" />
       </td>
     </tr>
   </tbody>
@@ -83,7 +83,7 @@
     <script language="JavaScript">
 <!--
 // 初始页面参数
-var status_code = 0; //{$ad.ad_type};
+var status_code = 0; //{{ $ad['ad_type'] }};
 
 
 onload = function()
@@ -112,14 +112,14 @@ function initialize_form(status_code)
       document.getElementById('content_01').style.display = display_yes;
       document.getElementById('content_23').style.display = 'none';
       document.getElementById('url_tr').style.display = display_yes;
-            document.getElementById('title_upload').innerHTML = '{$width_height}';
+            document.getElementById('title_upload').innerHTML = '{{ $width_height }}';
     break;
     case 1 :
 
       document.getElementById('content_01').style.display = display_yes;
       document.getElementById('content_23').style.display = 'none';
       document.getElementById('url_tr').style.display = 'none';
-            document.getElementById('title_upload').innerHTML = '{$lang.title_upload_notice}';
+            document.getElementById('title_upload').innerHTML = '{{ $lang['title_upload_notice'] }}';
     break;
     case 2 :
       document.getElementById('content_01').style.display = 'none';
@@ -151,7 +151,7 @@ function showMedia(code)
  */
 function system_set()
 {
-  alert('{$lang.tab_change_alert}');
+  alert('{{ $lang['tab_change_alert'] }}');
 }
 
 /**
@@ -187,4 +187,4 @@ function navigator_type()
 //-->
 </script>
 
-{include file="pagefooter.htm"}
+@include('pagefooter')

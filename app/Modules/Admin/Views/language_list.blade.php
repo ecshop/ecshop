@@ -1,66 +1,66 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 
 <div class="form-div">
   <form name="searchForm" action="edit_languages.php" method="post" onSubmit="return validate();">
-    <select name="lang_file">{html_options options=$lang_arr selected=$lang_file}</select>
+    <select name="lang_file">@foreach($lang_arr as $__k => $__v)<option value="{{ $__k }}" @if($__k == $lang_file) selected @endif>{{ $__v }}</option>@endforeach</select>
     &nbsp;&nbsp;&nbsp;
-    {$lang.enter_keywords}：<input type="text" name="keyword" size="30" />
-    <input type="submit" value="{$lang.button_search}" class="button" /> <input type="hidden" name="act" value="list" />
+    {{ $lang['enter_keywords'] }}：<input type="text" name="keyword" size="30" />
+    <input type="submit" value="{{ $lang['button_search'] }}" class="button" /> <input type="hidden" name="act" value="list" />
   </form>
 </div>
 <div>
 <ul style="padding:0; margin: 0; list-style-type:none; color: #CC0000;">
-  {if $file_attr}
-  <li style="border: 1px solid #CC0000; background: #FFFFCC; padding: 10px; margin-bottom: 5px;" >{$file_attr}</li>
-  {/if}
+  @if($file_attr)
+  <li style="border: 1px solid #CC0000; background: #FFFFCC; padding: 10px; margin-bottom: 5px;" >{{ $file_attr }}</li>
+  @endif
 </ul>
 </div>
 
 <form method="post" action="edit_languages.php">
 <div class="list-div" id="listDiv">
 <table width="100%" cellspacing="1" cellpadding="2" id="list-table">
-{if $language_arr}
+@if($language_arr)
   <tr>
-    <th>{$lang.item_name}</th>
-    <th>{$lang.item_value}</th>
+    <th>{{ $lang['item_name'] }}</th>
+    <th>{{ $lang['item_value'] }}</th>
   </tr>
- {foreach from=$language_arr item=list}
+ @foreach($language_arr as $list)
   <tr>
     <td width="30%" align="left" class="first-cell">
-    {$list.item_id}<input type="hidden" name="item_id[]" value="{$list.item_id}" />
+    {{ $list['item_id'] }}<input type="hidden" name="item_id[]" value="{{ $list['item_id'] }}" />
     </td>
     <td width="70%">
-      <input type="text" name="item_content[]" value="{$list.item_content|escape:html}" size="60" />
+      <input type="text" name="item_content[]" value="{{ $list['item_content'] }}" size="60" />
     </td>
   </tr>
   <tr style="display:none">
     <td width="30%" align="left" class="first-cell">&nbsp;</td>
     <td width="70%">
-      <input type="hidden" name="item[]" value="{$list.item|escape:html}" size="60"/>
+      <input type="hidden" name="item[]" value="{{ $list['item'] }}" size="60"/>
     </td>
   </tr>
-  {/foreach}
+  @endforeach
   <tr>
     <td colspan="2">
       <div align="center">
         <input type="hidden" name="act" value="edit" />
-        <input type="hidden" name="file_path" value="{$file_path}" />
-        <input type="hidden" name="keyword" value="{$keyword}" />
-        <input type="submit" value="{$lang.edit_button}" class="button" />
+        <input type="hidden" name="file_path" value="{{ $file_path }}" />
+        <input type="hidden" name="keyword" value="{{ $keyword }}" />
+        <input type="submit" value="{{ $lang['edit_button'] }}" class="button" />
 &nbsp;&nbsp;&nbsp;
-        <input type="reset" value="{$lang.reset_button}" class="button" />
+        <input type="reset" value="{{ $lang['reset_button'] }}" class="button" />
       </div></td>
     </tr>
   <tr>
-    <td colspan="2"><strong>{$lang.notice_edit}</strong></td>
+    <td colspan="2"><strong>{{ $lang['notice_edit'] }}</strong></td>
     </tr>
-  {/if}
+  @endif
 
 </table>
 </div>
 </form>
 
-{literal}
+
 <script type="text/javascript" language="JavaScript">
 <!--
 
@@ -83,5 +83,5 @@ function validate()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

@@ -2,22 +2,22 @@
 
      <div class="box">
      <div class="box_1">
-      <h3><span class="text">{$lang.goods_tag}</span></h3>
+      <h3><span class="text">{{ $lang['goods_tag'] }}</span></h3>
       <div class="boxCenterList clearfix ie6">
        <form name="tagForm" action="javascript:;" onSubmit="return submitTag(this)" id="tagForm">
         <p id="ECS_TAGS" style="margin-bottom:5px;">
-          <!-- 标记{foreach from=$tags item=tag}-->
-          <a href="search.php?keywords={$tag.tag_words|escape:url}" style="color:#006ace; text-decoration:none; margin-right:5px;">{$tag.tag_words|escape:html}[{$tag.tag_count}]</a>
-          <!-- 结束标记{/foreach} -->
+          <!-- 标记@foreach($tags as $tag)-->
+          <a href="search.php?keywords={{ $tag['tag_words'] }}" style="color:#006ace; text-decoration:none; margin-right:5px;">{{ $tag['tag_words'] }}[{{ $tag['tag_count'] }}]</a>
+          <!-- 结束标记@endforeach -->
         </p>
         <p>
           <input type="text" name="tag" id="tag" class="inputBg" size="35" />
           <input type="submit" value="添 加" class="bnt_blue" style="border:none;" />
-          <input type="hidden" name="goods_id" value="{$goods.goods_id}"  />
+          <input type="hidden" name="goods_id" value="{{ $goods['goods_id'] }}"  />
         </p>
                 <script type="text/javascript">
                 //<![CDATA[
-                {literal}
+                
                 /**
                  * 用户添加标记的处理函数
                  */
@@ -61,7 +61,7 @@
                     catch (e) { alert(e); }
                   }
                 }
-                {/literal}
+                
                 //]]>
                 </script>
               </form>

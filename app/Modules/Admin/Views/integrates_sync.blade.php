@@ -1,30 +1,31 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <!-- start integrate setup form -->
 <div class="list-div" id="listDiv">
   <table cellpadding="3" cellspacing="1">
-    <tr><th>{$lang.task_name}</th><th>{$lang.task_status}</th></tr>
-    {foreach from=$tasks item=task}
+    <tr><th>{{ $lang['task_name'] }}</th><th>{{ $lang['task_status'] }}</th></tr>
+    @foreach($tasks as $task)
     <tr>
-      <td>{$task.task_name}</td>
-      <td>{$task.task_status}</td>
+      <td>{{ $task['task_name'] }}</td>
+      <td>{{ $task['task_status'] }}</td>
     </tr>
-    {/foreach}
+    @endforeach
     <tr>
     <td colspan="2">&nbsp;</span>
     </tr>
     <tr>
-    <td colspan="2">{$lang.sync_size}&nbsp;&nbsp;<input type="text" name="size" size="5" value="{$size}" id="ECS_SIZE"></td>
+    <td colspan="2">{{ $lang['sync_size'] }}&nbsp;&nbsp;<input type="text" name="size" size="5" value="{{ $size }}" id="ECS_SIZE"></td>
     </tr>
     <tr>
     <td colspan="2">
-      <input type="button" value="{$lang.button_pre}" class="button" onclick="location.href='integrate.php?act=modify'">
-      <input type="button" value="{$lang.start_task}" class="button" onclick="sync_start(this)">
+      <input type="button" value="{{ $lang['button_pre'] }}" class="button" onclick="location.href='integrate.php?act=modify'">
+      <input type="button" value="{{ $lang['start_task'] }}" class="button" onclick="sync_start(this)">
     </tr>
   </table>
 </div>
 <!-- end integrate setup form -->
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 onload = function()
@@ -65,5 +66,5 @@ function taskResponse(result)
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

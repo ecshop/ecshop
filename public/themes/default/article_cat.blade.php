@@ -2,17 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$page_title}</title>
+<title>{{ $page_title }}</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
 <!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
 {* 包含脚本文件 *}
-{insert_scripts files='common.js'}
+<script src="common.js"></script>
 </head>
 <body>
 <!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
@@ -30,9 +30,9 @@
     <!-- TemplateBeginEditable name="左边区域" -->
 <!-- #BeginLibraryItem "/library/cart.lbi" --><!-- #EndLibraryItem -->
 <!-- #BeginLibraryItem "/library/category_tree.lbi" --><!-- #EndLibraryItem -->
-<!-- {if $article_categories} -->
+@if($article_categories)
  <!-- #BeginLibraryItem "/library/article_category_tree.lbi" --><!-- #EndLibraryItem -->
-<!-- {/if} -->
+@endif
  <!-- #BeginLibraryItem "/library/filter_attr.lbi" --><!-- #EndLibraryItem -->
  <!-- #BeginLibraryItem "/library/price_grade.lbi" --><!-- #EndLibraryItem -->
 <!-- TemplateEndEditable -->
@@ -46,27 +46,27 @@
   <div class="AreaR">
    <div class="box">
    <div class="box_1">
-    <h3><span>{$lang.article_list}</span></h3>
+    <h3><span>{{ $lang['article_list'] }}</span></h3>
     <div class="boxCenterList">
-          <form action="{$search_url}" name="search_form" method="post" class="article_search">
-        <input name="keywords" type="text" id="requirement" value="{$search_value}" class="inputBg" />
-        <input name="id" type="hidden" value="{$cat_id}" />
+          <form action="{{ $search_url }}" name="search_form" method="post" class="article_search">
+        <input name="keywords" type="text" id="requirement" value="{{ $search_value }}" class="inputBg" />
+        <input name="id" type="hidden" value="{{ $cat_id }}" />
         <input name="cur_url" id="cur_url" type="hidden" value="" />
-        <input type="submit" value="{$lang.button_search}" class="bnt_blue_1" />
+        <input type="submit" value="{{ $lang['button_search'] }}" class="bnt_blue_1" />
       </form>
       <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
       <tr>
-        <th bgcolor="#ffffff">{$lang.article_title}</th>
-          <th bgcolor="#ffffff">{$lang.article_author}</th>
-          <th bgcolor="#ffffff">{$lang.article_add_time}</th>
+        <th bgcolor="#ffffff">{{ $lang['article_title'] }}</th>
+          <th bgcolor="#ffffff">{{ $lang['article_author'] }}</th>
+          <th bgcolor="#ffffff">{{ $lang['article_add_time'] }}</th>
         </tr>
-      <!-- {foreach from=$artciles_list item=article} -->
+      @foreach($artciles_list as $article)
       <tr>
-        <td bgcolor="#ffffff"><a href="{$article.url}" title="{$article.title|escape:html}" class="f6">{$article.short_title}</a></td>
-          <td bgcolor="#ffffff">{$article.author}</td>
-          <td bgcolor="#ffffff" align="center">{$article.add_time}</td>
+        <td bgcolor="#ffffff"><a href="{{ $article['url'] }}" title="{{ $article['title'] }}" class="f6">{{ $article['short_title'] }}</a></td>
+          <td bgcolor="#ffffff">{{ $article['author'] }}</td>
+          <td bgcolor="#ffffff" align="center">{{ $article['add_time'] }}</td>
         </tr>
-      <!-- {/foreach} -->
+      @endforeach
     </table>
     </div>
    </div>
@@ -88,22 +88,22 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>] 
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+    <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>] 
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->

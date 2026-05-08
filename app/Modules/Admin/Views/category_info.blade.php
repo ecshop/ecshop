@@ -1,73 +1,73 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <!-- start add new category form -->
 <div class="main-div">
   <form action="category.php" method="post" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
   <table width="100%" id="general-table">
       <tr>
-        <td class="label">{$lang.cat_name}:</td>
+        <td class="label">{{ $lang['cat_name'] }}:</td>
         <td>
-          <input type='text' name='cat_name' maxlength="20" value='{$cat_info.cat_name|escape:html}' size='27' /> <font color="red">*</font>
+          <input type='text' name='cat_name' maxlength="20" value='{{ $cat_info['cat_name'] }}' size='27' /> <font color="red">*</font>
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.parent_id}:</td>
+        <td class="label">{{ $lang['parent_id'] }}:</td>
         <td>
           <select name="parent_id">
-            <option value="0">{$lang.cat_top}</option>
-            {$cat_select}
+            <option value="0">{{ $lang['cat_top'] }}</option>
+            {{ $cat_select }}
           </select>
         </td>
       </tr>
 
       <tr id="measure_unit">
-        <td class="label">{$lang.measure_unit}:</td>
+        <td class="label">{{ $lang['measure_unit'] }}:</td>
         <td>
-          <input type="text" name='measure_unit' value='{$cat_info.measure_unit}' size="12" />
+          <input type="text" name='measure_unit' value='{{ $cat_info['measure_unit'] }}' size="12" />
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.sort_order}:</td>
+        <td class="label">{{ $lang['sort_order'] }}:</td>
         <td>
-          <input type="text" name='sort_order' {if $cat_info.sort_order}value='{$cat_info.sort_order}'{else} value="50"{/if} size="15" />
+          <input type="text" name='sort_order' @if($cat_info['sort_order'])value='{{ $cat_info['sort_order'] }}'@else value="50"@endif size="15" />
         </td>
       </tr>
 
       <tr>
-        <td class="label">{$lang.is_show}:</td>
+        <td class="label">{{ $lang['is_show'] }}:</td>
         <td>
-          <input type="radio" name="is_show" value="1" {if $cat_info.is_show neq 0} checked="true"{/if}/> {$lang.yes}
-          <input type="radio" name="is_show" value="0" {if $cat_info.is_show eq 0} checked="true"{/if} /> {$lang.no}
+          <input type="radio" name="is_show" value="1" @if($cat_info['is_show'] != 0) checked="true"@endif/> {{ $lang['yes'] }}
+          <input type="radio" name="is_show" value="0" @if($cat_info['is_show'] == 0) checked="true"@endif /> {{ $lang['no'] }}
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.show_in_nav}:</td>
+        <td class="label">{{ $lang['show_in_nav'] }}:</td>
         <td>
-          <input type="radio" name="show_in_nav" value="1" {if $cat_info.show_in_nav neq 0} checked="true"{/if}/> {$lang.yes}
-          <input type="radio" name="show_in_nav" value="0" {if $cat_info.show_in_nav eq 0} checked="true"{/if} /> {$lang.no}
+          <input type="radio" name="show_in_nav" value="1" @if($cat_info['show_in_nav'] != 0) checked="true"@endif/> {{ $lang['yes'] }}
+          <input type="radio" name="show_in_nav" value="0" @if($cat_info['show_in_nav'] == 0) checked="true"@endif /> {{ $lang['no'] }}
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.show_in_index}:</td>
+        <td class="label">{{ $lang['show_in_index'] }}:</td>
         <td>
-          <input type="checkbox" name="cat_recommend[]" value="1" {if $cat_recommend[1] eq 1} checked="true"{/if}/> {$lang.index_best}
-          <input type="checkbox" name="cat_recommend[]" value="2" {if $cat_recommend[2] eq 1} checked="true"{/if} /> {$lang.index_new}
-          <input type="checkbox" name="cat_recommend[]" value="3" {if $cat_recommend[3] eq 1} checked="true"{/if} /> {$lang.index_hot}
+          <input type="checkbox" name="cat_recommend[]" value="1" @if($cat_recommend[1] == 1) checked="true"@endif/> {{ $lang['index_best'] }}
+          <input type="checkbox" name="cat_recommend[]" value="2" @if($cat_recommend[2] == 1) checked="true"@endif /> {{ $lang['index_new'] }}
+          <input type="checkbox" name="cat_recommend[]" value="3" @if($cat_recommend[3] == 1) checked="true"@endif /> {{ $lang['index_hot'] }}
         </td>
       </tr>
       <tr>
-        <td class="label"><a href="javascript:showNotice('noticeFilterAttr');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.notice_style}"></a>{$lang.filter_attr}:</td>
+        <td class="label"><a href="javascript:showNotice('noticeFilterAttr');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['notice_style'] }}"></a>{{ $lang['filter_attr'] }}:</td>
         <td>
           <script type="text/javascript">
           var arr = new Array();
-          var sel_filter_attr = "{$lang.sel_filter_attr}";
-          {foreach from=$attr_list item=val key=att_cat_id}
-            arr[{$att_cat_id}] = new Array();
-            {foreach from=$val item=item key=i}
-              {foreach from=$item item=attr_val key=attr_id}
-                arr[{$att_cat_id}][{$i}] = ["{$attr_val}", {$attr_id}];
-              {/foreach}
-            {/foreach}
-          {/foreach}
+          var sel_filter_attr = "{{ $lang['sel_filter_attr'] }}";
+          @foreach($attr_list as $att_cat_id => $val)
+            arr[{{ $att_cat_id }}] = new Array();
+            @foreach($val as $i => $item)
+              @foreach($item as $attr_id => $attr_val)
+                arr[{{ $att_cat_id }}][{{ $i }}] = ["{{ $attr_val }}", {{ $attr_id }}];
+              @endforeach
+            @endforeach
+          @endforeach
 
           function changeCat(obj)
           {
@@ -90,71 +90,72 @@
 
          
           <table width="100%" id="tbody-attr" align="center">
-            {if $attr_cat_id eq 0}
+            @if($attr_cat_id == 0)
             <tr>
               <td>   
                    <a href="javascript:;" onclick="addFilterAttr(this)">[+]</a> 
-                   <select onChange="changeCat(this)"><option value="0">{$lang.sel_goods_type}</option>{$goods_type_list}</select>&nbsp;&nbsp;
-                   <select name="filter_attr[]"><option value="0">{$lang.sel_filter_attr}</option></select><br />                   
+                   <select onChange="changeCat(this)"><option value="0">{{ $lang['sel_goods_type'] }}</option>{{ $goods_type_list }}</select>&nbsp;&nbsp;
+                   <select name="filter_attr[]"><option value="0">{{ $lang['sel_filter_attr'] }}</option></select><br />                   
               </td>
             </tr> 
-            {/if}           
-            {foreach from=$filter_attr_list item=filter_attr name="filter_attr_tab"}
+            @endif           
+            @foreach($filter_attr_list as $filter_attr)
             <tr>
               <td>
-                 {if $smarty.foreach.filter_attr_tab.iteration eq 1}
+                 @if($loop->iteration == 1)
                    <a href="javascript:;" onclick="addFilterAttr(this)">[+]</a>
-                 {else}
+                 @else
                    <a href="javascript:;" onclick="removeFilterAttr(this)">[-]&nbsp;</a>
-                 {/if}
-                 <select onChange="changeCat(this)"><option value="0">{$lang.sel_goods_type}</option>{$filter_attr.goods_type_list}</select>&nbsp;&nbsp;
-                 <select name="filter_attr[]"><option value="0">{$lang.sel_filter_attr}</option>{html_options options=$filter_attr.option selected=$filter_attr.filter_attr}</select><br />
+                 @endif
+                 <select onChange="changeCat(this)"><option value="0">{{ $lang['sel_goods_type'] }}</option>{{ $filter_attr['goods_type_list'] }}</select>&nbsp;&nbsp;
+                 <select name="filter_attr[]"><option value="0">{{ $lang['sel_filter_attr'] }}</option>@foreach($filter_attr['option'] as $__k => $__v)<option value="{{ $__k }}" @if($__k == $filter_attr['filter_attr']) selected @endif>{{ $__v }}</option>@endforeach</select><br />
               </td>
             </tr>
-            {/foreach}
+            @endforeach
           </table>
 
-          <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeFilterAttr">{$lang.filter_attr_notic}</span>
+          <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeFilterAttr">{{ $lang['filter_attr_notic'] }}</span>
         </td>
       </tr>
       <tr>
-        <td class="label"><a href="javascript:showNotice('noticeGrade');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.notice_style}"></a>{$lang.grade}:</td>
+        <td class="label"><a href="javascript:showNotice('noticeGrade');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['notice_style'] }}"></a>{{ $lang['grade'] }}:</td>
         <td>
-          <input type="text" name="grade" value="{$cat_info.grade|default:0}" size="40" /> <br />
-          <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGrade">{$lang.notice_grade}</span>
+          <input type="text" name="grade" value="{{ $cat_info['grade'] ?? 0 }}" size="40" /> <br />
+          <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGrade">{{ $lang['notice_grade'] }}</span>
         </td>
       </tr>
       <tr>
-        <td class="label"><a href="javascript:showNotice('noticeGoodsSN');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.notice_style}"></a>{$lang.cat_style}:</td>
+        <td class="label"><a href="javascript:showNotice('noticeGoodsSN');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['notice_style'] }}"></a>{{ $lang['cat_style'] }}:</td>
         <td>
-          <input type="text" name="style" value="{$cat_info.style|escape}" size="40" /> <br />
-          <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsSN">{$lang.notice_style}</span>
+          <input type="text" name="style" value="{{ $cat_info['style'] }}" size="40" /> <br />
+          <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsSN">{{ $lang['notice_style'] }}</span>
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.keywords}:</td>
-        <td><input type="text" name="keywords" value='{$cat_info.keywords}' size="50">
+        <td class="label">{{ $lang['keywords'] }}:</td>
+        <td><input type="text" name="keywords" value='{{ $cat_info['keywords'] }}' size="50">
         </td>
       </tr>
 
       <tr>
-        <td class="label">{$lang.cat_desc}:</td>
+        <td class="label">{{ $lang['cat_desc'] }}:</td>
         <td>
-          <textarea name='cat_desc' rows="6" cols="48">{$cat_info.cat_desc}</textarea>
+          <textarea name='cat_desc' rows="6" cols="48">{{ $cat_info['cat_desc'] }}</textarea>
         </td>
       </tr>
       </table>
       <div class="button-div">
-        <input type="submit" value="{$lang.button_submit}" />
-        <input type="reset" value="{$lang.button_reset}" />
+        <input type="submit" value="{{ $lang['button_submit'] }}" />
+        <input type="reset" value="{{ $lang['button_reset'] }}" />
       </div>
-    <input type="hidden" name="act" value="{$form_act}" />
-    <input type="hidden" name="old_cat_name" value="{$cat_info.cat_name}" />
-    <input type="hidden" name="cat_id" value="{$cat_info.cat_id}" />
+    <input type="hidden" name="act" value="{{ $form_act }}" />
+    <input type="hidden" name="old_cat_name" value="{{ $cat_info['cat_name'] }}" />
+    <input type="hidden" name="cat_id" value="{{ $cat_info['cat_id'] }}" />
   </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 document.forms['theForm'].elements['cat_name'].focus();
@@ -227,5 +228,5 @@ function removeFilterAttr(obj)
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

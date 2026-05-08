@@ -1,61 +1,62 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 
 <form method="post" action="" name="listForm">
 <!-- start vote list -->
 <div class="list-div" id="listDiv">
-{/if}
+@endif
 
 <table cellpadding="3" cellspacing="1">
   <tr>
-    <th>{$lang.vote_name}</th>
-    <th>{$lang.begin_date}</th>
-    <th>{$lang.end_date}</th>
-    <th>{$lang.vote_count}</th>
-    <th>{$lang.handler}</th>
+    <th>{{ $lang['vote_name'] }}</th>
+    <th>{{ $lang['begin_date'] }}</th>
+    <th>{{ $lang['end_date'] }}</th>
+    <th>{{ $lang['vote_count'] }}</th>
+    <th>{{ $lang['handler'] }}</th>
   </tr>
-  {foreach from=$list item=list}
+  @forelse($list as $list)
   <tr>
     <td class="first-cell">
-    <span onclick="javascript:listTable.edit(this, 'edit_vote_name', {$list.vote_id})">{$list.vote_name|escape:html}</span>
+    <span onclick="javascript:listTable.edit(this, 'edit_vote_name', {{ $list['vote_id'] }})">{{ $list['vote_name'] }}</span>
     </td>
-    <td align="center"><span>{$list.begin_date}</span></td>
-    <td align="center"><span>{$list.end_date}</span></td>
-    <td align="right"><span>{$list.vote_count}</span></td>
+    <td align="center"><span>{{ $list['begin_date'] }}</span></td>
+    <td align="center"><span>{{ $list['end_date'] }}</span></td>
+    <td align="right"><span>{{ $list['vote_count'] }}</span></td>
     <td align="center">
-    <a href="vote.php?act=option&id={$list.vote_id}" title="{$lang.vote_option}"><img src="images/icon_view.gif" border="0" height="16" width="16" /></a>&nbsp;
-    <a href="vote.php?act=edit&id={$list.vote_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" border="0" height="16" width="16" /></a>&nbsp;
-    <a href="javascript:;" onclick="listTable.remove({$list.vote_id}, '{$lang.drop_confirm}')" title="{$lang.remove}"><img src="images/icon_drop.gif" border="0" height="16" width="16" /></a>
+    <a href="vote.php?act=option&id={{ $list['vote_id'] }}" title="{{ $lang['vote_option'] }}"><img src="images/icon_view.gif" border="0" height="16" width="16" /></a>&nbsp;
+    <a href="vote.php?act=edit&id={{ $list['vote_id'] }}" title="{{ $lang['edit'] }}"><img src="images/icon_edit.gif" border="0" height="16" width="16" /></a>&nbsp;
+    <a href="javascript:;" onclick="listTable.remove({{ $list['vote_id'] }}, '{{ $lang['drop_confirm'] }}')" title="{{ $lang['remove'] }}"><img src="images/icon_drop.gif" border="0" height="16" width="16" /></a>
     </td>
   </tr>
-  {foreachelse}
-    <tr><td class="no-records" colspan="10">{$lang.no_vote_name}</td></tr>
-  {/foreach}
+  @empty
+    <tr><td class="no-records" colspan="10">{{ $lang['no_vote_name'] }}</td></tr>
+  @endforelse
   <tr>
-    <td align="right" nowrap="true" colspan="10">{include file="page.htm"}</td>
+    <td align="right" nowrap="true" colspan="10">@include('page')</td>
   </tr>
 </table>
 
-{if $full_page}
+@if($full_page)
 </div>
 <!-- end ad_position list -->
 </form>
 
 <script type="text/javascript" language="JavaScript">
-  listTable.recordCount = {$record_count};
-  listTable.pageCount = {$page_count};
+  listTable.recordCount = {{ $record_count }};
+  listTable.pageCount = {{ $page_count }};
 
-  {foreach from=$filter item=item key=key}
-  listTable.filter.{$key} = '{$item}';
-  {/foreach}
-  {literal}
+  @foreach($filter as $key => $item)
+  listTable.filter.{{ $key }} = '{{ $item }}';
+  @endforeach
+  
   onload = function()
   {
     // 开始检查订单
     startCheckOrder();
   }
-  {/literal}
+  
 </script>
-{include file="pagefooter.htm"}
-{/if}
+@include('pagefooter')
+@endif

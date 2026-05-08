@@ -1,50 +1,51 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 
 <div class="main-div">
 <form action="user_rank.php" method="post" name="theForm" onsubmit="return validate()">
 <table width="100%">
   <tr>
-    <td class="label">{$lang.rank_name}: </td>
-    <td><input type="text" name="rank_name" value="{$rank.rank_name}" maxlength="20" />{$lang.require_field}</td>
+    <td class="label">{{ $lang['rank_name'] }}: </td>
+    <td><input type="text" name="rank_name" value="{{ $rank['rank_name'] }}" maxlength="20" />{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.integral_min}: </td>
-    <td><input type="text" name="min_points" value="{$rank.min_points}" size="10" maxlength="20" /></td>
+    <td class="label">{{ $lang['integral_min'] }}: </td>
+    <td><input type="text" name="min_points" value="{{ $rank['min_points'] }}" size="10" maxlength="20" /></td>
   </tr>
   <tr>
-    <td class="label">{$lang.integral_max}: </td>
-    <td><input type="text" name="max_points" value="{$rank.max_points}" size="10" maxlength="20" /></td>
-  </tr>
-  <tr>
-    <td class="label"></td>
-    <td>
-    <input type="checkbox" name="show_price" value="1" {if $rank.show_price eq 1} checked="true"{/if} /> {$lang.show_price}</td>
+    <td class="label">{{ $lang['integral_max'] }}: </td>
+    <td><input type="text" name="max_points" value="{{ $rank['max_points'] }}" size="10" maxlength="20" /></td>
   </tr>
   <tr>
     <td class="label"></td>
     <td>
-    <input type="checkbox" name="special_rank" value="1" {if $rank.special_rank eq 1} checked="true"{/if} onClick="javascript:doSpecial()" /> {$lang.special_rank} <a href="javascript:showNotice('notice_special');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>
-    <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="notice_special">{$lang.notice_special}</span></td>
+    <input type="checkbox" name="show_price" value="1" @if($rank['show_price'] == 1) checked="true"@endif /> {{ $lang['show_price'] }}</td>
   </tr>
   <tr>
-    <td class="label"><a href="javascript:showNotice('notice_discount');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.discount}: </td>
-    <td><input type="text" name="discount" value="{$rank.discount}" size="10" maxlength="20" />{$lang.require_field}
-    <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="notice_discount">{$lang.notice_discount}</span>
+    <td class="label"></td>
+    <td>
+    <input type="checkbox" name="special_rank" value="1" @if($rank['special_rank'] == 1) checked="true"@endif onClick="javascript:doSpecial()" /> {{ $lang['special_rank'] }} <a href="javascript:showNotice('notice_special');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>
+    <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="notice_special">{{ $lang['notice_special'] }}</span></td>
+  </tr>
+  <tr>
+    <td class="label"><a href="javascript:showNotice('notice_discount');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['discount'] }}: </td>
+    <td><input type="text" name="discount" value="{{ $rank['discount'] }}" size="10" maxlength="20" />{{ $lang['require_field'] }}
+    <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="notice_discount">{{ $lang['notice_discount'] }}</span>
     </td>
   </tr>
   <tr>
     <td colspan="2" align="center">
-      <input type="hidden" name="act" value="{$form_action}" />
-      <input type="hidden" name="id" value="{$rank.rank_id}" />
-      <input type="submit" value="{$lang.button_submit}" class="button" />
-      <input type="reset" value="{$lang.button_reset}" class="button" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
+      <input type="hidden" name="id" value="{{ $rank['rank_id'] }}" />
+      <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
     </td>
   </tr>
 </table>
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 document.forms['theForm'].elements['rank_name'].focus();
@@ -112,5 +113,5 @@ function doSpecial()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

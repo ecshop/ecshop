@@ -2,90 +2,90 @@
 <div class="box">
   <div class="box_1">
     <h3>
-      <span>{$lang.goods_list}</span>
+      <span>{{ $lang['goods_list'] }}</span>
       <form method="GET" class="sort" name="listform">
-        {$lang.btn_display}：
-        <a href="javascript:;" onClick="javascript:display_mode('list')"><img src="images/display_mode_list<!-- {if $pager.display == 'list'} -->_act<!-- {/if} -->.gif" alt="{$lang.display.list}"></a>
-        <a href="javascript:;" onClick="javascript:display_mode('grid')"><img src="images/display_mode_grid<!-- {if $pager.display == 'grid'} -->_act<!-- {/if} -->.gif" alt="{$lang.display.grid}"></a>
-        <a href="javascript:;" onClick="javascript:display_mode('text')"><img src="images/display_mode_text<!-- {if $pager.display == 'text'} -->_act<!-- {/if} -->.gif" alt="{$lang.display.text}"></a>&nbsp;&nbsp;
+        {{ $lang['btn_display'] }}：
+        <a href="javascript:;" onClick="javascript:display_mode('list')"><img src="images/display_mode_list@if($pager['display'] == 'list')_act@endif.gif" alt="{{ $lang['display']['list'] }}"></a>
+        <a href="javascript:;" onClick="javascript:display_mode('grid')"><img src="images/display_mode_grid@if($pager['display'] == 'grid')_act@endif.gif" alt="{{ $lang['display']['grid'] }}"></a>
+        <a href="javascript:;" onClick="javascript:display_mode('text')"><img src="images/display_mode_text@if($pager['display'] == 'text')_act@endif.gif" alt="{{ $lang['display']['text'] }}"></a>&nbsp;&nbsp;
         <select name="sort" style="border:1px solid #ccc;">
-        {html_options options=$lang.exchange_sort selected=$pager.sort}
+        @foreach($lang['exchange_sort'] as $__k => $__v)<option value="{{ $__k }}" @if($__k == $pager['sort']) selected @endif>{{ $__v }}</option>@endforeach
         </select>
         <select name="order" style="border:1px solid #ccc;">
-        {html_options options=$lang.order selected=$pager.order}
+        @foreach($lang['order'] as $__k => $__v)<option value="{{ $__k }}" @if($__k == $pager['order']) selected @endif>{{ $__v }}</option>@endforeach
         </select>
         <input type="image" name="imageField" src="../images/bnt_go.gif" alt="go"/>
-        <input type="hidden" name="category" value="{$category}" />
-        <input type="hidden" name="display" value="{$pager.display}" id="display" />
-        <input type="hidden" name="integral_min" value="{$integral_min}" />
-        <input type="hidden" name="integral_max" value="{$integral_max}" />
-        <input type="hidden" name="page" value="{$pager.page}" />
+        <input type="hidden" name="category" value="{{ $category }}" />
+        <input type="hidden" name="display" value="{{ $pager['display'] }}" id="display" />
+        <input type="hidden" name="integral_min" value="{{ $integral_min }}" />
+        <input type="hidden" name="integral_max" value="{{ $integral_max }}" />
+        <input type="hidden" name="page" value="{{ $pager['page'] }}" />
       </form>
     </h3>
 
     <form name="compareForm" method="post">
-    <!-- {if $pager.display == 'list'} -->
+    @if($pager['display'] == 'list')
       <div class="goodsList">
-      <!--{foreach name=goods_list from=$goods_list item=goods}-->
-        <ul class="clearfix bgcolor"<!--{if $smarty.foreach.goods_list.index mod 2 eq 0}-->id=""<!--{else}-->id="bgcolor"<!--{/if}-->>
-          <li class="thumb"><a href="{$goods.url}"><img src="{$goods.goods_thumb}" alt="{$goods.goods_name}" /></a></li>
+      @foreach($goods_list as $goods)
+        <ul class="clearfix bgcolor"@if($loop->index % 2 == 0)id=""@elseid="bgcolor"@endif>
+          <li class="thumb"><a href="{{ $goods['url'] }}"><img src="{{ $goods['goods_thumb'] }}" alt="{{ $goods['goods_name'] }}" /></a></li>
           <li class="goodsName">
-            <a href="{$goods.url}" class="f6">
-            <!-- {if $goods.goods_style_name} -->
-              {$goods.goods_style_name}<br />
-            <!-- {else} -->
-              {$goods.goods_name}<br />
-            <!-- {/if} -->
+            <a href="{{ $goods['url'] }}" class="f6">
+            @if($goods['goods_style_name'])
+              {{ $goods['goods_style_name'] }}<br />
+            @else
+              {{ $goods['goods_name'] }}<br />
+            @endif
             </a>
-            <!-- {if $goods.goods_brief} -->
-              {$lang.goods_brief}{$goods.goods_brief}<br />
-            <!-- {/if} -->
+            @if($goods['goods_brief'])
+              {{ $lang['goods_brief'] }}{{ $goods['goods_brief'] }}<br />
+            @endif
           </li>
           <li>
-            {$lang.exchange_integral}<font class="shop_s">{$goods.exchange_integral}</font>
+            {{ $lang['exchange_integral'] }}<font class="shop_s">{{ $goods['exchange_integral'] }}</font>
           </li>
         </ul>
-      <!--{/foreach}-->
+      @endforeach
       </div>
 
-    <!-- {elseif $pager.display == 'grid'} -->
+    @elseif($pager['display'] == 'grid')
       <div class="centerPadd">
         <div class="clearfix goodsBox" style="border:none;">
-        <!--{foreach from=$goods_list item=goods}-->
-          <!-- {if $goods.goods_id} -->
+        @foreach($goods_list as $goods)
+          @if($goods['goods_id'])
             <div class="goodsItem">
-              <a href="{$goods.url}"><img src="{$goods.goods_thumb}" alt="{$goods.goods_name}" class="goodsimg" /></a><br />
-              <p><a href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.goods_name}</a></p>
-              {$lang.exchange_integral}<font class="shop_s">{$goods.exchange_integral}</font><br />
+              <a href="{{ $goods['url'] }}"><img src="{{ $goods['goods_thumb'] }}" alt="{{ $goods['goods_name'] }}" class="goodsimg" /></a><br />
+              <p><a href="{{ $goods['url'] }}" title="{{ $goods['name'] }}">{{ $goods['goods_name'] }}</a></p>
+              {{ $lang['exchange_integral'] }}<font class="shop_s">{{ $goods['exchange_integral'] }}</font><br />
             </div>
-          <!--{/if}-->
-        <!--{/foreach}-->
+          @endif
+        @endforeach
         </div>
       </div>
 
-    <!-- {elseif $pager.display == 'text'} -->
+    @elseif($pager['display'] == 'text')
       <div class="goodsList">
-      <!--{foreach from=$goods_list item=goods}-->
-        <ul class="clearfix bgcolor" <!--{if $smarty.foreach.goods_list.index mod 2 eq 0}-->id=""<!--{else}-->id="bgcolor"<!--{/if}-->>
+      @foreach($goods_list as $goods)
+        <ul class="clearfix bgcolor" @if($loop->index % 2 == 0)id=""@elseid="bgcolor"@endif>
           <li class="goodsName">
-            <a href="{$goods.url}" class="f6 f5">
-            <!-- {if $goods.goods_style_name} -->
-              {$goods.goods_style_name}<br />
-            <!-- {else} -->
-              {$goods.goods_name}<br />
-            <!-- {/if} -->
+            <a href="{{ $goods['url'] }}" class="f6 f5">
+            @if($goods['goods_style_name'])
+              {{ $goods['goods_style_name'] }}<br />
+            @else
+              {{ $goods['goods_name'] }}<br />
+            @endif
             </a>
-            <!-- {if $goods.goods_brief} -->
-              {$lang.goods_brief}{$goods.goods_brief}<br />
-            <!-- {/if} -->
+            @if($goods['goods_brief'])
+              {{ $lang['goods_brief'] }}{{ $goods['goods_brief'] }}<br />
+            @endif
           </li>
           <li>
-            {$lang.exchange_integral}<font class="shop_s">{$goods.exchange_integral}</font>
+            {{ $lang['exchange_integral'] }}<font class="shop_s">{{ $goods['exchange_integral'] }}</font>
           </li>
         </ul>
-      <!--{/foreach}-->
+      @endforeach
       </div>
-    <!-- {/if} -->
+    @endif
     </form>
 
   </div>

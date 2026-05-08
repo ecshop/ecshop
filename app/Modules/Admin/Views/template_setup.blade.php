@@ -1,12 +1,12 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 
 <div class="form-div">
   <form method="post" action="template.php">
-  {$lang.select_template}
+  {{ $lang['select_template'] }}
   <select name="template_file">
-    {html_options options=$lang.template_files selected=$curr_template_file}
+    @foreach($lang['template_files'] as $__k => $__v)<option value="{{ $__k }}" @if($__k == $curr_template_file) selected @endif>{{ $__v }}</option>@endforeach
   </select>
-  <input type="submit" value="{$lang.button_submit}" class="button" />
+  <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
   <input type="hidden" name="act" value="setup" />
   </form>
 </div>
@@ -16,87 +16,87 @@
 <form name="theForm" action="template.php" method="post">
   <table width="100%" cellpadding="3" cellspacing="1">
   <tr>
-    <th>{$lang.library_name}</th>
-    <th>{$lang.region_name}</th>
-    <th>{$lang.sort_order}</th>
-    <th>{$lang.contents}</th>
-    <th>{$lang.number}</th>
-    <th>{$lang.display}</th>
+    <th>{{ $lang['library_name'] }}</th>
+    <th>{{ $lang['region_name'] }}</th>
+    <th>{{ $lang['sort_order'] }}</th>
+    <th>{{ $lang['contents'] }}</th>
+    <th>{{ $lang['number'] }}</th>
+    <th>{{ $lang['display'] }}</th>
   </tr>
-  {foreach from=$temp_options item=library key=lib_name}
+  @foreach($temp_options as $lib_name => $library)
   <tr>
-    <td class="first-cell">{$library.desc}</td>
-    <td><select name="regions[{$lib_name}]">{if $library.editable eq 1}<option value="">{$lang.not_editable}</option>{else}<option value="">{$lang.select_plz}</option>{html_options values=$temp_regions output=$temp_regions selected=$library.region}{/if}</select></td>
-    <td><input type="text" name="sort_order[{$lib_name}]" value="{$library.sort_order}" size="4" {if $library.editable eq 1} disabled {/if}/></td>
-    <td><input type="hidden" name="map[{$lib_name}]" value="{$library.library}" /></td>
-    <td>{if $library.number_enabled}<input type="text" name="number[{$lib_name}]" value="{$library.number}" size="4" />{else}&nbsp;{/if}</td>
-    <td align="center"><input type="checkbox" name="display[{$lib_name}]" value="1" {if $library.editable eq 1} disabled {/if}{if $library.display eq 1} checked="true" {/if} /></td>
+    <td class="first-cell">{{ $library['desc'] }}</td>
+    <td><select name="regions[{{ $lib_name }}]">@if($library['editable'] == 1)<option value="">{{ $lang['not_editable'] }}</option>@else<option value="">{{ $lang['select_plz'] }}</option>@foreach($temp_regions as $__i => $__v)<option value="{{ $__v }}" @if($__v == $library['region']) selected @endif>{{ $temp_regions[$__i] }}</option>@endforeach@endif</select></td>
+    <td><input type="text" name="sort_order[{{ $lib_name }}]" value="{{ $library['sort_order'] }}" size="4" @if($library['editable'] == 1) disabled @endif/></td>
+    <td><input type="hidden" name="map[{{ $lib_name }}]" value="{{ $library['library'] }}" /></td>
+    <td>@if($library['number_enabled'])<input type="text" name="number[{{ $lib_name }}]" value="{{ $library['number'] }}" size="4" />@else&nbsp;@endif</td>
+    <td align="center"><input type="checkbox" name="display[{{ $lib_name }}]" value="1" @if($library['editable'] == 1) disabled @endif@if($library['display'] == 1) checked="true" @endif /></td>
   </tr>
-  {/foreach}
+  @endforeach
 
   <!-- cateogry goods list -->
   <tr>
-    <td colspan="6" style="background-color: #F4FBFB; font-weight: bold" align="left"><a href="javascript:;" onclick="addCatGoods(this)">[+]</a> {$lang.template_libs.cat_goods} </td>
+    <td colspan="6" style="background-color: #F4FBFB; font-weight: bold" align="left"><a href="javascript:;" onclick="addCatGoods(this)">[+]</a> {{ $lang['template_libs']['cat_goods'] }} </td>
   </tr>
-  {foreach from=$cate_goods item=library key=lib_name}
+  @foreach($cate_goods as $lib_name => $library)
   <tr>
     <td class="first-cell" align="right"><a href="javascript:;" onclick="removeRow(this)">[-]</a></td>
-    <td><select name="regions[cat_goods][]"><option value="">{$lang.select_plz}</option>{html_options values=$temp_regions output=$temp_regions selected=$library.region}</select></td>
-    <td><input type="text" name="sort_order[cat_goods][]" value="{$library.sort_order}" size="4" /></td>
-    <td><select name="categories[cat_goods][]"><option value="">{$lang.select_plz}</option>{$library.cats}</select></td>
-    <td><input type="text" name="number[cat_goods][]" value="{$library.number}" size="4"  /></td>
+    <td><select name="regions[cat_goods][]"><option value="">{{ $lang['select_plz'] }}</option>@foreach($temp_regions as $__i => $__v)<option value="{{ $__v }}" @if($__v == $library['region']) selected @endif>{{ $temp_regions[$__i] }}</option>@endforeach</select></td>
+    <td><input type="text" name="sort_order[cat_goods][]" value="{{ $library['sort_order'] }}" size="4" /></td>
+    <td><select name="categories[cat_goods][]"><option value="">{{ $lang['select_plz'] }}</option>{{ $library['cats'] }}</select></td>
+    <td><input type="text" name="number[cat_goods][]" value="{{ $library['number'] }}" size="4"  /></td>
     <td></td>
   </tr>
-  {/foreach}
+  @endforeach
 
   <tr>
-    <td colspan="6" style="background-color: #F4FBFB; font-weight: bold" align="left"><a href="javascript:;" onclick="addBrandGoods(this)">[+]</a> {$lang.template_libs.brand_goods} </td>
+    <td colspan="6" style="background-color: #F4FBFB; font-weight: bold" align="left"><a href="javascript:;" onclick="addBrandGoods(this)">[+]</a> {{ $lang['template_libs']['brand_goods'] }} </td>
   </tr>
-  {foreach from=$brand_goods item=library key=lib_name}
+  @foreach($brand_goods as $lib_name => $library)
   <tr>
     <td class="first-cell" align="right"><a href="javascript:;" onclick="removeRow(this)">[-]</a></td>
-    <td><select name="regions[brand_goods][]"><option value="">{$lang.select_plz}</option>{html_options values=$temp_regions output=$temp_regions selected=$library.region}</select></td>
-    <td><input type="text" name="sort_order[brand_goods][]" value="{$library.sort_order}" size="4" /></td>
-    <td><select name="brands[brand_goods][]"><option value="">{$lang.select_plz}</option>{html_options options=$arr_brands selected=$library.brand}</select></td>
-    <td><input type="text" name="number[brand_goods][]" value="{$library.number}" size="4" /></td>
+    <td><select name="regions[brand_goods][]"><option value="">{{ $lang['select_plz'] }}</option>@foreach($temp_regions as $__i => $__v)<option value="{{ $__v }}" @if($__v == $library['region']) selected @endif>{{ $temp_regions[$__i] }}</option>@endforeach</select></td>
+    <td><input type="text" name="sort_order[brand_goods][]" value="{{ $library['sort_order'] }}" size="4" /></td>
+    <td><select name="brands[brand_goods][]"><option value="">{{ $lang['select_plz'] }}</option>@foreach($arr_brands as $__k => $__v)<option value="{{ $__k }}" @if($__k == $library['brand']) selected @endif>{{ $__v }}</option>@endforeach</select></td>
+    <td><input type="text" name="number[brand_goods][]" value="{{ $library['number'] }}" size="4" /></td>
     <td></td>
   </tr>
-  {/foreach}
+  @endforeach
 
   <tr>
-    <td colspan="6" style="background-color: #F4FBFB; font-weight: bold" align="left"><a href="javascript:;" onclick="addArticles(this)">[+]</a> {$lang.template_libs.articles} </td>
+    <td colspan="6" style="background-color: #F4FBFB; font-weight: bold" align="left"><a href="javascript:;" onclick="addArticles(this)">[+]</a> {{ $lang['template_libs']['articles'] }} </td>
   </tr>
-  {foreach from=$cat_articles item=library key=lib_name}
+  @foreach($cat_articles as $lib_name => $library)
   <tr>
     <td class="first-cell" align="right"><a href="javascript:;" onclick="removeRow(this)">[-]</a></td>
-    <td><select name="regions[cat_articles][]"><option value="">{$lang.select_plz}</option>{html_options values=$temp_regions output=$temp_regions selected=$library.region}</select></td>
-    <td><input type="text" name="sort_order[cat_articles][]" value="{$library.sort_order}" size="4" /></td>
-    <td><select name="article_cat[cat_articles][]"><option value="0">{$lang.select_plz}</option>{$library.cat}</select></td>
-    <td><input type="text" name="number[cat_articles][]" value="{$library.number}" size="4" /></td>
+    <td><select name="regions[cat_articles][]"><option value="">{{ $lang['select_plz'] }}</option>@foreach($temp_regions as $__i => $__v)<option value="{{ $__v }}" @if($__v == $library['region']) selected @endif>{{ $temp_regions[$__i] }}</option>@endforeach</select></td>
+    <td><input type="text" name="sort_order[cat_articles][]" value="{{ $library['sort_order'] }}" size="4" /></td>
+    <td><select name="article_cat[cat_articles][]"><option value="0">{{ $lang['select_plz'] }}</option>{{ $library['cat'] }}</select></td>
+    <td><input type="text" name="number[cat_articles][]" value="{{ $library['number'] }}" size="4" /></td>
     <td></td>
   </tr>
-  {/foreach}
+  @endforeach
 
   <tr>
-    <td colspan="6" style="background-color: #F4FBFB; font-weight: bold" align="left"><a href="javascript:;" onclick="addAdPosition(this)">[+]</a> {$lang.template_libs.ad_position} </td>
+    <td colspan="6" style="background-color: #F4FBFB; font-weight: bold" align="left"><a href="javascript:;" onclick="addAdPosition(this)">[+]</a> {{ $lang['template_libs']['ad_position'] }} </td>
   </tr>
-  {foreach from=$ad_positions item=ad_position key=lib_name}
+  @foreach($ad_positions as $lib_name => $ad_position)
   <tr>
     <td class="first-cell" align="right"><a href="javascript:;" onclick="removeRow(this)">[-]</a></td>
-    <td><select name="regions[ad_position][]"><option value="">{$lang.select_plz}</option>{html_options values=$temp_regions output=$temp_regions selected=$ad_position.region}</select></td>
-    <td><input type="text" name="sort_order[ad_position][]" value="{$ad_position.sort_order}" size="4" /></td>
-    <td><select name="ad_position[]"><option value="0">{$lang.select_plz}</option>{html_options options=$arr_ad_positions selected=$ad_position.ad_pos}</select></td>
-    <td><input type="text" name="number[ad_position][]" value="{$ad_position.number}" size="4" /></td>
+    <td><select name="regions[ad_position][]"><option value="">{{ $lang['select_plz'] }}</option>@foreach($temp_regions as $__i => $__v)<option value="{{ $__v }}" @if($__v == $ad_position['region']) selected @endif>{{ $temp_regions[$__i] }}</option>@endforeach</select></td>
+    <td><input type="text" name="sort_order[ad_position][]" value="{{ $ad_position['sort_order'] }}" size="4" /></td>
+    <td><select name="ad_position[]"><option value="0">{{ $lang['select_plz'] }}</option>@foreach($arr_ad_positions as $__k => $__v)<option value="{{ $__k }}" @if($__k == $ad_position['ad_pos']) selected @endif>{{ $__v }}</option>@endforeach</select></td>
+    <td><input type="text" name="number[ad_position][]" value="{{ $ad_position['number'] }}" size="4" /></td>
     <td></td>
   </tr>
-  {/foreach}
+  @endforeach
 
   </table>
   <div class="button-div ">
-    <input type="submit" value="{$lang.button_submit}" class="button" />
-    <input type="reset" value="{$lang.button_reset}" class="button" />
+    <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+    <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
     <input type="hidden" name="act" value="setting" />
-    <input type="hidden" name="template_file" value="{$curr_template_file}" />
+    <input type="hidden" name="template_file" value="{{ $curr_template_file }}" />
   </div>
 </form>
 </div>
@@ -105,30 +105,30 @@
 
 <script language="JavaScript">
 <!--
-var currTemplateFile = '{$curr_template_file}';
-var selCategories    = '{$arr_cates}';
+var currTemplateFile = '{{ $curr_template_file }}';
+var selCategories    = '{{ $arr_cates }}';
 var selRegions       = new Array();
 var selBrands        = new Array();
 var selArticleCats   = new Array();
 var selAdPositions   = new Array();
 
-{foreach from=$temp_regions item=region key=id}
-selRegions[{$id}] = '{$region|escape:quotes}';
-{/foreach}
+@foreach($temp_regions as $id => $region)
+selRegions[{{ $id }}] = '{{ $region }}';
+@endforeach
 
-{foreach from=$arr_brands item=brand key=id}
-selBrands[{$id}] = '{$brand|escape:quotes}';
-{/foreach}
+@foreach($arr_brands as $id => $brand)
+selBrands[{{ $id }}] = '{{ $brand }}';
+@endforeach
 
-{foreach from=$arr_article_cats item=cat key=id}
-selArticleCats[{$id}] = '{$cat}';
-{/foreach}
+@foreach($arr_article_cats as $id => $cat)
+selArticleCats[{{ $id }}] = '{{ $cat }}';
+@endforeach
 
-{foreach from=$arr_ad_positions item=ad_position key=id}
-selAdPositions[{$id}] = '{$ad_position|escape}';
-{/foreach}
+@foreach($arr_ad_positions as $id => $ad_position)
+selAdPositions[{{ $id }}] = '{{ $ad_position }}';
+@endforeach
 
-{literal}
+
 
 onload = function()
 {
@@ -360,7 +360,7 @@ function removeRow(obj)
         }
     }
 }
-{/literal}
+
 //-->
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

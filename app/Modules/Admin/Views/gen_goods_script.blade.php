@@ -1,65 +1,65 @@
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js"}
+@include('pageheader')
+<script src="../js/utils.js"></script>
 <div class="main-div">
 <form name="theForm" method="post" action="">
   <table cellspacing="1" cellpadding="3" width="100%">
     <tr>
-      <td class="label">{$lang.label_category}</td>
+      <td class="label">{{ $lang['label_category'] }}</td>
       <td><select name="category" id="category">
-        <option value="0" selected>{$lang.all_category}</option>
-        {$cat_list}
+        <option value="0" selected>{{ $lang['all_category'] }}</option>
+        {{ $cat_list }}
       </select></td>
     </tr>
     <tr>
-      <td class="label">{$lang.label_brand}</td>
+      <td class="label">{{ $lang['label_brand'] }}</td>
       <td><select name="brand" id="brand">
-        <option value="0" selected>{$lang.all_brand}</option>
-        {html_options options=$brand_list}
+        <option value="0" selected>{{ $lang['all_brand'] }}</option>
+        @foreach($brand_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach
       </select></td>
     </tr>
     <tr>
-      <td class="label">{$lang.label_intro_type}</td>
+      <td class="label">{{ $lang['label_intro_type'] }}</td>
       <td><select name="intro_type" id="intro_type">
-        <option value="all" selected>{$lang.all_intro_type}</option>
-        {html_options options=$intro_list}
+        <option value="all" selected>{{ $lang['all_intro_type'] }}</option>
+        @foreach($intro_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach
       </select></td>
     </tr>
     <tr>
-      <td class="label">{$lang.label_need_image}</td>
+      <td class="label">{{ $lang['label_need_image'] }}</td>
       <td>        <label>
         <select name="need_image" id="need_image">
-          <option value="true" selected>{$lang.need}</option>
-          <option value="false">{$lang.need_not}</option>
+          <option value="true" selected>{{ $lang['need'] }}</option>
+          <option value="false">{{ $lang['need_not'] }}</option>
         </select>
       </label></td>
     </tr>
     <tr>
-      <td class="label">{$lang.label_goods_num}</td>
+      <td class="label">{{ $lang['label_goods_num'] }}</td>
       <td><input name="goods_num" type="text" id="goods_num" value="1" /></td>
     </tr>
     <tr>
-      <td class="label">{$lang.label_arrange}</td>
+      <td class="label">{{ $lang['label_arrange'] }}</td>
       <td><select name="arrange" id="arrange">
-        <option value="h" selected>{$lang.horizontal}</option>
-        <option value="v">{$lang.verticle}</option>
+        <option value="h" selected>{{ $lang['horizontal'] }}</option>
+        <option value="v">{{ $lang['verticle'] }}</option>
       </select></td>
     </tr>
     <tr>
-      <td class="label">{$lang.label_rows_num}</td>
+      <td class="label">{{ $lang['label_rows_num'] }}</td>
       <td><input name="rows_num" type="text" id="rows_num" value="1" /></td>
     </tr>
     <tr>
-      <td class="label">{$lang.label_charset}</td>
+      <td class="label">{{ $lang['label_charset'] }}</td>
       <td><select name="charset" id="charset">
-        {html_options options=$lang_list}
+        @foreach($lang_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach
       </select></td>
     </tr>
     <tr>
-      <td class="label">{$lang.label_sitename}</td>
+      <td class="label">{{ $lang['label_sitename'] }}</td>
       <td><input name="sitename" type="text" id="sitename"></td>
     </tr>
     <tr>
-      <td colspan="2" align="center"><input type="button" class="button" name="gen_code" value="{$lang.generate}" onclick="genCode()" />        </td>
+      <td colspan="2" align="center"><input type="button" class="button" name="gen_code" value="{{ $lang['generate'] }}" onclick="genCode()" />        </td>
       </tr>
     <tr>
       <td colspan="2" align="center"><textarea name="code" cols="80" rows="5" id="code"></textarea></td>
@@ -69,8 +69,8 @@
 </div>
 <script language="JavaScript">
     var elements = document.forms['theForm'].elements;
-    var url = '{$url}';
-{literal}
+    var url = '{{ $url }}';
+
     onload = function()
     {
       // 开始检查订单
@@ -132,5 +132,5 @@
         }
     }
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

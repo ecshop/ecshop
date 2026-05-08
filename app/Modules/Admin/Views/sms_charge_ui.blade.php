@@ -1,27 +1,27 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="main-div" id="sms-charge">
-<form method="POST" action="{$sms_charge.charge_url}" name="sms-charge-form" onsubmit="return validate();">
+<form method="POST" action="{{ $sms_charge['charge_url'] }}" name="sms-charge-form" onsubmit="return validate();">
 <table >
   <tr>
-    <td colspan="2"><input type="hidden" name="login_info" maxlength="60" size="20" value="{$sms_charge.login_info}" /></td>
+    <td colspan="2"><input type="hidden" name="login_info" maxlength="60" size="20" value="{{ $sms_charge['login_info'] }}" /></td>
   </tr>
   <tr>
-    <td colspan="2"><input type="hidden" name="return_url" maxlength="20" size="20" value="{$sms_charge.return_url}" /></td>
+    <td colspan="2"><input type="hidden" name="return_url" maxlength="20" size="20" value="{{ $sms_charge['return_url'] }}" /></td>
   </tr>
   <tr>
-    <td class="label">{$lang.charge}:</td>
-    <td><input type="text" name="money" maxlength="60" size="40" value="" />{$lang.require_field}</td>
+    <td class="label">{{ $lang['charge'] }}:</td>
+    <td><input type="text" name="money" maxlength="60" size="40" value="" />{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
     <td colspan="2" align="center">
-      <input type="submit" name="submit" value="{$lang.button_submit}" class="button" />
-      <input type="reset" value="{$lang.button_reset}" class="button" />
+      <input type="submit" name="submit" value="{{ $lang['button_submit'] }}" class="button" />
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
     </td>
   </tr>
 </table>
 </form>
 </div>
-{literal}
+
 <script type="text/javascript" language="JavaScript">
 <!--
 function  validate() {
@@ -47,5 +47,5 @@ function  validate() {
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

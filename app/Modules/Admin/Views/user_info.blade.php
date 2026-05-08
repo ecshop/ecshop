@@ -1,124 +1,125 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="main-div">
 <form method="post" action="users.php" name="theForm" onsubmit="return validate()">
 <table width="100%" >
   <tr>
-    <td class="label">{$lang.username}:</td>
-    <td>{if $form_action eq "update"}{$user.user_name}<input type="hidden" name="username" value="{$user.user_name}" />{else}<input type="text" name="username" maxlength="60" value="{$user.user_name}" />{$lang.require_field}{/if}</td>
+    <td class="label">{{ $lang['username'] }}:</td>
+    <td>@if($form_action == "update"){{ $user['user_name'] }}<input type="hidden" name="username" value="{{ $user['user_name'] }}" />@else<input type="text" name="username" maxlength="60" value="{{ $user['user_name'] }}" />{{ $lang['require_field'] }}@endif</td>
   </tr>
-  {if $form_action eq "update"}
+  @if($form_action == "update")
   <tr>
-    <td class="label">{$lang.user_money}:</td>
-    <td>{$user.formated_user_money} <a href="account_log.php?act=list&user_id={$user.user_id}&account_type=user_money">[ {$lang.view_detail_account} ]</a> </td>
-  </tr>
-  <tr>
-    <td class="label">{$lang.frozen_money}:</td>
-    <td>{$user.formated_frozen_money} <a href="account_log.php?act=list&user_id={$user.user_id}&account_type=frozen_money">[ {$lang.view_detail_account} ]</a> </td>
+    <td class="label">{{ $lang['user_money'] }}:</td>
+    <td>{{ $user['formated_user_money'] }} <a href="account_log.php?act=list&user_id={{ $user['user_id'] }}&account_type=user_money">[ {{ $lang['view_detail_account'] }} ]</a> </td>
   </tr>
   <tr>
-    <td class="label"><a href="javascript:showNotice('noticeRankPoints');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a> {$lang.rank_points}:</td>
-    <td>{$user.rank_points} <a href="account_log.php?act=list&user_id={$user.user_id}&account_type=rank_points">[ {$lang.view_detail_account} ]</a> <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeRankPoints">{$lang.notice_rank_points}</span></td>
+    <td class="label">{{ $lang['frozen_money'] }}:</td>
+    <td>{{ $user['formated_frozen_money'] }} <a href="account_log.php?act=list&user_id={{ $user['user_id'] }}&account_type=frozen_money">[ {{ $lang['view_detail_account'] }} ]</a> </td>
   </tr>
   <tr>
-    <td class="label"><a href="javascript:showNotice('noticePayPoints');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a> {$lang.pay_points}:</td>
-    <td>{$user.pay_points} <a href="account_log.php?act=list&user_id={$user.user_id}&account_type=pay_points">[ {$lang.view_detail_account} ]</a> <br />
-        <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticePayPoints">{$lang.notice_pay_points}</span></td>
-  </tr>
-  {/if}
-  <tr>
-    <td class="label">{$lang.email}:</td>
-    <td><input type="text" name="email" maxlength="60" size="40" value="{$user.email}" />{$lang.require_field}</td>
-  </tr>
-  {if $form_action eq "insert"}
-  <tr>
-    <td class="label">{$lang.password}:</td>
-    <td><input type="password" name="password" maxlength="20" size="20" />{$lang.require_field}</td>
+    <td class="label"><a href="javascript:showNotice('noticeRankPoints');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a> {{ $lang['rank_points'] }}:</td>
+    <td>{{ $user['rank_points'] }} <a href="account_log.php?act=list&user_id={{ $user['user_id'] }}&account_type=rank_points">[ {{ $lang['view_detail_account'] }} ]</a> <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeRankPoints">{{ $lang['notice_rank_points'] }}</span></td>
   </tr>
   <tr>
-    <td class="label">{$lang.confirm_password}:</td>
-    <td><input type="password" name="confirm_password" maxlength="20" size="20" />{$lang.require_field}</td>
+    <td class="label"><a href="javascript:showNotice('noticePayPoints');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}" /></a> {{ $lang['pay_points'] }}:</td>
+    <td>{{ $user['pay_points'] }} <a href="account_log.php?act=list&user_id={{ $user['user_id'] }}&account_type=pay_points">[ {{ $lang['view_detail_account'] }} ]</a> <br />
+        <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticePayPoints">{{ $lang['notice_pay_points'] }}</span></td>
   </tr>
-  {elseif  $form_action eq "update"}
+  @endif
   <tr>
-    <td class="label">{$lang.newpass}:</td>
+    <td class="label">{{ $lang['email'] }}:</td>
+    <td><input type="text" name="email" maxlength="60" size="40" value="{{ $user['email'] }}" />{{ $lang['require_field'] }}</td>
+  </tr>
+  @if($form_action == "insert")
+  <tr>
+    <td class="label">{{ $lang['password'] }}:</td>
+    <td><input type="password" name="password" maxlength="20" size="20" />{{ $lang['require_field'] }}</td>
+  </tr>
+  <tr>
+    <td class="label">{{ $lang['confirm_password'] }}:</td>
+    <td><input type="password" name="confirm_password" maxlength="20" size="20" />{{ $lang['require_field'] }}</td>
+  </tr>
+  @elseif($form_action == "update")
+  <tr>
+    <td class="label">{{ $lang['newpass'] }}:</td>
     <td><input type="password" name="password" maxlength="20" size="20" /></td>
   </tr>
   <tr>
-    <td class="label">{$lang.confirm_password}:</td>
+    <td class="label">{{ $lang['confirm_password'] }}:</td>
     <td><input type="password" name="confirm_password" maxlength="20" size="20" /></td>
   </tr>
-  {/if}
+  @endif
   <tr>
-    <td class="label">{$lang.user_rank}:</td>
+    <td class="label">{{ $lang['user_rank'] }}:</td>
     <td><select name="user_rank">
-      <option value="0">{$lang.not_special_rank}</option>
-      {html_options options=$special_ranks selected=$user.user_rank}
+      <option value="0">{{ $lang['not_special_rank'] }}</option>
+      @foreach($special_ranks as $__k => $__v)<option value="{{ $__k }}" @if($__k == $user['user_rank']) selected @endif>{{ $__v }}</option>@endforeach
     </select></td>
   </tr>
   <tr>
-    <td class="label">{$lang.gender}:</td>
+    <td class="label">{{ $lang['gender'] }}:</td>
     <td>{html_radios name="sex" options=$lang.sex checked=$user.sex }</td>
   </tr>
   <tr>
-    <td class="label">{$lang.birthday}:</td>
+    <td class="label">{{ $lang['birthday'] }}:</td>
     <td>{html_select_date field_order="YMD" prefix="birthday" time=$user.birthday start_year="-60" end_year="+1" display_days=true month_format="%m"}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.credit_line}:</td>
-    <td><input name="credit_line" type="text" id="credit_line" value="{$user.credit_line}" size="10" /></td>
+    <td class="label">{{ $lang['credit_line'] }}:</td>
+    <td><input name="credit_line" type="text" id="credit_line" value="{{ $user['credit_line'] }}" size="10" /></td>
   </tr>
-  {foreach from=$extend_info_list item=field}
+  @foreach($extend_info_list as $field)
   <tr>
-    <td class="label">{$field.reg_field_name}:</td>
+    <td class="label">{{ $field['reg_field_name'] }}:</td>
     <td>
-    <input name="extend_field{$field.id}" type="text" size="40" class="inputBg" value="{$field.content}"/>
+    <input name="extend_field{{ $field['id'] }}" type="text" size="40" class="inputBg" value="{{ $field['content'] }}"/>
     </td>
   </tr>
-  {/foreach}
-  {if $user.parent_id}
+  @endforeach
+  @if($user['parent_id'])
   <tr>
-    <td class="label">{$lang.parent_user}:</td>
-    <td><a href="users.php?act=edit&id={$user.parent_id}">{$user.parent_username}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="users.php?act=remove_parent&id={$user.user_id}">{$lang.parent_remove}</a></td>
+    <td class="label">{{ $lang['parent_user'] }}:</td>
+    <td><a href="users.php?act=edit&id={{ $user['parent_id'] }}">{{ $user['parent_username'] }}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="users.php?act=remove_parent&id={{ $user['user_id'] }}">{{ $lang['parent_remove'] }}</a></td>
   </tr>
-  {/if}
-  {if $affiliate.on eq 1 && $affdb}
+  @endif
+  @if($affiliate['on'] == 1 && $affdb)
   <tr>
-    <td class="label">{$lang.affiliate_user}:</td>
-    <td>[<a href="users.php?act=aff_list&auid={$user.user_id}">{$lang.show_affiliate_users}</a>][<a href="affiliate_ck.php?act=list&auid={$user.user_id}">{$lang.show_affiliate_orders}</a>]</td>
+    <td class="label">{{ $lang['affiliate_user'] }}:</td>
+    <td>[<a href="users.php?act=aff_list&auid={{ $user['user_id'] }}">{{ $lang['show_affiliate_users'] }}</a>][<a href="affiliate_ck.php?act=list&auid={{ $user['user_id'] }}">{{ $lang['show_affiliate_orders'] }}</a>]</td>
   </tr>
   <tr>
     <td></td>
     <td>   
     <table border="0" cellspacing="1" style="background: #dddddd; width:30%;">
     <tr>
-    <td bgcolor="#ffffff">{$lang.affiliate_lever}</td>
-    {foreach from=$affdb key=level item=val0}
-    <td bgcolor="#ffffff">{$level}</td>
-    {/foreach}
+    <td bgcolor="#ffffff">{{ $lang['affiliate_lever'] }}</td>
+    @foreach($affdb as $level => $val0)
+    <td bgcolor="#ffffff">{{ $level }}</td>
+    @endforeach
     </tr>
     <tr>
-    <td bgcolor="#ffffff">{$lang.affiliate_num}</td>
-    {foreach from=$affdb item=val}
-    <td bgcolor="#ffffff">{$val.num}</td>
-    {/foreach}
+    <td bgcolor="#ffffff">{{ $lang['affiliate_num'] }}</td>
+    @foreach($affdb as $val)
+    <td bgcolor="#ffffff">{{ $val['num'] }}</td>
+    @endforeach
     </tr>
     </table>
     </td>
   </tr>
-  {/if}
+  @endif
   <tr>
     <td colspan="2" align="center">
-      <input type="submit" value="{$lang.button_submit}" class="button" />
-      <input type="reset" value="{$lang.button_reset}" class="button" />
-      <input type="hidden" name="act" value="{$form_action}" />
-      <input type="hidden" name="id" value="{$user.user_id}" />    </td>
+      <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
+      <input type="hidden" name="id" value="{{ $user['user_id'] }}" />    </td>
   </tr>
 </table>
 
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 
@@ -183,5 +184,5 @@ function validate()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

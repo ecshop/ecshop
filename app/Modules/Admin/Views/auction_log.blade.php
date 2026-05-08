@@ -1,27 +1,27 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="form-div">
-  <strong>{$lang.label_act_name}</strong>{$auction.act_name} <strong>{$lang.label_goods_name}</strong>{$auction.goods_name}
-  <a href="auction.php?act=edit&id={$auction.act_id}"> [ {$lang.view} ] </a>
+  <strong>{{ $lang['label_act_name'] }}</strong>{{ $auction['act_name'] }} <strong>{{ $lang['label_goods_name'] }}</strong>{{ $auction['goods_name'] }}
+  <a href="auction.php?act=edit&id={{ $auction['act_id'] }}"> [ {{ $lang['view'] }} ] </a>
 </div>
 
 <div class="list-div" id="listDiv">
   <table cellpadding="3" cellspacing="1">
     <tr>
-      <th>{$lang.bid_user}</th>
-      <th>{$lang.bid_price}</th>
-      <th width="30%">{$lang.bid_time}</th>
-      <th>{$lang.status}</th>
+      <th>{{ $lang['bid_user'] }}</th>
+      <th>{{ $lang['bid_price'] }}</th>
+      <th width="30%">{{ $lang['bid_time'] }}</th>
+      <th>{{ $lang['status'] }}</th>
     </tr>
-    {foreach from=$auction_log item=log name="fe_log"}
+    @forelse($auction_log as $log)
     <tr>
-      <td>{$log.user_name}</td>
-      <td align="right">{$log.formated_bid_price}</td>
-      <td align="center">{$log.bid_time}</td>
-      <td align="center">{if $smarty.foreach.fe_log.first}OK{else}&nbsp;{/if}</td>
+      <td>{{ $log['user_name'] }}</td>
+      <td align="right">{{ $log['formated_bid_price'] }}</td>
+      <td align="center">{{ $log['bid_time'] }}</td>
+      <td align="center">@if($loop->first)OK@else&nbsp;@endif</td>
     </tr>
-    {foreachelse}
-    <tr><td class="no-records" colspan="4">{$lang.no_records}</td></tr>
-    {/foreach}
+    @empty
+    <tr><td class="no-records" colspan="4">{{ $lang['no_records'] }}</td></tr>
+    @endforelse
   </table>
 </div>
-{include file="pagefooter.htm"}
+@include('pagefooter')

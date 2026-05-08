@@ -2,15 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$page_title}</title>
+<title>{{ $page_title }}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
 {* 包含脚本文件 *}
-{insert_scripts files='common.js'}
+<script src="common.js"></script>
 </head>
 <body>
 <!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
@@ -23,48 +23,48 @@
 <!--当前位置 end-->
 <div class="blank"></div>
 <div class="block">
-  <h5><span>{$lang.package_list}</span></h5>
+  <h5><span>{{ $lang['package_list'] }}</span></h5>
   <div class="blank"></div>
-   <!-- {foreach from=$list item=val} -->
-   <a name="{$val.act_id}"></a>
+   @foreach($list as $val)
+   <a name="{{ $val['act_id'] }}"></a>
   <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
     <tr>
-      <th bgcolor="#ffffff">{$lang.package_name}:</th>
-      <td colspan="3" bgcolor="#ffffff">{$val.act_name}</td>
+      <th bgcolor="#ffffff">{{ $lang['package_name'] }}:</th>
+      <td colspan="3" bgcolor="#ffffff">{{ $val['act_name'] }}</td>
     </tr>
     <tr>
-      <th bgcolor="#ffffff">{$lang.start_time}:</th>
-      <td width="200" bgcolor="#ffffff">{$val.start_time}</td>
-      <th bgcolor="#ffffff">{$lang.orgtotal}:</th>
-      <td bgcolor="#ffffff">{$val.subtotal}</td>
+      <th bgcolor="#ffffff">{{ $lang['start_time'] }}:</th>
+      <td width="200" bgcolor="#ffffff">{{ $val['start_time'] }}</td>
+      <th bgcolor="#ffffff">{{ $lang['orgtotal'] }}:</th>
+      <td bgcolor="#ffffff">{{ $val['subtotal'] }}</td>
     </tr>
     <tr>
-      <th bgcolor="#ffffff">{$lang.end_time}:</th>
-      <td bgcolor="#ffffff">{$val.end_time}</td>
-      <th bgcolor="#ffffff">{$lang.package_price}:</th>
-      <td bgcolor="#ffffff">{$val.package_price}</td>
+      <th bgcolor="#ffffff">{{ $lang['end_time'] }}:</th>
+      <td bgcolor="#ffffff">{{ $val['end_time'] }}</td>
+      <th bgcolor="#ffffff">{{ $lang['package_price'] }}:</th>
+      <td bgcolor="#ffffff">{{ $val['package_price'] }}</td>
     </tr>
     <tr>
-      <th bgcolor="#ffffff">{$lang.heart_buy}:</th>
-      <td bgcolor="#ffffff"><a href="javascript:addPackageToCart({$val.act_id})" style="background:transparent"><img src="images/bnt_buy_1.gif" alt="{$lang.add_to_cart}" /></a></td>
-      <th bgcolor="#ffffff">{$lang.saving}:</th>
-      <td width="200" bgcolor="#ffffff">{$val.saving}</td>
+      <th bgcolor="#ffffff">{{ $lang['heart_buy'] }}:</th>
+      <td bgcolor="#ffffff"><a href="javascript:addPackageToCart({{ $val['act_id'] }})" style="background:transparent"><img src="images/bnt_buy_1.gif" alt="{{ $lang['add_to_cart'] }}" /></a></td>
+      <th bgcolor="#ffffff">{{ $lang['saving'] }}:</th>
+      <td width="200" bgcolor="#ffffff">{{ $val['saving'] }}</td>
     </tr>
     <tr>
-      <th bgcolor="#ffffff">{$lang.package_goods}:</th>
+      <th bgcolor="#ffffff">{{ $lang['package_goods'] }}:</th>
       <td colspan="3" bgcolor="#ffffff">
-        <!-- {foreach from=$val.goods_list item=goods} -->
-        <a href="goods.php?id={$goods.goods_id}" target="_blank" class="f6"><span class="f_user_info"><u>{$goods.goods_name}</u></span></a> &nbsp;X &nbsp;{$goods.goods_number}<br />
-        <!-- {/foreach} -->
+        @foreach($val['goods_list'] as $goods)
+        <a href="goods.php?id={{ $goods['goods_id'] }}" target="_blank" class="f6"><span class="f_user_info"><u>{{ $goods['goods_name'] }}</u></span></a> &nbsp;X &nbsp;{{ $goods['goods_number'] }}<br />
+        @endforeach
       </td>
     </tr>
     <tr>
-      <th bgcolor="#ffffff">{$lang.desc}:</th>
-      <td colspan="3" bgcolor="#ffffff">{$val.act_desc}</td>
+      <th bgcolor="#ffffff">{{ $lang['desc'] }}:</th>
+      <td colspan="3" bgcolor="#ffffff">{{ $val['act_desc'] }}</td>
     </tr>
   </table>
   <div class="blank5"></div><br />
-  <!-- {/foreach} -->
+  @endforeach
 </div>
 <div class="blank5"></div>
 <!--帮助-->
@@ -78,22 +78,22 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>]
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+    <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>]
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->

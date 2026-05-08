@@ -6,11 +6,11 @@
 <link href="styles/general.css" rel="stylesheet" type="text/css" />
 <script language="JavaScript">
 <!--
-var noHelp   = "<p align='center' style='color: #666'>{$lang.no_help}</p>";
-var helpLang = "{$help_lang}";
+var noHelp   = "<p align='center' style='color: #666'>{{ $lang['no_help'] }}</p>";
+var helpLang = "{{ $help_lang }}";
 //-->
 </script>
-{literal}
+
 <style type="text/css">
 body {
   background: #80BDCB;
@@ -113,33 +113,33 @@ body {
   color: #000099;
 }
 </style>
-{/literal}
+
 </head>
 <body>
 <div id="tabbar-div">
-<p><span style="float:right; padding: 3px 5px;" ><a href="javascript:toggleCollapse();"><img id="toggleImg" src="images/menu_minus.gif" width="9" height="9" border="0" alt="{$lang.collapse_all}" /></a></span>
-  <span class="tab-front" id="menu-tab">{$lang.menu}</span>
+<p><span style="float:right; padding: 3px 5px;" ><a href="javascript:toggleCollapse();"><img id="toggleImg" src="images/menu_minus.gif" width="9" height="9" border="0" alt="{{ $lang['collapse_all'] }}" /></a></span>
+  <span class="tab-front" id="menu-tab">{{ $lang['menu'] }}</span>
 </p>
 </div>
 <div id="main-div">
 <div id="menu-list">
 <ul id="menu-ul">
-{foreach from=$menus item=menu key=k}
-{if $menu.action}
-  <li class="explode"><a href="{$menu.action}" target="main-frame">{$menu.label}</a></li>
-{else}
-  <li class="explode" key="{$k}" name="menu">
-    {$menu.label}
-    {if $menu.children}
+@foreach($menus as $k => $menu)
+@if($menu['action'])
+  <li class="explode"><a href="{{ $menu['action'] }}" target="main-frame">{{ $menu['label'] }}</a></li>
+@else
+  <li class="explode" key="{{ $k }}" name="menu">
+    {{ $menu['label'] }}
+    @if($menu['children'])
     <ul>
-    {foreach from=$menu.children item=child}
-      <li class="menu-item"><a href="{$child.action}" target="main-frame">{$child.label}</a></li>
-    {/foreach}
+    @foreach($menu['children'] as $child)
+      <li class="menu-item"><a href="{{ $child['action'] }}" target="main-frame">{{ $child['label'] }}</a></li>
+    @endforeach
     </ul>
-    {/if}
+    @endif
   </li>
-{/if}
-{/foreach}
+@endif
+@endforeach
 </ul>
 </div>
 <div id="help-div" style="display:none">
@@ -147,14 +147,16 @@ body {
 <div id="help-content"></div>
 </div>
 </div>
-{insert_scripts files="../js/global.js,../js/utils.js,../js/transport.js"}
-{insert_scripts files="./js/menu.js"}
+<script src="../js/global.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/transport.js"></script>
+<script src="./js/menu.js"></script>
 <script language="JavaScript">
 <!--
-var collapse_all = "{$lang.collapse_all}";
-var expand_all = "{$lang.expand_all}";
+var collapse_all = "{{ $lang['collapse_all'] }}";
+var expand_all = "{{ $lang['expand_all'] }}";
 var collapse = true;
-{literal}
+
 function toggleCollapse()
 {
   var items = document.getElementsByTagName('LI');
@@ -401,8 +403,8 @@ Object.extend(ToggleHanlder ,{
     document.getElementById('toggleImg').alt = collapse ? collapse_all : expand_all;
   }
 });
-{/literal}
-ToggleHanlder.CookieName += "_{$admin_id}";
+
+ToggleHanlder.CookieName += "_{{ $admin_id }}";
 //初始化菜单状态
 ToggleHanlder.Load();
 //-->

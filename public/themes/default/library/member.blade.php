@@ -1,6 +1,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-{insert_scripts files='transport.js,utils.js'}
+<script src="transport.js"></script>
+<script src="utils.js"></script>
 <div><img src="../images/memeber_login.jpg" alt="Login" width="170" height="40" /></div>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" style="background:url(../images/login_bg.gif);">
   <tr>

@@ -1,23 +1,23 @@
-{include file="pageheader.htm"}
-{if $warning}
+@include('pageheader')
+@if($warning)
 <ul style="padding:0; margin: 0; list-style-type:none; color: #CC0000;">
-  <li style="border: 1px solid #CC0000; background: #FFFFCC; padding: 10px; margin-bottom: 5px;" >{$warning}</li>
+  <li style="border: 1px solid #CC0000; background: #FFFFCC; padding: 10px; margin-bottom: 5px;" >{{ $warning }}</li>
 </ul>
-{/if}
+@endif
 <!-- start list -->
 <div class="list-div" id="listDiv">
   <form method="post" action="database.php" enctype="multipart/form-data">
   <table cellspacing='1' cellpadding='3'>
   <tr>
-    <th colspan="2">{$lang.restore}</th>
+    <th colspan="2">{{ $lang['restore'] }}</th>
   </tr>
   <tr>
-    <td>{$lang.sqlfile}</td>
+    <td>{{ $lang['sqlfile'] }}</td>
     <td><input type="file" name="sqlfile" size="50"></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
-    <td><input type="hidden" name = "act" value = "upload_sql"><input type="submit" value={$lang.upload_and_exe} class="button"></td>
+    <td><input type="hidden" name = "act" value = "upload_sql"><input type="submit" value={{ $lang['upload_and_exe'] }} class="button"></td>
   </tr>
   </table>
   </form>
@@ -26,41 +26,42 @@
 <br />
 <br />
 <div class="list-div" id="listDiv">
-<form action="database.php" name="file_list" method="POST" onsubmit="return confirm('{$lang.confirm_remove}');" >
+<form action="database.php" name="file_list" method="POST" onsubmit="return confirm('{{ $lang['confirm_remove'] }}');" >
 <table>
   <tr>
-    <th colspan=7>{$lang.server_sql}</th>
+    <th colspan=7>{{ $lang['server_sql'] }}</th>
   </tr>
   <tr>
-    <th width=48 align="right"><input type="checkbox" name="chkall" onclick="checkall(this.form, 'file[]')">{$lang.remove}</th>
-    <th>{$lang.name}</th>
-    <th>{$lang.ver}</th>
-    <th>{$lang.add_time}</th>
-    <th>{$lang.file_size}</th>
-    <th>{$lang.vol}</th>
-    <th>{$lang.handler}</th>
+    <th width=48 align="right"><input type="checkbox" name="chkall" onclick="checkall(this.form, 'file[]')">{{ $lang['remove'] }}</th>
+    <th>{{ $lang['name'] }}</th>
+    <th>{{ $lang['ver'] }}</th>
+    <th>{{ $lang['add_time'] }}</th>
+    <th>{{ $lang['file_size'] }}</th>
+    <th>{{ $lang['vol'] }}</th>
+    <th>{{ $lang['handler'] }}</th>
   </tr>
-  {foreach from=$list item=item}
-  <tr {if $item.mark eq 2}style="display:none"{/if}>
-   <td><input type="checkbox" name="file[]" value="{$item.name}" /></td>
-   <td>{if $item.mark eq 1}<img src="images/menu_plus.gif" onclick="rowClicked(this)">{/if}{if $item.mark eq 2}<img src="images/menu_arrow.gif">{/if}<a href="../data/sqldata/{$item.name}">{$item.name}</a></td>
-   <td>{$item.ver}</td>
-   <td>{$item.add_time}</td>
-   <td>{$item.file_size}</td>
-   <td>vol:{$item.vol}</td>
-   <td align="center">{if $item.mark neq 2}<a href="database.php?act=import&file_name={$item.name}">[{$lang.import}]</a>{else}&nbsp;{/if}</td>
+  @foreach($list as $item)
+  <tr @if($item['mark'] == 2)style="display:none"@endif>
+   <td><input type="checkbox" name="file[]" value="{{ $item['name'] }}" /></td>
+   <td>@if($item['mark'] == 1)<img src="images/menu_plus.gif" onclick="rowClicked(this)">@endif@if($item['mark'] == 2)<img src="images/menu_arrow.gif">@endif<a href="../data/sqldata/{{ $item['name'] }}">{{ $item['name'] }}</a></td>
+   <td>{{ $item['ver'] }}</td>
+   <td>{{ $item['add_time'] }}</td>
+   <td>{{ $item['file_size'] }}</td>
+   <td>vol:{{ $item['vol'] }}</td>
+   <td align="center">@if($item['mark'] != 2)<a href="database.php?act=import&file_name={{ $item['name'] }}">[{{ $lang['import'] }}]</a>@else&nbsp;@endif</td>
   </tr>
-  {/foreach}
+  @endforeach
   <tr>
-    <td colspan=7 align="center"><input type="hidden" name="act" value="remove"><input type="submit" value="{$lang.submit_remove}" class="button" />
+    <td colspan=7 align="center"><input type="hidden" name="act" value="remove"><input type="submit" value="{{ $lang['submit_remove'] }}" class="button" />
   </tr>
 </table>
 </from>
 </div>
 
 
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 
 onload = function()
@@ -128,5 +129,5 @@ function rowClicked(obj)
 
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

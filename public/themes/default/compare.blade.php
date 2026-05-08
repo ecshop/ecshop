@@ -2,15 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$page_title}</title>
+<title>{{ $page_title }}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
 {* 包含脚本文件 *}
-{insert_scripts files='transport.js,common.js,utils.js'}
+<script src="transport.js"></script>
+<script src="common.js"></script>
+<script src="utils.js"></script>
 <script language="javascript">
 function remove(id, url)
 {
@@ -24,10 +26,10 @@ function remove(id, url)
   }
 }
 
-var compare_no_goods = "{$lang.compare_no_goods}";
-var btn_buy = "{$lang.btn_buy}";
-var is_cancel = "{$lang.is_cancel}";
-var select_spe = "{$lang.select_spe}";
+var compare_no_goods = "{{ $lang['compare_no_goods'] }}";
+var btn_buy = "{{ $lang['btn_buy'] }}";
+var is_cancel = "{{ $lang['is_cancel'] }}";
+var select_spe = "{{ $lang['select_spe'] }}";
 </script>
 </head>
 <body>
@@ -41,79 +43,79 @@ var select_spe = "{$lang.select_spe}";
 <!--当前位置 end-->
 <div class="blank"></div>
 <div class="block">
-  <h5><span>{$lang.goods_compare}</span></h5>
+  <h5><span>{{ $lang['goods_compare'] }}</span></h5>
   <div class="blank"></div>
   <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
               <tr>
-                <th width="120" align="center" bgcolor="#ffffff">{$lang.goods_name}</th>
-                <!-- {foreach name="goods_list" from=$goods_list item=goods} -->
-                <td align="center" bgcolor="#ffffff" {if $smarty.foreach.goods_list.total gt 3}width="200"{else}{/if}> {$goods.goods_name}</td>
-                <!-- {/foreach} -->
+                <th width="120" align="center" bgcolor="#ffffff">{{ $lang['goods_name'] }}</th>
+                @foreach($goods_list as $goods)
+                <td align="center" bgcolor="#ffffff" @if($loop->count > 3)width="200"@else@endif> {{ $goods['goods_name'] }}</td>
+                @endforeach
               </tr>
               <tr>
                 <th align="left" bgcolor="#ffffff"></th>
-                <!-- {foreach name="goods_list" from=$goods_list item=goods} -->
-                <td  align="center" bgcolor="#ffffff" style="padding:5px;"><a href="{$goods.url}"><img src="{$goods.goods_thumb}" alt="{$goods.goods_name}" class="ent_img" /></a></td>
-                <!-- {/foreach} -->
+                @foreach($goods_list as $goods)
+                <td  align="center" bgcolor="#ffffff" style="padding:5px;"><a href="{{ $goods['url'] }}"><img src="{{ $goods['goods_thumb'] }}" alt="{{ $goods['goods_name'] }}" class="ent_img" /></a></td>
+                @endforeach
               </tr>
-              <!-- {if $smarty.foreach.goods_list.total gt 2} -->
+              @if($loop->count > 2)
               <tr>
                 <td bgcolor="#ffffff">&nbsp;</td>
-                <!-- {foreach name="goods_list" from=$goods_list item=goods} -->
+                @foreach($goods_list as $goods)
                 <th bgcolor="#ffffff">
-                  <a href="compare.php?{$goods.ids}" onClick="return remove({$goods.goods_id});">{$lang.compare_remove}</a>                </th>
-                <!-- {/foreach} -->
+                  <a href="compare.php?{{ $goods['ids'] }}" onClick="return remove({{ $goods['goods_id'] }});">{{ $lang['compare_remove'] }}</a>                </th>
+                @endforeach
               </tr>
-              <!-- {/if} -->
+              @endif
               <tr>
-                <th align="left" bgcolor="#ffffff">&nbsp;&nbsp;{$lang.brand}</th>
-                <!-- {foreach name="goods_list" from=$goods_list item=goods} -->
-                <td bgcolor="#ffffff">&nbsp;&nbsp;{$goods.brand_name}</td>
-                <!-- {/foreach} -->
-              </tr>
-              <tr>
-                <th align="left" bgcolor="#ffffff">&nbsp;&nbsp;{$lang.shop_price}</th>
-                <!-- {foreach name="goods_list" from=$goods_list item=goods} -->
-                <td bgcolor="#ffffff">&nbsp;&nbsp;{$goods.rank_price}</td>
-                <!-- {/foreach} -->
+                <th align="left" bgcolor="#ffffff">&nbsp;&nbsp;{{ $lang['brand'] }}</th>
+                @foreach($goods_list as $goods)
+                <td bgcolor="#ffffff">&nbsp;&nbsp;{{ $goods['brand_name'] }}</td>
+                @endforeach
               </tr>
               <tr>
-                <th align="left" bgcolor="#ffffff">&nbsp;&nbsp;{$lang.goods_weight}</th>
-                <!-- {foreach name="goods_list" from=$goods_list item=goods} -->
-                <td bgcolor="#ffffff">&nbsp;&nbsp;{$goods.goods_weight}</td>
-                <!-- {/foreach} -->
+                <th align="left" bgcolor="#ffffff">&nbsp;&nbsp;{{ $lang['shop_price'] }}</th>
+                @foreach($goods_list as $goods)
+                <td bgcolor="#ffffff">&nbsp;&nbsp;{{ $goods['rank_price'] }}</td>
+                @endforeach
               </tr>
-              <!-- {foreach key=key from=$attribute item=val} -->
               <tr>
-                <th align="left" bgcolor="#ffffff">&nbsp;&nbsp;{$val}</th>
-                <!-- {foreach name="goods_list" from=$goods_list item=goods} -->
+                <th align="left" bgcolor="#ffffff">&nbsp;&nbsp;{{ $lang['goods_weight'] }}</th>
+                @foreach($goods_list as $goods)
+                <td bgcolor="#ffffff">&nbsp;&nbsp;{{ $goods['goods_weight'] }}</td>
+                @endforeach
+              </tr>
+              @foreach($attribute as $key => $val)
+              <tr>
+                <th align="left" bgcolor="#ffffff">&nbsp;&nbsp;{{ $val }}</th>
+                @foreach($goods_list as $goods)
                 <td bgcolor="#ffffff">&nbsp;&nbsp;
-                  <!-- {foreach from=$goods.properties item=property key=k} -->
-                  <!-- {if $k eq $key} -->
-                  {$property.value}
-                  <!-- {/if} -->
-                  <!-- {/foreach} -->                </td>
-                <!-- {/foreach} -->
+                  @foreach($goods['properties'] as $k => $property)
+                  @if($k == $key)
+                  {{ $property['value'] }}
+                  @endif
+                  @endforeach                </td>
+                @endforeach
               </tr>
-              <!-- {/foreach} -->
+              @endforeach
               <tr>
-                <td align="left" bgcolor="#ffffff">&nbsp;&nbsp;<strong>{$lang.goods_rank}</strong></td>
-                <!-- {foreach name="goods_list" from=$goods_list item=goods} -->
-                <td bgcolor="#ffffff">&nbsp;&nbsp;<span class="goods-price"><img src="images/stars{$goods.comment_rank}.gif" width="64" height="12" alt="comment rank {$goods.comment_rank}" /></span><br /></td>
-                <!-- {/foreach} -->
+                <td align="left" bgcolor="#ffffff">&nbsp;&nbsp;<strong>{{ $lang['goods_rank'] }}</strong></td>
+                @foreach($goods_list as $goods)
+                <td bgcolor="#ffffff">&nbsp;&nbsp;<span class="goods-price"><img src="images/stars{{ $goods['comment_rank'] }}.gif" width="64" height="12" alt="comment rank {{ $goods['comment_rank'] }}" /></span><br /></td>
+                @endforeach
               </tr>
               <tr>
-                <td align="left" bgcolor="#ffffff">&nbsp;&nbsp;<strong>{$lang.brief}</strong></td>
-                <!-- {foreach name="goods_list" from=$goods_list item=goods} -->
-                <td bgcolor="#ffffff">&nbsp;&nbsp;<a href="{$goods.url}" target="_blank"> {$goods.goods_brief}</a></td>
-                <!-- {/foreach} -->
+                <td align="left" bgcolor="#ffffff">&nbsp;&nbsp;<strong>{{ $lang['brief'] }}</strong></td>
+                @foreach($goods_list as $goods)
+                <td bgcolor="#ffffff">&nbsp;&nbsp;<a href="{{ $goods['url'] }}" target="_blank"> {{ $goods['goods_brief'] }}</a></td>
+                @endforeach
               </tr>
               <tr>
                 <td bgcolor="#ffffff">&nbsp;</td>
-                <!-- {foreach name="goods_list" from=$goods_list item=goods} -->
-                <td align='center' bgcolor="#ffffff"><a href="javascript:collect({$goods.goods_id});"><img src="images/bnt_colles.gif" alt="{$lang.collect}"  style="margin:2px auto;"/></a>
-                <a href="javascript:addToCart({$goods.goods_id})"><img src="images/bnt_cat.gif" alt="{$lang.add_to_cart}"  style="margin:2px auto;"/></a></td>
-                <!-- {/foreach} -->
+                @foreach($goods_list as $goods)
+                <td align='center' bgcolor="#ffffff"><a href="javascript:collect({{ $goods['goods_id'] }});"><img src="images/bnt_colles.gif" alt="{{ $lang['collect'] }}"  style="margin:2px auto;"/></a>
+                <a href="javascript:addToCart({{ $goods['goods_id'] }})"><img src="images/bnt_cat.gif" alt="{{ $lang['add_to_cart'] }}"  style="margin:2px auto;"/></a></td>
+                @endforeach
               </tr>
   </table>
 </div>
@@ -129,22 +131,22 @@ var select_spe = "{$lang.select_spe}";
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>]
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+    <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>]
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->

@@ -1,73 +1,75 @@
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js,validator.js"}
-<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
+<script src="validator.js"></script>
+<script type="text/javascript" src="../js/calendar.php?lang={{ $cfg_lang }}"></script>
 <link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
 <div class="main-div">
 <form method="post" action="snatch.php" name="theForm" onsubmit="return validate()">
 <table cellspacing="1" cellpadding="3" width="100%">
   <tr>
-    <td class="label">{$lang.snatch_name}</td>
-    <td><input type="text" name="snatch_name" maxlength="60" size="40" value="{$snatch.snatch_name}" />{$lang.require_field}</td>
+    <td class="label">{{ $lang['snatch_name'] }}</td>
+    <td><input type="text" name="snatch_name" maxlength="60" size="40" value="{{ $snatch['snatch_name'] }}" />{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td align="right">{$lang.keywords}</td>
+    <td align="right">{{ $lang['keywords'] }}</td>
     <td><input type="text" name="keywords" size="30" />
-    <input type="button" value="{$lang.button_search}" class="button" onclick="searchGoods()"></td>
+    <input type="button" value="{{ $lang['button_search'] }}" class="button" onclick="searchGoods()"></td>
   </tr>
   <tr>
-    <td class="label"><a href="javascript:showNotice('noticegoodsid');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.goodsid}</td>
+    <td class="label"><a href="javascript:showNotice('noticegoodsid');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['goodsid'] }}</td>
     <td>
         <select name="goods_id" onchange="javascript:change_good_products();">
-        {$snatch.option}
+        {{ $snatch['option'] }}
         </select>
-        <select name="product_id" {if $snatch.product_id <= 0}style="display:none"{/if}>
-        {html_options options=$good_products_select selected=$snatch.product_id}
+        <select name="product_id" @if($snatch['product_id'] <= 0)style="display:none"@endif>
+        @foreach($good_products_select as $__k => $__v)<option value="{{ $__k }}" @if($__k == $snatch['product_id']) selected @endif>{{ $__v }}</option>@endforeach
         </select>
-        {$lang.require_field}
-     <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticegoodsid">{$lang.notice_goodsid}</span></td>
+        {{ $lang['require_field'] }}
+     <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticegoodsid">{{ $lang['notice_goodsid'] }}</span></td>
   </tr>
   <tr>
-    <td class="label">{$lang.start_time}</td>
+    <td class="label">{{ $lang['start_time'] }}</td>
     <td>
-      <input type="text" name="start_time" maxlength="60" size="40" value="{$snatch.start_time}" readonly="readonly" id="start_time_id" />
-      <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time_id', '%Y-%m-%d %H:%M', '24', false, 'selbtn1');" value="{$lang.btn_select}" class="button"/>
-      {$lang.require_field}
+      <input type="text" name="start_time" maxlength="60" size="40" value="{{ $snatch['start_time'] }}" readonly="readonly" id="start_time_id" />
+      <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time_id', '%Y-%m-%d %H:%M', '24', false, 'selbtn1');" value="{{ $lang['btn_select'] }}" class="button"/>
+      {{ $lang['require_field'] }}
     </td>
   </tr>
   <tr>
-    <td class="label">{$lang.end_time}</td>
+    <td class="label">{{ $lang['end_time'] }}</td>
     <td>
-      <input type="text" name="end_time" maxlength="60" size="40" value="{$snatch.end_time}"  readonly="readonly" id ="end_time_id" />
-      <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('end_time_id', '%Y-%m-%d %H:%M', '24', false, 'selbtn1');" value="{$lang.btn_select}" class="button"/>
-      {$lang.require_field}</td>
+      <input type="text" name="end_time" maxlength="60" size="40" value="{{ $snatch['end_time'] }}"  readonly="readonly" id ="end_time_id" />
+      <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('end_time_id', '%Y-%m-%d %H:%M', '24', false, 'selbtn1');" value="{{ $lang['btn_select'] }}" class="button"/>
+      {{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label"><a href="javascript:showNotice('noticeminPrice');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.min_price}</td>
-    <td><input type="text" name="start_price" maxlength="60" size="20" value="{$snatch.start_price}" />{$lang.require_field}<br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeminPrice">{$lang.notice_min_price}</span></td>
+    <td class="label"><a href="javascript:showNotice('noticeminPrice');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['min_price'] }}</td>
+    <td><input type="text" name="start_price" maxlength="60" size="20" value="{{ $snatch['start_price'] }}" />{{ $lang['require_field'] }}<br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeminPrice">{{ $lang['notice_min_price'] }}</span></td>
   </tr>
    <tr>
-    <td class="label"><a href="javascript:showNotice('noticemaxPrice');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.max_price}</td>
-    <td><input type="text" name="end_price" maxlength="60" size="20" value="{$snatch.end_price}" />{$lang.require_field}<br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticemaxPrice">{$lang.notice_max_price}</span></td>
+    <td class="label"><a href="javascript:showNotice('noticemaxPrice');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['max_price'] }}</td>
+    <td><input type="text" name="end_price" maxlength="60" size="20" value="{{ $snatch['end_price'] }}" />{{ $lang['require_field'] }}<br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticemaxPrice">{{ $lang['notice_max_price'] }}</span></td>
   </tr>
   <tr>
-    <td class="label"><a href="javascript:showNotice('noticePrice');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.price}</td>
-    <td><input type="text" name="max_price" maxlength="60" size="20" value="{$snatch.max_price}" />{$lang.require_field}<br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticePrice">{$lang.notice_price}</span></td>
+    <td class="label"><a href="javascript:showNotice('noticePrice');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['price'] }}</td>
+    <td><input type="text" name="max_price" maxlength="60" size="20" value="{{ $snatch['max_price'] }}" />{{ $lang['require_field'] }}<br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticePrice">{{ $lang['notice_price'] }}</span></td>
   </tr>
   <tr>
-    <td class="label"><a href="javascript:showNotice('noticeintegral');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.integral}</td>
-    <td><input type="text" name="cost_points" maxlength="60" size="20" value="{$snatch.cost_points}" />{$lang.require_field}<br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeintegral">{$lang.notice_integral}</span></td>
+    <td class="label"><a href="javascript:showNotice('noticeintegral');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['integral'] }}</td>
+    <td><input type="text" name="cost_points" maxlength="60" size="20" value="{{ $snatch['cost_points'] }}" />{{ $lang['require_field'] }}<br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeintegral">{{ $lang['notice_integral'] }}</span></td>
   </tr>
   <tr>
-    <td class="label">{$lang.desc}</td>
-    <td><textarea  name="desc" cols="60" rows="4"  >{$snatch.act_desc}</textarea></td>
+    <td class="label">{{ $lang['desc'] }}</td>
+    <td><textarea  name="desc" cols="60" rows="4"  >{{ $snatch['act_desc'] }}</textarea></td>
   </tr>
 
   <tr>
     <td colspan="2" align="center">
-      <input type="submit" value="{$lang.button_submit}" class="button" />
-      <input type="reset" value="{$lang.button_reset}" class="button" />
-      <input type="hidden" name="act" value="{$form_action}" />
-      <input type="hidden" name="id" value="{$snatch.act_id}" />
+      <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
+      <input type="hidden" name="id" value="{{ $snatch['act_id'] }}" />
     </td>
   </tr>
 </table>
@@ -75,7 +77,7 @@
 </div>
 <script language="JavaScript">
 <!--
-{literal}
+
 var display_yes = (Browser.isIE) ? 'block' : 'table-row-group';
 
 document.forms['theForm'].elements['snatch_name'].focus();
@@ -230,6 +232,6 @@ function searchProductsResponse(result)
   }
 }
 //-->
-{/literal}
+
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

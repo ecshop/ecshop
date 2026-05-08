@@ -1,15 +1,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<!-- {if $cat_list} -->
+@if($cat_list)
 <div class="box">
  <div class="box_1">
   <div id="category_tree">
-    <!-- {foreach from=$cat_list item=cat} -->
+    @foreach($cat_list as $cat)
      <dl>
-     <dt><a href="{$cat.url}">{$cat.cat_name|escape:html} {if $cat.goods_num}({$cat.goods_num}){/if}</a></dt>
+     <dt><a href="{{ $cat['url'] }}">{{ $cat['cat_name'] }} @if($cat['goods_num'])({{ $cat['goods_num'] }})@endif</a></dt>
      </dl>
-    <!--{/foreach}--> 
+    @endforeach 
   </div>
  </div>
 </div>
 <div class="blank5"></div>
-<!-- {/if} -->
+@endif

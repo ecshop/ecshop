@@ -1,45 +1,45 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 
 <div class="list-div">
 <form method="post" action="captcha_manage.php" name="theForm" onsubmit="return validate()" >
 <table cellpadding='3' cellspacing='1'>
 <tr>
-  <th colspan="2">{$lang.captcha_setting}</th>
+  <th colspan="2">{{ $lang['captcha_setting'] }}</th>
 </tr>
 <tr>
   <td width="60%" >
-  <strong>{$lang.captcha_turn_on}</strong><br />
-  {$lang.turn_on_note}<br />
-  <img src="../captcha.php?{$rand}" alt="captcha" style="vertical-align: middle;cursor: pointer;" onClick="this.src='../captcha.php?'+Math.random()" />
+  <strong>{{ $lang['captcha_turn_on'] }}</strong><br />
+  {{ $lang['turn_on_note'] }}<br />
+  <img src="../captcha.php?{{ $rand }}" alt="captcha" style="vertical-align: middle;cursor: pointer;" onClick="this.src='../captcha.php?'+Math.random()" />
   </td>
   <td>
-  <input type="checkbox" name="captcha_register" value="1" {$captcha.register} />{$lang.captcha_register}<br />
-  <input type="checkbox" name="captcha_login" value="2" {$captcha.login} />{$lang.captcha_login}<br />
-  <input type="checkbox" name="captcha_comment" value="4"  {$captcha.comment} />{$lang.captcha_comment}<br />
-  <input type="checkbox" name="captcha_admin" value="8" {$captcha.admin} />{$lang.captcha_admin}<br />
-  <input type="checkbox" name="captcha_message" value="32" {$captcha.message} />{$lang.captcha_message}<br />
+  <input type="checkbox" name="captcha_register" value="1" {{ $captcha['register'] }} />{{ $lang['captcha_register'] }}<br />
+  <input type="checkbox" name="captcha_login" value="2" {{ $captcha['login'] }} />{{ $lang['captcha_login'] }}<br />
+  <input type="checkbox" name="captcha_comment" value="4"  {{ $captcha['comment'] }} />{{ $lang['captcha_comment'] }}<br />
+  <input type="checkbox" name="captcha_admin" value="8" {{ $captcha['admin'] }} />{{ $lang['captcha_admin'] }}<br />
+  <input type="checkbox" name="captcha_message" value="32" {{ $captcha['message'] }} />{{ $lang['captcha_message'] }}<br />
   </td>
 </tr>
 <tr>
   <td>
-  <strong>{$lang.captcha_login_fail}</strong><br />
-  {$lang.login_fail_note}
+  <strong>{{ $lang['captcha_login_fail'] }}</strong><br />
+  {{ $lang['login_fail_note'] }}
   </td>
-  <td><input type="radio" name="captcha_login_fail" value="32" {$captcha.login_fail_yes} />{$lang.yes}<input type="radio"  name="captcha_login_fail" value="0" {$captcha.login_fail_no} />{$lang.no}</td>
+  <td><input type="radio" name="captcha_login_fail" value="32" {{ $captcha['login_fail_yes'] }} />{{ $lang['yes'] }}<input type="radio"  name="captcha_login_fail" value="0" {{ $captcha['login_fail_no'] }} />{{ $lang['no'] }}</td>
 </tr>
 <tr>
   <td>
-  <strong>{$lang.captcha_width}</strong><br />
-  {$lang.width_note}
+  <strong>{{ $lang['captcha_width'] }}</strong><br />
+  {{ $lang['width_note'] }}
   </td>
-  <td><input type="text" name="captcha_width" value="{$captcha_width}" /></td>
+  <td><input type="text" name="captcha_width" value="{{ $captcha_width }}" /></td>
 </tr>
 <tr>
   <td>
-  <strong>{$lang.captcha_height}</strong><br />
-  {$lang.height_note}
+  <strong>{{ $lang['captcha_height'] }}</strong><br />
+  {{ $lang['height_note'] }}
   </td>
-  <td><input type="text" name="captcha_height" value="{$captcha_height}" /></td>
+  <td><input type="text" name="captcha_height" value="{{ $captcha_height }}" /></td>
 </tr>
 <tr>
   <td colspan="2" align="center"><input type="hidden" name="act" value="save_config" /><input type="submit" value="保存设置" class="button" /></td>
@@ -47,8 +47,8 @@
 </table>
 </form>
 </div>
-{insert_scripts files="../js/utils.js"}
-{literal}
+<script src="../js/utils.js"></script>
+
 <script type="text/javascript" language="JavaScript">
 <!--
 onload = function() { startCheckOrder(); }
@@ -85,5 +85,5 @@ function validate()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

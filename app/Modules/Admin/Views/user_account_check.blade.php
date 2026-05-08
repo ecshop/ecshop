@@ -1,47 +1,48 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="main-div">
 <form method="post" action="user_account.php" name="theForm" onsubmit="return validate();">
 <table border="0" width="100%">
   <tr>
-    <td colspan="2"><strong>{$lang.surplus_info}：</strong><hr /></td>
+    <td colspan="2"><strong>{{ $lang['surplus_info'] }}：</strong><hr /></td>
   </tr>
   <tr>
     <td colspan="2">
-    <strong>{$lang.user_id}：</strong>{$user_name} &nbsp;&nbsp;<strong>{$lang.surplus_amount}：</strong>{$surplus.amount} &nbsp;&nbsp;<strong>{$lang.add_date}：</strong>{$surplus.add_time}
-    &nbsp;&nbsp;<strong>{$lang.process_type}：</strong>{$process_type}
-    {if $surplus.pay_method}&nbsp;&nbsp;<strong>{$lang.pay_method}：</strong>{$surplus.payment}{/if}
+    <strong>{{ $lang['user_id'] }}：</strong>{{ $user_name }} &nbsp;&nbsp;<strong>{{ $lang['surplus_amount'] }}：</strong>{{ $surplus['amount'] }} &nbsp;&nbsp;<strong>{{ $lang['add_date'] }}：</strong>{{ $surplus['add_time'] }}
+    &nbsp;&nbsp;<strong>{{ $lang['process_type'] }}：</strong>{{ $process_type }}
+    @if($surplus['pay_method'])&nbsp;&nbsp;<strong>{{ $lang['pay_method'] }}：</strong>{{ $surplus['payment'] }}@endif
     </td>
   </tr>
   <tr>
-    <td colspan="2"><strong>{$lang.surplus_desc}：</strong>{$surplus.user_note}<hr /></td>
+    <td colspan="2"><strong>{{ $lang['surplus_desc'] }}：</strong>{{ $surplus['user_note'] }}<hr /></td>
   </tr>
   <tr>
-    <th width="15%" valign="middle" align="right">{$lang.surplus_notic}：</th>
+    <th width="15%" valign="middle" align="right">{{ $lang['surplus_notic'] }}：</th>
     <td width="85%">
-      <textarea name="admin_note" cols="55" rows="5">{$surplus.admin_note}</textarea>
+      <textarea name="admin_note" cols="55" rows="5">{{ $surplus['admin_note'] }}</textarea>
     </td>
   </tr>
   <tr>
-    <th width="15%" valign="middle" align="right">{$lang.status}：</th>
+    <th width="15%" valign="middle" align="right">{{ $lang['status'] }}：</th>
     <td>
-      <input type="radio" name="is_paid" value="0" checked="true" />{$lang.unconfirm}
-      <input type="radio" name="is_paid" value="1" />{$lang.confirm}
+      <input type="radio" name="is_paid" value="0" checked="true" />{{ $lang['unconfirm'] }}
+      <input type="radio" name="is_paid" value="1" />{{ $lang['confirm'] }}
     </td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td>
       <input type="hidden" name="act" value="action" />
-      <input type="hidden" name="id" value="{$id}" />
-      <input name="submit" type="submit" value="{$lang.button_submit}" class="button" />
-      <input type="reset" value="{$lang.button_reset}" class="button" />
+      <input type="hidden" name="id" value="{{ $id }}" />
+      <input name="submit" type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
     </td>
   </tr>
 </table>
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 document.forms['theForm'].elements['admin_note'].focus();
@@ -63,5 +64,5 @@ onload = function()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

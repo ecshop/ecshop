@@ -1,16 +1,17 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 <div class="form-div">
 <form method="post" action="area_manage.php" name="theForm" onsubmit="return add_area()">
-{if $region_type eq '0'}{$lang.add_country}:
-{elseif $region_type eq '1'}{$lang.add_province}:
-{elseif $region_type eq '2'}{$lang.add_city}:
-{elseif $region_type eq '3'}{$lang.add_cantonal}: {/if}
+@if($region_type == '0'){{ $lang['add_country'] }}:
+@elseif($region_type == '1'){{ $lang['add_province'] }}:
+@elseif($region_type == '2'){{ $lang['add_city'] }}:
+@elseif($region_type == '3'){{ $lang['add_cantonal'] }}: @endif
 <input type="text" name="region_name" maxlength="150" size="40" />
-<input type="hidden" name="region_type" value="{$region_type}" />
-<input type="hidden" name="parent_id" value="{$parent_id}" />
-<input type="submit" value="{$lang.button_submit}" class="button" />
+<input type="hidden" name="region_type" value="{{ $region_type }}" />
+<input type="hidden" name="parent_id" value="{{ $parent_id }}" />
+<input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
 </form>
 </div>
 
@@ -18,37 +19,37 @@
 <div class="list-div">
 <table cellspacing='1' cellpadding='3' id='listTable'>
   <tr>
-    <th>{$area_here}</th>
+    <th>{{ $area_here }}</th>
   </tr>
 </table>
 </div>
 <div class="list-div" id="listDiv">
-{/if}
+@endif
 
 <table cellspacing='1' cellpadding='3' id='listTable'>
   <tr>
-    {foreach from=$region_arr item=list name=area_name}
-      {if $smarty.foreach.area_name.iteration > 1 and ($smarty.foreach.area_name.iteration-1) % 3 eq 0}
+    @foreach($region_arr as $list)
+      @if($loop->iteration > 1 && ($loop->iteration-1) % 3 == 0)
       </tr><tr>
-      {/if}
+      @endif
       <td class="first-cell" align="left">
-       <span onclick="listTable.edit(this, 'edit_area_name', '{$list.region_id}'); return false;">{$list.region_name|escape:"html"}</span>
+       <span onclick="listTable.edit(this, 'edit_area_name', '{{ $list['region_id'] }}'); return false;">{{ $list['region_name'] }}</span>
        <span class="link-span">
-       {if $region_type < 3}
-       <a href="area_manage.php?act=list&type={$list.region_type+1}&pid={$list.region_id}" title="{$lang.manage_area}">
-         {$lang.manage_area}</a>&nbsp;&nbsp;
-       {/if}
-       <a href="javascript:listTable.remove({$list.region_id}, '{$lang.area_drop_confirm}', 'drop_area')" title="{$lang.drop}">{$lang.drop}</a>
+       @if($region_type < 3)
+       <a href="area_manage.php?act=list&type={{ $list['region_type+1'] }}&pid={{ $list['region_id'] }}" title="{{ $lang['manage_area'] }}">
+         {{ $lang['manage_area'] }}</a>&nbsp;&nbsp;
+       @endif
+       <a href="javascript:listTable.remove({{ $list['region_id'] }}, '{{ $lang['area_drop_confirm'] }}', 'drop_area')" title="{{ $lang['drop'] }}">{{ $lang['drop'] }}</a>
        </span>
       </td>
-    {/foreach}
+    @endforeach
   </tr>
 </table>
 
-{if $full_page}
+@if($full_page)
 </div>
 
-{literal}
+
 <script language="JavaScript">
 <!--
 
@@ -83,7 +84,7 @@ function add_area()
 
 //-->
 </script>
-{/literal}
 
-{include file="pagefooter.htm"}
-{/if}
+
+@include('pagefooter')
+@endif

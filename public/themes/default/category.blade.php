@@ -2,18 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$page_title}</title>
+<title>{{ $page_title }}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
-<!-- {if $cat_style} -->
-<link href="{$cat_style}" rel="stylesheet" type="text/css" />
-<!-- {/if} -->
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
+@if($cat_style)
+<link href="{{ $cat_style }}" rel="stylesheet" type="text/css" />
+@endif
 {* 包含脚本文件 *}
-{insert_scripts files='common.js,global.js,compare.js'}
+<script src="common.js"></script>
+<script src="global.js"></script>
+<script src="compare.js"></script>
 </head>
 <body>
 <!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
@@ -41,50 +43,50 @@
   <!--right start-->
   <div class="AreaR">
 	 <!--组合搜索 开始-->
-	  <!--{if $brands.1 || $price_grade.1 || $filter_attr_list}-->
+	  @if($brands[1] || $price_grade[1] || $filter_attr_list)
 	  <div class="box">
 		 <div class="box_1">
-			<h3><span>{$lang.goods_filter}</span></h3>
-			<!--{if $brands.1}-->
+			<h3><span>{{ $lang['goods_filter'] }}</span></h3>
+			@if($brands[1])
 			<div class="screeBox">
-			  <strong>{$lang.brand}：</strong>
-				<!--{foreach from=$brands item=brand}-->
-					<!-- {if $brand.selected} -->
-					<span>{$brand.brand_name}</span>
-					<!-- {else} -->
-					<a href="{$brand.url}">{$brand.brand_name}</a>&nbsp;
-					<!-- {/if} -->
-				<!--{/foreach}-->
+			  <strong>{{ $lang['brand'] }}：</strong>
+				@foreach($brands as $brand)
+					@if($brand['selected'])
+					<span>{{ $brand['brand_name'] }}</span>
+					@else
+					<a href="{{ $brand['url'] }}">{{ $brand['brand_name'] }}</a>&nbsp;
+					@endif
+				@endforeach
 			</div>
-			<!--{/if}-->
-			<!--{if $price_grade.1}-->
+			@endif
+			@if($price_grade[1])
 			<div class="screeBox">
-			<strong>{$lang.price}：</strong>
-			<!--{foreach from=$price_grade item=grade}-->
-				<!-- {if $grade.selected} -->
-				<span>{$grade.price_range}</span>
-				<!-- {else} -->
-				<a href="{$grade.url}">{$grade.price_range}</a>&nbsp;
-				<!-- {/if} -->
-			<!--{/foreach}-->
+			<strong>{{ $lang['price'] }}：</strong>
+			@foreach($price_grade as $grade)
+				@if($grade['selected'])
+				<span>{{ $grade['price_range'] }}</span>
+				@else
+				<a href="{{ $grade['url'] }}">{{ $grade['price_range'] }}</a>&nbsp;
+				@endif
+			@endforeach
 			</div>
-			<!--{/if}-->
-			<!--{foreach from=$filter_attr_list item=filter_attr}-->
+			@endif
+			@foreach($filter_attr_list as $filter_attr)
       <div class="screeBox">
-			<strong>{$filter_attr.filter_attr_name|escape:html} :</strong>
-			<!--{foreach from=$filter_attr.attr_list item=attr}-->
-				<!-- {if $attr.selected} -->
-				<span>{$attr.attr_value}</span>
-				<!-- {else} -->
-				<a href="{$attr.url}">{$attr.attr_value}</a>&nbsp;
-				<!-- {/if} -->
-			<!--{/foreach}-->
+			<strong>{{ $filter_attr['filter_attr_name'] }} :</strong>
+			@foreach($filter_attr['attr_list'] as $attr)
+				@if($attr['selected'])
+				<span>{{ $attr['attr_value'] }}</span>
+				@else
+				<a href="{{ $attr['url'] }}">{{ $attr['attr_value'] }}</a>&nbsp;
+				@endif
+			@endforeach
 			</div>
-      <!--{/foreach}-->
+      @endforeach
 		 </div>
 		</div>
 		<div class="blank5"></div>
-	  <!-- {/if} -->
+	  @endif
 	 <!--组合搜索 结束-->
    <!-- TemplateBeginEditable name="右边区域" -->
 <!-- #BeginLibraryItem "/library/recommend_best.lbi" --><!-- #EndLibraryItem -->
@@ -108,22 +110,22 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>] 
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+    <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>] 
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->

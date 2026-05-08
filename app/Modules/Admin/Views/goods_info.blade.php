@@ -1,27 +1,29 @@
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,selectzone.js,colorselector.js"}
-<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="selectzone.js"></script>
+<script src="colorselector.js"></script>
+<script type="text/javascript" src="../js/calendar.php?lang={{ $cfg_lang }}"></script>
 <link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
 
-{if $warning}
+@if($warning)
 <ul style="padding:0; margin: 0; list-style-type:none; color: #CC0000;">
-  <li style="border: 1px solid #CC0000; background: #FFFFCC; padding: 10px; margin-bottom: 5px;" >{$warning}</li>
+  <li style="border: 1px solid #CC0000; background: #FFFFCC; padding: 10px; margin-bottom: 5px;" >{{ $warning }}</li>
 </ul>
-{/if}
+@endif
 
 <!-- start goods form -->
 <div class="tab-div">
     <!-- tab bar -->
     <div id="tabbar-div">
       <p>
-        <span class="tab-front" id="general-tab">{$lang.tab_general}</span><span
-        class="tab-back" id="detail-tab">{$lang.tab_detail}</span><span
-        class="tab-back" id="mix-tab">{$lang.tab_mix}</span>{if $goods_type_list}<span
-        class="tab-back" id="properties-tab">{$lang.tab_properties}</span>{/if}<span
-        class="tab-back" id="gallery-tab">{$lang.tab_gallery}</span><span
-        class="tab-back" id="linkgoods-tab">{$lang.tab_linkgoods}</span>{if $code eq ''}<span
-        class="tab-back" id="groupgoods-tab">{$lang.tab_groupgoods}</span>{/if}<span
-        class="tab-back" id="article-tab">{$lang.tab_article}</span>
+        <span class="tab-front" id="general-tab">{{ $lang['tab_general'] }}</span><span
+        class="tab-back" id="detail-tab">{{ $lang['tab_detail'] }}</span><span
+        class="tab-back" id="mix-tab">{{ $lang['tab_mix'] }}</span>@if($goods_type_list)<span
+        class="tab-back" id="properties-tab">{{ $lang['tab_properties'] }}</span>@endif<span
+        class="tab-back" id="gallery-tab">{{ $lang['tab_gallery'] }}</span><span
+        class="tab-back" id="linkgoods-tab">{{ $lang['tab_linkgoods'] }}</span>@if($code == '')<span
+        class="tab-back" id="groupgoods-tab">{{ $lang['tab_groupgoods'] }}</span>@endif<span
+        class="tab-back" id="article-tab">{{ $lang['tab_article'] }}</span>
       </p>
     </div>
 
@@ -33,167 +35,167 @@
         <!-- 閫氱敤淇℃伅 -->
         <table width="90%" id="general-table" align="center">
           <tr>
-            <td class="label">{$lang.lab_goods_name}</td>
-            <td><input type="text" name="goods_name" value="{$goods.goods_name|escape}" style="float:left;color:{$goods_name_color};" size="30" /><div style="background-color:{$goods_name_color};float:left;margin-left:2px;" id="font_color" onclick="ColorSelecter.Show(this);"><img src="images/color_selecter.gif" style="margin-top:-1px;" /></div><input type="hidden" id="goods_name_color" name="goods_name_color" value="{$goods_name_color}" />&nbsp;
+            <td class="label">{{ $lang['lab_goods_name'] }}</td>
+            <td><input type="text" name="goods_name" value="{{ $goods['goods_name'] }}" style="float:left;color:{{ $goods_name_color }};" size="30" /><div style="background-color:{{ $goods_name_color }};float:left;margin-left:2px;" id="font_color" onclick="ColorSelecter.Show(this);"><img src="images/color_selecter.gif" style="margin-top:-1px;" /></div><input type="hidden" id="goods_name_color" name="goods_name_color" value="{{ $goods_name_color }}" />&nbsp;
             <select name="goods_name_style">
-              <option value="">{$lang.select_font}</option>
-              {html_options options=$lang.font_styles selected=$goods_name_style}
+              <option value="">{{ $lang['select_font'] }}</option>
+              @foreach($lang['font_styles'] as $__k => $__v)<option value="{{ $__k }}" @if($__k == $goods_name_style) selected @endif>{{ $__v }}</option>@endforeach
             </select>
-            {$lang.require_field}</td>
+            {{ $lang['require_field'] }}</td>
           </tr>
           <tr>
             <td class="label">
-            <a href="javascript:showNotice('noticeGoodsSN');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a> {$lang.lab_goods_sn} </td>
-            <td><input type="text" name="goods_sn" value="{$goods.goods_sn|escape}" size="20" onblur="checkGoodsSn(this.value,'{$goods.goods_id}')" /><span id="goods_sn_notice"></span><br />
-            <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsSN">{$lang.notice_goods_sn}</span></td>
+            <a href="javascript:showNotice('noticeGoodsSN');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a> {{ $lang['lab_goods_sn'] }} </td>
+            <td><input type="text" name="goods_sn" value="{{ $goods['goods_sn'] }}" size="20" onblur="checkGoodsSn(this.value,'{{ $goods['goods_id'] }}')" /><span id="goods_sn_notice"></span><br />
+            <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsSN">{{ $lang['notice_goods_sn'] }}</span></td>
           </tr>
           <tr>
-            <td class="label">{$lang.lab_goods_cat}</td>
-            <td><select name="cat_id" onchange="hideCatDiv()" ><option value="0">{$lang.select_please}</option>{$cat_list}</select>
-              {if $is_add}
-              <a href="javascript:void(0)" onclick="rapidCatAdd()" title="{$lang.rapid_add_cat}" class="special">{$lang.rapid_add_cat}</a>
+            <td class="label">{{ $lang['lab_goods_cat'] }}</td>
+            <td><select name="cat_id" onchange="hideCatDiv()" ><option value="0">{{ $lang['select_please'] }}</option>{{ $cat_list }}</select>
+              @if($is_add)
+              <a href="javascript:void(0)" onclick="rapidCatAdd()" title="{{ $lang['rapid_add_cat'] }}" class="special">{{ $lang['rapid_add_cat'] }}</a>
               <span id="category_add" style="display:none;">
               <input class="text" size="10" name="addedCategoryName" />
-               <a href="javascript:void(0)" onclick="addCategory()" title="{$lang.button_submit}" class="special" >{$lang.button_submit}</a>
-               <a href="javascript:void(0)" onclick="return goCatPage()" title="{$lang.category_manage}" class="special" >{$lang.category_manage}</a>
-               <a href="javascript:void(0)" onclick="hideCatDiv()" title="{$lang.hide}" class="special" ><<</a>
+               <a href="javascript:void(0)" onclick="addCategory()" title="{{ $lang['button_submit'] }}" class="special" >{{ $lang['button_submit'] }}</a>
+               <a href="javascript:void(0)" onclick="return goCatPage()" title="{{ $lang['category_manage'] }}" class="special" >{{ $lang['category_manage'] }}</a>
+               <a href="javascript:void(0)" onclick="hideCatDiv()" title="{{ $lang['hide'] }}" class="special" ><<</a>
                </span>
-               {/if}
-               {$lang.require_field}
+               @endif
+               {{ $lang['require_field'] }}
             </td>
           </tr>
           <tr>
-            <td class="label">{$lang.lab_other_cat}</td>
+            <td class="label">{{ $lang['lab_other_cat'] }}</td>
             <td>
-              <input type="button" value="{$lang.add}" onclick="addOtherCat(this.parentNode)" class="button" />
-              {foreach from=$goods.other_cat item=cat_id}
-              <select name="other_cat[]"><option value="0">{$lang.select_please}</option>{$other_cat_list.$cat_id}</select>
-              {/foreach}
+              <input type="button" value="{{ $lang['add'] }}" onclick="addOtherCat(this.parentNode)" class="button" />
+              @foreach($goods['other_cat'] as $cat_id)
+              <select name="other_cat[]"><option value="0">{{ $lang['select_please'] }}</option>{{ $other_cat_list['$cat_id'] }}</select>
+              @endforeach
             </td>
           </tr>
           <tr>
-            <td class="label">{$lang.lab_goods_brand}</td>
-            <td><select name="brand_id" onchange="hideBrandDiv()" ><option value="0">{$lang.select_please}{html_options options=$brand_list selected=$goods.brand_id}</select>
-              {if $is_add}
-              <a href="javascript:void(0)" title="{$lang.rapid_add_brand}" onclick="rapidBrandAdd()" class="special" >{$lang.rapid_add_brand}</a>
+            <td class="label">{{ $lang['lab_goods_brand'] }}</td>
+            <td><select name="brand_id" onchange="hideBrandDiv()" ><option value="0">{{ $lang['select_please'] }}@foreach($brand_list as $__k => $__v)<option value="{{ $__k }}" @if($__k == $goods['brand_id']) selected @endif>{{ $__v }}</option>@endforeach</select>
+              @if($is_add)
+              <a href="javascript:void(0)" title="{{ $lang['rapid_add_brand'] }}" onclick="rapidBrandAdd()" class="special" >{{ $lang['rapid_add_brand'] }}</a>
               <span id="brand_add" style="display:none;">
               <input class="text" size="15" name="addedBrandName" />
-               <a href="javascript:void(0)" onclick="addBrand()" class="special" >{$lang.button_submit}</a>
-               <a href="javascript:void(0)" onclick="return goBrandPage()" title="{$lang.brand_manage}" class="special" >{$lang.brand_manage}</a>
-               <a href="javascript:void(0)" onclick="hideBrandDiv()" title="{$lang.hide}" class="special" ><<</a>
+               <a href="javascript:void(0)" onclick="addBrand()" class="special" >{{ $lang['button_submit'] }}</a>
+               <a href="javascript:void(0)" onclick="return goBrandPage()" title="{{ $lang['brand_manage'] }}" class="special" >{{ $lang['brand_manage'] }}</a>
+               <a href="javascript:void(0)" onclick="hideBrandDiv()" title="{{ $lang['hide'] }}" class="special" ><<</a>
                </span>
-               {/if}
+               @endif
             </td>
           </tr>
-         {if $suppliers_exists eq 1}
+         @if($suppliers_exists == 1)
           <tr>
-            <td class="label">{$lang.label_suppliers}</td>
+            <td class="label">{{ $lang['label_suppliers'] }}</td>
             <td><select name="suppliers_id" id="suppliers_id">
-        <option value="0">{$lang.suppliers_no}</option>
-        {html_options options=$suppliers_list_name selected=$goods.suppliers_id}
+        <option value="0">{{ $lang['suppliers_no'] }}</option>
+        @foreach($suppliers_list_name as $__k => $__v)<option value="{{ $__k }}" @if($__k == $goods['suppliers_id']) selected @endif>{{ $__v }}</option>@endforeach
       </select></td>
           </tr>
-         {/if}
+         @endif
           <tr>
-            <td class="label">{$lang.lab_shop_price}</td>
-            <td><input type="text" name="shop_price" value="{$goods.shop_price}" size="20" onblur="priceSetted()"/>
-            <input type="button" value="{$lang.compute_by_mp}" onclick="marketPriceSetted()" />
-            {$lang.require_field}</td>
+            <td class="label">{{ $lang['lab_shop_price'] }}</td>
+            <td><input type="text" name="shop_price" value="{{ $goods['shop_price'] }}" size="20" onblur="priceSetted()"/>
+            <input type="button" value="{{ $lang['compute_by_mp'] }}" onclick="marketPriceSetted()" />
+            {{ $lang['require_field'] }}</td>
           </tr>
-          {if $user_rank_list}
+          @if($user_rank_list)
           <tr>
-            <td class="label"><a href="javascript:showNotice('noticeUserPrice');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.lab_user_price}</td>
+            <td class="label"><a href="javascript:showNotice('noticeUserPrice');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['lab_user_price'] }}</td>
             <td>
-              {foreach from=$user_rank_list item=user_rank}
-              {$user_rank.rank_name}<span id="nrank_{$user_rank.rank_id}"></span><input type="text" id="rank_{$user_rank.rank_id}" name="user_price[]" value="{$member_price_list[$user_rank.rank_id]|default:-1}" onkeyup="if(parseInt(this.value)<-1){this.value='-1';};set_price_note({$user_rank.rank_id})" size="8" />
-              <input type="hidden" name="user_rank[]" value="{$user_rank.rank_id}" />
-              {/foreach}
+              @foreach($user_rank_list as $user_rank)
+              {{ $user_rank['rank_name'] }}<span id="nrank_{{ $user_rank['rank_id'] }}"></span><input type="text" id="rank_{{ $user_rank['rank_id'] }}" name="user_price[]" value="{{ $member_price_list[$user_rank['rank_id]'] ?? -1 }}" onkeyup="if(parseInt(this.value)<-1){this.value='-1';};set_price_note({{ $user_rank['rank_id'] }})" size="8" />
+              <input type="hidden" name="user_rank[]" value="{{ $user_rank['rank_id'] }}" />
+              @endforeach
               <br />
-              <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeUserPrice">{$lang.notice_user_price}</span>
+              <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeUserPrice">{{ $lang['notice_user_price'] }}</span>
             </td>
           </tr>
-          {/if}
+          @endif
 
           <!--鍟嗗搧浼樻儬浠锋牸-->
           <tr>
-            <td class="label"><a href="javascript:showNotice('volumePrice');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.lab_volume_price}</td>
+            <td class="label"><a href="javascript:showNotice('volumePrice');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['lab_volume_price'] }}</td>
             <td>
               <table width="100%" id="tbody-volume" align="center">
-                {foreach from=$volume_price_list item=volume_price name="volume_price_tab"}
+                @foreach($volume_price_list as $volume_price)
                 <tr>
                   <td>
-                     {if $smarty.foreach.volume_price_tab.iteration eq 1}
+                     @if($loop->iteration == 1)
                        <a href="javascript:;" onclick="addVolumePrice(this)">[+]</a>
-                     {else}
+                     @else
                        <a href="javascript:;" onclick="removeVolumePrice(this)">[-]</a>
-                     {/if}
-                     {$lang.volume_number} <input type="text" name="volume_number[]" size="8" value="{$volume_price.number}"/>
-                     {$lang.volume_price} <input type="text" name="volume_price[]" size="8" value="{$volume_price.price}"/>
+                     @endif
+                     {{ $lang['volume_number'] }} <input type="text" name="volume_number[]" size="8" value="{{ $volume_price['number'] }}"/>
+                     {{ $lang['volume_price'] }} <input type="text" name="volume_price[]" size="8" value="{{ $volume_price['price'] }}"/>
                   </td>
                 </tr>
-                {/foreach}
+                @endforeach
               </table>
-              <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="volumePrice">{$lang.notice_volume_price}</span>
+              <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="volumePrice">{{ $lang['notice_volume_price'] }}</span>
             </td>
           </tr>
           <!--鍟嗗搧浼樻儬浠锋牸 end -->
 
           <tr>
-            <td class="label">{$lang.lab_market_price}</td>
-            <td><input type="text" name="market_price" value="{$goods.market_price}" size="20" />
-              <input type="button" value="{$lang.integral_market_price}" onclick="integral_market_price()" />
+            <td class="label">{{ $lang['lab_market_price'] }}</td>
+            <td><input type="text" name="market_price" value="{{ $goods['market_price'] }}" size="20" />
+              <input type="button" value="{{ $lang['integral_market_price'] }}" onclick="integral_market_price()" />
             </td>
           </tr>
           <tr>
-            <td class="label"><a href="javascript:showNotice('giveIntegral');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a> {$lang.lab_give_integral}</td>
-            <td><input type="text" name="give_integral" value="{$goods.give_integral}" size="20" />
-            <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="giveIntegral">{$lang.notice_give_integral}</span></td>
+            <td class="label"><a href="javascript:showNotice('giveIntegral');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a> {{ $lang['lab_give_integral'] }}</td>
+            <td><input type="text" name="give_integral" value="{{ $goods['give_integral'] }}" size="20" />
+            <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="giveIntegral">{{ $lang['notice_give_integral'] }}</span></td>
           </tr>
           <tr>
-            <td class="label"><a href="javascript:showNotice('rankIntegral');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a> {$lang.lab_rank_integral}</td>
-            <td><input type="text" name="rank_integral" value="{$goods.rank_integral}" size="20" />
-            <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="rankIntegral">{$lang.notice_rank_integral}</span></td>
+            <td class="label"><a href="javascript:showNotice('rankIntegral');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a> {{ $lang['lab_rank_integral'] }}</td>
+            <td><input type="text" name="rank_integral" value="{{ $goods['rank_integral'] }}" size="20" />
+            <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="rankIntegral">{{ $lang['notice_rank_integral'] }}</span></td>
           </tr>
           <tr>
-            <td class="label"><a href="javascript:showNotice('noticPoints');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a> {$lang.lab_integral}</td>
-            <td><input type="text" name="integral" value="{$goods.integral}" size="20" onblur="parseint_integral()";/>
-              <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticPoints">{$lang.notice_integral}</span>
+            <td class="label"><a href="javascript:showNotice('noticPoints');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a> {{ $lang['lab_integral'] }}</td>
+            <td><input type="text" name="integral" value="{{ $goods['integral'] }}" size="20" onblur="parseint_integral()";/>
+              <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticPoints">{{ $lang['notice_integral'] }}</span>
             </td>
           </tr>
           <tr>
-            <td class="label"><label for="is_promote"><input type="checkbox" id="is_promote" name="is_promote" value="1" {if $goods.is_promote}checked="checked"{/if} onclick="handlePromote(this.checked);" /> {$lang.lab_promote_price}</label></td>
-            <td id="promote_3"><input type="text" id="promote_1" name="promote_price" value="{$goods.promote_price}" size="20" /></td>
+            <td class="label"><label for="is_promote"><input type="checkbox" id="is_promote" name="is_promote" value="1" @if($goods['is_promote'])checked="checked"@endif onclick="handlePromote(this.checked);" /> {{ $lang['lab_promote_price'] }}</label></td>
+            <td id="promote_3"><input type="text" id="promote_1" name="promote_price" value="{{ $goods['promote_price'] }}" size="20" /></td>
           </tr>
           <tr id="promote_4">
-            <td class="label" id="promote_5">{$lang.lab_promote_date}</td>
+            <td class="label" id="promote_5">{{ $lang['lab_promote_date'] }}</td>
             <td id="promote_6">
-              <input name="promote_start_date" type="text" id="promote_start_date" size="12" value='{$goods.promote_start_date}' readonly="readonly" /><input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('promote_start_date', '%Y-%m-%d', false, false, 'selbtn1');" value="{$lang.btn_select}" class="button"/> - <input name="promote_end_date" type="text" id="promote_end_date" size="12" value='{$goods.promote_end_date}' readonly="readonly" /><input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('promote_end_date', '%Y-%m-%d', false, false, 'selbtn2');" value="{$lang.btn_select}" class="button"/>
+              <input name="promote_start_date" type="text" id="promote_start_date" size="12" value='{{ $goods['promote_start_date'] }}' readonly="readonly" /><input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('promote_start_date', '%Y-%m-%d', false, false, 'selbtn1');" value="{{ $lang['btn_select'] }}" class="button"/> - <input name="promote_end_date" type="text" id="promote_end_date" size="12" value='{{ $goods['promote_end_date'] }}' readonly="readonly" /><input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('promote_end_date', '%Y-%m-%d', false, false, 'selbtn2');" value="{{ $lang['btn_select'] }}" class="button"/>
             </td>
           </tr>
           <tr>
-            <td class="label">{$lang.lab_picture}</td>
+            <td class="label">{{ $lang['lab_picture'] }}</td>
             <td>
               <input type="file" name="goods_img" size="35" />
-              {if $goods.goods_img}
-                <a href="goods.php?act=show_image&img_url={$goods.goods_img}" target="_blank"><img src="images/yes.gif" border="0" /></a>
-              {else}
+              @if($goods['goods_img'])
+                <a href="goods.php?act=show_image&img_url={{ $goods['goods_img'] }}" target="_blank"><img src="images/yes.gif" border="0" /></a>
+              @else
                 <img src="images/no.gif" />
-              {/if}
-              <br /><input type="text" size="40" value="{$lang.lab_picture_url}" style="color:#aaa;" onfocus="if (this.value == '{$lang.lab_picture_url}'){this.value='http://';this.style.color='#000';}" name="goods_img_url"/>
+              @endif
+              <br /><input type="text" size="40" value="{{ $lang['lab_picture_url'] }}" style="color:#aaa;" onfocus="if (this.value == '{{ $lang['lab_picture_url'] }}'){this.value='http://';this.style.color='#000';}" name="goods_img_url"/>
             </td>
           </tr>
           <tr id="auto_thumb_1">
-            <td class="label"> {$lang.lab_thumb}</td>
+            <td class="label"> {{ $lang['lab_thumb'] }}</td>
             <td id="auto_thumb_3">
               <input type="file" name="goods_thumb" size="35" />
-              {if $goods.goods_thumb}
-                <a href="goods.php?act=show_image&img_url={$goods.goods_thumb}" target="_blank"><img src="images/yes.gif" border="0" /></a>
-              {else}
+              @if($goods['goods_thumb'])
+                <a href="goods.php?act=show_image&img_url={{ $goods['goods_thumb'] }}" target="_blank"><img src="images/yes.gif" border="0" /></a>
+              @else
                 <img src="images/no.gif" />
-              {/if}
-              <br /><input type="text" size="40" value="{$lang.lab_thumb_url}" style="color:#aaa;" onfocus="if (this.value == '{$lang.lab_thumb_url}'){this.value='http://';this.style.color='#000';}" name="goods_thumb_url"/>
-              {if $gd > 0}
-              <br /><label for="auto_thumb"><input type="checkbox" id="auto_thumb" name="auto_thumb" checked="true" value="1" onclick="handleAutoThumb(this.checked)" />{$lang.auto_thumb}</label>{/if}
+              @endif
+              <br /><input type="text" size="40" value="{{ $lang['lab_thumb_url'] }}" style="color:#aaa;" onfocus="if (this.value == '{{ $lang['lab_thumb_url'] }}'){this.value='http://';this.style.color='#000';}" name="goods_thumb_url"/>
+              @if($gd > 0)
+              <br /><label for="auto_thumb"><input type="checkbox" id="auto_thumb" name="auto_thumb" checked="true" value="1" onclick="handleAutoThumb(this.checked)" />{{ $lang['auto_thumb'] }}</label>@endif
             </td>
           </tr>
         </table>
@@ -201,94 +203,94 @@
         <!-- 璇︾粏鎻忚堪 -->
         <table width="90%" id="detail-table" style="display:none">
           <tr>
-            <td>{$FCKeditor}</td>
+            <td>{{ $FCKeditor }}</td>
           </tr>
         </table>
 
         <!-- 鍏朵粬淇℃伅 -->
         <table width="90%" id="mix-table" style="display:none" align="center">
-          {if $code eq ''}
+          @if($code == '')
           <tr>
-            <td class="label">{$lang.lab_goods_weight}</td>
-            <td><input type="text" name="goods_weight" value="{$goods.goods_weight_by_unit}" size="20" /> <select name="weight_unit">{html_options options=$unit_list selected=$weight_unit}</select></td>
+            <td class="label">{{ $lang['lab_goods_weight'] }}</td>
+            <td><input type="text" name="goods_weight" value="{{ $goods['goods_weight_by_unit'] }}" size="20" /> <select name="weight_unit">@foreach($unit_list as $__k => $__v)<option value="{{ $__k }}" @if($__k == $weight_unit) selected @endif>{{ $__v }}</option>@endforeach</select></td>
           </tr>
-          {/if}
-          {if $cfg.use_storage}
+          @endif
+          @if($cfg['use_storage'])
           <tr>
-            <td class="label"><a href="javascript:showNotice('noticeStorage');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a> {$lang.lab_goods_number}</td>
-<!--            <td><input type="text" name="goods_number" value="{$goods.goods_number}" size="20" {if $code neq '' || $goods._attribute neq ''}readonly="readonly"{/if} /><br />-->
-            <td><input type="text" name="goods_number" value="{$goods.goods_number}" size="20" /><br />
-            <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeStorage">{$lang.notice_storage}</span></td>
+            <td class="label"><a href="javascript:showNotice('noticeStorage');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a> {{ $lang['lab_goods_number'] }}</td>
+<!--            <td><input type="text" name="goods_number" value="{{ $goods['goods_number'] }}" size="20" @if($code != '' || $goods['_attribute'] != '')readonly="readonly"@endif /><br />-->
+            <td><input type="text" name="goods_number" value="{{ $goods['goods_number'] }}" size="20" /><br />
+            <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeStorage">{{ $lang['notice_storage'] }}</span></td>
           </tr>
           <tr>
-            <td class="label">{$lang.lab_warn_number}</td>
-            <td><input type="text" name="warn_number" value="{$goods.warn_number}" size="20" /></td>
+            <td class="label">{{ $lang['lab_warn_number'] }}</td>
+            <td><input type="text" name="warn_number" value="{{ $goods['warn_number'] }}" size="20" /></td>
           </tr>
-          {/if}
+          @endif
           <tr>
-            <td class="label">{$lang.lab_intro}</td>
-            <td><input type="checkbox" name="is_best" value="1" {if $goods.is_best}checked="checked"{/if} />{$lang.is_best} <input type="checkbox" name="is_new" value="1" {if $goods.is_new}checked="checked"{/if} />{$lang.is_new} <input type="checkbox" name="is_hot" value="1" {if $goods.is_hot}checked="checked"{/if} />{$lang.is_hot}</td>
+            <td class="label">{{ $lang['lab_intro'] }}</td>
+            <td><input type="checkbox" name="is_best" value="1" @if($goods['is_best'])checked="checked"@endif />{{ $lang['is_best'] }} <input type="checkbox" name="is_new" value="1" @if($goods['is_new'])checked="checked"@endif />{{ $lang['is_new'] }} <input type="checkbox" name="is_hot" value="1" @if($goods['is_hot'])checked="checked"@endif />{{ $lang['is_hot'] }}</td>
           </tr>
           <tr id="alone_sale_1">
-            <td class="label" id="alone_sale_2">{$lang.lab_is_on_sale}</td>
-            <td id="alone_sale_3"><input type="checkbox" name="is_on_sale" value="1" {if $goods.is_on_sale}checked="checked"{/if} /> {$lang.on_sale_desc}</td>
+            <td class="label" id="alone_sale_2">{{ $lang['lab_is_on_sale'] }}</td>
+            <td id="alone_sale_3"><input type="checkbox" name="is_on_sale" value="1" @if($goods['is_on_sale'])checked="checked"@endif /> {{ $lang['on_sale_desc'] }}</td>
           </tr>
           <tr>
-            <td class="label">{$lang.lab_is_alone_sale}</td>
-            <td><input type="checkbox" name="is_alone_sale" value="1" {if $goods.is_alone_sale}checked="checked"{/if} /> {$lang.alone_sale}</td>
+            <td class="label">{{ $lang['lab_is_alone_sale'] }}</td>
+            <td><input type="checkbox" name="is_alone_sale" value="1" @if($goods['is_alone_sale'])checked="checked"@endif /> {{ $lang['alone_sale'] }}</td>
           </tr>
           <tr>
-            <td class="label">{$lang.lab_is_free_shipping}</td>
-            <td><input type="checkbox" name="is_shipping" value="1" {if $goods.is_shipping}checked="checked"{/if} /> {$lang.free_shipping}</td>
+            <td class="label">{{ $lang['lab_is_free_shipping'] }}</td>
+            <td><input type="checkbox" name="is_shipping" value="1" @if($goods['is_shipping'])checked="checked"@endif /> {{ $lang['free_shipping'] }}</td>
           </tr>
           <tr>
-            <td class="label">{$lang.lab_keywords}</td>
-            <td><input type="text" name="keywords" value="{$goods.keywords|escape}" size="40" /> {$lang.notice_keywords}</td>
+            <td class="label">{{ $lang['lab_keywords'] }}</td>
+            <td><input type="text" name="keywords" value="{{ $goods['keywords'] }}" size="40" /> {{ $lang['notice_keywords'] }}</td>
           </tr>
           <tr>
-            <td class="label">{$lang.lab_goods_brief}</td>
-            <td><textarea name="goods_brief" cols="40" rows="3">{$goods.goods_brief|escape}</textarea></td>
+            <td class="label">{{ $lang['lab_goods_brief'] }}</td>
+            <td><textarea name="goods_brief" cols="40" rows="3">{{ $goods['goods_brief'] }}</textarea></td>
           </tr>
           <tr>
             <td class="label">
-            <a href="javascript:showNotice('noticeSellerNote');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a> {$lang.lab_seller_note} </td>
-            <td><textarea name="seller_note" cols="40" rows="3">{$goods.seller_note}</textarea><br />
-            <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeSellerNote">{$lang.notice_seller_note}</span></td>
+            <a href="javascript:showNotice('noticeSellerNote');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a> {{ $lang['lab_seller_note'] }} </td>
+            <td><textarea name="seller_note" cols="40" rows="3">{{ $goods['seller_note'] }}</textarea><br />
+            <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeSellerNote">{{ $lang['notice_seller_note'] }}</span></td>
           </tr>
         </table>
 
         <!-- 灞炴€т笌瑙勬牸 -->
-        {if $goods_type_list}
+        @if($goods_type_list)
         <table width="90%" id="properties-table" style="display:none" align="center">
           <tr>
-              <td class="label"><a href="javascript:showNotice('noticeGoodsType');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.lab_goods_type}</td>
+              <td class="label"><a href="javascript:showNotice('noticeGoodsType');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['lab_goods_type'] }}</td>
               <td>
-                <select name="goods_type" onchange="getAttrList({$goods.goods_id})">
-                  <option value="0">{$lang.sel_goods_type}</option>
-                  {$goods_type_list}
+                <select name="goods_type" onchange="getAttrList({{ $goods['goods_id'] }})">
+                  <option value="0">{{ $lang['sel_goods_type'] }}</option>
+                  {{ $goods_type_list }}
                 </select><br />
-              <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsType">{$lang.notice_goods_type}</span></td>
+              <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsType">{{ $lang['notice_goods_type'] }}</span></td>
           </tr>
           <tr>
-            <td id="tbody-goodsAttr" colspan="2" style="padding:0">{$goods_attr_html}</td>
+            <td id="tbody-goodsAttr" colspan="2" style="padding:0">{{ $goods_attr_html }}</td>
           </tr>
         </table>
-        {/if}
+        @endif
 
         <!-- 鍟嗗搧鐩稿唽 -->
         <table width="90%" id="gallery-table" style="display:none" align="center">
           <!-- 鍥剧墖鍒楄〃 -->
           <tr>
             <td>
-              {foreach from=$img_list item=img key=i}
-              <div id="gallery_{$img.img_id}" style="float:left; text-align:center; border: 1px solid #DADADA; margin: 4px; padding:2px;">
-                <a href="javascript:;" onclick="if (confirm('{$lang.drop_img_confirm}')) dropImg('{$img.img_id}')">[-]</a><br />
-                <a href="goods.php?act=show_image&img_url={$img.img_url}" target="_blank">
-                <img src="../{if $img.thumb_url}{$img.thumb_url}{else}{$img.img_url}{/if}" {if $thumb_width neq 0}width="{$thumb_width}"{/if} {if $thumb_height neq 0}height="{$thumb_height}"{/if} border="0" />
+              @foreach($img_list as $i => $img)
+              <div id="gallery_{{ $img['img_id'] }}" style="float:left; text-align:center; border: 1px solid #DADADA; margin: 4px; padding:2px;">
+                <a href="javascript:;" onclick="if (confirm('{{ $lang['drop_img_confirm'] }}')) dropImg('{{ $img['img_id'] }}')">[-]</a><br />
+                <a href="goods.php?act=show_image&img_url={{ $img['img_url'] }}" target="_blank">
+                <img src="../@if($img['thumb_url']){{ $img['thumb_url'] }}@else{{ $img['img_url'] }}@endif" @if($thumb_width != 0)width="{{ $thumb_width }}"@endif @if($thumb_height != 0)height="{{ $thumb_height }}"@endif border="0" />
                 </a><br />
-                <input type="text" value="{$img.img_desc|escape}" size="15" name="old_img_desc[{$img.img_id}]" />
+                <input type="text" value="{{ $img['img_desc'] }}" size="15" name="old_img_desc[{{ $img['img_id'] }}]" />
               </div>
-              {/foreach}
+              @endforeach
             </td>
           </tr>
           <tr><td>&nbsp;</td></tr>
@@ -296,9 +298,9 @@
           <tr>
             <td>
               <a href="javascript:;" onclick="addImg(this)">[+]</a>
-              {$lang.img_desc} <input type="text" name="img_desc[]" size="20" />
-              {$lang.img_url} <input type="file" name="img_url[]" />
-              <input type="text" size="40" value="{$lang.img_file}" style="color:#aaa;" onfocus="if (this.value == '{$lang.img_file}'){this.value='http://';this.style.color='#000';}" name="img_file[]"/>
+              {{ $lang['img_desc'] }} <input type="text" name="img_desc[]" size="20" />
+              {{ $lang['img_url'] }} <input type="file" name="img_url[]" />
+              <input type="text" size="40" value="{{ $lang['img_file'] }}" style="color:#aaa;" onfocus="if (this.value == '{{ $lang['img_file'] }}'){this.value='http://';this.style.color='#000';}" name="img_file[]"/>
             </td>
           </tr>
         </table>
@@ -309,18 +311,18 @@
           <tr>
             <td colspan="3">
               <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
-              <select name="cat_id1"><option value="0">{$lang.all_category}{$cat_list}</select>
-              <select name="brand_id1"><option value="0">{$lang.all_brand}{html_options options=$brand_list}</select>
+              <select name="cat_id1"><option value="0">{{ $lang['all_category'] }}{{ $cat_list }}</select>
+              <select name="brand_id1"><option value="0">{{ $lang['all_brand'] }}@foreach($brand_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach</select>
               <input type="text" name="keyword1" />
-              <input type="button" value="{$lang.button_search}"  class="button"
+              <input type="button" value="{{ $lang['button_search'] }}"  class="button"
                 onclick="searchGoods(sz1, 'cat_id1','brand_id1','keyword1')" />
             </td>
           </tr>
           <!-- 鍟嗗搧鍒楄〃 -->
           <tr>
-            <th>{$lang.all_goods}</th>
-            <th>{$lang.handler}</th>
-            <th>{$lang.link_goods}</th>
+            <th>{{ $lang['all_goods'] }}</th>
+            <th>{{ $lang['handler'] }}</th>
+            <th>{{ $lang['link_goods'] }}</th>
           </tr>
           <tr>
             <td width="42%">
@@ -328,7 +330,7 @@
               </select>
             </td>
             <td align="center">
-              <p><input name="is_single" type="radio" value="1" checked="checked" />{$lang.single}<br /><input name="is_single" type="radio" value="0" />{$lang.double}</p>
+              <p><input name="is_single" type="radio" value="1" checked="checked" />{{ $lang['single'] }}<br /><input name="is_single" type="radio" value="0" />{{ $lang['double'] }}</p>
               <p><input type="button" value=">>" onclick="sz1.addItem(true, 'add_link_goods', goodsId, this.form.elements['is_single'][0].checked)" class="button" /></p>
               <p><input type="button" value=">" onclick="sz1.addItem(false, 'add_link_goods', goodsId, this.form.elements['is_single'][0].checked)" class="button" /></p>
               <p><input type="button" value="<" onclick="sz1.dropItem(false, 'drop_link_goods', goodsId, elements['is_single'][0].checked)" class="button" /></p>
@@ -336,9 +338,9 @@
             </td>
             <td width="42%">
               <select name="target_select1" size="20" style="width:100%" multiple ondblclick="sz1.dropItem(false, 'drop_link_goods', goodsId, elements['is_single'][0].checked)">
-                {foreach from=$link_goods_list item=link_goods}
-                <option value="{$link_goods.goods_id}">{$link_goods.goods_name}</option>
-                {/foreach}
+                @foreach($link_goods_list as $link_goods)
+                <option value="{{ $link_goods['goods_id'] }}">{{ $link_goods['goods_name'] }}</option>
+                @endforeach
               </select>
             </td>
           </tr>
@@ -350,17 +352,17 @@
           <tr>
             <td colspan="3">
               <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
-              <select name="cat_id2"><option value="0">{$lang.all_category}{$cat_list}</select>
-              <select name="brand_id2"><option value="0">{$lang.all_brand}{html_options options=$brand_list}</select>
+              <select name="cat_id2"><option value="0">{{ $lang['all_category'] }}{{ $cat_list }}</select>
+              <select name="brand_id2"><option value="0">{{ $lang['all_brand'] }}@foreach($brand_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach</select>
               <input type="text" name="keyword2" />
-              <input type="button" value="{$lang.button_search}" onclick="searchGoods(sz2, 'cat_id2', 'brand_id2', 'keyword2')" class="button" />
+              <input type="button" value="{{ $lang['button_search'] }}" onclick="searchGoods(sz2, 'cat_id2', 'brand_id2', 'keyword2')" class="button" />
             </td>
           </tr>
           <!-- 鍟嗗搧鍒楄〃 -->
           <tr>
-            <th>{$lang.all_goods}</th>
-            <th>{$lang.handler}</th>
-            <th>{$lang.group_goods}</th>
+            <th>{{ $lang['all_goods'] }}</th>
+            <th>{{ $lang['handler'] }}</th>
+            <th>{{ $lang['group_goods'] }}</th>
           </tr>
           <tr>
             <td width="42%">
@@ -368,16 +370,16 @@
               </select>
             </td>
             <td align="center">
-              <p>{$lang.price}<br /><input name="price2" type="text" size="6" /></p>
+              <p>{{ $lang['price'] }}<br /><input name="price2" type="text" size="6" /></p>
               <p><input type="button" value=">" onclick="sz2.addItem(false, 'add_group_goods', goodsId, this.form.elements['price2'].value)" class="button" /></p>
               <p><input type="button" value="<" onclick="sz2.dropItem(false, 'drop_group_goods', goodsId, elements['is_single'][0].checked)" class="button" /></p>
               <p><input type="button" value="<<" onclick="sz2.dropItem(true, 'drop_group_goods', goodsId, elements['is_single'][0].checked)" class="button" /></p>
             </td>
             <td width="42%">
               <select name="target_select2" size="20" style="width:100%" multiple ondblclick="sz2.dropItem(false, 'drop_group_goods', goodsId, elements['is_single'][0].checked)">
-                {foreach from=$group_goods_list item=group_goods}
-                <option value="{$group_goods.goods_id}">{$group_goods.goods_name}</option>
-                {/foreach}
+                @foreach($group_goods_list as $group_goods)
+                <option value="{{ $group_goods['goods_id'] }}">{{ $group_goods['goods_name'] }}</option>
+                @endforeach
               </select>
             </td>
           </tr>
@@ -389,15 +391,15 @@
           <tr>
             <td colspan="3">
               <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
-              {$lang.article_title} <input type="text" name="article_title" />
-              <input type="button" value="{$lang.button_search}" onclick="searchArticle()" class="button" />
+              {{ $lang['article_title'] }} <input type="text" name="article_title" />
+              <input type="button" value="{{ $lang['button_search'] }}" onclick="searchArticle()" class="button" />
             </td>
           </tr>
           <!-- 鏂囩珷鍒楄〃 -->
           <tr>
-            <th>{$lang.all_article}</th>
-            <th>{$lang.handler}</th>
-            <th>{$lang.goods_article}</th>
+            <th>{{ $lang['all_article'] }}</th>
+            <th>{{ $lang['handler'] }}</th>
+            <th>{{ $lang['goods_article'] }}</th>
           </tr>
           <tr>
             <td width="45%">
@@ -412,39 +414,40 @@
             </td>
             <td width="45%">
               <select name="target_select3" size="20" style="width:100%" multiple ondblclick="sz3.dropItem(false, 'drop_goods_article', goodsId, elements['is_single'][0].checked)">
-                {foreach from=$goods_article_list item=goods_article}
-                <option value="{$goods_article.article_id}">{$goods_article.title}</option>
-                {/foreach}
+                @foreach($goods_article_list as $goods_article)
+                <option value="{{ $goods_article['article_id'] }}">{{ $goods_article['title'] }}</option>
+                @endforeach
               </select>
             </td>
           </tr>
         </table>
 
         <div class="button-div">
-          <input type="hidden" name="goods_id" value="{$goods.goods_id}" />
-          {if $code neq ''}
-          <input type="hidden" name="extension_code" value="{$code}" />
-          {/if}
-          <input type="button" value="{$lang.button_submit}" class="button" onclick="validate('{$goods.goods_id}')" />
-          <input type="reset" value="{$lang.button_reset}" class="button" />
+          <input type="hidden" name="goods_id" value="{{ $goods['goods_id'] }}" />
+          @if($code != '')
+          <input type="hidden" name="extension_code" value="{{ $code }}" />
+          @endif
+          <input type="button" value="{{ $lang['button_submit'] }}" class="button" onclick="validate('{{ $goods['goods_id'] }}')" />
+          <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
         </div>
-        <input type="hidden" name="act" value="{$form_act}" />
+        <input type="hidden" name="act" value="{{ $form_act }}" />
       </form>
     </div>
 </div>
 <!-- end goods form -->
-{insert_scripts files="validator.js,tab.js"}
+<script src="validator.js"></script>
+<script src="tab.js"></script>
 
 <script language="JavaScript">
-  var goodsId = '{$goods.goods_id}';
+  var goodsId = '{{ $goods['goods_id'] }}';
   var elements = document.forms['theForm'].elements;
   var sz1 = new SelectZone(1, elements['source_select1'], elements['target_select1']);
   var sz2 = new SelectZone(2, elements['source_select2'], elements['target_select2'], elements['price2']);
   var sz3 = new SelectZone(1, elements['source_select3'], elements['target_select3']);
-  var marketPriceRate = {$cfg.market_price_rate|default:1};
-  var integralPercent = {$cfg.integral_percent|default:0};
+  var marketPriceRate = {{ $cfg['market_price_rate'] ?? 1 }};
+  var integralPercent = {{ $cfg['integral_percent'] ?? 0 }};
 
-  {literal}
+  
   onload = function()
   {
       handlePromote(document.forms['theForm'].elements['is_promote'].checked);
@@ -456,11 +459,11 @@
 
       // 妫€鏌ユ柊璁㈠崟
       startCheckOrder();
-      {/literal}
-      {foreach from=$user_rank_list item=item}
-      set_price_note({$item.rank_id});
-      {/foreach}
-      {literal}
+      
+      @foreach($user_rank_list as $item)
+      set_price_note({{ $item['rank_id'] }});
+      @endforeach
+      
       document.forms['theForm'].reset();
   }
 
@@ -569,11 +572,11 @@
   {
     computePrice('market_price', marketPriceRate);
     computePrice('integral', integralPercent / 100);
-    {/literal}
-    {foreach from=$user_rank_list item=item}
-    set_price_note({$item.rank_id});
-    {/foreach}
-    {literal}
+    
+    @foreach($user_rank_list as $item)
+    set_price_note({{ $item['rank_id'] }});
+    @endforeach
+    
   }
 
   /**
@@ -584,11 +587,11 @@
     var shop_price = parseFloat(document.forms['theForm'].elements['shop_price'].value);
 
     var rank = new Array();
-    {/literal}
-    {foreach from=$user_rank_list item=item}
-    rank[{$item.rank_id}] = {$item.discount|default:100};
-    {/foreach}
-    {literal}
+    
+    @foreach($user_rank_list as $item)
+    rank[{{ $item['rank_id'] }}] = {{ $item['discount'] ?? 100 }};
+    @endforeach
+    
     if (shop_price >0 && rank[rank_id] && document.getElementById('rank_' + rank_id) && parseInt(document.getElementById('rank_' + rank_id).value) == -1)
     {
       var price = parseInt(shop_price * rank[rank_id] + 0.5) / 100;
@@ -613,11 +616,11 @@
   {
     computePrice('shop_price', 1/marketPriceRate, 'market_price');
     computePrice('integral', integralPercent / 100);
-    {/literal}
-    {foreach from=$user_rank_list item=item}
-    set_price_note({$item.rank_id});
-    {/foreach}
-    {literal}
+    
+    @foreach($user_rank_list as $item)
+    set_price_note({{ $item['rank_id'] }});
+    @endforeach
+    
   }
 
   /**
@@ -1116,6 +1119,6 @@
       }
     }
   }
-  {/literal}
+  
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

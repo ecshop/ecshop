@@ -1,44 +1,45 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 
 <div class="form-div">
 <form method="post" action="javascript:newVoteOption()" name="theForm">
-    {$lang.add_vote_option}：<input type="text" name="option_name" maxlength="100" size="30" />
-    <input type="hidden" name="id" value="{$id}" size="30" />
-    <input type="submit" value="{$lang.button_submit}" class="button" />
+    {{ $lang['add_vote_option'] }}：<input type="text" name="option_name" maxlength="100" size="30" />
+    <input type="hidden" name="id" value="{{ $id }}" size="30" />
+    <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
 </form>
 </div>
 
 <!-- start option list -->
 <div class="list-div" id="listDiv">
-{/if}
+@endif
 
 <table cellspacing='1' cellpadding='3' id='listTable'>
   <tr>
-    <th>{$lang.option_name}</th>
-    <th>{$lang.option_order}</th>
-    <th>{$lang.vote_count}</th>
-    <th>{$lang.handler}</th>
+    <th>{{ $lang['option_name'] }}</th>
+    <th>{{ $lang['option_order'] }}</th>
+    <th>{{ $lang['vote_count'] }}</th>
+    <th>{{ $lang['handler'] }}</th>
   </tr>
-  {foreach from=$option_arr  item=list}
+  @foreach($option_arr as $list)
     <tr align="center">
       <td align="left" class="first-cell">
-      <span onclick="javascript:listTable.edit(this, 'edit_option_name', {$list.option_id})">{$list.option_name|escape:"html"}</span>
+      <span onclick="javascript:listTable.edit(this, 'edit_option_name', {{ $list['option_id'] }})">{{ $list['option_name'] }}</span>
       </td>
-      <td><span onclick="javascript:listTable.edit(this, 'edit_option_order', {$list.option_id})">{$list.option_order}</span></td>
-      <td>{$list.option_count}</td>
-      <td><a href="javascript:;" onclick="listTable.remove({$list.option_id}, '{$lang.drop_confirm}', 'remove_option')" title="{$lang.remove}"><img src="images/icon_drop.gif" border="0" height="16" width="16"></a>
+      <td><span onclick="javascript:listTable.edit(this, 'edit_option_order', {{ $list['option_id'] }})">{{ $list['option_order'] }}</span></td>
+      <td>{{ $list['option_count'] }}</td>
+      <td><a href="javascript:;" onclick="listTable.remove({{ $list['option_id'] }}, '{{ $lang['drop_confirm'] }}', 'remove_option')" title="{{ $lang['remove'] }}"><img src="images/icon_drop.gif" border="0" height="16" width="16"></a>
       </td>
     </tr>
-  {/foreach}
+  @endforeach
 </table>
 
-{if $full_page}
+@if($full_page)
 </div>
 
 <script language="JavaScript">
-{literal}
+
 onload = function()
 {
   document.forms['theForm'].elements['option_name'].focus();
@@ -72,8 +73,8 @@ function newGoodsTypeResponse(result)
     alert(result.message);
   }
 }
-{/literal}
+
 </script>
 
-{include file="pagefooter.htm"}
-{/if}
+@include('pagefooter')
+@endif

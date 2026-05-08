@@ -1,27 +1,27 @@
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js"}
+@include('pageheader')
+<script src="../js/utils.js"></script>
 
 <div class="main-div">
 <form action="bonus.php" method="post" name="theForm2" onsubmit="return validate2()">
   <table width="100%">
   <tr>
-    <td class="label">{$lang.senduserrank}:</td>
+    <td class="label">{{ $lang['senduserrank'] }}:</td>
     <td>
       <select name="rank_id">
-      <option value="0">{$lang.select_rank}</option>
-      {html_options options=$ranklist selected=$smarty.get.rank_id}
+      <option value="0">{{ $lang['select_rank'] }}</option>
+      @foreach($ranklist as $__k => $__v)<option value="{{ $__k }}" @if($__k == request()->query('rank_id')) selected @endif>{{ $__v }}</option>@endforeach
       </select>&nbsp;&nbsp;&nbsp;
-      <input type="checkbox" name="validated_email" value="1">{$lang.validated_email}
+      <input type="checkbox" name="validated_email" value="1">{{ $lang['validated_email'] }}
     </td>
   </tr>
   <tr>
      <td style="text-align:center" colspan =2>
-     <input type="submit" name="send_rank" value="{$lang.confirm_send_bonus}" class="button" />
+     <input type="submit" name="send_rank" value="{{ $lang['confirm_send_bonus'] }}" class="button" />
      </td>
    </tr>
 </table>
 <input type="hidden" name="act" value="send_by_user" />
-<input type="hidden" name="id" value="{$id}" />
+<input type="hidden" name="id" value="{{ $id }}" />
 </form>
 
 
@@ -30,16 +30,16 @@
 <div class="main-div">
 <form name="theForm" action="bonus.php" method="post" onsubmit="return validate();">
 <div class="form-div">
-<img src="images/icon_search.gif" border="0" alt="SEARCH" />{$lang.keywords}
+<img src="images/icon_search.gif" border="0" alt="SEARCH" />{{ $lang['keywords'] }}
       <input type="text" name="keyword" size="30" />
-      <input type="button" name="search" value="{$lang.button_search}" onclick="searchUser();" />
+      <input type="button" name="search" value="{{ $lang['button_search'] }}" onclick="searchUser();" />
 </div>
 <div class="list-div">
 <table cellspacing='1' cellpadding='3'>
   <tr>
-    <th>{$lang.userlist}</th>
-    <th>{$lang.handler}</th>
-    <th>{$lang.send_to_user}</th>
+    <th>{{ $lang['userlist'] }}</th>
+    <th>{{ $lang['handler'] }}</th>
+    <th>{{ $lang['send_to_user'] }}</th>
   </tr>
   <tr>
     <td width="45%" align="center">
@@ -56,16 +56,16 @@
     </td>
   </tr>
   <tr>
-    <td align="center" colspan="3"><input type="submit" name="send_user" value="{$lang.confirm_send_bonus}" class="button" /></td>
+    <td align="center" colspan="3"><input type="submit" name="send_user" value="{{ $lang['confirm_send_bonus'] }}" class="button" /></td>
   </tr>
 </table>
 </div>
-<input type="hidden" name="id" value="{$id}" />
+<input type="hidden" name="id" value="{{ $id }}" />
 <input type="hidden" name="act" value="send_by_user" />
 </form>
 </div>
 
-{literal}
+
 <script language="JavaScript">
 <!--
 document.forms['theForm'].elements['keyword'].focus();
@@ -194,5 +194,5 @@ function validate()
 
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

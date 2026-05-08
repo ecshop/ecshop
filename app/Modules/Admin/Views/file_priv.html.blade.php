@@ -1,33 +1,33 @@
-{include file="pageheader.htm"}
-{insert_scripts files="validator.js"}
+@include('pageheader')
+<script src="validator.js"></script>
 <!-- start shipping area list -->
 <div class="list-div" id="listDiv">
 
 <table cellspacing='1' cellpadding='3' id='list-table'>
   <tr>
-    <th>{$lang.item}</th>
-    <th>{$lang.read}</th>
-    <th>{$lang.write}</th>
-    <th>{$lang.modify}</th>
+    <th>{{ $lang['item'] }}</th>
+    <th>{{ $lang['read'] }}</th>
+    <th>{{ $lang['write'] }}</th>
+    <th>{{ $lang['modify'] }}</th>
   </tr>
-  {foreach from=$list item=item key=key}
+  @foreach($list as $key => $item)
   <tr>
-    <td width="250px">{$item.item}</td>
-    <td>{if $item.r > 0}<img src="images/yes.gif" width="14" height="14" alt="YES" />{else}<img src="images/no.gif" width="14" height="14" alt="NO" />{if $item.err_msg.w}&nbsp;<a href="javascript:showNotice('r_{$key}');" title="{$lang.detail}">[{$lang.detail}]</a><br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="r_{$key}">{foreach from=$item.err_msg.r item=msg}{$msg}{$lang.unread}<br />{/foreach}</span>{/if}{/if}</td>
-    <td>{if $item.w > 0}<img src="images/yes.gif" width="14" height="14" alt="YES" />{else}<img src="images/no.gif" width="14" height="14" alt="NO" />{if $item.err_msg.w}&nbsp;<a href="javascript:showNotice('w_{$key}');" title="{$lang.detail}">[{$lang.detail}]</a><br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="w_{$key}">{foreach from=$item.err_msg.w item=msg}{$msg}{$lang.unwrite}<br />{/foreach}</span>{/if}{/if}</td>
-    <td>{if $item.m > 0}<img src="images/yes.gif" width="14" height="14" alt="YES" />{else}<img src="images/no.gif" width="14" height="14" alt="NO" />{if $item.err_msg.m}&nbsp;<a href="javascript:showNotice('m_{$key}');" title="{$lang.detail}">[{$lang.detail}]</a><br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="m_{$key}">{foreach from=$item.err_msg.m item=msg}{$msg}{$lang.unmodify}<br />{/foreach}</span>{/if}{/if}</td>
+    <td width="250px">{{ $item['item'] }}</td>
+    <td>@if($item['r'] > 0)<img src="images/yes.gif" width="14" height="14" alt="YES" />@else<img src="images/no.gif" width="14" height="14" alt="NO" />@if($item['err_msg']['w'])&nbsp;<a href="javascript:showNotice('r_{{ $key }}');" title="{{ $lang['detail'] }}">[{{ $lang['detail'] }}]</a><br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="r_{{ $key }}">@foreach($item['err_msg']['r'] as $msg){{ $msg }}{{ $lang['unread'] }}<br />@endforeach</span>@endif@endif</td>
+    <td>@if($item['w'] > 0)<img src="images/yes.gif" width="14" height="14" alt="YES" />@else<img src="images/no.gif" width="14" height="14" alt="NO" />@if($item['err_msg']['w'])&nbsp;<a href="javascript:showNotice('w_{{ $key }}');" title="{{ $lang['detail'] }}">[{{ $lang['detail'] }}]</a><br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="w_{{ $key }}">@foreach($item['err_msg']['w'] as $msg){{ $msg }}{{ $lang['unwrite'] }}<br />@endforeach</span>@endif@endif</td>
+    <td>@if($item['m'] > 0)<img src="images/yes.gif" width="14" height="14" alt="YES" />@else<img src="images/no.gif" width="14" height="14" alt="NO" />@if($item['err_msg']['m'])&nbsp;<a href="javascript:showNotice('m_{{ $key }}');" title="{{ $lang['detail'] }}">[{{ $lang['detail'] }}]</a><br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="m_{{ $key }}">@foreach($item['err_msg']['m'] as $msg){{ $msg }}{{ $lang['unmodify'] }}<br />@endforeach</span>@endif@endif</td>
   </tr>
-  {/foreach}
-  {if $tpl_msg}
+  @endforeach
+  @if($tpl_msg)
   <tr>
-    <td colspan="4"><img src="images/no.gif" width="14" height="14" alt="NO" /><span style="color:red">{$tpl_msg}</span>{$lang.unrename}</td>
+    <td colspan="4"><img src="images/no.gif" width="14" height="14" alt="NO" /><span style="color:red">{{ $tpl_msg }}</span>{{ $lang['unrename'] }}</td>
   </tr>
-  {/if}
+  @endif
 </table>
 
 </div>
 
-{literal}
+
 <script language="JavaScript">
 <!--
 onload = function()
@@ -37,6 +37,6 @@ onload = function()
 }
 //-->
 </script>
-{/literal}
 
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

@@ -2,15 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$page_title}</title>
+<title>{{ $page_title }}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
 {* 包含脚本文件 *}
-{insert_scripts files='common.js'}
+<script src="common.js"></script>
 <script type="text/javascript">
 function $id(element) {
   return document.getElementById(element);
@@ -55,29 +55,29 @@ function reg(str){
 <!-- #BeginLibraryItem "/library/category_tree.lbi" --><!-- #EndLibraryItem -->
 <!-- #BeginLibraryItem "/library/goods_related.lbi" -->
 
-<!-- {if $related_goods} -->
+@if($related_goods)
 <div class="box">
      <div class="box_1">
-      <h3><span>{$lang.releate_goods}</span></h3>
+      <h3><span>{{ $lang['releate_goods'] }}</span></h3>
       <div class="boxCenterList clearfix">
-      <!--{foreach from=$related_goods item=releated_goods_data}-->
+      @foreach($related_goods as $releated_goods_data)
         <ul class="clearfix">
-          <li class="goodsimg"><a href="{$releated_goods_data.url}"><img src="{$releated_goods_data.goods_thumb}" alt="{$releated_goods_data.goods_name}" class="B_blue" /></a></li>
+          <li class="goodsimg"><a href="{{ $releated_goods_data['url'] }}"><img src="{{ $releated_goods_data['goods_thumb'] }}" alt="{{ $releated_goods_data['goods_name'] }}" class="B_blue" /></a></li>
           <li>
-        <a href="{$releated_goods_data.url}" title="{$releated_goods_data.goods_name}">{$releated_goods_data.short_name}</a><br />
-        <!-- {if $releated_goods_data.promote_price neq 0} -->
-        {$lang.promote_price}<font class="f1">{$releated_goods_data.formated_promote_price}</font>
-        <!-- {else} -->
-        {$lang.shop_price}<font class="f1">{$releated_goods_data.shop_price}</font>
-        <!-- {/if} -->
+        <a href="{{ $releated_goods_data['url'] }}" title="{{ $releated_goods_data['goods_name'] }}">{{ $releated_goods_data['short_name'] }}</a><br />
+        @if($releated_goods_data['promote_price'] != 0)
+        {{ $lang['promote_price'] }}<font class="f1">{{ $releated_goods_data['formated_promote_price'] }}</font>
+        @else
+        {{ $lang['shop_price'] }}<font class="f1">{{ $releated_goods_data['shop_price'] }}</font>
+        @endif
           </li>
         </ul>
-        <!--{/foreach}-->
+        @endforeach
       </div>
      </div>
     </div>
 <div class="blank5"></div>
-<!-- {/if} -->
+@endif
 
  <!-- #EndLibraryItem -->
 <!-- #BeginLibraryItem "/library/goods_fittings.lbi" --><!-- #EndLibraryItem -->
@@ -96,13 +96,13 @@ function reg(str){
    <div id="goodsInfo" class="clearfix">
      <!--商品图片和相册 start-->
      <div class="imgInfo">
-     <!-- {if $pictures}-->
-     <a href="javascript:;" onclick="window.open('gallery.php?id={$goods.goods_id}'); return false;">
-      <img src="{$goods.goods_img}" alt="{$goods.goods_name|escape:html}"/>
+     @if($pictures)
+     <a href="javascript:;" onclick="window.open('gallery.php?id={{ $goods['goods_id'] }}'); return false;">
+      <img src="{{ $goods['goods_img'] }}" alt="{{ $goods['goods_name'] }}"/>
      </a>
-         <!-- {else} -->
-         <img src="{$goods.goods_img}" alt="{$goods.goods_name|escape:html}"/>
-         <!-- {/if}-->
+         @else
+         <img src="{{ $goods['goods_img'] }}" alt="{{ $goods['goods_name'] }}"/>
+         @endif
      <div class="blank5"></div>
      <!--相册 START-->
      <!-- #BeginLibraryItem "/library/goods_gallery.lbi" --><!-- #EndLibraryItem -->
@@ -113,189 +113,189 @@ function reg(str){
      </div>
      <!--商品图片和相册 end-->
      <div class="textInfo">
-     <form action="javascript:addToCart({$goods.goods_id})" method="post" name="ECS_FORMBUY" id="ECS_FORMBUY" >
+     <form action="javascript:addToCart({{ $goods['goods_id'] }})" method="post" name="ECS_FORMBUY" id="ECS_FORMBUY" >
      <div class="clearfix">
-      <p class="f_l">{$goods.goods_style_name}</p>
+      <p class="f_l">{{ $goods['goods_style_name'] }}</p>
       <p class="f_r">
-      {if $prev_good}
-      <a href="{$prev_good.url}"><img alt="prev" src="./images/up.gif" /></a>
-      {/if}
-      {if $next_good}
-      <a href="{$next_good.url}"><img alt="next" src="./images/down.gif" /></a>
-      {/if}
+      @if($prev_good)
+      <a href="{{ $prev_good['url'] }}"><img alt="prev" src="./images/up.gif" /></a>
+      @endif
+      @if($next_good)
+      <a href="{{ $next_good['url'] }}"><img alt="next" src="./images/down.gif" /></a>
+      @endif
       </p>
       </div>
       <ul>
-       <!-- {if $promotion} -->
+       @if($promotion)
       <li class="padd">
-      <!-- {foreach from=$promotion item=item key=key} 优惠活动-->
-      {$lang.activity}
-      <!-- {if $item.type eq "snatch"} -->
-      <a href="snatch.php" title="{$lang.snatch}" style="font-weight:100; color:#006bcd; text-decoration:none;">[{$lang.snatch}]</a>
-      <!-- {elseif $item.type eq "group_buy"} -->
-      <a href="group_buy.php" title="{$lang.group_buy}" style="font-weight:100; color:#006bcd; text-decoration:none;">[{$lang.group_buy}]</a>
-      <!-- {elseif $item.type eq "auction"} -->
-      <a href="auction.php" title="{$lang.auction}" style="font-weight:100; color:#006bcd; text-decoration:none;">[{$lang.auction}]</a>
-      <!-- {elseif $item.type eq "favourable"} -->
-      <a href="activity.php" title="{$lang.favourable}" style="font-weight:100; color:#006bcd; text-decoration:none;">[{$lang.favourable}]</a>
-      <!-- {/if} -->
-      <a href="{$item.url}" title="{$lang.$item.type} {$item.act_name}{$item.time}" style="font-weight:100; color:#006bcd;">{$item.act_name}</a><br />
-      <!-- {/foreach} -->
+      <!-- @foreach($promotion as $key => $item) 优惠活动-->
+      {{ $lang['activity'] }}
+      @if($item['type'] == "snatch")
+      <a href="snatch.php" title="{{ $lang['snatch'] }}" style="font-weight:100; color:#006bcd; text-decoration:none;">[{{ $lang['snatch'] }}]</a>
+      @elseif($item['type'] == "group_buy")
+      <a href="group_buy.php" title="{{ $lang['group_buy'] }}" style="font-weight:100; color:#006bcd; text-decoration:none;">[{{ $lang['group_buy'] }}]</a>
+      @elseif($item['type'] == "auction")
+      <a href="auction.php" title="{{ $lang['auction'] }}" style="font-weight:100; color:#006bcd; text-decoration:none;">[{{ $lang['auction'] }}]</a>
+      @elseif($item['type'] == "favourable")
+      <a href="activity.php" title="{{ $lang['favourable'] }}" style="font-weight:100; color:#006bcd; text-decoration:none;">[{{ $lang['favourable'] }}]</a>
+      @endif
+      <a href="{{ $item['url'] }}" title="{{ $lang['$item']['type'] }} {{ $item['act_name'] }}{{ $item['time'] }}" style="font-weight:100; color:#006bcd;">{{ $item['act_name'] }}</a><br />
+      @endforeach
       </li>
-      <!-- {/if} -->
+      @endif
       <li class="clearfix">
        <dd>
-       <!-- {if $cfg.show_goodssn} 显示商品货号-->
-       <strong>{$lang.goods_sn}</strong>{$goods.goods_sn}
-       <!-- {/if} -->
+       <!-- @if($cfg['show_goodssn']) 显示商品货号-->
+       <strong>{{ $lang['goods_sn'] }}</strong>{{ $goods['goods_sn'] }}
+       @endif
        </dd>
        <dd class="ddR">
-       <!-- {if $goods.goods_number neq "" and $cfg.show_goodsnumber} 商品库存-->
-        <!-- {if $goods.goods_number eq 0} -->
-          <strong>{$lang.goods_number}</strong>
-          <font color='red'>{$lang.stock_up}</font>
-        <!-- {else} -->
-          <strong>{$lang.goods_number}</strong>
-          {$goods.goods_number} {$goods.measure_unit}
-        <!-- {/if} -->
-      <!-- {/if} -->
+       <!-- @if($goods['goods_number'] != "" && $cfg['show_goodsnumber']) 商品库存-->
+        @if($goods['goods_number'] == 0)
+          <strong>{{ $lang['goods_number'] }}</strong>
+          <font color='red'>{{ $lang['stock_up'] }}</font>
+        @else
+          <strong>{{ $lang['goods_number'] }}</strong>
+          {{ $goods['goods_number'] }} {{ $goods['measure_unit'] }}
+        @endif
+      @endif
        </dd>
       </li>
       <li class="clearfix">
        <dd>
-       <!-- {if $goods.goods_brand neq "" and $cfg.show_brand} 显示商品品牌-->
-       <strong>{$lang.goods_brand}</strong><a href="{$goods.goods_brand_url}" >{$goods.goods_brand}</a>
-       <!--{/if}-->
+       <!-- @if($goods['goods_brand'] != "" && $cfg['show_brand']) 显示商品品牌-->
+       <strong>{{ $lang['goods_brand'] }}</strong><a href="{{ $goods['goods_brand_url'] }}" >{{ $goods['goods_brand'] }}</a>
+       @endif
        </dd>
        <dd class="ddR">
-       <!-- {if $cfg.show_goodsweight} 商品重量-->
-       <strong>{$lang.goods_weight}</strong>{$goods.goods_weight}
-       <!-- {/if} -->
+       <!-- @if($cfg['show_goodsweight']) 商品重量-->
+       <strong>{{ $lang['goods_weight'] }}</strong>{{ $goods['goods_weight'] }}
+       @endif
        </dd>
       </li>
       <li class="clearfix">
        <dd>
-       <!-- {if $cfg.show_addtime} 上架时间-->
-      <strong>{$lang.add_time}</strong>{$goods.add_time}
-      <!-- {/if} -->
+       <!-- @if($cfg['show_addtime']) 上架时间-->
+      <strong>{{ $lang['add_time'] }}</strong>{{ $goods['add_time'] }}
+      @endif
        </dd>
        <dd class="ddR">
        <!--点击数-->
-       <strong>{$lang.goods_click_count}：</strong>{$goods.click_count}
+       <strong>{{ $lang['goods_click_count'] }}：</strong>{{ $goods['click_count'] }}
        </dd>
       </li>
       <li class="clearfix">
        <dd class="ddL">
-       <!-- {if $cfg.show_marketprice} 市场价格-->
-       <strong>{$lang.market_price}</strong><font class="market">{$goods.market_price}</font><br />
-       <!-- {/if} -->
+       <!-- @if($cfg['show_marketprice']) 市场价格-->
+       <strong>{{ $lang['market_price'] }}</strong><font class="market">{{ $goods['market_price'] }}</font><br />
+       @endif
        <!--本店售价-->
-       <strong>{$lang.shop_price}</strong><font class="shop" id="ECS_SHOPPRICE">{$goods.shop_price_formated}</font><br />
-       <!-- {foreach from=$rank_prices item=rank_price key=key} 会员等级对应的价格-->
-       <strong>{$rank_price.rank_name}：</strong><font class="shop" id="ECS_RANKPRICE_{$key}">{$rank_price.price}</font><br />
-       <!--{/foreach}-->
+       <strong>{{ $lang['shop_price'] }}</strong><font class="shop" id="ECS_SHOPPRICE">{{ $goods['shop_price_formated'] }}</font><br />
+       <!-- @foreach($rank_prices as $key => $rank_price) 会员等级对应的价格-->
+       <strong>{{ $rank_price['rank_name'] }}：</strong><font class="shop" id="ECS_RANKPRICE_{{ $key }}">{{ $rank_price['price'] }}</font><br />
+       @endforeach
        </dd>
        <dd style="width:48%; padding-left:7px;">
-       <strong>{$lang.goods_rank}</strong>
-      <img src="images/stars{$goods.comment_rank}.gif" alt="comment rank {$goods.comment_rank}" />
+       <strong>{{ $lang['goods_rank'] }}</strong>
+      <img src="images/stars{{ $goods['comment_rank'] }}.gif" alt="comment rank {{ $goods['comment_rank'] }}" />
        </dd>
       </li>
 
-      <!--{if $volume_price_list } -->
+      @if($volume_price_list )
       <li class="padd">
-       <font class="f1">{$lang.volume_price}：</font><br />
+       <font class="f1">{{ $lang['volume_price'] }}：</font><br />
        <table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#aad6ff">
         <tr>
-          <td align="center" bgcolor="#FFFFFF"><strong>{$lang.number_to}</strong></td>
-          <td align="center" bgcolor="#FFFFFF"><strong>{$lang.preferences_price}</strong></td>
+          <td align="center" bgcolor="#FFFFFF"><strong>{{ $lang['number_to'] }}</strong></td>
+          <td align="center" bgcolor="#FFFFFF"><strong>{{ $lang['preferences_price'] }}</strong></td>
         </tr>
-        <!-- {foreach from=$volume_price_list item=price_list key=price_key} -->
+        @foreach($volume_price_list as $price_key => $price_list)
         <tr>
-        <td align="center" bgcolor="#FFFFFF" class="shop">{$price_list.number}</td>
-        <td align="center" bgcolor="#FFFFFF" class="shop">{$price_list.format_price}</td>
+        <td align="center" bgcolor="#FFFFFF" class="shop">{{ $price_list['number'] }}</td>
+        <td align="center" bgcolor="#FFFFFF" class="shop">{{ $price_list['format_price'] }}</td>
         </tr>
-        <!-- {/foreach} -->
+        @endforeach
        </table>
       </li>
-      <!--{/if}-->
+      @endif
 
-      <!--{if $goods.is_promote and $goods.gmt_end_time } 促销-->
-      {insert_scripts files='lefttime.js'}
+      <!--@if($goods['is_promote'] && $goods['gmt_end_time'] ) 促销-->
+      <script src="lefttime.js"></script>
       <li class="padd loop" style="margin-bottom:5px; border-bottom:1px dashed #ccc;">
-      <strong>{$lang.promote_price}</strong><font class="shop">{$goods.promote_price}</font><br />
-      <strong>{$lang.residual_time}</strong>
-      <font class="f4" id="leftTime">{$lang.please_waiting}</font><br />
+      <strong>{{ $lang['promote_price'] }}</strong><font class="shop">{{ $goods['promote_price'] }}</font><br />
+      <strong>{{ $lang['residual_time'] }}</strong>
+      <font class="f4" id="leftTime">{{ $lang['please_waiting'] }}</font><br />
       </li>
-      <!--{/if}-->
+      @endif
       <li class="clearfix">
        <dd>
-       <strong>{$lang.amount}：</strong><font id="ECS_GOODS_AMOUNT" class="shop"></font>
+       <strong>{{ $lang['amount'] }}：</strong><font id="ECS_GOODS_AMOUNT" class="shop"></font>
        </dd>
        <dd class="ddR">
-       <!-- {if $goods.give_integral > 0} 购买此商品赠送积分-->
-        <strong>{$lang.goods_give_integral}</strong><font class="f4">{$goods.give_integral} {$points_name}</font>
-        <!-- {/if} -->
+       <!-- @if($goods['give_integral'] > 0) 购买此商品赠送积分-->
+        <strong>{{ $lang['goods_give_integral'] }}</strong><font class="f4">{{ $goods['give_integral'] }} {{ $points_name }}</font>
+        @endif
        </dd>
       </li>
-      <!-- {if $goods.bonus_money} 红包-->
+      <!-- @if($goods['bonus_money']) 红包-->
       <li class="padd loop" style="margin-bottom:5px; border-bottom:1px dashed #ccc;">
-      <strong>{$lang.goods_bonus}</strong><font class="shop">{$goods.bonus_money}</font><br />
+      <strong>{{ $lang['goods_bonus'] }}</strong><font class="shop">{{ $goods['bonus_money'] }}</font><br />
       </li>
-      <!-- {/if} -->
+      @endif
       <li class="clearfix">
        <dd>
-       <strong>{$lang.number}：</strong>
+       <strong>{{ $lang['number'] }}：</strong>
         <input name="number" type="text" id="number" value="1" size="4" onblur="changePrice()" style="border:1px solid #ccc; "/>
        </dd>
        <dd class="ddR">
-       <!-- {if $cfg.use_integral} 购买此商品可使用积分-->
-       <strong>{$lang.goods_integral}</strong><font class="f4">{$goods.integral} {$points_name}</font>
-       <!-- {/if} -->
+       <!-- @if($cfg['use_integral']) 购买此商品可使用积分-->
+       <strong>{{ $lang['goods_integral'] }}</strong><font class="f4">{{ $goods['integral'] }} {{ $points_name }}</font>
+       @endif
        </dd>
       </li>
-      <!-- {if $goods.is_shipping} 为免运费商品则显示-->
+      <!-- @if($goods['is_shipping']) 为免运费商品则显示-->
       <li style="height:30px;padding-top:4px;">
-      {$lang.goods_free_shipping}<br />
+      {{ $lang['goods_free_shipping'] }}<br />
       </li>
-      <!-- {/if} -->
+      @endif
       <!-- {* 开始循环所有可选属性 *} -->
-      <!-- {foreach from=$specification item=spec key=spec_key} -->
+      @foreach($specification as $spec_key => $spec)
       <li class="padd loop">
-      <strong>{$spec.name}:</strong><br />
+      <strong>{{ $spec['name'] }}:</strong><br />
         <!-- {* 判断属性是复选还是单选 *} -->
-                    <!-- {if $spec.attr_type eq 1} -->
-                      <!-- {if $cfg.goodsattr_style eq 1} -->
-                        <!-- {foreach from=$spec.values item=value key=key} -->
-                        <label for="spec_value_{$value.id}">
-                        <input type="radio" name="spec_{$spec_key}" value="{$value.id}" id="spec_value_{$value.id}" {if $key eq 0}checked{/if} onclick="changePrice()" />
-                        {$value.label} [{if $value.price gt 0}{$lang.plus}{elseif $value.price lt 0}{$lang.minus}{/if} {$value.format_price|abs}] </label><br />
-                        <!-- {/foreach} -->
-                        <input type="hidden" name="spec_list" value="{$key}" />
-                        <!-- {else} -->
-                        <select name="spec_{$spec_key}" onchange="changePrice()">
-                          <!-- {foreach from=$spec.values item=value key=key} -->
-                          <option label="{$value.label}" value="{$value.id}">{$value.label} {if $value.price gt 0}{$lang.plus}{elseif $value.price lt 0}{$lang.minus}{/if}{if $value.price neq 0}{$value.format_price}{/if}</option>
-                          <!-- {/foreach} -->
+                    @if($spec['attr_type'] == 1)
+                      @if($cfg['goodsattr_style'] == 1)
+                        @foreach($spec['values'] as $key => $value)
+                        <label for="spec_value_{{ $value['id'] }}">
+                        <input type="radio" name="spec_{{ $spec_key }}" value="{{ $value['id'] }}" id="spec_value_{{ $value['id'] }}" @if($key == 0)checked@endif onclick="changePrice()" />
+                        {{ $value['label'] }} [@if($value['price'] > 0){{ $lang['plus'] }}@elseif($value['price'] < 0){{ $lang['minus'] }}@endif {{ $value['format_price'] }}] </label><br />
+                        @endforeach
+                        <input type="hidden" name="spec_list" value="{{ $key }}" />
+                        @else
+                        <select name="spec_{{ $spec_key }}" onchange="changePrice()">
+                          @foreach($spec['values'] as $key => $value)
+                          <option label="{{ $value['label'] }}" value="{{ $value['id'] }}">{{ $value['label'] }} @if($value['price'] > 0){{ $lang['plus'] }}@elseif($value['price'] < 0){{ $lang['minus'] }}@endif@if($value['price'] != 0){{ $value['format_price'] }}@endif</option>
+                          @endforeach
                         </select>
-                        <input type="hidden" name="spec_list" value="{$key}" />
-                      <!-- {/if} -->
-                    <!-- {else} -->
-                      <!-- {foreach from=$spec.values item=value key=key} -->
-                      <label for="spec_value_{$value.id}">
-                      <input type="checkbox" name="spec_{$spec_key}" value="{$value.id}" id="spec_value_{$value.id}" onclick="changePrice()" />
-                      {$value.label} [{if $value.price gt 0}{$lang.plus}{elseif $value.price lt 0}{$lang.minus}{/if} {$value.format_price|abs}] </label><br />
-                      <!-- {/foreach} -->
-                      <input type="hidden" name="spec_list" value="{$key}" />
-                    <!-- {/if} -->
+                        <input type="hidden" name="spec_list" value="{{ $key }}" />
+                      @endif
+                    @else
+                      @foreach($spec['values'] as $key => $value)
+                      <label for="spec_value_{{ $value['id'] }}">
+                      <input type="checkbox" name="spec_{{ $spec_key }}" value="{{ $value['id'] }}" id="spec_value_{{ $value['id'] }}" onclick="changePrice()" />
+                      {{ $value['label'] }} [@if($value['price'] > 0){{ $lang['plus'] }}@elseif($value['price'] < 0){{ $lang['minus'] }}@endif {{ $value['format_price'] }}] </label><br />
+                      @endforeach
+                      <input type="hidden" name="spec_list" value="{{ $key }}" />
+                    @endif
       </li>
-      <!-- {/foreach} -->
+      @endforeach
       <!-- {* 结束循环可选属性 *} -->
       <li class="padd">
-      <a href="javascript:addToCart({$goods.goods_id})"><img src="images/bnt_cat.gif" /></a>
-      <a href="javascript:collect({$goods.goods_id})"><img src="images/bnt_colles.gif" /></a>
-      <!-- {if $affiliate.on} -->
-      <a href="user.php?act=affiliate&goodsid={$goods.goods_id}"><img src='images/bnt_recommend.gif'></a>
-      <!-- {/if} -->
+      <a href="javascript:addToCart({{ $goods['goods_id'] }})"><img src="images/bnt_cat.gif" /></a>
+      <a href="javascript:collect({{ $goods['goods_id'] }})"><img src="images/bnt_colles.gif" /></a>
+      @if($affiliate['on'])
+      <a href="user.php?act=affiliate&goodsid={{ $goods['goods_id'] }}"><img src='images/bnt_recommend.gif'></a>
+      @endif
       </li>
       </ul>
       </form>
@@ -308,59 +308,59 @@ function reg(str){
      <div class="box_1">
       <h3 style="padding:0 5px;">
         <div id="com_b" class="history clearfix">
-        <h2>{$lang.goods_brief}</h2>
-        <h2 class="h2bg">{$lang.goods_attr}</h2>
-        <!-- {if $package_goods_list} -->
-        <h2 class="h2bg" style="color:red;">{$lang.remark_package}</h2>
-        <!-- {/if} -->
+        <h2>{{ $lang['goods_brief'] }}</h2>
+        <h2 class="h2bg">{{ $lang['goods_attr'] }}</h2>
+        @if($package_goods_list)
+        <h2 class="h2bg" style="color:red;">{{ $lang['remark_package'] }}</h2>
+        @endif
         </div>
       </h3>
       <div id="com_v" class="boxCenterList RelaArticle"></div>
       <div id="com_h">
        <blockquote>
-        {$goods.goods_desc}
+        {{ $goods['goods_desc'] }}
        </blockquote>
 
      <blockquote>
       <table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#dddddd">
-        <!-- {foreach from=$properties item=property_group key=key} -->
+        @foreach($properties as $key => $property_group)
         <tr>
-          <th colspan="2" bgcolor="#FFFFFF">{$key|escape}</th>
+          <th colspan="2" bgcolor="#FFFFFF">{{ $key }}</th>
         </tr>
-        <!-- {foreach from=$property_group item=property} -->
+        @foreach($property_group as $property)
         <tr>
-          <td bgcolor="#FFFFFF" align="left" width="30%" class="f1">[{$property.name|escape:html}]</td>
-          <td bgcolor="#FFFFFF" align="left" width="70%">{$property.value}</td>
+          <td bgcolor="#FFFFFF" align="left" width="30%" class="f1">[{{ $property['name'] }}]</td>
+          <td bgcolor="#FFFFFF" align="left" width="70%">{{ $property['value'] }}</td>
         </tr>
-        <!-- {/foreach}-->
-        <!-- {/foreach}-->
+        @endforeach
+        @endforeach
       </table>
      </blockquote>
 
-     <!-- {if $package_goods_list} -->
+     @if($package_goods_list)
      <blockquote>
-       <!-- {foreach from=$package_goods_list item=package_goods} -->
-        <strong>{$package_goods.act_name}</strong><br />
+       @foreach($package_goods_list as $package_goods)
+        <strong>{{ $package_goods['act_name'] }}</strong><br />
         <table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#dddddd">
         <tr>
         <td bgcolor="#FFFFFF">
-          <!-- {foreach from=$package_goods.goods_list item=goods_list} -->
-          <a href="goods.php?id={$goods_list.goods_id}" target="_blank"><font class="f1">{$goods_list.goods_name}{$goods_list.goods_attr_str}</font></a> &nbsp;&nbsp;X {$goods_list.goods_number}<br />
-          <!-- {/foreach} -->
+          @foreach($package_goods['goods_list'] as $goods_list)
+          <a href="goods.php?id={{ $goods_list['goods_id'] }}" target="_blank"><font class="f1">{{ $goods_list['goods_name'] }}{{ $goods_list['goods_attr_str'] }}</font></a> &nbsp;&nbsp;X {{ $goods_list['goods_number'] }}<br />
+          @endforeach
           </td>
           <td bgcolor="#FFFFFF">
-          <strong>{$lang.old_price}</strong><font class="market">{$package_goods.subtotal}</font><br />
-          <strong>{$lang.package_price}</strong><font class="shop">{$package_goods.package_price}</font><br />
-          <strong>{$lang.then_old_price}</strong><font class="shop">{$package_goods.saving}</font><br />
+          <strong>{{ $lang['old_price'] }}</strong><font class="market">{{ $package_goods['subtotal'] }}</font><br />
+          <strong>{{ $lang['package_price'] }}</strong><font class="shop">{{ $package_goods['package_price'] }}</font><br />
+          <strong>{{ $lang['then_old_price'] }}</strong><font class="shop">{{ $package_goods['saving'] }}</font><br />
           </td>
           <td bgcolor="#FFFFFF">
-          <a href="javascript:addPackageToCart({$package_goods.act_id})" style="background:transparent"><img src="images/bnt_buy_1.gif" alt="{$lang.add_to_cart}" /></a>
+          <a href="javascript:addPackageToCart({{ $package_goods['act_id'] }})" style="background:transparent"><img src="images/bnt_buy_1.gif" alt="{{ $lang['add_to_cart'] }}" /></a>
           </td>
         </tr>
        </table>
-       <!-- {/foreach} -->
+       @endforeach
      </blockquote>
-     <!-- {/if} -->
+     @endif
 
       </div>
      </div>
@@ -393,37 +393,37 @@ function reg(str){
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>]
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+    <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>]
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->
 </body>
 <script type="text/javascript">
-var goods_id = {$goods_id};
-var goodsattr_style = {$cfg.goodsattr_style|default:1};
-var gmt_end_time = {$promote_end_time|default:0};
-{foreach from=$lang.goods_js item=item key=key}
-var {$key} = "{$item}";
-{/foreach}
-var goodsId = {$goods_id};
-var now_time = {$now_time};
+var goods_id = {{ $goods_id }};
+var goodsattr_style = {{ $cfg['goodsattr_style'] ?? 1 }};
+var gmt_end_time = {{ $promote_end_time ?? 0 }};
+@foreach($lang['goods_js'] as $key => $item)
+var {{ $key }} = "{{ $item }}";
+@endforeach
+var goodsId = {{ $goods_id }};
+var now_time = {{ $now_time }};
 
-<!-- {literal} -->
+<!--  -->
 onload = function(){
   changePrice();
   fixpng();
@@ -459,6 +459,6 @@ function changePriceResponse(res)
       document.getElementById('ECS_GOODS_AMOUNT').innerHTML = res.result;
   }
 }
-<!-- {/literal} -->
+<!--  -->
 </script>
 </html>

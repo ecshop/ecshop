@@ -1,22 +1,22 @@
 <div id="footer">
-{$query_info}{$gzip_enabled}{$memory_info}<br />
-{$lang.copyright}
+{{ $query_info }}{{ $gzip_enabled }}{{ $memory_info }}<br />
+{{ $lang['copyright'] }}
 </div>
-{insert_scripts files="../js/utils.js"}
+<script src="../js/utils.js"></script>
 <!-- 新订单提示信息 -->
 <div id="popMsg">
   <table cellspacing="0" cellpadding="0" width="100%" bgcolor="#cfdef4" border="0">
   <tr>
     <td style="color: #0f2c8c" width="30" height="24"></td>
-    <td style="font-weight: normal; color: #1f336b; padding-top: 4px;padding-left: 4px" valign="center" width="100%"> {$lang.order_notify}</td>
+    <td style="font-weight: normal; color: #1f336b; padding-top: 4px;padding-left: 4px" valign="center" width="100%"> {{ $lang['order_notify'] }}</td>
     <td style="padding-top: 2px;padding-right:2px" valign="center" align="right" width="19"><span title="关闭" style="cursor: hand;cursor:pointer;color:red;font-size:12px;font-weight:bold;margin-right:4px;" onclick="Message.close()" >×</span><!-- <img title=关闭 style="cursor: hand" onclick=closediv() hspace=3 src="msgclose.jpg"> --></td>
   </tr>
   <tr>
     <td style="padding-right: 1px; padding-bottom: 1px" colspan="3" height="70">
     <div id="popMsgContent">
-      <p>{$lang.new_order_1}<strong style="color:#ff0000" id="spanNewOrder">1</strong>{$lang.new_order_2}
-      <strong style="color:#ff0000" id="spanNewPaid">0</strong>{$lang.new_order_3}</p>
-      <p align="center" style="word-break:break-all"><a href="order.php?act=list"><span style="color:#ff0000">{$lang.new_order_link}</span></a></p>
+      <p>{{ $lang['new_order_1'] }}<strong style="color:#ff0000" id="spanNewOrder">1</strong>{{ $lang['new_order_2'] }}
+      <strong style="color:#ff0000" id="spanNewPaid">0</strong>{{ $lang['new_order_3'] }}</p>
+      <p align="center" style="word-break:break-all"><a href="order.php?act=list"><span style="color:#ff0000">{{ $lang['new_order_link'] }}</span></a></p>
     </div>
     </td>
   </tr>
@@ -39,7 +39,7 @@ document.onmousemove=function(e)
   var obj = Utils.srcElement(e);
   if (typeof(obj.onclick) == 'function' && obj.onclick.toString().indexOf('listTable.edit') != -1)
   {
-    obj.title = '{$lang.span_edit_help}';
+    obj.title = '{{ $lang['span_edit_help'] }}';
     obj.style.cssText = 'background: #278296;';
     obj.onmouseout = function(e)
     {
@@ -48,14 +48,14 @@ document.onmousemove=function(e)
   }
   else if (typeof(obj.href) != 'undefined' && obj.href.indexOf('listTable.sort') != -1)
   {
-    obj.title = '{$lang.href_sort_help}';
+    obj.title = '{{ $lang['href_sort_help'] }}';
   }
 }
 <!--
-{if $enable_order_check eq '0'}
+@if($enable_order_check == '0')
 startCheckOrder = function(){}
-{/if}
-{literal}
+@endif
+
 
 var MyTodolist;
 function showTodoList(adminid)
@@ -176,7 +176,7 @@ if (document.getElementById("listDiv"))
   }
 
 }
-{/literal}
+
 //-->
 </script>
 </body>

@@ -1,115 +1,116 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="main-div">
 <form name="theForm" method="post" enctype="multipart/form-data" onsubmit="return validate();">
 <table width="100%">
   <tr>
-    <td class="label">{$lang.user_name}</td>
+    <td class="label">{{ $lang['user_name'] }}</td>
     <td>
-      <input type="text" name="user_name" maxlength="20" value="{$user.user_name|escape}" size="34"/>{$lang.require_field}</td>
+      <input type="text" name="user_name" maxlength="20" value="{{ $user['user_name'] }}" size="34"/>{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.email}</td>
+    <td class="label">{{ $lang['email'] }}</td>
     <td>
-      <input type="text" name="email" value="{$user.email|escape}" size="34" />{$lang.require_field}</td>
+      <input type="text" name="email" value="{{ $user['email'] }}" size="34" />{{ $lang['require_field'] }}</td>
   </tr>
- {if $action eq "add"}
+ @if($action == "add")
   <tr>
-    <td class="label">{$lang.password}</td>
+    <td class="label">{{ $lang['password'] }}</td>
     <td>
-      <input type="password" name="password" maxlength="32" size="34" />{$lang.require_field}</td>
+      <input type="password" name="password" maxlength="32" size="34" />{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.pwd_confirm}</td>
+    <td class="label">{{ $lang['pwd_confirm'] }}</td>
     <td>
-      <input type="password" name="pwd_confirm" maxlength="32" size="34" />{$lang.require_field}</td>
+      <input type="password" name="pwd_confirm" maxlength="32" size="34" />{{ $lang['require_field'] }}</td>
   </tr>
-  {/if}
-  {if $action neq "add"}
+  @endif
+  @if($action != "add")
   <tr>
     <td class="label">
-      <a href="javascript:showNotice('passwordNotic');" title="{$lang.form_notice}">
-        <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.old_password}</td>
+      <a href="javascript:showNotice('passwordNotic');" title="{{ $lang['form_notice'] }}">
+        <img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['old_password'] }}</td>
     <td>
-      <input type="password" name="old_password" size="34" />{$lang.require_field}
-      <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="passwordNotic">{$lang.password_notic}</span></td>
+      <input type="password" name="old_password" size="34" />{{ $lang['require_field'] }}
+      <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="passwordNotic">{{ $lang['password_notic'] }}</span></td>
   </tr>
   <tr>
-    <td class="label">{$lang.new_password}</td>
+    <td class="label">{{ $lang['new_password'] }}</td>
     <td>
-      <input type="password" name="new_password" maxlength="32" size="34" />{$lang.require_field}</td>
+      <input type="password" name="new_password" maxlength="32" size="34" />{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.pwd_confirm}</td>
+    <td class="label">{{ $lang['pwd_confirm'] }}</td>
     <td>
-      <input type="password" name="pwd_confirm" value="" size="34" />{$lang.require_field}</td>
+      <input type="password" name="pwd_confirm" value="" size="34" />{{ $lang['require_field'] }}</td>
   </tr>
-  {if $user.agency_name}
+  @if($user['agency_name'])
   <tr>
-    <td class="label">{$lang.agency}</td>
-    <td>{$user.agency_name}</td>
+    <td class="label">{{ $lang['agency'] }}</td>
+    <td>{{ $user['agency_name'] }}</td>
   </tr>
-  {/if}
-  {/if}
-   {if $select_role}
+  @endif
+  @endif
+   @if($select_role)
     <tr>
-   <td class="label">{$lang.select_role}</td>
+   <td class="label">{{ $lang['select_role'] }}</td>
     <td>
       <select name="select_role">
-        <option value="">{$lang.select_please}</option>
-        {foreach from=$select_role item=list}
-        <option value="{$list.role_id}" {if $list.role_id eq $user.role_id} selected="selected" {/if} >{$list.role_name}</option>
-        {/foreach}
+        <option value="">{{ $lang['select_please'] }}</option>
+        @foreach($select_role as $list)
+        <option value="{{ $list['role_id'] }}" @if($list['role_id'] == $user['role_id']) selected="selected" @endif >{{ $list['role_name'] }}</option>
+        @endforeach
       </select>
     </td>
   </tr>
-  {/if}
-  {if $action eq "modif"}
+  @endif
+  @if($action == "modif")
   <tr>
-  <td align="left" class="label">{$lang.edit_navi}</td>
+  <td align="left" class="label">{{ $lang['edit_navi'] }}</td>
   <td>
       <table style="width:300px" cellspacing="0">
         <tr>
         <td valign="top">
           <input type="hidden" name="nav_list[]" id="nav_list[]" />
           <select name="menus_navlist" id="menus_navlist" multiple="true" style="width: 120px; height: 180px" onclick="setTimeout('toggleButtonSatus()', 1);">
-          {html_options options=$nav_arr}
+          @foreach($nav_arr as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach
           </select></td>
         <td align="center">
-         <input type="button" class="button" value="{$lang.move_up}" id="btnMoveUp" onclick="moveOptions('up')" disabled="true" />
-         <input type="button" class="button" value="{$lang.move_down}" id="btnMoveDown" onclick="moveOptions('down')" disabled="true" />
-         <input type="button" value="{$lang.add_nav}" id="btnAdd" onclick="JavaScript:addItem(theForm.all_menu_list,theForm.menus_navlist); this.disabled=true; " class="button" disabled="true" /><br />
-         <input type="button" value="{$lang.remove_nav}" onclick="JavaScript:delItem(theForm.menus_navlist); toggleButtonSatus()" class="button" disabled="true" id="btnRemove" /></td>
+         <input type="button" class="button" value="{{ $lang['move_up'] }}" id="btnMoveUp" onclick="moveOptions('up')" disabled="true" />
+         <input type="button" class="button" value="{{ $lang['move_down'] }}" id="btnMoveDown" onclick="moveOptions('down')" disabled="true" />
+         <input type="button" value="{{ $lang['add_nav'] }}" id="btnAdd" onclick="JavaScript:addItem(theForm.all_menu_list,theForm.menus_navlist); this.disabled=true; " class="button" disabled="true" /><br />
+         <input type="button" value="{{ $lang['remove_nav'] }}" onclick="JavaScript:delItem(theForm.menus_navlist); toggleButtonSatus()" class="button" disabled="true" id="btnRemove" /></td>
         <td>
           <select id="all_menu_list" name="all_menu_list" size="15" multiple="true" style="width:150px; height: 180px" onchange="toggleAddButton()">
-            {foreach from=$menus item=menu key=key}
-              {if $key neq "admin_home" && $menus.$key}
-              <option value="" style="font-weight:bold;">{$lang.$key}</option>
-              {foreach from=$menus.$key item=item key=k}
-              <option value="{$item}">&nbsp;&nbsp;&nbsp;&nbsp;{$lang.$k}</option>
-              {/foreach}
-              {/if}
-             {/foreach}
+            @foreach($menus as $key => $menu)
+              @if($key != "admin_home" && $menus.$key)
+              <option value="" style="font-weight:bold;">{{ $lang['$key'] }}</option>
+              @foreach($menus['$key'] as $k => $item)
+              <option value="{{ $item }}">&nbsp;&nbsp;&nbsp;&nbsp;{{ $lang['$k'] }}</option>
+              @endforeach
+              @endif
+             @endforeach
            </select></td>
         </tr>
       </table></td>
   </tr>
-  {/if}
+  @endif
   <tr>
     <td colspan="2" align="center">
-      <input type="submit" value="{$lang.button_submit}" class="button" />&nbsp;&nbsp;&nbsp;
-      <input type="reset" value="{$lang.button_reset}" class="button" />
-      <input type="hidden" name="act" value="{$form_act}" />
-      <input type="hidden" name="token" value="{$token}" />
-      <input type="hidden" name="id" value="{$user.user_id}" /></td>
+      <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />&nbsp;&nbsp;&nbsp;
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
+      <input type="hidden" name="act" value="{{ $form_act }}" />
+      <input type="hidden" name="token" value="{{ $token }}" />
+      <input type="hidden" name="id" value="{{ $user['user_id'] }}" /></td>
   </tr>
 </table>
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
 <script language="JavaScript">
-var action = "{$action}";
+var action = "{{ $action }}";
 <!--
-{literal}
+
 document.forms['theForm'].elements['user_name'].focus();
 onload = function()
 {
@@ -223,6 +224,6 @@ function get_navlist()
   //alert(document.getElementById('nav_list[]').value);
 }
 //-->
-{/literal}
+
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

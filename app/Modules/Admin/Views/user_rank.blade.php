@@ -1,50 +1,51 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 
 <form method="post" action="" name="listForm">
 <!-- start ads list -->
 <div class="list-div" id="listDiv">
-{/if}
+@endif
 
 <table cellspacing='1' id="list-table">
   <tr>
-    <th>{$lang.rank_name}</th>
-    <th>{$lang.integral_min}</th>
-    <th>{$lang.integral_max}</th>
-    <th>{$lang.discount}(%)</th>
-    <th>{$lang.special_rank}</th>
-    <th>{$lang.show_price_short}</th>
-    <th>{$lang.handler}</th>
+    <th>{{ $lang['rank_name'] }}</th>
+    <th>{{ $lang['integral_min'] }}</th>
+    <th>{{ $lang['integral_max'] }}</th>
+    <th>{{ $lang['discount'] }}(%)</th>
+    <th>{{ $lang['special_rank'] }}</th>
+    <th>{{ $lang['show_price_short'] }}</th>
+    <th>{{ $lang['handler'] }}</th>
   </tr>
-  {foreach from=$user_ranks item=rank}
+  @foreach($user_ranks as $rank)
   <tr>
-    <td class="first-cell" ><span onclick="listTable.edit(this,'edit_name', {$rank.rank_id})">{$rank.rank_name}</span></td>
-    <td align="right"><span {if $rank.special_rank != 1} onclick="listTable.edit(this, 'edit_min_points', {$rank.rank_id})" {/if} >{$rank.min_points}</span></td>
-    <td align="right"><span {if $rank.special_rank != 1} onclick="listTable.edit(this, 'edit_max_points', {$rank.rank_id})" {/if} >{$rank.max_points}</span></td>
-    <td align="right"><span onclick="listTable.edit(this, 'edit_discount', {$rank.rank_id})">{$rank.discount}</span></td>
-    <td align="center"><img src="images/{if $rank.special_rank}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_special', {$rank.rank_id})" /></td>
-    <td align="center"><img src="images/{if $rank.show_price}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_showprice', {$rank.rank_id})" /></td>
+    <td class="first-cell" ><span onclick="listTable.edit(this,'edit_name', {{ $rank['rank_id'] }})">{{ $rank['rank_name'] }}</span></td>
+    <td align="right"><span @if($rank['special_rank'] != 1) onclick="listTable.edit(this, 'edit_min_points', {{ $rank['rank_id'] }})" @endif >{{ $rank['min_points'] }}</span></td>
+    <td align="right"><span @if($rank['special_rank'] != 1) onclick="listTable.edit(this, 'edit_max_points', {{ $rank['rank_id'] }})" @endif >{{ $rank['max_points'] }}</span></td>
+    <td align="right"><span onclick="listTable.edit(this, 'edit_discount', {{ $rank['rank_id'] }})">{{ $rank['discount'] }}</span></td>
+    <td align="center"><img src="images/@if($rank['special_rank'])yes@elseno@endif.gif" onclick="listTable.toggle(this, 'toggle_special', {{ $rank['rank_id'] }})" /></td>
+    <td align="center"><img src="images/@if($rank['show_price'])yes@elseno@endif.gif" onclick="listTable.toggle(this, 'toggle_showprice', {{ $rank['rank_id'] }})" /></td>
     <td align="center">
-    <a href="javascript:;" onclick="listTable.remove({$rank.rank_id}, '{$lang.drop_confirm}')" title="{$lang.remove}"><img src="images/icon_drop.gif" border="0" height="16" width="16"></a></td>
+    <a href="javascript:;" onclick="listTable.remove({{ $rank['rank_id'] }}, '{{ $lang['drop_confirm'] }}')" title="{{ $lang['remove'] }}"><img src="images/icon_drop.gif" border="0" height="16" width="16"></a></td>
   </tr>
-  {/foreach}
+  @endforeach
   </table>
 
-{if $full_page}
+@if($full_page)
 </div>
 <!-- end user ranks list -->
 </form>
 <script type="Text/Javascript" language="JavaScript">
 <!--
-{literal}
+
 onload = function()
 {
     // 开始检查订单
     startCheckOrder();
 }
-{/literal}
+
 //-->
 </script>
-{include file="pagefooter.htm"}
-{/if}
+@include('pagefooter')
+@endif

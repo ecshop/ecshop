@@ -1,490 +1,493 @@
 
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,../js/transport.js,validator.js"}
-{if $step eq "consignee"}
-{insert_scripts files="../js/region.js"}
-{/if}
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="../js/transport.js"></script>
+<script src="validator.js"></script>
+@if($step == "consignee")
+<script src="../js/region.js"></script>
+@endif
 
-{if $step eq "user"}
-<form name="theForm" action="order.php?act=step_post&step={$step}&order_id={$order_id}&step_act={$step_act}" method="post" onsubmit="return checkUser()">
+@if($step == "user")
+<form name="theForm" action="order.php?act=step_post&step={{ $step }}&order_id={{ $order_id }}&step_act={{ $step_act }}" method="post" onsubmit="return checkUser()">
 <div class="main-div" style="padding: 15px">
-  <label><input type="radio" name="anonymous" value="1" checked /> {$lang.anonymous}</label><br />
-  <label><input type="radio" name="anonymous" value="0" id="user_useridname" /> {$lang.by_useridname}</label>
+  <label><input type="radio" name="anonymous" value="1" checked /> {{ $lang['anonymous'] }}</label><br />
+  <label><input type="radio" name="anonymous" value="0" id="user_useridname" /> {{ $lang['by_useridname'] }}</label>
   <input name="keyword" type="text" value="" />
-  <input type="button" class="button" name="search" value="{$lang.button_search}" onclick="searchUser();" />
+  <input type="button" class="button" name="search" value="{{ $lang['button_search'] }}" onclick="searchUser();" />
   <select name="user"></select>
-  <p>{$lang.notice_user}</p>
+  <p>{{ $lang['notice_user'] }}</p>
 </div>
 <div style="text-align:center">
   <p>
-    <input name="submit" type="submit" class="button" value="{$lang.button_next}" />
-    <input type="button" value="{$lang.button_cancel}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={$order_id}&step_act={$step_act}'" />
+    <input name="submit" type="submit" class="button" value="{{ $lang['button_next'] }}" />
+    <input type="button" value="{{ $lang['button_cancel'] }}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={{ $order_id }}&step_act={{ $step_act }}'" />
   </p>
 </div>
 </form>
 
-{elseif $step eq "goods"}
-<form name="theForm" action="order.php?act=step_post&step=edit_goods&order_id={$order_id}&step_act={$step_act}" method="post">
+@elseif($step == "goods")
+<form name="theForm" action="order.php?act=step_post&step=edit_goods&order_id={{ $order_id }}&step_act={{ $step_act }}" method="post">
 <div class="list-div">
 <table cellpadding="3" cellspacing="1">
   <tr>
-    <th scope="col">{$lang.goods_name}</th>
-    <th scope="col">{$lang.goods_sn}</th>
-    <th scope="col">{$lang.goods_price}</th>
-    <th scope="col">{$lang.goods_number}</th>
-    <th scope="col">{$lang.goods_attr}</th>
-    <th scope="col">{$lang.subtotal}</th>
-    <th scope="col">{$lang.handler}</th>
+    <th scope="col">{{ $lang['goods_name'] }}</th>
+    <th scope="col">{{ $lang['goods_sn'] }}</th>
+    <th scope="col">{{ $lang['goods_price'] }}</th>
+    <th scope="col">{{ $lang['goods_number'] }}</th>
+    <th scope="col">{{ $lang['goods_attr'] }}</th>
+    <th scope="col">{{ $lang['subtotal'] }}</th>
+    <th scope="col">{{ $lang['handler'] }}</th>
   </tr>
-  {foreach from=$goods_list item=goods name="goods"}
+  @foreach($goods_list as $goods)
   <tr>
     <td>
-    {if $goods.goods_id gt 0 && $goods.extension_code neq 'package_buy'}
-    <a href="#" onclick="getGoodsInfo({$goods.goods_id});">{$goods.goods_name}</a>
-    {elseif $goods.goods_id gt 0 && $goods.extension_code eq 'package_buy'}
-    {$goods.goods_name}
-    {/if}
+    @if($goods['goods_id'] > 0 && $goods['extension_code'] != 'package_buy')
+    <a href="#" onclick="getGoodsInfo({{ $goods['goods_id'] }});">{{ $goods['goods_name'] }}</a>
+    @elseif($goods['goods_id'] > 0 && $goods['extension_code'] == 'package_buy')
+    {{ $goods['goods_name'] }}
+    @endif
     </td>
-    <td>{$goods.goods_sn}<input name="rec_id[]" type="hidden" value="{$goods.rec_id}" /></td>
-    <td><input name="goods_price[]" type="text" style="text-align:right" value="{$goods.goods_price}" size="10" />
-        <input name="goods_id[]" type="hidden" style="text-align:right" value="{$goods.goods_id}" size="10" /></td>
-    <td><input name="goods_number[]" type="text" style="text-align:right" value="{$goods.goods_number}" size="6" /></td>
-    <td><textarea name="goods_attr[]" cols="30" rows="{$goods.rows}">{$goods.goods_attr}</textarea></td>
-    <td align="right">{$goods.subtotal}</td>
-    <td><a href="javascript:confirm_redirect(confirm_drop, 'order.php?act=process&func=drop_order_goods&rec_id={$goods.rec_id}&step_act={$step_act}&order_id={$order_id}')">{$lang.drop}</a></td>
+    <td>{{ $goods['goods_sn'] }}<input name="rec_id[]" type="hidden" value="{{ $goods['rec_id'] }}" /></td>
+    <td><input name="goods_price[]" type="text" style="text-align:right" value="{{ $goods['goods_price'] }}" size="10" />
+        <input name="goods_id[]" type="hidden" style="text-align:right" value="{{ $goods['goods_id'] }}" size="10" /></td>
+    <td><input name="goods_number[]" type="text" style="text-align:right" value="{{ $goods['goods_number'] }}" size="6" /></td>
+    <td><textarea name="goods_attr[]" cols="30" rows="{{ $goods['rows'] }}">{{ $goods['goods_attr'] }}</textarea></td>
+    <td align="right">{{ $goods['subtotal'] }}</td>
+    <td><a href="javascript:confirm_redirect(confirm_drop, 'order.php?act=process&func=drop_order_goods&rec_id={{ $goods['rec_id'] }}&step_act={{ $step_act }}&order_id={{ $order_id }}')">{{ $lang['drop'] }}</a></td>
   </tr>
-  {/foreach}
+  @endforeach
   <tr>
-    <td colspan="4"><span class="require-field">{$lang.price_note}</span></td>
-    <td align="right"><strong>{$lang.label_total}</strong></td>
-    <td align="right">{$goods_amount}</td>
-    <td>{if $smarty.foreach.goods.total > 0}<input name="edit_goods" type="submit" value="{$lang.update_goods}" />{/if}
-    <input name="goods_count" type="hidden" value="{$smarty.foreach.goods.total}" /></td>
+    <td colspan="4"><span class="require-field">{{ $lang['price_note'] }}</span></td>
+    <td align="right"><strong>{{ $lang['label_total'] }}</strong></td>
+    <td align="right">{{ $goods_amount }}</td>
+    <td>@if($loop->count > 0)<input name="edit_goods" type="submit" value="{{ $lang['update_goods'] }}" />@endif
+    <input name="goods_count" type="hidden" value="{{ $loop->count }}" /></td>
   </tr>
 </table>
 </div>
 </form>
 
-<form name="goodsForm" action="order.php?act=step_post&step=add_goods&order_id={$order_id}&step_act={$step_act}" method="post" onsubmit="return addToOrder()">
+<form name="goodsForm" action="order.php?act=step_post&step=add_goods&order_id={{ $order_id }}&step_act={{ $step_act }}" method="post" onsubmit="return addToOrder()">
 <p>
-  {$lang.search_goods}
+  {{ $lang['search_goods'] }}
   <input type="text" name="keyword" value="" />
-  <input type="button" name="search" value="{$lang.button_search}" onclick="searchGoods();" />
+  <input type="button" name="search" value="{{ $lang['button_search'] }}" onclick="searchGoods();" />
   <select name="goodslist" onchange="getGoodsInfo(this.value)"></select>
 </p>
 <div class="list-div">
 <table cellpadding="3" cellspacing="1">
   <tr>
-    <th width="100">{$lang.goods_name}</th>
+    <th width="100">{{ $lang['goods_name'] }}</th>
     <td id="goods_name">&nbsp;</td>
   </tr>
   <tr>
-    <th>{$lang.goods_sn}</th>
+    <th>{{ $lang['goods_sn'] }}</th>
     <td id="goods_sn">&nbsp;</td>
   </tr>
   <tr>
-    <th>{$lang.category}</th>
+    <th>{{ $lang['category'] }}</th>
     <td id="goods_cat">&nbsp;</td>
   </tr>
   <tr>
-    <th>{$lang.brand}</th>
+    <th>{{ $lang['brand'] }}</th>
     <td id="goods_brand">&nbsp;</td>
   </tr>
   <tr>
-    <th>{$lang.goods_price}</th>
+    <th>{{ $lang['goods_price'] }}</th>
     <td id="add_price">&nbsp;</td>
   </tr>
   <tr>
-    <th>{$lang.goods_attr}<input type="hidden" name="spec_count" value="0" /></th>
+    <th>{{ $lang['goods_attr'] }}<input type="hidden" name="spec_count" value="0" /></th>
     <td id="goods_attr">&nbsp;</td>
   </tr>
   <tr>
-    <th>{$lang.goods_number}</th>
+    <th>{{ $lang['goods_number'] }}</th>
     <td><input name="add_number" type="text" value="1" size="10"></td>
   </tr>
   <tr>
-    <td colspan="2" align="center"><input name="add_goods" type="submit" value="{$lang.add_to_order}" /></td>
+    <td colspan="2" align="center"><input name="add_goods" type="submit" value="{{ $lang['add_to_order'] }}" /></td>
   </tr>
 </table>
 </div>
 </form>
-<form action="order.php?act=step_post&step=goods&order_id={$order_id}&step_act={$step_act}" method="post" onsubmit="return checkGoods()">
+<form action="order.php?act=step_post&step=goods&order_id={{ $order_id }}&step_act={{ $step_act }}" method="post" onsubmit="return checkGoods()">
   <p align="center">
-    <input name="{if $step_act eq 'add'}next{else}finish{/if}" type="submit" class="button" value="{if $step_act eq 'add'}{$lang.button_next}{else}{$lang.button_submit}{/if}" />
-    <input type="button" value="{$lang.button_cancel}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={$order_id}&step_act={$step_act}'" />
+    <input name="@if($step_act == 'add')next@elsefinish@endif" type="submit" class="button" value="@if($step_act == 'add'){{ $lang['button_next'] }}@else{{ $lang['button_submit'] }}@endif" />
+    <input type="button" value="{{ $lang['button_cancel'] }}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={{ $order_id }}&step_act={{ $step_act }}'" />
   </p>
 </form>
 
-{elseif $step eq "consignee"}
-{insert_scripts files="../js/transport.js,../js/region.js"}
+@elseif($step == "consignee")
+<script src="../js/transport.js"></script>
+<script src="../js/region.js"></script>
 <script type="text/javascript">
 region.isAdmin=true;
 </script>
-<form name="theForm" action="order.php?act=step_post&step={$step}&order_id={$order_id}&step_act={$step_act}" method="post" onsubmit="return checkConsignee()">
+<form name="theForm" action="order.php?act=step_post&step={{ $step }}&order_id={{ $order_id }}&step_act={{ $step_act }}" method="post" onsubmit="return checkConsignee()">
 <div class="list-div">
 <table cellpadding="3" cellspacing="1">
-  {if $address_list}
+  @if($address_list)
   <tr>
-    <th align="left">{$lang.address_list}</th>
-    <td><select onchange="loadAddress(this.value)"><option value="0" selected>{$lang.select_please}</option>
-      {foreach from=$address_list item=address}<option value="{$address.address_id}" {if $smarty.get.address_id eq $address.address_id}selected{/if}>{$address.consignee|escape} {$address.email} {$address.address|escape} {$address.tel|escape}</option>{/foreach}
+    <th align="left">{{ $lang['address_list'] }}</th>
+    <td><select onchange="loadAddress(this.value)"><option value="0" selected>{{ $lang['select_please'] }}</option>
+      @foreach($address_list as $address)<option value="{{ $address['address_id'] }}" @if(request()->query('address_id') == $address['address_id'])selected@endif>{{ $address['consignee'] }} {{ $address['email'] }} {{ $address['address'] }} {{ $address['tel'] }}</option>@endforeach
     </select></td>
   </tr>
-  {/if}
+  @endif
   <tr>
-    <th width="150" align="left">{$lang.label_consignee}</th>
-    <td><input name="consignee" type="text" value="{$order.consignee}" />
-      {$lang.require_field}</td>
+    <th width="150" align="left">{{ $lang['label_consignee'] }}</th>
+    <td><input name="consignee" type="text" value="{{ $order['consignee'] }}" />
+      {{ $lang['require_field'] }}</td>
   </tr>
-  {if $exist_real_goods}
+  @if($exist_real_goods)
   <tr>
-    <th align="left">{$lang.label_area}</th>
+    <th align="left">{{ $lang['label_area'] }}</th>
     <td><select name="country" id="selCountries" onChange="region.changed(this, 1, 'selProvinces')">
-        <option value="0" selected="true">{$lang.select_please}</option>
-        {foreach from=$country_list item=country}
-        <option value="{$country.region_id}" {if $order.country eq $country.region_id}selected{/if}>{$country.region_name}</option>
-        {/foreach}
+        <option value="0" selected="true">{{ $lang['select_please'] }}</option>
+        @foreach($country_list as $country)
+        <option value="{{ $country['region_id'] }}" @if($order['country'] == $country['region_id'])selected@endif>{{ $country['region_name'] }}</option>
+        @endforeach
       </select> <select name="province" id="selProvinces" onChange="region.changed(this, 2, 'selCities')">
-        <option value="0">{$lang.select_please}</option>
-        {foreach from=$province_list item=province}
-        <option value="{$province.region_id}" {if $order.province eq $province.region_id}selected{/if}>{$province.region_name}</option>
-        {/foreach}
+        <option value="0">{{ $lang['select_please'] }}</option>
+        @foreach($province_list as $province)
+        <option value="{{ $province['region_id'] }}" @if($order['province'] == $province['region_id'])selected@endif>{{ $province['region_name'] }}</option>
+        @endforeach
       </select> <select name="city" id="selCities" onchange="region.changed(this, 3, 'selDistricts')">
-          <option value="0">{$lang.select_please}</option>
-          <!-- {foreach from=$city_list item=city} -->
-          <option value="{$city.region_id}" {if $order.city eq $city.region_id}selected{/if}>{$city.region_name}</option>
-          <!-- {/foreach} -->
+          <option value="0">{{ $lang['select_please'] }}</option>
+          @foreach($city_list as $city)
+          <option value="{{ $city['region_id'] }}" @if($order['city'] == $city['region_id'])selected@endif>{{ $city['region_name'] }}</option>
+          @endforeach
         </select>
         <select name="district" id="selDistricts">
-          <option value="0">{$lang.select_please}</option>
-          <!-- {foreach from=$district_list item=district} -->
-          <option value="{$district.region_id}" {if $order.district eq $district.region_id}selected{/if}>{$district.region_name}</option>
-          <!-- {/foreach} -->
+          <option value="0">{{ $lang['select_please'] }}</option>
+          @foreach($district_list as $district)
+          <option value="{{ $district['region_id'] }}" @if($order['district'] == $district['region_id'])selected@endif>{{ $district['region_name'] }}</option>
+          @endforeach
         </select>
-        {$lang.require_field}</td>
+        {{ $lang['require_field'] }}</td>
   </tr>
-  {/if}
+  @endif
   <tr>
-    <th align="left">{$lang.label_email}</th>
-    <td><input name="email" type="text" value="{$order.email}" size="40" />
-    {$lang.require_field}</td>
+    <th align="left">{{ $lang['label_email'] }}</th>
+    <td><input name="email" type="text" value="{{ $order['email'] }}" size="40" />
+    {{ $lang['require_field'] }}</td>
   </tr>
-  {if $exist_real_goods}
+  @if($exist_real_goods)
   <tr>
-    <th align="left">{$lang.label_address}</th>
-    <td><input name="address" type="text" value="{$order.address}" size="40" />
-    {$lang.require_field}</td>
-  </tr>
-  <tr>
-    <th align="left">{$lang.label_zipcode}</th>
-    <td><input name="zipcode" type="text" value="{$order.zipcode}" /></td>
-  </tr>
-  {/if}
-  <tr>
-    <th align="left">{$lang.label_tel}</th>
-    <td><input name="tel" type="text" value="{$order.tel}" />
-    {$lang.require_field}</td>
+    <th align="left">{{ $lang['label_address'] }}</th>
+    <td><input name="address" type="text" value="{{ $order['address'] }}" size="40" />
+    {{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <th align="left">{$lang.label_mobile}</th>
-    <td><input name="mobile" type="text" value="{$order.mobile}" /></td>
+    <th align="left">{{ $lang['label_zipcode'] }}</th>
+    <td><input name="zipcode" type="text" value="{{ $order['zipcode'] }}" /></td>
   </tr>
-  {if $exist_real_goods}
+  @endif
   <tr>
-    <th align="left">{$lang.label_sign_building}</th>
-    <td><input name="sign_building" type="text" value="{$order.sign_building}" size="40" /></td>
+    <th align="left">{{ $lang['label_tel'] }}</th>
+    <td><input name="tel" type="text" value="{{ $order['tel'] }}" />
+    {{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <th align="left">{$lang.label_best_time}</th>
-    <td><input name="best_time" type="text" value="{$order.best_time}" size="40" /></td>
+    <th align="left">{{ $lang['label_mobile'] }}</th>
+    <td><input name="mobile" type="text" value="{{ $order['mobile'] }}" /></td>
   </tr>
-  {/if}
+  @if($exist_real_goods)
+  <tr>
+    <th align="left">{{ $lang['label_sign_building'] }}</th>
+    <td><input name="sign_building" type="text" value="{{ $order['sign_building'] }}" size="40" /></td>
+  </tr>
+  <tr>
+    <th align="left">{{ $lang['label_best_time'] }}</th>
+    <td><input name="best_time" type="text" value="{{ $order['best_time'] }}" size="40" /></td>
+  </tr>
+  @endif
 </table>
 </div>
 
 <div align="center">
   <p>
-    {if $step_act eq "add"}{if $step_act eq "add"}<input type="button" value="{$lang.button_prev}" class="button" onclick="history.back()" />{/if}{/if}
-    <input name="{if $step_act eq 'add'}next{else}finish{/if}" type="submit" class="button" value="{if $step_act eq 'add'}{$lang.button_next}{else}{$lang.button_submit}{/if}" />
-    <input type="button" value="{$lang.button_cancel}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={$order_id}&step_act={$step_act}'" />
+    @if($step_act == "add")@if($step_act == "add")<input type="button" value="{{ $lang['button_prev'] }}" class="button" onclick="history.back()" />@endif@endif
+    <input name="@if($step_act == 'add')next@elsefinish@endif" type="submit" class="button" value="@if($step_act == 'add'){{ $lang['button_next'] }}@else{{ $lang['button_submit'] }}@endif" />
+    <input type="button" value="{{ $lang['button_cancel'] }}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={{ $order_id }}&step_act={{ $step_act }}'" />
   </p>
 </div>
 </form>
 
-{elseif $step eq "shipping"}
-<form name="theForm" action="order.php?act=step_post&step={$step}&order_id={$order_id}&step_act={$step_act}" method="post" onsubmit="return checkShipping()">
+@elseif($step == "shipping")
+<form name="theForm" action="order.php?act=step_post&step={{ $step }}&order_id={{ $order_id }}&step_act={{ $step_act }}" method="post" onsubmit="return checkShipping()">
 <div class="list-div">
 <table cellpadding="3" cellspacing="1">
   <tr>
     <th width="5%">&nbsp;</th>
-    <th width="25%">{$lang.name}</th>
-    <th>{$lang.desc}</th>
-    <th width="15%">{$lang.shipping_fee}</th>
-    <th width="15%">{$lang.free_money}</th>
-  <th width="15%">{$lang.insure}</th>
+    <th width="25%">{{ $lang['name'] }}</th>
+    <th>{{ $lang['desc'] }}</th>
+    <th width="15%">{{ $lang['shipping_fee'] }}</th>
+    <th width="15%">{{ $lang['free_money'] }}</th>
+  <th width="15%">{{ $lang['insure'] }}</th>
   </tr>
-  {foreach from=$shipping_list item=shipping}
+  @foreach($shipping_list as $shipping)
   <tr>
-    <td><input name="shipping" type="radio" value="{$shipping.shipping_id}" {if $order.shipping_id eq $shipping.shipping_id}checked{/if} onclick="" /></td>
-    <td>{$shipping.shipping_name}</td>
-    <td>{$shipping.shipping_desc}</td>
-    <td><div align="right">{$shipping.format_shipping_fee}</div></td>
-    <td><div align="right">{$shipping.free_money}</div></td>
-  <td><div align="right">{$shipping.insure}</div></td>
+    <td><input name="shipping" type="radio" value="{{ $shipping['shipping_id'] }}" @if($order['shipping_id'] == $shipping['shipping_id'])checked@endif onclick="" /></td>
+    <td>{{ $shipping['shipping_name'] }}</td>
+    <td>{{ $shipping['shipping_desc'] }}</td>
+    <td><div align="right">{{ $shipping['format_shipping_fee'] }}</div></td>
+    <td><div align="right">{{ $shipping['free_money'] }}</div></td>
+  <td><div align="right">{{ $shipping['insure'] }}</div></td>
   </tr>
-  {/foreach}
+  @endforeach
 </table>
 </div>
 
-<p align="right"><input name="insure" type="checkbox" value="1" {if $order.insure_fee > 0}checked{/if} />
-{$lang.want_insure}</p>
+<p align="right"><input name="insure" type="checkbox" value="1" @if($order['insure_fee'] > 0)checked@endif />
+{{ $lang['want_insure'] }}</p>
 
   <p align="center">
-    {if $step_act eq "add"}<input type="button" value="{$lang.button_prev}" class="button" onclick="history.back()" />{/if}
-    <input name="{if $step_act eq 'add'}next{else}finish{/if}" type="submit" class="button" value="{if $step_act eq 'add'}{$lang.button_next}{else}{$lang.button_submit}{/if}" />
-    <input type="button" value="{$lang.button_cancel}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={$order_id}&step_act={$step_act}'" />
+    @if($step_act == "add")<input type="button" value="{{ $lang['button_prev'] }}" class="button" onclick="history.back()" />@endif
+    <input name="@if($step_act == 'add')next@elsefinish@endif" type="submit" class="button" value="@if($step_act == 'add'){{ $lang['button_next'] }}@else{{ $lang['button_submit'] }}@endif" />
+    <input type="button" value="{{ $lang['button_cancel'] }}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={{ $order_id }}&step_act={{ $step_act }}'" />
   </p>
 </form>
 
-{elseif $step eq "payment"}
-<form name="theForm" action="order.php?act=step_post&step={$step}&order_id={$order_id}&step_act={$step_act}" method="post" onsubmit="return checkPayment()">
+@elseif($step == "payment")
+<form name="theForm" action="order.php?act=step_post&step={{ $step }}&order_id={{ $order_id }}&step_act={{ $step_act }}" method="post" onsubmit="return checkPayment()">
 <div class="list-div">
 <table cellpadding="3" cellspacing="1">
   <tr>
     <th width="5%">&nbsp;</th>
-    <th width="20%">{$lang.name}</th>
-    <th>{$lang.desc}</th>
-    <th width="15%">{$lang.pay_fee}</th>
+    <th width="20%">{{ $lang['name'] }}</th>
+    <th>{{ $lang['desc'] }}</th>
+    <th width="15%">{{ $lang['pay_fee'] }}</th>
   </tr>
-  {foreach from=$payment_list item=payment}
+  @foreach($payment_list as $payment)
   <tr>
-    <td><input type="radio" name="payment" value="{$payment.pay_id}" {if $order.pay_id eq $payment.pay_id}checked{/if} /></td>
-    <td>{$payment.pay_name}</td>
-    <td>{$payment.pay_desc}</td>
-    <td align="right">{$payment.pay_fee}</td>
+    <td><input type="radio" name="payment" value="{{ $payment['pay_id'] }}" @if($order['pay_id'] == $payment['pay_id'])checked@endif /></td>
+    <td>{{ $payment['pay_name'] }}</td>
+    <td>{{ $payment['pay_desc'] }}</td>
+    <td align="right">{{ $payment['pay_fee'] }}</td>
   </tr>
-  {/foreach}
+  @endforeach
 </table>
 </div>
   <p align="center">
-    {if $step_act eq "add"}<input type="button" value="{$lang.button_prev}" class="button" onclick="history.back()" />{/if}
-    <input name="{if $step_act eq 'add'}next{else}finish{/if}" type="submit" class="button" value="{if $step_act eq 'add'}{$lang.button_next}{else}{$lang.button_submit}{/if}" />
-    <input type="button" value="{$lang.button_cancel}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={$order_id}&step_act={$step_act}'" />
+    @if($step_act == "add")<input type="button" value="{{ $lang['button_prev'] }}" class="button" onclick="history.back()" />@endif
+    <input name="@if($step_act == 'add')next@elsefinish@endif" type="submit" class="button" value="@if($step_act == 'add'){{ $lang['button_next'] }}@else{{ $lang['button_submit'] }}@endif" />
+    <input type="button" value="{{ $lang['button_cancel'] }}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={{ $order_id }}&step_act={{ $step_act }}'" />
   </p>
 </form>
 
-{elseif $step eq "other"}
-<form name="theForm" action="order.php?act=step_post&step={$step}&order_id={$order_id}&step_act={$step_act}" method="post">
+@elseif($step == "other")
+<form name="theForm" action="order.php?act=step_post&step={{ $step }}&order_id={{ $order_id }}&step_act={{ $step_act }}" method="post">
 <div class="list-div">
-{if $exist_real_goods and ($pack_list or $card_list)}
+@if($exist_real_goods && ($pack_list || $card_list))
 <table cellpadding="3" cellspacing="1">
-  {if $pack_list}
+  @if($pack_list)
   <tr>
-    <th colspan="4" scope="col">{$lang.select_pack}</th>
+    <th colspan="4" scope="col">{{ $lang['select_pack'] }}</th>
     </tr>
   <tr>
     <td width="5%" scope="col">&nbsp;</td>
-    <td width="35%" scope="col"><div align="center"><strong>{$lang.name}</strong></div></td>
-    <td width="22%" scope="col"><div align="center"><strong>{$lang.pack_fee}</strong></div></td>
-    <td width="22%" scope="col"><div align="center"><strong>{$lang.free_money}</strong></div></td>
+    <td width="35%" scope="col"><div align="center"><strong>{{ $lang['name'] }}</strong></div></td>
+    <td width="22%" scope="col"><div align="center"><strong>{{ $lang['pack_fee'] }}</strong></div></td>
+    <td width="22%" scope="col"><div align="center"><strong>{{ $lang['free_money'] }}</strong></div></td>
     </tr>
   <tr>
-    <td><input type="radio" name="pack" value="0" {if $order.pack_id eq 0}checked{/if} /></td>
-    <td>{$lang.no_pack}</td>
+    <td><input type="radio" name="pack" value="0" @if($order['pack_id'] == 0)checked@endif /></td>
+    <td>{{ $lang['no_pack'] }}</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     </tr>
-  {foreach from=$pack_list item=pack}
+  @foreach($pack_list as $pack)
   <tr>
-    <td><input type="radio" name="pack" value="{$pack.pack_id}" {if $order.pack_id eq $pack.pack_id}checked{/if} /></td>
-    <td>{$pack.pack_name}</td>
-    <td><div align="right">{$pack.format_pack_fee}</div></td>
-    <td><div align="right">{$pack.format_free_money}</div></td>
+    <td><input type="radio" name="pack" value="{{ $pack['pack_id'] }}" @if($order['pack_id'] == $pack['pack_id'])checked@endif /></td>
+    <td>{{ $pack['pack_name'] }}</td>
+    <td><div align="right">{{ $pack['format_pack_fee'] }}</div></td>
+    <td><div align="right">{{ $pack['format_free_money'] }}</div></td>
     </tr>
-  {/foreach}
-  {/if}
-  {if $card_list}
+  @endforeach
+  @endif
+  @if($card_list)
   <tr>
-    <th colspan="4" scope="col">{$lang.select_card}</th>
+    <th colspan="4" scope="col">{{ $lang['select_card'] }}</th>
     </tr>
   <tr>
     <td scope="col">&nbsp;</td>
-    <td scope="col"><div align="center"><strong>{$lang.name}</strong></div></td>
-    <td scope="col"><div align="center"><strong>{$lang.card_fee}</strong></div></td>
-    <td scope="col"><div align="center"><strong>{$lang.free_money}</strong></div></td>
+    <td scope="col"><div align="center"><strong>{{ $lang['name'] }}</strong></div></td>
+    <td scope="col"><div align="center"><strong>{{ $lang['card_fee'] }}</strong></div></td>
+    <td scope="col"><div align="center"><strong>{{ $lang['free_money'] }}</strong></div></td>
     </tr>
   <tr>
-    <td><input type="radio" name="card" value="0" {if $order.card_id eq 0}checked{/if} /></td>
-    <td>{$lang.no_card}</td>
+    <td><input type="radio" name="card" value="0" @if($order['card_id'] == 0)checked@endif /></td>
+    <td>{{ $lang['no_card'] }}</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     </tr>
-  {foreach from=$card_list item=card}
+  @foreach($card_list as $card)
   <tr>
-    <td><input type="radio" name="card" value="{$card.card_id}" {if $order.card_id eq $card.card_id}checked{/if} /></td>
-    <td>{$card.card_name}</td>
-    <td><div align="right">{$card.format_card_fee}</div></td>
-    <td><div align="right">{$card.format_free_money}</div></td>
+    <td><input type="radio" name="card" value="{{ $card['card_id'] }}" @if($order['card_id'] == $card['card_id'])checked@endif /></td>
+    <td>{{ $card['card_name'] }}</td>
+    <td><div align="right">{{ $card['format_card_fee'] }}</div></td>
+    <td><div align="right">{{ $card['format_free_money'] }}</div></td>
     </tr>
-  {/foreach}
-  {/if}
+  @endforeach
+  @endif
 </table>
-{/if}
+@endif
 </div><br />
 <div class="list-div">
 <table cellpadding="3" cellspacing="1">
-  {if $exist_real_goods}
-  {if $card_list}
+  @if($exist_real_goods)
+  @if($card_list)
   <tr>
-    <th>{$lang.label_card_message}</th>
-    <td><textarea name="card_message" cols="60" rows="3">{$order.card_message}</textarea></td>
+    <th>{{ $lang['label_card_message'] }}</th>
+    <td><textarea name="card_message" cols="60" rows="3">{{ $order['card_message'] }}</textarea></td>
   </tr>
-  {/if}
+  @endif
   <tr>
-    <th>{$lang.label_inv_type}</th>
-    <td><input name="inv_type" type="text" id="inv_type" value="{$order.inv_type}" size="40" /></td>
-  </tr>
-  <tr>
-    <th>{$lang.label_inv_payee}</th>
-    <td><input name="inv_payee" value="{$order.inv_payee}" size="40" text="text" /></td>
+    <th>{{ $lang['label_inv_type'] }}</th>
+    <td><input name="inv_type" type="text" id="inv_type" value="{{ $order['inv_type'] }}" size="40" /></td>
   </tr>
   <tr>
-    <th>{$lang.label_inv_content}</th>
-    <td><input name="inv_content" value="{$order.inv_content}" size="40" text="text" /></td>
-  </tr>
-  {/if}
-  <tr>
-    <th>{$lang.label_postscript}</th>
-    <td><textarea name="postscript" cols="60" rows="3">{$order.postscript}</textarea></td>
+    <th>{{ $lang['label_inv_payee'] }}</th>
+    <td><input name="inv_payee" value="{{ $order['inv_payee'] }}" size="40" text="text" /></td>
   </tr>
   <tr>
-    <th>{$lang.label_how_oos}</th>
-    <td><input name="how_oos" type="text" value="{$order.how_oos}" size="40" /></td>
+    <th>{{ $lang['label_inv_content'] }}</th>
+    <td><input name="inv_content" value="{{ $order['inv_content'] }}" size="40" text="text" /></td>
+  </tr>
+  @endif
+  <tr>
+    <th>{{ $lang['label_postscript'] }}</th>
+    <td><textarea name="postscript" cols="60" rows="3">{{ $order['postscript'] }}</textarea></td>
   </tr>
   <tr>
-    <th>{$lang.label_to_buyer}</th>
-    <td><textarea name="to_buyer" cols="60" rows="3">{$order.to_buyer}</textarea></td>
+    <th>{{ $lang['label_how_oos'] }}</th>
+    <td><input name="how_oos" type="text" value="{{ $order['how_oos'] }}" size="40" /></td>
+  </tr>
+  <tr>
+    <th>{{ $lang['label_to_buyer'] }}</th>
+    <td><textarea name="to_buyer" cols="60" rows="3">{{ $order['to_buyer'] }}</textarea></td>
   </tr>
 </table>
 </div>
   <p align="center">
-    {if $step_act eq "add"}<input type="button" value="{$lang.button_prev}" class="button" onclick="history.back()" />{/if}
-    <input name="{if $step_act eq 'add'}next{else}finish{/if}" type="submit" class="button" value="{if $step_act eq 'add'}{$lang.button_next}{else}{$lang.button_submit}{/if}" />
-    <input type="button" value="{$lang.button_cancel}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={$order_id}&step_act={$step_act}'" />
+    @if($step_act == "add")<input type="button" value="{{ $lang['button_prev'] }}" class="button" onclick="history.back()" />@endif
+    <input name="@if($step_act == 'add')next@elsefinish@endif" type="submit" class="button" value="@if($step_act == 'add'){{ $lang['button_next'] }}@else{{ $lang['button_submit'] }}@endif" />
+    <input type="button" value="{{ $lang['button_cancel'] }}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={{ $order_id }}&step_act={{ $step_act }}'" />
   </p>
 </form>
 
-{elseif $step eq "money"}
-<form name="theForm" action="order.php?act=step_post&step={$step}&order_id={$order_id}&step_act={$step_act}" method="post">
+@elseif($step == "money")
+<form name="theForm" action="order.php?act=step_post&step={{ $step }}&order_id={{ $order_id }}&step_act={{ $step_act }}" method="post">
 <div class="list-div">
 <table cellpadding="3" cellspacing="1">
   <tr>
-    <th width="120">{$lang.label_goods_amount}</th>
-    <td width="150">{$order.formated_goods_amount}</td>
-  <th width="120">{$lang.label_discount}</th>
-    <td><input name="discount" type="text" id="discount" value="{$order.discount}" size="15" /></td>
+    <th width="120">{{ $lang['label_goods_amount'] }}</th>
+    <td width="150">{{ $order['formated_goods_amount'] }}</td>
+  <th width="120">{{ $lang['label_discount'] }}</th>
+    <td><input name="discount" type="text" id="discount" value="{{ $order['discount'] }}" size="15" /></td>
   </tr>
   <tr>
-    <th>{$lang.label_tax}</th>
-    <td><input name="tax" type="text" id="tax" value="{$order.tax}" size="15" /></td>
-    <th>{$lang.label_order_amount}</th>
-    <td>{$order.formated_total_fee}</td>
+    <th>{{ $lang['label_tax'] }}</th>
+    <td><input name="tax" type="text" id="tax" value="{{ $order['tax'] }}" size="15" /></td>
+    <th>{{ $lang['label_order_amount'] }}</th>
+    <td>{{ $order['formated_total_fee'] }}</td>
   </tr>
   <tr>
-    <th>{$lang.label_shipping_fee}</th>
-    <td>{if $exist_real_goods}<input name="shipping_fee" type="text" value="{$order.shipping_fee}" size="15">{else}0{/if}</td>
-  <th width="120">{$lang.label_money_paid}</th>
-    <td>{$order.formated_money_paid} </td>
+    <th>{{ $lang['label_shipping_fee'] }}</th>
+    <td>@if($exist_real_goods)<input name="shipping_fee" type="text" value="{{ $order['shipping_fee'] }}" size="15">@else0@endif</td>
+  <th width="120">{{ $lang['label_money_paid'] }}</th>
+    <td>{{ $order['formated_money_paid'] }} </td>
   </tr>
   <tr>
-    <th>{$lang.label_insure_fee}</th>
-    <td>{if $exist_real_goods}<input name="insure_fee" type="text" value="{$order.insure_fee}" size="15">{else}0{/if}</td>
-  <th>{$lang.label_surplus}</th>
-    <td>{if $order.user_id >0}
-        <input name="surplus" type="text" value="{$order.surplus}" size="15">
-  {/if} {$lang.available_surplus}{$available_user_money|default:0}</td>
+    <th>{{ $lang['label_insure_fee'] }}</th>
+    <td>@if($exist_real_goods)<input name="insure_fee" type="text" value="{{ $order['insure_fee'] }}" size="15">@else0@endif</td>
+  <th>{{ $lang['label_surplus'] }}</th>
+    <td>@if($order['user_id'] >0)
+        <input name="surplus" type="text" value="{{ $order['surplus'] }}" size="15">
+  @endif {{ $lang['available_surplus'] }}{{ $available_user_money ?? 0 }}</td>
   </tr>
   <tr>
-    <th>{$lang.label_pay_fee}</th>
-    <td><input name="pay_fee" type="text" value="{$order.pay_fee}" size="15"></td>
-  <th>{$lang.label_integral}</th>
-    <td>{if $order.user_id > 0}
-        <input name="integral" type="text" value="{$order.integral}" size="15">
-  {/if} {$lang.available_integral}{$available_pay_points|default:0}</td>
+    <th>{{ $lang['label_pay_fee'] }}</th>
+    <td><input name="pay_fee" type="text" value="{{ $order['pay_fee'] }}" size="15"></td>
+  <th>{{ $lang['label_integral'] }}</th>
+    <td>@if($order['user_id'] > 0)
+        <input name="integral" type="text" value="{{ $order['integral'] }}" size="15">
+  @endif {{ $lang['available_integral'] }}{{ $available_pay_points ?? 0 }}</td>
   </tr>
   <tr>
-    <th>{$lang.label_pack_fee}</th>
-    <td>{if $exist_real_goods}
-      <input name="pack_fee" type="text" value="{$order.pack_fee}" size="15">
-      {else}0{/if}</td>
-    <th>{$lang.label_bonus}</th>
+    <th>{{ $lang['label_pack_fee'] }}</th>
+    <td>@if($exist_real_goods)
+      <input name="pack_fee" type="text" value="{{ $order['pack_fee'] }}" size="15">
+      @else0@endif</td>
+    <th>{{ $lang['label_bonus'] }}</th>
     <td>
       <select name="bonus_id">
-        <option value="0" {if $order.bonus_id eq 0}selected{/if}>{$lang.select_please}</option>
+        <option value="0" @if($order['bonus_id'] == 0)selected@endif>{{ $lang['select_please'] }}</option>
 
-          {foreach from=$available_bonus item=bonus}
+          @foreach($available_bonus as $bonus)
 
-        <option value="{$bonus.bonus_id}" {if $order.bonus_id eq $bonus.bonus_id}selected{/if} money="{$bonus.type_money}">{$bonus.type_name} - {$bonus.type_money}</option>
+        <option value="{{ $bonus['bonus_id'] }}" @if($order['bonus_id'] == $bonus['bonus_id'])selected@endif money="{{ $bonus['type_money'] }}">{{ $bonus['type_name'] }} - {{ $bonus['type_money'] }}</option>
 
-          {/foreach}
+          @endforeach
 
       </select>    </td>
   </tr>
   <tr>
-    <th>{$lang.label_card_fee}</th>
-    <td>{if $exist_real_goods}
-      <input name="card_fee" type="text" value="{$order.card_fee}" size="15">
-      {else}0{/if}</td>
-    <th>{if $order.order_amount >= 0} {$lang.label_money_dues} {else} {$lang.label_money_refund} {/if}</th>
-    <td>{$order.formated_order_amount}</td>
+    <th>{{ $lang['label_card_fee'] }}</th>
+    <td>@if($exist_real_goods)
+      <input name="card_fee" type="text" value="{{ $order['card_fee'] }}" size="15">
+      @else0@endif</td>
+    <th>@if($order['order_amount'] >= 0) {{ $lang['label_money_dues'] }} @else {{ $lang['label_money_refund'] }} @endif</th>
+    <td>{{ $order['formated_order_amount'] }}</td>
   </tr>
 </table>
 </div>
   <p align="center">
-    {if $step_act eq "add"}<input type="button" value="{$lang.button_prev}" class="button" onclick="history.back()" />{/if}
-    <input name="finish" type="submit" class="button" value="{$lang.button_finish}" />
-    <input type="button" value="{$lang.button_cancel}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={$order_id}&step_act={$step_act}'" />
+    @if($step_act == "add")<input type="button" value="{{ $lang['button_prev'] }}" class="button" onclick="history.back()" />@endif
+    <input name="finish" type="submit" class="button" value="{{ $lang['button_finish'] }}" />
+    <input type="button" value="{{ $lang['button_cancel'] }}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={{ $order_id }}&step_act={{ $step_act }}'" />
   </p>
 </form>
 
-{elseif $step eq "invoice"}
-<form name="theForm" action="order.php?act=step_post&step={$step}&order_id={$order_id}&step_act={$step_act}" method="post" onsubmit="return checkShipping()">
+@elseif($step == "invoice")
+<form name="theForm" action="order.php?act=step_post&step={{ $step }}&order_id={{ $order_id }}&step_act={{ $step_act }}" method="post" onsubmit="return checkShipping()">
 <div class="list-div">
 <table cellpadding="3" cellspacing="1">
   <tr>
     <th width="5%">&nbsp;</th>
-    <th width="25%">{$lang.name}</th>
-    <th>{$lang.desc}</th>
+    <th width="25%">{{ $lang['name'] }}</th>
+    <th>{{ $lang['desc'] }}</th>
     </tr>
-  {foreach from=$shipping_list item=shipping}
+  @foreach($shipping_list as $shipping)
   <tr>
-    <td><input name="shipping" type="radio" value="{$shipping.shipping_id}" {if $order.shipping_id eq $shipping.shipping_id}checked{/if} onclick="" /></td>
-    <td>{$shipping.shipping_name}</td>
-    <td>{$shipping.shipping_desc}</td>
+    <td><input name="shipping" type="radio" value="{{ $shipping['shipping_id'] }}" @if($order['shipping_id'] == $shipping['shipping_id'])checked@endif onclick="" /></td>
+    <td>{{ $shipping['shipping_name'] }}</td>
+    <td>{{ $shipping['shipping_desc'] }}</td>
     </tr>
-  {/foreach}
+  @endforeach
   <tr>
-    <td colspan="3"><strong>{$lang.shipping_note}</strong></td>
+    <td colspan="3"><strong>{{ $lang['shipping_note'] }}</strong></td>
     </tr>
   <tr>
-    <td colspan="3"><a href="javascript:showNotice('noticeinvoiceno');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a><strong>{$lang.label_invoice_no}</strong><input name="invoice_no" type="text" value="{$order.invoice_no}" size="30"/><br/><span class="notice-span" id="noticeinvoiceno" style="display:block;">{$lang.invoice_no_mall}</span></td>
+    <td colspan="3"><a href="javascript:showNotice('noticeinvoiceno');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a><strong>{{ $lang['label_invoice_no'] }}</strong><input name="invoice_no" type="text" value="{{ $order['invoice_no'] }}" size="30"/><br/><span class="notice-span" id="noticeinvoiceno" style="display:block;">{{ $lang['invoice_no_mall'] }}</span></td>
   </tr>
 </table>
 </div>
 
   <p align="center">
-    {if $step_act eq "add"}<input type="button" value="{$lang.button_prev}" class="button" onclick="history.back()" />{/if}
-    <input name="{if $step_act eq 'add'}next{else}finish{/if}" type="submit" class="button" value="{if $step_act eq 'add'}{$lang.button_next}{else}{$lang.button_submit}{/if}" />
-    <input type="button" value="{$lang.button_cancel}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={$order_id}&step_act={$step_act}'" />
+    @if($step_act == "add")<input type="button" value="{{ $lang['button_prev'] }}" class="button" onclick="history.back()" />@endif
+    <input name="@if($step_act == 'add')next@elsefinish@endif" type="submit" class="button" value="@if($step_act == 'add'){{ $lang['button_next'] }}@else{{ $lang['button_submit'] }}@endif" />
+    <input type="button" value="{{ $lang['button_cancel'] }}" class="button" onclick="location.href='order.php?act=process&func=cancel_order&order_id={{ $order_id }}&step_act={{ $step_act }}'" />
   </p>
 </form>
-{/if}
+@endif
 
 <script language="JavaScript">
-  var step = '{$step}';
-  var orderId = {$order_id};
-  var act = '{$smarty.get.act}';
-{literal}
+  var step = '{{ $step }}';
+  var orderId = {{ $order_id }};
+  var act = '{{ request()->query('act') }}';
+
   function checkUser()
   {
     var eles = document.forms['theForm'].elements;
@@ -792,11 +795,11 @@ region.isAdmin=true;
    */
   function loadAddress(addressId)
   {
-{/literal}
-    location.href += 'order.php?act={$smarty.get.act}&order_id={$smarty.get.order_id}&step={$smarty.get.step}&address_id=' + addressId;
-{literal}
+
+    location.href += 'order.php?act={{ request()->query('act') }}&order_id={{ request()->query('order_id') }}&step={{ request()->query('step') }}&address_id=' + addressId;
+
   }
 </script>
-{/literal}
 
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

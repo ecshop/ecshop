@@ -1,90 +1,91 @@
-{if $full_page}
+@if($full_page)
 
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
-{insert_scripts files="validator.js"}
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
+<script src="validator.js"></script>
 <!-- 添加货品 -->
 <div class="list-div" style="margin-bottom: 5px; margin-top: 10px;" id="listDiv">
 
-{/if}
+@endif
 
 <form method="post" action="goods.php" name="addForm" id="addForm" >
-<input type="hidden" name="goods_id" value="{$goods_id}" />
+<input type="hidden" name="goods_id" value="{{ $goods_id }}" />
 <input type="hidden" name="act" value="product_add_execute" />
   <table width="100%" cellpadding="3" cellspacing="1" id="table_list">
     <tr>
-      <th colspan="20" scope="col">{$goods_name}&nbsp;&nbsp;&nbsp;&nbsp;{$goods_sn}</th>
+      <th colspan="20" scope="col">{{ $goods_name }}&nbsp;&nbsp;&nbsp;&nbsp;{{ $goods_sn }}</th>
     </tr>
     <tr>
       <!-- start for specifications -->
-      {foreach from=$attribute item=attribute_value}
-        <td scope="col"><div align="center"><strong>{$attribute_value.attr_name}</strong></div></td>
-      {foreachelse}
+      @forelse($attribute as $attribute_value)
+        <td scope="col"><div align="center"><strong>{{ $attribute_value['attr_name'] }}</strong></div></td>
+      @empty
         <td scope="col">&nbsp;</td>
-      {/foreach}
+      @endforelse
       <!-- end for specifications -->
-      <td class="label_2">{$lang.goods_sn}</td>
-      <td class="label_2">{$lang.goods_number}</td>
+      <td class="label_2">{{ $lang['goods_sn'] }}</td>
+      <td class="label_2">{{ $lang['goods_number'] }}</td>
       <td class="label_2">&nbsp;</td>
     </tr>
 
-    {foreach from=$product_list item=product}
+    @foreach($product_list as $product)
     <tr>
-      {foreach from=$product.goods_attr item=goods_attr}
-      <td scope="col"><div align="center">{$goods_attr}</div></td>
-      {/foreach}
-      <td class="td_1"><span onclick="listTable.edit(this, 'edit_product_sn', {$product.product_id})">{$product.product_sn|default:$lang.n_a}</span></td>
-      <td class="td_1"><span onclick="listTable.edit(this, 'edit_product_number', {$product.product_id})">{$product.product_number}</span></td>
-      <td><input type="button" class="button" value=" - " onclick="listTable.remove({$product.product_id}, '{$lang.trash_product_confirm}', 'product_remove')"/></td>
+      @foreach($product['goods_attr'] as $goods_attr)
+      <td scope="col"><div align="center">{{ $goods_attr }}</div></td>
+      @endforeach
+      <td class="td_1"><span onclick="listTable.edit(this, 'edit_product_sn', {{ $product['product_id'] }})">{{ $product['product_sn'] ?? $lang['n_a'] }}</span></td>
+      <td class="td_1"><span onclick="listTable.edit(this, 'edit_product_number', {{ $product['product_id'] }})">{{ $product['product_number'] }}</span></td>
+      <td><input type="button" class="button" value=" - " onclick="listTable.remove({{ $product['product_id'] }}, '{{ $lang['trash_product_confirm'] }}', 'product_remove')"/></td>
     </tr>
-    {/foreach}
+    @endforeach
 
     <tr id="attr_row">
     <!-- start for specifications_value -->
-    {foreach from=$attribute item=attribute_value key=attribute_key}
+    @foreach($attribute as $attribute_key => $attribute_value)
       <td align="center">
-        <select name="attr[{$attribute_value.attr_id}][]">
-        <option value="" selected>{$lang.select_please}</option>
-        {foreach from=$attribute_value.attr_values item=value}
-        <option value="{$value}">{$value}</option>
-        {/foreach}
+        <select name="attr[{{ $attribute_value['attr_id'] }}][]">
+        <option value="" selected>{{ $lang['select_please'] }}</option>
+        @foreach($attribute_value['attr_values'] as $value)
+        <option value="{{ $value }}">{{ $value }}</option>
+        @endforeach
         </select>
       </td>
-    {/foreach}
+    @endforeach
     <!-- end for specifications_value -->
 
       <td class="label_2"><input type="text" name="product_sn[]" value="" size="20"/></td>
-      <td class="label_2"><input type="text" name="product_number[]" value="{$product_number}" size="10"/></td>
+      <td class="label_2"><input type="text" name="product_number[]" value="{{ $product_number }}" size="10"/></td>
       <td><input type="button" class="button" value=" + " onclick="javascript:add_attr_product();"/></td>
     </tr>
 
     <tr>
-      <td align="center" colspan="{$attribute_count_3}">
-        <input type="button" class="button" value="{$lang.button_save}" onclick="checkgood_sn()" />
+      <td align="center" colspan="{{ $attribute_count_3 }}">
+        <input type="button" class="button" value="{{ $lang['button_save'] }}" onclick="checkgood_sn()" />
       </td>
     </tr>
   </table>
 </form>
 
-{if $full_page}
+@if($full_page)
 
 </div>
 <!-- end 添加货品 -->
 
 <script type="text/javascript">
 
-{foreach from=$filter item=item key=key}
-listTable.filter.{$key} = '{$item}';
-{/foreach}
+@foreach($filter as $key => $item)
+listTable.filter.{{ $key }} = '{{ $item }}';
+@endforeach
 
 listTable.query = 'product_query';
 
 var _attr = new Array;
-{foreach from=$attribute item=attribute_value key=attribute_key}
-_attr[{$attribute_key}] = '{$attribute_value.attr_id}';
-{/foreach}
+@foreach($attribute as $attribute_key => $attribute_value)
+_attr[{{ $attribute_key }}] = '{{ $attribute_value['attr_id'] }}';
+@endforeach
 
-{literal}
+
 onload = function()
 {
   startCheckOrder(); // 开始检查订单
@@ -194,8 +195,8 @@ function  checkgood_sn()
 }
 
 
-{/literal}
-</script>
-{include file="pagefooter.htm"}
 
-{/if}
+</script>
+@include('pagefooter')
+
+@endif

@@ -1,38 +1,38 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="validator.js"}
+@if($full_page)
+@include('pageheader')
+<script src="validator.js"></script>
 <div class="tab-div" id="listDiv">
-{/if}
+@endif
   <!-- tab bar -->
-  {include file="flashplay_tab.htm"}
+  @include('flashplay_tab')
   <!-- body -->
   <div class="tab-body">
   <div class="list-div list-div-ad" id="listDiv">
   <table cellspacing='1' cellpadding='3' id='list-table' width="70%">
     <tr>
-      <th width="400px">{$lang.title_flash_name}</th>
-      <th>{$lang.title_flash_type}</th>
-      <th>{$lang.title_flash_time}</th>
-      <th>{$lang.title_flash_status}</th>
-    <th width="70px">{$lang.handler}</th>
+      <th width="400px">{{ $lang['title_flash_name'] }}</th>
+      <th>{{ $lang['title_flash_type'] }}</th>
+      <th>{{ $lang['title_flash_time'] }}</th>
+      <th>{{ $lang['title_flash_status'] }}</th>
+    <th width="70px">{{ $lang['handler'] }}</th>
     </tr>
-    {foreach from=$ad_list item=item key=key}
+    @foreach($ad_list as $key => $item)
     <tr>
-      <td>{$item.ad_name}</td>
-      <td align="left">{$item.type_name}</td>
-      <td align="left">{$item.add_time}</td>
-      <td align="center"><a href="javascript:custom_status({$item.ad_id}, {$item.ad_status});void(0);" title="{$lang.custom_change_img}"><img src="images/{if $item.ad_status eq 0}no.gif{else}yes.gif{/if}" width="16" height="16" border="0" /></a></td>
+      <td>{{ $item['ad_name'] }}</td>
+      <td align="left">{{ $item['type_name'] }}</td>
+      <td align="left">{{ $item['add_time'] }}</td>
+      <td align="center"><a href="javascript:custom_status({{ $item['ad_id'] }}, {{ $item['ad_status'] }});void(0);" title="{{ $lang['custom_change_img'] }}"><img src="images/@if($item['ad_status'] == 0)no.gif@elseyes.gif@endif" width="16" height="16" border="0" /></a></td>
       <td align="center">
-        <a href="flashplay.php?act=custom_edit&id={$item.ad_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>
-        <a href="flashplay.php?act=custom_del&id={$item.ad_id}" onclick="return check_del();" title="{$lang.custom_drop_img}"><img src="images/icon_drop.gif" width="16" height="16" border="0" /></a>
+        <a href="flashplay.php?act=custom_edit&id={{ $item['ad_id'] }}" title="{{ $lang['edit'] }}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>
+        <a href="flashplay.php?act=custom_del&id={{ $item['ad_id'] }}" onclick="return check_del();" title="{{ $lang['custom_drop_img'] }}"><img src="images/icon_drop.gif" width="16" height="16" border="0" /></a>
       </td>
     </tr>
-    {/foreach}
+    @endforeach
   </table>
       <table cellspacing="0">
     <tr>
       <td>
-        <input name="add" type="submit" id="btnSubmit" value="{$action_link_special.text}" onclick="location.href='{$action_link_special.href}';" class="button"/>
+        <input name="add" type="submit" id="btnSubmit" value="{{ $action_link_special['text'] }}" onclick="location.href='{{ $action_link_special['href'] }}';" class="button"/>
       </td>
     </tr>
   </table>
@@ -41,12 +41,12 @@
  
   </div>
 
-{if $full_page}
+@if($full_page)
 </div>
 <script language="JavaScript">
 <!--
 // 初始页面参数
-var status_code = 0; //{$ad.ad_type};
+var status_code = 0; //{{ $ad['ad_type'] }};
 
 
 onload = function()
@@ -81,7 +81,7 @@ function custom_status_edit(result)
 
 function check_del()
 {
-  if (confirm('{$lang.custom_del_confirm}'))
+  if (confirm('{{ $lang['custom_del_confirm'] }}'))
   {
     return true;
   }
@@ -96,7 +96,7 @@ function check_del()
  */
 function system_set()
 {
-  alert('{$lang.tab_change_alert}');
+  alert('{{ $lang['tab_change_alert'] }}');
 }
 
 /**
@@ -132,5 +132,5 @@ function navigator_type()
 //-->
 </script>
 
-{include file="pagefooter.htm"}
-{/if}
+@include('pagefooter')
+@endif

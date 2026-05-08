@@ -1,15 +1,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<!-- {if $pictures}-->
+@if($pictures)
  <div class="clearfix">
       <span onmouseover="moveLeft()" onmousedown="clickLeft()" onmouseup="moveLeft()" onmouseout="scrollStop()"></span>
       <div class="gallery">
         <div id="demo">
           <div id="demo1" style="float:left">
             <ul>
-             <!-- {foreach from=$pictures item=picture}-->
-            <li><a href="gallery.php?id={$id}&amp;img={$picture.img_id}" target="_blank"><img src="{if $picture.thumb_url}{$picture.thumb_url}{else}{$picture.img_url}{/if}" alt="{$goods.goods_name}" class="B_blue" /></a>
+             @foreach($pictures as $picture)
+            <li><a href="gallery.php?id={{ $id }}&amp;img={{ $picture['img_id'] }}" target="_blank"><img src="@if($picture['thumb_url']){{ $picture['thumb_url'] }}@else{{ $picture['img_url'] }}@endif" alt="{{ $goods['goods_name'] }}" class="B_blue" /></a>
             </li>
-            <!--{/foreach}-->
+            @endforeach
             </ul>
           </div>
           <div id="demo2" style="display:inline; overflow:visible;"></div>
@@ -115,4 +115,4 @@
       }
       </script> 
      </div>
-		  <!-- {/if}-->
+		  @endif

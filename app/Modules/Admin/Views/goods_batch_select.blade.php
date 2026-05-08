@@ -1,34 +1,34 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="main-div">
   <form name="theForm" method="post" action="goods_batch.php?act=edit" onsubmit="return getGoodsIDs()">
   <table cellspacing="1" cellpadding="3" width="100%">
   <tr>
-    <td class="narrow-label">{$lang.select_method}</td>
+    <td class="narrow-label">{{ $lang['select_method'] }}</td>
     <td>
-      <label><input name="select_method" id="sm_cat" type="radio" value="cat" checked onclick="toggleSelectMethod(this.value)">{$lang.by_cat}</label>
-      <label><input name="select_method" id="sm_sn" type="radio" value="sn" onclick="toggleSelectMethod(this.value)">{$lang.by_sn}</label>    </td>
+      <label><input name="select_method" id="sm_cat" type="radio" value="cat" checked onclick="toggleSelectMethod(this.value)">{{ $lang['by_cat'] }}</label>
+      <label><input name="select_method" id="sm_sn" type="radio" value="sn" onclick="toggleSelectMethod(this.value)">{{ $lang['by_sn'] }}</label>    </td>
   </tr>
   <tr id="cat_1">
-    <td class="narrow-label" id="cat_2">{$lang.select_cat}</td>
+    <td class="narrow-label" id="cat_2">{{ $lang['select_cat'] }}</td>
     <td id="cat_3">&nbsp;<select name="cat" id="cat" onchange="getGoods()">
-      <option value="0" selected>{$lang.select_please}</option>{$cat_list}
+      <option value="0" selected>{{ $lang['select_please'] }}</option>{{ $cat_list }}
     </select></td>
   </tr>
   <tr id="cat_7">
-    <td class="narrow-label" id="cat_8">{$lang.select_brand}</td>
+    <td class="narrow-label" id="cat_8">{{ $lang['select_brand'] }}</td>
     <td id="cat_9">&nbsp;<select name="brand" id="brand" onchange="getGoods()">
-      <option value="0" selected>{$lang.select_please}</option>
-      {html_options options=$brand_list}
+      <option value="0" selected>{{ $lang['select_please'] }}</option>
+      @foreach($brand_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach
     </select></td>
   </tr>
   <tr id="cat_4">
-    <td class="narrow-label" id="cat_5">{$lang.goods_list}</td>
+    <td class="narrow-label" id="cat_5">{{ $lang['goods_list'] }}</td>
     <td valign="middle" id="cat_6">
       <table  border="0" cellspacing="1" cellpadding="3">
       <tr>
-        <td>{$lang.src_list}</td>
+        <td>{{ $lang['src_list'] }}</td>
         <td align="center" valign="middle">&nbsp;</td>
-        <td>{$lang.dest_list}</td>
+        <td>{{ $lang['dest_list'] }}</td>
       </tr>
       <tr>
         <td width="45%">
@@ -44,19 +44,19 @@
     </td>
   </tr>
   <tr style="display:none" id="sn_1">
-    <td class="narrow-label" style="display:none" id="sn_2">{$lang.input_sn}</td>
+    <td class="narrow-label" style="display:none" id="sn_2">{{ $lang['input_sn'] }}</td>
     <td style="display:none" id="sn_3"><textarea name="sn_list" rows="10" cols="40" id="sn_list"></textarea></td>
   </tr>
   <tr>
-    <td class="narrow-label">{$lang.edit_method}</td>
+    <td class="narrow-label">{{ $lang['edit_method'] }}</td>
     <td>
       <label><input name="edit_method" type="radio" value="each" checked>
-      {$lang.edit_each}</label>
-      <label><input type="radio" name="edit_method" value="all">{$lang.edit_all}</label>    </td>
+      {{ $lang['edit_each'] }}</label>
+      <label><input type="radio" name="edit_method" value="all">{{ $lang['edit_all'] }}</label>    </td>
   </tr>
   <tr>
     <td>&nbsp;</td>
-    <td><input type="submit" name="submit" value="{$lang.go_edit}" class="button" />
+    <td><input type="submit" name="submit" value="{{ $lang['go_edit'] }}" class="button" />
       <input type="hidden" name="goods_ids" value="" /></td>
   </tr>
   </table>
@@ -64,7 +64,7 @@
 
 </div>
 
-{literal}
+
 <script language="JavaScript">
   var ele = document.forms['theForm'].elements;
 
@@ -220,5 +220,5 @@
       }
   }
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

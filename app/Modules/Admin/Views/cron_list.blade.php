@@ -1,58 +1,59 @@
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 <!-- start payment list -->
 <div class="list-div" id="listDiv">
 <table cellspacing='1' cellpadding='3'>
   <tr>
-    <th width="13%">{$lang.cron_name}</th>
-    <th >{$lang.cron_desc}</th>
-    <th width="5%">{$lang.version}</th>
-    <th width="13%">{$lang.cron_author}</th>
-    <th width="16%">{$lang.cron_this}</th>
-    <th width="16%">{$lang.cron_next}</th>
-    <th width="3%">{$lang.if_open}</th>
-    <th width="12%">{$lang.handler}</th>
+    <th width="13%">{{ $lang['cron_name'] }}</th>
+    <th >{{ $lang['cron_desc'] }}</th>
+    <th width="5%">{{ $lang['version'] }}</th>
+    <th width="13%">{{ $lang['cron_author'] }}</th>
+    <th width="16%">{{ $lang['cron_this'] }}</th>
+    <th width="16%">{{ $lang['cron_next'] }}</th>
+    <th width="3%">{{ $lang['if_open'] }}</th>
+    <th width="12%">{{ $lang['handler'] }}</th>
   </tr>
-  {foreach from=$modules item=module}
+  @foreach($modules as $module)
   <tr>
     <td class="first-cell" valign="top">
-      {if $module.install == 1}
-        {$module.name}
-      {else}
-        {$module.name}
-      {/if}
+      @if($module['install'] == 1)
+        {{ $module['name'] }}
+      @else
+        {{ $module['name'] }}
+      @endif
     </td>
-    <td>{$module.desc|nl2br}</td>
-    <td valign="top">{$module.version}</td>
-    <td valign="top"><a href="{$module.website}" target="_blank">{$module.author}</a></td>
-    <td align="center">{$module.thistime}</td>
-    <td align="center">{$module.nextime}</td>
+    <td>{!! nl2br(e($module['desc'])) !!}</td>
+    <td valign="top">{{ $module['version'] }}</td>
+    <td valign="top"><a href="{{ $module['website'] }}" target="_blank">{{ $module['author'] }}</a></td>
+    <td align="center">{{ $module['thistime'] }}</td>
+    <td align="center">{{ $module['nextime'] }}</td>
 
     <td align="center">
-      {if $module.install == "1"}
-        <img src="images/{if $module.enable eq 1}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_show', '{$module.code}')" />
-      {else}－{/if}</td>
+      @if($module['install'] == "1")
+        <img src="images/@if($module['enable'] == 1)yes@elseno@endif.gif" onclick="listTable.toggle(this, 'toggle_show', '{{ $module['code'] }}')" />
+      @else－@endif</td>
     <td align="center" valign="top">
-      {if $module.install == "1"}
-        <a href="javascript:confirm_redirect(lang_removeconfirm, 'cron.php?act=uninstall&code={$module.code}')">{$lang.uninstall}</a>|<a href="cron.php?act=edit&code={$module.code}">{$lang.edit}</a>|<a href="cron.php?act=do&code={$module.code}">{$lang.cron_do}</a>
-      {else}
-        <a href="cron.php?act=install&code={$module.code}">{$lang.install}</a>
-      {/if}
+      @if($module['install'] == "1")
+        <a href="javascript:confirm_redirect(lang_removeconfirm, 'cron.php?act=uninstall&code={{ $module['code'] }}')">{{ $lang['uninstall'] }}</a>|<a href="cron.php?act=edit&code={{ $module['code'] }}">{{ $lang['edit'] }}</a>|<a href="cron.php?act=do&code={{ $module['code'] }}">{{ $lang['cron_do'] }}</a>
+      @else
+        <a href="cron.php?act=install&code={{ $module['code'] }}">{{ $lang['install'] }}</a>
+      @endif
     </td>
   </tr>
-  {/foreach}
+  @endforeach
 </table>
 </div>
 <!-- end payment list -->
 <script type="Text/Javascript" language="JavaScript">
 <!--
-{literal}
+
 onload = function()
 {
   // 开始检查订单
   startCheckOrder();
 }
-{/literal}
+
 //-->
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

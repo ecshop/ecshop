@@ -1,32 +1,34 @@
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,../js/region.js"}
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="../js/region.js"></script>
 <div class="tab-div">
   <!-- tab bar -->
   <div id="tabbar-div">
     <p>
-      {foreach from=$group_list item=group name="bar_group"}<span class="{if $smarty.foreach.bar_group.iteration eq 1}tab-front{else}tab-back{/if}" id="{$group.code}-tab">{$group.name}</span>{/foreach}
+      @foreach($group_list as $group)<span class="@if($loop->iteration == 1)tab-front@elsetab-back@endif" id="{{ $group['code'] }}-tab">{{ $group['name'] }}</span>@endforeach
     </p>
   </div>
   <!-- tab body -->
   <div id="tabbody-div">
     <form enctype="multipart/form-data" name="theForm" action="?act=post" method="post">
-    {foreach from=$group_list item=group name="body_group"}
-    <table width="90%" id="{$group.code}-table" {if $smarty.foreach.body_group.iteration neq 1}style="display:none"{/if}>
-      {foreach from=$group.vars item=var key=key}
-      {include file="shop_config_form.htm"}
-      {/foreach}
+    @foreach($group_list as $group)
+    <table width="90%" id="{{ $group['code'] }}-table" @if($loop->iteration != 1)style="display:none"@endif>
+      @foreach($group['vars'] as $key => $var)
+      @include('shop_config_form')
+      @endforeach
     </table>
-    {/foreach}
+    @endforeach
 
     <div class="button-div">
-      <input name="submit" type="submit" value="{$lang.button_submit}" class="button" />
-      <input name="reset" type="reset" value="{$lang.button_reset}" class="button" />
+      <input name="submit" type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+      <input name="reset" type="reset" value="{{ $lang['button_reset'] }}" class="button" />
     </div>
     </form>
   </div>
 </div>
-{insert_scripts files="tab.js,validator.js"}
-{literal}
+<script src="tab.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 region.isAdmin = true;
 onload = function()
@@ -64,5 +66,5 @@ function ReWriterConfirm(sender)
   return res;
 }
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

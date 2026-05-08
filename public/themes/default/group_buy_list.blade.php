@@ -2,17 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$page_title}</title>
+<title>{{ $page_title }}</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
 <!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
 {* 包含脚本文件 *}
-{insert_scripts files='common.js'}
+<script src="common.js"></script>
 </head>
 <body>
 <!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
@@ -48,36 +48,36 @@
    <div class="blank5"></div>
    <div class="box">
    <div class="box_1">
-    <h3><span>{$lang.gb_goods_name}</span></h3>
+    <h3><span>{{ $lang['gb_goods_name'] }}</span></h3>
     <div class="boxCenterList">
-      <!-- {if $gb_list} 如果有团购活动 -->
-      <!-- {foreach from=$gb_list item=group_buy} 循环团购活动开始 -->
+      <!-- @if($gb_list) 如果有团购活动 -->
+      <!-- @foreach($gb_list as $group_buy) 循环团购活动开始 -->
       <ul class="group clearfix">
       <li style="margin-right:8px; text-align:center;">
-      <a href="{$group_buy.url}"><img src="{$group_buy.goods_thumb}" border="0" alt="{$group_buy.goods_name|escape:html}" style="vertical-align: middle" /></a>
+      <a href="{{ $group_buy['url'] }}"><img src="{{ $group_buy['goods_thumb'] }}" border="0" alt="{{ $group_buy['goods_name'] }}" style="vertical-align: middle" /></a>
       </li>
       <li style="width:555px; line-height:23px;">
-      {$lang.gb_goods_name}<a href="{$group_buy.url}" class="f5">{$group_buy.goods_name|escape:html}</a><br />
-      {$lang.act_time}：{$group_buy.formated_start_date} -- {$group_buy.formated_end_date}<br />
-      {$lang.gb_price_ladder}<br />
+      {{ $lang['gb_goods_name'] }}<a href="{{ $group_buy['url'] }}" class="f5">{{ $group_buy['goods_name'] }}</a><br />
+      {{ $lang['act_time'] }}：{{ $group_buy['formated_start_date'] }} -- {{ $group_buy['formated_end_date'] }}<br />
+      {{ $lang['gb_price_ladder'] }}<br />
       <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
        <tr>
-          <th width="29%" bgcolor="#FFFFFF">{$lang.gb_ladder_amount}</th>
-         <th width="71%" bgcolor="#FFFFFF">{$lang.gb_ladder_price}</th>
+          <th width="29%" bgcolor="#FFFFFF">{{ $lang['gb_ladder_amount'] }}</th>
+         <th width="71%" bgcolor="#FFFFFF">{{ $lang['gb_ladder_price'] }}</th>
         </tr>
-        <!-- {foreach from=$group_buy.price_ladder item=item} -->
+        @foreach($group_buy['price_ladder'] as $item)
         <tr>
-          <td width="29%" bgcolor="#FFFFFF">{$item.amount}</td>
-         <td width="71%" bgcolor="#FFFFFF">{$item.formated_price}</td>
+          <td width="29%" bgcolor="#FFFFFF">{{ $item['amount'] }}</td>
+         <td width="71%" bgcolor="#FFFFFF">{{ $item['formated_price'] }}</td>
         </tr>
-        <!-- {/foreach} -->
+        @endforeach
       </table>
       </li>
       </ul>
-      <!--{/foreach}-->
-      <!-- {else} -->
-       <span style="margin:2px 10px; font-size:14px; line-height:36px;">{$lang.group_goods_empty}</span>
-      <!-- {/if} -->
+      @endforeach
+      @else
+       <span style="margin:2px 10px; font-size:14px; line-height:36px;">{{ $lang['group_goods_empty'] }}</span>
+      @endif
     </div>
    </div>
   </div>
@@ -98,22 +98,22 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>]
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+    <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>]
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->

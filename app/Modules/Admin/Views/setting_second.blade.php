@@ -1,58 +1,58 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="main-div">
-<div class="step2">{$lang.shop_basic_second}</div>
+<div class="step2">{{ $lang['shop_basic_second'] }}</div>
 <form enctype="multipart/form-data" action="index.php?act=third" name="theForm" method="post" onsubmit="return validator()" >
   <table cellspacing="1" cellpadding="3" width="100%">
     <tr>
-      <td class="micro-label">{$lang.good_category}:</td>
+      <td class="micro-label">{{ $lang['good_category'] }}:</td>
       <td><input type="text" name="good_category" /></td>
     </tr>
     <tr>
-      <td class="micro-label">{$lang.good_name}:</td>
+      <td class="micro-label">{{ $lang['good_name'] }}:</td>
       <td><input type="text" name="good_name" /></td>
     </tr>
     <tr>
-      <td class="micro-label">{$lang.good_number}:</td>
+      <td class="micro-label">{{ $lang['good_number'] }}:</td>
       <td><input type="text" name="good_number" /></td>
     </tr>
     <tr>
-      <td class="micro-label">{$lang.good_brand}:</td>
+      <td class="micro-label">{{ $lang['good_brand'] }}:</td>
       <td><input type="text" name="good_brand" /></td>
     </tr>
     <tr>
-      <td class="micro-label">{$lang.good_price}:</td>
+      <td class="micro-label">{{ $lang['good_price'] }}:</td>
       <td><input type="text" name="good_price" /></td>
     </tr>
     <tr>
-      <td class="micro-label">{$lang.good_intro}:</td>
+      <td class="micro-label">{{ $lang['good_intro'] }}:</td>
       <td>
-        <input type="checkbox" name="is_best" value="1" checked />{$lang.is_best} 
-        <input type="checkbox" name="is_new" value="1" checked />{$lang.is_new}
-        <input type="checkbox" name="is_hot" value="1" checked />{$lang.is_hot}
+        <input type="checkbox" name="is_best" value="1" checked />{{ $lang['is_best'] }} 
+        <input type="checkbox" name="is_new" value="1" checked />{{ $lang['is_new'] }}
+        <input type="checkbox" name="is_hot" value="1" checked />{{ $lang['is_hot'] }}
       </td>
     </tr>
     <tr>
-      <td class="micro-label">{$lang.good_brief}:</td>
+      <td class="micro-label">{{ $lang['good_brief'] }}:</td>
       <td><textarea name="good_brief" cols="40" rows="3"></textarea></td></td>
     </tr>
     <tr>
-      <td class="micro-label">{$lang.good_image}:</td>
+      <td class="micro-label">{{ $lang['good_image'] }}:</td>
       <td><input type="file" name="goods_img" /></td>
     </tr>
     <tr>
       <td></td>
       <td>
-        <input type="submit" value={$lang.next_step} class="button" />
-        <input type="button" value={$lang.skip} onclick="javascript:window.location.href='index.php?act=main'" class="button" />
+        <input type="submit" value={{ $lang['next_step'] }} class="button" />
+        <input type="button" value={{ $lang['skip'] }} onclick="javascript:window.location.href='index.php?act=main'" class="button" />
       </td>
     </tr>
   </table>
 </form>
 </div>
-{insert_scripts files="validator.js"}
+<script src="validator.js"></script>
 <script type="Text/Javascript" language="JavaScript">
 <!--
-{literal}
+
 onload = function()
 {
   /* 检查订单 */
@@ -71,7 +71,7 @@ function validator()
 }
 
 
-{/literal}
+
 //-->
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

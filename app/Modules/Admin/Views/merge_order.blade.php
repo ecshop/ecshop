@@ -1,36 +1,36 @@
-{include file="pageheader.htm"}
-{insert_scripts files="validator.js"}
+@include('pageheader')
+<script src="validator.js"></script>
 <div class="main-div">
 <table cellspacing="1" cellpadding="3" width="100%">
   <tr>
-    <td class="label"><a href="javascript:showNotice('noticeOrderSn');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.to_order_sn}</td>
+    <td class="label"><a href="javascript:showNotice('noticeOrderSn');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['to_order_sn'] }}</td>
     <td><input name="to_order_sn" type="text" id="to_order_sn">
       <select name="to_list" id="to_list" onchange="if (this.value != '') document.getElementById('to_order_sn').value = this.value;">
-      <option value="">{$lang.select_please}</option>
-      {foreach from=$order_list item=order}
-      <option value="{$order.order_sn}">{$order.order_sn} [{$order.user_name}]</option>
-      {/foreach}
+      <option value="">{{ $lang['select_please'] }}</option>
+      @foreach($order_list as $order)
+      <option value="{{ $order['order_sn'] }}">{{ $order['order_sn'] }} [{{ $order['user_name'] }}]</option>
+      @endforeach
       </select>
-      <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeOrderSn">{$lang.notice_order_sn}</span></td>
+      <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeOrderSn">{{ $lang['notice_order_sn'] }}</span></td>
   </tr>
   <tr>
-    <td class="label">{$lang.from_order_sn}</td>
+    <td class="label">{{ $lang['from_order_sn'] }}</td>
     <td><input name="from_order_sn" type="text" id="from_order_sn">
       <select name="from_list" onchange="if (this.value != '') document.getElementById('from_order_sn').value = this.value;">
-      <option value="">{$lang.select_please}</option>
-      {foreach from=$order_list item=order}
-      <option value="{$order.order_sn}">{$order.order_sn} [{$order.user_name}]</option>
-      {/foreach}
+      <option value="">{{ $lang['select_please'] }}</option>
+      @foreach($order_list as $order)
+      <option value="{{ $order['order_sn'] }}">{{ $order['order_sn'] }} [{{ $order['user_name'] }}]</option>
+      @endforeach
       </select></td>
   </tr>
   <tr>
     <td colspan="2"><div align="center">
-      <input name="merge" type="button" id="merge" value="{$lang.merge}" class="button" onclick="if (confirm(confirm_merge)) merge()" />
+      <input name="merge" type="button" id="merge" value="{{ $lang['merge'] }}" class="button" onclick="if (confirm(confirm_merge)) merge()" />
     </div></td>
     </tr>
 </table>
 </div>
-{literal}
+
 <script language="JavaScript">
     /**
      * 合并
@@ -63,5 +63,5 @@
         startCheckOrder();
     }
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

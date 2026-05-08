@@ -2,15 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$page_title}</title>
+<title>{{ $page_title }}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
 {* 包含脚本文件 *}
-{insert_scripts files='common.js'}
+<script src="common.js"></script>
 </head>
 <body>
 <!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
@@ -23,84 +23,84 @@
 <!--当前位置 end-->
 <div class="blank"></div>
 <div class="block">
-  <h5><span>{$lang.activity_list}</span></h5>
+  <h5><span>{{ $lang['activity_list'] }}</span></h5>
   <div class="blank"></div>
-   <!-- {foreach from=$list item=val} -->
+   @foreach($list as $val)
   <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
     <tr>
-      <th bgcolor="#ffffff">{$lang.label_act_name}</th>
-      <td colspan="3" bgcolor="#ffffff">{$val.act_name}</td>
+      <th bgcolor="#ffffff">{{ $lang['label_act_name'] }}</th>
+      <td colspan="3" bgcolor="#ffffff">{{ $val['act_name'] }}</td>
     </tr>
     <tr>
-      <th bgcolor="#ffffff">{$lang.label_start_time}</th>
-      <td width="200" bgcolor="#ffffff">{$val.start_time}</td>
-      <th bgcolor="#ffffff">{$lang.label_max_amount}</th>
+      <th bgcolor="#ffffff">{{ $lang['label_start_time'] }}</th>
+      <td width="200" bgcolor="#ffffff">{{ $val['start_time'] }}</td>
+      <th bgcolor="#ffffff">{{ $lang['label_max_amount'] }}</th>
       <td bgcolor="#ffffff">
-        <!-- {if $val.max_amount > 0} -->
-        {$val.max_amount}
-        <!-- {else} -->
-        {$lang.nolimit}
-        <!-- {/if} -->
+        @if($val['max_amount'] > 0)
+        {{ $val['max_amount'] }}
+        @else
+        {{ $lang['nolimit'] }}
+        @endif
       </td>
     </tr>
     <tr>
-      <th bgcolor="#ffffff">{$lang.label_end_time}</th>
-      <td bgcolor="#ffffff">{$val.end_time}</td>
-      <th bgcolor="#ffffff">{$lang.label_min_amount}</th>
-      <td width="200" bgcolor="#ffffff">{$val.min_amount}</td>
+      <th bgcolor="#ffffff">{{ $lang['label_end_time'] }}</th>
+      <td bgcolor="#ffffff">{{ $val['end_time'] }}</td>
+      <th bgcolor="#ffffff">{{ $lang['label_min_amount'] }}</th>
+      <td width="200" bgcolor="#ffffff">{{ $val['min_amount'] }}</td>
     </tr>
     <tr>
-      <th bgcolor="#ffffff">{$lang.label_act_range}</th>
+      <th bgcolor="#ffffff">{{ $lang['label_act_range'] }}</th>
       <td bgcolor="#ffffff">
-        {$val.act_range}
-        <!-- {if $val.act_range ne $lang.far_all} -->
+        {{ $val['act_range'] }}
+        @if($val['act_range'] ne $lang['far_all'])
         :<br />
-        <!-- {foreach from=$val.act_range_ext item=ext} -->
-        <a href="{$val.program}{$ext.id}" taget="_blank" class="f6"><span class="f_user_info"><u>{$ext.name}</u></span></a>
-        <!-- {/foreach} -->
-        <!-- {/if} -->
+        @foreach($val['act_range_ext'] as $ext)
+        <a href="{{ $val['program'] }}{{ $ext['id'] }}" taget="_blank" class="f6"><span class="f_user_info"><u>{{ $ext['name'] }}</u></span></a>
+        @endforeach
+        @endif
       </td>
-      <th bgcolor="#ffffff">{$lang.label_user_rank}</th>
+      <th bgcolor="#ffffff">{{ $lang['label_user_rank'] }}</th>
       <td bgcolor="#ffffff">
-        <!-- {foreach from=$val.user_rank item=user} -->
-        {$user}
-        <!-- {/foreach} -->
+        @foreach($val['user_rank'] as $user)
+        {{ $user }}
+        @endforeach
       </td>
     </tr>
     <tr>
-      <th bgcolor="#ffffff">{$lang.label_act_type}</th>
+      <th bgcolor="#ffffff">{{ $lang['label_act_type'] }}</th>
       <td colspan="3" bgcolor="#ffffff">
-        {$val.act_type}<!-- {if $val.act_type ne $lang.fat_goods} -->{$val.act_type_ext}<!-- {/if} -->
+        {{ $val['act_type'] }}@if($val['act_type'] ne $lang['fat_goods']){{ $val['act_type_ext'] }}@endif
       </td>
     </tr>
-    <!-- {if $val.gift} -->
+    @if($val['gift'])
     <tr>
       <td colspan="4" bgcolor="#ffffff">
-      <!-- {foreach from=$val.gift item=goods} -->
+      @foreach($val['gift'] as $goods)
       <table border="0" style="float:left;">
         <tr>
-          <td align="center"><a href="goods.php?id={$goods.id}"><img src="{$goods.thumb}" alt="{$goods.name}" /></a></td>
+          <td align="center"><a href="goods.php?id={{ $goods['id'] }}"><img src="{{ $goods['thumb'] }}" alt="{{ $goods['name'] }}" /></a></td>
         </tr>
         <tr>
-          <td align="center"><a href="goods.php?id={$goods.id}" class="f6">{$goods.name}</a></td>
+          <td align="center"><a href="goods.php?id={{ $goods['id'] }}" class="f6">{{ $goods['name'] }}</a></td>
         </tr>
         <tr>
           <td align="center">
-            <!-- {if $goods.price > 0} -->
-            {$goods.price}{$lang.unit_yuan}
-            <!-- {else} -->
-            {$lang.for_free}
-            <!-- {/if} -->
+            @if($goods['price'] > 0)
+            {{ $goods['price'] }}{{ $lang['unit_yuan'] }}
+            @else
+            {{ $lang['for_free'] }}
+            @endif
           </td>
         </tr>
       </table>
-      <!-- {/foreach} -->
+      @endforeach
       </td>
     </tr>
-    <!-- {/if} -->
+    @endif
   </table>
   <div class="blank5"></div>
-  <!-- {/foreach} -->
+  @endforeach
 </div>
 <div class="blank5"></div>
 <!--帮助-->
@@ -114,22 +114,22 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>]
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+    <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>]
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->

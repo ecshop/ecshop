@@ -1,12 +1,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <div class="box">
  <div class="box_1">
-  <h3><span>{$lang.email_subscribe}</span></h3>
+  <h3><span>{{ $lang['email_subscribe'] }}</span></h3>
   <div class="boxCenterList RelaArticle">
     <input type="text" id="user_email" class="inputBg" /><br />
     <div class="blank5"></div>
-    <input type="button" class="bnt_blue" value="{$lang.email_list_ok}" onclick="add_email_list();" />
-    <input type="button" class="bnt_bonus"  value="{$lang.email_list_cancel}" onclick="cancel_email_list();" />
+    <input type="button" class="bnt_blue" value="{{ $lang['email_list_ok'] }}" onclick="add_email_list();" />
+    <input type="button" class="bnt_bonus"  value="{{ $lang['email_list_cancel'] }}" onclick="cancel_email_list();" />
   </div>
  </div>
 </div>
@@ -43,7 +43,7 @@ function check_email()
   }
   else
   {
-    alert('{$lang.email_invalid}');
+    alert('{{ $lang['email_invalid'] }}');
     return false;
   }
 }

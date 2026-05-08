@@ -1,57 +1,57 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <!-- start integrate plugins list -->
 <div class="list-div" id="listDiv">
 <form name="theForm" action="integrate.php?act=edit_points" method="post" onsubmit="return valid()" >
 <table>
   <tr>
-    <th width="350">{$lang.rule_name}</th>
-    <th>{$lang.rule_rate}</th>
-    <th width="100">{$lang.handler}</th>
+    <th width="350">{{ $lang['rule_name'] }}</th>
+    <th>{{ $lang['rule_rate'] }}</th>
+    <th width="100">{{ $lang['handler'] }}</th>
   </tr>
-  {foreach from=$rule_list item=val key=key}
-    {if $key eq $rule_index}
+  @foreach($rule_list as $key => $val)
+    @if($key == $rule_index)
      <tr>
       <td style="padding-left:8px;">
         <select name="rule_index">
-          {html_options options=$select_rule selected=$rule_index}
+          @foreach($select_rule as $__k => $__v)<option value="{{ $__k }}" @if($__k == $rule_index) selected @endif>{{ $__v }}</option>@endforeach
         </select>
       </td>
-      <td style="padding-left:8px;"><input type="text" style="width:50px;"  name="from_val" value="{$from_val}" /> : <input type="text" style="width:50px;" name="to_val" value="{$to_val}" /></td>
-      <td align="center"><input type="hidden" name="old_rule_index" value="{$rule_index}" /><input type="submit" value="{$lang.button_submit}" /> <a href="integrate.php?act=edit_points&rule_index={$key}">{$lang.remove}</a></td>
+      <td style="padding-left:8px;"><input type="text" style="width:50px;"  name="from_val" value="{{ $from_val }}" /> : <input type="text" style="width:50px;" name="to_val" value="{{ $to_val }}" /></td>
+      <td align="center"><input type="hidden" name="old_rule_index" value="{{ $rule_index }}" /><input type="submit" value="{{ $lang['button_submit'] }}" /> <a href="integrate.php?act=edit_points&rule_index={{ $key }}">{{ $lang['remove'] }}</a></td>
     </tr>
-    {else}
+    @else
     <tr>
       <td style="padding-left:8px;">
-        {$exist_rule.$key}
+        {{ $exist_rule['$key'] }}
       </td>
-      <td style="padding-left:8px;">{$val}</td>
-      <td align="center"><a href="integrate.php?act=points_set&rule_index={$key}">{$lang.modify}</a> <a href="integrate.php?act=edit_points&rule_index={$key}">{$lang.remove}</a></td>
+      <td style="padding-left:8px;">{{ $val }}</td>
+      <td align="center"><a href="integrate.php?act=points_set&rule_index={{ $key }}">{{ $lang['modify'] }}</a> <a href="integrate.php?act=edit_points&rule_index={{ $key }}">{{ $lang['remove'] }}</a></td>
     </tr>
-    {/if}
-  {/foreach}
-  {if $allow_add}
+    @endif
+  @endforeach
+  @if($allow_add)
    <tr id="addRow" style="display:none">
     <td style="padding-left:8px;">
       <select name="rule_index">
-        {html_options options=$select_rule}
+        @foreach($select_rule as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach
       </select>
     </td>
     <td style="padding-left:8px;"><input type="text" name="from_val" style="width:50px;" value="0" /> : <input type="text" name="to_val" style="width:50px;" value="0" /></td>
-    <td align="center"><input type="submit" value="{$lang.button_submit}" /> <a href="javascript:;" onclick="removeRow()">{$lang.remove}</a></td>
+    <td align="center"><input type="submit" value="{{ $lang['button_submit'] }}" /> <a href="javascript:;" onclick="removeRow()">{{ $lang['remove'] }}</a></td>
   </tr>
   <tr>
-    <td colspan="3" align="center"><input type="button" name="addRule" value="{$lang.add_rule}" onclick="addRow()" /></td>
+    <td colspan="3" align="center"><input type="button" name="addRule" value="{{ $lang['add_rule'] }}" onclick="addRow()" /></td>
   </tr>
-  {else}
+  @else
   <tr>
-    <td colspan="3" align="center"><input type="button" name="addRule" value="{$lang.add_rule}" disabled="disabled" /></td>
+    <td colspan="3" align="center"><input type="button" name="addRule" value="{{ $lang['add_rule'] }}" disabled="disabled" /></td>
   </tr>
-  {/if}
+  @endif
 </table>
 </form>
 </div>
 <!-- end integrate plugins list -->
-{literal}
+
 <script type="Text/Javascript" language="JavaScript">
 <!--
 
@@ -104,5 +104,5 @@ function removeRow()
 
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

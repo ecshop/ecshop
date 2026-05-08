@@ -1,69 +1,70 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 
 <div class="form-div">
   <form action="" name="searchForm">
     <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
-    {$lang.by_goods_type}<select name="goods_type" onchange="searchAttr(this.value)"><option value="0">{$lang.all_goods_type}</caption>{$goods_type_list}</select>
+    {{ $lang['by_goods_type'] }}<select name="goods_type" onchange="searchAttr(this.value)"><option value="0">{{ $lang['all_goods_type'] }}</caption>{{ $goods_type_list }}</select>
   </form>
 </div>
 
 <form method="post" action="attribute.php?act=batch" name="listForm">
 <div class="list-div" id="listDiv">
-{/if}
+@endif
 
   <table cellpadding="3" cellspacing="1">
     <tr>
       <th>
         <input onclick='listTable.selectAll(this, "checkboxes[]")' type="checkbox">
-        <a href="javascript:listTable.sort('attr_id'); ">{$lang.record_id}</a>{$sort_attr_id}
+        <a href="javascript:listTable.sort('attr_id'); ">{{ $lang['record_id'] }}</a>{{ $sort_attr_id }}
       </th>
-      <th><a href="javascript:listTable.sort('attr_name'); ">{$lang.attr_name}</a>{$sort_attr_name}</th>
-      <th><a href="javascript:listTable.sort('cat_id'); ">{$lang.cat_id}</a>{$sort_cat_id}</th>
-      <th><a href="javascript:listTable.sort('attr_input_type');">{$lang.attr_input_type}</a>{$sort.attr_input_type}</th>
-      <th>{$lang.attr_values}</th>
-      <th><a href="javascript:listTable.sort('sort_order'); ">{$lang.sort_order}</a>{$sort_sort_order}</th>
-      <th>{$lang.handler}</th>
+      <th><a href="javascript:listTable.sort('attr_name'); ">{{ $lang['attr_name'] }}</a>{{ $sort_attr_name }}</th>
+      <th><a href="javascript:listTable.sort('cat_id'); ">{{ $lang['cat_id'] }}</a>{{ $sort_cat_id }}</th>
+      <th><a href="javascript:listTable.sort('attr_input_type');">{{ $lang['attr_input_type'] }}</a>{{ $sort['attr_input_type'] }}</th>
+      <th>{{ $lang['attr_values'] }}</th>
+      <th><a href="javascript:listTable.sort('sort_order'); ">{{ $lang['sort_order'] }}</a>{{ $sort_sort_order }}</th>
+      <th>{{ $lang['handler'] }}</th>
     </tr>
-    {foreach from=$attr_list item=attr}
+    @forelse($attr_list as $attr)
     <tr>
-      <td nowrap="true" valign="top"><span><input value="{$attr.attr_id}" name="checkboxes[]" type="checkbox">{$attr.attr_id}</span></td>
-      <td class="first-cell" nowrap="true" valign="top"><span onclick="listTable.edit(this, 'edit_attr_name', {$attr.attr_id})">{$attr.attr_name}</span></td>
-      <td nowrap="true" valign="top"><span>{$attr.cat_name}</span></td>
-      <td nowrap="true" valign="top"><span>{$attr.attr_input_type_desc}</span></td>
-      <td valign="top"><span>{$attr.attr_values}</span></td>
-      <td align="right" nowrap="true" valign="top"><span onclick="listTable.edit(this, 'edit_sort_order', {$attr.attr_id})">{$attr.sort_order}</span></td>
+      <td nowrap="true" valign="top"><span><input value="{{ $attr['attr_id'] }}" name="checkboxes[]" type="checkbox">{{ $attr['attr_id'] }}</span></td>
+      <td class="first-cell" nowrap="true" valign="top"><span onclick="listTable.edit(this, 'edit_attr_name', {{ $attr['attr_id'] }})">{{ $attr['attr_name'] }}</span></td>
+      <td nowrap="true" valign="top"><span>{{ $attr['cat_name'] }}</span></td>
+      <td nowrap="true" valign="top"><span>{{ $attr['attr_input_type_desc'] }}</span></td>
+      <td valign="top"><span>{{ $attr['attr_values'] }}</span></td>
+      <td align="right" nowrap="true" valign="top"><span onclick="listTable.edit(this, 'edit_sort_order', {{ $attr['attr_id'] }})">{{ $attr['sort_order'] }}</span></td>
       <td align="center" nowrap="true" valign="top">
-        <a href="?act=edit&amp;attr_id={$attr.attr_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" border="0" height="16" width="16"></a>
-        <a href="javascript:;" onclick="removeRow({$attr.attr_id})" title="{$lang.remove}"><img src="images/icon_drop.gif" border="0" height="16" width="16"></a>
+        <a href="?act=edit&amp;attr_id={{ $attr['attr_id'] }}" title="{{ $lang['edit'] }}"><img src="images/icon_edit.gif" border="0" height="16" width="16"></a>
+        <a href="javascript:;" onclick="removeRow({{ $attr['attr_id'] }})" title="{{ $lang['remove'] }}"><img src="images/icon_drop.gif" border="0" height="16" width="16"></a>
       </td>
     </tr>
-    {foreachelse}
-    <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
-    {/foreach}
+    @empty
+    <tr><td class="no-records" colspan="10">{{ $lang['no_records'] }}</td></tr>
+    @endforelse
   </table>
 
   <table cellpadding="4" cellspacing="0">
     <tr>
-      <td><input type="submit" id="btnSubmit" value="{$lang.drop}" class="button" disabled="true" /></td>
-      <td align="right">{include file="page.htm"}</td>
+      <td><input type="submit" id="btnSubmit" value="{{ $lang['drop'] }}" class="button" disabled="true" /></td>
+      <td align="right">@include('page')</td>
     </tr>
   </table>
-{if $full_page}
+@if($full_page)
 </div>
 
 </form>
 <script language="JavaScript">
 <!--
-  listTable.recordCount = {$record_count};
-  listTable.pageCount = {$page_count};
+  listTable.recordCount = {{ $record_count }};
+  listTable.pageCount = {{ $page_count }};
 
-  {foreach from=$filter item=item key=key}
-  listTable.filter.{$key} = '{$item}';
-  {/foreach}
+  @foreach($filter as $key => $item)
+  listTable.filter.{{ $key }} = '{{ $item }}';
+  @endforeach
 
-  {literal}
+  
   onload = function()
   {
       // 开始检查订单
@@ -98,8 +99,8 @@
     }
   }
 
-  {/literal}
+  
 //-->
 </script>
-{include file="pagefooter.htm"}
-{/if}
+@include('pagefooter')
+@endif

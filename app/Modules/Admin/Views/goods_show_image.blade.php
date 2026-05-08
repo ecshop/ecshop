@@ -7,6 +7,6 @@
 </head>
 
 <body>
-<img src="{$img_url}" />
+<img src="{{ $img_url }}" />
 </body>
 </html>

@@ -7,24 +7,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$topic.title}_{$page_title}</title>
+<title>{{ $topic['title'] }}_{{ $page_title }}</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
 <!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
-{if $topic.css neq ''}
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
+@if($topic['css'] != '')
 <style type="text/css">
-  {$topic.css}
+  {{ $topic['css'] }}
 </style>
-{/if}
+@endif
 <style type="text/css">
 h6{
 font-family:"黑体";
-background:url({$title_pic}) repeat-x 0 0;
+background:url({{ $title_pic }}) repeat-x 0 0;
 text-align:left;
 height:38px;
 line-height:38px;
@@ -36,7 +36,7 @@ color:#fff;
 .goodsbox{
 margin:5px;
 background:#fff;
-border:1px solid {$base_style};
+border:1px solid {{ $base_style }};
 width:170px;
 min-height:1px;
 display: -moz-inline-stack;
@@ -62,7 +62,7 @@ color:#222;
 }
 </style>
 {* 包含脚本文件 *}
-{insert_scripts files='common.js'}
+<script src="common.js"></script>
 </head>
 <body>
 <!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
@@ -77,11 +77,11 @@ color:#222;
 <div class="blank"></div>
 <div class="block">
 
-{if $topic.htmls eq ''}
+@if($topic['htmls'] == '')
   <script language="javascript">
 	var topic_width  = "960";
 	var topic_height = "300";
-	var img_url      = "{$topic.topic_img}";
+	var img_url      = "{{ $topic['topic_img'] }}";
 	
 	if (img_url.indexOf('.swf') != -1)
 	{
@@ -96,84 +96,84 @@ color:#222;
 		document.write('<img width="' + topic_width + '" height="' + topic_height + '" border="0" src="' + img_url + '">');
 	}
   </script>
-{else}
-	{$topic.htmls}
-{/if}
+@else
+	{{ $topic['htmls'] }}
+@endif
 
-{if $topic.intro neq ''}
- {$topic.intro}
+@if($topic['intro'] != '')
+ {{ $topic['intro'] }}
  <br /><br />
-{/if}
+@endif
    
-		<!-- {if $topic.title_pic eq ''} -->
+		@if($topic['title_pic'] == '')
     
-     <!-- {foreach from=$sort_goods_arr item=sort key=sort_name} -->
+     @foreach($sort_goods_arr as $sort_name => $sort)
     <div class="box">
     <div class="box_1 clearfix">
-     <h3><span>{$sort_name}</span></h3>
+     <h3><span>{{ $sort_name }}</span></h3>
     <div class="centerPadd">
-    <!-- {foreach from=$sort item=goods} -->
+    @foreach($sort as $goods)
     <div class="goodsItem">
-       <a href="{$goods.url}"><img src="{$goods.goods_thumb}" alt="{$goods.name|escape:html}" class="goodsimg" /></a><br />
-       <p><a href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.short_style_name}</a></p>
+       <a href="{{ $goods['url'] }}"><img src="{{ $goods['goods_thumb'] }}" alt="{{ $goods['name'] }}" class="goodsimg" /></a><br />
+       <p><a href="{{ $goods['url'] }}" title="{{ $goods['name'] }}">{{ $goods['short_style_name'] }}</a></p>
        <font class="f1">
-       <!-- {if $goods.promote_price neq ""} -->
-      {$goods.promote_price}
-      <!-- {else}-->
-      {$goods.shop_price}
-      <!--{/if}-->
+       @if($goods['promote_price'] != "")
+      {{ $goods['promote_price'] }}
+      @else
+      {{ $goods['shop_price'] }}
+      @endif
        </font>
     </div>
-    <!--{/foreach}-->
+    @endforeach
     </div>
     </div>
     </div>
-    <!--{/foreach}-->
-    <!-- {else} -->
+    @endforeach
+    @else
 		
 		
-		 <!-- {foreach from=$sort_goods_arr item=sort key=sort_name} -->
+		 @foreach($sort_goods_arr as $sort_name => $sort)
     <div class="clearfix">
-    <h6>{$sort_name}</h6>
+    <h6>{{ $sort_name }}</h6>
 		<div class="sort_box">
-    <!-- {foreach from=$sort item=goods} -->
+    @foreach($sort as $goods)
     <div class="goodsbox">
-       <div class="imgbox"><a href="{$goods.url}"><img src="{$goods.goods_thumb}" alt="{$goods.name|escape:html}" /></a></div>
-       <a href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.short_style_name}</a><br />
-       <!-- {if $goods.promote_price neq ""} -->
-       {$goods.promote_price}<br />
-       <!-- {else}-->
-       {$goods.shop_price}<br />
-       <!--{/if}-->
+       <div class="imgbox"><a href="{{ $goods['url'] }}"><img src="{{ $goods['goods_thumb'] }}" alt="{{ $goods['name'] }}" /></a></div>
+       <a href="{{ $goods['url'] }}" title="{{ $goods['name'] }}">{{ $goods['short_style_name'] }}</a><br />
+       @if($goods['promote_price'] != "")
+       {{ $goods['promote_price'] }}<br />
+       @else
+       {{ $goods['shop_price'] }}<br />
+       @endif
     </div>
-    <!--{/foreach}-->
+    @endforeach
 		</div>
     </div>
 
-    <!--{/foreach}-->
+    @endforeach
 
   
-    <!-- {/if} -->    
+    @endif    
 </div>
 <div class="blank5"></div>
 
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>] 
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+    <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>] 
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->

@@ -1,16 +1,17 @@
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,selectzone.js"}
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="selectzone.js"></script>
 <!-- 商品搜索 -->
 <div class="form-div">
   <form action="javascript:searchGoods()" name="searchForm">
     <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
     <!-- 分类 -->
-    <select name="cat_id"><option value="0">{$lang.all_category}</caption>{$cat_list}</select>
+    <select name="cat_id"><option value="0">{{ $lang['all_category'] }}</caption>{{ $cat_list }}</select>
     <!-- 品牌 -->
-    <select name="brand_id"><option value="0">{$lang.all_brand}</caption>{html_options options=$brand_list}</select>
+    <select name="brand_id"><option value="0">{{ $lang['all_brand'] }}</caption>@foreach($brand_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach</select>
     <!-- 关键字 -->
     <input type="text" name="keyword" size="30" />
-    <input type="submit" value="{$lang.button_search}" class="button" />
+    <input type="submit" value="{{ $lang['button_search'] }}" class="button" />
   </form>
 </div>
 
@@ -19,9 +20,9 @@
 <form name="theForm">
 <table cellspacing='1' cellpadding='3'>
   <tr>
-    <th>{$lang.all_goods}</th>
-    <th>{$lang.handler}</th>
-    <th>{$lang.send_bouns_goods}</th>
+    <th>{{ $lang['all_goods'] }}</th>
+    <th>{{ $lang['handler'] }}</th>
+    <th>{{ $lang['send_bouns_goods'] }}</th>
   </tr>
   <tr>
     <td width="45%" align="center">
@@ -36,24 +37,24 @@
     </td>
     <td width="45%" align="center">
       <select name="target_select" multiple="true" size="20" style="width:90%" ondblclick="sz.dropItem(false, 'drop_bonus_goods', bounsTypeId)">
-        {foreach from=$goods_list item=goods}
-        <option value="{$goods.goods_id}">{$goods.goods_name}</option>
-        {/foreach}
+        @foreach($goods_list as $goods)
+        <option value="{{ $goods['goods_id'] }}">{{ $goods['goods_name'] }}</option>
+        @endforeach
       </select>
     </td>
   </tr>
   <tr>
-    <td colspan="3" align="center"><input type="button"  class="button" value="{$lang.send}" onClick="javascript:history.back()" /></td>
+    <td colspan="3" align="center"><input type="button"  class="button" value="{{ $lang['send'] }}" onClick="javascript:history.back()" /></td>
   </td>
 </table>
 </form>
 </div>
 <script language="JavaScript">
-  var bounsTypeId = '{$bonus_type.type_id}';
+  var bounsTypeId = '{{ $bonus_type['type_id'] }}';
   var elements    = document.forms['theForm'].elements;
   var sz          = new SelectZone(1, elements['source_select'], elements['target_select'], '');
 
-  {literal}
+  
   onload = function()
   {
     startCheckOrder();
@@ -70,6 +71,6 @@
 
     sz.loadOptions('get_goods_list', filters);
   }
-{/literal}
+
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

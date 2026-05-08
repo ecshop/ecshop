@@ -1,41 +1,42 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 <div class="form-div">
   <form  action="search_log.php" method="post" style="margin:0px">
-    {$lang.start_date}&nbsp;{html_select_date field_order="YMD" prefix="start_date" time=$start_date start_year="-10" end_year="+1" display_days=true month_format="%m"}&nbsp;&nbsp;
-    {$lang.end_date}&nbsp;{html_select_date field_order="YMD" prefix="end_date" time=$end_date start_year="-10" end_year="+1" display_days=true month_format="%m"}&nbsp;&nbsp;
+    {{ $lang['start_date'] }}&nbsp;{html_select_date field_order="YMD" prefix="start_date" time=$start_date start_year="-10" end_year="+1" display_days=true month_format="%m"}&nbsp;&nbsp;
+    {{ $lang['end_date'] }}&nbsp;{html_select_date field_order="YMD" prefix="end_date" time=$end_date start_year="-10" end_year="+1" display_days=true month_format="%m"}&nbsp;&nbsp;
     <input type="hidden" name="act" value="list" />
-    <input type="submit" name="submit" value="{$lang.query}" class="button" />
+    <input type="submit" name="submit" value="{{ $lang['query'] }}" class="button" />
   </form>
 </div>
 <div class="list-div" id="listDiv">
-{/if}
+@endif
 <table cellspacing='1' cellpadding='3'>
 <tr>
-<th>{$lang.keywords}</th><th width="25%">{$lang.date}</th><th width="20%">{$lang.hits}</th>
+<th>{{ $lang['keywords'] }}</th><th width="25%">{{ $lang['date'] }}</th><th width="20%">{{ $lang['hits'] }}</th>
 </tr>
-{foreach from=$logdb item=val}
+@foreach($logdb as $val)
 <tr>
-  <td>{$val.keyword}</td><td align="center">{$val.date}</td><td align="center">{$val.count}</td>
+  <td>{{ $val['keyword'] }}</td><td align="center">{{ $val['date'] }}</td><td align="center">{{ $val['count'] }}</td>
 </tr>
-{/foreach}
+@endforeach
 </table>
 <table id="page-table" cellspacing="0">
   <tr>
     <td align="right" nowrap="true">
-    {include file="page.htm"}
+    @include('page')
     </td>
   </tr>
 </table>
-{if $full_page}
+@if($full_page)
 </div>
 <script type="Text/Javascript" language="JavaScript">
-listTable.recordCount = {$record_count};
-listTable.pageCount = {$page_count};
-{foreach from=$filter item=item key=key}
-listTable.filter.{$key} = '{$item}';
-{/foreach}
+listTable.recordCount = {{ $record_count }};
+listTable.pageCount = {{ $page_count }};
+@foreach($filter as $key => $item)
+listTable.filter.{{ $key }} = '{{ $item }}';
+@endforeach
 <!--
 onload = function()
 {
@@ -44,5 +45,5 @@ onload = function()
 }
 //-->
 </script>
-{include file="pagefooter.htm"}
-{/if}
+@include('pagefooter')
+@endif

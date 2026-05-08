@@ -1,32 +1,32 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<!-- {if $vote} -->
-{insert_scripts files='transport.js'}
+@if($vote)
+<script src="transport.js"></script>
 
 <div id="ECS_VOTE">
 <div  class="box">
  <div class="box_1">
-  <h3><span>{$lang.online_vote}</span></h3>
+  <h3><span>{{ $lang['online_vote'] }}</span></h3>
   <div  class="boxCenterList">
     <form id="formvote" name="ECS_VOTEFORM" method="post" action="javascript:submit_vote()">
-    <!-- {foreach from=$vote item=title} -->
-     {$title.vote_name}<br />
-     ({$lang.vote_times}:{$title.vote_count})<br />
-     <!-- {/foreach} -->
-     <!-- {foreach from=$vote item=title} -->
-          <!-- {foreach from=$title.options item=item} -->
-            <!-- {if $title.can_multi eq 0} -->
-            <input type="checkbox" name="option_id" value="{$item.option_id}" />
-            {$item.option_name} ({$item.percent}%)<br />
-            <!-- {else} -->
-            <input type="radio" name="option_id" value="{$item.option_id}" />
-            {$item.option_name} ({$item.percent}%)<br />
-            <!-- {/if} -->
-            <!-- {/foreach} -->
-            <input type="hidden" name="type" value="{$title.can_multi}" />
-     <!-- {/foreach} -->
-     <input type="hidden" name="id" value="{$vote_id}" />
-     <input type="submit" name="submit" style="border:none;" value="{$lang.submit}"  class="bnt_bonus" />
-     <input type="reset" style="border:none;" value="{$lang.reset}" class="bnt_blue" />
+    @foreach($vote as $title)
+     {{ $title['vote_name'] }}<br />
+     ({{ $lang['vote_times'] }}:{{ $title['vote_count'] }})<br />
+     @endforeach
+     @foreach($vote as $title)
+          @foreach($title['options'] as $item)
+            @if($title['can_multi'] == 0)
+            <input type="checkbox" name="option_id" value="{{ $item['option_id'] }}" />
+            {{ $item['option_name'] }} ({{ $item['percent'] }}%)<br />
+            @else
+            <input type="radio" name="option_id" value="{{ $item['option_id'] }}" />
+            {{ $item['option_name'] }} ({{ $item['percent'] }}%)<br />
+            @endif
+            @endforeach
+            <input type="hidden" name="type" value="{{ $title['can_multi'] }}" />
+     @endforeach
+     <input type="hidden" name="id" value="{{ $vote_id }}" />
+     <input type="submit" name="submit" style="border:none;" value="{{ $lang['submit'] }}"  class="bnt_bonus" />
+     <input type="reset" style="border:none;" value="{{ $lang['reset'] }}" class="bnt_blue" />
      </form>
   </div>
  </div>
@@ -34,7 +34,7 @@
 </div>
 <div class="blank5"></div>
 <script type="text/javascript">
-{literal}
+
 /**
  * 处理用户的投票
  */
@@ -89,6 +89,6 @@ function voteResponse(result)
     }
   }
 }
-{/literal}
+
 </script>
-<!-- {/if} -->
+@endif

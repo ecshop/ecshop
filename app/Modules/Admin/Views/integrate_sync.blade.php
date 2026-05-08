@@ -1,35 +1,36 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="main-div">
 <form action="integrate.php" method="post" onsubmit="return validate()" name="theForm">
 <table>
   <tr>
     <td colspan="2" style="padding: 10px 80px">
-      <img src="images/warning.gif" width="32" height="32" border="0" alt="warning" align="left" hspace="10" /> {$lang.sync_notics}
+      <img src="images/warning.gif" width="32" height="32" border="0" alt="warning" align="left" hspace="10" /> {{ $lang['sync_notics'] }}
     </td>
   </tr>
   <tr>
-    <td class="label">{$lang.sync_start}</td>
-    <td><input type="text" name="start" value="{$sync_start}" />{$lang.require_field}</td>
+    <td class="label">{{ $lang['sync_start'] }}</td>
+    <td><input type="text" name="start" value="{{ $sync_start }}" />{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.sync_number}</td>
-    <td><input type="text" name="num" value="{$sync_num}" />{$lang.require_field}</td>
+    <td class="label">{{ $lang['sync_number'] }}</td>
+    <td><input type="text" name="num" value="{{ $sync_num }}" />{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.sync_target}</td>
+    <td class="label">{{ $lang['sync_target'] }}</td>
     <td>{html_radios options=$lang.sync_target_sys checked=$sync_target name=target}</td>
   </tr>
   <tr>
     <td colspan="2" align="center"><br />
-      <input type="submit" value="{$lang.btn_sync}" class="button" />
+      <input type="submit" value="{{ $lang['btn_sync'] }}" class="button" />
       <input type="hidden" name="act" value="exec_sync" />
     </td>
   </tr>
 </table>
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 onload = function()
@@ -54,5 +55,5 @@ function validate()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

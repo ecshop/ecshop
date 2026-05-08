@@ -1,31 +1,32 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>{$lang.cp_home}{if $ur_here} - {$ur_here}{/if}</title>
+<title>{{ $lang['cp_home'] }}@if($ur_here) - {{ $ur_here }}@endif</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="styles/general.css" rel="stylesheet" type="text/css" />
 <link href="styles/main.css" rel="stylesheet" type="text/css" />
-{literal}
+
 <style type="text/css">
   body {
     color: white;
   }
 </style>
-{/literal}
-{insert_scripts files="../js/utils.js,validator.js"}
+
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
 <script language="JavaScript">
 <!--
 // 这里把JS用到的所有语言都赋值到这里
-{foreach from=$lang.js_languages key=key item=item}
-var {$key} = "{$item}";
-{/foreach}
+@foreach($lang['js_languages'] as $key => $item)
+var {{ $key }} = "{{ $item }}";
+@endforeach
 //-->
 </script>
 
 </head>
 <body style="background: #278296">
 
-{if $form_act eq "forget_pwd"}
+@if($form_act == "forget_pwd")
 <form action="get_password.php" method="post" name="submitAdmin" onsubmit="return validate()">
   <table cellspacing="0" cellpadding="0" style="margin-top: 100px" align="center">
   <tr>
@@ -33,18 +34,18 @@ var {$key} = "{$item}";
     <td style="padding-left: 50px">
       <table>
         <tr>
-          <td colspan="2"><h3>{$lang.get_newpassword}</h3></td>
+          <td colspan="2"><h3>{{ $lang['get_newpassword'] }}</h3></td>
         </tr>
         <tr>
-          <td>{$lang.user_name}</td>
+          <td>{{ $lang['user_name'] }}</td>
           <td>
-            <input type="text" name="user_name" maxlength="20" size="30"/>{$lang.require_field}
+            <input type="text" name="user_name" maxlength="20" size="30"/>{{ $lang['require_field'] }}
           </td>
         </tr>
         <tr>
-          <td>{$lang.email}</td>
+          <td>{{ $lang['email'] }}</td>
           <td>
-            <input type="text" name="email" size="30" />{$lang.require_field}
+            <input type="text" name="email" size="30" />{{ $lang['require_field'] }}
          </td>
         </tr>
        <tr>
@@ -52,8 +53,8 @@ var {$key} = "{$item}";
          <td>
            <input type="hidden" name="action" value="get_pwd" />
            <input type="hidden" name="act" value="forget_pwd" />
-           <input type="submit" value="{$lang.click_button}" class="button" />
-           <input type="reset" value="{$lang.reset_button}" class="button" />
+           <input type="submit" value="{{ $lang['click_button'] }}" class="button" />
+           <input type="reset" value="{{ $lang['reset_button'] }}" class="button" />
          </td>
        </tr>
       </table>
@@ -61,8 +62,8 @@ var {$key} = "{$item}";
   </tr>
   </table>
 </form>
-{/if}
-{if $form_act eq "reset_pwd"}
+@endif
+@if($form_act == "reset_pwd")
 <form action="get_password.php" method="post" name="submitPwd" onsubmit="return validate2()">
   <table cellspacing="0" cellpadding="0" style="margin-top: 100px" align="center">
   <tr>
@@ -70,18 +71,18 @@ var {$key} = "{$item}";
     <td style="padding-left: 50px">
       <table>
         <tr>
-          <td colspan="2"><h3>{$lang.get_newpassword}</h3></td>
+          <td colspan="2"><h3>{{ $lang['get_newpassword'] }}</h3></td>
         </tr>
         <tr>
-          <td>{$lang.enter_admin_pwd}</td>
+          <td>{{ $lang['enter_admin_pwd'] }}</td>
           <td>
-            <input type="password" name="password" size="30"/>{$lang.require_field}
+            <input type="password" name="password" size="30"/>{{ $lang['require_field'] }}
           </td>
         </tr>
         <tr>
-          <td>{$lang.confirm_admin_pwd}</td>
+          <td>{{ $lang['confirm_admin_pwd'] }}</td>
           <td>
-            <input type="password" name="confirm_pwd" size="30" />{$lang.require_field}
+            <input type="password" name="confirm_pwd" size="30" />{{ $lang['require_field'] }}
          </td>
         </tr>
        <tr>
@@ -89,10 +90,10 @@ var {$key} = "{$item}";
          <td>
            <input type="hidden" name="action" value="reset_pwd" />
            <input type="hidden" name="act" value="forget_pwd" />
-           <input type="hidden" name="adminid" value="{$adminid}" />
-           <input type="hidden" name="code" value="{$code}" />
-           <input type="submit" value="{$lang.click_button}" class="button" />
-           <input type="reset" value="{$lang.reset_button}" class="button" />
+           <input type="hidden" name="adminid" value="{{ $adminid }}" />
+           <input type="hidden" name="code" value="{{ $code }}" />
+           <input type="submit" value="{{ $lang['click_button'] }}" class="button" />
+           <input type="reset" value="{{ $lang['reset_button'] }}" class="button" />
          </td>
        </tr>
       </table>
@@ -100,8 +101,8 @@ var {$key} = "{$item}";
   </tr>
   </table>
 </form>
-{/if}
-{literal}
+@endif
+
 <script type="text/javascript">
 <!--
 /**
@@ -131,6 +132,6 @@ function validate2()
 }
 //-->
 </script>
-{/literal}
+
 </body>
 </html>

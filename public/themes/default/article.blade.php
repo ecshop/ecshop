@@ -2,15 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$page_title}</title>
+<title>{{ $page_title }}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
 {* 包含脚本文件 *}
-{insert_scripts files='common.js'}
+<script src="common.js"></script>
 </head>
 <body>
 <!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
@@ -33,29 +33,29 @@
 <!-- TemplateBeginEditable name="左边区域" -->
 <!-- #BeginLibraryItem "/library/goods_related.lbi" -->
 
-<!-- {if $related_goods} -->
+@if($related_goods)
 <div class="box">
      <div class="box_1">
-      <h3><span>{$lang.releate_goods}</span></h3>
+      <h3><span>{{ $lang['releate_goods'] }}</span></h3>
       <div class="boxCenterList clearfix">
-      <!--{foreach from=$related_goods item=releated_goods_data}-->
+      @foreach($related_goods as $releated_goods_data)
         <ul class="clearfix">
-          <li class="goodsimg"><a href="{$releated_goods_data.url}"><img src="{$releated_goods_data.goods_thumb}" alt="{$releated_goods_data.goods_name}" class="B_blue" /></a></li>
+          <li class="goodsimg"><a href="{{ $releated_goods_data['url'] }}"><img src="{{ $releated_goods_data['goods_thumb'] }}" alt="{{ $releated_goods_data['goods_name'] }}" class="B_blue" /></a></li>
           <li>
-        <a href="{$releated_goods_data.url}" title="{$releated_goods_data.goods_name}">{$releated_goods_data.short_name}</a><br />
-        <!-- {if $releated_goods_data.promote_price neq 0} -->
-        {$lang.promote_price}<font class="f1">{$releated_goods_data.formated_promote_price}</font>
-        <!-- {else} -->
-        {$lang.shop_price}<font class="f1">{$releated_goods_data.shop_price}</font>
-        <!-- {/if} -->
+        <a href="{{ $releated_goods_data['url'] }}" title="{{ $releated_goods_data['goods_name'] }}">{{ $releated_goods_data['short_name'] }}</a><br />
+        @if($releated_goods_data['promote_price'] != 0)
+        {{ $lang['promote_price'] }}<font class="f1">{{ $releated_goods_data['formated_promote_price'] }}</font>
+        @else
+        {{ $lang['shop_price'] }}<font class="f1">{{ $releated_goods_data['shop_price'] }}</font>
+        @endif
           </li>
         </ul>
-        <!--{/foreach}-->
+        @endforeach
       </div>
      </div>
     </div>
 <div class="blank5"></div>
-<!-- {/if} -->
+@endif
 
  <!-- #EndLibraryItem -->
 <!-- TemplateEndEditable -->
@@ -71,30 +71,31 @@
      <div class="box_1">
       <div style="border:4px solid #fcf8f7; background-color:#fff; padding:20px 15px;">
          <div class="tc" style="padding:8px;">
-         <font class="f5 f6">{$article.title|escape:html}</font><br /><font class="f3">{$article.author|escape:html} / {$article.add_time}</font>
+         <font class="f5 f6">{{ $article['title'] }}</font><br /><font class="f3">{{ $article['author'] }} / {{ $article['add_time'] }}</font>
          </div>
-         <!-- {if $article.content } -->
-          {$article.content}
-         <!-- {/if} -->
-         {if $article.open_type eq 2 or $article.open_type eq 1}<br />
-         <div><a href="{$article.file_url}" target="_blank">{$lang.relative_file}</a></div>
-          {/if}
+         @if($article['content'] )
+          {{ $article['content'] }}
+         @endif
+         @if($article['open_type'] == 2 || $article['open_type'] == 1)<br />
+         <div><a href="{{ $article['file_url'] }}" target="_blank">{{ $lang['relative_file'] }}</a></div>
+          @endif
          <div style="padding:8px; margin-top:15px; text-align:left; border-top:1px solid #ccc;">
          <!-- 上一篇文章 -->
-          {if $next_article}
-            {$lang.next_article}:<a href="{$next_article.url}" class="f6">{$next_article.title}</a><br />
-          {/if}
+          @if($next_article)
+            {{ $lang['next_article'] }}:<a href="{{ $next_article['url'] }}" class="f6">{{ $next_article['title'] }}</a><br />
+          @endif
           <!-- 下一篇文章 -->
-          {if $prev_article}
-            {$lang.prev_article}:<a href="{$prev_article.url}" class="f6">{$prev_article.title}</a>
-          {/if}
+          @if($prev_article)
+            {{ $lang['prev_article'] }}:<a href="{{ $prev_article['url'] }}" class="f6">{{ $prev_article['title'] }}</a>
+          @endif
          </div>
       </div>
     </div>
   </div>
   <div class="blank"></div>
   <!-- #BeginLibraryItem "/library/comments.lbi" -->
-{insert_scripts files='transport.js,utils.js'}
+<script src="transport.js"></script>
+<script src="utils.js"></script>
 <div id="ECS_COMMENT"> {* ECSHOP 提醒您：动态载入comments_list.lbi，显示评论列表和评论表单 *}{insert name='comments' type=$type id=$id}</div>
 <!-- #EndLibraryItem -->
 
@@ -113,22 +114,22 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>]
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+    <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>]
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->

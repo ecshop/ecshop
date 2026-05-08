@@ -1,22 +1,22 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 
 <div class="main-div">
   <form name="theForm">
     <table width="100%">
       <tr>
-        <td colspan="2">{$lang.user_guide}</td>
+        <td colspan="2">{{ $lang['user_guide'] }}</td>
       </tr>
       <tr>
-        <td class="label">{$lang.label_old_string}</td>
+        <td class="label">{{ $lang['label_old_string'] }}</td>
         <td><input name="old_string" type="text" id="old_string"></td>
       </tr>
       <tr>
-        <td class="label">{$lang.label_new_string}</td>
+        <td class="label">{{ $lang['label_new_string'] }}</td>
         <td><input name="new_string" type="text" id="new_string"></td>
       </tr>
       <tr>
         <td colspan="2"><div align="center">
-          <input type="button" class="button" value="{$lang.button_submit}" onclick="start_change()" />
+          <input type="button" class="button" value="{{ $lang['button_submit'] }}" onclick="start_change()" />
         </div></td>
       </tr>
     </table>
@@ -26,14 +26,14 @@
 <div class="list-div">
   <table id="change_log" cellpadding="3" cellspacing="1">
     <tr>
-      <th>{$lang.update_log}</th>
+      <th>{{ $lang['update_log'] }}</th>
     </tr>
   </table>
 </div>
 
 <script language="JavaScript" type="text/javascript">
 <!--
-{literal}
+
     /**
      * 开始更新：检查原串和新串
      */
@@ -109,7 +109,7 @@
           cell.innerHTML = result.message;
       }
     }
-{/literal}
+
 -->
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

@@ -1,25 +1,25 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <form method="post" action="shophelp.php" name="theForm"  onsubmit="return validate()">
 <div class="form-div">
 <table >
   <tr>
-    <td width="80px" >{$lang.title}</td>
-    <td><input type="text" name="title" size ="50" maxlength="60" value="{$article.title|escape}" />{$lang.require_field}</td>
+    <td width="80px" >{{ $lang['title'] }}</td>
+    <td><input type="text" name="title" size ="50" maxlength="60" value="{{ $article['title'] }}" />{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td >{$lang.cat}</td>
+    <td >{{ $lang['cat'] }}</td>
     <td>
-    {$cat_list}
-    {$lang.require_field}
+    {{ $cat_list }}
+    {{ $lang['require_field'] }}
     </td>
   </tr>
   <tr>
-    <td>{$lang.article_type}</td>
+    <td>{{ $lang['article_type'] }}</td>
     <td>
-      <input type="radio" name="article_type" value="0" {if $article.article_type == 0}checked="true"{/if}>{$lang.common}
-      <input type="radio" name="article_type" value="1" {if $article.article_type == 1}checked="true"{/if}>{$lang.top}
+      <input type="radio" name="article_type" value="0" @if($article['article_type'] == 0)checked="true"@endif>{{ $lang['common'] }}
+      <input type="radio" name="article_type" value="1" @if($article['article_type'] == 1)checked="true"@endif>{{ $lang['top'] }}
 
-    {$lang.require_field}
+    {{ $lang['require_field'] }}
     </td>
   </tr>
 </table>
@@ -29,25 +29,26 @@
 <table >
   <tr>
     <td  colspan ="2" align ="center" >
-     {$FCKeditor}</script>
+     {{ $FCKeditor }}</script>
     </td>
   </tr>
   <tr>
     <td colspan="2" align="center"><br />
-      <input type="submit" class="button" value="{$lang.button_submit}" />
-      <input type="reset" class="button" value="{$lang.button_reset}" />
-      <input type="hidden" name="act" value="{$form_action}" />
-      <input type="hidden" name="old_title" value="{$article.title}" />
-      <input type="hidden" name="id" value="{$article.article_id}" />
+      <input type="submit" class="button" value="{{ $lang['button_submit'] }}" />
+      <input type="reset" class="button" value="{{ $lang['button_reset'] }}" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
+      <input type="hidden" name="old_title" value="{{ $article['title'] }}" />
+      <input type="hidden" name="id" value="{{ $article['article_id'] }}" />
     </td>
   </tr>
 </table>
 </div>
 </form>
-{insert_scripts files="../js/utils.js,validator.js"}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
 <script language="JavaScript">
 <!--
-{literal}
+
 document.forms['theForm'].elements['title'].focus();
 onload = function()
 {
@@ -66,6 +67,6 @@ function validate()
     return validator.passed();
 }
 //-->
-{/literal}
+
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

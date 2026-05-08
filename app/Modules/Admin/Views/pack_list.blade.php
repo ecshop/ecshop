@@ -1,54 +1,55 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 <!-- start goods list -->
 <form method="post" action="" name="listForm">
 <div class="list-div" id="listDiv">
-{/if}
+@endif
   <table cellpadding="3" cellspacing="1">
     <tr>
-      <th><a href="javascript:listTable.sort('pack_name'); ">{$lang.pack_name}</a>{$sort_pack_name}</th>
-      <th><a href="javascript:listTable.sort('pack_fee'); ">{$lang.pack_fee}</a>{$sort_pack_fee}</th>
-      <th><a href="javascript:listTable.sort('free_money');">{$lang.free_money}</a>{$sort_free_money}</th>
-      <th>{$lang.pack_desc}</th>
-      <th>{$lang.handler}</th>
+      <th><a href="javascript:listTable.sort('pack_name'); ">{{ $lang['pack_name'] }}</a>{{ $sort_pack_name }}</th>
+      <th><a href="javascript:listTable.sort('pack_fee'); ">{{ $lang['pack_fee'] }}</a>{{ $sort_pack_fee }}</th>
+      <th><a href="javascript:listTable.sort('free_money');">{{ $lang['free_money'] }}</a>{{ $sort_free_money }}</th>
+      <th>{{ $lang['pack_desc'] }}</th>
+      <th>{{ $lang['handler'] }}</th>
     </tr>
-    {foreach from=$packs_list item=pack}
+    @forelse($packs_list as $pack)
     <tr>
       <td class="first-cell">
-        {if ($pack.pack_img)}<a href = "../data/packimg/{$pack.pack_img}" target="_brank"><img src="images/picflag.gif" width="16" height="16" border="0" alt="" /></a>{else}<img src="images/picnoflag.gif" width="16" height="16" border="0" alt="" />{/if}
-        <span onclick="listTable.edit(this, 'edit_name', {$pack.pack_id})">{$pack.pack_name|escape:"html"}</span>
+        @if(($pack['pack_img']))<a href = "../data/packimg/{{ $pack['pack_img'] }}" target="_brank"><img src="images/picflag.gif" width="16" height="16" border="0" alt="" /></a>@else<img src="images/picnoflag.gif" width="16" height="16" border="0" alt="" />@endif
+        <span onclick="listTable.edit(this, 'edit_name', {{ $pack['pack_id'] }})">{{ $pack['pack_name'] }}</span>
       </td>
-      <td align="right"><span onclick="listTable.edit(this, 'edit_pack_fee', {$pack.pack_id})">{$pack.pack_fee}</span></td>
-      <td align="right"><span onclick="listTable.edit(this, 'edit_free_money', {$pack.pack_id})">{$pack.free_money}</span></td>
-      <td>{$pack.pack_desc|truncate:50|escape:"html"}</td>
+      <td align="right"><span onclick="listTable.edit(this, 'edit_pack_fee', {{ $pack['pack_id'] }})">{{ $pack['pack_fee'] }}</span></td>
+      <td align="right"><span onclick="listTable.edit(this, 'edit_free_money', {{ $pack['pack_id'] }})">{{ $pack['free_money'] }}</span></td>
+      <td>{{ \Illuminate\Support\Str::limit($pack['pack_desc'], 50, '...') }}</td>
       <td align="center" nowrap="true" valign="top">
-        <a href="?act=edit&amp;id={$pack.pack_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" border="0" height="16" width="16"></a>
-        <a href="javascript:;" onclick="listTable.remove({$pack.pack_id}, '{$lang.drop_confirm}')" title="{$lang.remove}"><img src="images/icon_drop.gif" border="0" height="16" width="16"></a>
+        <a href="?act=edit&amp;id={{ $pack['pack_id'] }}" title="{{ $lang['edit'] }}"><img src="images/icon_edit.gif" border="0" height="16" width="16"></a>
+        <a href="javascript:;" onclick="listTable.remove({{ $pack['pack_id'] }}, '{{ $lang['drop_confirm'] }}')" title="{{ $lang['remove'] }}"><img src="images/icon_drop.gif" border="0" height="16" width="16"></a>
       </td>
     </tr>
-    {foreachelse}
-    <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
-    {/foreach}
+    @empty
+    <tr><td class="no-records" colspan="10">{{ $lang['no_records'] }}</td></tr>
+    @endforelse
   </table>
 
   <table cellpadding="4" cellspacing="0">
     <tr>
-      <td align="right">{include file="page.htm"}</td>
+      <td align="right">@include('page')</td>
     </tr>
   </table>
-{if $full_page}
+@if($full_page)
 </div>
 <!-- end goods list -->
 </form>
 
 <script type="text/javascript" language="JavaScript">
-listTable.recordCount = {$record_count};
-listTable.pageCount = {$page_count};
-{foreach from=$filter item=item key=key}
-listTable.filter.{$key} = '{$item}';
-{/foreach}
-{literal}
+listTable.recordCount = {{ $record_count }};
+listTable.pageCount = {{ $page_count }};
+@foreach($filter as $key => $item)
+listTable.filter.{{ $key }} = '{{ $item }}';
+@endforeach
+
 <!--
 onload = function()
 {
@@ -57,6 +58,6 @@ onload = function()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
-{/if}
+
+@include('pagefooter')
+@endif

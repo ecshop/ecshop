@@ -1,23 +1,23 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="list-div">
   <table width="100%" cellpadding="3" cellspacing="1">
      <tr>
-      <th>{$lang.consignee}</th>
-      <th>{$lang.address}</th>
-      <th>{$lang.link}</th>
-      <th>{$lang.other}</th>
+      <th>{{ $lang['consignee'] }}</th>
+      <th>{{ $lang['address'] }}</th>
+      <th>{{ $lang['link'] }}</th>
+      <th>{{ $lang['other'] }}</th>
     </tr>
-  {foreach from=$address key=Key item=val}
+  @forelse($address as $Key => $val)
     <tr>
-      <td>{$val.consignee|escape}</td>
-      <td>{$val.country_name}&nbsp;&nbsp;{$val.province_name}&nbsp;&nbsp;{$val.city_name}&nbsp;&nbsp;{$val.district_name}<br />
-      {$val.address|escape}{if $val.zipcode}[{$val.zipcode|escape}]{/if}</td>
-      <td>{$lang.tel}：{$val.tel}<br />{$lang.mobile}：{$val.mobile}<br/>email: {$val.email}</td>
-      <td>{$lang.best_time}:{$val.best_time|escape}<br/>{$lang.sign_building}:{$val.sign_building|escape}</td>
+      <td>{{ $val['consignee'] }}</td>
+      <td>{{ $val['country_name'] }}&nbsp;&nbsp;{{ $val['province_name'] }}&nbsp;&nbsp;{{ $val['city_name'] }}&nbsp;&nbsp;{{ $val['district_name'] }}<br />
+      {{ $val['address'] }}@if($val['zipcode'])[{{ $val['zipcode'] }}]@endif</td>
+      <td>{{ $lang['tel'] }}：{{ $val['tel'] }}<br />{{ $lang['mobile'] }}：{{ $val['mobile'] }}<br/>email: {{ $val['email'] }}</td>
+      <td>{{ $lang['best_time'] }}:{{ $val['best_time'] }}<br/>{{ $lang['sign_building'] }}:{{ $val['sign_building'] }}</td>
     </tr>
-  {foreachelse}
-    <tr><td class="no-records" colspan="4">{$lang.no_records}</td></tr>
-  {/foreach}
+  @empty
+    <tr><td class="no-records" colspan="4">{{ $lang['no_records'] }}</td></tr>
+  @endforelse
   </table>
 </div>
-{include file="pagefooter.htm"}
+@include('pagefooter')

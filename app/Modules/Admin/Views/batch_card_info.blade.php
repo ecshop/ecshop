@@ -1,26 +1,26 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 
 <div class="main-div">
 <form method="post" action="virtual_card.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
 <table cellspacing="1" cellpadding="3" width="100%">
   <tr>
-    <td class="label">{$lang.separator}</td>
-    <td><input type="text" name="separator" maxlength="60" size="6" value="," />{$lang.require_field}</td>
+    <td class="label">{{ $lang['separator'] }}</td>
+    <td><input type="text" name="separator" maxlength="60" size="6" value="," />{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.uploadfile}</td>
+    <td class="label">{{ $lang['uploadfile'] }}</td>
     <td><input type="file" name="uploadfile" maxlength="60" size="40" /></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
-    <td><a href="../data/virtual_goods_list.csv">{$lang.download_file}</a></td>
+    <td><a href="../data/virtual_goods_list.csv">{{ $lang['download_file'] }}</a></td>
   </tr>
   <tr>
     <td colspan="2" align="center"><br />
-      <input type="submit" class="button" value="{$lang.button_submit}" />
-      <input type="reset" class="button" value="{$lang.button_reset}" />
+      <input type="submit" class="button" value="{{ $lang['button_submit'] }}" />
+      <input type="reset" class="button" value="{{ $lang['button_reset'] }}" />
       <input type="hidden" name="act" value="batch_confirm" />
-      <input type="hidden" name="goods_id" value="{$goods_id}" />
+      <input type="hidden" name="goods_id" value="{{ $goods_id }}" />
     </td>
   </tr>
 </table>
@@ -29,7 +29,7 @@
 <table cellspacing="1" cellpadding="3" width="100%">
   <tr>
     <td>&nbsp;</td>
-    <td width="80%">{$lang.use_help}</td>
+    <td width="80%">{{ $lang['use_help'] }}</td>
     <td>&nbsp;</td>
   </tr>
 </table>
@@ -39,7 +39,7 @@
 <script language="javascript" src="js/validator.js"></script>
 <script language="JavaScript">
 <!--
-{literal}
+
 document.forms['theForm'].elements['separator'].focus();
 
 onload = function()
@@ -59,6 +59,6 @@ function validate()
   return validator.passed();
 }
 //-->
-{/literal}
+
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

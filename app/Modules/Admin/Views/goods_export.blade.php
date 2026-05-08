@@ -1,21 +1,21 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <table width="100%">
 <tr>
   <td>
   <div class="main-div" style="background-color: white;">
-  {$lang.user_guide}
-  <h3><center>{$lang.export_condition}</center></h3>
+  {{ $lang['user_guide'] }}
+  <h3><center>{{ $lang['export_condition'] }}</center></h3>
   <div>
     <form action="goods_export.php" method="post" name="searchForm" onsubmit="return queryGoods(this)">
-      <strong>{$lang.custom_goods_search}</strong>
+      <strong>{{ $lang['custom_goods_search'] }}</strong>
       <!-- 分类 -->
-      <select name="cat_id"><option value="0">{$lang.custom_goods_cat}</option>{$cat_list}</select>
+      <select name="cat_id"><option value="0">{{ $lang['custom_goods_cat'] }}</option>{{ $cat_list }}</select>
       <!-- 品牌 -->
-      <select name="brand_id"><option value="0">{$lang.custom_goods_brand}</option>{html_options options=$brand_list}</select>
+      <select name="brand_id"><option value="0">{{ $lang['custom_goods_brand'] }}</option>@foreach($brand_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach</select>
       <!-- 关键字 -->
-      {$lang.custom_keyword}<input type="text" name="keyword"/>
+      {{ $lang['custom_keyword'] }}<input type="text" name="keyword"/>
       <!-- 搜索 -->
-      <input type="submit" name="search_submit" id="search_submit" value="{$lang.export_condition_search}" class="button" />
+      <input type="submit" name="search_submit" id="search_submit" value="{{ $lang['export_condition_search'] }}" class="button" />
     </form>
   </div>
   <table>
@@ -33,9 +33,9 @@
   </tr>
   </table>
   <div>
-      <strong>{$lang.export_format}</strong>
+      <strong>{{ $lang['export_format'] }}</strong>
       <!-- 导出的数据格式 -->
-      <select name="data_format" id="data_format">{html_options options=$data_format}</select>
+      <select name="data_format" id="data_format">@foreach($data_format as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach</select>
       <div id="export_format">
       </div>
   </div>
@@ -47,7 +47,7 @@
     <form action="goods_export.php" method="post" name="theForm" onsubmit="return formValidate0()">
     <table width="100%" >
       <tr>
-        <td class="label">{$lang.select_charset}</td>
+        <td class="label">{{ $lang['select_charset'] }}</td>
         <td>
             <select name="charset" >
               <option value="UTF8">UTF8</option>
@@ -65,7 +65,7 @@
             <input type="hidden" name="act" value="act_export_ecshop">
         </td>
         <td>
-        <input name="submit" type="submit" id="submit" value="{$lang.button_submit}" class="button" />
+        <input name="submit" type="submit" id="submit" value="{{ $lang['button_submit'] }}" class="button" />
         </td>
       </tr>
     </table>
@@ -75,23 +75,23 @@
 <form action="goods_export.php" method="post" name="theForm1" onsubmit="return formValidate1()">
     <table width="100%" >
       <tr>
-        <td class="label"><a href="javascript:showNotice('noticeGoodsClass');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.goods_class}</td>
+        <td class="label"><a href="javascript:showNotice('noticeGoodsClass');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['goods_class'] }}</td>
         <td><input type="text" name="goods_class" value="0" /><br />
-          <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsClass">{$lang.notice_goods_class}</span></tr>
+          <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsClass">{{ $lang['notice_goods_class'] }}</span></tr>
       <tr>
       <tr>
         <td ></tr>
       <tr>
       <tr>
-        <td class="label">{$lang.post_express}</td>
+        <td class="label">{{ $lang['post_express'] }}</td>
         <td><input type="text" name="post_express" value="0" /></tr>
       <tr>
       <tr>
-        <td class="label">{$lang.express}</td>
+        <td class="label">{{ $lang['express'] }}</td>
         <td><input type="text" name="express" value="0" /></tr>
       <tr>
       <tr>
-        <td class="label">{$lang.ems}</td>
+        <td class="label">{{ $lang['ems'] }}</td>
         <td><input type="text" name="ems" value="0" /></tr>
       <tr>
       <tr>
@@ -99,7 +99,7 @@
     <input name="brand_id" type="hidden" value="" />
     <input name="keyword" type="hidden" value="" />
     <input name="goods_ids" type="hidden" value="" /><input type="hidden" name="act" value="act_export_taobao"></td>
-        <td><input name="submit" type="submit" id="submit" value="{$lang.button_submit}" class="button" /></td>
+        <td><input name="submit" type="submit" id="submit" value="{{ $lang['button_submit'] }}" class="button" /></td>
       </tr>
     </table>
     </form>
@@ -108,23 +108,23 @@
 <form action="goods_export.php" method="post" name="theForm3" onsubmit="return formValidate3()">
     <table width="100%" >
       <tr>
-        <td class="label"><a href="javascript:showNotice('noticeGoodsClass');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.goods_class}</td>
+        <td class="label"><a href="javascript:showNotice('noticeGoodsClass');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['goods_class'] }}</td>
         <td><input type="text" name="goods_class" value="0" /><br />
-          <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsClass">{$lang.notice_goods_class}</span></tr>
+          <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsClass">{{ $lang['notice_goods_class'] }}</span></tr>
       <tr>
       <tr>
         <td ></tr>
       <tr>
       <tr>
-        <td class="label">{$lang.post_express}</td>
+        <td class="label">{{ $lang['post_express'] }}</td>
         <td><input type="text" name="post_express" value="0" /></tr>
       <tr>
       <tr>
-        <td class="label">{$lang.express}</td>
+        <td class="label">{{ $lang['express'] }}</td>
         <td><input type="text" name="express" value="0" /></tr>
       <tr>
       <tr>
-        <td class="label">{$lang.ems}</td>
+        <td class="label">{{ $lang['ems'] }}</td>
         <td><input type="text" name="ems" value="0" /></tr>
       <tr>
       <tr>
@@ -132,7 +132,7 @@
     <input name="brand_id" type="hidden" value="" />
     <input name="keyword" type="hidden" value="" />
     <input name="goods_ids" type="hidden" value="" /><input type="hidden" name="act" value="act_export_taobao V4.3"></td>
-        <td><input name="submit" type="submit" id="submit" value="{$lang.button_submit}" class="button" /></td>
+        <td><input name="submit" type="submit" id="submit" value="{{ $lang['button_submit'] }}" class="button" /></td>
       </tr>
     </table>
     </form>
@@ -141,23 +141,23 @@
 <form action="goods_export.php" method="post" name="theForm6" onsubmit="return formValidate6()">
     <table width="100%" >
       <tr>
-        <td class="label"><a href="javascript:showNotice('noticeGoodsClass');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.goods_class}</td>
+        <td class="label"><a href="javascript:showNotice('noticeGoodsClass');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['goods_class'] }}</td>
         <td><input type="text" name="goods_class" value="0" /><br />
-          <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsClass">{$lang.notice_goods_class}</span></tr>
+          <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsClass">{{ $lang['notice_goods_class'] }}</span></tr>
       <tr>
       <tr>
         <td ></tr>
       <tr>
       <tr>
-        <td class="label">{$lang.post_express}</td>
+        <td class="label">{{ $lang['post_express'] }}</td>
         <td><input type="text" name="post_express" value="0" /></tr>
       <tr>
       <tr>
-        <td class="label">{$lang.express}</td>
+        <td class="label">{{ $lang['express'] }}</td>
         <td><input type="text" name="express" value="0" /></tr>
       <tr>
       <tr>
-        <td class="label">{$lang.ems}</td>
+        <td class="label">{{ $lang['ems'] }}</td>
         <td><input type="text" name="ems" value="0" /></tr>
       <tr>
       <tr>
@@ -165,7 +165,7 @@
     <input name="brand_id" type="hidden" value="" />
     <input name="keyword" type="hidden" value="" />
     <input name="goods_ids" type="hidden" value="" /><input type="hidden" name="act" value="act_export_taobao V4.6"></td>
-        <td><input name="submit" type="submit" id="submit" value="{$lang.button_submit}" class="button" /></td>
+        <td><input name="submit" type="submit" id="submit" value="{{ $lang['button_submit'] }}" class="button" /></td>
       </tr>
     </table>
     </form>
@@ -177,11 +177,11 @@
         <td ></tr>
       <tr>
       <tr>
-        <td class="label">{$lang.post_express}</td>
+        <td class="label">{{ $lang['post_express'] }}</td>
         <td><input type="text" name="post_express" value="0" /></tr>
       <tr>
       <tr>
-        <td class="label">{$lang.express}</td>
+        <td class="label">{{ $lang['express'] }}</td>
         <td><input type="text" name="express" value="0" /></tr>
       <tr>
       <tr>
@@ -189,7 +189,7 @@
     <input name="brand_id" type="hidden" value="" />
     <input name="keyword" type="hidden" value="" />
     <input name="goods_ids" type="hidden" value="" /><input type="hidden" name="act" value="act_export_paipai"></td>
-        <td><input name="submit" type="submit" id="submit" value="{$lang.button_submit}" class="button" /></td>
+        <td><input name="submit" type="submit" id="submit" value="{{ $lang['button_submit'] }}" class="button" /></td>
       </tr>
     </table>
     </form>
@@ -201,11 +201,11 @@
         <td ></tr>
       <tr>
       <tr>
-        <td class="label">{$lang.post_express}</td>
+        <td class="label">{{ $lang['post_express'] }}</td>
         <td><input type="text" name="post_express" value="0" /></tr>
       <tr>
       <tr>
-        <td class="label">{$lang.express}</td>
+        <td class="label">{{ $lang['express'] }}</td>
         <td><input type="text" name="express" value="0" /></tr>
       <tr>
       <tr>
@@ -213,7 +213,7 @@
     <input name="brand_id" type="hidden" value="" />
     <input name="keyword" type="hidden" value="" />
     <input name="goods_ids" type="hidden" value="" /><input type="hidden" name="act" value="act_export_paipai4"></td>
-        <td><input name="submit" type="submit" id="submit" value="{$lang.button_submit}" class="button" /></td>
+        <td><input name="submit" type="submit" id="submit" value="{{ $lang['button_submit'] }}" class="button" /></td>
       </tr>
     </table>
     </form>
@@ -226,21 +226,21 @@
   <div class="main-div" style="background-color: white;">
   <table>
   <tr>
-    <td width="45%"><strong>{$lang.custom_goods_list}</strong><span style="margin-left:20px;"><select name="goods_type" id="goods_type"><option value="0">{$lang.custom_goods_type}</option>{$goods_type_list}</select></span></td>
+    <td width="45%"><strong>{{ $lang['custom_goods_list'] }}</strong><span style="margin-left:20px;"><select name="goods_type" id="goods_type"><option value="0">{{ $lang['custom_goods_type'] }}</option>{{ $goods_type_list }}</select></span></td>
     <td rowspan="2" width="5%" style="text-align:center;"><p><input type="button" value=">>" id="addAllItem" class="button" /></p>
               <p><input type="button" value=">" id="addItem" class="button" /></p>
               <p><input type="button" value="<" id="delItem" class="button" /></p>
               <p><input type="button" value="<<" id="delAllItem" class="button" /></p></td>
-    <td width="45%"><strong>{$lang.custom_export_list}</strong></td>
-    <td rowspan="2" width="5%" style="text-align:center;"><p><input type="button" value="{$lang.custom_up}" id="mvUp" class="button" /></p><p><input type="button" value="{$lang.custom_down}" id="mvDown" class="button" /></p></td>
+    <td width="45%"><strong>{{ $lang['custom_export_list'] }}</strong></td>
+    <td rowspan="2" width="5%" style="text-align:center;"><p><input type="button" value="{{ $lang['custom_up'] }}" id="mvUp" class="button" /></p><p><input type="button" value="{{ $lang['custom_down'] }}" id="mvDown" class="button" /></p></td>
   </tr>
   <tr>
-    <td><select name="src_goods_fields" id="src_goods_fields" size="14" style="width:100%" multiple="true">{html_options options=$goods_fields}
+    <td><select name="src_goods_fields" id="src_goods_fields" size="14" style="width:100%" multiple="true">@foreach($goods_fields as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach
               </select></td>
     <td><select name="dst_goods_fields" id="dst_goods_fields" size="14" style="width:100%" multiple="true">
               </select></td>
   </tr>
-  <tr><td class="label">{$lang.select_charset}</td>
+  <tr><td class="label">{{ $lang['select_charset'] }}</td>
         <td>
             <select name="charset_custom" >
               <option value="UTF8">UTF8</option>
@@ -258,7 +258,7 @@
     <input name="goods_ids" type="hidden" value="" />
     <input type="hidden" name="act" value="act_export_custom">
     <input type="hidden" name="custom_goods_export" value="">
-    <input name="submit" type="submit" id="submit" value="{$lang.button_submit}" class="button" />
+    <input name="submit" type="submit" id="submit" value="{{ $lang['button_submit'] }}" class="button" />
     </td>
     <td></td>
   </tr>
@@ -269,14 +269,15 @@
 </table>
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
 <script language="JavaScript">
-var post_express_not_null = "{$lang.post_express_not_null}";
-var express_not_null = "{$lang.express_not_null}";
-var ems_not_null = "{$lang.ems_not_null}";
-var custom_goods_field_not_null = "{$lang.custom_goods_field_not_null}";
+var post_express_not_null = "{{ $lang['post_express_not_null'] }}";
+var express_not_null = "{{ $lang['express_not_null'] }}";
+var ems_not_null = "{{ $lang['ems_not_null'] }}";
+var custom_goods_field_not_null = "{{ $lang['custom_goods_field_not_null'] }}";
 
-{literal}
+
 
     var elements;
     onload = function()
@@ -719,5 +720,5 @@ var custom_goods_field_not_null = "{$lang.custom_goods_field_not_null}";
         window.addEventListener("load", init_data_format, false);
     }
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

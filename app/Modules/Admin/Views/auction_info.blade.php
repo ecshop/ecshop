@@ -1,86 +1,88 @@
-{include file="pageheader.htm"}
-<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+@include('pageheader')
+<script type="text/javascript" src="../js/calendar.php?lang={{ $cfg_lang }}"></script>
 <link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
-{insert_scripts files="validator.js,../js/transport.js,../js/utils.js}
+<script src="validator.js"></script>
+<script src="../js/transport.js"></script>
+<script src="../js/utils.js"></script>
 <div class="main-div">
 <form method="post" action="auction.php" name="theForm" enctype="multipart/form-data" onSubmit="return validate()">
 <table cellspacing="1" cellpadding="3" width="100%">
   <tr>
-    <td class="label">{$lang.label_act_name}</td>
-    <td><input name="act_name" type="text" id="act_name" value="{$auction.act_name}" maxlength="60" />
-    {$lang.notice_act_name}</td>
+    <td class="label">{{ $lang['label_act_name'] }}</td>
+    <td><input name="act_name" type="text" id="act_name" value="{{ $auction['act_name'] }}" maxlength="60" />
+    {{ $lang['notice_act_name'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_act_desc}</td>
-    <td><textarea  name="act_desc" cols="60" rows="4" id="act_desc"  >{$auction.act_desc}</textarea></td>
+    <td class="label">{{ $lang['label_act_desc'] }}</td>
+    <td><textarea  name="act_desc" cols="60" rows="4" id="act_desc"  >{{ $auction['act_desc'] }}</textarea></td>
   </tr>
   <tr>
-    <td align="right">{$lang.label_search_goods}</td>
+    <td align="right">{{ $lang['label_search_goods'] }}</td>
     <td><input name="keyword" type="text" id="keyword">
-      <input name="search" type="button" id="search" value="{$lang.button_search}" class="button" onclick="searchGoods()" /></td>
+      <input name="search" type="button" id="search" value="{{ $lang['button_search'] }}" class="button" onclick="searchGoods()" /></td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_goods_name}</td>
+    <td class="label">{{ $lang['label_goods_name'] }}</td>
     <td><select name="goods_id" id="goods_id" onchange="javascript:change_good_products();">
-      <option value="{$auction.goods_id}" selected="selected">{$auction.goods_name}</option>
+      <option value="{{ $auction['goods_id'] }}" selected="selected">{{ $auction['goods_name'] }}</option>
     </select>
-    <select name="product_id" {if $auction.product_id <= 0}style="display:none"{/if}>
-        {html_options options=$good_products_select selected=$auction.product_id}
+    <select name="product_id" @if($auction['product_id'] <= 0)style="display:none"@endif>
+        @foreach($good_products_select as $__k => $__v)<option value="{{ $__k }}" @if($__k == $auction['product_id']) selected @endif>{{ $__v }}</option>@endforeach
         </select></td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_start_time}</td>
-    <td><input name="start_time" type="text" id="start_time" value="{$auction.start_time}" readonly="readonly" />
-      <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time', '%Y-%m-%d %H:%M', '24', false, 'selbtn1');" value="{$lang.btn_select}" class="button" /></td>
+    <td class="label">{{ $lang['label_start_time'] }}</td>
+    <td><input name="start_time" type="text" id="start_time" value="{{ $auction['start_time'] }}" readonly="readonly" />
+      <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time', '%Y-%m-%d %H:%M', '24', false, 'selbtn1');" value="{{ $lang['btn_select'] }}" class="button" /></td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_end_time}</td>
-    <td><input name="end_time" type="text" id="end_time" value="{$auction.end_time}" readonly="readonly" />
-      <input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d %H:%M', '24', false, 'selbtn2');" value="{$lang.btn_select}" class="button" /></td>
+    <td class="label">{{ $lang['label_end_time'] }}</td>
+    <td><input name="end_time" type="text" id="end_time" value="{{ $auction['end_time'] }}" readonly="readonly" />
+      <input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d %H:%M', '24', false, 'selbtn2');" value="{{ $lang['btn_select'] }}" class="button" /></td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_start_price}</td>
-    <td><input name="start_price" type="text" id="start_price" value="{$auction.start_price}"></td>
+    <td class="label">{{ $lang['label_start_price'] }}</td>
+    <td><input name="start_price" type="text" id="start_price" value="{{ $auction['start_price'] }}"></td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_end_price}</td>
-    <td><input name="end_price" type="text" id="end_price"  {if $auction.no_top}disabled="true" {else}value="{$auction.end_price}"{/if}><input name="no_top" type="checkbox" value="1" onClick="checked_no_top(this);" onChange="checked_no_top(this);" {if $auction.no_top}checked{/if}/>{$lang.label_no_top}</td>
+    <td class="label">{{ $lang['label_end_price'] }}</td>
+    <td><input name="end_price" type="text" id="end_price"  @if($auction['no_top'])disabled="true" @elsevalue="{{ $auction['end_price'] }}"@endif><input name="no_top" type="checkbox" value="1" onClick="checked_no_top(this);" onChange="checked_no_top(this);" @if($auction['no_top'])checked@endif/>{{ $lang['label_no_top'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_amplitude}</td>
-    <td><input name="amplitude" type="text" id="amplitude" value="{$auction.amplitude}"></td>
+    <td class="label">{{ $lang['label_amplitude'] }}</td>
+    <td><input name="amplitude" type="text" id="amplitude" value="{{ $auction['amplitude'] }}"></td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_deposit}</td>
-    <td><input name="deposit" type="text" id="deposit" value="{$auction.deposit}"></td>
+    <td class="label">{{ $lang['label_deposit'] }}</td>
+    <td><input name="deposit" type="text" id="deposit" value="{{ $auction['deposit'] }}"></td>
   </tr>
-  {if $auction.act_id gt 0}
+  @if($auction['act_id'] > 0)
   <tr>
-    <td class="label">{$lang.label_status}</td>
-    <td>{$auction.status}<br />{$bid_user_count} <a href="auction.php?act=view_log&id={$auction.act_id}"> [ {$lang.view} ]</a></td>
+    <td class="label">{{ $lang['label_status'] }}</td>
+    <td>{{ $auction['status'] }}<br />{{ $bid_user_count }} <a href="auction.php?act=view_log&id={{ $auction['act_id'] }}"> [ {{ $lang['view'] }} ]</a></td>
   </tr>
-  {/if}
+  @endif
   <tr>
     <td colspan="2" align="center">
-      {if $auction.act_id eq 0 or $auction.status_no eq "0" or $auction.status_no eq "1"}
-      <input type="submit" class="button" value="{$lang.button_submit}" />
-      <input type="reset" class="button" value="{$lang.button_reset}" />
-      <input type="hidden" name="act" value="{$form_action}" />
-      {elseif $auction.status_no eq "2"}
-        {if $auction.deposit gt 0}
-        {$lang.settle_frozen_money}
-        <input type="submit" class="button" value="{$lang.unfreeze}" name="unfreeze" />
-        <input type="submit" class="button" value="{$lang.deduct}" name="deduct" />
+      @if($auction['act_id'] == 0 || $auction['status_no'] == "0" || $auction['status_no'] == "1")
+      <input type="submit" class="button" value="{{ $lang['button_submit'] }}" />
+      <input type="reset" class="button" value="{{ $lang['button_reset'] }}" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
+      @elseif($auction['status_no'] == "2")
+        @if($auction['deposit'] > 0)
+        {{ $lang['settle_frozen_money'] }}
+        <input type="submit" class="button" value="{{ $lang['unfreeze'] }}" name="unfreeze" />
+        <input type="submit" class="button" value="{{ $lang['deduct'] }}" name="deduct" />
         <input type="hidden" name="act" value="settle_money" />
-        {/if}
-      {/if}
-      <input type="hidden" name="id" value="{$auction.act_id}" /></td>
+        @endif
+      @endif
+      <input type="hidden" name="id" value="{{ $auction['act_id'] }}" /></td>
   </tr>
 </table>
 </form>
 </div>
 
-{literal}
+
 <script language="JavaScript">
 <!--
 var display_yes = (Browser.isIE) ? 'block' : 'table-row-group';
@@ -244,5 +246,5 @@ function searchProductsResponse(result)
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

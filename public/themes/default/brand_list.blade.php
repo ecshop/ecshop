@@ -2,15 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$page_title}</title>
+<title>{{ $page_title }}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
 {* 包含脚本文件 *}
-{insert_scripts files='common.js,global.js,compare.js'}
+<script src="common.js"></script>
+<script src="global.js"></script>
+<script src="compare.js"></script>
 </head>
 <body>
 <!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
@@ -42,19 +44,19 @@
      <!-- TemplateBeginEditable name="通栏广告区域（宽750px）" -->
      <!-- TemplateEndEditable -->
      <div class="blank5"></div>
-      <h3 class="border"><span><!--{$lang.all_brand}--></span></h3>
+      <h3 class="border"><span><!--{{ $lang['all_brand'] }}--></span></h3>
      <div id="brandList" class="clearfix">
-     <!-- {foreach from=$brand_list name="brand_list_foreach" item=brand_data} -->
+     @foreach($brand_list as $brand_data)
 		  <div class="brandBox">
-			<h4><span>{$brand_data.brand_name}</span>({$brand_data.goods_num})</h4>
-			<!-- {if $brand_data.brand_logo} -->
+			<h4><span>{{ $brand_data['brand_name'] }}</span>({{ $brand_data['goods_num'] }})</h4>
+			@if($brand_data['brand_logo'])
 			  <div class="brandLogo">
-        <a href="{$brand_data.url}"><img src="data/brandlogo/{$brand_data.brand_logo}" alt="{$brand_data.brand_name|escape:html} ({$brand_data.goods_num})" /></a>
+        <a href="{{ $brand_data['url'] }}"><img src="data/brandlogo/{{ $brand_data['brand_logo'] }}" alt="{{ $brand_data['brand_name'] }} ({{ $brand_data['goods_num'] }})" /></a>
 				</div>
-			<!-- {/if} -->
-			 <p title="{$brand_data.brand_desc}">{$brand_data.brand_desc}</p> 
+			@endif
+			 <p title="{{ $brand_data['brand_desc'] }}">{{ $brand_data['brand_desc'] }}</p> 
 			</div>
-		<!-- {/foreach} -->	
+		@endforeach	
 
      </div>
      <div class="blank5"></div>
@@ -74,22 +76,22 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-   <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>]
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+   <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>]
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->

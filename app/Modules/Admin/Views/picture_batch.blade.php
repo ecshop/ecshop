@@ -1,15 +1,15 @@
-{insert_scripts files="../js/utils.js"}
-{include file="pageheader.htm"}
+<script src="../js/utils.js"></script>
+@include('pageheader')
 <div class="main-div">
 <form action="picture_batch.php" method="post" name="theForm" onsubmit="return start()">
   <table cellspacing="1" cellpadding="3" width="100%">
   <tr>
-    <td>{$lang.notes}</td>
+    <td>{{ $lang['notes'] }}</td>
   </tr>
   <tr>
-    <td ><select name="cat_id" onchange="goods_list(this);"><option value="0">{$lang.all_category}</caption>{$cat_list}</select>
-          <select name="brand_id" onchange="goods_list(this);"><option value="0">{$lang.all_brand}</caption>{html_options options=$brand_list}</select>
-          <span id="list"><select name="goods_id"><option value="0">{$lang.all_goods}</option></select></span>
+    <td ><select name="cat_id" onchange="goods_list(this);"><option value="0">{{ $lang['all_category'] }}</caption>{{ $cat_list }}</select>
+          <select name="brand_id" onchange="goods_list(this);"><option value="0">{{ $lang['all_brand'] }}</caption>@foreach($brand_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach</select>
+          <span id="list"><select name="goods_id"><option value="0">{{ $lang['all_goods'] }}</option></select></span>
           <input  type="button" value=" + " onclick="add_search_goods();" />
     </td>
   </tr>
@@ -20,31 +20,31 @@
   </tr>
   <tr>
     <td>
-        <label for="do_icon"><input type="checkbox" name="do_icon" value="1" id="do_icon" checked="true" />{$lang.do_icon}</label>
-        <label for="do_album"><input type="checkbox" name="do_album" value="1" id="do_album" checked="true" />{$lang.do_album}</label>
+        <label for="do_icon"><input type="checkbox" name="do_icon" value="1" id="do_icon" checked="true" />{{ $lang['do_icon'] }}</label>
+        <label for="do_album"><input type="checkbox" name="do_album" value="1" id="do_album" checked="true" />{{ $lang['do_album'] }}</label>
     </td>
   </tr>
   <tr>
-    <td><label for="process_thumb"><input type="checkbox" name="process_thumb" value="1" id="process_thumb" checked="true" />{$lang.thumb}</label></td>
+    <td><label for="process_thumb"><input type="checkbox" name="process_thumb" value="1" id="process_thumb" checked="true" />{{ $lang['thumb'] }}</label></td>
   </tr>
   <tr>
-    <td><label for="process_watermark"><input type="checkbox" name="process_watermark" value="1" id="process_watermark" checked="true" />{$lang.watermark}</label></td>
+    <td><label for="process_watermark"><input type="checkbox" name="process_watermark" value="1" id="process_watermark" checked="true" />{{ $lang['watermark'] }}</label></td>
   </tr>
   <tr>
     <td>
-        <label for="yes_change"><input type="radio" name="change_link" value="1" id="yes_change" />{$lang.yes_change}</label>
-        <label for="no_change"><input type="radio" name="change_link" value="0" checked="true" id="no_change" />{$lang.no_change}</label>
+        <label for="yes_change"><input type="radio" name="change_link" value="1" id="yes_change" />{{ $lang['yes_change'] }}</label>
+        <label for="no_change"><input type="radio" name="change_link" value="0" checked="true" id="no_change" />{{ $lang['no_change'] }}</label>
     </td>
   </tr>
   <tr>
     <td>
-        <label for="silent"><input type="radio" name="silent" value="1" id="silent" checked="checked" />{$lang.silent}</label>
-        <label for="no_silent"><input type="radio" name="silent" value="0"  id="no_silent" />{$lang.no_silent}</label>
+        <label for="silent"><input type="radio" name="silent" value="1" id="silent" checked="checked" />{{ $lang['silent'] }}</label>
+        <label for="no_silent"><input type="radio" name="silent" value="0"  id="no_silent" />{{ $lang['no_silent'] }}</label>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <input type="submit" class="button" value="{$lang.button_submit}" />
+      <input type="submit" class="button" value="{{ $lang['button_submit'] }}" />
     </td>
   </tr>
   </table>
@@ -54,9 +54,9 @@
 <div class="list-div" id="listDiv">
   <table cellspacing='1' cellpadding='3' id='listTable'>
     <tr>
-      <th>{$lang.page}</th>
-      <th>{$lang.total}</th>
-      <th>{$lang.time}</th>
+      <th>{{ $lang['page'] }}</th>
+      <th>{{ $lang['total'] }}</th>
+      <th>{{ $lang['time'] }}</th>
     </tr>
   </table>
 </div>
@@ -65,7 +65,7 @@
 
 <script type="Text/Javascript" language="JavaScript">
 <!--
-{literal}
+
 onload = function()
 {
     // 开始检查订单
@@ -283,7 +283,7 @@ function start_response(result)
       alert(result.message);
     }
 }
-{/literal}
+
 //-->
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

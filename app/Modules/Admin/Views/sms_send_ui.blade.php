@@ -1,30 +1,30 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 
 <div class="main-div" id="sms-send">
 <form method="POST" action="sms.php?act=send_sms" name="sms-send-form" onsubmit="return validate();">
 <table >
   <tr>
-    <td class="label">{$lang.phone}:</td>
+    <td class="label">{{ $lang['phone'] }}:</td>
     <td><input name="send_num" type="text" size="35" />
-        {$lang.phone_notice}
+        {{ $lang['phone_notice'] }}
     </td>
   </tr>
     <tr>
-    <td class="label">{$lang.user_rand}:</td>
+    <td class="label">{{ $lang['user_rand'] }}:</td>
     <td><select name="send_rank">
-        <option value='0'>{$lang.please_select}</option>
-          {html_options options=$send_rank}
+        <option value='0'>{{ $lang['please_select'] }}</option>
+          @foreach($send_rank as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach
         </select></td>
   </tr>
   <tr>
-    <td class="label">{$lang.msg}:</td>
-    <td><textarea name="msg" rows="6" cols="32"></textarea>{$lang.require_field} {$lang.msg_notice}</td>
+    <td class="label">{{ $lang['msg'] }}:</td>
+    <td><textarea name="msg" rows="6" cols="32"></textarea>{{ $lang['require_field'] }} {{ $lang['msg_notice'] }}</td>
   </tr>
   
   <tr>
     <td colspan="2" align="center">
-      <input type="submit" name="submit" value="{$lang.button_submit}" class="button" />
-      <input type="reset" value="{$lang.button_reset}" class="button" />
+      <input type="submit" name="submit" value="{{ $lang['button_submit'] }}" class="button" />
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
     </td>
   </tr>
 </table>
@@ -33,7 +33,7 @@
 
 <script type="text/javascript" language="JavaScript">
 <!--
-{literal}
+
 function  validate() {
   var f = document['sms-send-form'];
   var phone = f.elements['send_num'].value;
@@ -49,7 +49,7 @@ function  validate() {
 	  return true;
 	}
 }
-{/literal}
+
 //-->
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

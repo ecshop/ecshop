@@ -2,19 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
-<meta name="Description" content="{$description}" />
-{if $auto_redirect}
-<meta http-equiv="refresh" content="3;URL={$message.href}" />
-{/if}
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
+<meta name="Description" content="{{ $description }}" />
+@if($auto_redirect)
+<meta http-equiv="refresh" content="3;URL={{ $message['href'] }}" />
+@endif
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$page_title}</title>
+<title>{{ $page_title }}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
 {* 包含脚本文件 *}
-{insert_scripts files='common.js'}
+<script src="common.js"></script>
 </head>
 <body>
 <!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
@@ -50,65 +50,65 @@
   <div class="blank5"></div>
     <div class="box">
      <div class="box_1">
-      <h3><span>{$lang.post_message}</span></h3>
+      <h3><span>{{ $lang['post_message'] }}</span></h3>
       <div class="boxCenterList">
           <form action="message.php" method="post" name="formMsg" onSubmit="return submitMsgBoard(this)">
             <table width="100%" border="0" cellpadding="3">
               <tr>
-                <td align="right">{$lang.username}</td>
+                <td align="right">{{ $lang['username'] }}</td>
                 <td>
-                <!--{if $smarty.session.user_name}-->
-                <font class="f4_b">{$username}</font><label for="anonymous" style="margin-left:8px;"><input type="checkbox" name="anonymous" value="1" id="anonymous" />{$lang.message_anonymous}</label>
-                <!--{else}-->
-               {$lang.anonymous}
-                <!--{/if}-->
+                @if($smarty['session']['user_name'])
+                <font class="f4_b">{{ $username }}</font><label for="anonymous" style="margin-left:8px;"><input type="checkbox" name="anonymous" value="1" id="anonymous" />{{ $lang['message_anonymous'] }}</label>
+                @else
+               {{ $lang['anonymous'] }}
+                @endif
                 </td>
               </tr>
               <tr>
-                <td align="right">{$lang.email}</td>
-                <td><input name="user_email" type="text" class="inputBg" size="20" value="{$smarty.session.email|escape}" /></td>
+                <td align="right">{{ $lang['email'] }}</td>
+                <td><input name="user_email" type="text" class="inputBg" size="20" value="{{ $smarty['session']['email'] }}" /></td>
               </tr>
               <tr>
-                <td align="right">{$lang.message_board_type}</td>
+                <td align="right">{{ $lang['message_board_type'] }}</td>
                 <td><input name="msg_type" type="radio" value="0" checked="checked" />
-                  {$lang.message_type[0]}
+                  {{ $lang['message_type[0]'] }}
                   <input type="radio" name="msg_type" value="1" />
-                  {$lang.message_type[1]}
+                  {{ $lang['message_type[1]'] }}
                   <input type="radio" name="msg_type" value="2" />
-                  {$lang.message_type[2]}
+                  {{ $lang['message_type[2]'] }}
                   <input type="radio" name="msg_type" value="3" />
-                  {$lang.message_type[3]}
+                  {{ $lang['message_type[3]'] }}
                   <input type="radio" name="msg_type" value="4" />
-                  {$lang.message_type[4]} </td>
+                  {{ $lang['message_type[4]'] }} </td>
               </tr>
               <tr>
-                <td align="right">{$lang.message_title}</td>
+                <td align="right">{{ $lang['message_title'] }}</td>
                 <td><input name="msg_title" type="text" class="inputBg" size="30" /></td>
               </tr>
-            <!-- 判断是否启用验证码{if $enabled_mes_captcha} -->
+            <!-- 判断是否启用验证码@if($enabled_mes_captcha) -->
               <tr>
-                <td align="right">{$lang.comment_captcha}</td>
+                <td align="right">{{ $lang['comment_captcha'] }}</td>
                 <td><input type="text" size="8" name="captcha"  class="inputBg" />
-                <img src="captcha.php?{$rand}" alt="captcha" style="vertical-align: middle;cursor: pointer;" onClick="this.src='captcha.php?'+Math.random()" /> </td>
+                <img src="captcha.php?{{ $rand }}" alt="captcha" style="vertical-align: middle;cursor: pointer;" onClick="this.src='captcha.php?'+Math.random()" /> </td>
               </tr>
-            <!--{/if}-->
+            @endif
               <tr>
-                <td align="right" valign="top">{$lang.message_content}</td>
+                <td align="right" valign="top">{{ $lang['message_content'] }}</td>
                 <td><textarea name="msg_content" cols="50" rows="4" wrap="virtual" style="border:1px solid #ccc;"></textarea></td>
               </tr>
               <tr>
                 <td>&nbsp;</td>
                 <td><input type="hidden" name="act" value="act_add_message" />
-                  <input type="submit" value="{$lang.post_message}" class="bnt_blue_1" />
+                  <input type="submit" value="{{ $lang['post_message'] }}" class="bnt_blue_1" />
                 </td>
               </tr>
             </table>
           </form>
         <script type="text/javascript">
-        {foreach from=$lang.message_board_js item=item key=key}
-        var {$key} = "{$item}";
-        {/foreach}
-        {literal}
+        @foreach($lang['message_board_js'] as $key => $item)
+        var {{ $key }} = "{{ $item }}";
+        @endforeach
+        
         /**
          * 提交留言信息
         */
@@ -161,7 +161,7 @@
                 return true;
             }
         }
-        {/literal}
+        
         </script>
       </div>
      </div>
@@ -181,22 +181,22 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>]
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+    <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>]
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->

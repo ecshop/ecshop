@@ -1,34 +1,35 @@
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 <!-- 品牌搜索 -->
 <div class="form-div">
 <form  name="searchForm" method="post">   
-     {$lang.add_sign} <input type="text" name="sms_sign" size="15" />
+     {{ $lang['add_sign'] }} <input type="text" name="sms_sign" size="15" />
     <input type="hidden" name="act" size="15" value="sms_sign_add" />
-    <input type="submit" value="{$lang.add}" class="button" />
-	{$lang.new_default_sign}：{$default_sign}
+    <input type="submit" value="{{ $lang['add'] }}" class="button" />
+	{{ $lang['new_default_sign'] }}：{{ $default_sign }}
   </form>
 </div>
 
 
 
-{foreach from=$sms_sign  item=sms_sign}
+@foreach($sms_sign as $sms_sign)
 <div class="form-div">
 <form  name="searchForm" method="post">
-     {$lang.default_sign}: {$sms_sign.value}
-	 {$lang.edited}:<input type="text" name="new_sms_sign" size="15" />
+     {{ $lang['default_sign'] }}: {{ $sms_sign['value'] }}
+	 {{ $lang['edited'] }}:<input type="text" name="new_sms_sign" size="15" />
 
-    <input type="hidden" name="extend_no" size="15" value="{$sms_sign.key}" />
-    <input type="submit" value="{$lang.edit}" class="button"  name="sms_sign_update"/>
-    <input type="submit" value="{$lang.set_default_sign}" class="button"  name="sms_sign_default"/>
+    <input type="hidden" name="extend_no" size="15" value="{{ $sms_sign['key'] }}" />
+    <input type="submit" value="{{ $lang['edit'] }}" class="button"  name="sms_sign_update"/>
+    <input type="submit" value="{{ $lang['set_default_sign'] }}" class="button"  name="sms_sign_default"/>
   </form>
 </div>
 
 
 
-{/foreach}
+@endforeach
 
-{include file="pagefooter.htm"}
+@include('pagefooter')
 
 
 
@@ -42,20 +43,20 @@
 
 <script type="text/javascript" language="javascript">
   <!--
-  listTable.recordCount = {$record_count};
-  listTable.pageCount = {$page_count};
+  listTable.recordCount = {{ $record_count }};
+  listTable.pageCount = {{ $page_count }};
 
-  {foreach from=$filter item=item key=key}
-  listTable.filter.{$key} = '{$item}';
-  {/foreach}
+  @foreach($filter as $key => $item)
+  listTable.filter.{{ $key }} = '{{ $item }}';
+  @endforeach
 
-  {literal}
+  
   onload = function()
   {
       // 开始检查订单
       startCheckOrder();
   }
-  {/literal}
+  
   //-->
 </script>
 

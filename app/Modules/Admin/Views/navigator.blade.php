@@ -1,58 +1,59 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 <form method="post" action="" name="listForm">
 <div class="list-div" id="listDiv">
-{/if}
+@endif
 <table cellspacing='1' cellpadding='3' id='list-table'>
 <tr>
-	<th>{$lang.item_name}</th><th>{$lang.item_ifshow}</th><th>{$lang.item_opennew}</th><th>{$lang.item_vieworder}</th><th>{$lang.item_type}</th><th width="60px">{$lang.handler}</th>
+	<th>{{ $lang['item_name'] }}</th><th>{{ $lang['item_ifshow'] }}</th><th>{{ $lang['item_opennew'] }}</th><th>{{ $lang['item_vieworder'] }}</th><th>{{ $lang['item_type'] }}</th><th width="60px">{{ $lang['handler'] }}</th>
 </tr>
-{foreach from=$navdb item=val}
+@forelse($navdb as $val)
 <tr>
-	<td align="center"><!-- {if $val.id} -->{$val.name}<!-- {else} -->&nbsp;<!-- {/if} --></td>
+	<td align="center">@if($val['id']){{ $val['name'] }}@else&nbsp;@endif</td>
   <td align="center">
-   <!-- {if $val.id} -->
-   <img src="images/{if $val.ifshow eq '1'}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_ifshow', {$val.id})" />
-   <!-- {/if} --></td>
+   @if($val['id'])
+   <img src="images/@if($val['ifshow'] == '1')yes@elseno@endif.gif" onclick="listTable.toggle(this, 'toggle_ifshow', {{ $val['id'] }})" />
+   @endif</td>
   <td align="center">
-   <!-- {if $val.id} -->
-    <img src="images/{if $val.opennew eq '1'}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_opennew', {$val.id})" />
-   <!-- {/if} --></td>
-  <td align="center"><!-- {if $val.id} --><span onclick="listTable.edit(this, 'edit_sort_order', {$val.id})">{$val.vieworder}</span><!-- {/if} --></td>
-  <td align="center"><!-- {if $val.id} -->{$lang[$val.type]}<!-- {/if} --></td>
-  <td align="center"><!-- {if $val.id} --><a href="navigator.php?act=edit&id={$val.id}" title="{$lang.edit}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>
-  <a href="navigator.php?act=del&id={$val.id}" onclick="return confirm('{$lang.ckdel}');" title="{$lang.ckdel}"><img src="images/no.gif" width="16" height="16" border="0" /><!-- {/if} --></a>
+   @if($val['id'])
+    <img src="images/@if($val['opennew'] == '1')yes@elseno@endif.gif" onclick="listTable.toggle(this, 'toggle_opennew', {{ $val['id'] }})" />
+   @endif</td>
+  <td align="center">@if($val['id'])<span onclick="listTable.edit(this, 'edit_sort_order', {{ $val['id'] }})">{{ $val['vieworder'] }}</span>@endif</td>
+  <td align="center">@if($val['id']){{ $lang[$val['type]'] }}@endif</td>
+  <td align="center">@if($val['id'])<a href="navigator.php?act=edit&id={{ $val['id'] }}" title="{{ $lang['edit'] }}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>
+  <a href="navigator.php?act=del&id={{ $val['id'] }}" onclick="return confirm('{{ $lang['ckdel'] }}');" title="{{ $lang['ckdel'] }}"><img src="images/no.gif" width="16" height="16" border="0" />@endif</a>
   </td>
 </tr>
-{foreachelse}
-<tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
-{/foreach}
+@empty
+<tr><td class="no-records" colspan="10">{{ $lang['no_records'] }}</td></tr>
+@endforelse
 </table>
 
   <table cellpadding="4" cellspacing="0">
     <tr>
-      <td align="right">{include file="page.htm"}</td>
+      <td align="right">@include('page')</td>
     </tr>
   </table>
-{if $full_page}
+@if($full_page)
 </div>
 </form>
 <script type="Text/Javascript" language="JavaScript">
 <!--
-listTable.recordCount = {$record_count};
-listTable.pageCount = {$page_count};
-{foreach from=$filter item=item key=key}
-listTable.filter.{$key} = '{$item}';
-{/foreach}
-{literal}
+listTable.recordCount = {{ $record_count }};
+listTable.pageCount = {{ $page_count }};
+@foreach($filter as $key => $item)
+listTable.filter.{{ $key }} = '{{ $item }}';
+@endforeach
+
 onload = function()
 {
   // 开始检查订单
   startCheckOrder();
 }
-{/literal}
+
 //-->
 </script>
-{include file="pagefooter.htm"}
-{/if}
+@include('pagefooter')
+@endif

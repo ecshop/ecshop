@@ -3,8 +3,8 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 -- Table structure for ecs_account_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_account_log`;
-CREATE TABLE `ecs_account_log` (
+DROP TABLE IF EXISTS `account_log`;
+CREATE TABLE `account_log` (
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
   `user_money` decimal(10,2) NOT NULL,
@@ -25,8 +25,8 @@ CREATE TABLE `ecs_account_log` (
 -- ----------------------------
 -- Table structure for ecs_ad
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_ad`;
-CREATE TABLE `ecs_ad` (
+DROP TABLE IF EXISTS `ad`;
+CREATE TABLE `ad` (
   `ad_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `position_id` int(11) unsigned NOT NULL DEFAULT '0',
   `media_type` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -52,8 +52,8 @@ CREATE TABLE `ecs_ad` (
 -- ----------------------------
 -- Table structure for ecs_admin_action
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_admin_action`;
-CREATE TABLE `ecs_admin_action` (
+DROP TABLE IF EXISTS `admin_action`;
+CREATE TABLE `admin_action` (
   `action_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `action_code` varchar(20) NOT NULL DEFAULT '',
@@ -69,8 +69,8 @@ CREATE TABLE `ecs_admin_action` (
 -- ----------------------------
 -- Table structure for ecs_admin_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_admin_log`;
-CREATE TABLE `ecs_admin_log` (
+DROP TABLE IF EXISTS `admin_log`;
+CREATE TABLE `admin_log` (
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `log_time` int(11) unsigned NOT NULL DEFAULT '0',
   `user_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -88,8 +88,8 @@ CREATE TABLE `ecs_admin_log` (
 -- ----------------------------
 -- Table structure for ecs_admin_message
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_admin_message`;
-CREATE TABLE `ecs_admin_message` (
+DROP TABLE IF EXISTS `admin_message`;
+CREATE TABLE `admin_message` (
   `message_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `sender_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `receiver_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -111,8 +111,8 @@ CREATE TABLE `ecs_admin_message` (
 -- ----------------------------
 -- Table structure for ecs_admin_user
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_admin_user`;
-CREATE TABLE `ecs_admin_user` (
+DROP TABLE IF EXISTS `admin_user`;
+CREATE TABLE `admin_user` (
   `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_name` varchar(60) NOT NULL DEFAULT '',
   `email` varchar(60) NOT NULL DEFAULT '',
@@ -140,8 +140,8 @@ CREATE TABLE `ecs_admin_user` (
 -- ----------------------------
 -- Table structure for ecs_adsense
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_adsense`;
-CREATE TABLE `ecs_adsense` (
+DROP TABLE IF EXISTS `adsense`;
+CREATE TABLE `adsense` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `from_ad` int(11) NOT NULL DEFAULT '0',
   `referer` varchar(255) NOT NULL DEFAULT '',
@@ -157,8 +157,8 @@ CREATE TABLE `ecs_adsense` (
 -- ----------------------------
 -- Table structure for ecs_ad_custom
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_ad_custom`;
-CREATE TABLE `ecs_ad_custom` (
+DROP TABLE IF EXISTS `ad_custom`;
+CREATE TABLE `ad_custom` (
   `ad_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `ad_type` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `ad_name` varchar(60) DEFAULT NULL,
@@ -176,8 +176,8 @@ CREATE TABLE `ecs_ad_custom` (
 -- ----------------------------
 -- Table structure for ecs_ad_position
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_ad_position`;
-CREATE TABLE `ecs_ad_position` (
+DROP TABLE IF EXISTS `ad_position`;
+CREATE TABLE `ad_position` (
   `position_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `position_name` varchar(60) NOT NULL DEFAULT '',
   `ad_width` int(11) unsigned NOT NULL DEFAULT '0',
@@ -194,8 +194,8 @@ CREATE TABLE `ecs_ad_position` (
 -- ----------------------------
 -- Table structure for ecs_affiliate_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_affiliate_log`;
-CREATE TABLE `ecs_affiliate_log` (
+DROP TABLE IF EXISTS `affiliate_log`;
+CREATE TABLE `affiliate_log` (
   `log_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
   `time` int(11) NOT NULL,
@@ -214,8 +214,8 @@ CREATE TABLE `ecs_affiliate_log` (
 -- ----------------------------
 -- Table structure for ecs_agency
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_agency`;
-CREATE TABLE `ecs_agency` (
+DROP TABLE IF EXISTS `agency`;
+CREATE TABLE `agency` (
   `agency_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `agency_name` varchar(255) NOT NULL,
   `agency_desc` text NOT NULL,
@@ -230,8 +230,8 @@ CREATE TABLE `ecs_agency` (
 -- ----------------------------
 -- Table structure for ecs_area_region
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_area_region`;
-CREATE TABLE `ecs_area_region` (
+DROP TABLE IF EXISTS `area_region`;
+CREATE TABLE `area_region` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `shipping_area_id` int(11) unsigned NOT NULL DEFAULT '0',
   `region_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -246,8 +246,8 @@ CREATE TABLE `ecs_area_region` (
 -- ----------------------------
 -- Table structure for ecs_article
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_article`;
-CREATE TABLE `ecs_article` (
+DROP TABLE IF EXISTS `article`;
+CREATE TABLE `article` (
   `article_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cat_id` int(11) NOT NULL DEFAULT '0',
   `title` varchar(150) NOT NULL DEFAULT '',
@@ -273,8 +273,8 @@ CREATE TABLE `ecs_article` (
 -- ----------------------------
 -- Table structure for ecs_article_cat
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_article_cat`;
-CREATE TABLE `ecs_article_cat` (
+DROP TABLE IF EXISTS `article_cat`;
+CREATE TABLE `article_cat` (
   `cat_id` int(11) NOT NULL AUTO_INCREMENT,
   `cat_name` varchar(255) NOT NULL DEFAULT '',
   `cat_type` tinyint(1) unsigned NOT NULL DEFAULT '1',
@@ -296,8 +296,8 @@ CREATE TABLE `ecs_article_cat` (
 -- ----------------------------
 -- Table structure for ecs_attribute
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_attribute`;
-CREATE TABLE `ecs_attribute` (
+DROP TABLE IF EXISTS `attribute`;
+CREATE TABLE `attribute` (
   `attr_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cat_id` int(11) unsigned NOT NULL DEFAULT '0',
   `attr_name` varchar(60) NOT NULL DEFAULT '',
@@ -319,8 +319,8 @@ CREATE TABLE `ecs_attribute` (
 -- ----------------------------
 -- Table structure for ecs_auction_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_auction_log`;
-CREATE TABLE `ecs_auction_log` (
+DROP TABLE IF EXISTS `auction_log`;
+CREATE TABLE `auction_log` (
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `act_id` int(11) unsigned NOT NULL,
   `bid_user` int(11) unsigned NOT NULL,
@@ -337,8 +337,8 @@ CREATE TABLE `ecs_auction_log` (
 -- ----------------------------
 -- Table structure for ecs_auto_manage
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_auto_manage`;
-CREATE TABLE `ecs_auto_manage` (
+DROP TABLE IF EXISTS `auto_manage`;
+CREATE TABLE `auto_manage` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `item_id` int(11) NOT NULL,
   `type` varchar(10) NOT NULL,
@@ -355,8 +355,8 @@ CREATE TABLE `ecs_auto_manage` (
 -- ----------------------------
 -- Table structure for ecs_back_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_back_goods`;
-CREATE TABLE `ecs_back_goods` (
+DROP TABLE IF EXISTS `back_goods`;
+CREATE TABLE `back_goods` (
   `rec_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `back_id` int(11) unsigned DEFAULT '0',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -380,8 +380,8 @@ CREATE TABLE `ecs_back_goods` (
 -- ----------------------------
 -- Table structure for ecs_back_order
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_back_order`;
-CREATE TABLE `ecs_back_order` (
+DROP TABLE IF EXISTS `back_order`;
+CREATE TABLE `back_order` (
   `back_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `delivery_sn` varchar(20) NOT NULL,
   `order_sn` varchar(20) NOT NULL,
@@ -425,8 +425,8 @@ CREATE TABLE `ecs_back_order` (
 -- ----------------------------
 -- Table structure for ecs_bonus_type
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_bonus_type`;
-CREATE TABLE `ecs_bonus_type` (
+DROP TABLE IF EXISTS `bonus_type`;
+CREATE TABLE `bonus_type` (
   `type_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `type_name` varchar(60) NOT NULL DEFAULT '',
   `type_money` decimal(10,2) NOT NULL DEFAULT '0.00',
@@ -448,8 +448,8 @@ CREATE TABLE `ecs_bonus_type` (
 -- ----------------------------
 -- Table structure for ecs_booking_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_booking_goods`;
-CREATE TABLE `ecs_booking_goods` (
+DROP TABLE IF EXISTS `booking_goods`;
+CREATE TABLE `booking_goods` (
   `rec_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `email` varchar(60) NOT NULL DEFAULT '',
@@ -474,8 +474,8 @@ CREATE TABLE `ecs_booking_goods` (
 -- ----------------------------
 -- Table structure for ecs_brand
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_brand`;
-CREATE TABLE `ecs_brand` (
+DROP TABLE IF EXISTS `brand`;
+CREATE TABLE `brand` (
   `brand_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `brand_name` varchar(60) NOT NULL DEFAULT '',
   `brand_logo` varchar(80) NOT NULL DEFAULT '',
@@ -494,8 +494,8 @@ CREATE TABLE `ecs_brand` (
 -- ----------------------------
 -- Table structure for ecs_card
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_card`;
-CREATE TABLE `ecs_card` (
+DROP TABLE IF EXISTS `card`;
+CREATE TABLE `card` (
   `card_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `card_name` varchar(120) NOT NULL DEFAULT '',
   `card_img` varchar(255) NOT NULL DEFAULT '',
@@ -512,8 +512,8 @@ CREATE TABLE `ecs_card` (
 -- ----------------------------
 -- Table structure for ecs_cart
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_cart`;
-CREATE TABLE `ecs_cart` (
+DROP TABLE IF EXISTS `cart`;
+CREATE TABLE `cart` (
   `rec_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `session_id` char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
@@ -544,8 +544,8 @@ CREATE TABLE `ecs_cart` (
 -- ----------------------------
 -- Table structure for ecs_category
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_category`;
-CREATE TABLE `ecs_category` (
+DROP TABLE IF EXISTS `category`;
+CREATE TABLE `category` (
   `cat_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cat_name` varchar(90) NOT NULL DEFAULT '',
   `keywords` varchar(255) NOT NULL DEFAULT '',
@@ -570,8 +570,8 @@ CREATE TABLE `ecs_category` (
 -- ----------------------------
 -- Table structure for ecs_cat_recommend
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_cat_recommend`;
-CREATE TABLE `ecs_cat_recommend` (
+DROP TABLE IF EXISTS `cat_recommend`;
+CREATE TABLE `cat_recommend` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cat_id` int(11) NOT NULL,
   `recommend_type` tinyint(1) NOT NULL,
@@ -586,8 +586,8 @@ CREATE TABLE `ecs_cat_recommend` (
 -- ----------------------------
 -- Table structure for ecs_collect_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_collect_goods`;
-CREATE TABLE `ecs_collect_goods` (
+DROP TABLE IF EXISTS `collect_goods`;
+CREATE TABLE `collect_goods` (
   `rec_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -606,8 +606,8 @@ CREATE TABLE `ecs_collect_goods` (
 -- ----------------------------
 -- Table structure for ecs_comment
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_comment`;
-CREATE TABLE `ecs_comment` (
+DROP TABLE IF EXISTS `comment`;
+CREATE TABLE `comment` (
   `comment_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `comment_type` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `id_value` int(11) unsigned NOT NULL DEFAULT '0',
@@ -632,8 +632,8 @@ CREATE TABLE `ecs_comment` (
 -- ----------------------------
 -- Table structure for ecs_crons
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_crons`;
-CREATE TABLE `ecs_crons` (
+DROP TABLE IF EXISTS `crons`;
+CREATE TABLE `crons` (
   `cron_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `cron_code` varchar(20) NOT NULL,
   `cron_name` varchar(120) NOT NULL,
@@ -663,8 +663,8 @@ CREATE TABLE `ecs_crons` (
 -- ----------------------------
 -- Table structure for ecs_delivery_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_delivery_goods`;
-CREATE TABLE `ecs_delivery_goods` (
+DROP TABLE IF EXISTS `delivery_goods`;
+CREATE TABLE `delivery_goods` (
   `rec_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `delivery_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -690,8 +690,8 @@ CREATE TABLE `ecs_delivery_goods` (
 -- ----------------------------
 -- Table structure for ecs_delivery_order
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_delivery_order`;
-CREATE TABLE `ecs_delivery_order` (
+DROP TABLE IF EXISTS `delivery_order`;
+CREATE TABLE `delivery_order` (
   `delivery_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `delivery_sn` varchar(20) NOT NULL,
   `order_sn` varchar(20) NOT NULL,
@@ -734,8 +734,8 @@ CREATE TABLE `ecs_delivery_order` (
 -- ----------------------------
 -- Table structure for ecs_email_list
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_email_list`;
-CREATE TABLE `ecs_email_list` (
+DROP TABLE IF EXISTS `email_list`;
+CREATE TABLE `email_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(60) NOT NULL,
   `stat` tinyint(1) NOT NULL DEFAULT '0',
@@ -750,8 +750,8 @@ CREATE TABLE `ecs_email_list` (
 -- ----------------------------
 -- Table structure for ecs_email_sendlist
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_email_sendlist`;
-CREATE TABLE `ecs_email_sendlist` (
+DROP TABLE IF EXISTS `email_sendlist`;
+CREATE TABLE `email_sendlist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(100) NOT NULL,
   `template_id` int(11) NOT NULL,
@@ -769,8 +769,8 @@ CREATE TABLE `ecs_email_sendlist` (
 -- ----------------------------
 -- Table structure for ecs_error_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_error_log`;
-CREATE TABLE `ecs_error_log` (
+DROP TABLE IF EXISTS `error_log`;
+CREATE TABLE `error_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `info` varchar(255) NOT NULL,
   `file` varchar(100) NOT NULL,
@@ -786,8 +786,8 @@ CREATE TABLE `ecs_error_log` (
 -- ----------------------------
 -- Table structure for ecs_exchange_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_exchange_goods`;
-CREATE TABLE `ecs_exchange_goods` (
+DROP TABLE IF EXISTS `exchange_goods`;
+CREATE TABLE `exchange_goods` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `exchange_integral` int(11) unsigned NOT NULL DEFAULT '0',
@@ -804,8 +804,8 @@ CREATE TABLE `ecs_exchange_goods` (
 -- ----------------------------
 -- Table structure for ecs_favourable_activity
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_favourable_activity`;
-CREATE TABLE `ecs_favourable_activity` (
+DROP TABLE IF EXISTS `favourable_activity`;
+CREATE TABLE `favourable_activity` (
   `act_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `act_name` varchar(255) NOT NULL,
   `start_time` int(11) unsigned NOT NULL,
@@ -830,8 +830,8 @@ CREATE TABLE `ecs_favourable_activity` (
 -- ----------------------------
 -- Table structure for ecs_feedback
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_feedback`;
-CREATE TABLE `ecs_feedback` (
+DROP TABLE IF EXISTS `feedback`;
+CREATE TABLE `feedback` (
   `msg_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) unsigned NOT NULL DEFAULT '0',
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -856,8 +856,8 @@ CREATE TABLE `ecs_feedback` (
 -- ----------------------------
 -- Table structure for ecs_friend_link
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_friend_link`;
-CREATE TABLE `ecs_friend_link` (
+DROP TABLE IF EXISTS `friend_link`;
+CREATE TABLE `friend_link` (
   `link_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `link_name` varchar(255) NOT NULL DEFAULT '',
   `link_url` varchar(255) NOT NULL DEFAULT '',
@@ -874,8 +874,8 @@ CREATE TABLE `ecs_friend_link` (
 -- ----------------------------
 -- Table structure for ecs_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_goods`;
-CREATE TABLE `ecs_goods` (
+DROP TABLE IF EXISTS `goods`;
+CREATE TABLE `goods` (
   `goods_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cat_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_sn` varchar(60) NOT NULL DEFAULT '',
@@ -938,8 +938,8 @@ CREATE TABLE `ecs_goods` (
 -- ----------------------------
 -- Table structure for ecs_goods_activity
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_goods_activity`;
-CREATE TABLE `ecs_goods_activity` (
+DROP TABLE IF EXISTS `goods_activity`;
+CREATE TABLE `goods_activity` (
   `act_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `act_name` varchar(255) NOT NULL,
   `act_desc` text NOT NULL,
@@ -962,8 +962,8 @@ CREATE TABLE `ecs_goods_activity` (
 -- ----------------------------
 -- Table structure for ecs_goods_article
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_goods_article`;
-CREATE TABLE `ecs_goods_article` (
+DROP TABLE IF EXISTS `goods_article`;
+CREATE TABLE `goods_article` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `article_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -979,8 +979,8 @@ CREATE TABLE `ecs_goods_article` (
 -- ----------------------------
 -- Table structure for ecs_goods_attr
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_goods_attr`;
-CREATE TABLE `ecs_goods_attr` (
+DROP TABLE IF EXISTS `goods_attr`;
+CREATE TABLE `goods_attr` (
   `goods_attr_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `attr_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -998,8 +998,8 @@ CREATE TABLE `ecs_goods_attr` (
 -- ----------------------------
 -- Table structure for ecs_goods_cat
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_goods_cat`;
-CREATE TABLE `ecs_goods_cat` (
+DROP TABLE IF EXISTS `goods_cat`;
+CREATE TABLE `goods_cat` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `cat_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1014,8 +1014,8 @@ CREATE TABLE `ecs_goods_cat` (
 -- ----------------------------
 -- Table structure for ecs_goods_gallery
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_goods_gallery`;
-CREATE TABLE `ecs_goods_gallery` (
+DROP TABLE IF EXISTS `goods_gallery`;
+CREATE TABLE `goods_gallery` (
   `img_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `img_url` varchar(255) NOT NULL DEFAULT '',
@@ -1033,8 +1033,8 @@ CREATE TABLE `ecs_goods_gallery` (
 -- ----------------------------
 -- Table structure for ecs_goods_type
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_goods_type`;
-CREATE TABLE `ecs_goods_type` (
+DROP TABLE IF EXISTS `goods_type`;
+CREATE TABLE `goods_type` (
   `cat_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cat_name` varchar(60) NOT NULL DEFAULT '',
   `enabled` tinyint(1) unsigned NOT NULL DEFAULT '1',
@@ -1049,8 +1049,8 @@ CREATE TABLE `ecs_goods_type` (
 -- ----------------------------
 -- Table structure for ecs_group_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_group_goods`;
-CREATE TABLE `ecs_group_goods` (
+DROP TABLE IF EXISTS `group_goods`;
+CREATE TABLE `group_goods` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1067,8 +1067,8 @@ CREATE TABLE `ecs_group_goods` (
 -- ----------------------------
 -- Table structure for ecs_keywords
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_keywords`;
-CREATE TABLE `ecs_keywords` (
+DROP TABLE IF EXISTS `keywords`;
+CREATE TABLE `keywords` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL DEFAULT '2000-01-01',
   `searchengine` varchar(20) NOT NULL DEFAULT '',
@@ -1085,8 +1085,8 @@ CREATE TABLE `ecs_keywords` (
 -- ----------------------------
 -- Table structure for ecs_link_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_link_goods`;
-CREATE TABLE `ecs_link_goods` (
+DROP TABLE IF EXISTS `link_goods`;
+CREATE TABLE `link_goods` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `link_goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1103,8 +1103,8 @@ CREATE TABLE `ecs_link_goods` (
 -- ----------------------------
 -- Table structure for ecs_mail_templates
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_mail_templates`;
-CREATE TABLE `ecs_mail_templates` (
+DROP TABLE IF EXISTS `mail_templates`;
+CREATE TABLE `mail_templates` (
   `template_id` tinyint(1) unsigned NOT NULL AUTO_INCREMENT,
   `template_code` varchar(30) NOT NULL DEFAULT '',
   `is_html` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -1125,8 +1125,8 @@ CREATE TABLE `ecs_mail_templates` (
 -- ----------------------------
 -- Table structure for ecs_member_price
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_member_price`;
-CREATE TABLE `ecs_member_price` (
+DROP TABLE IF EXISTS `member_price`;
+CREATE TABLE `member_price` (
   `price_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `user_rank` tinyint(3) NOT NULL DEFAULT '0',
@@ -1142,8 +1142,8 @@ CREATE TABLE `ecs_member_price` (
 -- ----------------------------
 -- Table structure for ecs_nav
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_nav`;
-CREATE TABLE `ecs_nav` (
+DROP TABLE IF EXISTS `nav`;
+CREATE TABLE `nav` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ctype` varchar(10) DEFAULT NULL,
   `cid` int(11) unsigned DEFAULT NULL,
@@ -1165,8 +1165,8 @@ CREATE TABLE `ecs_nav` (
 -- ----------------------------
 -- Table structure for ecs_order_action
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_order_action`;
-CREATE TABLE `ecs_order_action` (
+DROP TABLE IF EXISTS `order_action`;
+CREATE TABLE `order_action` (
   `action_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` int(11) unsigned NOT NULL DEFAULT '0',
   `action_user` varchar(30) NOT NULL DEFAULT '',
@@ -1187,8 +1187,8 @@ CREATE TABLE `ecs_order_action` (
 -- ----------------------------
 -- Table structure for ecs_order_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_order_goods`;
-CREATE TABLE `ecs_order_goods` (
+DROP TABLE IF EXISTS `order_goods`;
+CREATE TABLE `order_goods` (
   `rec_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1217,8 +1217,8 @@ CREATE TABLE `ecs_order_goods` (
 -- ----------------------------
 -- Table structure for ecs_order_info
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_order_info`;
-CREATE TABLE `ecs_order_info` (
+DROP TABLE IF EXISTS `order_info`;
+CREATE TABLE `order_info` (
   `order_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `order_sn` varchar(20) NOT NULL DEFAULT '',
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1300,8 +1300,8 @@ CREATE TABLE `ecs_order_info` (
 -- ----------------------------
 -- Table structure for ecs_pack
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_pack`;
-CREATE TABLE `ecs_pack` (
+DROP TABLE IF EXISTS `pack`;
+CREATE TABLE `pack` (
   `pack_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `pack_name` varchar(120) NOT NULL DEFAULT '',
   `pack_img` varchar(255) NOT NULL DEFAULT '',
@@ -1318,8 +1318,8 @@ CREATE TABLE `ecs_pack` (
 -- ----------------------------
 -- Table structure for ecs_package_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_package_goods`;
-CREATE TABLE `ecs_package_goods` (
+DROP TABLE IF EXISTS `package_goods`;
+CREATE TABLE `package_goods` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `package_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1337,8 +1337,8 @@ CREATE TABLE `ecs_package_goods` (
 -- ----------------------------
 -- Table structure for ecs_payment
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_payment`;
-CREATE TABLE `ecs_payment` (
+DROP TABLE IF EXISTS `payment`;
+CREATE TABLE `payment` (
   `pay_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `pay_code` varchar(20) NOT NULL DEFAULT '',
   `pay_name` varchar(120) NOT NULL DEFAULT '',
@@ -1360,8 +1360,8 @@ CREATE TABLE `ecs_payment` (
 -- ----------------------------
 -- Table structure for ecs_pay_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_pay_log`;
-CREATE TABLE `ecs_pay_log` (
+DROP TABLE IF EXISTS `pay_log`;
+CREATE TABLE `pay_log` (
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` int(11) unsigned NOT NULL DEFAULT '0',
   `order_amount` decimal(10,2) unsigned NOT NULL,
@@ -1377,8 +1377,8 @@ CREATE TABLE `ecs_pay_log` (
 -- ----------------------------
 -- Table structure for ecs_plugins
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_plugins`;
-CREATE TABLE `ecs_plugins` (
+DROP TABLE IF EXISTS `plugins`;
+CREATE TABLE `plugins` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(30) NOT NULL DEFAULT '',
   `version` varchar(10) NOT NULL DEFAULT '',
@@ -1396,8 +1396,8 @@ CREATE TABLE `ecs_plugins` (
 -- ----------------------------
 -- Table structure for ecs_products
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_products`;
-CREATE TABLE `ecs_products` (
+DROP TABLE IF EXISTS `products`;
+CREATE TABLE `products` (
   `product_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_attr` varchar(50) DEFAULT NULL,
@@ -1413,8 +1413,8 @@ CREATE TABLE `ecs_products` (
 -- ----------------------------
 -- Table structure for ecs_region
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_region`;
-CREATE TABLE `ecs_region` (
+DROP TABLE IF EXISTS `region`;
+CREATE TABLE `region` (
   `region_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) unsigned NOT NULL DEFAULT '0',
   `region_name` varchar(120) NOT NULL DEFAULT '',
@@ -1433,8 +1433,8 @@ CREATE TABLE `ecs_region` (
 -- ----------------------------
 -- Table structure for ecs_reg_extend_info
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_reg_extend_info`;
-CREATE TABLE `ecs_reg_extend_info` (
+DROP TABLE IF EXISTS `reg_extend_info`;
+CREATE TABLE `reg_extend_info` (
   `Id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
   `reg_field_id` int(11) unsigned NOT NULL,
@@ -1449,8 +1449,8 @@ CREATE TABLE `ecs_reg_extend_info` (
 -- ----------------------------
 -- Table structure for ecs_reg_fields
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_reg_fields`;
-CREATE TABLE `ecs_reg_fields` (
+DROP TABLE IF EXISTS `reg_fields`;
+CREATE TABLE `reg_fields` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `reg_field_name` varchar(60) NOT NULL,
   `dis_order` tinyint(3) unsigned NOT NULL DEFAULT '100',
@@ -1467,8 +1467,8 @@ CREATE TABLE `ecs_reg_fields` (
 -- ----------------------------
 -- Table structure for ecs_role
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_role`;
-CREATE TABLE `ecs_role` (
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE `role` (
   `role_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `role_name` varchar(60) NOT NULL DEFAULT '',
   `action_list` text NOT NULL,
@@ -1484,8 +1484,8 @@ CREATE TABLE `ecs_role` (
 -- ----------------------------
 -- Table structure for ecs_searchengine
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_searchengine`;
-CREATE TABLE `ecs_searchengine` (
+DROP TABLE IF EXISTS `searchengine`;
+CREATE TABLE `searchengine` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL DEFAULT '2000-01-01',
   `searchengine` varchar(20) NOT NULL DEFAULT '',
@@ -1501,8 +1501,8 @@ CREATE TABLE `ecs_searchengine` (
 -- ----------------------------
 -- Table structure for ecs_sessions
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_sessions`;
-CREATE TABLE `ecs_sessions` (
+DROP TABLE IF EXISTS `sessions`;
+CREATE TABLE `sessions` (
   `sesskey` char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
   `expiry` int(11) unsigned NOT NULL DEFAULT '0',
   `userid` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1524,8 +1524,8 @@ CREATE TABLE `ecs_sessions` (
 -- ----------------------------
 -- Table structure for ecs_sessions_data
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_sessions_data`;
-CREATE TABLE `ecs_sessions_data` (
+DROP TABLE IF EXISTS `sessions_data`;
+CREATE TABLE `sessions_data` (
   `sesskey` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
   `expiry` int(11) unsigned NOT NULL DEFAULT '0',
   `data` text NOT NULL,
@@ -1540,8 +1540,8 @@ CREATE TABLE `ecs_sessions_data` (
 -- ----------------------------
 -- Table structure for ecs_shipping
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_shipping`;
-CREATE TABLE `ecs_shipping` (
+DROP TABLE IF EXISTS `shipping`;
+CREATE TABLE `shipping` (
   `shipping_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `shipping_code` varchar(20) NOT NULL DEFAULT '',
   `shipping_name` varchar(120) NOT NULL DEFAULT '',
@@ -1565,8 +1565,8 @@ CREATE TABLE `ecs_shipping` (
 -- ----------------------------
 -- Table structure for ecs_shipping_area
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_shipping_area`;
-CREATE TABLE `ecs_shipping_area` (
+DROP TABLE IF EXISTS `shipping_area`;
+CREATE TABLE `shipping_area` (
   `shipping_area_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `shipping_area_name` varchar(150) NOT NULL DEFAULT '',
   `shipping_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1582,8 +1582,8 @@ CREATE TABLE `ecs_shipping_area` (
 -- ----------------------------
 -- Table structure for ecs_shop_config
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_shop_config`;
-CREATE TABLE `ecs_shop_config` (
+DROP TABLE IF EXISTS `shop_config`;
+CREATE TABLE `shop_config` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) unsigned NOT NULL DEFAULT '0',
   `code` varchar(30) NOT NULL DEFAULT '',
@@ -1604,8 +1604,8 @@ CREATE TABLE `ecs_shop_config` (
 -- ----------------------------
 -- Table structure for ecs_snatch_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_snatch_log`;
-CREATE TABLE `ecs_snatch_log` (
+DROP TABLE IF EXISTS `snatch_log`;
+CREATE TABLE `snatch_log` (
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `snatch_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1622,8 +1622,8 @@ CREATE TABLE `ecs_snatch_log` (
 -- ----------------------------
 -- Table structure for ecs_stats
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_stats`;
-CREATE TABLE `ecs_stats` (
+DROP TABLE IF EXISTS `stats`;
+CREATE TABLE `stats` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `access_time` int(11) unsigned NOT NULL DEFAULT '0',
   `ip_address` varchar(15) NOT NULL DEFAULT '',
@@ -1646,8 +1646,8 @@ CREATE TABLE `ecs_stats` (
 -- ----------------------------
 -- Table structure for ecs_suppliers
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_suppliers`;
-CREATE TABLE `ecs_suppliers` (
+DROP TABLE IF EXISTS `suppliers`;
+CREATE TABLE `suppliers` (
   `suppliers_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `suppliers_name` varchar(255) DEFAULT NULL,
   `suppliers_desc` text,
@@ -1662,8 +1662,8 @@ CREATE TABLE `ecs_suppliers` (
 -- ----------------------------
 -- Table structure for ecs_tag
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_tag`;
-CREATE TABLE `ecs_tag` (
+DROP TABLE IF EXISTS `tag`;
+CREATE TABLE `tag` (
   `tag_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1680,8 +1680,8 @@ CREATE TABLE `ecs_tag` (
 -- ----------------------------
 -- Table structure for ecs_template
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_template`;
-CREATE TABLE `ecs_template` (
+DROP TABLE IF EXISTS `template`;
+CREATE TABLE `template` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `filename` varchar(30) NOT NULL DEFAULT '',
   `region` varchar(40) NOT NULL DEFAULT '',
@@ -1705,8 +1705,8 @@ CREATE TABLE `ecs_template` (
 -- ----------------------------
 -- Table structure for ecs_topic
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_topic`;
-CREATE TABLE `ecs_topic` (
+DROP TABLE IF EXISTS `topic`;
+CREATE TABLE `topic` (
   `topic_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL DEFAULT '''''',
   `intro` text NOT NULL,
@@ -1731,8 +1731,8 @@ CREATE TABLE `ecs_topic` (
 -- ----------------------------
 -- Table structure for ecs_users
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_users`;
-CREATE TABLE `ecs_users` (
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
   `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(60) NOT NULL DEFAULT '',
   `user_name` varchar(60) NOT NULL DEFAULT '',
@@ -1781,8 +1781,8 @@ CREATE TABLE `ecs_users` (
 -- ----------------------------
 -- Table structure for ecs_user_account
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_user_account`;
-CREATE TABLE `ecs_user_account` (
+DROP TABLE IF EXISTS `user_account`;
+CREATE TABLE `user_account` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `admin_user` varchar(255) NOT NULL,
@@ -1806,8 +1806,8 @@ CREATE TABLE `ecs_user_account` (
 -- ----------------------------
 -- Table structure for ecs_user_address
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_user_address`;
-CREATE TABLE `ecs_user_address` (
+DROP TABLE IF EXISTS `user_address`;
+CREATE TABLE `user_address` (
   `address_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `address_name` varchar(50) NOT NULL DEFAULT '',
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1834,8 +1834,8 @@ CREATE TABLE `ecs_user_address` (
 -- ----------------------------
 -- Table structure for ecs_user_bonus
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_user_bonus`;
-CREATE TABLE `ecs_user_bonus` (
+DROP TABLE IF EXISTS `user_bonus`;
+CREATE TABLE `user_bonus` (
   `bonus_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `bonus_type_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `bonus_sn` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -1854,8 +1854,8 @@ CREATE TABLE `ecs_user_bonus` (
 -- ----------------------------
 -- Table structure for ecs_user_feed
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_user_feed`;
-CREATE TABLE `ecs_user_feed` (
+DROP TABLE IF EXISTS `user_feed`;
+CREATE TABLE `user_feed` (
   `feed_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `value_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1872,8 +1872,8 @@ CREATE TABLE `ecs_user_feed` (
 -- ----------------------------
 -- Table structure for ecs_user_rank
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_user_rank`;
-CREATE TABLE `ecs_user_rank` (
+DROP TABLE IF EXISTS `user_rank`;
+CREATE TABLE `user_rank` (
   `rank_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `rank_name` varchar(30) NOT NULL DEFAULT '',
   `min_points` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1891,8 +1891,8 @@ CREATE TABLE `ecs_user_rank` (
 -- ----------------------------
 -- Table structure for ecs_virtual_card
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_virtual_card`;
-CREATE TABLE `ecs_virtual_card` (
+DROP TABLE IF EXISTS `virtual_card`;
+CREATE TABLE `virtual_card` (
   `card_id` int(11) NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0',
   `card_sn` varchar(60) NOT NULL DEFAULT '',
@@ -1915,8 +1915,8 @@ CREATE TABLE `ecs_virtual_card` (
 -- ----------------------------
 -- Table structure for ecs_volume_price
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_volume_price`;
-CREATE TABLE `ecs_volume_price` (
+DROP TABLE IF EXISTS `volume_price`;
+CREATE TABLE `volume_price` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `price_type` tinyint(1) unsigned NOT NULL,
   `goods_id` int(11) unsigned NOT NULL,
@@ -1933,8 +1933,8 @@ CREATE TABLE `ecs_volume_price` (
 -- ----------------------------
 -- Table structure for ecs_vote
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_vote`;
-CREATE TABLE `ecs_vote` (
+DROP TABLE IF EXISTS `vote`;
+CREATE TABLE `vote` (
   `vote_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `vote_name` varchar(250) NOT NULL DEFAULT '',
   `start_time` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1951,8 +1951,8 @@ CREATE TABLE `ecs_vote` (
 -- ----------------------------
 -- Table structure for ecs_vote_log
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_vote_log`;
-CREATE TABLE `ecs_vote_log` (
+DROP TABLE IF EXISTS `vote_log`;
+CREATE TABLE `vote_log` (
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `vote_id` int(11) unsigned NOT NULL DEFAULT '0',
   `ip_address` varchar(15) NOT NULL DEFAULT '',
@@ -1968,8 +1968,8 @@ CREATE TABLE `ecs_vote_log` (
 -- ----------------------------
 -- Table structure for ecs_vote_option
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_vote_option`;
-CREATE TABLE `ecs_vote_option` (
+DROP TABLE IF EXISTS `vote_option`;
+CREATE TABLE `vote_option` (
   `option_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `vote_id` int(11) unsigned NOT NULL DEFAULT '0',
   `option_name` varchar(250) NOT NULL DEFAULT '',
@@ -1986,8 +1986,8 @@ CREATE TABLE `ecs_vote_option` (
 -- ----------------------------
 -- Table structure for ecs_wholesale
 -- ----------------------------
-DROP TABLE IF EXISTS `ecs_wholesale`;
-CREATE TABLE `ecs_wholesale` (
+DROP TABLE IF EXISTS `wholesale`;
+CREATE TABLE `wholesale` (
   `act_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) unsigned NOT NULL,
   `goods_name` varchar(255) NOT NULL,

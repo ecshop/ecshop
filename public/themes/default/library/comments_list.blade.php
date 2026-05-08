@@ -2,70 +2,70 @@
 <!--用户评论 START-->
      <div class="box">
      <div class="box_1">
-      <h3><span class="text">{$lang.user_comment}</span>({$lang.total}<font class="f1">{$pager.record_count}</font>{$lang.user_comment_num})</h3>
+      <h3><span class="text">{{ $lang['user_comment'] }}</span>({{ $lang['total'] }}<font class="f1">{{ $pager['record_count'] }}</font>{{ $lang['user_comment_num'] }})</h3>
       <div class="boxCenterList clearfix" style="height:1%;">
        <ul class="comments">
-       <!-- {if $comments} -->
-       <!-- {foreach from=$comments item=comment} -->
+       @if($comments)
+       @foreach($comments as $comment)
         <li class="word">
-        <font class="f2"><!-- {if $comment.username} -->{$comment.username|escape:html}<!-- {else} -->{$lang.anonymous}<!-- {/if} --></font> <font class="f3">( {$comment.add_time} )</font><br />
-        <img src="../images/stars{$comment.rank}.gif" alt="{$comment.comment_rank}" />
-        <p>{$comment.content}</p>
-				<!-- {if $comment.re_content} -->
-        <p><font class="f1">{$lang.admin_username}</font>{$comment.re_content}</p>
-				<!-- {/if} -->
+        <font class="f2">@if($comment['username']){{ $comment['username'] }}@else{{ $lang['anonymous'] }}@endif</font> <font class="f3">( {{ $comment['add_time'] }} )</font><br />
+        <img src="../images/stars{{ $comment['rank'] }}.gif" alt="{{ $comment['comment_rank'] }}" />
+        <p>{{ $comment['content'] }}</p>
+				@if($comment['re_content'])
+        <p><font class="f1">{{ $lang['admin_username'] }}</font>{{ $comment['re_content'] }}</p>
+				@endif
         </li>
-        <!-- {/foreach} -->
-        <!--{else}-->
-        <li>{$lang.no_comments}</li>
-        <!--{/if}-->
+        @endforeach
+        @else
+        <li>{{ $lang['no_comments'] }}</li>
+        @endif
        </ul>
        <!--翻页 start-->
        <div id="pagebar" class="f_r">
-        <form name="selectPageForm" action="{$smarty.server.PHP_SELF}" method="get">
-        <!-- {if $pager.styleid eq 0 } -->
+        <form name="selectPageForm" action="{{ $smarty['server']['PHP_SELF'] }}" method="get">
+        @if($pager['styleid'] == 0 )
         <div id="pager">
-          {$lang.pager_1}{$pager.record_count}{$lang.pager_2}{$lang.pager_3}{$pager.page_count}{$lang.pager_4} <span> <a href="{$pager.page_first}">{$lang.page_first}</a> <a href="{$pager.page_prev}">{$lang.page_prev}</a> <a href="{$pager.page_next}">{$lang.page_next}</a> <a href="{$pager.page_last}">{$lang.page_last}</a> </span>
-            <!--{foreach from=$pager.search key=key item=item}-->
-            <input type="hidden" name="{$key}" value="{$item}" />
-            <!--{/foreach}-->
+          {{ $lang['pager_1'] }}{{ $pager['record_count'] }}{{ $lang['pager_2'] }}{{ $lang['pager_3'] }}{{ $pager['page_count'] }}{{ $lang['pager_4'] }} <span> <a href="{{ $pager['page_first'] }}">{{ $lang['page_first'] }}</a> <a href="{{ $pager['page_prev'] }}">{{ $lang['page_prev'] }}</a> <a href="{{ $pager['page_next'] }}">{{ $lang['page_next'] }}</a> <a href="{{ $pager['page_last'] }}">{{ $lang['page_last'] }}</a> </span>
+            @foreach($pager['search'] as $key => $item)
+            <input type="hidden" name="{{ $key }}" value="{{ $item }}" />
+            @endforeach
         </div>
-        <!--{else}-->
+        @else
 
         <!--翻页 start-->
          <div id="pager" class="pagebar">
-          <span class="f_l f6" style="margin-right:10px;">{$lang.total} <b>{$pager.record_count}</b> {$lang.user_comment_num}</span>
-          <!-- {if $pager.page_first} --><a href="{$pager.page_first}">1 ...</a><!-- {/if} -->
-          <!-- {if $pager.page_prev} --><a class="prev" href="{$pager.page_prev}">{$lang.page_prev}</a><!-- {/if} -->
-          <!--{foreach from=$pager.page_number key=key item=item}-->
-                <!-- {if $pager.page eq $key} -->
-                <span class="page_now">{$key}</span>
-                <!-- {else} -->
-                <a href="{$item}">[{$key}]</a>
-                <!-- {/if} -->
-            <!--{/foreach}-->
+          <span class="f_l f6" style="margin-right:10px;">{{ $lang['total'] }} <b>{{ $pager['record_count'] }}</b> {{ $lang['user_comment_num'] }}</span>
+          @if($pager['page_first'])<a href="{{ $pager['page_first'] }}">1 ...</a>@endif
+          @if($pager['page_prev'])<a class="prev" href="{{ $pager['page_prev'] }}">{{ $lang['page_prev'] }}</a>@endif
+          @foreach($pager['page_number'] as $key => $item)
+                @if($pager['page'] == $key)
+                <span class="page_now">{{ $key }}</span>
+                @else
+                <a href="{{ $item }}">[{{ $key }}]</a>
+                @endif
+            @endforeach
 
-          <!-- {if $pager.page_next} --><a class="next" href="{$pager.page_next}">{$lang.page_next}</a><!-- {/if} -->
-          <!-- {if $pager.page_last} --><a class="last" href="{$pager.page_last}">...{$pager.page_count}</a><!-- {/if} -->
-          <!-- {if $pager.page_kbd} -->
-            <!--{foreach from=$pager.search key=key item=item}-->
-            <input type="hidden" name="{$key}" value="{$item}" />
-            <!--{/foreach}-->
+          @if($pager['page_next'])<a class="next" href="{{ $pager['page_next'] }}">{{ $lang['page_next'] }}</a>@endif
+          @if($pager['page_last'])<a class="last" href="{{ $pager['page_last'] }}">...{{ $pager['page_count'] }}</a>@endif
+          @if($pager['page_kbd'])
+            @foreach($pager['search'] as $key => $item)
+            <input type="hidden" name="{{ $key }}" value="{{ $item }}" />
+            @endforeach
             <kbd style="float:left; margin-left:8px; position:relative; bottom:3px;"><input type="text" name="page" onkeydown="if(event.keyCode==13)selectPage(this)" size="3" class="B_blue" /></kbd>
-            <!-- {/if} -->
+            @endif
         </div>
         <!--翻页 END-->
 
-        <!-- {/if} -->
+        @endif
         </form>
         <script type="Text/Javascript" language="JavaScript">
         <!--
-        {literal}
+        
         function selectPage(sel)
         {
           sel.form.submit();
         }
-        {/literal}
+        
         //-->
         </script>
       </div>
@@ -76,17 +76,17 @@
       <form action="javascript:;" onsubmit="submitComment(this)" method="post" name="commentForm" id="commentForm">
        <table width="710" border="0" cellspacing="5" cellpadding="0">
         <tr>
-          <td width="64" align="right">{$lang.username}：</td>
-          <td width="631"{if !$enabled_captcha}{/if}><!--{if $smarty.session.user_name}-->{$smarty.session.user_name}<!--{else}-->{$lang.anonymous}<!--{/if}--></td>
+          <td width="64" align="right">{{ $lang['username'] }}：</td>
+          <td width="631"@if(!$enabled_captcha)@endif>@if($smarty['session']['user_name']){{ $smarty['session']['user_name'] }}@else{{ $lang['anonymous'] }}@endif</td>
         </tr>
         <tr>
           <td align="right">E-mail：</td>
           <td>
-          <input type="text" name="email" id="email"  maxlength="100" value="{$smarty.session.email|escape}" class="inputBorder"/>
+          <input type="text" name="email" id="email"  maxlength="100" value="{{ $smarty['session']['email'] }}" class="inputBorder"/>
           </td>
         </tr>
         <tr>
-          <td align="right">{$lang.comment_rank}：</td>
+          <td align="right">{{ $lang['comment_rank'] }}：</td>
           <td>
           <input name="comment_rank" type="radio" value="1" id="comment_rank1" /> <img src="../images/stars1.gif" />
           <input name="comment_rank" type="radio" value="2" id="comment_rank2" /> <img src="../images/stars2.gif" />
@@ -96,21 +96,21 @@
           </td>
         </tr>
         <tr>
-          <td align="right" valign="top">{$lang.comment_content}：</td>
+          <td align="right" valign="top">{{ $lang['comment_content'] }}：</td>
           <td>
           <textarea name="content" class="inputBorder" style="height:50px; width:620px;"></textarea>
-          <input type="hidden" name="cmt_type" value="{$comment_type}" />
-          <input type="hidden" name="id" value="{$id}" />
+          <input type="hidden" name="cmt_type" value="{{ $comment_type }}" />
+          <input type="hidden" name="id" value="{{ $id }}" />
           </td>
         </tr>
         <tr>
           <td colspan="2">
-          <!-- 判断是否启用验证码{if $enabled_captcha} -->
+          <!-- 判断是否启用验证码@if($enabled_captcha) -->
           <div style="padding-left:15px; text-align:left; float:left;">
-          {$lang.comment_captcha}：<input type="text" name="captcha"  class="inputBorder" style="width:50px; margin-left:5px;"/>
-          <img src="captcha.php?{$rand}" alt="captcha" onClick="this.src='captcha.php?'+Math.random()" class="captcha">
+          {{ $lang['comment_captcha'] }}：<input type="text" name="captcha"  class="inputBorder" style="width:50px; margin-left:5px;"/>
+          <img src="captcha.php?{{ $rand }}" alt="captcha" onClick="this.src='captcha.php?'+Math.random()" class="captcha">
           </div>
-          <!-- {/if} -->
+          @endif
           <input name="" type="submit"  value="" class="f_r" style="border:none; background:url(../images/commentsBnt.gif); width:75px; height:21px; margin-right:8px;">
           </td>
         </tr>
@@ -125,10 +125,10 @@
   <!--用户评论 END-->
 <script type="text/javascript">
 //<![CDATA[
-{foreach from=$lang.cmt_lang item=item key=key}
-var {$key} = "{$item}";
-{/foreach}
-{literal}
+@foreach($lang['cmt_lang'] as $key => $item)
+var {{ $key }} = "{{ $item }}";
+@endforeach
+
 /**
  * 提交评论信息
 */
@@ -209,6 +209,6 @@ function submitComment(frm)
       }
     }
   }
-{/literal}
+
 //]]>
 </script>

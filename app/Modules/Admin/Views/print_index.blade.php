@@ -5,13 +5,15 @@
 <meta name="robots" content="noindex, nofollow">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Cache-Control" content="public">
-{insert_scripts files="../js/utils.js,../js/transport.js,common.js"}
+<script src="../js/utils.js"></script>
+<script src="../js/transport.js"></script>
+<script src="common.js"></script>
 <script language="JavaScript">
 <!--
 // 这里把JS用到的所有语言都赋值到这里
-{foreach from=$lang.js_languages key=key item=item}
-var {$key} = "{$item}";
-{/foreach}
+@foreach($lang['js_languages'] as $key => $item)
+var {{ $key }} = "{{ $item }}";
+@endforeach
 //-->
 </script>
 <style type="text/css">
@@ -69,10 +71,10 @@ body, td
   <table width="100%" cellpadding="0" cellspacing="0" border="0" class="table_box">
   <form action="shipping.php" enctype="multipart/form-data" method="post" name="theForm" id="theForm" onsubmit="return validate();">
   <input type="hidden" name="act" value="">
-  <input type="hidden" name="shipping" value="{$shipping_id}">
+  <input type="hidden" name="shipping" value="{{ $shipping_id }}">
   <input type="hidden" name="config_lable" value="">
   <input type="hidden" name="print_model" value="2">
-  <input type="hidden" name="shipping_name" value="{$shipping.shipping_name}">
+  <input type="hidden" name="shipping_name" value="{{ $shipping['shipping_name'] }}">
     <!--菜单栏 start-->
     <tr>
       <td style="overflow:hidden; background-color:#EFEFDE; padding-left:8px;">
@@ -80,20 +82,20 @@ body, td
           <tr>
             <td align="left">
               <select name="lable" id="lable" class="select_box" onchange="javascript:call_flash('lable_add', this);">
-                <option value="" selected="selected">{$lang.lable_select_notice}</option>
-                {html_options options=$lang.lable_box}
+                <option value="" selected="selected">{{ $lang['lable_select_notice'] }}</option>
+                @foreach($lang['lable_box'] as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach
               </select>
-              <input type="button" name="del" id="del" value="{$lang.del_lable}" onclick="javascript:call_flash('lable_del', this);">
+              <input type="button" name="del" id="del" value="{{ $lang['del_lable'] }}" onclick="javascript:call_flash('lable_del', this);">
             </td>
-            <td id="pic_control_upload" {if $shipping.print_bg != ''} class="display_no" {/if}>
-              <input type="file" name="bg" id="bg" {if $shipping.print_bg != ''} disabled="disabled" {/if}>
-              <input type="button" name="upload" id="upload" value="{$lang.upload_shipping_bg}" onclick="javascript:bg_upload();" {if $shipping.print_bg != ''} disabled="disabled" {/if}>
+            <td id="pic_control_upload" @if($shipping['print_bg'] != '') class="display_no" @endif>
+              <input type="file" name="bg" id="bg" @if($shipping['print_bg'] != '') disabled="disabled" @endif>
+              <input type="button" name="upload" id="upload" value="{{ $lang['upload_shipping_bg'] }}" onclick="javascript:bg_upload();" @if($shipping['print_bg'] != '') disabled="disabled" @endif>
               <iframe id="bg_upload_hidden" name="bg_upload_hidden" frameborder="0" scrolling="no" class="display_no"></iframe>
             </td>
-            <td id="pic_control_del" {if $shipping.print_bg == ''} class="display_no" {/if}>
-              <input type="button" name="upload_del" id="upload_del" onclick="javascript:bg_del();" value="{$lang.del_shipping_bg}" {if $shipping.print_bg == ''} disabled="disabled" {/if}>
+            <td id="pic_control_del" @if($shipping['print_bg'] == '') class="display_no" @endif>
+              <input type="button" name="upload_del" id="upload_del" onclick="javascript:bg_del();" value="{{ $lang['del_shipping_bg'] }}" @if($shipping['print_bg'] == '') disabled="disabled" @endif>
             </td>
-            <td align="right"><input type="button" value="{$lang.save_setting}" onclick="javascript:save();">&nbsp;&nbsp;<input type="button" value="{$lang.recovery_default}" onclick="javascript:recovery_default();"></td>
+            <td align="right"><input type="button" value="{{ $lang['save_setting'] }}" onclick="javascript:save();">&nbsp;&nbsp;<input type="button" value="{{ $lang['recovery_default'] }}" onclick="javascript:recovery_default();"></td>
           </tr>
           <tr>
             <td colspan="3">&nbsp;</td>
@@ -119,9 +121,9 @@ body, td
       <param name="quality" value="high">
       <param name="menu" value="false">
       <param name="wmode" value="transparent">
-      <param name="FlashVars" value="bcastr_config_bg={$shipping.print_bg}&swf_config_lable={$shipping.config_lable}">
+      <param name="FlashVars" value="bcastr_config_bg={{ $shipping['print_bg'] }}&swf_config_lable={{ $shipping['config_lable'] }}">
       <param name="allowScriptAccess" value="sameDomain"/>
-      <embed src="../data/print/pint.swf" wmode="transparent" FlashVars="bcastr_config_bg={$shipping.print_bg}&swf_config_lable={$shipping.config_lable}" menu="false" quality="high" width="1024" height="600" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" allowScriptAccess="sameDomain" name="test" swLiveConnect="true"/>
+      <embed src="../data/print/pint.swf" wmode="transparent" FlashVars="bcastr_config_bg={{ $shipping['print_bg'] }}&swf_config_lable={{ $shipping['config_lable'] }}" menu="false" quality="high" width="1024" height="600" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" allowScriptAccess="sameDomain" name="test" swLiveConnect="true"/>
       </object></div></td>
     </tr>
     <!--编辑区 end-->

@@ -1,56 +1,56 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <!-- start templates list -->
 <div class="list-div">
   <table width="100%" cellpadding="3" cellspacing="1">
-  <tr><th>{$lang.cur_setting_template}</th></tr>
-  {if $files}
+  <tr><th>{{ $lang['cur_setting_template'] }}</th></tr>
+  @if($files)
   <tr><td>
     <form action="template.php" method="post" >
     <table>
       <tr>
-        <td colspan="2"><input type="checkbox" name="chkall" onclick="checkall(this.form, 'files[]')"><strong>{$lang.select_all}<strong></td>
+        <td colspan="2"><input type="checkbox" name="chkall" onclick="checkall(this.form, 'files[]')"><strong>{{ $lang['select_all'] }}<strong></td>
       </tr>
       <tr>
-      {foreach from=$files item=file key=key name=template}
-      {if $smarty.foreach.template.iteration > 1 and ($smarty.foreach.template.iteration-1)%3 eq 0 }
+      @forelse($files as $key => $file)
+      @if($loop->iteration > 1 && ($loop->iteration-1)%3 == 0 )
         </tr><tr>
-      {/if}
-      <td><input type="checkbox" name="files[]" value="{$key}" >{$file}</td>
-      {if $smarty.foreach.template.last}
-        {if $smarty.foreach.template.iteration%3 eq 0}
+      @endif
+      <td><input type="checkbox" name="files[]" value="{{ $key }}" >{{ $file }}</td>
+      @if($loop->last)
+        @if($loop->iteration%3 == 0)
           </tr>
-        {elseif $smarty.foreach.template.iteration%3 eq 1 }
+        @elseif($loop->iteration%3 == 1 )
           <td>&nbsp;</td><td>&nbsp;</td></tr>
-        {else}
+        @else
            <td>&nbsp;</td></tr>
-        {/if}
-      {/if}
-      {/foreach}
+        @endif
+      @endif
+      @endforeach
       <tr>
-        <td colspan="3" >{$lang.remarks}:&nbsp;&nbsp;<input type="text" name="remarks" size="40" /></td>
+        <td colspan="3" >{{ $lang['remarks'] }}:&nbsp;&nbsp;<input type="text" name="remarks" size="40" /></td>
       </tr>
       <tr>
-      <td colspan="3" /><input type="hidden" name="act" value="act_backup_setting" /><input type="submit" value="{$lang.backup_setting}" class="button" /><td>
+      <td colspan="3" /><input type="hidden" name="act" value="act_backup_setting" /><input type="submit" value="{{ $lang['backup_setting'] }}" class="button" /><td>
       </tr>
     </table>
     </form>
   </td></tr>
-  {else}
-  <tr><td colspan="2" align="center">{$lang.no_setting_template}</td></tr>
-  {/if}
-  <tr><th>{$lang.cur_backup}</th></tr>
-  {foreach from=$list item=remarks}
-  <tr><td><span style="float:right"><a href="template.php?act=restore_backup&remarks={$remarks.url}">{$lang.restore}</a>&nbsp;&nbsp;<a href="template.php?act=del_backup&remarks={$remarks.url}">{$lang.remove}</a></span>{$remarks.content}</td></tr>
-  {foreachelse}
-  <tr><td colspan="2" align="center">{$lang.no_backup}</td></tr>
-  {/foreach}
+  @else
+  <tr><td colspan="2" align="center">{{ $lang['no_setting_template'] }}</td></tr>
+  @endif
+  <tr><th>{{ $lang['cur_backup'] }}</th></tr>
+  @foreach($list as $remarks)
+  <tr><td><span style="float:right"><a href="template.php?act=restore_backup&remarks={{ $remarks['url'] }}">{{ $lang['restore'] }}</a>&nbsp;&nbsp;<a href="template.php?act=del_backup&remarks={{ $remarks['url'] }}">{{ $lang['remove'] }}</a></span>{{ $remarks['content'] }}</td></tr>
+  @empty
+  <tr><td colspan="2" align="center">{{ $lang['no_backup'] }}</td></tr>
+  @endforelse
   </table>
 </div>
 <!-- end templates list -->
 
 <script language="JavaScript">
 <!--
-{literal}
+
 
 onload = function()
 {
@@ -70,6 +70,6 @@ function checkall(frm, chk)
 }
 
 //-->
-{/literal}
+
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

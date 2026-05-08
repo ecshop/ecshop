@@ -1,19 +1,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<!-- {if $hot_goods}-->
+@if($hot_goods)
 <div class="box">
   <div class="box_2 centerPadd">
     <div class="itemTit Hot" id="itemHot"></div>
     <div id="show_hot_area" class="clearfix goodsBox">
-    <!--{foreach from=$hot_goods item=goods}-->
+    @foreach($hot_goods as $goods)
       <div class="goodsItem">
         <span class="hot"></span>
-        <a href="{$goods.url}"><img src="{$goods.thumb}" alt="{$goods.name|escape:html}" class="goodsimg" /></a><br />
-        <p><a href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.short_style_name}</a></p>
-        {$lang.exchange_integral}<font class="f1">{$goods.exchange_integral}</font>
+        <a href="{{ $goods['url'] }}"><img src="{{ $goods['thumb'] }}" alt="{{ $goods['name'] }}" class="goodsimg" /></a><br />
+        <p><a href="{{ $goods['url'] }}" title="{{ $goods['name'] }}">{{ $goods['short_style_name'] }}</a></p>
+        {{ $lang['exchange_integral'] }}<font class="f1">{{ $goods['exchange_integral'] }}</font>
       </div>
-    <!--{/foreach}-->
+    @endforeach
     </div>
   </div>
 </div>
 <div class="blank5"></div>
-<!-- {/if} -->
+@endif

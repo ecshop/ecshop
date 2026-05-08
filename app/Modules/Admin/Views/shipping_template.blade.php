@@ -1,35 +1,36 @@
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 
 <div class="list-div" style="margin-bottom: 5px">
   <table id="general-table" align="center" width="100%" cellpadding="3" cellspacing="1" border="0">
   <tr>
-    <td colspan="2" width="100%"><a href="javascript:showNotice('noticeGoodsSN');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a><strong>请选择模板的模式：</strong><input type="radio" name="model" id="model_1" value="1" {if $shipping.print_model == 1}checked="checked"{/if} onclick="javascript:model_change('1');">代码模式&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="model" id="model_2" value="2" {if $shipping.print_model == 2}checked="checked"{/if} onclick="javascript:model_change('2');">所见即所得模式<br/><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsSN">选择“代码模式”可以切换到以前版本。建议您使用“所见即所得模式”。所有模式选择后，同样在打印模板中生效。</span></td>
+    <td colspan="2" width="100%"><a href="javascript:showNotice('noticeGoodsSN');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a><strong>请选择模板的模式：</strong><input type="radio" name="model" id="model_1" value="1" @if($shipping['print_model'] == 1)checked="checked"@endif onclick="javascript:model_change('1');">代码模式&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="model" id="model_2" value="2" @if($shipping['print_model'] == 2)checked="checked"@endif onclick="javascript:model_change('2');">所见即所得模式<br/><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsSN">选择“代码模式”可以切换到以前版本。建议您使用“所见即所得模式”。所有模式选择后，同样在打印模板中生效。</span></td>
   </tr>
   <tr>
     <th colspan="2" width="100%">编辑模板</th>
   </tr>
 
-  <tr id="visual" {if $shipping.print_model == 1}style="display:none"{/if}>
-    <td colspan="2" width="100%"><!--Flash播放器 start--><iframe id="goods_desc___Frame" src="shipping.php?act=print_index&shipping={$shipping_id}" width="99%" height="675" frameborder="0" scrolling="no"></iframe><!--Flash播放器 end--></td>
+  <tr id="visual" @if($shipping['print_model'] == 1)style="display:none"@endif>
+    <td colspan="2" width="100%"><!--Flash播放器 start--><iframe id="goods_desc___Frame" src="shipping.php?act=print_index&shipping={{ $shipping_id }}" width="99%" height="675" frameborder="0" scrolling="no"></iframe><!--Flash播放器 end--></td>
   </tr>
   
-  <form method="post" name="theForm" action="shipping.php?act=do_edit_print_template&shipping={$shipping.shipping_id}">
+  <form method="post" name="theForm" action="shipping.php?act=do_edit_print_template&shipping={{ $shipping['shipping_id'] }}">
   <input type="hidden" name="print_model" value="1">
-  <input type="hidden" name="shipping_name" value="{$shipping.shipping_name}">
-  <tr id="code_shipping_print" {if $shipping.print_model == 2}style="display:none"{/if}>
-    <td width="75%"><textarea id="shipping_print" name="shipping_print" rows="26" cols="100" >{$shipping.shipping_print|escape:html}</textarea></td>
-    <td align="left" valign="top" width="25%">{$lang.shipping_template_info}</td>
+  <input type="hidden" name="shipping_name" value="{{ $shipping['shipping_name'] }}">
+  <tr id="code_shipping_print" @if($shipping['print_model'] == 2)style="display:none"@endif>
+    <td width="75%"><textarea id="shipping_print" name="shipping_print" rows="26" cols="100" >{{ $shipping['shipping_print'] }}</textarea></td>
+    <td align="left" valign="top" width="25%">{{ $lang['shipping_template_info'] }}</td>
   </tr>
-  <tr id="code_submit" {if $shipping.print_model == 2}style="display:none"{/if}>
-    <td colspan="2" align="center" width="100%"><input type="submit" value="{$lang.button_submit}" class="button" /></td>
+  <tr id="code_submit" @if($shipping['print_model'] == 2)style="display:none"@endif>
+    <td colspan="2" align="center" width="100%"><input type="submit" value="{{ $lang['button_submit'] }}" class="button" /></td>
   </tr>
   </form>
 
   </table>
 </div>
 
-{insert_scripts files="validator.js"}
+<script src="validator.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -68,4 +69,4 @@ function model_change(type)
 //-->
 </script>
 
-{include file="pagefooter.htm"}
+@include('pagefooter')

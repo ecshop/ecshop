@@ -1,88 +1,89 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 <!-- 订单搜索 -->
 <div class="form-div">
   <form action="javascript:searchOrder()" name="searchForm">
     <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
-    {$lang.order_sn}<input name="order_sn" type="text" id="order_sn" size="15">
-    {$lang.consignee|escape}<input name="consignee" type="text" id="consignee" size="15">
-    {$lang.all_status}
+    {{ $lang['order_sn'] }}<input name="order_sn" type="text" id="order_sn" size="15">
+    {{ $lang['consignee'] }}<input name="consignee" type="text" id="consignee" size="15">
+    {{ $lang['all_status'] }}
     <select name="status" id="status">
-      <option value="-1">{$lang.select_please}</option>
-      {html_options options=$status_list}
+      <option value="-1">{{ $lang['select_please'] }}</option>
+      @foreach($status_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach
     </select>
-    <input type="submit" value="{$lang.button_search}" class="button" />
-    <a href="order.php?act=list&composite_status={$os_unconfirmed}">{$lang.cs.$os_unconfirmed}</a>
-    <a href="order.php?act=list&composite_status={$cs_await_pay}">{$lang.cs.$cs_await_pay}</a>
-    <a href="order.php?act=list&composite_status={$cs_await_ship}">{$lang.cs.$cs_await_ship}</a>
+    <input type="submit" value="{{ $lang['button_search'] }}" class="button" />
+    <a href="order.php?act=list&composite_status={{ $os_unconfirmed }}">{{ $lang['cs']['$os_unconfirmed'] }}</a>
+    <a href="order.php?act=list&composite_status={{ $cs_await_pay }}">{{ $lang['cs']['$cs_await_pay'] }}</a>
+    <a href="order.php?act=list&composite_status={{ $cs_await_ship }}">{{ $lang['cs']['$cs_await_ship'] }}</a>
   </form>
 </div>
 
 <!-- 订单列表 -->
 <form method="post" action="order.php?act=operate" name="listForm" onsubmit="return check()">
   <div class="list-div" id="listDiv">
-{/if}
+@endif
 
 <table cellpadding="3" cellspacing="1">
   <tr>
     <th>
-      <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox" /><a href="javascript:listTable.sort('order_sn', 'DESC'); ">{$lang.order_sn}</a>{$sort_order_sn}
+      <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox" /><a href="javascript:listTable.sort('order_sn', 'DESC'); ">{{ $lang['order_sn'] }}</a>{{ $sort_order_sn }}
     </th>
-    <th><a href="javascript:listTable.sort('add_time', 'DESC'); ">{$lang.order_time}</a>{$sort_order_time}</th>
-    <th><a href="javascript:listTable.sort('consignee', 'DESC'); ">{$lang.consignee}</a>{$sort_consignee}</th>
-    <th><a href="javascript:listTable.sort('total_fee', 'DESC'); ">{$lang.total_fee}</a>{$sort_total_fee}</th>
-    <th><a href="javascript:listTable.sort('order_amount', 'DESC'); ">{$lang.order_amount}</a>{$sort_order_amount}</th>
-    <th>{$lang.all_status}</th>
-    <th>{$lang.handler}</th>
+    <th><a href="javascript:listTable.sort('add_time', 'DESC'); ">{{ $lang['order_time'] }}</a>{{ $sort_order_time }}</th>
+    <th><a href="javascript:listTable.sort('consignee', 'DESC'); ">{{ $lang['consignee'] }}</a>{{ $sort_consignee }}</th>
+    <th><a href="javascript:listTable.sort('total_fee', 'DESC'); ">{{ $lang['total_fee'] }}</a>{{ $sort_total_fee }}</th>
+    <th><a href="javascript:listTable.sort('order_amount', 'DESC'); ">{{ $lang['order_amount'] }}</a>{{ $sort_order_amount }}</th>
+    <th>{{ $lang['all_status'] }}</th>
+    <th>{{ $lang['handler'] }}</th>
   <tr>
-  {foreach from=$order_list item=order key=okey}
+  @foreach($order_list as $okey => $order)
   <tr>
-    <td valign="top" nowrap="nowrap"><input type="checkbox" name="checkboxes" value="{$order.order_sn}" /><a href="order.php?act=info&order_id={$order.order_id}" id="order_{$okey}">{$order.order_sn}{if $order.extension_code eq "group_buy"}<br /><div align="center">{$lang.group_buy}</div>{elseif $order.extension_code eq "exchange_goods"}<br /><div align="center">{$lang.exchange_goods}</div>{/if}</a></td>
-    <td>{$order.buyer|escape}<br />{$order.short_order_time}</td>
-    <td align="left" valign="top"><a href="mailto:{$order.email}"> {$order.consignee|escape}</a>{if $order.tel} [TEL: {$order.tel|escape}]{/if} <br />{$order.address|escape}</td>
-    <td align="right" valign="top" nowrap="nowrap">{$order.formated_total_fee}</td>
-    <td align="right" valign="top" nowrap="nowrap">{$order.formated_order_amount}</td>
-    <td align="center" valign="top" nowrap="nowrap">{$lang.os[$order.order_status]},{$lang.ps[$order.pay_status]},{$lang.ss[$order.shipping_status]}</td>
+    <td valign="top" nowrap="nowrap"><input type="checkbox" name="checkboxes" value="{{ $order['order_sn'] }}" /><a href="order.php?act=info&order_id={{ $order['order_id'] }}" id="order_{{ $okey }}">{{ $order['order_sn'] }}@if($order['extension_code'] == "group_buy")<br /><div align="center">{{ $lang['group_buy'] }}</div>@elseif($order['extension_code'] == "exchange_goods")<br /><div align="center">{{ $lang['exchange_goods'] }}</div>@endif</a></td>
+    <td>{{ $order['buyer'] }}<br />{{ $order['short_order_time'] }}</td>
+    <td align="left" valign="top"><a href="mailto:{{ $order['email'] }}"> {{ $order['consignee'] }}</a>@if($order['tel']) [TEL: {{ $order['tel'] }}]@endif <br />{{ $order['address'] }}</td>
+    <td align="right" valign="top" nowrap="nowrap">{{ $order['formated_total_fee'] }}</td>
+    <td align="right" valign="top" nowrap="nowrap">{{ $order['formated_order_amount'] }}</td>
+    <td align="center" valign="top" nowrap="nowrap">{{ $lang['os[$order']['order_status]'] }},{{ $lang['ps[$order']['pay_status]'] }},{{ $lang['ss[$order']['shipping_status]'] }}</td>
     <td align="center" valign="top"  nowrap="nowrap">
-     <a href="order.php?act=info&order_id={$order.order_id}">{$lang.detail}</a>
-     {if $order.can_remove}
-     <br /><a href="javascript:;" onclick="listTable.remove({$order.order_id}, remove_confirm, 'remove_order')">{$lang.remove}</a>
-     {/if}
+     <a href="order.php?act=info&order_id={{ $order['order_id'] }}">{{ $lang['detail'] }}</a>
+     @if($order['can_remove'])
+     <br /><a href="javascript:;" onclick="listTable.remove({{ $order['order_id'] }}, remove_confirm, 'remove_order')">{{ $lang['remove'] }}</a>
+     @endif
     </td>
   </tr>
-  {/foreach}
+  @endforeach
 </table>
 
 <!-- 分页 -->
 <table id="page-table" cellspacing="0">
   <tr>
     <td align="right" nowrap="true">
-    {include file="page.htm"}
+    @include('page')
     </td>
   </tr>
 </table>
 
-{if $full_page}
+@if($full_page)
   </div>
   <div>
-    <input name="confirm" type="submit" id="btnSubmit" value="{$lang.op_confirm}" class="button" disabled="true" onclick="this.form.target = '_self'" />
-    <input name="invalid" type="submit" id="btnSubmit1" value="{$lang.op_invalid}" class="button" disabled="true" onclick="this.form.target = '_self'" />
-    <input name="cancel" type="submit" id="btnSubmit2" value="{$lang.op_cancel}" class="button" disabled="true" onclick="this.form.target = '_self'" />
-    <input name="remove" type="submit" id="btnSubmit3" value="{$lang.remove}" class="button" disabled="true" onclick="this.form.target = '_self'" />
-    <input name="print" type="submit" id="btnSubmit4" value="{$lang.print_order}" class="button" disabled="true" onclick="this.form.target = '_blank'" />
+    <input name="confirm" type="submit" id="btnSubmit" value="{{ $lang['op_confirm'] }}" class="button" disabled="true" onclick="this.form.target = '_self'" />
+    <input name="invalid" type="submit" id="btnSubmit1" value="{{ $lang['op_invalid'] }}" class="button" disabled="true" onclick="this.form.target = '_self'" />
+    <input name="cancel" type="submit" id="btnSubmit2" value="{{ $lang['op_cancel'] }}" class="button" disabled="true" onclick="this.form.target = '_self'" />
+    <input name="remove" type="submit" id="btnSubmit3" value="{{ $lang['remove'] }}" class="button" disabled="true" onclick="this.form.target = '_self'" />
+    <input name="print" type="submit" id="btnSubmit4" value="{{ $lang['print_order'] }}" class="button" disabled="true" onclick="this.form.target = '_blank'" />
     <input name="batch" type="hidden" value="1" />
     <input name="order_id" type="hidden" value="" />
   </div>
 </form>
 <script language="JavaScript">
-listTable.recordCount = {$record_count};
-listTable.pageCount = {$page_count};
+listTable.recordCount = {{ $record_count }};
+listTable.pageCount = {{ $page_count }};
 
-{foreach from=$filter item=item key=key}
-listTable.filter.{$key} = '{$item}';
-{/foreach}
-{literal}
+@foreach($filter as $key => $item)
+listTable.filter.{{ $key }} = '{{ $item }}';
+@endforeach
+
 
     onload = function()
     {
@@ -285,7 +286,7 @@ listTable.filter.{$key} = '{$item}';
         Utils.$(show_goods_layer).innerHTML = result.content[0].str;
     }
 </script>
-{/literal}
 
-{include file="pagefooter.htm"}
-{/if}
+
+@include('pagefooter')
+@endif

@@ -1,56 +1,56 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="tab-div">
   <!-- tab bar -->
-  {include file="flashplay_tab.htm"}
+  @include('flashplay_tab')
   <!-- body -->
   <div class="tab-body">
   <div class="list-div list-div-ad" id="listDiv">
   <table cellspacing='1' cellpadding='3' id='list-table' width="70%">
     <tr>
-      <th width="400px">{$lang.schp_imgsrc}</th>
-    <th>{$lang.schp_imgurl}</th>
-      <th>{$lang.schp_imgdesc}</th>
-      <th>{$lang.schp_sort}</th>
-    <th width="70px">{$lang.handler}</th>
+      <th width="400px">{{ $lang['schp_imgsrc'] }}</th>
+    <th>{{ $lang['schp_imgurl'] }}</th>
+      <th>{{ $lang['schp_imgdesc'] }}</th>
+      <th>{{ $lang['schp_sort'] }}</th>
+    <th width="70px">{{ $lang['handler'] }}</th>
     </tr>
-    {foreach from=$playerdb item=item key=key}
+    @foreach($playerdb as $key => $item)
     <tr>
-      <td><a href="{$item.src}" target="_blank">{$item.src}</a></td>
-    <td align="left"><a href="{$item.url}" target="_blank">{$item.url}</a></td>
-      <td align="left">{$item.text}</td>
-      <td align="left">{$item.sort}</td>
+      <td><a href="{{ $item['src'] }}" target="_blank">{{ $item['src'] }}</a></td>
+    <td align="left"><a href="{{ $item['url'] }}" target="_blank">{{ $item['url'] }}</a></td>
+      <td align="left">{{ $item['text'] }}</td>
+      <td align="left">{{ $item['sort'] }}</td>
     <td align="center">
-        <a href="flashplay.php?act=edit&id={$key}" title="{$lang.edit}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>
-        <a href="flashplay.php?act=del&id={$key}" onclick="return check_del();" title="{$lang.trash_img}"><img src="images/icon_drop.gif" width="16" height="16" border="0" /></a>
+        <a href="flashplay.php?act=edit&id={{ $key }}" title="{{ $lang['edit'] }}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>
+        <a href="flashplay.php?act=del&id={{ $key }}" onclick="return check_del();" title="{{ $lang['trash_img'] }}"><img src="images/icon_drop.gif" width="16" height="16" border="0" /></a>
       </td>
     </tr>
-    {/foreach}
+    @endforeach
   </table>
   <table cellspacing="0">
     <tr>
       <td>
-        <input name="add" type="submit" id="btnSubmit" value="{$action_link_special.text}" onclick="location.href='{$action_link_special.href}';" class="button"/>
+        <input name="add" type="submit" id="btnSubmit" value="{{ $action_link_special['text'] }}" onclick="location.href='{{ $action_link_special['href'] }}';" class="button"/>
       </td>
     </tr>
   </table>
   </div>
   <div class="list-div list-div-ad" style="margin-top:15px;">
   <table>
-  <tr><th>{$lang.flash_template}</th></tr>
+  <tr><th>{{ $lang['flash_template'] }}</th></tr>
   <tr>
-      <td>{foreach from=$flashtpls item=flashtpl}
+      <td>@foreach($flashtpls as $flashtpl)
   <table style="float:left;width: 220px;">
   <tr>
-    <td><strong><center>{$flashtpl.name}&nbsp;{if $flashtpl.code eq $current_flashtpl}<span style="color:red;" id="current_theme">{$lang.current_theme}</span>{/if}</center></strong></td>
+    <td><strong><center>{{ $flashtpl['name'] }}&nbsp;@if($flashtpl['code'] == $current_flashtpl)<span style="color:red;" id="current_theme">{{ $lang['current_theme'] }}</span>@endif</center></strong></td>
   </tr>
   <tr>
-    <td>{if $flashtpl.screenshot}<img src="{$flashtpl.screenshot}" border="0" style="cursor:pointer" onclick="setupFlashTpl('{$flashtpl.code}', this)" />{/if}</td>
+    <td>@if($flashtpl['screenshot'])<img src="{{ $flashtpl['screenshot'] }}" border="0" style="cursor:pointer" onclick="setupFlashTpl('{{ $flashtpl['code'] }}', this)" />@endif</td>
   </tr>
   <tr>
-    <td valign="top">{$flashtpl.desc}</td>
+    <td valign="top">{{ $flashtpl['desc'] }}</td>
   </tr>
   </table>
-  {/foreach}</td>
+  @endforeach</td>
   </tr>
   </table>
   </div>
@@ -66,7 +66,7 @@ onload = function()
 }
 function check_del()
 {
-  if (confirm('{$lang.trash_img_confirm}'))
+  if (confirm('{{ $lang['trash_img_confirm'] }}'))
   {
     return true;
   }
@@ -110,4 +110,4 @@ function setupFlashTplResponse(result)
 //-->
 </script>
 
-{include file="pagefooter.htm"}
+@include('pagefooter')

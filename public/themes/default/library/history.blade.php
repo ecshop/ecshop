@@ -1,7 +1,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <div class="box" id='history_div'>
  <div class="box_1">
-  <h3><span>{$lang.view_history}</span></h3>
+  <h3><span>{{ $lang['view_history'] }}</span></h3>
   <div class="boxCenterList clearfix" id='history_list'>
     {insert name='history'}
   </div>
@@ -23,6 +23,6 @@ Ajax.call('user.php', 'act=clear_history',clear_history_Response, 'GET', 'TEXT',
 }
 function clear_history_Response(res)
 {
-document.getElementById('history_list').innerHTML = '{$lang.no_history}';
+document.getElementById('history_list').innerHTML = '{{ $lang['no_history'] }}';
 }
 </script>

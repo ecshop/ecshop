@@ -1,108 +1,108 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <!-- start integrate setup form -->
-<!--{if $code neq 'ucenter' or empty($cfg.uc_id)}-->
-<div style="border: 1px solid #CC0000;background-color:#FFFFCE;color:#CE0000;padding:4px" >{$lang.db_notice}</div>
-<!--{/if}-->
+@if($code != 'ucenter' || empty($cfg['uc_id']))
+<div style="border: 1px solid #CC0000;background-color:#FFFFCE;color:#CE0000;padding:4px" >{{ $lang['db_notice'] }}</div>
+@endif
 <div class="main-div">
-  <!--{if $code eq 'ucenter'}-->
-  <!--{if !empty($cfg.uc_id) and !empty($cfg.uc_key)}-->
+  @if($code == 'ucenter')
+  @if(!empty($cfg['uc_id']) && !empty($cfg['uc_key']))
   <div id="tabbar-div">
     <p>
-      <span class="tab-front" id="ucenter-tab">{$lang.ucenter_tab_base}</span>
-      <span class="tab-back" id="feed-tab">{$lang.ucenter_tab_show}</span>
+      <span class="tab-front" id="ucenter-tab">{{ $lang['ucenter_tab_base'] }}</span>
+      <span class="tab-back" id="feed-tab">{{ $lang['ucenter_tab_show'] }}</span>
     </p>
   </div>
   <div id="tabbody-div">
     <form name="theForm" action="integrate.php" method="post">
         <table width="90%" id="ucenter-table">
           <tr>
-            <td class="label">{$lang.ucenter_lab_id}</td>
-            <td><input type="text" name="cfg[uc_id]" value="{$cfg.uc_id}" /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsSN">{$lang.ucenter_notice_id}</span></td>
+            <td class="label">{{ $lang['ucenter_lab_id'] }}</td>
+            <td><input type="text" name="cfg[uc_id]" value="{{ $cfg['uc_id'] }}" /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsSN">{{ $lang['ucenter_notice_id'] }}</span></td>
           </tr>
           <tr>
-            <td class="label">{$lang.ucenter_lab_key}</td>
-            <td><input type="text" name="cfg[uc_key]" value="{$cfg.uc_key}" /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsSN">{$lang.ucenter_notice_key}</span></td>
+            <td class="label">{{ $lang['ucenter_lab_key'] }}</td>
+            <td><input type="text" name="cfg[uc_key]" value="{{ $cfg['uc_key'] }}" /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsSN">{{ $lang['ucenter_notice_key'] }}</span></td>
           </tr>
           <tr>
-            <td class="label">{$lang.ucenter_lab_url}</td>
-            <td><input type="text" name="cfg[uc_url]" value="{$cfg.uc_url}" /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsSN">{$lang.ucenter_notice_url}</span></td>
+            <td class="label">{{ $lang['ucenter_lab_url'] }}</td>
+            <td><input type="text" name="cfg[uc_url]" value="{{ $cfg['uc_url'] }}" /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsSN">{{ $lang['ucenter_notice_url'] }}</span></td>
           </tr>
           <tr>
-            <td class="label">{$lang.ucenter_lab_ip}</td>
-            <td><input type="text" name="cfg[uc_ip]" value="{$cfg.uc_ip}" /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsSN">{$lang.ucenter_notice_ip}</span></td>
+            <td class="label">{{ $lang['ucenter_lab_ip'] }}</td>
+            <td><input type="text" name="cfg[uc_ip]" value="{{ $cfg['uc_ip'] }}" /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsSN">{{ $lang['ucenter_notice_ip'] }}</span></td>
           </tr>
           <tr>
-            <td class="label">{$lang.ucenter_lab_connect}</td>
-            <td><input type="radio" id="ucenter_connect_1" name="cfg[uc_connect]" value="mysql" {if $cfg.uc_connect eq "mysql"}checked="checked"{/if} /><label for="ucenter_connect_1">{$lang.ucenter_opt_database}</label><input type="radio" id="ucenter_connect_2" name="cfg[uc_connect]" value="post" {if $cfg.uc_connect neq "mysql"}checked="checked"{/if} /><label for="ucenter_connect_2">{$lang.ucenter_opt_interface}</label><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsSN">{$lang.ucenter_notice_connect}</span></td>
+            <td class="label">{{ $lang['ucenter_lab_connect'] }}</td>
+            <td><input type="radio" id="ucenter_connect_1" name="cfg[uc_connect]" value="mysql" @if($cfg['uc_connect'] == "mysql")checked="checked"@endif /><label for="ucenter_connect_1">{{ $lang['ucenter_opt_database'] }}</label><input type="radio" id="ucenter_connect_2" name="cfg[uc_connect]" value="post" @if($cfg['uc_connect'] != "mysql")checked="checked"@endif /><label for="ucenter_connect_2">{{ $lang['ucenter_opt_interface'] }}</label><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsSN">{{ $lang['ucenter_notice_connect'] }}</span></td>
           </tr>
           <tbody id="uc_db" style="display:none">
           <tr>
-            <td class="label">{$lang.ucenter_lab_db_host}</td>
-            <td><input type="text" name="cfg[db_host]" value="{$cfg.db_host}" /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsSN">{$lang.ucenter_notice_db_host}</span></td>
+            <td class="label">{{ $lang['ucenter_lab_db_host'] }}</td>
+            <td><input type="text" name="cfg[db_host]" value="{{ $cfg['db_host'] }}" /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsSN">{{ $lang['ucenter_notice_db_host'] }}</span></td>
           </tr>
           <tr>
-            <td class="label">{$lang.ucenter_lab_db_user}</td>
-            <td><input type="text" name="cfg[db_user]" value="{$cfg.db_user}" /></td>
+            <td class="label">{{ $lang['ucenter_lab_db_user'] }}</td>
+            <td><input type="text" name="cfg[db_user]" value="{{ $cfg['db_user'] }}" /></td>
           </tr>
           <tr>
-            <td class="label">{$lang.ucenter_lab_db_pass}</td>
-            <td><input type="password" name="cfg[db_pass]" value="{$cfg.db_pass}" /></td>
+            <td class="label">{{ $lang['ucenter_lab_db_pass'] }}</td>
+            <td><input type="password" name="cfg[db_pass]" value="{{ $cfg['db_pass'] }}" /></td>
           </tr>
           <tr>
-            <td class="label">{$lang.ucenter_lab_db_name}</td>
-            <td><input type="text" name="cfg[db_name]" value="{$cfg.db_name}" /></td>
+            <td class="label">{{ $lang['ucenter_lab_db_name'] }}</td>
+            <td><input type="text" name="cfg[db_name]" value="{{ $cfg['db_name'] }}" /></td>
           </tr>
           <tr>
-            <td class="label">{$lang.ucenter_lab_db_pre}</td>
-            <td><input type="text" name="cfg[db_pre]" value="{$cfg.db_pre}" /></td>
+            <td class="label">{{ $lang['ucenter_lab_db_pre'] }}</td>
+            <td><input type="text" name="cfg[db_pre]" value="{{ $cfg['db_pre'] }}" /></td>
           </tr>
           <tr>
-            <td class="label">{$lang.ucenter_lab_credit_0}</td>
-            <td><input type="text" name="cfg[uc_lang][credits][0][0]" value="{$cfg.uc_lang.credits.0.0}" /></td>
+            <td class="label">{{ $lang['ucenter_lab_credit_0'] }}</td>
+            <td><input type="text" name="cfg[uc_lang][credits][0][0]" value="{{ $cfg['uc_lang']['credits'][0][0] }}" /></td>
           </tr>
           <tr>
-            <td class="label">{$lang.ucenter_lab_credit_1}</td>
-            <td><input type="text" name="cfg[uc_lang][credits][1][0]" value="{$cfg.uc_lang.credits.1.0}" /></td>
+            <td class="label">{{ $lang['ucenter_lab_credit_1'] }}</td>
+            <td><input type="text" name="cfg[uc_lang][credits][1][0]" value="{{ $cfg['uc_lang']['credits'][1][0] }}" /></td>
           </tr>
           </tbody>
         </table>
         <table width="90%" id="feed-table" style="display:none">
           <tr>
-            <td class="label">{$lang.ucenter_lab_tag_number}</td>
-            <td><input type="text" name="cfg[tag_number]" value="{$cfg.tag_number}" /></td>
+            <td class="label">{{ $lang['ucenter_lab_tag_number'] }}</td>
+            <td><input type="text" name="cfg[tag_number]" value="{{ $cfg['tag_number'] }}" /></td>
           </tr>
         </table>
         <div class="button-div">
-            <input type="hidden" name="cfg[uc_lang][exchange]" value="{$cfg.uc_lang.exchange}" />
-            <input type="submit" value="{$lang.button_force_save_config}" class="button" />
-            <input type="reset" value="{$lang.button_reset}" class="button" />
-            <input type="hidden" name="code" value="{$code}" />
+            <input type="hidden" name="cfg[uc_lang][exchange]" value="{{ $cfg['uc_lang']['exchange'] }}" />
+            <input type="submit" value="{{ $lang['button_force_save_config'] }}" class="button" />
+            <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
+            <input type="hidden" name="code" value="{{ $code }}" />
             <input type="hidden" name="act" value="save_uc_config" />
         </div>
     </form>
   </div>
-  {insert_scripts files="tab.js"}
-  <!--{else}-->
+  <script src="tab.js"></script>
+  @else
   <form action="integrate.php" method="post" name="theForm">
   <table cellspacing="1" cellpadding="3" width="100%">
     <tr>
-      <td class="label">{$lang.uc_lab_url}</td>
+      <td class="label">{{ $lang['uc_lab_url'] }}</td>
       <td><input type="text" name="uc_url" value="" /></td>
     </tr>
     <tr id="ucip" style="display:none">
-        <td class="label">{$lang.uc_lab_ip}</td>
-        <td align="left"><input name="uc_ip" type="text" id="uc_ip"  value="" /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsSN">{$lang.uc_notice_ip}</span></td>
+        <td class="label">{{ $lang['uc_lab_ip'] }}</td>
+        <td align="left"><input name="uc_ip" type="text" id="uc_ip"  value="" /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsSN">{{ $lang['uc_notice_ip'] }}</span></td>
     </tr>
     <tr>
-      <td class="label">{$lang.uc_lab_pass}</td>
+      <td class="label">{{ $lang['uc_lab_pass'] }}</td>
       <td><input type="password" name="uc_pass" value="" /><span id="ucfounderpwnotice" style="color:#FF0000"></span></td>
     </tr>
     <tr>
       <td colspan="2" align="center">
-        <input type="button" value="{$lang.button_next}" onclick="save_uc_config(0)" class="button" />
-        <input type="button" value="{$lang.button_force_save_config}" onclick="save_uc_config(1)" class="button" />
-        <input type="reset" value="{$lang.button_reset}" class="button" />
-        <input type="hidden" name="code" value="{$code}" />
+        <input type="button" value="{{ $lang['button_next'] }}" onclick="save_uc_config(0)" class="button" />
+        <input type="button" value="{{ $lang['button_force_save_config'] }}" onclick="save_uc_config(1)" class="button" />
+        <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
+        <input type="hidden" name="code" value="{{ $code }}" />
         <input type="hidden" name="save" value="0" />
         <input type="hidden" name="ucconfig" value="" />
         <input type="hidden" name="act" value="save_uc_config_first" />
@@ -110,73 +110,74 @@
     </tr>
   </table>
   </form>
-  <!--{/if}-->
-  <!--{else}-->
+  @endif
+  @else
   <form action="integrate.php" method="post" name="theForm" onsubmit="return validate();">
   <table cellspacing="1" cellpadding="3" width="100%">
     <tr>
-      <td class="label">{$lang.lable_db_host}</td>
-      <td><input type="text" name="cfg[db_host]" value="{$cfg.db_host}" />{$lang.require_field}</td>
+      <td class="label">{{ $lang['lable_db_host'] }}</td>
+      <td><input type="text" name="cfg[db_host]" value="{{ $cfg['db_host'] }}" />{{ $lang['require_field'] }}</td>
     </tr>
     <tr>
-      <td class="label">{$lang.lable_db_user}</td>
-      <td><input type="text" name="cfg[db_user]" value="{$cfg.db_user}" />{$lang.require_field}</td>
+      <td class="label">{{ $lang['lable_db_user'] }}</td>
+      <td><input type="text" name="cfg[db_user]" value="{{ $cfg['db_user'] }}" />{{ $lang['require_field'] }}</td>
     </tr>
     <tr>
-      <td class="label">{$lang.lable_db_pass}</td>
-      <td><input type="password" name="cfg[db_pass]" value="{$cfg.db_pass}" />{$lang.require_field}</td>
+      <td class="label">{{ $lang['lable_db_pass'] }}</td>
+      <td><input type="password" name="cfg[db_pass]" value="{{ $cfg['db_pass'] }}" />{{ $lang['require_field'] }}</td>
     </tr>
     <tr>
-      <td class="label">{$lang.lable_db_name}</td>
-      <td><input type="text" name="cfg[db_name]" value="{$cfg.db_name}" />{$lang.require_field}</td>
+      <td class="label">{{ $lang['lable_db_name'] }}</td>
+      <td><input type="text" name="cfg[db_name]" value="{{ $cfg['db_name'] }}" />{{ $lang['require_field'] }}</td>
     </tr>
     <tr>
-      <td class="label"><a href="javascript:showNotice('noticeGoodsSN');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.lable_db_chartset}</td>
-      <td><select name="cfg[db_charset]">{html_options options=$set_list selected=$cfg.db_charset}</select><input type="checkbox" name="cfg[is_latin1]" value="1" {if $cfg.is_latin1}checked="checked"{/if} />{$lang.lable_is_latin1}{$lang.require_field}
-      <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeGoodsSN">{$lang.notice_latin1}</span>
+      <td class="label"><a href="javascript:showNotice('noticeGoodsSN');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['lable_db_chartset'] }}</td>
+      <td><select name="cfg[db_charset]">@foreach($set_list as $__k => $__v)<option value="{{ $__k }}" @if($__k == $cfg['db_charset']) selected @endif>{{ $__v }}</option>@endforeach</select><input type="checkbox" name="cfg[is_latin1]" value="1" @if($cfg['is_latin1'])checked="checked"@endif />{{ $lang['lable_is_latin1'] }}{{ $lang['require_field'] }}
+      <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeGoodsSN">{{ $lang['notice_latin1'] }}</span>
       </td>
     </tr>
     <tr>
-      <td class="label">{$lang.lable_prefix}</td>
-      <td><input type="text" name="cfg[prefix]" value="{$cfg.prefix}" /></td>
+      <td class="label">{{ $lang['lable_prefix'] }}</td>
+      <td><input type="text" name="cfg[prefix]" value="{{ $cfg['prefix'] }}" /></td>
     </tr>
     <tr>
-      <td class="label">{$lang.lable_url}</td>
-      <td><input type="text" name="cfg[integrate_url]" value="{$cfg.integrate_url}"  size="40" />{$lang.require_field}</td>
+      <td class="label">{{ $lang['lable_url'] }}</td>
+      <td><input type="text" name="cfg[integrate_url]" value="{{ $cfg['integrate_url'] }}"  size="40" />{{ $lang['require_field'] }}</td>
     </tr>
-    {if isset($cfg.cookie_prefix)}
+    @if(isset($cfg['cookie_prefix']))
     <tr>
-      <td class="label">{$lang.cookie_prefix}</td>
-      <td><input type="text" name="cfg[cookie_prefix]" value="{$cfg.cookie_prefix}" />{$lang.require_field}</td>
+      <td class="label">{{ $lang['cookie_prefix'] }}</td>
+      <td><input type="text" name="cfg[cookie_prefix]" value="{{ $cfg['cookie_prefix'] }}" />{{ $lang['require_field'] }}</td>
     </tr>
-    {/if}
-    {if isset($cfg.cookie_salt)}
+    @endif
+    @if(isset($cfg['cookie_salt']))
     <tr>
-      <td class="label">{$lang.cookie_salt}</td>
-      <td><input type="text" name="cfg[cookie_salt]" value="{$cfg.cookie_salt}" />{$lang.require_field}</td>
+      <td class="label">{{ $lang['cookie_salt'] }}</td>
+      <td><input type="text" name="cfg[cookie_salt]" value="{{ $cfg['cookie_salt'] }}" />{{ $lang['require_field'] }}</td>
     </tr>
-    {/if}
+    @endif
     <tr>
       <td colspan="2" align="center">
-        {if $save eq 0}
-        <input type="submit" value="{$lang.button_next}" class="button" />
-        <input type="button" value="{$lang.button_force_save_config}" onclick="saveConfig('{$lang.save_confirm}')" class="button" />
-        {else}
-        <input type="submit" value="{$lang.button_save_config}" class="button" />
-        {/if}
-        <input type="reset" value="{$lang.button_reset}" class="button"  />
-        <input type="hidden" name="code" value="{$code}" />
+        @if($save == 0)
+        <input type="submit" value="{{ $lang['button_next'] }}" class="button" />
+        <input type="button" value="{{ $lang['button_force_save_config'] }}" onclick="saveConfig('{{ $lang['save_confirm'] }}')" class="button" />
+        @else
+        <input type="submit" value="{{ $lang['button_save_config'] }}" class="button" />
+        @endif
+        <input type="reset" value="{{ $lang['button_reset'] }}" class="button"  />
+        <input type="hidden" name="code" value="{{ $code }}" />
         <input type="hidden" name="act" value="check_config" />
-        <input type="hidden" name="save" id="ECS_SAVE" value="{$save|default:0}">
+        <input type="hidden" name="save" id="ECS_SAVE" value="{{ $save ?? 0 }}">
       </td>
     </tr>
   </table>
   </form>
-  <!--{/if}-->
+  @endif
 </div>
 <!-- end integrate setup form -->
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 onload = function()
@@ -296,5 +297,5 @@ function validate()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

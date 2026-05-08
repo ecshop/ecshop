@@ -1,50 +1,51 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 <div class="form-div">
-  <input type="button" name="export" value="{$lang.export}" onclick="location.href='email_list.php?act=export';" class="button" />
+  <input type="button" name="export" value="{{ $lang['export'] }}" onclick="location.href='email_list.php?act=export';" class="button" />
 </div>
 <form method="post" action="email_list.php" name="listForm">
 <div class="list-div" id="listDiv">
-{/if}
+@endif
 <table cellspacing='1' cellpadding='3'>
 <tr>
-<th width="5%"><input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox"><a href="javascript:listTable.sort('id'); ">{$lang.id}</a>{$sort_id}</th>
-<th><a href="javascript:listTable.sort('email'); ">{$lang.email_val}</a>{$sort_email}</th>
-<th width="15%"><a href="javascript:listTable.sort('stat'); ">{$lang.stat.name}</a>{$sort_stat}</th>
+<th width="5%"><input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox"><a href="javascript:listTable.sort('id'); ">{{ $lang['id'] }}</a>{{ $sort_id }}</th>
+<th><a href="javascript:listTable.sort('email'); ">{{ $lang['email_val'] }}</a>{{ $sort_email }}</th>
+<th width="15%"><a href="javascript:listTable.sort('stat'); ">{{ $lang['stat']['name'] }}</a>{{ $sort_stat }}</th>
 </tr>
-{foreach from=$emaildb item=val}
+@forelse($emaildb as $val)
 <tr>
-  <td><input name="checkboxes[]" type="checkbox" value="{$val.id}" />{$val.id}</td>
-  <td>{$val.email}</td>
-  <td align="center">{$lang.stat[$val.stat]}</td>
+  <td><input name="checkboxes[]" type="checkbox" value="{{ $val['id'] }}" />{{ $val['id'] }}</td>
+  <td>{{ $val['email'] }}</td>
+  <td align="center">{{ $lang['stat[$val']['stat]'] }}</td>
 </tr>
-{foreachelse}
-    <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
-{/foreach}
+@empty
+    <tr><td class="no-records" colspan="10">{{ $lang['no_records'] }}</td></tr>
+@endforelse
 </table>
 <table id="page-table" cellspacing="0">
   <tr>
     <td>
       <input type="hidden" name="act" value="" />
-      <input type="button" id="btnSubmit1" value="{$lang.button_exit}" disabled="true" class="button" onClick="javascript:document.listForm.act.value='batch_exit';document.listForm.submit();" />
-      <input type="button" id="btnSubmit2" value="{$lang.button_remove}" disabled="true" class="button" onClick="javascript:document.listForm.act.value='batch_remove';document.listForm.submit();" />
-      <input type="button" id="btnSubmit3" value="{$lang.button_unremove}" disabled="true" class="button" onClick="javascript:document.listForm.act.value='batch_unremove';document.listForm.submit();" />
+      <input type="button" id="btnSubmit1" value="{{ $lang['button_exit'] }}" disabled="true" class="button" onClick="javascript:document.listForm.act.value='batch_exit';document.listForm.submit();" />
+      <input type="button" id="btnSubmit2" value="{{ $lang['button_remove'] }}" disabled="true" class="button" onClick="javascript:document.listForm.act.value='batch_remove';document.listForm.submit();" />
+      <input type="button" id="btnSubmit3" value="{{ $lang['button_unremove'] }}" disabled="true" class="button" onClick="javascript:document.listForm.act.value='batch_unremove';document.listForm.submit();" />
     </td>
     <td align="right" nowrap="true">
-    {include file="page.htm"}
+    @include('page')
     </td>
   </tr>
 </table>
-{if $full_page}
+@if($full_page)
 </div>
 </form>
 <script type="Text/Javascript" language="JavaScript">
-listTable.recordCount = {$record_count};
-listTable.pageCount = {$page_count};
-{foreach from=$filter item=item key=key}
-listTable.filter.{$key} = '{$item}';
-{/foreach}
+listTable.recordCount = {{ $record_count }};
+listTable.pageCount = {{ $page_count }};
+@foreach($filter as $key => $item)
+listTable.filter.{{ $key }} = '{{ $item }}';
+@endforeach
 <!--
 onload = function()
 {
@@ -53,5 +54,5 @@ onload = function()
 }
 //-->
 </script>
-{include file="pagefooter.htm"}
-{/if}
+@include('pagefooter')
+@endif

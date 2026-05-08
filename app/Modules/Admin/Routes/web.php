@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('admin')->middleware('web')->name('admin.')->group(function () {
     Route::get('login', [Controllers\AuthController::class, 'showLoginForm'])->name('login');
     Route::post('login', [Controllers\AuthController::class, 'login']);
+    Route::get('forget', [Controllers\AuthController::class, 'showForgetForm'])->name('forget');
+    Route::post('forget', [Controllers\AuthController::class, 'forget']);
+    Route::get('reset', [Controllers\AuthController::class, 'showResetForm'])->name('reset');
+    Route::post('reset', [Controllers\AuthController::class, 'reset']);
     Route::middleware('auth:admin')->group(function () {
         Route::any('/', Controllers\IndexController::class);
         Route::any('account_log.php', Controllers\AccountLogController::class);
@@ -45,7 +49,6 @@ Route::prefix('admin')->middleware('web')->name('admin.')->group(function () {
         Route::any('flow_stats.php', Controllers\FlowStatsController::class);
         Route::any('friend_link.php', Controllers\FriendLinkController::class);
         Route::any('gen_goods_script.php', Controllers\GenGoodsScriptController::class);
-        Route::any('get_password.php', Controllers\GetPasswordController::class);
         Route::any('goods_auto.php', Controllers\GoodsAutoController::class);
         Route::any('goods_batch.php', Controllers\GoodsBatchController::class);
         Route::any('goods_booking.php', Controllers\GoodsBookingController::class);

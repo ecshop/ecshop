@@ -1,92 +1,93 @@
-{include file="pageheader.htm"}
-{insert_scripts files="validator.js,../js/transport.js}
+@include('pageheader')
+<script src="validator.js"></script>
+<script src="../js/transport.js"></script>
 <div class="main-div">
 <form method="post" action="wholesale.php" name="theForm" enctype="multipart/form-data" onSubmit="return validate()">
 <table width="100%">
-  <!-- {if $form_action eq "insert"} 编辑时不能改商品名称 -->
+  <!-- @if($form_action == "insert") 编辑时不能改商品名称 -->
   <tr>
-    <td align="right">{$lang.pls_search_goods}</td>
+    <td align="right">{{ $lang['pls_search_goods'] }}</td>
     <td><!-- 分类 -->
-      <select name="cat_id"><option value="0">{$lang.custom_goods_cat}</option>{$cat_list}</select>
+      <select name="cat_id"><option value="0">{{ $lang['custom_goods_cat'] }}</option>{{ $cat_list }}</select>
       <!-- 品牌 -->
-      <select name="brand_id"><option value="0">{$lang.custom_goods_brand}</option>{html_options options=$brand_list}</select>
+      <select name="brand_id"><option value="0">{{ $lang['custom_goods_brand'] }}</option>@foreach($brand_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach</select>
       <!-- 关键字 -->
-      {$lang.label_search_goods}<input name="keyword" type="text" id="keyword" size="10">
+      {{ $lang['label_search_goods'] }}<input name="keyword" type="text" id="keyword" size="10">
       <!-- 搜索 -->
-      <input name="search" type="button" id="search" value="{$lang.button_search}" class="button" onclick="searchGoods()" /></td>
+      <input name="search" type="button" id="search" value="{{ $lang['button_search'] }}" class="button" onclick="searchGoods()" /></td>
   </tr>
-  <!-- {/if} -->
+  @endif
   <tr>
-    <td class="label">{$lang.label_goods_name}</td>
+    <td class="label">{{ $lang['label_goods_name'] }}</td>
     <td><select name="goods_id" id="goods_id" onchange="document.getElementById('price-div').innerHTML = ''; getGoodsInfo(this.value);">
-      <option value="{$wholesale.goods_id}" selected="selected">{$wholesale.goods_name}</option>
+      <option value="{{ $wholesale['goods_id'] }}" selected="selected">{{ $wholesale['goods_name'] }}</option>
     </select>
-      <input name="goods_name" type="hidden" id="goods_name" value="{$wholesale.goods_name}" /></td>
+      <input name="goods_name" type="hidden" id="goods_name" value="{{ $wholesale['goods_name'] }}" /></td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_rank_name}</td>
-    <td>{foreach from=$user_rank_list item=rank} 
-      <input name="rank_id[]" type="checkbox" id="rank_id[]" value="{$rank.rank_id}" {if $rank.checked}checked="checked"{/if} />
-      {$rank.rank_name} {/foreach}</td>
+    <td class="label">{{ $lang['label_rank_name'] }}</td>
+    <td>@foreach($user_rank_list as $rank) 
+      <input name="rank_id[]" type="checkbox" id="rank_id[]" value="{{ $rank['rank_id'] }}" @if($rank['checked'])checked="checked"@endif />
+      {{ $rank['rank_name'] }} @endforeach</td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_enabled}</td>
+    <td class="label">{{ $lang['label_enabled'] }}</td>
     <td><label>
-        <input type="radio" name="enabled" value="1" {if $wholesale.enabled}checked="checked"{/if} />
-        {$lang.yes}</label>
+        <input type="radio" name="enabled" value="1" @if($wholesale['enabled'])checked="checked"@endif />
+        {{ $lang['yes'] }}</label>
       <label>
-        <input type="radio" name="enabled" value="0" {if !$wholesale.enabled}checked="checked"{/if} />
-        {$lang.no}</label>    </td>
+        <input type="radio" name="enabled" value="0" @if(!$wholesale['enabled'])checked="checked"@endif />
+        {{ $lang['no'] }}</label>    </td>
   </tr>
 </table>
 
 <hr />
 
 <div id="price-div">
-{foreach from=$wholesale.price_list key=key item=attr_price}
+@foreach($wholesale['price_list'] as $key => $attr_price)
 <table width="100%">
-  <!-- {if $attr_list} 该商品的属性 -->
+  <!-- @if($attr_list) 该商品的属性 -->
   <tr>
     <td>&nbsp;</td>
     <td colspan="2">
-	  {foreach from=$attr_list item=attr}
-	  {$attr.attr_name} <select name="attr_{$attr.attr_id}[{$key}]"> {html_options options=$attr.goods_attr_list selected=$attr_price.attr[$attr.attr_id]} </select>
-	  {/foreach}
+	  @foreach($attr_list as $attr)
+	  {{ $attr['attr_name'] }} <select name="attr_{{ $attr['attr_id'] }}[{{ $key }}]"> @foreach($attr['goods_attr_list'] as $__k => $__v)<option value="{{ $__k }}" @if($__k == $attr_price['attr[$attr']['attr_id]']) selected @endif>{{ $__v }}</option>@endforeach </select>
+	  @endforeach
     </td>
-    <td>{if $key eq 0} <input type="button" class="button" value=" + " onclick="addAttr(this)" /> {else} <input type="button" class="button" value=" - " onclick="dropAttr(this)" /> {/if}</td>
+    <td>@if($key == 0) <input type="button" class="button" value=" + " onclick="addAttr(this)" /> @else <input type="button" class="button" value=" - " onclick="dropAttr(this)" /> @endif</td>
     <td>&nbsp;</td>
   </tr>
   <tr><td></td><td colspan="3" style="border-bottom:1px #000 dashed;"></td><td></td></tr>
-  <!-- {/if} -->
+  @endif
 
-  {foreach from=$attr_price.qp_list key=index item=qp}
+  @foreach($attr_price['qp_list'] as $index => $qp)
   <tr>
     <td width="10%">&nbsp;</td>
-    <td> {$lang.quantity} <input name="quantity[{$key}][]" type="text" value="{$qp.quantity}" /> </td>
-    <td> {$lang.price} <input name="price[{$key}][]" type="text" value="{$qp.price}" /> </td>
-    <td> {if $index eq 0} <input type="button" class="button" value=" + " onclick="addQuantityPrice(this, '{$key}')" /> {else} <input type="button" class="button" value=" - " onclick="dropQuantityPrice(this)" /> {/if} </td>
+    <td> {{ $lang['quantity'] }} <input name="quantity[{{ $key }}][]" type="text" value="{{ $qp['quantity'] }}" /> </td>
+    <td> {{ $lang['price'] }} <input name="price[{{ $key }}][]" type="text" value="{{ $qp['price'] }}" /> </td>
+    <td> @if($index == 0) <input type="button" class="button" value=" + " onclick="addQuantityPrice(this, '{{ $key }}')" /> @else <input type="button" class="button" value=" - " onclick="dropQuantityPrice(this)" /> @endif </td>
     <td width="10%">&nbsp;</td>
   </tr>
-  {/foreach}
+  @endforeach
 </table>
-{/foreach}
+@endforeach
 </div>
 
 <table width="100%">
   <tr>
     <td colspan="2" align="center">
-      <input type="submit" class="button" value="{$lang.button_submit}" />
-      <input type="reset" class="button" value="{$lang.button_reset}" />
-      <input type="hidden" name="act" value="{$form_action}" />
-      <input type="hidden" name="id" value="{$wholesale.act_id}" />
-	  <input type="hidden" name="seed" id="seed" value="{$key}" />
+      <input type="submit" class="button" value="{{ $lang['button_submit'] }}" />
+      <input type="reset" class="button" value="{{ $lang['button_reset'] }}" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
+      <input type="hidden" name="id" value="{{ $wholesale['act_id'] }}" />
+	  <input type="hidden" name="seed" id="seed" value="{{ $key }}" />
     </td>
   </tr>
 </table>
 </form>
 </div>
 
-{literal}
+
 <script language="JavaScript">
 <!--
 onload = function()
@@ -246,13 +247,13 @@ function addQuantityPrice(buttonObj, tableIndex)
   var cell3 = newRow.insertCell(-1);
   var cell4 = newRow.insertCell(-1);
   var cell5 = newRow.insertCell(-1);
-  {/literal}
+  
   cell1.innerHTML = '&nbsp;';
-  cell2.innerHTML = ' {$lang.quantity} <input name="quantity[' + tableIndex + '][]" type="text" value="" /> ';
-  cell3.innerHTML = ' {$lang.price} <input name="price[' + tableIndex + '][]" type="text" value="" /> ';
+  cell2.innerHTML = ' {{ $lang['quantity'] }} <input name="quantity[' + tableIndex + '][]" type="text" value="" /> ';
+  cell3.innerHTML = ' {{ $lang['price'] }} <input name="price[' + tableIndex + '][]" type="text" value="" /> ';
   cell4.innerHTML = ' <input type="button" class="button" value=" - " onclick="dropQuantityPrice(this)" />';
   cell5.innerHTML = '&nbsp;';
-  {literal}
+  
 }
 
 /**
@@ -292,32 +293,32 @@ function getKey()
 
 function getQuantityHtml(key)
 {
-  {/literal}
-  var html = '{$lang.quantity} <input name="quantity[#][]" type="text" value="" />';
-  {literal}
+  
+  var html = '{{ $lang['quantity'] }} <input name="quantity[#][]" type="text" value="" />';
+  
 
   return html.replace('[#]', '[' + key + ']');
 }
 
 function getPriceHtml(key)
 {
-  {/literal}
-  var html = '{$lang.price} <input name="price[#][]" type="text" value="" />';
-  {literal}
+  
+  var html = '{{ $lang['price'] }} <input name="price[#][]" type="text" value="" />';
+  
 
   return html.replace('[#]', '[' + key + ']');
 }
 
 function getButtonHtml(key)
 {
-  {/literal}
+  
   var html = '<input type="button" class="button" value=" + " onclick="addQuantityPrice(this, [#])" />';
-  {literal}
+  
 
   return html.replace('[#]', key);
 }
 
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

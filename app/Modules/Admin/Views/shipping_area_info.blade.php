@@ -1,83 +1,85 @@
-{include file="pageheader.htm"}
-{insert_scripts files="validator.js,../js/transport.js,../js/region.js"}
+@include('pageheader')
+<script src="validator.js"></script>
+<script src="../js/transport.js"></script>
+<script src="../js/region.js"></script>
 <div class="main-div">
 <form method="post" action="shipping_area.php" name="theForm" onsubmit="return validate()" style="background:#FFF">
 <fieldset style="border:1px solid #DDEEF2">
   <table >
     <tr>
-      <td class="label">{$lang.shipping_area_name}:</td>
-<td><input type="text" name="shipping_area_name" maxlength="60" size="30" value="{$shipping_area.shipping_area_name}" />{$lang.require_field}</td>
+      <td class="label">{{ $lang['shipping_area_name'] }}:</td>
+<td><input type="text" name="shipping_area_name" maxlength="60" size="30" value="{{ $shipping_area['shipping_area_name'] }}" />{{ $lang['require_field'] }}</td>
     </tr>
-  {if $shipping_area.shipping_code =='ems' || $shipping_area.shipping_code =='yto' || $shipping_area.shipping_code =='zto' || $shipping_area.shipping_code =='sto_express' || $shipping_area.shipping_code =='post_mail' || $shipping_area.shipping_code =='sf_express' || $shipping_area.shipping_code =='post_express' }
+  @if($shipping_area['shipping_code'] =='ems' || $shipping_area['shipping_code'] =='yto' || $shipping_area['shipping_code'] =='zto' || $shipping_area['shipping_code'] =='sto_express' || $shipping_area['shipping_code'] =='post_mail' || $shipping_area['shipping_code'] =='sf_express' || $shipping_area['shipping_code'] =='post_express' )
     <tr>
-    <td class="label">{$lang.fee_compute_mode}:</td>
+    <td class="label">{{ $lang['fee_compute_mode'] }}:</td>
     <td>
-    <input type="radio"  {if $fee_compute_mode != 'by_number' }checked="true"{/if} onclick="compute_mode('{$shipping_area.shipping_code}','weight')" name="fee_compute_mode" value="by_weight" />{$lang.fee_by_weight}
-    <input type="radio" {if $fee_compute_mode == 'by_number'}checked="true"{/if}  onclick="compute_mode('{$shipping_area.shipping_code}','number')" name="fee_compute_mode" value="by_number" />{$lang.fee_by_number}
+    <input type="radio"  @if($fee_compute_mode != 'by_number' )checked="true"@endif onclick="compute_mode('{{ $shipping_area['shipping_code'] }}','weight')" name="fee_compute_mode" value="by_weight" />{{ $lang['fee_by_weight'] }}
+    <input type="radio" @if($fee_compute_mode == 'by_number')checked="true"@endif  onclick="compute_mode('{{ $shipping_area['shipping_code'] }}','number')" name="fee_compute_mode" value="by_number" />{{ $lang['fee_by_number'] }}
     </td>
     </tr>
-  {/if}
-<!--{if $shipping_area.shipping_code != 'cac'}-->
-    {foreach from=$fields item=field}
-    <!--{if $fee_compute_mode == 'by_number'}-->
-       <!--{if $field.name == 'item_fee' || $field.name == 'free_money' || $field.name == 'pay_fee'}-->
-            <tr id="{$field.name}" >
-              <td class="label">{$field.label}</td>
-              <td><input type="text" name="{$field.name}"  maxlength="60" size="20" value="{$field.value}" />{$lang.require_field}</td>
+  @endif
+@if($shipping_area['shipping_code'] != 'cac')
+    @foreach($fields as $field)
+    @if($fee_compute_mode == 'by_number')
+       @if($field['name'] == 'item_fee' || $field['name'] == 'free_money' || $field['name'] == 'pay_fee')
+            <tr id="{{ $field['name'] }}" >
+              <td class="label">{{ $field['label'] }}</td>
+              <td><input type="text" name="{{ $field['name'] }}"  maxlength="60" size="20" value="{{ $field['value'] }}" />{{ $lang['require_field'] }}</td>
             </tr>
-            <!--{else}-->
-            <tr id="{$field.name}" style="display:none">
-              <td class="label">{$field.label}</td>
-              <td><input type="text" name="{$field.name}"  maxlength="60" size="20" value="{$field.value}" />{$lang.require_field}</td>
+            @else
+            <tr id="{{ $field['name'] }}" style="display:none">
+              <td class="label">{{ $field['label'] }}</td>
+              <td><input type="text" name="{{ $field['name'] }}"  maxlength="60" size="20" value="{{ $field['value'] }}" />{{ $lang['require_field'] }}</td>
             </tr>
-        <!--{/if}-->
-    <!--{else}-->
-        <!--{if $field.name != 'item_fee'}-->
-            <tr id="{$field.name}">
-              <td class="label">{$field.label}</td>
-              <td><input type="text" name="{$field.name}"  maxlength="60" size="20" value="{$field.value}" />{$lang.require_field}</td>
+        @endif
+    @else
+        @if($field['name'] != 'item_fee')
+            <tr id="{{ $field['name'] }}">
+              <td class="label">{{ $field['label'] }}</td>
+              <td><input type="text" name="{{ $field['name'] }}"  maxlength="60" size="20" value="{{ $field['value'] }}" />{{ $lang['require_field'] }}</td>
             </tr>
-        <!--{else}-->
-            <tr id="{$field.name}" style="display:none">
-              <td class="label">{$field.label}</td>
-              <td><input type="text" name="{$field.name}"  maxlength="60" size="20" value="{$field.value}" />{$lang.require_field}</td>
+        @else
+            <tr id="{{ $field['name'] }}" style="display:none">
+              <td class="label">{{ $field['label'] }}</td>
+              <td><input type="text" name="{{ $field['name'] }}"  maxlength="60" size="20" value="{{ $field['value'] }}" />{{ $lang['require_field'] }}</td>
             </tr>
-        <!--{/if}-->
-     <!--{/if}-->
-    {/foreach}
-<!--{/if}-->
+        @endif
+     @endif
+    @endforeach
+@endif
   </table>
 </fieldset>
 
 <fieldset style="border:1px solid #DDEEF2">
-  <legend style="background:#FFF">{$lang.shipping_area_regions}:</legend>
+  <legend style="background:#FFF">{{ $lang['shipping_area_regions'] }}:</legend>
   <table style="width:600px" align="center">
   <tr>
     <td id="regionCell">
-      {foreach from=$regions item=region key=id}
-      <input type="checkbox" name="regions[]" value="{$id}" checked="true" /> {$region}&nbsp;&nbsp;
-      {/foreach}
+      @foreach($regions as $id => $region)
+      <input type="checkbox" name="regions[]" value="{{ $id }}" checked="true" /> {{ $region }}&nbsp;&nbsp;
+      @endforeach
     </td>
   </tr>
   <tr>
     <td>
-        <span  style="vertical-align: top">{$lang.label_country} </span>
+        <span  style="vertical-align: top">{{ $lang['label_country'] }} </span>
         <select name="country" id="selCountries" onchange="region.changed(this, 1, 'selProvinces')" size="10" style="width:80px">
-          {foreach from=$countries item=country}
-          <option value="{$country.region_id}">{$country.region_name|escape:html}</option>
-          {/foreach}
+          @foreach($countries as $country)
+          <option value="{{ $country['region_id'] }}">{{ $country['region_name'] }}</option>
+          @endforeach
         </select>
-        <span  style="vertical-align: top">{$lang.label_province} </span>
+        <span  style="vertical-align: top">{{ $lang['label_province'] }} </span>
         <select name="province" id="selProvinces" onchange="region.changed(this, 2, 'selCities')" size="10" style="width:80px">
-          <option value=''>{$lang.select_please}</option>
+          <option value=''>{{ $lang['select_please'] }}</option>
         </select>
-        <span  style="vertical-align: top">{$lang.label_city} </span>
+        <span  style="vertical-align: top">{{ $lang['label_city'] }} </span>
         <select name="city" id="selCities" onchange="region.changed(this, 3, 'selDistricts')" size="10" style="width:80px">
-          <option value=''>{$lang.select_please}</option>
+          <option value=''>{{ $lang['select_please'] }}</option>
         </select>
-        <span  style="vertical-align: top">{$lang.label_district}</span>
+        <span  style="vertical-align: top">{{ $lang['label_district'] }}</span>
         <select name="district" id="selDistricts" size="10" style="width:130px">
-          <option value=''>{$lang.select_please}</option>
+          <option value=''>{{ $lang['select_please'] }}</option>
         </select>
         <span  style="vertical-align: top"><input type="button" value="+" class="button" onclick="addRegion()" /></span>
     </td>
@@ -88,11 +90,11 @@
   <table >
   <tr>
     <td colspan="2" align="center">
-      <input type="submit" value="{$lang.button_submit}" class="button" />
-      <input type="reset" value="{$lang.button_reset}" class="button" />
-      <input type="hidden" name="act" value="{$form_action}" />
-      <input type="hidden" name="id" value="{$shipping_area.shipping_area_id}" />
-      <input type="hidden" name="shipping" value="{$shipping_area.shipping_id}" />
+      <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
+      <input type="hidden" name="id" value="{{ $shipping_area['shipping_area_id'] }}" />
+      <input type="hidden" name="shipping" value="{{ $shipping_area['shipping_id'] }}" />
     </td>
   </tr>
 </table>
@@ -101,7 +103,7 @@
 </div>
 <script language="JavaScript">
 <!--
-{literal}
+
 region.isAdmin = true;
 onload = function()
 {
@@ -246,6 +248,6 @@ function compute_mode(shipping_code,mode)
     }
 }
 //-->
-{/literal}
+
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

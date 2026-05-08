@@ -1,24 +1,24 @@
-{include file="pageheader.htm"}
-{insert_scripts files="validator.js"}
+@include('pageheader')
+<script src="validator.js"></script>
 <form method="POST" action="shop_config.php?act=post" name="theForm">
-<div class="main-div"><p style="padding: 0 10px">{$lang.mail_settings_note}</p></div>
+<div class="main-div"><p style="padding: 0 10px">{{ $lang['mail_settings_note'] }}</p></div>
 
 <div class="main-div">
-  <table width="100%" id="{$group.code}-table" >
-    {foreach from=$cfg item=var key=key}
-    {include file="shop_config_form.htm"}
-    {/foreach}
+  <table width="100%" id="{{ $group['code'] }}-table" >
+    @foreach($cfg as $key => $var)
+    @include('shop_config_form')
+    @endforeach
     <tr>
-      <td class="label">{$lang.cfg_name.test_mail_address}:</td>
+      <td class="label">{{ $lang['cfg_name']['test_mail_address'] }}:</td>
       <td>
         <input type="text" name="test_mail_address" size="30" />
-        <input type="button" value="{$lang.cfg_name.send}" onclick="sendTestEmail();" class="button" />
+        <input type="button" value="{{ $lang['cfg_name']['send'] }}" onclick="sendTestEmail();" class="button" />
       </td>
     </tr>
     <tr>
       <td align="center" colspan="2">
-        <input name="submit" type="submit" value="{$lang.button_submit}" class="button" />
-        <input name="reset" type="reset" value="{$lang.button_reset}" class="button" />
+        <input name="submit" type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+        <input name="reset" type="reset" value="{{ $lang['button_reset'] }}" class="button" />
         <input name="type" type="hidden" value="mail_setting" class="button" />
       </td>
     </tr>
@@ -26,7 +26,7 @@
 </div>
 </form>
 
-{literal}
+
 <script type="text/javascript" language="JavaScript">
 <!--
 onload = function()
@@ -83,5 +83,5 @@ function emailResponse(result)
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

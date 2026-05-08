@@ -1,24 +1,25 @@
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 <form method="post" onsubmit="return false">
 <div class="form-div">
-  {$lang.select_library}
-  <select id="selLib" onchange="loadLibrary()">{$curr_template}
-    {html_options options=$libraries selected="$curr_library"}
+  {{ $lang['select_library'] }}
+  <select id="selLib" onchange="loadLibrary()">{{ $curr_template }}
+    @foreach($libraries as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach
   </select>
 </div>
 
 <div class="main-div">
   <div class="button-div ">
-  <textarea id="libContent" rows="20" style="font-family: Courier New; width:95%">{$library_html|escape:html}</textarea>
-    <input type="button" value="{$lang.button_submit}" class="button" onclick="updateLibrary()" />
-    <input type="button" value="{$lang.button_restore}" class="button" onclick="restoreLibrary()" />
+  <textarea id="libContent" rows="20" style="font-family: Courier New; width:95%">{{ $library_html }}</textarea>
+    <input type="button" value="{{ $lang['button_submit'] }}" class="button" onclick="updateLibrary()" />
+    <input type="button" value="{{ $lang['button_restore'] }}" class="button" onclick="restoreLibrary()" />
   </div>
 </div>
 </form>
 <script language="JavaScript">
 <!--
-{literal}
+
 
 var currLibrary = "{$curr_library}";
 var content = '';
@@ -104,7 +105,7 @@ function updateLibraryResponse(result)
     alert(result.message);
   }
 }
-{/literal}
+
 //-->
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

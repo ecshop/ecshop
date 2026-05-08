@@ -1,58 +1,59 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="main-div">
 <form method="post" action="articlecat.php" name="theForm"  onsubmit="return validate()">
 <table cellspacing="1" cellpadding="3" width="100%">
   <tr>
-    <td class="label">{$lang.cat_name}</td>
-    <td><input type="text" name="cat_name" maxlength="60" size = "30" value="{$cat.cat_name|escape}" />{$lang.require_field}</td>
+    <td class="label">{{ $lang['cat_name'] }}</td>
+    <td><input type="text" name="cat_name" maxlength="60" size = "30" value="{{ $cat['cat_name'] }}" />{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.parent_cat}</td>
+    <td class="label">{{ $lang['parent_cat'] }}</td>
     <td>
-      <select name="parent_id" onchange="catChanged()" {if $disabled }disabled="disabled"{/if} >
-        <option value="0">{$lang.cat_top}</option>
-        {$cat_select}
+      <select name="parent_id" onchange="catChanged()" @if($disabled )disabled="disabled"@endif >
+        <option value="0">{{ $lang['cat_top'] }}</option>
+        {{ $cat_select }}
       </select>
     </td>
   </tr>
   <tr>
-    <td class="label">{$lang.sort_order}:</td>
+    <td class="label">{{ $lang['sort_order'] }}:</td>
     <td>
-      <input type="text" name='sort_order' {if $cat.sort_order}value='{$cat.sort_order}'{else} value="50"{/if} size="15" />
+      <input type="text" name='sort_order' @if($cat['sort_order'])value='{{ $cat['sort_order'] }}'@else value="50"@endif size="15" />
     </td>
   </tr>
     <tr>
-    <td class="label">{$lang.show_in_nav}:</td>
+    <td class="label">{{ $lang['show_in_nav'] }}:</td>
     <td>
-      <input type="radio" name="show_in_nav" value="1" {if $cat.show_in_nav neq 0} checked="true"{/if}/> {$lang.yes}
-      <input type="radio" name="show_in_nav" value="0" {if $cat.show_in_nav eq 0} checked="true"{/if} /> {$lang.no}
+      <input type="radio" name="show_in_nav" value="1" @if($cat['show_in_nav'] != 0) checked="true"@endif/> {{ $lang['yes'] }}
+      <input type="radio" name="show_in_nav" value="0" @if($cat['show_in_nav'] == 0) checked="true"@endif /> {{ $lang['no'] }}
     </td>
   </tr>
   <tr>
-    <td class="label"><a href="javascript:showNotice('notice_keywords');" title="{$lang.form_notice}">
-        <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.cat_keywords}</td>
-    <td><input type="text" name="keywords" maxlength="60" size="50" value="{$cat.keywords|escape}" />
-    <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="notice_keywords">{$lang.notice_keywords}</span>
+    <td class="label"><a href="javascript:showNotice('notice_keywords');" title="{{ $lang['form_notice'] }}">
+        <img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['cat_keywords'] }}</td>
+    <td><input type="text" name="keywords" maxlength="60" size="50" value="{{ $cat['keywords'] }}" />
+    <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="notice_keywords">{{ $lang['notice_keywords'] }}</span>
     </td>
   </tr>
   <tr>
-    <td class="label">{$lang.cat_desc}</td>
-    <td><textarea  name="cat_desc" cols="60" rows="4">{$cat.cat_desc|escape}</textarea></td>
+    <td class="label">{{ $lang['cat_desc'] }}</td>
+    <td><textarea  name="cat_desc" cols="60" rows="4">{{ $cat['cat_desc'] }}</textarea></td>
   </tr>
   <tr>
     <td colspan="2" align="center"><br />
-      <input type="submit" class="button" value="{$lang.button_submit}" />
-      <input type="reset" class="button" value="{$lang.button_reset}" />
-      <input type="hidden" name="act" value="{$form_action}" />
-      <input type="hidden" name="id" value="{$cat.cat_id}" />
-      <input type="hidden" name="old_catname" value="{$cat.cat_name}" />
+      <input type="submit" class="button" value="{{ $lang['button_submit'] }}" />
+      <input type="reset" class="button" value="{{ $lang['button_reset'] }}" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
+      <input type="hidden" name="id" value="{{ $cat['cat_id'] }}" />
+      <input type="hidden" name="old_catname" value="{{ $cat['cat_name'] }}" />
     </td>
   </tr>
 </table>
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 /**
@@ -95,5 +96,5 @@ onload = function()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

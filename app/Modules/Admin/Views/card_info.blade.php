@@ -1,52 +1,53 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="main-div">
 <form method="post" action="card.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
 <table cellspacing="1" cellpadding="3" width="100%">
   <tr>
-    <td class="label">{$lang.card_name}</td>
-    <td><input type="text" name="card_name" maxlength="60" size = "30" value="{$card.card_name|escape}" />{$lang.require_field}</td>
+    <td class="label">{{ $lang['card_name'] }}</td>
+    <td><input type="text" name="card_name" maxlength="60" size = "30" value="{{ $card['card_name'] }}" />{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label"><a href="javascript:showNotice('notice_cardfee');" title="{$lang.form_notice}">
-        <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.card_fee}</td>
-    <td><input type="text" name="card_fee" maxlength="60" size="30" value="{$card.card_fee}" />{$lang.require_field}
-    <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="notice_cardfee">{$lang.notice_cardfee}</span>
+    <td class="label"><a href="javascript:showNotice('notice_cardfee');" title="{{ $lang['form_notice'] }}">
+        <img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['card_fee'] }}</td>
+    <td><input type="text" name="card_fee" maxlength="60" size="30" value="{{ $card['card_fee'] }}" />{{ $lang['require_field'] }}
+    <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="notice_cardfee">{{ $lang['notice_cardfee'] }}</span>
     </td>
   </tr>
   <tr>
-    <td class="label"><a href="javascript:showNotice('notice_cardfreemoney');" title="{$lang.form_notice}">
-        <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.free_money}</td>
-    <td><input type="text" name="free_money" maxlength="60" size="30" value="{$card.free_money}" />{$lang.require_field}
-    <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="notice_cardfreemoney">{$lang.notice_cardfreemoney}</span>
+    <td class="label"><a href="javascript:showNotice('notice_cardfreemoney');" title="{{ $lang['form_notice'] }}">
+        <img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['free_money'] }}</td>
+    <td><input type="text" name="free_money" maxlength="60" size="30" value="{{ $card['free_money'] }}" />{{ $lang['require_field'] }}
+    <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="notice_cardfreemoney">{{ $lang['notice_cardfreemoney'] }}</span>
     </td>
   </tr>
   <tr>
-    <td class="label">{if $card.card_img neq ""}<a href="javascript:showNotice('warn_cardimg');" title="{$lang.form_notice}">
-        <img src="images/warning_small.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{/if}{$lang.card_img}</td>
-    <td><input type="file" name="card_img"  size="45">{if $card.card_img neq ""}<input type="button" value="{$lang.drop_card_img}" onclick="if (confirm('{$lang.confirm_drop_card_img}'))location.href='card.php?act=drop_card_img&id={$card.card_id}'">{/if}
-    <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="warn_cardimg">{$lang.warn_cardimg}</span>
+    <td class="label">@if($card['card_img'] != "")<a href="javascript:showNotice('warn_cardimg');" title="{{ $lang['form_notice'] }}">
+        <img src="images/warning_small.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>@endif{{ $lang['card_img'] }}</td>
+    <td><input type="file" name="card_img"  size="45">@if($card['card_img'] != "")<input type="button" value="{{ $lang['drop_card_img'] }}" onclick="if (confirm('{{ $lang['confirm_drop_card_img'] }}'))location.href='card.php?act=drop_card_img&id={{ $card['card_id'] }}'">@endif
+    <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="warn_cardimg">{{ $lang['warn_cardimg'] }}</span>
     </td>
   </tr>
   <tr>
-    <td class="label">{$lang.card_desc}</td>
-    <td><textarea  name="card_desc" cols="60" rows="4">{$card.card_desc|escape}</textarea></td>
+    <td class="label">{{ $lang['card_desc'] }}</td>
+    <td><textarea  name="card_desc" cols="60" rows="4">{{ $card['card_desc'] }}</textarea></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td>
-      <input type="submit" class="button" value="{$lang.button_submit}" />
-      <input type="reset" class="button" value="{$lang.button_reset}" />
-      <input type="hidden" name="act" value="{$form_action}" />
-      <input type="hidden" name="id" value="{$card.card_id}" />
-      <input type="hidden" name="old_cardname" value="{$card.card_name}" />
-      <input type="hidden" name="old_cardimg" value="{$card.card_img}">
+      <input type="submit" class="button" value="{{ $lang['button_submit'] }}" />
+      <input type="reset" class="button" value="{{ $lang['button_reset'] }}" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
+      <input type="hidden" name="id" value="{{ $card['card_id'] }}" />
+      <input type="hidden" name="old_cardname" value="{{ $card['card_name'] }}" />
+      <input type="hidden" name="old_cardimg" value="{{ $card['card_img'] }}">
     </td>
   </tr>
 </table>
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 document.forms['theForm'].elements['card_name'].focus();
@@ -68,5 +69,5 @@ onload = function()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

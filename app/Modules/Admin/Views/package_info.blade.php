@@ -1,47 +1,50 @@
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js,validator.js,selectzone.js"}
-<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
+<script src="validator.js"></script>
+<script src="selectzone.js"></script>
+<script type="text/javascript" src="../js/calendar.php?lang={{ $cfg_lang }}"></script>
 <link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
 <div class="main-div">
 <form method="post" action="package.php" name="theForm" onsubmit="return validate()">
 <table cellspacing="1" cellpadding="3" width="100%">
   <tr>
-    <td class="label">{$lang.package_name}</td>
-    <td><input type="text" name="package_name" maxlength="60" size="40" value="{$package.package_name}" />{$lang.require_field}</td>
+    <td class="label">{{ $lang['package_name'] }}</td>
+    <td><input type="text" name="package_name" maxlength="60" size="40" value="{{ $package['package_name'] }}" />{{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.start_time}</td>
+    <td class="label">{{ $lang['start_time'] }}</td>
     <td>
-      <input type="text" name="start_time" maxlength="60" size="40" value="{$package.start_time}" readonly="readonly" id="start_time_id" />
-      <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time_id', '%Y-%m-%d %H:%M', '24', false, 'selbtn1');" value="{$lang.btn_select}" class="button"/>
-      {$lang.require_field}
+      <input type="text" name="start_time" maxlength="60" size="40" value="{{ $package['start_time'] }}" readonly="readonly" id="start_time_id" />
+      <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time_id', '%Y-%m-%d %H:%M', '24', false, 'selbtn1');" value="{{ $lang['btn_select'] }}" class="button"/>
+      {{ $lang['require_field'] }}
     </td>
   </tr>
   <tr>
-    <td class="label">{$lang.end_time}</td>
+    <td class="label">{{ $lang['end_time'] }}</td>
     <td>
-      <input type="text" name="end_time" maxlength="60" size="40" value="{$package.end_time}"  readonly="readonly" id ="end_time_id" />
-      <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('end_time_id', '%Y-%m-%d %H:%M', '24', false, 'selbtn1');" value="{$lang.btn_select}" class="button"/>
-      {$lang.require_field}</td>
+      <input type="text" name="end_time" maxlength="60" size="40" value="{{ $package['end_time'] }}"  readonly="readonly" id ="end_time_id" />
+      <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('end_time_id', '%Y-%m-%d %H:%M', '24', false, 'selbtn1');" value="{{ $lang['btn_select'] }}" class="button"/>
+      {{ $lang['require_field'] }}</td>
   </tr>
   <tr>
-    <td class="label"><a href="javascript:showNotice('noticepackagePrice');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.package_price}</td>
-    <td><input type="text" name="package_price" maxlength="60" size="20" value="{$package.package_price}" />{$lang.require_field}<br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticepackagePrice">{$lang.notice_package_price}</span></td>
+    <td class="label"><a href="javascript:showNotice('noticepackagePrice');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['package_price'] }}</td>
+    <td><input type="text" name="package_price" maxlength="60" size="20" value="{{ $package['package_price'] }}" />{{ $lang['require_field'] }}<br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticepackagePrice">{{ $lang['notice_package_price'] }}</span></td>
   </tr>
   <tr>
-    <td class="label">{$lang.desc}</td>
-    <td><textarea  name="desc" cols="60" rows="4">{$package.act_desc}</textarea></td>
+    <td class="label">{{ $lang['desc'] }}</td>
+    <td><textarea  name="desc" cols="60" rows="4">{{ $package['act_desc'] }}</textarea></td>
   </tr>
   <!-- 商品搜索 -->
   <tr>
     <td class="label">
-      {$lang.search_goods}
+      {{ $lang['search_goods'] }}
     </td>
     <td>
-      <select name="cat_id"><option value="0">{$lang.all_category}</caption>{$cat_list}</select>
-      <select name="brand_id"><option value="0">{$lang.all_brand}</caption>{html_options options=$brand_list}</select>
+      <select name="cat_id"><option value="0">{{ $lang['all_category'] }}</caption>{{ $cat_list }}</select>
+      <select name="brand_id"><option value="0">{{ $lang['all_brand'] }}</caption>@foreach($brand_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach</select>
       <input type="text" name="keyword" />
-      <input type="button" value="{$lang.button_search}" onclick="javascript:searchGoods();" class="button" />
+      <input type="button" value="{{ $lang['button_search'] }}" onclick="javascript:searchGoods();" class="button" />
     </td>
   </tr>
   <tr>
@@ -49,9 +52,9 @@
       <table id="groupgoods-table" align="center" style="width:70%;">
         <!-- 商品列表 -->
         <tr>
-          <th>{$lang.all_goods}</th>
-          <th>{$lang.handler}</th>
-          <th>{$lang.package_goods}</th>
+          <th>{{ $lang['all_goods'] }}</th>
+          <th>{{ $lang['handler'] }}</th>
+          <th>{{ $lang['package_goods'] }}</th>
         </tr>
         <tr>
           <td width="42%">
@@ -59,7 +62,7 @@
             </select>
           </td>
           <td align="center">
-            <p>{$lang.goods_number}<br /><input name="number" type="text" size="6" value="1" /></p>
+            <p>{{ $lang['goods_number'] }}<br /><input name="number" type="text" size="6" value="1" /></p>
             <p><input type="button" value=">>" onclick="sz.addItem(true, 'add_package_goods', this.form.elements['id'].value, this.form.elements['number'].value)" class="button" /></p>
             <p><input type="button" value=">" onclick="sz.addItem(false, 'add_package_goods', this.form.elements['id'].value, this.form.elements['number'].value)" class="button" /></p>
             <p><input type="button" value="<" onclick="sz.dropItem(false, 'drop_package_goods', this.form.elements['id'].value)" class="button" /></p>
@@ -67,9 +70,9 @@
           </td>
           <td width="42%">
             <select name="target_select" size="15" style="width:100%" multiple ondblclick="sz.dropItem(false, 'drop_package_goods', this.form.elements['id'].value)">
-              {foreach from=$package_goods_list item=package_goods}
-              <option value="{$package_goods.g_p}">{$package_goods.goods_name}</option>
-              {/foreach}
+              @foreach($package_goods_list as $package_goods)
+              <option value="{{ $package_goods['g_p'] }}">{{ $package_goods['goods_name'] }}</option>
+              @endforeach
             </select>
           </td>
         </tr>
@@ -79,10 +82,10 @@
 
   <tr>
     <td colspan="2" align="center">
-      <input type="submit" value="{$lang.button_submit}" class="button" />
-      <input type="reset" value="{$lang.button_reset}" class="button" />
-      <input type="hidden" name="act" value="{$form_action}" />
-      <input type="hidden" name="id" value="{$package.id}" />
+      <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
+      <input type="hidden" name="id" value="{{ $package['id'] }}" />
     </td>
   </tr>
 </table>
@@ -90,7 +93,7 @@
 </div>
 <script language="JavaScript">
 <!--
-{literal}
+
 document.forms['theForm'].elements['package_name'].focus();
 var elements = document.forms['theForm'].elements;
 var sz = new SelectZone(2, elements['source_select'], elements['target_select'], elements['number']);
@@ -194,6 +197,6 @@ function searchGoodsResponse(result)
 //  szObject.loadOptions('get_goods_list', filters);
 //}
 //-->
-{/literal}
+
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

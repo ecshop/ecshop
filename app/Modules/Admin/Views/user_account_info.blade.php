@@ -1,79 +1,79 @@
-{include file="pageheader.htm"}
-{insert_scripts files="validator.js"}
+@include('pageheader')
+<script src="validator.js"></script>
 <div class="main-div">
   <form action="user_account.php" method="post" name="theForm" onsubmit="return validate()">
     <table width="100%">
       <tr>
-        <td class="label">{$lang.user_id}：</td>
+        <td class="label">{{ $lang['user_id'] }}：</td>
         <td>
-          <input type="text" name="user_id" value="{$user_name}" size="20"
-          {if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3 || $action eq "edit"} readonly="true" {/if}/>
+          <input type="text" name="user_id" value="{{ $user_name }}" size="20"
+          @if($user_surplus['process_type'] == 2 || $user_surplus['process_type'] == 3 || $action == "edit") readonly="true" @endif/>
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.surplus_amount}：</td>
+        <td class="label">{{ $lang['surplus_amount'] }}：</td>
         <td>
-          <input type="text" name="amount" value="{$user_surplus.amount}" size="20"
-          {if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3 || $action eq "edit"} readonly="true" {/if}/>
+          <input type="text" name="amount" value="{{ $user_surplus['amount'] }}" size="20"
+          @if($user_surplus['process_type'] == 2 || $user_surplus['process_type'] == 3 || $action == "edit") readonly="true" @endif/>
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.pay_mothed}：</td>
+        <td class="label">{{ $lang['pay_mothed'] }}：</td>
         <td>
-          <select name="payment" {if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3}disabled="true" {/if}>
-          <option value="">{$lang.please_select}</option>
-          {html_options options=$payment_list selected=$user_surplus.payment}
+          <select name="payment" @if($user_surplus['process_type'] == 2 || $user_surplus['process_type'] == 3)disabled="true" @endif>
+          <option value="">{{ $lang['please_select'] }}</option>
+          @foreach($payment_list as $__k => $__v)<option value="{{ $__k }}" @if($__k == $user_surplus['payment']) selected @endif>{{ $__v }}</option>@endforeach
           </select>
         </td>
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.process_type}：</td>
+        <td class="label">{{ $lang['process_type'] }}：</td>
         <td>
           <input type="radio" name="process_type" value="0"
-          {if $user_surplus.process_type eq 0} checked="true" {/if} {if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3 || $action eq "edit"}disabled="true" {/if} />{$lang.surplus_type_0}
+          @if($user_surplus['process_type'] == 0) checked="true" @endif @if($user_surplus['process_type'] == 2 || $user_surplus['process_type'] == 3 || $action == "edit")disabled="true" @endif />{{ $lang['surplus_type_0'] }}
           <input type="radio" name="process_type" value="1"
-          {if $user_surplus.process_type eq 1} checked="true" {/if} {if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3|| $action eq "edit"}disabled="true" {/if} />{$lang.surplus_type_1}
-          {if $action eq "edit" && ($user_surplus.process_type eq 2 || $user_surplus.process_type eq 3)}
+          @if($user_surplus['process_type'] == 1) checked="true" @endif @if($user_surplus['process_type'] == 2 || $user_surplus['process_type'] == 3|| $action == "edit")disabled="true" @endif />{{ $lang['surplus_type_1'] }}
+          @if($action == "edit" && ($user_surplus['process_type'] == 2 || $user_surplus['process_type'] == 3))
           <input type="radio" name="process_type" value="2"
-          {if $user_surplus.process_type eq 2|| $action eq "edit"} checked="true"{/if}{if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3} disabled="true"{/if} />{$lang.surplus_type_2}
+          @if($user_surplus['process_type'] == 2|| $action == "edit") checked="true"@endif@if($user_surplus['process_type'] == 2 || $user_surplus['process_type'] == 3) disabled="true"@endif />{{ $lang['surplus_type_2'] }}
           <input type="radio" name="process_type" value="3"
-          {if $user_surplus.process_type eq 3|| $action eq "edit"} checked="true"{/if}{if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3} disabled="true"{/if} />{$lang.surplus_type_3}
-          {/if}
+          @if($user_surplus['process_type'] == 3|| $action == "edit") checked="true"@endif@if($user_surplus['process_type'] == 2 || $user_surplus['process_type'] == 3) disabled="true"@endif />{{ $lang['surplus_type_3'] }}
+          @endif
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.surplus_notic}：</td>
+        <td class="label">{{ $lang['surplus_notic'] }}：</td>
         <td>
-          <textarea name="admin_note" cols="55" rows="3"{if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3} readonly="true" {/if}>{$user_surplus.admin_note}</textarea>
+          <textarea name="admin_note" cols="55" rows="3"@if($user_surplus['process_type'] == 2 || $user_surplus['process_type'] == 3) readonly="true" @endif>{{ $user_surplus['admin_note'] }}</textarea>
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.surplus_desc}：</td>
+        <td class="label">{{ $lang['surplus_desc'] }}：</td>
         <td>
-          <textarea name="user_note" cols="55" rows="3"{if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3} readonly="true" {/if}>{$user_surplus.user_note}</textarea>
+          <textarea name="user_note" cols="55" rows="3"@if($user_surplus['process_type'] == 2 || $user_surplus['process_type'] == 3) readonly="true" @endif>{{ $user_surplus['user_note'] }}</textarea>
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.status}：</td>
+        <td class="label">{{ $lang['status'] }}：</td>
         <td>
           <input type="radio" name="is_paid" value="0"
-          {if $user_surplus.is_paid eq 0} checked="true"{/if} {if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3 ||$action eq "edit"} disabled="true"{/if}/>{$lang.unconfirm}
+          @if($user_surplus['is_paid'] == 0) checked="true"@endif @if($user_surplus['process_type'] == 2 || $user_surplus['process_type'] == 3 ||$action == "edit") disabled="true"@endif/>{{ $lang['unconfirm'] }}
           <input type="radio" name="is_paid" value="1"
-          {if $user_surplus.is_paid eq 1} checked="true" {/if} {if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3 ||$action eq "edit"} disabled="true"{/if}/>{$lang.confirm}
+          @if($user_surplus['is_paid'] == 1) checked="true" @endif @if($user_surplus['process_type'] == 2 || $user_surplus['process_type'] == 3 ||$action == "edit") disabled="true"@endif/>{{ $lang['confirm'] }}
           <input type="radio" name="is_paid" value="2"
-          {if $user_surplus.is_paid eq 2} checked="true" {/if} {if $user_surplus.process_type eq 2 || $user_surplus.process_type eq 3 ||$action eq "edit"} disabled="true"{/if}/>{$lang.cancel}
+          @if($user_surplus['is_paid'] == 2) checked="true" @endif @if($user_surplus['process_type'] == 2 || $user_surplus['process_type'] == 3 ||$action == "edit") disabled="true"@endif/>{{ $lang['cancel'] }}
         </td>
       </tr>
       <tr>
         <td class="label">&nbsp;</td>
         <td>
-          <input type="hidden" name="id" value="{$user_surplus.id}" />
-          <input type="hidden" name="act" value="{$form_act}" />
-          {if $user_surplus.process_type eq 0 || $user_surplus.process_type eq 1}
-          <input type="submit" value="{$lang.button_submit}" class="button" />
-          <input type="reset" value="{$lang.button_reset}" class="button" />
-          {/if}
+          <input type="hidden" name="id" value="{{ $user_surplus['id'] }}" />
+          <input type="hidden" name="act" value="{{ $form_act }}" />
+          @if($user_surplus['process_type'] == 0 || $user_surplus['process_type'] == 1)
+          <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+          <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
+          @endif
         </td>
       </tr>
     </table>
@@ -82,7 +82,7 @@
 
 <script language="JavaScript">
 <!--
-{literal}
+
 onload = function()
 {
     // 开始检查订单
@@ -114,6 +114,6 @@ function validate()
 }
 
 //-->
-{/literal}
+
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

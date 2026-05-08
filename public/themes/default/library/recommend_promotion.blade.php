@@ -1,17 +1,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<!-- {if $promotion_goods} -->
+@if($promotion_goods)
 <div id="sales" class="f_l clearfix">
       <h1><a href="../search.php?intro=promotion"><img src="images/more.gif" /></a></h1>
        <div class="clearfix goodBox">
-         <!--{foreach from=$promotion_goods item=goods name="promotion_foreach"}-->
-         {if $smarty.foreach.promotion_foreach.index <= 3}
+         @foreach($promotion_goods as $goods)
+         @if($loop->index <= 3)
            <div class="goodList">
-           <a href="{$goods.url}"><img src="{$goods.thumb}" border="0" alt="{$goods.name|escape:html}"/></a><br />
-					 <p><a href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.short_name|escape:html}</a></p>
-           {$lang.promote_price}<font class="f1">{$goods.promote_price}</font>
+           <a href="{{ $goods['url'] }}"><img src="{{ $goods['thumb'] }}" border="0" alt="{{ $goods['name'] }}"/></a><br />
+					 <p><a href="{{ $goods['url'] }}" title="{{ $goods['name'] }}">{{ $goods['short_name'] }}</a></p>
+           {{ $lang['promote_price'] }}<font class="f1">{{ $goods['promote_price'] }}</font>
            </div>
-         {/if}
-         <!--{/foreach}-->
+         @endif
+         @endforeach
        </div>
       </div>
-<!-- {/if} -->
+@endif

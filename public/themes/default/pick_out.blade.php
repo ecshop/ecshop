@@ -2,20 +2,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$page_title}</title>
+<title>{{ $page_title }}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
 
 {* 包含脚本文件 *}
-{insert_scripts files='common.js,lefttime.js'}
+<script src="common.js"></script>
+<script src="lefttime.js"></script>
 <script type="text/javascript">
-  {foreach from=$lang.js_languages item=item key=key}
-    var {$key} = "{$item}";
-  {/foreach}
+  @foreach($lang['js_languages'] as $key => $item)
+    var {{ $key }} = "{{ $item }}";
+  @endforeach
 </script>
 </head>
 <body>
@@ -41,12 +42,12 @@
     <!-- TemplateEndEditable -->
     <div class="box">
      <div class="box_1">
-      <h3><span>{$lang.your_choice}</span></h3>
+      <h3><span>{{ $lang['your_choice'] }}</span></h3>
       <div class="boxCenterList clearfix">
         <ul>
-        <!--{foreach from = $picks item=pick }-->
-        <li style="word-break:break-all;"><a href="{$pick.url}">{$pick.name}</a></li>
-        <!--{/foreach}-->
+        @foreach($picks as $pick)
+        <li style="word-break:break-all;"><a href="{{ $pick['url'] }}">{{ $pick['name'] }}</a></li>
+        @endforeach
        </ul>
       </div>
      </div>
@@ -61,27 +62,27 @@
   <div class="AreaR">
    <div class="box">
    <div class="box_1">
-    <h3><span>{$lang.pick_out}</span></h3>
+    <h3><span>{{ $lang['pick_out'] }}</span></h3>
     <div class="boxCenterList">
       <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
-      <!--{foreach from=$condition item=caption}-->
+      @foreach($condition as $caption)
       <tr>
         <td bgcolor="#e5ecfb" style="border-bottom: 1px solid #DADADA">
-          <img src="images/note.gif" alt="no alt" />&nbsp;&nbsp;<strong class="f_red">{$caption.name}</strong></td>
+          <img src="images/note.gif" alt="no alt" />&nbsp;&nbsp;<strong class="f_red">{{ $caption['name'] }}</strong></td>
       </tr>
-      <!--{foreach from=$caption.cat item=cat}-->
+      @foreach($caption['cat'] as $cat)
       <tr>
-        <td bgcolor="#ffffff">&nbsp;&nbsp;<strong>{$cat.cat_name}</strong></td>
+        <td bgcolor="#ffffff">&nbsp;&nbsp;<strong>{{ $cat['cat_name'] }}</strong></td>
       </tr>
       <tr>
         <td bgcolor="#ffffff">&nbsp;&nbsp;
-          <!--{foreach from = $cat.list item=list}-->
-          &nbsp;&nbsp;<a href="{$list.url}" class="f6">{$list.name}</a>
-          <!--{/foreach}-->
+          @foreach($cat['list'] as $list)
+          &nbsp;&nbsp;<a href="{{ $list['url'] }}" class="f6">{{ $list['name'] }}</a>
+          @endforeach
         </td>
       </tr>
-      <!--{/foreach}-->
-      <!--{/foreach}-->
+      @endforeach
+      @endforeach
     </table>
     </div>
    </div>
@@ -89,25 +90,25 @@
    <div class="blank5"></div>
    <div class="box">
    <div class="box_1">
-    <h3><span>{$lang.search_result} ({$count})</span></h3>
+    <h3><span>{{ $lang['search_result'] }} ({{ $count }})</span></h3>
     <div class="boxCenterList clearfix">
-     <!--{foreach from=$pickout_goods item=goods name=goods}-->
+     @foreach($pickout_goods as $goods)
      <div class="goodsItem">
-           <a href="{$goods.url}"><img src="{$goods.thumb}" alt="{$goods.name|escape:html}" class="goodsimg" /></a><br />
-           <p><a href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.short_name}</a></p>
-					 <a href="javascript:addToCart({$goods.id})"><img src="images/bnt_buy.gif" /></a> <a href="javascript:collect({$goods.id})"><img src="images/bnt_coll.gif" /></a>
+           <a href="{{ $goods['url'] }}"><img src="{{ $goods['thumb'] }}" alt="{{ $goods['name'] }}" class="goodsimg" /></a><br />
+           <p><a href="{{ $goods['url'] }}" title="{{ $goods['name'] }}">{{ $goods['short_name'] }}</a></p>
+					 <a href="javascript:addToCart({{ $goods['id'] }})"><img src="images/bnt_buy.gif" /></a> <a href="javascript:collect({{ $goods['id'] }})"><img src="images/bnt_coll.gif" /></a>
            <font class="f1">
-           <!-- {if $goods.promote_price neq ""} -->
-          {$lang.promote_price}{$goods.promote_price}
-          <!-- {else}-->
-          {$lang.shop_price}{$goods.shop_price}
-          <!--{/if}-->
+           @if($goods['promote_price'] != "")
+          {{ $lang['promote_price'] }}{{ $goods['promote_price'] }}
+          @else
+          {{ $lang['shop_price'] }}{{ $goods['shop_price'] }}
+          @endif
            </font>
         </div>
-     <!--{/foreach}-->
-     <!--{if $count > 5}-->
-     <div class="more f_r" style="clear:both;"><a href="{$url}"><img src="images/more.gif" /></a></div>
-     <!--{/if}-->
+     @endforeach
+     @if($count > 5)
+     <div class="more f_r" style="clear:both;"><a href="{{ $url }}"><img src="images/more.gif" /></a></div>
+     @endif
     </div>
    </div>
   </div>
@@ -127,36 +128,36 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>]
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+    <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>]
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->
 </body>
 <script type="text/javascript">
-var gmt_end_time = "{$group_buy.gmt_end_date|default:0}";
-{foreach from=$lang.goods_js item=item key=key}
-var {$key} = "{$item}";
-{/foreach}
+var gmt_end_time = "{{ $group_buy['gmt_end_date'] ?? 0 }}";
+@foreach($lang['goods_js'] as $key => $item)
+var {{ $key }} = "{{ $item }}";
+@endforeach
 
-var btn_buy = "{$lang.btn_buy}";
-var is_cancel = "{$lang.is_cancel}";
-var select_spe = "{$lang.select_spe}";
-<!-- {literal} -->
+var btn_buy = "{{ $lang['btn_buy'] }}";
+var is_cancel = "{{ $lang['is_cancel'] }}";
+var select_spe = "{{ $lang['select_spe'] }}";
+<!--  -->
 
 onload = function()
 {
@@ -167,6 +168,6 @@ onload = function()
   catch (e)
   {}
 }
-<!-- {/literal} -->
+<!--  -->
 </script>
 </html>

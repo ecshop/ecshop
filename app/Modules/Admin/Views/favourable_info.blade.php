@@ -1,83 +1,84 @@
-{include file="pageheader.htm"}
-<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+@include('pageheader')
+<script type="text/javascript" src="../js/calendar.php?lang={{ $cfg_lang }}"></script>
 <link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
-{insert_scripts files="validator.js,../js/transport.js}
+<script src="validator.js"></script>
+<script src="../js/transport.js"></script>
 <div class="main-div">
 <form method="post" action="favourable.php" name="theForm" enctype="multipart/form-data" onSubmit="return validate()">
 <table cellspacing="1" cellpadding="3" width="100%">
   <tr>
-    <td class="label">{$lang.label_act_name}</td>
-    <td><input name="act_name" type="text" id="act_name" value="{$favourable.act_name}" size="40" /></td>
+    <td class="label">{{ $lang['label_act_name'] }}</td>
+    <td><input name="act_name" type="text" id="act_name" value="{{ $favourable['act_name'] }}" size="40" /></td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_start_time}</td>
-    <td><input name="start_time" type="text" id="start_time" value="{$favourable.start_time}" readonly="readonly" />
-        <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time', '%Y-%m-%d %H:%M', '24', false, 'selbtn1');" value="{$lang.btn_select}" class="button" /></td>
+    <td class="label">{{ $lang['label_start_time'] }}</td>
+    <td><input name="start_time" type="text" id="start_time" value="{{ $favourable['start_time'] }}" readonly="readonly" />
+        <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time', '%Y-%m-%d %H:%M', '24', false, 'selbtn1');" value="{{ $lang['btn_select'] }}" class="button" /></td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_end_time}</td>
-    <td><input name="end_time" type="text" id="end_time" value="{$favourable.end_time}" readonly="readonly" />
-        <input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d %H:%M', '24', false, 'selbtn2');" value="{$lang.btn_select}" class="button" /></td>
+    <td class="label">{{ $lang['label_end_time'] }}</td>
+    <td><input name="end_time" type="text" id="end_time" value="{{ $favourable['end_time'] }}" readonly="readonly" />
+        <input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d %H:%M', '24', false, 'selbtn2');" value="{{ $lang['btn_select'] }}" class="button" /></td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_user_rank}</td>
-    <td>{foreach from=$user_rank_list item=user_rank}<input type="checkbox" name="user_rank[]" value="{$user_rank.rank_id}" {if $user_rank.checked}checked="true"{/if} />{$user_rank.rank_name} {/foreach}</td>
+    <td class="label">{{ $lang['label_user_rank'] }}</td>
+    <td>@foreach($user_rank_list as $user_rank)<input type="checkbox" name="user_rank[]" value="{{ $user_rank['rank_id'] }}" @if($user_rank['checked'])checked="true"@endif />{{ $user_rank['rank_name'] }} @endforeach</td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_act_range}</td>
+    <td class="label">{{ $lang['label_act_range'] }}</td>
     <td><select name="act_range" onchange="changeRange(this.value)">
-          <option value="0" selected="selected" {if $favourable.act_range eq 0}selected="selected"{/if}>{$lang.far_all}</option>
-          <option value="1" {if $favourable.act_range eq 1}selected="selected"{/if}>{$lang.far_category}</option>
-          <option value="2" {if $favourable.act_range eq 2}selected="selected"{/if}>{$lang.far_brand}</option>
-          <option value="3" {if $favourable.act_range eq 3}selected="selected"{/if}>{$lang.far_goods}</option>
+          <option value="0" selected="selected" @if($favourable['act_range'] == 0)selected="selected"@endif>{{ $lang['far_all'] }}</option>
+          <option value="1" @if($favourable['act_range'] == 1)selected="selected"@endif>{{ $lang['far_category'] }}</option>
+          <option value="2" @if($favourable['act_range'] == 2)selected="selected"@endif>{{ $lang['far_brand'] }}</option>
+          <option value="3" @if($favourable['act_range'] == 3)selected="selected"@endif>{{ $lang['far_goods'] }}</option>
         </select>
-      <div id="range-div">{foreach from=$act_range_ext item=item}<input name="act_range_ext[]" type="checkbox" value="{$item.id}" checked="checked" />{$item.name} {/foreach}</div></td>
+      <div id="range-div">@foreach($act_range_ext as $item)<input name="act_range_ext[]" type="checkbox" value="{{ $item['id'] }}" checked="checked" />{{ $item['name'] }} @endforeach</div></td>
   </tr>
-  <tr id="range_search"{if $favourable.act_range eq 0} style="display:none"{/if}>
-    <td align="right">{$lang.label_search_and_add}</td>
+  <tr id="range_search"@if($favourable['act_range'] == 0) style="display:none"@endif>
+    <td align="right">{{ $lang['label_search_and_add'] }}</td>
     <td><input name="keyword" type="text" id="keyword">
-      <input name="search" type="button" id="search" value="{$lang.button_search}" class="button" onclick="searchItem()" />
+      <input name="search" type="button" id="search" value="{{ $lang['button_search'] }}" class="button" onclick="searchItem()" />
       <select name="result" id="result">
       </select> <input type="button" name="add_range" value="+" class="button" onclick="addRange()" />
       </a></td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_min_amount}</td>
-    <td><input name="min_amount" type="text" id="min_amount" value="{$favourable.min_amount}"></td>
+    <td class="label">{{ $lang['label_min_amount'] }}</td>
+    <td><input name="min_amount" type="text" id="min_amount" value="{{ $favourable['min_amount'] }}"></td>
   </tr>
   <tr>
-    <td class="label">{$lang.label_max_amount}</td>
-    <td><input name="max_amount" type="text" id="max_amount" value="{$favourable.max_amount}">
-    {$lang.notice_max_amount}</td>
+    <td class="label">{{ $lang['label_max_amount'] }}</td>
+    <td><input name="max_amount" type="text" id="max_amount" value="{{ $favourable['max_amount'] }}">
+    {{ $lang['notice_max_amount'] }}</td>
   </tr>
   <tr>
-    <td class="label"><a href="javascript:showNotice('NoticeActType');" title="{$lang.form_notice}">
-        <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.label_act_type}</td>
+    <td class="label"><a href="javascript:showNotice('NoticeActType');" title="{{ $lang['form_notice'] }}">
+        <img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['label_act_type'] }}</td>
     <td><select name="act_type" id="act_type" onchange="changeType(this.value)">
-      <option value="0" {if $favourable.act_type eq 0}selected="selected"{/if}>{$lang.fat_goods}</option>
-      <option value="1" {if $favourable.act_type eq 1}selected="selected"{/if}>{$lang.fat_price}</option>
-      <option value="2" {if $favourable.act_type eq 2}selected="selected"{/if}>{$lang.fat_discount}</option>
+      <option value="0" @if($favourable['act_type'] == 0)selected="selected"@endif>{{ $lang['fat_goods'] }}</option>
+      <option value="1" @if($favourable['act_type'] == 1)selected="selected"@endif>{{ $lang['fat_price'] }}</option>
+      <option value="2" @if($favourable['act_type'] == 2)selected="selected"@endif>{{ $lang['fat_discount'] }}</option>
       </select>
-      <input name="act_type_ext" type="text" id="act_type_ext" value="{$favourable.act_type_ext}" size="10" />
+      <input name="act_type_ext" type="text" id="act_type_ext" value="{{ $favourable['act_type_ext'] }}" size="10" />
       <br />
-      <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="NoticeActType">{$lang.notice_act_type}</span>
+      <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="NoticeActType">{{ $lang['notice_act_type'] }}</span>
       <div id="gift-div" style="width:60%">
       <table id="gift-table">
-      {if $favourable.gift}
-        <tr align="center"><td><strong>{$lang.js_languages.gift}</strong></td><td><strong>{$lang.js_languages.price}</strong></td></tr>
-        {foreach from=$favourable.gift item=goods key=key}
-        <tr><td><input type="checkbox" name="gift_id[{$key}]" value="{$goods.id}" checked="checked" />{$goods.name}</td>
-        <td align="right"><input name="gift_price[{$key}]" type="text" value="{$goods.price}" size="10" style="text-align:right" />
-        <input name="gift_name[{$key}]" type="hidden" value="{$goods.name}" /></td></tr>
-        {/foreach}
-      {/if}
+      @if($favourable['gift'])
+        <tr align="center"><td><strong>{{ $lang['js_languages']['gift'] }}</strong></td><td><strong>{{ $lang['js_languages']['price'] }}</strong></td></tr>
+        @foreach($favourable['gift'] as $key => $goods)
+        <tr><td><input type="checkbox" name="gift_id[{{ $key }}]" value="{{ $goods['id'] }}" checked="checked" />{{ $goods['name'] }}</td>
+        <td align="right"><input name="gift_price[{{ $key }}]" type="text" value="{{ $goods['price'] }}" size="10" style="text-align:right" />
+        <input name="gift_name[{{ $key }}]" type="hidden" value="{{ $goods['name'] }}" /></td></tr>
+        @endforeach
+      @endif
       </table>
     </div></td>
   </tr>
-  <tr id="type_search"{if $favourable.act_type neq 0} style="display:none"{/if}>
-    <td align="right">{$lang.label_search_and_add_gift}</td>
+  <tr id="type_search"@if($favourable['act_type'] != 0) style="display:none"@endif>
+    <td align="right">{{ $lang['label_search_and_add_gift'] }}</td>
     <td><input name="keyword1" type="text" id="keyword1" />
-      <input name="search1" type="button" id="search1" value="{$lang.button_search}" class="button" onclick="searchItem1()" />
+      <input name="search1" type="button" id="search1" value="{{ $lang['button_search'] }}" class="button" onclick="searchItem1()" />
         <select name="result1" id="result1">
                 </select>
         <input name="add_gift" type="button" class="button" id="add_gift" onclick="addGift()" value="+" />
@@ -85,16 +86,16 @@
   </tr>
   <tr>
     <td colspan="2" align="center">
-      <input type="submit" class="button" value="{$lang.button_submit}" />
-      <input type="reset" class="button" value="{$lang.button_reset}" />
-      <input type="hidden" name="act" value="{$form_action}" />
-      <input type="hidden" name="id" value="{$favourable.act_id}" />    </td>
+      <input type="submit" class="button" value="{{ $lang['button_submit'] }}" />
+      <input type="reset" class="button" value="{{ $lang['button_reset'] }}" />
+      <input type="hidden" name="act" value="{{ $form_action }}" />
+      <input type="hidden" name="id" value="{{ $favourable['act_id'] }}" />    </td>
   </tr>
 </table>
 </form>
 </div>
 
-{literal}
+
 <script language="JavaScript">
 <!--
 onload = function()
@@ -343,5 +344,5 @@ function changeType(typeId)
 
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

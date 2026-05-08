@@ -1,25 +1,25 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div id="main-div" class="main-div">
 <form method="POST" action="sms.php?act=get_charge_history" name="sms-charge-history-form" onsubmit="return validate();">
 <table>
   <tr>
-    <td class="label">{$lang.start_date}:</td>
-    <td><input type="text" name="start_date" maxlength="20" size="20" value="" />&nbsp;&nbsp;&nbsp;&nbsp;{$lang.date_notice}</td>
+    <td class="label">{{ $lang['start_date'] }}:</td>
+    <td><input type="text" name="start_date" maxlength="20" size="20" value="" />&nbsp;&nbsp;&nbsp;&nbsp;{{ $lang['date_notice'] }}</td>
   </tr>
   <tr>
-    <td class="label">{$lang.end_date}:</td>
-    <td><input type="text" name="end_date" maxlength="20" size="20" value="" />&nbsp;&nbsp;&nbsp;&nbsp;{$lang.date_notice}</td>
+    <td class="label">{{ $lang['end_date'] }}:</td>
+    <td><input type="text" name="end_date" maxlength="20" size="20" value="" />&nbsp;&nbsp;&nbsp;&nbsp;{{ $lang['date_notice'] }}</td>
   </tr>
   <tr>
     <td colspan="2" align="center">
-      <input type="submit" name="submit" value="{$lang.button_submit}" class="button" />
-      <input type="reset" value="{$lang.button_reset}" class="button" />
+      <input type="submit" name="submit" value="{{ $lang['button_submit'] }}" class="button" />
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
     </td>
   </tr>
 </table>
 </form>
 </div>
-{literal}
+
 <script type="text/javascript" language="JavaScript">
 <!--
 function  validate() {
@@ -48,5 +48,5 @@ function  validate() {
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

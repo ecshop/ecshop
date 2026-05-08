@@ -1,21 +1,21 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="list-div">
 <table cellpadding='3' cellspacing='1'>
-    <tr><th>{$lang.sent_phones}</th>
-        <th>{$lang.content}</th>
-        <th>{$lang.charge_num}</th>
-        <th>{$lang.sent_date}</th>
-        <th>{$lang.send_status}</th>
+    <tr><th>{{ $lang['sent_phones'] }}</th>
+        <th>{{ $lang['content'] }}</th>
+        <th>{{ $lang['charge_num'] }}</th>
+        <th>{{ $lang['sent_date'] }}</th>
+        <th>{{ $lang['send_status'] }}</th>
     </tr>
-    {foreach from=$sms_send_history.send item=sms_send_history_item}
+    @foreach($sms_send_history['send'] as $sms_send_history_item)
     <tr>
-        <td>{$sms_send_history_item.phone}</td>
-        <td>{$sms_send_history_item.content}</td>
-        <td>{$sms_send_history_item.charge_num}</td>
-        <td>{$sms_send_history_item.send_date}</td>
-        <td>{if $sms_send_history_item.send_status eq 1}{$lang.status.1}{else}{$lang.status.0}{/if}</td>
+        <td>{{ $sms_send_history_item['phone'] }}</td>
+        <td>{{ $sms_send_history_item['content'] }}</td>
+        <td>{{ $sms_send_history_item['charge_num'] }}</td>
+        <td>{{ $sms_send_history_item['send_date'] }}</td>
+        <td>@if($sms_send_history_item['send_status'] == 1){{ $lang['status'][1] }}@else{{ $lang['status'][0] }}@endif</td>
     </tr>
-    {/foreach}
+    @endforeach
 </table>
 </div>
 
@@ -24,12 +24,12 @@
 <tr>
   <td>&nbsp;</td>
   <td align="right" nowrap="true">
-  {include file="sms_pages.htm"}
+  @include('sms_pages')
   </td>
 </tr>
 </table>
 <input type="hidden" value="get_send_history" name="act">
-<input type="hidden" value="{$start_date}" name="start_date">
-<input type="hidden" value="{$end_date}" name="end_date">
+<input type="hidden" value="{{ $start_date }}" name="start_date">
+<input type="hidden" value="{{ $end_date }}" name="end_date">
 </form>
-{include file="pagefooter.htm"}
+@include('pagefooter')

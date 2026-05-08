@@ -1,25 +1,25 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="form-div">
   <table width="98%">
     <tr>
-      <td colspan="2">{$repay.user_name}&nbsp;&nbsp;&lt;{$repay.email}&gt;</td>
+      <td colspan="2">{{ $repay['user_name'] }}&nbsp;&nbsp;&lt;{{ $repay['email'] }}&gt;</td>
     </tr>
     <tr>
-      <td>{$lang.amount}:{$repay.amount}&nbsp;&nbsp;&lt;{$lang.user_money}:{$repay.user_money}&gt;</td><td align="right">{$repay.apply_time}</td>
+      <td>{{ $lang['amount'] }}:{{ $repay['amount'] }}&nbsp;&nbsp;&lt;{{ $lang['user_money'] }}:{{ $repay['user_money'] }}&gt;</td><td align="right">{{ $repay['apply_time'] }}</td>
     </tr>
     <tr>
       <td colspan="2"><hr color="#dadada" size="1"></td>
     </tr>
     <tr>
-      <td colspan="2">{$repay.method}</td>
+      <td colspan="2">{{ $repay['method'] }}</td>
     </tr>
 
   </table>
-  {if $repay.is_repayed}
+  @if($repay['is_repayed'])
   <ul>
-    <li>{$repay.action_user}{$lang.from}{$repay.action_time}{$lang.reply}:<p>{$repay.action_note}</p></li>
+    <li>{{ $repay['action_user'] }}{{ $lang['from'] }}{{ $repay['action_time'] }}{{ $lang['reply'] }}:<p>{{ $repay['action_note'] }}</p></li>
   </ul>
-  {/if}
+  @endif
 </div>
 
 <div class="main-div">
@@ -28,33 +28,33 @@
   <tbody>
   <tr>
 
-    <td>{$lang.action_note}:</td>
-    <td rowspan="2"><textarea name="action_note" cols="50" rows="2" wrap="VIRTUAL" id="msg_content">{$repay.action_note}</textarea></td>
+    <td>{{ $lang['action_note'] }}:</td>
+    <td rowspan="2"><textarea name="action_note" cols="50" rows="2" wrap="VIRTUAL" id="msg_content">{{ $repay['action_note'] }}</textarea></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
   </tr>
-  {if $repay.is_repayed eq 1}
+  @if($repay['is_repayed'] == 1)
   <tr>
-    <td>&nbsp;</td><td>{$lang.had_reply_content}</td>
+    <td>&nbsp;</td><td>{{ $lang['had_reply_content'] }}</td>
   </tr>
-  {/if}
-  {if $repay.is_repayed eq 2}
+  @endif
+  @if($repay['is_repayed'] == 2)
   <tr>
-    <td>&nbsp;</td><td>{$lang.have_reply_content}</td>
+    <td>&nbsp;</td><td>{{ $lang['have_reply_content'] }}</td>
   </tr>
-  {/if}
+  @endif
   <tr>
     <td>&nbsp;</td>
     <td>
-      <input type="hidden" name="id" value="{$repay.rec_id}">
-      {if $repay.is_repayed}
-      <input name="modify" value="{$lang.button_modify}" type="submit" class="button">
-      {else}
-      <input type="hidden" name="amount" value="{$repay.user_amount}">
-      <input type="hidden" name="user_id" value="{$repay.user_id}">
-      <input name="dispose" value="{$lang.button_dipose}" type="submit" class="button">&nbsp;&nbsp;&nbsp;<input name="skip" value="{$lang.button_skip}" type="submit" class="button">
-      {/if}
+      <input type="hidden" name="id" value="{{ $repay['rec_id'] }}">
+      @if($repay['is_repayed'])
+      <input name="modify" value="{{ $lang['button_modify'] }}" type="submit" class="button">
+      @else
+      <input type="hidden" name="amount" value="{{ $repay['user_amount'] }}">
+      <input type="hidden" name="user_id" value="{{ $repay['user_id'] }}">
+      <input name="dispose" value="{{ $lang['button_dipose'] }}" type="submit" class="button">&nbsp;&nbsp;&nbsp;<input name="skip" value="{{ $lang['button_skip'] }}" type="submit" class="button">
+      @endif
     </td>
   </tr>
   <tr>
@@ -65,8 +65,9 @@
 </table>
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
-{literal}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
+
 <script language="JavaScript">
 <!--
 document.forms['theForm'].elements['action_note'].focus();
@@ -87,5 +88,5 @@ function validate()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

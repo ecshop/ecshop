@@ -1,53 +1,55 @@
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,selectzone.js,colorselector_topic.js"}
-<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="selectzone.js"></script>
+<script src="colorselector_topic.js"></script>
+<script type="text/javascript" src="../js/calendar.php?lang={{ $cfg_lang }}"></script>
 <link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
-{if $warning}
+@if($warning)
 <ul style="padding:0; margin: 0; list-style-type:none; color: #CC0000;">
-  <li style="border: 1px solid #CC0000; background: #FFFFCC; padding: 10px; margin-bottom: 5px;" >{$warning}</li>
+  <li style="border: 1px solid #CC0000; background: #FFFFCC; padding: 10px; margin-bottom: 5px;" >{{ $warning }}</li>
 </ul>
-{/if}
+@endif
 <!-- start goods form -->
 <div class="tab-div">
   <!-- tab bar -->
   <div id="tabbar-div">
-    <p> <span class="tab-front" id="general-tab">{$lang.tab_general}</span> <span class="tab-back" id="goods-tab">{$lang.tab_goods}</span> <span class="tab-back" id="desc-tab">{$lang.tab_desc}</span><span class="tab-back" id="advanced-tab">{$lang.tab_advanced}</span> </p>
+    <p> <span class="tab-front" id="general-tab">{{ $lang['tab_general'] }}</span> <span class="tab-back" id="goods-tab">{{ $lang['tab_goods'] }}</span> <span class="tab-back" id="desc-tab">{{ $lang['tab_desc'] }}</span><span class="tab-back" id="advanced-tab">{{ $lang['tab_advanced'] }}</span> </p>
   </div>
   <!-- tab body -->
   <div id="tabbody-div">
     <form action="topic.php" method="post" name="theForm" enctype="multipart/form-data">
       <table cellspacing="1"  id="general-table" cellpadding="3" width="100%">
         <tr>
-          <td class="label">{$lang.topic_title}</td>
-          <td><input name="topic_name" type="text" value="{$topic.title}" size="40" /></td>
+          <td class="label">{{ $lang['topic_title'] }}</td>
+          <td><input name="topic_name" type="text" value="{{ $topic['title'] }}" size="40" /></td>
         </tr>
         <tr>
-          <td class="label">{$lang.lable_topic_keywords}</td>
-          <td><textarea name="keywords" id="keywords" cols="40" rows="3">{$topic.keywords}</textarea></td>
+          <td class="label">{{ $lang['lable_topic_keywords'] }}</td>
+          <td><textarea name="keywords" id="keywords" cols="40" rows="3">{{ $topic['keywords'] }}</textarea></td>
         </tr>
         <tr>
-          <td class="label">{$lang.lable_topic_description}</td>
-          <td><textarea name="description" id="description" cols="40" rows="5">{$topic.description}</textarea></td>
+          <td class="label">{{ $lang['lable_topic_description'] }}</td>
+          <td><textarea name="description" id="description" cols="40" rows="5">{{ $topic['description'] }}</textarea></td>
         </tr>
         <tr>
-          <td class="label">{$lang.lable_topic_type}</td>
+          <td class="label">{{ $lang['lable_topic_type'] }}</td>
           <td><select name="topic_type" id="topic_type" onchange="showMedia(this.value)">
-       <option value='0'>{$lang.top_img}</option>
-       <option value='1'>{$lang.top_flash}</option>
-       <option value='2'>{$lang.top_html}</option>
+       <option value='0'>{{ $lang['top_img'] }}</option>
+       <option value='1'>{{ $lang['top_flash'] }}</option>
+       <option value='2'>{{ $lang['top_html'] }}</option>
        </select></td>
         </tr>
         <tbody id="content_01">
           <tr>
             <td  class="label">
-              <a href="javascript:showNotice('title_upload');" title="{$lang.form_notice}">
-              <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.lable_upload}</td>
+              <a href="javascript:showNotice('title_upload');" title="{{ $lang['form_notice'] }}">
+              <img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['lable_upload'] }}</td>
             <td>
               <input type='file' name='topic_img' id='topic_img' size='35' />
-              <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="title_upload">{$width_height}</span></td>
+              <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="title_upload">{{ $width_height }}</span></td>
           </tr>
           <tr>
-            <td class="label">{$lang.lable_from_web}</td>
+            <td class="label">{{ $lang['lable_from_web'] }}</td>
             <td><input type="text" name="url" id="url" value="" size="35" /></td>
           </tr>
         </tbody>
@@ -55,76 +57,76 @@
         <tbody id="edit_img">
           <tr>
             <td class="label">&nbsp;</td>
-            <td><input type="text" name="img_url" id="img_url" value="{$topic.topic_img}" size="35" readonly="readonly"/></td>
+            <td><input type="text" name="img_url" id="img_url" value="{{ $topic['topic_img'] }}" size="35" readonly="readonly"/></td>
           </tr>
         </tbody>
 
         <tbody id="content_23">
           <tr>
-            <td class="label">{$lang.lable_content}</td>
-            <td><textarea name="htmls" id="htmls" cols="50" rows="7">{$topic.htmls}</textarea></td>
+            <td class="label">{{ $lang['lable_content'] }}</td>
+            <td><textarea name="htmls" id="htmls" cols="50" rows="7">{{ $topic['htmls'] }}</textarea></td>
           </tr>
         </tbody>
         
         <tr>
-          <td  class="label"><a href="javascript:showNotice('title_pic_upload');" title="{$lang.form_notice}">
-              <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.lable_title_upload}</td>
+          <td  class="label"><a href="javascript:showNotice('title_pic_upload');" title="{{ $lang['form_notice'] }}">
+              <img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['lable_title_upload'] }}</td>
           <td><input type='file' name='title_pic' id='title_pic' size='35' />
-          <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="title_pic_upload">{$title_width_height}</span></td>
+          <br /><span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="title_pic_upload">{{ $title_width_height }}</span></td>
         </tr>
         <tr>
-          <td class="label">{$lang.lable_from_web}</td>
+          <td class="label">{{ $lang['lable_from_web'] }}</td>
           <td><input type="text" name="title_url" id="title_url" value="" size="35" /></td>
         </tr>
 
         <tbody id="edit_title_img">
           <tr>
             <td class="label">&nbsp;</td>
-            <td><input type="text" name="title_img_url" id="title_img_url" value="{$topic.title_pic}" size="35" readonly="readonly"/></td>
+            <td><input type="text" name="title_img_url" id="title_img_url" value="{{ $topic['title_pic'] }}" size="35" readonly="readonly"/></td>
           </tr>
         </tbody>
 
         <tr>
-          <td class="label">{$lang.lable_base_style}</td>
-          <td><input type="text" name="base_style" id="base_style" value="{$topic.base_style}" size="7" maxlength="6" style="float:left;color:{$goods_name_color};" size="30"/><div style="background-color:#{$topic.base_style};float:left;margin-left:2px;" id="font_color" onclick="ColorSelecter.Show(this);"><img src="images/color_selecter.gif" style="margin-top:-1px;" /></div></td>
+          <td class="label">{{ $lang['lable_base_style'] }}</td>
+          <td><input type="text" name="base_style" id="base_style" value="{{ $topic['base_style'] }}" size="7" maxlength="6" style="float:left;color:{{ $goods_name_color }};" size="30"/><div style="background-color:#{{ $topic['base_style'] }};float:left;margin-left:2px;" id="font_color" onclick="ColorSelecter.Show(this);"><img src="images/color_selecter.gif" style="margin-top:-1px;" /></div></td>
         </tr>
 
         <tr>
-          <td class="label">{$lang.cycle}</td>
-          <td><input name="start_time" type="text" id="start_time" size="12" value='{$topic.start_time}' readonly="readonly" />
-            <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time', '%Y-%m-%d', false, false, 'selbtn1');" value="{$lang.btn_select}" class="button"/>
+          <td class="label">{{ $lang['cycle'] }}</td>
+          <td><input name="start_time" type="text" id="start_time" size="12" value='{{ $topic['start_time'] }}' readonly="readonly" />
+            <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time', '%Y-%m-%d', false, false, 'selbtn1');" value="{{ $lang['btn_select'] }}" class="button"/>
             -
-            <input name="end_time" type="text" id="end_time" size="12" value='{$topic.end_time}' readonly="readonly" />
-            <input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d', false, false, 'selbtn2');" value="{$lang.btn_select}" class="button"/></td>
+            <input name="end_time" type="text" id="end_time" size="12" value='{{ $topic['end_time'] }}' readonly="readonly" />
+            <input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d', false, false, 'selbtn2');" value="{{ $lang['btn_select'] }}" class="button"/></td>
         </tr>
       </table>
       <table width="90%" border="0"  align="center" cellpadding="0" cellspacing="0" id="goods-table" style="display:none;" >
         <tr>
-          <td colspan="4" class="label" style="text-align:left">{$lang.topic_class}
+          <td colspan="4" class="label" style="text-align:left">{{ $lang['topic_class'] }}
             <select name="topic_class_list" id="topic_class_list" onchange="showTargetList()">
             </select>
             <input name="new_cat_name" type="text" id="new_cat_name" />
-            <input name="create_class_btn" type="button" id="create_class_btn" value="{$lang.add}" class="button" onclick="addClass()" />
-            <input name="delete_class_btn" type="button" id="delete_class_btn" value="{$lang.remove}" class="button" onclick="deleteClass()" />          </td>
+            <input name="create_class_btn" type="button" id="create_class_btn" value="{{ $lang['add'] }}" class="button" onclick="addClass()" />
+            <input name="delete_class_btn" type="button" id="delete_class_btn" value="{{ $lang['remove'] }}" class="button" onclick="deleteClass()" />          </td>
         </tr>
         <tr>
           <td colspan="3"><img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
             <select name="cat_id2">
-              <option value="0">{$lang.all_category}</option>
-              {$cat_list}
+              <option value="0">{{ $lang['all_category'] }}</option>
+              {{ $cat_list }}
             </select>
             <select name="brand_id2">
-              <option value="0">{$lang.all_brand}</option>
-              {html_options options=$brand_list}
+              <option value="0">{{ $lang['all_brand'] }}</option>
+              @foreach($brand_list as $__k => $__v)<option value="{{ $__k }}">{{ $__v }}</option>@endforeach
             </select>
             <input type="text" name="keyword2"/>
-            <input name="button" type="button" class="button" onclick="searchGoods('cat_id2', 'brand_id2', 'keyword2')" value="{$lang.button_search}" />          </td>
+            <input name="button" type="button" class="button" onclick="searchGoods('cat_id2', 'brand_id2', 'keyword2')" value="{{ $lang['button_search'] }}" />          </td>
         </tr>
         <!-- 商品列表 -->
         <tr height="37">
-          <th>{$lang.all_goods}</th>
-          <th>{$lang.handler}</th>
-          <th>{$lang.selected_goods}</th>
+          <th>{{ $lang['all_goods'] }}</th>
+          <th>{{ $lang['handler'] }}</th>
+          <th>{{ $lang['selected_goods'] }}</th>
         </tr>
         <tr>
           <td width="42%"><select name="source_select" id="source_select" size="20" style="width:100%;height:300px;"  ondblclick="addItem(this)">
@@ -147,38 +149,39 @@
       </table>
       <table width="90%" border="0"  align="center" cellpadding="0" cellspacing="0" id="desc-table" style="display:none;">
         <tr>
-          <td>{$FCKeditor}</td>
+          <td>{{ $FCKeditor }}</td>
         </tr>
       </table>
       <table width="90%" border="0"  align="center" cellpadding="0" cellspacing="0" id="advanced-table" style="display:none;">
           <tr>
-          <td class="label"><a href="javascript:showNotice('noticeTemplateFile');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.template_file}</td>
-          <td ><input name="topic_template_file" type="text" id="topic_template_file" value="{$topic.template}" size="40" />
-          <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeTemplateFile">{$lang.notice_template_file}</span></td>
+          <td class="label"><a href="javascript:showNotice('noticeTemplateFile');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['template_file'] }}</td>
+          <td ><input name="topic_template_file" type="text" id="topic_template_file" value="{{ $topic['template'] }}" size="40" />
+          <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeTemplateFile">{{ $lang['notice_template_file'] }}</span></td>
         </tr>
         <tr>
-          <td class="label"><a href="javascript:showNotice('noticeCss');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.style_sheet}</td>
-          <td ><textarea name="topic_css" id="topic_css" cols="40" rows="5">{$topic.css}</textarea>
-            <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeCss">{$lang.notice_css}</span>
+          <td class="label"><a href="javascript:showNotice('noticeCss');" title="{{ $lang['form_notice'] }}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{{ $lang['form_notice'] }}"></a>{{ $lang['style_sheet'] }}</td>
+          <td ><textarea name="topic_css" id="topic_css" cols="40" rows="5">{{ $topic['css'] }}</textarea>
+            <span class="notice-span" @if($help_open)style="display:block" @else style="display:none" @endif id="noticeCss">{{ $lang['notice_css'] }}</span>
             <div> <a href="javascript:chanageSize(3,'topic_css');">[+]</a> <a href="javascript:chanageSize(-3,'topic_css');">[-]</a> </div></td>
         </tr>
       </table>
       <div class="button-div">
         <input  name="topic_data" type="hidden" id="topic_data" value='' />
-        <input  name="act" type="hidden" id="act" value='{$act}' />
-        <input  name="topic_id" type="hidden" id="topic_id" value='{$topic.topic_id}' />
-        <input type="submit"  name="Submit"       value="{$lang.button_submit}" class="button" onclick="return checkForm()"/>
-        <input type="reset"   name="Reset"        value="{$lang.button_reset}" class="button"/>
+        <input  name="act" type="hidden" id="act" value='{{ $act }}' />
+        <input  name="topic_id" type="hidden" id="topic_id" value='{{ $topic['topic_id'] }}' />
+        <input type="submit"  name="Submit"       value="{{ $lang['button_submit'] }}" class="button" onclick="return checkForm()"/>
+        <input type="reset"   name="Reset"        value="{{ $lang['button_reset'] }}" class="button"/>
       </div>
     </form>
   </div>
 </div>
-{insert_scripts files="validator.js,tab.js"}
+<script src="validator.js"></script>
+<script src="tab.js"></script>
 <script type="Text/Javascript" language="JavaScript">
 <!--
-var data = '{$topic.data}';
-var defaultClass = "{$lang.default_class}";
-{literal}
+var data = '{{ $topic['data'] }}';
+var defaultClass = "{{ $lang['default_class'] }}";
+
 var myTopic = Object();
 var status_code = "{$topic.topic_type}"; // 初始页面参数
 
@@ -534,7 +537,7 @@ function navigator_type()
 
   return type_name;
 }
-{/literal}
+
 //-->
 </script>
-{include file="pagefooter.htm"}
+@include('pagefooter')

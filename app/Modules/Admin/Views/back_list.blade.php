@@ -1,75 +1,76 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 <!-- 订单搜索 -->
 <div class="form-div">
   <form action="javascript:searchOrder()" name="searchForm">
     <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
-    {$lang.label_delivery_sn}<input name="delivery_sn" type="text" id="delivery_sn" size="15">
-    {$lang.order_sn}<input name="order_sn" type="text" id="order_sn" size="15">
-    {$lang.consignee|escape}<input name="consignee" type="text" id="consignee" size="15">
-    <input type="submit" value="{$lang.button_search}" class="button" />
+    {{ $lang['label_delivery_sn'] }}<input name="delivery_sn" type="text" id="delivery_sn" size="15">
+    {{ $lang['order_sn'] }}<input name="order_sn" type="text" id="order_sn" size="15">
+    {{ $lang['consignee'] }}<input name="consignee" type="text" id="consignee" size="15">
+    <input type="submit" value="{{ $lang['button_search'] }}" class="button" />
   </form>
 </div>
 
 <!-- 订单列表 -->
 <form method="post" action="order.php?act=operate" name="listForm" onsubmit="return check()">
   <div class="list-div" id="listDiv">
-{/if}
+@endif
 
 <table cellpadding="3" cellspacing="1">
   <tr>
     <th>
-      <input onclick='listTable.selectAll(this, "back_id")' type="checkbox"/><a href="javascript:listTable.sort('delivery_sn', 'DESC'); ">{$lang.label_delivery_sn}</a>{$sort_delivery_sn}
+      <input onclick='listTable.selectAll(this, "back_id")' type="checkbox"/><a href="javascript:listTable.sort('delivery_sn', 'DESC'); ">{{ $lang['label_delivery_sn'] }}</a>{{ $sort_delivery_sn }}
     </th>
-    <th><a href="javascript:listTable.sort('order_sn', 'DESC'); ">{$lang.order_sn}</a>{$sort_order_sn}</th>
-    <th><a href="javascript:listTable.sort('add_time', 'DESC'); ">{$lang.label_add_time}</a>{$sort_add_time}</th>
-    <th><a href="javascript:listTable.sort('consignee', 'DESC'); ">{$lang.consignee}</a>{$sort_consignee}</th>
-    <th><a href="javascript:listTable.sort('update_time', 'DESC'); ">{$lang.label_update_time}</a>{$sort_update_time}</th>
-    <th>{$lang.label_return_time}</th>
-    <th>{$lang.operator}</th>
-    <th>{$lang.handler}</th>
+    <th><a href="javascript:listTable.sort('order_sn', 'DESC'); ">{{ $lang['order_sn'] }}</a>{{ $sort_order_sn }}</th>
+    <th><a href="javascript:listTable.sort('add_time', 'DESC'); ">{{ $lang['label_add_time'] }}</a>{{ $sort_add_time }}</th>
+    <th><a href="javascript:listTable.sort('consignee', 'DESC'); ">{{ $lang['consignee'] }}</a>{{ $sort_consignee }}</th>
+    <th><a href="javascript:listTable.sort('update_time', 'DESC'); ">{{ $lang['label_update_time'] }}</a>{{ $sort_update_time }}</th>
+    <th>{{ $lang['label_return_time'] }}</th>
+    <th>{{ $lang['operator'] }}</th>
+    <th>{{ $lang['handler'] }}</th>
   <tr>
-  {foreach from=$back_list item=back key=dkey}
+  @foreach($back_list as $dkey => $back)
   <tr>
-    <td valign="top" nowrap="nowrap"><input type="checkbox" name="back_id[]" value="{$back.back_id}" />{$back.delivery_sn}</td>
-    <td>{$back.order_sn}<br /></td>
-    <td align="center" valign="top" nowrap="nowrap">{$back.add_time}</td>
-    <td align="left" valign="top"><a href="mailto:{$back.email}"> {$back.consignee|escape}</a></td>
-    <td align="center" valign="top" nowrap="nowrap">{$back.update_time}</td>
-    <td align="center" valign="top" nowrap="nowrap">{$back.return_time}</td>
-    <td align="center" valign="top" nowrap="nowrap">{$back.action_user}</td>
+    <td valign="top" nowrap="nowrap"><input type="checkbox" name="back_id[]" value="{{ $back['back_id'] }}" />{{ $back['delivery_sn'] }}</td>
+    <td>{{ $back['order_sn'] }}<br /></td>
+    <td align="center" valign="top" nowrap="nowrap">{{ $back['add_time'] }}</td>
+    <td align="left" valign="top"><a href="mailto:{{ $back['email'] }}"> {{ $back['consignee'] }}</a></td>
+    <td align="center" valign="top" nowrap="nowrap">{{ $back['update_time'] }}</td>
+    <td align="center" valign="top" nowrap="nowrap">{{ $back['return_time'] }}</td>
+    <td align="center" valign="top" nowrap="nowrap">{{ $back['action_user'] }}</td>
     <td align="center" valign="top"  nowrap="nowrap">
-     <a href="order.php?act=back_info&back_id={$back.back_id}">{$lang.detail}</a>
-     <a onclick="{if(confirm('{$lang.confirm_delete}')){return true;}return false;}" href="order.php?act=operate&remove_back=1&back_id={$back.back_id}">{$lang.remove}</a>
+     <a href="order.php?act=back_info&back_id={{ $back['back_id'] }}">{{ $lang['detail'] }}</a>
+     <a onclick="{if(confirm('{{ $lang['confirm_delete'] }}')){return true;}return false;}" href="order.php?act=operate&remove_back=1&back_id={{ $back['back_id'] }}">{{ $lang['remove'] }}</a>
     </td>
   </tr>
-  {/foreach}
+  @endforeach
 </table>
 
 <!-- 分页 -->
 <table id="page-table" cellspacing="0">
   <tr>
     <td align="right" nowrap="true">
-    {include file="page.htm"}
+    @include('page')
     </td>
   </tr>
 </table>
 
-{if $full_page}
+@if($full_page)
   </div>
   <div>
-    <input name="remove_back" type="submit" id="btnSubmit3" value="{$lang.remove}" class="button" disabled="true" onclick="{if(confirm('{$lang.confirm_delete}')){return true;}return false;}" />
+    <input name="remove_back" type="submit" id="btnSubmit3" value="{{ $lang['remove'] }}" class="button" disabled="true" onclick="{if(confirm('{{ $lang['confirm_delete'] }}')){return true;}return false;}" />
   </div>
 </form>
 <script language="JavaScript">
-listTable.recordCount = {$record_count};
-listTable.pageCount = {$page_count};
+listTable.recordCount = {{ $record_count }};
+listTable.pageCount = {{ $page_count }};
 
-{foreach from=$filter item=item key=key}
-listTable.filter.{$key} = '{$item}';
-{/foreach}
-{literal}
+@foreach($filter as $key => $item)
+listTable.filter.{{ $key }} = '{{ $item }}';
+@endforeach
+
 
     onload = function()
     {
@@ -115,7 +116,7 @@ listTable.filter.{$key} = '{$item}';
       }
     }
 </script>
-{/literal}
 
-{include file="pagefooter.htm"}
-{/if}
+
+@include('pagefooter')
+@endif

@@ -2,15 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
+<meta name="Keywords" content="{{ $keywords }}" />
+<meta name="Description" content="{{ $description }}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>{$page_title}</title>
+<title>{{ $page_title }}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
+<link href="{{ $ecs_css_path }}" rel="stylesheet" type="text/css" />
 {* 包含脚本文件 *}
-{insert_scripts files='common.js,global.js,compare.js'}
+<script src="common.js"></script>
+<script src="global.js"></script>
+<script src="compare.js"></script>
 </head>
 <body>
 <!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
@@ -41,27 +43,27 @@
   <div class="AreaR">
     <div class="box">
      <div class="box_1">
-      <h3><span>{$brand.brand_name}</span></h3>
+      <h3><span>{{ $brand['brand_name'] }}</span></h3>
       <div class="boxCenterList">
         <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
         <tr>
           <td bgcolor="#ffffff" width="200" align="center" valign="middle">
           <div style="width:200px; overflow:hidden;">
-          <!-- {if $brand.brand_logo} -->
-            <img src="data/brandlogo/{$brand.brand_logo}" />
-            <!-- {/if} -->
+          @if($brand['brand_logo'])
+            <img src="data/brandlogo/{{ $brand['brand_logo'] }}" />
+            @endif
           </div>
           </td>
           <td bgcolor="#ffffff">
-          {$brand.brand_desc|nl2br}<br />
-            <!-- {if $brand.site_url} -->
-            {$lang.official_site} <a href="{$brand.site_url}" target="_blank" class="f6">{$brand.site_url}</a><br />
-            <!-- {/if} -->
-            {$lang.brand_category}<br />
+          {!! nl2br(e($brand['brand_desc'])) !!}<br />
+            @if($brand['site_url'])
+            {{ $lang['official_site'] }} <a href="{{ $brand['site_url'] }}" target="_blank" class="f6">{{ $brand['site_url'] }}</a><br />
+            @endif
+            {{ $lang['brand_category'] }}<br />
             <div class="brandCategoryA">
-              <!-- {foreach from=$brand_cat_list item=cat} -->
-            <a href="{$cat.url}" class="f6">{$cat.cat_name|escape:html} {if $cat.goods_count}({$cat.goods_count}){/if}</a>
-              <!-- {/foreach} -->
+              @foreach($brand_cat_list as $cat)
+            <a href="{{ $cat['url'] }}" class="f6">{{ $cat['cat_name'] }} @if($cat['goods_count'])({{ $cat['goods_count'] }})@endif</a>
+              @endforeach
             </div>  
          </td>
         </tr>
@@ -93,22 +95,22 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<!--{if $img_links  or $txt_links }-->
+@if($img_links  || $txt_links )
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
-    <a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" alt="{$link.name}" border="0" /></a>
-    <!--结束图片类型的友情链接{/foreach}-->
-    <!-- {if $txt_links} -->
-    <!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
-    [<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>] 
-    <!--结束文字类型的友情链接{/foreach}-->
-    <!-- {/if} -->
+    <!--开始图片类型的友情链接@foreach($img_links as $link)-->
+    <a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}"><img src="{{ $link['logo'] }}" alt="{{ $link['name'] }}" border="0" /></a>
+    <!--结束图片类型的友情链接@endforeach-->
+    @if($txt_links)
+    <!--开始文字类型的友情链接@foreach($txt_links as $link)-->
+    [<a href="{{ $link['url'] }}" target="_blank" title="{{ $link['name'] }}">{{ $link['name'] }}</a>] 
+    <!--结束文字类型的友情链接@endforeach-->
+    @endif
   </div>
  </div>
 </div>
-<!--{/if}-->
+@endif
 <!--友情链接 end-->
 <div class="blank"></div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->

@@ -1,52 +1,53 @@
-{include file="pageheader.htm"}
-<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+@include('pageheader')
+<script type="text/javascript" src="../js/calendar.php?lang={{ $cfg_lang }}"></script>
 <link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
 <div class="main-div">
 <form action="vote.php" method="post" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
 <table width="100%" id="general-table">
   <tr>
-    <td class="label">{$lang.vote_name}</td>
+    <td class="label">{{ $lang['vote_name'] }}</td>
     <td>
-      <input type='text' name='vote_name' value='{$vote_arr.vote_name}' size='40' />
+      <input type='text' name='vote_name' value='{{ $vote_arr['vote_name'] }}' size='40' />
     </td>
   </tr>
   <tr>
-    <td class="label">{$lang.begin_date}</td>
+    <td class="label">{{ $lang['begin_date'] }}</td>
     <td>
-      <input name="start_time" type="text" id="start_time" size="22" value='{$vote_arr.start_time}' readonly="readonly" /><input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time', '%Y-%m-%d', false, false, 'selbtn1');" value="{$lang.btn_select}" class="button"/>
+      <input name="start_time" type="text" id="start_time" size="22" value='{{ $vote_arr['start_time'] }}' readonly="readonly" /><input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time', '%Y-%m-%d', false, false, 'selbtn1');" value="{{ $lang['btn_select'] }}" class="button"/>
     </td>
   </tr>
   <tr>
-    <td class="label">{$lang.end_date}</td>
+    <td class="label">{{ $lang['end_date'] }}</td>
     <td>
-      <input name="end_time" type="text" id="end_time" size="22" value='{$vote_arr.end_time}' readonly="readonly" /><input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d', false, false, 'selbtn2');" value="{$lang.btn_select}" class="button"/>
+      <input name="end_time" type="text" id="end_time" size="22" value='{{ $vote_arr['end_time'] }}' readonly="readonly" /><input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d', false, false, 'selbtn2');" value="{{ $lang['btn_select'] }}" class="button"/>
     </td>
   </tr>
   <tr>
-    <td class="label">{$lang.can_multi}</td>
+    <td class="label">{{ $lang['can_multi'] }}</td>
     <td>
-      <input type="radio" name="can_multi" value="0"{if $vote_arr.can_multi eq 0} checked="true" {/if}/>{$lang.is_multi}
+      <input type="radio" name="can_multi" value="0"@if($vote_arr['can_multi'] == 0) checked="true" @endif/>{{ $lang['is_multi'] }}
       &nbsp;&nbsp;&nbsp;&nbsp;
-      <input type="radio" name="can_multi" value="1"{if $vote_arr.can_multi eq 1} checked="true" {/if}/>{$lang.no_multi}
+      <input type="radio" name="can_multi" value="1"@if($vote_arr['can_multi'] == 1) checked="true" @endif/>{{ $lang['no_multi'] }}
     </td>
   </tr>
   <tr>
     <td class="label">&nbsp;</td>
     <td>
-      <input type="submit" value="{$lang.button_submit}" class="button" />
-      <input type="reset" value="{$lang.button_reset}" class="button" />
+      <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+      <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
     </td>
   </tr>
 </table>
-    <input type="hidden" name="act" value="{$form_act}" />
-    <input type="hidden" name="id" value="{$vote_arr.vote_id}" />
+    <input type="hidden" name="act" value="{{ $form_act }}" />
+    <input type="hidden" name="id" value="{{ $vote_arr['vote_id'] }}" />
 </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
 <script>
-var date_error = '{$lang.date_error}';
+var date_error = '{{ $lang['date_error'] }}';
 </script>
-{literal}
+
 <script language="JavaScript">
 <!--
 document.forms['theForm'].elements['vote_name'].focus();
@@ -72,5 +73,5 @@ onload = function()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
+
+@include('pagefooter')

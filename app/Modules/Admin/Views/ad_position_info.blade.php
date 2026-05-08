@@ -1,53 +1,54 @@
-{include file="pageheader.htm"}
+@include('pageheader')
 <div class="main-div">
   <form action="ad_position.php" method="post" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
     <table width="100%">
       <tr>
-        <td class="label">{$lang.position_name}</td>
-        <td><input type="text" name="position_name" value="{$posit_arr.position_name}" size="30" /></td>
+        <td class="label">{{ $lang['position_name'] }}</td>
+        <td><input type="text" name="position_name" value="{{ $posit_arr['position_name'] }}" size="30" /></td>
       </tr>
       <tr>
-        <td class="label">{$lang.ad_width}</td>
-        <td><input type="text" name="ad_width" value="{$posit_arr.ad_width}" size="30" /> {$lang.unit_px}</td>
+        <td class="label">{{ $lang['ad_width'] }}</td>
+        <td><input type="text" name="ad_width" value="{{ $posit_arr['ad_width'] }}" size="30" /> {{ $lang['unit_px'] }}</td>
       </tr>
       <tr>
-        <td class="label">{$lang.ad_height}</td>
+        <td class="label">{{ $lang['ad_height'] }}</td>
         <td>
-          <input type="text" name="ad_height" value="{$posit_arr.ad_height}" size="30" /> {$lang.unit_px}
+          <input type="text" name="ad_height" value="{{ $posit_arr['ad_height'] }}" size="30" /> {{ $lang['unit_px'] }}
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.position_desc}</td>
+        <td class="label">{{ $lang['position_desc'] }}</td>
         <td>
-          <input type="text" name="position_desc" size="55" value="{$posit_arr.position_desc}" />
+          <input type="text" name="position_desc" size="55" value="{{ $posit_arr['position_desc'] }}" />
         </td>
       </tr>
       <tr>
-        <td class="label">{$lang.posit_style}</td>
+        <td class="label">{{ $lang['posit_style'] }}</td>
         <td>
-          <textarea name="position_style" cols="55" rows="6">{$posit_arr.position_style}</textarea>
+          <textarea name="position_style" cols="55" rows="6">{{ $posit_arr['position_style'] }}</textarea>
         </td>
       </tr>
       <tr>
         <td class="label">&nbsp;</td>
         <td>
-          <input type="submit" value="{$lang.button_submit}" class="button" />
-          <input type="reset" value="{$lang.button_reset}" class="button" />
+          <input type="submit" value="{{ $lang['button_submit'] }}" class="button" />
+          <input type="reset" value="{{ $lang['button_reset'] }}" class="button" />
         </td>
       </tr>
      <tr>
        <td colspan="2">
-         <input type="hidden" name="act" value="{$form_act}" />
-         <input type="hidden" name="id" value="{$posit_arr.position_id}" />
+         <input type="hidden" name="act" value="{{ $form_act }}" />
+         <input type="hidden" name="id" value="{{ $posit_arr['position_id'] }}" />
        </td>
      </tr>
     </table>
   </form>
 </div>
-{insert_scripts files="../js/utils.js,validator.js"}
+<script src="../js/utils.js"></script>
+<script src="validator.js"></script>
 <script language="JavaScript">
 <!--
-{literal}
+
 document.forms['theForm'].elements['position_name'].focus();
 
 onload = function()
@@ -83,7 +84,7 @@ function validate()
     return validator.passed();
 }
 //-->
-{/literal}
+
 </script>
 
-{include file="pagefooter.htm"}
+@include('pagefooter')

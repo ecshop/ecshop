@@ -1,66 +1,67 @@
-{if $full_page}
-{include file="pageheader.htm"}
-{insert_scripts files="../js/utils.js,listtable.js"}
+@if($full_page)
+@include('pageheader')
+<script src="../js/utils.js"></script>
+<script src="listtable.js"></script>
 
 <div class="form-div">
   <form action="javascript:searchUser()" name="searchForm">
     <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
-    &nbsp;{$lang.label_user_name} &nbsp;<input type="text" name="keyword" /> <input type="submit" value="{$lang.button_search}" />
+    &nbsp;{{ $lang['label_user_name'] }} &nbsp;<input type="text" name="keyword" /> <input type="submit" value="{{ $lang['button_search'] }}" />
   </form>
 </div>
 
 <form method="POST" action="" name="listForm">
 <!-- start users list -->
 <div class="list-div" id="listDiv">
-{/if}
+@endif
 <!--用户列表部分-->
 <table cellpadding="3" cellspacing="1">
   <tr>
-    <th><a href="javascript:listTable.sort('user_name'); ">{$lang.username}</a>{$sort_user_name}</th>
-    <th><a href="javascript:listTable.sort('order_sn'); ">{$lang.order_sn}</a>{$sort_order_sn}</th>
-    <th>{$lang.surplus}</th>
-    <th>{$lang.integral_money}</th>
-    <th><a href="javascript:listTable.sort('add_time'); ">{$lang.add_time}</a>{$sort_add_time}</th>
-    <th>{$lang.handler}</th>
+    <th><a href="javascript:listTable.sort('user_name'); ">{{ $lang['username'] }}</a>{{ $sort_user_name }}</th>
+    <th><a href="javascript:listTable.sort('order_sn'); ">{{ $lang['order_sn'] }}</a>{{ $sort_order_sn }}</th>
+    <th>{{ $lang['surplus'] }}</th>
+    <th>{{ $lang['integral_money'] }}</th>
+    <th><a href="javascript:listTable.sort('add_time'); ">{{ $lang['add_time'] }}</a>{{ $sort_add_time }}</th>
+    <th>{{ $lang['handler'] }}</th>
   <tr>
-  {foreach from=$order_list item=order}
+  @forelse($order_list as $order)
   <tr align="center">
-    <td class="first-cell">{$order.user_name|escape}</td>
-    <td>{$order.order_sn}</td>
-    <td>{$order.surplus}</td>
-    <td>{$order.integral_money}</td>
-    <td align="center">{$order.add_time}</td>
+    <td class="first-cell">{{ $order['user_name'] }}</td>
+    <td>{{ $order['order_sn'] }}</td>
+    <td>{{ $order['surplus'] }}</td>
+    <td>{{ $order['integral_money'] }}</td>
+    <td align="center">{{ $order['add_time'] }}</td>
     <td align="center">
-      <a href="order.php?act=info&order_id={$order.order_id}" title="{$lang.view_order}">{$lang.view}</a>
+      <a href="order.php?act=info&order_id={{ $order['order_id'] }}" title="{{ $lang['view_order'] }}">{{ $lang['view'] }}</a>
     </td>
   </tr>
-  {foreachelse}
-  <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
-  {/foreach}
+  @empty
+  <tr><td class="no-records" colspan="10">{{ $lang['no_records'] }}</td></tr>
+  @endforelse
   <tr>
       <td colspan="2">
       <input type="hidden" name="act" value="batch_remove" />
-      <input type="submit" id="btnSubmit" value="{$lang.button_remove}" disabled="true" class="button" /></td>
+      <input type="submit" id="btnSubmit" value="{{ $lang['button_remove'] }}" disabled="true" class="button" /></td>
       <td align="right" nowrap="true" colspan="8">
-      {include file="page.htm"}
+      @include('page')
       </td>
   </tr>
 </table>
 
-{if $full_page}
+@if($full_page)
 </div>
 <!-- end users list -->
 </form>
 <script type="text/javascript" language="JavaScript">
 <!--
-listTable.recordCount = {$record_count};
-listTable.pageCount = {$page_count};
+listTable.recordCount = {{ $record_count }};
+listTable.pageCount = {{ $page_count }};
 
-{foreach from=$filter item=item key=key}
-listTable.filter.{$key} = '{$item}';
-{/foreach}
+@foreach($filter as $key => $item)
+listTable.filter.{{ $key }} = '{{ $item }}';
+@endforeach
 
-{literal}
+
 onload = function()
 {
     document.forms['searchForm'].elements['keyword'].focus();
@@ -79,6 +80,6 @@ function searchUser()
 }
 //-->
 </script>
-{/literal}
-{include file="pagefooter.htm"}
-{/if}
+
+@include('pagefooter')
+@endif

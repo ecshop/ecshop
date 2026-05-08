@@ -1,0 +1,16 @@
+{
+    "agents": [
+        "claude_code",
+        "codex"
+    ],
+    "cloud": false,
+    "guidelines": true,
+    "mcp": true,
+    "nightwatch": false,
+    "sail": false,
+    "skills": [
+        "laravel-best-practices",
+        "scout-development",
+        "wayfinder-development"
+    ]
+}

@@ -659,16 +659,6 @@ Route::put('searchengine/update', [\App\Api\Admin\Controllers\SearchengineContro
 // 删除接口
 Route::delete('searchengine/destroy', [\App\Api\Admin\Controllers\SearchengineController::class, 'destroy']);
 // 查询列表接口
-Route::post('sessionsData/query', [\App\Api\Admin\Controllers\SessionsDataController::class, 'query']);
-// 新增接口
-Route::post('sessionsData/store', [\App\Api\Admin\Controllers\SessionsDataController::class, 'store']);
-// 获取详情接口
-Route::get('sessionsData/show', [\App\Api\Admin\Controllers\SessionsDataController::class, 'show'])->name('sessionsData.show');
-// 更新接口
-Route::put('sessionsData/update', [\App\Api\Admin\Controllers\SessionsDataController::class, 'update']);
-// 删除接口
-Route::delete('sessionsData/destroy', [\App\Api\Admin\Controllers\SessionsDataController::class, 'destroy']);
-// 查询列表接口
 Route::post('shippingArea/query', [\App\Api\Admin\Controllers\ShippingAreaController::class, 'query']);
 // 新增接口
 Route::post('shippingArea/store', [\App\Api\Admin\Controllers\ShippingAreaController::class, 'store']);

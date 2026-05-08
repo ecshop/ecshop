@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\CardEntity;
-use App\Services\CardService;
 use App\Api\Admin\Requests\Card\CardCreateRequest;
 use App\Api\Admin\Requests\Card\CardDestroyRequest;
 use App\Api\Admin\Requests\Card\CardQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Card\CardUpdateRequest;
 use App\Api\Admin\Responses\Card\CardDestroyResponse;
 use App\Api\Admin\Responses\Card\CardQueryResponse;
 use App\Api\Admin\Responses\Card\CardResponse;
+use App\Entities\CardEntity;
+use App\Services\CardService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class CardController extends BaseController
             if (isset($requestData[CardQueryRequest::getCardId])) {
                 $condition[] = [CardEntity::getCardId, '=', $requestData[CardQueryRequest::getCardId]];
             }
-            
+
             $cardService = new CardService;
             $result = $cardService->page($condition, $page, $pageSize);
 

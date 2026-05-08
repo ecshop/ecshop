@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\VoteEntity;
-use App\Services\VoteService;
 use App\Api\Admin\Requests\Vote\VoteCreateRequest;
 use App\Api\Admin\Requests\Vote\VoteDestroyRequest;
 use App\Api\Admin\Requests\Vote\VoteQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Vote\VoteUpdateRequest;
 use App\Api\Admin\Responses\Vote\VoteDestroyResponse;
 use App\Api\Admin\Responses\Vote\VoteQueryResponse;
 use App\Api\Admin\Responses\Vote\VoteResponse;
+use App\Entities\VoteEntity;
+use App\Services\VoteService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class VoteController extends BaseController
             if (isset($requestData[VoteQueryRequest::getVoteId])) {
                 $condition[] = [VoteEntity::getVoteId, '=', $requestData[VoteQueryRequest::getVoteId]];
             }
-            
+
             $voteService = new VoteService;
             $result = $voteService->page($condition, $page, $pageSize);
 

@@ -6,865 +6,951 @@
 
 declare(strict_types=1);
 
+use App\Api\Admin\Controllers\AccountLogController;
+use App\Api\Admin\Controllers\AdController;
+use App\Api\Admin\Controllers\AdCustomController;
+use App\Api\Admin\Controllers\AdminActionController;
+use App\Api\Admin\Controllers\AdminLogController;
+use App\Api\Admin\Controllers\AdminMessageController;
+use App\Api\Admin\Controllers\AdminUserController;
+use App\Api\Admin\Controllers\AdPositionController;
+use App\Api\Admin\Controllers\AdsenseController;
+use App\Api\Admin\Controllers\AffiliateLogController;
+use App\Api\Admin\Controllers\AgencyController;
+use App\Api\Admin\Controllers\AreaRegionController;
+use App\Api\Admin\Controllers\ArticleCatController;
+use App\Api\Admin\Controllers\ArticleController;
+use App\Api\Admin\Controllers\AttributeController;
+use App\Api\Admin\Controllers\AuctionLogController;
+use App\Api\Admin\Controllers\AutoManageController;
+use App\Api\Admin\Controllers\BackGoodsController;
+use App\Api\Admin\Controllers\BackOrderController;
+use App\Api\Admin\Controllers\BonusTypeController;
+use App\Api\Admin\Controllers\BookingGoodsController;
+use App\Api\Admin\Controllers\BrandController;
+use App\Api\Admin\Controllers\CardController;
+use App\Api\Admin\Controllers\CartController;
+use App\Api\Admin\Controllers\CategoryController;
+use App\Api\Admin\Controllers\CatRecommendController;
+use App\Api\Admin\Controllers\CollectGoodsController;
+use App\Api\Admin\Controllers\CommentController;
+use App\Api\Admin\Controllers\CronsController;
+use App\Api\Admin\Controllers\DeliveryGoodsController;
+use App\Api\Admin\Controllers\DeliveryOrderController;
+use App\Api\Admin\Controllers\EmailListController;
+use App\Api\Admin\Controllers\EmailSendlistController;
+use App\Api\Admin\Controllers\ErrorLogController;
+use App\Api\Admin\Controllers\ExchangeGoodsController;
+use App\Api\Admin\Controllers\FavourableActivityController;
+use App\Api\Admin\Controllers\FeedbackController;
+use App\Api\Admin\Controllers\FriendLinkController;
+use App\Api\Admin\Controllers\GoodsActivityController;
+use App\Api\Admin\Controllers\GoodsArticleController;
+use App\Api\Admin\Controllers\GoodsAttrController;
+use App\Api\Admin\Controllers\GoodsCatController;
+use App\Api\Admin\Controllers\GoodsController;
+use App\Api\Admin\Controllers\GoodsGalleryController;
+use App\Api\Admin\Controllers\GoodsTypeController;
+use App\Api\Admin\Controllers\GroupGoodsController;
+use App\Api\Admin\Controllers\KeywordsController;
+use App\Api\Admin\Controllers\LinkGoodsController;
+use App\Api\Admin\Controllers\MailTemplatesController;
+use App\Api\Admin\Controllers\MemberPriceController;
+use App\Api\Admin\Controllers\NavController;
+use App\Api\Admin\Controllers\OrderActionController;
+use App\Api\Admin\Controllers\OrderGoodsController;
+use App\Api\Admin\Controllers\OrderInfoController;
+use App\Api\Admin\Controllers\PackageGoodsController;
+use App\Api\Admin\Controllers\PackController;
+use App\Api\Admin\Controllers\PayLogController;
+use App\Api\Admin\Controllers\PaymentController;
+use App\Api\Admin\Controllers\PluginsController;
+use App\Api\Admin\Controllers\ProductsController;
+use App\Api\Admin\Controllers\RegExtendInfoController;
+use App\Api\Admin\Controllers\RegFieldsController;
+use App\Api\Admin\Controllers\RegionController;
+use App\Api\Admin\Controllers\RoleController;
+use App\Api\Admin\Controllers\SearchengineController;
+use App\Api\Admin\Controllers\ShippingAreaController;
+use App\Api\Admin\Controllers\ShippingController;
+use App\Api\Admin\Controllers\ShopConfigController;
+use App\Api\Admin\Controllers\SnatchLogController;
+use App\Api\Admin\Controllers\StatsController;
+use App\Api\Admin\Controllers\SuppliersController;
+use App\Api\Admin\Controllers\TagController;
+use App\Api\Admin\Controllers\TemplateController;
+use App\Api\Admin\Controllers\TopicController;
+use App\Api\Admin\Controllers\UserAccountController;
+use App\Api\Admin\Controllers\UserAddressController;
+use App\Api\Admin\Controllers\UserBonusController;
+use App\Api\Admin\Controllers\UserFeedController;
+use App\Api\Admin\Controllers\UserRankController;
+use App\Api\Admin\Controllers\UsersController;
+use App\Api\Admin\Controllers\VirtualCardController;
+use App\Api\Admin\Controllers\VolumePriceController;
+use App\Api\Admin\Controllers\VoteController;
+use App\Api\Admin\Controllers\VoteLogController;
+use App\Api\Admin\Controllers\VoteOptionController;
+use App\Api\Admin\Controllers\WholesaleController;
 use Illuminate\Support\Facades\Route;
 
 // 查询列表接口
-Route::post('accountLog/query', [\App\Api\Admin\Controllers\AccountLogController::class, 'query']);
+Route::post('accountLog/query', [AccountLogController::class, 'query']);
 // 新增接口
-Route::post('accountLog/store', [\App\Api\Admin\Controllers\AccountLogController::class, 'store']);
+Route::post('accountLog/store', [AccountLogController::class, 'store']);
 // 获取详情接口
-Route::get('accountLog/show', [\App\Api\Admin\Controllers\AccountLogController::class, 'show'])->name('accountLog.show');
+Route::get('accountLog/show', [AccountLogController::class, 'show'])->name('accountLog.show');
 // 更新接口
-Route::put('accountLog/update', [\App\Api\Admin\Controllers\AccountLogController::class, 'update']);
+Route::put('accountLog/update', [AccountLogController::class, 'update']);
 // 删除接口
-Route::delete('accountLog/destroy', [\App\Api\Admin\Controllers\AccountLogController::class, 'destroy']);
+Route::delete('accountLog/destroy', [AccountLogController::class, 'destroy']);
 // 查询列表接口
-Route::post('ad/query', [\App\Api\Admin\Controllers\AdController::class, 'query']);
+Route::post('ad/query', [AdController::class, 'query']);
 // 新增接口
-Route::post('ad/store', [\App\Api\Admin\Controllers\AdController::class, 'store']);
+Route::post('ad/store', [AdController::class, 'store']);
 // 获取详情接口
-Route::get('ad/show', [\App\Api\Admin\Controllers\AdController::class, 'show'])->name('ad.show');
+Route::get('ad/show', [AdController::class, 'show'])->name('ad.show');
 // 更新接口
-Route::put('ad/update', [\App\Api\Admin\Controllers\AdController::class, 'update']);
+Route::put('ad/update', [AdController::class, 'update']);
 // 删除接口
-Route::delete('ad/destroy', [\App\Api\Admin\Controllers\AdController::class, 'destroy']);
+Route::delete('ad/destroy', [AdController::class, 'destroy']);
 // 查询列表接口
-Route::post('adCustom/query', [\App\Api\Admin\Controllers\AdCustomController::class, 'query']);
+Route::post('adCustom/query', [AdCustomController::class, 'query']);
 // 新增接口
-Route::post('adCustom/store', [\App\Api\Admin\Controllers\AdCustomController::class, 'store']);
+Route::post('adCustom/store', [AdCustomController::class, 'store']);
 // 获取详情接口
-Route::get('adCustom/show', [\App\Api\Admin\Controllers\AdCustomController::class, 'show'])->name('adCustom.show');
+Route::get('adCustom/show', [AdCustomController::class, 'show'])->name('adCustom.show');
 // 更新接口
-Route::put('adCustom/update', [\App\Api\Admin\Controllers\AdCustomController::class, 'update']);
+Route::put('adCustom/update', [AdCustomController::class, 'update']);
 // 删除接口
-Route::delete('adCustom/destroy', [\App\Api\Admin\Controllers\AdCustomController::class, 'destroy']);
+Route::delete('adCustom/destroy', [AdCustomController::class, 'destroy']);
 // 查询列表接口
-Route::post('adPosition/query', [\App\Api\Admin\Controllers\AdPositionController::class, 'query']);
+Route::post('adPosition/query', [AdPositionController::class, 'query']);
 // 新增接口
-Route::post('adPosition/store', [\App\Api\Admin\Controllers\AdPositionController::class, 'store']);
+Route::post('adPosition/store', [AdPositionController::class, 'store']);
 // 获取详情接口
-Route::get('adPosition/show', [\App\Api\Admin\Controllers\AdPositionController::class, 'show'])->name('adPosition.show');
+Route::get('adPosition/show', [AdPositionController::class, 'show'])->name('adPosition.show');
 // 更新接口
-Route::put('adPosition/update', [\App\Api\Admin\Controllers\AdPositionController::class, 'update']);
+Route::put('adPosition/update', [AdPositionController::class, 'update']);
 // 删除接口
-Route::delete('adPosition/destroy', [\App\Api\Admin\Controllers\AdPositionController::class, 'destroy']);
+Route::delete('adPosition/destroy', [AdPositionController::class, 'destroy']);
 // 查询列表接口
-Route::post('adminAction/query', [\App\Api\Admin\Controllers\AdminActionController::class, 'query']);
+Route::post('adminAction/query', [AdminActionController::class, 'query']);
 // 新增接口
-Route::post('adminAction/store', [\App\Api\Admin\Controllers\AdminActionController::class, 'store']);
+Route::post('adminAction/store', [AdminActionController::class, 'store']);
 // 获取详情接口
-Route::get('adminAction/show', [\App\Api\Admin\Controllers\AdminActionController::class, 'show'])->name('adminAction.show');
+Route::get('adminAction/show', [AdminActionController::class, 'show'])->name('adminAction.show');
 // 更新接口
-Route::put('adminAction/update', [\App\Api\Admin\Controllers\AdminActionController::class, 'update']);
+Route::put('adminAction/update', [AdminActionController::class, 'update']);
 // 删除接口
-Route::delete('adminAction/destroy', [\App\Api\Admin\Controllers\AdminActionController::class, 'destroy']);
+Route::delete('adminAction/destroy', [AdminActionController::class, 'destroy']);
 // 查询列表接口
-Route::post('adminLog/query', [\App\Api\Admin\Controllers\AdminLogController::class, 'query']);
+Route::post('adminLog/query', [AdminLogController::class, 'query']);
 // 新增接口
-Route::post('adminLog/store', [\App\Api\Admin\Controllers\AdminLogController::class, 'store']);
+Route::post('adminLog/store', [AdminLogController::class, 'store']);
 // 获取详情接口
-Route::get('adminLog/show', [\App\Api\Admin\Controllers\AdminLogController::class, 'show'])->name('adminLog.show');
+Route::get('adminLog/show', [AdminLogController::class, 'show'])->name('adminLog.show');
 // 更新接口
-Route::put('adminLog/update', [\App\Api\Admin\Controllers\AdminLogController::class, 'update']);
+Route::put('adminLog/update', [AdminLogController::class, 'update']);
 // 删除接口
-Route::delete('adminLog/destroy', [\App\Api\Admin\Controllers\AdminLogController::class, 'destroy']);
+Route::delete('adminLog/destroy', [AdminLogController::class, 'destroy']);
 // 查询列表接口
-Route::post('adminMessage/query', [\App\Api\Admin\Controllers\AdminMessageController::class, 'query']);
+Route::post('adminMessage/query', [AdminMessageController::class, 'query']);
 // 新增接口
-Route::post('adminMessage/store', [\App\Api\Admin\Controllers\AdminMessageController::class, 'store']);
+Route::post('adminMessage/store', [AdminMessageController::class, 'store']);
 // 获取详情接口
-Route::get('adminMessage/show', [\App\Api\Admin\Controllers\AdminMessageController::class, 'show'])->name('adminMessage.show');
+Route::get('adminMessage/show', [AdminMessageController::class, 'show'])->name('adminMessage.show');
 // 更新接口
-Route::put('adminMessage/update', [\App\Api\Admin\Controllers\AdminMessageController::class, 'update']);
+Route::put('adminMessage/update', [AdminMessageController::class, 'update']);
 // 删除接口
-Route::delete('adminMessage/destroy', [\App\Api\Admin\Controllers\AdminMessageController::class, 'destroy']);
+Route::delete('adminMessage/destroy', [AdminMessageController::class, 'destroy']);
 // 查询列表接口
-Route::post('adminUser/query', [\App\Api\Admin\Controllers\AdminUserController::class, 'query']);
+Route::post('adminUser/query', [AdminUserController::class, 'query']);
 // 新增接口
-Route::post('adminUser/store', [\App\Api\Admin\Controllers\AdminUserController::class, 'store']);
+Route::post('adminUser/store', [AdminUserController::class, 'store']);
 // 获取详情接口
-Route::get('adminUser/show', [\App\Api\Admin\Controllers\AdminUserController::class, 'show'])->name('adminUser.show');
+Route::get('adminUser/show', [AdminUserController::class, 'show'])->name('adminUser.show');
 // 更新接口
-Route::put('adminUser/update', [\App\Api\Admin\Controllers\AdminUserController::class, 'update']);
+Route::put('adminUser/update', [AdminUserController::class, 'update']);
 // 删除接口
-Route::delete('adminUser/destroy', [\App\Api\Admin\Controllers\AdminUserController::class, 'destroy']);
+Route::delete('adminUser/destroy', [AdminUserController::class, 'destroy']);
 // 查询列表接口
-Route::post('adsense/query', [\App\Api\Admin\Controllers\AdsenseController::class, 'query']);
+Route::post('adsense/query', [AdsenseController::class, 'query']);
 // 新增接口
-Route::post('adsense/store', [\App\Api\Admin\Controllers\AdsenseController::class, 'store']);
+Route::post('adsense/store', [AdsenseController::class, 'store']);
 // 获取详情接口
-Route::get('adsense/show', [\App\Api\Admin\Controllers\AdsenseController::class, 'show'])->name('adsense.show');
+Route::get('adsense/show', [AdsenseController::class, 'show'])->name('adsense.show');
 // 更新接口
-Route::put('adsense/update', [\App\Api\Admin\Controllers\AdsenseController::class, 'update']);
+Route::put('adsense/update', [AdsenseController::class, 'update']);
 // 删除接口
-Route::delete('adsense/destroy', [\App\Api\Admin\Controllers\AdsenseController::class, 'destroy']);
+Route::delete('adsense/destroy', [AdsenseController::class, 'destroy']);
 // 查询列表接口
-Route::post('affiliateLog/query', [\App\Api\Admin\Controllers\AffiliateLogController::class, 'query']);
+Route::post('affiliateLog/query', [AffiliateLogController::class, 'query']);
 // 新增接口
-Route::post('affiliateLog/store', [\App\Api\Admin\Controllers\AffiliateLogController::class, 'store']);
+Route::post('affiliateLog/store', [AffiliateLogController::class, 'store']);
 // 获取详情接口
-Route::get('affiliateLog/show', [\App\Api\Admin\Controllers\AffiliateLogController::class, 'show'])->name('affiliateLog.show');
+Route::get('affiliateLog/show', [AffiliateLogController::class, 'show'])->name('affiliateLog.show');
 // 更新接口
-Route::put('affiliateLog/update', [\App\Api\Admin\Controllers\AffiliateLogController::class, 'update']);
+Route::put('affiliateLog/update', [AffiliateLogController::class, 'update']);
 // 删除接口
-Route::delete('affiliateLog/destroy', [\App\Api\Admin\Controllers\AffiliateLogController::class, 'destroy']);
+Route::delete('affiliateLog/destroy', [AffiliateLogController::class, 'destroy']);
 // 查询列表接口
-Route::post('agency/query', [\App\Api\Admin\Controllers\AgencyController::class, 'query']);
+Route::post('agency/query', [AgencyController::class, 'query']);
 // 新增接口
-Route::post('agency/store', [\App\Api\Admin\Controllers\AgencyController::class, 'store']);
+Route::post('agency/store', [AgencyController::class, 'store']);
 // 获取详情接口
-Route::get('agency/show', [\App\Api\Admin\Controllers\AgencyController::class, 'show'])->name('agency.show');
+Route::get('agency/show', [AgencyController::class, 'show'])->name('agency.show');
 // 更新接口
-Route::put('agency/update', [\App\Api\Admin\Controllers\AgencyController::class, 'update']);
+Route::put('agency/update', [AgencyController::class, 'update']);
 // 删除接口
-Route::delete('agency/destroy', [\App\Api\Admin\Controllers\AgencyController::class, 'destroy']);
+Route::delete('agency/destroy', [AgencyController::class, 'destroy']);
 // 查询列表接口
-Route::post('areaRegion/query', [\App\Api\Admin\Controllers\AreaRegionController::class, 'query']);
+Route::post('areaRegion/query', [AreaRegionController::class, 'query']);
 // 新增接口
-Route::post('areaRegion/store', [\App\Api\Admin\Controllers\AreaRegionController::class, 'store']);
+Route::post('areaRegion/store', [AreaRegionController::class, 'store']);
 // 获取详情接口
-Route::get('areaRegion/show', [\App\Api\Admin\Controllers\AreaRegionController::class, 'show'])->name('areaRegion.show');
+Route::get('areaRegion/show', [AreaRegionController::class, 'show'])->name('areaRegion.show');
 // 更新接口
-Route::put('areaRegion/update', [\App\Api\Admin\Controllers\AreaRegionController::class, 'update']);
+Route::put('areaRegion/update', [AreaRegionController::class, 'update']);
 // 删除接口
-Route::delete('areaRegion/destroy', [\App\Api\Admin\Controllers\AreaRegionController::class, 'destroy']);
+Route::delete('areaRegion/destroy', [AreaRegionController::class, 'destroy']);
 // 查询列表接口
-Route::post('articleCat/query', [\App\Api\Admin\Controllers\ArticleCatController::class, 'query']);
+Route::post('articleCat/query', [ArticleCatController::class, 'query']);
 // 新增接口
-Route::post('articleCat/store', [\App\Api\Admin\Controllers\ArticleCatController::class, 'store']);
+Route::post('articleCat/store', [ArticleCatController::class, 'store']);
 // 获取详情接口
-Route::get('articleCat/show', [\App\Api\Admin\Controllers\ArticleCatController::class, 'show'])->name('articleCat.show');
+Route::get('articleCat/show', [ArticleCatController::class, 'show'])->name('articleCat.show');
 // 更新接口
-Route::put('articleCat/update', [\App\Api\Admin\Controllers\ArticleCatController::class, 'update']);
+Route::put('articleCat/update', [ArticleCatController::class, 'update']);
 // 删除接口
-Route::delete('articleCat/destroy', [\App\Api\Admin\Controllers\ArticleCatController::class, 'destroy']);
+Route::delete('articleCat/destroy', [ArticleCatController::class, 'destroy']);
 // 查询列表接口
-Route::post('article/query', [\App\Api\Admin\Controllers\ArticleController::class, 'query']);
+Route::post('article/query', [ArticleController::class, 'query']);
 // 新增接口
-Route::post('article/store', [\App\Api\Admin\Controllers\ArticleController::class, 'store']);
+Route::post('article/store', [ArticleController::class, 'store']);
 // 获取详情接口
-Route::get('article/show', [\App\Api\Admin\Controllers\ArticleController::class, 'show'])->name('article.show');
+Route::get('article/show', [ArticleController::class, 'show'])->name('article.show');
 // 更新接口
-Route::put('article/update', [\App\Api\Admin\Controllers\ArticleController::class, 'update']);
+Route::put('article/update', [ArticleController::class, 'update']);
 // 删除接口
-Route::delete('article/destroy', [\App\Api\Admin\Controllers\ArticleController::class, 'destroy']);
+Route::delete('article/destroy', [ArticleController::class, 'destroy']);
 // 查询列表接口
-Route::post('attribute/query', [\App\Api\Admin\Controllers\AttributeController::class, 'query']);
+Route::post('attribute/query', [AttributeController::class, 'query']);
 // 新增接口
-Route::post('attribute/store', [\App\Api\Admin\Controllers\AttributeController::class, 'store']);
+Route::post('attribute/store', [AttributeController::class, 'store']);
 // 获取详情接口
-Route::get('attribute/show', [\App\Api\Admin\Controllers\AttributeController::class, 'show'])->name('attribute.show');
+Route::get('attribute/show', [AttributeController::class, 'show'])->name('attribute.show');
 // 更新接口
-Route::put('attribute/update', [\App\Api\Admin\Controllers\AttributeController::class, 'update']);
+Route::put('attribute/update', [AttributeController::class, 'update']);
 // 删除接口
-Route::delete('attribute/destroy', [\App\Api\Admin\Controllers\AttributeController::class, 'destroy']);
+Route::delete('attribute/destroy', [AttributeController::class, 'destroy']);
 // 查询列表接口
-Route::post('auctionLog/query', [\App\Api\Admin\Controllers\AuctionLogController::class, 'query']);
+Route::post('auctionLog/query', [AuctionLogController::class, 'query']);
 // 新增接口
-Route::post('auctionLog/store', [\App\Api\Admin\Controllers\AuctionLogController::class, 'store']);
+Route::post('auctionLog/store', [AuctionLogController::class, 'store']);
 // 获取详情接口
-Route::get('auctionLog/show', [\App\Api\Admin\Controllers\AuctionLogController::class, 'show'])->name('auctionLog.show');
+Route::get('auctionLog/show', [AuctionLogController::class, 'show'])->name('auctionLog.show');
 // 更新接口
-Route::put('auctionLog/update', [\App\Api\Admin\Controllers\AuctionLogController::class, 'update']);
+Route::put('auctionLog/update', [AuctionLogController::class, 'update']);
 // 删除接口
-Route::delete('auctionLog/destroy', [\App\Api\Admin\Controllers\AuctionLogController::class, 'destroy']);
+Route::delete('auctionLog/destroy', [AuctionLogController::class, 'destroy']);
 // 查询列表接口
-Route::post('autoManage/query', [\App\Api\Admin\Controllers\AutoManageController::class, 'query']);
+Route::post('autoManage/query', [AutoManageController::class, 'query']);
 // 新增接口
-Route::post('autoManage/store', [\App\Api\Admin\Controllers\AutoManageController::class, 'store']);
+Route::post('autoManage/store', [AutoManageController::class, 'store']);
 // 获取详情接口
-Route::get('autoManage/show', [\App\Api\Admin\Controllers\AutoManageController::class, 'show'])->name('autoManage.show');
+Route::get('autoManage/show', [AutoManageController::class, 'show'])->name('autoManage.show');
 // 更新接口
-Route::put('autoManage/update', [\App\Api\Admin\Controllers\AutoManageController::class, 'update']);
+Route::put('autoManage/update', [AutoManageController::class, 'update']);
 // 删除接口
-Route::delete('autoManage/destroy', [\App\Api\Admin\Controllers\AutoManageController::class, 'destroy']);
+Route::delete('autoManage/destroy', [AutoManageController::class, 'destroy']);
 // 查询列表接口
-Route::post('backGoods/query', [\App\Api\Admin\Controllers\BackGoodsController::class, 'query']);
+Route::post('backGoods/query', [BackGoodsController::class, 'query']);
 // 新增接口
-Route::post('backGoods/store', [\App\Api\Admin\Controllers\BackGoodsController::class, 'store']);
+Route::post('backGoods/store', [BackGoodsController::class, 'store']);
 // 获取详情接口
-Route::get('backGoods/show', [\App\Api\Admin\Controllers\BackGoodsController::class, 'show'])->name('backGoods.show');
+Route::get('backGoods/show', [BackGoodsController::class, 'show'])->name('backGoods.show');
 // 更新接口
-Route::put('backGoods/update', [\App\Api\Admin\Controllers\BackGoodsController::class, 'update']);
+Route::put('backGoods/update', [BackGoodsController::class, 'update']);
 // 删除接口
-Route::delete('backGoods/destroy', [\App\Api\Admin\Controllers\BackGoodsController::class, 'destroy']);
+Route::delete('backGoods/destroy', [BackGoodsController::class, 'destroy']);
 // 查询列表接口
-Route::post('backOrder/query', [\App\Api\Admin\Controllers\BackOrderController::class, 'query']);
+Route::post('backOrder/query', [BackOrderController::class, 'query']);
 // 新增接口
-Route::post('backOrder/store', [\App\Api\Admin\Controllers\BackOrderController::class, 'store']);
+Route::post('backOrder/store', [BackOrderController::class, 'store']);
 // 获取详情接口
-Route::get('backOrder/show', [\App\Api\Admin\Controllers\BackOrderController::class, 'show'])->name('backOrder.show');
+Route::get('backOrder/show', [BackOrderController::class, 'show'])->name('backOrder.show');
 // 更新接口
-Route::put('backOrder/update', [\App\Api\Admin\Controllers\BackOrderController::class, 'update']);
+Route::put('backOrder/update', [BackOrderController::class, 'update']);
 // 删除接口
-Route::delete('backOrder/destroy', [\App\Api\Admin\Controllers\BackOrderController::class, 'destroy']);
+Route::delete('backOrder/destroy', [BackOrderController::class, 'destroy']);
 // 查询列表接口
-Route::post('bonusType/query', [\App\Api\Admin\Controllers\BonusTypeController::class, 'query']);
+Route::post('bonusType/query', [BonusTypeController::class, 'query']);
 // 新增接口
-Route::post('bonusType/store', [\App\Api\Admin\Controllers\BonusTypeController::class, 'store']);
+Route::post('bonusType/store', [BonusTypeController::class, 'store']);
 // 获取详情接口
-Route::get('bonusType/show', [\App\Api\Admin\Controllers\BonusTypeController::class, 'show'])->name('bonusType.show');
+Route::get('bonusType/show', [BonusTypeController::class, 'show'])->name('bonusType.show');
 // 更新接口
-Route::put('bonusType/update', [\App\Api\Admin\Controllers\BonusTypeController::class, 'update']);
+Route::put('bonusType/update', [BonusTypeController::class, 'update']);
 // 删除接口
-Route::delete('bonusType/destroy', [\App\Api\Admin\Controllers\BonusTypeController::class, 'destroy']);
+Route::delete('bonusType/destroy', [BonusTypeController::class, 'destroy']);
 // 查询列表接口
-Route::post('bookingGoods/query', [\App\Api\Admin\Controllers\BookingGoodsController::class, 'query']);
+Route::post('bookingGoods/query', [BookingGoodsController::class, 'query']);
 // 新增接口
-Route::post('bookingGoods/store', [\App\Api\Admin\Controllers\BookingGoodsController::class, 'store']);
+Route::post('bookingGoods/store', [BookingGoodsController::class, 'store']);
 // 获取详情接口
-Route::get('bookingGoods/show', [\App\Api\Admin\Controllers\BookingGoodsController::class, 'show'])->name('bookingGoods.show');
+Route::get('bookingGoods/show', [BookingGoodsController::class, 'show'])->name('bookingGoods.show');
 // 更新接口
-Route::put('bookingGoods/update', [\App\Api\Admin\Controllers\BookingGoodsController::class, 'update']);
+Route::put('bookingGoods/update', [BookingGoodsController::class, 'update']);
 // 删除接口
-Route::delete('bookingGoods/destroy', [\App\Api\Admin\Controllers\BookingGoodsController::class, 'destroy']);
+Route::delete('bookingGoods/destroy', [BookingGoodsController::class, 'destroy']);
 // 查询列表接口
-Route::post('brand/query', [\App\Api\Admin\Controllers\BrandController::class, 'query']);
+Route::post('brand/query', [BrandController::class, 'query']);
 // 新增接口
-Route::post('brand/store', [\App\Api\Admin\Controllers\BrandController::class, 'store']);
+Route::post('brand/store', [BrandController::class, 'store']);
 // 获取详情接口
-Route::get('brand/show', [\App\Api\Admin\Controllers\BrandController::class, 'show'])->name('brand.show');
+Route::get('brand/show', [BrandController::class, 'show'])->name('brand.show');
 // 更新接口
-Route::put('brand/update', [\App\Api\Admin\Controllers\BrandController::class, 'update']);
+Route::put('brand/update', [BrandController::class, 'update']);
 // 删除接口
-Route::delete('brand/destroy', [\App\Api\Admin\Controllers\BrandController::class, 'destroy']);
+Route::delete('brand/destroy', [BrandController::class, 'destroy']);
 // 查询列表接口
-Route::post('card/query', [\App\Api\Admin\Controllers\CardController::class, 'query']);
+Route::post('card/query', [CardController::class, 'query']);
 // 新增接口
-Route::post('card/store', [\App\Api\Admin\Controllers\CardController::class, 'store']);
+Route::post('card/store', [CardController::class, 'store']);
 // 获取详情接口
-Route::get('card/show', [\App\Api\Admin\Controllers\CardController::class, 'show'])->name('card.show');
+Route::get('card/show', [CardController::class, 'show'])->name('card.show');
 // 更新接口
-Route::put('card/update', [\App\Api\Admin\Controllers\CardController::class, 'update']);
+Route::put('card/update', [CardController::class, 'update']);
 // 删除接口
-Route::delete('card/destroy', [\App\Api\Admin\Controllers\CardController::class, 'destroy']);
+Route::delete('card/destroy', [CardController::class, 'destroy']);
 // 查询列表接口
-Route::post('cart/query', [\App\Api\Admin\Controllers\CartController::class, 'query']);
+Route::post('cart/query', [CartController::class, 'query']);
 // 新增接口
-Route::post('cart/store', [\App\Api\Admin\Controllers\CartController::class, 'store']);
+Route::post('cart/store', [CartController::class, 'store']);
 // 获取详情接口
-Route::get('cart/show', [\App\Api\Admin\Controllers\CartController::class, 'show'])->name('cart.show');
+Route::get('cart/show', [CartController::class, 'show'])->name('cart.show');
 // 更新接口
-Route::put('cart/update', [\App\Api\Admin\Controllers\CartController::class, 'update']);
+Route::put('cart/update', [CartController::class, 'update']);
 // 删除接口
-Route::delete('cart/destroy', [\App\Api\Admin\Controllers\CartController::class, 'destroy']);
+Route::delete('cart/destroy', [CartController::class, 'destroy']);
 // 查询列表接口
-Route::post('catRecommend/query', [\App\Api\Admin\Controllers\CatRecommendController::class, 'query']);
+Route::post('catRecommend/query', [CatRecommendController::class, 'query']);
 // 新增接口
-Route::post('catRecommend/store', [\App\Api\Admin\Controllers\CatRecommendController::class, 'store']);
+Route::post('catRecommend/store', [CatRecommendController::class, 'store']);
 // 获取详情接口
-Route::get('catRecommend/show', [\App\Api\Admin\Controllers\CatRecommendController::class, 'show'])->name('catRecommend.show');
+Route::get('catRecommend/show', [CatRecommendController::class, 'show'])->name('catRecommend.show');
 // 更新接口
-Route::put('catRecommend/update', [\App\Api\Admin\Controllers\CatRecommendController::class, 'update']);
+Route::put('catRecommend/update', [CatRecommendController::class, 'update']);
 // 删除接口
-Route::delete('catRecommend/destroy', [\App\Api\Admin\Controllers\CatRecommendController::class, 'destroy']);
+Route::delete('catRecommend/destroy', [CatRecommendController::class, 'destroy']);
 // 查询列表接口
-Route::post('category/query', [\App\Api\Admin\Controllers\CategoryController::class, 'query']);
+Route::post('category/query', [CategoryController::class, 'query']);
 // 新增接口
-Route::post('category/store', [\App\Api\Admin\Controllers\CategoryController::class, 'store']);
+Route::post('category/store', [CategoryController::class, 'store']);
 // 获取详情接口
-Route::get('category/show', [\App\Api\Admin\Controllers\CategoryController::class, 'show'])->name('category.show');
+Route::get('category/show', [CategoryController::class, 'show'])->name('category.show');
 // 更新接口
-Route::put('category/update', [\App\Api\Admin\Controllers\CategoryController::class, 'update']);
+Route::put('category/update', [CategoryController::class, 'update']);
 // 删除接口
-Route::delete('category/destroy', [\App\Api\Admin\Controllers\CategoryController::class, 'destroy']);
+Route::delete('category/destroy', [CategoryController::class, 'destroy']);
 // 查询列表接口
-Route::post('collectGoods/query', [\App\Api\Admin\Controllers\CollectGoodsController::class, 'query']);
+Route::post('collectGoods/query', [CollectGoodsController::class, 'query']);
 // 新增接口
-Route::post('collectGoods/store', [\App\Api\Admin\Controllers\CollectGoodsController::class, 'store']);
+Route::post('collectGoods/store', [CollectGoodsController::class, 'store']);
 // 获取详情接口
-Route::get('collectGoods/show', [\App\Api\Admin\Controllers\CollectGoodsController::class, 'show'])->name('collectGoods.show');
+Route::get('collectGoods/show', [CollectGoodsController::class, 'show'])->name('collectGoods.show');
 // 更新接口
-Route::put('collectGoods/update', [\App\Api\Admin\Controllers\CollectGoodsController::class, 'update']);
+Route::put('collectGoods/update', [CollectGoodsController::class, 'update']);
 // 删除接口
-Route::delete('collectGoods/destroy', [\App\Api\Admin\Controllers\CollectGoodsController::class, 'destroy']);
+Route::delete('collectGoods/destroy', [CollectGoodsController::class, 'destroy']);
 // 查询列表接口
-Route::post('comment/query', [\App\Api\Admin\Controllers\CommentController::class, 'query']);
+Route::post('comment/query', [CommentController::class, 'query']);
 // 新增接口
-Route::post('comment/store', [\App\Api\Admin\Controllers\CommentController::class, 'store']);
+Route::post('comment/store', [CommentController::class, 'store']);
 // 获取详情接口
-Route::get('comment/show', [\App\Api\Admin\Controllers\CommentController::class, 'show'])->name('comment.show');
+Route::get('comment/show', [CommentController::class, 'show'])->name('comment.show');
 // 更新接口
-Route::put('comment/update', [\App\Api\Admin\Controllers\CommentController::class, 'update']);
+Route::put('comment/update', [CommentController::class, 'update']);
 // 删除接口
-Route::delete('comment/destroy', [\App\Api\Admin\Controllers\CommentController::class, 'destroy']);
+Route::delete('comment/destroy', [CommentController::class, 'destroy']);
 // 查询列表接口
-Route::post('crons/query', [\App\Api\Admin\Controllers\CronsController::class, 'query']);
+Route::post('crons/query', [CronsController::class, 'query']);
 // 新增接口
-Route::post('crons/store', [\App\Api\Admin\Controllers\CronsController::class, 'store']);
+Route::post('crons/store', [CronsController::class, 'store']);
 // 获取详情接口
-Route::get('crons/show', [\App\Api\Admin\Controllers\CronsController::class, 'show'])->name('crons.show');
+Route::get('crons/show', [CronsController::class, 'show'])->name('crons.show');
 // 更新接口
-Route::put('crons/update', [\App\Api\Admin\Controllers\CronsController::class, 'update']);
+Route::put('crons/update', [CronsController::class, 'update']);
 // 删除接口
-Route::delete('crons/destroy', [\App\Api\Admin\Controllers\CronsController::class, 'destroy']);
+Route::delete('crons/destroy', [CronsController::class, 'destroy']);
 // 查询列表接口
-Route::post('deliveryGoods/query', [\App\Api\Admin\Controllers\DeliveryGoodsController::class, 'query']);
+Route::post('deliveryGoods/query', [DeliveryGoodsController::class, 'query']);
 // 新增接口
-Route::post('deliveryGoods/store', [\App\Api\Admin\Controllers\DeliveryGoodsController::class, 'store']);
+Route::post('deliveryGoods/store', [DeliveryGoodsController::class, 'store']);
 // 获取详情接口
-Route::get('deliveryGoods/show', [\App\Api\Admin\Controllers\DeliveryGoodsController::class, 'show'])->name('deliveryGoods.show');
+Route::get('deliveryGoods/show', [DeliveryGoodsController::class, 'show'])->name('deliveryGoods.show');
 // 更新接口
-Route::put('deliveryGoods/update', [\App\Api\Admin\Controllers\DeliveryGoodsController::class, 'update']);
+Route::put('deliveryGoods/update', [DeliveryGoodsController::class, 'update']);
 // 删除接口
-Route::delete('deliveryGoods/destroy', [\App\Api\Admin\Controllers\DeliveryGoodsController::class, 'destroy']);
+Route::delete('deliveryGoods/destroy', [DeliveryGoodsController::class, 'destroy']);
 // 查询列表接口
-Route::post('deliveryOrder/query', [\App\Api\Admin\Controllers\DeliveryOrderController::class, 'query']);
+Route::post('deliveryOrder/query', [DeliveryOrderController::class, 'query']);
 // 新增接口
-Route::post('deliveryOrder/store', [\App\Api\Admin\Controllers\DeliveryOrderController::class, 'store']);
+Route::post('deliveryOrder/store', [DeliveryOrderController::class, 'store']);
 // 获取详情接口
-Route::get('deliveryOrder/show', [\App\Api\Admin\Controllers\DeliveryOrderController::class, 'show'])->name('deliveryOrder.show');
+Route::get('deliveryOrder/show', [DeliveryOrderController::class, 'show'])->name('deliveryOrder.show');
 // 更新接口
-Route::put('deliveryOrder/update', [\App\Api\Admin\Controllers\DeliveryOrderController::class, 'update']);
+Route::put('deliveryOrder/update', [DeliveryOrderController::class, 'update']);
 // 删除接口
-Route::delete('deliveryOrder/destroy', [\App\Api\Admin\Controllers\DeliveryOrderController::class, 'destroy']);
+Route::delete('deliveryOrder/destroy', [DeliveryOrderController::class, 'destroy']);
 // 查询列表接口
-Route::post('emailList/query', [\App\Api\Admin\Controllers\EmailListController::class, 'query']);
+Route::post('emailList/query', [EmailListController::class, 'query']);
 // 新增接口
-Route::post('emailList/store', [\App\Api\Admin\Controllers\EmailListController::class, 'store']);
+Route::post('emailList/store', [EmailListController::class, 'store']);
 // 获取详情接口
-Route::get('emailList/show', [\App\Api\Admin\Controllers\EmailListController::class, 'show'])->name('emailList.show');
+Route::get('emailList/show', [EmailListController::class, 'show'])->name('emailList.show');
 // 更新接口
-Route::put('emailList/update', [\App\Api\Admin\Controllers\EmailListController::class, 'update']);
+Route::put('emailList/update', [EmailListController::class, 'update']);
 // 删除接口
-Route::delete('emailList/destroy', [\App\Api\Admin\Controllers\EmailListController::class, 'destroy']);
+Route::delete('emailList/destroy', [EmailListController::class, 'destroy']);
 // 查询列表接口
-Route::post('emailSendlist/query', [\App\Api\Admin\Controllers\EmailSendlistController::class, 'query']);
+Route::post('emailSendlist/query', [EmailSendlistController::class, 'query']);
 // 新增接口
-Route::post('emailSendlist/store', [\App\Api\Admin\Controllers\EmailSendlistController::class, 'store']);
+Route::post('emailSendlist/store', [EmailSendlistController::class, 'store']);
 // 获取详情接口
-Route::get('emailSendlist/show', [\App\Api\Admin\Controllers\EmailSendlistController::class, 'show'])->name('emailSendlist.show');
+Route::get('emailSendlist/show', [EmailSendlistController::class, 'show'])->name('emailSendlist.show');
 // 更新接口
-Route::put('emailSendlist/update', [\App\Api\Admin\Controllers\EmailSendlistController::class, 'update']);
+Route::put('emailSendlist/update', [EmailSendlistController::class, 'update']);
 // 删除接口
-Route::delete('emailSendlist/destroy', [\App\Api\Admin\Controllers\EmailSendlistController::class, 'destroy']);
+Route::delete('emailSendlist/destroy', [EmailSendlistController::class, 'destroy']);
 // 查询列表接口
-Route::post('errorLog/query', [\App\Api\Admin\Controllers\ErrorLogController::class, 'query']);
+Route::post('errorLog/query', [ErrorLogController::class, 'query']);
 // 新增接口
-Route::post('errorLog/store', [\App\Api\Admin\Controllers\ErrorLogController::class, 'store']);
+Route::post('errorLog/store', [ErrorLogController::class, 'store']);
 // 获取详情接口
-Route::get('errorLog/show', [\App\Api\Admin\Controllers\ErrorLogController::class, 'show'])->name('errorLog.show');
+Route::get('errorLog/show', [ErrorLogController::class, 'show'])->name('errorLog.show');
 // 更新接口
-Route::put('errorLog/update', [\App\Api\Admin\Controllers\ErrorLogController::class, 'update']);
+Route::put('errorLog/update', [ErrorLogController::class, 'update']);
 // 删除接口
-Route::delete('errorLog/destroy', [\App\Api\Admin\Controllers\ErrorLogController::class, 'destroy']);
+Route::delete('errorLog/destroy', [ErrorLogController::class, 'destroy']);
 // 查询列表接口
-Route::post('exchangeGoods/query', [\App\Api\Admin\Controllers\ExchangeGoodsController::class, 'query']);
+Route::post('exchangeGoods/query', [ExchangeGoodsController::class, 'query']);
 // 新增接口
-Route::post('exchangeGoods/store', [\App\Api\Admin\Controllers\ExchangeGoodsController::class, 'store']);
+Route::post('exchangeGoods/store', [ExchangeGoodsController::class, 'store']);
 // 获取详情接口
-Route::get('exchangeGoods/show', [\App\Api\Admin\Controllers\ExchangeGoodsController::class, 'show'])->name('exchangeGoods.show');
+Route::get('exchangeGoods/show', [ExchangeGoodsController::class, 'show'])->name('exchangeGoods.show');
 // 更新接口
-Route::put('exchangeGoods/update', [\App\Api\Admin\Controllers\ExchangeGoodsController::class, 'update']);
+Route::put('exchangeGoods/update', [ExchangeGoodsController::class, 'update']);
 // 删除接口
-Route::delete('exchangeGoods/destroy', [\App\Api\Admin\Controllers\ExchangeGoodsController::class, 'destroy']);
+Route::delete('exchangeGoods/destroy', [ExchangeGoodsController::class, 'destroy']);
 // 查询列表接口
-Route::post('favourableActivity/query', [\App\Api\Admin\Controllers\FavourableActivityController::class, 'query']);
+Route::post('favourableActivity/query', [FavourableActivityController::class, 'query']);
 // 新增接口
-Route::post('favourableActivity/store', [\App\Api\Admin\Controllers\FavourableActivityController::class, 'store']);
+Route::post('favourableActivity/store', [FavourableActivityController::class, 'store']);
 // 获取详情接口
-Route::get('favourableActivity/show', [\App\Api\Admin\Controllers\FavourableActivityController::class, 'show'])->name('favourableActivity.show');
+Route::get('favourableActivity/show', [FavourableActivityController::class, 'show'])->name('favourableActivity.show');
 // 更新接口
-Route::put('favourableActivity/update', [\App\Api\Admin\Controllers\FavourableActivityController::class, 'update']);
+Route::put('favourableActivity/update', [FavourableActivityController::class, 'update']);
 // 删除接口
-Route::delete('favourableActivity/destroy', [\App\Api\Admin\Controllers\FavourableActivityController::class, 'destroy']);
+Route::delete('favourableActivity/destroy', [FavourableActivityController::class, 'destroy']);
 // 查询列表接口
-Route::post('feedback/query', [\App\Api\Admin\Controllers\FeedbackController::class, 'query']);
+Route::post('feedback/query', [FeedbackController::class, 'query']);
 // 新增接口
-Route::post('feedback/store', [\App\Api\Admin\Controllers\FeedbackController::class, 'store']);
+Route::post('feedback/store', [FeedbackController::class, 'store']);
 // 获取详情接口
-Route::get('feedback/show', [\App\Api\Admin\Controllers\FeedbackController::class, 'show'])->name('feedback.show');
+Route::get('feedback/show', [FeedbackController::class, 'show'])->name('feedback.show');
 // 更新接口
-Route::put('feedback/update', [\App\Api\Admin\Controllers\FeedbackController::class, 'update']);
+Route::put('feedback/update', [FeedbackController::class, 'update']);
 // 删除接口
-Route::delete('feedback/destroy', [\App\Api\Admin\Controllers\FeedbackController::class, 'destroy']);
+Route::delete('feedback/destroy', [FeedbackController::class, 'destroy']);
 // 查询列表接口
-Route::post('friendLink/query', [\App\Api\Admin\Controllers\FriendLinkController::class, 'query']);
+Route::post('friendLink/query', [FriendLinkController::class, 'query']);
 // 新增接口
-Route::post('friendLink/store', [\App\Api\Admin\Controllers\FriendLinkController::class, 'store']);
+Route::post('friendLink/store', [FriendLinkController::class, 'store']);
 // 获取详情接口
-Route::get('friendLink/show', [\App\Api\Admin\Controllers\FriendLinkController::class, 'show'])->name('friendLink.show');
+Route::get('friendLink/show', [FriendLinkController::class, 'show'])->name('friendLink.show');
 // 更新接口
-Route::put('friendLink/update', [\App\Api\Admin\Controllers\FriendLinkController::class, 'update']);
+Route::put('friendLink/update', [FriendLinkController::class, 'update']);
 // 删除接口
-Route::delete('friendLink/destroy', [\App\Api\Admin\Controllers\FriendLinkController::class, 'destroy']);
+Route::delete('friendLink/destroy', [FriendLinkController::class, 'destroy']);
 // 查询列表接口
-Route::post('goodsActivity/query', [\App\Api\Admin\Controllers\GoodsActivityController::class, 'query']);
+Route::post('goodsActivity/query', [GoodsActivityController::class, 'query']);
 // 新增接口
-Route::post('goodsActivity/store', [\App\Api\Admin\Controllers\GoodsActivityController::class, 'store']);
+Route::post('goodsActivity/store', [GoodsActivityController::class, 'store']);
 // 获取详情接口
-Route::get('goodsActivity/show', [\App\Api\Admin\Controllers\GoodsActivityController::class, 'show'])->name('goodsActivity.show');
+Route::get('goodsActivity/show', [GoodsActivityController::class, 'show'])->name('goodsActivity.show');
 // 更新接口
-Route::put('goodsActivity/update', [\App\Api\Admin\Controllers\GoodsActivityController::class, 'update']);
+Route::put('goodsActivity/update', [GoodsActivityController::class, 'update']);
 // 删除接口
-Route::delete('goodsActivity/destroy', [\App\Api\Admin\Controllers\GoodsActivityController::class, 'destroy']);
+Route::delete('goodsActivity/destroy', [GoodsActivityController::class, 'destroy']);
 // 查询列表接口
-Route::post('goodsArticle/query', [\App\Api\Admin\Controllers\GoodsArticleController::class, 'query']);
+Route::post('goodsArticle/query', [GoodsArticleController::class, 'query']);
 // 新增接口
-Route::post('goodsArticle/store', [\App\Api\Admin\Controllers\GoodsArticleController::class, 'store']);
+Route::post('goodsArticle/store', [GoodsArticleController::class, 'store']);
 // 获取详情接口
-Route::get('goodsArticle/show', [\App\Api\Admin\Controllers\GoodsArticleController::class, 'show'])->name('goodsArticle.show');
+Route::get('goodsArticle/show', [GoodsArticleController::class, 'show'])->name('goodsArticle.show');
 // 更新接口
-Route::put('goodsArticle/update', [\App\Api\Admin\Controllers\GoodsArticleController::class, 'update']);
+Route::put('goodsArticle/update', [GoodsArticleController::class, 'update']);
 // 删除接口
-Route::delete('goodsArticle/destroy', [\App\Api\Admin\Controllers\GoodsArticleController::class, 'destroy']);
+Route::delete('goodsArticle/destroy', [GoodsArticleController::class, 'destroy']);
 // 查询列表接口
-Route::post('goodsAttr/query', [\App\Api\Admin\Controllers\GoodsAttrController::class, 'query']);
+Route::post('goodsAttr/query', [GoodsAttrController::class, 'query']);
 // 新增接口
-Route::post('goodsAttr/store', [\App\Api\Admin\Controllers\GoodsAttrController::class, 'store']);
+Route::post('goodsAttr/store', [GoodsAttrController::class, 'store']);
 // 获取详情接口
-Route::get('goodsAttr/show', [\App\Api\Admin\Controllers\GoodsAttrController::class, 'show'])->name('goodsAttr.show');
+Route::get('goodsAttr/show', [GoodsAttrController::class, 'show'])->name('goodsAttr.show');
 // 更新接口
-Route::put('goodsAttr/update', [\App\Api\Admin\Controllers\GoodsAttrController::class, 'update']);
+Route::put('goodsAttr/update', [GoodsAttrController::class, 'update']);
 // 删除接口
-Route::delete('goodsAttr/destroy', [\App\Api\Admin\Controllers\GoodsAttrController::class, 'destroy']);
+Route::delete('goodsAttr/destroy', [GoodsAttrController::class, 'destroy']);
 // 查询列表接口
-Route::post('goodsCat/query', [\App\Api\Admin\Controllers\GoodsCatController::class, 'query']);
+Route::post('goodsCat/query', [GoodsCatController::class, 'query']);
 // 新增接口
-Route::post('goodsCat/store', [\App\Api\Admin\Controllers\GoodsCatController::class, 'store']);
+Route::post('goodsCat/store', [GoodsCatController::class, 'store']);
 // 获取详情接口
-Route::get('goodsCat/show', [\App\Api\Admin\Controllers\GoodsCatController::class, 'show'])->name('goodsCat.show');
+Route::get('goodsCat/show', [GoodsCatController::class, 'show'])->name('goodsCat.show');
 // 更新接口
-Route::put('goodsCat/update', [\App\Api\Admin\Controllers\GoodsCatController::class, 'update']);
+Route::put('goodsCat/update', [GoodsCatController::class, 'update']);
 // 删除接口
-Route::delete('goodsCat/destroy', [\App\Api\Admin\Controllers\GoodsCatController::class, 'destroy']);
+Route::delete('goodsCat/destroy', [GoodsCatController::class, 'destroy']);
 // 查询列表接口
-Route::post('goods/query', [\App\Api\Admin\Controllers\GoodsController::class, 'query']);
+Route::post('goods/query', [GoodsController::class, 'query']);
 // 新增接口
-Route::post('goods/store', [\App\Api\Admin\Controllers\GoodsController::class, 'store']);
+Route::post('goods/store', [GoodsController::class, 'store']);
 // 获取详情接口
-Route::get('goods/show', [\App\Api\Admin\Controllers\GoodsController::class, 'show'])->name('goods.show');
+Route::get('goods/show', [GoodsController::class, 'show'])->name('goods.show');
 // 更新接口
-Route::put('goods/update', [\App\Api\Admin\Controllers\GoodsController::class, 'update']);
+Route::put('goods/update', [GoodsController::class, 'update']);
 // 删除接口
-Route::delete('goods/destroy', [\App\Api\Admin\Controllers\GoodsController::class, 'destroy']);
+Route::delete('goods/destroy', [GoodsController::class, 'destroy']);
 // 查询列表接口
-Route::post('goodsGallery/query', [\App\Api\Admin\Controllers\GoodsGalleryController::class, 'query']);
+Route::post('goodsGallery/query', [GoodsGalleryController::class, 'query']);
 // 新增接口
-Route::post('goodsGallery/store', [\App\Api\Admin\Controllers\GoodsGalleryController::class, 'store']);
+Route::post('goodsGallery/store', [GoodsGalleryController::class, 'store']);
 // 获取详情接口
-Route::get('goodsGallery/show', [\App\Api\Admin\Controllers\GoodsGalleryController::class, 'show'])->name('goodsGallery.show');
+Route::get('goodsGallery/show', [GoodsGalleryController::class, 'show'])->name('goodsGallery.show');
 // 更新接口
-Route::put('goodsGallery/update', [\App\Api\Admin\Controllers\GoodsGalleryController::class, 'update']);
+Route::put('goodsGallery/update', [GoodsGalleryController::class, 'update']);
 // 删除接口
-Route::delete('goodsGallery/destroy', [\App\Api\Admin\Controllers\GoodsGalleryController::class, 'destroy']);
+Route::delete('goodsGallery/destroy', [GoodsGalleryController::class, 'destroy']);
 // 查询列表接口
-Route::post('goodsType/query', [\App\Api\Admin\Controllers\GoodsTypeController::class, 'query']);
+Route::post('goodsType/query', [GoodsTypeController::class, 'query']);
 // 新增接口
-Route::post('goodsType/store', [\App\Api\Admin\Controllers\GoodsTypeController::class, 'store']);
+Route::post('goodsType/store', [GoodsTypeController::class, 'store']);
 // 获取详情接口
-Route::get('goodsType/show', [\App\Api\Admin\Controllers\GoodsTypeController::class, 'show'])->name('goodsType.show');
+Route::get('goodsType/show', [GoodsTypeController::class, 'show'])->name('goodsType.show');
 // 更新接口
-Route::put('goodsType/update', [\App\Api\Admin\Controllers\GoodsTypeController::class, 'update']);
+Route::put('goodsType/update', [GoodsTypeController::class, 'update']);
 // 删除接口
-Route::delete('goodsType/destroy', [\App\Api\Admin\Controllers\GoodsTypeController::class, 'destroy']);
+Route::delete('goodsType/destroy', [GoodsTypeController::class, 'destroy']);
 // 查询列表接口
-Route::post('groupGoods/query', [\App\Api\Admin\Controllers\GroupGoodsController::class, 'query']);
+Route::post('groupGoods/query', [GroupGoodsController::class, 'query']);
 // 新增接口
-Route::post('groupGoods/store', [\App\Api\Admin\Controllers\GroupGoodsController::class, 'store']);
+Route::post('groupGoods/store', [GroupGoodsController::class, 'store']);
 // 获取详情接口
-Route::get('groupGoods/show', [\App\Api\Admin\Controllers\GroupGoodsController::class, 'show'])->name('groupGoods.show');
+Route::get('groupGoods/show', [GroupGoodsController::class, 'show'])->name('groupGoods.show');
 // 更新接口
-Route::put('groupGoods/update', [\App\Api\Admin\Controllers\GroupGoodsController::class, 'update']);
+Route::put('groupGoods/update', [GroupGoodsController::class, 'update']);
 // 删除接口
-Route::delete('groupGoods/destroy', [\App\Api\Admin\Controllers\GroupGoodsController::class, 'destroy']);
+Route::delete('groupGoods/destroy', [GroupGoodsController::class, 'destroy']);
 // 查询列表接口
-Route::post('keywords/query', [\App\Api\Admin\Controllers\KeywordsController::class, 'query']);
+Route::post('keywords/query', [KeywordsController::class, 'query']);
 // 新增接口
-Route::post('keywords/store', [\App\Api\Admin\Controllers\KeywordsController::class, 'store']);
+Route::post('keywords/store', [KeywordsController::class, 'store']);
 // 获取详情接口
-Route::get('keywords/show', [\App\Api\Admin\Controllers\KeywordsController::class, 'show'])->name('keywords.show');
+Route::get('keywords/show', [KeywordsController::class, 'show'])->name('keywords.show');
 // 更新接口
-Route::put('keywords/update', [\App\Api\Admin\Controllers\KeywordsController::class, 'update']);
+Route::put('keywords/update', [KeywordsController::class, 'update']);
 // 删除接口
-Route::delete('keywords/destroy', [\App\Api\Admin\Controllers\KeywordsController::class, 'destroy']);
+Route::delete('keywords/destroy', [KeywordsController::class, 'destroy']);
 // 查询列表接口
-Route::post('linkGoods/query', [\App\Api\Admin\Controllers\LinkGoodsController::class, 'query']);
+Route::post('linkGoods/query', [LinkGoodsController::class, 'query']);
 // 新增接口
-Route::post('linkGoods/store', [\App\Api\Admin\Controllers\LinkGoodsController::class, 'store']);
+Route::post('linkGoods/store', [LinkGoodsController::class, 'store']);
 // 获取详情接口
-Route::get('linkGoods/show', [\App\Api\Admin\Controllers\LinkGoodsController::class, 'show'])->name('linkGoods.show');
+Route::get('linkGoods/show', [LinkGoodsController::class, 'show'])->name('linkGoods.show');
 // 更新接口
-Route::put('linkGoods/update', [\App\Api\Admin\Controllers\LinkGoodsController::class, 'update']);
+Route::put('linkGoods/update', [LinkGoodsController::class, 'update']);
 // 删除接口
-Route::delete('linkGoods/destroy', [\App\Api\Admin\Controllers\LinkGoodsController::class, 'destroy']);
+Route::delete('linkGoods/destroy', [LinkGoodsController::class, 'destroy']);
 // 查询列表接口
-Route::post('mailTemplates/query', [\App\Api\Admin\Controllers\MailTemplatesController::class, 'query']);
+Route::post('mailTemplates/query', [MailTemplatesController::class, 'query']);
 // 新增接口
-Route::post('mailTemplates/store', [\App\Api\Admin\Controllers\MailTemplatesController::class, 'store']);
+Route::post('mailTemplates/store', [MailTemplatesController::class, 'store']);
 // 获取详情接口
-Route::get('mailTemplates/show', [\App\Api\Admin\Controllers\MailTemplatesController::class, 'show'])->name('mailTemplates.show');
+Route::get('mailTemplates/show', [MailTemplatesController::class, 'show'])->name('mailTemplates.show');
 // 更新接口
-Route::put('mailTemplates/update', [\App\Api\Admin\Controllers\MailTemplatesController::class, 'update']);
+Route::put('mailTemplates/update', [MailTemplatesController::class, 'update']);
 // 删除接口
-Route::delete('mailTemplates/destroy', [\App\Api\Admin\Controllers\MailTemplatesController::class, 'destroy']);
+Route::delete('mailTemplates/destroy', [MailTemplatesController::class, 'destroy']);
 // 查询列表接口
-Route::post('memberPrice/query', [\App\Api\Admin\Controllers\MemberPriceController::class, 'query']);
+Route::post('memberPrice/query', [MemberPriceController::class, 'query']);
 // 新增接口
-Route::post('memberPrice/store', [\App\Api\Admin\Controllers\MemberPriceController::class, 'store']);
+Route::post('memberPrice/store', [MemberPriceController::class, 'store']);
 // 获取详情接口
-Route::get('memberPrice/show', [\App\Api\Admin\Controllers\MemberPriceController::class, 'show'])->name('memberPrice.show');
+Route::get('memberPrice/show', [MemberPriceController::class, 'show'])->name('memberPrice.show');
 // 更新接口
-Route::put('memberPrice/update', [\App\Api\Admin\Controllers\MemberPriceController::class, 'update']);
+Route::put('memberPrice/update', [MemberPriceController::class, 'update']);
 // 删除接口
-Route::delete('memberPrice/destroy', [\App\Api\Admin\Controllers\MemberPriceController::class, 'destroy']);
+Route::delete('memberPrice/destroy', [MemberPriceController::class, 'destroy']);
 // 查询列表接口
-Route::post('nav/query', [\App\Api\Admin\Controllers\NavController::class, 'query']);
+Route::post('nav/query', [NavController::class, 'query']);
 // 新增接口
-Route::post('nav/store', [\App\Api\Admin\Controllers\NavController::class, 'store']);
+Route::post('nav/store', [NavController::class, 'store']);
 // 获取详情接口
-Route::get('nav/show', [\App\Api\Admin\Controllers\NavController::class, 'show'])->name('nav.show');
+Route::get('nav/show', [NavController::class, 'show'])->name('nav.show');
 // 更新接口
-Route::put('nav/update', [\App\Api\Admin\Controllers\NavController::class, 'update']);
+Route::put('nav/update', [NavController::class, 'update']);
 // 删除接口
-Route::delete('nav/destroy', [\App\Api\Admin\Controllers\NavController::class, 'destroy']);
+Route::delete('nav/destroy', [NavController::class, 'destroy']);
 // 查询列表接口
-Route::post('orderAction/query', [\App\Api\Admin\Controllers\OrderActionController::class, 'query']);
+Route::post('orderAction/query', [OrderActionController::class, 'query']);
 // 新增接口
-Route::post('orderAction/store', [\App\Api\Admin\Controllers\OrderActionController::class, 'store']);
+Route::post('orderAction/store', [OrderActionController::class, 'store']);
 // 获取详情接口
-Route::get('orderAction/show', [\App\Api\Admin\Controllers\OrderActionController::class, 'show'])->name('orderAction.show');
+Route::get('orderAction/show', [OrderActionController::class, 'show'])->name('orderAction.show');
 // 更新接口
-Route::put('orderAction/update', [\App\Api\Admin\Controllers\OrderActionController::class, 'update']);
+Route::put('orderAction/update', [OrderActionController::class, 'update']);
 // 删除接口
-Route::delete('orderAction/destroy', [\App\Api\Admin\Controllers\OrderActionController::class, 'destroy']);
+Route::delete('orderAction/destroy', [OrderActionController::class, 'destroy']);
 // 查询列表接口
-Route::post('orderGoods/query', [\App\Api\Admin\Controllers\OrderGoodsController::class, 'query']);
+Route::post('orderGoods/query', [OrderGoodsController::class, 'query']);
 // 新增接口
-Route::post('orderGoods/store', [\App\Api\Admin\Controllers\OrderGoodsController::class, 'store']);
+Route::post('orderGoods/store', [OrderGoodsController::class, 'store']);
 // 获取详情接口
-Route::get('orderGoods/show', [\App\Api\Admin\Controllers\OrderGoodsController::class, 'show'])->name('orderGoods.show');
+Route::get('orderGoods/show', [OrderGoodsController::class, 'show'])->name('orderGoods.show');
 // 更新接口
-Route::put('orderGoods/update', [\App\Api\Admin\Controllers\OrderGoodsController::class, 'update']);
+Route::put('orderGoods/update', [OrderGoodsController::class, 'update']);
 // 删除接口
-Route::delete('orderGoods/destroy', [\App\Api\Admin\Controllers\OrderGoodsController::class, 'destroy']);
+Route::delete('orderGoods/destroy', [OrderGoodsController::class, 'destroy']);
 // 查询列表接口
-Route::post('orderInfo/query', [\App\Api\Admin\Controllers\OrderInfoController::class, 'query']);
+Route::post('orderInfo/query', [OrderInfoController::class, 'query']);
 // 新增接口
-Route::post('orderInfo/store', [\App\Api\Admin\Controllers\OrderInfoController::class, 'store']);
+Route::post('orderInfo/store', [OrderInfoController::class, 'store']);
 // 获取详情接口
-Route::get('orderInfo/show', [\App\Api\Admin\Controllers\OrderInfoController::class, 'show'])->name('orderInfo.show');
+Route::get('orderInfo/show', [OrderInfoController::class, 'show'])->name('orderInfo.show');
 // 更新接口
-Route::put('orderInfo/update', [\App\Api\Admin\Controllers\OrderInfoController::class, 'update']);
+Route::put('orderInfo/update', [OrderInfoController::class, 'update']);
 // 删除接口
-Route::delete('orderInfo/destroy', [\App\Api\Admin\Controllers\OrderInfoController::class, 'destroy']);
+Route::delete('orderInfo/destroy', [OrderInfoController::class, 'destroy']);
 // 查询列表接口
-Route::post('pack/query', [\App\Api\Admin\Controllers\PackController::class, 'query']);
+Route::post('pack/query', [PackController::class, 'query']);
 // 新增接口
-Route::post('pack/store', [\App\Api\Admin\Controllers\PackController::class, 'store']);
+Route::post('pack/store', [PackController::class, 'store']);
 // 获取详情接口
-Route::get('pack/show', [\App\Api\Admin\Controllers\PackController::class, 'show'])->name('pack.show');
+Route::get('pack/show', [PackController::class, 'show'])->name('pack.show');
 // 更新接口
-Route::put('pack/update', [\App\Api\Admin\Controllers\PackController::class, 'update']);
+Route::put('pack/update', [PackController::class, 'update']);
 // 删除接口
-Route::delete('pack/destroy', [\App\Api\Admin\Controllers\PackController::class, 'destroy']);
+Route::delete('pack/destroy', [PackController::class, 'destroy']);
 // 查询列表接口
-Route::post('packageGoods/query', [\App\Api\Admin\Controllers\PackageGoodsController::class, 'query']);
+Route::post('packageGoods/query', [PackageGoodsController::class, 'query']);
 // 新增接口
-Route::post('packageGoods/store', [\App\Api\Admin\Controllers\PackageGoodsController::class, 'store']);
+Route::post('packageGoods/store', [PackageGoodsController::class, 'store']);
 // 获取详情接口
-Route::get('packageGoods/show', [\App\Api\Admin\Controllers\PackageGoodsController::class, 'show'])->name('packageGoods.show');
+Route::get('packageGoods/show', [PackageGoodsController::class, 'show'])->name('packageGoods.show');
 // 更新接口
-Route::put('packageGoods/update', [\App\Api\Admin\Controllers\PackageGoodsController::class, 'update']);
+Route::put('packageGoods/update', [PackageGoodsController::class, 'update']);
 // 删除接口
-Route::delete('packageGoods/destroy', [\App\Api\Admin\Controllers\PackageGoodsController::class, 'destroy']);
+Route::delete('packageGoods/destroy', [PackageGoodsController::class, 'destroy']);
 // 查询列表接口
-Route::post('payLog/query', [\App\Api\Admin\Controllers\PayLogController::class, 'query']);
+Route::post('payLog/query', [PayLogController::class, 'query']);
 // 新增接口
-Route::post('payLog/store', [\App\Api\Admin\Controllers\PayLogController::class, 'store']);
+Route::post('payLog/store', [PayLogController::class, 'store']);
 // 获取详情接口
-Route::get('payLog/show', [\App\Api\Admin\Controllers\PayLogController::class, 'show'])->name('payLog.show');
+Route::get('payLog/show', [PayLogController::class, 'show'])->name('payLog.show');
 // 更新接口
-Route::put('payLog/update', [\App\Api\Admin\Controllers\PayLogController::class, 'update']);
+Route::put('payLog/update', [PayLogController::class, 'update']);
 // 删除接口
-Route::delete('payLog/destroy', [\App\Api\Admin\Controllers\PayLogController::class, 'destroy']);
+Route::delete('payLog/destroy', [PayLogController::class, 'destroy']);
 // 查询列表接口
-Route::post('payment/query', [\App\Api\Admin\Controllers\PaymentController::class, 'query']);
+Route::post('payment/query', [PaymentController::class, 'query']);
 // 新增接口
-Route::post('payment/store', [\App\Api\Admin\Controllers\PaymentController::class, 'store']);
+Route::post('payment/store', [PaymentController::class, 'store']);
 // 获取详情接口
-Route::get('payment/show', [\App\Api\Admin\Controllers\PaymentController::class, 'show'])->name('payment.show');
+Route::get('payment/show', [PaymentController::class, 'show'])->name('payment.show');
 // 更新接口
-Route::put('payment/update', [\App\Api\Admin\Controllers\PaymentController::class, 'update']);
+Route::put('payment/update', [PaymentController::class, 'update']);
 // 删除接口
-Route::delete('payment/destroy', [\App\Api\Admin\Controllers\PaymentController::class, 'destroy']);
+Route::delete('payment/destroy', [PaymentController::class, 'destroy']);
 // 查询列表接口
-Route::post('plugins/query', [\App\Api\Admin\Controllers\PluginsController::class, 'query']);
+Route::post('plugins/query', [PluginsController::class, 'query']);
 // 新增接口
-Route::post('plugins/store', [\App\Api\Admin\Controllers\PluginsController::class, 'store']);
+Route::post('plugins/store', [PluginsController::class, 'store']);
 // 获取详情接口
-Route::get('plugins/show', [\App\Api\Admin\Controllers\PluginsController::class, 'show'])->name('plugins.show');
+Route::get('plugins/show', [PluginsController::class, 'show'])->name('plugins.show');
 // 更新接口
-Route::put('plugins/update', [\App\Api\Admin\Controllers\PluginsController::class, 'update']);
+Route::put('plugins/update', [PluginsController::class, 'update']);
 // 删除接口
-Route::delete('plugins/destroy', [\App\Api\Admin\Controllers\PluginsController::class, 'destroy']);
+Route::delete('plugins/destroy', [PluginsController::class, 'destroy']);
 // 查询列表接口
-Route::post('products/query', [\App\Api\Admin\Controllers\ProductsController::class, 'query']);
+Route::post('products/query', [ProductsController::class, 'query']);
 // 新增接口
-Route::post('products/store', [\App\Api\Admin\Controllers\ProductsController::class, 'store']);
+Route::post('products/store', [ProductsController::class, 'store']);
 // 获取详情接口
-Route::get('products/show', [\App\Api\Admin\Controllers\ProductsController::class, 'show'])->name('products.show');
+Route::get('products/show', [ProductsController::class, 'show'])->name('products.show');
 // 更新接口
-Route::put('products/update', [\App\Api\Admin\Controllers\ProductsController::class, 'update']);
+Route::put('products/update', [ProductsController::class, 'update']);
 // 删除接口
-Route::delete('products/destroy', [\App\Api\Admin\Controllers\ProductsController::class, 'destroy']);
+Route::delete('products/destroy', [ProductsController::class, 'destroy']);
 // 查询列表接口
-Route::post('regExtendInfo/query', [\App\Api\Admin\Controllers\RegExtendInfoController::class, 'query']);
+Route::post('regExtendInfo/query', [RegExtendInfoController::class, 'query']);
 // 新增接口
-Route::post('regExtendInfo/store', [\App\Api\Admin\Controllers\RegExtendInfoController::class, 'store']);
+Route::post('regExtendInfo/store', [RegExtendInfoController::class, 'store']);
 // 获取详情接口
-Route::get('regExtendInfo/show', [\App\Api\Admin\Controllers\RegExtendInfoController::class, 'show'])->name('regExtendInfo.show');
+Route::get('regExtendInfo/show', [RegExtendInfoController::class, 'show'])->name('regExtendInfo.show');
 // 更新接口
-Route::put('regExtendInfo/update', [\App\Api\Admin\Controllers\RegExtendInfoController::class, 'update']);
+Route::put('regExtendInfo/update', [RegExtendInfoController::class, 'update']);
 // 删除接口
-Route::delete('regExtendInfo/destroy', [\App\Api\Admin\Controllers\RegExtendInfoController::class, 'destroy']);
+Route::delete('regExtendInfo/destroy', [RegExtendInfoController::class, 'destroy']);
 // 查询列表接口
-Route::post('regFields/query', [\App\Api\Admin\Controllers\RegFieldsController::class, 'query']);
+Route::post('regFields/query', [RegFieldsController::class, 'query']);
 // 新增接口
-Route::post('regFields/store', [\App\Api\Admin\Controllers\RegFieldsController::class, 'store']);
+Route::post('regFields/store', [RegFieldsController::class, 'store']);
 // 获取详情接口
-Route::get('regFields/show', [\App\Api\Admin\Controllers\RegFieldsController::class, 'show'])->name('regFields.show');
+Route::get('regFields/show', [RegFieldsController::class, 'show'])->name('regFields.show');
 // 更新接口
-Route::put('regFields/update', [\App\Api\Admin\Controllers\RegFieldsController::class, 'update']);
+Route::put('regFields/update', [RegFieldsController::class, 'update']);
 // 删除接口
-Route::delete('regFields/destroy', [\App\Api\Admin\Controllers\RegFieldsController::class, 'destroy']);
+Route::delete('regFields/destroy', [RegFieldsController::class, 'destroy']);
 // 查询列表接口
-Route::post('region/query', [\App\Api\Admin\Controllers\RegionController::class, 'query']);
+Route::post('region/query', [RegionController::class, 'query']);
 // 新增接口
-Route::post('region/store', [\App\Api\Admin\Controllers\RegionController::class, 'store']);
+Route::post('region/store', [RegionController::class, 'store']);
 // 获取详情接口
-Route::get('region/show', [\App\Api\Admin\Controllers\RegionController::class, 'show'])->name('region.show');
+Route::get('region/show', [RegionController::class, 'show'])->name('region.show');
 // 更新接口
-Route::put('region/update', [\App\Api\Admin\Controllers\RegionController::class, 'update']);
+Route::put('region/update', [RegionController::class, 'update']);
 // 删除接口
-Route::delete('region/destroy', [\App\Api\Admin\Controllers\RegionController::class, 'destroy']);
+Route::delete('region/destroy', [RegionController::class, 'destroy']);
 // 查询列表接口
-Route::post('role/query', [\App\Api\Admin\Controllers\RoleController::class, 'query']);
+Route::post('role/query', [RoleController::class, 'query']);
 // 新增接口
-Route::post('role/store', [\App\Api\Admin\Controllers\RoleController::class, 'store']);
+Route::post('role/store', [RoleController::class, 'store']);
 // 获取详情接口
-Route::get('role/show', [\App\Api\Admin\Controllers\RoleController::class, 'show'])->name('role.show');
+Route::get('role/show', [RoleController::class, 'show'])->name('role.show');
 // 更新接口
-Route::put('role/update', [\App\Api\Admin\Controllers\RoleController::class, 'update']);
+Route::put('role/update', [RoleController::class, 'update']);
 // 删除接口
-Route::delete('role/destroy', [\App\Api\Admin\Controllers\RoleController::class, 'destroy']);
+Route::delete('role/destroy', [RoleController::class, 'destroy']);
 // 查询列表接口
-Route::post('searchengine/query', [\App\Api\Admin\Controllers\SearchengineController::class, 'query']);
+Route::post('searchengine/query', [SearchengineController::class, 'query']);
 // 新增接口
-Route::post('searchengine/store', [\App\Api\Admin\Controllers\SearchengineController::class, 'store']);
+Route::post('searchengine/store', [SearchengineController::class, 'store']);
 // 获取详情接口
-Route::get('searchengine/show', [\App\Api\Admin\Controllers\SearchengineController::class, 'show'])->name('searchengine.show');
+Route::get('searchengine/show', [SearchengineController::class, 'show'])->name('searchengine.show');
 // 更新接口
-Route::put('searchengine/update', [\App\Api\Admin\Controllers\SearchengineController::class, 'update']);
+Route::put('searchengine/update', [SearchengineController::class, 'update']);
 // 删除接口
-Route::delete('searchengine/destroy', [\App\Api\Admin\Controllers\SearchengineController::class, 'destroy']);
+Route::delete('searchengine/destroy', [SearchengineController::class, 'destroy']);
 // 查询列表接口
-Route::post('shippingArea/query', [\App\Api\Admin\Controllers\ShippingAreaController::class, 'query']);
+Route::post('shippingArea/query', [ShippingAreaController::class, 'query']);
 // 新增接口
-Route::post('shippingArea/store', [\App\Api\Admin\Controllers\ShippingAreaController::class, 'store']);
+Route::post('shippingArea/store', [ShippingAreaController::class, 'store']);
 // 获取详情接口
-Route::get('shippingArea/show', [\App\Api\Admin\Controllers\ShippingAreaController::class, 'show'])->name('shippingArea.show');
+Route::get('shippingArea/show', [ShippingAreaController::class, 'show'])->name('shippingArea.show');
 // 更新接口
-Route::put('shippingArea/update', [\App\Api\Admin\Controllers\ShippingAreaController::class, 'update']);
+Route::put('shippingArea/update', [ShippingAreaController::class, 'update']);
 // 删除接口
-Route::delete('shippingArea/destroy', [\App\Api\Admin\Controllers\ShippingAreaController::class, 'destroy']);
+Route::delete('shippingArea/destroy', [ShippingAreaController::class, 'destroy']);
 // 查询列表接口
-Route::post('shipping/query', [\App\Api\Admin\Controllers\ShippingController::class, 'query']);
+Route::post('shipping/query', [ShippingController::class, 'query']);
 // 新增接口
-Route::post('shipping/store', [\App\Api\Admin\Controllers\ShippingController::class, 'store']);
+Route::post('shipping/store', [ShippingController::class, 'store']);
 // 获取详情接口
-Route::get('shipping/show', [\App\Api\Admin\Controllers\ShippingController::class, 'show'])->name('shipping.show');
+Route::get('shipping/show', [ShippingController::class, 'show'])->name('shipping.show');
 // 更新接口
-Route::put('shipping/update', [\App\Api\Admin\Controllers\ShippingController::class, 'update']);
+Route::put('shipping/update', [ShippingController::class, 'update']);
 // 删除接口
-Route::delete('shipping/destroy', [\App\Api\Admin\Controllers\ShippingController::class, 'destroy']);
+Route::delete('shipping/destroy', [ShippingController::class, 'destroy']);
 // 查询列表接口
-Route::post('shopConfig/query', [\App\Api\Admin\Controllers\ShopConfigController::class, 'query']);
+Route::post('shopConfig/query', [ShopConfigController::class, 'query']);
 // 新增接口
-Route::post('shopConfig/store', [\App\Api\Admin\Controllers\ShopConfigController::class, 'store']);
+Route::post('shopConfig/store', [ShopConfigController::class, 'store']);
 // 获取详情接口
-Route::get('shopConfig/show', [\App\Api\Admin\Controllers\ShopConfigController::class, 'show'])->name('shopConfig.show');
+Route::get('shopConfig/show', [ShopConfigController::class, 'show'])->name('shopConfig.show');
 // 更新接口
-Route::put('shopConfig/update', [\App\Api\Admin\Controllers\ShopConfigController::class, 'update']);
+Route::put('shopConfig/update', [ShopConfigController::class, 'update']);
 // 删除接口
-Route::delete('shopConfig/destroy', [\App\Api\Admin\Controllers\ShopConfigController::class, 'destroy']);
+Route::delete('shopConfig/destroy', [ShopConfigController::class, 'destroy']);
 // 查询列表接口
-Route::post('snatchLog/query', [\App\Api\Admin\Controllers\SnatchLogController::class, 'query']);
+Route::post('snatchLog/query', [SnatchLogController::class, 'query']);
 // 新增接口
-Route::post('snatchLog/store', [\App\Api\Admin\Controllers\SnatchLogController::class, 'store']);
+Route::post('snatchLog/store', [SnatchLogController::class, 'store']);
 // 获取详情接口
-Route::get('snatchLog/show', [\App\Api\Admin\Controllers\SnatchLogController::class, 'show'])->name('snatchLog.show');
+Route::get('snatchLog/show', [SnatchLogController::class, 'show'])->name('snatchLog.show');
 // 更新接口
-Route::put('snatchLog/update', [\App\Api\Admin\Controllers\SnatchLogController::class, 'update']);
+Route::put('snatchLog/update', [SnatchLogController::class, 'update']);
 // 删除接口
-Route::delete('snatchLog/destroy', [\App\Api\Admin\Controllers\SnatchLogController::class, 'destroy']);
+Route::delete('snatchLog/destroy', [SnatchLogController::class, 'destroy']);
 // 查询列表接口
-Route::post('stats/query', [\App\Api\Admin\Controllers\StatsController::class, 'query']);
+Route::post('stats/query', [StatsController::class, 'query']);
 // 新增接口
-Route::post('stats/store', [\App\Api\Admin\Controllers\StatsController::class, 'store']);
+Route::post('stats/store', [StatsController::class, 'store']);
 // 获取详情接口
-Route::get('stats/show', [\App\Api\Admin\Controllers\StatsController::class, 'show'])->name('stats.show');
+Route::get('stats/show', [StatsController::class, 'show'])->name('stats.show');
 // 更新接口
-Route::put('stats/update', [\App\Api\Admin\Controllers\StatsController::class, 'update']);
+Route::put('stats/update', [StatsController::class, 'update']);
 // 删除接口
-Route::delete('stats/destroy', [\App\Api\Admin\Controllers\StatsController::class, 'destroy']);
+Route::delete('stats/destroy', [StatsController::class, 'destroy']);
 // 查询列表接口
-Route::post('suppliers/query', [\App\Api\Admin\Controllers\SuppliersController::class, 'query']);
+Route::post('suppliers/query', [SuppliersController::class, 'query']);
 // 新增接口
-Route::post('suppliers/store', [\App\Api\Admin\Controllers\SuppliersController::class, 'store']);
+Route::post('suppliers/store', [SuppliersController::class, 'store']);
 // 获取详情接口
-Route::get('suppliers/show', [\App\Api\Admin\Controllers\SuppliersController::class, 'show'])->name('suppliers.show');
+Route::get('suppliers/show', [SuppliersController::class, 'show'])->name('suppliers.show');
 // 更新接口
-Route::put('suppliers/update', [\App\Api\Admin\Controllers\SuppliersController::class, 'update']);
+Route::put('suppliers/update', [SuppliersController::class, 'update']);
 // 删除接口
-Route::delete('suppliers/destroy', [\App\Api\Admin\Controllers\SuppliersController::class, 'destroy']);
+Route::delete('suppliers/destroy', [SuppliersController::class, 'destroy']);
 // 查询列表接口
-Route::post('tag/query', [\App\Api\Admin\Controllers\TagController::class, 'query']);
+Route::post('tag/query', [TagController::class, 'query']);
 // 新增接口
-Route::post('tag/store', [\App\Api\Admin\Controllers\TagController::class, 'store']);
+Route::post('tag/store', [TagController::class, 'store']);
 // 获取详情接口
-Route::get('tag/show', [\App\Api\Admin\Controllers\TagController::class, 'show'])->name('tag.show');
+Route::get('tag/show', [TagController::class, 'show'])->name('tag.show');
 // 更新接口
-Route::put('tag/update', [\App\Api\Admin\Controllers\TagController::class, 'update']);
+Route::put('tag/update', [TagController::class, 'update']);
 // 删除接口
-Route::delete('tag/destroy', [\App\Api\Admin\Controllers\TagController::class, 'destroy']);
+Route::delete('tag/destroy', [TagController::class, 'destroy']);
 // 查询列表接口
-Route::post('template/query', [\App\Api\Admin\Controllers\TemplateController::class, 'query']);
+Route::post('template/query', [TemplateController::class, 'query']);
 // 新增接口
-Route::post('template/store', [\App\Api\Admin\Controllers\TemplateController::class, 'store']);
+Route::post('template/store', [TemplateController::class, 'store']);
 // 获取详情接口
-Route::get('template/show', [\App\Api\Admin\Controllers\TemplateController::class, 'show'])->name('template.show');
+Route::get('template/show', [TemplateController::class, 'show'])->name('template.show');
 // 更新接口
-Route::put('template/update', [\App\Api\Admin\Controllers\TemplateController::class, 'update']);
+Route::put('template/update', [TemplateController::class, 'update']);
 // 删除接口
-Route::delete('template/destroy', [\App\Api\Admin\Controllers\TemplateController::class, 'destroy']);
+Route::delete('template/destroy', [TemplateController::class, 'destroy']);
 // 查询列表接口
-Route::post('topic/query', [\App\Api\Admin\Controllers\TopicController::class, 'query']);
+Route::post('topic/query', [TopicController::class, 'query']);
 // 新增接口
-Route::post('topic/store', [\App\Api\Admin\Controllers\TopicController::class, 'store']);
+Route::post('topic/store', [TopicController::class, 'store']);
 // 获取详情接口
-Route::get('topic/show', [\App\Api\Admin\Controllers\TopicController::class, 'show'])->name('topic.show');
+Route::get('topic/show', [TopicController::class, 'show'])->name('topic.show');
 // 更新接口
-Route::put('topic/update', [\App\Api\Admin\Controllers\TopicController::class, 'update']);
+Route::put('topic/update', [TopicController::class, 'update']);
 // 删除接口
-Route::delete('topic/destroy', [\App\Api\Admin\Controllers\TopicController::class, 'destroy']);
+Route::delete('topic/destroy', [TopicController::class, 'destroy']);
 // 查询列表接口
-Route::post('userAccount/query', [\App\Api\Admin\Controllers\UserAccountController::class, 'query']);
+Route::post('userAccount/query', [UserAccountController::class, 'query']);
 // 新增接口
-Route::post('userAccount/store', [\App\Api\Admin\Controllers\UserAccountController::class, 'store']);
+Route::post('userAccount/store', [UserAccountController::class, 'store']);
 // 获取详情接口
-Route::get('userAccount/show', [\App\Api\Admin\Controllers\UserAccountController::class, 'show'])->name('userAccount.show');
+Route::get('userAccount/show', [UserAccountController::class, 'show'])->name('userAccount.show');
 // 更新接口
-Route::put('userAccount/update', [\App\Api\Admin\Controllers\UserAccountController::class, 'update']);
+Route::put('userAccount/update', [UserAccountController::class, 'update']);
 // 删除接口
-Route::delete('userAccount/destroy', [\App\Api\Admin\Controllers\UserAccountController::class, 'destroy']);
+Route::delete('userAccount/destroy', [UserAccountController::class, 'destroy']);
 // 查询列表接口
-Route::post('userAddress/query', [\App\Api\Admin\Controllers\UserAddressController::class, 'query']);
+Route::post('userAddress/query', [UserAddressController::class, 'query']);
 // 新增接口
-Route::post('userAddress/store', [\App\Api\Admin\Controllers\UserAddressController::class, 'store']);
+Route::post('userAddress/store', [UserAddressController::class, 'store']);
 // 获取详情接口
-Route::get('userAddress/show', [\App\Api\Admin\Controllers\UserAddressController::class, 'show'])->name('userAddress.show');
+Route::get('userAddress/show', [UserAddressController::class, 'show'])->name('userAddress.show');
 // 更新接口
-Route::put('userAddress/update', [\App\Api\Admin\Controllers\UserAddressController::class, 'update']);
+Route::put('userAddress/update', [UserAddressController::class, 'update']);
 // 删除接口
-Route::delete('userAddress/destroy', [\App\Api\Admin\Controllers\UserAddressController::class, 'destroy']);
+Route::delete('userAddress/destroy', [UserAddressController::class, 'destroy']);
 // 查询列表接口
-Route::post('userBonus/query', [\App\Api\Admin\Controllers\UserBonusController::class, 'query']);
+Route::post('userBonus/query', [UserBonusController::class, 'query']);
 // 新增接口
-Route::post('userBonus/store', [\App\Api\Admin\Controllers\UserBonusController::class, 'store']);
+Route::post('userBonus/store', [UserBonusController::class, 'store']);
 // 获取详情接口
-Route::get('userBonus/show', [\App\Api\Admin\Controllers\UserBonusController::class, 'show'])->name('userBonus.show');
+Route::get('userBonus/show', [UserBonusController::class, 'show'])->name('userBonus.show');
 // 更新接口
-Route::put('userBonus/update', [\App\Api\Admin\Controllers\UserBonusController::class, 'update']);
+Route::put('userBonus/update', [UserBonusController::class, 'update']);
 // 删除接口
-Route::delete('userBonus/destroy', [\App\Api\Admin\Controllers\UserBonusController::class, 'destroy']);
+Route::delete('userBonus/destroy', [UserBonusController::class, 'destroy']);
 // 查询列表接口
-Route::post('userFeed/query', [\App\Api\Admin\Controllers\UserFeedController::class, 'query']);
+Route::post('userFeed/query', [UserFeedController::class, 'query']);
 // 新增接口
-Route::post('userFeed/store', [\App\Api\Admin\Controllers\UserFeedController::class, 'store']);
+Route::post('userFeed/store', [UserFeedController::class, 'store']);
 // 获取详情接口
-Route::get('userFeed/show', [\App\Api\Admin\Controllers\UserFeedController::class, 'show'])->name('userFeed.show');
+Route::get('userFeed/show', [UserFeedController::class, 'show'])->name('userFeed.show');
 // 更新接口
-Route::put('userFeed/update', [\App\Api\Admin\Controllers\UserFeedController::class, 'update']);
+Route::put('userFeed/update', [UserFeedController::class, 'update']);
 // 删除接口
-Route::delete('userFeed/destroy', [\App\Api\Admin\Controllers\UserFeedController::class, 'destroy']);
+Route::delete('userFeed/destroy', [UserFeedController::class, 'destroy']);
 // 查询列表接口
-Route::post('userRank/query', [\App\Api\Admin\Controllers\UserRankController::class, 'query']);
+Route::post('userRank/query', [UserRankController::class, 'query']);
 // 新增接口
-Route::post('userRank/store', [\App\Api\Admin\Controllers\UserRankController::class, 'store']);
+Route::post('userRank/store', [UserRankController::class, 'store']);
 // 获取详情接口
-Route::get('userRank/show', [\App\Api\Admin\Controllers\UserRankController::class, 'show'])->name('userRank.show');
+Route::get('userRank/show', [UserRankController::class, 'show'])->name('userRank.show');
 // 更新接口
-Route::put('userRank/update', [\App\Api\Admin\Controllers\UserRankController::class, 'update']);
+Route::put('userRank/update', [UserRankController::class, 'update']);
 // 删除接口
-Route::delete('userRank/destroy', [\App\Api\Admin\Controllers\UserRankController::class, 'destroy']);
+Route::delete('userRank/destroy', [UserRankController::class, 'destroy']);
 // 查询列表接口
-Route::post('users/query', [\App\Api\Admin\Controllers\UsersController::class, 'query']);
+Route::post('users/query', [UsersController::class, 'query']);
 // 新增接口
-Route::post('users/store', [\App\Api\Admin\Controllers\UsersController::class, 'store']);
+Route::post('users/store', [UsersController::class, 'store']);
 // 获取详情接口
-Route::get('users/show', [\App\Api\Admin\Controllers\UsersController::class, 'show'])->name('users.show');
+Route::get('users/show', [UsersController::class, 'show'])->name('users.show');
 // 更新接口
-Route::put('users/update', [\App\Api\Admin\Controllers\UsersController::class, 'update']);
+Route::put('users/update', [UsersController::class, 'update']);
 // 删除接口
-Route::delete('users/destroy', [\App\Api\Admin\Controllers\UsersController::class, 'destroy']);
+Route::delete('users/destroy', [UsersController::class, 'destroy']);
 // 查询列表接口
-Route::post('virtualCard/query', [\App\Api\Admin\Controllers\VirtualCardController::class, 'query']);
+Route::post('virtualCard/query', [VirtualCardController::class, 'query']);
 // 新增接口
-Route::post('virtualCard/store', [\App\Api\Admin\Controllers\VirtualCardController::class, 'store']);
+Route::post('virtualCard/store', [VirtualCardController::class, 'store']);
 // 获取详情接口
-Route::get('virtualCard/show', [\App\Api\Admin\Controllers\VirtualCardController::class, 'show'])->name('virtualCard.show');
+Route::get('virtualCard/show', [VirtualCardController::class, 'show'])->name('virtualCard.show');
 // 更新接口
-Route::put('virtualCard/update', [\App\Api\Admin\Controllers\VirtualCardController::class, 'update']);
+Route::put('virtualCard/update', [VirtualCardController::class, 'update']);
 // 删除接口
-Route::delete('virtualCard/destroy', [\App\Api\Admin\Controllers\VirtualCardController::class, 'destroy']);
+Route::delete('virtualCard/destroy', [VirtualCardController::class, 'destroy']);
 // 查询列表接口
-Route::post('volumePrice/query', [\App\Api\Admin\Controllers\VolumePriceController::class, 'query']);
+Route::post('volumePrice/query', [VolumePriceController::class, 'query']);
 // 新增接口
-Route::post('volumePrice/store', [\App\Api\Admin\Controllers\VolumePriceController::class, 'store']);
+Route::post('volumePrice/store', [VolumePriceController::class, 'store']);
 // 获取详情接口
-Route::get('volumePrice/show', [\App\Api\Admin\Controllers\VolumePriceController::class, 'show'])->name('volumePrice.show');
+Route::get('volumePrice/show', [VolumePriceController::class, 'show'])->name('volumePrice.show');
 // 更新接口
-Route::put('volumePrice/update', [\App\Api\Admin\Controllers\VolumePriceController::class, 'update']);
+Route::put('volumePrice/update', [VolumePriceController::class, 'update']);
 // 删除接口
-Route::delete('volumePrice/destroy', [\App\Api\Admin\Controllers\VolumePriceController::class, 'destroy']);
+Route::delete('volumePrice/destroy', [VolumePriceController::class, 'destroy']);
 // 查询列表接口
-Route::post('vote/query', [\App\Api\Admin\Controllers\VoteController::class, 'query']);
+Route::post('vote/query', [VoteController::class, 'query']);
 // 新增接口
-Route::post('vote/store', [\App\Api\Admin\Controllers\VoteController::class, 'store']);
+Route::post('vote/store', [VoteController::class, 'store']);
 // 获取详情接口
-Route::get('vote/show', [\App\Api\Admin\Controllers\VoteController::class, 'show'])->name('vote.show');
+Route::get('vote/show', [VoteController::class, 'show'])->name('vote.show');
 // 更新接口
-Route::put('vote/update', [\App\Api\Admin\Controllers\VoteController::class, 'update']);
+Route::put('vote/update', [VoteController::class, 'update']);
 // 删除接口
-Route::delete('vote/destroy', [\App\Api\Admin\Controllers\VoteController::class, 'destroy']);
+Route::delete('vote/destroy', [VoteController::class, 'destroy']);
 // 查询列表接口
-Route::post('voteLog/query', [\App\Api\Admin\Controllers\VoteLogController::class, 'query']);
+Route::post('voteLog/query', [VoteLogController::class, 'query']);
 // 新增接口
-Route::post('voteLog/store', [\App\Api\Admin\Controllers\VoteLogController::class, 'store']);
+Route::post('voteLog/store', [VoteLogController::class, 'store']);
 // 获取详情接口
-Route::get('voteLog/show', [\App\Api\Admin\Controllers\VoteLogController::class, 'show'])->name('voteLog.show');
+Route::get('voteLog/show', [VoteLogController::class, 'show'])->name('voteLog.show');
 // 更新接口
-Route::put('voteLog/update', [\App\Api\Admin\Controllers\VoteLogController::class, 'update']);
+Route::put('voteLog/update', [VoteLogController::class, 'update']);
 // 删除接口
-Route::delete('voteLog/destroy', [\App\Api\Admin\Controllers\VoteLogController::class, 'destroy']);
+Route::delete('voteLog/destroy', [VoteLogController::class, 'destroy']);
 // 查询列表接口
-Route::post('voteOption/query', [\App\Api\Admin\Controllers\VoteOptionController::class, 'query']);
+Route::post('voteOption/query', [VoteOptionController::class, 'query']);
 // 新增接口
-Route::post('voteOption/store', [\App\Api\Admin\Controllers\VoteOptionController::class, 'store']);
+Route::post('voteOption/store', [VoteOptionController::class, 'store']);
 // 获取详情接口
-Route::get('voteOption/show', [\App\Api\Admin\Controllers\VoteOptionController::class, 'show'])->name('voteOption.show');
+Route::get('voteOption/show', [VoteOptionController::class, 'show'])->name('voteOption.show');
 // 更新接口
-Route::put('voteOption/update', [\App\Api\Admin\Controllers\VoteOptionController::class, 'update']);
+Route::put('voteOption/update', [VoteOptionController::class, 'update']);
 // 删除接口
-Route::delete('voteOption/destroy', [\App\Api\Admin\Controllers\VoteOptionController::class, 'destroy']);
+Route::delete('voteOption/destroy', [VoteOptionController::class, 'destroy']);
 // 查询列表接口
-Route::post('wholesale/query', [\App\Api\Admin\Controllers\WholesaleController::class, 'query']);
+Route::post('wholesale/query', [WholesaleController::class, 'query']);
 // 新增接口
-Route::post('wholesale/store', [\App\Api\Admin\Controllers\WholesaleController::class, 'store']);
+Route::post('wholesale/store', [WholesaleController::class, 'store']);
 // 获取详情接口
-Route::get('wholesale/show', [\App\Api\Admin\Controllers\WholesaleController::class, 'show'])->name('wholesale.show');
+Route::get('wholesale/show', [WholesaleController::class, 'show'])->name('wholesale.show');
 // 更新接口
-Route::put('wholesale/update', [\App\Api\Admin\Controllers\WholesaleController::class, 'update']);
+Route::put('wholesale/update', [WholesaleController::class, 'update']);
 // 删除接口
-Route::delete('wholesale/destroy', [\App\Api\Admin\Controllers\WholesaleController::class, 'destroy']);
+Route::delete('wholesale/destroy', [WholesaleController::class, 'destroy']);

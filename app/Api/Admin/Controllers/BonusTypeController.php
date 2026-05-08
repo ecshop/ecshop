@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\BonusTypeEntity;
-use App\Services\BonusTypeService;
 use App\Api\Admin\Requests\BonusType\BonusTypeCreateRequest;
 use App\Api\Admin\Requests\BonusType\BonusTypeDestroyRequest;
 use App\Api\Admin\Requests\BonusType\BonusTypeQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\BonusType\BonusTypeUpdateRequest;
 use App\Api\Admin\Responses\BonusType\BonusTypeDestroyResponse;
 use App\Api\Admin\Responses\BonusType\BonusTypeQueryResponse;
 use App\Api\Admin\Responses\BonusType\BonusTypeResponse;
+use App\Entities\BonusTypeEntity;
+use App\Services\BonusTypeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class BonusTypeController extends BaseController
             if (isset($requestData[BonusTypeQueryRequest::getTypeId])) {
                 $condition[] = [BonusTypeEntity::getTypeId, '=', $requestData[BonusTypeQueryRequest::getTypeId]];
             }
-            
+
             $bonusTypeService = new BonusTypeService;
             $result = $bonusTypeService->page($condition, $page, $pageSize);
 

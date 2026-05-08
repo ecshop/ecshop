@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\ShippingEntity;
-use App\Services\ShippingService;
 use App\Api\Admin\Requests\Shipping\ShippingCreateRequest;
 use App\Api\Admin\Requests\Shipping\ShippingDestroyRequest;
 use App\Api\Admin\Requests\Shipping\ShippingQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Shipping\ShippingUpdateRequest;
 use App\Api\Admin\Responses\Shipping\ShippingDestroyResponse;
 use App\Api\Admin\Responses\Shipping\ShippingQueryResponse;
 use App\Api\Admin\Responses\Shipping\ShippingResponse;
+use App\Entities\ShippingEntity;
+use App\Services\ShippingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class ShippingController extends BaseController
             if (isset($requestData[ShippingQueryRequest::getEnabled])) {
                 $condition[] = [ShippingEntity::getEnabled, '=', $requestData[ShippingQueryRequest::getEnabled]];
             }
-            
+
             $shippingService = new ShippingService;
             $result = $shippingService->page($condition, $page, $pageSize);
 

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\FavourableActivityEntity;
-use App\Services\FavourableActivityService;
 use App\Api\Admin\Requests\FavourableActivity\FavourableActivityCreateRequest;
 use App\Api\Admin\Requests\FavourableActivity\FavourableActivityDestroyRequest;
 use App\Api\Admin\Requests\FavourableActivity\FavourableActivityQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\FavourableActivity\FavourableActivityUpdateRequest;
 use App\Api\Admin\Responses\FavourableActivity\FavourableActivityDestroyResponse;
 use App\Api\Admin\Responses\FavourableActivity\FavourableActivityQueryResponse;
 use App\Api\Admin\Responses\FavourableActivity\FavourableActivityResponse;
+use App\Entities\FavourableActivityEntity;
+use App\Services\FavourableActivityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class FavourableActivityController extends BaseController
             if (isset($requestData[FavourableActivityQueryRequest::getActId])) {
                 $condition[] = [FavourableActivityEntity::getActId, '=', $requestData[FavourableActivityQueryRequest::getActId]];
             }
-            
+
             $favourableActivityService = new FavourableActivityService;
             $result = $favourableActivityService->page($condition, $page, $pageSize);
 

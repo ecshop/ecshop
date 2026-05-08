@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\LinkGoodsEntity;
-use App\Services\LinkGoodsService;
 use App\Api\Admin\Requests\LinkGoods\LinkGoodsCreateRequest;
 use App\Api\Admin\Requests\LinkGoods\LinkGoodsDestroyRequest;
 use App\Api\Admin\Requests\LinkGoods\LinkGoodsQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\LinkGoods\LinkGoodsUpdateRequest;
 use App\Api\Admin\Responses\LinkGoods\LinkGoodsDestroyResponse;
 use App\Api\Admin\Responses\LinkGoods\LinkGoodsQueryResponse;
 use App\Api\Admin\Responses\LinkGoods\LinkGoodsResponse;
+use App\Entities\LinkGoodsEntity;
+use App\Services\LinkGoodsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class LinkGoodsController extends BaseController
             if (isset($requestData[LinkGoodsQueryRequest::getId])) {
                 $condition[] = [LinkGoodsEntity::getId, '=', $requestData[LinkGoodsQueryRequest::getId]];
             }
-            
+
             $linkGoodsService = new LinkGoodsService;
             $result = $linkGoodsService->page($condition, $page, $pageSize);
 

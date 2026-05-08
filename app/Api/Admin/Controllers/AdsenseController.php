@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\AdsenseEntity;
-use App\Services\AdsenseService;
 use App\Api\Admin\Requests\Adsense\AdsenseCreateRequest;
 use App\Api\Admin\Requests\Adsense\AdsenseDestroyRequest;
 use App\Api\Admin\Requests\Adsense\AdsenseQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Adsense\AdsenseUpdateRequest;
 use App\Api\Admin\Responses\Adsense\AdsenseDestroyResponse;
 use App\Api\Admin\Responses\Adsense\AdsenseQueryResponse;
 use App\Api\Admin\Responses\Adsense\AdsenseResponse;
+use App\Entities\AdsenseEntity;
+use App\Services\AdsenseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class AdsenseController extends BaseController
             if (isset($requestData[AdsenseQueryRequest::getId])) {
                 $condition[] = [AdsenseEntity::getId, '=', $requestData[AdsenseQueryRequest::getId]];
             }
-            
+
             $adsenseService = new AdsenseService;
             $result = $adsenseService->page($condition, $page, $pageSize);
 

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\RoleEntity;
-use App\Services\RoleService;
 use App\Api\Admin\Requests\Role\RoleCreateRequest;
 use App\Api\Admin\Requests\Role\RoleDestroyRequest;
 use App\Api\Admin\Requests\Role\RoleQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Role\RoleUpdateRequest;
 use App\Api\Admin\Responses\Role\RoleDestroyResponse;
 use App\Api\Admin\Responses\Role\RoleQueryResponse;
 use App\Api\Admin\Responses\Role\RoleResponse;
+use App\Entities\RoleEntity;
+use App\Services\RoleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class RoleController extends BaseController
             if (isset($requestData[RoleQueryRequest::getRoleName])) {
                 $condition[] = [RoleEntity::getRoleName, '=', $requestData[RoleQueryRequest::getRoleName]];
             }
-            
+
             $roleService = new RoleService;
             $result = $roleService->page($condition, $page, $pageSize);
 

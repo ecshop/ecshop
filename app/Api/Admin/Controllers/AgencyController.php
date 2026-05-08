@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\AgencyEntity;
-use App\Services\AgencyService;
 use App\Api\Admin\Requests\Agency\AgencyCreateRequest;
 use App\Api\Admin\Requests\Agency\AgencyDestroyRequest;
 use App\Api\Admin\Requests\Agency\AgencyQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Agency\AgencyUpdateRequest;
 use App\Api\Admin\Responses\Agency\AgencyDestroyResponse;
 use App\Api\Admin\Responses\Agency\AgencyQueryResponse;
 use App\Api\Admin\Responses\Agency\AgencyResponse;
+use App\Entities\AgencyEntity;
+use App\Services\AgencyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class AgencyController extends BaseController
             if (isset($requestData[AgencyQueryRequest::getAgencyId])) {
                 $condition[] = [AgencyEntity::getAgencyId, '=', $requestData[AgencyQueryRequest::getAgencyId]];
             }
-            
+
             $agencyService = new AgencyService;
             $result = $agencyService->page($condition, $page, $pageSize);
 

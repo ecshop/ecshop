@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\BookingGoodsEntity;
-use App\Services\BookingGoodsService;
 use App\Api\Admin\Requests\BookingGoods\BookingGoodsCreateRequest;
 use App\Api\Admin\Requests\BookingGoods\BookingGoodsDestroyRequest;
 use App\Api\Admin\Requests\BookingGoods\BookingGoodsQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\BookingGoods\BookingGoodsUpdateRequest;
 use App\Api\Admin\Responses\BookingGoods\BookingGoodsDestroyResponse;
 use App\Api\Admin\Responses\BookingGoods\BookingGoodsQueryResponse;
 use App\Api\Admin\Responses\BookingGoods\BookingGoodsResponse;
+use App\Entities\BookingGoodsEntity;
+use App\Services\BookingGoodsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class BookingGoodsController extends BaseController
             if (isset($requestData[BookingGoodsQueryRequest::getUserId])) {
                 $condition[] = [BookingGoodsEntity::getUserId, '=', $requestData[BookingGoodsQueryRequest::getUserId]];
             }
-            
+
             $bookingGoodsService = new BookingGoodsService;
             $result = $bookingGoodsService->page($condition, $page, $pageSize);
 

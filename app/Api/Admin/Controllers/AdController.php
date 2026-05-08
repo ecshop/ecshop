@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\AdEntity;
-use App\Services\AdService;
 use App\Api\Admin\Requests\Ad\AdCreateRequest;
 use App\Api\Admin\Requests\Ad\AdDestroyRequest;
 use App\Api\Admin\Requests\Ad\AdQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Ad\AdUpdateRequest;
 use App\Api\Admin\Responses\Ad\AdDestroyResponse;
 use App\Api\Admin\Responses\Ad\AdQueryResponse;
 use App\Api\Admin\Responses\Ad\AdResponse;
+use App\Entities\AdEntity;
+use App\Services\AdService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class AdController extends BaseController
             if (isset($requestData[AdQueryRequest::getAdId])) {
                 $condition[] = [AdEntity::getAdId, '=', $requestData[AdQueryRequest::getAdId]];
             }
-            
+
             $adService = new AdService;
             $result = $adService->page($condition, $page, $pageSize);
 

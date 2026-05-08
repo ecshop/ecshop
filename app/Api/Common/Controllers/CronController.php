@@ -1,7 +1,5 @@
 <?php
 
-
-
 require './init.php';
 // require('../includes/lib_time.php');
 

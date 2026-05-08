@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\FeedbackEntity;
-use App\Services\FeedbackService;
 use App\Api\Admin\Requests\Feedback\FeedbackCreateRequest;
 use App\Api\Admin\Requests\Feedback\FeedbackDestroyRequest;
 use App\Api\Admin\Requests\Feedback\FeedbackQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Feedback\FeedbackUpdateRequest;
 use App\Api\Admin\Responses\Feedback\FeedbackDestroyResponse;
 use App\Api\Admin\Responses\Feedback\FeedbackQueryResponse;
 use App\Api\Admin\Responses\Feedback\FeedbackResponse;
+use App\Entities\FeedbackEntity;
+use App\Services\FeedbackService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class FeedbackController extends BaseController
             if (isset($requestData[FeedbackQueryRequest::getUserId])) {
                 $condition[] = [FeedbackEntity::getUserId, '=', $requestData[FeedbackQueryRequest::getUserId]];
             }
-            
+
             $feedbackService = new FeedbackService;
             $result = $feedbackService->page($condition, $page, $pageSize);
 

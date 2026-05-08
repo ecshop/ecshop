@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\TagEntity;
-use App\Services\TagService;
 use App\Api\Admin\Requests\Tag\TagCreateRequest;
 use App\Api\Admin\Requests\Tag\TagDestroyRequest;
 use App\Api\Admin\Requests\Tag\TagQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Tag\TagUpdateRequest;
 use App\Api\Admin\Responses\Tag\TagDestroyResponse;
 use App\Api\Admin\Responses\Tag\TagQueryResponse;
 use App\Api\Admin\Responses\Tag\TagResponse;
+use App\Entities\TagEntity;
+use App\Services\TagService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class TagController extends BaseController
             if (isset($requestData[TagQueryRequest::getUserId])) {
                 $condition[] = [TagEntity::getUserId, '=', $requestData[TagQueryRequest::getUserId]];
             }
-            
+
             $tagService = new TagService;
             $result = $tagService->page($condition, $page, $pageSize);
 

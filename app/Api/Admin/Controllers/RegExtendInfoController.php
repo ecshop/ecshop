@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\RegExtendInfoEntity;
-use App\Services\RegExtendInfoService;
 use App\Api\Admin\Requests\RegExtendInfo\RegExtendInfoCreateRequest;
 use App\Api\Admin\Requests\RegExtendInfo\RegExtendInfoDestroyRequest;
 use App\Api\Admin\Requests\RegExtendInfo\RegExtendInfoQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\RegExtendInfo\RegExtendInfoUpdateRequest;
 use App\Api\Admin\Responses\RegExtendInfo\RegExtendInfoDestroyResponse;
 use App\Api\Admin\Responses\RegExtendInfo\RegExtendInfoQueryResponse;
 use App\Api\Admin\Responses\RegExtendInfo\RegExtendInfoResponse;
+use App\Entities\RegExtendInfoEntity;
+use App\Services\RegExtendInfoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class RegExtendInfoController extends BaseController
             if (isset($requestData[RegExtendInfoQueryRequest::getId])) {
                 $condition[] = [RegExtendInfoEntity::getId, '=', $requestData[RegExtendInfoQueryRequest::getId]];
             }
-            
+
             $regExtendInfoService = new RegExtendInfoService;
             $result = $regExtendInfoService->page($condition, $page, $pageSize);
 

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\AdminLogEntity;
-use App\Services\AdminLogService;
 use App\Api\Admin\Requests\AdminLog\AdminLogCreateRequest;
 use App\Api\Admin\Requests\AdminLog\AdminLogDestroyRequest;
 use App\Api\Admin\Requests\AdminLog\AdminLogQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\AdminLog\AdminLogUpdateRequest;
 use App\Api\Admin\Responses\AdminLog\AdminLogDestroyResponse;
 use App\Api\Admin\Responses\AdminLog\AdminLogQueryResponse;
 use App\Api\Admin\Responses\AdminLog\AdminLogResponse;
+use App\Entities\AdminLogEntity;
+use App\Services\AdminLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class AdminLogController extends BaseController
             if (isset($requestData[AdminLogQueryRequest::getUserId])) {
                 $condition[] = [AdminLogEntity::getUserId, '=', $requestData[AdminLogQueryRequest::getUserId]];
             }
-            
+
             $adminLogService = new AdminLogService;
             $result = $adminLogService->page($condition, $page, $pageSize);
 

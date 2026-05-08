@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\AdminMessageEntity;
-use App\Services\AdminMessageService;
 use App\Api\Admin\Requests\AdminMessage\AdminMessageCreateRequest;
 use App\Api\Admin\Requests\AdminMessage\AdminMessageDestroyRequest;
 use App\Api\Admin\Requests\AdminMessage\AdminMessageQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\AdminMessage\AdminMessageUpdateRequest;
 use App\Api\Admin\Responses\AdminMessage\AdminMessageDestroyResponse;
 use App\Api\Admin\Responses\AdminMessage\AdminMessageQueryResponse;
 use App\Api\Admin\Responses\AdminMessage\AdminMessageResponse;
+use App\Entities\AdminMessageEntity;
+use App\Services\AdminMessageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class AdminMessageController extends BaseController
             if (isset($requestData[AdminMessageQueryRequest::getReceiverId])) {
                 $condition[] = [AdminMessageEntity::getReceiverId, '=', $requestData[AdminMessageQueryRequest::getReceiverId]];
             }
-            
+
             $adminMessageService = new AdminMessageService;
             $result = $adminMessageService->page($condition, $page, $pageSize);
 

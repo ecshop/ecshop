@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\BrandEntity;
-use App\Services\BrandService;
 use App\Api\Admin\Requests\Brand\BrandCreateRequest;
 use App\Api\Admin\Requests\Brand\BrandDestroyRequest;
 use App\Api\Admin\Requests\Brand\BrandQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Brand\BrandUpdateRequest;
 use App\Api\Admin\Responses\Brand\BrandDestroyResponse;
 use App\Api\Admin\Responses\Brand\BrandQueryResponse;
 use App\Api\Admin\Responses\Brand\BrandResponse;
+use App\Entities\BrandEntity;
+use App\Services\BrandService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class BrandController extends BaseController
             if (isset($requestData[BrandQueryRequest::getBrandId])) {
                 $condition[] = [BrandEntity::getBrandId, '=', $requestData[BrandQueryRequest::getBrandId]];
             }
-            
+
             $brandService = new BrandService;
             $result = $brandService->page($condition, $page, $pageSize);
 

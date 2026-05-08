@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\CollectGoodsEntity;
-use App\Services\CollectGoodsService;
 use App\Api\Admin\Requests\CollectGoods\CollectGoodsCreateRequest;
 use App\Api\Admin\Requests\CollectGoods\CollectGoodsDestroyRequest;
 use App\Api\Admin\Requests\CollectGoods\CollectGoodsQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\CollectGoods\CollectGoodsUpdateRequest;
 use App\Api\Admin\Responses\CollectGoods\CollectGoodsDestroyResponse;
 use App\Api\Admin\Responses\CollectGoods\CollectGoodsQueryResponse;
 use App\Api\Admin\Responses\CollectGoods\CollectGoodsResponse;
+use App\Entities\CollectGoodsEntity;
+use App\Services\CollectGoodsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +49,7 @@ class CollectGoodsController extends BaseController
             if (isset($requestData[CollectGoodsQueryRequest::getUserId])) {
                 $condition[] = [CollectGoodsEntity::getUserId, '=', $requestData[CollectGoodsQueryRequest::getUserId]];
             }
-            
+
             $collectGoodsService = new CollectGoodsService;
             $result = $collectGoodsService->page($condition, $page, $pageSize);
 

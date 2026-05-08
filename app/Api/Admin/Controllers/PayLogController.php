@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\PayLogEntity;
-use App\Services\PayLogService;
 use App\Api\Admin\Requests\PayLog\PayLogCreateRequest;
 use App\Api\Admin\Requests\PayLog\PayLogDestroyRequest;
 use App\Api\Admin\Requests\PayLog\PayLogQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\PayLog\PayLogUpdateRequest;
 use App\Api\Admin\Responses\PayLog\PayLogDestroyResponse;
 use App\Api\Admin\Responses\PayLog\PayLogQueryResponse;
 use App\Api\Admin\Responses\PayLog\PayLogResponse;
+use App\Entities\PayLogEntity;
+use App\Services\PayLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class PayLogController extends BaseController
             if (isset($requestData[PayLogQueryRequest::getLogId])) {
                 $condition[] = [PayLogEntity::getLogId, '=', $requestData[PayLogQueryRequest::getLogId]];
             }
-            
+
             $payLogService = new PayLogService;
             $result = $payLogService->page($condition, $page, $pageSize);
 

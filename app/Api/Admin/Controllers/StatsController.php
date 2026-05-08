@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\StatsEntity;
-use App\Services\StatsService;
 use App\Api\Admin\Requests\Stats\StatsCreateRequest;
 use App\Api\Admin\Requests\Stats\StatsDestroyRequest;
 use App\Api\Admin\Requests\Stats\StatsQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Stats\StatsUpdateRequest;
 use App\Api\Admin\Responses\Stats\StatsDestroyResponse;
 use App\Api\Admin\Responses\Stats\StatsQueryResponse;
 use App\Api\Admin\Responses\Stats\StatsResponse;
+use App\Entities\StatsEntity;
+use App\Services\StatsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class StatsController extends BaseController
             if (isset($requestData[StatsQueryRequest::getId])) {
                 $condition[] = [StatsEntity::getId, '=', $requestData[StatsQueryRequest::getId]];
             }
-            
+
             $statsService = new StatsService;
             $result = $statsService->page($condition, $page, $pageSize);
 

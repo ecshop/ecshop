@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\UsersEntity;
-use App\Services\UsersService;
 use App\Api\Admin\Requests\Users\UsersCreateRequest;
 use App\Api\Admin\Requests\Users\UsersDestroyRequest;
 use App\Api\Admin\Requests\Users\UsersQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Users\UsersUpdateRequest;
 use App\Api\Admin\Responses\Users\UsersDestroyResponse;
 use App\Api\Admin\Responses\Users\UsersQueryResponse;
 use App\Api\Admin\Responses\Users\UsersResponse;
+use App\Entities\UsersEntity;
+use App\Services\UsersService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -53,7 +52,7 @@ class UsersController extends BaseController
             if (isset($requestData[UsersQueryRequest::getUserName])) {
                 $condition[] = [UsersEntity::getUserName, '=', $requestData[UsersQueryRequest::getUserName]];
             }
-            
+
             $usersService = new UsersService;
             $result = $usersService->page($condition, $page, $pageSize);
 

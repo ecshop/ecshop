@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\AffiliateLogEntity;
-use App\Services\AffiliateLogService;
 use App\Api\Admin\Requests\AffiliateLog\AffiliateLogCreateRequest;
 use App\Api\Admin\Requests\AffiliateLog\AffiliateLogDestroyRequest;
 use App\Api\Admin\Requests\AffiliateLog\AffiliateLogQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\AffiliateLog\AffiliateLogUpdateRequest;
 use App\Api\Admin\Responses\AffiliateLog\AffiliateLogDestroyResponse;
 use App\Api\Admin\Responses\AffiliateLog\AffiliateLogQueryResponse;
 use App\Api\Admin\Responses\AffiliateLog\AffiliateLogResponse;
+use App\Entities\AffiliateLogEntity;
+use App\Services\AffiliateLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class AffiliateLogController extends BaseController
             if (isset($requestData[AffiliateLogQueryRequest::getLogId])) {
                 $condition[] = [AffiliateLogEntity::getLogId, '=', $requestData[AffiliateLogQueryRequest::getLogId]];
             }
-            
+
             $affiliateLogService = new AffiliateLogService;
             $result = $affiliateLogService->page($condition, $page, $pageSize);
 

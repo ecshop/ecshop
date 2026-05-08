@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\PaymentEntity;
-use App\Services\PaymentService;
 use App\Api\Admin\Requests\Payment\PaymentCreateRequest;
 use App\Api\Admin\Requests\Payment\PaymentDestroyRequest;
 use App\Api\Admin\Requests\Payment\PaymentQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Payment\PaymentUpdateRequest;
 use App\Api\Admin\Responses\Payment\PaymentDestroyResponse;
 use App\Api\Admin\Responses\Payment\PaymentQueryResponse;
 use App\Api\Admin\Responses\Payment\PaymentResponse;
+use App\Entities\PaymentEntity;
+use App\Services\PaymentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class PaymentController extends BaseController
             if (isset($requestData[PaymentQueryRequest::getPayId])) {
                 $condition[] = [PaymentEntity::getPayId, '=', $requestData[PaymentQueryRequest::getPayId]];
             }
-            
+
             $paymentService = new PaymentService;
             $result = $paymentService->page($condition, $page, $pageSize);
 

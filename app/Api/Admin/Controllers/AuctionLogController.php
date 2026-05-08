@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\AuctionLogEntity;
-use App\Services\AuctionLogService;
 use App\Api\Admin\Requests\AuctionLog\AuctionLogCreateRequest;
 use App\Api\Admin\Requests\AuctionLog\AuctionLogDestroyRequest;
 use App\Api\Admin\Requests\AuctionLog\AuctionLogQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\AuctionLog\AuctionLogUpdateRequest;
 use App\Api\Admin\Responses\AuctionLog\AuctionLogDestroyResponse;
 use App\Api\Admin\Responses\AuctionLog\AuctionLogQueryResponse;
 use App\Api\Admin\Responses\AuctionLog\AuctionLogResponse;
+use App\Entities\AuctionLogEntity;
+use App\Services\AuctionLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class AuctionLogController extends BaseController
             if (isset($requestData[AuctionLogQueryRequest::getLogId])) {
                 $condition[] = [AuctionLogEntity::getLogId, '=', $requestData[AuctionLogQueryRequest::getLogId]];
             }
-            
+
             $auctionLogService = new AuctionLogService;
             $result = $auctionLogService->page($condition, $page, $pageSize);
 

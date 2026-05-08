@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\ShopConfigEntity;
-use App\Services\ShopConfigService;
 use App\Api\Admin\Requests\ShopConfig\ShopConfigCreateRequest;
 use App\Api\Admin\Requests\ShopConfig\ShopConfigDestroyRequest;
 use App\Api\Admin\Requests\ShopConfig\ShopConfigQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\ShopConfig\ShopConfigUpdateRequest;
 use App\Api\Admin\Responses\ShopConfig\ShopConfigDestroyResponse;
 use App\Api\Admin\Responses\ShopConfig\ShopConfigQueryResponse;
 use App\Api\Admin\Responses\ShopConfig\ShopConfigResponse;
+use App\Entities\ShopConfigEntity;
+use App\Services\ShopConfigService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class ShopConfigController extends BaseController
             if (isset($requestData[ShopConfigQueryRequest::getId])) {
                 $condition[] = [ShopConfigEntity::getId, '=', $requestData[ShopConfigQueryRequest::getId]];
             }
-            
+
             $shopConfigService = new ShopConfigService;
             $result = $shopConfigService->page($condition, $page, $pageSize);
 

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\BackOrderEntity;
-use App\Services\BackOrderService;
 use App\Api\Admin\Requests\BackOrder\BackOrderCreateRequest;
 use App\Api\Admin\Requests\BackOrder\BackOrderDestroyRequest;
 use App\Api\Admin\Requests\BackOrder\BackOrderQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\BackOrder\BackOrderUpdateRequest;
 use App\Api\Admin\Responses\BackOrder\BackOrderDestroyResponse;
 use App\Api\Admin\Responses\BackOrder\BackOrderQueryResponse;
 use App\Api\Admin\Responses\BackOrder\BackOrderResponse;
+use App\Entities\BackOrderEntity;
+use App\Services\BackOrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class BackOrderController extends BaseController
             if (isset($requestData[BackOrderQueryRequest::getUserId])) {
                 $condition[] = [BackOrderEntity::getUserId, '=', $requestData[BackOrderQueryRequest::getUserId]];
             }
-            
+
             $backOrderService = new BackOrderService;
             $result = $backOrderService->page($condition, $page, $pageSize);
 

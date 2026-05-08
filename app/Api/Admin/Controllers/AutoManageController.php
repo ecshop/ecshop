@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\AutoManageEntity;
-use App\Services\AutoManageService;
 use App\Api\Admin\Requests\AutoManage\AutoManageCreateRequest;
 use App\Api\Admin\Requests\AutoManage\AutoManageDestroyRequest;
 use App\Api\Admin\Requests\AutoManage\AutoManageQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\AutoManage\AutoManageUpdateRequest;
 use App\Api\Admin\Responses\AutoManage\AutoManageDestroyResponse;
 use App\Api\Admin\Responses\AutoManage\AutoManageQueryResponse;
 use App\Api\Admin\Responses\AutoManage\AutoManageResponse;
+use App\Entities\AutoManageEntity;
+use App\Services\AutoManageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class AutoManageController extends BaseController
             if (isset($requestData[AutoManageQueryRequest::getId])) {
                 $condition[] = [AutoManageEntity::getId, '=', $requestData[AutoManageQueryRequest::getId]];
             }
-            
+
             $autoManageService = new AutoManageService;
             $result = $autoManageService->page($condition, $page, $pageSize);
 

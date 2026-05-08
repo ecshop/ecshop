@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\GoodsCatEntity;
-use App\Services\GoodsCatService;
 use App\Api\Admin\Requests\GoodsCat\GoodsCatCreateRequest;
 use App\Api\Admin\Requests\GoodsCat\GoodsCatDestroyRequest;
 use App\Api\Admin\Requests\GoodsCat\GoodsCatQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\GoodsCat\GoodsCatUpdateRequest;
 use App\Api\Admin\Responses\GoodsCat\GoodsCatDestroyResponse;
 use App\Api\Admin\Responses\GoodsCat\GoodsCatQueryResponse;
 use App\Api\Admin\Responses\GoodsCat\GoodsCatResponse;
+use App\Entities\GoodsCatEntity;
+use App\Services\GoodsCatService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class GoodsCatController extends BaseController
             if (isset($requestData[GoodsCatQueryRequest::getId])) {
                 $condition[] = [GoodsCatEntity::getId, '=', $requestData[GoodsCatQueryRequest::getId]];
             }
-            
+
             $goodsCatService = new GoodsCatService;
             $result = $goodsCatService->page($condition, $page, $pageSize);
 

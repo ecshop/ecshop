@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\MemberPriceEntity;
-use App\Services\MemberPriceService;
 use App\Api\Admin\Requests\MemberPrice\MemberPriceCreateRequest;
 use App\Api\Admin\Requests\MemberPrice\MemberPriceDestroyRequest;
 use App\Api\Admin\Requests\MemberPrice\MemberPriceQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\MemberPrice\MemberPriceUpdateRequest;
 use App\Api\Admin\Responses\MemberPrice\MemberPriceDestroyResponse;
 use App\Api\Admin\Responses\MemberPrice\MemberPriceQueryResponse;
 use App\Api\Admin\Responses\MemberPrice\MemberPriceResponse;
+use App\Entities\MemberPriceEntity;
+use App\Services\MemberPriceService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class MemberPriceController extends BaseController
             if (isset($requestData[MemberPriceQueryRequest::getPriceId])) {
                 $condition[] = [MemberPriceEntity::getPriceId, '=', $requestData[MemberPriceQueryRequest::getPriceId]];
             }
-            
+
             $memberPriceService = new MemberPriceService;
             $result = $memberPriceService->page($condition, $page, $pageSize);
 

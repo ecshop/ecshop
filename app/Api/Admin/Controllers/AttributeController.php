@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\AttributeEntity;
-use App\Services\AttributeService;
 use App\Api\Admin\Requests\Attribute\AttributeCreateRequest;
 use App\Api\Admin\Requests\Attribute\AttributeDestroyRequest;
 use App\Api\Admin\Requests\Attribute\AttributeQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Attribute\AttributeUpdateRequest;
 use App\Api\Admin\Responses\Attribute\AttributeDestroyResponse;
 use App\Api\Admin\Responses\Attribute\AttributeQueryResponse;
 use App\Api\Admin\Responses\Attribute\AttributeResponse;
+use App\Entities\AttributeEntity;
+use App\Services\AttributeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class AttributeController extends BaseController
             if (isset($requestData[AttributeQueryRequest::getAttrId])) {
                 $condition[] = [AttributeEntity::getAttrId, '=', $requestData[AttributeQueryRequest::getAttrId]];
             }
-            
+
             $attributeService = new AttributeService;
             $result = $attributeService->page($condition, $page, $pageSize);
 

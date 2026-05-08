@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\OrderActionEntity;
-use App\Services\OrderActionService;
 use App\Api\Admin\Requests\OrderAction\OrderActionCreateRequest;
 use App\Api\Admin\Requests\OrderAction\OrderActionDestroyRequest;
 use App\Api\Admin\Requests\OrderAction\OrderActionQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\OrderAction\OrderActionUpdateRequest;
 use App\Api\Admin\Responses\OrderAction\OrderActionDestroyResponse;
 use App\Api\Admin\Responses\OrderAction\OrderActionQueryResponse;
 use App\Api\Admin\Responses\OrderAction\OrderActionResponse;
+use App\Entities\OrderActionEntity;
+use App\Services\OrderActionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class OrderActionController extends BaseController
             if (isset($requestData[OrderActionQueryRequest::getActionId])) {
                 $condition[] = [OrderActionEntity::getActionId, '=', $requestData[OrderActionQueryRequest::getActionId]];
             }
-            
+
             $orderActionService = new OrderActionService;
             $result = $orderActionService->page($condition, $page, $pageSize);
 

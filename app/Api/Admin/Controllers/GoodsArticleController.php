@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\GoodsArticleEntity;
-use App\Services\GoodsArticleService;
 use App\Api\Admin\Requests\GoodsArticle\GoodsArticleCreateRequest;
 use App\Api\Admin\Requests\GoodsArticle\GoodsArticleDestroyRequest;
 use App\Api\Admin\Requests\GoodsArticle\GoodsArticleQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\GoodsArticle\GoodsArticleUpdateRequest;
 use App\Api\Admin\Responses\GoodsArticle\GoodsArticleDestroyResponse;
 use App\Api\Admin\Responses\GoodsArticle\GoodsArticleQueryResponse;
 use App\Api\Admin\Responses\GoodsArticle\GoodsArticleResponse;
+use App\Entities\GoodsArticleEntity;
+use App\Services\GoodsArticleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class GoodsArticleController extends BaseController
             if (isset($requestData[GoodsArticleQueryRequest::getId])) {
                 $condition[] = [GoodsArticleEntity::getId, '=', $requestData[GoodsArticleQueryRequest::getId]];
             }
-            
+
             $goodsArticleService = new GoodsArticleService;
             $result = $goodsArticleService->page($condition, $page, $pageSize);
 

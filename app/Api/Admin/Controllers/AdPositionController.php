@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\AdPositionEntity;
-use App\Services\AdPositionService;
 use App\Api\Admin\Requests\AdPosition\AdPositionCreateRequest;
 use App\Api\Admin\Requests\AdPosition\AdPositionDestroyRequest;
 use App\Api\Admin\Requests\AdPosition\AdPositionQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\AdPosition\AdPositionUpdateRequest;
 use App\Api\Admin\Responses\AdPosition\AdPositionDestroyResponse;
 use App\Api\Admin\Responses\AdPosition\AdPositionQueryResponse;
 use App\Api\Admin\Responses\AdPosition\AdPositionResponse;
+use App\Entities\AdPositionEntity;
+use App\Services\AdPositionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class AdPositionController extends BaseController
             if (isset($requestData[AdPositionQueryRequest::getPositionId])) {
                 $condition[] = [AdPositionEntity::getPositionId, '=', $requestData[AdPositionQueryRequest::getPositionId]];
             }
-            
+
             $adPositionService = new AdPositionService;
             $result = $adPositionService->page($condition, $page, $pageSize);
 

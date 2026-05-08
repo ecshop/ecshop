@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\UserRankEntity;
-use App\Services\UserRankService;
 use App\Api\Admin\Requests\UserRank\UserRankCreateRequest;
 use App\Api\Admin\Requests\UserRank\UserRankDestroyRequest;
 use App\Api\Admin\Requests\UserRank\UserRankQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\UserRank\UserRankUpdateRequest;
 use App\Api\Admin\Responses\UserRank\UserRankDestroyResponse;
 use App\Api\Admin\Responses\UserRank\UserRankQueryResponse;
 use App\Api\Admin\Responses\UserRank\UserRankResponse;
+use App\Entities\UserRankEntity;
+use App\Services\UserRankService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class UserRankController extends BaseController
             if (isset($requestData[UserRankQueryRequest::getRankId])) {
                 $condition[] = [UserRankEntity::getRankId, '=', $requestData[UserRankQueryRequest::getRankId]];
             }
-            
+
             $userRankService = new UserRankService;
             $result = $userRankService->page($condition, $page, $pageSize);
 

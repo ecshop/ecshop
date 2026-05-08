@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\DeliveryOrderEntity;
-use App\Services\DeliveryOrderService;
 use App\Api\Admin\Requests\DeliveryOrder\DeliveryOrderCreateRequest;
 use App\Api\Admin\Requests\DeliveryOrder\DeliveryOrderDestroyRequest;
 use App\Api\Admin\Requests\DeliveryOrder\DeliveryOrderQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\DeliveryOrder\DeliveryOrderUpdateRequest;
 use App\Api\Admin\Responses\DeliveryOrder\DeliveryOrderDestroyResponse;
 use App\Api\Admin\Responses\DeliveryOrder\DeliveryOrderQueryResponse;
 use App\Api\Admin\Responses\DeliveryOrder\DeliveryOrderResponse;
+use App\Entities\DeliveryOrderEntity;
+use App\Services\DeliveryOrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class DeliveryOrderController extends BaseController
             if (isset($requestData[DeliveryOrderQueryRequest::getUserId])) {
                 $condition[] = [DeliveryOrderEntity::getUserId, '=', $requestData[DeliveryOrderQueryRequest::getUserId]];
             }
-            
+
             $deliveryOrderService = new DeliveryOrderService;
             $result = $deliveryOrderService->page($condition, $page, $pageSize);
 

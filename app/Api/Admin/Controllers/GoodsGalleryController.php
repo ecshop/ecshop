@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\GoodsGalleryEntity;
-use App\Services\GoodsGalleryService;
 use App\Api\Admin\Requests\GoodsGallery\GoodsGalleryCreateRequest;
 use App\Api\Admin\Requests\GoodsGallery\GoodsGalleryDestroyRequest;
 use App\Api\Admin\Requests\GoodsGallery\GoodsGalleryQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\GoodsGallery\GoodsGalleryUpdateRequest;
 use App\Api\Admin\Responses\GoodsGallery\GoodsGalleryDestroyResponse;
 use App\Api\Admin\Responses\GoodsGallery\GoodsGalleryQueryResponse;
 use App\Api\Admin\Responses\GoodsGallery\GoodsGalleryResponse;
+use App\Entities\GoodsGalleryEntity;
+use App\Services\GoodsGalleryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class GoodsGalleryController extends BaseController
             if (isset($requestData[GoodsGalleryQueryRequest::getImgId])) {
                 $condition[] = [GoodsGalleryEntity::getImgId, '=', $requestData[GoodsGalleryQueryRequest::getImgId]];
             }
-            
+
             $goodsGalleryService = new GoodsGalleryService;
             $result = $goodsGalleryService->page($condition, $page, $pageSize);
 

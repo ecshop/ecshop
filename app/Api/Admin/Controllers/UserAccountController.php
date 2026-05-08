@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\UserAccountEntity;
-use App\Services\UserAccountService;
 use App\Api\Admin\Requests\UserAccount\UserAccountCreateRequest;
 use App\Api\Admin\Requests\UserAccount\UserAccountDestroyRequest;
 use App\Api\Admin\Requests\UserAccount\UserAccountQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\UserAccount\UserAccountUpdateRequest;
 use App\Api\Admin\Responses\UserAccount\UserAccountDestroyResponse;
 use App\Api\Admin\Responses\UserAccount\UserAccountQueryResponse;
 use App\Api\Admin\Responses\UserAccount\UserAccountResponse;
+use App\Entities\UserAccountEntity;
+use App\Services\UserAccountService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class UserAccountController extends BaseController
             if (isset($requestData[UserAccountQueryRequest::getUserId])) {
                 $condition[] = [UserAccountEntity::getUserId, '=', $requestData[UserAccountQueryRequest::getUserId]];
             }
-            
+
             $userAccountService = new UserAccountService;
             $result = $userAccountService->page($condition, $page, $pageSize);
 

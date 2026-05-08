@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\FriendLinkEntity;
-use App\Services\FriendLinkService;
 use App\Api\Admin\Requests\FriendLink\FriendLinkCreateRequest;
 use App\Api\Admin\Requests\FriendLink\FriendLinkDestroyRequest;
 use App\Api\Admin\Requests\FriendLink\FriendLinkQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\FriendLink\FriendLinkUpdateRequest;
 use App\Api\Admin\Responses\FriendLink\FriendLinkDestroyResponse;
 use App\Api\Admin\Responses\FriendLink\FriendLinkQueryResponse;
 use App\Api\Admin\Responses\FriendLink\FriendLinkResponse;
+use App\Entities\FriendLinkEntity;
+use App\Services\FriendLinkService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class FriendLinkController extends BaseController
             if (isset($requestData[FriendLinkQueryRequest::getShowOrder])) {
                 $condition[] = [FriendLinkEntity::getShowOrder, '=', $requestData[FriendLinkQueryRequest::getShowOrder]];
             }
-            
+
             $friendLinkService = new FriendLinkService;
             $result = $friendLinkService->page($condition, $page, $pageSize);
 

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\ProductsEntity;
-use App\Services\ProductsService;
 use App\Api\Admin\Requests\Products\ProductsCreateRequest;
 use App\Api\Admin\Requests\Products\ProductsDestroyRequest;
 use App\Api\Admin\Requests\Products\ProductsQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Products\ProductsUpdateRequest;
 use App\Api\Admin\Responses\Products\ProductsDestroyResponse;
 use App\Api\Admin\Responses\Products\ProductsQueryResponse;
 use App\Api\Admin\Responses\Products\ProductsResponse;
+use App\Entities\ProductsEntity;
+use App\Services\ProductsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class ProductsController extends BaseController
             if (isset($requestData[ProductsQueryRequest::getProductId])) {
                 $condition[] = [ProductsEntity::getProductId, '=', $requestData[ProductsQueryRequest::getProductId]];
             }
-            
+
             $productsService = new ProductsService;
             $result = $productsService->page($condition, $page, $pageSize);
 

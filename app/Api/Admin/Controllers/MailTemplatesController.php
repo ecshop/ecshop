@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\MailTemplatesEntity;
-use App\Services\MailTemplatesService;
 use App\Api\Admin\Requests\MailTemplates\MailTemplatesCreateRequest;
 use App\Api\Admin\Requests\MailTemplates\MailTemplatesDestroyRequest;
 use App\Api\Admin\Requests\MailTemplates\MailTemplatesQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\MailTemplates\MailTemplatesUpdateRequest;
 use App\Api\Admin\Responses\MailTemplates\MailTemplatesDestroyResponse;
 use App\Api\Admin\Responses\MailTemplates\MailTemplatesQueryResponse;
 use App\Api\Admin\Responses\MailTemplates\MailTemplatesResponse;
+use App\Entities\MailTemplatesEntity;
+use App\Services\MailTemplatesService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class MailTemplatesController extends BaseController
             if (isset($requestData[MailTemplatesQueryRequest::getType])) {
                 $condition[] = [MailTemplatesEntity::getType, '=', $requestData[MailTemplatesQueryRequest::getType]];
             }
-            
+
             $mailTemplatesService = new MailTemplatesService;
             $result = $mailTemplatesService->page($condition, $page, $pageSize);
 

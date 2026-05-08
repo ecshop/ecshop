@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\UserFeedEntity;
-use App\Services\UserFeedService;
 use App\Api\Admin\Requests\UserFeed\UserFeedCreateRequest;
 use App\Api\Admin\Requests\UserFeed\UserFeedDestroyRequest;
 use App\Api\Admin\Requests\UserFeed\UserFeedQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\UserFeed\UserFeedUpdateRequest;
 use App\Api\Admin\Responses\UserFeed\UserFeedDestroyResponse;
 use App\Api\Admin\Responses\UserFeed\UserFeedQueryResponse;
 use App\Api\Admin\Responses\UserFeed\UserFeedResponse;
+use App\Entities\UserFeedEntity;
+use App\Services\UserFeedService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class UserFeedController extends BaseController
             if (isset($requestData[UserFeedQueryRequest::getFeedId])) {
                 $condition[] = [UserFeedEntity::getFeedId, '=', $requestData[UserFeedQueryRequest::getFeedId]];
             }
-            
+
             $userFeedService = new UserFeedService;
             $result = $userFeedService->page($condition, $page, $pageSize);
 

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\UserAddressEntity;
-use App\Services\UserAddressService;
 use App\Api\Admin\Requests\UserAddress\UserAddressCreateRequest;
 use App\Api\Admin\Requests\UserAddress\UserAddressDestroyRequest;
 use App\Api\Admin\Requests\UserAddress\UserAddressQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\UserAddress\UserAddressUpdateRequest;
 use App\Api\Admin\Responses\UserAddress\UserAddressDestroyResponse;
 use App\Api\Admin\Responses\UserAddress\UserAddressQueryResponse;
 use App\Api\Admin\Responses\UserAddress\UserAddressResponse;
+use App\Entities\UserAddressEntity;
+use App\Services\UserAddressService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class UserAddressController extends BaseController
             if (isset($requestData[UserAddressQueryRequest::getUserId])) {
                 $condition[] = [UserAddressEntity::getUserId, '=', $requestData[UserAddressQueryRequest::getUserId]];
             }
-            
+
             $userAddressService = new UserAddressService;
             $result = $userAddressService->page($condition, $page, $pageSize);
 

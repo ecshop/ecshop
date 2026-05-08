@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\TopicEntity;
-use App\Services\TopicService;
 use App\Api\Admin\Requests\Topic\TopicCreateRequest;
 use App\Api\Admin\Requests\Topic\TopicDestroyRequest;
 use App\Api\Admin\Requests\Topic\TopicQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Topic\TopicUpdateRequest;
 use App\Api\Admin\Responses\Topic\TopicDestroyResponse;
 use App\Api\Admin\Responses\Topic\TopicQueryResponse;
 use App\Api\Admin\Responses\Topic\TopicResponse;
+use App\Entities\TopicEntity;
+use App\Services\TopicService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class TopicController extends BaseController
             if (isset($requestData[TopicQueryRequest::getTopicId])) {
                 $condition[] = [TopicEntity::getTopicId, '=', $requestData[TopicQueryRequest::getTopicId]];
             }
-            
+
             $topicService = new TopicService;
             $result = $topicService->page($condition, $page, $pageSize);
 

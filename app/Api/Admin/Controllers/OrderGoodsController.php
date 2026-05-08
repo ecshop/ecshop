@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\OrderGoodsEntity;
-use App\Services\OrderGoodsService;
 use App\Api\Admin\Requests\OrderGoods\OrderGoodsCreateRequest;
 use App\Api\Admin\Requests\OrderGoods\OrderGoodsDestroyRequest;
 use App\Api\Admin\Requests\OrderGoods\OrderGoodsQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\OrderGoods\OrderGoodsUpdateRequest;
 use App\Api\Admin\Responses\OrderGoods\OrderGoodsDestroyResponse;
 use App\Api\Admin\Responses\OrderGoods\OrderGoodsQueryResponse;
 use App\Api\Admin\Responses\OrderGoods\OrderGoodsResponse;
+use App\Entities\OrderGoodsEntity;
+use App\Services\OrderGoodsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class OrderGoodsController extends BaseController
             if (isset($requestData[OrderGoodsQueryRequest::getRecId])) {
                 $condition[] = [OrderGoodsEntity::getRecId, '=', $requestData[OrderGoodsQueryRequest::getRecId]];
             }
-            
+
             $orderGoodsService = new OrderGoodsService;
             $result = $orderGoodsService->page($condition, $page, $pageSize);
 

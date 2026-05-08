@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\AdminUserEntity;
-use App\Services\AdminUserService;
 use App\Api\Admin\Requests\AdminUser\AdminUserCreateRequest;
 use App\Api\Admin\Requests\AdminUser\AdminUserDestroyRequest;
 use App\Api\Admin\Requests\AdminUser\AdminUserQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\AdminUser\AdminUserUpdateRequest;
 use App\Api\Admin\Responses\AdminUser\AdminUserDestroyResponse;
 use App\Api\Admin\Responses\AdminUser\AdminUserQueryResponse;
 use App\Api\Admin\Responses\AdminUser\AdminUserResponse;
+use App\Entities\AdminUserEntity;
+use App\Services\AdminUserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class AdminUserController extends BaseController
             if (isset($requestData[AdminUserQueryRequest::getUserName])) {
                 $condition[] = [AdminUserEntity::getUserName, '=', $requestData[AdminUserQueryRequest::getUserName]];
             }
-            
+
             $adminUserService = new AdminUserService;
             $result = $adminUserService->page($condition, $page, $pageSize);
 

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\CronsEntity;
-use App\Services\CronsService;
 use App\Api\Admin\Requests\Crons\CronsCreateRequest;
 use App\Api\Admin\Requests\Crons\CronsDestroyRequest;
 use App\Api\Admin\Requests\Crons\CronsQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Crons\CronsUpdateRequest;
 use App\Api\Admin\Responses\Crons\CronsDestroyResponse;
 use App\Api\Admin\Responses\Crons\CronsQueryResponse;
 use App\Api\Admin\Responses\Crons\CronsResponse;
+use App\Entities\CronsEntity;
+use App\Services\CronsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +49,7 @@ class CronsController extends BaseController
             if (isset($requestData[CronsQueryRequest::getCronId])) {
                 $condition[] = [CronsEntity::getCronId, '=', $requestData[CronsQueryRequest::getCronId]];
             }
-            
+
             $cronsService = new CronsService;
             $result = $cronsService->page($condition, $page, $pageSize);
 

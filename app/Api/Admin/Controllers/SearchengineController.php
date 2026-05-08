@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\SearchengineEntity;
-use App\Services\SearchengineService;
 use App\Api\Admin\Requests\Searchengine\SearchengineCreateRequest;
 use App\Api\Admin\Requests\Searchengine\SearchengineDestroyRequest;
 use App\Api\Admin\Requests\Searchengine\SearchengineQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Searchengine\SearchengineUpdateRequest;
 use App\Api\Admin\Responses\Searchengine\SearchengineDestroyResponse;
 use App\Api\Admin\Responses\Searchengine\SearchengineQueryResponse;
 use App\Api\Admin\Responses\Searchengine\SearchengineResponse;
+use App\Entities\SearchengineEntity;
+use App\Services\SearchengineService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class SearchengineController extends BaseController
             if (isset($requestData[SearchengineQueryRequest::getId])) {
                 $condition[] = [SearchengineEntity::getId, '=', $requestData[SearchengineQueryRequest::getId]];
             }
-            
+
             $searchengineService = new SearchengineService;
             $result = $searchengineService->page($condition, $page, $pageSize);
 

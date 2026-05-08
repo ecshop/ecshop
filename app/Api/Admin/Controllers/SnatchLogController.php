@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\SnatchLogEntity;
-use App\Services\SnatchLogService;
 use App\Api\Admin\Requests\SnatchLog\SnatchLogCreateRequest;
 use App\Api\Admin\Requests\SnatchLog\SnatchLogDestroyRequest;
 use App\Api\Admin\Requests\SnatchLog\SnatchLogQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\SnatchLog\SnatchLogUpdateRequest;
 use App\Api\Admin\Responses\SnatchLog\SnatchLogDestroyResponse;
 use App\Api\Admin\Responses\SnatchLog\SnatchLogQueryResponse;
 use App\Api\Admin\Responses\SnatchLog\SnatchLogResponse;
+use App\Entities\SnatchLogEntity;
+use App\Services\SnatchLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class SnatchLogController extends BaseController
             if (isset($requestData[SnatchLogQueryRequest::getSnatchId])) {
                 $condition[] = [SnatchLogEntity::getSnatchId, '=', $requestData[SnatchLogQueryRequest::getSnatchId]];
             }
-            
+
             $snatchLogService = new SnatchLogService;
             $result = $snatchLogService->page($condition, $page, $pageSize);
 

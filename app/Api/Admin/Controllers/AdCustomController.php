@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\AdCustomEntity;
-use App\Services\AdCustomService;
 use App\Api\Admin\Requests\AdCustom\AdCustomCreateRequest;
 use App\Api\Admin\Requests\AdCustom\AdCustomDestroyRequest;
 use App\Api\Admin\Requests\AdCustom\AdCustomQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\AdCustom\AdCustomUpdateRequest;
 use App\Api\Admin\Responses\AdCustom\AdCustomDestroyResponse;
 use App\Api\Admin\Responses\AdCustom\AdCustomQueryResponse;
 use App\Api\Admin\Responses\AdCustom\AdCustomResponse;
+use App\Entities\AdCustomEntity;
+use App\Services\AdCustomService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class AdCustomController extends BaseController
             if (isset($requestData[AdCustomQueryRequest::getAdId])) {
                 $condition[] = [AdCustomEntity::getAdId, '=', $requestData[AdCustomQueryRequest::getAdId]];
             }
-            
+
             $adCustomService = new AdCustomService;
             $result = $adCustomService->page($condition, $page, $pageSize);
 

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\EmailListEntity;
-use App\Services\EmailListService;
 use App\Api\Admin\Requests\EmailList\EmailListCreateRequest;
 use App\Api\Admin\Requests\EmailList\EmailListDestroyRequest;
 use App\Api\Admin\Requests\EmailList\EmailListQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\EmailList\EmailListUpdateRequest;
 use App\Api\Admin\Responses\EmailList\EmailListDestroyResponse;
 use App\Api\Admin\Responses\EmailList\EmailListQueryResponse;
 use App\Api\Admin\Responses\EmailList\EmailListResponse;
+use App\Entities\EmailListEntity;
+use App\Services\EmailListService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class EmailListController extends BaseController
             if (isset($requestData[EmailListQueryRequest::getId])) {
                 $condition[] = [EmailListEntity::getId, '=', $requestData[EmailListQueryRequest::getId]];
             }
-            
+
             $emailListService = new EmailListService;
             $result = $emailListService->page($condition, $page, $pageSize);
 

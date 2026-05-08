@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\VolumePriceEntity;
-use App\Services\VolumePriceService;
 use App\Api\Admin\Requests\VolumePrice\VolumePriceCreateRequest;
 use App\Api\Admin\Requests\VolumePrice\VolumePriceDestroyRequest;
 use App\Api\Admin\Requests\VolumePrice\VolumePriceQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\VolumePrice\VolumePriceUpdateRequest;
 use App\Api\Admin\Responses\VolumePrice\VolumePriceDestroyResponse;
 use App\Api\Admin\Responses\VolumePrice\VolumePriceQueryResponse;
 use App\Api\Admin\Responses\VolumePrice\VolumePriceResponse;
+use App\Entities\VolumePriceEntity;
+use App\Services\VolumePriceService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class VolumePriceController extends BaseController
             if (isset($requestData[VolumePriceQueryRequest::getId])) {
                 $condition[] = [VolumePriceEntity::getId, '=', $requestData[VolumePriceQueryRequest::getId]];
             }
-            
+
             $volumePriceService = new VolumePriceService;
             $result = $volumePriceService->page($condition, $page, $pageSize);
 

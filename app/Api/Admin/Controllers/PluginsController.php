@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\PluginsEntity;
-use App\Services\PluginsService;
 use App\Api\Admin\Requests\Plugins\PluginsCreateRequest;
 use App\Api\Admin\Requests\Plugins\PluginsDestroyRequest;
 use App\Api\Admin\Requests\Plugins\PluginsQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Plugins\PluginsUpdateRequest;
 use App\Api\Admin\Responses\Plugins\PluginsDestroyResponse;
 use App\Api\Admin\Responses\Plugins\PluginsQueryResponse;
 use App\Api\Admin\Responses\Plugins\PluginsResponse;
+use App\Entities\PluginsEntity;
+use App\Services\PluginsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class PluginsController extends BaseController
             if (isset($requestData[PluginsQueryRequest::getId])) {
                 $condition[] = [PluginsEntity::getId, '=', $requestData[PluginsQueryRequest::getId]];
             }
-            
+
             $pluginsService = new PluginsService;
             $result = $pluginsService->page($condition, $page, $pageSize);
 

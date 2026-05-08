@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\BackGoodsEntity;
-use App\Services\BackGoodsService;
 use App\Api\Admin\Requests\BackGoods\BackGoodsCreateRequest;
 use App\Api\Admin\Requests\BackGoods\BackGoodsDestroyRequest;
 use App\Api\Admin\Requests\BackGoods\BackGoodsQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\BackGoods\BackGoodsUpdateRequest;
 use App\Api\Admin\Responses\BackGoods\BackGoodsDestroyResponse;
 use App\Api\Admin\Responses\BackGoods\BackGoodsQueryResponse;
 use App\Api\Admin\Responses\BackGoods\BackGoodsResponse;
+use App\Entities\BackGoodsEntity;
+use App\Services\BackGoodsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class BackGoodsController extends BaseController
             if (isset($requestData[BackGoodsQueryRequest::getRecId])) {
                 $condition[] = [BackGoodsEntity::getRecId, '=', $requestData[BackGoodsQueryRequest::getRecId]];
             }
-            
+
             $backGoodsService = new BackGoodsService;
             $result = $backGoodsService->page($condition, $page, $pageSize);
 

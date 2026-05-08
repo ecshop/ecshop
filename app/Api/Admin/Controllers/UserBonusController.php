@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\UserBonusEntity;
-use App\Services\UserBonusService;
 use App\Api\Admin\Requests\UserBonus\UserBonusCreateRequest;
 use App\Api\Admin\Requests\UserBonus\UserBonusDestroyRequest;
 use App\Api\Admin\Requests\UserBonus\UserBonusQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\UserBonus\UserBonusUpdateRequest;
 use App\Api\Admin\Responses\UserBonus\UserBonusDestroyResponse;
 use App\Api\Admin\Responses\UserBonus\UserBonusQueryResponse;
 use App\Api\Admin\Responses\UserBonus\UserBonusResponse;
+use App\Entities\UserBonusEntity;
+use App\Services\UserBonusService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class UserBonusController extends BaseController
             if (isset($requestData[UserBonusQueryRequest::getUserId])) {
                 $condition[] = [UserBonusEntity::getUserId, '=', $requestData[UserBonusQueryRequest::getUserId]];
             }
-            
+
             $userBonusService = new UserBonusService;
             $result = $userBonusService->page($condition, $page, $pageSize);
 

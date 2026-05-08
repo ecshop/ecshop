@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\RegionEntity;
-use App\Services\RegionService;
 use App\Api\Admin\Requests\Region\RegionCreateRequest;
 use App\Api\Admin\Requests\Region\RegionDestroyRequest;
 use App\Api\Admin\Requests\Region\RegionQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Region\RegionUpdateRequest;
 use App\Api\Admin\Responses\Region\RegionDestroyResponse;
 use App\Api\Admin\Responses\Region\RegionQueryResponse;
 use App\Api\Admin\Responses\Region\RegionResponse;
+use App\Entities\RegionEntity;
+use App\Services\RegionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +49,7 @@ class RegionController extends BaseController
             if (isset($requestData[RegionQueryRequest::getRegionType])) {
                 $condition[] = [RegionEntity::getRegionType, '=', $requestData[RegionQueryRequest::getRegionType]];
             }
-            
+
             $regionService = new RegionService;
             $result = $regionService->page($condition, $page, $pageSize);
 

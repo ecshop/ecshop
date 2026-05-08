@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\ErrorLogEntity;
-use App\Services\ErrorLogService;
 use App\Api\Admin\Requests\ErrorLog\ErrorLogCreateRequest;
 use App\Api\Admin\Requests\ErrorLog\ErrorLogDestroyRequest;
 use App\Api\Admin\Requests\ErrorLog\ErrorLogQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\ErrorLog\ErrorLogUpdateRequest;
 use App\Api\Admin\Responses\ErrorLog\ErrorLogDestroyResponse;
 use App\Api\Admin\Responses\ErrorLog\ErrorLogQueryResponse;
 use App\Api\Admin\Responses\ErrorLog\ErrorLogResponse;
+use App\Entities\ErrorLogEntity;
+use App\Services\ErrorLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class ErrorLogController extends BaseController
             if (isset($requestData[ErrorLogQueryRequest::getTime])) {
                 $condition[] = [ErrorLogEntity::getTime, '=', $requestData[ErrorLogQueryRequest::getTime]];
             }
-            
+
             $errorLogService = new ErrorLogService;
             $result = $errorLogService->page($condition, $page, $pageSize);
 

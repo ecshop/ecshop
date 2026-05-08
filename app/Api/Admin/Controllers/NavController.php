@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\NavEntity;
-use App\Services\NavService;
 use App\Api\Admin\Requests\Nav\NavCreateRequest;
 use App\Api\Admin\Requests\Nav\NavDestroyRequest;
 use App\Api\Admin\Requests\Nav\NavQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Nav\NavUpdateRequest;
 use App\Api\Admin\Responses\Nav\NavDestroyResponse;
 use App\Api\Admin\Responses\Nav\NavQueryResponse;
 use App\Api\Admin\Responses\Nav\NavResponse;
+use App\Entities\NavEntity;
+use App\Services\NavService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class NavController extends BaseController
             if (isset($requestData[NavQueryRequest::getType])) {
                 $condition[] = [NavEntity::getType, '=', $requestData[NavQueryRequest::getType]];
             }
-            
+
             $navService = new NavService;
             $result = $navService->page($condition, $page, $pageSize);
 

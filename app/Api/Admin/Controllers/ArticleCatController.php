@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\ArticleCatEntity;
-use App\Services\ArticleCatService;
 use App\Api\Admin\Requests\ArticleCat\ArticleCatCreateRequest;
 use App\Api\Admin\Requests\ArticleCat\ArticleCatDestroyRequest;
 use App\Api\Admin\Requests\ArticleCat\ArticleCatQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\ArticleCat\ArticleCatUpdateRequest;
 use App\Api\Admin\Responses\ArticleCat\ArticleCatDestroyResponse;
 use App\Api\Admin\Responses\ArticleCat\ArticleCatQueryResponse;
 use App\Api\Admin\Responses\ArticleCat\ArticleCatResponse;
+use App\Entities\ArticleCatEntity;
+use App\Services\ArticleCatService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +49,7 @@ class ArticleCatController extends BaseController
             if (isset($requestData[ArticleCatQueryRequest::getSortOrder])) {
                 $condition[] = [ArticleCatEntity::getSortOrder, '=', $requestData[ArticleCatQueryRequest::getSortOrder]];
             }
-            
+
             $articleCatService = new ArticleCatService;
             $result = $articleCatService->page($condition, $page, $pageSize);
 

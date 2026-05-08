@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\RegFieldsEntity;
-use App\Services\RegFieldsService;
 use App\Api\Admin\Requests\RegFields\RegFieldsCreateRequest;
 use App\Api\Admin\Requests\RegFields\RegFieldsDestroyRequest;
 use App\Api\Admin\Requests\RegFields\RegFieldsQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\RegFields\RegFieldsUpdateRequest;
 use App\Api\Admin\Responses\RegFields\RegFieldsDestroyResponse;
 use App\Api\Admin\Responses\RegFields\RegFieldsQueryResponse;
 use App\Api\Admin\Responses\RegFields\RegFieldsResponse;
+use App\Entities\RegFieldsEntity;
+use App\Services\RegFieldsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class RegFieldsController extends BaseController
             if (isset($requestData[RegFieldsQueryRequest::getId])) {
                 $condition[] = [RegFieldsEntity::getId, '=', $requestData[RegFieldsQueryRequest::getId]];
             }
-            
+
             $regFieldsService = new RegFieldsService;
             $result = $regFieldsService->page($condition, $page, $pageSize);
 

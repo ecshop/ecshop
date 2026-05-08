@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\VirtualCardEntity;
-use App\Services\VirtualCardService;
 use App\Api\Admin\Requests\VirtualCard\VirtualCardCreateRequest;
 use App\Api\Admin\Requests\VirtualCard\VirtualCardDestroyRequest;
 use App\Api\Admin\Requests\VirtualCard\VirtualCardQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\VirtualCard\VirtualCardUpdateRequest;
 use App\Api\Admin\Responses\VirtualCard\VirtualCardDestroyResponse;
 use App\Api\Admin\Responses\VirtualCard\VirtualCardQueryResponse;
 use App\Api\Admin\Responses\VirtualCard\VirtualCardResponse;
+use App\Entities\VirtualCardEntity;
+use App\Services\VirtualCardService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +49,7 @@ class VirtualCardController extends BaseController
             if (isset($requestData[VirtualCardQueryRequest::getCardId])) {
                 $condition[] = [VirtualCardEntity::getCardId, '=', $requestData[VirtualCardQueryRequest::getCardId]];
             }
-            
+
             $virtualCardService = new VirtualCardService;
             $result = $virtualCardService->page($condition, $page, $pageSize);
 

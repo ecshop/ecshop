@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\AccountLogEntity;
-use App\Services\AccountLogService;
 use App\Api\Admin\Requests\AccountLog\AccountLogCreateRequest;
 use App\Api\Admin\Requests\AccountLog\AccountLogDestroyRequest;
 use App\Api\Admin\Requests\AccountLog\AccountLogQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\AccountLog\AccountLogUpdateRequest;
 use App\Api\Admin\Responses\AccountLog\AccountLogDestroyResponse;
 use App\Api\Admin\Responses\AccountLog\AccountLogQueryResponse;
 use App\Api\Admin\Responses\AccountLog\AccountLogResponse;
+use App\Entities\AccountLogEntity;
+use App\Services\AccountLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class AccountLogController extends BaseController
             if (isset($requestData[AccountLogQueryRequest::getUserId])) {
                 $condition[] = [AccountLogEntity::getUserId, '=', $requestData[AccountLogQueryRequest::getUserId]];
             }
-            
+
             $accountLogService = new AccountLogService;
             $result = $accountLogService->page($condition, $page, $pageSize);
 

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\CartEntity;
-use App\Services\CartService;
 use App\Api\Admin\Requests\Cart\CartCreateRequest;
 use App\Api\Admin\Requests\Cart\CartDestroyRequest;
 use App\Api\Admin\Requests\Cart\CartQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Cart\CartUpdateRequest;
 use App\Api\Admin\Responses\Cart\CartDestroyResponse;
 use App\Api\Admin\Responses\Cart\CartQueryResponse;
 use App\Api\Admin\Responses\Cart\CartResponse;
+use App\Entities\CartEntity;
+use App\Services\CartService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class CartController extends BaseController
             if (isset($requestData[CartQueryRequest::getSessionId])) {
                 $condition[] = [CartEntity::getSessionId, '=', $requestData[CartQueryRequest::getSessionId]];
             }
-            
+
             $cartService = new CartService;
             $result = $cartService->page($condition, $page, $pageSize);
 

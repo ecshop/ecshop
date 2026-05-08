@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\GoodsTypeEntity;
-use App\Services\GoodsTypeService;
 use App\Api\Admin\Requests\GoodsType\GoodsTypeCreateRequest;
 use App\Api\Admin\Requests\GoodsType\GoodsTypeDestroyRequest;
 use App\Api\Admin\Requests\GoodsType\GoodsTypeQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\GoodsType\GoodsTypeUpdateRequest;
 use App\Api\Admin\Responses\GoodsType\GoodsTypeDestroyResponse;
 use App\Api\Admin\Responses\GoodsType\GoodsTypeQueryResponse;
 use App\Api\Admin\Responses\GoodsType\GoodsTypeResponse;
+use App\Entities\GoodsTypeEntity;
+use App\Services\GoodsTypeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class GoodsTypeController extends BaseController
             if (isset($requestData[GoodsTypeQueryRequest::getCatId])) {
                 $condition[] = [GoodsTypeEntity::getCatId, '=', $requestData[GoodsTypeQueryRequest::getCatId]];
             }
-            
+
             $goodsTypeService = new GoodsTypeService;
             $result = $goodsTypeService->page($condition, $page, $pageSize);
 

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\TemplateEntity;
-use App\Services\TemplateService;
 use App\Api\Admin\Requests\Template\TemplateCreateRequest;
 use App\Api\Admin\Requests\Template\TemplateDestroyRequest;
 use App\Api\Admin\Requests\Template\TemplateQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Template\TemplateUpdateRequest;
 use App\Api\Admin\Responses\Template\TemplateDestroyResponse;
 use App\Api\Admin\Responses\Template\TemplateQueryResponse;
 use App\Api\Admin\Responses\Template\TemplateResponse;
+use App\Entities\TemplateEntity;
+use App\Services\TemplateService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +49,7 @@ class TemplateController extends BaseController
             if (isset($requestData[TemplateQueryRequest::getTheme])) {
                 $condition[] = [TemplateEntity::getTheme, '=', $requestData[TemplateQueryRequest::getTheme]];
             }
-            
+
             $templateService = new TemplateService;
             $result = $templateService->page($condition, $page, $pageSize);
 

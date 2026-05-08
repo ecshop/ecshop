@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\SuppliersEntity;
-use App\Services\SuppliersService;
 use App\Api\Admin\Requests\Suppliers\SuppliersCreateRequest;
 use App\Api\Admin\Requests\Suppliers\SuppliersDestroyRequest;
 use App\Api\Admin\Requests\Suppliers\SuppliersQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Suppliers\SuppliersUpdateRequest;
 use App\Api\Admin\Responses\Suppliers\SuppliersDestroyResponse;
 use App\Api\Admin\Responses\Suppliers\SuppliersQueryResponse;
 use App\Api\Admin\Responses\Suppliers\SuppliersResponse;
+use App\Entities\SuppliersEntity;
+use App\Services\SuppliersService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class SuppliersController extends BaseController
             if (isset($requestData[SuppliersQueryRequest::getSuppliersId])) {
                 $condition[] = [SuppliersEntity::getSuppliersId, '=', $requestData[SuppliersQueryRequest::getSuppliersId]];
             }
-            
+
             $suppliersService = new SuppliersService;
             $result = $suppliersService->page($condition, $page, $pageSize);
 

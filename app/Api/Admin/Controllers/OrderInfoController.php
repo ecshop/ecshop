@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\OrderInfoEntity;
-use App\Services\OrderInfoService;
 use App\Api\Admin\Requests\OrderInfo\OrderInfoCreateRequest;
 use App\Api\Admin\Requests\OrderInfo\OrderInfoDestroyRequest;
 use App\Api\Admin\Requests\OrderInfo\OrderInfoQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\OrderInfo\OrderInfoUpdateRequest;
 use App\Api\Admin\Responses\OrderInfo\OrderInfoDestroyResponse;
 use App\Api\Admin\Responses\OrderInfo\OrderInfoQueryResponse;
 use App\Api\Admin\Responses\OrderInfo\OrderInfoResponse;
+use App\Entities\OrderInfoEntity;
+use App\Services\OrderInfoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -68,7 +67,7 @@ class OrderInfoController extends BaseController
             if (isset($requestData[OrderInfoQueryRequest::getUserId])) {
                 $condition[] = [OrderInfoEntity::getUserId, '=', $requestData[OrderInfoQueryRequest::getUserId]];
             }
-            
+
             $orderInfoService = new OrderInfoService;
             $result = $orderInfoService->page($condition, $page, $pageSize);
 

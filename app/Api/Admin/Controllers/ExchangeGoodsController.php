@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\ExchangeGoodsEntity;
-use App\Services\ExchangeGoodsService;
 use App\Api\Admin\Requests\ExchangeGoods\ExchangeGoodsCreateRequest;
 use App\Api\Admin\Requests\ExchangeGoods\ExchangeGoodsDestroyRequest;
 use App\Api\Admin\Requests\ExchangeGoods\ExchangeGoodsQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\ExchangeGoods\ExchangeGoodsUpdateRequest;
 use App\Api\Admin\Responses\ExchangeGoods\ExchangeGoodsDestroyResponse;
 use App\Api\Admin\Responses\ExchangeGoods\ExchangeGoodsQueryResponse;
 use App\Api\Admin\Responses\ExchangeGoods\ExchangeGoodsResponse;
+use App\Entities\ExchangeGoodsEntity;
+use App\Services\ExchangeGoodsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class ExchangeGoodsController extends BaseController
             if (isset($requestData[ExchangeGoodsQueryRequest::getId])) {
                 $condition[] = [ExchangeGoodsEntity::getId, '=', $requestData[ExchangeGoodsQueryRequest::getId]];
             }
-            
+
             $exchangeGoodsService = new ExchangeGoodsService;
             $result = $exchangeGoodsService->page($condition, $page, $pageSize);
 

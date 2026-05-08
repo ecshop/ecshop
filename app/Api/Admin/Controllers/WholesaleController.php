@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\WholesaleEntity;
-use App\Services\WholesaleService;
 use App\Api\Admin\Requests\Wholesale\WholesaleCreateRequest;
 use App\Api\Admin\Requests\Wholesale\WholesaleDestroyRequest;
 use App\Api\Admin\Requests\Wholesale\WholesaleQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Wholesale\WholesaleUpdateRequest;
 use App\Api\Admin\Responses\Wholesale\WholesaleDestroyResponse;
 use App\Api\Admin\Responses\Wholesale\WholesaleQueryResponse;
 use App\Api\Admin\Responses\Wholesale\WholesaleResponse;
+use App\Entities\WholesaleEntity;
+use App\Services\WholesaleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class WholesaleController extends BaseController
             if (isset($requestData[WholesaleQueryRequest::getActId])) {
                 $condition[] = [WholesaleEntity::getActId, '=', $requestData[WholesaleQueryRequest::getActId]];
             }
-            
+
             $wholesaleService = new WholesaleService;
             $result = $wholesaleService->page($condition, $page, $pageSize);
 

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\AdminActionEntity;
-use App\Services\AdminActionService;
 use App\Api\Admin\Requests\AdminAction\AdminActionCreateRequest;
 use App\Api\Admin\Requests\AdminAction\AdminActionDestroyRequest;
 use App\Api\Admin\Requests\AdminAction\AdminActionQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\AdminAction\AdminActionUpdateRequest;
 use App\Api\Admin\Responses\AdminAction\AdminActionDestroyResponse;
 use App\Api\Admin\Responses\AdminAction\AdminActionQueryResponse;
 use App\Api\Admin\Responses\AdminAction\AdminActionResponse;
+use App\Entities\AdminActionEntity;
+use App\Services\AdminActionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class AdminActionController extends BaseController
             if (isset($requestData[AdminActionQueryRequest::getActionId])) {
                 $condition[] = [AdminActionEntity::getActionId, '=', $requestData[AdminActionQueryRequest::getActionId]];
             }
-            
+
             $adminActionService = new AdminActionService;
             $result = $adminActionService->page($condition, $page, $pageSize);
 

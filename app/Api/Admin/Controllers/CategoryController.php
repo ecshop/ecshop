@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\CategoryEntity;
-use App\Services\CategoryService;
 use App\Api\Admin\Requests\Category\CategoryCreateRequest;
 use App\Api\Admin\Requests\Category\CategoryDestroyRequest;
 use App\Api\Admin\Requests\Category\CategoryQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Category\CategoryUpdateRequest;
 use App\Api\Admin\Responses\Category\CategoryDestroyResponse;
 use App\Api\Admin\Responses\Category\CategoryQueryResponse;
 use App\Api\Admin\Responses\Category\CategoryResponse;
+use App\Entities\CategoryEntity;
+use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class CategoryController extends BaseController
             if (isset($requestData[CategoryQueryRequest::getCatId])) {
                 $condition[] = [CategoryEntity::getCatId, '=', $requestData[CategoryQueryRequest::getCatId]];
             }
-            
+
             $categoryService = new CategoryService;
             $result = $categoryService->page($condition, $page, $pageSize);
 

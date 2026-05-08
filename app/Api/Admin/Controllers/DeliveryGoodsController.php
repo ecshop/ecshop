@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\DeliveryGoodsEntity;
-use App\Services\DeliveryGoodsService;
 use App\Api\Admin\Requests\DeliveryGoods\DeliveryGoodsCreateRequest;
 use App\Api\Admin\Requests\DeliveryGoods\DeliveryGoodsDestroyRequest;
 use App\Api\Admin\Requests\DeliveryGoods\DeliveryGoodsQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\DeliveryGoods\DeliveryGoodsUpdateRequest;
 use App\Api\Admin\Responses\DeliveryGoods\DeliveryGoodsDestroyResponse;
 use App\Api\Admin\Responses\DeliveryGoods\DeliveryGoodsQueryResponse;
 use App\Api\Admin\Responses\DeliveryGoods\DeliveryGoodsResponse;
+use App\Entities\DeliveryGoodsEntity;
+use App\Services\DeliveryGoodsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class DeliveryGoodsController extends BaseController
             if (isset($requestData[DeliveryGoodsQueryRequest::getRecId])) {
                 $condition[] = [DeliveryGoodsEntity::getRecId, '=', $requestData[DeliveryGoodsQueryRequest::getRecId]];
             }
-            
+
             $deliveryGoodsService = new DeliveryGoodsService;
             $result = $deliveryGoodsService->page($condition, $page, $pageSize);
 

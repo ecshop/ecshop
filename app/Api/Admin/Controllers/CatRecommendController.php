@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\CatRecommendEntity;
-use App\Services\CatRecommendService;
 use App\Api\Admin\Requests\CatRecommend\CatRecommendCreateRequest;
 use App\Api\Admin\Requests\CatRecommend\CatRecommendDestroyRequest;
 use App\Api\Admin\Requests\CatRecommend\CatRecommendQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\CatRecommend\CatRecommendUpdateRequest;
 use App\Api\Admin\Responses\CatRecommend\CatRecommendDestroyResponse;
 use App\Api\Admin\Responses\CatRecommend\CatRecommendQueryResponse;
 use App\Api\Admin\Responses\CatRecommend\CatRecommendResponse;
+use App\Entities\CatRecommendEntity;
+use App\Services\CatRecommendService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class CatRecommendController extends BaseController
             if (isset($requestData[CatRecommendQueryRequest::getId])) {
                 $condition[] = [CatRecommendEntity::getId, '=', $requestData[CatRecommendQueryRequest::getId]];
             }
-            
+
             $catRecommendService = new CatRecommendService;
             $result = $catRecommendService->page($condition, $page, $pageSize);
 

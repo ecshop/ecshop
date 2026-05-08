@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\PackEntity;
-use App\Services\PackService;
 use App\Api\Admin\Requests\Pack\PackCreateRequest;
 use App\Api\Admin\Requests\Pack\PackDestroyRequest;
 use App\Api\Admin\Requests\Pack\PackQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Pack\PackUpdateRequest;
 use App\Api\Admin\Responses\Pack\PackDestroyResponse;
 use App\Api\Admin\Responses\Pack\PackQueryResponse;
 use App\Api\Admin\Responses\Pack\PackResponse;
+use App\Entities\PackEntity;
+use App\Services\PackService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ class PackController extends BaseController
             if (isset($requestData[PackQueryRequest::getPackId])) {
                 $condition[] = [PackEntity::getPackId, '=', $requestData[PackQueryRequest::getPackId]];
             }
-            
+
             $packService = new PackService;
             $result = $packService->page($condition, $page, $pageSize);
 

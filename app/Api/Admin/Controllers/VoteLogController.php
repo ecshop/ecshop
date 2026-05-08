@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\VoteLogEntity;
-use App\Services\VoteLogService;
 use App\Api\Admin\Requests\VoteLog\VoteLogCreateRequest;
 use App\Api\Admin\Requests\VoteLog\VoteLogDestroyRequest;
 use App\Api\Admin\Requests\VoteLog\VoteLogQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\VoteLog\VoteLogUpdateRequest;
 use App\Api\Admin\Responses\VoteLog\VoteLogDestroyResponse;
 use App\Api\Admin\Responses\VoteLog\VoteLogQueryResponse;
 use App\Api\Admin\Responses\VoteLog\VoteLogResponse;
+use App\Entities\VoteLogEntity;
+use App\Services\VoteLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class VoteLogController extends BaseController
             if (isset($requestData[VoteLogQueryRequest::getVoteId])) {
                 $condition[] = [VoteLogEntity::getVoteId, '=', $requestData[VoteLogQueryRequest::getVoteId]];
             }
-            
+
             $voteLogService = new VoteLogService;
             $result = $voteLogService->page($condition, $page, $pageSize);
 

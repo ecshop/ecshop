@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\CommentEntity;
-use App\Services\CommentService;
 use App\Api\Admin\Requests\Comment\CommentCreateRequest;
 use App\Api\Admin\Requests\Comment\CommentDestroyRequest;
 use App\Api\Admin\Requests\Comment\CommentQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Comment\CommentUpdateRequest;
 use App\Api\Admin\Responses\Comment\CommentDestroyResponse;
 use App\Api\Admin\Responses\Comment\CommentQueryResponse;
 use App\Api\Admin\Responses\Comment\CommentResponse;
+use App\Entities\CommentEntity;
+use App\Services\CommentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class CommentController extends BaseController
             if (isset($requestData[CommentQueryRequest::getCommentId])) {
                 $condition[] = [CommentEntity::getCommentId, '=', $requestData[CommentQueryRequest::getCommentId]];
             }
-            
+
             $commentService = new CommentService;
             $result = $commentService->page($condition, $page, $pageSize);
 

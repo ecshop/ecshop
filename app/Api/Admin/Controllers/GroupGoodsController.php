@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\GroupGoodsEntity;
-use App\Services\GroupGoodsService;
 use App\Api\Admin\Requests\GroupGoods\GroupGoodsCreateRequest;
 use App\Api\Admin\Requests\GroupGoods\GroupGoodsDestroyRequest;
 use App\Api\Admin\Requests\GroupGoods\GroupGoodsQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\GroupGoods\GroupGoodsUpdateRequest;
 use App\Api\Admin\Responses\GroupGoods\GroupGoodsDestroyResponse;
 use App\Api\Admin\Responses\GroupGoods\GroupGoodsQueryResponse;
 use App\Api\Admin\Responses\GroupGoods\GroupGoodsResponse;
+use App\Entities\GroupGoodsEntity;
+use App\Services\GroupGoodsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class GroupGoodsController extends BaseController
             if (isset($requestData[GroupGoodsQueryRequest::getId])) {
                 $condition[] = [GroupGoodsEntity::getId, '=', $requestData[GroupGoodsQueryRequest::getId]];
             }
-            
+
             $groupGoodsService = new GroupGoodsService;
             $result = $groupGoodsService->page($condition, $page, $pageSize);
 

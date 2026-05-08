@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\ShippingAreaEntity;
-use App\Services\ShippingAreaService;
 use App\Api\Admin\Requests\ShippingArea\ShippingAreaCreateRequest;
 use App\Api\Admin\Requests\ShippingArea\ShippingAreaDestroyRequest;
 use App\Api\Admin\Requests\ShippingArea\ShippingAreaQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\ShippingArea\ShippingAreaUpdateRequest;
 use App\Api\Admin\Responses\ShippingArea\ShippingAreaDestroyResponse;
 use App\Api\Admin\Responses\ShippingArea\ShippingAreaQueryResponse;
 use App\Api\Admin\Responses\ShippingArea\ShippingAreaResponse;
+use App\Entities\ShippingAreaEntity;
+use App\Services\ShippingAreaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class ShippingAreaController extends BaseController
             if (isset($requestData[ShippingAreaQueryRequest::getShippingId])) {
                 $condition[] = [ShippingAreaEntity::getShippingId, '=', $requestData[ShippingAreaQueryRequest::getShippingId]];
             }
-            
+
             $shippingAreaService = new ShippingAreaService;
             $result = $shippingAreaService->page($condition, $page, $pageSize);
 

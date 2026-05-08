@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\KeywordsEntity;
-use App\Services\KeywordsService;
 use App\Api\Admin\Requests\Keywords\KeywordsCreateRequest;
 use App\Api\Admin\Requests\Keywords\KeywordsDestroyRequest;
 use App\Api\Admin\Requests\Keywords\KeywordsQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Keywords\KeywordsUpdateRequest;
 use App\Api\Admin\Responses\Keywords\KeywordsDestroyResponse;
 use App\Api\Admin\Responses\Keywords\KeywordsQueryResponse;
 use App\Api\Admin\Responses\Keywords\KeywordsResponse;
+use App\Entities\KeywordsEntity;
+use App\Services\KeywordsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class KeywordsController extends BaseController
             if (isset($requestData[KeywordsQueryRequest::getId])) {
                 $condition[] = [KeywordsEntity::getId, '=', $requestData[KeywordsQueryRequest::getId]];
             }
-            
+
             $keywordsService = new KeywordsService;
             $result = $keywordsService->page($condition, $page, $pageSize);
 

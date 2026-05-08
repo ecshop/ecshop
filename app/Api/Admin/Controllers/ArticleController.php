@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-use App\Api\Admin\Controllers\BaseController;
-use App\Entities\ArticleEntity;
-use App\Services\ArticleService;
 use App\Api\Admin\Requests\Article\ArticleCreateRequest;
 use App\Api\Admin\Requests\Article\ArticleDestroyRequest;
 use App\Api\Admin\Requests\Article\ArticleQueryRequest;
@@ -14,6 +11,8 @@ use App\Api\Admin\Requests\Article\ArticleUpdateRequest;
 use App\Api\Admin\Responses\Article\ArticleDestroyResponse;
 use App\Api\Admin\Responses\Article\ArticleQueryResponse;
 use App\Api\Admin\Responses\Article\ArticleResponse;
+use App\Entities\ArticleEntity;
+use App\Services\ArticleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +43,7 @@ class ArticleController extends BaseController
             if (isset($requestData[ArticleQueryRequest::getArticleId])) {
                 $condition[] = [ArticleEntity::getArticleId, '=', $requestData[ArticleQueryRequest::getArticleId]];
             }
-            
+
             $articleService = new ArticleService;
             $result = $articleService->page($condition, $page, $pageSize);
 

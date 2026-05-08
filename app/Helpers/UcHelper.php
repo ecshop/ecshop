@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Helpers;
+
 /**
  * 通过判断is_feed 向UCenter提交Feed
  *

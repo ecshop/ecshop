@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Helpers;
+
 /**
  * 商品推荐usort用自定义排序行数
  */

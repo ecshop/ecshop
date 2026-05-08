@@ -1,6 +1,8 @@
 <?php
 
-class ECS
+namespace App\Libraries;
+
+class Shop
 {
     public $db_name = '';
 

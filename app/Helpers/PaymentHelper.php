@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Helpers;
+
 /**
  * 取得返回信息地址
  *

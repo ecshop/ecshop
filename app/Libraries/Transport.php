@@ -1,6 +1,8 @@
 <?php
 
-class transport
+namespace App\Libraries;
+
+class Transport
 {
     /**
      * 脚本执行时间。－1表示采用PHP的默认值。

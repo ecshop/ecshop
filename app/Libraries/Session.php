@@ -1,6 +1,8 @@
 <?php
 
-class cls_session
+namespace App\Libraries;
+
+class Session
 {
     public $db = null;
 

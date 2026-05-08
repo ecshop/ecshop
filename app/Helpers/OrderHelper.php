@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Helpers;
+
 /**
  * 处理序列化的支付、配送的配置参数
  * 返回一个以name为索引的数组

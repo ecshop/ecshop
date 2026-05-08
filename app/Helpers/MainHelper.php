@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Helpers;
+
 /**
  * 更新用户SESSION,COOKIE及登录时间、登录次数。
  *

@@ -1,6 +1,8 @@
 <?php
 
-class sql_executor
+namespace App\Libraries;
+
+class SqlExecutor
 {
     /**
      * 记录程序执行过程中最后产生的那条错误信息

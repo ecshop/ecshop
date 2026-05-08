@@ -1,6 +1,8 @@
 <?php
 
-class cls_image
+namespace App\Libraries;
+
+class Image
 {
     public $error_no = 0;
 

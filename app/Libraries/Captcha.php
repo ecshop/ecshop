@@ -1,6 +1,8 @@
 <?php
 
-class captcha
+namespace App\Libraries;
+
+class  Captcha
 {
     /**
      * 背景图片所在目录

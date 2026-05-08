@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Helpers;
+
 /**
  *  获取指定用户的收藏商品列表
  *

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Helpers;
+
 /**
  * 截取UTF-8编码下字符串的函数
  *

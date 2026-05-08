@@ -1,6 +1,8 @@
 <?php
 
-class ecs_error
+namespace App\Libraries;
+
+class Error
 {
     public $_message = [];
 

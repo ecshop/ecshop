@@ -1,9 +1,11 @@
 <?php
 
+namespace App\Libraries;
+
 define('SMTP_STATUS_NOT_CONNECTED', 1, true);
 define('SMTP_STATUS_CONNECTED', 2, true);
 
-class smtp
+class Smtp
 {
     public $connection;
 

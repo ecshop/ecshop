@@ -1,6 +1,8 @@
 <?php
 
-class cls_template
+namespace App\Libraries;
+
+class Template
 {
     public $template_dir = '';
 

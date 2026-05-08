@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Helpers;
+
 /**
  * 修改个人资料（Email, 性别，生日)
  *
@@ -551,11 +553,9 @@ function get_order_detail($order_id, $user_id = 0)
             $order['user_name'] = $_SESSION['user_name'];
             $order['pay_desc'] = $payment_info['pay_desc'];
 
-            /* 调用相应的支付方式文件 */
-            include_once ROOT_PATH.'includes/modules/payment/'.$payment_info['pay_code'].'.php';
-
             /* 取得在线支付方式的支付按钮 */
-            $pay_obj = new $payment_info['pay_code'];
+            require_once ROOT_PATH.'app/Plugins/Payment/PaymentFactory.php';
+            $pay_obj = PaymentFactory::create($payment_info['pay_code']);
             $order['pay_online'] = $pay_obj->get_code($order, $payment);
         }
     } else {

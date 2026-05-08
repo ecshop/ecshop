@@ -1,6 +1,8 @@
 <?php
 
-class cls_mysql
+namespace App\Libraries;
+
+class Mysql
 {
     public $link_id = null;
 

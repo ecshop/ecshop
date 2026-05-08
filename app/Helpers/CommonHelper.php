@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Helpers;
+
 /*  开启全局的Cookie的HttpOnly属性 */
 @ini_set('session.cookie_httponly', 1);
 

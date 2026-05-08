@@ -1,20 +1,2 @@
 User-agent: *
-Disallow: /admin/
-Disallow: /api/
-Disallow: /data/
-Disallow: /images/
-Disallow: /includes/
-Disallow: /install/
-Disallow: /js/
-Disallow: /languages/
-Disallow: /plugins/
-Disallow: /temp/
-Disallow: /themes/
-Disallow: /affiche.php
-Disallow: /captcha.php
-Disallow: /comment.php
-Disallow: /receive.php
-Disallow: /region.php
-Disallow: /respond.php
-Disallow: /feed.php
-Disallow: /gallery.php
+Disallow:

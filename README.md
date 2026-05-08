@@ -1,53 +1,58 @@
-# ECSHOP 通用电子商务平台
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-ECSHOP是一款开源免费的通用电子商务平台构建软件，使用她您可以非常方便的开一个网上商店，在网上开展自己的生意。
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-### 强大的模版机制
+## About Laravel
 
-做网站的，做页面是一个头疼的问题。如果每次的小改动都要去改页面模版代码再上传的话，作为商家的你，一定不厌其烦。
-ECSHOP 结合最流行的 Adobe Dreamweaver 软件实现了一套模版机制，让您改动模版不再需要上传，而是在后台稍稍动动手设置一下就可以了。
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-### 完全开放的插件机制
-  
-支付、配送，这个是商家每天都要面对的功能，如果您现在使用的程序不够开放，那么在您想快速变更所用的支付、配送体系的时候，很可能会拖了后腿。
-我们根据自己的长期运营和开发经验，总结出了一套开放、简洁的插件体系，以支持不断变化的支付、配送体系的变更。
-届时，您会发现，这块事情将会解除您的忧愁，可以把精力集中在更重要的事情上。
-我们同时也以插件形式支持会员整合。迁入、迁出，不再烦恼。
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-### 功能的 AJAX 化
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-当您发现编辑一个商品，需要敲打键盘、挪动鼠标几十下的时候，您是否想到了以后大批量修改的是一个非常恐怖的工作呢？
-ECSHOP 使用目前流行的 AJAX 技术，为您实现简洁修改，奠定了基础。
-同时在更多方面以减轻用户的劳动，提供工作的效率为宗旨，完整的实现了相关功能的 AJAX 化，由于是在底层完全支持，所以也为以后的扩展打下了基础。
+## Learning Laravel
 
-### 促销功能
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-当您把商品一一上架、却发现没有用户来关心，同样是一个头疼的问题。
-那么我们目前在提供了积分、红包、赠品等常规促销手段，更根据自身的电商经验，独家加入了更容易吸引人气的夺宝奇兵促销功能。
-把您每月做广告的费用拿出来一点点，变成您所卖的商品，通过夺宝奇兵活动吸引人气、回馈用户，我相信是一个比简单的广而告之更有效的办法。
+In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-### 高效率的代码和执行性能
+You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
 
-当你浏览自己的网站，发现速度很慢，是不是恨的要全部改成静态页面呢？
-其实不然，根据我们长时间的开发经验，动态、静态页面在不同的用途下各擅胜场，但是在有很多个性化功能的前提下，动态的页面要比纯静态的页面好处多多，如果动态页面的 URL 静态化可以通过 REWRITE 方式实现，那么剩下就是一个效率问题。
-我们也认为，动态页面的瓶颈99％在数据库上，我们通过以往自己的数据库架构设计以及优化经验为基础，设计了目前的 ECSHOP 数据库结构，并通过缓存机制，实现目前的高效访问。
-在不考虑网速的情况下，与纯静态页面相比，您不会感觉到丝毫的差别。我们也会在以后的开发设计中，让目前的架构更加完善、更加高效。
+## Agentic Development
 
-### 常规功能的更完善实现
+Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
 
-有些软件的功能虽然不错，但是因为对于用户不够友善，也会让人敬而远之，也往往把客户拒之门外，我们希望能够在常规的功能上，也能为您和您的客户提供更好的用户体验。
+```bash
+composer require laravel/boost --dev
 
-### 代码的开源和免费的发展策略
+php artisan boost:install
+```
 
-我们认为开源是一个趋势，同时也是一个商业模式。我们也同样认为免费是一个趋势，同时也是一个商业模式。
-我们不是说我们不想收费，而是希望在用户能够在提高自身收入和价值的同时，能够让我们之间形成一个双赢的结局。
-我们认为的收费应该是以周边服务收费，而不是卖产品本身，所以在这之前我们与广泛的业界同仁进行过充分的交流，对自身是否可以实现这个想法也有一定的考证。
+Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
-为了您更好的使用ECSHOP，请阅读docs目录下面的相应文档，如果这些文档无法满足您的需要，您可以访问我们的网站获得支持：
+## Contributing
 
-1. 官方网站：http://www.ecshop.com
-2. 讨论社区：http://bbs.ecshop.com
-    
-非常感谢您在众多的软件中选择了ECShop。相信她会帮助您的事业蒸蒸日上。
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-(C) 2026 上海商派软件有限公司
+## Code of Conduct
+
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+
+## Security Vulnerabilities
+
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

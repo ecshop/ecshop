@@ -128,7 +128,7 @@ if ($_REQUEST['act'] == 'uninstall') {
         $db->query('DELETE FROM '.$ecs->table('shipping')." WHERE shipping_id='$shipping_id'");
 
         // 删除上传的非默认快递单
-        if (($row['print_bg'] != '') && (! is_print_bg_default($row['print_bg']))) {
+        if (($row['print_bg'] != '') && (! $this->is_print_bg_default($row['print_bg']))) {
             @unlink(ROOT_PATH.$row['print_bg']);
         }
 
@@ -156,7 +156,7 @@ if ($_REQUEST['act'] == 'print_index') {
     if ($row) {
         include_once ROOT_PATH.'includes/modules/shipping/'.$row['shipping_code'].'.php';
         $row['shipping_print'] = ! empty($row['shipping_print']) ? $row['shipping_print'] : '';
-        $row['print_bg'] = empty($row['print_bg']) ? '' : get_site_root_url().$row['print_bg'];
+        $row['print_bg'] = empty($row['print_bg']) ? '' : $this->get_site_root_url().$row['print_bg'];
     }
     $smarty->assign('shipping', $row);
     $smarty->assign('shipping_id', $shipping_id);
@@ -248,7 +248,7 @@ if ($_REQUEST['act'] == 'print_del') {
     $sql = 'SELECT print_bg FROM '.$ecs->table('shipping')." WHERE shipping_id = '$shipping_id' LIMIT 0,1";
     $row = $db->getRow($sql);
     if ($row) {
-        if (($row['print_bg'] != '') && (! is_print_bg_default($row['print_bg']))) {
+        if (($row['print_bg'] != '') && (! $this->is_print_bg_default($row['print_bg']))) {
             @unlink(ROOT_PATH.$row['print_bg']);
         }
 

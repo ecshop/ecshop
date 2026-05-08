@@ -16,7 +16,7 @@ define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 admin_priv('view_sendlist');
 if ($_REQUEST['act'] == 'list') {
-    $listdb = get_sendlist();
+    $listdb = $this->get_sendlist();
     $smarty->assign('ur_here', $_LANG['view_sendlist']);
     $smarty->assign('full_page', 1);
 
@@ -29,7 +29,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('view_sendlist.htm');
 }
 if ($_REQUEST['act'] == 'query') {
-    $listdb = get_sendlist();
+    $listdb = $this->get_sendlist();
     $smarty->assign('listdb', $listdb['listdb']);
     $smarty->assign('filter', $listdb['filter']);
     $smarty->assign('record_count', $listdb['record_count']);

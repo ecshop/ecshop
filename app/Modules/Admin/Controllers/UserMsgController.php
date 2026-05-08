@@ -108,7 +108,7 @@ if ($_REQUEST['act'] == 'check') {
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list_all') {
     assign_query_info();
-    $msg_list = msg_list();
+    $msg_list = $this->msg_list();
 
     $smarty->assign('msg_list', $msg_list['msg_list']);
     $smarty->assign('filter', $msg_list['filter']);
@@ -126,7 +126,7 @@ if ($_REQUEST['act'] == 'list_all') {
 // -- ajax显示留言列表
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $msg_list = msg_list();
+    $msg_list = $this->msg_list();
 
     $smarty->assign('msg_list', $msg_list['msg_list']);
     $smarty->assign('filter', $msg_list['filter']);
@@ -210,7 +210,7 @@ if ($_REQUEST['act'] == 'batch') {
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'view') {
     $smarty->assign('send_fail', ! empty($_REQUEST['send_ok']));
-    $smarty->assign('msg', get_feedback_detail(intval($_REQUEST['id'])));
+    $smarty->assign('msg', $this->get_feedback_detail(intval($_REQUEST['id'])));
     $smarty->assign('ur_here', $_LANG['reply']);
     $smarty->assign('action_link', ['text' => $_LANG['08_unreply_msg'], 'href' => 'user_msg.php?act=list_all']);
 

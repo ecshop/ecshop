@@ -28,7 +28,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('action_link', ['text' => $_LANG['pack_add'], 'href' => 'pack.php?act=add']);
     $smarty->assign('full_page', 1);
 
-    $packs_list = packs_list();
+    $packs_list = $this->packs_list();
 
     $smarty->assign('packs_list', $packs_list['packs_list']);
     $smarty->assign('filter', $packs_list['filter']);
@@ -42,7 +42,7 @@ if ($_REQUEST['act'] == 'list') {
 // -- ajax 列表
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $packs_list = packs_list();
+    $packs_list = $this->packs_list();
     $smarty->assign('packs_list', $packs_list['packs_list']);
     $smarty->assign('filter', $packs_list['filter']);
     $smarty->assign('record_count', $packs_list['record_count']);

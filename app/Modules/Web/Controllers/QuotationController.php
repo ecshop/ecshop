@@ -21,7 +21,7 @@ if ($action == 'print_quotation') {
     $smarty->template_dir = DATA_DIR;
     $smarty->assign('shop_name', $_CFG['shop_title']);
     $smarty->assign('cfg', $_CFG);
-    $where = get_quotation_where($_POST);
+    $where = $this->get_quotation_where($_POST);
     $sql = 'SELECT g.goods_id, g.goods_name, g.shop_price, g.goods_number, c.cat_name AS goods_category,p.product_id,p.product_number,p.goods_attr'.
         ' FROM '.$ecs->table('goods').' AS g LEFT JOIN '.$ecs->table('category').' AS c ON g.cat_id = c.cat_id LEFT JOIN '.$ecs->table('products').'as p  On g.goods_id=p.goods_id'.$where.' AND is_on_sale = 1 AND is_alone_sale = 1 ';
     $goods_list = $db->getAll($sql);
@@ -29,7 +29,7 @@ if ($action == 'print_quotation') {
     foreach ($goods_list as $key => $val) {
         if (! empty($val['product_id'])) {
             $goods_list[$key]['goods_number'] = $val['product_number'];
-            $product_info = product_info($val['goods_attr'], $val['goods_id']);
+            $product_info = $this->product_info($val['goods_attr'], $val['goods_id']);
             $goods_list[$key]['members_price'] = $val['shop_price'];
             $goods_list[$key]['shop_price'] += $product_info['attr_price'];
             $goods_list[$key]['product_name'] = $product_info['attr_value'];
@@ -46,8 +46,8 @@ if ($action == 'print_quotation') {
     if (! empty($_SESSION['user_id'])) {
         $rank_point = $db->getOne('SELECT rank_points FROM '.$ecs->table('users')." WHERE user_id = '$_SESSION[user_id]'");
     }
-    $user_rank = calc_user_rank($user_rank, $rank_point);
-    $user_men = serve_user($goods_list);
+    $user_rank = $this->calc_user_rank($user_rank, $rank_point);
+    $user_men = $this->serve_user($goods_list);
     $smarty->assign('extend_price', $user_rank['ext_price']);
     $smarty->assign('extend_rank', $user_men);
     $smarty->assign('goods_list', $goods_list);

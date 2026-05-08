@@ -71,7 +71,7 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
 
     $children = get_children($cat_id);
 
-    $cat = get_cat_info($cat_id);   // 获得分类的相关信息
+    $cat = $this->get_cat_info($cat_id);   // 获得分类的相关信息
 
     if (! empty($cat)) {
         $smarty->assign('keywords', htmlspecialchars($cat['keywords']));
@@ -94,7 +94,7 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
 
     /* 获取价格分级 */
     if ($cat['grade'] == 0 && $cat['parent_id'] != 0) {
-        $cat['grade'] = get_parent_grade($cat_id); // 如果当前分类级别为空，取最近的上级分类
+        $cat['grade'] = $this->get_parent_grade($cat_id); // 如果当前分类级别为空，取最近的上级分类
     }
 
     if ($cat['grade'] > 1) {
@@ -327,12 +327,12 @@ if (! $smarty->is_cached('category.dwt', $cache_id)) {
     $smarty->assign('promotion_goods', get_category_recommend_goods('promote', $children, $brand, $price_min, $price_max, $ext));
     $smarty->assign('hot_goods', get_category_recommend_goods('hot', $children, $brand, $price_min, $price_max, $ext));
 
-    $count = get_cagtegory_goods_count($children, $brand, $price_min, $price_max, $ext);
+    $count = $this->get_cagtegory_goods_count($children, $brand, $price_min, $price_max, $ext);
     $max_page = ($count > 0) ? ceil($count / $size) : 1;
     if ($page > $max_page) {
         $page = $max_page;
     }
-    $goodslist = category_get_goods($children, $brand, $price_min, $price_max, $ext, $size, $page, $sort, $order);
+    $goodslist = $this->category_get_goods($children, $brand, $price_min, $price_max, $ext, $size, $page, $sort, $order);
     if ($display == 'grid') {
         if (count($goodslist) % 2 != 0) {
             $goodslist[] = [];

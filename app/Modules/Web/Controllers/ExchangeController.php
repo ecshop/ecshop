@@ -62,7 +62,7 @@ if ($_REQUEST['act'] == 'list') {
 
         $children = get_children($cat_id);
 
-        $cat = get_cat_info($cat_id);   // 获得分类的相关信息
+        $cat = $this->get_cat_info($cat_id);   // 获得分类的相关信息
 
         if (! empty($cat)) {
             $smarty->assign('keywords', htmlspecialchars($cat['keywords']));
@@ -89,16 +89,16 @@ if ($_REQUEST['act'] == 'list') {
 
         $ext = ''; // 商品查询条件扩展
 
-        // $smarty->assign('best_goods',      get_exchange_recommend_goods('best', $children, $integral_min, $integral_max));
-        // $smarty->assign('new_goods',       get_exchange_recommend_goods('new',  $children, $integral_min, $integral_max));
-        $smarty->assign('hot_goods', get_exchange_recommend_goods('hot', $children, $integral_min, $integral_max));
+        // $smarty->assign('best_goods',      $this->get_exchange_recommend_goods('best', $children, $integral_min, $integral_max));
+        // $smarty->assign('new_goods',       $this->get_exchange_recommend_goods('new',  $children, $integral_min, $integral_max));
+        $smarty->assign('hot_goods', $this->get_exchange_recommend_goods('hot', $children, $integral_min, $integral_max));
 
-        $count = get_exchange_goods_count($children, $integral_min, $integral_max);
+        $count = $this->get_exchange_goods_count($children, $integral_min, $integral_max);
         $max_page = ($count > 0) ? ceil($count / $size) : 1;
         if ($page > $max_page) {
             $page = $max_page;
         }
-        $goodslist = exchange_get_goods($children, $integral_min, $integral_max, $ext, $size, $page, $sort, $order);
+        $goodslist = $this->exchange_get_goods($children, $integral_min, $integral_max, $ext, $size, $page, $sort, $order);
         if ($display == 'grid') {
             if (count($goodslist) % 2 != 0) {
                 $goodslist[] = [];
@@ -135,7 +135,7 @@ if ($_REQUEST['act'] == 'view') {
         $smarty->assign('cfg', $_CFG);
 
         /* 获得商品的信息 */
-        $goods = get_exchange_goods_info($goods_id);
+        $goods = $this->get_exchange_goods_info($goods_id);
 
         if ($goods === false) {
             /* 如果没有找到任何记录则跳回到首页 */
@@ -214,7 +214,7 @@ if ($_REQUEST['act'] == 'buy') {
     }
 
     /* 查询：取得兑换商品信息 */
-    $goods = get_exchange_goods_info($goods_id);
+    $goods = $this->get_exchange_goods_info($goods_id);
     if (empty($goods)) {
         ecs_header("Location: ./\n");
         exit;

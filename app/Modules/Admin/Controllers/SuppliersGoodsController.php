@@ -44,7 +44,7 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'trash') {
     $ur_here = ($_REQUEST['act'] == 'list') ? $goods_ur[$code] : $_LANG['11_goods_trash'];
     $smarty->assign('ur_here', $ur_here);
 
-    $action_link = ($_REQUEST['act'] == 'list') ? add_link($code) : ['href' => 'goods.php?act=list', 'text' => $_LANG['01_goods_list']];
+    $action_link = ($_REQUEST['act'] == 'list') ? $this->add_link($code) : ['href' => 'goods.php?act=list', 'text' => $_LANG['01_goods_list']];
     $smarty->assign('action_link', $action_link);
     $smarty->assign('code', $code);
     $smarty->assign('cat_list', cat_list(0, $cat_id));
@@ -333,7 +333,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
     /* 模板赋值 */
     $smarty->assign('code', $code);
     $smarty->assign('ur_here', $is_add ? (empty($code) ? $_LANG['02_goods_add'] : $_LANG['51_virtual_card_add']) : ($_REQUEST['act'] == 'edit' ? $_LANG['edit_goods'] : $_LANG['copy_goods']));
-    $smarty->assign('action_link', list_link($is_add, $code));
+    $smarty->assign('action_link', $this->list_link($is_add, $code));
     $smarty->assign('goods', $goods);
     $smarty->assign('goods_name_color', $goods_name_style[0]);
     $smarty->assign('goods_name_style', $goods_name_style[1]);
@@ -613,8 +613,8 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     $catgory_id = empty($_POST['cat_id']) ? '' : intval($_POST['cat_id']);
     $brand_id = empty($_POST['brand_id']) ? '' : intval($_POST['brand_id']);
 
-    $goods_img = (empty($goods_img) && ! empty($_POST['goods_img_url']) && goods_parse_url($_POST['goods_img_url'])) ? htmlspecialchars(trim($_POST['goods_img_url'])) : $goods_img;
-    $goods_thumb = (empty($goods_thumb) && ! empty($_POST['goods_thumb_url']) && goods_parse_url($_POST['goods_thumb_url'])) ? htmlspecialchars(trim($_POST['goods_thumb_url'])) : $goods_thumb;
+    $goods_img = (empty($goods_img) && ! empty($_POST['goods_img_url']) && $this->goods_parse_url($_POST['goods_img_url'])) ? htmlspecialchars(trim($_POST['goods_img_url'])) : $goods_img;
+    $goods_thumb = (empty($goods_thumb) && ! empty($_POST['goods_thumb_url']) && $this->goods_parse_url($_POST['goods_thumb_url'])) ? htmlspecialchars(trim($_POST['goods_thumb_url'])) : $goods_thumb;
     $goods_thumb = (empty($goods_thumb) && isset($_POST['auto_thumb'])) ? $goods_img : $goods_thumb;
 
     /* 入库 */
@@ -650,12 +650,12 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
             ' FROM '.$ecs->table('goods').
             " WHERE goods_id = '$_REQUEST[goods_id]'";
         $row = $db->getRow($sql);
-        if ($proc_thumb && $goods_img && $row['goods_img'] && ! goods_parse_url($row['goods_img'])) {
+        if ($proc_thumb && $goods_img && $row['goods_img'] && ! $this->goods_parse_url($row['goods_img'])) {
             @unlink(ROOT_PATH.$row['goods_img']);
             @unlink(ROOT_PATH.$row['original_img']);
         }
 
-        if ($proc_thumb && $goods_thumb && $row['goods_thumb'] && ! goods_parse_url($row['goods_thumb'])) {
+        if ($proc_thumb && $goods_thumb && $row['goods_thumb'] && ! $this->goods_parse_url($row['goods_thumb'])) {
             @unlink(ROOT_PATH.$row['goods_thumb']);
         }
 
@@ -802,7 +802,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
                 break;
             }
         }
-        handle_volume_price($goods_id, $_POST['volume_number'], $_POST['volume_price']);
+        $this->handle_volume_price($goods_id, $_POST['volume_number'], $_POST['volume_price']);
     }
 
     /* 处理扩展分类 */
@@ -878,9 +878,9 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         $link[] = ['href' => 'virtual_card.php?act=replenish&goods_id='.$goods_id, 'text' => $_LANG['add_replenish']];
     }
     if ($is_insert) {
-        $link[] = add_link($code);
+        $link[] = $this->add_link($code);
     }
-    $link[] = list_link($is_insert, $code);
+    $link[] = $this->list_link($is_insert, $code);
 
     sys_msg($is_insert ? $_LANG['add_goods_ok'] : $_LANG['edit_goods_ok'], 0, $link);
 }
@@ -977,7 +977,7 @@ if ($_REQUEST['act'] == 'batch') {
     if ($_POST['type'] == 'drop' || $_POST['type'] == 'restore') {
         $link[] = ['href' => 'goods.php?act=trash', 'text' => $_LANG['11_goods_trash']];
     } else {
-        $link[] = list_link(true, $code);
+        $link[] = $this->list_link(true, $code);
     }
     sys_msg($_LANG['batch_handle_ok'], 0, $link);
 }

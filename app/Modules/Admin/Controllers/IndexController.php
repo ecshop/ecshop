@@ -1006,7 +1006,7 @@ if ($_REQUEST['act'] == 'license') {
         include_once ROOT_PATH.'includes/lib_main.php';
         include_once ROOT_PATH.'includes/lib_license.php';
 
-        $license = license_check();
+        $license = $this->license_check();
         switch ($license['flag']) {
             case 'login_succ':
                 if (isset($license['request']['info']['service']['ecshop_b2c']['cert_auth']['auth_str'])) {
@@ -1022,7 +1022,7 @@ if ($_REQUEST['act'] == 'license') {
                 break;
 
             case 'reg_succ':
-                $_license = license_check();
+                $_license = $this->license_check();
                 switch ($_license['flag']) {
                     case 'login_succ':
                         if (isset($_license['request']['info']['service']['ecshop_b2c']['cert_auth']['auth_str']) && $_license['request']['info']['service']['ecshop_b2c']['cert_auth']['auth_str'] != '') {

@@ -29,7 +29,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('action_link', ['href' => 'wholesale.php?act=add', 'text' => $_LANG['add_wholesale']]);
     $smarty->assign('action_link2', ['href' => 'wholesale.php?act=batch_add', 'text' => $_LANG['add_batch_wholesale']]);
 
-    $list = wholesale_list();
+    $list = $this->wholesale_list();
 
     $smarty->assign('wholesale_list', $list['item']);
     $smarty->assign('filter', $list['filter']);
@@ -49,7 +49,7 @@ if ($_REQUEST['act'] == 'list') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'query') {
-    $list = wholesale_list();
+    $list = $this->wholesale_list();
 
     $smarty->assign('wholesale_list', $list['item']);
     $smarty->assign('filter', $list['filter']);

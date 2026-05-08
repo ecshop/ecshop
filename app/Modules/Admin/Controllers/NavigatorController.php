@@ -27,7 +27,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('action_link', ['text' => $_LANG['add_new'], 'href' => 'navigator.php?act=add']);
     $smarty->assign('full_page', 1);
 
-    $navdb = get_nav();
+    $navdb = $this->get_nav();
 
     $smarty->assign('navdb', $navdb['navdb']);
     $smarty->assign('filter', $navdb['filter']);
@@ -41,7 +41,7 @@ if ($_REQUEST['act'] == 'list') {
 // -- 自定义导航栏列表Ajax
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $navdb = get_nav();
+    $navdb = $this->get_nav();
     $smarty->assign('navdb', $navdb['navdb']);
     $smarty->assign('filter', $navdb['filter']);
     $smarty->assign('record_count', $navdb['record_count']);
@@ -59,7 +59,7 @@ if ($_REQUEST['act'] == 'add') {
     if (empty($_REQUEST['step'])) {
         $rt = ['act' => 'add'];
 
-        $sysmain = get_sysnav();
+        $sysmain = $this->get_sysnav();
 
         $smarty->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'navigator.php?act=list']);
         $smarty->assign('ur_here', $_LANG['navigator']);
@@ -81,10 +81,10 @@ if ($_REQUEST['act'] == 'add') {
         if ($item_ifshow == 1 && $item_type == 'middle') {
             // 如果设置为在中部显示
 
-            $arr = analyse_uri($item_url);  // 分析URI
+            $arr = $this->analyse_uri($item_url);  // 分析URI
             if ($arr) {
                 // 如果为分类
-                set_show_in_nav($arr['type'], $arr['id'], 1);   // 设置显示
+                $this->set_show_in_nav($arr['type'], $arr['id'], 1);   // 设置显示
                 $sql = 'INSERT INTO '.$GLOBALS['ecs']->table('nav')." (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('$item_name','".$arr['type']."','".$arr['id']."','$item_ifshow','$item_vieworder','$item_opennew','$item_url','$item_type')";
             }
         }
@@ -114,7 +114,7 @@ if ($_REQUEST['act'] == 'edit') {
         $rt['item_opennew_'.$row['opennew']] = 'selected';
         $rt['item_type_'.$row['type']] = 'selected';
 
-        $sysmain = get_sysnav();
+        $sysmain = $this->get_sysnav();
 
         $smarty->assign('action_link', ['text' => $_LANG['go_list'], 'href' => 'navigator.php?act=list']);
         $smarty->assign('ur_here', $_LANG['navigator']);
@@ -131,7 +131,7 @@ if ($_REQUEST['act'] == 'edit') {
         $item_vieworder = (int) $_REQUEST['item_vieworder'];
 
         $row = $db->getRow('SELECT ctype,cid,ifshow,type FROM '.$GLOBALS['ecs']->table('nav')." WHERE id = '$id'");
-        $arr = analyse_uri($item_url);
+        $arr = $this->analyse_uri($item_url);
 
         if ($arr) {
             // 目标为分类
@@ -139,21 +139,21 @@ if ($_REQUEST['act'] == 'edit') {
                 // 没有修改分类
                 if ($item_type != 'middle') {
                     // 位置不在中部
-                    set_show_in_nav($arr['type'], $arr['id'], 0);
+                    $this->set_show_in_nav($arr['type'], $arr['id'], 0);
                 }
             } else {
                 // 修改了分类
                 if ($row['ifshow'] == 1 && $row['type'] == 'middle') {
                     // 原来在中部显示
-                    set_show_in_nav($row['ctype'], $row['cid'], 0); // 设置成不显示
+                    $this->set_show_in_nav($row['ctype'], $row['cid'], 0); // 设置成不显示
                 } elseif ($row['ifshow'] == 0 && $row['type'] == 'middle') {
                     // 原来不显示
                 }
             }
 
             // 分类判断
-            if ($item_ifshow != is_show_in_nav($arr['type'], $arr['id']) && $item_type == 'middle') {
-                set_show_in_nav($arr['type'], $arr['id'], $item_ifshow);
+            if ($item_ifshow != $this->is_show_in_nav($arr['type'], $arr['id']) && $item_type == 'middle') {
+                $this->set_show_in_nav($arr['type'], $arr['id'], $item_ifshow);
             }
             $sql = 'UPDATE '.$GLOBALS['ecs']->table('nav').
                 " SET name='$item_name',ctype='".$arr['type']."',cid='".$arr['id']."',ifshow='$item_ifshow',vieworder='$item_vieworder',opennew='$item_opennew',url='$item_url',type='$item_type' WHERE id='$id'";
@@ -161,7 +161,7 @@ if ($_REQUEST['act'] == 'edit') {
             // 目标不是分类
             if ($row['ctype'] && $row['cid']) {
                 // 原来是分类
-                set_show_in_nav($row['ctype'], $row['cid'], 0);
+                $this->set_show_in_nav($row['ctype'], $row['cid'], 0);
             }
 
             $sql = 'UPDATE '.$GLOBALS['ecs']->table('nav').
@@ -182,7 +182,7 @@ if ($_REQUEST['act'] == 'del') {
     $row = $db->getRow('SELECT ctype,cid,type FROM '.$GLOBALS['ecs']->table('nav')." WHERE id = '$id' LIMIT 1");
 
     if ($row['type'] == 'middle' && $row['ctype'] && $row['cid']) {
-        set_show_in_nav($row['ctype'], $row['cid'], 0);
+        $this->set_show_in_nav($row['ctype'], $row['cid'], 0);
     }
 
     $sql = ' DELETE FROM '.$GLOBALS['ecs']->table('nav')." WHERE id='$id' LIMIT 1";
@@ -225,10 +225,10 @@ if ($_REQUEST['act'] == 'toggle_ifshow') {
     $row = $db->getRow('SELECT type,ctype,cid FROM '.$GLOBALS['ecs']->table('nav')." WHERE id = '$id' LIMIT 1");
 
     if ($row['type'] == 'middle' && $row['ctype'] && $row['cid']) {
-        set_show_in_nav($row['ctype'], $row['cid'], $val);
+        $this->set_show_in_nav($row['ctype'], $row['cid'], $val);
     }
 
-    if (nav_update($id, ['ifshow' => $val]) != false) {
+    if ($this->nav_update($id, ['ifshow' => $val]) != false) {
         clear_cache_files();
         make_json_result($val);
     } else {
@@ -244,7 +244,7 @@ if ($_REQUEST['act'] == 'toggle_opennew') {
     $id = intval($_POST['id']);
     $val = intval($_POST['val']);
 
-    if (nav_update($id, ['opennew' => $val]) != false) {
+    if ($this->nav_update($id, ['opennew' => $val]) != false) {
         clear_cache_files();
         make_json_result($val);
     } else {

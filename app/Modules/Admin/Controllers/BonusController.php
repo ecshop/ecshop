@@ -34,7 +34,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('action_link', ['text' => $_LANG['bonustype_add'], 'href' => 'bonus.php?act=add']);
     $smarty->assign('full_page', 1);
 
-    $list = get_type_list();
+    $list = $this->get_type_list();
 
     $smarty->assign('type_list', $list['item']);
     $smarty->assign('filter', $list['filter']);
@@ -53,7 +53,7 @@ if ($_REQUEST['act'] == 'list') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'query') {
-    $list = get_type_list();
+    $list = $this->get_type_list();
 
     $smarty->assign('type_list', $list['item']);
     $smarty->assign('filter', $list['filter']);
@@ -318,7 +318,7 @@ if ($_REQUEST['act'] == 'send') {
             " WHERE type_id='$_REQUEST[id]'");
 
         /* 查询红包类型的商品列表 */
-        $goods_list = get_bonus_goods($_REQUEST['id']);
+        $goods_list = $this->get_bonus_goods($_REQUEST['id']);
 
         /* 查询其他红包类型的商品 */
         $sql = 'SELECT goods_id FROM '.$ecs->table('goods').
@@ -411,7 +411,7 @@ if ($_REQUEST['act'] == 'send_by_user') {
 
     /* 发送红包 */
     $loop = 0;
-    $bonus_type = bonus_type_info($_REQUEST['id']);
+    $bonus_type = $this->bonus_type_info($_REQUEST['id']);
 
     $tpl = get_mail_template('send_bonus');
     $today = local_date($_CFG['date_format']);
@@ -427,7 +427,7 @@ if ($_REQUEST['act'] == 'send_by_user') {
 
         $content = $smarty->fetch('str:'.$tpl['template_content']);
 
-        if (add_to_maillist($val['user_name'], $val['email'], $tpl['template_subject'], $content, $tpl['is_html'])) {
+        if ($this->add_to_maillist($val['user_name'], $val['email'], $tpl['template_subject'], $content, $tpl['is_html'])) {
             /* 向会员红包表录入数据 */
             $sql = 'INSERT INTO '.$ecs->table('user_bonus').
                 '(bonus_type_id, bonus_sn, user_id, used_time, order_id, emailed) '.
@@ -486,7 +486,7 @@ if ($_REQUEST['act'] == 'send_mail') {
     }
 
     /* 发邮件 */
-    $count = send_bonus_mail($bonus['bonus_type_id'], [$bonus_id]);
+    $count = $this->send_bonus_mail($bonus['bonus_type_id'], [$bonus_id]);
 
     $link[0]['text'] = $_LANG['back_bonus_list'];
     $link[0]['href'] = 'bonus.php?act=bonus_list&bonus_type='.$bonus['bonus_type_id'];
@@ -628,7 +628,7 @@ if ($_REQUEST['act'] == 'add_bonus_goods') {
     }
 
     /* 重新载入 */
-    $arr = get_bonus_goods($type_id);
+    $arr = $this->get_bonus_goods($type_id);
     $opt = [];
 
     foreach ($arr as $key => $val) {
@@ -658,7 +658,7 @@ if ($_REQUEST['act'] == 'drop_bonus_goods') {
         "WHERE bonus_type_id = '$type_id' AND goods_id ".$drop_goods_ids);
 
     /* 重新载入 */
-    $arr = get_bonus_goods($type_id);
+    $arr = $this->get_bonus_goods($type_id);
     $opt = [];
 
     foreach ($arr as $key => $val) {
@@ -694,10 +694,10 @@ if ($_REQUEST['act'] == 'bonus_list') {
     $smarty->assign('ur_here', $_LANG['bonus_list']);
     $smarty->assign('action_link', ['href' => 'bonus.php?act=list', 'text' => $_LANG['04_bonustype_list']]);
 
-    $list = get_bonus_list();
+    $list = $this->get_bonus_list();
 
     /* 赋值是否显示红包序列号 */
-    $bonus_type = bonus_type_info(intval($_REQUEST['bonus_type']));
+    $bonus_type = $this->bonus_type_info(intval($_REQUEST['bonus_type']));
     if ($bonus_type['send_type'] == SEND_BY_PRINT) {
         $smarty->assign('show_bonus_sn', 1);
     } /* 赋值是否显示发邮件操作和是否发过邮件 */
@@ -722,10 +722,10 @@ if ($_REQUEST['act'] == 'bonus_list') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'query_bonus') {
-    $list = get_bonus_list();
+    $list = $this->get_bonus_list();
 
     /* 赋值是否显示红包序列号 */
-    $bonus_type = bonus_type_info(intval($_REQUEST['bonus_type']));
+    $bonus_type = $this->bonus_type_info(intval($_REQUEST['bonus_type']));
     if ($bonus_type['send_type'] == SEND_BY_PRINT) {
         $smarty->assign('show_bonus_sn', 1);
     } /* 赋值是否显示发邮件操作和是否发过邮件 */
@@ -792,7 +792,7 @@ if ($_REQUEST['act'] == 'batch') {
             sys_msg(sprintf($_LANG['batch_drop_success'], count($bonus_id_list)), 0, $link);
         } /* 发邮件 */
         elseif (isset($_POST['mail'])) {
-            $count = send_bonus_mail($bonus_type_id, $bonus_id_list);
+            $count = $this->send_bonus_mail($bonus_type_id, $bonus_id_list);
             $link[] = ['text' => $_LANG['back_bonus_list'],
                 'href' => 'bonus.php?act=bonus_list&bonus_type='.$bonus_type_id];
             sys_msg(sprintf($_LANG['success_send_mail'], $count), 0, $link);
@@ -950,7 +950,7 @@ private function bonus_type_info($bonus_type_id)
 private function send_bonus_mail($bonus_type_id, $bonus_id_list)
 {
     /* 取得红包类型信息 */
-    $bonus_type = bonus_type_info($bonus_type_id);
+    $bonus_type = $this->bonus_type_info($bonus_type_id);
     if ($bonus_type['send_type'] != SEND_BY_USER) {
         return 0;
     }
@@ -983,7 +983,7 @@ private function send_bonus_mail($bonus_type_id, $bonus_id_list)
         $GLOBALS['smarty']->assign('money', price_format($bonus_type['type_money']));
 
         $content = $GLOBALS['smarty']->fetch('str:'.$tpl['template_content']);
-        if (add_to_maillist($bonus['user_name'], $bonus['email'], $tpl['template_subject'], $content, $tpl['is_html'], false)) {
+        if ($this->add_to_maillist($bonus['user_name'], $bonus['email'], $tpl['template_subject'], $content, $tpl['is_html'], false)) {
             $sql = 'UPDATE '.$GLOBALS['ecs']->table('user_bonus').
                 " SET emailed = '".BONUS_MAIL_SUCCEED."'".
                 " WHERE bonus_id = '$bonus[bonus_id]'";

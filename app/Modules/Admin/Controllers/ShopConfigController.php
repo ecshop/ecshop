@@ -36,7 +36,7 @@ if ($_REQUEST['act'] == 'list_edit') {
 
     $smarty->assign('lang_list', $lang_list);
     $smarty->assign('ur_here', $_LANG['01_shop_config']);
-    $smarty->assign('group_list', get_settings(null, ['5']));
+    $smarty->assign('group_list', $this->get_settings(null, ['5']));
     $smarty->assign('countries', get_regions());
 
     if (strpos(strtolower($_SERVER['SERVER_SOFTWARE']), 'iis') !== false) {
@@ -65,7 +65,7 @@ if ($_REQUEST['act'] == 'mail_settings') {
     /* 检查权限 */
     admin_priv('shop_config');
 
-    $arr = get_settings([5]);
+    $arr = $this->get_settings([5]);
 
     assign_query_info();
 
@@ -231,7 +231,7 @@ if ($_REQUEST['act'] == 'del') {
     @unlink($filename);
 
     // 更新设置
-    update_configure($code, '');
+    $this->update_configure($code, '');
 
     /* 记录日志 */
     admin_log('', 'edit', 'shop_config');

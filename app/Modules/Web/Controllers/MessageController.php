@@ -102,7 +102,7 @@ if ($action == 'default') {
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
     $pagesize = get_library_number('message_list', 'message_board');
     $pager = get_pager('message.php', [], $record_count, $page, $pagesize);
-    $msg_lists = get_msg_list($pagesize, $pager['start']);
+    $msg_lists = $this->get_msg_list($pagesize, $pager['start']);
     assign_dynamic('message_board');
     $smarty->assign('rand', mt_rand());
     $smarty->assign('msg_lists', $msg_lists);

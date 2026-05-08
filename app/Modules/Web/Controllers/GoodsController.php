@@ -146,7 +146,7 @@ if (! $smarty->is_cached('goods.dwt', $cache_id)) {
         }
 
         $shop_price = $goods['shop_price'];
-        $linked_goods = get_linked_goods($goods_id);
+        $linked_goods = $this->get_linked_goods($goods_id);
 
         $goods['goods_style_name'] = add_style($goods['goods_name'], $goods['goods_name_style']);
 
@@ -205,19 +205,19 @@ if (! $smarty->is_cached('goods.dwt', $cache_id)) {
         $smarty->assign('specification', $properties['spe']);                              // 商品规格
         $smarty->assign('attribute_linked', get_same_attribute_goods($properties));           // 相同属性的关联商品
         $smarty->assign('related_goods', $linked_goods);                                   // 关联商品
-        $smarty->assign('goods_article_list', get_linked_articles($goods_id));                  // 关联文章
+        $smarty->assign('goods_article_list', $this->get_linked_articles($goods_id));                  // 关联文章
         $smarty->assign('fittings', get_goods_fittings([$goods_id]));                   // 配件
-        $smarty->assign('rank_prices', get_user_rank_prices($goods_id, $shop_price));    // 会员等级价格
+        $smarty->assign('rank_prices', $this->get_user_rank_prices($goods_id, $shop_price));    // 会员等级价格
         $smarty->assign('pictures', get_goods_gallery($goods_id));                    // 商品相册
-        $smarty->assign('bought_goods', get_also_bought($goods_id));                      // 购买了该商品的用户还购买了哪些商品
-        $smarty->assign('goods_rank', get_goods_rank($goods_id));                       // 商品的销售排名
+        $smarty->assign('bought_goods', $this->get_also_bought($goods_id));                      // 购买了该商品的用户还购买了哪些商品
+        $smarty->assign('goods_rank', $this->get_goods_rank($goods_id));                       // 商品的销售排名
 
         // 获取tag
         $tag_array = get_tags($goods_id);
         $smarty->assign('tags', $tag_array);                                       // 商品的标记
 
         // 获取关联礼包
-        $package_goods_list = get_package_goods_list($goods['goods_id']);
+        $package_goods_list = $this->get_package_goods_list($goods['goods_id']);
         $smarty->assign('package_goods_list', $package_goods_list);    // 获取关联礼包
 
         assign_dynamic('goods');

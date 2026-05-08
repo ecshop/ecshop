@@ -28,7 +28,7 @@ if ($_REQUEST['act'] == 'list') {
         exit;
     }
 
-    $playerdb = get_flash_xml();
+    $playerdb = $this->get_flash_xml();
     foreach ($playerdb as $key => $val) {
         if (strpos($val['src'], 'http') === false) {
             $playerdb[$key]['src'] = $uri.$val['src'];
@@ -50,7 +50,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('uri', $uri);
     $smarty->assign('ur_here', $_LANG['flashplay']);
     $smarty->assign('action_link_special', ['text' => $_LANG['add_new'], 'href' => 'flashplay.php?act=add']);
-    $smarty->assign('flashtpls', get_flash_templates($flash_dir));
+    $smarty->assign('flashtpls', $this->get_flash_templates($flash_dir));
     $smarty->assign('current_flashtpl', $_CFG['flash_theme']);
     $smarty->assign('playerdb', $playerdb);
     $smarty->display('flashplay_list.htm');
@@ -59,7 +59,7 @@ if ($_REQUEST['act'] == 'del') {
     admin_priv('flash_manage');
 
     $id = (int) $_GET['id'];
-    $flashdb = get_flash_xml();
+    $flashdb = $this->get_flash_xml();
     if (isset($flashdb[$id])) {
         $rt = $flashdb[$id];
     } else {
@@ -76,9 +76,9 @@ if ($_REQUEST['act'] == 'del') {
             $temp[] = $val;
         }
     }
-    put_flash_xml($temp);
+    $this->put_flash_xml($temp);
     $error_msg = '';
-    set_flash_data($_CFG['flash_theme'], $error_msg);
+    $this->set_flash_data($_CFG['flash_theme'], $error_msg);
     ecs_header("Location: flashplay.php?act=list\n");
     exit;
 }
@@ -90,7 +90,7 @@ if ($_REQUEST['act'] == 'add') {
         $src = isset($_GET['src']) ? $_GET['src'] : '';
         $sort = 0;
         $rt = ['act' => 'add', 'img_url' => $url, 'img_src' => $src, 'img_sort' => $sort];
-        $width_height = get_width_height();
+        $width_height = $this->get_width_height();
         assign_query_info();
         if (isset($width_height['width']) || isset($width_height['height'])) {
             $smarty->assign('width_height', sprintf($_LANG['width_height'], $width_height['width'], $width_height['height']));
@@ -121,7 +121,7 @@ if ($_REQUEST['act'] == 'add') {
             }
             $src = $_POST['img_src'];
             if (strstr($src, 'http') && ! strstr($src, $_SERVER['SERVER_NAME'])) {
-                $src = get_url_image($src);
+                $src = $this->get_url_image($src);
             }
         } else {
             $links[] = ['text' => $_LANG['add_new'], 'href' => 'flashplay.php?act=add'];
@@ -134,7 +134,7 @@ if ($_REQUEST['act'] == 'add') {
         }
 
         // 获取flash播放器数据
-        $flashdb = get_flash_xml();
+        $flashdb = $this->get_flash_xml();
 
         // 插入新数据
         array_unshift($flashdb, ['src' => $src, 'url' => $_POST['img_url'], 'text' => $_POST['img_text'], 'sort' => $_POST['img_sort']]);
@@ -151,9 +151,9 @@ if ($_REQUEST['act'] == 'add') {
         }
         unset($flashdb, $flashdb_sort);
 
-        put_flash_xml($_flashdb);
+        $this->put_flash_xml($_flashdb);
         $error_msg = '';
-        set_flash_data($_CFG['flash_theme'], $error_msg);
+        $this->set_flash_data($_CFG['flash_theme'], $error_msg);
         $links[] = ['text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list'];
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
@@ -162,7 +162,7 @@ if ($_REQUEST['act'] == 'edit') {
     admin_priv('flash_manage');
 
     $id = (int) $_REQUEST['id']; // 取得id
-    $flashdb = get_flash_xml(); // 取得数据
+    $flashdb = $this->get_flash_xml(); // 取得数据
     if (isset($flashdb[$id])) {
         $rt = $flashdb[$id];
     } else {
@@ -210,7 +210,7 @@ if ($_REQUEST['act'] == 'edit') {
                 sys_msg($_LANG['invalid_type']);
             }
             if (strstr($src, 'http') && ! strstr($src, $_SERVER['SERVER_NAME'])) {
-                $src = get_url_image($src);
+                $src = $this->get_url_image($src);
             }
         } else {
             $links[] = ['text' => $_LANG['return_edit'], 'href' => 'flashplay.php?act=edit&id='.$id];
@@ -234,9 +234,9 @@ if ($_REQUEST['act'] == 'edit') {
         }
         unset($flashdb, $flashdb_sort);
 
-        put_flash_xml($_flashdb);
+        $this->put_flash_xml($_flashdb);
         $error_msg = '';
-        set_flash_data($_CFG['flash_theme'], $error_msg);
+        $this->set_flash_data($_CFG['flash_theme'], $error_msg);
         $links[] = ['text' => $_LANG['go_url'], 'href' => 'flashplay.php?act=list'];
         sys_msg($_LANG['edit_ok'], 0, $links);
     }
@@ -250,7 +250,7 @@ if ($_REQUEST['act'] == 'install') {
             clear_all_files(); // 清除模板编译文件
 
             $error_msg = '';
-            if (set_flash_data($flash_theme, $error_msg)) {
+            if ($this->set_flash_data($flash_theme, $error_msg)) {
                 make_json_error($error_msg);
             } else {
                 make_json_result($flash_theme, $_LANG['install_success']);
@@ -275,11 +275,11 @@ if ($_REQUEST['act'] == 'custom_list') {
     ];
 
     /* 列表 */
-    $ad_list = ad_list();
+    $ad_list = $this->ad_list();
     $smarty->assign('ad_list', $ad_list['ad']);
 
     assign_query_info();
-    $width_height = get_width_height();
+    $width_height = $this->get_width_height();
     //        if(isset($width_height['width'])|| isset($width_height['height']))
     //        {
     $smarty->assign('width_height', sprintf($_LANG['width_height'], $width_height['width'], $width_height['height']));
@@ -313,11 +313,11 @@ if ($_REQUEST['act'] == 'custom_add') {
     ];
 
     /* 列表 */
-    $ad_list = ad_list();
+    $ad_list = $this->ad_list();
     $smarty->assign('ad_list', $ad_list['ad']);
 
     assign_query_info();
-    $width_height = get_width_height();
+    $width_height = $this->get_width_height();
     //        if(isset($width_height['width'])|| isset($width_height['height']))
     //        {
     $smarty->assign('width_height', sprintf($_LANG['width_height'], $width_height['width'], $width_height['height']));
@@ -392,7 +392,7 @@ if ($_REQUEST['act'] == 'custom_insert') {
         /* 来自互联网图片 不可以是服务器地址 */
         if (strstr($filter['content']['url'], 'http') && ! strstr($filter['content']['url'], $_SERVER['SERVER_NAME'])) {
             /* 取互联网图片至本地 */
-            $src = get_url_image($filter['content']['url']);
+            $src = $this->get_url_image($filter['content']['url']);
         } else {
             sys_msg($_LANG['web_url_no']);
         }
@@ -423,7 +423,7 @@ if ($_REQUEST['act'] == 'custom_insert') {
     $ad_id = $db->insert_id();
 
     /* 修改状态 */
-    modfiy_ad_status($ad_id, $filter['ad']['ad_status']);
+    $this->modfiy_ad_status($ad_id, $filter['ad']['ad_status']);
 
     /* 状态为启用 清除模板编译文件 */
     if ($filter['ad']['ad_status'] == 1) {
@@ -448,7 +448,7 @@ if ($_REQUEST['act'] == 'custom_del') {
     }
 
     /* 修改状态 */
-    modfiy_ad_status($id, 0);
+    $this->modfiy_ad_status($id, 0);
 
     /* 清除模板编译文件 */
     clear_all_files();
@@ -479,7 +479,7 @@ if ($_REQUEST['act'] == 'custom_status') {
 
     /* 修改状态 */
     $links[] = ['text' => $_LANG['back_custom_set'], 'href' => 'flashplay.php?act=custom_list'];
-    if (modfiy_ad_status($id, $ad_status)) {
+    if ($this->modfiy_ad_status($id, $ad_status)) {
         /* 清除模板编译文件 */
         clear_all_files();
 
@@ -492,7 +492,7 @@ if ($_REQUEST['act'] == 'custom_status') {
         ];
 
         /* 列表 */
-        $ad_list = ad_list();
+        $ad_list = $this->ad_list();
         $smarty->assign('ad_list', $ad_list['ad']);
         $smarty->assign('current', 'cus');
         $smarty->assign('group_list', $group_list);
@@ -526,7 +526,7 @@ if ($_REQUEST['act'] == 'custom_edit') {
     $ad = $GLOBALS['db']->getRow($sql);
 
     assign_query_info();
-    $width_height = get_width_height();
+    $width_height = $this->get_width_height();
     $smarty->assign('width_height', sprintf($_LANG['width_height'], $width_height['width'], $width_height['height']));
 
     $smarty->assign('group_selected', $_CFG['index_ad']);
@@ -594,7 +594,7 @@ if ($_REQUEST['act'] == 'custom_update') {
         /* 来自互联网图片 不可以是服务器地址 */
         if (strstr($filter['content']['url'], 'http') && ! strstr($filter['content']['url'], $_SERVER['SERVER_NAME'])) {
             /* 取互联网图片至本地 */
-            $src = get_url_image($filter['content']['url']);
+            $src = $this->get_url_image($filter['content']['url']);
         } else {
             sys_msg($_LANG['web_url_no']);
         }
@@ -623,7 +623,7 @@ if ($_REQUEST['act'] == 'custom_update') {
     $db->autoExecute($ecs->table('ad_custom'), $ad, 'UPDATE', 'ad_id = '.$ad_info['ad_id'], 'SILENT');
 
     /* 修改状态 */
-    modfiy_ad_status($ad_info['ad_id'], $filter['ad']['ad_status']);
+    $this->modfiy_ad_status($ad_info['ad_id'], $filter['ad']['ad_status']);
 
     /* 状态为启用 清除模板编译文件 */
     if ($filter['ad']['ad_status'] == 1) {
@@ -732,7 +732,7 @@ private function get_flash_templates($dir)
     $template_dir = @opendir($dir);
     while ($file = readdir($template_dir)) {
         if ($file != '.' && $file != '..' && is_dir($dir.$file) && $file != '.svn' && $file != 'index.htm') {
-            $flashtpls[] = get_flash_tpl_info($dir, $file);
+            $flashtpls[] = $this->get_flash_tpl_info($dir, $file);
         }
     }
     @closedir($template_dir);
@@ -758,7 +758,7 @@ private function get_flash_tpl_info($dir, $file)
 
 private function set_flash_data($tplname, &$msg)
 {
-    $flashdata = get_flash_xml();
+    $flashdata = $this->get_flash_xml();
     if (empty($flashdata)) {
         $flashdata[] = [
             'src' => 'data/afficheimg/20081027angsif.jpg',
@@ -778,16 +778,16 @@ private function set_flash_data($tplname, &$msg)
     }
     switch ($tplname) {
         case 'uproll':
-            $msg = set_flash_uproll($tplname, $flashdata);
+            $msg = $this->set_flash_uproll($tplname, $flashdata);
             break;
         case 'redfocus':
         case 'pinkfocus':
         case 'dynfocus':
-            $msg = set_flash_focus($tplname, $flashdata);
+            $msg = $this->set_flash_focus($tplname, $flashdata);
             break;
         case 'default':
         default:
-            $msg = set_flash_default($tplname, $flashdata);
+            $msg = $this->set_flash_default($tplname, $flashdata);
             break;
     }
 

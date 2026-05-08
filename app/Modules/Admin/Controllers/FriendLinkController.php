@@ -37,7 +37,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('full_page', 1);
 
     /* 获取友情链接数据 */
-    $links_list = get_links_list();
+    $links_list = $this->get_links_list();
 
     $smarty->assign('links_list', $links_list['list']);
     $smarty->assign('filter', $links_list['filter']);
@@ -56,7 +56,7 @@ if ($_REQUEST['act'] == 'list') {
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
     /* 获取友情链接数据 */
-    $links_list = get_links_list();
+    $links_list = $this->get_links_list();
 
     $smarty->assign('links_list', $links_list['list']);
     $smarty->assign('filter', $links_list['filter']);

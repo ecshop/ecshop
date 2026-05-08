@@ -63,7 +63,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['admin_role']);
     $smarty->assign('action_link', ['href' => 'role.php?act=add', 'text' => $_LANG['admin_add_role']]);
     $smarty->assign('full_page', 1);
-    $smarty->assign('admin_list', get_role_list());
+    $smarty->assign('admin_list', $this->get_role_list());
 
     /* 显示页面 */
     assign_query_info();
@@ -74,7 +74,7 @@ if ($_REQUEST['act'] == 'list') {
 // -- 查询
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $smarty->assign('admin_list', get_role_list());
+    $smarty->assign('admin_list', $this->get_role_list());
 
     make_json_result($smarty->fetch('role_list.htm'));
 }

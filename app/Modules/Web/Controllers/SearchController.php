@@ -54,7 +54,7 @@ $_REQUEST['act'] = ! empty($_REQUEST['act']) ? trim($_REQUEST['act']) : '';
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'advanced_search') {
     $goods_type = ! empty($_REQUEST['goods_type']) ? intval($_REQUEST['goods_type']) : 0;
-    $attributes = get_seachable_attributes($goods_type);
+    $attributes = $this->get_seachable_attributes($goods_type);
     $smarty->assign('goods_type_selected', $goods_type);
     $smarty->assign('goods_type_list', $attributes['cate']);
     $smarty->assign('goods_attributes', $attributes['attr']);
@@ -100,7 +100,7 @@ else {
         $adv_value['max_price'] = $_REQUEST['max_price'];
         $adv_value['category'] = $_REQUEST['category'];
 
-        $attributes = get_seachable_attributes($_REQUEST['goods_type']);
+        $attributes = $this->get_seachable_attributes($_REQUEST['goods_type']);
 
         /* 将提交数据重新赋值 */
         foreach ($attributes['attr'] as $key => $val) {
@@ -250,7 +250,7 @@ else {
     if (! empty($_REQUEST['attr'])) {
         $sql = 'SELECT goods_id, COUNT(*) AS num FROM '.$ecs->table('goods_attr').' WHERE 0 ';
         foreach ($_REQUEST['attr'] as $key => $val) {
-            if (is_not_null($val) && is_numeric($key)) {
+            if ($this->is_not_null($val) && is_numeric($key)) {
                 $attr_num++;
                 $sql .= ' OR (1 ';
 

@@ -63,7 +63,7 @@ if ($_REQUEST['act'] == 'list') {
     $keyword = ! empty($_POST['keyword']) ? trim(stripslashes($_POST['keyword'])) : '';
 
     /* 调用函数 */
-    $language_arr = get_language_item_list($file_path, $keyword);
+    $language_arr = $this->get_language_item_list($file_path, $keyword);
 
     /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['edit_languages']);
@@ -104,7 +104,7 @@ if ($_REQUEST['act'] == 'edit') {
     }
 
     /* 调用函数编辑语言项 */
-    $result = set_language_items($lang_file, $src_items, $dst_items);
+    $result = $this->set_language_items($lang_file, $src_items, $dst_items);
 
     if ($result === false) {
         /* 修改失败提示信息 */

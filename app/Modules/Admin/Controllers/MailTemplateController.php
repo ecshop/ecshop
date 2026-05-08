@@ -42,7 +42,7 @@ if ($_REQUEST['act'] == 'list') {
 
     assign_query_info();
 
-    $content = load_template($cur);
+    $content = $this->load_template($cur);
 
     /* 创建 html editor */
     $editor = new FCKeditor('content');
@@ -82,7 +82,7 @@ if ($_REQUEST['act'] == 'loat_template') {
             $_LANG[$row['template_code']]." [$row[template_code]]";
     }
 
-    $content = load_template($tpl);
+    $content = $this->load_template($tpl);
 
     if (($mail_type == -1 && $content['is_html'] == 1) || $mail_type == 1) {
         /* 创建 html editor */

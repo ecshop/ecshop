@@ -39,12 +39,12 @@ if ($step == 1 || $step == 2) {
     @set_time_limit(0);
 
     $md5data = [];
-    checkfiles('./', '\.php', 0);
-    checkfiles(ADMIN_PATH.'/', '\.php|\.htm|\.js|\.css|\xml');
-    checkfiles('api/', '\.php');
-    checkfiles('includes/', '\.php|\.html|\.js', 1, 'fckeditor');
-    checkfiles('js/', '\.js|\.css');
-    checkfiles('languages/', '\.php');
+    $this->checkfiles('./', '\.php', 0);
+    $this->checkfiles(ADMIN_PATH.'/', '\.php|\.htm|\.js|\.css|\xml');
+    $this->checkfiles('api/', '\.php');
+    $this->checkfiles('includes/', '\.php|\.html|\.js', 1, 'fckeditor');
+    $this->checkfiles('js/', '\.js|\.css');
+    $this->checkfiles('languages/', '\.php');
 
     foreach ($files as $line) {
         $file = trim(substr($line, 34));
@@ -143,7 +143,7 @@ private function checkfiles($currentdir, $ext = '', $sub = 1, $skip = '')
 
         if ($entry != '.' && $entry != '..' && $entry != '.svn' && (preg_match($exts, $entry) || ($sub && is_dir($file))) && ! in_array($entry, $skips)) {
             if ($sub && is_dir($file)) {
-                checkfiles($file.'/', $ext, $sub, $skip);
+                $this->checkfiles($file.'/', $ext, $sub, $skip);
             } else {
                 if (str_replace(ROOT_PATH, '', $file) != './md5.php') {
                     $md5data[str_replace(ROOT_PATH, '', $file)] = md5_file($file);

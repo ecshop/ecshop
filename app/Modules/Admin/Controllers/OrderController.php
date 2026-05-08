@@ -36,9 +36,9 @@ if ($_REQUEST['act'] == 'order_query') {
     $smarty->assign('country_list', get_regions());
 
     /* 载入订单状态、付款状态、发货状态 */
-    $smarty->assign('os_list', get_status_list('order'));
-    $smarty->assign('ps_list', get_status_list('payment'));
-    $smarty->assign('ss_list', get_status_list('shipping'));
+    $smarty->assign('os_list', $this->get_status_list('order'));
+    $smarty->assign('ps_list', $this->get_status_list('payment'));
+    $smarty->assign('ss_list', $this->get_status_list('shipping'));
 
     /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['03_order_query']);
@@ -68,7 +68,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('cs_await_ship', CS_AWAIT_SHIP);
     $smarty->assign('full_page', 1);
 
-    $order_list = order_list();
+    $order_list = $this->order_list();
     $smarty->assign('order_list', $order_list['orders']);
     $smarty->assign('filter', $order_list['filter']);
     $smarty->assign('record_count', $order_list['record_count']);
@@ -87,7 +87,7 @@ if ($_REQUEST['act'] == 'query') {
     /* 检查权限 */
     admin_priv('order_view');
 
-    $order_list = order_list();
+    $order_list = $this->order_list();
 
     $smarty->assign('order_list', $order_list['orders']);
     $smarty->assign('filter', $order_list['filter']);
@@ -313,7 +313,7 @@ if ($_REQUEST['act'] == 'info') {
     $smarty->assign('goods_list', $goods_list);
 
     /* 取得能执行的操作列表 */
-    $operable_list = operable_list($order);
+    $operable_list = $this->operable_list($order);
     $smarty->assign('operable_list', $operable_list);
 
     /* 取得订单操作记录 */
@@ -370,7 +370,7 @@ if ($_REQUEST['act'] == 'info') {
         if ($shipping['print_model'] == 2) {
             /* 可视化 */
             /* 快递单 */
-            $shipping['print_bg'] = empty($shipping['print_bg']) ? '' : get_site_root_url().$shipping['print_bg'];
+            $shipping['print_bg'] = empty($shipping['print_bg']) ? '' : $this->get_site_root_url().$shipping['print_bg'];
 
             /* 取快递单背景宽高 */
             if (! empty($shipping['print_bg'])) {
@@ -466,7 +466,7 @@ if ($_REQUEST['act'] == 'delivery_list') {
     admin_priv('delivery_view');
 
     /* 查询 */
-    $result = delivery_list();
+    $result = $this->delivery_list();
 
     /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['09_delivery_order']);
@@ -494,7 +494,7 @@ if ($_REQUEST['act'] == 'delivery_query') {
     /* 检查权限 */
     admin_priv('delivery_view');
 
-    $result = delivery_list();
+    $result = $this->delivery_list();
 
     $smarty->assign('delivery_list', $result['delivery']);
     $smarty->assign('filter', $result['filter']);
@@ -517,7 +517,7 @@ if ($_REQUEST['act'] == 'delivery_info') {
 
     /* 根据发货单id查询发货单信息 */
     if (! empty($delivery_id)) {
-        $delivery_order = delivery_order_info($delivery_id);
+        $delivery_order = $this->delivery_order_info($delivery_id);
     } else {
         exit('order does not exist');
     }
@@ -621,7 +621,7 @@ if ($_REQUEST['act'] == 'delivery_ship') {
 
     /* 根据发货单id查询发货单信息 */
     if (! empty($delivery_id)) {
-        $delivery_order = delivery_order_info($delivery_id);
+        $delivery_order = $this->delivery_order_info($delivery_id);
     } else {
         exit('order does not exist');
     }
@@ -730,7 +730,7 @@ if ($_REQUEST['act'] == 'delivery_ship') {
 
     /* 标记订单为已确认 “已发货” */
     /* 更新发货时间 */
-    $order_finish = get_all_delivery_finish($order_id);
+    $order_finish = $this->get_all_delivery_finish($order_id);
     $shipping_status = ($order_finish == 1) ? SS_SHIPPED : SS_SHIPPED_PART;
     $arr['shipping_status'] = $shipping_status;
     $arr['shipping_time'] = GMTIME_UTC; // 发货时间
@@ -812,7 +812,7 @@ if ($_REQUEST['act'] == 'delivery_cancel_ship') {
 
     /* 根据发货单id查询发货单信息 */
     if (! empty($delivery_id)) {
-        $delivery_order = delivery_order_info($delivery_id);
+        $delivery_order = $this->delivery_order_info($delivery_id);
     } else {
         exit('order does not exist');
     }
@@ -846,7 +846,7 @@ if ($_REQUEST['act'] == 'delivery_cancel_ship') {
     $_order['invoice_no'] = implode('<br>', $invoice_no_order);
 
     /* 更新配送状态 */
-    $order_finish = get_all_delivery_finish($order_id);
+    $order_finish = $this->get_all_delivery_finish($order_id);
     $shipping_status = ($order_finish == -1) ? SS_SHIPPED_PART : SS_SHIPPED_ING;
     $arr['shipping_status'] = $shipping_status;
     if ($shipping_status == SS_SHIPPED_ING) {
@@ -920,7 +920,7 @@ if ($_REQUEST['act'] == 'back_list') {
     admin_priv('back_view');
 
     /* 查询 */
-    $result = back_list();
+    $result = $this->back_list();
 
     /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['10_back_order']);
@@ -948,7 +948,7 @@ if ($_REQUEST['act'] == 'back_query') {
     /* 检查权限 */
     admin_priv('back_view');
 
-    $result = back_list();
+    $result = $this->back_list();
 
     $smarty->assign('back_list', $result['back']);
     $smarty->assign('filter', $result['filter']);
@@ -971,7 +971,7 @@ if ($_REQUEST['act'] == 'back_info') {
 
     /* 根据发货单id查询发货单信息 */
     if (! empty($back_id)) {
-        $back_order = back_order_info($back_id);
+        $back_order = $this->back_order_info($back_id);
     } else {
         exit('order does not exist');
     }
@@ -1137,10 +1137,10 @@ if ($_REQUEST['act'] == 'step_post') {
             /* 更新商品总金额和订单总金额 */
             $goods_amount = order_amount($order_id);
             update_order($order_id, ['goods_amount' => $goods_amount]);
-            update_order_amount($order_id);
+            $this->update_order_amount($order_id);
 
             /* 更新 pay_log */
-            update_pay_log($order_id);
+            $this->update_pay_log($order_id);
 
             /* todo 记录日志 */
             $sn = $old_order['order_sn'];
@@ -1257,10 +1257,10 @@ if ($_REQUEST['act'] == 'step_post') {
 
         /* 更新商品总金额和订单总金额 */
         update_order($order_id, ['goods_amount' => order_amount($order_id)]);
-        update_order_amount($order_id);
+        $this->update_order_amount($order_id);
 
         /* 更新 pay_log */
-        update_pay_log($order_id);
+        $this->update_pay_log($order_id);
 
         /* todo 记录日志 */
         $sn = $old_order['order_sn'];
@@ -1287,7 +1287,7 @@ if ($_REQUEST['act'] == 'step_post') {
 
             /* 如果已付款，检查金额是否变动，并执行相应操作 */
             $order = order_info($order_id);
-            handle_order_money_change($order, $msgs, $links);
+            $this->handle_order_money_change($order, $msgs, $links);
 
             /* 显示提示信息 */
             if (! empty($msgs)) {
@@ -1389,10 +1389,10 @@ if ($_REQUEST['act'] == 'step_post') {
             $order['insure_fee'] = 0;
         }
         update_order($order_id, $order);
-        update_order_amount($order_id);
+        $this->update_order_amount($order_id);
 
         /* 更新 pay_log */
-        update_pay_log($order_id);
+        $this->update_pay_log($order_id);
 
         /* 清除首页缓存：发货单查询 */
         clear_cache_files('index.dwt');
@@ -1416,7 +1416,7 @@ if ($_REQUEST['act'] == 'step_post') {
 
             /* 如果已付款，检查金额是否变动，并执行相应操作 */
             $order = order_info($order_id);
-            handle_order_money_change($order, $msgs, $links);
+            $this->handle_order_money_change($order, $msgs, $links);
 
             /* 如果是编辑且配送不支持货到付款且原支付方式是货到付款 */
             if ($step_act == 'edit' && $shipping['support_cod'] == 0) {
@@ -1464,10 +1464,10 @@ if ($_REQUEST['act'] == 'step_post') {
             'pay_fee' => $pay_fee,
         ];
         update_order($order_id, $order);
-        update_order_amount($order_id);
+        $this->update_order_amount($order_id);
 
         /* 更新 pay_log */
-        update_pay_log($order_id);
+        $this->update_pay_log($order_id);
 
         /* todo 记录日志 */
         $sn = $old_order['order_sn'];
@@ -1488,7 +1488,7 @@ if ($_REQUEST['act'] == 'step_post') {
 
             /* 如果已付款，检查金额是否变动，并执行相应操作 */
             $order = order_info($order_id);
-            handle_order_money_change($order, $msgs, $links);
+            $this->handle_order_money_change($order, $msgs, $links);
 
             /* 显示提示信息 */
             if (! empty($msgs)) {
@@ -1531,10 +1531,10 @@ if ($_REQUEST['act'] == 'step_post') {
         $order['postscript'] = $_POST['postscript'];
         $order['to_buyer'] = $_POST['to_buyer'];
         update_order($order_id, $order);
-        update_order_amount($order_id);
+        $this->update_order_amount($order_id);
 
         /* 更新 pay_log */
-        update_pay_log($order_id);
+        $this->update_pay_log($order_id);
 
         /* todo 记录日志 */
         $sn = $old_order['order_sn'];
@@ -1647,7 +1647,7 @@ if ($_REQUEST['act'] == 'step_post') {
         update_order($order_id, $order);
 
         /* 更新 pay_log */
-        update_pay_log($order_id);
+        $this->update_pay_log($order_id);
 
         /* todo 记录日志 */
         $sn = $old_order['order_sn'];
@@ -1705,7 +1705,7 @@ if ($_REQUEST['act'] == 'step_post') {
 
             /* 如果已付款，检查金额是否变动，并执行相应操作 */
             $order = order_info($order_id);
-            handle_order_money_change($order, $msgs, $links);
+            $this->handle_order_money_change($order, $msgs, $links);
 
             /* 显示提示信息 */
             if (! empty($msgs)) {
@@ -2015,7 +2015,7 @@ if ($_REQUEST['act'] == 'process') {
 
         /* 更新商品总金额和订单总金额 */
         update_order($order_id, ['goods_amount' => order_amount($order_id)]);
-        update_order_amount($order_id);
+        $this->update_order_amount($order_id);
 
         /* 跳回订单商品 */
         ecs_header('Location: order.php?act='.$step_act.'&order_id='.$order_id."&step=goods\n");
@@ -2257,7 +2257,7 @@ if ($_REQUEST['act'] == 'operate') {
         $exist_real_goods = exist_real_goods($order_id);
 
         /* 查询：取得订单商品 */
-        $_goods = get_order_goods(['order_id' => $order['order_id'], 'order_sn' => $order['order_sn']]);
+        $_goods = $this->get_order_goods(['order_id' => $order['order_id'], 'order_sn' => $order['order_sn']]);
 
         $attr = $_goods['attr'];
         $goods_list = $_goods['goods_list'];
@@ -2272,7 +2272,7 @@ if ($_REQUEST['act'] == 'operate') {
 
                 /* 超级礼包 */
                 if (($goods_value['extension_code'] == 'package_buy') && (count($goods_value['package_goods_list']) > 0)) {
-                    $goods_list[$key]['package_goods_list'] = package_goods($goods_value['package_goods_list'], $goods_value['goods_number'], $goods_value['order_id'], $goods_value['extension_code'], $goods_value['goods_id']);
+                    $goods_list[$key]['package_goods_list'] = $this->package_goods($goods_value['package_goods_list'], $goods_value['goods_number'], $goods_value['order_id'], $goods_value['extension_code'], $goods_value['goods_id']);
 
                     foreach ($goods_list[$key]['package_goods_list'] as $pg_key => $pg_value) {
                         $goods_list[$key]['package_goods_list'][$pg_key]['readonly'] = '';
@@ -2312,7 +2312,7 @@ if ($_REQUEST['act'] == 'operate') {
         $smarty->assign('operation', 'split'); // 订单id
         $smarty->assign('action_note', $action_note); // 发货操作信息
 
-        $suppliers_list = get_suppliers_list();
+        $suppliers_list = $this->get_suppliers_list();
         $suppliers_list_count = count($suppliers_list);
         $smarty->assign('suppliers_name', suppliers_list_name()); // 取供货商名
         $smarty->assign('suppliers_list', ($suppliers_list_count == 0 ? 0 : $suppliers_list)); // 取供货商列表
@@ -2408,7 +2408,7 @@ if ($_REQUEST['act'] == 'operate') {
         if (! $batch) {
             /* 检查能否操作 */
             $order = order_info($order_id);
-            $operable_list = operable_list($order);
+            $operable_list = $this->operable_list($order);
             if (! isset($operable_list['remove'])) {
                 exit('Hacking attempt');
             }
@@ -2418,7 +2418,7 @@ if ($_REQUEST['act'] == 'operate') {
             $db->query('DELETE FROM '.$ecs->table('order_goods')." WHERE order_id = '$order_id'");
             $db->query('DELETE FROM '.$ecs->table('order_action')." WHERE order_id = '$order_id'");
             $action_array = ['delivery', 'back'];
-            del_delivery($order_id, $action_array);
+            $this->del_delivery($order_id, $action_array);
 
             /* todo 记录日志 */
             admin_log($order['order_sn'], 'remove', 'order');
@@ -2436,18 +2436,18 @@ if ($_REQUEST['act'] == 'operate') {
             $value_is = intval(trim($value_is));
 
             // 查询：发货单信息
-            $delivery_order = delivery_order_info($value_is);
+            $delivery_order = $this->delivery_order_info($value_is);
 
             // 如果status不是退货
             if ($delivery_order['status'] != 1) {
                 /* 处理退货 */
-                delivery_return_goods($value_is, $delivery_order);
+                $this->delivery_return_goods($value_is, $delivery_order);
             }
 
             // 如果status是已发货并且发货单号不为空
             if ($delivery_order['status'] == 0 && $delivery_order['invoice_no'] != '') {
                 /* 更新：删除订单中的发货单号 */
-                del_order_invoice_no($delivery_order['order_id'], $delivery_order['invoice_no']);
+                $this->del_order_invoice_no($delivery_order['order_id'], $delivery_order['invoice_no']);
             }
 
             // 更新：删除发货单
@@ -2658,7 +2658,7 @@ if ($_REQUEST['act'] == 'batch_operate_post') {
 
             if ($order) {
                 /* 检查能否操作 */
-                $operable_list = operable_list($order);
+                $operable_list = $this->operable_list($order);
                 if (! isset($operable_list[$operation])) {
                     $sn_not_list[] = $id_order;
 
@@ -2669,7 +2669,7 @@ if ($_REQUEST['act'] == 'batch_operate_post') {
 
                 /* 标记订单为已确认 */
                 update_order($order_id, ['order_status' => OS_CONFIRMED, 'confirm_time' => gmtime()]);
-                update_order_amount($order_id);
+                $this->update_order_amount($order_id);
 
                 /* 记录log */
                 order_action($order['order_sn'], OS_CONFIRMED, SS_UNSHIPPED, PS_UNPAYED, $action_note);
@@ -2703,7 +2703,7 @@ if ($_REQUEST['act'] == 'batch_operate_post') {
 
             if ($order) {
                 /* 检查能否操作 */
-                $operable_list = operable_list($order);
+                $operable_list = $this->operable_list($order);
                 if (! isset($operable_list[$operation])) {
                     $sn_not_list[] = $id_order;
 
@@ -2735,7 +2735,7 @@ if ($_REQUEST['act'] == 'batch_operate_post') {
                 }
 
                 /* 退还用户余额、积分、红包 */
-                return_user_surplus_integral_bonus($order);
+                $this->return_user_surplus_integral_bonus($order);
 
                 $sn_list[] = $order['order_sn'];
             } else {
@@ -2752,7 +2752,7 @@ if ($_REQUEST['act'] == 'batch_operate_post') {
             $order = $db->getRow($sql);
             if ($order) {
                 /* 检查能否操作 */
-                $operable_list = operable_list($order);
+                $operable_list = $this->operable_list($order);
                 if (! isset($operable_list[$operation])) {
                     $sn_not_list[] = $id_order;
 
@@ -2785,7 +2785,7 @@ if ($_REQUEST['act'] == 'batch_operate_post') {
                 }
 
                 /* 退还用户余额、积分、红包 */
-                return_user_surplus_integral_bonus($order);
+                $this->return_user_surplus_integral_bonus($order);
 
                 $sn_list[] = $order['order_sn'];
             } else {
@@ -2798,7 +2798,7 @@ if ($_REQUEST['act'] == 'batch_operate_post') {
         foreach ($order_id_list as $id_order) {
             /* 检查能否操作 */
             $order = order_info('', $id_order);
-            $operable_list = operable_list($order);
+            $operable_list = $this->operable_list($order);
             if (! isset($operable_list['remove'])) {
                 $sn_not_list[] = $id_order;
 
@@ -2810,7 +2810,7 @@ if ($_REQUEST['act'] == 'batch_operate_post') {
             $db->query('DELETE FROM '.$ecs->table('order_goods')." WHERE order_id = '$order[order_id]'");
             $db->query('DELETE FROM '.$ecs->table('order_action')." WHERE order_id = '$order[order_id]'");
             $action_array = ['delivery', 'back'];
-            del_delivery($order['order_id'], $action_array);
+            $this->del_delivery($order['order_id'], $action_array);
 
             /* todo 记录日志 */
             admin_log($order['order_sn'], 'remove', 'order');
@@ -2844,7 +2844,7 @@ if ($_REQUEST['act'] == 'batch_operate_post') {
             $order_list_no_fail[$row['order_id']]['pay_status'] = $row['pay_status'];
 
             $order_list_fail = '';
-            foreach (operable_list($row) as $key => $value) {
+            foreach ($this->operable_list($row) as $key => $value) {
                 if ($key != $operation) {
                     $order_list_fail .= $_LANG['op_'.$key].',';
                 }
@@ -2879,7 +2879,7 @@ if ($_REQUEST['act'] == 'operate_post') {
     $order = order_info($order_id);
 
     /* 检查能否操作 */
-    $operable_list = operable_list($order);
+    $operable_list = $this->operable_list($order);
     if (! isset($operable_list[$operation])) {
         exit('Hacking attempt');
     }
@@ -2894,7 +2894,7 @@ if ($_REQUEST['act'] == 'operate_post') {
     if ($operation == 'confirm') {
         /* 标记订单为已确认 */
         update_order($order_id, ['order_status' => OS_CONFIRMED, 'confirm_time' => gmtime()]);
-        update_order_amount($order_id);
+        $this->update_order_amount($order_id);
 
         /* 记录log */
         order_action($order['order_sn'], OS_CONFIRMED, SS_UNSHIPPED, PS_UNPAYED, $action_note);
@@ -3015,7 +3015,7 @@ if ($_REQUEST['act'] == 'operate_post') {
         }
 
         /* 取得订单商品 */
-        $_goods = get_order_goods(['order_id' => $order_id, 'order_sn' => $delivery['order_sn']]);
+        $_goods = $this->get_order_goods(['order_id' => $order_id, 'order_sn' => $delivery['order_sn']]);
         $goods_list = $_goods['goods_list'];
 
         /* 检查此单发货数量填写是否正确 合并计算相同商品和货品 */
@@ -3042,7 +3042,7 @@ if ($_REQUEST['act'] == 'operate_post') {
                     }
                 } else {
                     /* 组合超值礼包信息 */
-                    $goods_list[$key]['package_goods_list'] = package_goods($value['package_goods_list'], $value['goods_number'], $value['order_id'], $value['extension_code'], $value['goods_id']);
+                    $goods_list[$key]['package_goods_list'] = $this->package_goods($value['package_goods_list'], $value['goods_number'], $value['order_id'], $value['extension_code'], $value['goods_id']);
 
                     /* 超值礼包 */
                     foreach ($value['package_goods_list'] as $pg_key => $pg_value) {
@@ -3072,7 +3072,7 @@ if ($_REQUEST['act'] == 'operate_post') {
 
                 /* 发货数量与总量不符 */
                 if (! isset($value['package_goods_list']) || ! is_array($value['package_goods_list'])) {
-                    $sended = order_delivery_num($order_id, $value['goods_id'], $value['product_id']);
+                    $sended = $this->order_delivery_num($order_id, $value['goods_id'], $value['product_id']);
                     if (($value['goods_number'] - $sended - $send_number[$value['rec_id']]) < 0) {
                         /* 操作失败 */
                         $links[] = ['text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id='.$order_id];
@@ -3265,14 +3265,14 @@ if ($_REQUEST['act'] == 'operate_post') {
 
             /* 更新订单的虚拟卡 商品（虚货） */
             $_virtual_goods = isset($virtual_goods['virtual_card']) ? $virtual_goods['virtual_card'] : '';
-            update_order_virtual_goods($order_id, $_sended, $_virtual_goods);
+            $this->update_order_virtual_goods($order_id, $_sended, $_virtual_goods);
 
             /* 更新订单的非虚拟商品信息 即：商品（实货）（货品）、商品（超值礼包） */
-            update_order_goods($order_id, $_sended, $_goods['goods_list']);
+            $this->update_order_goods($order_id, $_sended, $_goods['goods_list']);
 
             /* 标记订单为已确认 “发货中” */
             /* 更新发货时间 */
-            $order_finish = get_order_finish($order_id);
+            $order_finish = $this->get_order_finish($order_id);
             $shipping_status = SS_SHIPPED_ING;
             if ($order['order_status'] != OS_CONFIRMED && $order['order_status'] != OS_SPLITED && $order['order_status'] != OS_SPLITING_PART) {
                 $arr['order_status'] = OS_CONFIRMED;
@@ -3318,7 +3318,7 @@ if ($_REQUEST['act'] == 'operate_post') {
         }
 
         /* 删除发货单 */
-        del_order_delivery($order_id);
+        $this->del_order_delivery($order_id);
 
         /* 将订单的商品发货数量更新为 0 */
         $sql = 'UPDATE '.$GLOBALS['ecs']->table('order_goods')."
@@ -3371,7 +3371,7 @@ if ($_REQUEST['act'] == 'operate_post') {
         }
 
         /* 退还用户余额、积分、红包 */
-        return_user_surplus_integral_bonus($order);
+        $this->return_user_surplus_integral_bonus($order);
 
         /* 发送邮件 */
         $cfg = $_CFG['send_cancel_email'];
@@ -3414,7 +3414,7 @@ if ($_REQUEST['act'] == 'operate_post') {
         }
 
         /* 退货用户余额、积分、红包 */
-        return_user_surplus_integral_bonus($order);
+        $this->return_user_surplus_integral_bonus($order);
     } /* 退货 */
     elseif ($operation == 'return') {
         /* 定义当前时间 */
@@ -3473,7 +3473,7 @@ if ($_REQUEST['act'] == 'operate_post') {
         }
 
         /* 退货用户余额、积分、红包 */
-        return_user_surplus_integral_bonus($order);
+        $this->return_user_surplus_integral_bonus($order);
 
         /* 获取当前操作员 */
         $delivery['action_user'] = $_SESSION['admin_name'];
@@ -3622,7 +3622,7 @@ if ($_REQUEST['act'] == 'remove_order') {
 
     /* 检查订单是否允许删除操作 */
     $order = order_info($order_id);
-    $operable_list = operable_list($order);
+    $operable_list = $this->operable_list($order);
     if (! isset($operable_list['remove'])) {
         make_json_error('Hacking attempt');
         exit;
@@ -3632,7 +3632,7 @@ if ($_REQUEST['act'] == 'remove_order') {
     $GLOBALS['db']->query('DELETE FROM '.$GLOBALS['ecs']->table('order_goods')." WHERE order_id = '$order_id'");
     $GLOBALS['db']->query('DELETE FROM '.$GLOBALS['ecs']->table('order_action')." WHERE order_id = '$order_id'");
     $action_array = ['delivery', 'back'];
-    del_delivery($order_id, $action_array);
+    $this->del_delivery($order_id, $action_array);
 
     if ($GLOBALS['db']->errno() == 0) {
         $url = 'order.php?act=query&'.str_replace('act=remove_order', '', $_SERVER['QUERY_STRING']);
@@ -4068,7 +4068,7 @@ private function operable_list($order)
         }
 
         /* 如果部分发货 不允许 取消 订单 */
-        if (order_deliveryed($order['order_id'])) {
+        if ($this->order_deliveryed($order['order_id'])) {
             $list['return'] = true; // 退货（包括退款）
             unset($list['cancel']); // 取消
         }
@@ -4402,7 +4402,7 @@ private function get_order_goods($order)
         if ($row['extension_code'] == 'package_buy') {
             $row['storage'] = '';
             $row['brand_name'] = '';
-            $row['package_goods_list'] = get_package_goods_list($row['goods_id']);
+            $row['package_goods_list'] = $this->get_package_goods_list($row['goods_id']);
         }
 
         // 处理货品id
@@ -4594,7 +4594,7 @@ private function update_order_goods($order_id, $_sended, $goods_list = [])
                     continue;
                 }
 
-                $goods['package_goods_list'] = package_goods($goods['package_goods_list'], $goods['goods_number'], $goods['order_id'], $goods['extension_code'], $goods['goods_id']);
+                $goods['package_goods_list'] = $this->package_goods($goods['package_goods_list'], $goods['goods_number'], $goods['order_id'], $goods['extension_code'], $goods['goods_id']);
                 $pg_is_end = true;
 
                 foreach ($goods['package_goods_list'] as $pg_key => $pg_value) {
@@ -4708,7 +4708,7 @@ private function get_all_delivery_finish($order_id)
     }
 
     /* 未全部分单 */
-    if (! get_order_finish($order_id)) {
+    if (! $this->get_order_finish($order_id)) {
         return $return_res;
     } /* 已全部分单 */
     else {
@@ -4908,7 +4908,7 @@ private function delivery_list()
     }
 
     /* 获取供货商列表 */
-    $suppliers_list = get_suppliers_list();
+    $suppliers_list = $this->get_suppliers_list();
     $_suppliers_list = [];
     foreach ($suppliers_list as $value) {
         $_suppliers_list[$value['suppliers_id']] = $value['suppliers_name'];
@@ -5152,7 +5152,7 @@ private function package_goods(&$package_goods, $goods_number, $order_id, $exten
     foreach ($package_goods as $key => $value) {
         $return_array[$key] = $value;
         $return_array[$key]['order_send_number'] = $value['order_goods_number'] * $goods_number;
-        $return_array[$key]['sended'] = package_sended($package_id, $value['goods_id'], $order_id, $extension_code, $value['product_id']);
+        $return_array[$key]['sended'] = $this->package_sended($package_id, $value['goods_id'], $order_id, $extension_code, $value['product_id']);
         $return_array[$key]['send'] = ($value['order_goods_number'] * $goods_number) - $return_array[$key]['sended'];
         $return_array[$key]['storage'] = $value['goods_number'];
 

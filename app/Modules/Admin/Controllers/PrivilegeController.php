@@ -123,7 +123,7 @@ if ($_REQUEST['act'] == 'signin') {
         }
 
         // 清除购物车中过期的数据
-        clear_cart();
+        $this->clear_cart();
 
         ecs_header("Location: ./index.php\n");
 
@@ -141,7 +141,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['admin_list']);
     $smarty->assign('action_link', ['href' => 'privilege.php?act=add', 'text' => $_LANG['admin_add']]);
     $smarty->assign('full_page', 1);
-    $smarty->assign('admin_list', get_admin_userlist());
+    $smarty->assign('admin_list', $this->get_admin_userlist());
 
     /* 显示页面 */
     assign_query_info();
@@ -152,7 +152,7 @@ if ($_REQUEST['act'] == 'list') {
 // -- 查询
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $smarty->assign('admin_list', get_admin_userlist());
+    $smarty->assign('admin_list', $this->get_admin_userlist());
 
     make_json_result($smarty->fetch('privilege_list.htm'));
 }
@@ -169,7 +169,7 @@ if ($_REQUEST['act'] == 'add') {
     $smarty->assign('action_link', ['href' => 'privilege.php?act=list', 'text' => $_LANG['admin_list']]);
     $smarty->assign('form_act', 'insert');
     $smarty->assign('action', 'add');
-    $smarty->assign('select_role', get_role_list());
+    $smarty->assign('select_role', $this->get_role_list());
 
     /* 显示页面 */
     assign_query_info();
@@ -276,7 +276,7 @@ if ($_REQUEST['act'] == 'edit') {
 
     /* 如果被编辑的管理员拥有了all这个权限，将不能编辑 */
     if ($priv_str != 'all') {
-        $smarty->assign('select_role', get_role_list());
+        $smarty->assign('select_role', $this->get_role_list());
     }
     $smarty->assign('form_act', 'update');
     $smarty->assign('action', 'edit');

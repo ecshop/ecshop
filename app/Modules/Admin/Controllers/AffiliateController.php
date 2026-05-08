@@ -15,7 +15,7 @@ class AffiliateController extends BaseController
 define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 admin_priv('affiliate');
-$config = get_affiliate();
+$config = $this->get_affiliate();
 
 /* ------------------------------------------------------ */
 // -- 分成管理页
@@ -62,7 +62,7 @@ if ($_REQUEST['act'] == 'add') {
         $config['on'] = 1;
         $config['config']['separate_by'] = 0;
 
-        put_affiliate($config);
+        $this->put_affiliate($config);
     } else {
         make_json_error($_LANG['level_error']);
     }
@@ -101,7 +101,7 @@ if ($_REQUEST['act'] == 'updata') {
     ];
     $temp['item'] = $config['item'];
     $temp['on'] = 1;
-    put_affiliate($temp);
+    $this->put_affiliate($temp);
     $links[] = ['text' => $_LANG['affiliate'], 'href' => 'affiliate.php?act=list'];
     sys_msg($_LANG['edit_ok'], 0, $links);
 }
@@ -112,7 +112,7 @@ if ($_REQUEST['act'] == 'on') {
     $on = (intval($_POST['on']) == 1) ? 1 : 0;
 
     $config['on'] = $on;
-    put_affiliate($config);
+    $this->put_affiliate($config);
     $links[] = ['text' => $_LANG['affiliate'], 'href' => 'affiliate.php?act=list'];
     sys_msg($_LANG['edit_ok'], 0, $links);
 }
@@ -136,7 +136,7 @@ if ($_REQUEST['act'] == 'edit_point') {
     }
     $config['item'][$key]['level_point'] = $val;
     $config['on'] = 1;
-    put_affiliate($config);
+    $this->put_affiliate($config);
     make_json_result(stripcslashes($val));
 }
 /* ------------------------------------------------------ */
@@ -157,7 +157,7 @@ if ($_REQUEST['act'] == 'edit_money') {
     }
     $config['item'][$key]['level_money'] = $val;
     $config['on'] = 1;
-    put_affiliate($config);
+    $this->put_affiliate($config);
     make_json_result(stripcslashes($val));
 }
 /* ------------------------------------------------------ */
@@ -173,7 +173,7 @@ if ($_REQUEST['act'] == 'del') {
     $config['item'] = $temp;
     $config['on'] = 1;
     $config['config']['separate_by'] = 0;
-    put_affiliate($config);
+    $this->put_affiliate($config);
     ecs_header("Location: affiliate.php?act=list\n");
     exit;
 }

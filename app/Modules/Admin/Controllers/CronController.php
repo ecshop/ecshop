@@ -74,7 +74,7 @@ if ($_REQUEST['act'] == 'install') {
                 }
             }
         }
-        [$day, $week, $hours] = get_dwh();
+        [$day, $week, $hours] = $this->get_dwh();
         assign_query_info();
 
         $page_list = ['index' => 0,
@@ -122,7 +122,7 @@ if ($_REQUEST['act'] == 'install') {
             }
         }
         $cron_config = serialize($cron_config);
-        $cron_minute = get_minute($_POST['cron_minute']);
+        $cron_minute = $this->get_minute($_POST['cron_minute']);
         if ($_POST['ttype'] == 'day') {
             $cron_day = $_POST['cron_day'];
             $cron_week = '';
@@ -141,7 +141,7 @@ if ($_REQUEST['act'] == 'install') {
         ! isset($_POST['cron_run_once']) && $_POST['cron_run_once'] = 0;
         $cron_hour = $_POST['cron_hour'];
         $cron = ['day' => $cron_day, 'week' => $cron_week, 'm' => $cron_minute, 'hour' => $cron_hour];
-        $next = get_next_time($cron);
+        $next = $this->get_next_time($cron);
         $sql = 'INSERT INTO '.$ecs->table('crons').' (cron_code, cron_name, cron_desc, cron_config, nextime, day, week, hour, minute, run_once, allow_ip, alow_files)'.
             "VALUES ('$_POST[cron_code]', '$_POST[cron_name]', '$_POST[cron_desc]', '$cron_config', '$next', '$cron_day', '$cron_week', '$cron_hour', '$cron_minute', '$_POST[cron_run_once]', '$_POST[allow_ip]', '$_POST[alow_files]')";
         $db->query($sql);
@@ -183,7 +183,7 @@ if ($_REQUEST['act'] == 'edit') {
         $cron['cronhour'] = $cron['hour'];
         $cron['cronminute'] = $cron['minute'];
         $cron['run_once'] && $cron['autoclose'] = 'checked';
-        [$day, $week, $hours] = get_dwh();
+        [$day, $week, $hours] = $this->get_dwh();
         $page_list = ['index' => 0,
             'user' => 0,
             'pick_out' => 0,
@@ -231,7 +231,7 @@ if ($_REQUEST['act'] == 'edit') {
             }
         }
         $cron_config = serialize($cron_config);
-        $cron_minute = get_minute($_POST['cron_minute']);
+        $cron_minute = $this->get_minute($_POST['cron_minute']);
         if ($_POST['ttype'] == 'day') {
             $cron_day = $_POST['cron_day'];
             $cron_week = '';
@@ -251,7 +251,7 @@ if ($_REQUEST['act'] == 'edit') {
         // $_POST['cron_run_once'] = (int)$_POST['cron_run_once'];
         $cron_hour = $_POST['cron_hour'];
         $cron = ['day' => $cron_day, 'week' => $cron_week, 'm' => $cron_minute, 'hour' => $cron_hour];
-        $next = get_next_time($cron);
+        $next = $this->get_next_time($cron);
         $sql = 'UPDATE '.$ecs->table('crons').
             "SET cron_name = '$_POST[cron_name]', cron_desc = '$_POST[cron_desc]', cron_config = '$cron_config', nextime='$next', day = '$cron_day', week = '$cron_week', hour = '$cron_hour', minute = '$cron_minute', run_once = '$_POST[cron_run_once]', allow_ip = '$_POST[allow_ip]', alow_files = '$_POST[alow_files]'".
             "WHERE cron_id = '$_POST[cron_id]' LIMIT 1";

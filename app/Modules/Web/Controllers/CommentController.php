@@ -108,7 +108,7 @@ if (empty($_REQUEST['act'])) {
 
                 /* 无错误就保存留言 */
                 if (empty($result['error'])) {
-                    add_comment($cmt);
+                    $this->add_comment($cmt);
                 }
             }
         } else {
@@ -178,7 +178,7 @@ if (empty($_REQUEST['act'])) {
                 }
                 /* 无错误就保存留言 */
                 if (empty($result['error'])) {
-                    add_comment($cmt);
+                    $this->add_comment($cmt);
                     $_SESSION['send_time'] = $cur_time;
                 }
             }

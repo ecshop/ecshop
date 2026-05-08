@@ -34,7 +34,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('full_page', 1);
     $smarty->assign('filter', $filter);
 
-    $goods_list = get_exchange_goodslist();
+    $goods_list = $this->get_exchange_goodslist();
 
     $smarty->assign('goods_list', $goods_list['arr']);
     $smarty->assign('filter', $goods_list['filter']);
@@ -54,7 +54,7 @@ if ($_REQUEST['act'] == 'list') {
 if ($_REQUEST['act'] == 'query') {
     check_authz_json('exchange_goods');
 
-    $goods_list = get_exchange_goodslist();
+    $goods_list = $this->get_exchange_goodslist();
 
     $smarty->assign('goods_list', $goods_list['arr']);
     $smarty->assign('filter', $goods_list['filter']);

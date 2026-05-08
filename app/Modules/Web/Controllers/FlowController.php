@@ -588,7 +588,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
         && ($flow_type != CART_GROUP_BUY_GOODS && $flow_type != CART_EXCHANGE_GOODS)) {
         // 能使用积分
         $smarty->assign('allow_use_integral', 1);
-        $smarty->assign('order_max_integral', flow_available_points());  // 可用积分
+        $smarty->assign('order_max_integral', $this->flow_available_points());  // 可用积分
         $smarty->assign('your_integral', $user_info['pay_points']); // 用户积分
     }
 
@@ -946,7 +946,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     /* 取得订单信息 */
     $order = flow_order_info();
 
-    $flow_points = flow_available_points();  // 该订单允许使用的积分
+    $flow_points = $this->flow_available_points();  // 该订单允许使用的积分
     $user_points = $user_info['pay_points']; // 用户的积分总数
 
     if ($points > $user_points) {
@@ -1116,7 +1116,7 @@ if ($_REQUEST['step'] == 'add_to_cart') {
     /* ------------------------------------------------------ */
     $points = floatval($_GET['integral']);
     $user_info = user_info($_SESSION['user_id']);
-    $flow_points = flow_available_points();  // 该订单允许使用的积分
+    $flow_points = $this->flow_available_points();  // 该订单允许使用的积分
     $user_points = $user_info['pay_points']; // 用户的积分总数
 
     if ($points > $user_points) {
@@ -1160,7 +1160,7 @@ elseif ($_REQUEST['step'] == 'done') {
         foreach ($cart_goods_stock['goods_list'] as $value) {
             $_cart_goods_stock[$value['rec_id']] = $value['goods_number'];
         }
-        flow_cart_stock($_cart_goods_stock);
+        $this->flow_cart_stock($_cart_goods_stock);
         unset($cart_goods_stock, $_cart_goods_stock);
     }
 
@@ -1235,7 +1235,7 @@ elseif ($_REQUEST['step'] == 'done') {
         }
 
         // 查询用户有多少积分
-        $flow_points = flow_available_points();  // 该订单允许使用的积分
+        $flow_points = $this->flow_available_points();  // 该订单允许使用的积分
         $user_points = $user_info['pay_points']; // 用户的积分总数
 
         $order['integral'] = min($order['integral'], $user_points, $flow_points);
@@ -1557,7 +1557,7 @@ elseif ($_REQUEST['step'] == 'done') {
 
 elseif ($_REQUEST['step'] == 'update_cart') {
     if (isset($_POST['goods_number']) && is_array($_POST['goods_number'])) {
-        flow_update_cart($_POST['goods_number']);
+        $this->flow_update_cart($_POST['goods_number']);
     }
 
     show_message($_LANG['update_cart_notice'], $_LANG['back_to_cart'], 'flow.php');
@@ -1570,7 +1570,7 @@ elseif ($_REQUEST['step'] == 'update_cart') {
 
 elseif ($_REQUEST['step'] == 'drop_goods') {
     $rec_id = intval($_GET['id']);
-    flow_drop_cart_goods($rec_id);
+    $this->flow_drop_cart_goods($rec_id);
 
     ecs_header("Location: flow.php\n");
     exit;
@@ -1588,13 +1588,13 @@ elseif ($_REQUEST['step'] == 'add_favourable') {
     }
 
     /* 判断用户能否享受该优惠 */
-    if (! favourable_available($favourable)) {
+    if (! $this->favourable_available($favourable)) {
         show_message($_LANG['favourable_not_available']);
     }
 
     /* 检查购物车中是否已有该优惠 */
-    $cart_favourable = cart_favourable();
-    if (favourable_used($favourable, $cart_favourable)) {
+    $cart_favourable = $this->cart_favourable();
+    if ($this->favourable_used($favourable, $cart_favourable)) {
         show_message($_LANG['favourable_used']);
     }
 
@@ -1626,13 +1626,13 @@ elseif ($_REQUEST['step'] == 'add_favourable') {
         /* 添加赠品到购物车 */
         foreach ($favourable['gift'] as $gift) {
             if (in_array($gift['id'], $_POST['gift'])) {
-                add_gift_to_cart($act_id, $gift['id'], $gift['price']);
+                $this->add_gift_to_cart($act_id, $gift['id'], $gift['price']);
             }
         }
     } elseif ($favourable['act_type'] == FAT_DISCOUNT) {
-        add_favourable_to_cart($act_id, $favourable['act_name'], cart_favourable_amount($favourable) * (100 - $favourable['act_type_ext']) / 100);
+        $this->add_favourable_to_cart($act_id, $favourable['act_name'], $this->cart_favourable_amount($favourable) * (100 - $favourable['act_type_ext']) / 100);
     } elseif ($favourable['act_type'] == FAT_PRICE) {
-        add_favourable_to_cart($act_id, $favourable['act_name'], $favourable['act_type_ext']);
+        $this->add_favourable_to_cart($act_id, $favourable['act_name'], $favourable['act_type_ext']);
     }
 
     /* 刷新购物车 */
@@ -1659,7 +1659,7 @@ elseif ($_REQUEST['step'] == 'add_favourable') {
                 "VALUES ('$_SESSION[user_id]', '$goods_id', '$time')";
             $db->query($sql);
         }
-        flow_drop_cart_goods($rec_id);
+        $this->flow_drop_cart_goods($rec_id);
     }
     ecs_header("Location: flow.php\n");
     exit;
@@ -1825,7 +1825,7 @@ elseif ($_REQUEST['step'] == 'add_package_to_cart') {
     }
 
     /* 取得优惠活动 */
-    $favourable_list = favourable_list($_SESSION['user_rank']);
+    $favourable_list = $this->favourable_list($_SESSION['user_rank']);
     usort($favourable_list, 'cmp_favourable');
 
     $smarty->assign('favourable_list', $favourable_list);
@@ -2134,7 +2134,7 @@ private function flow_drop_cart_goods($id)
         $GLOBALS['db']->query($sql);
     }
 
-    flow_clear_cart_alone();
+    $this->flow_clear_cart_alone();
 }
 
 /**
@@ -2235,7 +2235,7 @@ private function cmp_favourable($a, $b)
 private function favourable_list($user_rank)
 {
     /* 购物车中已有的优惠活动及数量 */
-    $used_list = cart_favourable();
+    $used_list = $this->cart_favourable();
 
     /* 当前用户可享受的优惠活动 */
     $favourable_list = [];
@@ -2264,14 +2264,14 @@ private function favourable_list($user_rank)
             }
         }
 
-        $favourable['act_range_desc'] = act_range_desc($favourable);
+        $favourable['act_range_desc'] = $this->act_range_desc($favourable);
         $favourable['act_type_desc'] = sprintf($GLOBALS['_LANG']['fat_ext'][$favourable['act_type']], $favourable['act_type_ext']);
 
         /* 是否能享受 */
-        $favourable['available'] = favourable_available($favourable);
+        $favourable['available'] = $this->favourable_available($favourable);
         if ($favourable['available']) {
             /* 是否尚未享受 */
-            $favourable['available'] = ! favourable_used($favourable, $used_list);
+            $favourable['available'] = ! $this->favourable_used($favourable, $used_list);
         }
 
         $favourable_list[] = $favourable;
@@ -2295,7 +2295,7 @@ private function favourable_available($favourable)
     }
 
     /* 优惠范围内的商品总额 */
-    $amount = cart_favourable_amount($favourable);
+    $amount = $this->cart_favourable_amount($favourable);
 
     /* 金额上限为0表示没有上限 */
     return $amount >= $favourable['min_amount'] &&

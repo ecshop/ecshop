@@ -38,7 +38,7 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'download') {
     $show_num = (! empty($_REQUEST['show_num'])) ? intval($_REQUEST['show_num']) : 15;
 
     /* 获取访问购买的比例数据 */
-    $click_sold_info = click_sold_info($cat_id, $brand_id, $show_num);
+    $click_sold_info = $this->click_sold_info($cat_id, $brand_id, $show_num);
 
     /* 下载报表 */
     if ($_REQUEST['act'] == 'download') {

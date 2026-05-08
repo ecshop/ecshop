@@ -31,7 +31,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
     /* ------------------------------------------------------ */
     if ($_REQUEST['act'] == 'download') {
         $file_name = $_REQUEST['start_date'].'_'.$_REQUEST['end_date'].'_sale';
-        $goods_sales_list = get_sale_list(false);
+        $goods_sales_list = $this->get_sale_list(false);
         header('Content-type: application/vnd.ms-excel; charset=utf-8');
         header("Content-Disposition: attachment; filename=$file_name.xls");
 
@@ -55,7 +55,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
         }
         exit;
     }
-    $sale_list_data = get_sale_list();
+    $sale_list_data = $this->get_sale_list();
     $smarty->assign('goods_sales_list', $sale_list_data['sale_list_data']);
     $smarty->assign('filter', $sale_list_data['filter']);
     $smarty->assign('record_count', $sale_list_data['record_count']);
@@ -77,7 +77,7 @@ if ($_REQUEST['act'] == 'list') {
         $end_date = local_strtotime('today');
     }
 
-    $sale_list_data = get_sale_list();
+    $sale_list_data = $this->get_sale_list();
     /* 赋值到模板 */
     $smarty->assign('filter', $sale_list_data['filter']);
     $smarty->assign('record_count', $sale_list_data['record_count']);

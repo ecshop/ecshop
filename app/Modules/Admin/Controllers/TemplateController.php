@@ -41,7 +41,7 @@ if ($_REQUEST['act'] == 'list') {
     $templates_style = [];
     if (count($available_templates) > 0) {
         foreach ($available_templates as $value) {
-            $templates_style[$value['code']] = read_tpl_style($value['code'], 2);
+            $templates_style[$value['code']] = $this->read_tpl_style($value['code'], 2);
         }
     }
 
@@ -425,7 +425,7 @@ if ($_REQUEST['act'] == 'library') {
 
     @closedir($library_dir);
 
-    $lib = load_library($curr_template, $curr_library);
+    $lib = $this->load_library($curr_template, $curr_library);
 
     assign_query_info();
     $smarty->assign('ur_here', $_LANG['04_template_library']);
@@ -454,7 +454,7 @@ if ($_REQUEST['act'] == 'install') {
     if ($step_one && $step_two) {
         clear_all_files(); // 清除模板编译文件
 
-        make_json_result(read_style_and_tpl($tpl_name, $tpl_fg), $_LANG['install_template_success']);
+        make_json_result($this->read_style_and_tpl($tpl_name, $tpl_fg), $_LANG['install_template_success']);
     } else {
         make_json_error($db->error());
     }
@@ -487,7 +487,7 @@ if ($_REQUEST['act'] == 'backup') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'load_library') {
-    $library = load_library($_CFG['template'], trim($_GET['lib']));
+    $library = $this->load_library($_CFG['template'], trim($_GET['lib']));
     $message = ($library['mark'] & 7) ? '' : $_LANG['library_not_written'];
 
     make_json_result($library['html'], $message);
@@ -749,7 +749,7 @@ private function read_style_and_tpl($tpl_name, $tpl_style)
     $style_info = get_template_info($tpl_name, $tpl_style);
 
     $tpl_style_info = [];
-    $tpl_style_info = read_tpl_style($tpl_name, 2);
+    $tpl_style_info = $this->read_tpl_style($tpl_name, 2);
     $tpl_style_list = '';
     if (count($tpl_style_info) > 1) {
         foreach ($tpl_style_info as $value) {

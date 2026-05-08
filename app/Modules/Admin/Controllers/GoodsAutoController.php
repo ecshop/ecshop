@@ -17,7 +17,7 @@ require dirname(__FILE__).'/includes/init.php';
 admin_priv('goods_auto');
 $smarty->assign('thisfile', 'goods_auto.php');
 if ($_REQUEST['act'] == 'list') {
-    $goodsdb = get_auto_goods();
+    $goodsdb = $this->get_auto_goods();
     $crons_enable = $db->getOne('SELECT enable FROM '.$GLOBALS['ecs']->table('crons')." WHERE cron_code='auto_manage'");
     $smarty->assign('crons_enable', $crons_enable);
     $smarty->assign('full_page', 1);
@@ -31,7 +31,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('goods_auto.htm');
 }
 if ($_REQUEST['act'] == 'query') {
-    $goodsdb = get_auto_goods();
+    $goodsdb = $this->get_auto_goods();
     $smarty->assign('goodsdb', $goodsdb['goodsdb']);
     $smarty->assign('filter', $goodsdb['filter']);
     $smarty->assign('cfg_lang', $_CFG['lang']);

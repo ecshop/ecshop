@@ -28,7 +28,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
     }
 
     if ($_REQUEST['act'] == 'download') {
-        $user_orderinfo = get_user_orderinfo(false);
+        $user_orderinfo = $this->get_user_orderinfo(false);
         $filename = $_REQUEST['start_date'].'_'.$_REQUEST['end_date'].'users_order';
 
         header('Content-type: application/vnd.ms-excel; charset=utf-8');
@@ -44,7 +44,7 @@ if (isset($_REQUEST['act']) && ($_REQUEST['act'] == 'query' || $_REQUEST['act'] 
         echo ecs_iconv(EC_CHARSET, 'GB2312', $data);
         exit;
     }
-    $user_orderinfo = get_user_orderinfo();
+    $user_orderinfo = $this->get_user_orderinfo();
     $smarty->assign('filter', $user_orderinfo['filter']);
     $smarty->assign('record_count', $user_orderinfo['record_count']);
     $smarty->assign('page_count', $user_orderinfo['page_count']);
@@ -68,7 +68,7 @@ if ($_REQUEST['act'] == 'list') {
     }
 
     /* 取得会员排行数据 */
-    $user_orderinfo = get_user_orderinfo();
+    $user_orderinfo = $this->get_user_orderinfo();
 
     /* 赋值到模板 */
     $smarty->assign('ur_here', $_LANG['report_users']);

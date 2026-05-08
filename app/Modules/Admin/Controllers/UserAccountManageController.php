@@ -52,8 +52,8 @@ if (isset($_POST) && ! empty($_POST)) {
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list') {
     $account = $money_list = [];
-    $account['voucher_amount'] = get_total_amount($start_date, $end_date); // 充值总额
-    $account['to_cash_amount'] = get_total_amount($start_date, $end_date, 1); // 提现总额
+    $account['voucher_amount'] = $this->get_total_amount($start_date, $end_date); // 充值总额
+    $account['to_cash_amount'] = $this->get_total_amount($start_date, $end_date, 1); // 提现总额
 
     $sql = ' SELECT IFNULL(SUM(user_money), 0) AS user_money, IFNULL(SUM(frozen_money), 0) AS frozen_money FROM '.
         $ecs->table('account_log').' WHERE `change_time` >= '.$start_date.' AND `change_time` < '.($end_date + 86400);
@@ -79,7 +79,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('user_account_manage.htm');
 }
 if ($_REQUEST['act'] == 'surplus') {
-    $order_list = order_list();
+    $order_list = $this->order_list();
 
     /* 赋值到模板 */
     $smarty->assign('order_list', $order_list['order_list']);
@@ -99,7 +99,7 @@ if ($_REQUEST['act'] == 'surplus') {
 // -- ajax返回用户列表
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $order_list = order_list();
+    $order_list = $this->order_list();
 
     $smarty->assign('order_list', $order_list['order_list']);
     $smarty->assign('filter', $order_list['filter']);

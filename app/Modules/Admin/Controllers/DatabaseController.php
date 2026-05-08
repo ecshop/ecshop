@@ -101,7 +101,7 @@ if ($_REQUEST['act'] == 'restore') {
 
             $file_size = filesize($path.$file);
             $info = cls_sql_dump::get_head($path.$file);
-            $list[] = ['name' => $file, 'ver' => $info['ecs_ver'], 'add_time' => $info['date'], 'vol' => $info['vol'], 'file_size' => num_bitunit($file_size), 'mark' => $mark];
+            $list[] = ['name' => $file, 'ver' => $info['ecs_ver'], 'add_time' => $info['date'], 'vol' => $info['vol'], 'file_size' => $this->num_bitunit($file_size), 'mark' => $mark];
         }
     }
 
@@ -361,7 +361,7 @@ if ($_REQUEST['act'] == 'import') {
             if ($info['ecs_ver'] != VERSION) {
                 sys_msg(sprintf($_LANG['version_error'], VERSION, $sql_info['ecs_ver']));
             }
-            if (! sql_import($path.$file)) {
+            if (! $this->sql_import($path.$file)) {
                 sys_msg($_LANG['sqlfile_error'], 1);
             }
         }
@@ -375,7 +375,7 @@ if ($_REQUEST['act'] == 'import') {
         if ($info['ecs_ver'] != VERSION) {
             sys_msg(sprintf($_LANG['version_error'], VERSION, $sql_info['ecs_ver']));
         }
-        if (sql_import($path.$file_name)) {
+        if ($this->sql_import($path.$file_name)) {
             clear_cache_files();
             admin_log($_LANG['backup_time'].$info['date'], 'restore', 'db_backup');
             sys_msg($_LANG['restore_success'], 0, [['text' => $_LANG['restore'], 'href' => 'database.php?act=restore']]);
@@ -452,7 +452,7 @@ if ($_REQUEST['act'] == 'upload_sql') {
     /* 设置最长执行时间为5分钟 */
     @set_time_limit(300);
 
-    if (sql_import($sql_file)) {
+    if ($this->sql_import($sql_file)) {
         clear_all_files();
         @unlink($sql_file);
         sys_msg($_LANG['restore_success'], 0, []);

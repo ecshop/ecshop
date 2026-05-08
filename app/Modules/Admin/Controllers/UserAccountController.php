@@ -55,7 +55,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('payment_list', $payment);
     $smarty->assign('action_link', ['text' => $_LANG['surplus_add'], 'href' => 'user_account.php?act=add']);
 
-    $list = account_list();
+    $list = $this->account_list();
     $smarty->assign('list', $list['list']);
     $smarty->assign('filter', $list['filter']);
     $smarty->assign('record_count', $list['record_count']);
@@ -147,7 +147,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
     /* 退款，检查余额是否足够 */
     if ($process_type == 1) {
-        $user_account = get_user_surplus($user_id);
+        $user_account = $this->get_user_surplus($user_id);
 
         /* 如果扣除的余额多于此会员拥有的余额，提示 */
         if ($amount > $user_account) {
@@ -299,7 +299,7 @@ if ($_REQUEST['act'] == 'action') {
     if ($account['is_paid'] == 0) {
         // 如果是退款申请, 并且已完成,更新此条记录,扣除相应的余额
         if ($is_paid == '1' && $account['process_type'] == '1') {
-            $user_account = get_user_surplus($account['user_id']);
+            $user_account = $this->get_user_surplus($account['user_id']);
             $fmt_amount = str_replace('-', '', $amount);
 
             // 如果扣除的余额多于此会员拥有的余额，提示
@@ -308,13 +308,13 @@ if ($_REQUEST['act'] == 'action') {
                 sys_msg($_LANG['surplus_amount_error'], 0, $link);
             }
 
-            update_user_account($id, $amount, $admin_note, $is_paid);
+            $this->update_user_account($id, $amount, $admin_note, $is_paid);
 
             // 更新会员余额数量
             log_account_change($account['user_id'], $amount, 0, 0, 0, $_LANG['surplus_type_1'], ACT_DRAWING);
         } elseif ($is_paid == '1' && $account['process_type'] == '0') {
             // 如果是预付款，并且已完成, 更新此条记录，增加相应的余额
-            update_user_account($id, $amount, $admin_note, $is_paid);
+            $this->update_user_account($id, $amount, $admin_note, $is_paid);
 
             // 更新会员余额数量
             log_account_change($account['user_id'], $amount, 0, 0, 0, $_LANG['surplus_type_0'], ACT_SAVING);
@@ -342,7 +342,7 @@ if ($_REQUEST['act'] == 'action') {
 // -- ajax帐户信息列表
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $list = account_list();
+    $list = $this->account_list();
     $smarty->assign('list', $list['list']);
     $smarty->assign('filter', $list['filter']);
     $smarty->assign('record_count', $list['record_count']);

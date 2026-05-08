@@ -65,8 +65,8 @@ if ($action == 'sms_sign') {
                 $smarty->assign('sms_sign', $t[$_CFG['ent_id']]);
             }
         } else {
-            shop_config_update('sms_sign', '');
-            shop_config_update('default_sms_sign', '');
+            $this->shop_config_update('sms_sign', '');
+            $this->shop_config_update('default_sms_sign', '');
         }
         $sql = 'SELECT * FROM '.$ecs->table('shop_config')."WHERE  code='default_sms_sign'";
         $default_sms_sign = $db->getRow($sql);
@@ -120,9 +120,9 @@ if ($action == 'sms_sign_add') {
                 $sms_sign[$_CFG['ent_id']][$extend_no] = $content_y;
                 $sms_sign = serialize($sms_sign);
                 if (empty($_CFG['default_sms_sign'])) {
-                    shop_config_update('default_sms_sign', $content_y);
+                    $this->shop_config_update('default_sms_sign', $content_y);
                 }
-                shop_config_update('sms_sign', $sms_sign);
+                $this->shop_config_update('sms_sign', $sms_sign);
                 /* 清除缓存 */
                 clear_all_files();
                 sys_msg($_LANG['insert_succ'], 1, [], false);
@@ -134,8 +134,8 @@ if ($action == 'sms_sign_add') {
                 sys_msg($error_smg, 1, [], false);
             }
         } else {
-            shop_config_update('default_sms_sign', $content_y);
-            shop_config_update('sms_sign', '');
+            $this->shop_config_update('default_sms_sign', $content_y);
+            $this->shop_config_update('sms_sign', '');
             /* 清除缓存 */
             clear_all_files();
             sys_msg($_LANG['error_smg'], 1, [], false);
@@ -188,9 +188,9 @@ if ($action == 'sms_sign_update') {
 
                 $sms_sign = serialize($sms_sign);
                 if (empty($_CFG['default_sms_sign'])) {
-                    shop_config_update('default_sms_sign', $new_content_y);
+                    $this->shop_config_update('default_sms_sign', $new_content_y);
                 }
-                shop_config_update('sms_sign', $sms_sign);
+                $this->shop_config_update('sms_sign', $sms_sign);
 
                 /* 清除缓存 */
                 clear_all_files();
@@ -203,8 +203,8 @@ if ($action == 'sms_sign_update') {
                 sys_msg($error_smg, 1, [], false);
             }
         } else {
-            shop_config_update('default_sms_sign', $content_y);
-            shop_config_update('sms_sign', '');
+            $this->shop_config_update('default_sms_sign', $content_y);
+            $this->shop_config_update('sms_sign', '');
             /* 清除缓存 */
             clear_all_files();
             sys_msg($_LANG['error_smg'], 1, [], false);
@@ -232,7 +232,7 @@ if ($action == 'sms_sign_default') {
 
             $sms_sign_default = $sms_sign[$_CFG['ent_id']][$extend_no];
             if (! empty($sms_sign_default)) {
-                shop_config_update('default_sms_sign', $sms_sign_default);
+                $this->shop_config_update('default_sms_sign', $sms_sign_default);
                 /* 清除缓存 */
                 clear_all_files();
                 sys_msg($_LANG['default_succ'], 1, [], false);
@@ -240,8 +240,8 @@ if ($action == 'sms_sign_default') {
                 sys_msg($_LANG['no_default'], 1, [], false);
             }
         } else {
-            shop_config_update('default_sms_sign', $content_y);
-            shop_config_update('sms_sign', '');
+            $this->shop_config_update('default_sms_sign', $content_y);
+            $this->shop_config_update('sms_sign', '');
             /* 清除缓存 */
             clear_all_files();
             sys_msg($_LANG['error_smg'], 1, [], false);

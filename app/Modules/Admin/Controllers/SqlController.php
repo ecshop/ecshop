@@ -48,7 +48,7 @@ if ($_REQUEST['act'] == 'query') {
         }
     }
 
-    assign_sql($_POST['sql']);
+    $this->assign_sql($_POST['sql']);
     assign_query_info();
     $smarty->assign('ur_here', $_LANG['04_sql_query']);
 

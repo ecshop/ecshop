@@ -28,7 +28,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('action_link', ['text' => $_LANG['07_brand_add'], 'href' => 'brand.php?act=add']);
     $smarty->assign('full_page', 1);
 
-    $brand_list = get_brandlist();
+    $brand_list = $this->get_brandlist();
 
     $smarty->assign('brand_list', $brand_list['brand']);
     $smarty->assign('filter', $brand_list['filter']);
@@ -281,7 +281,7 @@ if ($_REQUEST['act'] == 'drop_logo') {
 // -- 排序、分页、查询
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $brand_list = get_brandlist();
+    $brand_list = $this->get_brandlist();
     $smarty->assign('brand_list', $brand_list['brand']);
     $smarty->assign('filter', $brand_list['filter']);
     $smarty->assign('record_count', $brand_list['record_count']);

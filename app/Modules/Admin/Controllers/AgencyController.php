@@ -26,7 +26,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('action_link', ['text' => $_LANG['add_agency'], 'href' => 'agency.php?act=add']);
     $smarty->assign('full_page', 1);
 
-    $agency_list = get_agencylist();
+    $agency_list = $this->get_agencylist();
     $smarty->assign('agency_list', $agency_list['agency']);
     $smarty->assign('filter', $agency_list['filter']);
     $smarty->assign('record_count', $agency_list['record_count']);
@@ -44,7 +44,7 @@ if ($_REQUEST['act'] == 'list') {
 // -- 排序、分页、查询
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $agency_list = get_agencylist();
+    $agency_list = $this->get_agencylist();
     $smarty->assign('agency_list', $agency_list['agency']);
     $smarty->assign('filter', $agency_list['filter']);
     $smarty->assign('record_count', $agency_list['record_count']);

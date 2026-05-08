@@ -99,7 +99,7 @@ if ($_REQUEST['act'] == 'check') {
             make_json_error(sprintf($_LANG['dir_not_readable'], $cur_dir));
         }
 
-        $res = check_files_readable($cur_dir);
+        $res = $this->check_files_readable($cur_dir);
         if ($res !== true) {
             make_json_error(sprintf($_LANG['file_not_readable'], $res));
         }
@@ -263,7 +263,7 @@ private function copy_dirs($from_dir, $to_dir, $file_prefix = '')
             $src = $from_dir.DIRECTORY_SEPARATOR.$file;
             $dtn = $to_dir.DIRECTORY_SEPARATOR.$file_prefix.$file;
             if (is_dir($src)) {
-                copy_dirs($src, $dtn);
+                $this->copy_dirs($src, $dtn);
             } else {
                 if (! copy($src, $dtn)) {
                     $result = false;

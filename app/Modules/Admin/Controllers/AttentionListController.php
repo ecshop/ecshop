@@ -16,7 +16,7 @@ define('IN_ECS', true);
 require dirname(__FILE__).'/includes/init.php';
 admin_priv('attention_list');
 if ($_REQUEST['act'] == 'list') {
-    $goodsdb = get_attention();
+    $goodsdb = $this->get_attention();
     $smarty->assign('full_page', 1);
     $smarty->assign('ur_here', $_LANG['attention_list']);
     $smarty->assign('goodsdb', $goodsdb['goodsdb']);
@@ -28,7 +28,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('attention_list.htm');
 }
 if ($_REQUEST['act'] == 'query') {
-    $goodsdb = get_attention();
+    $goodsdb = $this->get_attention();
     $smarty->assign('goodsdb', $goodsdb['goodsdb']);
     $smarty->assign('filter', $goodsdb['filter']);
     $smarty->assign('record_count', $goodsdb['record_count']);

@@ -31,7 +31,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['auction_list']);
     $smarty->assign('action_link', ['href' => 'auction.php?act=add', 'text' => $_LANG['add_auction']]);
 
-    $list = auction_list();
+    $list = $this->auction_list();
 
     $smarty->assign('auction_list', $list['item']);
     $smarty->assign('filter', $list['filter']);
@@ -51,7 +51,7 @@ if ($_REQUEST['act'] == 'list') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'query') {
-    $list = auction_list();
+    $list = $this->auction_list();
 
     $smarty->assign('auction_list', $list['item']);
     $smarty->assign('filter', $list['filter']);
@@ -217,7 +217,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     } else {
         $smarty->assign('ur_here', $_LANG['edit_auction']);
     }
-    $smarty->assign('action_link', list_link($is_add));
+    $smarty->assign('action_link', $this->list_link($is_add));
     assign_query_info();
     $smarty->display('auction_info.htm');
 }

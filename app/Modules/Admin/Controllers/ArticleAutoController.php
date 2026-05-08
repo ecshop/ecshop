@@ -17,7 +17,7 @@ require dirname(__FILE__).'/includes/init.php';
 admin_priv('article_auto');
 $smarty->assign('thisfile', 'article_auto.php');
 if ($_REQUEST['act'] == 'list') {
-    $goodsdb = get_auto_goods();
+    $goodsdb = $this->get_auto_goods();
     $crons_enable = $db->getOne('SELECT enable FROM '.$GLOBALS['ecs']->table('crons')." WHERE cron_code='ipdel'");
     $smarty->assign('crons_enable', $crons_enable);
     $smarty->assign('full_page', 1);
@@ -30,7 +30,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('goods_auto.htm');
 }
 if ($_REQUEST['act'] == 'query') {
-    $goodsdb = get_auto_goods();
+    $goodsdb = $this->get_auto_goods();
     $smarty->assign('goodsdb', $goodsdb['goodsdb']);
     $smarty->assign('filter', $goodsdb['filter']);
     $smarty->assign('record_count', $goodsdb['record_count']);

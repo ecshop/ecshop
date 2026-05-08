@@ -26,7 +26,7 @@ if (empty($_REQUEST['act'])) {
 
 /* 设置活动的SESSION */
 if (empty($_REQUEST['id'])) {
-    $id = get_last_snatch();
+    $id = $this->get_last_snatch();
     if ($id) {
         $page = build_uri('snatch', ['sid' => $id]);
         ecs_header("Location: $page\n");
@@ -41,17 +41,17 @@ if (empty($_REQUEST['id'])) {
 
 /* 显示页面部分 */
 if ($_REQUEST['act'] == 'main') {
-    $goods = get_snatch($id);
+    $goods = $this->get_snatch($id);
     if ($goods) {
         $position = assign_ur_here(0, $goods['snatch_name']);
-        $myprice = get_myprice($id);
+        $myprice = $this->get_myprice($id);
         if ($goods['is_end']) {
             // 如果活动已经结束,获取活动结果
             $smarty->assign('result', get_snatch_result($id));
         }
         $smarty->assign('id', $id);
         $smarty->assign('snatch_goods', $goods); // 竞价商品
-        $smarty->assign('myprice', get_myprice($id));
+        $smarty->assign('myprice', $this->get_myprice($id));
         if ($goods['product_id'] > 0) {
             $goods_specifications = get_specifications_list($goods['goods_id']);
 
@@ -82,8 +82,8 @@ if ($_REQUEST['act'] == 'main') {
     $smarty->assign('ur_here', $position['ur_here']);
     $smarty->assign('categories', get_categories_tree()); // 分类树
     $smarty->assign('helps', get_shop_help());       // 网店帮助
-    $smarty->assign('snatch_list', get_snatch_list());     // 所有有效的夺宝奇兵列表
-    $smarty->assign('price_list', get_price_list($id));
+    $smarty->assign('snatch_list', $this->get_snatch_list());     // 所有有效的夺宝奇兵列表
+    $smarty->assign('price_list', $this->get_price_list($id));
     $smarty->assign('promotion_info', get_promotion_info());
     $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? 'feed-typesnatch.xml' : 'feed.php?type=snatch'); // RSS URL
     $smarty->display('snatch.dwt');
@@ -93,7 +93,7 @@ if ($_REQUEST['act'] == 'main') {
 
 /* 最新出价列表 */
 if ($_REQUEST['act'] == 'new_price_list') {
-    $smarty->assign('price_list', get_price_list($id));
+    $smarty->assign('price_list', $this->get_price_list($id));
     $smarty->display('library/snatch_price.lbi');
 
     exit;
@@ -169,7 +169,7 @@ if ($_REQUEST['act'] == 'bid') {
         "('$id', '".$_SESSION['user_id']."', '".$price."', ".gmtime().')';
     $db->query($sql);
 
-    $smarty->assign('myprice', get_myprice($id));
+    $smarty->assign('myprice', $this->get_myprice($id));
     $smarty->assign('id', $id);
     $result['content'] = $smarty->fetch('library/snatch.lbi');
     exit($json->encode($result));
@@ -188,7 +188,7 @@ if ($_REQUEST['act'] == 'buy') {
         show_message($_LANG['not_login']);
     }
 
-    $snatch = get_snatch($id);
+    $snatch = $this->get_snatch($id);
 
     if (empty($snatch)) {
         ecs_header("Location: ./\n");

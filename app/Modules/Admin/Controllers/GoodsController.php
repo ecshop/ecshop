@@ -58,7 +58,7 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'trash') {
     $ur_here = ($_REQUEST['act'] == 'list') ? $goods_ur[$code] : $_LANG['11_goods_trash'];
     $smarty->assign('ur_here', $ur_here);
 
-    $action_link = ($_REQUEST['act'] == 'list') ? add_link($code) : ['href' => 'goods.php?act=list', 'text' => $_LANG['01_goods_list']];
+    $action_link = ($_REQUEST['act'] == 'list') ? $this->add_link($code) : ['href' => 'goods.php?act=list', 'text' => $_LANG['01_goods_list']];
     $smarty->assign('action_link', $action_link);
     $smarty->assign('code', $code);
     $smarty->assign('cat_list', cat_list(0, $cat_id));
@@ -374,7 +374,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit' || $_REQUEST['act'] 
     /* 模板赋值 */
     $smarty->assign('code', $code);
     $smarty->assign('ur_here', $is_add ? (empty($code) ? $_LANG['02_goods_add'] : $_LANG['51_virtual_card_add']) : ($_REQUEST['act'] == 'edit' ? $_LANG['edit_goods'] : $_LANG['copy_goods']));
-    $smarty->assign('action_link', list_link($is_add, $code));
+    $smarty->assign('action_link', $this->list_link($is_add, $code));
     $smarty->assign('goods', $goods);
     $smarty->assign('goods_name_color', $goods_name_style[0]);
     $smarty->assign('goods_name_style', $goods_name_style[1]);
@@ -671,7 +671,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
     $catgory_id = empty($_POST['cat_id']) ? '' : intval($_POST['cat_id']);
     $brand_id = empty($_POST['brand_id']) ? '' : intval($_POST['brand_id']);
 
-    $goods_thumb = (empty($goods_thumb) && ! empty($_POST['goods_thumb_url']) && goods_parse_url($_POST['goods_thumb_url'])) ? htmlspecialchars(trim($_POST['goods_thumb_url'])) : $goods_thumb;
+    $goods_thumb = (empty($goods_thumb) && ! empty($_POST['goods_thumb_url']) && $this->goods_parse_url($_POST['goods_thumb_url'])) ? htmlspecialchars(trim($_POST['goods_thumb_url'])) : $goods_thumb;
     $goods_thumb = (empty($goods_thumb) && isset($_POST['auto_thumb'])) ? $goods_img : $goods_thumb;
 
     /* 入库 */
@@ -707,12 +707,12 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
             ' FROM '.$ecs->table('goods').
             " WHERE goods_id = '$_REQUEST[goods_id]'";
         $row = $db->getRow($sql);
-        if ($proc_thumb && $goods_img && $row['goods_img'] && ! goods_parse_url($row['goods_img'])) {
+        if ($proc_thumb && $goods_img && $row['goods_img'] && ! $this->goods_parse_url($row['goods_img'])) {
             @unlink(ROOT_PATH.$row['goods_img']);
             @unlink(ROOT_PATH.$row['original_img']);
         }
 
-        if ($proc_thumb && $goods_thumb && $row['goods_thumb'] && ! goods_parse_url($row['goods_thumb'])) {
+        if ($proc_thumb && $goods_thumb && $row['goods_thumb'] && ! $this->goods_parse_url($row['goods_thumb'])) {
             @unlink(ROOT_PATH.$row['goods_thumb']);
         }
 
@@ -865,7 +865,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
                 break;
             }
         }
-        handle_volume_price($goods_id, $_POST['volume_number'], $_POST['volume_price']);
+        $this->handle_volume_price($goods_id, $_POST['volume_number'], $_POST['volume_price']);
     }
 
     /* 处理扩展分类 */
@@ -950,9 +950,9 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         $link[1] = ['href' => 'virtual_card.php?act=replenish&goods_id='.$goods_id, 'text' => $_LANG['add_replenish']];
     }
     if ($is_insert) {
-        $link[2] = add_link($code);
+        $link[2] = $this->add_link($code);
     }
-    $link[3] = list_link($is_insert, $code);
+    $link[3] = $this->list_link($is_insert, $code);
 
     for ($i = 0; $i < count($link); $i++) {
         $key_array[] = $i;
@@ -1060,7 +1060,7 @@ if ($_REQUEST['act'] == 'batch') {
     if ($_POST['type'] == 'drop' || $_POST['type'] == 'restore') {
         $link[] = ['href' => 'goods.php?act=trash', 'text' => $_LANG['11_goods_trash']];
     } else {
-        $link[] = list_link(true, $code);
+        $link[] = $this->list_link(true, $code);
     }
     sys_msg($_LANG['batch_handle_ok'], 0, $link);
 }
@@ -1970,7 +1970,7 @@ if ($_REQUEST['act'] == 'product_remove') {
     $result = $db->query($sql);
     if ($result) {
         /* 修改商品库存 */
-        if (update_goods_stock($product['goods_id'], $product_number - $product['product_number'])) {
+        if ($this->update_goods_stock($product['goods_id'], $product_number - $product['product_number'])) {
             // 记录日志
             admin_log('', 'update', 'goods');
         }
@@ -2025,7 +2025,7 @@ if ($_REQUEST['act'] == 'edit_product_number') {
     $result = $db->query($sql);
     if ($result) {
         /* 修改商品库存 */
-        if (update_goods_stock($product['goods_id'], $product_number - $product['product_number'])) {
+        if ($this->update_goods_stock($product['goods_id'], $product_number - $product['product_number'])) {
             clear_cache_files();
             make_json_result($product_number);
         }
@@ -2174,7 +2174,7 @@ if ($_REQUEST['act'] == 'batch_product') {
             }
 
             /* 修改商品库存 */
-            if (update_goods_stock($goods_id, -$sum)) {
+            if ($this->update_goods_stock($goods_id, -$sum)) {
                 // 记录日志
                 admin_log('', 'update', 'goods');
             }

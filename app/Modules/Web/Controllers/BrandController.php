@@ -74,7 +74,7 @@ setcookie('ECS[display]', $display, gmtime() + 86400 * 7, null, null, null, true
 $cache_id = sprintf('%X', crc32($brand_id.'-'.$display.'-'.$sort.'-'.$order.'-'.$page.'-'.$size.'-'.$_SESSION['user_rank'].'-'.$_CFG['lang'].'-'.$cate));
 
 if (! $smarty->is_cached('brand.dwt', $cache_id)) {
-    $brand_info = get_brand_info($brand_id);
+    $brand_info = $this->get_brand_info($brand_id);
 
     if (empty($brand_info)) {
         ecs_header("Location: ./\n");
@@ -97,7 +97,7 @@ if (! $smarty->is_cached('brand.dwt', $cache_id)) {
     $smarty->assign('helps', get_shop_help());              // 网店帮助
     $smarty->assign('top_goods', get_top10());                  // 销售排行
     $smarty->assign('show_marketprice', $_CFG['show_marketprice']);
-    $smarty->assign('brand_cat_list', brand_related_cat($brand_id)); // 相关分类
+    $smarty->assign('brand_cat_list', $this->brand_related_cat($brand_id)); // 相关分类
     $smarty->assign('feed_url', ($_CFG['rewrite'] == 1) ? "feed-b$brand_id.xml" : 'feed.php?brand='.$brand_id);
 
     /* 调查 */
@@ -107,14 +107,14 @@ if (! $smarty->is_cached('brand.dwt', $cache_id)) {
         $smarty->assign('vote', $vote['content']);
     }
 
-    $smarty->assign('best_goods', brand_recommend_goods('best', $brand_id, $cate));
-    $smarty->assign('promotion_goods', brand_recommend_goods('promote', $brand_id, $cate));
+    $smarty->assign('best_goods', $this->brand_recommend_goods('best', $brand_id, $cate));
+    $smarty->assign('promotion_goods', $this->brand_recommend_goods('promote', $brand_id, $cate));
     $smarty->assign('brand', $brand_info);
     $smarty->assign('promotion_info', get_promotion_info());
 
-    $count = goods_count_by_brand($brand_id, $cate);
+    $count = $this->goods_count_by_brand($brand_id, $cate);
 
-    $goodslist = brand_get_goods($brand_id, $cate, $size, $page, $sort, $order);
+    $goodslist = $this->brand_get_goods($brand_id, $cate, $size, $page, $sort, $order);
 
     if ($display == 'grid') {
         if (count($goodslist) % 2 != 0) {

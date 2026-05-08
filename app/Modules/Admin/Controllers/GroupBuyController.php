@@ -37,7 +37,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['group_buy_list']);
     $smarty->assign('action_link', ['href' => 'group_buy.php?act=add', 'text' => $_LANG['add_group_buy']]);
 
-    $list = group_buy_list();
+    $list = $this->group_buy_list();
 
     $smarty->assign('group_buy_list', $list['item']);
     $smarty->assign('filter', $list['filter']);
@@ -52,7 +52,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('group_buy_list.htm');
 }
 if ($_REQUEST['act'] == 'query') {
-    $list = group_buy_list();
+    $list = $this->group_buy_list();
 
     $smarty->assign('group_buy_list', $list['item']);
     $smarty->assign('filter', $list['filter']);
@@ -93,7 +93,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
 
     /* 模板赋值 */
     $smarty->assign('ur_here', $_LANG['add_group_buy']);
-    $smarty->assign('action_link', list_link($_REQUEST['act'] == 'add'));
+    $smarty->assign('action_link', $this->list_link($_REQUEST['act'] == 'add'));
     $smarty->assign('cat_list', cat_list());
     $smarty->assign('brand_list', get_brand_list());
 
@@ -374,7 +374,7 @@ if ($_REQUEST['act'] == 'insert_update') {
         if ($goods_id <= 0) {
             sys_msg($_LANG['error_goods_null']);
         }
-        $info = goods_group_buy($goods_id);
+        $info = $this->goods_group_buy($goods_id);
         if ($info && $info['act_id'] != $group_buy_id) {
             sys_msg($_LANG['error_goods_exist']);
         }

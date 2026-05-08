@@ -19,7 +19,7 @@ $_REQUEST['act'] = trim($_REQUEST['act']);
 
 admin_priv('search_log');
 if ($_REQUEST['act'] == 'list') {
-    $logdb = get_search_log();
+    $logdb = $this->get_search_log();
     $smarty->assign('ur_here', $_LANG['search_log']);
     $smarty->assign('full_page', 1);
     $smarty->assign('logdb', $logdb['logdb']);
@@ -32,7 +32,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('search_log_list.htm');
 }
 if ($_REQUEST['act'] == 'query') {
-    $logdb = get_search_log();
+    $logdb = $this->get_search_log();
     $smarty->assign('full_page', 0);
     $smarty->assign('logdb', $logdb['logdb']);
     $smarty->assign('filter', $logdb['filter']);

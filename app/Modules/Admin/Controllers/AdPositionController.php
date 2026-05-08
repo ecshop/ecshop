@@ -35,7 +35,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('action_link', ['text' => $_LANG['position_add'], 'href' => 'ad_position.php?act=add']);
     $smarty->assign('full_page', 1);
 
-    $position_list = ad_position_list();
+    $position_list = $this->ad_position_list();
 
     $smarty->assign('position_list', $position_list['position']);
     $smarty->assign('filter', $position_list['filter']);
@@ -159,7 +159,7 @@ if ($_REQUEST['act'] == 'update') {
 // -- 排序、分页、查询
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $position_list = ad_position_list();
+    $position_list = $this->ad_position_list();
 
     $smarty->assign('position_list', $position_list['position']);
     $smarty->assign('filter', $position_list['filter']);

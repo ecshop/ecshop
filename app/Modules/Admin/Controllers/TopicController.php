@@ -44,7 +44,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['09_topic']);
 
     $smarty->assign('full_page', 1);
-    $list = get_topic_list();
+    $list = $this->get_topic_list();
 
     $smarty->assign('topic_list', $list['item']);
     $smarty->assign('filter', $list['filter']);
@@ -69,14 +69,14 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
     include_once ROOT_PATH.'includes/fckeditor/fckeditor.php'; // 包含 html editor 类文件
 
     $smarty->assign('ur_here', $_LANG['09_topic']);
-    $smarty->assign('action_link', list_link($isadd));
+    $smarty->assign('action_link', $this->list_link($isadd));
 
     $smarty->assign('cat_list', cat_list(0, 1));
     $smarty->assign('brand_list', get_brand_list());
     $smarty->assign('cfg_lang', $_CFG['lang']);
     $smarty->assign('topic_style_color', $topic_style_color);
 
-    $width_height = get_toppic_width_height();
+    $width_height = $this->get_toppic_width_height();
     if (isset($width_height['pic']['width']) && isset($width_height['pic']['height'])) {
         $smarty->assign('width_height', sprintf($_LANG['tips_width_height'], $width_height['pic']['width'], $width_height['pic']['height']));
     }
@@ -154,7 +154,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
                 /* 来自互联网图片 不可以是服务器地址 */
                 if (strstr($_REQUEST['url'], 'http') && ! strstr($_REQUEST['url'], $_SERVER['SERVER_NAME'])) {
                     /* 取互联网图片至本地 */
-                    $topic_img = get_url_image($_REQUEST['url']);
+                    $topic_img = $this->get_url_image($_REQUEST['url']);
                 } else {
                     sys_msg($_LANG['web_url_no']);
                 }
@@ -198,7 +198,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         /* 来自互联网图片 不可以是服务器地址 */
         if (strstr($_REQUEST['title_url'], 'http') && ! strstr($_REQUEST['title_url'], $_SERVER['SERVER_NAME'])) {
             /* 取互联网图片至本地 */
-            $title_pic = get_url_image($_REQUEST['title_url']);
+            $title_pic = $this->get_url_image($_REQUEST['title_url']);
         } else {
             sys_msg($_LANG['web_url_no']);
         }
@@ -279,7 +279,7 @@ if ($_REQUEST['act'] == 'delete') {
     sys_msg($_LANG['succed'], 0, $links);
 }
 if ($_REQUEST['act'] == 'query') {
-    $topic_list = get_topic_list();
+    $topic_list = $this->get_topic_list();
     $smarty->assign('topic_list', $topic_list['item']);
     $smarty->assign('filter', $topic_list['filter']);
     $smarty->assign('record_count', $topic_list['record_count']);

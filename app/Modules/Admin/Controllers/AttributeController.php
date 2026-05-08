@@ -35,7 +35,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('goods_type_list', goods_type_list($goods_type)); // 取得商品类型
     $smarty->assign('full_page', 1);
 
-    $list = get_attrlist();
+    $list = $this->get_attrlist();
 
     $smarty->assign('attr_list', $list['item']);
     $smarty->assign('filter', $list['filter']);
@@ -55,7 +55,7 @@ if ($_REQUEST['act'] == 'list') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'query') {
-    $list = get_attrlist();
+    $list = $this->get_attrlist();
 
     $smarty->assign('attr_list', $list['item']);
     $smarty->assign('filter', $list['filter']);

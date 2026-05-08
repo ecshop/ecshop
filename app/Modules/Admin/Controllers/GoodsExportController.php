@@ -24,7 +24,7 @@ if ($_REQUEST['act'] == 'goods_export') {
     $smarty->assign('cat_list', cat_list());
     $smarty->assign('brand_list', get_brand_list());
     $smarty->assign('goods_type_list', goods_type_list(0));
-    $goods_fields = my_array_merge($_LANG['custom'], get_attributes());
+    $goods_fields = $this->my_array_merge($_LANG['custom'], $this->get_attributes());
     $data_format_array = [
         'ecshop' => $_LANG['export_ecshop'],
         'custom' => $_LANG['export_custom'],
@@ -41,7 +41,7 @@ if ($_REQUEST['act'] == 'act_export_ecshop') {
     include_once 'includes/cls_phpzip.php';
     $zip = new PHPZip;
 
-    $where = get_export_where_sql($_POST);
+    $where = $this->get_export_where_sql($_POST);
 
     $sql = 'SELECT g.*, b.brand_name as brandname '.
         ' FROM '.$ecs->table('goods').' AS g LEFT JOIN '.$ecs->table('brand').' AS b '.
@@ -121,7 +121,7 @@ if ($_REQUEST['act'] == 'act_export_ecshop') {
 /* 处理Ajax调用 */
 if ($_REQUEST['act'] == 'get_goods_fields') {
     $cat_id = isset($_REQUEST['cat_id']) ? intval($_REQUEST['cat_id']) : 0;
-    $goods_fields = my_array_merge($_LANG['custom'], get_attributes($cat_id));
+    $goods_fields = $this->my_array_merge($_LANG['custom'], $this->get_attributes($cat_id));
     make_json_result($goods_fields);
 }
 if ($_REQUEST['act'] == 'act_export_custom') {
@@ -136,7 +136,7 @@ if ($_REQUEST['act'] == 'act_export_custom') {
     include_once 'includes/cls_phpzip.php';
     $zip = new PHPZip;
 
-    $where = get_export_where_sql($_POST);
+    $where = $this->get_export_where_sql($_POST);
 
     $sql = 'SELECT g.*, b.brand_name as brandname '.
         ' FROM '.$ecs->table('goods').' AS g LEFT JOIN '.$ecs->table('brand').' AS b '.
@@ -145,7 +145,7 @@ if ($_REQUEST['act'] == 'act_export_custom') {
     $res = $db->query($sql);
 
     $goods_fields = explode(',', $_POST['custom_goods_export']);
-    $goods_field_name = set_goods_field_name($goods_fields, $_LANG['custom']);
+    $goods_field_name = $this->set_goods_field_name($goods_fields, $_LANG['custom']);
 
     /* csv文件数组 */
     $goods_field_value = [];
@@ -395,7 +395,7 @@ private function get_export_where_sql($filter)
  */
 private function replace_special_char($str, $replace = true)
 {
-    $str = str_replace("\r\n", '', image_path_format($str));
+    $str = str_replace("\r\n", '', $this->image_path_format($str));
     $str = str_replace("\t", '    ', $str);
     $str = str_replace("\n", '', $str);
     if ($replace == true) {

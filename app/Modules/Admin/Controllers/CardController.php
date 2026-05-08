@@ -29,7 +29,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('action_link', ['text' => $_LANG['card_add'], 'href' => 'card.php?act=add']);
     $smarty->assign('full_page', 1);
 
-    $cards_list = cards_list();
+    $cards_list = $this->cards_list();
 
     $smarty->assign('card_list', $cards_list['card_list']);
     $smarty->assign('filter', $cards_list['filter']);
@@ -43,7 +43,7 @@ if ($_REQUEST['act'] == 'list') {
 // -- ajax列表
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $cards_list = cards_list();
+    $cards_list = $this->cards_list();
     $smarty->assign('card_list', $cards_list['card_list']);
     $smarty->assign('filter', $cards_list['filter']);
     $smarty->assign('record_count', $cards_list['record_count']);

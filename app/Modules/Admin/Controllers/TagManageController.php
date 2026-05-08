@@ -34,7 +34,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('action_link', ['href' => 'tag_manage.php?act=add', 'text' => $_LANG['add_tag']]);
     $smarty->assign('full_page', 1);
 
-    $tag_list = get_tag_list();
+    $tag_list = $this->get_tag_list();
     $smarty->assign('tag_list', $tag_list['tags']);
     $smarty->assign('filter', $tag_list['filter']);
     $smarty->assign('record_count', $tag_list['record_count']);
@@ -68,7 +68,7 @@ if ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit') {
         $smarty->assign('ur_here', $_LANG['add_tag']);
     } else {
         $tag_id = $_GET['id'];
-        $tag = get_tag_info($tag_id);
+        $tag = $this->get_tag_info($tag_id);
         $tag['tag_words'] = htmlspecialchars($tag['tag_words']);
         $smarty->assign('ur_here', $_LANG['tag_edit']);
     }
@@ -95,7 +95,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
         sys_msg($_LANG['pls_select_goods']);
     }
 
-    if (! tag_is_only($tag_words, $id, $goods_id)) {
+    if (! $this->tag_is_only($tag_words, $id, $goods_id)) {
         sys_msg(sprintf($_LANG['tagword_exist'], $tag_words));
     }
 
@@ -114,7 +114,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 
         sys_msg($_LANG['tag_add_success'], 0, $link);
     } else {
-        edit_tag($tag_words, $id, $goods_id);
+        $this->edit_tag($tag_words, $id, $goods_id);
 
         /* 清除缓存 */
         clear_cache_files();
@@ -133,7 +133,7 @@ if ($_REQUEST['act'] == 'insert' || $_REQUEST['act'] == 'update') {
 if ($_REQUEST['act'] == 'query') {
     check_authz_json('tag_manage');
 
-    $tag_list = get_tag_list();
+    $tag_list = $this->get_tag_list();
     $smarty->assign('tag_list', $tag_list['tags']);
     $smarty->assign('filter', $tag_list['filter']);
     $smarty->assign('record_count', $tag_list['record_count']);
@@ -236,10 +236,10 @@ if ($_REQUEST['act'] == 'edit_tag_name') {
     $name = json_str_iconv(trim($_POST['val']));
     $id = intval($_POST['id']);
 
-    if (! tag_is_only($name, $id)) {
+    if (! $this->tag_is_only($name, $id)) {
         make_json_error(sprintf($_LANG['tagword_exist'], $name));
     } else {
-        edit_tag($name, $id);
+        $this->edit_tag($name, $id);
         make_json_result(stripslashes($name));
     }
 }

@@ -35,7 +35,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['03_users_list']);
     $smarty->assign('action_link', ['text' => $_LANG['04_users_add'], 'href' => 'users.php?act=add']);
 
-    $user_list = user_list();
+    $user_list = $this->user_list();
 
     $smarty->assign('user_list', $user_list['user_list']);
     $smarty->assign('filter', $user_list['filter']);
@@ -52,7 +52,7 @@ if ($_REQUEST['act'] == 'list') {
 // -- ajax返回用户列表
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $user_list = user_list();
+    $user_list = $this->user_list();
 
     $smarty->assign('user_list', $user_list['user_list']);
     $smarty->assign('filter', $user_list['filter']);

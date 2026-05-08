@@ -64,7 +64,7 @@ if ($_REQUEST['act'] == 'add') {
     $smarty->assign('action_link', ['href' => 'category.php?act=list', 'text' => $_LANG['03_category_list']]);
 
     $smarty->assign('goods_type_list', goods_type_list(0)); // 取得商品类型
-    $smarty->assign('attr_list', get_attr_list()); // 取得商品属性
+    $smarty->assign('attr_list', $this->get_attr_list()); // 取得商品属性
 
     $smarty->assign('cat_select', cat_list(0, 0, true));
     $smarty->assign('form_act', 'insert');
@@ -122,7 +122,7 @@ if ($_REQUEST['act'] == 'insert') {
                 " VALUES('".$cat['cat_name']."', 'c', '".$db->insert_id()."','1','$vieworder','0', '".build_uri('category', ['cid' => $cat_id], $cat['cat_name'])."','middle')";
             $db->query($sql);
         }
-        insert_cat_recommend($cat['cat_recommend'], $cat_id);
+        $this->insert_cat_recommend($cat['cat_recommend'], $cat_id);
 
         admin_log($_POST['cat_name'], 'add', 'category');   // 记录管理员操作
         clear_cache_files();    // 清除缓存
@@ -144,8 +144,8 @@ if ($_REQUEST['act'] == 'insert') {
 if ($_REQUEST['act'] == 'edit') {
     admin_priv('cat_manage');   // 权限检查
     $cat_id = intval($_REQUEST['cat_id']);
-    $cat_info = get_cat_info($cat_id);  // 查询分类信息数据
-    $attr_list = get_attr_list();
+    $cat_info = $this->get_cat_info($cat_id);  // 查询分类信息数据
+    $attr_list = $this->get_attr_list();
     $filter_attr_list = [];
 
     if ($cat_info['filter_attr']) {
@@ -292,7 +292,7 @@ if ($_REQUEST['act'] == 'update') {
         }
 
         // 更新首页推荐
-        insert_cat_recommend($cat['cat_recommend'], $cat_id);
+        $this->insert_cat_recommend($cat['cat_recommend'], $cat_id);
         /* 更新分类信息成功 */
         clear_cache_files(); // 清除缓存
         admin_log($_POST['cat_name'], 'edit', 'category'); // 记录管理员操作
@@ -363,7 +363,7 @@ if ($_REQUEST['act'] == 'edit_sort_order') {
     $id = intval($_POST['id']);
     $val = intval($_POST['val']);
 
-    if (cat_update($id, ['sort_order' => $val])) {
+    if ($this->cat_update($id, ['sort_order' => $val])) {
         clear_cache_files(); // 清除缓存
         make_json_result($val);
     } else {
@@ -381,7 +381,7 @@ if ($_REQUEST['act'] == 'edit_measure_unit') {
     $id = intval($_POST['id']);
     $val = json_str_iconv($_POST['val']);
 
-    if (cat_update($id, ['measure_unit' => $val])) {
+    if ($this->cat_update($id, ['measure_unit' => $val])) {
         clear_cache_files(); // 清除缓存
         make_json_result($val);
     } else {
@@ -404,7 +404,7 @@ if ($_REQUEST['act'] == 'edit_grade') {
         make_json_error($_LANG['grade_error']);
     }
 
-    if (cat_update($id, ['grade' => $val])) {
+    if ($this->cat_update($id, ['grade' => $val])) {
         clear_cache_files(); // 清除缓存
         make_json_result($val);
     } else {
@@ -422,7 +422,7 @@ if ($_REQUEST['act'] == 'toggle_show_in_nav') {
     $id = intval($_POST['id']);
     $val = intval($_POST['val']);
 
-    if (cat_update($id, ['show_in_nav' => $val]) != false) {
+    if ($this->cat_update($id, ['show_in_nav' => $val]) != false) {
         if ($val == 1) {
             // 显示
             $vieworder = $db->getOne('SELECT max(vieworder) FROM '.$ecs->table('nav')." WHERE type = 'middle'");
@@ -461,7 +461,7 @@ if ($_REQUEST['act'] == 'toggle_is_show') {
     $id = intval($_POST['id']);
     $val = intval($_POST['val']);
 
-    if (cat_update($id, ['is_show' => $val]) != false) {
+    if ($this->cat_update($id, ['is_show' => $val]) != false) {
         clear_cache_files();
         make_json_result($val);
     } else {

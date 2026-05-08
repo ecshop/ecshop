@@ -20,7 +20,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('action_link', ['text' => $_LANG['add_new'], 'href' => 'magazine_list.php?act=add']);
     $smarty->assign('full_page', 1);
 
-    $magazinedb = get_magazine();
+    $magazinedb = $this->get_magazine();
 
     $smarty->assign('magazinedb', $magazinedb['magazinedb']);
     $smarty->assign('filter', $magazinedb['filter']);
@@ -39,7 +39,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->display('magazine_list.htm');
 }
 if ($_REQUEST['act'] == 'query') {
-    $magazinedb = get_magazine();
+    $magazinedb = $this->get_magazine();
     $smarty->assign('magazinedb', $magazinedb['magazinedb']);
     $smarty->assign('filter', $magazinedb['filter']);
     $smarty->assign('record_count', $magazinedb['record_count']);

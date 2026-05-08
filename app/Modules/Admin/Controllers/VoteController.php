@@ -35,7 +35,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('action_link', ['text' => $_LANG['add_vote'], 'href' => 'vote.php?act=add']);
     $smarty->assign('full_page', 1);
 
-    $vote_list = get_votelist();
+    $vote_list = $this->get_votelist();
 
     $smarty->assign('list', $vote_list['list']);
     $smarty->assign('filter', $vote_list['filter']);
@@ -51,7 +51,7 @@ if ($_REQUEST['act'] == 'list') {
 // -- 排序、分页、查询
 /* ------------------------------------------------------ */
 if ($_REQUEST['act'] == 'query') {
-    $vote_list = get_votelist();
+    $vote_list = $this->get_votelist();
 
     $smarty->assign('list', $vote_list['list']);
     $smarty->assign('filter', $vote_list['filter']);
@@ -190,7 +190,7 @@ if ($_REQUEST['act'] == 'option') {
     $smarty->assign('full_page', 1);
 
     $smarty->assign('id', $id);
-    $smarty->assign('option_arr', get_optionlist($id));
+    $smarty->assign('option_arr', $this->get_optionlist($id));
 
     /* 显示页面 */
     assign_query_info();
@@ -204,7 +204,7 @@ if ($_REQUEST['act'] == 'query_option') {
     $id = intval($_GET['vid']);
 
     $smarty->assign('id', $id);
-    $smarty->assign('option_arr', get_optionlist($id));
+    $smarty->assign('option_arr', $this->get_optionlist($id));
 
     make_json_result($smarty->fetch('vote_option.htm'));
 }

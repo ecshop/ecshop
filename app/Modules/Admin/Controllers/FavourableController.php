@@ -30,7 +30,7 @@ if ($_REQUEST['act'] == 'list') {
     $smarty->assign('ur_here', $_LANG['favourable_list']);
     $smarty->assign('action_link', ['href' => 'favourable.php?act=add', 'text' => $_LANG['add_favourable']]);
 
-    $list = favourable_list();
+    $list = $this->favourable_list();
 
     $smarty->assign('favourable_list', $list['item']);
     $smarty->assign('filter', $list['filter']);
@@ -50,7 +50,7 @@ if ($_REQUEST['act'] == 'list') {
 /* ------------------------------------------------------ */
 
 if ($_REQUEST['act'] == 'query') {
-    $list = favourable_list();
+    $list = $this->favourable_list();
 
     $smarty->assign('favourable_list', $list['item']);
     $smarty->assign('filter', $list['filter']);

@@ -164,7 +164,7 @@ if ($_REQUEST['act'] == 'drop_area') {
     $new_region_id = $id;
     if ($region_type < 6) {
         for ($i = 1; $i < 6 - $region_type; $i++) {
-            $new_region_id = new_region_id($new_region_id);
+            $new_region_id = $this->new_region_id($new_region_id);
             if (count($new_region_id)) {
                 $delete_region = array_merge($delete_region, $new_region_id);
             } else {

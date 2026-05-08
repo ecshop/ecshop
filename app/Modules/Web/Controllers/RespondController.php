@@ -1,5 +1,7 @@
 <?php
 
+use App\Plugins\Payment\PaymentFactory;
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -28,18 +30,11 @@ if (empty($pay_code)) {
     $sql = 'SELECT COUNT(*) FROM '.$ecs->table('payment')." WHERE pay_code = '$pay_code' AND enabled = 1";
     if ($db->getOne($sql) == 0) {
         $msg = $_LANG['pay_disabled'];
+    } elseif (PaymentFactory::isRegistered($pay_code)) {
+        $payment = PaymentFactory::create($pay_code);
+        $msg = (@$payment->respond()) ? $_LANG['pay_success'] : $_LANG['pay_fail'];
     } else {
-        $plugin_file = ROOT_PATH.'includes/modules/payment/'.$pay_code.'.php';
-        /* 检查插件文件是否存在，如果存在则验证支付是否成功，否则则返回失败信息 */
-        if (file_exists($plugin_file)) {
-            /* 根据支付方式代码创建支付类的对象并调用其响应操作方法 */
-            include_once $plugin_file;
-
-            $payment = new $pay_code;
-            $msg = (@$payment->respond()) ? $_LANG['pay_success'] : $_LANG['pay_fail'];
-        } else {
-            $msg = $_LANG['pay_not_exist'];
-        }
+        $msg = $_LANG['pay_not_exist'];
     }
 }
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Modules\Admin\Libraries;
+
 /**
  * 数据库导出类
  */
@@ -32,7 +34,7 @@ function dump_null_string($str)
     return $str;
 }
 
-class cls_sql_dump
+class SqlDump
 {
     public $max_size = 2097152; // 2M
 

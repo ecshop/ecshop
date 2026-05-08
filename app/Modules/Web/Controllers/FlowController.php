@@ -1,5 +1,7 @@
 <?php
 
+use App\Plugins\Payment\PaymentFactory;
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -1513,9 +1515,7 @@ elseif ($_REQUEST['step'] == 'done') {
     if ($order['order_amount'] > 0) {
         $payment = payment_info($order['pay_id']);
 
-        include_once 'includes/modules/payment/'.$payment['pay_code'].'.php';
-
-        $pay_obj = new $payment['pay_code'];
+        $pay_obj = PaymentFactory::create($payment['pay_code']);
 
         $pay_online = $pay_obj->get_code($order, unserialize_config($payment['pay_config']));
 

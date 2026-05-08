@@ -1,5 +1,7 @@
 <?php
 
+use App\Plugins\Payment\PaymentFactory;
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -1203,11 +1205,8 @@ elseif ($action == 'act_account') {
         // 记录支付log
         $order['log_id'] = insert_pay_log($surplus['rec_id'], $order['order_amount'], $type = PAY_SURPLUS, 0);
 
-        /* 调用相应的支付方式文件 */
-        include_once ROOT_PATH.'includes/modules/payment/'.$payment_info['pay_code'].'.php';
-
         /* 取得在线支付方式的支付按钮 */
-        $pay_obj = new $payment_info['pay_code'];
+        $pay_obj = PaymentFactory::create($payment_info['pay_code']);
         $payment_info['pay_button'] = $pay_obj->get_code($order, $payment);
 
         /* 模板赋值 */
@@ -1288,11 +1287,8 @@ elseif ($action == 'pay') {
                 " SET order_amount = '$order[order_amount]' WHERE log_id = '$order[log_id]'");
         }
 
-        /* 调用相应的支付方式文件 */
-        include_once ROOT_PATH.'includes/modules/payment/'.$payment_info['pay_code'].'.php';
-
         /* 取得在线支付方式的支付按钮 */
-        $pay_obj = new $payment_info['pay_code'];
+        $pay_obj = PaymentFactory::create($payment_info['pay_code']);
         $payment_info['pay_button'] = $pay_obj->get_code($order, $payment);
 
         /* 模板赋值 */

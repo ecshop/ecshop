@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Integrate;
+
 /* 模块的基本信息 */
 if (isset($set_modules) && $set_modules == true) {
     $i = (isset($modules)) ? count($modules) : 0;

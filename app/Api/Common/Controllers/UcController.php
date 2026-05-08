@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Api\Common\Controllers;
+
 define('UC_CLIENT_VERSION', '1.5.0');  // note UCenter 版本标识
 define('UC_CLIENT_RELEASE', '20081031');
 

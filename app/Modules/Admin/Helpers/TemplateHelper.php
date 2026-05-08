@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Modules\Admin\Helpers;
+
 /* 可以设置内容的模板 */
 $template_files = [
     'index.dwt',

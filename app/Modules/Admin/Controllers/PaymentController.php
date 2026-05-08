@@ -1,5 +1,7 @@
 <?php
 
+use App\Plugins\Payment\PaymentFactory;
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -20,7 +22,7 @@ if ($_REQUEST['act'] == 'list') {
     }
 
     /* 取得插件文件中的支付方式 */
-    $modules = read_modules('../includes/modules/payment');
+    $modules = PaymentFactory::getAllModules();
     for ($i = 0; $i < count($modules); $i++) {
         $code = $modules[$i]['code'];
         $modules[$i]['pay_code'] = $modules[$i]['code'];
@@ -56,12 +58,8 @@ if ($_REQUEST['act'] == 'list') {
 if ($_REQUEST['act'] == 'install') {
     admin_priv('payment');
 
-    /* 取相应插件信息 */
-    $set_modules = true;
-    include_once ROOT_PATH.'includes/modules/payment/'.$_REQUEST['code'].'.php';
-
-    $data = $modules[0];
-    /* 对支付费用判断。如果data['pay_fee']为false无支付费用，为空则说明以配送有关，其它可以修改 */
+    $data = PaymentFactory::getModuleInfo($_REQUEST['code']);
+    $data['code'] = $_REQUEST['code'];
     if (isset($data['pay_fee'])) {
         $data['pay_fee'] = trim($data['pay_fee']);
     } else {
@@ -98,10 +96,8 @@ if ($_REQUEST['act'] == 'get_config') {
 
     $code = $_REQUEST['code'];
 
-    /* 取相应插件信息 */
-    $set_modules = true;
-    include_once ROOT_PATH.'includes/modules/payment/'.$code.'.php';
-    $data = $modules[0]['config'];
+    $moduleInfo = PaymentFactory::getModuleInfo($code);
+    $data = $moduleInfo['config'];
     $config = '<table>';
     $range = '';
     foreach ($data as $key => $value) {
@@ -155,10 +151,7 @@ if ($_REQUEST['act'] == 'edit') {
         sys_msg($_LANG['payment_not_available'], 0, $links);
     }
 
-    /* 取相应插件信息 */
-    $set_modules = true;
-    include_once ROOT_PATH.'includes/modules/payment/'.$_REQUEST['code'].'.php';
-    $data = $modules[0];
+    $data = PaymentFactory::getModuleInfo($_REQUEST['code']);
 
     /* 取得配置信息 */
     if (is_string($pay['pay_config'])) {

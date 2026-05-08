@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Modules\Admin\Helpers;
+
 /**
  * 取得推荐类型列表
  *

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Payment;
+
 $payment_lang = ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/payment/post.php';
 
 if (file_exists($payment_lang)) {
@@ -12,56 +14,42 @@ if (file_exists($payment_lang)) {
 if (isset($set_modules) && $set_modules == true) {
     $i = isset($modules) ? count($modules) : 0;
 
-    /* 代码 */
     $modules[$i]['code'] = basename(__FILE__, '.php');
-
-    /* 描述对应的语言项 */
     $modules[$i]['desc'] = 'post_desc';
-
-    /* 是否支持货到付款 */
     $modules[$i]['is_cod'] = '0';
-
-    /* 是否支持在线支付 */
     $modules[$i]['is_online'] = '0';
-
-    /* 作者 */
     $modules[$i]['author'] = 'ECSHOP TEAM';
-
-    /* 网址 */
     $modules[$i]['website'] = 'http://www.ecshop.com';
-
-    /* 版本号 */
     $modules[$i]['version'] = '1.0.0';
-
-    /* 配置信息 */
     $modules[$i]['config'] = [];
 
     return;
 }
 
-/**
- * 类
- */
-class post
+class post implements PaymentInterface
 {
-    /**
-     * 构造函数
-     *
-     *
-     * @return void
-     */
     public function __construct() {}
 
-    /**
-     * 提交函数
-     */
-    public function get_code()
+    public static function getModuleInfo(): array
+    {
+        return [
+            'desc' => 'post_desc',
+            'is_cod' => '0',
+            'is_online' => '0',
+            'author' => 'ECSHOP TEAM',
+            'website' => 'http://www.ecshop.com',
+            'version' => '1.0.0',
+            'config' => [],
+        ];
+    }
+
+    public function get_code(array $order = [], array $payment = []): string
     {
         return '';
     }
 
-    /**
-     * 处理函数
-     */
-    public function response() {}
+    public function respond(): bool
+    {
+        return false;
+    }
 }

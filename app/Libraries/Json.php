@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Libraries;
+
 /**
  * JSON 类
  */

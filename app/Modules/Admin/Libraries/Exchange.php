@@ -1,10 +1,12 @@
 <?php
 
+namespace App\Modules\Admin\Libraries;
+
 /* ------------------------------------------------------ */
 // -- 该类用于与数据库数据进行交换
 /* ------------------------------------------------------ */
 
-class exchange
+class Exchange
 {
     public $table;
 

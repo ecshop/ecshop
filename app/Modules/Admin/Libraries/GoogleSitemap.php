@@ -1,6 +1,8 @@
 <?php
 
-class google_sitemap
+namespace App\Modules\Admin\Libraries;
+
+class GoogleSitemap
 {
     public $header = "<\x3Fxml version=\"1.0\" encoding=\"UTF-8\"\x3F>\n\t<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">";
 

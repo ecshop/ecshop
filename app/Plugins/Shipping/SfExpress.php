@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Shipping;
+
 $shipping_lang = ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/shipping/sf_express.php';
 
 if (file_exists($shipping_lang)) {

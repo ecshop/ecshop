@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Modules\Admin\Libraries;
+
 class PHPZip
 {
     public function zip($dir, $zipfilename, $drop = false)

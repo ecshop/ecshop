@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Plugins\Payment\PaymentFactory;
+
 /**
  * 修改个人资料（Email, 性别，生日)
  *
@@ -554,7 +556,6 @@ function get_order_detail($order_id, $user_id = 0)
             $order['pay_desc'] = $payment_info['pay_desc'];
 
             /* 取得在线支付方式的支付按钮 */
-            require_once ROOT_PATH.'app/Plugins/Payment/PaymentFactory.php';
             $pay_obj = PaymentFactory::create($payment_info['pay_code']);
             $order['pay_online'] = $pay_obj->get_code($order, $payment);
         }

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Plugins\Integrate;
+
 class integrate
 {
     /* ------------------------------------------------------ */

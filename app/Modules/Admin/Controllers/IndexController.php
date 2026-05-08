@@ -1,5 +1,7 @@
 <?php
 
+use App\Plugins\Payment\PaymentFactory;
+
 define('IN_ECS', true);
 
 require dirname(__FILE__).'/includes/init.php';
@@ -482,7 +484,7 @@ if ($_REQUEST['act'] == 'first') {
     unset($modules);
 
     // 获取支付方式
-    $modules = read_modules('../includes/modules/payment');
+    $modules = PaymentFactory::getAllModules();
 
     for ($i = 0; $i < count($modules); $i++) {
         $code = $modules[$i]['code'];
@@ -621,9 +623,7 @@ if ($_REQUEST['act'] == 'second') {
     unset($modules);
 
     if (! empty($payment)) {
-        /* 取相应插件信息 */
-        $set_modules = true;
-        include_once ROOT_PATH.'includes/modules/payment/'.$payment.'.php';
+        $moduleInfo = PaymentFactory::getModuleInfo($payment);
 
         $pay_config = [];
         if (isset($_REQUEST['cfg_value']) && is_array($_REQUEST['cfg_value'])) {
@@ -646,9 +646,9 @@ if ($_REQUEST['act'] == 'second') {
             $db->query($sql);
         } else {
             $payment_info = [];
-            $payment_info['name'] = $_LANG[$modules[0]['code']];
-            $payment_info['pay_fee'] = empty($modules[0]['pay_fee']) ? 0 : $modules[0]['pay_fee'];
-            $payment_info['desc'] = $_LANG[$modules[0]['desc']];
+            $payment_info['name'] = $_LANG[$payment];
+            $payment_info['pay_fee'] = empty($moduleInfo['pay_fee']) ? 0 : $moduleInfo['pay_fee'];
+            $payment_info['desc'] = $_LANG[$moduleInfo['desc']];
 
             $sql = 'INSERT INTO '.$ecs->table('payment').' (pay_code, pay_name, pay_desc, pay_config, is_cod, pay_fee, enabled, is_online)'.
                 "VALUES ('$payment', '$payment_info[name]', '$payment_info[desc]', '$pay_config', '0', '$payment_info[pay_fee]', '1', '1')";

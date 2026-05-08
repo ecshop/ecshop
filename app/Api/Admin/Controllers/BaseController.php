@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Api\Admin\Controllers;
 
-class BaseController 
+use Juling\Foundation\Http\Controllers\Controller;
+
+class BaseController extends Controller
 {
 }

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>API接口文档</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui@5.20.2/dist/swagger-ui.min.css" />
+    <style>
+        html {
+            box-sizing: border-box;
+            overflow: -moz-scrollbars-vertical;
+            overflow-y: scroll;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        body {
+            margin: 0;
+            background: #fafafa;
+        }
+    </style>
+</head>
+
+<body>
+<div id="swagger-ui"></div>
+<script src="https://cdn.jsdelivr.net/npm/swagger-ui@5.20.2/dist/swagger-ui-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swagger-ui@5.20.2/dist/swagger-ui-standalone-preset.min.js"></script>
+<script>
+    window.onload = function() {
+        window.ui = SwaggerUIBundle({
+            urls: [
+                {name: "管理接口", url: "./api/admin.json"},
+                {name: "公共接口", url: "./api/common.json"},
+                {name: "店铺接口", url: "./api/shop.json"},
+                {name: "会员接口", url: "./api/user.json"}
+            ],
+            dom_id: '#swagger-ui',
+            deepLinking: true,
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+            ],
+            plugins: [
+                SwaggerUIBundle.plugins.DownloadUrl
+            ],
+            layout: "StandaloneLayout"
+        });
+    };
+</script>
+</body>
+</html>

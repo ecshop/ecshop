@@ -1,0 +1,1 @@
+INSERT INTO `admin_user` (`user_id`, `user_name`, `email`, `password`, `ec_salt`, `add_time`, `last_login`, `last_ip`, `action_list`, `nav_list`, `lang_type`, `agency_id`, `suppliers_id`, `todolist`, `role_id`) VALUES (1, 'admin', '', '$2y$12$crW0yGUg6FQgZhauL5C.resd237QNT.9tB6vlNiO3Ecrb0BwsAKCi', '', 0, 0, '', 'all', '', '', 0, 0, '', NULL);

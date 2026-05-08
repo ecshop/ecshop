@@ -44,7 +44,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-class fpd
+class Fpd
 {
     /* ------------------------------------------------------ */
     // -- PUBLIC ATTRIBUTEs

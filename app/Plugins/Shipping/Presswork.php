@@ -47,7 +47,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-class presswork
+class Presswork
 {
     /* ------------------------------------------------------ */
     // -- PUBLIC ATTRIBUTEs

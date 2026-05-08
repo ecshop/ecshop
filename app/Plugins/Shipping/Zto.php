@@ -53,7 +53,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-class zto
+class Zto
 {
     /* ------------------------------------------------------ */
     // -- PUBLIC ATTRIBUTEs

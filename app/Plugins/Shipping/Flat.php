@@ -46,7 +46,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-class flat
+class Flat
 {
     /* ------------------------------------------------------ */
     // -- PUBLIC ATTRIBUTEs

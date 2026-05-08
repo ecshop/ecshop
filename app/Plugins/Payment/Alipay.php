@@ -31,7 +31,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-class alipay implements PaymentInterface
+class Alipay implements PaymentInterface
 {
     public function __construct() {}
 

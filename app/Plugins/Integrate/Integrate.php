@@ -2,7 +2,7 @@
 
 namespace App\Plugins\Integrate;
 
-class integrate
+class Integrate
 {
     /* ------------------------------------------------------ */
     // -- PUBLIC ATTRIBUTEs

@@ -26,7 +26,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-class balance implements PaymentInterface
+class Balance implements PaymentInterface
 {
     public function __construct() {}
 

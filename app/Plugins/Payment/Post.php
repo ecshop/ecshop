@@ -26,7 +26,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-class post implements PaymentInterface
+class Post implements PaymentInterface
 {
     public function __construct() {}
 

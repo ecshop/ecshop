@@ -27,7 +27,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-class cod implements PaymentInterface
+class Cod implements PaymentInterface
 {
     public function __construct() {}
 

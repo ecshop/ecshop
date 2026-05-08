@@ -24,9 +24,7 @@ if (isset($set_modules) && $set_modules == true) {
     return;
 }
 
-require_once ROOT_PATH.'includes/modules/integrates/integrate.php';
-
-class ecshop extends integrate
+class Shop extends Integrate
 {
     public $is_ecshop = 1;
 

@@ -1,9 +1,5 @@
 <?php
 
-if (! defined('IN_ECS')) {
-    exit('Hacking attempt');
-}
-
 /* ----------------------------------------------------------------------- */
 // @package RSSBuilder
 // @category FLP

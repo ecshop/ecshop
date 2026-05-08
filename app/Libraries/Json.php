@@ -3,10 +3,6 @@
 /**
  * JSON 类
  */
-if (! defined('IN_ECS')) {
-    exit('Hacking attempt');
-}
-
 class JSON
 {
     public function encode($arg)

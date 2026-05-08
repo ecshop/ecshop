@@ -1,9 +1,5 @@
 <?php
 
-if (! defined('IN_ECS')) {
-    exit('Hacking attempt');
-}
-
 class PHPZip
 {
     public function zip($dir, $zipfilename, $drop = false)

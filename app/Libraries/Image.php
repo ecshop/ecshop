@@ -1,9 +1,5 @@
 <?php
 
-if (! defined('IN_ECS')) {
-    exit('Hacking attempt');
-}
-
 class cls_image
 {
     public $error_no = 0;

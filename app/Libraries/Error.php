@@ -1,9 +1,5 @@
 <?php
 
-if (! defined('IN_ECS')) {
-    exit('Hacking attempt');
-}
-
 class ecs_error
 {
     public $_message = [];

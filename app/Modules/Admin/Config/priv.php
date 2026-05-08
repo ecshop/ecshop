@@ -1,9 +1,5 @@
 <?php
 
-if (! defined('IN_ECS')) {
-    exit('Hacking attempt');
-}
-
 // 商品管理权限
 $purview['01_goods_list'] = ['goods_manage', 'remove_back'];
 $purview['02_goods_add'] = 'goods_manage';

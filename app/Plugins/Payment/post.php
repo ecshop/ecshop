@@ -1,9 +1,5 @@
 <?php
 
-if (! defined('IN_ECS')) {
-    exit('Hacking attempt');
-}
-
 $payment_lang = ROOT_PATH.'languages/'.$GLOBALS['_CFG']['lang'].'/payment/post.php';
 
 if (file_exists($payment_lang)) {

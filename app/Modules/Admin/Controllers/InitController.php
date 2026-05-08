@@ -1,9 +1,5 @@
 <?php
 
-if (! defined('IN_ECS')) {
-    exit('Hacking attempt');
-}
-
 define('ECS_ADMIN', true);
 
 error_reporting(E_ALL);

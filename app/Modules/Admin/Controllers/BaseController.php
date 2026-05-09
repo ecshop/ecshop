@@ -31,60 +31,6 @@ abstract class BaseController extends Controller
 
     protected function initialize(Request $request)
     {
-        if (!defined('ECS_ADMIN')) {
-            define('ECS_ADMIN', true);
-        }
-
-        error_reporting(E_ALL);
-
-        if (!defined('ROOT_PATH')) {
-            define('ROOT_PATH', str_replace('\\', '/', dirname(__DIR__, 2)) . '/');
-        }
-
-        require_once ROOT_PATH . 'includes/inc_constant.php';
-
-        /* 初始化设置 */
-        @ini_set('memory_limit', '1G');
-        @ini_set('session.cache_expire', '180');
-        @ini_set('session.use_trans_sid', '0');
-        @ini_set('session.use_cookies', '1');
-        @ini_set('session.auto_start', '0');
-        @ini_set('display_errors', defined('DEBUG_MODE') && DEBUG_MODE ? '1' : '0');
-
-        require_once ROOT_PATH . '/data/config.php';
-
-        date_default_timezone_set($timezone ?? 'PRC');
-
-        if (isset($_SERVER['PHP_SELF'])) {
-            if (!defined('PHP_SELF')) define('PHP_SELF', $_SERVER['PHP_SELF']);
-        } else {
-            if (!defined('PHP_SELF')) define('PHP_SELF', $_SERVER['SCRIPT_NAME']);
-        }
-
-        require_once ROOT_PATH . 'includes/cls_ecshop.php';
-        require_once ROOT_PATH . 'includes/cls_error.php';
-        require_once ROOT_PATH . 'includes/lib_time.php';
-        require_once ROOT_PATH . 'includes/lib_base.php';
-        require_once ROOT_PATH . 'includes/lib_common.php';
-        require_once ROOT_PATH . ADMIN_PATH . '/includes/lib_main.php';
-        require_once ROOT_PATH . ADMIN_PATH . '/includes/cls_exchange.php';
-
-        /* 对用户传入的变量进行转义操作。 */
-        if (!empty($_GET)) {
-            $_GET = addslashes_deep($_GET);
-        }
-        if (!empty($_POST)) {
-            $_POST = addslashes_deep($_POST);
-        }
-
-        $_COOKIE = addslashes_deep($_COOKIE);
-        $_REQUEST = addslashes_deep($_REQUEST);
-
-        /* 对路径进行安全处理 */
-        if (strpos(PHP_SELF, '.php/') !== false) {
-            return redirect(substr(PHP_SELF, 0, strpos(PHP_SELF, '.php/') + 4));
-        }
-
         /* 创建 ECSHOP 对象 */
         global $ecs, $db, $err, $sess, $smarty, $_CFG, $_LANG;
 
@@ -106,11 +52,6 @@ abstract class BaseController extends Controller
 
         /* 初始化 action */
         $act = $request->input('act', '');
-        if (in_array($act, ['login', 'logout', 'signin']) && strpos(PHP_SELF, '/privilege.php') === false) {
-            $act = '';
-        } elseif (in_array($act, ['forget_pwd', 'reset_pwd', 'get_pwd']) && strpos(PHP_SELF, '/get_password.php') === false) {
-            $act = '';
-        }
         $request->merge(['act' => $act]);
         $_REQUEST['act'] = $act;
 
@@ -135,24 +76,6 @@ abstract class BaseController extends Controller
             include_once ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/' . basename(PHP_SELF);
         }
 
-        if (!file_exists('../temp/caches')) {
-            @mkdir('../temp/caches', 0777);
-            @chmod('../temp/caches', 0777);
-        }
-
-        if (!file_exists('../temp/compiled/admin')) {
-            @mkdir('../temp/compiled/admin', 0777);
-            @chmod('../temp/compiled/admin', 0777);
-        }
-
-        clearstatcache();
-
-        if (preg_replace('/(?:\.|\s+)[a-z]*$/i', '', $_CFG['ecs_version']) != preg_replace('/(?:\.|\s+)[a-z]*$/i', '', VERSION)
-            && file_exists('../upgrade/index.php')) {
-            // 转到升级文件
-            return redirect('../upgrade/index.php');
-        }
-
         /* 创建 Smarty 对象。 */
         require_once ROOT_PATH . 'includes/cls_template.php';
         $smarty = new cls_template;
@@ -171,89 +94,6 @@ abstract class BaseController extends Controller
             $this->assign('enable_order_check', $_CFG['enable_order_check']);
         } else {
             $this->assign('enable_order_check', 0);
-        }
-
-        /* 验证管理员身份 */
-        $allowedActs = ['login', 'signin', 'forget_pwd', 'reset_pwd', 'check_order'];
-        if ((!Session::has('admin_id') || intval(Session::get('admin_id')) <= 0) && !in_array($act, $allowedActs)) {
-            /* session 不存在，检查cookie */
-            $ecscpCookie = $request->cookie('ECSCP');
-            if (!empty($ecscpCookie['admin_id']) && !empty($ecscpCookie['admin_pass'])) {
-                // 找到了cookie, 验证cookie信息
-                $row = DB::table('admin_user')->where('user_id', intval($ecscpCookie['admin_id']))->first();
-
-                if (!$row) {
-                    // 没有找到这个记录
-                    Cookie::queue(Cookie::forget('ECSCP[admin_id]'));
-                    Cookie::queue(Cookie::forget('ECSCP[admin_pass]'));
-
-                    if ($request->input('is_ajax') || $request->ajax()) {
-                        return response()->json(['error' => 1, 'message' => $_LANG['priv_error']]);
-                    } else {
-                        return redirect()->route('admin.login');
-                    }
-                } else {
-                    // 检查密码是否正确
-                    if (md5($row->password . $_CFG['hash_code'] . $row->add_time) == $ecscpCookie['admin_pass']) {
-                        !isset($row->last_time) && $row->last_time = '';
-                        set_admin_session($row->user_id, $row->user_name, $row->action_list, $row->last_time);
-
-                        // 更新最后登录时间和IP
-                        DB::table('admin_user')->where('user_id', Session::get('admin_id'))->update([
-                            'last_login' => gmtime(),
-                            'last_ip' => $request->ip()
-                        ]);
-                    } else {
-                        Cookie::queue(Cookie::forget('ECSCP[admin_id]'));
-                        Cookie::queue(Cookie::forget('ECSCP[admin_pass]'));
-
-                        if ($request->input('is_ajax') || $request->ajax()) {
-                            return response()->json(['error' => 1, 'message' => $_LANG['priv_error']]);
-                        } else {
-                            return redirect()->route('admin.login');
-                        }
-                    }
-                }
-            } else {
-                if ($request->input('is_ajax') || $request->ajax()) {
-                    return response()->json(['error' => 1, 'message' => $_LANG['priv_error']]);
-                } else {
-                    return redirect()->route('admin.login');
-                }
-            }
-        }
-
-        $this->assign('token', $_CFG['token'] ?? '');
-
-        if (!in_array($act, $allowedActs)) {
-            $admin_path = preg_replace('/:\d+/', '', $ecs->url()) . ADMIN_PATH;
-            if (!empty($_SERVER['HTTP_REFERER']) &&
-                strpos(preg_replace('/:\d+/', '', $_SERVER['HTTP_REFERER']), $admin_path) === false) {
-                if ($request->input('is_ajax') || $request->ajax()) {
-                    return response()->json(['error' => 1, 'message' => $_LANG['priv_error']]);
-                } else {
-                    return redirect()->route('admin.login');
-                }
-            }
-        }
-
-        header('content-type: text/html; charset=' . EC_CHARSET);
-        header('Expires: Fri, 14 Mar 1980 20:53:00 GMT');
-        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-        header('Cache-Control: no-cache, must-revalidate');
-        header('Pragma: no-cache');
-
-        if (defined('DEBUG_MODE') && DEBUG_MODE) {
-            error_reporting(E_ALL);
-        } else {
-            error_reporting(E_ALL ^ E_NOTICE);
-        }
-
-        /* 判断是否支持gzip模式 */
-        if (function_exists('gzip_enabled') && gzip_enabled()) {
-            ob_start('ob_gzhandler');
-        } else {
-            ob_start();
         }
 
         return null;
